@@ -25,6 +25,10 @@
   # Additional make flags passed to kbuild
 , extraMakeFlags ? []
 
+, # enables the options in ./common-config.nix; if `false` then only
+  # `structuredExtraConfig` is used
+ enableCommonConfig ? true
+
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
@@ -47,8 +51,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
-                       stdenv.hostPlatform != stdenv.buildPlatform
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc"
 , extraMeta ? {}
 
 , isZen      ? false
@@ -132,8 +135,6 @@ let
     platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
     kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
-    # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
 
     makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
       ++ extraMakeFlags;
@@ -184,7 +185,9 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
+        ] ++ lib.optionals enableCommonConfig [
           { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+        ] ++ [
           { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
         ++  structuredConfigFromPatches
@@ -224,7 +227,7 @@ let
             + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
   finalKernel = lib.extendDerivation true passthru kernel;

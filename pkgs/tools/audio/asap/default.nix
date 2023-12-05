@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asap";
-  version = "5.2.0";
+  version = "6.0.1";
 
   src = fetchzip {
     url = "mirror://sourceforge/project/asap/asap/${version}/asap-${version}.tar.gz";
-    sha256 = "1riwfds5ipgh19i3ibsyqhxlh70xix9452y4wqih9xdkixmxqbqm";
+    sha256 = "sha256-nTnnRDYOkTmXfXPS1XIHaC2LHFfZz+gVInQ3satuyDM=";
   };
 
   outputs = [ "out" "dev" ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://asap.sourceforge.net/";
+    homepage = "https://asap.sourceforge.net/";
     mainProgram = "asap-sdl";
     description = "Another Slight Atari Player";
     longDescription = ''

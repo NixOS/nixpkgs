@@ -174,14 +174,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.neo4j;
-      defaultText = literalExpression "pkgs.neo4j";
-      description = lib.mdDoc ''
-        Neo4j package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "neo4j" { };
 
     readOnly = mkOption {
       type = types.bool;
@@ -636,6 +629,6 @@ in {
     };
 
   meta = {
-    maintainers = with lib.maintainers; [ patternspandemic jonringer erictapen ];
+    maintainers = with lib.maintainers; [ patternspandemic jonringer ];
   };
 }

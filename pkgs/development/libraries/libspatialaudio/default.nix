@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libmysofa zlib ];
 
+  postFixup = ''
+    substituteInPlace "''${!outputDev}/lib/pkgconfig/spatialaudio.pc" \
+      --replace '-L${lib.getDev libmysofa}' '-L${lib.getLib libmysofa}'
+  '';
+
   meta = with lib; {
     description =
       "Ambisonic encoding / decoding and binauralization library in C++";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-aHF3E/fLN+j/T4W9lvuVSMy6iRSEn+ARWmL01rY+ixs=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytz
     unittestCheckHook
   ];
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Backport of Python 3.11's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

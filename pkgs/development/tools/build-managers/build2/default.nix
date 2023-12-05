@@ -4,6 +4,7 @@
 , fixDarwinDylibNames
 , libbutl
 , libpkgconf
+, buildPackages
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
   # LC_LOAD_DYLIB entries containing @rpath, requiring manual fixup
   propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
     fixDarwinDylibNames
+
+    # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
+    # which ld64 does not support.
+    (lib.getBin buildPackages.llvmPackages_16.lld)
   ];
 
   postPatch = ''
@@ -71,6 +76,11 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath "''${!outputLib}/lib" "''${!outputBin}/bin/b"
+  '';
+
+  postFixup = ''
+    substituteInPlace $dev/nix-support/setup-hook \
+      --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
   passthru = {

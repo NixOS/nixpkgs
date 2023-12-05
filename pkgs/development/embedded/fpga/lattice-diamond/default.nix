@@ -1,5 +1,5 @@
 { lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib,
-    freetype, fontconfig, xorg, libusb-compat-0_1 }:
+    freetype, fontconfig, xorg, libusb-compat-0_1, coreutils }:
 
 stdenv.mkDerivation {
   pname = "diamond";
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     done
 
     # Patch executable ELFs.
-    for path in bin/lin64 ispfpga/bin/lin64; do
+    for path in bin/lin64 ispfpga/bin/lin64 synpbase/linux_a_64 synpbase/linux_a_64/mbin; do
         cd $out/$prefix/$path
         for f in *; do
             if ! file $f | grep -q "ELF 64-bit LSB executable" ; then
@@ -79,19 +79,22 @@ stdenv.mkDerivation {
             # dependencies from nix.
             patchelf \
                 --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                --set-rpath "$libPath" --force-rpath \
+                --set-rpath "$libPath:$out/$prefix/bin/lin64:$out/$prefix/ispfpga/bin/lin64" \
+                --force-rpath \
                 $f
         done
     done
 
+    # Patch absolute /usr/bin/id path in script
+    sed -i -e "s#/usr/bin/id#${coreutils}/bin/id#" $out/$prefix/synpbase/bin/config/platform_set
+
     # Remove 32-bit libz.
     rm $out/$prefix/bin/lin64/libz.{so,so.1}
 
-    # Make wrappers (should these target more than the 'diamond' tool?).
-    # The purpose of these is just to call the target program using its
-    # absolute path - otherwise, it will crash.
+    # Make wrappers. The purpose of these is just to call the target program
+    # using its absolute path - otherwise, it will crash.
     mkdir -p bin
-    for tool in diamond ; do
+    for tool in diamond pnmainc ddtcmd ; do
         makeWrapper $out/$prefix/bin/lin64/$tool $out/bin/$tool
     done
   '';

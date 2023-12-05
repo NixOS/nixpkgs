@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , meson
 , ninja
 , pkg-config
@@ -12,20 +12,20 @@
 , gobject-introspection
 , desktop-file-utils
 , appstream-glib
-, libadwaita }:
+, libadwaita
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "7.0";
+  version = "8.0";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-P/1lKmWpwidW3fz2zxgVnFoHmROTVB//byDedoOC4u0=";
+    hash = "sha256-SEPQjl6hd8IBs0c0LBEYaqn2n8CGQmYSEMJp5yoL/PA=";
   };
 
   nativeBuildInputs = [
@@ -68,5 +68,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvnetbiz ];
+    mainProgram = "secrets";
   };
 }

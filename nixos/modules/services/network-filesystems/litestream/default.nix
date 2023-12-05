@@ -10,12 +10,7 @@ in
   options.services.litestream = {
     enable = mkEnableOption (lib.mdDoc "litestream");
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.litestream;
-      defaultText = literalExpression "pkgs.litestream";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "litestream" { };
 
     settings = mkOption {
       description = lib.mdDoc ''
@@ -94,5 +89,6 @@ in
     };
     users.groups.litestream = {};
   };
-  meta.doc = ./litestream.xml;
+
+  meta.doc = ./default.md;
 }

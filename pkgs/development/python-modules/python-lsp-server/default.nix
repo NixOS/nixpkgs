@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , flake8
 , flaky
+, importlib-metadata
 , jedi
 , matplotlib
 , mccabe
@@ -20,6 +21,7 @@
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pythonOlder
+, pythonRelaxDepsHook
 , rope
 , setuptools
 , setuptools-scm
@@ -27,38 +29,45 @@
 , ujson
 , websockets
 , whatthepatch
+, wheel
 , yapf
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.7.0";
+  version = "1.9.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9cyzJxyCris7FsVni5IZCCL6IAcsN8tMakNoKPeWv7s=";
+    hash = "sha256-9za0et/W+AwrjqUVoHwk8oqLXk4eqgRON8Z4F5GSKXM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" "" \
-      --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
-      --replace "flake8>=5.0.0,<7" "flake8" \
-      --replace "mccabe>=0.7.0,<0.8.0" "mccabe" \
-      --replace "pycodestyle>=2.9.0,<2.11.0" "pycodestyle" \
-      --replace "pyflakes>=2.5.0,<3.1.0" "pyflakes"
+      --replace "--cov pylsp --cov test" ""
   '';
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  pythonRelaxDeps = [
+    "autopep8"
+    "flake8"
+    "mccabe"
+    "pycodestyle"
+    "pydocstyle"
+    "pyflakes"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -68,6 +77,8 @@ buildPythonPackage rec {
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   passthru.optional-dependencies = {
@@ -117,7 +128,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     matplotlib
     numpy
@@ -130,6 +141,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Don't run lint tests
+    "test_pydocstyle"
     # https://github.com/python-lsp/python-lsp-server/issues/243
     "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
@@ -153,5 +166,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pylsp";
   };
 }

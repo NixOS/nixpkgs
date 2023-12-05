@@ -22,8 +22,10 @@ stdenv.mkDerivation {
   buildInputs = [ curl ];
   propagatedBuildInputs = [ nlohmann_json ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=range-loop-construct"
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
   ];
 
   meta = with lib; {

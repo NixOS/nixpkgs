@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.3.13";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CFKo8YEAXAniX+jL2A0naJUOn3KAWwcrPsabdiZevhI=";
+    sha256 = "sha256-dEAlOKjNXL7zqlll6lqGmbopjdplDR3ewMMNu9TMsmw=";
   };
 
-  vendorSha256 = "sha256-3y42rbhurGhCI9PuSayxmLem0tv/nTjBwYxF3Dk6/yM=";
+  vendorHash = "sha256-WZsm2wiKedMP0miwnzhnSrF7Qw+jqd8dnpcehlsdMCA=";
 
   # No tests
   doCheck = false;

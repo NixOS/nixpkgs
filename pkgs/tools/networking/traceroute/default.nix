@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "traceroute";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
-    sha256 = "sha256-j8jVBG6FXXWIYHuzGfW4LjuhPpHV1GNoYyYuY4a7r3Y=";
+    sha256 = "sha256-BevHq6KKkQD5u65Uzuy/dcgsz0a9/Oi11kgGRZp+BBI=";
   };
 
   makeFlags = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tracks the route taken by packets over an IP network";
-    homepage = "http://traceroute.sourceforge.net/";
+    homepage = "https://traceroute.sourceforge.net/";
     changelog = "https://sourceforge.net/projects/traceroute/files/traceroute/traceroute-${version}/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ koral ];

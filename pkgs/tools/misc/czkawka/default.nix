@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -8,6 +9,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
+, Foundation
 , wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
@@ -17,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "5.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "sha256-+Z4R6eRYNU0/wmrrTCLabY1zgxGbdSkgrfJd8rI5fZo=";
+    hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
   };
 
-  cargoSha256 = "sha256-hkqGOl6ew3GBMPem8bPRy0PYphHhXJVv6iQiH6lK0kE=";
+  cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,9 +43,11 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     atk
     gtk4
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Foundation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ];
 
@@ -53,12 +57,28 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
+  doCheck = stdenv.hostPlatform.isLinux
+          && (stdenv.hostPlatform == stdenv.buildPlatform);
+
   passthru.tests.version = testers.testVersion {
     package = czkawka;
     command = "czkawka_cli --version";
   };
 
+  postInstall = ''
+    # Install Icons
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
+
+    # Install MetaInfo
+    install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+    # Install Desktop Entry
+    install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
+  '';
+
   meta = with lib; {
+    changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with licenses; [ mit ];

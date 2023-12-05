@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [ pypandoc ];
   propagatedBuildInputs = with python3.pkgs; [ requests ];
-  checkInputs = with python3.pkgs; [ pytestCheckHook requests-mock ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook requests-mock ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -27,5 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/agude/wayback-machine-archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion ];
+    mainProgram = "archiver";
   };
 }

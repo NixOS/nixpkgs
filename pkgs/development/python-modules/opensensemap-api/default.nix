@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "opensensemap-api";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lz2G7vXUadhTFgfHpIq9kHfojf+iytjitFZZ7rgqeO8=";
+    hash = "sha256-UrgQjZYw7TlFvhnaI7wFUpuUYeVKO5hsnx8h1OKfV8w=";
   };
 
   propagatedBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: src/net/../gnauralnet.h:233: multiple definition of `GN_ScheduleFingerprint';
   #     src/net/../../src/gnauralnet.h:233: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Programmable auditory binaural-beat synthesizer";
-    homepage = "http://gnaural.sourceforge.net/";
+    homepage = "https://gnaural.sourceforge.net/";
     maintainers = with maintainers; [ ehmry ];
     license = with licenses; [ gpl2Only ];
   };

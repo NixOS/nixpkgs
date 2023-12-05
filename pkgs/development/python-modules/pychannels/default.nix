@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "fancybits";
     repo = pname;
     rev = version;
-    sha256 = "sha256-E+VL4mJ2KxS5bJZc3Va+wvyVjT55LJz+1wHkxDRa85s=";
+    hash = "sha256-E+VL4mJ2KxS5bJZc3Va+wvyVjT55LJz+1wHkxDRa85s=";
   };
 
   propagatedBuildInputs = [ requests ];

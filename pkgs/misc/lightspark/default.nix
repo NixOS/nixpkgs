@@ -1,17 +1,16 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, zlib, ffmpeg, glew, pcre
-, rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, xz, nasm
-, llvm, glibmm
+, rtmpdump, cairo, boost, SDL2, libjpeg, pango, xz, nasm, llvm, glibmm
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightspark";
-  version = "0.8.6.1";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
     rev = version;
-    sha256 = "sha256-/w0cqPIeQC1Oz1teSjMpeiQEI6bIpnyOOu0GoGyi6Kg=";
+    hash = "sha256-qX/ft9slWTbvuSyi2jB6YC7D7QTtCybL/dTo1dJp3pQ=";
   };
 
   postPatch = ''
@@ -21,8 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [
-    curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 SDL2_mixer libjpeg
-    pango xz nasm llvm glibmm
+    curl zlib ffmpeg glew pcre rtmpdump cairo boost SDL2 libjpeg pango xz nasm
+    llvm glibmm
   ];
 
   meta = with lib; {
@@ -31,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jchw ];
     platforms = platforms.linux;
+    mainProgram = "lightspark";
   };
 }

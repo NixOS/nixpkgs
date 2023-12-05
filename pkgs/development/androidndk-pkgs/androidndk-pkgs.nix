@@ -11,15 +11,17 @@ let
   # than we do. We don't just use theirs because ours are less ambiguous and
   # some builds need that clarity.
   #
-  # FIXME:
-  # There's some dragons here. Build host and target concepts are being mixed up.
-  ndkInfoFun = { config, ... }: {
+  ndkBuildInfoFun = { config, ... }: {
     x86_64-apple-darwin = {
       double = "darwin-x86_64";
     };
     x86_64-unknown-linux-gnu = {
       double = "linux-x86_64";
     };
+  }.${config} or
+    (throw "Android NDK doesn't support building on ${config}, as far as we know");
+
+  ndkTargetInfoFun = { config, ... }: {
     i686-unknown-linux-android = {
       triple = "i686-linux-android";
       arch = "x86";
@@ -37,11 +39,10 @@ let
       triple = "aarch64-linux-android";
     };
   }.${config} or
-    (throw "Android NDK doesn't support ${config}, as far as we know");
+    (throw "Android NDK doesn't support targetting ${config}, as far as we know");
 
-  buildInfo = ndkInfoFun stdenv.buildPlatform;
-  hostInfo = ndkInfoFun stdenv.hostPlatform;
-  targetInfo = ndkInfoFun stdenv.targetPlatform;
+  buildInfo = ndkBuildInfoFun stdenv.buildPlatform;
+  targetInfo = ndkTargetInfoFun stdenv.targetPlatform;
 
   inherit (stdenv.targetPlatform) sdkVer;
   suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] stdenv.targetPlatform.config;
@@ -133,7 +134,8 @@ rec {
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
       echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
       echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
-      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
+      echo 'expandResponseParams "$@"' >> $out/nix-support/add-flags.sh
+      echo 'if [[ ! (" ''${params[@]} " =~ " -shared ") && ! (" ''${params[@]} " =~ " -no-pie ") ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
       echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake

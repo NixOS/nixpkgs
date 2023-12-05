@@ -1,11 +1,25 @@
 { callPackage
 , nixosTests
 , python3
+, fetchFromGitHub
+, fetchpatch
 }:
 let
   python = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
+
+      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
+        version = "1.14.0";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "django-crispy-forms";
+          repo = "django-crispy-forms";
+          rev = "refs/tags/${version}";
+          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
+        };
+      });
 
       # Tests are incompatible with Django 4
       django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
@@ -28,6 +42,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
     ./media-root.patch
+    # https://github.com/TandoorRecipes/recipes/pull/2706
+    (fetchpatch {
+      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
+      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
+    })
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -52,7 +71,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
-    django_treebeard
+    django-treebeard
     djangorestframework
     drf-writable-nested
     gunicorn
@@ -88,8 +107,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    # Avoid dependency on django debug toolbar
+    # Disable debug logging
     export DEBUG=0
+    # Avoid dependency on django debug toolbar
+    export DEBUG_TOOLBAR=0
 
     # See https://github.com/TandoorRecipes/recipes/issues/2043
     mkdir cookbook/static/themes/maps/
@@ -97,8 +118,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     touch cookbook/static/themes/bootstrap.min.css.map
     touch cookbook/static/css/bootstrap-vue.min.css.map
 
-    ${python.pythonForBuild.interpreter} manage.py collectstatic_js_reverse
-    ${python.pythonForBuild.interpreter} manage.py collectstatic
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic_js_reverse
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic
 
     runHook postBuild
   '';
@@ -118,7 +139,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     runHook postInstall
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-django
     pytest-factoryboy

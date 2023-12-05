@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     homepage = "https://github.com/mstrobel/procyon/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "procyon";
   };
 }

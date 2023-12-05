@@ -1,15 +1,29 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl, unzip }:
 
 let
   rev = "e764ba00b9c34524e3ff3ffd19a44fa2a5c296a5";
-in fetchzip {
+in
+stdenvNoCC.mkDerivation {
   pname = "blobs.gg";
   version = "unstable-2019-07-24";
 
-  url = "https://git.pleroma.social/pleroma/emoji-index/-/raw/${rev}/packs/blobs_gg.zip";
-  hash = "sha256-dnOwW93xTyJKRnYgvPgsqZHNWod4y80aNhBSVKNk6do=";
+  src = fetchurl {
+    url = "https://git.pleroma.social/pleroma/emoji-index/-/raw/${rev}/packs/blobs_gg.zip";
+    hash = "sha256-OhLzoYFnjVs1hKYglUEbDWCjNRGBNZENh5kg+K3lpX8=";
+  };
 
-  stripRoot = false;
+  sourceRoot = ".";
+
+  nativeBuildInputs = [ unzip ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp *.png LICENSE $out
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Blob emoji from blobs.gg repacked as APNG";

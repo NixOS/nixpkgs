@@ -1,30 +1,32 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3;
+in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.0.6";
-
-  format = "pyproject";
+  version = "4.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oZyEh76nNKMeEenz0dNLQ5Hd9jRaot6He8toxDSZZ/8=";
+    hash = "sha256-pJr0OGUI3OcFsmvn9eqkvpFeF1EkHDdNoWc91s8h9O8=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     spotipy
     ytmusicapi
     pytube
@@ -39,9 +41,15 @@ python3.pkgs.buildPythonApplication rec {
     pydantic
     fastapi
     platformdirs
-  ];
+    pykakasi
+    syncedlyrics
+    typing-extensions
+    soundcloud-v2
+    bandcamp-api
+    setuptools # for pkg_resources
+  ] ++ python-slugify.optional-dependencies.unidecode;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-mock
     pytest-vcr
@@ -57,6 +65,9 @@ python3.pkgs.buildPythonApplication rec {
     # require networking
     "tests/test_init.py"
     "tests/test_matching.py"
+    "tests/providers/lyrics"
+    "tests/types"
+    "tests/utils/test_github.py"
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
@@ -64,20 +75,12 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # require networking
-    "test_album_from_string"
-    "test_album_from_url"
-    "test_album_length"
-    "test_artist_from_url"
-    "test_artist_from_string"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
-    "test_playlist_from_string"
-    "test_playlist_from_url"
-    "test_playlist_length"
     "test_preload_song"
-    "test_song_from_search_term"
-    "test_song_from_url"
+    "test_ytm_get_results"
+    "test_ytm_search"
   ];
 
   makeWrapperArgs = [
@@ -87,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
+    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

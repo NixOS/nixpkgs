@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 , makeWrapper
 , nixosTests
@@ -20,15 +21,23 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "9.0.6";
-  format = "other";
+  version = "9.0.10";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "876b7ba9b680fc668e89706aff535593772ae921"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
+    rev = "5971bf25fe67d94ec4d9f53b785c15a098113620"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-7Exvm3EShb/1EqwA4wzWB9zCdv0P/ISmjKSoqtOMnqk=";
   };
+
+  patches = [
+    (fetchpatch {
+      # PIL update fix
+      url = "https://patch-diff.githubusercontent.com/raw/haiwen/seahub/pull/5570.patch";
+      sha256 = "sha256-7V2aRlacJ7Qhdi9k4Bs+t/Emx+EAM/NNCI+K40bMwLA=";
+    })
+  ];
 
   dontBuild = true;
 
@@ -61,6 +70,8 @@ python.pkgs.buildPythonApplication rec {
     pysearpc
     seaserv
     gunicorn
+    markdown
+    bleach
   ];
 
   installPhase = ''

@@ -6,6 +6,8 @@ let
   pkg = cfg.package;
 
   defaultUser = "paperless";
+  nltkDir = "/var/cache/paperless/nltk";
+  defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
 
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
@@ -15,6 +17,8 @@ let
     PAPERLESS_DATA_DIR = cfg.dataDir;
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+    PAPERLESS_NLTK_DIR = nltkDir;
+    PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -24,29 +28,20 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage = let
-    setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-  in pkgs.writeShellScript "manage" ''
-    ${setupEnv}
+  manage = pkgs.writeShellScript "manage" ''
+    set -o allexport # Export the following env vars
+    ${lib.toShellVars env}
     exec ${pkg}/bin/paperless-ngx "$@"
   '';
 
   # Secure the services
   defaultServiceConfig = {
-    TemporaryFileSystem = "/:ro";
-    BindReadOnlyPaths = [
-      "/nix/store"
-      "-/etc/resolv.conf"
-      "-/etc/nsswitch.conf"
-      "-/etc/hosts"
-      "-/etc/localtime"
-      "-/run/postgresql"
-    ] ++ (optional enableRedis redisServer.unixSocket);
-    BindPaths = [
+    ReadWritePaths = [
       cfg.consumptionDir
       cfg.dataDir
       cfg.mediaDir
     ];
+    CacheDirectory = "paperless";
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
@@ -60,11 +55,9 @@ let
     PrivateUsers = true;
     ProtectClock = true;
     # Breaks if the home dir of the user is in /home
-    # Also does not add much value in combination with the TemporaryFileSystem.
     # ProtectHome = true;
     ProtectHostname = true;
-    # Would re-mount paths ignored by temporary root
-    #ProtectSystem = "strict";
+    ProtectSystem = "strict";
     ProtectControlGroups = true;
     ProtectKernelLogs = true;
     ProtectKernelModules = true;
@@ -81,12 +74,11 @@ let
     SupplementaryGroups = optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
-    # Does not work well with the temporary root
-    #UMask = "0066";
+    UMask = "0066";
   };
 in
 {
-  meta.maintainers = with maintainers; [ erikarvstedt Flakebi ];
+  meta.maintainers = with maintainers; [ erikarvstedt Flakebi leona ];
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -168,19 +160,32 @@ in
       description = lib.mdDoc "Web interface port.";
     };
 
+    # FIXME this should become an RFC42-style settings attr
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = lib.mdDoc ''
         Extra paperless config options.
 
-        See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
+        See [the documentation](https://docs.paperless-ngx.com/configuration/)
         for available options.
+
+        Note that some options such as `PAPERLESS_CONSUMER_IGNORE_PATTERN` expect JSON values. Use `builtins.toJSON` to ensure proper quoting.
       '';
-      example = {
-        PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        PAPERLESS_DBHOST = "/run/postgresql";
-      };
+      example = literalExpression ''
+        {
+          PAPERLESS_OCR_LANGUAGE = "deu+eng";
+
+          PAPERLESS_DBHOST = "/run/postgresql";
+
+          PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [ ".DS_STORE/*" "desktop.ini" ];
+
+          PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
+            optimize = 1;
+            pdfa_image_compression = "lossless";
+          };
+        };
+      '';
     };
 
     user = mkOption {
@@ -189,12 +194,7 @@ in
       description = lib.mdDoc "User under which Paperless runs.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.paperless-ngx;
-      defaultText = literalExpression "pkgs.paperless-ngx";
-      description = lib.mdDoc "The Paperless package to use.";
-    };
+    package = mkPackageOption pkgs "paperless-ngx" { };
   };
 
   config = mkIf cfg.enable {
@@ -226,9 +226,26 @@ in
 
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkg} ]]; then
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${pkg.version} ]]; then
           ${pkg}/bin/paperless-ngx migrate
-          echo ${pkg} > "$versionFile"
+
+          # Parse old version string format for backwards compatibility
+          version=$(echo "$version" | grep -ohP '[^-]+$')
+
+          versionLessThan() {
+            target=$1
+            [[ $({ echo "$version"; echo "$target"; } | sort -V | head -1) != "$target" ]]
+          }
+
+          if versionLessThan 1.12.0; then
+            # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
+            echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
+            ${pkg}/bin/paperless-ngx document_index reindex
+          fi
+
+          echo ${pkg.version} > "$versionFile"
         fi
       ''
       + optionalString (cfg.passwordFile != null) ''
@@ -274,6 +291,22 @@ in
       };
     };
 
+    # Download NLTK corpus data
+    systemd.services.paperless-download-nltk-data = {
+      wantedBy = [ "paperless-scheduler.service" ];
+      before = [ "paperless-scheduler.service" ];
+      after = [ "network-online.target" ];
+      serviceConfig = defaultServiceConfig // {
+        User = cfg.user;
+        Type = "oneshot";
+        # Enable internet access
+        PrivateNetwork = false;
+        ExecStart = let pythonWithNltk = pkg.python.withPackages (ps: [ ps.nltk ]); in ''
+          ${pythonWithNltk}/bin/python -m nltk.downloader -d '${nltkDir}' punkt snowball_data stopwords
+        '';
+      };
+    };
+
     systemd.services.paperless-consumer = {
       description = "Paperless document consumer";
       # Bind to `paperless-scheduler` so that the consumer never runs
@@ -294,12 +327,28 @@ in
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
       after = [ "paperless-scheduler.service" ];
+      # Setup PAPERLESS_SECRET_KEY.
+      # If this environment variable is left unset, paperless-ngx defaults
+      # to a well-known value, which is insecure.
+      script = let
+        secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key";
+      in ''
+        if [[ ! -f '${secretKeyFile}' ]]; then
+          (
+            umask 0377
+            tr -dc A-Za-z0-9 < /dev/urandom | head -c64 | ${pkgs.moreutils}/bin/sponge '${secretKeyFile}'
+          )
+        fi
+        export PAPERLESS_SECRET_KEY=$(cat '${secretKeyFile}')
+        if [[ ! $PAPERLESS_SECRET_KEY ]]; then
+          echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
+          exit 1
+        fi
+        exec ${pkg.python.pkgs.gunicorn}/bin/gunicorn \
+          -c ${pkg}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
+      '';
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
-        ExecStart = ''
-          ${pkg.python.pkgs.gunicorn}/bin/gunicorn \
-            -c ${pkg}/lib/paperless-ngx/gunicorn.conf.py paperless.asgi:application
-        '';
         Restart = "on-failure";
 
         # gunicorn needs setuid, liblapack needs mbind
@@ -311,7 +360,6 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
       environment = env // {
-        PATH = mkForce pkg.path;
         PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/paperless-ngx/src";
       };
       # Allow the web interface to access the private /tmp directory of the server.

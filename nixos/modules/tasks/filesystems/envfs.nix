@@ -7,17 +7,18 @@ let
       device = "none";
       fsType = "envfs";
       options = [
-        "fallback-path=${pkgs.runCommand "fallback-path" {} ''
+        "fallback-path=${pkgs.runCommand "fallback-path" {} (''
           mkdir -p $out
-          ln -s ${pkgs.coreutils}/bin/env $out/env
-          ln -s ${config.system.build.binsh}/bin/sh $out/sh
-        ''}"
+          ln -s ${config.environment.usrbinenv} $out/env
+          ln -s ${config.environment.binsh} $out/sh
+        '' + cfg.extraFallbackPathCommands)}"
+        "nofail"
       ];
     };
     "/bin" = {
       device = "/usr/bin";
       fsType = "none";
-      options = [ "bind" ];
+      options = [ "bind" "nofail" ];
     };
   };
 in {
@@ -31,11 +32,19 @@ in {
           etc.
         '';
       };
+
       package = lib.mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "Which package to use for the envfs.";
         default = pkgs.envfs;
-        defaultText = lib.mdDoc "pkgs.envfs";
+        defaultText = lib.literalExpression "pkgs.envfs";
+        description = lib.mdDoc "Which package to use for the envfs.";
+      };
+
+      extraFallbackPathCommands = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = "ln -s $''{pkgs.bash}/bin/bash $out/bash";
+        description = lib.mdDoc "Extra commands to run in the package that contains fallback executables in case not other executable is found";
       };
     };
   };

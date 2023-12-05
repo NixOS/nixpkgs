@@ -5,14 +5,14 @@ then throw "camlpdf is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.5";
+  version = "2.6";
   pname = "ocaml${ocaml.version}-camlpdf";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";
     rev = "v${version}";
-    sha256 = "sha256:1qmsa0xgi960y7r20mvf8hxiiml7l1908s4dm7nq262f19w51gsl";
+    hash = "sha256-CJWVvZSbvSzG3PIr7w0vmbmY6tH59AgBAWRfDpQ9MCk=";
   };
 
   nativeBuildInputs = [ which ocaml findlib ];

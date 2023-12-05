@@ -38,6 +38,7 @@ let
           modules = [ {
             _module.check = false;
           } ] ++ docModules.eager;
+          class = "nixos";
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
             # allow access to arbitrary options for eager modules, eg for getting
@@ -106,7 +107,7 @@ let
             } >&2
         '';
 
-    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
+    inherit (cfg.nixos.options) warningsAreErrors;
   };
 
 
@@ -131,7 +132,8 @@ let
     desktopItem = pkgs.makeDesktopItem {
       name = "nixos-manual";
       desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
+      genericName = "System Manual";
+      comment = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
       categories = ["System"];
@@ -158,6 +160,9 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRemovedOptionModule
+      [ "documentation" "nixos" "options" "allowDocBook" ]
+      "DocBook option documentation is no longer supported")
   ];
 
   options = {
@@ -262,23 +267,6 @@ in
         '';
       };
 
-      nixos.options.allowDocBook = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Whether to allow DocBook option docs. When set to `false` all option using
-          DocBook documentation will cause a manual build error; additionally a new
-          renderer may be used.
-
-          ::: {.note}
-          The `false` setting for this option is not yet fully supported. While it
-          should work fine and produce the same output as the previous toolchain
-          using DocBook it may not work in all circumstances. Whether markdown option
-          documentation is allowed is independent of this option.
-          :::
-        '';
-      };
-
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
@@ -358,7 +346,7 @@ in
       system.build.manual = manual;
 
       environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
+        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
     })
 

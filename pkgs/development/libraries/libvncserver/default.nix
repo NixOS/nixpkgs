@@ -8,6 +8,7 @@
 , zlib
 , libgcrypt
 , libpng
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , Carbon
 }:
@@ -29,12 +30,16 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    "-DWITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
+  ];
+
   buildInputs = [
     libjpeg
     openssl
     libgcrypt
     libpng
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withSystemd [
     systemd
   ] ++ lib.optionals stdenv.isDarwin [
     Carbon

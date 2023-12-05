@@ -1,19 +1,18 @@
-{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
+{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile_2_2
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, makeWrapper, t1utils
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf;
-  }
+, freefont_ttf, makeFontsConf
+, makeWrapper, t1utils, boehmgc, rsync
+, texliveSmall, tex ? texliveSmall.withPackages (ps: with ps; [ lh metafont epsf fontinst ])
 }:
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
-  version = "2.22.2";
+  version = "2.24.3";
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-3ekIVPp94QEvThMEpoYXrqmrMiky7AznaYT2DSaqI74=";
+    sha256 = "sha256-3wBfdu969aTNdKEPjnEVJ4t/p58UAYk3tlwQlJjsRL4=";
   };
 
   postInstall = ''
@@ -41,14 +40,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
   buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
+    [ ghostscript texinfo imagemagick texi2html guile_2_2 dblatex tex zip netpbm
       python3 gettext perl fontconfig freetype pango
-      fontforge help2man groff t1utils
+      fontforge help2man groff t1utils boehmgc rsync
     ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = {
+    command = [ ./update.sh ];
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = with lib; {
     description = "Music typesetting system";
@@ -57,4 +61,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ marcweber yurrriq ];
     platforms = platforms.all;
   };
+
+  FONTCONFIG_FILE = lib.optional stdenv.isDarwin (makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  });
 }

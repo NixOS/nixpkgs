@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-B8PUN1Q4UAsDWrHjPZDlpaPjCKjI/pAogCSI+BQnaWs=";
   };
 
-  checkInputs = [ pytestCheckHook mock path pyhamcrest pytest-html ];
+  nativeCheckInputs = [ pytestCheckHook mock path pyhamcrest pytest-html ];
 
   # upstream tests are failing, so instead we only check if we can import it
   doCheck = false;

@@ -7,15 +7,15 @@
 let
 
   inherit (vimUtils.override {inherit vim;})
-    buildVimPluginFrom2Nix;
+    buildVimPlugin;
 
   inherit (lib) extends;
 
   initialPackages = self: { };
 
   plugins = callPackage ./generated.nix {
-    inherit buildVimPluginFrom2Nix;
-    inherit (neovimUtils) buildNeovimPluginFrom2Nix;
+    inherit buildVimPlugin;
+    inherit (neovimUtils) buildNeovimPlugin;
   };
 
   # TL;DR
@@ -26,7 +26,7 @@ let
   # add to ./overrides.nix.
   overrides = callPackage ./overrides.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
-    inherit buildVimPluginFrom2Nix;
+    inherit buildVimPlugin;
     inherit llvmPackages luaPackages;
   };
 

@@ -17,7 +17,8 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap117.nix { };
+  useGccGoBootstrap = stdenv.buildPlatform.isMusl || stdenv.buildPlatform.isRiscV;
+  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap117.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo120Module; };
 
@@ -43,13 +44,13 @@ let
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.20rc2";
+  version = "1.20.11";
 
   src = fetchurl {
-    url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-V1IqKi4pXKYpJJRQHxMfiJO1kRqMD4VzfniqdOC5/PY=";
+    url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
+    hash = "sha256-01XFrjqPd2PJ7J3CUVOq43OVjLy2DdCekai1bHYhsvw=";
   };
 
   strictDeps = true;
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Foundation Security xcbuild ];
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -140,24 +141,25 @@ stdenv.mkDerivation rec {
     # Contains the wrong perl shebang when cross compiling,
     # since it is not used for anything we can deleted as well.
     rm src/regexp/syntax/make_perl_groups.pl
-  '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
+  '' + (if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
     ''}
-  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
+  '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
     rm -rf bin/*_*
-    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
     ''}
-  '' else "");
+  '');
 
   installPhase = ''
     runHook preInstall
     mkdir -p $GOROOT_FINAL
     cp -a bin pkg src lib misc api doc $GOROOT_FINAL
-    ln -s $GOROOT_FINAL/bin $out/bin
+    mkdir -p $out/bin
+    ln -s $GOROOT_FINAL/bin/* $out/bin
     runHook postInstall
   '';
 
@@ -167,14 +169,20 @@ stdenv.mkDerivation rec {
     inherit goBootstrap skopeoTest;
     tests = {
       skopeo = testers.testVersion { package = skopeoTest; };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "go version";
+        version = "go${finalAttrs.version}";
+      };
     };
   };
 
   meta = with lib; {
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.darwin ++ platforms.linux;
   };
-}
+})

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "1.6.10";
+  version = "1.7.0.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "swaylock-effects";
     rev = "v${version}";
-    sha256 = "sha256-VkyH9XN/pR1UY/liG5ygDHp+ymdqCPeWHyU7/teJGbU=";
+    sha256 = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 
   postPatch = ''
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnxlxnxx ma27 ];
+    maintainers = with maintainers; [ gnxlxnxx ];
   };
 }

@@ -1,42 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, fuse, adb }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fuse
+, android-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "adbfs-rootless";
-  version = "2016-10-02";
+  version = "unstable-2023-03-21";
 
   src = fetchFromGitHub {
     owner = "spion";
-    repo = "adbfs-rootless";
-    rev = "b58963430e40c9246710a16cec58e7ffc88baa48";
-    sha256 = "1kjibl86k6pf7vciwaaxwv5m4q28zdpd2g7yhp71av32jq6j3wm8";
+    repo = pname;
+    rev = "fd56381af4dc9ae2f09b904c295686871a46ed0f";
+    sha256 = "atiVjRfqvhTlm8Q+3iTNNPQiNkLIaHDLg5HZDJvpl2Q=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/spion/adbfs-rootless/issues/14
-      url = "https://github.com/kronenpj/adbfs-rootless/commit/35f87ce0a7aeddaaad118daed3022e01453b838d.patch";
-      sha256 = "1iigla74n3hphnyx9ffli9wqk7v71ylvsxama868czlg7851jqj9";
-    })
-  ];
-
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ fuse ];
 
   postPatch = ''
     # very ugly way of replacing the adb calls
-    sed -e 's|"adb |"${adb}/bin/adb |g' \
-        -i adbfs.cpp
+    substituteInPlace adbfs.cpp \
+      --replace '"adb ' '"${android-tools}/bin/adb '
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D adbfs $out/bin/adbfs
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Mount Android phones on Linux with adb, no root required";
     inherit (src.meta) homepage;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ Profpatsch ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
   };
 }

@@ -1,47 +1,52 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+
+# build
 , setuptools-scm
-, fonttools
-, defcon
-, compreffor
+
+# runtime
 , booleanoperations
 , cffsubr
+, compreffor
+, cu2qu
+, defcon
+, fonttools
+, skia-pathops
 , ufoLib2
+
+# tests
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "2.28.0";
-
+  version = "2.33.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pWHvjAvHNWlmJiQ75JRmFyrjYnzbJG7M8/DGoIWpEBk=";
+    hash = "sha256-e6p/H1Vub0Ln0VhQvwsVLuD/p8uNG5oCPhfQPCTl1nY=";
   };
-
-  patches = [
-    # Use cu2qu from fonttools.
-    # https://github.com/googlefonts/ufo2ft/pull/461
-    ./fonttools-cu2qu.patch
-  ];
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    cu2qu
     fonttools
     defcon
     compreffor
     booleanoperations
     cffsubr
     ufoLib2
-  ];
+    skia-pathops
+  ]
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.ufo;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -59,6 +64,6 @@ buildPythonPackage rec {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

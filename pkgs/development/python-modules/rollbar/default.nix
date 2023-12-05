@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "0.16.3";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AjE9/GBxDsc2qwM9D4yWnYV6i5kc1n4MGpFiDooE7eI=";
+    hash = "sha256-Y0e35J8i8ClvwoemrqddZCz2RJTS7hJwQqelk8l9868=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     webob
     blinker
     mock

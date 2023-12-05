@@ -26,12 +26,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.onlyoffice-documentserver;
-      defaultText = lib.literalExpression "pkgs.onlyoffice-documentserver";
-      description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
-    };
+    package = mkPackageOption pkgs "onlyoffice-documentserver" { };
 
     port = mkOption {
       type = types.port;
@@ -198,7 +193,7 @@ in
         ensureDatabases = [ "onlyoffice" ];
         ensureUsers = [{
           name = "onlyoffice";
-          ensurePermissions = { "DATABASE \"onlyoffice\"" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
     };
@@ -228,6 +223,9 @@ in
             mkdir -p /run/onlyoffice/config/ /var/lib/onlyoffice/documentserver/sdkjs/{slide/themes,common}/ /var/lib/onlyoffice/documentserver/{fonts,server/FileConverter/bin}/
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
+
+            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
+            chmod g+x /var/lib/onlyoffice/documentserver
 
             cp /run/onlyoffice/config/default.json{,.orig}
 
@@ -267,7 +265,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
-            ExecStartPre = onlyoffice-prestart;
+            ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
@@ -284,6 +282,8 @@ in
         group = "onlyoffice";
         isSystemUser = true;
       };
+
+      nginx.extraGroups = [ "onlyoffice" ];
     };
 
     users.groups.onlyoffice = { };

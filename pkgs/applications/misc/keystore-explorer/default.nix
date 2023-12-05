@@ -1,11 +1,11 @@
 { fetchzip, lib, stdenv, jdk, runtimeShell, glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.1";
+  version = "5.5.2";
   pname = "keystore-explorer";
   src = fetchzip {
     url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${lib.replaceStrings ["."] [""] version}.zip";
-    sha256 = "2C/LkUUuef30PkN7HL0CtcNOjR5uNo9XaCiTatv5hgA=";
+    sha256 = "sha256-mDi/TSYumCg2hAnMOI2QpdAOSlDMpdJPqzatFotAqUk=";
   };
 
   # glib is necessary so file dialogs don't hang.

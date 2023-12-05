@@ -1,33 +1,19 @@
-{ fetchsvn, lib, stdenv, cmake, qt4, libGLU, libGL }:
+{ stdenv, fetchFromGitLab, lib, cmake, qtbase, qttools, qtcharts, libGLU, libGL, glm, glew, wrapQtAppsHook }:
 
-# ViTE 1.1 has several bugs, so use the SVN version.
-let
-  rev = "1543";
-  externals = fetchsvn {
-    url = "svn://scm.gforge.inria.fr/svn/vite/externals";
-    sha256 = "1a422n3dp72v4visq5b1i21cf8sj12903sgg5v2hah3sgk02dnyz";
-    inherit rev;
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "vite";
-  version = "1.2pre${rev}";
+  version = "unstable-2022-05-17";
 
-  src = fetchsvn {
-    url = "svn://scm.gforge.inria.fr/svn/vite/trunk";
-    sha256 = "02479dv96h29d0w0svp42mjjrxhmv8lkkqp30w7mlx5gr2g0v7lf";
-    inherit rev;
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "solverstack";
+    repo = pname;
+    rev = "6d497cc519fac623e595bd174e392939c4de845c";
+    hash = "sha256-Yf2jYALZplIXzVtd/sg6gzEYrZ+oU0zLG1ETd/hiTi0=";
   };
 
-  preConfigure = ''
-    rm -rv externals
-    ln -sv "${externals}" externals
-  '';
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 libGLU libGL ];
-
-  NIX_LDFLAGS = "-lGLU";
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  buildInputs = [ qtbase qtcharts libGLU libGL glm glew ];
 
   meta = {
     description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";

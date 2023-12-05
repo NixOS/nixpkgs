@@ -22,9 +22,14 @@ let
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "L /var/lib/grafana/dashboards/test.json 0700 grafana grafana - ${pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json)}"
-    ];
+    systemd.tmpfiles.rules =
+      let
+        dashboard = pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json);
+      in
+      [
+        "d /var/lib/grafana/dashboards 0700 grafana grafana -"
+        "C+ /var/lib/grafana/dashboards/test.json - - - - ${dashboard}"
+      ];
   };
 
   extraNodeConfs = {

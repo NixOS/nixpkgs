@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "roswell";
-  version = "22.12.14.112";
+  version = "23.10.14.114";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Aqgv2WPmQDuBR4/OgjPeC+kzHL3DrImL24z7fbsfGRo=";
+    hash = "sha256-70BSwRKj1WPvWxQzWPrs8ECkcVosAUaX5cK7FaDUhRc=";
   };
 
   patches = [

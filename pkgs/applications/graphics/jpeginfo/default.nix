@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jpeginfo";
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://www.kokkonen.net/tjko/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HV/alZ68VA+pyBN25gCHVkmaUkpfZvgSnIeRXkzNoAQ=";
+    sha256 = "sha256-J09r4j/Qib2ehxW2dkOmbKL2OlAwKL3qPlcSKNULZp4=";
   };
 
   buildInputs = [ libjpeg ];

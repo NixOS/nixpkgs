@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.13";
+  version = "1.0.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-bNVvQbwtef7Q0OBtR/8vsDDPkgGQgzdBC3QyoxLW3Wo=";
+    hash = "sha256-rvjdhsvGYllVeenVkU/ikwil4OVHPRIaXs+85q0pM/w=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp-wsgi
     pytest-aiohttp
     pytest-asyncio

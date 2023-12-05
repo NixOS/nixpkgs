@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib, fetchurl, fetchpatch, buildPythonPackage, python, isPyPy, pythonAtLeast, sip-module ? "sip" }:
 
 buildPythonPackage rec {
   pname = sip-module;
@@ -12,6 +12,14 @@ buildPythonPackage rec {
     sha256 = "04a23cgsnx150xq86w1z44b6vr2zyazysy9mqax0fy346zlr77dk";
   };
 
+  patches = lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      name = "sip-4-python3-11.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/python3-11.patch?h=sip4&id=67b5907227e68845cdfafcf050fedb89ed653585";
+      sha256 = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
+    })
+  ];
+
   configurePhase = ''
     ${python.executable} ./configure.py \
       --sip-module ${sip-module} \
@@ -21,16 +29,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  installCheckPhase = let
-    modules = [
-      sip-module
-      "sipconfig"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
-  '';
+  pythonImportsCheck = [ sip-module "sipconfig" ];
 
   doCheck = true;
 

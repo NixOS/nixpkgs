@@ -4,7 +4,7 @@ let
   package = cfg.package;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption
+    mkDefault mkEnableOption mkIf mkOption mkPackageOption
     mkRenamedOptionModule mkRemovedOptionModule
     concatStringsSep escapeShellArgs literalExpression
     optional optionals optionalAttrs recursiveUpdate types;
@@ -46,14 +46,7 @@ in
         description = lib.mdDoc "Whether to power up the default Bluetooth controller on boot.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bluez;
-        defaultText = literalExpression "pkgs.bluez";
-        description = lib.mdDoc ''
-          Which BlueZ package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "bluez" { };
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;
@@ -71,6 +64,29 @@ in
         };
         description = lib.mdDoc "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
       };
+
+      input = mkOption {
+        type = cfgFmt.type;
+        default = { };
+        example = {
+          General = {
+            IdleTimeout = 30;
+            ClassicBondedOnly = true;
+          };
+        };
+        description = lib.mdDoc "Set configuration for the input service (/etc/bluetooth/input.conf).";
+      };
+
+      network = mkOption {
+        type = cfgFmt.type;
+        default = { };
+        example = {
+          General = {
+            DisableSecurity = true;
+          };
+        };
+        description = lib.mdDoc "Set configuration for the network service (/etc/bluetooth/network.conf).";
+      };
     };
   };
 
@@ -80,6 +96,10 @@ in
     environment.systemPackages = [ package ]
       ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
 
+    environment.etc."bluetooth/input.conf".source =
+      cfgFmt.generate "input.conf" cfg.input;
+    environment.etc."bluetooth/network.conf".source =
+      cfgFmt.generate "network.conf" cfg.network;
     environment.etc."bluetooth/main.conf".source =
       cfgFmt.generate "main.conf" (recursiveUpdate defaults cfg.settings);
     services.udev.packages = [ package ];

@@ -15,14 +15,7 @@ in
 
       enableConfigCheck = mkEnableOption (lib.mdDoc "checking the config during build time") // { default = true; };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.varnish;
-        defaultText = literalExpression "pkgs.varnish";
-        description = lib.mdDoc ''
-          The package to use
-        '';
-      };
+      package = mkPackageOption pkgs "varnish" { };
 
       http_address = mkOption {
         type = types.str;
@@ -99,7 +92,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.extraDependencies = mkIf cfg.enableConfigCheck [
+    system.checks = mkIf cfg.enableConfigCheck [
       (pkgs.runCommand "check-varnish-syntax" {} ''
         ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
       '')

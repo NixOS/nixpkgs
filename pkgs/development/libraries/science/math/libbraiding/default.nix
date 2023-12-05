@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1";
+  version = "1.2";
   pname = "libbraiding";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libbraiding";
     rev = version;
-    sha256 = "1n1j58y9jaiv0ya0y4fpfb3b05wv0h6k2babpnk2zifjw26xr366";
+    sha256 = "sha256-cgg6rvlOvFqGjgbw6i7QXS+tqvfFd1MkPCEjnW/FyFs=";
   };
 
   nativeBuildInputs = [

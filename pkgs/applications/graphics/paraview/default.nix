@@ -1,12 +1,12 @@
-{ lib, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, qtbase, qtx11extras
+{ lib, stdenv, fetchFromGitLab, fetchurl
+, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, ninja, mpi, python3, tbb, libGLU, libGL
 , withDocs ? true
 }:
 
 let
-  version = "5.10.0";
+  version = "5.11.1";
 
   docFiles = [
     (fetchurl {
@@ -26,7 +26,7 @@ let
     })
   ];
 
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,7 +35,7 @@ in mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    sha256 = "0ipx6zq44hpic7gvv0s2jvjncak6vlmrz5sp9ypc15b15bna0gs2";
+    hash = "sha256-LatNHfiAqB2kqzERRnYae0WIXBb4nXQ79Be4kuh8NFQ=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +45,6 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPARAVIEW_ENABLE_FFMPEG=ON"
     "-DPARAVIEW_ENABLE_GDAL=ON"
     "-DPARAVIEW_ENABLE_MOTIONFX=ON"
@@ -68,6 +67,7 @@ in mkDerivation rec {
     makeWrapper
     ninja
     gfortran
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -84,6 +84,10 @@ in mkDerivation rec {
     qttools
     qtxmlpatterns
     qtsvg
+  ];
+
+  patches = [
+    ./dont-redefine-strlcat.patch
   ];
 
   postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in

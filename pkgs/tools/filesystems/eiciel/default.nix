@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "eiciel";
-  version = "0.10.0-rc2";
+  version = "0.10.0";
 
   outputs = [ "out" "nautilusExtension" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "rofirrim";
     repo = "eiciel";
     rev = version;
-    sha256 = "+MXoT6J4tKuFaSvUTcM15cKWLUnS0kYgBfqH+5lz6KY=";
+    sha256 = "0lhnrxhbg80pqjy9f8yiqi7x48rb6m2cmkffv25ssjynsmdnar0s";
   };
 
   nativeBuildInputs = [
@@ -46,16 +46,12 @@ stdenv.mkDerivation rec {
     "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-4"
   ];
 
-  postPatch = ''
-    # https://github.com/rofirrim/eiciel/pull/9
-    substituteInPlace meson.build --replace "compiler.find_library('libacl')" "compiler.find_library('acl')"
-  '';
-
   meta = with lib; {
     description = "Graphical editor for ACLs and extended attributes";
     homepage = "https://rofi.roger-ferrer.org/eiciel/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sersorrel ];
     platforms = platforms.linux;
+    mainProgram = "eiciel";
   };
 }

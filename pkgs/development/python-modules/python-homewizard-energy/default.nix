@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "1.3.1";
+  version = "2.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rj3WTDj2ey8unOxXkD4zbqwd0FDcyHPzsDrjtX7myj4=";
+    hash = "sha256-iyDRhTV5GSBTVK7ccJhUOrCpE9YuiI1vJM4XroCyIwE=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,9 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

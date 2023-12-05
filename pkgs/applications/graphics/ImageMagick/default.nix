@@ -30,6 +30,9 @@
 , Foundation
 , testers
 , imagemagick
+, nixos-icons
+, perlPackages
+, python3
 }:
 
 assert libXtSupport -> libX11Support;
@@ -44,15 +47,15 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.0-57";
+  version = "7.1.1-21";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
-    hash = "sha256-1fFsrsrY8AAMr6miG8OPZIYaVZhtVi5kEaI/96dzip8=";
+    rev = finalAttrs.version;
+    hash = "sha256-DqVonNh6bFNK91Pd6MwIO1yMrshfGAWNWPpHHQUA2sQ=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -114,7 +117,7 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do
@@ -122,15 +125,22 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.version =
-    testers.testVersion { package = imagemagick; };
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit nixos-icons;
+    inherit (perlPackages) ImageMagick;
+    inherit (python3.pkgs) img2pdf;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "A software suite to create, edit, compose, or convert bitmap images";
+    pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda ];
+    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };
-}
+})

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
 , coreutils, python3, makeWrapper, nixosTests }:
 
 let
@@ -18,6 +18,7 @@ let
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
       ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
@@ -31,7 +32,7 @@ let
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+      env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
 
@@ -41,7 +42,6 @@ let
       };
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
@@ -51,14 +51,14 @@ let
     };
 in
 {
-  # EOL TBA
+  # EOL (LTS) TBA
   varnish60 = common {
     version = "6.0.11";
     hash = "sha256-UVkA2+tH/9MOs5BlyuAzFnmD7Pm9A6lDWic2B+HRKNs=";
   };
-  # EOL 2023-09-15
-  varnish72 = common {
-    version = "7.2.1";
-    hash = "sha256-TZN9FyCo7BnFM/ly2TA6HJiJt7/KdDeJOuXCfPIEqUA=";
+  # EOL 2024-09-15
+  varnish74 = common {
+    version = "7.4.1";
+    hash = "sha256-h02Deq9JuPJxjLYLjIx5AOnqEMJk8hjIjNZy1Zb0uJ8=";
   };
 }

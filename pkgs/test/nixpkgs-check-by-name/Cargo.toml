@@ -1,0 +1,19 @@
+[package]
+name = "nixpkgs-check-by-name"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rnix = "0.11.0"
+regex = "1.9.3"
+clap = { version = "4.3.23", features = ["derive"] }
+serde_json = "1.0.105"
+tempfile = "3.8.0"
+serde = { version = "1.0.185", features = ["derive"] }
+anyhow = "1.0"
+lazy_static = "1.4.0"
+colored = "2.0.4"
+itertools = "0.11.0"
+
+[dev-dependencies]
+temp-env = "0.3.5"

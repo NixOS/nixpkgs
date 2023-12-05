@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-u8U/62LZEn1ffwdGsUCGam4HAk7b2LetomCLZzHuuas=";
   };
 
-  vendorSha256 = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
+  vendorHash = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
 
   meta = with lib; {
     description = "A set of utilities for checking Go sources";

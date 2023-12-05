@@ -301,6 +301,7 @@ in
       }
     ];
 
+    environment.systemPackages = [ pkgs.nixos-firewall-tool ];
     networking.firewall.checkReversePath = mkIf (!kernelHasRPFilter) (mkDefault false);
 
     systemd.services.firewall = {

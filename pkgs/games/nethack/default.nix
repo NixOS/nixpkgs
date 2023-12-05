@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison, fetchpatch
+{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
@@ -19,23 +19,14 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.6";
+  version = "3.6.7";
   pname = if x11Mode then "nethack-x11"
          else if qtMode then "nethack-qt"
          else "nethack";
 
-  patches = [
-    # Don't unset `__warn_unused_result__`, breaks on glibc-2.34
-    (fetchpatch {
-      url = "https://github.com/NetHack/NetHack/commit/81d73ce417dda6a98e2e918e06922e68b67c53f7.patch";
-      sha256 = "sha256-PX9XtJTEE3K1yg/IwIzEIT+EZWi02gU+9msrsG9ZWQY=";
-      revert = true;
-    })
-  ];
-
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
-    sha256 = "1liyckjp34j354qnxc1zn9730lh1p2dabrg1hap24z6xnqx0rpng";
+    sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
   buildInputs = [ ncurses ]
@@ -94,6 +85,9 @@ in stdenv.mkDerivation rec {
       -i sys/unix/Makefile.*
     ''}
     sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
+    # Fix building on darwin where otherwise __has_attribute fails with an empty parameter
+    sed -e 's/define __warn_unused_result__ .*/define __warn_unused_result__ __unused__/' -i include/tradstdc.h
+    sed -e 's/define warn_unused_result .*/define warn_unused_result __unused__/' -i include/tradstdc.h
   '';
 
   configurePhase = ''

@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, fetchpatch }:
+{ lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "starlark";
-  version = "unstable-2022-08-17";
+  version = "unstable-2023-11-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "starlark-go";
-    rev = "f738f5508c12fe5a9fae44bbdf07a94ddcf5030e";
-    sha256 = "sha256-nkQxwdP/lXEq5iiGy17mUTSMG6XiKAUJYfMDgbr10yM=";
+    rev = "556fd59b42f68a2fb1f84957741b72811c714e51";
+    hash = "sha256-0IiEtZOQEvE2Qm//lI1eyFFL1q/ZQzO9JzmiGsk0HkQ=";
   };
 
-  vendorSha256 = "sha256-Kcjtaef//7LmUAIViyKv3gTK7kjynwJ6DwgGJ+pdbfM=";
+  vendorHash = "sha256-jQE5fSqJeiDV7PW7BY/dzCxG6b/KEVIobcjJsaL2zMw=";
 
   ldflags = [ "-s" "-w" ];
 

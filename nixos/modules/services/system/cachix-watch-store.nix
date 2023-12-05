@@ -25,7 +25,7 @@ in
 
     compressionLevel = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for XZ compression (between 0 and 9)";
+      description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
@@ -47,13 +47,7 @@ in
       default = false;
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
-    };
-
+    package = mkPackageOption pkgs "cachix" { };
   };
 
   config = mkIf cfg.enable {
@@ -62,7 +56,13 @@ in
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
+      unitConfig = {
+        # allow to restart indefinitely
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
+        # don't put too much stress on the machine when restarting
+        RestartSec = 1;
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
         Restart = "on-failure";

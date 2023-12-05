@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = [ maintainers.ckie ];
     platforms = platforms.unix;
+    mainProgram = "zthrottle";
   };
 }

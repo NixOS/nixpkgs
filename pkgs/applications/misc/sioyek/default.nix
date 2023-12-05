@@ -2,6 +2,7 @@
 , stdenv
 , installShellFiles
 , fetchFromGitHub
+, fetchurl
 , freetype
 , gumbo
 , harfbuzz
@@ -26,6 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-GFZaTXJhoBB+rSe7Qk6H6FZJVXr3nO9XgM+LAbS4te4=";
   };
 
+  patches = [
+    # Fixed compatibility with mupdf-0.23.0
+    # https://github.com/ahrm/sioyek/issues/804
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/community/sioyek/mupdf-0.23.0.patch?id=86e913eccf19b97a16f25d9b6cdf0f50232f1226";
+      hash = "sha256-sEqhpk7/h6g/fIhbu5LgpKKnbnIFLInrTP1k+/GhrXE=";
+    })
+  ];
+
   buildInputs = [
     gumbo
     harfbuzz
@@ -48,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pdf_viewer_build_config.pro \
-      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2"
+      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2" \
+      --replace "-lmupdf-third" ""
     substituteInPlace pdf_viewer/main.cpp \
       --replace "/usr/share/sioyek" "$out/share" \
       --replace "/etc/sioyek" "$out/etc"
@@ -62,8 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp pdf_viewer/keys_user.config sioyek.app/Contents/MacOS/
     cp tutorial.pdf sioyek.app/Contents/MacOS/
 
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r sioyek.app $out/Applications
+    ln -s $out/Applications/sioyek.app/Contents/MacOS/sioyek $out/bin/sioyek
   '' else ''
     install -Dm644 tutorial.pdf $out/share/tutorial.pdf
     cp -r pdf_viewer/shaders $out/share/

@@ -317,8 +317,8 @@ rec {
       lib.warnIf (wrapManual != null) ''
         vim.customize: wrapManual is deprecated: the manual is now included by default if `name == "vim"`.
         ${if wrapManual == true && name != "vim" then "Set `standalone = false` to include the manual."
-        else if wrapManual == false && name == "vim" then "Set `standalone = true` to get the *vim wrappers only."
-        else ""}''
+        else lib.optionalString (wrapManual == false && name == "vim") "Set `standalone = true` to get the *vim wrappers only."
+        }''
       lib.warnIf (wrapGui != null)
         "vim.customize: wrapGui is deprecated: gvim is now automatically included if present"
       lib.throwIfNot (vimExecutableName == null && gvimExecutableName == null)
@@ -330,7 +330,7 @@ rec {
           else throw "at least one of vimrcConfig and vimrcFile must be specified";
         bin = runCommand "${name}-bin" { nativeBuildInputs = [ makeWrapper ]; } ''
           vimrc=${lib.escapeShellArg vimrc}
-          gvimrc=${if gvimrcFile != null then lib.escapeShellArg gvimrcFile else ""}
+          gvimrc=${lib.optionalString (gvimrcFile != null) (lib.escapeShellArg gvimrcFile)}
 
           mkdir -p "$out/bin"
           for exe in ${
@@ -363,7 +363,7 @@ rec {
   vimGenDocHook = callPackage ({ vim }:
     makeSetupHook {
       name = "vim-gen-doc-hook";
-      deps = [ vim ];
+      propagatedBuildInputs = [ vim ];
       substitutions = {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
@@ -373,7 +373,7 @@ rec {
   vimCommandCheckHook = callPackage ({ neovim-unwrapped }:
     makeSetupHook {
       name = "vim-command-check-hook";
-      deps = [ neovim-unwrapped ];
+      propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
@@ -383,7 +383,7 @@ rec {
   neovimRequireCheckHook = callPackage ({ neovim-unwrapped }:
     makeSetupHook {
       name = "neovim-require-check-hook";
-      deps = [ neovim-unwrapped ];
+      propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
@@ -392,8 +392,9 @@ rec {
 
   inherit (import ./build-vim-plugin.nix {
     inherit lib stdenv rtpPath toVimPlugin;
-  }) buildVimPlugin buildVimPluginFrom2Nix;
+  }) buildVimPlugin;
 
+  buildVimPluginFrom2Nix = lib.warn "buildVimPluginFrom2Nix is deprecated: use buildVimPlugin instead" buildVimPlugin;
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
@@ -418,7 +419,7 @@ rec {
       forceShare = [ "man" "info" ];
 
       nativeBuildInputs = oldAttrs.nativeBuildInputs or []
-      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         vimCommandCheckHook vimGenDocHook
         # many neovim plugins keep using buildVimPlugin
         neovimRequireCheckHook

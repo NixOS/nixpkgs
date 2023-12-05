@@ -46,15 +46,7 @@ in
           '';
         };
 
-        package = mkOption {
-          default = pkgs.oh-my-zsh;
-          defaultText = literalExpression "pkgs.oh-my-zsh";
-          description = lib.mdDoc ''
-            Package to install for `oh-my-zsh` usage.
-          '';
-
-          type = types.package;
-        };
+        package = mkPackageOption pkgs "oh-my-zsh" { };
 
         plugins = mkOption {
           default = [];
@@ -142,5 +134,5 @@ in
 
     };
 
-    meta.doc = ./oh-my-zsh.xml;
+    meta.doc = ./oh-my-zsh.md;
   }

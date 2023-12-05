@@ -9,7 +9,7 @@ let
     , nixosTests
     , tests
     , fetchurl
-    , makeWrapper
+    , makeBinaryWrapper
     , symlinkJoin
     , writeText
     , autoconf
@@ -33,10 +33,12 @@ let
     , jq
 
     , version
-    , hash
+    , phpSrc ? null
+    , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
+    , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
     , cgiSupport ? true
@@ -52,7 +54,7 @@ let
     , cgotoSupport ? false
     , embedSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
@@ -85,7 +87,7 @@ let
 
           php-packages = (callPackage ../../../top-level/php-packages.nix {
             phpPackage = phpWithExtensions;
-          }).overrideScope' packageOverrides;
+          }).overrideScope packageOverrides;
 
           allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
           enabledExtensions =
@@ -141,7 +143,7 @@ let
           phpWithExtensions = symlinkJoin {
             name = "php-with-extensions-${version}";
             inherit (php) version;
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeBinaryWrapper ];
             passthru = php.passthru // {
               buildEnv = mkBuildEnv allArgs allExtensionFunctions;
               withExtensions = mkWithExtensions allArgs allExtensionFunctions;
@@ -159,7 +161,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject composerHooks mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -170,19 +172,19 @@ let
               ln -s ${extraInit} $out/lib/php.ini
 
               if test -e $out/bin/php; then
-                wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-fpm; then
-                wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-fpm --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/phpdbg; then
-                wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/phpdbg --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-cgi; then
-                wrapProgram $out/bin/php-cgi --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-cgi --set-default PHP_INI_SCAN_DIR $out/lib
               fi
             '';
           };
@@ -192,6 +194,11 @@ let
 
       mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
         mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
+
+      defaultPhpSrc = fetchurl {
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+        inherit hash;
+      };
     in
     stdenv.mkDerivation (
       let
@@ -247,8 +254,7 @@ let
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-            ++ lib.optional (ztsSupport && (lib.versionOlder version "8.0")) "--enable-maintainer-zts"
-            ++ lib.optional (ztsSupport && (lib.versionAtLeast version "8.0")) "--enable-zts"
+            ++ lib.optional ztsSupport "--enable-zts"
 
 
             # Sendmail
@@ -272,12 +278,21 @@ let
 
               ./buildconf --copy --force
 
-              if test -f $src/genfiles; then
-                ./genfiles
+              if [ -f "scripts/dev/genfiles" ]; then
+                ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"
             '';
+
+          # When compiling PHP sources from Github, this file is missing and we
+          # need to install it ourselves.
+          # On the other hand, a distribution includes this file by default.
+          preInstall = ''
+            if [[ ! -f ./pear/install-pear-nozlib.phar ]]; then
+              cp ${pearInstallPhar} ./pear/install-pear-nozlib.phar
+            fi
+          '';
 
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
@@ -292,10 +307,7 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit hash;
-          };
+          src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 
@@ -333,6 +345,7 @@ let
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
+            mainProgram = "php";
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];

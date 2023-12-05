@@ -15,7 +15,7 @@
 , stdenv
 }:
 let
-  version = "2.0-1182";
+  version = "2.0-1272";
   urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
 in
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-    hash = "sha256-2mo45+cbOyej5stJ8DFobvqECTTMLandcoPFnD4nY7s=";
+    hash = "sha256-oLHdgOaGnu7hRm863ryf4r05nN8wQL7WKxN3ONG67J4=";
   };
 
   dontConfigure = true;
@@ -95,5 +95,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "RoonServer";
   };
 }

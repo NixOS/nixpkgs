@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build
+, setuptools
+, setuptools-git-versioning
 , setuptools-scm
 
 # propagates
@@ -14,51 +17,55 @@
 , responses
 , unittestCheckHook
 }:
-
 buildPythonPackage rec {
-    pname = "sapi-python-client";
-    version = "0.4.1";
-    format = "setuptools";
+  pname = "sapi-python-client";
+  version = "0.7.1";
+  format = "pyproject";
 
-    src = fetchFromGitHub {
-      owner = "keboola";
-      repo = pname;
-      rev  = version;
-      sha256 = "189dzj06vzp7366h2qsfvbjmw9qgl7jbp8syhynn9yvrjqp4k8h3";
-    };
+  disabled = pythonOlder "3.7";
 
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  src = fetchFromGitHub {
+    owner = "keboola";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-74sChw6eMkBtfHV6hiaaLNOr/J0Sa73LB93Z8muLaiI=";
+  };
 
-    nativeBuildInputs = [
-      setuptools-scm
-    ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-    propagatedBuildInputs = [
-      azure-storage-blob
-      boto3
-      requests
-    ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-git-versioning
+    setuptools-scm
+  ];
 
-    # requires API token and an active keboola bucket
-    # ValueError: Root URL is required.
-    doCheck = false;
+  propagatedBuildInputs = [
+    azure-storage-blob
+    boto3
+    requests
+  ];
 
-    checkInputs = [
-      unittestCheckHook
-      responses
-    ];
+  # Requires API token and an active Keboola bucket
+  # ValueError: Root URL is required.
+  doCheck = false;
 
-    pythonImportsCheck = [
-      "kbcstorage"
-      "kbcstorage.buckets"
-      "kbcstorage.client"
-      "kbcstorage.tables"
-    ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    responses
+  ];
 
-    meta = with lib; {
-      description = "Keboola Connection Storage API client";
-      homepage = "https://github.com/keboola/sapi-python-client";
-      maintainers = with maintainers; [ mrmebelman ];
-      license = licenses.mit;
-    };
+  pythonImportsCheck = [
+    "kbcstorage"
+    "kbcstorage.buckets"
+    "kbcstorage.client"
+    "kbcstorage.tables"
+  ];
+
+  meta = with lib; {
+    description = "Keboola Connection Storage API client";
+    homepage = "https://github.com/keboola/sapi-python-client";
+    changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mrmebelman ];
+  };
 }

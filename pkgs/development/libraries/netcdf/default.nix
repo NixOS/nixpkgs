@@ -1,6 +1,11 @@
 { lib, stdenv
 , fetchurl, unzip
 , hdf5
+, bzip2
+, libzip
+, zstd
+, szipSupport ? false
+, szip
 , libxml2
 , m4
 , curl # for DAP
@@ -11,11 +16,11 @@ let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.0";
+  version = "4.9.2";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
-    hash = "sha256-TJVgIrecCOXhTu6N9RsTwo5hIcK35/qtwhs3WUlAC0k=";
+    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
   };
 
   postPatch = ''
@@ -25,6 +30,10 @@ in stdenv.mkDerivation rec {
     for a in ncdap_test/Makefile.am ncdap_test/Makefile.in; do
       substituteInPlace $a --replace testurl.sh " "
     done
+
+    # Prevent building the tests from prepending `#!/bin/bash` and wiping out the patched shenbangs.
+    substituteInPlace nczarr_test/Makefile.in \
+      --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];
@@ -34,7 +43,10 @@ in stdenv.mkDerivation rec {
     hdf5
     libxml2
     mpi
-  ];
+    bzip2
+    libzip
+    zstd
+  ] ++ lib.optional szipSupport szip;
 
   passthru = {
     inherit mpiSupport mpi;
@@ -45,8 +57,11 @@ in stdenv.mkDerivation rec {
       "--enable-dap"
       "--enable-shared"
       "--disable-dap-remote-tests"
+      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  enableParallelBuilding = true;
 
   disallowedReferences = [ stdenv.cc ];
 
@@ -54,8 +69,8 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
-  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
-  checkInputs = [ unzip ];
+  doCheck = !mpiSupport;
+  nativeCheckInputs = [ unzip ];
 
   preCheck = ''
     export HOME=$TEMP

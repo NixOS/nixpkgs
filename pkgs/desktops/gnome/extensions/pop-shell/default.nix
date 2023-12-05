@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, glib, nodePackages, gjs }:
+{ stdenv, lib, fetchFromGitHub, glib, gjs, typescript }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
-  version = "unstable-2022-10-11";
+  version = "unstable-2023-11-10";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "886a069c0582b371e90ac3602b1747ea5fba616c";
-    hash = "sha256-DwJ3IFhYuEW0LQrmN/mOspEiudj4X5BCLhdOyP74EVs=";
+    rev = "aafc9458a47a68c396933c637de00421f5198a2a";
+    hash = "sha256-74lZbEYHj7fufRSbuI2SN9rqbB3gpRa0V96qjAFc01s=";
   };
 
-  nativeBuildInputs = [ glib nodePackages.typescript gjs ];
+  nativeBuildInputs = [ glib gjs typescript ];
 
   buildInputs = [ gjs ];
 

@@ -7,6 +7,12 @@
 , pyjwt
 , pytestCheckHook
 , pythonOlder
+
+# for passthru.tests
+, django-allauth
+, django-oauth-toolkit
+, google-auth-oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
@@ -29,7 +35,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -37,6 +43,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "oauthlib"
   ];
+
+  passthru.tests = {
+    inherit
+      django-allauth
+      django-oauth-toolkit
+      google-auth-oauthlib
+      requests-oauthlib;
+  };
 
   meta = with lib; {
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";

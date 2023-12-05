@@ -1,36 +1,31 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kind2";
-  version = "0.2.79";
+  version = "0.3.10";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-QRPk7BpGVvhGHcDxCWJtJp5d3QOq72ESt5VbaSq5jBU=";
+    hash = "sha256-X2sjfYrSSym289jDJV3hNmcwyQCMnrabmGCUKD5wfdY=";
   };
 
-  cargoSha256 = "sha256-i7RAJmhUQzjMe9w7z7hPrpiap64L12Shu4DL+e5A6oc=";
+  cargoHash = "sha256-KzoEh/kMKsHx9K3t1/uQZ7fdsZEM+v8UOft8JjEB1Zw=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-
-  # these tests are flaky
-  checkFlags = [
-    "--skip=test_checker"
-    "--skip=test_run_hvm"
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
   ];
+
+  # requires nightly features
+  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A functional programming language and proof assistant";
-    homepage = "https://github.com/kindelia/kind2";
+    homepage = "https://github.com/higherorderco/kind";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

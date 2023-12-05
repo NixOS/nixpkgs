@@ -2,36 +2,43 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
+, setuptools
 , gym
+, gymnasium
 , torch
 , tensorboard
 , tqdm
+, wandb
 , packaging
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "0.8.0";
-
+  version = "1.0.0";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = pname;
-    rev = version;
-    hash = "sha256-NfKgQyD7PkPOTnkIua3fOfH7tHNGQEOVZ2HtvIg5HzA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-89OoJanmaB74SLF1qMI8WFBdN1czS7Yr7BmojaRdo4M=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     gym
+    gymnasium
     torch
     tensorboard
     tqdm
+    wandb
     packaging
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   doCheck = torch.cudaSupport;
 
   pythonImportsCheck = [

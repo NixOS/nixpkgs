@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mediafile";
   version = "0.10.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

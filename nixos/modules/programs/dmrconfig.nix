@@ -21,12 +21,7 @@ in {
         relatedPackages = [ "dmrconfig" ];
       };
 
-      package = mkOption {
-        default = pkgs.dmrconfig;
-        type = types.package;
-        defaultText = literalExpression "pkgs.dmrconfig";
-        description = lib.mdDoc "dmrconfig derivation to use";
-      };
+      package = mkPackageOption pkgs "dmrconfig" { };
     };
   };
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Database access library for C++";
-    homepage = "http://soci.sourceforge.net/";
+    homepage = "https://soci.sourceforge.net/";
     license = licenses.boost;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];

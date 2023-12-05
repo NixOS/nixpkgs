@@ -4,7 +4,7 @@
 , dpkg
 , undmg
 , makeWrapper
-, nodePackages
+, asar
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -41,18 +41,18 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  throwSystem = throw "slack does not support system: ${system}";
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.29.149";
-  x86_64-darwin-sha256 = "sha256-E0YnOPnaWFe17gCpFywxu5uHs1pEktA1tUu4QqvKhYw=";
+  x86_64-darwin-version = "4.35.126";
+  x86_64-darwin-sha256 = "1fmcvj4ryf9k82hbrkb4fl7iki6v80msgrwsc7l996wzkg5j771n";
 
-  x86_64-linux-version = "4.29.149";
-  x86_64-linux-sha256 = "sha256-ulXIGLp2ql47ZS6IeaMuqye39deDtukOB1dxy5BNCwI=";
+  x86_64-linux-version = "4.35.126";
+  x86_64-linux-sha256 = "0axwmhr8r8q3ih91zxwj3z64fnjy7w4mzmlyxcp2iws5gd541lcm";
 
-  aarch64-darwin-version = "4.29.149";
-  aarch64-darwin-sha256 = "sha256-Nn+dFD3H/By+aBPLDxnPneNXuFl+tHdLhxJXeYBMORg=";
+  aarch64-darwin-version = "4.35.126";
+  aarch64-darwin-sha256 = "0g477a31sdyxmg66aklpw359k1kk7vrd96vgcy5lxsvwvihiinkz";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -81,10 +81,12 @@ let
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
+    changelog = "https://slack.com/release-notes";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut maxeaubrey ];
+    maintainers = with maintainers; [ mmahut amaxine ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    mainProgram = "slack";
   };
 
   linux = stdenv.mkDerivation rec {
@@ -142,7 +144,7 @@ let
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
-    nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
+    nativeBuildInputs = [ dpkg makeWrapper asar ];
 
     dontUnpack = true;
     dontBuild = true;
@@ -172,12 +174,13 @@ let
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
         --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}}"
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
-        --replace /usr/share/ $out/share/
+        --replace /usr/share/pixmaps/slack.png slack \
+        --replace bin/slack "bin/slack -s"
 
       runHook postInstall
     '';

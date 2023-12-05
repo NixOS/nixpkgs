@@ -17,6 +17,7 @@
 , kactivities
 , kactivities-stats
 , kirigami2
+, kirigami-addons
 , kcrash
 , plasma-workspace
 }:
@@ -41,8 +42,10 @@ mkDerivation {
     kactivities
     kactivities-stats
     kirigami2
+    kirigami-addons
     kcrash
     plasma-workspace
   ];
   outputs = [ "bin" "dev" "out" ];
+  meta.mainProgram = "systemsettings5";
 }

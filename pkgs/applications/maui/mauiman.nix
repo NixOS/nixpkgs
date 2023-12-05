@@ -2,13 +2,7 @@
 , mkDerivation
 , cmake
 , extra-cmake-modules
-, kconfig
-, kcoreaddons
-, ki18n
-, knotifications
-, qtbase
-, qtquickcontrols2
-, qtx11extras
+, qtsystems
 }:
 
 mkDerivation {
@@ -17,6 +11,10 @@ mkDerivation {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+  ];
+
+  buildInputs = [
+    qtsystems
   ];
 
   meta = with lib; {

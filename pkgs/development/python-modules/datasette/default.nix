@@ -29,22 +29,21 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.63.3";
+  version = "0.64.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-SnUhF7QOXwCU288L4BB4JnhtP6XyHsBS1PpaFM32J0w=";
+    hash = "sha256-cCzvltq3DFbfRp0gO8RQxGUwBtYJcJoeYHIz06FA7vM=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' "" \
-      --replace "click-default-group-wheel>=1.2.2" "click-default-group"
+      --replace '"pytest-runner"' ""
   '';
 
   propagatedBuildInputs = [
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     beautifulsoup4
     pytest-asyncio
@@ -101,7 +100,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
+    changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

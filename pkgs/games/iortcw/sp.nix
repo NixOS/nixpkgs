@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "source/SP";
+  sourceRoot = "${src.name}/SP";
 
   makeFlags = [
     "USE_INTERNAL_LIBS=0"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ makeWrapper ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${SDL2.dev}/include/SDL2"
     "-I${opusfile.dev}/include/opus"
   ];

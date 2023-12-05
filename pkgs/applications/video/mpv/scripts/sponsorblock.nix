@@ -3,13 +3,13 @@
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
-  version = "unstable-2022-09-24";
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "mpv_sponsorblock";
-    rev = "248d108c1280e05de551c42867aebb72cf0c83b9";
-    sha256 = "1aacchyci34xyx7rcyd2r02i4rlqq8q61l6dcci8yd4g4hjiqqld";
+    rev = "7785c1477103f2fafabfd65fdcf28ef26e6d7f0d";
+    sha256 = "sha256-iUXaTWWFEdxhxClu2NYbQcThlvYty3A2dEYGooeAVAQ=";
   };
 
   dontBuild = true;

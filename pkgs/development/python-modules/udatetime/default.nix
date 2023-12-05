@@ -1,25 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "udatetime";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09vlcskvaxnfk73l9w5xgl2ks9l62g1b24yrm0xxb7gn93qxglw2";
+    hash = "sha256-sQvFVwaZpDinLitaZOdr2MKO4779FvIJOHpVB/oLgwE=";
   };
-
-  patches = [
-    # fix build with python 3.9
-    (fetchpatch {
-      url = "https://github.com/freach/udatetime/pull/33.patch";
-      sha256 = "02wm7ivkv1viqn2wflgd10dgpddfqfrwacmrldigb1mwb79n554j";
-    })
-  ];
 
   # tests not included on pypi
   doCheck = false;

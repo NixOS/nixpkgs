@@ -1,17 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libgcrypt, libbaseencode }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libgcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libcotp";
-  version = "1.2.8";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XWrLtWoYIEyGSwc1Qq1Q2NTn0USm1ekVyLWuwvppOZE=";
+    sha256 = "sha256-5zyQSoz5d/HYrIaj0ChtZYK79bBNlYDsFMSDuzcVhY0=";
   };
 
-  buildInputs = [ libbaseencode libgcrypt ];
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_link_options(-Wl," "# add_link_options(-Wl,"
+  '';
+
+  buildInputs = [ libgcrypt ];
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
@@ -19,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paolostivanin/libcotp";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexbakker ];
+    platforms = platforms.all;
   };
 }

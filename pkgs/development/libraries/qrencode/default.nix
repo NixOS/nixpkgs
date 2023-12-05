@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libpng ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv libobjc ];
+  buildInputs = [ libiconv libpng ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc ];
 
   configureFlags = [
     "--with-tests"
   ];
 
-  checkInputs = [ SDL2 ];
+  nativeCheckInputs = [ SDL2 ];
 
   doCheck = true;
 
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ adolfogc yana ];
     platforms = platforms.all;
+    mainProgram = "qrencode";
   };
 }

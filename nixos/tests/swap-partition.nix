@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     {
       virtualisation.useDefaultFilesystems = false;
 
-      virtualisation.bootDevice = "/dev/vda1";
+      virtualisation.rootDevice = "/dev/vda1";
 
       boot.initrd.postDeviceCommands = ''
         if ! test -b /dev/vda1; then

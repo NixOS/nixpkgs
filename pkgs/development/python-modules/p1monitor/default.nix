@@ -12,17 +12,23 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HaTwqTKqTuXZVt2fhKXyXEEYZCSau/YY6DRg6YHIhOI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZtIY4HvRllqlLlf3j1+RMJuuQuq+BZbMuMn9n/v8H5M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"' \
+      --replace 'addopts = "--cov"' ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -33,17 +39,11 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
-  '';
 
   pythonImportsCheck = [
     "p1monitor"
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with the P1 Monitor";
     homepage = "https://github.com/klaasnicolaas/python-p1monitor";
-    changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/${version}";
+    changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

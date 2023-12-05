@@ -37,16 +37,15 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt ? false
-, meta
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.35";
-  patchSuffix = "-224";
-  sha256 = "sha256-USNzL2tnzNMZMF79OZlx1YWSEivMKmUYob0lEN0M9S4=";
+  version = "2.38";
+  patchSuffix = "-27";
+  sha256 = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -54,26 +53,20 @@ assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
   version = version + patchSuffix;
-  linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
-
-  inherit (stdenv) is64bit;
 
   enableParallelBuilding = true;
 
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.35/master && git describe
-          glibc-2.35-210-ge123f08ad5
-          $ git show --minimal --reverse glibc-2.35.. | gzip -9n --rsyncable - > 2.35-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
+          glibc-2.38-27-g750a45a783
+          $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.35-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.35-master.patch.gz
+          $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
        */
-      ./2.35-master.patch.gz
-
-      /* Revert this patch contained in the previous bundle.  For now, until we know more. */
-      ./revert-mktime.patch
+      ./2.38-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -95,7 +88,27 @@ stdenv.mkDerivation ({
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+
+      /* Patch derived from archlinux,
+         https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
+
+         See also https://github.com/ValveSoftware/Proton/issues/6051
+         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
+      */
+      ./reenable_DT_HASH.patch
     ]
+    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+       every HPC piece of software, without this patch CUDA compilation on ARM
+       is effectively broken. See
+       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
+    */
+    ++ (
+      let
+        isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
+        isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
+      in
+      lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
+    )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
@@ -135,6 +148,7 @@ stdenv.mkDerivation ({
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+      "--enable-fortify-source"
     ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
       # This feature is currently supported on
       # i386, x86_64 and x32 with binutils 2.29 or later,
@@ -159,32 +173,44 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ]
     ++ lib.optional withGd "--with-gd"
-    ++ lib.optional (!withLibcrypt) "--disable-crypt";
+    ++ lib.optional withLibcrypt "--enable-crypt";
 
-  makeFlags = [
+  makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
+
+  postInstall = (args.postInstall or "") + ''
+    moveToOutput bin/getent $getent
+  '';
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   # out as the first output is an exception exclusive to glibc
-  outputs = [ "out" "bin" "dev" "static" ];
+
+  # getent is its own output, not kept in bin, since many things
+  # depend on getent but not on the locale generation tools in the bin
+  # output. This saves a couple of megabytes of closure size in many cases.
+  outputs = [ "out" "bin" "dev" "static" "getent" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
-  # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
-  # prevent a retained dependency on the bootstrap tools in the stdenv-linux
-  # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  env = {
+    linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
+    inherit (stdenv) is64bit;
+    # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
+    # prevent a retained dependency on the bootstrap tools in the stdenv-linux
+    # bootstrap.
+    BASH_SHELL = "/bin/sh";
+  };
 
   # Used by libgcc, elf-header, and others to determine ABI
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
@@ -262,11 +288,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 ];
+    maintainers = with maintainers; [ eelco ma27 connorbaker ];
     platforms = platforms.linux;
-  } // meta;
-}
-
-// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preInstall = null; # clobber the native hook
+  } // (args.meta or {});
 })

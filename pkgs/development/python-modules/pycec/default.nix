@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "konikvranik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H18petSiUdftZN8Q3fPmfSJA3OZks+gI+FAq9LwkRsk=";
+    hash = "sha256-H18petSiUdftZN8Q3fPmfSJA3OZks+gI+FAq9LwkRsk=";
   };
 
   propagatedBuildInputs = [
     libcec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

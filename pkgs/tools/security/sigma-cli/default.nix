@@ -5,15 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.5.3";
-  format = "pyproject";
+  version = "0.7.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = pname;
+    repo = "sigma-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-orJkWVBZnbhRjYDI6s5fPymzpTmZE5MsmYWp3JOKjnU=";
+    hash = "sha256-Sy9adkmR7Vu7kI75XG0PXihFogPaNwzHH2U5uSz9mZA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '= "^' '= ">='
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -21,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
+    colorama
     prettytable
     pysigma
     pysigma-backend-elasticsearch
@@ -33,14 +39,27 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-pipeline-windows
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '= "^' '= ">='
-  '';
+  disabledTests = [
+    "test_plugin_list"
+    "test_plugin_list_filtered"
+    "test_plugin_list_search"
+    "test_plugin_install_notexisting"
+    "test_plugin_install"
+    "test_plugin_uninstall"
+    # Tests require network access
+    "test_check_with_issues"
+    "test_plugin_show_identifier"
+    "test_plugin_show_nonexisting"
+    "test_plugin_show_uuid"
+    # Tests compare STDOUT results
+    "test_check_valid"
+    "test_check_stdin"
+    "test_check_exclude"
+  ];
 
   pythonImportsCheck = [
     "sigma.cli"
@@ -49,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
+    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ispc ];
   buildInputs = [ tbb ];
 
+  cmakeFlags = [
+    "-DTBB_ROOT=${tbb}"
+    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+  ];
+
   meta = with lib; {
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";

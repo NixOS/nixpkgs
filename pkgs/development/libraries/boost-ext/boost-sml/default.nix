@@ -7,15 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "boost-sml";
-  # This is first commit since 1.1.6 that passes all tests (test_policies_logging is commented out)
-  version = "1.1.6";
-  working_tests = "24d762d1901f4f6afaa5c5e0d1b7b77537964694";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "boost-ext";
     repo = "sml";
-    rev = "${working_tests}";
-    hash = "sha256-ZhIfyYdzrzPTAYevOz5I6tAcUiLRMV8HENKX9jychEY=";
+    rev = "v${version}";
+    hash = "sha256-RYgSpnsmgZybpkJALIzxpkDRfe9QF2FHG+nA3msFaK0=";
   };
 
   buildInputs = [ boost ];

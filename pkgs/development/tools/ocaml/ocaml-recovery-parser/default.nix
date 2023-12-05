@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, ocaml
 , buildDunePackage
 , fix
 , menhirLib
@@ -7,12 +8,15 @@
 , gitUpdater
 }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocaml-recovery-parser is not available for OCaml ${ocaml.version}"
+
 buildDunePackage rec {
   pname = "ocaml-recovery-parser";
   version = "0.2.4";
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "serokell";

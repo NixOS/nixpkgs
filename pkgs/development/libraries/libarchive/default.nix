@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , acl
 , attr
 , autoreconfHook
@@ -25,40 +26,49 @@
 }:
 
 assert xarSupport -> libxml2 != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
-    rev = "v${version}";
-    hash = "sha256-G4wL5DDbX0FqaA4cnOlVLZ25ObN8dNsRtxyas29tpDA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-p2JgJ/rvqaQ6yyXSh+ehScUH565ud5bQncl+lOnsWfc=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
-
-    declare -a skip_test_paths=(
-      # test won't work in nix sandbox
-      'libarchive/test/test_write_disk_perms.c'
-      # can't be sure builder will have sparse-capable fs
-      'libarchive/test/test_sparse_basic.c'
-      # can't even be sure builder will have hardlink-capable fs
-      'libarchive/test/test_write_disk_hardlink.c'
-      # access-time-related tests flakey on some systems
-      'cpio/test/test_option_a.c'
-      'cpio/test/test_option_t.c'
-    )
-
-    for test_path in "''${skip_test_paths[@]}" ; do
-      substituteInPlace Makefile.am --replace "$test_path" ""
-      rm "$test_path"
-    done
-  '';
+  patches = [
+    # Pull fix for test failure on 32-bit systems:
+    (fetchpatch {
+      name = "32-bit-tests-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
+      hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
+
+  postPatch = let
+    skipTestPaths = [
+      # test won't work in nix sandbox
+      "libarchive/test/test_write_disk_perms.c"
+      # the filesystem does not necessarily have sparse capabilities
+      "libarchive/test/test_sparse_basic.c"
+      # the filesystem does not necessarily have hardlink capabilities
+      "libarchive/test/test_write_disk_hardlink.c"
+      # access-time-related tests flakey on some systems
+      "cpio/test/test_option_a.c"
+      "cpio/test/test_option_t.c"
+    ];
+    removeTest = testPath: ''
+      substituteInPlace Makefile.am --replace "${testPath}" ""
+      rm "${testPath}"
+    '';
+  in ''
+    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
+
+    ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -105,7 +115,7 @@ stdenv.mkDerivation rec {
       includes implementations of the common tar, cpio, and zcat command-line
       tools that use the libarchive library.
     '';
-    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
+    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jcumming AndersonTorres ];
     platforms = platforms.all;
@@ -114,4 +124,4 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit cmake nix samba;
   };
-}
+})

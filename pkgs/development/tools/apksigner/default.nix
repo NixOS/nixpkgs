@@ -2,11 +2,13 @@
 , stdenv
 , fetchgit
 , openjdk17_headless
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 }:
-
+let
+  gradle = gradle_7;
+in
 stdenv.mkDerivation rec {
   pname = "apksigner";
   version = "33.0.1";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ffmpeg, libjpeg, libpng, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ffmpeg_4, libjpeg, libpng, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "harvid";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ffmpeg libjpeg libpng ];
+  buildInputs = [ ffmpeg_4 libjpeg libpng ];
 
   makeFlags = [ "DESTDIR=$(out)" "libdir=\"/lib\"" ];
 
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mitchmindtree ];
+    mainProgram = "harvid";
   };
 }

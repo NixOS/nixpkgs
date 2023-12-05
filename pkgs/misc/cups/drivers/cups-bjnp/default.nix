@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [cups];
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-include stdio.h"
     "-Wno-error=stringop-truncation"
     "-Wno-error=deprecated-declarations"

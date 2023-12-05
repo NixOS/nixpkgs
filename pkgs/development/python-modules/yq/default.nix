@@ -1,23 +1,23 @@
 { lib
+, argcomplete
 , buildPythonPackage
 , fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, toml
-, xmltodict
 , jq
-, setuptools-scm
 , pytestCheckHook
+, pyyaml
+, setuptools-scm
+, substituteAll
+, tomlkit
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "3.1.0";
+  version = "3.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MKhKoiSGx0m6JpJWvVhsC803C34qcedsOSTq1IZ+dPI=";
+    hash = "sha256-Kcj+HTa09kFj9NATFMauIXU5hw9hAhbe5gJd+16vr7E=";
   };
 
   patches = [
@@ -32,14 +32,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pyyaml
-    xmltodict
-    toml
     argcomplete
+    pyyaml
+    tomlkit
+    xmltodict
   ];
 
-  checkInputs = [
-   pytestCheckHook
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "test/test.py" ];
@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    mainProgram = "yq";
   };
 }

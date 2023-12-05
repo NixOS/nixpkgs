@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.2";
+  version = "1.26.4";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rsT5jInFnnbMBlbtBILx2CkS9N7MZg8hyNAE5JPgVBA=";
+    sha256 = "IHD51RVlfl3c2g2H73KXE9upy3sq0GIjvWdKIcxrPa8=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"

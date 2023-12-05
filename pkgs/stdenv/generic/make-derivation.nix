@@ -3,6 +3,43 @@
 stdenv:
 
 let
+  # Lib attributes are inherited to the lexical scope for performance reasons.
+  inherit (lib)
+    any
+    assertMsg
+    attrNames
+    boolToString
+    chooseDevOutputs
+    concatLists
+    concatMap
+    concatMapStrings
+    concatStringsSep
+    elem
+    elemAt
+    extendDerivation
+    filter
+    findFirst
+    flip
+    head
+    imap1
+    isAttrs
+    isBool
+    isDerivation
+    isInt
+    isList
+    isString
+    mapAttrs
+    mapNullable
+    optional
+    optionalAttrs
+    optionalString
+    optionals
+    remove
+    splitString
+    subtractLists
+    unique
+  ;
+
   checkMeta = import ./check-meta.nix {
     inherit lib config;
     # Nix itself uses the `system` field of a derivation to decide where
@@ -18,36 +55,37 @@ let
       # separate lines, because Nix would only show the last line of the comment.
 
       # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage; });
+      args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
-      finalPackage =
-        mkDerivationSimple
-          (f0:
-            let
-              f = self: super:
-                # Convert f0 to an overlay. Legacy is:
-                #   overrideAttrs (super: {})
-                # We want to introduce self. We follow the convention of overlays:
-                #   overrideAttrs (self: super: {})
-                # Which means the first parameter can be either self or super.
-                # This is surprising, but far better than the confusion that would
-                # arise from flipping an overlay's parameters in some cases.
-                let x = f0 super;
-                in
-                  if builtins.isFunction x
-                  then
-                    # Can't reuse `x`, because `self` comes first.
-                    # Looks inefficient, but `f0 super` was a cheap thunk.
-                    f0 self super
-                  else x;
+      overrideAttrs = f0:
+        let
+          f = self: super:
+            # Convert f0 to an overlay. Legacy is:
+            #   overrideAttrs (super: {})
+            # We want to introduce self. We follow the convention of overlays:
+            #   overrideAttrs (self: super: {})
+            # Which means the first parameter can be either self or super.
+            # This is surprising, but far better than the confusion that would
+            # arise from flipping an overlay's parameters in some cases.
+            let x = f0 super;
             in
-              makeDerivationExtensible
-                (self: let super = rattrs self; in super // f self super))
-          args;
+              if builtins.isFunction x
+              then
+                # Can't reuse `x`, because `self` comes first.
+                # Looks inefficient, but `f0 super` was a cheap thunk.
+                f0 self super
+              else x;
+        in
+          makeDerivationExtensible
+            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+
+      finalPackage =
+        mkDerivationSimple overrideAttrs args;
+
     in finalPackage;
 
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
   # but pre-evaluated for a slight improvement in performance.
   makeDerivationExtensibleConst = attrs:
     mkDerivationSimple
@@ -61,7 +99,7 @@ let
                 f0 self super
               else x;
         in
-          makeDerivationExtensible (self: attrs // f self attrs))
+          makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
   mkDerivationSimple = overrideAttrs:
@@ -85,24 +123,26 @@ let
 
 # TODO(@Ericson2314): Stop using legacy dep attribute names
 
-#                           host offset -> target offset
-  depsBuildBuild              ? [] # -1 -> -1
-, depsBuildBuildPropagated    ? [] # -1 -> -1
-, nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
-, propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
-, depsBuildTarget             ? [] # -1 ->  1
-, depsBuildTargetPropagated   ? [] # -1 ->  1
+#                                 host offset -> target offset
+  depsBuildBuild                    ? [] # -1 -> -1
+, depsBuildBuildPropagated          ? [] # -1 -> -1
+, nativeBuildInputs                 ? [] # -1 ->  0  N.B. Legacy name
+, propagatedNativeBuildInputs       ? [] # -1 ->  0  N.B. Legacy name
+, depsBuildTarget                   ? [] # -1 ->  1
+, depsBuildTargetPropagated         ? [] # -1 ->  1
 
-, depsHostHost                ? [] #  0 ->  0
-, depsHostHostPropagated      ? [] #  0 ->  0
-, buildInputs                 ? [] #  0 ->  1  N.B. Legacy name
-, propagatedBuildInputs       ? [] #  0 ->  1  N.B. Legacy name
+, depsHostHost                      ? [] #  0 ->  0
+, depsHostHostPropagated            ? [] #  0 ->  0
+, buildInputs                       ? [] #  0 ->  1  N.B. Legacy name
+, propagatedBuildInputs             ? [] #  0 ->  1  N.B. Legacy name
 
-, depsTargetTarget            ? [] #  1 ->  1
-, depsTargetTargetPropagated  ? [] #  1 ->  1
+, depsTargetTarget                  ? [] #  1 ->  1
+, depsTargetTargetPropagated        ? [] #  1 ->  1
 
-, checkInputs                 ? []
-, installCheckInputs          ? []
+, checkInputs                       ? []
+, installCheckInputs                ? []
+, nativeCheckInputs                 ? []
+, nativeInstallCheckInputs          ? []
 
 # Configure Phase
 , configureFlags ? []
@@ -112,7 +152,7 @@ let
   # Including it then would cause needless mass rebuilds.
   #
   # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
-  configurePlatforms ? lib.optionals
+  configurePlatforms ? optionals
     (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
     [ "build" "host" ]
 
@@ -154,7 +194,24 @@ let
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
   && config.contentAddressedByDefault
 
+# Experimental.  For simple packages mostly just works,
+# but for anything complex, be prepared to debug if enabling.
+, __structuredAttrs ? config.structuredAttrsByDefault or false
+
+, env ? { }
+
 , ... } @ attrs:
+
+# Policy on acceptable hash types in nixpkgs
+assert attrs ? outputHash -> (
+  let algo =
+    attrs.outputHashAlgo or (head (splitString "-" attrs.outputHash));
+  in
+  if algo == "md5" then
+    throw "Rejected insecure ${algo} hash '${attrs.outputHash}'"
+  else
+    true
+);
 
 let
   # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -162,37 +219,49 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
-  outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+  outputs' = outputs ++ optional separateDebugInfo' "debug";
+
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath = drv:
+    if isDerivation drv
+    then builtins.unsafeDiscardStringContext drv.outPath
+    else drv;
 
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsHostHost ++ depsHostHostPropagated
                                   ++ buildInputs ++ propagatedBuildInputs
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
-  supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+
+  hardeningDisable' = if any (x: x == "fortify") hardeningDisable
+    # disabling fortify implies fortify3 should also be disabled
+    then unique (hardeningDisable ++ [ "fortify3" ])
+    else hardeningDisable;
+  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
   defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-                            # Except when:
-                            #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-                            #    - static armv7l, where compilation fails.
-                            !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-                          then supportedHardeningFlags
-                          else lib.remove "pie" supportedHardeningFlags;
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
+    then supportedHardeningFlags
+    else remove "pie" supportedHardeningFlags;
   enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable
+    if builtins.elem "all" hardeningDisable'
     then []
-    else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
+    else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
-  erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
+  erroneousHardeningFlags = subtractLists supportedHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
-  checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
-    else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
-    else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
+  checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
+    if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
+    else if isList dep then checkDependencyList' ([index] ++ positions) name dep
+    else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
@@ -200,31 +269,35 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
 else let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
+  buildInputs' = buildInputs
+         ++ optionals doCheck checkInputs
+         ++ optionals doInstallCheck installCheckInputs;
+  nativeBuildInputs' = nativeBuildInputs
+         ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
+         ++ optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+         ++ optionals doCheck nativeCheckInputs
+         ++ optionals doInstallCheck nativeInstallCheckInputs;
 
   outputs = outputs';
 
   references = nativeBuildInputs ++ buildInputs
             ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
-  dependencies = map (map lib.chooseDevOutputs) [
+  dependencies = map (map chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
-         ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-         ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-         ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs))
+      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
-  propagatedDependencies = map (map lib.chooseDevOutputs) [
+  propagatedDependencies = map (map chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
       (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
@@ -240,33 +313,38 @@ else let
   ];
 
   computedSandboxProfile =
-    lib.concatMap (input: input.__propagatedSandboxProfile or [])
+    concatMap (input: input.__propagatedSandboxProfile or [])
       (stdenv.extraNativeBuildInputs
        ++ stdenv.extraBuildInputs
-       ++ lib.concatLists dependencies);
+       ++ concatLists dependencies);
 
   computedPropagatedSandboxProfile =
-    lib.concatMap (input: input.__propagatedSandboxProfile or [])
-      (lib.concatLists propagatedDependencies);
+    concatMap (input: input.__propagatedSandboxProfile or [])
+      (concatLists propagatedDependencies);
 
   computedImpureHostDeps =
-    lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
       (stdenv.extraNativeBuildInputs
        ++ stdenv.extraBuildInputs
-       ++ lib.concatLists dependencies));
+       ++ concatLists dependencies));
 
   computedPropagatedImpureHostDeps =
-    lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-      (lib.concatLists propagatedDependencies));
+    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+      (concatLists propagatedDependencies));
+
+  envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg =
     (removeAttrs attrs
-      ["meta" "passthru" "pos"
+      (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"])
-    // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
+       "sandboxProfile" "propagatedSandboxProfile"]
+       ++ optional (__structuredAttrs || envIsExportable) "env"))
+    // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
           # Indicate the host platform of the derivation if cross compiling.
@@ -274,22 +352,26 @@ else let
           # suffix. But we have some weird ones with run-time deps that are
           # just used for their side-affects. Those might as well since the
           # hash can't be the same. See #32986.
-          hostSuffix = lib.optionalString
+          hostSuffix = optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             "-${stdenv.hostPlatform.config}";
+
           # Disambiguate statically built packages. This was originally
           # introduce as a means to prevent nix-env to get confused between
           # nix and nixStatic. This should be also achieved by moving the
           # hostSuffix before the version, so we could contemplate removing
           # it again.
-          staticMarker = lib.optionalString stdenv.hostPlatform.isStatic "-static";
+          staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
         in
         lib.strings.sanitizeDerivationName (
           if attrs ? name
           then attrs.name + hostSuffix
-          else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+          else
+            # we cannot coerce null to a string below
+            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // {
+    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -304,87 +386,63 @@ else let
 
       userHook = config.stdenv.userHook or null;
       __ignoreNulls = true;
+      inherit __structuredAttrs strictDeps;
 
-      inherit strictDeps;
+      depsBuildBuild              = elemAt (elemAt dependencies 0) 0;
+      nativeBuildInputs           = elemAt (elemAt dependencies 0) 1;
+      depsBuildTarget             = elemAt (elemAt dependencies 0) 2;
+      depsHostHost                = elemAt (elemAt dependencies 1) 0;
+      buildInputs                 = elemAt (elemAt dependencies 1) 1;
+      depsTargetTarget            = elemAt (elemAt dependencies 2) 0;
 
-      depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
-      nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
-      depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-      depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
-      buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
-      depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
-
-      depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
-      propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
-      depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-      depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
-      propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
-      depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
+      depsBuildBuildPropagated    = elemAt (elemAt propagatedDependencies 0) 0;
+      propagatedNativeBuildInputs = elemAt (elemAt propagatedDependencies 0) 1;
+      depsBuildTargetPropagated   = elemAt (elemAt propagatedDependencies 0) 2;
+      depsHostHostPropagated      = elemAt (elemAt propagatedDependencies 1) 0;
+      propagatedBuildInputs       = elemAt (elemAt propagatedDependencies 1) 1;
+      depsTargetTargetPropagated  = elemAt (elemAt propagatedDependencies 2) 0;
 
       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-      configureFlags = let inherit (lib) optional elem; in
-        (/**/ if lib.isString configureFlags then lib.warn "String 'configureFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" [configureFlags]
-         else if configureFlags == null      then lib.warn "Null 'configureFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" []
-         else                                     configureFlags)
+      configureFlags =
+        configureFlags
         ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
       cmakeFlags =
-        let
-          explicitFlags =
-            if lib.isString cmakeFlags then lib.warn
-                "String 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [cmakeFlags]
-            else if cmakeFlags == null then
-              lib.warn
-                "Null 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              cmakeFlags;
-
-          crossFlags = [
-            "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
-            "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
-            "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-            "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
-            "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
-            "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
-            "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-          ];
-        in
-          explicitFlags ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) crossFlags;
+        cmakeFlags
+        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
+          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
+          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
+          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
+          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
+          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
+          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
+        ]);
 
       mesonFlags =
         let
-          explicitFlags =
-            if lib.isString mesonFlags then lib.warn
-                "String 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [mesonFlags]
-            else if mesonFlags == null then
-              lib.warn
-                "Null 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              mesonFlags;
-
           # See https://mesonbuild.com/Reference-tables.html#cpu-families
           cpuFamily = platform: with platform;
             /**/ if isAarch32 then "arm"
-            else if isAarch64 then "aarch64"
             else if isx86_32  then "x86"
-            else if isx86_64  then "x86_64"
-            else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
+            else platform.uname.processor;
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
-            needs_exe_wrapper = ${lib.boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
+            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
+            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
 
             [host_machine]
             system = '${stdenv.targetPlatform.parsed.kernel.name}'
@@ -394,35 +452,38 @@ else let
 
             [binaries]
             llvm-config = 'llvm-config-native'
+            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
           '';
-          crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ explicitFlags;
+          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+        in crossFlags ++ mesonFlags;
 
       inherit patches;
 
       inherit doCheck doInstallCheck;
 
       inherit outputs;
-    } // lib.optionalAttrs (__contentAddressed) {
+    } // optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
       # Provide default values for outputHashMode and outputHashAlgo because
       # most people won't care about these anyways
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
-    } // lib.optionalAttrs (enableParallelBuilding) {
+    } // optionalAttrs (enableParallelBuilding) {
+      inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
-    } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
+      enableParallelInstalling = attrs.enableParallelInstalling or true;
+    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
-    } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
+    } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
-    } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
+    } // optionalAttrs (stdenv.buildPlatform.isDarwin) {
       inherit __darwinAllowLocalNetworking;
-      # TODO: remove lib.unique once nix has a list canonicalization primitive
+      # TODO: remove `unique` once nix has a list canonicalization primitive
       __sandboxProfile =
       let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
-          final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
+          final = concatStringsSep "\n" (filter (x: x != "") (unique profiles));
       in final;
-      __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
+      __propagatedSandboxProfile = unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
       __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ stdenv.__extraImpureHostDeps ++ [
         "/dev/zero"
         "/dev/random"
@@ -430,52 +491,61 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+    } //
+    # If we use derivations directly here, they end up as build-time dependencies.
+    # This is especially problematic in the case of disallowed*, since the disallowed
+    # derivations will be built by nix as build-time dependencies, while those
+    # derivations might take a very long time to build, or might not even build
+    # successfully on the platform used.
+    # We can improve on this situation by instead passing only the outPath,
+    # without an attached string context, to nix. The out path will be a placeholder
+    # which will be replaced by the actual out path if the derivation in question
+    # is part of the final closure (and thus needs to be built). If it is not
+    # part of the final closure, then the placeholder will be passed along,
+    # but in that case we know for a fact that the derivation is not part of the closure.
+    # This means that passing the out path to nix does the right thing in either
+    # case, both for disallowed and allowed references/requisites, and we won't
+    # build the derivation if it wouldn't be part of the closure, saving time and resources.
+    # While the problem is less severe for allowed*, since we want the derivation
+    # to be built eventually, we would still like to get the error early and without
+    # having to wait while nix builds a derivation that might not be used.
+    # See also https://github.com/NixOS/nix/issues/4629
+    optionalAttrs (attrs ? disallowedReferences) {
+      disallowedReferences =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+    } //
+    optionalAttrs (attrs ? disallowedRequisites) {
+      disallowedRequisites =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+    } //
+    optionalAttrs (attrs ? allowedReferences) {
+      allowedReferences =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+    } //
+    optionalAttrs (attrs ? allowedRequisites) {
+      allowedRequisites =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  validity = checkMeta { inherit meta attrs; };
+  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  validity = checkMeta.assertValidity { inherit meta attrs; };
 
-  # The meta attribute is passed in the resulting attribute set,
-  # but it's not part of the actual derivation, i.e., it's not
-  # passed to the builder and is not a dependency.  But since we
-  # include it in the result, it *is* available to nix-env for queries.
-  meta = {
-      # `name` above includes cross-compilation cruft,
-      # is under assert, and is sanitized.
-      # Let's have a clean always accessible version here.
-      name = attrs.name or "${attrs.pname}-${attrs.version}";
-
-      # If the packager hasn't specified `outputsToInstall`, choose a default,
-      # which is the name of `p.bin or p.out or p` along with `p.man` when
-      # present.
-      #
-      # If the packager has specified it, it will be overridden below in
-      # `// meta`.
-      #
-      #   Note: This default probably shouldn't be globally configurable.
-      #   Services and users should specify outputs explicitly,
-      #   unless they are comfortable with this default.
-      outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
-          ++ lib.optional (hasOutput "man") "man";
-    }
-    // attrs.meta or {}
-    # Fill `meta.position` to identify the source location of the package.
-    // lib.optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
-    } // {
-      # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
-               && (if config.checkMetaRecursively or false
-                   then lib.all (d: d.meta.available or true) references
-                   else true);
-    };
+  checkedEnv =
+    let
+      overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+    in
+    assert assertMsg envIsExportable
+      "When using structured attributes, `env` must be an attribute set of environment variables.";
+    assert assertMsg (overlappingNames == [ ])
+      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
+    mapAttrs
+      (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
+        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+      env;
 
 in
 
-lib.extendDerivation
+extendDerivation
   validity.handled
   ({
      # A derivation that always builds successfully and whose runtime
@@ -500,16 +570,31 @@ lib.extendDerivation
        # binaries). By writing this to $out, Nix can find and register
        # them as runtime dependencies (since Nix greps for store paths
        # through $out to find them)
-       args = [ "-c" "export > $out" ];
+       args = [ "-c" ''
+         export > $out
+         for var in $passAsFile; do
+             pathVar="''${var}Path"
+             printf "%s" "$(< "''${!pathVar}")" >> $out
+         done
+       '' ];
+
+       # inputDerivation produces the inputs; not the outputs, so any
+       # restrictions on what used to be the outputs don't serve a purpose
+       # anymore.
+       allowedReferences = null;
+       allowedRequisites = null;
+       disallowedReferences = [ ];
+       disallowedRequisites = [ ];
      });
 
-     inherit meta passthru overrideAttrs;
+     inherit passthru overrideAttrs;
+     inherit meta;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg);
+  (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
 
 in
   fnOrAttrs:

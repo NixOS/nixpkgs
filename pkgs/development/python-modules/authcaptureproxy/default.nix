@@ -1,37 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
 , poetry-core
+
+# dependencies
 , aiohttp
 , beautifulsoup4
 , httpx
-, importlib-metadata
 , multidict
 , typer
 , yarl
+
+# tests
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.1.4";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4IPBulzRoAAplyM/1MPE40IW4IXBIGYLydzpY64Gl0c=";
+    hash = "sha256-qkvr8uYI6+lbNsAPw2PAnPyWRQTE4AEHf3djBfSp3XU=";
   };
-
-  postPatch = ''
-    # https://github.com/alandtse/auth_capture_proxy/issues/14
-    # https://github.com/alandtse/auth_capture_proxy/issues/15
-    substituteInPlace pyproject.toml \
-       --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-       --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -41,18 +38,28 @@ buildPythonPackage rec {
     aiohttp
     beautifulsoup4
     httpx
-    importlib-metadata
     multidict
     typer
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # test fails with frequency 1/200
+    # https://github.com/alandtse/auth_capture_proxy/issues/25
+    "test_return_timer_countdown_refresh_html"
+  ];
+
+  pythonImportsCheck = [
+    "authcaptureproxy"
+  ];
+
   meta = with lib; {
+    changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
     description = "A proxy to capture authentication information from a webpage";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
     license = licenses.asl20;

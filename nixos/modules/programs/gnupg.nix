@@ -6,11 +6,16 @@ let
 
   cfg = config.programs.gnupg;
 
+  agentSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  };
+
   xserverCfg = config.services.xserver;
 
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
-    || xserverCfg.desktopManager.plasma5.enable then
+    || xserverCfg.desktopManager.plasma5.enable
+    || xserverCfg.desktopManager.deepin.enable then
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
       "gtk2"
@@ -24,14 +29,7 @@ in
 {
 
   options.programs.gnupg = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gnupg;
-      defaultText = literalExpression "pkgs.gnupg";
-      description = lib.mdDoc ''
-        The gpg package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "gnupg" { };
 
     agent.enable = mkOption {
       type = types.bool;
@@ -74,12 +72,22 @@ in
       defaultText = literalMD ''matching the configured desktop environment'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
-        pinentry binary will be passed to gpg-agent via commandline and
-        thus overrides the pinentry option in gpg-agent.conf in the user's
-        home directory.
+        pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
         If not set at all, it'll pick an appropriate flavor depending on the
         system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
         4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+      '';
+    };
+
+    agent.settings = mkOption {
+      type = agentSettingsFormat.type;
+      default = { };
+      example = {
+        default-cache-ttl = 600;
+      };
+      description = lib.mdDoc ''
+        Configuration for /etc/gnupg/gpg-agent.conf.
+        See {manpage}`gpg-agent(1)` for supported options.
       '';
     };
 
@@ -93,38 +101,114 @@ in
   };
 
   config = mkIf cfg.agent.enable {
+    programs.gnupg.agent.settings = {
+      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
+        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+    };
+
+    environment.etc."gnupg/gpg-agent.conf".source =
+      agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
+
     # This overrides the systemd user unit shipped with the gnupg package
-    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
-      serviceConfig.ExecStart = [ "" ''
-        ${cfg.package}/bin/gpg-agent --supervised \
-          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-      '' ];
+    systemd.user.services.gpg-agent = {
+      unitConfig = {
+        Description = "GnuPG cryptographic agent and passphrase cache";
+        Documentation = "man:gpg-agent(1)";
+        Requires = [ "sockets.target" ];
+      };
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/gpg-agent --supervised";
+        ExecReload = "${cfg.package}/bin/gpgconf --reload gpg-agent";
+      };
     };
 
     systemd.user.sockets.gpg-agent = {
+      unitConfig = {
+        Description = "GnuPG cryptographic agent and passphrase cache";
+        Documentation = "man:gpg-agent(1)";
+      };
+      socketConfig = {
+        ListenStream = "%t/gnupg/S.gpg-agent";
+        FileDescriptorName = "std";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-ssh = mkIf cfg.agent.enableSSHSupport {
+      unitConfig = {
+        Description = "GnuPG cryptographic agent (ssh-agent emulation)";
+        Documentation = "man:gpg-agent(1) man:ssh-add(1) man:ssh-agent(1) man:ssh(1)";
+      };
+      socketConfig = {
+        ListenStream = "%t/gnupg/S.gpg-agent.ssh";
+        FileDescriptorName = "ssh";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-extra = mkIf cfg.agent.enableExtraSocket {
+      unitConfig = {
+        Description = "GnuPG cryptographic agent and passphrase cache (restricted)";
+        Documentation = "man:gpg-agent(1)";
+      };
+      socketConfig = {
+        ListenStream = "%t/gnupg/S.gpg-agent.extra";
+        FileDescriptorName = "extra";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-browser = mkIf cfg.agent.enableBrowserSocket {
+      unitConfig = {
+        Description = "GnuPG cryptographic agent and passphrase cache (access for web browsers)";
+        Documentation = "man:gpg-agent(1)";
+      };
+      socketConfig = {
+        ListenStream = "%t/gnupg/S.gpg-agent.browser";
+        FileDescriptorName = "browser";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
       wantedBy = [ "sockets.target" ];
     };
 
+    systemd.user.services.dirmngr = mkIf cfg.dirmngr.enable {
+      unitConfig = {
+        Description = "GnuPG network certificate management daemon";
+        Documentation = "man:dirmngr(8)";
+        Requires = "dirmngr.socket";
+      };
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/dirmngr --supervised";
+        ExecReload = "${cfg.package}/bin/gpgconf --reload dirmngr";
+      };
+    };
+
     systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
+      unitConfig = {
+        Description = "GnuPG network certificate management daemon";
+        Documentation = "man:dirmngr(8)";
+      };
+      socketConfig = {
+        ListenStream = "%t/gnupg/S.dirmngr";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
       wantedBy = [ "sockets.target" ];
     };
 
     services.dbus.packages = mkIf (cfg.agent.pinentryFlavor == "gnome3") [ pkgs.gcr ];
 
     environment.systemPackages = with pkgs; [ cfg.package ];
-    systemd.packages = [ cfg.package ];
 
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.

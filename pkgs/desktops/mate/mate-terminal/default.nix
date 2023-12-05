@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08mgxbviik2dwwnbclp0518wlag2fhcr6c2yadgcbhwiq4aff9vp";
+    sha256 = "fBMCBvC0eIfoySdOc/jBn65RETRXKGmnwjERt4nh4dA=";
   };
 
   nativeBuildInputs = [

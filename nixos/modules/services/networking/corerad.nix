@@ -48,12 +48,7 @@ in {
       description = lib.mdDoc "Path to CoreRAD TOML configuration file.";
     };
 
-    package = mkOption {
-      default = pkgs.corerad;
-      defaultText = literalExpression "pkgs.corerad";
-      type = types.package;
-      description = lib.mdDoc "CoreRAD package to use.";
-    };
+    package = mkPackageOption pkgs "corerad" { };
   };
 
   config = mkIf cfg.enable {

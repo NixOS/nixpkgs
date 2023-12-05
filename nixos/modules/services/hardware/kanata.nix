@@ -8,18 +8,14 @@ let
   keyboard = {
     options = {
       devices = mkOption {
-        type = types.addCheck (types.listOf types.str)
-          (devices: (length devices) > 0);
+        type = types.listOf types.str;
+        default = [ ];
         example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
-        # TODO replace note with tip, which has not been implemented yet in
-        # nixos/lib/make-options-doc/mergeJSON.py
         description = mdDoc ''
           Paths to keyboard devices.
 
-          ::: {.note}
-          To avoid unnecessary triggers of the service unit, unplug devices in
-          the order of the list.
-          :::
+          An empty list, the default value, lets kanata detect which
+          input devices are keyboards and intercept them all.
         '';
       };
       config = mkOption {
@@ -44,8 +40,10 @@ let
             cap (tap-hold 100 100 caps lctl))
         '';
         description = mdDoc ''
-          Configuration other than `defcfg`. See [example config
-          files](https://github.com/jtroo/kanata) for more information.
+          Configuration other than `defcfg`.
+
+          See [example config files](https://github.com/jtroo/kanata)
+          for more information.
         '';
       };
       extraDefCfg = mkOption {
@@ -53,8 +51,12 @@ let
         default = "";
         example = "danger-enable-cmd yes";
         description = mdDoc ''
-          Configuration of `defcfg` other than `linux-dev`. See [example
-          config files](https://github.com/jtroo/kanata) for more information.
+          Configuration of `defcfg` other than `linux-dev` (generated
+          from the devices option) and
+          `linux-continue-if-no-devs-found` (hardcoded to be yes).
+
+          See [example config files](https://github.com/jtroo/kanata)
+          for more information.
         '';
       };
       extraArgs = mkOption {
@@ -67,8 +69,7 @@ let
         default = null;
         example = 6666;
         description = mdDoc ''
-          Port to run the notification server on. `null` will not run the
-          server.
+          Port to run the TCP server on. `null` will not run the server.
         '';
       };
     };
@@ -76,28 +77,24 @@ let
 
   mkName = name: "kanata-${name}";
 
-  mkDevices = devices: concatStringsSep ":" devices;
+  mkDevices = devices:
+    optionalString ((length devices) > 0) "linux-dev ${concatStringsSep ":" devices}";
 
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
       ${keyboard.extraDefCfg}
-      linux-dev ${mkDevices keyboard.devices})
+      ${mkDevices keyboard.devices}
+      linux-continue-if-no-devs-found yes)
 
     ${keyboard.config}
   '';
 
   mkService = name: keyboard: nameValuePair (mkName name) {
-    description = "kanata for ${mkDevices keyboard.devices}";
-
-    # Because path units are used to activate service units, which
-    # will start the old stopped services during "nixos-rebuild
-    # switch", stopIfChanged here is a workaround to make sure new
-    # services are running after "nixos-rebuild switch".
-    stopIfChanged = false;
-
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
+      Type = "notify";
       ExecStart = ''
-        ${cfg.package}/bin/kanata \
+        ${getExe cfg.package} \
           --cfg ${mkConfig name keyboard} \
           --symlink-path ''${RUNTIME_DIRECTORY}/${name} \
           ${optionalString (keyboard.port != null) "--port ${toString keyboard.port}"} \
@@ -133,8 +130,7 @@ let
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
       ProtectProc = "invisible";
-      RestrictAddressFamilies =
-        if (keyboard.port == null) then "none" else [ "AF_INET" ];
+      RestrictAddressFamilies = [ "AF_UNIX" ] ++ optional (keyboard.port != null) "AF_INET";
       RestrictNamespaces = true;
       RestrictRealtime = true;
       SystemCallArchitectures = [ "native" ];
@@ -146,47 +142,15 @@ let
       UMask = "0077";
     };
   };
-
-  mkPathName = i: name: "${mkName name}-${toString i}";
-
-  mkPath = name: n: i: device:
-    nameValuePair (mkPathName i name) {
-      description =
-        "${toString (i+1)}/${toString n} kanata trigger for ${name}, watching ${device}";
-      wantedBy = optional (i == 0) "multi-user.target";
-      pathConfig = {
-        PathExists = device;
-        # (ab)use systemd.path to construct a trigger chain so that the
-        # service unit is only started when all paths exist
-        # however, manual of systemd.path says Unit's suffix is not ".path"
-        Unit =
-          if (i + 1) == n
-          then "${mkName name}.service"
-          else "${mkPathName (i + 1) name}.path";
-      };
-      unitConfig.StopPropagatedFrom = optional (i > 0) "${mkName name}.service";
-    };
-
-  mkPaths = name: keyboard:
-    let
-      n = length keyboard.devices;
-    in
-    imap0 (mkPath name n) keyboard.devices
-  ;
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption (lib.mdDoc "kanata");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.kanata;
-      defaultText = literalExpression "pkgs.kanata";
-      example = literalExpression "pkgs.kanata-with-cmd";
-      description = mdDoc ''
-        The kanata package to use.
-
+    enable = mkEnableOption (mdDoc "kanata");
+    package = mkPackageOption pkgs "kanata" {
+      example = "kanata-with-cmd";
+      extraDescription = ''
         ::: {.note}
-        If `danger-enable-cmd` is enabled in any of the keyboards, the
+        If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
         `kanata-with-cmd` package should be used.
         :::
       '';
@@ -199,16 +163,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      let
+        keyboardsWithEmptyDevices = filterAttrs (name: keyboard: keyboard.devices == [ ]) cfg.keyboards;
+        existEmptyDevices = length (attrNames keyboardsWithEmptyDevices) > 0;
+        moreThanOneKeyboard = length (attrNames cfg.keyboards) > 1;
+      in
+      optional (existEmptyDevices && moreThanOneKeyboard) "One device can only be intercepted by one kanata instance.  Setting services.kanata.keyboards.${head (attrNames keyboardsWithEmptyDevices)}.devices = [ ] and using more than one services.kanata.keyboards may cause a race condition.";
+
     hardware.uinput.enable = true;
 
-    systemd = {
-      paths = trivial.pipe cfg.keyboards [
-        (mapAttrsToList mkPaths)
-        concatLists
-        listToAttrs
-      ];
-      services = mapAttrs' mkService cfg.keyboards;
-    };
+    systemd.services = mapAttrs' mkService cfg.keyboards;
   };
 
   meta.maintainers = with maintainers; [ linj ];

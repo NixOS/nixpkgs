@@ -1,22 +1,37 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles, testers, cue }:
+{ buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, lib
+, installShellFiles
+, testers
+, cue
+}:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.4.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    sha256 = "sha256-v9MYrijnbtJpTgRZ4hmkaekisOyujldGewCRNbkVzWw=";
+    hash = "sha256-1svWb83xbVZIlI9pviCYfQ6Kkp0QRjZwrauL7PPJLts=";
   };
+
+  vendorHash = "sha256-ku4tPTXdnKau0kqnAAEHDdSF4oAC/6SDkTq8cECOiEk=";
+
+  patches = [
+    # Fix tests with go1.21. See https://github.com/cue-lang/cue/issues/2548.
+    (fetchpatch {
+      url = "https://github.com/cue-lang/cue/commit/3bf3dbd655284d3628399a83a703f4849b5f9374.patch";
+      hash = "sha256-9Zi2mrqB1JTFvadiqWTgzzi1pffZ3gOmTtrDDQWye1Q=";
+    })
+  ];
 
   postPatch = ''
     # Disable script tests
     rm -f cmd/cue/cmd/script_test.go
   '';
-
-  vendorSha256 = "sha256-jTfV8DJlr5LxS3HjOEBkVzBvZKiySrmINumXSUIq2mI=";
 
   excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
 

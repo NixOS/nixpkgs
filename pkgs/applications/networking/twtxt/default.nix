@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ aiohttp python-dateutil humanize click ];
 
-  checkInputs = [ pytestCheckHook tox ];
+  nativeCheckInputs = [ pytestCheckHook tox ];
 
   disabledTests = [
      # Disable test using relative date and time
@@ -33,5 +33,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/buckket/twtxt";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "twtxt";
   };
 }

@@ -2,20 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.4.2";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bI4IiYzVorocITkip+Xev3t7vGeMVmqCZn7oR1mAPpI=";
+    hash = "sha256-SW+8Lp2NNW2I1BoOGVRzIx+1+DsffxlmHf8xFCxTyNw=";
   };
 
-  vendorHash = "sha256-+i6jUImDMrsDnIPjIp8uM2BR1IYMqWG1OmvA2w/AfVQ=";
+  vendorHash = "sha256-IQg50z+X0dUOk2zEiGejywEE+8SCtS3mdgUAxIddcQs=";
 
   ldflags = [
     "-s"
@@ -38,7 +39,13 @@ buildGoModule rec {
       --bash <($out/bin/sftpgo gen completion bash) \
       --zsh <($out/bin/sftpgo gen completion zsh) \
       --fish <($out/bin/sftpgo gen completion fish)
+
+    shareDirectory="$out/share/sftpgo"
+    mkdir -p "$shareDirectory"
+    cp -r ./{openapi,static,templates} "$shareDirectory"
   '';
+
+  passthru.tests = nixosTests.sftpgo;
 
   meta = with lib; {
     homepage = "https://github.com/drakkan/sftpgo";
@@ -52,6 +59,7 @@ buildGoModule rec {
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ thenonameguy ];
+    maintainers = with maintainers; [ thenonameguy yayayayaka ];
+    mainProgram = "sftpgo";
   };
 }

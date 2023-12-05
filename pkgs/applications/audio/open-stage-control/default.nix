@@ -1,14 +1,14 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.21.0";
+  version = "1.25.6";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-6tRd8boVwWc8qGlklYqA/Kp76VOMvtUJlu/G/InvHkA=";
+    hash = "sha256-ZjNnchI8W0Xeuz1DHf3Q0cIL97BFXb3zY/HWQnrqqnk=";
   };
 
   # Remove some Electron stuff from package.json
@@ -16,7 +16,7 @@ buildNpmPackage rec {
     sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
   '';
 
-  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
+  npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -71,7 +71,7 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";

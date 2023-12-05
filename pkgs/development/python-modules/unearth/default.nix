@@ -4,7 +4,7 @@
 , pythonOlder
 , cached-property
 , packaging
-, pdm-pep517
+, pdm-backend
 , requests
 , flask
 , pytest-httpserver
@@ -15,18 +15,18 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.7.0";
+  version = "0.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z1RBGze3qUHzzf3ymu7ivxgWSor8o1xGe5f+q2JuZx4=";
+    hash = "sha256-TKrZQbYPUeUP3BCYZiNNQHkQrvd/EjOqG2tdFox0J+4=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -36,7 +36,9 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     flask
     pytest-httpserver
     pytestCheckHook

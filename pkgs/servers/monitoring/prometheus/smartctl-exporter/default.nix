@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "smartctl_exporter";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fc1NZ5QwzR/jJkeaDm5PMT4wBFFlqZOXKTJMBJWKJJ8=";
+    hash = "sha256-oUdMsUAlN/4uRSzxQrO0TOVRgyEdxYkGtf3VoNbxdhw=";
   };
 
-  vendorSha256 = "sha256-lQKuT5dzjDHFpRSmcXpKD1RJDlEv+0kcxENkv3mT4FU=";
+  vendorHash = "sha256-0WLI+nLhRkf1CGhSer1Jkv1nUho5sxIbTE/Mf5JmX7U=";
 
   ldflags = [
     "-X github.com/prometheus/common/version.Version=${version}"

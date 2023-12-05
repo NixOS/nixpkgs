@@ -1,27 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
+, pythonOlder
+
+# build-system
 , hatchling
-, orjson
+
+# dependencies
+, starlette
+, pydantic
+, typing-extensions
+
+# tests
+, dirty-equals
+, flask
 , passlib
-, peewee
+, pytest-asyncio
+, pytestCheckHook
 , python-jose
 , sqlalchemy
 , trio
-, pythonOlder
+
+# optional-dependencies
+, httpx
+, jinja2
+, python-multipart
+, itsdangerous
+, pyyaml
+, ujson
+, orjson
+, email-validator
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.85.2";
+  version = "0.103.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,37 +44,44 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j3Set+xWNcRqbn90DJOJQhMrJYI3msvWHlFvN1habP0=";
+    hash = "sha256-2J8c3S4Ca+c5bI0tyjMJArJKux9qPmu+ohqve5PhSGI=";
   };
 
   nativeBuildInputs = [
     hatchling
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette==" "starlette>="
-  '';
-
   propagatedBuildInputs = [
     starlette
     pydantic
+    typing-extensions
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
-    flask
+  passthru.optional-dependencies.all = [
     httpx
+    jinja2
+    python-multipart
+    itsdangerous
+    pyyaml
+    ujson
     orjson
+    email-validator
+    uvicorn
+    # pydantic-settings
+    # pydantic-extra-types
+  ] ++ uvicorn.optional-dependencies.standard;
+
+  nativeCheckInputs = [
+    dirty-equals
+    flask
     passlib
-    peewee
-    python-jose
     pytestCheckHook
     pytest-asyncio
-    sqlalchemy
+    python-jose
     trio
-  ] ++ passlib.optional-dependencies.bcrypt;
+    sqlalchemy
+  ] ++ passthru.optional-dependencies.all
+  ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
@@ -73,6 +94,9 @@ buildPythonPackage rec {
     "tests/test_default_response_class.py"
     # Don't test docs and examples
     "docs_src"
+    # databases is incompatible with SQLAlchemy 2.0
+    "tests/test_tutorial/test_async_sql_databases"
+    "tests/test_tutorial/test_sql_databases"
   ];
 
   disabledTests = [
@@ -84,6 +108,10 @@ buildPythonPackage rec {
     "test_head"
     "test_options"
     "test_trace"
+    # Unexpected number of warnings caught
+    "test_warn_duplicate_operation_id"
+    # assert state["except"] is True
+    "test_dependency_gets_exception"
   ];
 
   pythonImportsCheck = [

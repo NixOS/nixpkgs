@@ -1,9 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , antlr4
 , antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , importlib-resources
 , jre_headless
 , omegaconf
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hydra-core";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,13 +24,19 @@ buildPythonPackage rec {
     owner = "facebookresearch";
     repo = "hydra";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4FOh1Jr+LM8ffh/xcAqMqKudKbXb2DZdxU+czq2xwxs=";
+    hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
   };
 
   patches = [
     (substituteAll {
       src = ./antlr4.patch;
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
+    })
+    # https://github.com/facebookresearch/hydra/pull/2731
+    (fetchpatch {
+      name = "setuptools-67.5.0-test-compatibility.patch";
+      url = "https://github.com/facebookresearch/hydra/commit/25873841ed8159ab25a0c652781c75cc4a9d6e08.patch";
+      hash = "sha256-oUfHlJP653o3RDtknfb8HaaF4fpebdR/OcbKHzJFK/Q=";
     })
   ];
 
@@ -54,7 +60,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -76,7 +82,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;

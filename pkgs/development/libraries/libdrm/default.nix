@@ -1,15 +1,16 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
 , libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.114";
+  version = "2.4.117";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MEnPhDpH0S5e7vvDvjSW14L6CfQjRr8Lfe/j0eWY0CY=";
+    hash = "sha256-ooiNaePrHIp3rcCKdaYPuuAfDSCNJvA00aEuNiNhJCs=";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -20,13 +21,24 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstall-test-programs=true"
-    "-Domap=enabled"
     "-Dcairo-tests=disabled"
-    "-Dvalgrind=${if withValgrind then "enabled" else "disabled"}"
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=enabled"
-    "-Detnaviv=enabled"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
   ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.freedesktop.org/mesa/drm.git";
+      rev-prefix = "libdrm-";
+      # Skip versions like libdrm-2_0_2 that happen to go last when
+      # sorted.
+      ignoredVersions = "_";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
@@ -45,7 +57,7 @@ stdenv.mkDerivation rec {
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = lib.subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

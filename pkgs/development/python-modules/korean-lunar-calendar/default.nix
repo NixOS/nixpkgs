@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "korean_lunar_calendar";
-    sha256 = "sha256-6yxIUSSgYQFpJr3qbYnv35uf2/FttViVts8eW+wXuFc=";
+    hash = "sha256-6yxIUSSgYQFpJr3qbYnv35uf2/FttViVts8eW+wXuFc=";
   };
 
   # no real tests

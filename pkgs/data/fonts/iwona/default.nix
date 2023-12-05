@@ -1,16 +1,17 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, texlive }:
 
-let
-  version = "0_995";
-in fetchzip {
-  name = "iwona-${version}";
-  url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
+stdenvNoCC.mkDerivation rec {
+  inherit (src) pname version;
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile *.otf -d $out/share/fonts/opentype
+  src = texlive.pkgs.iwona;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-  sha256 = "1dcpn13bd31dw7ir0s722bv3nk136dy6qsab0kznjbzfqd7agswa";
 
   meta = with lib; {
     description = "A two-element sans-serif typeface, created by Małgorzata Budyta";
@@ -18,7 +19,7 @@ in fetchzip {
     # "[...] GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public # License (LPPL), version 1.3c or
     # later." - GUST website
-    license = licenses.lppl13c;
+    license = src.meta.license;
     maintainers = with maintainers; [ siddharthist ];
     platforms = platforms.all;
   };

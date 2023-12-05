@@ -1,4 +1,11 @@
-{ stdenv, lib, pkg-config, openssl, fetchFromGitHub, rustPlatform, darwin }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hydra-cli";
@@ -10,14 +17,27 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "1fd3swdjx249971ak1bgndm5kh6rlzbfywmydn122lhfi6ry6a03";
   };
-  cargoSha256 = "16446ppkvc6l8087x5m5kyy5gk4f7inyj7rzrfysriw4fvqxjsf3";
 
-  buildInputs = [ openssl ]
-                ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [
     pkg-config
   ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  # build fails due to outdated socket2 dependency
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A client for the Hydra CI";
@@ -25,5 +45,4 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gilligan lewo ];
   };
-
 }

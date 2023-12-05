@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     dnspython
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

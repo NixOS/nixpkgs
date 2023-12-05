@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 release () {
   local content="$1"
@@ -23,7 +23,7 @@ release_platform_attr () {
   local platform="$2"
   local attr="$3"
 
-  jq -r '.[] | select(.rid == "'"$platform"'") | ."'"$attr"'"' <<< "$release_files"
+  jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
@@ -64,6 +64,11 @@ generate_package_list() {
         local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
+        if [[ -z "$hash" ]]; then
+            echo "Failed to fetch hash for $url" >&2
+            exit 1
+        fi
+
         echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
     done
 }
@@ -111,11 +116,17 @@ aspnetcore_packages () {
       "Microsoft.AspNetCore.App.Runtime.linux-musl-x64" \
       "Microsoft.AspNetCore.App.Runtime.linux-x64" \
       "Microsoft.AspNetCore.App.Runtime.osx-x64" \
-      "Microsoft.AspNetCore.App.Runtime.win-arm" \
       "Microsoft.AspNetCore.App.Runtime.win-arm64" \
       "Microsoft.AspNetCore.App.Runtime.win-x64" \
       "Microsoft.AspNetCore.App.Runtime.win-x86" \
     )
+
+    # These packages are currently broken on .NET 8
+    if version_older "$version" "8"; then
+        pkgs+=( \
+            "Microsoft.AspNetCore.App.Runtime.win-arm" \
+        )
+    fi
 
     # Packages that only apply to .NET 6 and up
     if ! version_older "$version" "6"; then
@@ -161,7 +172,6 @@ sdk_packages () {
       "Microsoft.NETCore.App.Host.linux-musl-x64" \
       "Microsoft.NETCore.App.Host.linux-x64" \
       "Microsoft.NETCore.App.Host.osx-x64" \
-      "Microsoft.NETCore.App.Host.win-arm" \
       "Microsoft.NETCore.App.Host.win-arm64" \
       "Microsoft.NETCore.App.Host.win-x64" \
       "Microsoft.NETCore.App.Host.win-x86" \
@@ -171,7 +181,6 @@ sdk_packages () {
       "Microsoft.NETCore.App.Runtime.linux-musl-x64" \
       "Microsoft.NETCore.App.Runtime.linux-x64" \
       "Microsoft.NETCore.App.Runtime.osx-x64" \
-      "Microsoft.NETCore.App.Runtime.win-arm" \
       "Microsoft.NETCore.App.Runtime.win-arm64" \
       "Microsoft.NETCore.App.Runtime.win-x64" \
       "Microsoft.NETCore.App.Runtime.win-x86" \
@@ -207,10 +216,6 @@ sdk_packages () {
       "runtime.win-arm64.Microsoft.NETCore.DotNetHost" \
       "runtime.win-arm64.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.win-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHost" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver" \
       "runtime.win-x64.Microsoft.NETCore.DotNetAppHost" \
       "runtime.win-x64.Microsoft.NETCore.DotNetHost" \
       "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy" \
@@ -219,39 +224,52 @@ sdk_packages () {
       "runtime.win-x86.Microsoft.NETCore.DotNetHost" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostResolver" \
+      "Microsoft.NETCore.App.Host.linux-musl-arm" \
+      "Microsoft.NETCore.App.Host.osx-arm64" \
+      "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
+      "Microsoft.NETCore.App.Runtime.osx-arm64" \
+      "Microsoft.NETCore.App.Ref" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetAppHost" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHost" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostPolicy" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostResolver" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetAppHost" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-x64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
-    # Packages that only apply to .NET 6 and up
-    if ! version_older "$version" "6"; then
+    # These packages were removed on .NET 8
+    if version_older "$version" "8"; then
         pkgs+=( \
-          "Microsoft.NETCore.App.Composite" \
-          "Microsoft.NETCore.App.Host.linux-musl-arm" \
-          "Microsoft.NETCore.App.Host.osx-arm64" \
-          "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
-          "Microsoft.NETCore.App.Runtime.osx-arm64" \
-          "Microsoft.NETCore.App.Ref" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
-          "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetAppHost" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHost" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostPolicy" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostResolver" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetAppHost" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
+            "Microsoft.NETCore.App.Host.win-arm" \
+            "Microsoft.NETCore.App.Runtime.win-arm" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetAppHost" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHost" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver" \
+            "Microsoft.NETCore.App.Composite" \
         )
     fi
 
     # Packages that only apply to .NET 7 and up
     if ! version_older "$version" "7"; then
-        # ILCompiler requires nixpkgs#181373 to be fixed to work properly
         pkgs+=( \
           "runtime.linux-arm64.Microsoft.DotNet.ILCompiler" \
           "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler" \
@@ -273,8 +291,8 @@ main () {
 Get updated dotnet src (platform - url & sha512) expressions for specified versions
 
 Examples:
-  $pname 3.1.21 5.0.12    - specific x.y.z versions
-  $pname 3.1 5.0 6.0      - latest x.y versions
+  $pname 6.0.14 7.0.201    - specific x.y.z versions
+  $pname 6.0 7.0           - latest x.y versions
 " >&2
     exit 1
   fi
@@ -311,7 +329,7 @@ Examples:
             buildAspNetCore = { ... }: {}; \
             buildNetRuntime = { ... }: {}; \
             buildNetSdk = { version, ... }: version; \
-            icu = null; }).sdk_${major_minor_underscore}" | jq -r)
+            }).sdk_${major_minor_underscore}" | jq -r)
 
         if [[ "$current_version" == "$sdk_version" ]]; then
             echo "Nothing to update."
@@ -325,24 +343,25 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
-    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk, icu }:
+
+    result=$(mktemp)
+    trap "rm -f $result" TERM INT EXIT
+
+    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
 {
   aspnetcore_$major_minor_underscore = buildAspNetCore {
-    inherit icu;
     version = \"${aspnetcore_version}\";
     $(platform_sources "$aspnetcore_files")
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
-    inherit icu;
     version = \"${runtime_version}\";
     $(platform_sources "$runtime_files")
   };
 
   sdk_$major_minor_underscore = buildNetSdk {
-    inherit icu;
     version = \"${sdk_version}\";
     $(platform_sources "$sdk_files")
     packages = { fetchNuGet }: [
@@ -350,7 +369,9 @@ $(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
-}" > "./versions/${sem_version}.nix"
+}" > "${result}"
+
+    cp "${result}" "./versions/${sem_version}.nix"
     echo "Generated ./versions/${sem_version}.nix"
   done
 }

@@ -1,19 +1,20 @@
 { config, stdenv, lib
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , cmake
 , boost
 , gflags
 , glog
 , hdf5-cpp
-, opencv3
+, opencv4
 , protobuf
 , doxygen
 , blas
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , cudnnSupport ? cudaSupport
 , ncclSupport ? false
 , pythonSupport ? false, python ? null, numpy ? null
@@ -21,7 +22,13 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn nccl;
+  inherit (cudaPackages) cudatoolkit nccl;
+  # The default for cudatoolkit 10.1 is CUDNN 8.0.5, the last version to support CUDA 10.1.
+  # However, this caffe does not build with CUDNN 8.x, so we use CUDNN 7.6.5 instead.
+  # Earlier versions of cudatoolkit use pre-8.x CUDNN, so we use the default.
+  cudnn = if lib.versionOlder cudatoolkit.version "10.1"
+    then cudaPackages.cudnn
+    else cudaPackages.cudnn_7_6;
 in
 
 assert leveldbSupport -> (leveldb != null && snappy != null);
@@ -65,7 +72,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv4 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
@@ -78,7 +85,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
     let pp = python.pkgs; in ([
-      pp.numpy pp.scipy pp.scikitimage pp.h5py
+      pp.numpy pp.scipy pp.scikit-image pp.h5py
       pp.matplotlib pp.ipython pp.networkx pp.nose
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
@@ -90,6 +97,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
+    (fetchpatch {
+       name = "support-opencv4";
+       url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
+       hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
+     })
   ] ++ lib.optional pythonSupport (substituteAll {
     src = ./python.patch;
     inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
@@ -142,7 +154,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://caffe.berkeleyvision.org/";
     maintainers = with maintainers; [ ];
-    broken = pythonSupport && (python.isPy310);
+    broken = (pythonSupport && (python.isPy310)) || cudaSupport;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://romfs.sourceforge.net/";
+    homepage = "https://romfs.sourceforge.net/";
     description = "Tool for creating romfs file system images";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
+    mainProgram = "genromfs";
   };
 }

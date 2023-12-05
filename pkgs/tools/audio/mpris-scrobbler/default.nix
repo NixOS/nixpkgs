@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
     "-Dversion=${version}"
   ];
 
-  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # Needed with GCC 12
+    "-Wno-error=address"
+  ] ++ lib.optionals stdenv.isDarwin [
     "-Wno-sometimes-uninitialized"
     "-Wno-tautological-pointer-compare"
   ] ++ lib.optionals stdenv.isLinux [
@@ -67,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Minimalistic scrobbler for libre.fm & last.fm";
+    description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
     homepage = "https://github.com/mariusor/mpris-scrobbler";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];

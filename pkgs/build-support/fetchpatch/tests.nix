@@ -25,4 +25,11 @@ in
     revert = true;
     sha256 = if isFetchpatch2 then "sha256-+UKmEbr2rIAweCav/hR/7d4ZrYV84ht/domTrHtm8sM=" else "sha256-+UKmEbr2rIAweCav/hR/7d4ZrYV84ht/domTrHtm8sM=";
   };
+
+  decode = testers.invalidateFetcherByDrvHash fetchpatch {
+    name = "gcc.patch";
+    url = "https://chromium.googlesource.com/aosp/platform/external/libchrome/+/f37ae3b1a873d74182a2ac31d96742ead9c1f523^!?format=TEXT";
+    decode = "base64 -d";
+    sha256 = if isFetchpatch2 then "sha256-oMvPlmzE51ArI+EvFxONXkqmNee39106/O1ikG0Bdso=" else "sha256-SJHk8XrutqAyoIdORlhCpBCN626P+uzed7mjKz5eQYY=";
+  };
 }

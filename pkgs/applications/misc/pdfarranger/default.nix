@@ -1,27 +1,31 @@
-{ fetchFromGitHub, lib
-, wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+{ fetchFromGitHub
+, lib
+, wrapGAppsHook
+, python3Packages
+, gtk3
+, poppler_gi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-nZSP9JBbUPG9xk/ATXUYkjyP344m+e7RQS3BiFVzQf4=";
+    hash = "sha256-l//DeaIqUl6FdGFxM8yTKcTjVNvYMllorcoXoK33Iy4=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook
   ] ++ (with python3Packages; [
-    setuptools distutils_extra
+    setuptools
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3
+    poppler_gi
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -47,5 +51,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];
     license = licenses.gpl3Plus;
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }

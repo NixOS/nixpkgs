@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postBuild = ''
-    ${python.interpreter} -m compileall -f xattr
+    ${python.pythonOnBuildForHost.interpreter} -m compileall -f xattr
   '';
 
   pythonImportsCheck = [

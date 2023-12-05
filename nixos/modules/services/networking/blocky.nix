@@ -31,6 +31,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.blocky}/bin/blocky --config ${configFile}";
+        Restart = "on-failure";
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

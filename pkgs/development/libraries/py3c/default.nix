@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 

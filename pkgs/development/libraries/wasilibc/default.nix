@@ -8,7 +8,7 @@
 
 let
   pname = "wasilibc";
-  version = "17";
+  version = "20";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "WebAssembly";
     repo = "wasi-libc";
     rev = "refs/tags/wasi-sdk-${version}";
-    hash = "sha256-h2X78icCmnn6Y6baOxp8Xm7F2+RZZgaV2fszzi2q/iA=";
+    hash = "sha256-H92PDrH1FL7S3eMCK1+wqclryjhwghl21bOlRCAr1U4=";
     fetchSubmodules = true;
   };
 
@@ -63,6 +63,6 @@ stdenv.mkDerivation {
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
     maintainers = with maintainers; [ matthewbauer rvolosatovs ];
-    license = with licenses; [ asl20 mit llvm-exception ];
+    license = with licenses; [ asl20-llvm mit ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "papirus-folders";
-  version = "1.12.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "papirus-folders";
     rev = "v${version}";
-    sha256 = "sha256-ZZMEZCWO+qW76eqa+TgxWGVz69VkSCPcttLoCrH7ppY=";
+    sha256 = "sha256-BY1hnAGz31Deffy/EGKy/nuPKmpAA0u8FzPYgr1Plfs=";
   };
 
   buildInputs = [

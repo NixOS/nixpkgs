@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, pkg-config
 , airspy
-, librtlsdr
+, rtl-sdr
 , fdk_aac
 , faad2
 , fftwFloat
@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "guglielmo";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "marcogrecopriolo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-djBQTYbpgPFBtQZ9fZBpECP20RxB49AdxLbq8mUU6rg=";
+    sha256 = "sha256-W+KTwtxbTDrtONmkw95gXT28n3k9KS364WOzLLJdGLM=";
   };
 
   postInstall = ''
@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     airspy
-    librtlsdr
+    rtl-sdr
     fdk_aac
     faad2
     fftwFloat
@@ -42,7 +42,7 @@ mkDerivation rec {
 
   postFixup = ''
     # guglielmo opens SDR libraries at run time
-    patchelf --add-rpath "${airspy}/lib:${librtlsdr}/lib" $out/bin/.guglielmo-wrapped
+    patchelf --add-rpath "${airspy}/lib:${rtl-sdr}/lib" $out/bin/.guglielmo-wrapped
   '';
 
   meta = with lib; {

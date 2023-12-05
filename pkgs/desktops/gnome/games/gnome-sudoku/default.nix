@@ -7,9 +7,10 @@
 , pkg-config
 , gobject-introspection
 , gettext
-, gtk3
+, gtk4
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook4
+, libadwaita
 , libgee
 , json-glib
 , qqwing
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "43.0";
+  version = "45.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ftJ0KJz1ykELHJKxU3BQpcNi99szmaMrU0PQ3nBGbkk=";
+    sha256 = "27xURAbO54QRBBeOpKk742EH2dfsplVf0wGJzRQ41ko=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +38,12 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
     libgee
     json-glib
     qqwing

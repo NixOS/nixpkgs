@@ -20,10 +20,14 @@
 , gnutls
 , systemd
 , samba
+, talloc
 , jansson
+, ldb
 , libtasn1
 , tdb
+, tevent
 , libxcrypt
+, libxcrypt-legacy
 , cmocka
 , rpcsvc-proto
 , bash
@@ -46,13 +50,22 @@
 
 with lib;
 
+let
+  # samba-tool requires libxcrypt-legacy algorithms
+  python = python3Packages.python.override {
+    libxcrypt = libxcrypt-legacy;
+  };
+  wrapPython = python3Packages.wrapPython.override {
+    inherit python;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.17.4";
+  version = "4.19.2";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-wFEgedtMrHB8zqTBiuu9ay6zrPbpBzXn9kWjJr4fRTc=";
+    hash = "sha256-nmPwUF4cYx8dsLepNJpR6SXAJsoDrz/V2BIii7WX05M=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -90,8 +103,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
-    python3Packages.wrapPython
-    python3Packages.python
+    wrapPython
+    python
     readline
     popt
     dbus
@@ -106,6 +119,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
+    ++ optionals (!enableLDAP && stdenv.isLinux) [ ldb talloc tevent ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
@@ -143,6 +157,8 @@ stdenv.mkDerivation rec {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
+  ] ++ optionals (!enableLDAP && stdenv.isLinux) [
+    "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
   ] ++ optional enableLibunwind "--with-libunwind"
     ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
@@ -159,7 +175,7 @@ stdenv.mkDerivation rec {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  pythonPath = [ python3Packages.dnspython tdb ];
+  pythonPath = [ python3Packages.dnspython python3Packages.markdown tdb ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -202,7 +218,7 @@ stdenv.mkDerivation rec {
     # Samba does its own shebang patching, but uses build Python
     find $out/bin -type f -executable | while read file; do
       isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}/bin^${lib.getBin python3Packages.python}/bin^' "$file"
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python}^' "$file"
     done
   '';
 

@@ -1,34 +1,28 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3 }:
+{ lib, buildLua, fetchFromGitHub, python3 }:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpv-thumbnail-script";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "mpv_thumbnail_script";
     rev = version;
-    sha256 = "sha256-0nqV8vY3cBOJkLRoQ33Cc+4+vSK45i9yWbhKiQIuVSw=";
+    sha256 = "sha256-J24Rou7BTE7zoiPlBkWuO9dtYJiuzkuwB4FROuzXzag=";
   };
 
   nativeBuildInputs = [ python3 ];
+  postPatch = "patchShebangs concat_files.py";
+  dontBuild = false;
 
-  postPatch = ''
-    patchShebangs concat_files.py
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/mpv/scripts
-    cp mpv_thumbnail_script_{client_osc,server}.lua $out/share/mpv/scripts
-    runHook postInstall
-  '';
-
+  scriptPath = "mpv_thumbnail_script_client_osc.lua";
+  extraScripts = [ "mpv_thumbnail_script_server.lua" ];
   passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
 
   meta = with lib; {
     description = "A lua script to show preview thumbnails in mpv's OSC seekbar";
     homepage = "https://github.com/marzzzello/mpv_thumbnail_script";
+    changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ figsoda ];

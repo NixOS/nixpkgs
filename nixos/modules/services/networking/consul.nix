@@ -33,15 +33,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.consul;
-        defaultText = literalExpression "pkgs.consul";
-        description = lib.mdDoc ''
-          The package used for the Consul agent and CLI.
-        '';
-      };
-
+      package = mkPackageOption pkgs "consul" { };
 
       webUi = mkOption {
         type = types.bool;
@@ -128,12 +120,7 @@ in
       alerts = {
         enable = mkEnableOption (lib.mdDoc "consul-alerts");
 
-        package = mkOption {
-          description = lib.mdDoc "Package to use for consul-alerts.";
-          default = pkgs.consul-alerts;
-          defaultText = literalExpression "pkgs.consul-alerts";
-          type = types.package;
-        };
+        package = mkPackageOption pkgs "consul-alerts" { };
 
         listenAddr = mkOption {
           description = lib.mdDoc "Api listening address.";
@@ -199,7 +186,7 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           PermissionsStartOnly = true;
@@ -207,10 +194,10 @@ in
           Restart = "on-failure";
           TimeoutStartSec = "infinity";
         } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package}/bin/consul leave";
+          ExecStop = "${lib.getExe cfg.package} leave";
         });
 
-        path = with pkgs; [ iproute2 gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gawk cfg.package ];
         preStart = let
           family = if cfg.forceAddrFamily == "ipv6" then
             "-6"
@@ -269,7 +256,7 @@ in
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package}/bin/consul-alerts start \
+            ${lib.getExe cfg.alerts.package} start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \

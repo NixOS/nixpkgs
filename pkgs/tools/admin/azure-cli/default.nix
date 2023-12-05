@@ -1,63 +1,59 @@
-{ stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
+{ lib
+, callPackage
+, fetchFromGitHub
+, installShellFiles
+}:
 
 let
-  version = "2.37.0";
-  srcName = "azure-cli-${version}-src";
+  version = "2.54.0";
 
   src = fetchFromGitHub {
-    name = srcName;
+    name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-Y1P+cTOK7NbV7k9rg38vE7EPuZQo88IQW3IYYou8ZOI=";
+    hash = "sha256-LbGDPZe4AWl6wnZ5GtiiM4O5EsCHEHX420lBIJJ0+Kk=";
   };
 
   # put packages that needs to be overridden in the py package scope
-  py = import ./python-packages.nix {
-    inherit stdenv lib src version python3;
-  };
+  py = callPackage ./python-packages.nix { inherit src version; };
 in
+
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
-  sourceRoot = "${srcName}/src/azure-cli";
+  sourceRoot = "${src.name}/src/azure-cli";
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "chardet~=3.0.4" "chardet" \
-      --replace "javaproperties~=0.5.1" "javaproperties" \
-      --replace "scp~=0.13.2" "scp"
-
-    # remove namespace hacks
-    # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
-    sed -i setup.py \
-      -e '/azure-cli-command_modules-nspkg/d' \
-      -e '/azure-cli-nspkg/d' \
-      -e '/urllib3/d'
-  '';
-
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   propagatedBuildInputs = with py.pkgs; [
+    antlr4-python3-runtime
+    applicationinsights
+    argcomplete
+    asn1crypto
     azure-appconfiguration
     azure-batch
     azure-cli-core
     azure-cli-telemetry
+    azure-common
+    azure-core
     azure-cosmos
     azure-data-tables
     azure-datalake-store
-    azure-functions-devops-build
     azure-graphrbac
-    azure-identity
-    azure-keyvault
     azure-keyvault-administration
+    azure-keyvault-certificates
     azure-keyvault-keys
+    azure-keyvault-secrets
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
-    azure-mgmt-applicationinsights
     azure-mgmt-appconfiguration
+    azure-mgmt-appcontainers
+    azure-mgmt-applicationinsights
     azure-mgmt-authorization
     azure-mgmt-batch
     azure-mgmt-batchai
@@ -70,12 +66,12 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-containerinstance
     azure-mgmt-containerregistry
     azure-mgmt-containerservice
+    azure-mgmt-core
     azure-mgmt-cosmosdb
     azure-mgmt-databoxedge
-    azure-mgmt-datalake-analytics
+    azure-mgmt-datalake-nspkg
     azure-mgmt-datalake-store
     azure-mgmt-datamigration
-    azure-mgmt-deploymentmanager
     azure-mgmt-devtestlabs
     azure-mgmt-dns
     azure-mgmt-eventgrid
@@ -89,14 +85,13 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-keyvault
     azure-mgmt-kusto
     azure-mgmt-loganalytics
-    azure-mgmt-managedservices
     azure-mgmt-managementgroups
+    azure-mgmt-managedservices
     azure-mgmt-maps
     azure-mgmt-marketplaceordering
     azure-mgmt-media
     azure-mgmt-monitor
     azure-mgmt-msi
-    azure-mgmt-network
     azure-mgmt-netapp
     azure-mgmt-policyinsights
     azure-mgmt-privatedns
@@ -106,7 +101,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-redhatopenshift
     azure-mgmt-redis
     azure-mgmt-relay
-    azure-mgmt-reservations
     azure-mgmt-resource
     azure-mgmt-search
     azure-mgmt-security
@@ -114,50 +108,68 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-servicefabric
     azure-mgmt-servicefabricmanagedclusters
     azure-mgmt-servicelinker
-    azure-mgmt-signalr
     azure-mgmt-sql
+    azure-mgmt-signalr
     azure-mgmt-sqlvirtualmachine
     azure-mgmt-storage
     azure-mgmt-synapse
     azure-mgmt-trafficmanager
     azure-mgmt-web
     azure-multiapi-storage
+    azure-nspkg
+    azure-storage-common
     azure-storage-blob
     azure-synapse-accesscontrol
     azure-synapse-artifacts
     azure-synapse-managedprivateendpoints
     azure-synapse-spark
+    bcrypt
+    certifi
+    cffi
     chardet
     colorama
     cryptography
     distro
-    Fabric
-    jsmin
+    fabric
+    humanfriendly
+    idna
+    invoke
+    isodate
+    javaproperties
+    jinja2
+    jmespath
+    jsondiff
     knack
-    mock
+    markupsafe
+    msal-extensions
+    msal
+    msrest
+    msrestazure
+    oauthlib
+    packaging
     paramiko
-    pydocumentdb
-    PyGithub
-    pygments
+    pbr
+    pkginfo
+    portalocker
+    psutil
+    pycomposefile
+    pycparser
+    pygithub
+    pyjwt
     pynacl
     pyopenssl
-    pytz
-    pyyaml
-    psutil
+    python-dateutil
+    requests-oauthlib
     requests
     scp
     semver
     six
     sshtunnel
+    tabulate
     urllib3
-    vsts-cd-manager
+    wcwidth
     websocket-client
     xmltodict
-    javaproperties
-    jsondiff
-    # urllib3[secure]
-    # shell completion
-    argcomplete
   ];
 
   postInstall = ''
@@ -178,10 +190,12 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
       --set PYTHONPATH $PYTHONPATH
   '';
 
-  # almost the entire test suite requires an azure account setup and networking
-  # ensure that the azure namespaces are setup correctly and that azure.cli can be accessed
-  checkPhase = ''
-    HOME=$TMPDIR $out/bin/az --help > /dev/null
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export HOME=$TMPDIR
+
+    $out/bin/az --version
+    $out/bin/az self-test
   '';
 
   # ensure these namespaces are able to be accessed
@@ -191,7 +205,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.cli.telemetry"
     "azure.cosmos"
     "azure.datalake.store"
-    "azure_functions_devops_build"
     "azure.graphrbac"
     "azure.keyvault"
     "azure.loganalytics"
@@ -199,6 +212,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.apimanagement"
     "azure.mgmt.applicationinsights"
     "azure.mgmt.appconfiguration"
+    "azure.mgmt.appcontainers"
     "azure.mgmt.authorization"
     "azure.mgmt.batch"
     "azure.mgmt.batchai"
@@ -212,10 +226,8 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.containerregistry"
     "azure.mgmt.containerservice"
     "azure.mgmt.cosmosdb"
-    "azure.mgmt.datalake.analytics"
     "azure.mgmt.datalake.store"
     "azure.mgmt.datamigration"
-    "azure.mgmt.deploymentmanager"
     "azure.mgmt.devtestlabs"
     "azure.mgmt.dns"
     "azure.mgmt.eventgrid"
@@ -235,7 +247,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.media"
     "azure.mgmt.monitor"
     "azure.mgmt.msi"
-    "azure.mgmt.network"
     "azure.mgmt.netapp"
     "azure.mgmt.policyinsights"
     "azure.mgmt.privatedns"
@@ -244,7 +255,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.recoveryservicesbackup"
     "azure.mgmt.redis"
     "azure.mgmt.relay"
-    "azure.mgmt.reservations"
     "azure.mgmt.resource"
     "azure.mgmt.search"
     "azure.mgmt.security"
@@ -263,8 +273,19 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
+    downloadPage = "https://github.com/Azure/azure-cli/releases/tag/azure-cli-${version}";
+    longDescription = ''
+      The Azure Command-Line Interface (CLI) is a cross-platform
+      command-line tool to connect to Azure and execute administrative
+      commands on Azure resources. It allows the execution of commands
+      through a terminal using interactive command-line prompts or a script.
+    '';
+    changelog = "https://github.com/MicrosoftDocs/azure-docs-cli/blob/main/docs-ref-conceptual/release-notes-azure-cli.md";
+    sourceProvenance = [ sourceTypes.fromSource ];
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    mainProgram = "az";
+    maintainers = with maintainers; [ akechishiro jonringer ];
+    platforms = platforms.all;
   };
 })
 

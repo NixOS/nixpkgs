@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Library for creating OpenSMTPD filters";
     homepage = "http://imperialat.at/dev/libopensmtpd/";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

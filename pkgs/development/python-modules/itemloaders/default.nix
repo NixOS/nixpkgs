@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.0.6";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZzpWIJNDve6SvLDb+QUDVSXUfJabFuRwtyBeCUasUgY=";
+    hash = "sha256-jwxxKfr/SI1yfjSQbYqggWxBwusBZNYySHwZXHftgFs=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     itemadapter
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

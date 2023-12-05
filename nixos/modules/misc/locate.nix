@@ -4,14 +4,15 @@ with lib;
 
 let
   cfg = config.services.locate;
-  isMLocate = hasPrefix "mlocate" cfg.locate.name;
-  isPLocate = hasPrefix "plocate" cfg.locate.name;
-  isMorPLocate = (isMLocate || isPLocate);
-  isFindutils = hasPrefix "findutils" cfg.locate.name;
+  isMLocate = hasPrefix "mlocate" cfg.package.name;
+  isPLocate = hasPrefix "plocate" cfg.package.name;
+  isMorPLocate = isMLocate || isPLocate;
+  isFindutils = hasPrefix "findutils" cfg.package.name;
 in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRenamedOptionModule [ "services" "locate" "locate" ] [ "services" "locate" "package" ])
     (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
   ];
 
@@ -25,14 +26,8 @@ in
       '';
     };
 
-    locate = mkOption {
-      type = package;
-      default = pkgs.findutils.locate;
-      defaultText = literalExpression "pkgs.findutils";
-      example = literalExpression "pkgs.mlocate";
-      description = lib.mdDoc ''
-        The locate implementation to use
-      '';
+    package = mkPackageOption pkgs [ "findutils" "locate" ] {
+      example = "mlocate";
     };
 
     interval = mkOption {
@@ -216,25 +211,23 @@ in
           setgid = true;
           setuid = false;
         };
-        mlocate = (mkIf isMLocate {
+        mlocate = mkIf isMLocate {
           group = "mlocate";
-          source = "${cfg.locate}/bin/locate";
-        });
-        plocate = (mkIf isPLocate {
+          source = "${cfg.package}/bin/locate";
+        };
+        plocate = mkIf isPLocate {
           group = "plocate";
-          source = "${cfg.locate}/bin/plocate";
-        });
+          source = "${cfg.package}/bin/plocate";
+        };
       in
       mkIf isMorPLocate {
         locate = mkMerge [ common mlocate plocate ];
-        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
+        plocate = mkIf isPLocate (mkMerge [ common plocate ]);
       };
 
-    nixpkgs.config = { locate.dbfile = cfg.output; };
+    environment.systemPackages = [ cfg.package ];
 
-    environment.systemPackages = [ cfg.locate ];
-
-    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
+    environment.variables.LOCATE_PATH = cfg.output;
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
@@ -270,13 +263,13 @@ in
             args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
           in
           ''
-            exec ${cfg.locate}/bin/updatedb \
+            exec ${cfg.package}/bin/updatedb \
               --output ${toString cfg.output} ${concatStringsSep " " args} \
               --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
               ${concatStringsSep " " cfg.extraFlags}
           ''
         else ''
-          exec ${cfg.locate}/bin/updatedb \
+          exec ${cfg.package}/bin/updatedb \
             ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
             --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
         '';

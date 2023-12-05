@@ -19,6 +19,15 @@ in {
       '';
     };
 
+    dataPermissions = mkOption {
+      type = types.str;
+      default = "0750";
+      example = "0755";
+      description = lib.mdDoc ''
+        Unix Permissions in octal on the rtorrent directory.
+      '';
+    };
+
     downloadDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/download";
@@ -44,14 +53,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.rtorrent;
-      defaultText = literalExpression "pkgs.rtorrent";
-      description = lib.mdDoc ''
-        The rtorrent package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "rtorrent" { };
 
     port = mkOption {
       type = types.port;
@@ -205,7 +207,7 @@ in {
         };
       };
 
-      tmpfiles.rules = [ "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -" ];
+      tmpfiles.rules = [ "d '${cfg.dataDir}' ${cfg.dataPermissions} ${cfg.user} ${cfg.group} -" ];
     };
   };
 }

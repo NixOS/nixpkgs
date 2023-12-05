@@ -3,14 +3,16 @@
 , fetchFromGitHub
 , pandoc
 , pandocfilters
+, poetry-core
 , pythonOlder
 , substituteAll
-, texlive
+, texliveSmall
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.10";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -30,8 +32,12 @@ buildPythonPackage rec {
     ./skip-tests.patch
   ];
 
-  checkInputs = [
-    texlive.combined.scheme-small
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    texliveSmall
     pandocfilters
   ];
 

@@ -13,15 +13,15 @@ vscode-utils.buildVscodeMarketplaceExtension {
     jq '.contributes.configuration.properties."plantuml.java".default = "${plantuml}/bin/plantuml"' package.json | sponge package.json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A Visual Studio Code extension for supporting Rich PlantUML";
     downloadPage =
       "https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml";
     homepage = "https://github.com/qjebbs/vscode-plantuml";
     changelog =
       "https://marketplace.visualstudio.com/items/jebbs.plantuml/changelog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ victormignot ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.victormignot ];
   };
 }
 

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "releases";
-  version = "1.6.3";
+  version = "2.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bitprophet";
     repo = pname;
     rev = version;
-    hash = "sha256-XX2e6bjBNMun31h0sNJ9ieZE01U+PhA5JYYNOuMgD20=";
+    hash = "sha256-IgEKAUk97R3ZvqvexD/ptT8i0uf48K+DKkk4q3pn3G8=";
   };
 
   postPatch = ''

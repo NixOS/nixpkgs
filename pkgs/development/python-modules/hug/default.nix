@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ falcon requests ];
 
-  checkInputs = [ mock marshmallow pytestCheckHook numpy ];
+  nativeCheckInputs = [ mock marshmallow pytestCheckHook numpy ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner"' ""

@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
 
   pname = "seabios";
-  version = "1.16.1";
+  version = "1.16.2";
 
   src = fetchgit {
     url = "https://git.seabios.org/seabios.git";
     rev = "rel-${version}";
-    sha256 = "sha256-oIl2ZbhgSiVJPMBGbVt6N074vOifAoZL6VdKcBwM8D4=";
+    sha256 = "sha256-J2FuT+FXn9YoFLSfxDOxyKZvKrys59a6bP1eYvEXVNU=";
   };
 
   nativeBuildInputs = [ python3 ];

@@ -8,7 +8,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "AnyDesk";
-    exec = "@out@/bin/anydesk";
+    exec = "@out@/bin/anydesk %u";
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
@@ -18,14 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    sha256 = "k85nQH2FWyEXDgB+Pd4yStfNCjkiIGE2vA/YTXLaK4o=";
+    hash = "sha256-seMzfTXOGa+TljgpmIsgFOis+79r0bWt+4vH3Nb+5FI=";
   };
 
   passthru = {
@@ -86,6 +86,6 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ shyim cheriimoya ];
   };
 }

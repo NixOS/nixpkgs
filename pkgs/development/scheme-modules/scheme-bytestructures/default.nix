@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Wvs288K8BVjUuWvvzpDGBwOxL7mAXjVtgIwJAsQd0L4=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook guile pkg-config
   ];
   buildInputs = [
     guile

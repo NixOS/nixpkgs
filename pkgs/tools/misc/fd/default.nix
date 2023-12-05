@@ -1,19 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.6.0";
+  version = "8.7.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "sha256-RVGCSUYyWo2wKRIrnci+aWEAPW9jHhMfYkYJkCgd7f8=";
+    hash = "sha256-euQiMVPKE1/YG04VKMFUA27OtoGENNhqeE0iiF/X7uc=";
   };
 
-  cargoSha256 = "sha256-PT95U1l+BVX7sby3GKktZMmbNNQoPYR8nL+H90EnqZY=";
+  cargoHash = "sha256-doeZTjFPXmxIPYX3IBtetePoNkIHnl6oPJFtXD1tgZY=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   # skip flaky test
   checkFlags = [
@@ -29,6 +31,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh contrib/completion/_fd
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = fd;
+  };
+
   meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
@@ -41,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    mainProgram = "fd";
   };
 }

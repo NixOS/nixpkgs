@@ -1,10 +1,11 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
-, qmake
+, fetchpatch
+, cmake
+, pkg-config
 , qttools
-, qttranslations
+, wrapQtAppsHook
 , gdal
 , proj
 , qtsvg
@@ -15,7 +16,7 @@
 , withZbar ? false, zbar
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "merkaartor";
   version = "0.19.0";
 
@@ -23,10 +24,23 @@ mkDerivation rec {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
-    sha256 = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
+    hash = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  patches = [
+    (fetchpatch {
+      name = "exiv2-0.28.patch";
+      url = "https://github.com/openstreetmap/merkaartor/commit/1e20d2ccd743ea5f8c2358e4ae36fead8b9390fd.patch";
+      hash = "sha256-aHjJLKYvqz7V0QwUIg0SbentBe+DaCJusVqy4xRBVWo=";
+    })
+    # https://github.com/openstreetmap/merkaartor/pull/290
+    (fetchpatch {
+      url = "https://github.com/openstreetmap/merkaartor/commit/7dede77370d89e8e7586f6ed5af225f9b5bde6cf.patch";
+      hash = "sha256-3oDRPysVNvA50t/b9xOcVQgac3U1lDPrencanl4c6Zk=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [ gdal proj qtsvg qtwebengine ]
     ++ lib.optional withGeoimage exiv2
@@ -34,28 +48,25 @@ mkDerivation rec {
     ++ lib.optional withLibproxy libproxy
     ++ lib.optional withZbar zbar;
 
-  preConfigure = ''
-    lrelease src/src.pro
-  '';
-
-  qmakeFlags = [
-    "TRANSDIR_SYSTEM=${qttranslations}/translations"
-    "USEWEBENGINE=1"
-  ] ++ lib.optional withGeoimage "GEOIMAGE=1"
-    ++ lib.optional withGpsdlib "GPSDLIB=1"
-    ++ lib.optional withLibproxy "LIBPROXY=1"
-    ++ lib.optional withZbar "ZBAR=1";
+  cmakeFlags = [
+    (lib.cmakeBool "GEOIMAGE" withGeoimage)
+    (lib.cmakeBool "GPSD" withGpsdlib)
+    (lib.cmakeBool "LIBPROXY" withLibproxy)
+    (lib.cmakeBool "WEBENGINE" true)
+    (lib.cmakeBool "ZBAR" withZbar)
+  ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv binaries/bin/merkaartor.app $out/Applications
-    mv binaries/bin/plugins $out/Applications/merkaartor.app/Contents
+    mkdir -p $out/{Applications,bin}
+    mv $out/merkaartor.app $out/Applications
+    makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
   '';
 
   meta = with lib; {
     description = "OpenStreetMap editor";
     homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
+    mainProgram = "merkaartor";
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };

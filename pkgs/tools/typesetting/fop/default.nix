@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fop";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
-    sha256 = "sha256-tPGlISmJzrx9F8cnX70j3nPMVyWdkojAFDZVYlSthtQ=";
+    sha256 = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
   };
 
   buildInputs = [ ant jdk ];
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "fop";
   };
 }

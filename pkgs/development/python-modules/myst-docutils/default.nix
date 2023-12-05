@@ -13,12 +13,13 @@
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "0.18.0";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-evyIuNLbBWR3KfQMv2lNw6fOgX1+/uMS5cHIbSTYDmA=";
+    pname = "myst_docutils";
+    inherit version;
+    hash = "sha256-WmmPEg+bINmeId+pjR6bbp8qzjfSXfEel+sQEdPIu8Y=";
   };
 
   nativeBuildInputs = [

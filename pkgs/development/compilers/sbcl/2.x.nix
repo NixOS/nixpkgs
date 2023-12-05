@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap, zstd
-, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+{ lib, stdenv, callPackage, clisp, fetchurl, fetchpatch, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -14,60 +13,60 @@
 
 let
   versionMap = {
-    "2.0.8" = {
-      sha256 = "1xwrwvps7drrpyw3wg5h3g2qajmkwqs9gz0fdw1ns9adp7vld390";
-    };
-
-    "2.0.9" = {
-      sha256 = "17wvrcwgp45z9b6arik31fjnz7908qhr5ackxq1y0gqi1hsh1xy4";
-    };
-
-    "2.1.1" = {
-      sha256 = "15wa66sachhzgvg5n35vihmkpasg100lh561c1d1bdrql0p8kbd9";
-    };
-
-    "2.1.2" = {
-      sha256 = "sha256:02scrqyp2izsd8xjm2k5j5lhn4pdhd202jlcb54ysmcqjd80awdp";
-    };
-
+    # Only kept around for BCLM. Remove once unneeded there.
     "2.1.9" = {
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.1.10" = {
-      sha256 = "0f5ihj486m7ghh3nc0jlnqa656sbqcmhdv32syz2rjx5b47ky67b";
+    "2.3.10" = {
+      sha256 = "sha256-NYAzMV0H5MWmyDjufyLPxNSelISOtx7BOJ1JS8Mt0qs=";
     };
-
-    "2.1.11" = {
-      sha256 = "1zgypmn19c58pv7j33ga7m1l7lzghj70w3xbybpgmggxwwflihdz";
-    };
-
-    "2.2.4" = {
-      sha256 = "sha256-/N0lHLxl9/gI7QrXckaEjRvhZqppoX90mWABhLelcgI=";
-    };
-
-    "2.2.6" = {
-      sha256 = "sha256-PiMEjI+oJvuRMiC+sqw2l9vFwM3y6J/tjbOe0XEjBKA=";
-    };
-
-    "2.2.9" = {
-      sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
-    };
-
-    "2.2.10" = {
-      sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
-    };
-
-    "2.2.11" = {
-      sha256 = "sha256-NgfWgBZzGICEXO1dXVXGBUzEnxkSGhUCfmxWB66Elt8=";
-    };
-
-    "2.3.0" = {
-      sha256 = "sha256-v3Q5SXEq4Cy3ST87i1fOJBlIv2ETHjaGDdszTaFDnJc=";
+    "2.3.11" = {
+      sha256 = "sha256-hL7rjXLIeJeEf8AoWtyz+k9IG9s5ECxPuat5aEGErSk=";
     };
   };
+  # Collection of pre-built SBCL binaries for platforms that need them for
+  # bootstrapping. Ideally these are to be avoided.  If CLISP (or any other
+  # non-binary-distributed Lisp) can run on any of these systems, that entry
+  # should be removed from this list.
+  bootstrapBinaries = rec {
+    # This build segfaults using CLISP.
+    x86_64-darwin = {
+      version = "2.2.9";
+      system = "x86-64-darwin";
+      sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
+    };
+    i686-linux = {
+      version = "1.2.7";
+      system = "x86-linux";
+      sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
+    };
+    armv7l-linux = {
+      version = "1.2.14";
+      system = "armhf-linux";
+      sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
+    };
+    armv6l-linux = armv7l-linux;
+    x86_64-freebsd = {
+      version = "1.2.7";
+      system = "x86-64-freebsd";
+      sha256 = "14k42xiqd2rrim4pd5k5pjcrpkac09qnpynha8j1v4jngrvmw7y6";
+    };
+    x86_64-solaris = {
+      version = "1.2.7";
+      system = "x86-64-solaris";
+      sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";
+    };
+  };
+  sbclBootstrap = callPackage ./bootstrap.nix {
+    cfg = bootstrapBinaries.${stdenv.hostPlatform.system};
+  };
+  bootstrapLisp =
+    if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
+    then "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+    else "${clisp}/bin/clisp -E UTF-8 --silent -norc";
 
-in with versionMap.${version};
+in
 
 stdenv.mkDerivation rec {
   pname = "sbcl";
@@ -75,50 +74,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
-    inherit sha256;
+    inherit (versionMap.${version}) sha256;
   };
 
   nativeBuildInputs = [ texinfo ];
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  patches = lib.optional
-    (lib.versionAtLeast version "2.1.2" && lib.versionOlder version "2.1.8")
-    (fetchpatch {
-      # Fix segfault on ARM when reading large core files
-      url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
-      sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
-    })
-  ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.9") [
-      # Fix included in SBCL trunk since 2.2.9:
-      #   https://bugs.launchpad.net/sbcl/+bug/1980570
-      (fetchpatch {
-        name = "darwin-fno-common.patch";
-        url = "https://bugs.launchpad.net/sbcl/+bug/1980570/+attachment/5600916/+files/0001-src-runtime-fix-fno-common-build-on-darwin.patch";
-        sha256 = "0avpwgjdaxxdpq8pfvv9darfn4ql5dgqq7zaf3nmxnvhh86ngzij";
-      })
-  ] ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.0") [
-      # Fix -fno-common on arm64
-      (fetchpatch {
-        name = "arm64-fno-common.patch";
-        url = "https://github.com/sbcl/sbcl/commit/ac3739eae36de92feffef5bb9b4b4bd93f6c4942.patch";
-        sha256 = "1kxg0ng7d465rk5v4biikrzaps41x4n1v4ygnb5qh4f5jzkbms8y";
-      })
-  ] ++ lib.optionals (version == "2.2.6") [
-    # Take contrib blocklist into account for doc generation.  This fixes sbcl
-    # build on aarch64, because the docs Makefile tries to require sb-simd,
-    # which is blocked in that platform.
-    (fetchpatch {
-      url = "https://github.com/sbcl/sbcl/commit/f88989694200a5192fb68047d43d0500b2165f7b.patch";
-      sha256 = "sha256-MXEsK46RARPmB2WBPcrmZk6ArliU8DgHw73x9+/QAmk=";
-    })
-  ] ++ lib.optionals (version == "2.2.10") [
-    # hard-coded /bin/cat to just ‘cat’, trusting the PATH
-    (fetchpatch {
-      url = "https://github.com/sbcl/sbcl/commit/8ed662fbfeb5dde35eb265f390b55b01f79f70c1.patch";
-      sha256 = "sha256-2aqb13AFdw9KMf8KQ9yj1HVxgoFWZ9xWmnoDdbRSLy4=";
-    })
-  ];
-
+  # There are no patches necessary for the currently enabled versions, but this
+  # code is left in place for the next potential patch.
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
 
@@ -171,7 +134,7 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals (lib.versionOlder version "2.1.10") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
@@ -179,16 +142,16 @@ stdenv.mkDerivation rec {
     "-fcommon"
   ]
     # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ];
+    ++ [ "-D_GNU_SOURCE" ]);
 
   buildPhase = ''
     runHook preBuild
 
-    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
+    sh make.sh --prefix=$out --xc-host="${bootstrapLisp}" ${
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
-                } ${if stdenv.hostPlatform.system == "aarch64-darwin" then "--arch=arm64" else ""}
+                } ${lib.optionalString (stdenv.hostPlatform.system == "aarch64-darwin") "--arch=arm64"}
     (cd doc/manual ; make info)
 
     runHook postBuild
@@ -218,5 +181,17 @@ stdenv.mkDerivation rec {
     }
   '');
 
-  meta = sbclBootstrap.meta;
+  meta = with lib; {
+    description = "Lisp compiler";
+    homepage = "https://sbcl.org";
+    license = licenses.publicDomain; # and FreeBSD
+    maintainers = lib.teams.lisp.members;
+    platforms = attrNames bootstrapBinaries ++ [
+      # These aren’t bootstrapped using the binary distribution but compiled
+      # using a separate (lisp) host
+      "x86_64-linux"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
+  };
 }

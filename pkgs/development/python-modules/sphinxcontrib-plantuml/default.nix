@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.24.1";
+  version = "0.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OdLkvEDV4JMSYSmhRPVrbuFfWM+lBItZSOY6Ea/ztYY=";
+    hash = "sha256-iXV3ju2cFCpC7NxOzYMTLewGkMA1yueIwSN1Dq1SZwM=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   # No tests included.
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";

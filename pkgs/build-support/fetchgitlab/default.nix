@@ -1,5 +1,6 @@
 { fetchgit, fetchzip, lib }:
 
+lib.makeOverridable (
 # gitlab example
 { owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
 , fetchSubmodules ? false, leaveDotGit ? false, deepClone ? false
@@ -29,4 +30,5 @@ let
   }) // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev; }
+fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev owner repo; }
+)

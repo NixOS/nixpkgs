@@ -34,7 +34,7 @@ let
     text = if (cfg.configFile != null) then ''
       cp ${cfg.configFile} ${configPath}
       # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
+      chown -R --reference="$HOME" "$(dirname ${configPath})"
     '' else ''
       export CONFIG_FILE=${configPath}
 
@@ -195,12 +195,8 @@ in {
         Time to wait until a graceful shutdown is turned into a forceful one.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gitlab-runner;
-      defaultText = literalExpression "pkgs.gitlab-runner";
-      example = literalExpression "pkgs.gitlab-runner_1_11";
-      description = lib.mdDoc "Gitlab Runner package to use.";
+    package = mkPackageOption pkgs "gitlab-runner" {
+      example = "gitlab-runner_1_11";
     };
     extraPackages = mkOption {
       type = types.listOf types.package;
@@ -577,7 +573,7 @@ in {
       };
     };
     # Enable periodic clear-docker-cache script
-    systemd.services.gitlab-runner-clear-docker-cache = {
+    systemd.services.gitlab-runner-clear-docker-cache = mkIf (cfg.clear-docker-cache.enable && (any (s: s.executor == "docker") (attrValues cfg.services))) {
       description = "Prune gitlab-runner docker resources";
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
@@ -590,7 +586,7 @@ in {
         ${pkgs.gitlab-runner}/bin/clear-docker-cache ${toString cfg.clear-docker-cache.flags}
       '';
 
-      startAt = optional cfg.clear-docker-cache.enable cfg.clear-docker-cache.dates;
+      startAt = cfg.clear-docker-cache.dates;
     };
     # Enable docker if `docker` executor is used in any service
     virtualisation.docker.enable = mkIf (
@@ -611,4 +607,6 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "advertiseAddress" ] [ "services" "gitlab-runner" "settings" "session_server" "advertise_address" ] )
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "sessionTimeout" ] [ "services" "gitlab-runner" "settings" "session_server" "session_timeout" ] )
   ];
+
+  meta.maintainers = teams.gitlab.members;
 }

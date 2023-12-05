@@ -24,7 +24,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pytest-cov

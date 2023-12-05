@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "CircleUp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
+    hash = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytest-asyncio
     pytestCheckHook

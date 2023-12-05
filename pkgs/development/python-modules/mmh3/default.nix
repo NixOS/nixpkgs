@@ -1,22 +1,30 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "3.0.0";
+  version = "4.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1ec578c09a07d3518ec9be540b87546397fa3455de73c166fcce51eaa5c41c5";
+    hash = "sha256-rYvmldxORKeWMXSLpVYtgD8KxC02prl6U6yoSnCAk4U=";
   };
 
-  pythonImportsCheck = [ "mmh3" ];
+  pythonImportsCheck = [
+    "mmh3"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
-    homepage = "https://pypi.org/project/mmh3/";
+    homepage = "https://github.com/hajimes/mmh3";
+    changelog = "https://github.com/hajimes/mmh3/blob/v${version}/CHANGELOG.md";
     license = licenses.cc0;
+    maintainers = with maintainers; [ ];
   };
 }

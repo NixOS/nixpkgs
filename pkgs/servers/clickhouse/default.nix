@@ -1,32 +1,128 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, python3
+, perl
+, nasm
+, yasm
 , nixosTests
+, darwin
+, findutils
+
+, rustSupport ? true
+
+, corrosion
+, rustc
+, cargo
+, rustPlatform
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (llvmPackages) stdenv;
+  mkDerivation = (
+    if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.llvmPackages_16.stdenv
+    else llvmPackages.stdenv).mkDerivation;
+in mkDerivation rec {
   pname = "clickhouse";
-  version = "22.8.11.15";
+  version = "23.10.3.5";
 
-  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-
-  src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+  src = fetchFromGitHub rec {
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-stable";
     fetchSubmodules = true;
-    sha256 = "sha256-ZFS7RgeTV/eMSiI0o9WO1fHjRkPDNZs0Gm3w+blGsz0=";
+    name = "clickhouse-${rev}.tar.gz";
+    hash = "sha256-H3nIhBydLBxSesGrvqmwHmBoQGCGQlWgVVUudKLLkIY=";
+    postFetch = ''
+      # delete files that make the source too big
+      rm -rf $out/contrib/llvm-project/llvm/test
+      rm -rf $out/contrib/llvm-project/clang/test
+      rm -rf $out/contrib/croaring/benchmarks
+
+      # fix case insensitivity on macos https://github.com/NixOS/nixpkgs/issues/39308
+      rm -rf $out/contrib/sysroot/linux-*
+      rm -rf $out/contrib/liburing/man
+
+      # compress to not exceed the 2GB output limit
+      # try to make a deterministic tarball
+      tar -I 'gzip -n' \
+        --sort=name \
+        --mtime=1970-01-01 \
+        --owner=0 --group=0 \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        --transform='s@^@source/@S' \
+        -cf temp  -C "$out" .
+      rm -r "$out"
+      mv temp "$out"
+    '';
   };
 
-  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
-  buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
-  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
+  strictDeps = true;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+    perl
+    llvmPackages.lld
+  ] ++ lib.optionals stdenv.isx86_64 [
+    nasm
+    yasm
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.bintools
+    findutils
+    darwin.bootstrap_cmds
+  ] ++ lib.optionals rustSupport [
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
+
+  # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
+  corrosionSrc = if rustSupport then fetchFromGitHub {
+    owner = "corrosion-rs";
+    repo = "corrosion";
+    rev = "v0.3.5";
+    hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
+  } else null;
+  corrosionDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    src = corrosionSrc;
+    name = "corrosion-deps";
+    preBuild = "cd generator";
+    hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
+  } else null;
+  rustDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "rust-deps";
+    preBuild = "cd rust";
+    hash = "sha256-fWDAGm19b7uZv8aBdBoieY5c6POd8IxFXbGdtONpZbw=";
+  } else null;
+
+  dontCargoSetupPostUnpack = true;
+  postUnpack = lib.optionalString rustSupport ''
+    pushd source
+
+    rm -rf contrib/corrosion
+    cp -r --no-preserve=mode $corrosionSrc contrib/corrosion
+
+    pushd contrib/corrosion/generator
+    cargoDeps="$corrosionDeps" cargoSetupPostUnpackHook
+    corrosionDepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd rust
+    cargoDeps="$rustDeps" cargoSetupPostUnpackHook
+    rustDepsCopy="$cargoDepsCopy"
+    cat .cargo/config >> .cargo/config.toml.in
+    cat .cargo/config >> skim/.cargo/config.toml.in
+    rm .cargo/config
+    popd
+
+    popd
+  '';
 
   postPatch = ''
     patchShebangs src/
@@ -41,14 +137,40 @@ stdenv.mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's|gfind|find|' cmake/tools.cmake
+    sed -i 's|ggrep|grep|' cmake/tools.cmake
+  '' + lib.optionalString rustSupport ''
+
+    pushd contrib/corrosion/generator
+    cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd rust
+    cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    cargoSetupPostPatchHook() { true; }
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Make sure Darwin invokes lld.ld64 not lld.
+    substituteInPlace cmake/tools.cmake \
+      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
   '';
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
-    "-DENABLE_CCACHE=0"
+    "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+    # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+  };
+
+  # https://github.com/ClickHouse/ClickHouse/issues/49988
+  hardeningDisable = [ "fortify" ];
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
@@ -57,9 +179,9 @@ stdenv.mkDerivation rec {
       $out/etc/clickhouse-server/config.xml
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<level>trace</level>" "<level>warning</level>"
   '';
-
-  hardeningDisable = [ "format" ];
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
@@ -71,6 +193,9 @@ stdenv.mkDerivation rec {
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+
+    # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

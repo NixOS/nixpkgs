@@ -11,8 +11,7 @@
 , tqdm
   # Advanced image processing (triples size of output)
 , advancedProcessing ? false
-, opencv3
-, scikitimage
+, scikit-image
 , scikit-learn
 , scipy
 , matplotlib
@@ -47,8 +46,7 @@ buildPythonPackage rec {
     requests
     proglog
   ] ++ lib.optionals advancedProcessing [
-    opencv3
-    scikitimage
+    scikit-image
     scikit-learn
     scipy
     matplotlib

@@ -21,5 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Git subcommand to interactively select changes to commit or stage";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "git-crecord";
   };
 }

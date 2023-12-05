@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     python3
   ];
   propagatedBuildInputs = [
-    python3.pkgs.protobuf
+    (python3.pkgs.protobuf.override { protobuf = protobuf; })
     python3.pkgs.numpy
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     description = "A framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ lgpl21 gpl2Plus ];
     platforms = platforms.all;
   };

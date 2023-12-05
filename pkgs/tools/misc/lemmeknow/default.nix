@@ -2,19 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lemmeknow";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-rSuHFVUYpL1v5ba0q15mNEuAHzFF9tWxFs3zTJt5zcc=";
+    hash = "sha256-Q82tP4xNWAooFjHeJCFmuULnWlFbgca/9Y2lm8rVXKs=";
   };
 
-  cargoSha256 = "sha256-x//spFPlmJJAIyI5RgnYlMORi4eCXc8p7iEJQ7Ayptw=";
+  cargoHash = "sha256-slV9RxdFCEx1El7hngWGv+5CqDSQsU2ACF2nWQLOTU0=";
 
   meta = with lib; {
     description = "A tool to identify anything";
     homepage = "https://github.com/swanandx/lemmeknow";
+    changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda Br1ght0ne ];
+    mainProgram = "lemmeknow";
   };
 }

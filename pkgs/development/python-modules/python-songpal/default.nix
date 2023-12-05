@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "python-songpal";
-  version = "0.15.1";
+  version = "0.16";
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";
     rev = "refs/tags/release/${version}";
-    hash = "sha256-FX5pDWjUhrhK5B7zEfvihN77pSNi2QltRu0xbkUdc/c=";
+    hash = "sha256-wHyq63RG0lhzG33ssWyvzLjc7s1OqquXMN26N2MBHU8=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interfacing with Sony's Songpal devices";
     homepage = "https://github.com/rytilahti/python-songpal";
+    changelog = "https://github.com/rytilahti/python-songpal/blob/release/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda ];
   };

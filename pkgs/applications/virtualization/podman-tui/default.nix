@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.7.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-UhlhNmVPTOXVWpL4pxF5c6ZQj//pXrzZWlRUaKGSTSA=";
+    hash = "sha256-l6jbc/+Fi5xx7yhK0e5/iqcm7i8JnU37Qr4niVG4OvU=";
   };
 
   vendorHash = null;
@@ -24,7 +24,6 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestDialogs"
-        "TestNetdialogs"
       ];
     in
     ''
@@ -46,5 +45,6 @@ buildGoModule rec {
     description = "Podman Terminal UI";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "podman-tui";
   };
 }

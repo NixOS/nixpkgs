@@ -9,7 +9,7 @@ callPackage ./common.nix {} {
 
   extraNativeBuildInputs = [ texinfo perl ];
 
-  buildPhase = "make info";
+  makeFlags = [ "info" ];
 
   # I don't know why the info is not generated in 'build'
   # Somehow building the info still does not work, because the final

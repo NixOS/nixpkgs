@@ -16,11 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   propagatedBuildInputs = [ git ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   doCheck = !stdenv.isDarwin;
 

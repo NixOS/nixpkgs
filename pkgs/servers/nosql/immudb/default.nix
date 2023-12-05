@@ -14,13 +14,13 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.4.1";
+  version = "1.9DOM.0";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G6Oy+veZGQYtRyeOSpFmQ3Ehro3Ra69iCQVl9YnerAk=";
+    sha256 = "sha256-4N6E2dA7hF5sxHDLO5MMlKraXtwu7eHVB5WKs7J8ZmA=";
   };
 
   preBuild = ''
@@ -29,7 +29,7 @@ buildGoModule rec {
     go generate -tags webconsole ./webconsole
   '';
 
-  vendorSha256 = "sha256-k2OwwGjuyfM3QIRz+/DgGD0xUYor4TDmfBmcQOkcA3A=";
+  vendorHash = "sha256-Yvxra/B5Z8qfxh7zsFDj7H+G7SYRfdP7U8UZ9g2os6A=";
 
   nativeBuildInputs = [ installShellFiles ];
 

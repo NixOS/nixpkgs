@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ mrVanDalo ];
     platforms = platforms.linux;
+    mainProgram = "ctmg";
   };
 }

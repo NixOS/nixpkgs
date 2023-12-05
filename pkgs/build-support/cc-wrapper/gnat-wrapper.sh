@@ -29,6 +29,9 @@ if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
+if [ -z "${NIX_GNAT_WRAPPER_EXTRA_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @out@/nix-support/add-gnat-extra-flags.sh
+fi
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
@@ -124,20 +127,32 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${rest+"${rest[@]}"})
 fi
 
-if [ "$(basename $0)x" = "gnatmakex" ]; then
-    extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
-    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
-fi
-
-if [ "$(basename $0)x" = "gnatbindx" ]; then
-    extraBefore=()
-    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
-fi
-
-if [ "$(basename $0)x" = "gnatlinkx" ]; then
-    extraBefore=()
-    extraAfter=("--GCC=@out@/bin/gcc")
-fi
+case "$(basename $0)x" in
+    "gnatbindx")
+        extraBefore=()
+        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        ;;
+    "gnatchopx")
+        extraBefore=("--GCC=@out@/bin/gcc")
+        extraAfter=()
+        ;;
+    "gnatcleanx")
+        extraBefore=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        extraAfter=()
+        ;;
+    "gnatlinkx")
+        extraBefore=()
+        extraAfter=("--GCC=@out@/bin/gcc")
+        ;;
+    "gnatlsx")
+        extraBefore=()
+        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        ;;
+    "gnatmakex")
+        extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
+        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@ -cargs $NIX_GNATMAKE_CARGS_@suffixSalt@)
+        ;;
+esac
 
 # As a very special hack, if the arguments are just `-v', then don't
 # add anything.  This is to prevent `gcc -v' (which normally prints

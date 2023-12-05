@@ -1,33 +1,41 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, iconv
 , pytestCheckHook
 , pythonOlder
 , requests
+, json-stream-rs-tokenizer
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "1.5.1";
+  version = "2.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-htajifmbXtivUwsORzBzJA68nJCACcL75kiBysVYCxY=";
+    hash = "sha256-uLRQ6o6OPCOenn440S/tk053o1PBSyl/juNFpc6yW5E=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    requests
+  buildInputs = lib.optionals stdenv.isDarwin [
+    iconv
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    requests
+    json-stream-rs-tokenizer
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

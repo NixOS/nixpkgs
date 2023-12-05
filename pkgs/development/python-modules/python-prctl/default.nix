@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libcap ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Intel MPX support was removed in GCC 9.1 & Linux kernel 5.6

@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "8.6";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-hLNILUV7qzqHfh7l3SJAoFveUIRSCHTjEQ3ZC3PhZUY=";
+    hash = "sha256-unmbYQFLeqfqE1uFLMPLUad1UqA+sgbTzwRfpRhM3ik=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     boto3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     mock

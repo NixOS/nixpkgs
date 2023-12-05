@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, unittestCheckHook
+, pytestCheckHook
 , pythonOlder
 , fetchFromGitLab
 , substituteAll
@@ -23,16 +23,18 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.1";
+  version = "0.13.4";
 
   disabled = pythonOlder "3.5";
+
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-/HcWVXguZf9cCGY0xlC7uMnLkSAqZ0DIAC6JUw2KKDs=";
+    hash = "sha256-SuN62JjSb5O8gInvBH+elqv/Oe7j+xjCo+dmPBU7jEY=";
   };
 
   patches = [
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm pyproject.toml
     substituteInPlace dolphin/mat2.desktop \
       --replace "@mat2@" "$out/bin/mat2" \
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
@@ -85,15 +88,19 @@ buildPythonPackage rec {
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  disabledTests = [
+    # Frequently fails when exiftool is updated and adds support for new metadata.
+    "test_all_parametred"
+  ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";
     homepage = "https://0xacab.org/jvoisin/mat2";
     changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
+    mainProgram = "mat2";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

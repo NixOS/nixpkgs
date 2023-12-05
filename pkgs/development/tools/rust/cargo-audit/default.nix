@@ -2,28 +2,32 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, libgit2_1_5
 , openssl
+, zlib
 , stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.17.4";
+  version = "0.18.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-tglBtgjhZmeZTE8X6wNGI9CS3OsbHxTlPJVN4wjXVgs=";
+    hash = "sha256-8KLH6aPZhHtxC4hbMaebv1JiVkZH8p5QqnUXkJrmr4w=";
   };
 
-  cargoSha256 = "sha256-THoV87GpTuFhO/Qo37n4oascQK/tCaFUa8G2MKxrz+k=";
+  cargoHash = "sha256-8MOZvhREm4ch2flstx7J25j8mvwV3uGez5f1xkZ+S7I=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
+    libgit2_1_5
     openssl
+    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];

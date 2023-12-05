@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "32fbe1538a437da160fa4e4477270bfdcd8876e2e364d0d12898302644496231";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Readme is a library for rendering readme descriptions for Warehouse";
     homepage = "https://github.com/pypa/readme";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

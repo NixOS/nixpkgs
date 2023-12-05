@@ -1,8 +1,7 @@
-{ lib, ruby_3_0, bundlerApp, fetchpatch }:
+{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "3llo";
-  ruby = ruby_3_0;
 
   gemdir  = ./.;
 

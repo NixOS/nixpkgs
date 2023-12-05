@@ -9,9 +9,7 @@
 , # py-yajl deps
   git
 , # oil deps
-  readline
-, cmark
-, file
+  file
 , glibcLocales
 , six
 , typing
@@ -36,14 +34,18 @@ rec {
 
   py-yajl = python27.pkgs.buildPythonPackage rec {
     pname = "oil-pyyajl-unstable";
-    version = "2019-12-05";
+    version = "2022-09-01";
     src = fetchFromGitHub {
       owner = "oilshell";
       repo = "py-yajl";
-      rev = "eb561e9aea6e88095d66abcc3990f2ee1f5339df";
-      sha256 = "17hcgb7r7cy8r1pwbdh8di0nvykdswlqj73c85k6z8m0filj3hbh";
+      rev = "72686b0e2e9d13d3ce5fefe47ecd607c540c90a3";
+      hash = "sha256-H3GKN0Pq1VFD5+SWxm8CXUVO7zAyj/ngKVmDaG/aRT4=";
       fetchSubmodules = true;
     };
+    patches = [
+      # Fixes several incompatible function pointer conversions, which are errors in clang 16.
+      ./0014-clang_incompatible_function_pointer_conversions.patch
+    ];
     # just for submodule IIRC
     nativeBuildInputs = [ git ];
   };
@@ -60,9 +62,9 @@ rec {
     src = fetchFromGitHub {
       owner = "oilshell";
       repo = "oil";
-      # rev == present HEAD of release/0.8.12
-      rev = "799c0703d1da86cb80d1f5b163edf9369ad77cf1";
-      hash = "sha256-QNSISr719ycZ1Z0quxHWzCb3IvHGj9TpogaYz20hDM4=";
+      # rev == present HEAD of release/0.14.0
+      rev = "3d0427e222f7e42ae7be90c706d7fde555efca2e";
+      hash = "sha256-XMoNkBEEmD6AwNSu1uSh3OcWLfy4/ADtRckn/Pj2cP4=";
 
       /*
         It's not critical to drop most of these; the primary target is
@@ -73,16 +75,16 @@ rec {
         hash on rev updates. Command will fail w/o and not print hash.
       */
       postFetch = ''
-        rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
+        rm -rf $out/{Python-2.7.13,metrics,py-yajl,rfc,gold,web,testdata,services,demo,devtools}
       '';
     };
 
-    # patch to support a python package, pass tests on macOS, etc.
+    # patch to support a python package, pass tests on macOS, drop deps, etc.
     patchSrc = fetchFromGitHub {
       owner = "abathur";
       repo = "nix-py-dev-oil";
-      rev = "v0.8.12.2";
-      hash = "sha256-+dVxzPKMGNKFE+7Ggzx9iWjjvwW2Ow3UqmjjUud9Mqo=";
+      rev = "v0.14.0.1";
+      hash = "sha256-47+986+SohdtoNzTYAgF2vPPWgakyg0VCmR+MgxMzTk=";
     };
     patches = [
       "${patchSrc}/0001-add_setup_py.patch"
@@ -91,13 +93,19 @@ rec {
       "${patchSrc}/0006-disable_failing_libc_tests.patch"
       "${patchSrc}/0007-namespace_via_init.patch"
       "${patchSrc}/0009-avoid_nix_arch64_darwin_toolchain_bug.patch"
+      "${patchSrc}/0010-disable-line-input.patch"
+      "${patchSrc}/0011-disable-fanos.patch"
+      "${patchSrc}/0012-disable-doc-cmark.patch"
+      "${patchSrc}/0013-fix-pyverify.patch"
     ];
 
-    buildInputs = [ readline cmark py-yajl ];
+    configureFlags = [
+      "--without-readline"
+    ];
 
     nativeBuildInputs = [ re2c file makeWrapper ];
 
-    propagatedBuildInputs = [ six typing ];
+    propagatedBuildInputs = [ six typing py-yajl ];
 
     doCheck = true;
 
@@ -106,22 +114,28 @@ rec {
     '';
 
     postPatch = ''
-      patchShebangs asdl build core doctools frontend native oil_lang
+      patchShebangs asdl build core doctools frontend pyext oil_lang
+      substituteInPlace pyext/fastlex.c --replace '_gen/frontend' '../_gen/frontend'
+      substituteInPlace core/main_loop.py --replace 'import fanos' '# import fanos'
+      rm cpp/stdlib.h # keep modules from finding the wrong stdlib?
+      # work around hard parse failure documented in oilshell/oil#1468
+      substituteInPlace osh/cmd_parse.py --replace 'elif self.c_id == Id.Op_LParen' 'elif False'
     '';
-
-    /*
-    We did convince oil to upstream an env for specifying
-    this to support a shell.nix. Would need a patch if they
-    later drop this support. See:
-    https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
-    */
-    _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales TODO: verify needed?
     LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
 
-    # not exhaustive; just a spot-check for now
-    pythonImportsCheck = [ "oil" "oil._devbuild" ];
+    # not exhaustive; sample what resholve uses as a sanity check
+    pythonImportsCheck = [
+      "oil"
+      "oil.asdl"
+      "oil.core"
+      "oil.frontend"
+      "oil._devbuild"
+      "oil._devbuild.gen.id_kind_asdl"
+      "oil._devbuild.gen.syntax_asdl"
+      "oil.tools.osh2oil"
+    ];
 
     meta = {
       license = with lib.licenses; [

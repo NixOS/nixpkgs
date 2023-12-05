@@ -13,15 +13,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.0.0";
+  version = "6.1.2";
   pname = "robotframework-seleniumlibrary";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "v${version}";
-    sha256 = "1rjzz6mrx4zavcck2ry8269rf3dkvvs1qfa9ra7dkppbarrjin3f";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-QbAwPm1Y76KPIcHkopiyISULQSwUet021erFa/zi8Zw=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     selenium
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     approvaltests
     pytest-mockito
     pytestCheckHook

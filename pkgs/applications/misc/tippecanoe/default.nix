@@ -2,22 +2,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.17.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-GQPex+NX1DDOBWs/tBUsCtIWZ/+jxeblTRQEvfS2WuA=";
+    hash = "sha256-l19p/Ql1gaNJpmDH46jwLgUUmJ5YTYRQi6DdayAd84Q=";
   };
 
   buildInputs = [ sqlite zlib ];
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
-  doCheck = true;
+
+  # https://github.com/felt/tippecanoe/issues/148
+  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

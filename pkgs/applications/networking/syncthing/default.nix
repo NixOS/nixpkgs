@@ -1,19 +1,37 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
+{ pkgsBuildBuild
+, go
+, buildGoModule
+, stdenv
+, lib
+, procps
+, fetchFromGitHub
+, nixosTests
+, autoSignDarwinBinariesHook
+}:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.23.0";
+      version = "1.26.1";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-Z4YVU45na4BgIbN/IlORpTCuf2EuSuOyppDRzswn3EI=";
+        hash = "sha256-R7JTHlNP1guKRfiDjPVi1lnvfUAXuPDNDAMTGmbj3Hc=";
       };
 
-      vendorHash = "sha256-q63iaRxJRvPY0Np20O6JmdMEjSg/kxRneBfs8fRTwXk=";
+      vendorHash = "sha256-XYXIj+7xe33hCYM6Z9tqGSgr/P0LVlaPNf3T0PrxU7I=";
+
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+        # Recent versions of macOS seem to require binaries to be signed when
+        # run from Launch Agents/Daemons, even on x86 devices where it has a
+        # more lax code signing policy compared to Apple Silicon. So just sign
+        # the binaries on both architectures to make it possible for launchd to
+        # auto-start Syncthing at login.
+        autoSignDarwinBinariesHook
+      ];
 
       doCheck = false;
 
@@ -22,7 +40,12 @@ let
 
       buildPhase = ''
         runHook preBuild
-        go run build.go -no-upgrade -version v${version} build ${target}
+        (
+          export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
+          go build build.go
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+        )
+        ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
       '';
 

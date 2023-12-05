@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "levant";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "levant";
     rev = "v${version}";
-    sha256 = "sha256-ujybD4nSHC/w2Pfu43eSO6rNJjXFAvc81T05icWFvbs=";
+    sha256 = "sha256-pinrBLzBMptqzMMiQmZob6B5rNNyQsaEkuECFFyTkrw=";
   };
 
-  vendorSha256 = "sha256-pKxj0qz7adSuPpiXu4+2KBO3JZu8zZ8ycPF5LosF4T8=";
+  vendorHash = "sha256-z3QoDcp7l3XUNo4xvgd6iD1Nw6cly2CoxjRtbo+IKQ0=";
 
   # The tests try to connect to a Nomad cluster.
   doCheck = false;
@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/levant";
     license = licenses.mpl20;
     maintainers = with maintainers; [ max-niederman ];
-    platforms = platforms.unix;
   };
 }

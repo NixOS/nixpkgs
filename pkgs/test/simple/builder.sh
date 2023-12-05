@@ -1,3 +1,4 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 set -x
 
 export NIX_DEBUG=1

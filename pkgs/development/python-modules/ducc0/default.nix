@@ -2,22 +2,22 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.27.0";
+  version = "0.32.0";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
     rev = "ducc0_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-Z3eWuLuuA264z1ccdVp1YwAjDrLIXFxvTt/gC/zBE6o=";
+    hash = "sha256-D+Gt5RrzljZQHBijaPuCuNsK08VxxJoWhqxSDu4bjH0=";
   };
 
   buildInputs = [ pybind11 ];
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 

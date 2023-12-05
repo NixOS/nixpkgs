@@ -1,42 +1,26 @@
-From 56873cf29974ff0dfc1ba1afb7022ce49e300835 Mon Sep 17 00:00:00 2001
-From: Maximilian Bosch <maximilian@mbosch.me>
-Date: Wed, 11 Nov 2020 11:58:25 +0100
-Subject: [PATCH 2/2] Make sure that the setuid-wrapped `umount` is invoked
-
----
- src/dav_fuse.c     | 2 +-
- src/umount_davfs.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
 diff --git a/src/dav_fuse.c b/src/dav_fuse.c
-index 734bc1f..4501433 100644
+index 6311428..1b1698d 100644
 --- a/src/dav_fuse.c
 +++ b/src/dav_fuse.c
-@@ -187,7 +187,7 @@ dav_fuse_loop(int device, char *mpoint, size_t bufsize, time_t idle_time,
-             unmounting = 1;
+@@ -189,7 +189,7 @@ dav_fuse_loop(int device, char *mpoint, size_t bufsize, time_t idle_time,
              pid_t pid = fork();
              if (pid == 0) {
+ #if defined(__linux__)
 -                execl("/bin/umount", "umount", "-il", mountpoint, NULL);
 +                execl("@wrapperDir@/umount", "umount", "-il", mountpoint, NULL);
-                 _exit(EXIT_FAILURE);
-             }
-         }
+ #elif defined(__FreeBSD__)
+                 execl("/sbin/umount", "umount", "-v", mountpoint, NULL);
+ #endif
 diff --git a/src/umount_davfs.c b/src/umount_davfs.c
-index b7019c3..75e3b4b 100644
+index 6a82fd2..93958be 100644
 --- a/src/umount_davfs.c
 +++ b/src/umount_davfs.c
-@@ -122,9 +122,9 @@ main(int argc, char *argv[])
+@@ -50,7 +50,7 @@
+ #endif
  
-     char *umount_command = NULL;
-     if (mpoint) {
--        umount_command = ne_concat("umount -i '", mpoint, "'", NULL);
-+        umount_command = ne_concat("@wrapperDir@/umount -i '", mpoint, "'", NULL);
-     } else {
--        umount_command = ne_concat("umount -i '", argv[optind], "'", NULL);
-+        umount_command = ne_concat("@wrapperDir@/umount -i '", argv[optind], "'", NULL);
-         error(0, 0,
-               _("\n"
-                 "  can't evaluate PID file name;\n"
--- 
-2.28.0
-
+ #if defined(__linux__)
+-#define UMOUNT_CMD "umount -i"
++#define UMOUNT_CMD "@wrapperDir@/umount -i"
+ #elif defined(__FreeBSD__)
+ #define UMOUNT_CMD "umount"
+ #endif

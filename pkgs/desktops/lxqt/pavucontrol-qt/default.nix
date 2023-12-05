@@ -3,38 +3,34 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, lxqt
+, lxqt-build-tools
 , libpulseaudio
-, pcre
 , qtbase
 , qttools
-, qtx11extras
 , gitUpdater
 }:
 
 mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "OCMdfwbvgjb+7IYDp/NKF/gI4luJGFfFRKZH64JsPP8=";
+    hash = "sha256-eNhoqY1pak96x0xCypvgHmgCYjw4CYH8ABtWjIZrD3w=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
-    qtx11extras
     libpulseaudio
-    pcre
   ];
 
   passthru.updateScript = gitUpdater { };

@@ -6,15 +6,17 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "2.10.0";
+  version = "2.14.0";
   format = "wheel";
 
   src = fetchPypi {
     inherit format pname version;
-    sha256 = "sha256-JqbiwlIudGjd6iJxCpmzKQSTdo/AijnnXRFzoONFL98=";
+    hash = "sha256-10KdHSExzH6x8uouwzAifH2dONqz398ueN7+5OzEP80=";
+    python = "py3";
+    dist = "py3";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
     pytest-xdist

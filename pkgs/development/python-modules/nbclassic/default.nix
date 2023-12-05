@@ -3,17 +3,17 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, ipython_genutils
+, ipython-genutils
 , jinja2
 , jupyter-client
-, jupyter_core
-, jupyter_server
+, jupyter-core
+, jupyter-server
 , nbconvert
 , nbformat
 , nest-asyncio
-, notebook
 , notebook-shim
 , prometheus-client
+, pytest-jupyter
 , pytest-tornasync
 , pytestCheckHook
 , pythonOlder
@@ -26,28 +26,27 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.4.8";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x02KUA+OBY1GtXakHlvGQHEeEDLPdUHd5fc+pJSX4oM=";
+    hash = "sha256-CuEesjGUVdgFWWvzIDNs2pVUtB2Zq5o8Mb+BgL/6MOM=";
   };
 
   propagatedBuildInputs = [
     argon2-cffi
     ipykernel
-    ipython_genutils
+    ipython-genutils
     jinja2
     jupyter-client
-    jupyter_core
-    jupyter_server
+    jupyter-core
+    jupyter-server
     nbconvert
     nbformat
     nest-asyncio
-    notebook
     notebook-shim
     prometheus-client
     pyzmq
@@ -57,7 +56,8 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-jupyter
     pytest-tornasync
     pytestCheckHook
   ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension";
-    homepage = "https://github.com/jupyterlab/nbclassic";
+    homepage = "https://github.com/jupyter/nbclassic";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ elohmeier ];
   };

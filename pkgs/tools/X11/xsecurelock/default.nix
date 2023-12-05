@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "xsecurelock";
   };
 }

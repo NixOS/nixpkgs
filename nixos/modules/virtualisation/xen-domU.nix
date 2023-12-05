@@ -3,7 +3,6 @@
 { ... }:
 
 {
-  boot.loader.grub.version = 2;
   boot.loader.grub.device = "nodev";
 
   boot.initrd.kernelModules =

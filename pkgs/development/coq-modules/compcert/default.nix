@@ -5,9 +5,20 @@
 , version ? null
 }:
 
-with lib;
+let
 
-let compcert = mkCoqDerivation rec {
+# https://compcert.org/man/manual002.html
+targets = {
+  x86_64-linux = "x86_64-linux";
+  aarch64-linux = "aarch64-linux";
+  x86_64-darwin = "x86_64-macos";
+  aarch64-darwin = "aarch64-macos";
+};
+
+target = targets.${stdenv.hostPlatform.system}
+  or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+compcert = mkCoqDerivation {
 
   pname = "compcert";
   owner = "AbsInt";
@@ -15,8 +26,8 @@ let compcert = mkCoqDerivation rec {
   inherit version;
   releaseRev = v: "v${v}";
 
-  defaultVersion =  with versions; switch coq.version [
-      { case = range "8.14" "8.16"; out = "3.11"; }
+  defaultVersion =  with lib.versions; lib.switch coq.version [
+      { case = range "8.14" "8.17"; out = "3.13.1"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
       { case = range "8.8" "8.11"; out = "3.8"; }
@@ -27,10 +38,15 @@ let compcert = mkCoqDerivation rec {
     "3.9".sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
     "3.10".sha256 = "sha256:19rmx8r8v46101ij5myfrz60arqjy7q3ra3fb8mxqqi3c8c4l4j6";
     "3.11".sha256 = "sha256-ZISs/ZAJVWtxp9+Sg5qV5Rss1gI9hK769GnBfawLa6A=";
+    "3.12".sha256 = "sha256-hXkQ8UnAx3k50OJGBmSm4hgrnRFCosu4+PEMrcKfmV0=";
+    "3.13".sha256 = "sha256-ZedxgEPr1ZgKIcyhQ6zD1l2xr6RDNNUYq/4ZyR6ojM4=";
+    "3.13.1".sha256 = "sha256-ldXbuzVB0Z+UVTd5S4yGSg6oRYiKbXLMmUZcQsJLcns=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with ocamlPackages; [ ocaml findlib menhir menhirLib ] ++ [ coq coq2html ];
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages; [ makeWrapper ocaml findlib menhir coq coq2html ];
+  buildInputs = with ocamlPackages; [ menhirLib ];
   propagatedBuildInputs = [ flocq ];
 
   enableParallelBuilding = true;
@@ -47,7 +63,7 @@ let compcert = mkCoqDerivation rec {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
-    ${if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux"}
+    ${target}
   '';
 
   installTargets = "documentation install";
@@ -78,13 +94,13 @@ let compcert = mkCoqDerivation rec {
     description = "Formally verified C compiler";
     homepage    = "https://compcert.org";
     license     = licenses.inria-compcert;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms   = builtins.attrNames targets;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
 }; in
 compcert.overrideAttrs (o:
   {
-    patches = with versions; switch [ coq.version o.version ] [
+    patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
         out = [
           # Support for Coq 8.12.2
@@ -138,7 +154,7 @@ compcert.overrideAttrs (o:
           })
         ];
       }
-      { cases = [ (isEq "8.16") "3.11" ];
+      { cases = [ (isEq "8.16") (range "3.11" "3.12") ];
         out = [
           # Support for Coq 8.16.0
           (fetchpatch {
@@ -149,6 +165,15 @@ compcert.overrideAttrs (o:
           (fetchpatch {
             url = "https://github.com/AbsInt/CompCert/commit/35531503b3493cb9b0ec8a8585e84928c85b4af9.patch";
             hash = "sha256-DvtYi/eiPUe8tA0EFTcCjJA0JjtVKceUsX4ZDM0pWkE=";
+          })
+        ];
+      }
+      { cases = [ (isEq "8.17") (isEq "3.13") ];
+        out = [
+          # Support for Coq 8.17.0 & Coq 8.17.1
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/030a0fafe6a1a315bb13c5276e0af536e4f713ce.patch";
+            hash = "sha256-iRdmgYuun1wp6chRoDy99KKmFyvY79NGWzrltyQaW1o=";
           })
         ];
       }

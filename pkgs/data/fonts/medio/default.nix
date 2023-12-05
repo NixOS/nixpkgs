@@ -1,24 +1,29 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
   majorVersion = "0";
   minorVersion = "200";
-  pname = "medio";
 in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "medio";
+  version = "${majorVersion}.${minorVersion}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
+    hash = "sha256-S+CcwD4zGVk7cIFD6K4NnpE/0mrJq4RnDJC576rhcLQ=";
+    stripRoot = false;
+  };
 
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "0gxcmhjlsh2pzsmj78vw4v935ax7hfk533ddlhfhfma52zyxyh7x";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "Serif font designed by Sora Sagano";
     longDescription = ''
       Medio is a serif font designed by Sora Sagano, based roughly
@@ -26,7 +31,7 @@ fetchzip {
       but with hairline serifs in the style of a Didone.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.cc0;
   };
-}
+})

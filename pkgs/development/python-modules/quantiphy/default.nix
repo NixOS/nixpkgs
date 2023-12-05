@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , pytestCheckHook
 , pythonOlder
 , inform
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.18";
+  version = "2.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "quantiphy";
     rev = "v${version}";
-    hash = "sha256-KXZQTal5EQDrMNV9QKeuLeYYDaMfAJlEDEagq2XG9/Q=";
+    hash = "sha256-oSWq/D1EX6mxUDElfujyOSEtql0csAm72u2B5RuQddE=";
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rkm-codes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     inform
     parametrize-from-file
     pytestCheckHook

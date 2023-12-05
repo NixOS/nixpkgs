@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gocd-server";
-  version = "22.2.0";
-  rev = "14697";
+  version = "23.1.0";
+  rev = "16079";
 
   src = fetchurl {
     url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-server-${version}-${rev}.zip";
-    sha256 = "sha256-OACNCQJQNrihTQ+thGdXKEFD0lC7qRNTX1I42flSUmE=";
+    sha256 = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
   };
 
   meta = with lib; {

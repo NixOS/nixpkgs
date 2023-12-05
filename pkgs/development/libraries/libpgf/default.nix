@@ -1,20 +1,28 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
+{ lib
+, stdenv
+, fetchzip
+, autoreconfHook
+, dos2unix
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpgf";
-  version = "7.21.2";
+  version = "7.21.7";
 
   src = fetchzip {
     url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}.zip";
-    sha256 = "0l1j5b1d02jn27miggihlppx656i0pc70cn6x89j1rpj33zn0g9r";
+    hash = "sha256-TAWIuikijfyeTRetZWoMMdB/FeGAR7ZjNssVxUevlVg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  autoreconfPhase = ''
+  postPatch = ''
+    find . -type f | xargs dos2unix
     mv README.txt README
-    sh autogen.sh
   '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    dos2unix
+  ];
 
   meta = {
     homepage = "https://www.libpgf.org/";

@@ -1,8 +1,8 @@
 { stdenv, lib, stdenvNoCC
-, makeScopeWithSplicing, generateSplicesForMkScope
+, makeScopeWithSplicing', generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook
-, fetchgit, fetchurl, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
+, fetchgit, fetchzip, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
 , zlib, expat, libmd
 , runCommand, writeShellScript, writeText, symlinkJoin
 }:
@@ -66,14 +66,17 @@ let
     done
   '';
 
-in makeScopeWithSplicing
-  (generateSplicesForMkScope "freebsd")
-  (_: {})
-  (_: {})
-  (self: let
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "freebsd";
+  f = (self: let
     inherit (self) mkDerivation;
   in {
   inherit freebsdSrc;
+
+  ports = fetchzip {
+    url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";
+    sha256 = "BpHqJfnGOeTE7tkFJBx0Wk8ryalmf4KNTit/Coh026E=";
+  };
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   # See note in ../netbsd/default.nix.
@@ -386,6 +389,12 @@ in makeScopeWithSplicing
       ln -s ./binstall $out/bin/install
     '';
     outputs = [ "out" "man" "test" ];
+  };
+
+  sed = mkDerivation {
+    path = "usr.bin/sed";
+    TESTSRC = "${freebsdSrc}/contrib/netbsd-tests";
+    MK_TESTS = "no";
   };
 
   # Don't add this to nativeBuildInputs directly.  Use statHook instead.
@@ -706,7 +715,7 @@ in makeScopeWithSplicing
       flex byacc gencat rpcgen
     ];
     buildInputs = with self; [ include csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
+    env.NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
 
     makeFlags = [
       "STRIP=-s" # flag to install, not command
@@ -887,4 +896,5 @@ in makeScopeWithSplicing
     '';
   });
 
-})
+});
+}

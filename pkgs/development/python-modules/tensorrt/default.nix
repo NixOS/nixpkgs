@@ -38,7 +38,7 @@ buildPythonPackage rec {
     cudaPackages.tensorrt
   ];
 
-  pythonCheckImports = [
+  pythonImportsCheck = [
     "tensorrt"
   ];
 

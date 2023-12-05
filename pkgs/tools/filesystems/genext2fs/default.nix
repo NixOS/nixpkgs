@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "genext2fs";
   };
 }

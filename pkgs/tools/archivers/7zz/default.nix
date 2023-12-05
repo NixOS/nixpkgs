@@ -24,15 +24,15 @@ let
     x86_64-linux = "../../cmpl_gcc_x64.mak";
   }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "22.01";
+  version = "23.01";
 
   src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
-      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
+      free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
+      unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -53,12 +53,33 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = [ ./fix-build-on-darwin.patch ];
-  patchFlags = [ "-p0" ];
-
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
-    "-Wno-deprecated-copy-dtor"
+  patches = [
+    ./fix-cross-mingw-build.patch
+    # remove unneeded semicolons related to -Wextra-semi-stmt, caused by upstream
+    ./fix-empty-expr-stmt.patch
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
+      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-deprecated-copy-dtor"
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-Wno-conversion"
+    "-Wno-unused-macros"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-declaration-after-statement"
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
+      "-Wno-reserved-identifier"
+      "-Wno-unused-but-set-variable"
+    ])
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16") [
+      "-Wno-unsafe-buffer-usage"
+      "-Wno-cast-function-type-strict"
+    ])
+  ]);
 
   inherit makefile;
 
@@ -73,7 +94,8 @@ stdenv.mkDerivation rec {
     # aarch64-darwin so we don't need additional changes for it
     ++ lib.optionals stdenv.isDarwin [ "MACOSX_DEPLOYMENT_TARGET=10.16" ]
     # it's the compression code with the restriction, see DOC/License.txt
-    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
+    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ "IS_MINGW=1" "MSYSTEM=1" ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
@@ -84,8 +106,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin b/*/7zz
-    install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+    install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../../../../DOC/*.txt
 
     runHook postInstall
   '';
@@ -108,8 +130,8 @@ stdenv.mkDerivation rec {
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with maintainers; [ anna328p peterhoeg jk ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+    platforms = platforms.unix ++ platforms.windows;
     mainProgram = "7zz";
   };
-}
+})

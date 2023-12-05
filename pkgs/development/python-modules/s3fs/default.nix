@@ -11,15 +11,19 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2022.10.0";
+  version = "2023.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6N64DyC9CyBZFBuHT9udauuMzjUxLqXywCsiWnigBAY=";
+    hash = "sha256-xA8jjMyf7/8/bQnUtXYqvWyRO6QuGjKJdrVNA4kBuDU=";
   };
+
+  postPatch = ''
+    sed -i 's/fsspec==.*/fsspec/' requirements.txt
+  '';
 
   buildInputs = [
     docutils

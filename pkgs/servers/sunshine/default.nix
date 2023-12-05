@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoPatchelfHook
+, makeWrapper
 , buildNpmPackage
 , cmake
 , avahi
@@ -11,7 +12,6 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg-full
 , boost
 , pkg-config
 , libdrm
@@ -20,38 +20,50 @@
 , libcap
 , mesa
 , curl
+, pcre
+, pcre2
+, libuuid
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
 , libva
 , libvdpau
+, libglvnd
 , numactl
-, cudaSupport ? false
+, amf-headers
+, intel-media-sdk
+, svt-av1
+, vulkan-loader
+, libappindicator
+, libnotify
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
-
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.16.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-o489IPza1iLoe74Onn2grP5oeNy0ZYdrvBoMEWlbwCE=";
+    sha256 = "sha256-uvQAJkoKazFLz5iTpYSAGYJQZ2EprQ+p9+tryqorFHM=";
     fetchSubmodules = true;
   };
-
-  # remove pre-built ffmpeg; use ffmpeg from nixpkgs
-  patches = [ ./ffmpeg.diff ];
 
   # fetch node_modules needed for webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    sourceRoot = "source/src_assets/common/assets/web";
-    npmDepsHash = "sha256-fg/turcpPMHUs6GBwSoJl4Pxua/lGfCA1RzT1R5q53M=";
+    npmDepsHash = "sha256-+T1XAf4SThoJLOFpnVxDa2qiKFLIKQPGewjA83GQovM=";
 
     dontNpmBuild = true;
 
-    # use generated package-lock.json upstream does not provide one
+    # use generated package-lock.json as upstream does not provide one
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
     '';
@@ -66,13 +78,13 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     autoPatchelfHook
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   buildInputs = [
     avahi
-    ffmpeg-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -80,6 +92,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXrandr
     xorg.libXtst
+    xorg.libXi
     openssl
     libopus
     boost
@@ -90,12 +103,28 @@ stdenv.mkDerivation rec {
     libcap
     libdrm
     curl
+    pcre
+    pcre2
+    libuuid
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    xorg.libXdmcp
+    libxkbcommon
+    libepoxy
     libva
     libvdpau
     numactl
     mesa
+    amf-headers
+    svt-av1
+    libappindicator
+    libnotify
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
+  ] ++ lib.optionals stdenv.isx86_64 [
+    intel-media-sdk
   ];
 
   runtimeDependencies = [
@@ -103,13 +132,7 @@ stdenv.mkDerivation rec {
     mesa
     xorg.libXrandr
     libxcb
-  ];
-
-  CXXFLAGS = [
-    "-Wno-format-security"
-  ];
-  CFLAGS = [
-    "-Wno-format-security"
+    libglvnd
   ];
 
   cmakeFlags = [
@@ -117,20 +140,35 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Don't force the need for a static boost, fix hardcoded libevdev path
-    substituteInPlace CMakeLists.txt \
-      --replace 'set(Boost_USE_STATIC_LIBS ON)' '# set(Boost_USE_STATIC_LIBS ON)' \
+    # fix hardcoded libevdev path
+    substituteInPlace cmake/compile_definitions/linux.cmake \
       --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+
+    substituteInPlace packaging/linux/sunshine.desktop \
+      --replace '@PROJECT_NAME@' 'Sunshine' \
+      --replace '@PROJECT_DESCRIPTION@' 'Self-hosted game stream host for Moonlight'
   '';
 
   preBuild = ''
     # copy node_modules where they can be picked up by build
-    mkdir -p ../src_assets/common/assets/web/node_modules
-    cp -r ${ui}/node_modules/* ../src_assets/common/assets/web/node_modules
+    mkdir -p ../node_modules
+    cp -r ${ui}/node_modules/* ../node_modules
   '';
 
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  postInstall = ''
+    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+  '';
+
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
-    description = "Sunshine is a Game stream host for Moonlight.";
+    description = "Sunshine is a Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ devusb ];

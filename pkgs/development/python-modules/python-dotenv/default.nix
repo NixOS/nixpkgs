@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.21.0";
+  version = "1.0.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-t30IJ0Y549NBRd+mxwCOZt8PBLe+enX9DVKSwZHXkEU=";
+    hash = "sha256-qN+WA0qubS1QpOvoIWMmxhw+tkg2d2UE/MpBDlk3o7o=";
   };
 
   propagatedBuildInputs = [ click ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipython
     mock
     pytestCheckHook

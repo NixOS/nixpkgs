@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blobby-volley";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/blobby/Blobby%20Volley%202%20%28Linux%29/1.0/blobby2-linux-1.0.tar.gz";
-    sha256 = "1qpmbdlyhfbrdsq4vkb6cb3b8mh27fpizb71q4a21ala56g08yms";
+    url = "mirror://sourceforge/blobby/Blobby%20Volley%202%20%28Linux%29/1.1.1/blobby2-linux-1.1.1.tar.gz";
+    sha256 = "sha256-NX7lE+adO1D2f8Bj1Ky3lZpf6Il3gX8KqxTMxw2yFLo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config zip ];

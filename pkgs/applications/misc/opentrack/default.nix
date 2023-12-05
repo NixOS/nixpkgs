@@ -42,11 +42,10 @@ in
     nativeBuildInputs = [cmake pkg-config ninja copyDesktopItems];
     buildInputs = [qtbase qttools opencv4 procps eigen libXdmcp libevdev aruco];
 
-    NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
+    env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
     dontWrapQtApps = true;
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=RELEASE"
       "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
       "-DSDK_XPLANE=${xplaneSdk}"
     ];

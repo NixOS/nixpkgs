@@ -1,11 +1,15 @@
 { lib
 , appdirs
+, beautifulsoup4
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, frozendict
+, html5lib
 , multitasking
 , numpy
 , pandas
+, peewee
 , pythonOlder
 , requests
 , lxml
@@ -13,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.93";
+  version = "0.2.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,17 +26,21 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AyuIngXReI4PX554SuGIgoQoklFieZiEZzeVBcvPvEk=";
+    hash = "sha256-sEEYi2qp3LcgBxN0tlbmOaCpkjiDO80lFIaY0qdbuoo=";
   };
 
   propagatedBuildInputs = [
     appdirs
+    beautifulsoup4
     cryptography
+    frozendict
+    html5lib
+    lxml
     multitasking
     numpy
     pandas
+    peewee
     requests
-    lxml
   ];
 
   # Tests require internet access

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, cryptography
 , fetchPypi
 , httpx
 , pyspnego
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-ntlm";
-  version = "1.0.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,20 +16,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "httpx_ntlm";
     inherit version;
-    hash = "sha256-pv/OxgcO0JWk2nCZp+bKlOdX7NqV6V5xZRDy5dd13qQ=";
+    hash = "sha256-Qb6KK6hRQ0hOYX3LkX1LGeOuEq/caIYipJAQNJk7U+Q=";
   };
 
   propagatedBuildInputs = [
-    cryptography
     httpx
     pyspnego
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyspnego==0.3.*" "pyspnego>=0.3.*" \
-      --replace "cryptography==36.0.*" "cryptography>=36.0.*"
-  '';
 
   # https://github.com/ulodciv/httpx-ntlm/issues/5
   doCheck = false;
@@ -42,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "NTLM authentication support for HTTPX";
     homepage = "https://github.com/ulodciv/httpx-ntlm";
+    changelog = "https://github.com/ulodciv/httpx-ntlm/releases/tag/${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

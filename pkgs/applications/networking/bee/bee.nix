@@ -9,14 +9,14 @@ let
       rev = "824636a2c2629c329ab10275cef6a0b7395343ad";
       goVersionString = "g" + builtins.substring 0 7 rev;     # this seems to be some kind of standard of git describe...
       sha256 = "0ly1yqjq29arbak8lchdradf39l5bmxpbfir6ljjc7nyqdxz0sxg";
-      vendorSha256 = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
+      vendorHash = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
     };
     release = rec {
       pname = "bee";
       version = "0.5.0";
       rev = "refs/tags/v${version}";
       sha256 = "sha256-3Oy9RhgMPRFjUs3Dj8XUhAqoxx5BTi32OiK4Y8YEG2Q=";
-      vendorSha256 = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
+      vendorHash = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
     };
     "0.5.0" = release;
     "0.4.1" = rec {
@@ -24,14 +24,14 @@ let
       version = "0.4.1";
       rev = "refs/tags/v${version}";
       sha256 = "1bmgbav52pcb5p7cgq9756512fzfqhjybyr0dv538plkqx47mpv7";
-      vendorSha256 = "0j393va4jrg9q3wlc9mgkbpgnn2w2s3k2hcn8phzj8d5fl4n4v2h";
+      vendorHash = "sha256-UGxiCXWlIfnhRZZBMYcWXFj77pqvJkb5wOllSdQeaUg=";
     };
   }.${version};
 
 in
 
 buildGoModule {
-  inherit (versionSpec) pname version vendorSha256;
+  inherit (versionSpec) pname version vendorHash;
 
   src = fetchFromGitHub {
     owner = "ethersphere";

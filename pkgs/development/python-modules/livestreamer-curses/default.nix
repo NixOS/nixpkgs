@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "gapato";
     repo = "livestreamer-curses";
     rev = "v${version}";
-    sha256 = "sha256-Pi0PIOUhMMAWft9ackB04IgF6DyPrXppNqyVjozIjN4=";
+    hash = "sha256-Pi0PIOUhMMAWft9ackB04IgF6DyPrXppNqyVjozIjN4=";
   };
 
   propagatedBuildInputs = [ livestreamer ];

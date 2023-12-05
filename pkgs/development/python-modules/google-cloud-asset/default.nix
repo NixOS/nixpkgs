@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.16.0";
+  version = "3.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hkuW9c5ORUuN0kbQJ2MG/GezORvqL0w51a7Ca9AdHkU=";
+    hash = "sha256-lJLC1igiY0OYLu3eyuOvJ2KmFr9n4su8T7LPgWlUtCk=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytest-asyncio
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-asset";
     changelog = "https://github.com/googleapis/python-asset/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildPackages
 , version
 , src
 , extraMeta ? { }
-, callPackage
 , self
 , packageOverrides ? (final: prev: {})
 , pkgsBuildBuild
@@ -24,6 +22,7 @@
 , enableGDBJITSupport ? false
 , enableAPICheck ? false
 , enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
 , useSystemMalloc ? false
 # Upstream generates randomized string id's by default for security reasons
 # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
@@ -50,8 +49,18 @@ let
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
     ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
+
+  # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
+  # TODO support also other build architectures. The ideal way would be to use
+  # stdenv_32bit but that doesn't work due to host platform mismatch:
+  # https://github.com/NixOS/nixpkgs/issues/212494
+  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+    then buildPackages.pkgsi686Linux.buildPackages.stdenv
+    else buildPackages.stdenv;
+
 in
 stdenv.mkDerivation rec {
   pname = "luajit";
@@ -88,11 +97,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
-    # TODO: when pointer size differs, we would need e.g. -m32
-    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+    "HOST_CC=${buildStdenv.cc}/bin/cc"
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
+    ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = XCFLAGS;
+  env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )
@@ -119,7 +128,7 @@ stdenv.mkDerivation rec {
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
     luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
     luaOnHostForHost = override pkgsHostHost.${luaAttr};
-    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
+    luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
   };
 
   meta = with lib; {

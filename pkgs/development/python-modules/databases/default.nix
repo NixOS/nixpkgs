@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.6.2";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3zgHfYGiO2xWualLa4h8A85qjC32ILadw/47Ul1GTmM=";
+    hash = "sha256-e3iMZBPdldZFuS7FyhbGj9SufnH5hBBt8MEUjixXfqA=";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -77,6 +77,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
+    # https://github.com/encode/databases/issues/530
+    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }

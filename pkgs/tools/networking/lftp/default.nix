@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnutls, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
+{ lib, stdenv, fetchurl, openssl, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "lftp";
@@ -14,11 +14,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gnutls readline zlib libidn2 gmp libiconv libunistring gettext ];
+  buildInputs = [ openssl readline zlib libidn2 gmp libiconv libunistring gettext ];
 
   hardeningDisable = lib.optional stdenv.isDarwin "format";
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Required to build with clang 16 or `configure` will fail to detect several standard functions.
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   configureFlags = [
+    "--with-openssl"
     "--with-readline=${readline.dev}"
     "--with-zlib=${zlib.dev}"
     "--without-expat"

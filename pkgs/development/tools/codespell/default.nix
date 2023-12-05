@@ -6,18 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.2";
+  version = "2.2.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-zXHqaZzGIS7BOFc/kPzA4sgpoEmXuaKHdOcKpMWWeOI=";
+    sha256 = "sha256-esewCJw4o4SfSst5ALZ90X3XgOuOAsaxytpotvFeHB0=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--cov=codespell_lib" "" \
       --replace "--cov-report=" ""
   '';
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aspell-python
     chardet
     pytestCheckHook

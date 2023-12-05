@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -15,20 +16,21 @@
 , numpy
 , pandas
 , pillow
+, memorymappingHook
 }:
 let
   external = {
     avalon = fetchFromGitHub {
-      owner = "rohdebe1";
+      owner = "rdkit";
       repo = "ava-formake";
-      rev = "AvalonToolkit_2.0.2";
-      hash = "sha256-YI39OknHiSyArNGqRKrSVzEJnFc1xJ0W3UcTZrTKeME=";
+      rev = "AvalonToolkit_2.0.5-pre.3";
+      hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "v2022.09.1";
-      hash = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
+      rev = "v2023.03.1";
+      hash = "sha256-K9//cDN69U4sLETfIZq9NUaBE3RXOReH53qfiCzutqM=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
@@ -40,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.09.1";
+  version = "2023.09.1";
   format = "other";
 
   src =
@@ -51,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-AaawjCv3/ShByOKU0c37/hjuyfD7NhFC8UngDoG7C0s=";
+      hash = "sha256-qaYD/46oCTnso1FbD08zr2JuatKmSSqNBhOYlfeIiAA=";
     };
 
   unpackPhase = ''
@@ -59,7 +61,9 @@ buildPythonPackage rec {
     find . -type d -exec chmod +w {} +
 
     mkdir External/AvalonTools/avalon
-    ln -s ${external.avalon}/* External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
 
     mkdir External/YAeHMOP/yaehmop
     ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
@@ -80,6 +84,8 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memorymappingHook
   ];
 
   propagatedBuildInputs = [
@@ -147,8 +153,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }

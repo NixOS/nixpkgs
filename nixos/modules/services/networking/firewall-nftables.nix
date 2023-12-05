@@ -70,10 +70,8 @@ in
       }
     ];
 
-    networking.nftables.ruleset = ''
-
-      table inet nixos-fw {
-
+    networking.nftables.tables."nixos-fw".family = "inet";
+    networking.nftables.tables."nixos-fw".content = ''
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -94,7 +92,13 @@ in
           ${optionalString (ifaceSet != "") ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
 
           # Some ICMPv6 types like NDP is untracked
-          ct state vmap { invalid : drop, established : accept, related : accept, * : jump input-allow } comment "*: new and untracked"
+          ct state vmap {
+            invalid : drop,
+            established : accept,
+            related : accept,
+            new : jump input-allow,
+            untracked: jump input-allow,
+          }
 
           ${optionalString cfg.logRefusedConnections ''
             tcp flags syn / fin,syn,rst,ack log level info prefix "refused connection: "
@@ -143,7 +147,13 @@ in
           chain forward {
             type filter hook forward priority filter; policy drop;
 
-            ct state vmap { invalid : drop, established : accept, related : accept, * : jump forward-allow } comment "*: new and untracked"
+            ct state vmap {
+              invalid : drop,
+              established : accept,
+              related : accept,
+              new : jump forward-allow,
+              untracked : jump forward-allow,
+            }
 
           }
 
@@ -157,9 +167,6 @@ in
 
           }
         ''}
-
-      }
-
     '';
 
   };

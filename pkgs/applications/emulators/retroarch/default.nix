@@ -2,15 +2,12 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
-, withAssets ? false
-, withCoreInfo ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_4
 , flac
 , freetype
@@ -19,7 +16,6 @@
 , libGL
 , libGLU
 , libpulseaudio
-, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -34,10 +30,8 @@
 , pkg-config
 , python3
 , qtbase
-, retroarch-assets
 , SDL2
 , spirv-tools
-, substituteAll
 , udev
 , vulkan-loader
 , wayland
@@ -52,27 +46,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.14.0";
+  version = "1.16.0.3";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-oEENGehbzjJq1kTiz6gkXHMMe/rXjWPxxMoe4RqdqK4=";
+    hash = "sha256-BT+LzRDoQF03aNT2Kg7YaSWhK74CvOOiHUeHDtFpe9s=";
     rev = "v${version}";
   };
-
-  patches = [
-    ./use-default-values-for-libretro_info_path-assets_directory.patch
-    # TODO: remove those two patches in the next RetroArch release
-    (fetchpatch {
-      url = "https://github.com/libretro/RetroArch/commit/894c44c5ea7f1eada9207be3c29e8d5c0a7a9e1f.patch";
-      hash = "sha256-ThB6jd9pmsipT8zjehz7znK/s0ofHHCJeEYBKur6sO8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/libretro/RetroArch/commit/c5bfd52159cf97312bb28fc42203c39418d1bbbd.patch";
-      hash = "sha256-rb1maAvCSUgq2VtJ67iqUY+Fz00Fchl8YGG0EPm0+F0=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
@@ -118,14 +99,8 @@ stdenv.mkDerivation rec {
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
-  ] ++
-  lib.optionals withAssets [
     "--disable-update_assets"
-    "--with-assets_dir=${retroarch-assets}/share"
-  ] ++
-  lib.optionals withCoreInfo [
     "--disable-update_core_info"
-    "--with-core_info_dir=${libretro-core-info}/share"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"

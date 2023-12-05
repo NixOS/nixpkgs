@@ -25,8 +25,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # modernise cmake files, also fixes them for multiple outputs
+    # https://github.com/uclouvain/openjpeg/pull/1424
     (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/pull/1424.patch";
+      name = "uclouvain-openjpeg-pull-1424.patch";
+      url = "https://github.com/uclouvain/openjpeg/compare/52927287402a9f7353de8854c88f931051211e2f...9d4f70cfe99626f82f9c8dcbf45f07709e3511b2.patch";
       sha256 = "sha256-CxVRt1u4HVOMUjWiZ2plmZC29t/zshCpSY+N4Wlrlvg=";
     })
     # fix cmake files cross compilation
@@ -50,15 +52,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libdeflate libpng libtiff zlib lcms2 ]
+  buildInputs = [ libpng libtiff zlib lcms2 ]
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
     ++ lib.optional (jpipLibSupport) jdk;
 
   doCheck = (!stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
-
+  nativeCheckInputs = [ jpylyzer ];
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
-      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"${jpylyzer}/bin/jpylyzer\" # "
+      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"$(command -v jpylyzer)\" # "
     OPJ_SOURCE_DIR=.. ctest -S ../tools/ctest_scripts/travis-ci.cmake
   '';
 

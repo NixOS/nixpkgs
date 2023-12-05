@@ -15,8 +15,8 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
-, # LLVM is conceptually a run-time-only depedendency, but for
+              || stdenv.targetPlatform.isAarch64)
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
   buildTargetLlvmPackages, llvmPackages
@@ -30,8 +30,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -188,6 +187,15 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
     # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
@@ -203,6 +211,14 @@ stdenv.mkDerivation (rec {
       extraPrefix = "libraries/Cabal/";
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./Cabal-3.6-3.8-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

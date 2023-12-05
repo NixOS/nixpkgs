@@ -1,9 +1,10 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
+, setuptools
 , setuptools-scm
+, wheel
 , pint
 , pandas
 , pytestCheckHook
@@ -11,24 +12,22 @@
 
 buildPythonPackage rec {
   pname = "pint-pandas";
-  version = "0.2";
+  version = "0.4";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "Pint-Pandas";
-    inherit version;
-    sha256 = "sha256-b2DS6ArBAuD5St25IG4PbMpe5C8Lf4kw2MeYAC5B+oc=";
+  src = fetchFromGitHub {
+    owner = "hgrecco";
+    repo = "pint-pandas";
+    rev = version;
+    hash = "sha256-FuH6wksSCkkL2AyQN46hwTnfeAZFwkWRl6KEEhsxmUY=";
   };
 
-  patches = [
-    # Fixes a failing test, see: https://github.com/hgrecco/pint-pandas/issues/107
-    (fetchpatch{
-      url = "https://github.com/hgrecco/pint-pandas/commit/4c31e25609af968665ee60d019b9b5366f328680.patch";
-      sha256 = "vIT0LI4S73D4MBfGI8vtCZAM+Zb4PZ4E3xfpGKNyA4I=";
-    })
-  ];
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -36,12 +35,12 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "Pandas support for pint";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";

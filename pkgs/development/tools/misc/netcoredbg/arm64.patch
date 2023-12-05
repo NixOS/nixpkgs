@@ -1,0 +1,26 @@
+diff --git a/platformdefinitions.cmake b/platformdefinitions.cmake
+index ed3d9f6..6b0628f 100644
+--- a/platformdefinitions.cmake
++++ b/platformdefinitions.cmake
+@@ -7,17 +7,21 @@ if (CLR_CMAKE_PLATFORM_ARCH_AMD64)
+   add_definitions(-DAMD64)
+   add_definitions(-DBIT64=1)          # CoreClr <= 3.x
+   add_definitions(-DHOST_64BIT=1)     # CoreClr > 3.x
++  add_definitions(-DHOST_AMD64)
+ elseif (CLR_CMAKE_PLATFORM_ARCH_I386)
+   add_definitions(-D_X86_)
++  add_definitions(-DHOST_X86)
+ elseif (CLR_CMAKE_PLATFORM_ARCH_ARM)
+   add_definitions(-D_ARM_)
+   add_definitions(-DARM)
++  add_definitions(-DHOST_ARM)
+ elseif (CLR_CMAKE_PLATFORM_ARCH_ARM64)
+   add_definitions(-D_ARM64_)
+   add_definitions(-DARM64)
+   add_definitions(-D_WIN64)
+   add_definitions(-DBIT64=1)          # CoreClr <= 3.x
+   add_definitions(-DHOST_64BIT=1)     # CoreClr > 3.x
++  add_definitions(-DHOST_ARM64)
+ else ()
+   clr_unknown_arch()
+ endif ()

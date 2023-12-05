@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six unidecode ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     unittestCheckHook
   ];

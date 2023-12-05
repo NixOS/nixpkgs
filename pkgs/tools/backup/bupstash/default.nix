@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
+{ lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
 rustPlatform.buildRustPackage rec {
   pname = "bupstash";
   version = "0.12.0";
@@ -28,10 +28,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://bupstash.io";
     license = licenses.mit;
     platforms = platforms.unix;
-    # = note: Undefined symbols for architecture x86_64:
-    #           "_utimensat", referenced from:
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ andrewchambers ];
+    mainProgram = "bupstash";
   };
 }

@@ -1,22 +1,25 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "storrent-unstable";
-  version = "2021-10-10";
+  pname = "storrent";
+  version = "unstable-2023-01-14";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "storrent";
-    rev = "681733cf74de08bea251ada672ea8c666eb1b679";
-    sha256 = "0grrqgawswb44fahf40060jl691rlyccwlqkljvgy8mzzw1kjzj4";
+    rev = "86270ee777a19a521f8898a179485e0347f90ce0";
+    hash = "sha256-JYNtuyk4hhe1jZgY/5Bz91Ropdw/U7n1VKHYkdUjZ0I=";
   };
 
-  vendorSha256 = "0sz2fz7bqgwd5i7sacyxs7bmb8ly6xrxrakqi9c446vzlkh898hj";
+  vendorHash = "sha256-iPKZPXsa6ya29N/u9QYd5LAm42+FtHZLGStRDxsAxe4=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/jech/storrent";
     description = "An implementation of the BitTorrent protocol that is optimised for streaming media";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = [ maintainers.marsam ];
   };
 }

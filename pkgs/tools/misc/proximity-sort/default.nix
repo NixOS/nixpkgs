@@ -1,20 +1,23 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "proximity-sort";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-So3cvL2F7wfcPVPEBspMLH4f5KSbVQeUKLJve/BXLA4=";
+  src = fetchFromGitHub {
+    owner = "jonhoo";
+    repo = "proximity-sort";
+    rev = "v${version}";
+    hash = "sha256-MRLQvspv6kjirljhAkk1KT+hPA4hdjA1b7RL9eEyglQ=";
   };
 
-  cargoSha256 = "sha256-VGxU3CD5pj0Hrt6nUbNU7eNEpNrzHp/WaFHAKPUz8DA=";
+  cargoHash = "sha256-0hP6qa8d5CaqtBHCWBJ8UjtVJc6Z0GmL8DvdTWDMM8g=";
 
   meta = with lib; {
     description = "Simple command-line utility for sorting inputs by proximity to a path argument";
     homepage = "https://github.com/jonhoo/proximity-sort";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "proximity-sort";
   };
 }

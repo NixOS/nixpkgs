@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.10.1";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NUZRvwYsAtHwgEHW+/GptL96k6/OZZeb3Ai9xlZTqi4=";
+    hash = "sha256-bd43Q2+rFCZK09bLxarj/VVeualoCnv91uVkzXe14rg=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -57,14 +57,6 @@ buildPythonPackage rec {
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  # setup.py check is broken
-  # https://github.com/libgit2/pygit2/issues/868
-  dontUseSetuptoolsCheck = true;
-
-  # TODO: Test collection is failing
-  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
-  doCheck = false;
 
   pythonImportsCheck = [
     "pygit2"

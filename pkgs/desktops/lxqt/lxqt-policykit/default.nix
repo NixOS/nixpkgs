@@ -19,24 +19,24 @@
 
 mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "SvJ4XN0JZs2VAt5H9CJXrJhThxnQnlbsLP44CW7zpGM=";
+    hash = "sha256-w0o76oBFNy3syQqyFZdAbFUu8yX+uA6cMOHf3WfKPEU=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     polkit

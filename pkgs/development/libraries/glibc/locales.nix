@@ -10,14 +10,14 @@
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
-callPackage ./common.nix { inherit stdenv; } {
+(callPackage ./common.nix { inherit stdenv; } {
   pname = "glibc-locales";
+  extraNativeBuildInputs = [ glibc ];
+}).overrideAttrs(finalAttrs: previousAttrs: {
 
   builder = ./locales-builder.sh;
 
   outputs = [ "out" ];
-
-  extraNativeBuildInputs = [ glibc ];
 
   LOCALEDEF_FLAGS = [
     (if stdenv.hostPlatform.isLittleEndian
@@ -25,7 +25,7 @@ callPackage ./common.nix { inherit stdenv; } {
     else "--big-endian")
   ];
 
-  buildPhase = ''
+  preBuild = (previousAttrs.preBuild or "") + ''
       # Awful hack: `localedef' doesn't allow the path to `locale-archive'
       # to be overriden, but you *can* specify a prefix, i.e. it will use
       # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
@@ -57,10 +57,18 @@ callPackage ./common.nix { inherit stdenv; } {
       fi
 
       echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
-    '' + ''
-      make localedata/install-locales \
-          localedir=$out/lib/locale \
     '';
+
+  # Current `nixpkgs` way of building locales is not compatible with
+  # parallel install. `locale-archive` is updated in parallel with
+  # multiple `localedef` processes and causes non-deterministic result:
+  #   https://github.com/NixOS/nixpkgs/issues/245360
+  enableParallelBuilding = false;
+
+  makeFlags = (previousAttrs.makeFlags or []) ++ [
+    "localedata/install-locales"
+    "localedir=${builtins.placeholder "out"}/lib/locale"
+  ];
 
   installPhase =
     ''
@@ -75,4 +83,4 @@ callPackage ./common.nix { inherit stdenv; } {
     '';
 
   meta.description = "Locale information for the GNU C Library";
-}
+})

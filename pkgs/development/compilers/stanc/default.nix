@@ -5,15 +5,16 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.31.0";
+  version = "2.33.1";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "stanc3";
     rev = "v${version}";
-    hash = "sha256-5GOyKVt3LHN1D6UysOZT8isVQLKexwEcK0rwI45dDcg=";
+    hash = "sha256-DeQOiYJ5OHIMXcYHTYlObJnxM2Rqf6pSN4T7sAGw+wg=";
   };
 
   # Error: This expression has type [ `Use_Sys_unix ]
@@ -22,9 +23,11 @@ ocamlPackages.buildDunePackage rec {
       --replace "if Sys.file_exists (to_windows path) then to_windows cmd else cmd" "cmd"
   '';
 
+  nativeBuildInputs = with ocamlPackages; [
+    menhir
+  ];
   buildInputs = with ocamlPackages; [
     core_unix
-    menhir
     menhirLib
     ppx_deriving
     fmt

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , dateparser
+, defusedxml
 , fetchFromGitHub
 , importlib-metadata
 , numpy
@@ -8,15 +9,16 @@
 , python-dateutil
 , pythonOlder
 , pytz
+, remotezip
 , requests
 , requests-mock
 , shapely
-, wktutils
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "5.0.2";
+  version = "6.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jynks+c8OV0t1GoKAk4vP9jYQ0PclJHl3x8q78au5gk=";
+    hash = "sha256-w4xpCqNal0BHsmf1cL4k/DKzs/e9WQXTQNJNs8puJUU=";
   };
 
   propagatedBuildInputs = [
@@ -34,26 +36,24 @@ buildPythonPackage rec {
     numpy
     python-dateutil
     pytz
+    remotezip
     requests
     shapely
-    wktutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
     requests-mock
+    tenacity
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "WKTUtils==" "WKTUtils>="
-  '';
 
   pythonImportsCheck = [
     "asf_search"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
     license = licenses.bsd3;

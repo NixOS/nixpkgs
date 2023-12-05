@@ -6,15 +6,16 @@ let
   testPass = "password";
   testEmail = "test.testerman@test.com";
 in
-with lib;
 {
   name = "atuin";
-  meta.maintainers = with pkgs.lib.maintainers; [ devusb ];
+  meta.maintainers = with lib.maintainers; [ devusb ];
 
   nodes = {
     server =
       { ... }:
       {
+        services.postgresql.enable = true;
+
         services.atuin = {
           enable = true;
           port = testPort;
@@ -54,7 +55,7 @@ with lib;
     client.execute("echo 'sync_address = \"http://server:${toString testPort}\"' > ~/.config/atuin/config.toml")
 
     # log in to atuin server on client node
-    client.succeed(f"${atuin}/bin/atuin login -u ${testUser} -p ${testPass} -k {key}")
+    client.succeed(f"${atuin}/bin/atuin login -u ${testUser} -p ${testPass} -k \"{key}\"")
 
     # pull records from atuin server
     client.succeed("${atuin}/bin/atuin sync -f")

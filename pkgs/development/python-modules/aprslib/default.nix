@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, mox3
 , pytestCheckHook
 }:
 
@@ -24,8 +23,9 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [
-    mox3
+  doCheck = false; # mox3 is disabled on python311
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

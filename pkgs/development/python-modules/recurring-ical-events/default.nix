@@ -1,28 +1,36 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
+, setuptools
 , icalendar
 , pytz
 , python-dateutil
 , x-wr-timezone
 , pytestCheckHook
-, restructuredtext_lint
+, restructuredtext-lint
 , pygments
 , tzdata
 }:
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "1.1.0b0";
+  version = "2.1.1";
 
-  format = "setuptools";
+  disabled = pythonOlder "3.7";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-ePbyZd/l/O3p/6Mbq1kMFsktkFKpPAw/u7uUynZYP2Y=";
+    hash = "sha256-I5D4CAk0C60H2hMBV62gOaIRA+wYF2ORKxHfWustQz0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     icalendar
@@ -31,9 +39,9 @@ buildPythonPackage rec {
     x-wr-timezone
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
     tzdata
   ];
@@ -41,6 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "recurring_ical_events" ];
 
   meta = {
+    changelog = "https://github.com/niccokunzmann/python-recurring-ical-events/blob/${src.rev}/README.rst#changelog";
     description = "Repeat ICalendar events by RRULE, RDATE and EXDATE";
     homepage = "https://github.com/niccokunzmann/python-recurring-ical-events";
     license = lib.licenses.lgpl3Plus;

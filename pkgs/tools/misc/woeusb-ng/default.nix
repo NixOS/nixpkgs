@@ -1,25 +1,49 @@
-{ lib, python3Packages, fetchFromGitHub, p7zip, parted, grub2 }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook
+, p7zip
+, parted
+, grub2
+}:
+
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "woeusb-ng";
-  version = "0.2.10";
-
-  propagatedBuildInputs = [ p7zip parted grub2 termcolor wxPython_4_0 six ];
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "WoeUSB";
     repo = "WoeUSB-ng";
     rev = "v${version}";
-    sha256 = "sha256-Nsdk3SMRzj1fqLrp5Na5V3rRDMcIReL8uDb8K2GQNWI=";
+    hash = "sha256-2opSiXbbk0zDRt6WqMh97iAt6/KhwNDopOas+OZn6TU=";
   };
 
-  postInstall = ''
-    # TODO: the gui requires additional polkit-actions to work correctly, therefore it is currently disabled
-    rm $out/bin/woeusbgui
+  postPatch = ''
+    substituteInPlace setup.py WoeUSB/*.py miscellaneous/* \
+      --replace "/usr/local/" "$out/" \
+      --replace "/usr/" "$out/"
   '';
 
-  # checks fail, because of polkit-actions and should be reenabled when the gui is fixed.
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = [
+    p7zip
+    parted
+    grub2
+    termcolor
+    wxPython_4_2
+    six
+  ];
+
+  preConfigure = ''
+    mkdir -p $out/bin $out/share/applications $out/share/polkit-1/actions
+  '';
+
+  # Unable to access the X Display, is $DISPLAY set properly?
   doCheck = false;
 
   meta = with lib; {

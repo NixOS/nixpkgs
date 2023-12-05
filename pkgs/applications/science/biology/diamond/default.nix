@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diamond";
-  version = "2.0.15";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "17z9vwj58i1zc22gv4qscx0dk3nxf5ix443gxsibh3a5zsnc6dkg";
+    sha256 = "sha256-6L/eS3shfJ33bsXo1BaCO4lKklh2KbOIO2tZsvwcjnA=";
   };
 
 

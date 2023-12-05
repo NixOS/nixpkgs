@@ -1,7 +1,7 @@
-{ stdenvNoCC, cacert, crystal, openssl, pkg-config, invidious }:
+{ lib, stdenvNoCC, cacert, crystal, openssl, pkg-config, invidious }:
 
 let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+  versions = lib.importJSON ./versions.json;
 in
 stdenvNoCC.mkDerivation {
   name = "videojs";

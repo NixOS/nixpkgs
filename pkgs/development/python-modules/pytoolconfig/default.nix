@@ -3,42 +3,54 @@
 , docutils
 , fetchFromGitHub
 , packaging
-, pdm-pep517
+, pdm-backend
 , platformdirs
 , pydantic
-, pytest-timeout
 , pytestCheckHook
 , pythonOlder
 , sphinx
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, sphinxHook
 , tabulate
 , tomli
 }:
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
-  version = "1.2.5";
+  version = "1.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bagel897";
-    repo = pname;
+    repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b7er/IgXr2j9dSnI87669BXWA5CXNTzwa1DTpl8PBZ4=";
+    hash = "sha256-KmmaxFJbvdOGG9T9iiHKnJpFzZiLVkPJki+qHPxPTdY=";
   };
 
-  postPatch = ''
-    # License file name doesn't match
-    substituteInPlace pyproject.toml \
-      --replace "license = { file = 'LGPL-3.0' }" "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace "packaging>=22.0" "packaging"
-  '';
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  PDM_PEP517_SCM_VERSION = version;
 
   nativeBuildInputs = [
-    pdm-pep517
-  ];
+    pdm-backend
+
+    # docs
+    docutils
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+    sphinxHook
+  ] ++ passthru.optional-dependencies.doc;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "packaging>=22.0" "packaging"
+  '';
 
   propagatedBuildInputs = [
     packaging
@@ -59,21 +71,19 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    docutils
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.global
-  ++ passthru.optional-dependencies.doc;
-
   pythonImportsCheck = [
     "pytoolconfig"
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
   meta = with lib; {
-    description = "Module for tool configuration";
+    description = "Python tool configuration";
     homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab hexa ];
   };
 }

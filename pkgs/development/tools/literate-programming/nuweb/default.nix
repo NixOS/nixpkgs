@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, tex}:
+{lib, stdenv, fetchurl, texliveMedium}:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 
-  buildInputs = [ tex ];
+  buildInputs = [ texliveMedium ];
 
   patchPhase = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
   #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     make nuweb
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple literate programming tool";
-    homepage = "http://nuweb.sourceforge.net";
+    homepage = "https://nuweb.sourceforge.net";
     license = licenses.free;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ psutil ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test tests
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

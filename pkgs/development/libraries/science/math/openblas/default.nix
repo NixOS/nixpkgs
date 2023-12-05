@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -31,8 +31,6 @@
 , opencv
 , python3
 }:
-
-with lib;
 
 let blas64_ = blas64; in
 
@@ -108,6 +106,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    loongarch64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "LOONGSONGENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -121,7 +126,7 @@ let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+      else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -129,14 +134,14 @@ let
   mkMakeFlagValue = val:
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
-  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.21";
+  version = "0.3.24";
 
   outputs = [ "out" "dev" ];
 
@@ -144,7 +149,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
+    sha256 = "sha256-IuXhrZRB3o7kbnivv/6En/aAeF2F18sQw9pKs1WEJc4=";
   };
 
   postPatch = ''
@@ -185,6 +190,7 @@ stdenv.mkDerivation rec {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
+    OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
@@ -220,7 +226,7 @@ stdenv.mkDerivation rec {
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
+Cflags: -I$dev/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
@@ -252,7 +258,7 @@ EOF
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

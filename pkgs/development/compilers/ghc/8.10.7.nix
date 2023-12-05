@@ -14,7 +14,7 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc)
-, # LLVM is conceptually a run-time-only depedendency, but for
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
   buildTargetLlvmPackages, llvmPackages
@@ -28,8 +28,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -188,6 +187,14 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+
     # See upstream patch at
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
     # from source distributions, the auto-generated configure script needs to be
@@ -226,14 +233,13 @@ stdenv.mkDerivation (rec {
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
     })
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
-
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
     #
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./cabal-paths.patch
+    ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-data-explorer";
-    rev = "467b6c8a91a08ca71080b9bbff2e0cd45dc4efe5";
-    sha256 = "sha256-65Osh9oud/Gfy6dVJ4QXqT+A0wdIN33BeaCUIfyWEGA=";
+    rev = "06193f27ef15828479eea61ae4a80bf59806a535";
+    sha256 = "sha256-afjqgi2gzRpbZt5K9yXPy4BJ5qRv7A4ZkXHX85+Cv7s=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-data-explorer";

@@ -170,6 +170,6 @@ Packages
     ```
 
     The latter option definition changes the default PostgreSQL package
-    used by NixOS's PostgreSQL service to 10.x. For more information on
+    used by NixOS's PostgreSQL service to 14.x. For more information on
     packages, including how to add new ones, see
     [](#sec-custom-packages).

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchurl, git, cmake, pkg-config
-, openssl, boost, grpc, protobuf, libnsl }:
+, openssl, boost, grpc, protobuf, libnsl, rocksdb_6_23, snappy }:
 
 let
   sqlite3 = fetchurl rec {
@@ -11,14 +11,6 @@ let
   boostSharedStatic = boost.override {
     enableShared = true;
     enabledStatic = true;
-  };
-
-  beast = fetchgit {
-    url = "https://github.com/boostorg/beast.git";
-    rev = "2f9a8440c2432d8a196571d6300404cb76314125";
-    sha256 = "1n9ms5cn67b0p0mhldz5psgylds22sm5x22q7knrsf20856vlk5a";
-    fetchSubmodules = false;
-    leaveDotGit = true;
   };
 
   docca = fetchgit {
@@ -38,7 +30,7 @@ let
     postFetch = "cd $out && git tag ${rev}";
   };
 
-  rocksdb = fetchgit rec {
+  rocksdb = fetchgit {
     url = "https://github.com/facebook/rocksdb.git";
     rev = "v6.7.3";
     sha256 = "0dzn5jg3i2mnnjj24dn9lzi3aajj5ga2akjf64lybyj481lq445k";
@@ -73,24 +65,6 @@ let
     fetchSubmodules = false;
   };
 
-  snappy = fetchgit rec {
-    url = "https://github.com/google/snappy.git";
-    rev = "1.1.7";
-    sha256 = "1f0i0sz5gc8aqd594zn3py6j4w86gi1xry6qaz2vzyl4w7cb4v35";
-    leaveDotGit = true;
-    fetchSubmodules = false;
-    postFetch = "cd $out && git tag ${rev}";
-  };
-
-  cares = fetchgit rec {
-    url = "https://github.com/c-ares/c-ares.git";
-    rev = "cares-1_15_0";
-    sha256 = "1fkzsyhfk5p5hr4dx4r36pg9xzs0md6cyj1q2dni3cjgqj3s518v";
-    leaveDotGit = true;
-    fetchSubmodules = false;
-    postFetch = "cd $out && git tag ${rev}";
-  };
-
   google-test = fetchgit {
     url = "https://github.com/google/googletest.git";
     rev = "5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081";
@@ -116,31 +90,31 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "rippled";
-  version = "1.7.3";
+  version = "1.9.4";
 
   src = fetchgit {
     url = "https://github.com/ripple/rippled.git";
     rev = version;
-    sha256 = "008qzb138r2pi0cqj4d6d5f0grlb2gm87m8j0dj8b0giya22xv6s";
     leaveDotGit = true;
     fetchSubmodules = true;
+    hash = "sha256-VW/VmnhtF2xyHfEud3D6b3n8uTE0a/nDW1GISs5QfwM=";
   };
 
   hardeningDisable = ["format"];
-  cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
+  cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON" "-DSNAPPY_INCLUDE_DIR=${snappy}/include" ];
 
   nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic grpc protobuf libnsl ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic grpc protobuf libnsl rocksdb_6_23 snappy ];
 
   preConfigure = ''
     export HOME=$PWD
 
+    git config --global protocol.file.allow always
     git config --global url."file://${rocksdb}".insteadOf "${rocksdb.url}"
     git config --global url."file://${docca}".insteadOf "${docca.url}"
     git config --global url."file://${lz4}".insteadOf "${lz4.url}"
     git config --global url."file://${libarchive}".insteadOf "${libarchive.url}"
     git config --global url."file://${soci}".insteadOf "${soci.url}"
-    git config --global url."file://${snappy}".insteadOf "${snappy.url}"
     git config --global url."file://${nudb}".insteadOf "${nudb.url}"
     git config --global url."file://${google-benchmark}".insteadOf "${google-benchmark.url}"
     git config --global url."file://${google-test}".insteadOf "${google-test.url}"
@@ -150,6 +124,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
     substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
     substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
+
+    substituteInPlace Builds/CMake/deps/Rocksdb.cmake --replace "RocksDB 6.27" "RocksDB"
   '';
 
   doCheck = true;
@@ -162,6 +138,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/ripple/rippled";
     maintainers = with maintainers; [ offline RaghavSood ];
     license = licenses.isc;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
+    mainProgram = "rippled";
   };
 }

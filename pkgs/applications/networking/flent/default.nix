@@ -23,7 +23,7 @@ buildPythonApplication rec {
     python.pkgs.pyqt5
     python.pkgs.qtpy
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     python.pkgs.mock
     xvfb-run
   ];
@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
     cat >test-runner <<EOF
     #!/bin/sh
-    ${python.pythonForBuild.interpreter} nix_run_setup test
+    ${python.pythonOnBuildForHost.interpreter} nix_run_setup test
     EOF
     chmod +x test-runner
     wrapQtApp test-runner --prefix PYTHONPATH : $PYTHONPATH

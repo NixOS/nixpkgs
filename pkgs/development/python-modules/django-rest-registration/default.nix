@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-rest-registration";
-  version = "0.7.3";
+  version = "0.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "apragacz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-JoIeVjl5s60ilq9kU28Jo+GaYRKU61hoqy1GzYmMdZQ=";
+    hash = "sha256-kGZ88Z5nV3HChImmPurHoewobsjotZQ4q9RngBYGe5g=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
   ];

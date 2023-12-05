@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "txZMQ";
-    sha256 = "sha256-jWB9C/CcqUYAuOQvByHb5D7lOgRwGCNErHrOfljcYXc=";
+    hash = "sha256-jWB9C/CcqUYAuOQvByHb5D7lOgRwGCNErHrOfljcYXc=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

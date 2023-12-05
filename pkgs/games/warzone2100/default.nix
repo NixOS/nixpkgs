@@ -31,6 +31,8 @@
 , warzone2100
 , nixosTests
 
+, gitUpdater
+
 , withVideos ? false
 }:
 
@@ -44,11 +46,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.3.3";
+  version  = "4.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-PDy5mIYAoQ9VAJCTRMiBqUlRtKIqVHiMuBiozTtH5Z4=";
+    hash = "sha256-Ul77OihJWIH9H6FUpibGDjqX1BY4DWDQ3bR4lRDY9+U=";
   };
 
   buildInputs = [
@@ -86,6 +88,9 @@ stdenv.mkDerivation rec {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
+    # https://github.com/Warzone2100/warzone2100/pull/3353
+    substituteInPlace lib/ivis_opengl/gfx_api_vk.cpp \
+      --replace vk::throwResultException vk::detail::throwResultException
   '';
 
   cmakeFlags = [
@@ -113,6 +118,10 @@ stdenv.mkDerivation rec {
       command = "(warzone2100 --version || [ $? -eq 1 ])";
     };
     nixosTest = nixosTests.warzone2100;
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/Warzone2100/warzone2100";
   };
 
   meta = with lib; {

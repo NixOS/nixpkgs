@@ -1,40 +1,31 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
-, libxcrypt
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-Pry3eEUvrGUXK+x4et7DMbSxz9Mh/o5L0/Mh728mv1U=";
+    sha256 = "sha256-VFyFQ3c4EEbQAj3bUgjWbmpCyugcpfz0phgBz0ZUB/Q=";
   };
-  stripDebug = false;
+
+  patches = [
+    ./Revert-Config-Restrict-permissions-of-OTP-config.patch
+  ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = (final: prev: {
+    overrides = final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
-      gettext = beamPackages.buildMix rec {
-        name = "gettext";
-        version = "0.19.1";
-
-        src = fetchFromGitHub {
-          owner = "tusooa";
-          repo = "gettext";
-          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
-          sha256 = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
-        };
-      };
       prometheus_ex = beamPackages.buildMix rec {
         name = "prometheus_ex";
         version = "3.0.5";
@@ -97,24 +88,6 @@ beamPackages.mixRelease rec {
       majic = prev.majic.override {
         buildInputs = [ file ];
       };
-      crypt = beamPackages.buildRebar3 rec {
-        name = "crypt";
-        version = "1.0.0";
-
-        src = fetchFromGitHub {
-          owner = "msantos";
-          repo = "crypt";
-          rev = "f75cd55325e33cbea198fb41fe41871392f8fb76";
-          sha256 = "sha256-ZYhZTe7cTITkl8DZ4z2IOlxTX5gnbJImu/lVJ2ZjR1o=";
-        };
-
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so";
-
-        beamDeps = with final; [ elixir_make ];
-
-        buildInputs = [ libxcrypt ];
-      };
-
       # Some additional build inputs and build fixes
       http_signatures = prev.http_signatures.override {
         patchPhase = ''
@@ -155,7 +128,7 @@ beamPackages.mixRelease rec {
 
         src = fetchHex {
           pkg = "${name}";
-          version = "${version}";
+          inherit version;
           sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
         };
 
@@ -179,7 +152,7 @@ beamPackages.mixRelease rec {
           cp ${cfgFile} config/config.exs
         '';
       };
-    });
+    };
   };
 
   passthru = {
@@ -191,7 +164,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
+    maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

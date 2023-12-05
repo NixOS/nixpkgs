@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       Font selection tool similar to xfontsel implemented using GTK 2.
       Trivial, but useful nonetheless.
     '';
-    homepage = "http://gtk2fontsel.sourceforge.net/";
+    homepage = "https://gtk2fontsel.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/gtk2fontsel/";
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];

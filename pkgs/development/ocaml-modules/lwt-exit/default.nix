@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "1k763bmj1asj9ijar39rh3h1d59rckmsf21h2y8966lgglsf42bd";
   };
 

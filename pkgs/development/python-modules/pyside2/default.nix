@@ -1,4 +1,6 @@
 { python
+, pythonAtLeast
+, disabledIf
 , fetchurl
 , lib
 , stdenv
@@ -8,14 +10,13 @@
 , qt5
 , shiboken2
 }:
-
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.5";
+  version = "5.15.11";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "0cwvw6695215498rsbm2xzkwaxdr3w7zfvy4kc62c01k6pxs881r";
+    sha256 = "sha256-2lZ807eFTSegtK/j6J3osvmLem1XOTvlbx/BP3cPryk=";
   };
 
   patches = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
+  env.NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
 
   nativeBuildInputs = [ cmake ninja qt5.qmake python ];
 
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     qtcharts
     qtsensors
     qtsvg
+    qt3d
   ]) ++ (with python.pkgs; [
     setuptools
   ]) ++ (lib.optionals (python.pythonOlder "3.9") [
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd ../../..
-    ${python.interpreter} setup.py egg_info --build-type=pyside2
+    ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside2
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 

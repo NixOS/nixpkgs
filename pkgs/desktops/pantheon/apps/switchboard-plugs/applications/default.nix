@@ -7,6 +7,7 @@
 , pkg-config
 , vala
 , libgee
+, libhandy
 , granite
 , gtk3
 , switchboard
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "6.0.1";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "18izmzhqp6x5ivha9yl8gyz9adyrsylw7w5p0cwm1bndgqbi7yh5";
+    sha256 = "sha256-r2JKiTewsLQSZPriC0w72CFevRQXytrFcO2VfA9BKHA=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     switchboard
   ];
 

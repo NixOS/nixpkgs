@@ -45,16 +45,16 @@ let
   '';
 in
 {
+  imports = [
+    # https://github.com/zedeus/nitter/pull/772
+    (mkRemovedOptionModule [ "services" "nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
+  ];
+
   options = {
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
 
-      package = mkOption {
-        default = pkgs.nitter;
-        type = types.package;
-        defaultText = literalExpression "pkgs.nitter";
-        description = lib.mdDoc "The nitter derivation to use.";
-      };
+      package = mkPackageOption pkgs "nitter" { };
 
       server = {
         address = mkOption {
@@ -155,6 +155,22 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
+        enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
+
+        enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+
+        proxy = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
+        };
+
+        proxyAuth = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "Credentials for proxy.";
+        };
+
         tokenCount = mkOption {
           type = types.int;
           default = 10;
@@ -185,10 +201,11 @@ in
           description = lib.mdDoc "Replace YouTube links with links to this instance (blank to disable).";
         };
 
-        replaceInstagram = mkOption {
+        replaceReddit = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "Replace Instagram links with links to this instance (blank to disable).";
+          example = "teddit.net";
+          description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
         };
 
         mp4Playback = mkOption {
@@ -268,6 +285,12 @@ in
           default = false;
           description = lib.mdDoc "Hide tweet replies.";
         };
+
+        squareAvatars = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Square profile pictures.";
+        };
       };
 
       settings = mkOption {
@@ -306,7 +329,8 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

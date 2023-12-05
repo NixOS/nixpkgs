@@ -1,49 +1,73 @@
 { lib
 , buildPythonPackage
+, email-validator
 , fetchFromGitHub
 , flask
 , flask-wtf
+, markupsafe
 , mongoengine
-, six
-, nose
-, rednose
-, coverage
-, email-validator
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, wtforms
 }:
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2022-08-16";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "10g9b13ls2msnhv8j44gslrfxa2ppqz2y1xjn2a4gg4m9mdjv8b2";
+    rev = "d4526139cb1e2e94111ab7de96bb629d574c1690";
+    hash = "sha256-oMQU9Z8boc0q+0KzIQAZ8qSyxiITDY0M9FCg75S9MEY=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "1.0.0";
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     email-validator
     flask
     flask-wtf
     mongoengine
-    six
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # they set test requirements to setup_requirements...
-  buildInputs = [
-    nose
-    rednose
-    coverage
-  ];
+  passthru.optional-dependencies = {
+    wtf = [
+      flask-wtf
+      wtforms
+    ] ++ wtforms.optional-dependencies.email;
+    # toolbar = [
+    #   flask-debugtoolbar
+    # ];
+    legacy = [
+      markupsafe
+    ];
+  };
 
-  # tests require working mongodb connection
+  # Tests require working mongodb connection
   doCheck = false;
 
+  pythonImportsCheck = [
+    "flask_mongoengine"
+  ];
+
   meta = with lib; {
-    description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
+    description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
+    changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

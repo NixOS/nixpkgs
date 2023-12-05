@@ -33,12 +33,7 @@ in {
         defaultText = literalMD "empty firewall, allows any traffic";
         type = types.lines;
       };
-      package = mkOption {
-        description = lib.mdDoc "The ferm package.";
-        type = types.package;
-        default = pkgs.ferm;
-        defaultText = literalExpression "pkgs.ferm";
-      };
+      package = mkPackageOption pkgs "ferm" { };
     };
   };
 

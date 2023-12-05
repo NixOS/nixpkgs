@@ -33,7 +33,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];
 
   buildInputs = [ zlib ];
-  configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
+  configureFlags = lib.optional (buildProtobuf != null) "--with-protoc=${buildProtobuf}/bin/protoc";
 
   enableParallelBuilding = true;
 
@@ -53,8 +53,6 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     mainProgram = "protoc";
     platforms = lib.platforms.unix;
   };
-
-  passthru.version = version;
 };
 in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
                         then (mkProtobufDerivation null buildPackages.stdenv)

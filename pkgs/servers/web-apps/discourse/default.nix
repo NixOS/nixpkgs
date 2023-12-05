@@ -1,24 +1,62 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, oxipng, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, fetchYarnDeps, yarn, fixup_yarn_lock, nodePackages, nodejs-14_x
-, nodejs-16_x
+, ruby_3_2
+, replace
+, gzip
+, gnutar
+, git
+, esbuild
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodePackages
+, nodejs_18
+, jq
+, moreutils
+, terser
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.9.0.beta14";
+  version = "3.2.0.beta1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rdH6tALfhZyCGq1dtOQyuRlEYHSmWgvSz2qG6jrwPu0=";
+    sha256 = "sha256-HVjt5rsLSuyOaQxkbiTrsYsSXj3oSWjke98QVp+tEqk=";
   };
+
+  ruby = ruby_3_2;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -28,6 +66,7 @@ let
     gnutar
     git
     brotli
+    esbuild
 
     # Misc required system utils
     which
@@ -125,9 +164,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
+                ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -165,16 +204,20 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "1rj8bbhmrnnhaiqw2bik8dilk7g35yhis5p7yww57zy4k5ghjvlw";
+      sha256 = "070h66zp8kmsigbrkh5d3jzbzvllzhbx0fa2yzx5lbpgnjhih3p2";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
       nodePackages.uglify-js
-      nodePackages.terser
+      terser
+      nodePackages.patch-package
       yarn
-      nodejs-14_x
+      nodejs_18
+      jq
+      moreutils
+      esbuild
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -192,6 +235,18 @@ let
       # Fix the rake command used to recursively execute itself in the
       # assets precompilation task.
       ./assets_rake_command.patch
+
+      # `app/assets/javascripts/discourse/package.json`'s postinstall
+      # hook tries to call `../node_modules/.bin/patch-package`, which
+      # hasn't been `patchShebangs`-ed yet. So instead we just use
+      # `patch-package` from `nativeBuildInputs`.
+      ./asserts_patch-package_from_path.patch
+
+      # `lib/discourse_js_processor.rb`
+      # tries to call `../node_modules/.bin/esbuild`, which
+      # hasn't been `patchShebangs`-ed yet. So instead we just use
+      # `esbuild` from `nativeBuildInputs`.
+      ./assets_esbuild_from_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -210,9 +265,18 @@ let
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
+      find app/assets/javascripts -name package.json -print0 \
+        | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
       yarn install --offline --cwd app/assets/javascripts/discourse
 
       patchShebangs app/assets/javascripts/node_modules/
+
+      # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
+      # got patched. Otherwise this will fail with
+      #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
+      pushd app/assets/javascripts &>/dev/null
+        yarn run patch-package
+      popd &>/dev/null
 
       redis-server >/dev/null &
 
@@ -296,6 +360,12 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
+
+      # `lib/discourse_js_processor.rb`
+      # tries to call `../node_modules/.bin/esbuild`, which
+      # hasn't been `patchShebangs`-ed yet. So instead we just use
+      # `esbuild` from `nativeBuildInputs`.
+      ./assets_esbuild_from_path.patch
     ];
 
     postPatch = ''

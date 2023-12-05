@@ -13,6 +13,8 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
     };
 
   testScript = ''
+      machine.start(allow_reboot = True)
+
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
       machine.screenshot("postboot")
@@ -53,7 +55,14 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           machine.screenshot("getty")
 
       with subtest("Check whether ctrl-alt-delete works"):
-          machine.send_key("ctrl-alt-delete")
-          machine.wait_for_shutdown()
+          boot_id1 = machine.succeed("cat /proc/sys/kernel/random/boot_id").strip()
+          assert boot_id1 != ""
+
+          machine.reboot()
+
+          boot_id2 = machine.succeed("cat /proc/sys/kernel/random/boot_id").strip()
+          assert boot_id2 != ""
+
+          assert boot_id1 != boot_id2
   '';
 })

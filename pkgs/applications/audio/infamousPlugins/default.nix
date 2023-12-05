@@ -1,22 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cairomm
+, cmake
+, lv2
+, libpthreadstubs
+, libXdmcp
+, libXft
+, ntk
+, pcre
+, fftwFloat
+, zita-resampler
+}:
 
 stdenv.mkDerivation rec {
   pname = "infamousPlugins";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
     rev = "v${version}";
-    sha256 = "1r72agk5nxf5k0mghcc2j90z43j5d9i7rqjmf49jfyqnd443isip";
+    sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ssj71/infamousPlugins/commit/06dd967b4736ea886dc1dc07f882cb1563961582.patch";
-      sha256 = "08xwh6px13y1gykaw103nhvjms7vgbgkcm0avh9f5d2d7aadq0l2";
-    })
-  ];
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
 

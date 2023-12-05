@@ -48,14 +48,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.hound;
-        defaultText = literalExpression "pkgs.hound";
-        type = types.package;
-        description = lib.mdDoc ''
-          Package for running hound.
-        '';
-      };
+      package = mkPackageOption pkgs "hound" { };
 
       config = mkOption {
         type = types.str;

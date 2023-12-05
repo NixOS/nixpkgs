@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
+  patches = [
+    # This fix is included upstream, remove with next upgrade
+    ./cmake-h5free.patch
+  ];
+
   preConfigure = ''
     cmakeFlags+="-Dabs_top_srcdir=$(readlink -f ./)"
   '';
@@ -17,15 +22,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ netcdf hdf5 curl ];
 
-  # 10 - cxx4_test_filter (Failed)
-  # Setting Filter....Caught unexpected exception.
-  doCheck = false;
+  doCheck = true;
   enableParallelChecking = false;
+  preCheck = ''
+    export HDF5_PLUGIN_PATH=${netcdf}/lib/hdf5-plugins
+  '';
 
   meta = {
     description = "C++ API to manipulate netcdf files";
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

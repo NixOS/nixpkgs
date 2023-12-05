@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # added to fix build with gcc7
-  NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
 
   postPatch = ''
     substituteInPlace Makefile.am \

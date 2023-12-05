@@ -1,9 +1,10 @@
-self: super: with self;
+self: dontUse: with self;
 
 let
-  pythonInterpreter = super.python.pythonForBuild.interpreter;
-  pythonSitePackages = super.python.sitePackages;
-  pythonCheckInterpreter = super.python.interpreter;
+  inherit (python) pythonOnBuildForHost;
+  pythonInterpreter = pythonOnBuildForHost.interpreter;
+  pythonSitePackages = python.sitePackages;
+  pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
@@ -11,7 +12,7 @@ in {
   condaInstallHook = callPackage ({ makePythonHook, gnutar, lbzip2 }:
     makePythonHook {
       name = "conda-install-hook";
-      deps = [ gnutar lbzip2 ];
+      propagatedBuildInputs = [ gnutar lbzip2 ];
       substitutions = {
         inherit pythonSitePackages;
       };
@@ -20,19 +21,19 @@ in {
   condaUnpackHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "conda-unpack-hook";
-      deps = [];
+      propagatedBuildInputs = [];
     } ./conda-unpack-hook.sh) {};
 
   eggBuildHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "egg-build-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
     } ./egg-build-hook.sh) {};
 
   eggInstallHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "egg-install-hook.sh";
-      deps = [ setuptools ];
+      propagatedBuildInputs = [ setuptools ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
@@ -41,40 +42,62 @@ in {
   eggUnpackHook = callPackage ({ makePythonHook, }:
     makePythonHook {
       name = "egg-unpack-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh) {};
-
-  flitBuildHook = callPackage ({ makePythonHook, flit }:
-    makePythonHook {
-      name = "flit-build-hook";
-      deps = [ flit ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
-    } ./flit-build-hook.sh) {};
 
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
-      deps = [ pip wheel ];
+      propagatedBuildInputs = [ pip wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pip-build-hook.sh) {};
 
+  pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
+    makePythonHook {
+      name = "pypa-build-hook.sh";
+      propagatedBuildInputs = [ wheel ];
+      substitutions = {
+        inherit build;
+      };
+      # A test to ensure that this hook never propagates any of its dependencies
+      #   into the build environment.
+      # This prevents false positive alerts raised by catchConflictsHook.
+      # Such conflicts don't happen within the standard nixpkgs python package
+      #   set, but in downstream projects that build packages depending on other
+      #   versions of this hook's dependencies.
+      passthru.tests = import ./pypa-build-hook-tests.nix {
+        inherit pythonOnBuildForHost runCommand;
+      };
+    } ./pypa-build-hook.sh) {
+      inherit (pythonOnBuildForHost.pkgs) build;
+    };
+
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
-      deps = [ pip ];
+      propagatedBuildInputs = [ pip ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pip-install-hook.sh) {};
 
+  pypaInstallHook = callPackage ({ makePythonHook, installer }:
+    makePythonHook {
+      name = "pypa-install-hook";
+      propagatedBuildInputs = [ installer ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./pypa-install-hook.sh) {
+      inherit (pythonOnBuildForHost.pkgs) installer;
+    };
+
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
       name = "pytest-check-hook";
-      deps = [ pytest ];
+      propagatedBuildInputs = [ pytest ];
       substitutions = {
         inherit pythonCheckInterpreter;
       };
@@ -83,9 +106,16 @@ in {
   pythonCatchConflictsHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "python-catch-conflicts-hook";
-      substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuptools;
-        catchConflicts=../catch_conflicts/catch_conflicts.py;
+      substitutions = let
+        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
+      in {
+        inherit pythonInterpreter pythonSitePackages;
+        catchConflicts = if useLegacyHook then
+          ../catch_conflicts/catch_conflicts_py2.py
+        else
+          ../catch_conflicts/catch_conflicts.py;
+      } // lib.optionalAttrs useLegacyHook {
+        inherit setuptools;
       };
     } ./python-catch-conflicts-hook.sh) {};
 
@@ -93,15 +123,16 @@ in {
     makePythonHook {
       name = "python-imports-check-hook.sh";
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit pythonCheckInterpreter pythonSitePackages;
       };
     } ./python-imports-check-hook.sh) {};
 
-  pythonNamespacesHook = callPackage ({ makePythonHook, findutils }:
+  pythonNamespacesHook = callPackage ({ makePythonHook, buildPackages }:
     makePythonHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages findutils;
+        inherit pythonSitePackages;
+        inherit (buildPackages) findutils;
       };
     } ./python-namespaces-hook.sh) {};
 
@@ -123,9 +154,8 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
-      deps = [ wheel ];
       substitutions = {
-        inherit pythonInterpreter;
+        inherit pythonInterpreter pythonSitePackages wheel;
       };
     } ./python-relax-deps-hook.sh) {};
 
@@ -145,7 +175,7 @@ in {
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
       name = "setuptools-setup-hook";
-      deps = [ setuptools wheel ];
+      propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
         inherit pythonInterpreter pythonSitePackages setuppy;
       };
@@ -154,11 +184,23 @@ in {
   setuptoolsCheckHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "setuptools-check-hook";
-      deps = [ setuptools ];
+      propagatedBuildInputs = [ setuptools ];
       substitutions = {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
+      makePythonHook {
+        name = "setuptools-rust-setup-hook";
+        propagatedBuildInputs = [ setuptools-rust ];
+        substitutions = {
+          pyLibDir = "${python}/lib/${python.libPrefix}";
+          cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
+          cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
+          targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        };
+      } ./setuptools-rust-hook.sh) {};
 
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {
@@ -171,7 +213,7 @@ in {
   venvShellHook = disabledIf (!isPy3k) (callPackage ({ makePythonHook, ensureNewerSourcesForZipFilesHook }:
     makePythonHook {
       name = "venv-shell-hook";
-      deps = [ ensureNewerSourcesForZipFilesHook ];
+      propagatedBuildInputs = [ ensureNewerSourcesForZipFilesHook ];
       substitutions = {
         inherit pythonInterpreter;
       };
@@ -180,16 +222,19 @@ in {
   wheelUnpackHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "wheel-unpack-hook.sh";
-      deps = [ wheel ];
+      propagatedBuildInputs = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 
   wrapPython = callPackage ../wrap-python.nix {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
-  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+  sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      deps = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
+      substitutions = {
+        sphinxBuild = "${pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
+      };
     } ./sphinx-hook.sh) {};
 }

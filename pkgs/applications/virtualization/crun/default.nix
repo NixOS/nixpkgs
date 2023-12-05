@@ -23,6 +23,7 @@ let
     "test_exec.py"
     "test_hooks.py"
     "test_hostname.py"
+    "test_oci_features"
     "test_paths.py"
     "test_pid.py"
     "test_pid_file.py"
@@ -38,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.7.2";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SNNy/oI3ZcMeRLEMS2nSCS/rRaen5WsDfhdlHQCdtP4=";
+    hash = "sha256-61E/71axlN5H1KpAkWFm7jOETlmmy2qh7R+JrVZlMIQ=";
     fetchSubmodules = true;
   };
 
@@ -73,10 +74,12 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
+    changelog = "https://github.com/containers/crun/releases/tag/${version}";
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
+    homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "crun";
   };
 }

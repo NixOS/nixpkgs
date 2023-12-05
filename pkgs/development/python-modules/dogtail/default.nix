@@ -37,7 +37,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
-  strictDeps = false; # issue 56943
 
   checkPhase = ''
     runHook preCheck
@@ -50,6 +49,12 @@ buildPythonPackage {
     runHook postCheck
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # TODO: Tests require accessibility
   doCheck = false;
 
@@ -57,6 +62,6 @@ buildPythonPackage {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = "https://gitlab.com/dogtail/dogtail";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

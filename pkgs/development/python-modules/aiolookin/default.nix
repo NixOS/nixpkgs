@@ -27,7 +27,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     faker
     pytest-aiohttp
     pytest-mock

@@ -13,9 +13,7 @@
 , libgmpris
 , libusb-compat-0_1
 , llvmPackages_14
-, meson
 , mpg123
-, ninja
 , rpmextract
 , wavpack
 
@@ -28,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.33.0-96sse42";
+  version = "5.2.0-6";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc36/${pname}-${version}.fc36.x86_64.rpm";
-    hash = "sha256-4gPK31XMd5JUp2+il1Qa7r0EaXVGEvKoYLNGSD2dLUs=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc37/${pname}-${version}.fc37.x86_64.rpm";
+    hash = "sha256-AJKSj7t1yog3EXrzdods9Jk35ibEbegnXQzFcsr2N7I=";
   };
 
   unpackPhase = ''
@@ -75,14 +73,6 @@ stdenv.mkDerivation rec {
     # configuration
     mkdir -p $out/etc
     cp -rv ./etc/hqplayer $out/etc/
-
-    # udev rules
-    mkdir -p $out/etc/udev
-    cp -rv ./etc/udev/rules.d $out/etc/udev/
-
-    # kernel module cfgs
-    mkdir -p $out/etc
-    cp -rv ./etc/modules-load.d $out/etc/
 
     # systemd service file
     mkdir -p $out/lib/systemd

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-themes";
-  version = "2.0.8";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-4aBFK3cxcUfzaTIBAsZ+l4rvdF2AV+oPMB8oP8/KcvI=";
+    hash = "sha256-Acf9cwTKDUF1WwIqT3BR8wFpfUNRyZ+8anOIIg3O3CQ=";
   };
 
   nativeBuildInputs = [

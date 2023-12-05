@@ -1,25 +1,27 @@
 { lib
 , stdenv
-, callPackage
 , buildPythonPackage
-, fetchPypi
-, rustPlatform
-, setuptools-rust
-, openssl
-, Security
-, packaging
-, six
-, isPyPy
+, callPackage
+, cargo
 , cffi
-, pytestCheckHook
-, pytest-benchmark
-, pytest-subtests
-, pythonOlder
-, pretend
-, libiconv
-, iso8601
-, pytz
+, fetchPypi
 , hypothesis
+, iso8601
+, isPyPy
+, libiconv
+, libxcrypt
+, openssl
+, pkg-config
+, pretend
+, py
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
+, pytz
+, rustc
+, rustPlatform
+, Security
+, setuptoolsRustBuildHook
 }:
 
 let
@@ -27,44 +29,59 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "38.0.4"; # Also update the hash in vectors.nix
-  disabled = pythonOlder "3.6";
+  version = "41.0.3"; # Also update the hash in vectors.nix
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F1wagYuHyayAu3N39VILfzGz7yoABOJCAxm+re22cpA=";
+    hash = "sha256-bRknQRE+9eMNidy1uVbvThV48wRwhwG4tz044+FGHzQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-BN0kOblUwgHj5QBf52RY2Jx0nBn03lwoN1O5PEohbwY=";
+    hash = "sha256-LQu7waympGUs+CZun2yDQd2gUUAgyisKBG5mddrfSo0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--benchmark-disable" ""
+  '';
 
   cargoRoot = "src/rust";
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ] ++ [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    setuptoolsRustBuildHook
+    cargo
+    rustc
+    pkg-config
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography-vectors
     hypothesis
     iso8601
     pretend
+    py
     pytestCheckHook
-    pytest-benchmark
     pytest-subtests
     pytz
   ];
@@ -73,7 +90,10 @@ buildPythonPackage rec {
     "--disable-pytest-warnings"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = [
+    # save compute time by not running benchmarks
+    "tests/bench"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # aarch64-darwin forbids W+X memory, but this tests depends on it:
     # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
     "tests/hazmat/backends/test_openssl_memleak.py"
@@ -85,8 +105,6 @@ buildPythonPackage rec {
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
-      Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
     homepage = "https://github.com/pyca/cryptography";
     changelog = "https://cryptography.io/en/latest/changelog/#v"

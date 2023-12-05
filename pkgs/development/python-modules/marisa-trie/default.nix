@@ -5,22 +5,26 @@
 , pytestCheckHook
 , hypothesis
 , readme_renderer
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "0.7.8";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ruPeXyg2B0z9gD8crxb2g5DyYu8JzX3H0Oiu6baHhkM=";
+    hash = "sha256-W/Q+0M82r0V4/nsDTPlfUyQ5dmUWaA5L1gNyNhHr1Ws=";
   };
 
   nativeBuildInputs = [
     cython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     readme_renderer
     hypothesis
@@ -60,7 +64,7 @@ buildPythonPackage rec {
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
     homepage =  "https://github.com/kmike/marisa-trie";
+    changelog = "https://github.com/pytries/marisa-trie/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     "jamo"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

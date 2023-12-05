@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ OPNA2608 ];
+    mainProgram = "x11vnc";
   };
 }

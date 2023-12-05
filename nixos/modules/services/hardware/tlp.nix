@@ -47,7 +47,7 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    hardware.cpu.x86.msr.enable = true;
 
     warnings = optional (cfg.extraConfig != "") ''
       Using config.services.tlp.extraConfig is deprecated and will become unsupported in a future release. Use config.services.tlp.settings instead.
@@ -65,7 +65,7 @@ in
       "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
     } // optionalAttrs enableRDW {
       "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
-        "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
+        "${tlp}/usr/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
     };
 
     environment.systemPackages = [ tlp ];

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     pymongo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

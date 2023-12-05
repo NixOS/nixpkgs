@@ -1,12 +1,12 @@
-{lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse}:
+{ lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "wiimms-iso-tools";
-  version = "3.02a";
+  version = "3.05a";
 
   src = fetchurl {
-    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${version}.tar.bz2";
-    sha256 = "074cvcaqz23xyihslc6n64wwxwcnl6xp7l0750yb9pc0wrqxmj69";
+    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${version}.txz";
+    hash = "sha256-5aikiPJkZf9OwD8QmQ7ijhBOtFQpkIErvb6gOvEu2L0=";
   };
 
   buildInputs = [ zlib ncurses fuse ];
@@ -25,13 +25,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs setup.sh
-    patchShebangs gen-template.sh
-    patchShebangs gen-text-file.sh
+    patchShebangs setup.sh gen-template.sh gen-text-file.sh
+    substituteInPlace setup.sh --replace gcc "$CC"
+    substituteInPlace Makefile --replace gcc "$CC"
   '';
 
-  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security -fcommon";
   INSTALL_PATH = "$out";
 
   installPhase = ''
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wit.wiimm.de";
     description = "A set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nilp0inter ];
   };
 }

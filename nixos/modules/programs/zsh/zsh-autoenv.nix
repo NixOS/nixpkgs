@@ -8,15 +8,7 @@ in {
   options = {
     programs.zsh.zsh-autoenv = {
       enable = mkEnableOption (lib.mdDoc "zsh-autoenv");
-      package = mkOption {
-        default = pkgs.zsh-autoenv;
-        defaultText = literalExpression "pkgs.zsh-autoenv";
-        description = lib.mdDoc ''
-          Package to install for `zsh-autoenv` usage.
-        '';
-
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "zsh-autoenv" { };
     };
   };
 

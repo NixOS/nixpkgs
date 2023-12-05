@@ -2,17 +2,20 @@
 , buildPythonPackage
 , lib
 , python
+, fetchPypi
 , systemd
+, lxml
+, psutil
 , pytest
 , mock
 , pkg-config }:
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.10.0";
-  src = python.pkgs.fetchPypi {
+  version = "0.13.2";
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
+    hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
 
   disabled = python.pythonOlder "3.4";
@@ -21,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  checkInputs = [ pytest mock ];
+  nativeCheckInputs = [ lxml mock psutil pytest ];
 
   checkPhase = "pytest tests";
 

@@ -32,6 +32,9 @@ in
     ''
       import lzma
 
+      machine.systemctl("start udisks2")
+      machine.wait_for_unit("udisks2.service")
+
       with lzma.open(
           "${stick}"
       ) as data, open(machine.state_dir / "usbstick.img", "wb") as stick:

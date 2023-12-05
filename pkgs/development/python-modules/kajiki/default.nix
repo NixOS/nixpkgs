@@ -1,32 +1,44 @@
 { lib
+, babel
 , buildPythonPackage
 , fetchFromGitHub
-, babel
-, pytz
-, nine
+, linetable
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "kajiki";
-  version = "0.9.1";
+  version = "0.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-bdQBVFHRB408/7X9y+3+fpllhymFRsdv/MEPTVjJh2E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EbXe4Jh2IKAYw9GE0kFgKVv9c9uAOiFFYaMF8CGaOfg=";
   };
 
-  propagatedBuildInputs = [ babel pytz nine ];
+  propagatedBuildInputs = [
+    linetable
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    babel
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "kajiki"
+  ];
 
   meta = with lib; {
-    description = "Kajiki provides fast well-formed XML templates";
+    description = "Module provides fast well-formed XML templates";
     homepage = "https://github.com/nandoflorestan/kajiki";
+    changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
-
 }

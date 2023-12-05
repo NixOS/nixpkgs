@@ -8,21 +8,21 @@
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.4.2";
+  version = "1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1uj5DKji3U6AJ8RWGt65RWtUBEMS26ZV58rmUs65rlk=";
+    hash = "sha256-Oq0l0xKEJmvPz9H9inQ/YygjBaNkuNCUikO9YGrMZS8=";
   };
 
   propagatedBuildInputs = [
     python-socks
    ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

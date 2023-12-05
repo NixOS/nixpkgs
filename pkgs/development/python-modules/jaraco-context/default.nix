@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "4.1.2";
+  version = "4.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gfrDZW4d3X/QjUBN8DFSvKRLZge3pnZ6KkI7S7Nz3W0=";
+    hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,11 +32,14 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "jaraco.context" ];
+  pythonImportsCheck = [
+    "jaraco.context"
+  ];
 
   meta = with lib; {
     description = "Python module for context management";
     homepage = "https://github.com/jaraco/jaraco.context";
+    changelog = "https://github.com/jaraco/jaraco.context/blob/v${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

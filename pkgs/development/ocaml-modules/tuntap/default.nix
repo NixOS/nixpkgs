@@ -6,9 +6,9 @@ buildDunePackage rec {
   pname = "tuntap";
   version = "2.0.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.04.2";
+  minimalOCamlVersion = "4.04.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-tuntap/releases/download/v${version}/tuntap-v${version}.tbz";

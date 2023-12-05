@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 declare -a autoPatchelfLibs
 declare -a extraAutoPatchelfLibs
@@ -61,14 +61,18 @@ autoPatchelf() {
         ignoreMissingDepsArray=( "*" )
     fi
 
+    local appendRunpathsArray=($appendRunpaths)
     local runtimeDependenciesArray=($runtimeDependencies)
+    local patchelfFlagsArray=($patchelfFlags)
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
         --paths "$@"                                                    \
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
-        --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"
+        --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
+        --append-rpaths "${appendRunpathsArray[@]}"                     \
+        --extra-args "${patchelfFlagsArray[@]}"
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
@@ -84,7 +88,7 @@ autoPatchelf() {
 # (Expressions don't expand in single quotes, use double quotes for that.)
 postFixupHooks+=('
     if [ -z "${dontAutoPatchelf-}" ]; then
-        autoPatchelf -- $(for output in $outputs; do
+        autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)

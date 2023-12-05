@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.0p4";
+  version = "3.3p3";
 
   src = fetchurl {
-    url    = "http://picat-lang.org/download/picat30_4_src.tar.gz";
-    sha256 = "1rwin44m7ni2h2v51sh2r8gj2k6wm6f86zgaylrria9jr57inpqj";
+    url = "http://picat-lang.org/download/picat333_src.tar.gz";
+    hash = "sha256-LMmAHCGKgon/wNbrXTUH9hiHyGVwwSDpB1236xawzXs=";
   };
 
   buildInputs = [ zlib ];

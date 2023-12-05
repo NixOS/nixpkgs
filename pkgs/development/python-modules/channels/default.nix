@@ -4,6 +4,7 @@
 , daphne
 , django
 , fetchFromGitHub
+, async-timeout
 , pytest-asyncio
 , pytest-django
 , pytestCheckHook
@@ -35,7 +36,8 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    async-timeout
     pytest-asyncio
     pytest-django
     pytestCheckHook

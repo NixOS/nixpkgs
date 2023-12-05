@@ -1,8 +1,9 @@
-{ channel, version, revision, sha256 }:
+{ channel, version, revision, hash }:
 
 { stdenv
 , fetchurl
 , lib
+, makeWrapper
 
 , binutils-unwrapped
 , xz
@@ -31,6 +32,9 @@
 , libuuid
 , systemd
 , wayland
+
+# command line arguments which are always set e.g "--disable-gpu"
+, commandLineArgs ? ""
 }:
 
 let
@@ -45,22 +49,23 @@ let
              then baseName
              else baseName + "-" + channel;
 
-  iconSuffix = if channel == "stable"
-               then ""
-               else "_${channel}";
+  iconSuffix = lib.optionalString (channel != "stable") "_${channel}";
 
-  desktopSuffix = if channel == "stable"
-                  then ""
-                  else "-${channel}";
+  desktopSuffix = lib.optionalString (channel != "stable") "-${channel}";
 in
 
 stdenv.mkDerivation rec {
-  name="${baseName}-${channel}-${version}";
+  pname="${baseName}-${channel}";
+  inherit version;
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
-    inherit sha256;
+    inherit hash;
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   unpackCmd = "${binutils-unwrapped}/bin/ar p $src data.tar.xz | ${xz}/bin/xz -dc | ${gnutar}/bin/tar -xf -";
   sourceRoot = ".";
@@ -88,9 +93,6 @@ stdenv.mkDerivation rec {
       ];
       libGLESv2 = lib.makeLibraryPath [
         xorg.libX11 xorg.libXext xorg.libxcb wayland
-      ];
-      libsmartscreen = lib.makeLibraryPath [
-        libuuid stdenv.cc.cc.lib
       ];
       libsmartscreenn = lib.makeLibraryPath [
         libuuid
@@ -127,16 +129,12 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/libGLESv2.so
 
     patchelf \
-      --set-rpath "${libPath.libsmartscreen}" \
-      opt/microsoft/${shortName}/libsmartscreen.so
-
+      --set-rpath "${libPath.liboneauth}" \
+      opt/microsoft/${shortName}/liboneauth.so
+  '' + lib.optionalString (lib.versionOlder version "120") ''
     patchelf \
       --set-rpath "${libPath.libsmartscreenn}" \
       opt/microsoft/${shortName}/libsmartscreenn.so
-
-    patchelf \
-      --set-rpath "${libPath.liboneauth}" \
-      opt/microsoft/${shortName}/liboneauth.so
   '';
 
   installPhase = ''
@@ -144,7 +142,7 @@ stdenv.mkDerivation rec {
     cp -R opt usr/bin usr/share $out
 
     ${if channel == "stable"
-      then ""
+      then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
       else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
 
     ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}
@@ -170,7 +168,7 @@ stdenv.mkDerivation rec {
       --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-mime \
-      --replace "''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
       --replace "xdg_system_dirs=/usr/local/share/:/usr/share/" "xdg_system_dirs=/run/current-system/sw/share/" \
       --replace /usr/bin/file ${file}/bin/file
 
@@ -178,9 +176,18 @@ stdenv.mkDerivation rec {
       --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-settings \
-      --replace "''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "''${XDG_CONFIG_DIRS:-/etc/xdg}" "''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
+      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
   '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/${longName}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  '';
+
+  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
@@ -188,6 +195,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zanculmarktum kuwii ];
+    maintainers = with maintainers; [ zanculmarktum kuwii rhysmdnz ];
   };
 }

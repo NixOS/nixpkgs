@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "arrow";
   namespace = "script.module.arrow";
-  version = "1.0.3.1";
+  version = "1.2.3";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "0xa16sb2hls59l4gsg1xwb1qbkhcvbykq02l05n5rcm0alg80l3l";
+    url = "https://mirrors.kodi.tv/addons/nexus/script.module.arrow/script.module.arrow-${version}.zip";
+    sha256 = "sha256-Et+9FJT1dRE1dFOrAQ70HJJcfylyLsiyay9wPJcSOXs=";
   };
 
   propagatedBuildInputs = [

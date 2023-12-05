@@ -23,7 +23,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-lw4whdh8tNoS5XUlamQCq8f8z8K59uD90PSSo3skeyo=";
   };
 
-  cargoSha256 = "sha256-XmvM5tr6ToYi0UrFnLju1wmp/0VEEP/O7T9Bx0YyFW4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "egui_nodes-0.1.4" = "sha256-Bb88T+erjgKD769eYOSiVEg9lFnB5pBEDLeWgCdyUus=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -46,6 +51,10 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/pw-viz \
       --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
   '';
+
+  # enables pipewire API deprecated in 0.3.64
+  # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
   meta = with lib; {
     description = "A simple and elegant pipewire graph editor ";

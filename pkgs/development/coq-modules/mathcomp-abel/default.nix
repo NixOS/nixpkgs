@@ -7,7 +7,7 @@ mkCoqDerivation {
   owner = "math-comp";
 
   inherit version;
-  defaultVersion = with lib; with versions; switch [ coq.version mathcomp.version ]  [
+  defaultVersion = with lib; with versions; lib.switch [ coq.version mathcomp.version ]  [
       { cases = [ (range "8.10" "8.16") (range "1.12.0" "1.15.0") ]; out = "1.2.1"; }
       { cases = [ (range "8.10" "8.15") (range "1.12.0" "1.14.0") ]; out = "1.2.0"; }
       { cases = [ (range "8.10" "8.14") (range "1.11.0" "1.12.0") ]; out = "1.1.2"; }

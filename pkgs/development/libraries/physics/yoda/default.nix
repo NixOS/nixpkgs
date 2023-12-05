@@ -11,12 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.7";
+  version = "1.9.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-jQe7BNy3k2SFhxihggNFLY2foAAp+pQjnq+oUpAyuP8=";
+    hash = "sha256-e8MGJGirulCv8+y4sizmdxlgNgCYkGiO9FM6qn+S5uQ=";
   };
+
+  patches = [
+    # A bugfix https://gitlab.com/hepcedar/yoda/-/merge_requests/116
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/yoda/-/commit/ba1275033522c66bc473dfeffae1a7971e985611.diff";
+      hash = "sha256-/8UJuypiQzywarE+o3BEMtqM+f+YzkHylugi+xTJf+w=";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   nativeBuildInputs = with python.pkgs; [
     cython
@@ -41,6 +50,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     touch pyext/yoda/*.{pyx,pxd}
     patchShebangs .
+
+    substituteInPlace pyext/yoda/plotting/script_generator.py \
+      --replace '/usr/bin/env python' '${python.interpreter}'
   '';
 
   postInstall = ''

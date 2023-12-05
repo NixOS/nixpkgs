@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mypy-protobuf";
-  version = "3.4.0";
+  version = "3.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fXWgeWUbEFB2d2o1pUBeP6dzuKFnEY8bcS5EPppsGKI=";
+    hash = "sha256-IfJw2gqXkqnax2sN9GPAJ+VhZkq2lzxZvk5NBk3+Z9w=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   doCheck = false; # ModuleNotFoundError: No module named 'testproto'
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

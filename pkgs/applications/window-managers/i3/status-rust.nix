@@ -11,20 +11,21 @@
 , lm_sensors
 , iw
 , iproute2
+, withICUCalendar ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.22.0";
+  version = "0.32.3";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-9Fp5k14QkV1CwLSL1nUUu6NYIpjfvI9vNJRYNqvyr3M=";
+    hash = "sha256-CldVak1BQ4VhRt24hHdog5O3crkQBZBkRWNT7uYUw4Y=";
   };
 
-  cargoSha256 = "sha256-MzosatZ4yPHAdANqOBPVW2wpjnojLo9B9N9o4DtU0Iw=";
+  cargoHash = "sha256-gWBmzpgZcsO4u8kXSqtr4FIYvshXpxWbECg/tcyl9Ok=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     "notmuch"
     "maildir"
     "pulseaudio"
-  ];
+  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \
@@ -57,7 +58,8 @@ rustPlatform.buildRustPackage rec {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ backuitist globin ma27 ];
+    mainProgram = "i3status-rs";
+    maintainers = with maintainers; [ backuitist globin ];
     platforms = platforms.linux;
   };
 }

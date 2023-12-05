@@ -1,47 +1,55 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, attrs
 , buildPythonPackage
-, filelock
-, lxml
-, mypy-extensions
-, psutil
-, py
-, pytest-forked
-, pytest-xdist
-, pytestCheckHook
-, python
+, fetchFromGitHub
 , pythonOlder
+
+# build-system
 , setuptools
-, six
-, typed-ast
-, typing-extensions
-, tomli
-, types-setuptools
-, types-typed-ast
 , types-psutil
-, virtualenv
+, types-setuptools
+
+# propagates
+, mypy-extensions
+, tomli
+, typing-extensions
+
+# optionals
+, lxml
+, psutil
+
+# tests
+, attrs
+, filelock
+, pytest-xdist
+, pytest-forked
+, pytestCheckHook
+, py
+, six
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.991";
+  version = "1.5.1";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ljnMlQUlz4oiZqlqOlqJOumrP6wKLDGiDtT3Y5OEQog=";
+    hash = "sha256-qs+axm2+UWNuWzLW8CI4qBV7k7Ra8gBajid8mYKDsso=";
   };
 
   nativeBuildInputs = [
+    mypy-extensions
     setuptools
-    types-typed-ast
-    types-setuptools
     types-psutil
+    types-setuptools
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   propagatedBuildInputs = [
@@ -49,17 +57,24 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typed-ast
   ];
 
   passthru.optional-dependencies = {
-    dmypy = [ psutil ];
-    reports = [ lxml ];
+    dmypy = [
+      psutil
+    ];
+    reports = [
+      lxml
+    ];
   };
 
-  # TODO: enable tests
-  doCheck = false;
+  # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
+  # version is also the default in the wheels on Pypi that include binaries.
+  # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
+  env.MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
+
+  # when testing reduce optimisation level to reduce build time by 20%
+  env.MYPYC_OPT_LEVEL = 1;
 
   pythonImportsCheck = [
     "mypy"
@@ -73,18 +88,36 @@ buildPythonPackage rec {
     "mypy.report"
   ];
 
-  # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
-  # version is also the default in the wheels on Pypi that include binaries.
-  # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
-  MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
+  checkInputs = [
+    attrs
+    filelock
+    pytest-xdist
+    pytest-forked
+    pytestCheckHook
+    py
+    setuptools
+    six
+    tomli
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  # when testing reduce optimisation level to drastically reduce build time
-  MYPYC_OPT_LEVEL = 1;
+  disabledTestPaths = [
+    # fails to find tyoing_extensions
+    "mypy/test/testcmdline.py"
+    "mypy/test/testdaemon.py"
+    # fails to find setuptools
+    "mypyc/test/test_commandline.py"
+    # fails to find hatchling
+    "mypy/test/testpep561.py"
+  ] ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
+  ];
 
   meta = with lib; {
     description = "Optional static typing for Python";
-    homepage = "http://www.mypy-lang.org";
+    homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+    mainProgram = "mypy";
+    maintainers = with maintainers; [ martingms lnl7 ];
   };
 }

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "freeze";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "optiv";
     repo = "Freeze";
     rev = "v${version}";
-    hash = "sha256-ySwd7xs9JdJuBvqKC4jI/qA6qVHbYPPUEG7k6joSkRk=";
+    hash = "sha256-BE5MvCU+NfEccauOdWNty/FwMiWwLttPh7eE9+UzEMY=";
   };
 
   vendorHash = "sha256-R8kdFweMhAUjJ8zJ7HdF5+/vllbNmARdhU4hOw4etZo=";

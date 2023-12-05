@@ -21,30 +21,17 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.6.1";
+  version = "2.14.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
+    hash = "sha256-oLB6laY/Si071mBKoWlZpd1fqr/wNtAnhRvBKLjeEuE=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Backport support for dill<3.7
-      url = "https://github.com/huggingface/datasets/pull/5166.patch";
-      hash = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "responses<0.19" "responses"
-  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -64,10 +51,10 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  # Tests require pervasive internet access.
+  # Tests require pervasive internet access
   doCheck = false;
 
-  # Module import will attempt to create a cache directory.
+  # Module import will attempt to create a cache directory
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
   pythonImportsCheck = [

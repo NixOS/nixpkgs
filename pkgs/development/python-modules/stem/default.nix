@@ -1,32 +1,51 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, cryptography
+, mock
+, python
+}:
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.8.0";
+  version = "1.8.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hk8alc0r4m669ggngdfvryndd0fbx0w62sclcmg55af4ak8xd50";
+  disabled = pythonOlder "3.6";
+
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "torproject";
+    repo = "stem";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9BXeE/sVa13jr8G060aWjc49zgDVBhjaR6nt4lSxc0g=";
   };
 
-  postPatch = ''
-    rm test/unit/installation.py
-    sed -i "/test.unit.installation/d" test/settings.cfg
-    # https://github.com/torproject/stem/issues/56
-    sed -i '/MOCK_VERSION/d' run_tests.py
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    cryptography
+    mock
+  ];
 
   checkPhase = ''
-    touch .gitignore
-    ${python.interpreter} run_tests.py -u
+    runHook preCheck
+
+    ${python.interpreter} run_tests.py --unit
+
+    runHook postCheck
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/torproject/stem/blob/${src.rev}/docs/change_log.rst";
     description = "Controller library that allows applications to interact with Tor";
+    downloadPage = "https://github.com/torproject/stem";
     homepage = "https://stem.torproject.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

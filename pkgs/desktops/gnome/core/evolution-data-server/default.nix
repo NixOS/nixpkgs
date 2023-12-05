@@ -23,6 +23,7 @@
 , gperf
 , wrapGAppsHook
 , glib-networking
+, gsettings-desktop-schemas
 , pcre
 , vala
 , cmake
@@ -31,7 +32,7 @@
 , openldap
 , enableOAuth2 ? stdenv.isLinux
 , webkitgtk_4_1
-, webkitgtk_5_0
+, webkitgtk_6_0
 , libaccounts-glib
 , json-glib
 , glib
@@ -50,13 +51,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.46.2";
+  version = "3.50.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+b1SAIt+U12BaSDPzscKDlViveKK9x+ZbiA/9qhuRuA=";
+    sha256 = "XmYnA4jVDBTzsa4/oNISe5/tznUqzTk7VUUoGwH8SXA=";
   };
 
   patches = [
@@ -64,11 +65,16 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+
+    # Avoid using wrapper function, which the hardcode gsettings
+    # patch generator cannot handle.
+    ./drop-tentative-settings-constructor.patch
   ];
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -86,6 +92,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    libsecret
     libsoup_3
     gnome-online-accounts
     p11-kit
@@ -111,12 +118,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGtk4 [
     gtk4
   ] ++ lib.optionals (withGtk4 && enableOAuth2) [
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = [
     db
-    libsecret
     nss
     nspr
     libical
@@ -158,9 +164,9 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution-data-server.addressbook" = "EDS";
         "org.gnome.evolution-data-server.calendar" = "EDS";
         "org.gnome.evolution-data-server" = "EDS";
-
+        "org.gnome.desktop.interface" = "GDS";
       };
-      inherit src;
+      inherit src patches;
     };
     updateScript =
       let

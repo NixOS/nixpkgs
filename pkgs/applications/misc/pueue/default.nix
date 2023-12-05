@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, Libsystem
 , SystemConfiguration
 , installShellFiles
 , libiconv
@@ -9,20 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "2.1.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-xUTkjj/PdlgDEp2VMwBuRtF/9iGGiN4FZizdOdcbTag=";
+    hash = "sha256-m819IxJjUjRJvKRUdqwq/iOq6zznbM8/iZsplkAk0F0=";
   };
 
-  cargoSha256 = "sha256-7VdPu+9RYoj4Xfb3J6GLOji7Fqxkk+Fswi4C4q33+jk=";
+  cargoHash = "sha256-tUuo3vRnWNR5xlt9DbnHtfZqs0mGfMu4sZ7GrT1q6v4=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
+    Libsystem
     SystemConfiguration
     libiconv
   ];
@@ -54,7 +60,7 @@ rustPlatform.buildRustPackage rec {
       any terminal on the same machine. The queue will be continuously
       processed, even if you no longer have any active ssh sessions.
     '';
-    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

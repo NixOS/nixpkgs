@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
     rev = version;
-    sha256 = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
+    hash = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pyusb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

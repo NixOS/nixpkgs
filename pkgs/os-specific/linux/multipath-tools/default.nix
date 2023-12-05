@@ -1,39 +1,41 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
+, coreutils
+
 , perl
-, lvm2
+, pkg-config
+
+, json_c
 , libaio
+, liburcu
+, linuxHeaders
+, lvm2
 , readline
 , systemd
-, liburcu
-, json_c
-, kmod
+, util-linuxMinimal
+
 , cmocka
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.3";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-pIGeZ+jB+6GqkfVN83axHIuY/BobQ+zs+tH+MkLIln0=";
+    sha256 = "sha256-X4sAMGn4oBMY3cQkVj1dMcrDF7FgMl8SbZeUnCCOY6Q=";
   };
 
   postPatch = ''
-    substituteInPlace libmultipath/Makefile \
-      --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+    substituteInPlace create-config.mk \
+      --replace /bin/echo ${coreutils}/bin/echo
 
-    # systemd-udev-settle.service is deprecated.
     substituteInPlace multipathd/multipathd.service \
-      --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-      --replace /sbin/multipathd "$out/bin/multipathd" \
-      --replace " systemd-udev-settle.service" ""
+      --replace /sbin/multipathd "$out/bin/multipathd"
 
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
@@ -42,18 +44,33 @@ stdenv.mkDerivation rec {
       kpartx/Makefile libmpathpersist/Makefile
     sed -i -e "s,GZIP,GZ," \
       $(find * -name Makefile\*)
+
+    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    json_c
+    libaio
+    liburcu
+    linuxHeaders
+    lvm2
+    readline
+    systemd
+    util-linuxMinimal # for libmount
+  ];
 
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
+    "systemd_prefix=$(out)"
+    "kernel_incdir=${linuxHeaders}/include/"
     "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "SYSTEMDPATH=lib"
   ];
 
   doCheck = true;
@@ -61,7 +78,7 @@ stdenv.mkDerivation rec {
     # skip test attempting to access /sys/dev/block
     substituteInPlace tests/Makefile --replace ' devt ' ' '
   '';
-  checkInputs = [ cmocka ];
+  nativeCheckInputs = [ cmocka ];
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 

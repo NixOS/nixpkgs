@@ -1,18 +1,21 @@
-{ lib, fetchzip }:
-let
+{ lib, stdenvNoCC, fetchzip }:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "ttf-tw-moe";
   version = "2020-11-14";
-in
-fetchzip {
-  name = "ttf-tw-moe";
 
-  url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
+    hash = "sha256-9gy8xO93ViIPmpg1du0DbXVCR2FowourLH8nP9d6HK0=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile TW-fonts-${version}/\*.ttf -d $out/share/fonts/truetype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-
-  sha256 = "1jd3gjjfa4vadp6d499n0irz5b22z611kd7q5qgqf6s2fwbxfhiz";
 
   meta = with lib; {
     homepage = "http://www.moe.gov.tw/";

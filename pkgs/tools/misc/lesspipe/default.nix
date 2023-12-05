@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, makeWrapper, perl, procps, file, gnused, bash }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, procps, file, gnused, bash }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.06";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    sha256 = "sha256-4hyDtr2/9lhAWuiLd7OQ/+rdg/u5f5JT4hba3wpxxzg=";
+    sha256 = "sha256-fLDB0rUo1kfPs0Xy2s1gG5ZsRjk1h1yYqjXkQC4qPf0=";
   };
 
   nativeBuildInputs = [ perl makeWrapper ];

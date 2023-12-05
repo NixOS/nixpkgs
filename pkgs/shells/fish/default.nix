@@ -79,7 +79,7 @@ let
     # note that this is required:
     #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
-    builtin status --is-login
+    builtin status is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
     ${if fishEnvPreInit != null then ''
     and begin
@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.6.0";
+    version = "3.6.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,7 +145,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha512-oR6nYa2s4C73+IsliTMoAFzvB/ktNi+8eUVA3KJunPyXCHjQMSyuvRnWRIPp88PiStbCffziZNF3+T1lx+9plg==";
+      hash = "sha256-VUArtHymc52KuiXkF4CQW1zhvOCl4N0X3KkItbwLSbI=";
     };
 
     # Fix FHS paths in tests
@@ -181,6 +181,10 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
+
+      # pexpect tests are flaky in general
+      # See https://github.com/fish-shell/fish-shell/issues/8789
+      rm tests/pexpects/bind.py
     '' + lib.optionalString stdenv.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
@@ -206,6 +210,12 @@ let
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # Fish’s test suite needs to be able to look up process information and send signals.
+    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+      (allow mach-lookup mach-task-name)
+      (allow signal (target children))
+    '';
+
     # The optional string is kind of an inelegant way to get fish to cross compile.
     # Fish needs coreutils as a runtime dependency, and it gets put into
     # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
@@ -227,7 +237,7 @@ let
 
     doCheck = true;
 
-    checkInputs = [
+    nativeCheckInputs = [
       coreutils
       (python3.withPackages (ps: [ ps.pexpect ]))
       procps
@@ -288,7 +298,8 @@ let
       homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h winter srapenne ];
+      maintainers = with maintainers; [ cole-h winter ];
+      mainProgram = "fish";
     };
 
     passthru = {

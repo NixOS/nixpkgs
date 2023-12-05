@@ -3,7 +3,7 @@
 , fetchurl
 , runCommand
 , makeWrapper
-, buildFHSUserEnv
+, buildFHSEnv
 , libselinux
 , libarchive
 , libGL
@@ -63,7 +63,7 @@ let
             --prefix "LD_LIBRARY_PATH" : "${libPath}"
         '');
 in
-  buildFHSUserEnv {
+  buildFHSEnv {
     name = "conda-shell";
     targetPkgs = pkgs: (builtins.concatLists [ [ conda ] condaDeps extraPkgs]);
     profile = ''

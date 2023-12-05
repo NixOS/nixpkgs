@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmcrypt libmhash ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
+
   meta = {
     description = "Replacement for old UNIX crypt(1)";
     longDescription = ''
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
       for the old Unix crypt, except that they are under the GPL and support an
       ever-wider range of algorithms and modes.
     '';
-    homepage = "http://mcrypt.sourceforge.net";
+    homepage = "https://mcrypt.sourceforge.net";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.qknight ];

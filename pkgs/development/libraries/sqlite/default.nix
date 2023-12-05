@@ -7,38 +7,38 @@
 , interactive ? false
 # TODO: can be removed since 3.36 since it is the default now.
 , enableDeserialize ? false
-}:
 
-with lib;
+, gitUpdater
+}:
 
 let
   archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite${optionalString interactive "-interactive"}";
-  version = "3.40.0";
+  pname = "sqlite${lib.optionalString interactive "-interactive"}";
+  version = "3.43.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "sha256-AzNVIHbScAx1NSJW6Rx4v1zWJJFYm6DGmu0KgYaJgOc=";
+    url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    hash = "sha256-bUIrb2LE3iyoDWGGDjo/tpNVTS91uxqsp0PMxNb2CfA=";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -89,12 +89,22 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails to link against tcl
 
-  passthru.tests = {
-    inherit (python3Packages) sqlalchemy;
-    inherit sqldiff sqlite-analyzer tracker;
+  passthru = {
+    tests = {
+      inherit (python3Packages) sqlalchemy;
+      inherit sqldiff sqlite-analyzer tracker;
+    };
+
+    updateScript = gitUpdater {
+      # No nicer place to look for patest version.
+      url = "https://github.com/sqlite/sqlite.git";
+      # Expect tags like "version-3.43.0".
+      rev-prefix = "version-";
+    };
   };
 
-  meta = {
+  meta = with lib; {
+    changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
@@ -102,5 +112,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlite3";
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
+    pkgConfigModules = [ "sqlite3" ];
   };
 }

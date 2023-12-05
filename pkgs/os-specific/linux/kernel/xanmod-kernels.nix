@@ -2,15 +2,18 @@
 
 let
   # These names are how they are designated in https://xanmod.org.
+
+  # NOTE: When updating these, please also take a look at the changes done to
+  # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "5.15.84";
-    hash = "sha256-CN3GOuwSicJ6Oa9BiKTyZg7fpzWc846v2SV9JRiOu3M=";
+    version = "6.1.63";
+    hash = "sha256-WBMKJCLYexWJuTpli8vjvdms2ZYPXIS0yUxTgAL00io=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.1.3";
-    hash = "sha256-YtkmbbFEfvww7yJ4MpLQ3M6QjbBXSU9Pjwu0Dq/dIcs=";
+    version = "6.5.12";
+    hash = "sha256-zG9+d+hKg0S0qCX2hOc02CowC6s9u82MB45+X1bGYpE=";
     variant = "main";
   };
 
@@ -26,38 +29,22 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
-      # AMD P-state driver
-      X86_AMD_PSTATE = lib.mkOverride 60 yes;
-
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
-
-      # Multigenerational LRU framework
-      # This can be removed when the LTS variant reaches version >= 6.1 (since it's on by default then)
-      LRU_GEN = yes;
-      LRU_GEN_ENABLED = yes;
-
-      # FQ-PIE Packet Scheduling
-      NET_SCH_DEFAULT = yes;
-      DEFAULT_FQ_PIE = yes;
-
-      # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-      FUTEX = yes;
-      FUTEX_PI = yes;
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      HZ = freeform "500";
-      HZ_500 = yes;
+      # Preemptive Full Tickless Kernel at 250Hz
+      HZ = freeform "250";
+      HZ_250 = yes;
       HZ_1000 = no;
     };
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
+      maintainers = with lib.maintainers; [ moni lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

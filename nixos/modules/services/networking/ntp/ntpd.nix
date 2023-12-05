@@ -56,7 +56,7 @@ in
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
-          http://support.ntp.org/bin/view/Support/AccessRestrictions
+          https://support.ntp.org/Support/AccessRestrictions
         '';
         default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
       };

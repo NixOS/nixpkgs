@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "14.2.0";
+  version = "19.6.1";
 
   src = fetchPypi {
     pname = "Faker";
     inherit version;
-    hash = "sha256-bbVuLEOit0JQ0cMy7yX+99wH3LbF+rUynde0RnuO17k=";
+    hash = "sha256-XWt4gLO+pwgHXd+Rk4QkRT8HBTpZ+PoEU8GHDfb/MpI=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     text-unidecode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pillow
     pytestCheckHook

@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , click
 , ordered-set
+, orjson
 , clevercsv
 , jsonpickle
 , numpy
 , pytestCheckHook
+, python-dateutil
 , pyyaml
 , toml
+, tomli-w
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.2.1";
+  version = "6.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +26,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-AKah3A9srKm/cFWM7IiZ7JxQ8s0KTuh8VLKOymsDgnA=";
+    hash = "sha256-oO5+ZCDgqonxaHR95tSrPkZDar/fzr1FXtl6J2W3PeU=";
   };
 
   postPatch = ''
@@ -33,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ordered-set
+    orjson
   ];
 
   passthru.optional-dependencies = {
@@ -44,11 +48,19 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonpickle
     numpy
     pytestCheckHook
+    python-dateutil
+    tomli-w
   ] ++ passthru.optional-dependencies.cli;
+
+  disabledTests = [
+    # not compatible with pydantic 2.x
+    "test_pydantic1"
+    "test_pydantic2"
+  ];
 
   pythonImportsCheck = [
     "deepdiff"

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "10.2.4";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "topgrade-rs";
     repo = "topgrade";
     rev = "v${version}";
-    hash = "sha256-b1nWTQ+m4b6XzDTR36ubf5nTdUuWK94F2P4Q3tUvHAw=";
+    hash = "sha256-BuYwLD8HlmFjCpR8043GhrYK3XWffeqEaeEDqWhxZVI=";
   };
 
-  cargoHash = "sha256-7GSkFh0Fefl9VlCdPdVZ9IsyN0IKUob5c43v84PtrcI=";
+  cargoHash = "sha256-+kSvA9AC0peXeFLVjenATRfnIS9qaOr/f1ozPbifiPI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     Foundation
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-framework"
     "AppKit"
-  ];
+  ]);
 
   postInstall = ''
     installShellCompletion --cmd topgrade \
@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 xyenon ];
+    mainProgram = "topgrade";
   };
 }

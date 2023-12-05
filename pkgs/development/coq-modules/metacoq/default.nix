@@ -5,7 +5,7 @@ with builtins // lib;
 let
   repo  = "metacoq";
   owner = "MetaCoq";
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with versions; lib.switch coq.coq-version [
       { case = "8.11"; out = "1.0-beta2-8.11"; }
       { case = "8.12"; out = "1.0-beta2-8.12"; }
       # Do not provide 8.13 because it does not compile with equations 1.3 provided by default (only 1.2.3)
@@ -33,8 +33,7 @@ let
   template-coq = metacoq_ "template-coq";
 
   metacoq_ = package: let
-      metacoq-deps = if package == "single" then []
-        else map metacoq_ (head (splitList (pred.equal package) packages));
+      metacoq-deps = lib.optionals (package != "single") (map metacoq_ (head (splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "./" else "./${package}";
       pname = if package == "all" then "metacoq" else "metacoq-${package}";
       pkgallMake = ''

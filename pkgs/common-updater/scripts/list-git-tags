@@ -54,6 +54,6 @@ fi
 tags=$(git ls-remote --tags --refs "$url")
 
 # keep only the version part of the tag
-tags=$(echo "$tags" | cut --delimiter=/ --field=3)
+tags=$(echo "$tags" | cut --delimiter=/ --field=3-)
 
 echo "$tags"

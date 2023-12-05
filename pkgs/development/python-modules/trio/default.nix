@@ -1,10 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , attrs
 , sortedcontainers
-, async_generator
+, async-generator
+, exceptiongroup
 , idna
 , outcome
 , pytestCheckHook
+, pytest-trio
 , pyopenssl
 , trustme
 , sniffio
@@ -15,40 +17,55 @@
 , coreutils
 }:
 
+let
+  # escape infinite recursion with pytest-trio
+  pytest-trio' = (pytest-trio.override {
+    trio = null;
+  }).overrideAttrs {
+    doCheck = false;
+    pythonImportsCheck = [];
+  };
+in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.21.0";
+  version = "0.22.2";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uj85t7ae73NQHOv+Gq/UAKmq1bA1Q6Dt7VKVJIj/HBM=";
+    hash = "sha256-OIfPGMi8yJRDNCAwVGg4jax2ky6WaK+hxJqjgGtqzLM=";
   };
 
   propagatedBuildInputs = [
     attrs
     sortedcontainers
-    async_generator
+    async-generator
     idna
     outcome
     sniffio
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
 
   # tests are failing on Darwin
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     astor
     jedi
     pyopenssl
     pytestCheckHook
+    pytest-trio'
     trustme
     yapf
   ];
 
   preCheck = ''
-    substituteInPlace trio/tests/test_subprocess.py \
+    substituteInPlace trio/_tests/test_subprocess.py \
       --replace "/bin/sleep" "${coreutils}/bin/sleep"
+
+    export HOME=$TMPDIR
   '';
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
@@ -60,6 +77,8 @@ buildPythonPackage rec {
     "static_tool_sees_all_symbols"
     # tests pytest more than python
     "fallback_when_no_hook_claims_it"
+    # requires mypy
+    "test_static_tool_sees_class_members"
   ];
 
   pytestFlagsArray = [

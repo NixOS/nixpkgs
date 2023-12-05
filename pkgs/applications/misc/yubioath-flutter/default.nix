@@ -1,34 +1,40 @@
 { lib
+, writeText
 , flutter
 , python3
 , fetchFromGitHub
-, stdenv
 , pcre2
+, libnotify
+, libappindicator
+, pkg-config
 , gnome
 , makeWrapper
+, removeReferencesTo
 }:
-let
-  vendorHashes = {
-    x86_64-linux = "sha256-BwhWA8N0S55XkljDKPNkDhsj0QSpmJJ5MwEnrPjymS8=";
-    aarch64-linux = "sha256-T1aGz3+2Sls+rkUVDUo39Ky2igg+dxGSUaf3qpV7ovQ=";
-  };
-in
-flutter.mkFlutterApp rec {
+
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.0.2";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    sha256 = "13nh5qpq02c6azfdh4cbzhlrq0hs9is45q5z5cnxg84hrx26hd4k";
+    hash = "sha256-NgzijuvyWNl9sFQzq1Jzk1povF8c/rKuVyVKeve+Vic=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  vendorHash = vendorHashes.${stdenv.system};
+  pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-RV7NoXJnd1jYGcU5YE0VV7VlMM7bz2JTMJTImOY3m38=";
 
   postPatch = ''
+    rm -f pubspec.lock
+    ln -s "${writeText "${pname}-overrides.yaml" (builtins.toJSON {
+      dependency_overrides.intl = "^0.18.1";
+    })}" pubspec_overrides.yaml
+
     substituteInPlace linux/CMakeLists.txt \
       --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
@@ -68,10 +74,14 @@ flutter.mkFlutterApp rec {
 
   nativeBuildInputs = [
     makeWrapper
+    removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
+    libnotify
+    libappindicator
   ];
 
   meta = with lib; {
@@ -79,6 +89,6 @@ flutter.mkFlutterApp rec {
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = builtins.attrNames vendorHashes;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

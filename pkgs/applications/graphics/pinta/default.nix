@@ -10,7 +10,7 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.1";
+  version = "2.1.1";
 
   nativeBuildInputs = [
     intltool
@@ -26,7 +26,6 @@ buildDotnetModule rec {
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
   # $ ./result
-  # $ cp /tmp/Pinta-deps.nix ./pkgs/applications/graphics/pinta/deps.nix
   # TODO: create update script
   nugetDeps = ./deps.nix;
 
@@ -36,7 +35,7 @@ buildDotnetModule rec {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-hugV4I13wZhPnVTUlGlaVxdjpGRvWDnfRVXgV+oy+sE=";
+    hash = "sha256-sdSGBf/dk+3Oy/aCfmIDuymwXQZwnth923Wdggir/Q0=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/38991

@@ -1,27 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
 , docstring-to-markdown
+, fetchFromGitHub
 , jedi
+, lsprotocol
+, poetry-core
 , pygls
-, pytestCheckHook
+, pydantic
 , pyhamcrest
-, python-jsonrpc-server
+, pytestCheckHook
+, python-lsp-jsonrpc
+, pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.39.0";
+  version = "0.41.1-unstable-2023-10-04";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-nra2Xvfo1cfMoZkY7sem7NIEDwDmODWbGVNCeefSuQY=";
+    rev = "c4c470cff67e54593a626b22d1b6b05e56fde3a3";
+    hash = "sha256-qFBni97B/GkabbznnZtWTG4dCHFkOx5UQjuevxq+Uvo=";
   };
 
   pythonRelaxDeps = [
@@ -36,13 +40,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docstring-to-markdown
     jedi
+    lsprotocol
+    pydantic
     pygls
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
-    python-jsonrpc-server
+    python-lsp-jsonrpc
   ];
 
   preCheck = ''
@@ -54,9 +60,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/pappasam/jedi-language-server";
-    changelog = "https://github.com/pappasam/jedi-language-server/blob/${src.rev}/CHANGELOG.md";
     description = "A Language Server for the latest version(s) of Jedi";
+    homepage = "https://github.com/pappasam/jedi-language-server";
+    changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
   };

@@ -1,10 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-runner
 , pytestCheckHook
 , pytest-asyncio
-, sqlalchemy
 , isPy27
 }:
 
@@ -21,15 +19,12 @@ buildPythonPackage rec {
     sha256 = "0a2gmrm9csiknc8n3si67sgzffkydplh9d7ga1k87ygk2aj22mmk";
   };
 
-  buildInputs = [
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
+  '';
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
@@ -38,6 +33,6 @@ buildPythonPackage rec {
     description = "Asyncio support for PEP-567 contextvars backport";
     homepage = "https://github.com/fantix/aiocontextvars";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

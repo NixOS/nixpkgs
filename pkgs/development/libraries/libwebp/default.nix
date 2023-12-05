@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.4";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
+    hash   = "sha256-UYO2Fmm8nzQR8VBC26wEwWd3qZTD+6MHKcmKBoNcpEE=";
   };
 
   configureFlags = [

@@ -1,31 +1,66 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
+, fetchFromGitHub
 , jinja2
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 , selenium
-, six
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.5.0";
+  version = "0.7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5vL366fdNozu+PY4Irhn9eEdTTq90Jmnh9ue0rcGWuE=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "python-visualization";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DH+XBj+VcS56+nAOGjjrKG0dnSKrqiU6N5vkILm+vSE=";
   };
 
-  checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 six setuptools ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # Seems to require a browser
-  doCheck = false;
+  postPatch = ''
+    # We don't want flake8
+    rm setup.cfg
+  '';
 
-  meta = {
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    jinja2
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    selenium
+  ];
+
+  pythonImportsCheck = [
+    "branca"
+  ];
+
+  disabledTestPaths = [
+    # Some tests require a browser
+    "tests/test_utilities.py"
+  ];
+
+  disabledTests = [
+    "test_rendering_utf8_iframe"
+    "test_rendering_figure_notebook"
+  ];
+
+  meta = with lib; {
     description = "Generate complex HTML+JS pages with Python";
     homepage = "https://github.com/python-visualization/branca";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/python-visualization/branca/blob/v${version}/CHANGES.txt";
+    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , ninja
 , pkg-config
+, rustPlatform
+, rustc
 , curl
 , freetype
 , libGLU
@@ -22,37 +25,56 @@
 , vulkan-loader
 , glslang
 , spirv-tools
+, gtest
 , Carbon
 , Cocoa
 , OpenGL
 , Security
+, buildClient ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.4";
+  version = "17.4";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8t4UKytYmkELEMQ06jIj7C9cdOc5L22AnigwkGBzx20=";
+    hash = "sha256-VWn6fbK6f9/MwjZuFMD2LDv9erRhFnU4JEnbpYDBl70=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    hash = "sha256-ntAH78BTfPU9nMorsXzZnrZIyNWVCxmQWwwEFIFQB1c=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
+
+  nativeCheckInputs = [
+    gtest
+  ];
 
   buildInputs = [
     curl
-    freetype
-    libGLU
     libnotify
-    libogg
-    libX11
-    opusfile
     pcre
     python3
-    SDL2
     sqlite
+  ] ++ lib.optionals buildClient ([
+    freetype
+    libGLU
+    libogg
+    opusfile
+    SDL2
     wavpack
     ffmpeg
     x264
@@ -60,17 +82,35 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DAUTOUPDATE=OFF"
-    "-GNinja"
-  ];
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    Cocoa
+    OpenGL
+    Security
+  ]);
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
+  '';
+
+  cmakeFlags = [
+    "-DAUTOUPDATE=OFF"
+    "-DCLIENT=${if buildClient then "ON" else "OFF"}"
+  ];
+
+  doCheck = true;
+  checkTarget = "run_tests";
+
+  postInstall = lib.optionalString (!buildClient) ''
+    # DDNet's CMakeLists.txt automatically installs .desktop
+    # shortcuts and icons for the client, even if the client
+    # is not supposed to be built
+    rm -rf $out/share/applications
+    rm -rf $out/share/icons
+    rm -rf $out/share/metainfo
   '';
 
   meta = with lib; {
@@ -84,9 +124,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ddnet.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju lom ];
+    maintainers = with maintainers; [ sirseruju lom ncfavier ];
     mainProgram = "DDNet";
-    # error: use of undeclared identifier 'pthread_attr_set_qos_class_np'
-    broken = stdenv.isDarwin;
   };
 }

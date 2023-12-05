@@ -57,14 +57,14 @@ let
 in
 python3.pkgs.buildPythonPackage rec {
   pname = "steamos-devkit";
-  version = "0.20221101";
+  version = "0.20230411.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
     owner = "devkit";
     repo = "steamos-devkit";
     rev = "v${version}";
-    sha256 = "sha256-VKnfcMF3WxkvqxlhJF+5j4Hso/TZpSS4dMOmSrWagRU=";
+    sha256 = "sha256-DQIyjEpUFnC0OjMjKMrGYs4+HoEDfcSc3m3rfXLPyZ0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

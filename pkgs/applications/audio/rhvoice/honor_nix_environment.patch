@@ -1,5 +1,3 @@
-diff --git a/SConstruct b/SConstruct
-index 3ad4d9a..fb02365 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -94,11 +94,8 @@ def CheckWiX(context):
@@ -16,13 +14,15 @@ index 3ad4d9a..fb02365 100644
  
  def validate_spd_version(key,val,env):
      m=re.match(r"^\d+\.\d+",val)
-@@ -208,9 +205,9 @@ def create_base_env(user_vars):
+@@ -207,10 +204,10 @@ def create_base_env(user_vars):
+     env_args["LIBS"]=[]
      env_args["package_name"]="RHVoice"
      env_args["CPPDEFINES"]=[("RHVOICE","1")]
-     env=Environment(**env_args)
+-    env=Environment(**env_args)
 -    if env["dev"]:
 -        env["prefix"]=os.path.abspath("local")
 -        env["RPATH"]=env.Dir("$libdir").abspath
++    env=Environment(ENV = os.environ, **env_args)
 +    env.PrependENVPath("PATH", os.environ["PATH"])
 +    env["ENV"]["PKG_CONFIG_PATH"]=os.environ["PKG_CONFIG_PATH"]
 +    env["RPATH"]=env.Dir("$libdir").abspath

@@ -1,33 +1,52 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
-libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchFromGitHub
+, ocaml
+, pkg-config
+, mupdf
+, libX11
+, jbig2dec
+, openjpeg
+, libjpeg
+, lcms2
+, harfbuzz
+, libGLU
+, libGL
+, gumbo
+, freetype
+, zlib
+, xclip
+, inotify-tools
+, procps
+, darwin
+}:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "33";
+  version = "42";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/llpp.git";
+  src = fetchFromGitHub {
+    owner = "criticic";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0shqzhaflm2yhkx6c0csq9lxp1s1r7lh5kgpx9q5k06xya2a7yvs";
-    fetchSubmodules = false;
+    hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
 
-  patches = (substituteAll {
-    inherit version;
-    src = ./fix-build-bash.patch;
-  });
+  postPatch = ''
+    sed -i "2d;s/ver=.*/ver=${version}/" build.bash
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml pkg-config ];
+  buildInputs = [ mupdf libX11 freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ]
+    ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL darwin.apple_sdk.frameworks.Cocoa ];
 
   dontStrip = true;
-
-  configurePhase = ''
-    mkdir -p build/mupdf/thirdparty
-    ln -s ${freetype.dev} build/mupdf/thirdparty/freetype
-  '';
 
   buildPhase = ''
     bash ./build.bash build
@@ -37,7 +56,7 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install build/llpp $out/bin
     install misc/llpp.inotify $out/bin/llpp.inotify
-
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"
 
@@ -48,10 +67,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://repo.or.cz/w/llpp.git";
+    homepage = "https://github.com/criticic/llpp";
     description = "A MuPDF based PDF pager written in OCaml";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = [ licenses.publicDomain licenses.bsd3 ];
   };
 }

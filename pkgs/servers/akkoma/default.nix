@@ -1,7 +1,7 @@
 { lib
 , beamPackages
 , fetchFromGitea, fetchFromGitHub, fetchFromGitLab
-, cmake, file, libxcrypt
+, cmake, file
 , writeText
 , nixosTests
 , ...
@@ -9,14 +9,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "3.5.0";
+  version = "3.10.4";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-Apt+6nI4zOCyRb5msPt5UF9vyaendyaOjrYBMl0DqRY=";
+    hash = "sha256-MPUZFcIxZ21fe3edwi+/Kt8qpwNBCh40wheC3QMqw2M=";
   };
 
   postPatch = ''
@@ -30,9 +30,6 @@ beamPackages.mixRelease rec {
     rm -f priv/static/READ_THIS_BEFORE_TOUCHING_FILES_HERE
     mix phx.digest --no-deps-check
   '';
-
-  # cf. https://github.com/whitfin/cachex/issues/205
-  stripDebug = false;
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
@@ -48,28 +45,24 @@ beamPackages.mixRelease rec {
           group = "pleroma";
           owner = "elixir-libraries";
           repo = "elixir-captcha";
-          rev = "e0f16822d578866e186a0974d65ad58cddc1e2ab";
-          sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
+          rev = "3bbfa8b5ea13accc1b1c40579a380d8e5cfd6ad2";
+          hash = "sha256-skZ0QwF46lUTfsgACMR0AR5ymY2F50BQy1AUBjWVdro=";
         };
+
+        # the binary is not getting installed by default
+        postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
       };
-      crypt = beamPackages.buildRebar3 rec {
-        name = "crypt";
-        version = "0.4.3";
+      concurrent_limiter = beamPackages.buildMix rec {
+        name = "concurrent_limiter";
+        version = "0.1.1";
 
-        src = fetchFromGitHub {
-          owner = "msantos";
-          repo = "crypt";
-          rev = "f75cd55325e33cbea198fb41fe41871392f8fb76";
-          sha256 = "sha256-ZYhZTe7cTITkl8DZ4z2IOlxTX5gnbJImu/lVJ2ZjR1o=";
+        src = fetchFromGitea {
+          domain = "akkoma.dev";
+          owner = "AkkomaGang";
+          repo = "concurrent-limiter";
+          rev = "a9e0b3d64574bdba761f429bb4fba0cf687b3338";
+          hash = "sha256-A7ucZnXks4K+JDVY5vV2cT5KfEOUOo/OHO4rga5mGys=";
         };
-
-        buildInputs = [ libxcrypt ];
-
-        postInstall = ''
-          mv $out/lib/erlang/lib/crypt-${version}/priv/{source,crypt}.so
-        '';
-
-        beamDeps = with final; [ elixir_make ];
       };
       elasticsearch = beamPackages.buildMix rec {
         name = "elasticsearch";
@@ -81,17 +74,6 @@ beamPackages.mixRelease rec {
           repo = "elasticsearch-elixir";
           rev = "6cd946f75f6ab9042521a009d1d32d29a90113ca";
           hash = "sha256-CtmQHVl+VTpemne+nxbkYGcErrgCo+t3ZBPbkFSpyF0=";
-        };
-      };
-      gettext = beamPackages.buildMix {
-        name = "gettext";
-        version = "0.19.1";
-
-        src = fetchFromGitHub {
-          owner = "tusooa";
-          repo = "gettext";
-          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
-          hash = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
         };
       };
       linkify = beamPackages.buildMix rec {
@@ -119,20 +101,6 @@ beamPackages.mixRelease rec {
         };
 
         beamDeps = with final; [ phoenix_view temple ];
-      };
-      remote_ip = beamPackages.buildMix rec {
-        name = "remote_ip";
-        version = "0.1.5";
-
-        src = fetchFromGitLab {
-          domain = "git.pleroma.social";
-          group = "pleroma";
-          owner = "elixir-libraries";
-          repo = "remote_ip";
-          rev = "b647d0deecaa3acb140854fe4bda5b7e1dc6d1c8";
-          sha256 = "0c7vmakcxlcs3j040018i7bfd6z0yq6fjfig02g5fgakx398s0x6";
-        };
-        beamDeps = with final; [ combine plug inet_cidr ];
       };
       search_parser = beamPackages.buildMix rec {
         name = "search_parser";
@@ -204,6 +172,10 @@ beamPackages.mixRelease rec {
   passthru = {
     tests = with nixosTests; { inherit akkoma akkoma-confined; };
     inherit mixNixDeps;
+
+    # Used to make sure the service uses the same version of elixir as
+    # the package
+    elixirPackage = beamPackages.elixir;
   };
 
   meta = with lib; {

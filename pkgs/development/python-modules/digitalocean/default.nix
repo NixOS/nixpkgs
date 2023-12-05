@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytestCheckHook
     responses
@@ -39,6 +39,9 @@ buildPythonPackage rec {
   preCheck = ''
     cd digitalocean
   '';
+
+  # Test tries to access the network
+  disabledTests = ["TestFirewall"];
 
   pythonImportsCheck = [ "digitalocean" ];
 

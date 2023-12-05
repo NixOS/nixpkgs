@@ -5,6 +5,7 @@
 , pkg-config
 , cmake
 , gtest
+, valgrind
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "miloyip";
+    owner = "Tencent";
     repo = "rapidjson";
     rev = "v${version}";
     sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
@@ -24,9 +25,12 @@ stdenv.mkDerivation rec {
       sha256 = "1qm62iad1xfsixv1li7qy475xc7gc04hmi2q21qdk6l69gk7mf82";
     })
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch";
+      name = "do-not-include-gtest-src-dir.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch?id=9e5eefc7a5fcf5938a8dc8a3be8c75e9e6809909";
       hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
     })
+    # One of these three tests reports memcpy overlap after update to glibc-2.38
+    ./test-skip-valgrind.diff
   ];
 
   postPatch = ''
@@ -36,31 +40,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  cmakeFlags = [
-    "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
-  ] ++ lib.optionals (!doCheck) [
-    "-DRAPIDJSON_BUILD_TESTS=OFF"
-  ];
+  # for tests, adding gtest to checkInputs does not work
+  # https://github.com/NixOS/nixpkgs/pull/212200
+  buildInputs = [ gtest ];
+  cmakeFlags = [ "-DGTEST_SOURCE_DIR=${gtest.dev}/include" ];
 
-  checkInputs = [
-    gtest
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -E '.*valgrind.*'
-
-    runHook postCheck
-  '';
-
-  doCheck = !stdenv.hostPlatform.isStatic;
+  nativeCheckInputs = [ valgrind ];
+  doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

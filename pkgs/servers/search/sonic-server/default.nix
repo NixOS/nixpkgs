@@ -1,53 +1,76 @@
 { lib
+, stdenv
 , rustPlatform
-, llvmPackages
-, clang
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, nixosTests
+, testers
+, sonic-server
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.4.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
-    rev = "f5302f5c424256648ba0be32b3c5909d846821fe";
-    sha256 = "sha256-WebEluXijgJckZQOka2BDPYn7PqzPTsIcV2T380fxW8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V97K4KS46DXje4qKA11O9NEm0s13aTUnM+XW8lGc6fo=";
   };
 
-  cargoSha256 = "sha256-ObhKGjaIma6fUVUT3xadpy/GPYlnm0nKmRVxFmoePyQ=";
+  cargoPatches = [
+    # Update rocksdb to 0.21 to fix compilation issues against clang 16, see:
+    # https://github.com/valeriansaliou/sonic/issues/315
+    # https://github.com/valeriansaliou/sonic/pull/316
+    (fetchpatch {
+      url = "https://github.com/valeriansaliou/sonic/commit/81d5f1efec21ef8b911ed3303fcbe9ca6335f562.patch";
+      hash = "sha256-nOvHThTc2L3UQRVusUsD/OzbSkhSleZc6n0WyZducHM=";
+    })
+  ];
 
+  cargoHash = "sha256-k+gPCkf8DCnuv/aLXcQwjmsDUu/eqSEqKXlUyj8bRq8=";
+
+  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
   nativeBuildInputs = [
-    llvmPackages.libclang
-    llvmPackages.libcxxClang
-    clang
+    rustPlatform.bindgenHook
   ];
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion clang}/include";
 
   postPatch = ''
     substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
 
   postInstall = ''
-    mkdir -p $out/etc/
-    mkdir -p $out/usr/lib/systemd/system/
-
     install -Dm444 -t $out/etc/sonic config.cfg
-    substitute \
-      ./examples/config/systemd.service $out/usr/lib/systemd/system/sonic-server.service \
-      --replace /bin/sonic $out/bin/sonic \
+    install -Dm444 -t $out/lib/systemd/system debian/sonic.service
+
+    substituteInPlace \
+      $out/lib/systemd/system/sonic.service \
+      --replace /usr/bin/sonic $out/bin/sonic \
       --replace /etc/sonic.cfg $out/etc/sonic/config.cfg
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) sonic-server;
+      version = testers.testVersion {
+        command = "sonic --version";
+        package = sonic-server;
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
+    changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pleshevskiy ];
+    mainProgram = "sonic";
+    maintainers = with maintainers; [ pleshevskiy anthonyroussel ];
   };
 }

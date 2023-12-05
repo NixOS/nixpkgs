@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "odyssey";
   };
 }

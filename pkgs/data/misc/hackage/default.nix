@@ -2,7 +2,7 @@
 # and callHackage
 { lib, fetchurl }:
 let
-  pin = builtins.fromJSON (builtins.readFile ./pin.json);
+  pin = lib.importJSON ./pin.json;
 in
 fetchurl {
   inherit (pin) url sha256;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.17.3";
+  version = "0.17.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-nveMsebW828ATEW6vw+var+GxbJj2N0mNaQlkx+GH3w=";
+    hash = "sha256-O95W/J5y7qcR6PSzNQwOl0W19CyXifbq8okquESFSqM=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook

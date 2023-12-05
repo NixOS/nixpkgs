@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtserialport";
-  qtInputs = [ qtbase ];
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-DNIXPKGS_LIBUDEV=\"${lib.getLib systemd}/lib/libudev\"";
+  propagatedBuildInputs = [ qtbase ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-DNIXPKGS_LIBUDEV=\"${lib.getLib systemd}/lib/libudev\"";
 }

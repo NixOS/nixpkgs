@@ -104,6 +104,7 @@ with frameworks; with libs; {
   SpriteKit               = {};
   StoreKit                = {};
   SyncServices            = {};
+  System                  = {};
   SystemConfiguration     = { inherit Security; };
   TWAIN                   = { inherit Carbon; };
   Tcl                     = {};

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , dj-rest-auth
 , django
 , django-allauth
@@ -28,14 +29,22 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.24.2";
+  version = "0.26.5";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
-    rev = version;
-    sha256 = "sha256-WE+iOD3OjDByisHI9GgvjUUSpvOz+IYi/3Y8AmR7Eps=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sK+upLh0mi8eHKh1Wt9FoLRjqlHitTSX0Zl54S4Ce6E=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/tfranzel/drf-spectacular/pull/1090
+      url = "https://github.com/tfranzel/drf-spectacular/commit/8db4c2458f8403c53db0db352dd94057d285814b.patch";
+      hash = "sha256-Ue5y7IB4ie+9CEineMBgMMCLGiF4zqmn60TJvKsV1h0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django
@@ -46,7 +55,7 @@ buildPythonPackage rec {
     uritemplate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-rest-auth
     django-allauth
     django-filter
@@ -76,7 +85,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
     homepage = "https://github.com/tfranzel/drf-spectacular";
+    changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

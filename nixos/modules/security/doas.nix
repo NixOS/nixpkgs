@@ -19,7 +19,7 @@ let
   ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
+    if (rule.args == null) then ""
     else if (length rule.args == 0) then "args"
     else "args ${concatStringsSep " " rule.args}";
 
@@ -27,9 +27,9 @@ let
     let
       opts = mkOpts rule;
 
-      as = optionalString (!isNull rule.runAs) "as ${rule.runAs}";
+      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
+      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
@@ -75,7 +75,9 @@ in
         {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
         You can use `mkBefore` and/or `mkAfter` to ensure
-        this is the case when configuration options are merged.
+        this is the case when configuration options are merged. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
       example = literalExpression ''
         [
@@ -224,7 +226,9 @@ in
       type = with types; lines;
       default = "";
       description = lib.mdDoc ''
-        Extra configuration text appended to {file}`doas.conf`.
+        Extra configuration text appended to {file}`doas.conf`. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
     };
   };
@@ -266,14 +270,14 @@ in
             # completely replace the contents of this file, use
             # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-
             # extraRules
             ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
+
+            # "root" is allowed to do anything.
+            permit nopass keepenv root
           '';
           preferLocalBuild = true;
         }

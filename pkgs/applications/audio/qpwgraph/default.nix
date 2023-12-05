@@ -1,23 +1,33 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, pkg-config
-, alsa-lib, pipewire
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, qtbase
+, qtsvg
+, qtwayland
+, alsa-lib
+, pipewire
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpwgraph";
-  version = "0.3.9";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
-    rev = "v${version}";
-    sha256 = "sha256-KGZ67FF3WlKwUzVV3qz1DR/7i1mXsfXVVyuNoIR9uP0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-wJ+vUw16yBBFjMdJogF1nkLnAh3o2ndN9+0png8ZVJ4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
-  buildInputs = [ alsa-lib pipewire ];
+  buildInputs = [ qtbase qtsvg qtwayland alsa-lib pipewire ];
+
+  cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
   meta = with lib; {
     description = "Qt graph manager for PipeWire, similar to QjackCtl.";
@@ -29,6 +39,7 @@ mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kanashimia exi ];
+    maintainers = with maintainers; [ kanashimia exi Scrumplex ];
+    mainProgram = "qpwgraph";
   };
-}
+})

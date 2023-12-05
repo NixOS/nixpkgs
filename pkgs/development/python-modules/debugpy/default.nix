@@ -13,29 +13,24 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.5";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Microsoft";
-    repo = pname;
+    owner = "microsoft";
+    repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-98hyNer2Xtx6D2R3pFhLC3tb/2DFTawXO36xfwhIfEg=";
+    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
@@ -51,6 +46,18 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-gdb.patch;
+      inherit gdb;
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-lldb.patch;
+      inherit (llvmPackages) lldb;
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -69,7 +76,7 @@ buildPythonPackage rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
     gevent
@@ -80,7 +87,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preCheck = ''
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -96,6 +106,11 @@ buildPythonPackage rec {
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # testsuite gets stuck at this one
+    "test_attach_pid_client"
+  ];
 
   pythonImportsCheck = [
     "debugpy"

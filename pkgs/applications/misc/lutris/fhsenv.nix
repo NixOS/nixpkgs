@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv, lutris-unwrapped
+{ lib, buildFHSEnv, lutris-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 , steamSupport ? true
@@ -13,10 +13,13 @@ let
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
   ];
 
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = "lutris";
 
   runScript = "lutris";
+
+  # Many native and WINE games need 32bit
+  multiArch = true;
 
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
@@ -24,13 +27,16 @@ in buildFHSUserEnv {
     # Adventure Game Studio
     allegro dumb
 
+    # Curl
+    libnghttp2
+
     # Desmume
     lua agg soundtouch openal desktop-file-utils atk
 
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls_2 lzo sfml gsm
+    bluez ffmpeg gettext portaudio miniupnpc mbedtls_2 lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
@@ -45,7 +51,7 @@ in buildFHSUserEnv {
     fluidsynth hidapi mesa libdrm
 
     # MAME
-    qt48 fontconfig SDL2_ttf
+    fontconfig SDL2_ttf
 
     # Mednafen
     freeglut mesa_glu
@@ -58,9 +64,6 @@ in buildFHSUserEnv {
 
     # Mupen64Plus
     boost dash
-
-    # Osmose
-    qt4
 
     # Overwatch 2
     libunwind

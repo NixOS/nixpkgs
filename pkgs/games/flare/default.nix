@@ -1,7 +1,7 @@
 { lib, buildEnv, callPackage, makeWrapper, Cocoa }:
 
 buildEnv {
-  name = "flare-1.13.04";
+  name = "flare-1.14";
 
   paths = [
     (callPackage ./engine.nix { inherit Cocoa; })

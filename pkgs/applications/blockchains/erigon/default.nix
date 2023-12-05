@@ -1,26 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
 
 let
-  pinData = lib.importJSON ./pin.json;
-in
-buildGoModule rec {
   pname = "erigon";
-  version = pinData.version;
+  version = "2.54.0";
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    hash = "sha256-1kgbIg/3SvVT83UfwAYUixs1RQk4PP1quiOcI1mzbZ0=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = pinData.vendorSha256;
+  vendorHash = "sha256-Gr9mrME8/ZDxp2ORKessNhfguklDf+jC4RSpzLOSBhQ=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
+
+  # Fix error: 'Caught SIGILL in blst_cgo_init'
+  # https://github.com/bnb-chain/bsc/issues/1521
+  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
+  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
 
   subPackages = [
     "cmd/erigon"
@@ -29,7 +34,7 @@ buildGoModule rec {
     "cmd/rlpdump"
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";

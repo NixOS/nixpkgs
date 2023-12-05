@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0vb6vnd2j87iqxdl86j30dk65vrv4scprv200xb83203aprngqgh";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/collectd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
-    platforms = platforms.unix;
   };
 }

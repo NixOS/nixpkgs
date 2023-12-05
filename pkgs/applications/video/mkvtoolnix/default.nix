@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , autoreconfHook
 , rake
@@ -47,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "73.0.0";
+  version = "80.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "HGoT3t/ooRMiyjUkHnvVGOB04IU5U8VEKDixhE57kR8=";
+    hash = "sha256-/RqTfnxivghViFryCvj5RXSBziztb1Drb7tT89cGZ3o=";
   };
 
   nativeBuildInputs = [
@@ -102,6 +101,7 @@ stdenv.mkDerivation rec {
     "--disable-precompiled-headers"
     "--disable-profiling"
     "--disable-static-qt"
+    "--disable-update-check"
     "--enable-optimization"
     "--with-boost-libdir=${lib.getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"

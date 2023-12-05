@@ -5,8 +5,6 @@ appleDerivation' stdenv {
   srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/IOKit.framework/IOKit"
     "/System/Library/Frameworks/IOKit.framework/Resources"
@@ -174,10 +172,10 @@ appleDerivation' stdenv {
     # stream: missing altogether
 
     # usb: complete
-    cp IOUSBFamily-630.4.5/IOUSBFamily/Headers/IOUSBLib.h            $dest/usb
-    cp IOUSBFamily-630.4.5/IOUSBUserClient/Headers/IOUSBUserClient.h $dest/usb
-    cp IOUSBFamily-560.4.2/IOUSBFamily/Headers/USB.h                 $dest/usb # This file is empty in 630.4.5!
-    cp IOUSBFamily-630.4.5/IOUSBFamily/Headers/USBSpec.h             $dest/usb
+    cp IOUSBFamily*-630.4.5/IOUSBFamily/Headers/IOUSBLib.h            $dest/usb
+    cp IOUSBFamily*-630.4.5/IOUSBUserClient/Headers/IOUSBUserClient.h $dest/usb
+    cp IOUSBFamily*-560.4.2/IOUSBFamily/Headers/USB.h                 $dest/usb # This file is empty in 630.4.5!
+    cp IOUSBFamily*-630.4.5/IOUSBFamily/Headers/USBSpec.h             $dest/usb
 
     # video: missing altogether
   '';

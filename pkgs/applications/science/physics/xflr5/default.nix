@@ -1,12 +1,11 @@
-{ mkDerivation, lib, fetchurl, qmake }:
+{ mkDerivation, lib, fetchzip, qmake }:
 
 mkDerivation rec {
   pname = "xflr5";
-  version = "6.47";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/xflr5/${pname}_v${version}_src.tar.gz";
-    sha256 = "02x3r9iv3ndwxa65mxn9m5dlhcrnjiq7cffi6rmb456gs3v3dnav";
+  version = "6.61";
+  src = fetchzip {
+    url = "https://sourceforge.net/code-snapshots/svn/x/xf/xflr5/code/xflr5-code-r1481-tags-v6.61-xflr5.zip";
+    sha256 = "sha256-voWnXiBo7+kBPiZLVpSiXyBsYJv/Phd3noA81SQ5Vtw=";
   };
 
   nativeBuildInputs = [ qmake ];

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.6";
+  version = "3.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Hackndo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rdgz9hU2un1CKX2dRI8tVzL2lG7Ufd5HwninOxOsxjM=";
+    hash = "sha256-VGLSVv/+UpgeSTHoOTjEfQSAYfXA3bAI+yKjcKBI1Z4=";
   };
 
   propagatedBuildInputs = [

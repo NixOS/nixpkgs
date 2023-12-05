@@ -42,8 +42,7 @@ let
     ];
 
   defaultPackageNames =
-    [ "nano"
-      "perl"
+    [ "perl"
       "rsync"
       "strace"
     ];
@@ -90,12 +89,6 @@ in
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If `pkgs.nano` is removed from this list,
-          make sure another editor is installed and the
-          `EDITOR` environment variable is set to it.
-          Environment variables can be set using
-          {option}`environment.variables`.
-
           Like with systemPackages, packages are installed to
           {file}`/run/current-system/sw`. They are
           automatically available to all users, and are
@@ -116,8 +109,14 @@ in
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" "info" "devdoc" ];
-        description = lib.mdDoc "List of additional package outputs to be symlinked into {file}`/run/current-system/sw`.";
+        example = [ "dev" "info" ];
+        description = lib.mdDoc ''
+          Entries listed here will be appended to the `meta.outputsToInstall` attribute for each package in `environment.systemPackages`, and the files from the corresponding derivation outputs symlinked into {file}`/run/current-system/sw`.
+
+          For example, this can be used to install the `dev` and `info` outputs for all packages in the system environment, if they are available.
+
+          To use specific outputs instead of configuring them globally, select the corresponding attribute on the package derivation, e.g. `libxml2.dev` or `coreutils.info`.
+        '';
       };
 
       extraSetup = mkOption {

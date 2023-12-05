@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "waf-tester";
-  version = "0.6.12";
+  version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-baj9JuC4PF5c50K2aY+xwdE9t4aTzOu+isqJ6r1pWuc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UPviooQNGRVwf/bTz9ApedJDAGeCvh9iD1HXFOQXPcw=";
   };
 
-  vendorSha256 = "sha256-qVzgZX4HVXZ3qgYAu3a46vcGl4Pk2D1Zx/giEmPEG88=";
+  vendorHash = "sha256-HOYHrR1LtVcXMKFHPaA7PYH4Fp9nhqal2oxYTq/i4/8=";
 
   ldflags = [
     "-s"
@@ -33,6 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to test Web Application Firewalls (WAFs)";
     homepage = "https://github.com/jreisinger/waf-tester";
+    changelog = "https://github.com/jreisinger/waf-tester/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "1.2.0";
+  version = "1.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zfeXJJL5pWzv9y39MWHYZggBRBAPGJItUKKaxp8MlRM=";
+    hash = "sha256-Kl8NARHTzEZrh5I//TwmITKp+g44lk5D7vkKPM2ldFI=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     parameterized
     pytestCheckHook

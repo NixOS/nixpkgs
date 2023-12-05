@@ -5,27 +5,31 @@
 , fetchPypi
 , cython
 , geos
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.0";
-  disabled = pythonOlder "3.7";
-
+  version = "2.0.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EfGxIxpsBCE/sSJsaWjRsbOzaexC0ellUGavh2MYYOo=";
+    hash = "sha256-FxPMBMFxuv/Fslm6hTHFiswqMBcHt/Ah2IoV7QkGSec=";
   };
 
   nativeBuildInputs = [
     cython
     geos # for geos-config
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   buildInputs = [
@@ -36,12 +40,14 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  # Fix a ModuleNotFoundError. Investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
-    rm -r shapely # prevent import of local shapely
+    cd $out
   '';
 
   disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
@@ -62,6 +68,6 @@ buildPythonPackage rec {
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

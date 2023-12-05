@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -7,19 +6,18 @@
 , zlib
 , openssl
 , callPackage
-, stdenvNoCC
 }:
 
 buildDotnetModule rec {
-  pname = "archisteamfarm";
+  pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.4.0.3";
+  version = "5.4.13.4";
 
   src = fetchFromGitHub {
-    owner = "justarchinet";
-    repo = pname;
+    owner = "JustArchiNET";
+    repo = "ArchiSteamFarm";
     rev = version;
-    sha256 = "sha256-+S0nvgiMxSUQI/TzAMES6bAix1iudj1+EkOcXO+6igE=";
+    hash = "sha256-RQx+E/lxdSgB2ddNIeWOd/S2OMMiznXCbYUXdYKRvCM=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
@@ -32,6 +30,9 @@ buildDotnetModule rec {
   dotnetFlags = [
     "-p:PublishSingleFile=true"
     "-p:PublishTrimmed=true"
+  ];
+  dotnetInstallFlags = [
+    "--framework=net7.0"
   ];
   selfContainedBuild = true;
 
@@ -53,10 +54,15 @@ buildDotnetModule rec {
 
   postInstall = ''
     buildPlugin() {
+      echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
-        --output $out/lib/${pname}/plugins/$1 --configuration Release \
-        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
+        --framework=net7.0
      }
+
+     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
      buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
   '';
 
@@ -70,7 +76,7 @@ buildDotnetModule rec {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ArchiSteamFarm";
     maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

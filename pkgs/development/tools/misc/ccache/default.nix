@@ -13,15 +13,15 @@
 , nix-update-script
 }:
 
-let ccache = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.7.4";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-mt5udwSdzGaspfpAdUavQ55dBeJdhbZjcQpd9xNOQms=";
+    owner = "ccache";
+    repo = "ccache";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-fcstTjwwOh5SAe6+VT5MpBaD+AEFoQtHop99dOMr7/A=";
   };
 
   outputs = [ "out" "man" ];
@@ -31,9 +31,11 @@ let ccache = stdenv.mkDerivation rec {
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
     # Darwin.
+    # Additionally, when cross compiling, the correct target prefix
+    # needs to be set.
     (substituteAll {
-      src = ./force-objdump-on-darwin.patch;
-      objdump = "${binutils.bintools}/bin/objdump";
+      src = ./fix-objdump-path.patch;
+      objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
 
@@ -47,45 +49,58 @@ let ccache = stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkPhase = let
-    badTests = [
-      "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-    ] ++ lib.optionals stdenv.isDarwin [
-      "test.basedir"
-      "test.multi_arch"
-      "test.nocpp2"
-    ];
-  in ''
-    runHook preCheck
-    export HOME=$(mktemp -d)
-    ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      badTests = [
+        "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+      ] ++ lib.optionals stdenv.isDarwin [
+        "test.basedir"
+        "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
+        "test.multi_arch"
+        "test.nocpp2"
+      ];
+    in
+    ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
+      runHook postCheck
+    '';
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = {unwrappedCC, extraConfig}: stdenv.mkDerivation {
-      name = "ccache-links";
+    links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
+      pname = "ccache-links";
+      inherit (finalAttrs) version;
       passthru = {
         isClang = unwrappedCC.isClang or false;
         isGNU = unwrappedCC.isGNU or false;
+        isCcache = true;
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];
-      buildCommand = ''
+      # Unwrapped clang does not have a targetPrefix because it is multi-target
+      # target is decided with argv0.
+      buildCommand = let
+        targetPrefix = if unwrappedCC.isClang or false
+          then
+            ""
+          else
+            (lib.optionalString (unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != "") "${unwrappedCC.targetConfig}-");
+      in ''
         mkdir -p $out/bin
 
         wrap() {
-          local cname="$1"
+          local cname="${targetPrefix}$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
-            makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
+            makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
               --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
@@ -108,17 +123,20 @@ let ccache = stdenv.mkDerivation rec {
         done
       '';
     };
-  };
 
-  passthru.updateScript = nix-update-script { };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
+    changelog = "https://ccache.dev/releasenotes.html#_ccache_${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     license = licenses.gpl3Plus;
+    mainProgram = "ccache";
     maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };
-};
-in ccache
+})

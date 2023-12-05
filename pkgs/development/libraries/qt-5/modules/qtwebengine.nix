@@ -1,22 +1,27 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
-, bison, flex, git, gperf, ninja, pkg-config, python, which
+, bison, flex, git, gperf, ninja, pkg-config, python, which, python3
 , nodejs, qtbase, perl
+, buildPackages
+, pkgsBuildTarget
+, pkgsBuildBuild
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsa-lib
+, pulseaudio
 , libcap
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
 , gn
-, cctools, libobjc, libunwind, sandbox, xnu
+, cctools, libobjc, libpm, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
+, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
@@ -25,13 +30,45 @@
 , pipewireSupport ? stdenv.isLinux
 , pipewire_0_2
 , postPatch ? ""
+, nspr
+, lndir
+, dbusSupport ? !stdenv.isDarwin, expat
 }:
 
-qtModule {
+let
+  # qtwebengine expects to find an executable in $PATH which runs on
+  # the build platform yet knows about the host `.pc` files.  Most
+  # configury allows setting $PKG_CONFIG to point to an
+  # arbitrarily-named script which serves this purpose; however QT
+  # insists that it is named `pkg-config` with no target prefix.  So
+  # we re-wrap the host platform's pkg-config.
+  pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
+    name = "pkg-config-wrapper-without-target-prefix";
+    dontUnpack = true;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/bin
+      ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
+    '';
+  };
+
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
+
+in
+
+qtModule ({
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config python which gn nodejs
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    perl
+    lndir (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
+    pkgsBuildBuild.pkg-config
+    (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
+    pkg-config-wrapped-without-prefix
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -56,6 +93,12 @@ qtModule {
 
       # TODO: be more precise
       patchShebangs .
+
+      # Fix compatibility with python3.11
+      substituteInPlace tools/metrics/ukm/ukm_model.py \
+        --replace "r'^(?i)(|true|false)$'" "r'(?i)^(|true|false)$'"
+      substituteInPlace tools/grit/grit/util.py \
+        --replace "mode = 'rU'" "mode = 'r'"
     )
   ''
   # Prevent Chromium build script from making the path to `clang` relative to
@@ -80,55 +123,46 @@ qtModule {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  '' + lib.optionalString stdenv.isDarwin (
-  (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+  '' + lib.optionalString stdenv.isDarwin (''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '' else ''
-    substituteInPlace src/core/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '')
-   # Following is required to prevent a build error:
-   # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-  + ''
+
+    # Following is required to prevent a build error:
+    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
       --replace '$sysroot/usr' "${xnu}"
-  ''
-  # Apple has some secret stuff they don't share with OpenBSM
-  + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-    --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
-  substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-    --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-  '' else ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-    --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-  '')) + postPatch;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
-    # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
-    "-Wno-class-memaccess"
-  ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
-    # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
-    # TODO: investigate and fix properly
-    "-march=westmere"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-elaborated-enum-base"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_12"
-    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_12"
-    "-Wno-elaborated-enum-base"
+    # Apple has some secret stuff they don't share with OpenBSM
+    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
+      --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+      --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
 
-    #
-    # Prevent errors like
-    # /nix/store/xxx-apple-framework-CoreData/Library/Frameworks/CoreData.framework/Headers/NSEntityDescription.h:51:7:
-    # error: pointer to non-const type 'id' with no explicit ownership
-    #     id** _kvcPropertyAccessors;
-    #
-    # TODO remove when new Apple SDK is in
-    #
-    "-fno-objc-arc"
-  ];
+    # ld: warning: directory not found for option '-L/nix/store/...-xcodebuild-0.1.2-pre/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/usr/lib'
+    # ld: fatal warning(s) induced error (-fatal_warnings)
+    substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
+      --replace "-Wl,-fatal_warnings" ""
+  '') + postPatch;
+
+  env = {
+    NIX_CFLAGS_COMPILE =
+      toString (
+        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "-w "
+        ] ++ lib.optionals stdenv.cc.isGNU [
+          # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+          "-Wno-class-memaccess"
+        ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
+          # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+          # TODO: investigate and fix properly
+          "-march=westmere"
+        ] ++ lib.optionals stdenv.cc.isClang [
+          "-Wno-elaborated-enum-base"
+        ]);
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
+    "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
+  };
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -136,13 +170,20 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export QMAKE_CC=$CC
+    export QMAKE_CXX=$CXX
+    export QMAKE_LINK=$CXX
+    export QMAKE_AR=$AR
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) "-webengine-webrtc-pipewire"
+    ++ lib.optional (pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
+    qtdeclarative qtquickcontrols qtlocation qtwebchannel
+
     # Image formats
     libjpeg libpng libtiff libwebp
 
@@ -162,6 +203,7 @@ qtModule {
 
     # Audio formats
     alsa-lib
+    pulseaudio
 
     # Text rendering
     fontconfig freetype
@@ -173,7 +215,7 @@ qtModule {
     xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
     xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
 
-  ] ++ lib.optionals (pipewireSupport && (lib.versionAtLeast qtCompatVersion "5.15")) [
+  ] ++ lib.optionals pipewireSupport [
     # Pipewire
     pipewire_0_2
   ]
@@ -198,6 +240,13 @@ qtModule {
     Quartz
     Cocoa
     LocalAuthentication
+    MediaPlayer
+    MediaAccessibility
+    SecurityInterface
+    Vision
+    CoreML
+    OpenDirectory
+    Accelerate
 
     openbsm
     libunwind
@@ -205,6 +254,7 @@ qtModule {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     cups
+    libpm
     sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
@@ -226,12 +276,15 @@ qtModule {
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    mkdir -p $out/libexec
+  '' + lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
-  '' + lib.optionalString (lib.versions.majorMinor qtCompatVersion == "5.15") ''
+
+  '' + ''
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
@@ -244,25 +297,31 @@ qtModule {
 
     # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
     # x86-64, ARM, Aarch64, and MIPSel architectures."
-    platforms =
-      lib.trivial.pipe lib.systems.doubles.all [
-        (map (double: lib.systems.elaborate { system = double; }))
-        (lib.lists.filter (parsedPlatform: with parsedPlatform;
-          isUnix &&
-          (isx86_32  ||
-           isx86_64  ||
-           isAarch32 ||
-           isAarch64 ||
-           (isMips && isLittleEndian))))
-        (map (plat: plat.system))
-      ];
+    platforms = with lib.systems.inspect.patterns;
+      let inherit (lib.systems.inspect) patternLogicalAnd;
+      in concatMap (patternLogicalAnd isUnix) (lib.concatMap lib.toList [
+        isx86_32
+        isx86_64
+        isAarch32
+        isAarch64
+        (patternLogicalAnd isMips isLittleEndian)
+      ]);
 
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
-    # we are still stuck with MacOS SDK 10.12 on x86_64-darwin
-    # and qtwebengine 5.14+ requires at least SDK 10.14
-    # (qtwebengine 5.12 is fine with SDK 10.12)
-    # on aarch64-darwin we are already at MacOS SDK 11.0
-    broken = stdenv.isDarwin;
   };
-}
+
+} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  configurePlatforms = [ ];
+  # to get progress output in `nix-build` and `nix build -L`
+  preBuild = ''
+    export TERM=dumb
+  '';
+  depsBuildBuild = [
+    pkgsBuildBuild.stdenv
+    zlib
+    nss
+    nspr
+  ];
+
+})

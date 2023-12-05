@@ -12,14 +12,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.12.0";
+  version = "4.12.1";
   pname = "sleuthkit";
 
   sleuthsrc = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    hash = "sha256-NX7LNtor7UQJ6HCDz9wGpxbqrLQTTH9+543hOaQOAz4=";
+    hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
   };
 
   # Fetch libraries using a fixed output derivation

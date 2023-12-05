@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./wasm.patch}
+    patch -p1 -d llvm -i ${../../common/libcxxabi/wasm.patch}
   '';
 
   patches = [
@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$dev/include"
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
+
+  passthru = {
+    libName = "c++abi";
+  };
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

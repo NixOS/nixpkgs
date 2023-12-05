@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.33";
-  format = "pyproject";
+  version = "9.2.79";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ItWL2DGoMkOMOMsTTfal8W9DZCmXMuZs0cZbYESlFU4=";
+    hash = "sha256-N2w4djqJ9r2inLHwhyqNVUqjrlKVo75BblN5xURkMIc=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     z3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

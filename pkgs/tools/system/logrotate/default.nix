@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.viric ];
     platforms = platforms.all;
+    mainProgram = "logrotate";
   };
 }

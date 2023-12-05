@@ -11,6 +11,10 @@ in
     services.teleport = with lib.types; {
       enable = mkEnableOption (lib.mdDoc "the Teleport service");
 
+      package = mkPackageOption pkgs "teleport" {
+        example = "teleport_11";
+      };
+
       settings = mkOption {
         type = settingsYaml.type;
         default = { };
@@ -74,14 +78,14 @@ in
   };
 
   config = mkIf config.services.teleport.enable {
-    environment.systemPackages = [ pkgs.teleport ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.teleport = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.teleport}/bin/teleport start \
+          ${cfg.package}/bin/teleport start \
             ${optionalString cfg.insecure.enable "--insecure"} \
             ${optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
             ${optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}

@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pep517";
-  version = "0.13.0";
+  version = "0.13.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rmmSfFwXK+Gt2SA3JtS4TPPrrR7c1fcfzcdG5m6Cn1k=";
+    hash = "sha256-Gy+i/9OTi7S+/+XWFGy8sr2plqWk2p8xq//Ysk4Hsxc=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     importlib-metadata zipp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     setuptools
     testpath

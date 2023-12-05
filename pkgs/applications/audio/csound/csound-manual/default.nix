@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "csound-manual";
-  version = "6.17.0";
+  version = "6.18.0";
 
   src = fetchFromGitHub {
     owner = "csound";
     repo = "manual";
     rev = version;
-    sha256 = "sha256-8X9Egn/MIwlNDEKUmEEz4Dnw6rGa37jRjYsVEt8ziW8=";
+    sha256 = "sha256-W8MghqUBr3V7LPgNwU6Ugw16wdK3G37zAPuasMlZ2+I=";
   };
 
   prePatch = ''

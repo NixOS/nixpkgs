@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ursadb";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "ursadb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JssL1Yd+2CPy9fDPJnstiRucdy6TyUdb0Q6xa160CLM=";
+    hash = "sha256-5kVci9o1jUDpbTgMuach8AjXCKhTglcgsywHt3yoo2Y=";
     fetchSubmodules = true;
   };
 

@@ -28,13 +28,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ bats uncrustify ];
+  nativeCheckInputs = [ bats uncrustify ];
 
   preCheck = ''
     patchShebangs ../../tests
 
     # Disable a failing test.
     rm -rf ../../tests/style.d
+  '' + lib.optionalString stdenv.cc.isClang ''
+    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
   '';
 
   installPhase = ''

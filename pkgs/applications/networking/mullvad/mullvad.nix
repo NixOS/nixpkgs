@@ -1,35 +1,46 @@
 { lib
 , stdenv
-, writeText
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , protobuf
 , makeWrapper
+, git
 , dbus
 , libnftnl
 , libmnl
 , libwg
+, enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
+, installShellFiles
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2022.5";
+  version = "2023.5";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-LiaELeEBIn/GZibKf25W3DHe+IkpaTY8UC7ca/7lp8k=";
+    hash = "sha256-bu16U9XJiIuYG9Npljos2ytfloSoGIl1ayH43w0aeKY=";
   };
 
-  cargoHash = "sha256-KpBhdZce8Ug3ws7f1qg+5LtOMQw2Mf/uJsBg/TZSYyk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "nix-0.26.1" = "sha256-b5bLeZVNbJE7aBnyzl0qvo0mXFeXa4hAZiuT1VJiFLk=";
+      "shadowsocks-1.15.3" = "sha256-P35IQL2sAfrtjwMDn8k/kmkk2IMsvq6zICRRGUGfqJI=";
+      "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     makeWrapper
+    git
+    installShellFiles
   ];
 
   buildInputs = [
@@ -40,21 +51,32 @@ rustPlatform.buildRustPackage rec {
 
   # talpid-core wants libwg.a in build/lib/{triple}
   preBuild = ''
-    dest=build/lib/${stdenv.targetPlatform.config}
+    dest=build/lib/${stdenv.hostPlatform.config}
     mkdir -p $dest
     ln -s ${libwg}/lib/libwg.a $dest
+  '';
+
+  postInstall = ''
+    compdir=$(mktemp -d)
+    for shell in bash zsh fish; do
+      $out/bin/mullvad shell-completions $shell $compdir
+    done
+    installShellCompletion --cmd mullvad \
+      --bash $compdir/mullvad.bash \
+      --zsh $compdir/_mullvad \
+      --fish $compdir/mullvad.fish
   '';
 
   postFixup =
     # Place all binaries in the 'mullvad-' namespace, even though these
     # specific binaries aren't used in the lifetime of the program.
     ''
-      for bin in relay_list translations-converter; do
+      for bin in relay_list translations-converter tunnel-obfuscation; do
         mv "$out/bin/$bin" "$out/bin/mullvad-$bin"
       done
     '' +
     # Files necessary for OpenVPN tunnels to work.
-    ''
+    lib.optionalString enableOpenvpn ''
       mkdir -p $out/share/mullvad
       cp dist-assets/ca.crt $out/share/mullvad
       ln -s ${openvpn-mullvad}/bin/openvpn $out/share/mullvad

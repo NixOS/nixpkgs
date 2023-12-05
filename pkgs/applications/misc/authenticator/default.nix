@@ -2,19 +2,19 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
-, clang
+, cargo
 , desktop-file-utils
 , meson
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 , gdk-pixbuf
 , glib
 , gst_all_1
 , gtk4
 , libadwaita
-, libclang
 , openssl
 , pipewire
 , sqlite
@@ -24,20 +24,20 @@
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
-  version = "4.1.6";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
     rev = version;
-    hash = "sha256-fv7Np3haRCJABlJocKuu+1jevHYrdo+VyiQBpRmHs2g=";
+    hash = "sha256-WR5gXGry4wti2M4D/IQvwI7OSak1p+O+XAhr01hdv2Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-8GddlDM1lU365GXdrKNhO331/y1p3Om5uZfVLy8TBGI=";
+    hash = "sha256-ZVDKTJojblVCbbdtnqcL+UVW1vkmu99AXCbgyCGNHCM=";
   };
 
   nativeBuildInputs = [
@@ -47,12 +47,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-    bindgenHook
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     gdk-pixbuf
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Two-factor authentication code generator for GNOME";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ austinbutler ];
     platforms = lib.platforms.linux;
   };
 }

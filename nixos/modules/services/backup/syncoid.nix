@@ -87,6 +87,8 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
+    package = lib.mkPackageOption pkgs "sanoid" {};
+
     interval = mkOption {
       type = types.str;
       default = "hourly";
@@ -121,9 +123,7 @@ in
     };
 
     sshKey = mkOption {
-      type = types.nullOr types.path;
-      # Prevent key from being copied to store
-      apply = mapNullable toString;
+      type = with types; nullOr (coercedTo path toString str);
       default = null;
       description = lib.mdDoc ''
         SSH private key file to use to login to the remote system. Can be
@@ -203,9 +203,7 @@ in
           recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
           sshKey = mkOption {
-            type = types.nullOr types.path;
-            # Prevent key from being copied to store
-            apply = mapNullable toString;
+            type = with types; nullOr (coercedTo path toString str);
             description = lib.mdDoc ''
               SSH private key file to use to login to the remote system.
               Defaults to {option}`services.syncoid.sshKey` option.
@@ -331,7 +329,7 @@ in
               ExecStopPost =
                 (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
                 (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
+              ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
                 ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]
@@ -367,7 +365,7 @@ in
               PrivateDevices = true;
               PrivateMounts = true;
               PrivateNetwork = mkDefault false;
-              PrivateUsers = true;
+              PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
               ProtectClock = true;
               ProtectControlGroups = true;
               ProtectHome = true;

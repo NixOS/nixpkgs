@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-56eMOY7A1hek+YuscNW2T3hokoTdCuh9RpLihX8Rc3c=";
+    sha256 = "sha256-E5NEh+b4tI9pmhbTZ8x6GvejyodN5yGsbpYzvrhuchk=";
   };
 
   postPatch = ''
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ pcsclite libusb1 ];
+
+  # The resulting shared object ends up outside of the default paths which are
+  # usually getting stripped.
+  stripDebugList = ["pcsc"];
 
   meta = with lib; {
     description = "ccid drivers for pcsclite";

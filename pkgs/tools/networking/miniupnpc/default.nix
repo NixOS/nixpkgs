@@ -6,16 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
-    sha256 = "0jrc84lkc7xb53rb8dbswxrxj21ndj1iiclmk3r9wkp6xm55w6j8";
+    sha256 = "sha256-OKzV9GAvfPi83B7DCy1Y2y6ZEuXZ9TUN2ZsGv9/7UXw=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
   doCheck = !stdenv.isFreeBSD;
 

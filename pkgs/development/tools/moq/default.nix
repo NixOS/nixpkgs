@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "moq";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
     rev = "v${version}";
-    sha256 = "sha256-RdFffcj17CZdI6kL+d5fp8B8gX493k8h0EzDq8BN+SY=";
+    sha256 = "sha256-TOFWaPJ+XfgiQCVRXze29TG7Zfur0SV4mQNdgVIGj5o=";
   };
 
-  vendorSha256 = "sha256-lfs61YK5HmUd3/qA4o9MiWeTFhu4MTAkNH+f0iGlRe0=";
+  vendorHash = "sha256-lfs61YK5HmUd3/qA4o9MiWeTFhu4MTAkNH+f0iGlRe0=";
 
   subPackages = [ "." ];
 

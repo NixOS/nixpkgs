@@ -9,21 +9,26 @@
 , python-markdown-math
 , pythonOlder
 , pyyaml
+, setuptools
 , textile
 }:
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "3.1.3";
-  format = "setuptools";
+  version = "4.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Markups";
     inherit version;
-    hash = "sha256-q5dHpywcZFdBjrQnbHmHGXfBOmVGGOTxLiofCZD78vw=";
+    hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -36,7 +41,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

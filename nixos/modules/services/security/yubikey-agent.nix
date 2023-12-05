@@ -30,14 +30,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.yubikey-agent;
-        defaultText = literalExpression "pkgs.yubikey-agent";
-        description = lib.mdDoc ''
-          The package used for the yubikey-agent daemon.
-        '';
-      };
+      package = mkPackageOption pkgs "yubikey-agent" { };
     };
   };
 
@@ -56,6 +49,9 @@ in
           "graphical-session.target")
       ];
     };
+
+    # Yubikey-agent expects pcsd to be running in order to function.
+    services.pcscd.enable = true;
 
     environment.extraInit = ''
       if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then

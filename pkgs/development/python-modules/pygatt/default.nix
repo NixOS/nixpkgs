@@ -29,9 +29,15 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  checkInputs = [
-    mock
+  nativeBuildInputs = [
+    # For cross compilation the doCheck is false and therefor the
+    # nativeCheckInputs not included. We have to include nose here, since
+    # setup.py requires nose unconditionally.
     nose
+  ];
+
+  nativeCheckInputs = [
+    mock
     pytestCheckHook
   ]
   ++ passthru.optional-dependencies.GATTTOOL;

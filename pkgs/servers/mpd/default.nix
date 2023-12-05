@@ -9,7 +9,7 @@
 , audiofile, faad2, ffmpeg, flac, fluidsynth, game-music-emu
 , libmad, libmikmod, mpg123, libopus, libvorbis, lame
 # Filters
-, libsamplerate
+, libsamplerate, soxr
 # Outputs
 , alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
@@ -62,6 +62,7 @@ let
     lame          = [ lame ];
     # Filter plugins
     libsamplerate = [ libsamplerate ];
+    soxr          = [ soxr ];
     # Output plugins
     alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
@@ -116,13 +117,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.11";
+      version = "0.23.14";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-vgLH4kOluK9cOmTrvpBfR87Iunn0EzH9GmiUvsjsG4I=";
+        sha256 = "sha256-S71PXj+XTGsp5aJXH+82D7tdemfA6cnLBWT/fDmb8oA=";
       };
 
       buildInputs = [
@@ -147,7 +148,7 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
+      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
           --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
@@ -156,7 +157,7 @@ let
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 
@@ -189,6 +190,7 @@ let
         license     = licenses.gpl2Only;
         maintainers = with maintainers; [ astsmtl ehmry tobim ];
         platforms   = platforms.unix;
+        mainProgram = "mpd";
 
         longDescription = ''
           Music Player Daemon (MPD) is a flexible, powerful daemon for playing

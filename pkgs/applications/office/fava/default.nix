@@ -1,13 +1,13 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.23.1";
+  version = "1.26.2";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uw8UIJa+Dtsy+o31I1ynLyhZrFNX42NFRXu1O2ISbzU=";
+    hash = "sha256-+rMuVfe6BDAcZgJkBb18YLFZirOBfad6WGbWtAT21uI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -18,8 +18,8 @@ python3.pkgs.buildPythonApplication rec {
     cheroot
     click
     flask
-    flaskbabel
-    jaraco_functools
+    flask-babel
+    jaraco-functools
     jinja2
     markdown2
     ply
@@ -27,9 +27,14 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools_scm>=8.0' 'setuptools_scm'
+  '';
 
   preCheck = ''
     export HOME=$TEMPDIR

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
+    hash = "sha256-p6Vumfr+vRDr0D9PnEZItp9vNlCLIb59HpBg1KdyHGE=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -61,13 +61,18 @@ buildPythonPackage rec {
     "test_mixed_pairs"
     "test_multiple_diagrams"
     "test_n_pixels"
+    # https://github.com/scikit-tda/persim/issues/67
+    "test_persistenceimager"
+    # ValueError: setting an array element with a sequence
+    "test_exact_critical_pairs"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
+    changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
+    broken = stdenv.isDarwin;
   };
 }

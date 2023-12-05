@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-CAqOsxmJxDgQRMx8cN23TajHd6BNiCFraFvhf5kKnzc=";
   };
 
-  vendorSha256 = "sha256-Tk0yI/WFr0FV0AxJDStlP3XLem3v78ueuXyadhrLAog=";
+  vendorHash = "sha256-Tk0yI/WFr0FV0AxJDStlP3XLem3v78ueuXyadhrLAog=";
 
   postInstall = ''
     mv $out/bin/tasktimer $out/bin/tt
@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Task Timer (tt) is a dead simple TUI task timer";
     homepage = "https://github.com/caarlos0/tasktimer";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe caarlos0 ];
     mainProgram = "tt";
   };
 }

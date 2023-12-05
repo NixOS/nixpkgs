@@ -1,46 +1,75 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
+, fetchNpmDeps
 , buildPythonPackage
+, nix-update-script
+
+# build-system
+, gettext
+, nodejs
+, npmHooks
+, setuptools-scm
+
+# dependencies
 , django
-, django_compat
+
+# tests
 , pytest-django
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.2.6";
+  version = "3.4.3";
+  format = "setuptools";
 
-  # the wheel comes with pre-built assets, allowing us to avoid fighting
-  # with npm/webpack/gettext to build them ourselves.
-  format = "wheel";
-
-  src = fetchPypi {
-    inherit version format;
-    pname = "django_hijack";
-    dist = "py3";
-    python = "py3";
-    hash = "sha256-xFPZ03II1814+bZ5gx7GD/AxYMiLuH6awfSeXEraOHQ=";
+  src = fetchFromGitHub {
+    owner = "django-hijack";
+    repo = "django-hijack";
+    rev = "refs/tags/${version}";
+    hash = "sha256-D9IyuM+ZsvFZL0nhMt1VQ1DYcKg4CS8FPAgSWLtsXeE=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'cmd = ["npm", "ci"]' 'cmd = ["true"]' \
+      --replace 'f"{self.build_lib}/{name}.mo"' 'f"{name}.mo"'
+
+    sed -i "/addopts/d" setup.cfg
+  '';
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-X3bJ6STFq6zGIzXHSd2C67d4kSOVJJR5aBSM3o5T850=";
+  };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    gettext
+    nodejs
+    npmHooks.npmConfigHook
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     django
-    django_compat
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
   ];
 
-  preCheck = ''
-    export DJANGO_SETTINGS_MODULE='hijack.tests.test_app.settings'
-  '';
+  env.DJANGO_SETTINGS_MODULE = "hijack.tests.test_app.settings";
 
   pytestFlagsArray = [
-    "--pyargs"
-    "hijack"
+    "--pyargs" "hijack"
+    "-W" "ignore::DeprecationWarning"
   ];
+
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";

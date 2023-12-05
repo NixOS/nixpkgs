@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = with lib.platforms; linux;
+    mainProgram = "vis";
   };
 }

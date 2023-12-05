@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aresponses
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.8";
+  version = "0.5.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,9 +24,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pLqX+gbY71OsLflTyDuL4revj5dXol//eTFVy8iT9O4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m80lnNd1ANddV0d/w3S7+QWzIPRklDZsWMO2g1hgEoQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
+    sed -i "/covdefaults/d" pyproject.toml
+    sed -i "/ruff/d" pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -33,23 +42,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     packaging
     pydantic
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "bsblan"
@@ -58,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to control and monitor an BSBLan device programmatically";
     homepage = "https://github.com/liudger/python-bsblan";
+    changelog = "https://github.com/liudger/python-bsblan/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

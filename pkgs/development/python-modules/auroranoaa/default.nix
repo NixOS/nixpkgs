@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "auroranoaa";
-  version = "0.0.2";
+  version = "0.0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "aurora-api";
     rev = version;
-    sha256 = "0bh8amixkg3xigwh3ryra22x6kzhbdassmf1iqv20lhbvzmsqjv0";
+    hash = "sha256-ho0O5aEHCKaTuWh2eW2kY5a7dVGIGBLm4nKxAMq0bZ4=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

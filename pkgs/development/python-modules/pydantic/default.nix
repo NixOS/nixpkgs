@@ -1,20 +1,25 @@
 { lib
 , stdenv
 , buildPythonPackage
+, autoflake
 , cython
 , devtools
 , email-validator
 , fetchFromGitHub
+, fetchpatch
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
+, pythonAtLeast
 , pythonOlder
+, pyupgrade
 , typing-extensions
 # dependencies for building documentation.
 # docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
-, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin)
+, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin && pythonAtLeast "3.10")
 , ansi2html
 , markdown-include
+, mike
 , mkdocs
 , mkdocs-exclude
 , mkdocs-material
@@ -23,11 +28,13 @@
 , ujson
 , orjson
 , hypothesis
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.9.2";
+  version = "1.10.12";
+  format = "setuptools";
 
   outputs = [
     "out"
@@ -38,23 +45,29 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "samuelcolvin";
+    owner = "pydantic";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZGFxyQ1qD3zZWTdfTeoGj3UcUwAzO8K0DySdVAsMHyI=";
+    hash = "sha256-3XnbPGU90wLCPEryFAOky6Iy73Dvgzzh+GbOKW8hZ4U=";
   };
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
   '';
 
+  buildInputs = lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
+
   nativeBuildInputs = [
     cython
   ] ++ lib.optionals withDocs [
     # dependencies for building documentation
+    autoflake
     ansi2html
     markdown-include
     mdx-truly-sane-lists
+    mike
     mkdocs
     mkdocs-exclude
     mkdocs-material
@@ -66,14 +79,27 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     devtools
-    email-validator
-    python-dotenv
+    pyupgrade
     typing-extensions
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    dotenv = [
+      python-dotenv
+    ];
+    email = [
+      email-validator
+    ];
+  };
+
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    # https://github.com/pydantic/pydantic/issues/4817
+    "-W" "ignore::pytest.PytestReturnNotNoneWarning"
   ];
 
   preCheck = ''
@@ -97,8 +123,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
-    homepage = "https://github.com/samuelcolvin/pydantic";
     description = "Data validation and settings management using Python type hinting";
+    homepage = "https://github.com/pydantic/pydantic";
+    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

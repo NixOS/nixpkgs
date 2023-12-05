@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, cargo
 , datasets
 , fetchFromGitHub
 , fetchurl
@@ -12,6 +13,7 @@
 , pythonOlder
 , requests
 , rustPlatform
+, rustc
 , Security
 , setuptools-rust
 }:
@@ -58,33 +60,32 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.12.1";
+  version = "0.14.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "python-v${version}";
-    hash = "sha256-XIXKgcqa6ToAH4OkyaaJALOS9F+sD8d5Z71RttRcIsw=";
+    rev = "v${version}";
+    hash = "sha256-cq7dQLttNkV5UUhXujxKKMuzhD7hz+zTTKxUKlvz1s0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
-    sha256 = "sha256-Euvf0LNMa2Od+6gY1Ldge/7VPrH5mJoZduRRsb+lM/E=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     pkg-config
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl
@@ -97,7 +98,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     datasets
     pytestCheckHook
     requests

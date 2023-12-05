@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , backoff
 , beautifulsoup4
 , buildPythonPackage
@@ -20,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.12.1";
+  version = "2023.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "simplisafe-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-AOlO4K8ku+auEKw7OmgEo5E4ftAar0ukPQVIYzBJBW0=";
+    hash = "sha256-U3SbaR8PTTvoAMu65+LAHSwTmR7iwqiidbefW8bNSCo=";
   };
+
 
   nativeBuildInputs = [
     poetry-core
@@ -46,19 +46,13 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
     types-pytz
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = "<0.18"' 'docutils = "*"'
-  '';
 
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError

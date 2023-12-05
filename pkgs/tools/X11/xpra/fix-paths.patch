@@ -1,26 +1,3 @@
-diff --git a/setup.py b/setup.py
-index fc67abb50a..c29db3a6d2 100755
---- a/setup.py
-+++ b/setup.py
-@@ -2348,17 +2348,7 @@ if v4l2_ENABLED:
-             break
-     constants_pxi = "xpra/codecs/v4l2/constants.pxi"
-     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):
--        ENABLE_DEVICE_CAPS = 0
--        if os.path.exists(videodev2_h):
--            try:
--                with subprocess.Popen("cpp -fpreprocessed %s | grep -q device_caps" % videodev2_h,
--                                     shell=True) as proc:
--                    ENABLE_DEVICE_CAPS = proc.wait()==0
--            except OSError:
--                with open(videodev2_h) as f:
--                    hdata = f.read()
--                ENABLE_DEVICE_CAPS = int(hdata.find("device_caps")>=0)
--                print("failed to detect device caps, assuming off")
-+        ENABLE_DEVICE_CAPS = 1
-         with open(constants_pxi, "wb") as f:
-             f.write(b"DEF ENABLE_DEVICE_CAPS=%i" % ENABLE_DEVICE_CAPS)
-     add_cython_ext("xpra.codecs.v4l2.pusher",
 diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
 index d5c1c8bb10..88c77e8142 100755
 --- a/xpra/x11/fakeXinerama.py
@@ -54,7 +31,7 @@ index d5c1c8bb10..88c77e8142 100755
 -            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
 -            log.error(" %s", e)
 -    return find_lib("libfakeXinerama.so.1")
-+    return "@libfakeXinerama@/lib/libfakeXinerama.so.1"
++    return "@libfakeXinerama@/lib/libfakeXinerama.so.1.0"
  
  current_xinerama_config = None
  

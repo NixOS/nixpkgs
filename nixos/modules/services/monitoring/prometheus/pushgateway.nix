@@ -23,14 +23,7 @@ in {
     services.prometheus.pushgateway = {
       enable = mkEnableOption (lib.mdDoc "Prometheus Pushgateway");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-pushgateway;
-        defaultText = literalExpression "pkgs.prometheus-pushgateway";
-        description = lib.mdDoc ''
-          Package that should be used for the prometheus pushgateway.
-        '';
-      };
+      package = mkPackageOption pkgs "prometheus-pushgateway" { };
 
       web.listen-address = mkOption {
         type = types.nullOr types.str;

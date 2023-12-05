@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "please";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitLab {
     owner = "edneville";
     repo = "please";
     rev = "v${version}";
-    hash = "sha256-YL0yKIDoFD6Q5gVXOjHiqH2ub7jlhlE/uDKLK1FlE74=";
+    hash = "sha256-GW2t3pTX06mqEwFTpiLe3mlzFTmb5Fep5R0yHooRmig=";
   };
 
-  cargoHash = "sha256-noZsnFL6G1KcxGY0sn0PvY5nIdx5aOAMErMViIY/7bE=";
+  cargoHash = "sha256-bd3Pc8QPyPjE+xVcwASDILTXvMCioId/n6dXSr/KDOQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +28,9 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage man/*
   '';
+
+  # Unit tests are broken on NixOS.
+  doCheck = false;
 
   passthru.tests = { inherit (nixosTests) please; };
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "2.3.0";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
-    hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5CiKikhIZ+1pb5/NJ2XzpG1XHrkyuW1WUvvNEpxJIcw=";
   };
 
   propagatedBuildInputs = [
@@ -29,19 +29,12 @@ buildPythonPackage rec {
     dacite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   disabledTests = [
     # Test requires network access

@@ -3,7 +3,7 @@
 # Usage:
 # ```nix
 # let
-#   sources = builtins.fromJSON (builtins.readFile ./sources.json);
+#   sources = lib.importJSON ./sources.json;
 # in mkMyDerivation rec {
 #   version = src.version; # This obviously only works for releases
 #   src = pkgs.npins.mkSource sources.mySource;

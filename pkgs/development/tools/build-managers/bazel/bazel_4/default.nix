@@ -2,8 +2,6 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_3
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
@@ -206,6 +204,8 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    ./upb-clang16.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -322,10 +322,10 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (if !stdenv.hostPlatform.isDarwin then {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self; };
-    } else {}) // {
+    }) // {
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };
@@ -364,7 +364,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_3}"/bin/bazel \
+        "${bazel_self}"/bin/bazel \
             query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
             --loading_phase_threads=1 \
             --output build) \
@@ -401,6 +401,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in third_party/{zlib}, external/{upb} dependencies
+      export NIX_CFLAGS_COMPILE+=" -Wno-implicit-function-declaration -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \

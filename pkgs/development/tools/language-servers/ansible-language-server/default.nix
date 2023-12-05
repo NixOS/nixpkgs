@@ -6,19 +6,19 @@
 
 buildNpmPackage rec {
   pname = "ansible-language-server";
-  version = "1.0.4";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IBySScjfF2bIbiOv09uLMt9QH07zegm/W1vmGhdWxGY=";
+    hash = "sha256-e6cOWoryOxWnl8q62rlGmSgwLVnoxLMwNFoGlUZw2bQ=";
   };
 
-  npmDepsHash = "sha256-rJ1O2OsrJhTIfywK9/MRubwwcCmMbu61T4zyayg+mAU=";
+  npmDepsHash = "sha256-Lzwj0/2fxa44DJBsgDPa43AbRxggqh881X/DFnlNLig=";
   npmBuildScript = "compile";
 
-  # We remove the prepare and prepack scripts because they run the
+  # We remove/ignore the prepare and prepack scripts because they run the
   # build script, and therefore are redundant.
   #
   # Additionally, the prepack script runs npm ci in addition to the
@@ -30,6 +30,7 @@ buildNpmPackage rec {
     sed -i '/"prepack"/d' package.json
   '';
 
+  npmPackFlags = [ "--ignore-scripts" ];
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

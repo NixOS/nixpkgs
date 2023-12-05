@@ -2,14 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-rs/qv6zmSHy2FFiPSgGzxAV/r0SqK9vnfwnLj45WY4I=";
+    hash = "sha256-gLtQIqdU6syTo+Z+P59kIpwEtiGCr/DOom9+jA8Uq98=";
   };
 
-  cargoSha256 = "sha256-WDvflAb56l+UkrxeQQZrloxlaK/mZavT9sA+VOWDW5Q=";
+  cargoHash = "sha256-OA9iYGwKElvRaKoyelH9w5ZphoLKrbk8VXwZ2NyLLQY=";
+
+  buildFeatures = [ "nu-ansi-term" ];
 
   # setid is not allowed in the sandbox
   checkFlags = [ "--skip=tests::style_for_setid" ];
@@ -17,6 +19,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
+    changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -11,27 +11,31 @@
 , pyproj
 , pyshp
 , python
+, pythonRelaxDepsHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.6";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BSWifzh+Y1f+x89oNYMBvttWY9qZ0IM5QYqSgyVb1fE=";
+    hash = "sha256-QH/pC1WIa0XQaDbAhYwKbCeCyxUprJbNyRfguiLjlHI=";
   };
 
-  sourceRoot = "source/packages/basemap";
+  sourceRoot = "${src.name}/packages/basemap";
 
   nativeBuildInputs = [
     cython
     geos
+    pythonRelaxDepsHook
     setuptools
   ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     basemap-data

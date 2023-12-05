@@ -14,14 +14,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pylZw45FUtLHzUV4cDyl/nT8tCZwNj4Jf41MMlyskoU=";
+    hash = "sha256-pylZw45FUtLHzUV4cDyl/nT8tCZwNj4Jf41MMlyskoU=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     keyring
   ];
 
@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Keyring backend for password-store";
     homepage = "https://github.com/stv0g/keyrings.passwordstore";
     maintainers = [ lib.maintainers.shlevy ];
+    broken = true; # https://github.com/stv0g/keyrings.passwordstore/issues/2
   };
 }

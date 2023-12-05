@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.4.0";
+  version = "0.6.1";
 
   disabled = pythonOlder "3.6";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-WZSXt+sVeO64wCVbDgBhuGvo5jTn/JKh9oNSO7ZY9wo=";
+    hash = "sha256-oSLQvZGEq/nBj7ktDEq3BMk7xyYiLGpBDmKxuXtMTfs=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt

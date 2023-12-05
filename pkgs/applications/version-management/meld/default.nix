@@ -47,14 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     gnome.adwaita-icon-theme
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     pycairo
   ];
-
-  # gobject-introspection and some other similar setup hooks do not currently work with strictDeps.
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   postPatch = ''
     patchShebangs meson_shebang_normalisation.py
@@ -73,5 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
+    mainProgram = "meld";
   };
 }

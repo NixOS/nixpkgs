@@ -7,12 +7,12 @@
 , pythonOlder
 , sybil
 , twisted
-, zope_component
+, zope-component
 }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.0.4";
+  version = "7.2.0";
   format = "setuptools";
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -25,15 +25,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xSaqiXjBAC8FnxUsSt43WMShJBjfqyspdUrmIwyvPQQ=";
+    hash = "sha256-jIwg3TDqETVIUHWEodqud5JI26pXEmcseruXCfD7+LI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     sybil
     twisted
-    zope_component
+    zope-component
   ];
 
   disabledTestPaths = [

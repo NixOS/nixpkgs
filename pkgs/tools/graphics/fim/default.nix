@@ -11,11 +11,11 @@
 
 gcc9Stdenv.mkDerivation rec {
   pname = "fim";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchurl {
     url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
-    sha256 = "124b7c4flx5ygmy5sqq0gpvxqzafnknbcj6f45ddnbdxik9lazzp";
+    sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ gcc9Stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
   meta = with lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";

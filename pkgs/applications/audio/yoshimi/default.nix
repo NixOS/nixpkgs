@@ -22,16 +22,16 @@
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
-    hash = "sha256-fkN5VNiXRVKCCAyrG6Z2s5qLEtHQNB2874VprhHBhAg=";
+    hash = "sha256-NMgy/ucuSRFX2zlO8GhL4QSP4NZo1QKZJYTc2eXzWUA=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out

@@ -2,16 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swayws";
-  version = "unstable-2022-03-10";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "w0lff";
     repo = pname;
-    rev = "514f3c664439cf2c11bb9096c7e1d3b8c0b898a2";
-    sha256 = "sha256-vUnbn79v08riYLMBI8BxeBPpe/pHOWlraG7QAaohw3s=";
+    rev = "v${version}";
+    sha256 = "sha256-f0kXy7/31imgHHqKPmW9K+QrLqroaPaXwlJkzOoezRU=";
   };
 
-  cargoSha256 = "sha256-PvKpcTewajvbzUHPssBahWVcAQB3V/aMmOJ/wA0Nrv4=";
+  cargoSha256 = "sha256-VYT6wV59fraAoJgR/i6GlO8s7LUoehGtxPAggEL1eLo=";
+  # Required patch until upstream fixes https://gitlab.com/w0lff/swayws/-/issues/1
+  cargoPatches = [
+    ./ws-update-Cargo-lock.patch
+  ];
 
   # swayws does not have any tests
   doCheck = false;

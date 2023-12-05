@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , buildPythonPackage
 , cffi
 , dos2unix
@@ -8,6 +8,9 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 , gurobi
 , gurobipy
 # Enable support for the commercial Gurobi solver (requires a license)
@@ -19,23 +22,30 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.14.1";
+  version = "1.15.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bvpm5vUp15fbv/Sw1Lx70ihA7VHsSUzwFzoFDG+Ow1M=";
+    hash = "sha256-f28Dgc/ixSwbhkAgPaLLVpdLJuI5UN37GnazfZFvGX4=";
   };
 
-  checkInputs = [ matplotlib networkx numpy pytestCheckHook ];
-  nativeBuildInputs = [ dos2unix ];
+  nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
+
+  nativeBuildInputs = [
+    dos2unix
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
   propagatedBuildInputs = [
     cffi
   ] ++ lib.optionals gurobiSupport ([
     gurobipy
-  ] ++ lib.optional (builtins.isNull gurobiHome) gurobi);
+  ] ++ lib.optional (gurobiHome == null) gurobi);
 
   # Source files have CRLF terminators, which make patch error out when supplied
   # with diffs made on *nix machines
@@ -58,7 +68,7 @@ buildPythonPackage rec {
 
   # Make MIP use the Gurobi solver, if configured to do so
   makeWrapperArgs = lib.optional gurobiSupport
-    "--set GUROBI_HOME ${if builtins.isNull gurobiHome then gurobi.outPath else gurobiHome}";
+    "--set GUROBI_HOME ${if gurobiHome == null then gurobi.outPath else gurobiHome}";
 
   # Tests that rely on Gurobi are activated only when Gurobi support is enabled
   disabledTests = lib.optional (!gurobiSupport) "gurobi";
@@ -68,11 +78,12 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "http://python-mip.com/";
+    homepage = "https://python-mip.com/";
     description = "A collection of Python tools for the modeling and solution of Mixed-Integer Linear programs (MIPs)";
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
     license = licenses.epl20;
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ nessdoor ];
   };
 }

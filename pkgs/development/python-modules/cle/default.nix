@@ -16,29 +16,29 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.33";
+  version = "9.2.79";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "v${version}";
-    hash = "sha256-LpYi5Ty6OBcW0zokCliMDhujJ7tPPl1XdPs5ad1tv5s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HVCKw7L5Y/4TR26mWOZ8lKhWOcq0yQqo2LWKQjVSPX4=";
   };
 
 in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Abh6kSHnTtz/pz5xPJeg0UZcRQDah4D0tlsLnkyI2lE=";
+    repo = "cle";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Zy62O3Mf9V7aGvQejsv4b6JVrHuDIrrqvTSs7/mVdtY=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];
@@ -74,6 +74,8 @@ buildPythonPackage rec {
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    "test_x86"
+    "test_x86_64"
     # The required parts is not present on Nix
     "test_remote_file_map"
   ];

@@ -1,4 +1,4 @@
-{ buildEnv, indilib ? indilib, pname ? "indi-with-drivers", version ? null, extraDrivers ? null }:
+{ buildEnv, makeBinaryWrapper, indilib ? indilib, pname ? "indi-with-drivers", version ? null, extraDrivers ? null }:
 
 buildEnv {
   name = "${pname}-${version}";
@@ -6,5 +6,13 @@ buildEnv {
     indilib
   ]
   ++ extraDrivers;
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  postBuild = ''
+    makeBinaryWrapper ${indilib}/bin/indiserver $out/bin/indiserver --set-default INDIPREFIX $out
+  '';
+
+
   inherit (indilib) meta;
 }

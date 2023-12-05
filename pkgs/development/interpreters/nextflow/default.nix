@@ -2,25 +2,35 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, jre
+, openjdk17
 , wget
 , which
 , gnused
 , gawk
 , coreutils
+, buildFHSEnv
 }:
 
+let
+  nextflow =
 stdenv.mkDerivation rec {
   pname = "nextflow";
-  version = "22.04.5";
+  version = "22.10.6";
 
   src = fetchurl {
     url = "https://github.com/nextflow-io/nextflow/releases/download/v${version}/nextflow-${version}-all";
-    sha256 = "sha256-Lpxb0lGR/oiPzj6j+lySZwiRgkRgPgyjK7FX0BSejm4=";
+    hash = "sha256-zeYsKxWRnzr0W6CD+yjoAXwCN/AbN5P4HhH1oftnrjY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre wget which gnused gawk coreutils ];
+  nativeBuildInputs = [
+    makeWrapper
+    openjdk17
+    wget
+    which
+    gnused
+    gawk
+    coreutils
+  ];
 
   dontUnpack = true;
 
@@ -34,7 +44,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/nextflow --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/nextflow \
+      --prefix PATH : ${lib.makeBinPath nativeBuildInputs} \
+      --set JAVA_HOME ${openjdk17.home}
   '';
 
   meta = with lib; {
@@ -53,4 +65,13 @@ stdenv.mkDerivation rec {
     mainProgram = "nextflow";
     platforms = platforms.unix;
   };
-}
+};
+in
+if stdenv.isLinux then
+  buildFHSEnv
+  {
+    name = "nextflow";
+    targetPkgs = pkgs: [ nextflow ];
+    runScript = "nextflow";
+  }
+else nextflow

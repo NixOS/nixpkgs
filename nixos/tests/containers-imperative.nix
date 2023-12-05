@@ -21,10 +21,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           modules = lib.singleton {
             nixpkgs = { inherit (config.nixpkgs) localSystem; };
 
-            containers.foo.config = {
-              system.stateVersion = "18.03";
-            };
+            containers.foo.config = {};
           };
+
+          # The system is inherited from the host above.
+          # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+          system = null;
         };
       in with pkgs; [
         stdenv stdenvNoCC emptyContainer.config.containers.foo.path

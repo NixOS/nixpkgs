@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.4.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1aq06d66y622n0bbd57dx8s0ajz6cdv1vzaz25wvi4i62sg4x21x";
+    sha256 = "sha256-VrCEwAoWKhb1qfJUv3OreTzuKEVQADwZpEQIVEhjwHA=";
   };
 
-  cargoSha256 = "sha256-RzeewQzsV5F5E0xwJF1MpzzQ8usyfQjzlDInOJqZdO8=";
+  cargoHash = "sha256-SMKFSu5C5mc3U266hEa6RB3GH5te3jIrUZAzj3YNa2E=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -61,7 +61,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
+    changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
+    mainProgram = "elan";
   };
 }

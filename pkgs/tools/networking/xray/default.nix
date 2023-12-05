@@ -1,9 +1,7 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , symlinkJoin
 , buildGoModule
-, runCommand
 , makeWrapper
 , nix-update-script
 , v2ray-geoip
@@ -11,25 +9,18 @@
 , assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
-let
-  assetsDrv = symlinkJoin {
-    name = "v2ray-assets";
-    paths = assets;
-  };
-
-in
 buildGoModule rec {
   pname = "xray";
-  version = "1.7.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${version}";
-    sha256 = "sha256-aNIb90obew+tvd/rYVddK1MmUqLXSqi9xAu65BQFvk0=";
+    hash = "sha256-Hu0BP4BzoELRjJ8WdF3JS/ffxd3bpH+kauWqaMh/o1I=";
   };
 
-  vendorSha256 = "sha256-zZdUPjlul9f1jKy0Zf79KOToHIsvfgwDp6XpFPYyTzk=";
+  vendorHash = "sha256-ihTOKtppOTYdulzwIwD8oWaS2OPs+QCdqPTvqucw7xY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -51,6 +42,7 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/xray \
+      --suffix V2RAY_LOCATION_ASSET : $assetsDrv/share/v2ray \
       --suffix XRAY_LOCATION_ASSET : $assetsDrv/share/v2ray
   '';
 

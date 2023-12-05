@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: plugin.o:(.bss+0x0): multiple definition of `stam'; panel.o:(.bss+0x20): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   NIX_LDFLAGS="-lX11";
 
   meta = with lib; {
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.mit;
+    mainProgram = "fbpanel";
   };
 
   passthru = {

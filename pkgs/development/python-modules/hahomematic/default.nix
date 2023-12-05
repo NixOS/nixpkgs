@@ -2,6 +2,8 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
+, orjson
 , pydevccu
 , pytest-aiohttp
 , pytestCheckHook
@@ -11,40 +13,47 @@
 , voluptuous
 , websocket-client
 , xmltodict
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.1.2";
+  version = "2023.11.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-UxW80Lp8hATZFxFCxxD0p8BtqYhTl3UhwcM/+abN43c=";
+    hash = "sha256-LB0BGj/DWjHGAFkyACkkzGY1oYNc7hJ2BeT1lHlNjqU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=68.2" "setuptools" \
+      --replace "wheel~=0.41.2" "wheel"
+  '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
     aiohttp
+    orjson
     python-slugify
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     pydevccu
     pytest-aiohttp
     pytestCheckHook
   ];
-
-  # Starting with 0.30 the tests are broken, check with the next major release
-  doCheck = false;
 
   pythonImportsCheck = [
     "hahomematic"

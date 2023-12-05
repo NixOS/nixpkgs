@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
+  inherit (lib) escapeShellArgs mkEnableOption mkPackageOption mkIf mkOption types;
 
   cfg = config.services.mimir;
 
@@ -25,11 +25,23 @@ in {
         Specify a configuration file that Mimir should use.
       '';
     };
+
+    package = mkPackageOption pkgs "mimir" { };
+
+    extraFlags = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--config.expand-env=true" ];
+      description = lib.mdDoc ''
+        Specify a list of additional command line flags,
+        which get escaped and are then passed to Mimir.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     # for mimirtool
-    environment.systemPackages = [ pkgs.mimir ];
+    environment.systemPackages = [ cfg.package ];
 
     assertions = [{
       assertion = (
@@ -53,7 +65,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.mimir}/bin/mimir --config.file=${conf}";
+        ExecStart = "${cfg.package}/bin/mimir --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

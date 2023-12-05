@@ -1,39 +1,32 @@
-{ lib, pkgs, fetchFromGitHub, nodejs, nodePackages, stdenv, ArchiSteamFarm }:
+{ lib, fetchFromGitHub, buildNpmPackage, ArchiSteamFarm }:
 
-let
-  nodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
+buildNpmPackage rec {
+  pname = "asf-ui";
+  version = "c582499d60f0726b6ec7f0fd27bd533c1f67b937";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = "c348d6897324aac1d899a977f9c7d467ea934796";
-    sha256 = "1nvglb1wahz20my29jhi3j7824d12pdqf0xfpymnganzfkpj9zjk";
+    rev = version;
+    hash = "sha256-dTSYlswMWWRafieWqNDIi3qCBvNAkcmZWKhQgJiv2Ts=";
   };
 
-in
-nodePackages.package.override {
-  inherit src;
+  npmDepsHash = "sha256-0zzP1z3VO9Y4gBWJ+T7oHhKE/H2dzMUMg71BKupVcH4=";
 
-  # upstream isn't tagged, but we are using the latest official commit for that specific asf version (assuming both get updated at the same time)
-  version = ArchiSteamFarm.version;
+  installPhase = ''
+    runHook preInstall
 
-  nativeBuildInputs = [ pkgs.nodePackages.node-gyp-build ];
+    mkdir $out
+    cp -rv dist/* $out/
 
-  postInstall = ''
-    patchShebangs node_modules/
-    npm run build
-    cp -r $out/lib/node_modules/asf-ui/dist $out/lib/dist
-    rm -rf $out/lib/node_modules/
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "The official web interface for ASF";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     homepage = "https://github.com/JustArchiNET/ASF-ui";
     inherit (ArchiSteamFarm.meta) maintainers platforms;
   };

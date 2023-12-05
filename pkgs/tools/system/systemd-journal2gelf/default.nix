@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "SystemdJournal2Gelf";
-  version = "unstable-2022-02-15";
+  version = "unstable-2023-03-10";
 
   src = fetchFromGitHub {
     owner = "parse-nl";
     repo = "SystemdJournal2Gelf";
-    rev = "86f9f41b26b6848345c2424fbf1ff907b876bb5b";
-    sha256 = "sha256-xsrKuZVN6Eb0vG98LbQnFqNxHthv+uL/h2HCDiFY0Oo=";
+    rev = "863a15df5ed2d50365bb9c27424e3b118ce404c0";
+    hash = "sha256-AwJq0xZAoIpBz9kGERfmZZTn28LbAKIl3gUsFKL3yvs=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz ];
-    platforms = platforms.unix;
+    mainProgram = "SystemdJournal2Gelf";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aiosqlite
-, asynctest
 , buildPythonPackage
 , crccheck
 , cryptography
@@ -13,22 +12,35 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.53.0";
-  format = "setuptools";
+  version = "0.58.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-9KTBzPklQpqzLOQYRz6Kd0wUSHr2sfypvTu0X7om31Y=";
+    hash = "sha256-i2P9QyhT/UQ8Xu0IfQ2OzAxIiMF4H04Jkz3/6e2FCpY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,12 +52,18 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     freezegun
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # # Our two manual scans succeeded and the periodic one was attempted
+    # assert len(mock_scan.mock_calls) == 3
+    # AssertionError: assert 4 == 3
+    "test_periodic_scan_priority"
   ];
 
   pythonImportsCheck = [

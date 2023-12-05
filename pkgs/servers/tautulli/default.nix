@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.11.1";
+  version = "2.13.2";
   format = "other";
 
   pythonPath = [ setuptools ];
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9hWTnBi8t3ZJzrDvvViQ/jYDdbNCabVAion9E9sjqRQ=";
+    sha256 = "sha256-G1YNOJ2snddhFOWDkRQikQ1qC3G1BHg+qb2j5ffIR8k=";
   };
 
   installPhase = ''

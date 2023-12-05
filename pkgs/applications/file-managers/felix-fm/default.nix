@@ -3,39 +3,46 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, libgit2
+, zlib
 , zstd
 , zoxide
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.2.2";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
-    repo = pname;
+    repo = "felix";
     rev = "v${version}";
-    sha256 = "sha256-VKesly7Jp1PgukArNKvDGzSRh7DaL3A/Dub3dLR6ET4=";
+    hash = "sha256-vDQHOv6ejp2aOQY0s80mC7x5sG6wB1/98/taw7aYEnE=";
   };
 
-  cargoSha256 = "sha256-7+4SIBnu4R2mbH2nWBX9BmJL1n8t46d1vrMpNaUHAo4=";
+  cargoHash = "sha256-xy/h2O7aTURt4t8sNRASLhMYtceQrZnOynwhfhaecDA=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2
+    libgit2
+    zlib
     zstd
   ];
 
-  checkInputs = [ zoxide ];
+  nativeCheckInputs = [ zoxide ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   buildFeatures = [ "zstd/pkg-config" ];
 
   checkFlags = [
     # extra test files not shipped with the repository
     "--skip=functions::tests::test_list_up_contents"
-    "--skip=magic_image::tests::test_inspect_image"
-    "--skip=magic_packed::tests::test_inspect_signature"
+    "--skip=state::tests::test_has_write_permission"
   ];
 
   meta = with lib; {

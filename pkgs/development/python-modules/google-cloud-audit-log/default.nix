@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
-  version = "0.2.4";
+  version = "0.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qr5VQ2ceT4qcekwOPqmoe6K6K5b5/61vqgIgmQDh8wg=";
+    hash = "sha256-huL6ujODrcj9BKW9f9T5YLPkrtqn7ZUPL4kc4WkC62s=";
   };
 
   propagatedBuildInputs = [ googleapis-common-protos protobuf ];
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-audit-log";
     changelog = "https://github.com/googleapis/python-audit-log/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

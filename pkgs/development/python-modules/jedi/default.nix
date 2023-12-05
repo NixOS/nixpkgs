@@ -3,16 +3,22 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, attrs
-, django
-, pytestCheckHook
+
+# build-system
+, setuptools
+
+# dependencies
 , parso
+
+# tests
+, attrs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.18.2";
-  format = "setuptools";
+  version = "0.19.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -20,15 +26,20 @@ buildPythonPackage rec {
     owner = "davidhalter";
     repo = "jedi";
     rev = "v${version}";
-    hash = "sha256-hNRmUFpRzVKJQAtfsSNV4jeTR8vVj1+mGBIPO6tUGto=";
+    hash = "sha256-MD7lIKwAwULZp7yLE6jiao2PU6h6RIl0SQ/6b4Lq+9I=";
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [ parso ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    parso
+  ];
+
+  nativeCheckInputs = [
     attrs
-    django
     pytestCheckHook
   ];
 
@@ -37,9 +48,6 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # Assertions mismatches with pytest>=6.0
-    "test_completion"
-
     # sensitive to platform, causes false negatives on darwin
     "test_import"
   ] ++ lib.optionals (stdenv.isAarch64 && pythonOlder "3.9") [

@@ -1,4 +1,5 @@
 { stdenv
+, fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales
@@ -22,8 +23,11 @@
 
 , src
 , version
+, extraPatches ? [ ]
 , pluginOverrides ? { }
 , disableAllPlugins ? false
+, disabledTests ? []
+, extraNativeBuildInputs ? []
 
   # tests
 , runCommand
@@ -32,30 +36,26 @@
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  mkPlugin = { enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ ], wrapperBins ? [ ] }: {
-    inherit enable builtin propagatedBuildInputs testPaths wrapperBins;
+  mkPlugin = { name, enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ "test/test_${name}.py" ], wrapperBins ? [ ] }: {
+    inherit name enable builtin propagatedBuildInputs testPaths wrapperBins;
   };
 
   basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
-  allPlugins = lib.mapAttrs (_: mkPlugin) (lib.recursiveUpdate basePlugins pluginOverrides);
+  allPlugins = lib.mapAttrs (n: a: mkPlugin { name = n; } // a) (lib.recursiveUpdate basePlugins pluginOverrides);
   builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
 
   pluginWrapperBins = concatMap (p: p.wrapperBins) (attrValues enabledPlugins);
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
 
-  patches = [
-    # Bash completion fix for Nix
-    ./patches/bash-completion-always-print.patch
-  ];
+  patches = extraPatches;
 
   propagatedBuildInputs = with python3Packages; [
     confuse
-    gobject-introspection
     gst-python
     jellyfish
     mediafile
@@ -66,13 +66,13 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     reflink
     unidecode
+    typing-extensions
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
-  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
-  ];
+  ] ++ extraNativeBuildInputs;
 
   buildInputs = [
   ] ++ (with gst_all_1; [
@@ -89,42 +89,24 @@ python3Packages.buildPythonApplication rec {
     cp extra/_beet $out/share/zsh/site-functions/
   '';
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    tmphome="$(mktemp -d)"
-
-    EDITOR="${writeScript "beetconfig.sh" ''
-      #!${runtimeShell}
-      cat > "$1" <<CFG
-      plugins: ${lib.concatStringsSep " " (attrNames enabledPlugins)}
-      CFG
-    ''}" HOME="$tmphome" "$out/bin/beet" config -e
-    EDITOR=true HOME="$tmphome" "$out/bin/beet" config -e
-
-    runHook postInstallCheck
-  '';
-
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
     "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
     "--prefix PATH : ${lib.makeBinPath pluginWrapperBins}"
   ];
 
-  checkInputs = with python3Packages; [
-    pytest
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
     mock
     rarfile
     responses
   ] ++ pluginWrapperBins;
 
-  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (n: v: v.testPaths ++ [ "test/test_${n}.py" ]) disabledPlugins));
+  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
+  inherit disabledTests;
 
-  checkPhase = ''
-    runHook preCheck
-
+  # Perform extra "sanity checks", before running pytest tests.
+  preCheck = ''
     # Check for undefined plugins
     find beetsplug -mindepth 1 \
       \! -path 'beetsplug/__init__.py' -a \
@@ -136,19 +118,13 @@ python3Packages.buildPythonApplication rec {
     export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
     export HOME="$(mktemp -d)"
 
-    args=" -m pytest -r fEs"
-    eval "disabledTestPaths=($disabledTestPaths)"
-    for path in ''${disabledTestPaths[@]}; do
-      if [ -e "$path" ]; then
-        args+=" --ignore $path"
-      else
-        echo "Skipping non-existent test path '$path'"
-      fi
-    done
-
-    python $args
-
-    runHook postCheck
+    env EDITOR="${writeScript "beetconfig.sh" ''
+      #!${runtimeShell}
+      cat > "$1" <<CFG
+      plugins: ${lib.concatStringsSep " " (attrNames enabledPlugins)}
+      CFG
+    ''}" "$out/bin/beet" config -e
+    env EDITOR=true "$out/bin/beet" config -e
   '';
 
 
@@ -156,19 +132,17 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.gstreamer = runCommand "beets-gstreamer-test" {
     meta.timeout = 60;
-  }
-  ''
-  set -euo pipefail
-  export HOME=$(mktemp -d)
-  mkdir $out
+  } ''
+    set -euo pipefail
+    export HOME=$(mktemp -d)
+    mkdir $out
 
-  cat << EOF > $out/config.yaml
+    cat << EOF > $out/config.yaml
 replaygain:
   backend: gstreamer
 EOF
 
-  echo $out/config.yaml
-  ${beets}/bin/beet -c $out/config.yaml > /dev/null
+    ${beets}/bin/beet -c $out/config.yaml > /dev/null
   '';
 
   meta = with lib; {
@@ -177,5 +151,6 @@ EOF
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;
+    mainProgram = "beet";
   };
 }

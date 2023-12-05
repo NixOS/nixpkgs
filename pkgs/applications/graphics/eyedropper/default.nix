@@ -2,12 +2,15 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, cargo
 , pkg-config
 , meson
 , ninja
+, blueprint-compiler
 , glib
 , gtk4
 , libadwaita
+, rustc
 , wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
@@ -15,33 +18,33 @@
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sDrMIryVFkjMGHbYvNDmKb1HyJNGb3Hd+muxUJKhogE=";
+    hash = "sha256-PStQC9n+DTTOiNO9fHUjIkwgvKeA2alVbtX5qfqhTYo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-mztc44hHdqzR3WbG6tkCL38EfgBajRLlpMC8ElpXnlo=";
+    hash = "sha256-WRjoyIoVvOYcw2i/cMycE67iziZ8dvQrZ3EfE2v2jkQ=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    blueprint-compiler
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-  ] ++ (with rustPlatform; [
-    rust.cargo
-    rust.rustc
-    cargoSetupHook
-  ]);
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     glib
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An easy-to-use color picker and editor";
+    description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

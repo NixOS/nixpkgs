@@ -81,9 +81,10 @@ rec {
    */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false
+    listsAsDuplicateKeys ? false,
+    indent ? ""
   }:
-  let mkLine = k: v: mkKeyValue k v + "\n";
+  let mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if lib.isList v then v else [v])
         else k: v: [ (mkLine k v) ];
@@ -168,7 +169,7 @@ rec {
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
     listsAsDuplicateKeys ? false
-  }: { globalSection, sections }:
+  }: { globalSection, sections ? {} }:
     ( if globalSection == {}
       then ""
       else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)
@@ -188,10 +189,10 @@ rec {
    * }
    *
    *> [url "ssh://git@github.com/"]
-   *>   insteadOf = https://github.com/
+   *>   insteadOf = "https://github.com"
    *>
    *> [user]
-   *>   name = edolstra
+   *>   name = "edolstra"
    */
   toGitINI = attrs:
     with builtins;
@@ -208,9 +209,17 @@ rec {
         else
           ''${section} "${subsection}"'';
 
+      mkValueString = v:
+        let
+          escapedV = ''
+            "${
+              replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v
+            }"'';
+        in mkValueStringDefault { } (if isString v then escapedV else v);
+
       # generation for multiple ini values
       mkKeyValue = k: v:
-        let mkKeyValue = mkKeyValueDefault { } " = " k;
+        let mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
         in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
@@ -228,6 +237,14 @@ rec {
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
       toINI_ (gitFlattenAttrs attrs);
+
+  # mkKeyValueDefault wrapper that handles dconf INI quirks.
+  # The main differences of the format is that it requires strings to be quoted.
+  mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (lib.gvariant.mkValue v); } "=";
+
+  # Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+  # for details.
+  toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
 
   /* Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.
@@ -355,6 +372,7 @@ rec {
   # PLIST handling
   toPlist = {}: v: let
     isFloat = builtins.isFloat or (x: false);
+    isPath = x: builtins.typeOf x == "path";
     expr = ind: x:  with builtins;
       if x == null  then "" else
       if isBool x   then bool ind x else
@@ -362,6 +380,7 @@ rec {
       if isString x then str ind x else
       if isList x   then list ind x else
       if isAttrs x  then attrs ind x else
+      if isPath x   then str ind (toString x) else
       if isFloat x  then float ind x else
       abort "generators.toPlist: should never happen (v = ${v})";
 
@@ -422,8 +441,103 @@ ${expr "" v}
       (if v then "True" else "False")
     else if isFunction v then
       abort "generators.toDhall: cannot convert a function to Dhall"
-    else if isNull v then
+    else if v == null then
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
       builtins.toJSON v;
+
+  /*
+   Translate a simple Nix expression to Lua representation with occasional
+   Lua-inlines that can be constructed by mkLuaInline function.
+
+   Configuration:
+     * multiline - by default is true which results in indented block-like view.
+     * indent - initial indent.
+     * asBindings - by default generate single value, but with this use attrset to set global vars.
+
+   Attention:
+     Regardless of multiline parameter there is no trailing newline.
+
+   Example:
+     generators.toLua {}
+       {
+         cmd = [ "typescript-language-server" "--stdio" ];
+         settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+       }
+     ->
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }
+
+   Type:
+     toLua :: AttrSet -> Any -> String
+  */
+  toLua = {
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true,
+    /* Initial indentation level */
+    indent ? "",
+    /* Interpret as variable bindings */
+    asBindings ? false,
+  }@args: v:
+    with builtins;
+    let
+      innerIndent = "${indent}  ";
+      introSpace = if multiline then "\n${innerIndent}" else " ";
+      outroSpace = if multiline then "\n${indent}" else " ";
+      innerArgs = args // {
+        indent = if asBindings then indent else innerIndent;
+        asBindings = false;
+      };
+      concatItems = concatStringsSep ",${introSpace}";
+      isLuaInline = { _type ? null, ... }: _type == "lua-inline";
+
+      generatedBindings =
+          assert lib.assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
+          libStr.concatStrings (
+            lib.attrsets.mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
+            );
+
+      # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
+      matchVarName = match "[[:alpha:]_][[:alnum:]_]*(\\.[[:alpha:]_][[:alnum:]_]*)*";
+      badVarNames = filter (name: matchVarName name == null) (attrNames v);
+    in
+    if asBindings then
+      generatedBindings
+    else if v == null then
+      "nil"
+    else if isInt v || isFloat v || isString v || isBool v then
+      builtins.toJSON v
+    else if isList v then
+      (if v == [ ] then "{}" else
+      "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
+    else if isAttrs v then
+      (
+        if isLuaInline v then
+          "(${v.expr})"
+        else if v == { } then
+          "{}"
+        else
+          "{${introSpace}${concatItems (
+            lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            )}${outroSpace}}"
+      )
+    else
+      abort "generators.toLua: type ${typeOf v} is unsupported";
+
+  /*
+   Mark string as Lua expression to be inlined when processed by toLua.
+
+   Type:
+     mkLuaInline :: String -> AttrSet
+  */
+  mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 }

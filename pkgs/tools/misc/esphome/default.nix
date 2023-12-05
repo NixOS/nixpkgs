@@ -1,5 +1,6 @@
 { lib
-, python3
+, callPackage
+, python3Packages
 , fetchFromGitHub
 , platformio
 , esptool_3
@@ -7,22 +8,22 @@
 }:
 
 let
-  python = python3.override {
+  python = python3Packages.python.override {
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix {};
     };
   };
 in
-with python.pkgs; buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.12.3";
+  version = "2023.11.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9yyfcygEmnOcaooSg9bmGGOP2aph0i6d/Ot4nGlTPw4=";
+    hash = "sha256-9LqZlhCt+7p6tnSHFhbnUzkEOJQDsg/Pd/hgd/Il0ZQ=";
   };
 
   postPatch = ''
@@ -42,19 +43,21 @@ with python.pkgs; buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
+    argcomplete
     click
     colorama
     cryptography
     esphome-dashboard
-    ifaddr
     kconfiglib
     paho-mqtt
     pillow
     platformio
     protobuf
+    pyparsing
     pyserial
+    python-magic
     pyyaml
     requests
     tornado
@@ -71,12 +74,11 @@ with python.pkgs; buildPythonApplication rec {
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3Packages; [
     hypothesis
     mock
     pytest-asyncio
     pytest-mock
-    pytest-sugar
     pytestCheckHook
   ];
 
@@ -92,11 +94,12 @@ with python.pkgs; buildPythonApplication rec {
   '';
 
   passthru = {
-    dashboard = esphome-dashboard;
+    dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix {};
   };
 
   meta = with lib; {
+    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with licenses; [
@@ -104,5 +107,6 @@ with python.pkgs; buildPythonApplication rec {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with maintainers; [ globin hexa ];
+    mainProgram = "esphome";
   };
 }

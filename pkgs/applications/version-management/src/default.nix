@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "src";
-  version = "1.29";
+  version = "1.32";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Tc+qBhLtC9u23BrqVniAprAV8YhXELvbMn+XxN5BQkE=";
+    sha256 = "sha256-CSA1CmPvXuOl9PzX97/soGRq2HHBcYuA5PepOVMaMWU=";
   };
 
   nativeBuildInputs = [
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ calvertvl AndersonTorres ];
     inherit (python.meta) platforms;
+    mainProgram = "src";
   };
 }

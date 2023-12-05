@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cubiomes-viewer";
-  version = "2.6.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "Cubitect";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZXqe+696dNYTkNidEA+s5QQ7Euu7WOdl0EMLU5pKdOY=";
+    sha256 = "sha256-V6zPbL1/tP2B38wo4a05+vXCSjPE1YKpMR3zl/BbnY8=";
     fetchSubmodules = true;
   };
 

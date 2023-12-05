@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.5.8";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "abdullahselek";
     repo = "HerePy";
     rev = "refs/tags/${version}";
-    hash = "sha256-BwuH3GxEXiIFFM0na8Jhgp7J5TPW41/u89LWf+EprG4=";
+    hash = "sha256-wz6agxPKQvWobRIiYKYU2og33tzswd0qG1hawPCh1qI=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];

@@ -44,6 +44,16 @@ stdenv.mkDerivation rec {
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
+    detectOcamlConflicts () {
+      local conflict
+      conflict="$(ocamlfind list |& grep "has multiple definitions" || true)"
+      if [[ -n "$conflict" ]]; then
+        echo "Conflicting ocaml packages detected";
+        echo "$conflict"
+        echo "Set dontDetectOcamlConflicts to true to disable this check."
+        exit 1
+      fi
+    }
 
     # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
@@ -51,6 +61,10 @@ stdenv.mkDerivation rec {
     preInstallHooks+=(createOcamlDestDir)
     # run even in nix-shell, and even without buildInputs
     addEnvHooks "$hostOffset" exportOcamlDestDir
+    # runs after all calls to addOCamlPath
+    if [[ -z "''${dontDetectOcamlConflicts-}" ]]; then
+      postHooks+=("detectOcamlConflicts")
+    fi
   '';
 
   meta = {

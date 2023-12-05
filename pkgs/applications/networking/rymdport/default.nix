@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "rymdport";
-  version = "3.2.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
     rev = "v${version}";
-    hash = "sha256-kAEkeRAS+gMjdriop4tQcqc+GldldxOn+QwgWTl8XB0=";
+    hash = "sha256-wsFZN2qDp0XScqBdwLYZdRsS30g+ex+sYjw2GkBwwI4=";
   };
 
-  vendorHash = "sha256-rZHM0HwiTNbUuJmlNOHg/XoYxqrKt59l5BL/vjm4Hfk=";
+  vendorHash = "sha256-SDNCVROfwCTfoQpUyChxtX3rTf0OPFOTzH5PeH4ahUI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,5 +48,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+    mainProgram = "rymdport";
   };
 }

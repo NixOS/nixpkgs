@@ -21,10 +21,16 @@ mkDerivation {
   ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfig kcoreaddons kitemviews kjobwidgets kservice
-    kxmlgui qtbase qttools solid kded
+    kxmlgui qtbase qttools solid
+  ] ++ lib.optionals stdenv.isLinux [
+    kded
   ];
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
  ];
+  meta = {
+    homepage = "https://api.kde.org/frameworks/kio/html/";
+  };
 }

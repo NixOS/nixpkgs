@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.25";
+  version = "0.4.34";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-JiQaGyvoECylcJHWR2xm8ob5fA+0FmIEQpTuxxysvlw=";
+    hash = "sha256-kHpJXqFQI3vtDJIcH2ebzbaReHecwItDh73/NcoPk9A=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyyaml
     requests
-  ] ++ lib.optional (!pythonAtLeast "3.9") [
+  ] ++ lib.optionals (!pythonAtLeast "3.9") [
     importlib-resources
   ];
 

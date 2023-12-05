@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivationWith
 , fetchFromGitHub
 , python3Packages
@@ -6,6 +7,8 @@
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
+  inherit stdenv;
+
   pname = "webmacs";
   version = "0.8";
 
@@ -27,7 +30,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3Packages.pytest
     #python3Packages.pytest-xvfb
     #python3Packages.pytest-qt

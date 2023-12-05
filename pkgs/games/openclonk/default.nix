@@ -41,5 +41,6 @@ in stdenv.mkDerivation rec {
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     maintainers = with maintainers; [ lheckemann ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

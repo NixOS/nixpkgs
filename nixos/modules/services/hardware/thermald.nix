@@ -25,12 +25,7 @@ in
         description = lib.mdDoc "the thermald manual configuration file.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.thermald;
-        defaultText = literalExpression "pkgs.thermald";
-        description = lib.mdDoc "Which thermald package to use.";
-      };
+      package = mkPackageOption pkgs "thermald" { };
     };
   };
 

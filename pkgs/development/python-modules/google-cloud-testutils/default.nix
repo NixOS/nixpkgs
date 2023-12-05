@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bRjvNNmvsBy0sR4C0DoC/n7A9ez6AfXUJrXZiHKkz0g=";
+    hash = "sha256-bRjvNNmvsBy0sR4C0DoC/n7A9ez6AfXUJrXZiHKkz0g=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-test-utils";
     changelog  ="https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

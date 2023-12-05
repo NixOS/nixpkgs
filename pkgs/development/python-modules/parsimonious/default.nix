@@ -22,8 +22,16 @@ buildPythonPackage rec {
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test_benchmarks.py tests are actually benchmarks and may fail due to
+    # something being unexpectedly slow on a heavily loaded build machine
+    "test_lists_vs_dicts"
+    "test_call_vs_inline"
+    "test_startswith_vs_regex"
   ];
 
   postPatch = ''

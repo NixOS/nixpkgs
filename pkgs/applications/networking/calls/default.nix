@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , libhandy
+, libsecret
 , modemmanager
 , gtk3
 , gom
@@ -33,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "43.0";
+  version = "45.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fvG9N6HuuO8BMH8MJRquMSe1oEPNmX/pzsJX5yzs1CY=";
+    hash = "sha256-NIQFKVpZSxY2QOb73WfYsCzMQwB9XySoADCL7IlmGe8=";
   };
 
   outputs = [ "out" "devdoc" ];
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     modemmanager
     libhandy
+    libsecret
     evolution-data-server
     folks
     gom
@@ -79,12 +81,12 @@ stdenv.mkDerivation rec {
     sofia_sip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   mesonFlags = [
     "-Dgtk_doc=true"
@@ -110,5 +112,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;
+    mainProgram = "gnome-calls";
   };
 }

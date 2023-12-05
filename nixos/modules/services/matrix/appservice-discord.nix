@@ -5,7 +5,6 @@ with lib;
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
@@ -15,6 +14,8 @@ in {
   options = {
     services.matrix-appservice-discord = {
       enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
+
+      package = mkPackageOption pkgs "matrix-appservice-discord" { };
 
       settings = mkOption rec {
         # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented
@@ -92,9 +93,9 @@ in {
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
         defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
         description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service,
@@ -114,7 +115,7 @@ in {
 
       preStart = ''
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --generate-registration \
             --url=${escapeShellArg cfg.url} \
             ${optionalString (cfg.localpart != null) "--localpart=${escapeShellArg cfg.localpart}"} \
@@ -135,13 +136,13 @@ in {
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = appDir;
+        WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --file='${registrationFile}' \
             --config='${settingsFile}' \
             --port='${toString cfg.port}'

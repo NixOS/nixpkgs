@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pyu2f
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

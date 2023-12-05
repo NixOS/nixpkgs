@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -61,10 +61,12 @@ stdenv.mkDerivation rec {
 
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ] ++ optionals (fts != null) [
+    "FTS_LDLIBS=-lfts"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     "DISABLE_SHARED=y"
   ] ++ optionals enablePython [
-    "PYTHON=${python3.pythonForBuild.interpreter}"
+    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
   ];
 

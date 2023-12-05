@@ -16,17 +16,18 @@
 , libgee
 , pcre2
 , wrapGAppsHook
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.1.1";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     rev = version;
-    sha256 = "sha256-HnCKLN07tlfosXIHHKcHyTtqULqE4irBnYssyMMO5xk=";
+    sha256 = "sha256-k+xowr9HmOUgNkn25uj+oV7AtG9EZfgFDop0Z+H7b3Q=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+    xvfb-run
   ];
 
   buildInputs = [

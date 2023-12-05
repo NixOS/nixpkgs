@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

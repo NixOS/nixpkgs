@@ -1,10 +1,10 @@
 { lib
 , stdenv
 , fetchurl
-, autoreconfHook
 # doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
+, enableStatic ? false
 , nixVersions
 }:
 
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cplusplus"
     "--with-libatomic-ops=none"
   ]
+  ++ lib.optional enableStatic "--enable-static"
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
@@ -36,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   # don't forget to disable the fix (and if the next release does
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
-  makeFlags = if (stdenv.hostPlatform.isPower64 &&
+  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
                   finalAttrs.version == "8.2.2")
-    then [
+    [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
       # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
       "CFLAGS_EXTRA=-DNO_SOFT_VDB"
-    ] else null;
+    ];
 
   # `gctest` fails under emulation on aarch64-darwin
   doCheck = !(stdenv.isDarwin && stdenv.isx86_64);

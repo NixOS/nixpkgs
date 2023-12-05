@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zmusic";
-  version = "1.1.11";
+  version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
     rev = version;
-    hash = "sha256-QvP8ranwBs8VupBie4vrHdm517OOpCuV3Rbjeb/L9PY=";
+    hash = "sha256-waxgn4Dg8One2Hv7J2efMoYo5mmaMSMiPQSNq57kbvE=";
   };
 
   outputs = [ "out" "dev" ];

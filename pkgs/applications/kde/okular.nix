@@ -5,7 +5,7 @@
 , kdbusaddons, kdegraphics-mobipocket, kiconthemes, kjs, khtml, kio, kparts
 , kpty, kpurpose, kwallet, kwindowsystem, libkexiv2, libspectre, libzip, phonon, poppler
 , qca-qt5, qtdeclarative, qtsvg, threadweaver, kcrash
-, withSpeech ? true, qtspeech
+, withSpeech ? true, qtspeech, qtx11extras
 }:
 
 mkDerivation {
@@ -18,7 +18,7 @@ mkDerivation {
     kcompletion kconfig kconfigwidgets kcoreaddons kdbusaddons
     kdegraphics-mobipocket kiconthemes kjs khtml kio kparts kpty kpurpose kwallet
     kwindowsystem libkexiv2 libspectre libzip phonon poppler qca-qt5
-    qtdeclarative qtsvg threadweaver kcrash chmlib
+    qtdeclarative qtsvg threadweaver kcrash chmlib qtx11extras
   ] ++ lib.optional withSpeech qtspeech;
 
   # InitialPreference values are too high and end up making okular
@@ -35,7 +35,7 @@ mkDerivation {
     homepage = "http://www.kde.org";
     description = "KDE document viewer";
     license = with licenses; [ gpl2Plus lgpl21Plus fdl12Plus bsd3 ];
-    maintainers = with maintainers; [ ttuegel turion ];
+    maintainers = with maintainers; [ ttuegel ];
     platforms = lib.platforms.linux;
   };
 }

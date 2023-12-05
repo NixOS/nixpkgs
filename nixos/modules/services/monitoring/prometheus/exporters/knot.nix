@@ -8,9 +8,9 @@ in {
   port = 9433;
   extraOpts = {
     knotLibraryPath = mkOption {
-      type = types.str;
-      default = "${pkgs.knot-dns.out}/lib/libknot.so";
-      defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
+      type = types.nullOr types.str;
+      default = null;
+      example = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = lib.mdDoc ''
         Path to the library of `knot-dns`.
       '';
@@ -25,7 +25,7 @@ in {
     };
 
     knotSocketTimeout = mkOption {
-      type = types.int;
+      type = types.ints.positive;
       default = 2000;
       description = lib.mdDoc ''
         Timeout in seconds.
@@ -33,17 +33,22 @@ in {
     };
   };
   serviceOpts = {
+    path = with pkgs; [
+      procps
+    ];
     serviceConfig = {
       ExecStart = ''
-        ${pkgs.prometheus-knot-exporter}/bin/knot_exporter \
+        ${pkgs.prometheus-knot-exporter}/bin/knot-exporter \
           --web-listen-addr ${cfg.listenAddress} \
           --web-listen-port ${toString cfg.port} \
-          --knot-library-path ${cfg.knotLibraryPath} \
           --knot-socket-path ${cfg.knotSocketPath} \
           --knot-socket-timeout ${toString cfg.knotSocketTimeout} \
+          ${lib.optionalString (cfg.knotLibraryPath != null) "--knot-library-path ${cfg.knotLibraryPath}"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
-      SupplementaryGroups = [ "knot" ];
+      SupplementaryGroups = [
+        "knot"
+      ];
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

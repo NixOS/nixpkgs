@@ -28,16 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.12.2";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-NUujjcDRVpC5LbJNy2I5cVCOSoqS14XxjsYiZNOBs+s=";
+    hash = "sha256-dEkTRpeJhqUGDCqTLVsFoDXgHvfEqMYt/9DEldjqv0Y=";
   };
 
   strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ cmake pkg-config wayland-scanner scdoc makeWrapper ];
   buildInputs = [ libGL wayland wayland-protocols wlr-protocols bash ];
 

@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+wp29GD+toXGfQbPGYbDJ7/P+FY1uQY4uK3OQxTE9GM=";
   };
 
+  postPatch = ''
+    sed -i -e '1i #include <sys/pidfd.h>' src/bindings.c
+  '';
+
   nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];
   buildInputs = [ fuse ];
 
@@ -46,6 +50,6 @@ stdenv.mkDerivation rec {
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ ];
   };
 }

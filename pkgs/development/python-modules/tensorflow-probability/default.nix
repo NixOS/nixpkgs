@@ -1,7 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
+, bazel_6
 , buildBazelPackage
 , buildPythonPackage
+, cctools
 , python
 , setuptools
 , wheel
@@ -24,17 +27,17 @@
 }:
 
 let
-  version = "0.15.0";
-  pname = "tensorflow_probability";
+  version = "0.21.0";
+  pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
-    name = "${pname}-${version}-py2.py3-none-any.whl";
+    name = "tensorflow_probability-${version}-py2.py3-none-any.whl";
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "v" + version;
-      sha256 = "155fgmra90s08vjnp61qxdrpzq74xa3kdzhgdkavwgc25pvxn3mi";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-DsJd1E5n86xNS7Ci0DXxoUxQ9jH8OwTZq2UuLlQtMUU=";
     };
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
@@ -45,10 +48,13 @@ let
       tensorflow
     ];
 
-    bazelTarget = ":pip_pkg";
+    bazel = bazel_6;
+
+    bazelTargets = [ ":pip_pkg" ];
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "0sgxdlw5x3dydy53l10vbrj8smh78b7r1wff8jxcgp4w69mk8zfm";
+      sha256 = "sha256-1iO/eXz1wvSIRTmGuGZDF9VeDVTiWYnjw0Cby4n/6HM=";
     };
 
     buildAttrs = {
@@ -88,7 +94,7 @@ in buildPythonPackage {
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest
     scipy
@@ -110,6 +116,6 @@ in buildPythonPackage {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
-    maintainers = with maintainers; [];  # This package is maintainerless.
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

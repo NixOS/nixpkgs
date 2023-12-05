@@ -20,23 +20,24 @@
 , gperf
 , pango
 , pcre2
+, cairo
 , fribidi
 , zlib
 , icu
 , systemd
-, systemdSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.2";
+  version = "0.74.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TRW0OA3j9WTVfqvQBjicQHxwXfWwxwAw/cwklxozTYA=";
+    sha256 = "sha256-IyjD8cmYNQoY4OUTNI6fxYHVfqTnuJrt8R4OPGUEK08=";
   };
 
   patches = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     fribidi
     gnutls
     pcre2
@@ -82,18 +84,17 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "gtk3" (gtkVersion == "3"))
+    (lib.mesonBool "gtk4" (gtkVersion == "4"))
   ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals (gtkVersion == "4") [
-    "-Dgtk3=false"
-    "-Dgtk4=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
   ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
 
   postPatch = ''
     patchShebangs perf/*

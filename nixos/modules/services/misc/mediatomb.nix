@@ -186,7 +186,7 @@ let
   defaultFirewallRules = {
     # udp 1900 port needs to be opened for SSDP (not configurable within
     # mediatomb/gerbera) cf.
-    # http://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
+    # https://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
     allowedUDPPorts = [ 1900 cfg.port ];
     allowedTCPPorts = [ cfg.port ];
   };
@@ -215,14 +215,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gerbera;
-        defaultText = literalExpression "pkgs.gerbera";
-        description = lib.mdDoc ''
-          Underlying package to be used with the module.
-        '';
-      };
+      package = mkPackageOption pkgs "gerbera" { };
 
       ps3Support = mkOption {
         type = types.bool;

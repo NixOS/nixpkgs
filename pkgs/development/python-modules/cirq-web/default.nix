@@ -7,13 +7,13 @@ buildPythonPackage rec {
   pname = "cirq-web";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   propagatedBuildInputs = [
     cirq-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

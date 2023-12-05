@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "lhvy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UwRXErlGtneEtc3UAiREwILQPTRQn1AgxiWDzSCZv/M=";
+    sha256 = "sha256-PUCbirnOPYIqt56IF6UQ7Jd0bJLsVY2pGIn/C95HTrQ=";
   };
 
-  cargoSha256 = "sha256-Qyuvg13SnTN1dvxn4Gu4tizmjk4zrEi/iuXTV28fZbQ=";
+  cargoHash = "sha256-6OTiciRqZyuX4FaDg131DEaVssUT2OYXdw/cxxJmLso=";
 
   doInstallCheck = true;
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An over-engineered rewrite of pipes.sh in Rust";
     homepage = "https://github.com/lhvy/pipes-rs";
-    license = with licenses; [ asl20 mit ];
+    license = licenses.blueOak100;
     maintainers = [ maintainers.vanilla ];
   };
 }

@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.2";
+  version = "0.9.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "eXjj7oD5HOW/AG2uxDa0tSleKmbouFd2fwlL2HHFiMA=";
+    sha256 = "sha256-sJBY/pXUX5InLynsvAmapW54UF/WGn9eDlluWXjhubQ=";
   };
 
   patches = [
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=${umockdev.out}/lib/
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gobject-introspection
     umockdev
-    (python3.pythonForBuild.withPackages
+    (python3.pythonOnBuildForHost.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 

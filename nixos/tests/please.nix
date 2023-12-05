@@ -6,10 +6,10 @@ import ./make-test-python.nix ({ lib, ... }:
   nodes.machine =
     { ... }:
     {
-      users.users = with lib; mkMerge [
-        (listToAttrs (map
-          (n: nameValuePair n { isNormalUser = true; })
-          (genList (x: "user${toString x}") 6)))
+      users.users = lib.mkMerge [
+        (lib.listToAttrs (map
+          (n: lib.nameValuePair n { isNormalUser = true; })
+          (lib.genList (x: "user${toString x}") 6)))
         {
           user0.extraGroups = [ "wheel" ];
         }

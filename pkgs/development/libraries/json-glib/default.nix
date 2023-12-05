@@ -7,6 +7,8 @@
 , nixosTests
 , pkg-config
 , gettext
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
 , gi-docgen
 , libxslt
@@ -16,13 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.6.6";
+  version = "1.8.0";
 
-  outputs = [ "out" "dev" "devdoc" "installedTests" ];
+  outputs = [ "out" "dev" "installedTests" ]
+    ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "luyYvnqR9t3jNjZyDj2i/27LuQ52zKpJSX8xpoVaSQ4=";
+    sha256 = "l+9euSyoEQOa1Qpl8GYz8armR5J4kwe+cXB5XYsxlFQ=";
   };
 
   patches = [
@@ -43,13 +46,12 @@ stdenv.mkDerivation rec {
     gettext
     glib
     libxslt
-    gobject-introspection
-    gi-docgen
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
   ];
-
-  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "gtk_doc" withIntrospection)
   ];
 
   # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)

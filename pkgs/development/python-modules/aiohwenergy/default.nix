@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WfkwIxyDzLNzhWNWST/V3iN9Bhu2oXDwGiA5UXCq5ho=";
+    hash = "sha256-WfkwIxyDzLNzhWNWST/V3iN9Bhu2oXDwGiA5UXCq5ho=";
   };
 
   propagatedBuildInputs = [

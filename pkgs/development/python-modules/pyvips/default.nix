@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
 , glib
@@ -13,11 +14,13 @@ buildPythonPackage rec {
   pname = "pyvips";
   version = "2.2.1";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     rev = "v${version}";
-    sha256 = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
+    hash = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
   };
 
   nativeBuildInputs = [ pkgconfig pkg-config ];
@@ -26,7 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyvips/__init__.py \
@@ -41,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
+    changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ccellado anthonyroussel ];
   };

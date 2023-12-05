@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.0.0";
+  version = "30.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
-    rev = "v${version}";
-    hash = "sha256-tGXNZm9xH8sXa7dtBFsTzGgT+hfbmkwps7breR7KUWU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vsQsHi2jdB0OiV6stm1APjQvr+238UoKgaaeXVx/isI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     boolean-py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions";
     homepage = "https://github.com/nexB/license-expression";
+    changelog = "https://github.com/nexB/license-expression/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -7,17 +7,19 @@
 , ninja
 , pyproject-metadata
 , tomli
+, typing-extensions
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.10.0";
+  version = "0.14.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-CN0SLBB029XFW1OZOnGcynPdghY3LJEhf3pVAmD55+E=";
+    hash = "sha256-uWhmaQMmVE3+RSWDdTrD9DMTIn6f2UFnAajfkK8hIjQ=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +27,8 @@ buildPythonPackage rec {
     ninja
     pyproject-metadata
     tomli
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
   propagatedBuildInputs = [
@@ -32,18 +36,17 @@ buildPythonPackage rec {
     ninja
     pyproject-metadata
     tomli
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+  setupHooks = [
+    ./add-build-flags.sh
   ];
 
-  # Ugly work-around. Drop ninja dependency.
-  # We already have ninja, but it comes without METADATA.
-  # Building ninja-python-distributions is the way to go.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "'ninja'," ""
-  '';
-
   meta = {
+    changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
-    homepage = "https://github.com/FFY00/meson-python";
+    homepage = "https://github.com/mesonbuild/meson-python";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.fridh ];
   };

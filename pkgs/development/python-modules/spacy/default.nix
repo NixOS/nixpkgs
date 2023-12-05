@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , blis
 , buildPythonPackage
 , callPackage
@@ -17,6 +18,7 @@
 , pytest
 , python
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , setuptools
 , spacy-legacy
@@ -27,19 +29,32 @@
 , typer
 , typing-extensions
 , wasabi
+, weasel
+, writeScript
+, nix
+, git
+, nix-update
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.4.1";
-  format = "setuptools";
+  version = "3.7.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WcXPXTSKbA5kpZrFz+bNhdCOhmM3hwyV0exhYdUx5GM=";
+    hash = "sha256-zt9JJ78NP+x3OmzkjV0skb2wL+08fV7Ae9uHPxEm8aA=";
   };
+
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     blis
@@ -63,20 +78,22 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
+    weasel
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
+      --replace "thinc>=8.1.8,<8.2.0" "thinc>=8.1.8"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
   doCheck = false;
+
   checkPhase = ''
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
@@ -85,11 +102,24 @@ buildPythonPackage rec {
     "spacy"
   ];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru = {
+    updateScript = writeScript "update-spacy" ''
+    #!${stdenv.shell}
+    set -eou pipefail
+    PATH=${lib.makeBinPath [ nix git nix-update ]}
+
+    nix-update python3Packages.spacy
+
+    # update spacy models as well
+    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+    '';
+    tests.annotation = callPackage ./annotation-test { };
+  };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

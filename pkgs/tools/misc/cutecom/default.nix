@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bennofs ];
     platforms = platforms.unix;
+    mainProgram = "cutecom";
   };
 }

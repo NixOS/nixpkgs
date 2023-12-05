@@ -6,11 +6,11 @@
 
 buildDunePackage rec {
   pname = "yaml";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-${version}.tbz";
-    sha256 = "sha256-0KngriGEpp5tcgK/43B9EEOdMacSQYYCNLGfAgRS7Mc=";
+    hash = "sha256-xQ0qyii5+WZ5K3HhYDNR5dJO2k39PkRT+9UDZqOggic=";
   };
 
   minimalOCamlVersion = "4.13";
@@ -19,7 +19,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [ bos ctypes ];
 
   doCheck = true;
-  checkInputs = [ fmt logs mdx.bin alcotest crowbar junit_alcotest ezjsonm ];
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [ fmt logs alcotest crowbar junit_alcotest ezjsonm ];
 
   meta = {
     description = "Parse and generate YAML 1.1 files";

@@ -1,9 +1,7 @@
 { stdenv, lib, fetchurl, unzip, autoPatchelfHook }:
 
-with lib;
-
 let
-  archPostfix = optionalString (stdenv.is64bit && !stdenv.isDarwin) "_64";
+  archPostfix = lib.optionalString (stdenv.is64bit && !stdenv.isDarwin) "_64";
 in stdenv.mkDerivation rec {
   pname = "msp-debug-stack-bin";
   version = "3.15.1.1";
@@ -26,7 +24,7 @@ in stdenv.mkDerivation rec {
     install -Dm0644 -t $out/include Inc/*.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Unfree binary release of the TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

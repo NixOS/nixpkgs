@@ -17,15 +17,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.20.50";
+  version = "0.21.6";
   pname = "dulwich";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UKlBeWssZ1vjm+co1UDBa1t853654bP4VWUOzmgy0r4=";
+    hash = "sha256-MPvofotR84E8Ex4oQchtAHQ00WC9FttYa0DUfzHdBbA=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     gevent
     geventhttpclient
     git

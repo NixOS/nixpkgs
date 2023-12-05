@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "reolink";
-  version = "0.61";
+  version = "0053";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XUYTDHh0oTro6BT+h4LjRdMukOZTlWP+giFpjLciZNQ=";
+    hash = "sha256-DZcTfmzO9rBhhRN2RkgoPwUPE+LPPeZgc8kmhYU9V2I=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiounittest
     pytestCheckHook
   ];

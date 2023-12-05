@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.7.2";
+  version = "5.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    hash = "sha256-mSFs/k+3Lp5w4WdOLKj65kOA5b+Nc1uuksVmeeqV58E=";
+    hash = "sha256-1lyTZwkRpGRbeBqt6Thv5o+bUzkD1sC3T9T1GbWMEkI=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     msgpack
     pytestCheckHook

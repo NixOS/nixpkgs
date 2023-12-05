@@ -1,16 +1,22 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchurl {
+stdenvNoCC.mkDerivation {
   pname = "linja-pi-pu-lukin";
   version = "unstable-2021-10-29";
 
-  url = "https://web.archive.org/web/20211029000000/https://jansa-tp.github.io/linja-pi-pu-lukin/PuLukin.otf";
-  hash = "sha256-VPdrMHWpiokFYON4S8zT+pSs4TsB17S8TZRtkjqIqU8=";
+  src = fetchurl {
+    url = "https://web.archive.org/web/20211029000000/https://jansa-tp.github.io/linja-pi-pu-lukin/PuLukin.otf";
+    hash = "sha256-Mf7P9fLGiG7L555Q3wRaI/PRv/TIs0njLq2IzIbc5Wo=";
+  };
 
-  downloadToTemp = true;
-  recursiveHash = true;
-  postFetch = ''
-    install -D $downloadedFile $out/share/fonts/opentype/linja-pi-pu-lukin.otf
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D $src $out/share/fonts/opentype/linja-pi-pu-lukin.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

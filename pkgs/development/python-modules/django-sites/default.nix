@@ -14,14 +14,14 @@ buildPythonPackage rec {
     owner = "niwinz";
     repo = "django-sites";
     rev = version;
-    sha256 = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
+    hash = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
   };
 
   propagatedBuildInputs = [
     django
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     django-jinja
   ];
 
@@ -37,5 +37,7 @@ buildPythonPackage rec {
     description = "Alternative implementation of django sites framework";
     homepage = "https://github.com/niwinz/django-sites";
     license = lib.licenses.bsd3;
+    # has not been updated for django>=4.0
+    broken = lib.versionAtLeast django.version "4";
   };
 }

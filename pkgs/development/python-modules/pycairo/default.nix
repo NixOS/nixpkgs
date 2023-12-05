@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.21.0";
+  version = "1.24.0";
 
   disabled = pythonOlder "3.6";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pygobject";
     repo = "pycairo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cwkGN5O15DduCLkFWeh8DPO4lY64iIlCQaUsCBKB8Mw=";
+    hash = "sha256-eAE0YPZAV90MP6g1V1T80suaRV15ts38kYt6Djb78Xk=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     libxcrypt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     # This is only used for figuring out what version of Python is in
     # use, and related stuff like figuring out what the install prefix
     # should be, but it does need to be able to execute Python code.
-    "-Dpython=${python.pythonForBuild.interpreter}"
+    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   meta = with lib; {

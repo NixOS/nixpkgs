@@ -52,9 +52,9 @@ with lib;
     services.getty.helpLine = ''
       The "nixos" and "root" accounts have empty passwords.
 
-      An ssh daemon is running. You then must set a password
-      for either "root" or "nixos" with `passwd` or add an ssh key
-      to /home/nixos/.ssh/authorized_keys be able to login.
+      To log in over ssh you must set a password for either "nixos" or "root"
+      with `passwd` (prefix with `sudo` for "root"), or add your public key to
+      /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
 
       If you need a wireless connection, type
       `sudo systemctl start wpa_supplicant` and configure a
@@ -65,14 +65,14 @@ with lib;
       start the graphical user interface.
     '';
 
-    # We run sshd by default. Login via root is only possible after adding a
-    # password via "passwd" or by adding a ssh key to /home/nixos/.ssh/authorized_keys.
+    # We run sshd by default. Login is only possible after adding a
+    # password via "passwd" or by adding a ssh key to ~/.ssh/authorized_keys.
     # The latter one is particular useful if keys are manually added to
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
     services.openssh = {
       enable = true;
-      permitRootLogin = "yes";
+      settings.PermitRootLogin = "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.
@@ -102,9 +102,9 @@ with lib;
         jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-        systemdStage1
-        systemdStage1Network
       ];
+
+    boot.swraid.enable = true;
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
@@ -118,5 +118,8 @@ with lib;
       [PStore]
       Unlink=no
     '';
+
+    # allow nix-copy to live system
+    nix.settings.trusted-users = [ "root" "nixos" ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.8.11";
+  version = "0.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q+GMBLM9m837PWbxGV9rDVHuykY+ywf2Bh3kl+QzFuQ=";
+    hash = "sha256-7DOchpG2iPhnYQSjZ6S4zz6gH9CJ3CjSTewi1WOxFWI=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://nbsphinx.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

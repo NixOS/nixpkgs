@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.11.0";
+  version = "3.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wu53nKA4nmXHuJ+dr9r/A9xDYec1bkW4S8gfgiLBctw=";
+    hash = "sha256-cD5BQ5Ykj6mEdLurnqli9MlqPK8RhMkDv8lFPSdLDqI=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-datacatalog";
     changelog = "https://github.com/googleapis/python-datacatalog/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

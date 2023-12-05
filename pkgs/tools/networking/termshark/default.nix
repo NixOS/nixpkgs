@@ -14,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
-  vendorSha256 = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
+  vendorHash = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
 
   doCheck = false;
 

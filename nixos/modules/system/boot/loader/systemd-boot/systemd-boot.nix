@@ -7,20 +7,20 @@ let
 
   efi = config.boot.loader.efi;
 
-  python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
-
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
-    inherit python3;
+    inherit (pkgs) python3;
 
     systemd = config.systemd.package;
 
+    bootspecTools = pkgs.bootspec;
+
     nix = config.nix.package.out;
 
-    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
+    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
     editor = if cfg.editor then "True" else "False";
 
@@ -30,9 +30,11 @@ let
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
-    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
+    inherit (config.system.nixos) distroName;
 
-    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+
+    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(${pkgs.coreutils}/bin/mktemp)
@@ -50,7 +52,7 @@ let
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy python3 ];
+    nativeBuildInputs = [ pkgs.mypy ];
   } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
@@ -66,6 +68,8 @@ let
     ${cfg.extraInstallCommands}
   '';
 in {
+
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
@@ -145,10 +149,8 @@ in {
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
-          program for testing memory.  MemTest86 is an unfree program, so
-          this requires `allowUnfree` to be set to
-          `true`.
+          Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
+          program for testing memory.
         '';
       };
 
@@ -191,8 +193,8 @@ in {
       default = {};
       example = literalExpression ''
         { "memtest86.conf" = '''
-          title MemTest86
-          efi /efi/memtest86/memtest86.efi
+          title Memtest86+
+          efi /efi/memtest86/memtest.efi
         '''; }
       '';
       description = lib.mdDoc ''
@@ -211,7 +213,7 @@ in {
       type = types.attrsOf types.path;
       default = {};
       example = literalExpression ''
-        { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }
+        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
       description = lib.mdDoc ''
         A set of files to be copied to {file}`/boot`.
@@ -274,11 +276,8 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
-      # TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
-      # be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
-      # app filename is BOOTIA32.efi.
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
@@ -288,8 +287,8 @@ in {
     boot.loader.systemd-boot.extraEntries = mkMerge [
       (mkIf cfg.memtest86.enable {
         "${cfg.memtest86.entryFilename}" = ''
-          title  MemTest86
-          efi    /efi/memtest86/BOOTX64.efi
+          title  Memtest86+
+          efi    /efi/memtest86/memtest.efi
         '';
       })
       (mkIf cfg.netbootxyz.enable {

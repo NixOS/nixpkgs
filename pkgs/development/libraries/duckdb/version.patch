@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 349af6acf7..7ffec0b4cb 100644
+index 2b49e11288..0a4a69b9a0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -196,52 +196,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
+@@ -244,52 +244,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
    set(SUN TRUE)
  endif()
  

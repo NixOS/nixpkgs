@@ -2,20 +2,22 @@
 , lib
 , buildGoModule
 , fetchFromGitHub
-, writeText
 , writeShellScriptBin
 , runtimeShell
 , installShellFiles
+, bc
 , ncurses
 , perl
 , glibcLocales
+, testers
+, fzf
 }:
 
 let
   # on Linux, wrap perl in the bash completion scripts with the glibc locales,
   # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
   # warnings on non-nixos machines
-  ourPerl = if stdenv.isDarwin then perl else (
+  ourPerl = if !stdenv.isLinux then perl else (
     writeShellScriptBin "perl" ''
       export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
       exec ${perl}/bin/perl "$@"
@@ -23,16 +25,18 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.35.1";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zn//z66apkhUd2RvLZSV8PqmocQdVmPngfyK4jmWsfs=";
+    hash = "sha256-oL3AA/3RPKcXLBNYaBYleueQph7/xvN/UEhwcYM9lAs=";
   };
 
-  vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
+  vendorHash = "sha256-EutNjyW5bvGvMZP9xBrcu91TOAbl9TDZe2+g0/qnuAQ=";
+
+  CGO_ENABLED = 0;
 
   outputs = [ "out" "man" ];
 
@@ -56,7 +60,11 @@ buildGoModule rec {
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
+      --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
+    # fzf-tmux depends on bc
+   substituteInPlace bin/fzf-tmux \
+     --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''
@@ -65,12 +73,17 @@ buildGoModule rec {
     installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/
     install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
     mkdir -p $out/share/fish/vendor_conf.d
-    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
@@ -81,6 +94,10 @@ buildGoModule rec {
     chmod +x $out/bin/fzf-share
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = fzf;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
@@ -88,5 +105,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
     changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    mainProgram = "fzf";
   };
 }

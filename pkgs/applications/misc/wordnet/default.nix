@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/wishwn --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
     wrapProgram $out/bin/wnb    --prefix PATH : "$out/bin"
   '';
 

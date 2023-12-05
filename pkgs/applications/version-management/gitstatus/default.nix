@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # that the script was sourced successfully and that the "gitstatus_query"
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
-  installCheckInputs = [ git zsh ];
+  nativeInstallCheckInputs = [ git zsh ];
   doInstallCheck = true;
   installCheckPhase = ''
     TEMP=$(mktemp -d)
@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
     platforms = platforms.all;
+    mainProgram = "gitstatusd";
   };
 }

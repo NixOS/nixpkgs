@@ -6,33 +6,28 @@
 , fetchpatch
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nc4nix";
-  version = "unstable-2022-12-07";
+  version = "unstable-2023-11-06";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "c556a596b1d40ff69b71adab257ec5ae51ba4df1";
-    sha256 = "sha256-EIPCMiVTf0ryXRMRGhepORaOlimt3/funvUdORRbVa8=";
+    rev = "47666b418a71c609f8d2b2c2679956c2ac9818e5";
+    hash = "sha256-cXg0emFFAYI1Jtiz+Xilmct3JNiO9cSWUbghyIRQBnY=";
   };
 
   patches = [
     # Switch hash calculation method
+    # https://github.com/helsinki-systems/nc4nix/pull/3
     (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/commit/88c182fbdddef148e086fa86438dcd72208efd75.patch";
-      sha256 = "sha256-zAF0+t9wHrKhhyD0+/d58BiaavLHfxO8X5J6vNlEWx0=";
+      url = "https://github.com/helsinki-systems/nc4nix/commit/a7bca4793cc12e87d381f12f6f8c00ae2ca02893.patch";
+      sha256 = "sha256-0JxyhSQLtlgLtsMv82wMjQHGdmOoQ2dcPPNAw2cFByE=";
       name = "switch_hash_calculation_method.patch";
-    })
-     # Add package selection command line argument
-    (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/pull/2/commits/449eec89538df4e92106d06046831202eb84a1db.patch";
-      sha256 = "sha256-qAAbR1G748+2vwwfAhpe8luVEIKNGifqXqTV9QqaUFc=";
-      name = "add_package_selection_command_line_arg.patch";
     })
   ];
 
-  vendorSha256 = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
+  vendorHash = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
 
  nativeBuildInputs = [
     makeWrapper

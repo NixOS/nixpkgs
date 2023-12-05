@@ -11,12 +11,12 @@
 
 tcl.mkTclDerivation rec {
   pname = "eltclsh";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchgit {
     url = "https://git.openrobots.org/robots/eltclsh.git";
     rev = "eltclsh-${version}";
-    hash = "sha256-C996BJxEoCSpA0x/nSnz4nnmleTIWyzm0imZp/K+Q/o=";
+    hash = "sha256-YcJRaNct/cLNsjWk+NLzGiDYOG0jNgKudBczKckQU14=";
   };
 
   nativeBuildInputs = [

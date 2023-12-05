@@ -50,6 +50,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package pkgs.direnv ];
   };
 }

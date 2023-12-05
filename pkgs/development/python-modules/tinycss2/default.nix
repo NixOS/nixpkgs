@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "1.1.1";
-  format = "flit";
+  version = "1.2.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     # for tests
     fetchSubmodules = true;
-    sha256 = "sha256-RUF/3cjNgDFofoxl9iKY3u5ZAVVQmXu2Qbb5U4brdcQ=";
+    hash = "sha256-rJtxMmW30NK+E+Dhh/fu6FPrEojWWdoEWNt0raYEubs=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";

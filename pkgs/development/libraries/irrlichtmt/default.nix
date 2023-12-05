@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "irrlichtmt";
-  version = "1.9.0mt8";
+  version = "1.9.0mt10";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "irrlicht";
     rev = version;
-    sha256 = "sha256-bwpALhBk16KugYqKuN57M3t5Ba7rdyrYWn/iBoi8hpg=";
+    sha256 = "sha256-PA+gz77XkwxQ3TtubaT0ov9dsT7s3ZlrQxrOkD5ku3g=";
   };
 
   nativeBuildInputs = [

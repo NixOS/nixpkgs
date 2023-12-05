@@ -9,20 +9,20 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "6.0.0";
+  version = "7.0.0";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C8FRbsJyXi2CIXB6YSJFCTy28c6iCc/Yy9T8Xpb6Y2U=";
+    hash = "sha256-Y9qTJa0p2oHsI+BVtBIleVq3k7TstIO+XcH6Nj/UcX4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ pydantic ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "inflect" ];
 

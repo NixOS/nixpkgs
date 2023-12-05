@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.2";
+  version = "1.6.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6QBZzIOAXa2T6DvkflOVjwdHHMRk+UQ5HntcgqpRoY8=";
+    hash = "sha256-ydxQ6MeLN5LRsObFxfUsk+k0XT2uKJHjEamTpXT1oE8=";
   };
 
   depsBuildBuild = [
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dintrospection=true"
   ];
 
   doCheck = true;

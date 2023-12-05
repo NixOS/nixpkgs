@@ -1,18 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "3.19";
-in fetchzip {
-  name = "inter-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "inter";
+  version = "4.0";
 
-  url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-hFK7xFJt69n+98+juWgMvt+zeB9nDkc8nsR8vohrFIc=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    cp Inter.ttc InterVariable*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-
-  sha256 = "sha256-8p15thg3xyvCA/8dH2jGQoc54nzESFDyv5m47FgWrSI=";
 
   meta = with lib; {
     homepage = "https://rsms.me/inter/";
@@ -22,4 +27,3 @@ in fetchzip {
     maintainers = with maintainers; [ demize dtzWill ];
   };
 }
-

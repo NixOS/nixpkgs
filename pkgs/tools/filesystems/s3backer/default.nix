@@ -4,14 +4,20 @@
 
 stdenv.mkDerivation rec {
   pname = "s3backer";
-  version = "1.6.3";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-DOf+kpflDd2U1nXDLKYts/yf121CrBFIBI47OQa5XBs=";
+    sha256 = "sha256-xmOtL4v3UxdjrL09sSfXyF5FoMrNerSqG9nvEuwMvNM=";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";
   };
+
+  patches = [
+    # from upstream, after latest release
+    # https://github.com/archiecobbs/s3backer/commit/303a669356fa7cd6bc95ac7076ce51b1cab3970a
+    ./fix-darwin-builds.patch
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl expat ];
@@ -22,15 +28,11 @@ stdenv.mkDerivation rec {
       'AC_CHECK_DECLS(fdatasync)' ""
   '';
 
-  autoreconfPhase = ''
-    patchShebangs ./autogen.sh
-    ./autogen.sh
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "s3backer";
   };
 }

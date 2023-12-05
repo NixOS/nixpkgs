@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # NOTE: _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   preBuild = ''
     export DESTDIR=$out;

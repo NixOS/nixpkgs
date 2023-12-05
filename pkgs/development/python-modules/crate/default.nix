@@ -1,22 +1,26 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, dask
 , urllib3
 , geojson
-, isPy3k
+, pandas
+, pythonOlder
 , sqlalchemy
 , pytestCheckHook
-, stdenv
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.28.0";
-  disabled = !isPy3k;
+  version = "0.34.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lEELJKIjm4509x9d6n9ee4k81gGmLhy7vliAbZykIpA=";
+    hash = "sha256-nEWrfCd2MQCcIM6dLkVYc/cWT5wcT/pvYaY2V3wfuto=";
   };
 
   propagatedBuildInputs = [
@@ -25,13 +29,23 @@ buildPythonPackage rec {
     geojson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    dask
+    pandas
     pytestCheckHook
+    pytz
   ];
 
   disabledTests = [
-    # network access
+    # the following tests require network access
     "test_layer_from_uri"
+    "test_additional_settings"
+    "test_basic"
+    "test_cluster"
+    "test_default_settings"
+    "test_dynamic_http_port"
+    "test_environment_variables"
+    "test_verbosity"
   ];
 
   disabledTestPaths = [
@@ -42,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
     description = "A Python client library for CrateDB";
+    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
   };

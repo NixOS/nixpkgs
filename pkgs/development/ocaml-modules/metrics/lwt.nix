@@ -5,6 +5,8 @@ buildDunePackage {
 
   inherit (metrics) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ logs lwt metrics ];
 
   meta = metrics.meta // {

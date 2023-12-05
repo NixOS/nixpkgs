@@ -10,22 +10,21 @@
 , wayland-protocols
 , wl-clipboard
 , libxkbcommon
-, cmake
 , libressl
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";
-  version = "0.0.15";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
     rev = "v${version}";
-    hash = "sha256-pk1U3svy9r7O9ivFjBNXsaOmgc+nv2QTuwwHejB7B4Q=";
+    hash = "sha256-DHP84AYDd3M8on4LgS2TzFU/QulrWXdl1qbLV+qKoxw=";
   };
 
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
 
   postPatch = ''
@@ -40,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/r-c-f/waynergy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ maxhero pedrohlc ];
+    maintainers = with maintainers; [ maxhero ];
   };
 }

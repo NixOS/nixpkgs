@@ -33,7 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     pytestCheckHook
     requests-mock

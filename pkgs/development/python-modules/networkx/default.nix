@@ -11,16 +11,16 @@
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.8.6";
+  version = "3.1";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vSt3MDAIYMvS2v6OWvif9cmmXDl1s1J5nYemI4tDAaY=";
+    hash = "sha256-3jRjNUCPhN4Orab/n6+v/5vNoR8KDfqpMRM967FGq2E=";
   };
 
   propagatedBuildInputs = [ decorator setuptools ];
-  checkInputs = [ nose pytestCheckHook ];
+  nativeCheckInputs = [ nose pytestCheckHook ];
 
   meta = {
     homepage = "https://networkx.github.io/";

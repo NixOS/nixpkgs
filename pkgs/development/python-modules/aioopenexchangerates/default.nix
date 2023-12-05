@@ -12,17 +12,22 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qm9B4m5CLhfqnZj+sdHZ+iA0+YnDR9Dh3lCy/YADkEI=";
+    repo = "aioopenexchangerates";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4mvd5G4qpebocg74Kz/+XtJovDnGJJYPigyhke9YDjA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -33,16 +38,11 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "aioopenexchangerates"
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the Openexchangerates API";
     homepage = "https://github.com/MartinHjelmare/aioopenexchangerates";
+    changelog = "https://github.com/MartinHjelmare/aioopenexchangerates/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

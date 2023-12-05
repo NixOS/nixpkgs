@@ -26,14 +26,7 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.rabbitmq-server;
-        type = types.package;
-        defaultText = literalExpression "pkgs.rabbitmq-server";
-        description = lib.mdDoc ''
-          Which rabbitmq package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "rabbitmq-server" { };
 
       listenAddress = mkOption {
         default = "127.0.0.1";

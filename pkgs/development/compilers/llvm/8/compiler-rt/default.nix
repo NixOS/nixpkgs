@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -31,14 +31,13 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -57,7 +56,7 @@ stdenv.mkDerivation {
   patches = [
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
   ] ++ lib.optional (useLLVM) ./crtbegin-and-end.patch
@@ -81,6 +80,10 @@ stdenv.mkDerivation {
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model.c \
       --replace "#include <assert.h>" ""
+  '';
+
+  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
   '';
 
   # Hack around weird upsream RPATH bug

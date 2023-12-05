@@ -3,6 +3,7 @@
 , fastapi
 , fetchFromGitHub
 , flask
+, httpx
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -25,9 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastapi
     flask
+    httpx
     pytestCheckHook
     # quart
     requests
@@ -42,6 +44,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     "quart"
+  ];
+
+  disabledTestPaths = [
+    # Smoke tests don't always work
+    "tests/smoketests/test_run_smoketest.py"
   ];
 
   __darwinAllowLocalNetworking = true;

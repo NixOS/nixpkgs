@@ -1,22 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
 buildGoModule rec {
   pname = "ytt";
-  version = "0.44.1";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-ytt";
     rev = "v${version}";
-    sha256 = "sha256-3uyMwW8v2rPguXbPKy8IyQxroNaNS6rrXEcgRP91fdU=";
+    sha256 = "sha256-r9LQMQffnc/g1WFJU8m+Oy0hD+DudCNiVAcbAAPy1vI=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-X github.com/vmware-tanzu/carvel-ytt/pkg/version.Version=${version}"
   ];
 
   subPackages = [ "cmd/ytt" ];
+
+  postInstall = ''
+    installShellCompletion --cmd ytt \
+      --bash <($out/bin/ytt completion bash) \
+      --fish <($out/bin/ytt completion fish) \
+      --zsh <($out/bin/ytt completion zsh)
+  '';
 
   meta = with lib; {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";

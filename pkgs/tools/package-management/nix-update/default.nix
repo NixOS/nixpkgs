@@ -1,25 +1,30 @@
 { lib
-, buildPythonApplication
+, python3
 , fetchFromGitHub
 , nix
+, nix-prefetch-git
 , nixpkgs-fmt
 , nixpkgs-review
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7kIHMGtsbC7CIlJPA7F1HwAXlqHf61mfjvnvA/v1Uno=";
+    hash = "sha256-C7ke51QlBcTR98ovQi5NcxToEPP6s9gqnxWO1eBw/sI=";
   };
 
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+  ];
+
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nixpkgs-fmt nixpkgs-review ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch-git nixpkgs-fmt nixpkgs-review ])
   ];
 
   checkPhase = ''
@@ -32,6 +37,7 @@ buildPythonApplication rec {
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mic92 zowoq ];
+    mainProgram = "nix-update";
     platforms = platforms.all;
   };
 }

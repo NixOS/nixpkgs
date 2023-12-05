@@ -1,13 +1,13 @@
-{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "1.50.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2S3I3J3wmRkVSUshyQCUTuYgHLsDMnXZQHt7KySBzIY=";
+    hash = "sha256-nN4KUP9l3g5Q+QeWr4Fju2GiOyu2f7u94hz/VJlCYdw=";
   };
 
   repo = fetchFromGitLab {
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
 
-  checkInputs = [ pytestCheckHook git openssl ps sudo ];
+  nativeCheckInputs = [ pytestCheckHook git openssl ps sudo ];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";
@@ -87,6 +87,12 @@ buildPythonApplication rec {
     "test_skip_already_built"
     "test_switch_to_channel_branch"
     "test_version"
+    "test_build_abuild_leftovers"
+    "test_get_all_component_names"
+    "test_check_config"
+    "test_extract_arch"
+    "test_extract_version"
+    "test_check"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
@@ -96,5 +102,6 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "pmbootstrap";
   };
 }

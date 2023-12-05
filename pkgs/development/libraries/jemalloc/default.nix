@@ -47,9 +47,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--with-lg-vaddr=48"
   ;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.cc.libcxx != null) "-l${stdenv.cc.libcxx.cxxabi.libName}";
 
-  doCheck = true;
+  # Tries to link test binaries binaries dynamically and fails
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   enableParallelBuilding = true;
 

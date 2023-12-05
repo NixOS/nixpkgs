@@ -14,16 +14,14 @@
 
 buildDunePackage rec {
   pname = "ca-certs-nss";
-  version = "3.77";
+  version = "3.92";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    sha256 = "sha256-Ezos9A2AQOo43R9akVbJ5l+euTDtguzMfH63YXo9hvc=";
+    hash = "sha256-F6eF5jQO9qJACQldad8va5jXPj05o61L8Bp1SDXHBTg=";
   };
-
-  useDune2 = true;
 
   propagatedBuildInputs = [
     mirage-crypto

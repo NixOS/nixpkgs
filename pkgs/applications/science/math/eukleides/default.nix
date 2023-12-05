@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive }:
 
-lib.fix (eukleides: stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "eukleides";
   version = "1.5.4";
 
@@ -36,7 +36,7 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: eukleides_build/triangle.o:(.bss+0x28): multiple definition of `A';
   #     eukleides_build/quadrilateral.o:(.bss+0x18): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preInstall = ''
     mkdir -p $out/bin
@@ -49,10 +49,12 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "tex" ];
 
-  passthru.tlType = "run";
-  passthru.pkgs = [ eukleides.tex ]
+  passthru = {
+    tlType = "run";
     # packages needed by euktoeps, euktopdf and eukleides.sty
-    ++ (with texlive; collection-pstricks.pkgs ++ epstopdf.pkgs ++ iftex.pkgs ++ moreverb.pkgs);
+    tlDeps = with texlive; [ collection-pstricks epstopdf iftex moreverb ];
+    pkgs = [ finalAttrs.finalPackage.tex ];
+  };
 
   meta = {
     description = "Geometry Drawing Language";

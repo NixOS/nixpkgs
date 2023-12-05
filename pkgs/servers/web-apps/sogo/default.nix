@@ -5,13 +5,14 @@
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.7.0";
+  version = "5.9.0";
 
+  # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-3Xy0y1sdixy4gXhzhP9mfWeaDmOVJty+X95xCyxayPE=";
+    hash = "sha256-Jv+gOWNcjdXk51I22+znYLTUWDEdAOAmRJql9P+/OuQ=";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
@@ -44,6 +45,8 @@ gnustep.stdenv.mkDerivation rec {
     "--enable-mfa"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int";
+
   preFixup = ''
     # Create gnustep.conf
     mkdir -p $out/share/GNUstep
@@ -65,8 +68,6 @@ gnustep.stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
-
-    rmdir $out/nix
   '';
 
   passthru.tests.sogo = nixosTests.sogo;

@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Minimalistic C kernel for Jupyter";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

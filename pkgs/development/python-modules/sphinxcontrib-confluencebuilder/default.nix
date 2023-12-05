@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , docutils
 , sphinx
 , requests
@@ -9,12 +10,18 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
-  version = "1.9.0";
+  version = "2.3.0";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aj+8/ZOWpT1zBdCTit6Zo/XhnzFisLk/rrg5l6sPmkw=";
+    pname = "sphinxcontrib_confluencebuilder";
+    inherit version;
+    hash = "sha256-Zpe2n131afnq4IhQEEZtquvSEkkjv/uznXt2tQhGfZA=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -29,6 +36,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sphinxcontrib.confluencebuilder"
   ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Confluence builder for sphinx";

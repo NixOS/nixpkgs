@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, jq
 , glslang
 , libffi
 , libX11
@@ -12,8 +13,8 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
-, spirv-tools
 , vulkan-headers
+, vulkan-utility-libraries
 , wayland
 }:
 
@@ -22,30 +23,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.231.0";
+  version = "1.3.268.0";
 
-  # If we were to use "dev" here instead of headers, the setupHook would be
-  # placed in that output instead of "out".
-  outputs = ["out" "headers"];
-  outputInclude = "headers";
-
-  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-ValidationLayers";
-      rev = "sdk-${version}";
-      hash = "sha256-5bzUauu8081zyRaWmRUtOxHjUU4gc1GWoJtU783Msh0=";
-    });
-
-  # Include absolute paths to layer libraries in their associated
-  # layer definition json files.
-  postPatch = ''
-    sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
-  '';
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-ValidationLayers";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-DwkSUclStYKe54tC1H3jMv1KOSScgqf25tR5ajQZ6os=";
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    jq
   ];
 
   buildInputs = [
@@ -55,8 +45,8 @@ stdenv.mkDerivation rec {
     libXrandr
     libffi
     libxcb
-    spirv-tools
     vulkan-headers
+    vulkan-utility-libraries
     wayland
   ];
 
@@ -73,6 +63,17 @@ stdenv.mkDerivation rec {
   # Tests require access to vulkan-compatible GPU, which isn't
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
+
+  separateDebugInfo = true;
+
+  # Include absolute paths to layer libraries in their associated
+  # layer definition json files.
+  preFixup = ''
+    for f in "$out"/share/vulkan/explicit_layer.d/*.json "$out"/share/vulkan/implicit_layer.d/*.json; do
+      jq <"$f" >tmp.json ".layer.library_path = \"$out/lib/\" + .layer.library_path"
+      mv tmp.json "$f"
+    done
+  '';
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";

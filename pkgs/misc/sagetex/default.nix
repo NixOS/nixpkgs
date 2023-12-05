@@ -1,13 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, texlive
+, writeShellScript
+, texliveBasic
 }:
 
 stdenv.mkDerivation rec {
   pname = "sagetex";
   version = "3.6.1";
-  passthru.tlType = "run";
 
   src = fetchFromGitHub {
     owner = "sagemath";
@@ -16,8 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
   };
 
-  buildInputs = [
-    texlive.combined.scheme-basic
+  outputs = [ "tex" ];
+
+  nativeBuildInputs = [
+    texliveBasic
+    # multiple-outputs.sh fails if $out is not defined
+    (writeShellScript "force-tex-output.sh" ''
+      out="''${tex-}"
+    '')
   ];
 
   buildPhase = ''

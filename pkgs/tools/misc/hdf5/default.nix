@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, cmake
 , removeReferencesTo
 , cppSupport ? false
 , fortranSupport ? false
@@ -16,6 +17,7 @@
 , jdk
 , usev110Api ? false
 , threadsafe ? false
+, python3
 }:
 
 # cpp and mpi options are mutually exclusive
@@ -25,7 +27,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.2";
+  version = "1.14.3";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -33,8 +35,13 @@ stdenv.mkDerivation rec {
     + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-Goi742ITos6gyDlyAaRZZD5xVcnckeBiZ1s/sH7jiv4=";
+    url =
+      let
+        majorMinor = lib.versions.majorMinor version;
+        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
+      in
+      "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-lCXyJO110SgLtG1vJpI92Tj5BA5+rr9X5m7HNXwI+Rc=";
   };
 
   passthru = {
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ removeReferencesTo ]
+  nativeBuildInputs = [ removeReferencesTo cmake ]
     ++ optional fortranSupport fortran;
 
   buildInputs = optional fortranSupport fortran
@@ -63,24 +70,18 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional zlibSupport zlib
     ++ optional mpiSupport mpi;
 
-  configureFlags = optional cppSupport "--enable-cxx"
-    ++ optional fortranSupport "--enable-fortran"
-    ++ optional szipSupport "--with-szlib=${szip}"
-    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
-    ++ optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java"
-    ++ optional usev110Api "--with-default-api-version=v110"
-    # hdf5 hl (High Level) library is not considered stable with thread safety and should be disabled.
-    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ];
-
-  patches = [
-    # Avoid non-determinism in autoconf build system:
-    # - build time
-    # - build user
-    # - uname -a (kernel version)
-    # Can be dropped once/if we switch to cmake.
-    ./hdf5-more-determinism.patch
-  ];
+  cmakeFlags = [
+    "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
+  ] ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
+    ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
+    ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
+    ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
+    ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" "CC=${mpi}/bin/mpicc" ]
+    ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
+    ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
+    ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
+    ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
+  ;
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
@@ -90,7 +91,13 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (python3.pkgs) h5py;
+  };
+
+  meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -98,8 +105,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ bc python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ bc python3Packages.pytestCheckHook ];
 
   pytestFlagsArray = [ "test.py" ];
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jarun/bcal";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

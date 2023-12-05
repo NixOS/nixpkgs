@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , gettext
 , kdoctools
@@ -9,10 +8,8 @@
 , flatpak
 , fwupd
 , ostree
-, packagekit-qt
 , pcre
 , util-linux
-, qtbase
 , qtquickcontrols2
 , qtwebview
 , qtx11extras
@@ -28,6 +25,7 @@
 , kitemmodels
 , knewstuff
 , kpurpose
+, kuserfeedback
 , kwindowsystem
 , kxmlgui
 , plasma-framework
@@ -43,7 +41,6 @@ mkDerivation {
     flatpak
     fwupd
     ostree
-    packagekit-qt
     pcre
     util-linux
     qtquickcontrols2
@@ -61,6 +58,7 @@ mkDerivation {
     kitemmodels
     knewstuff
     kpurpose
+    kuserfeedback
     kwindowsystem
     kxmlgui
     plasma-framework

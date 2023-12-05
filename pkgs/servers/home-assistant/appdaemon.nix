@@ -5,21 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "4.0.8";
-  disabled = python3.pythonOlder "3.6";
+  version = "4.2.1";
+  format = "setuptools";
+
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
-    repo = pname;
-    rev = version;
-    sha256 = "04a4qx0rbx2vpkzpibmwkpy7fawa6dbgqlrllryrl7dchbrf703q";
+    repo = "appdaemon";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4sN0optkMmyWb5Cd3F7AhcXYHh7aidJE/bieYMEKgSY=";
   };
 
-  # relax dependencies
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "deepdiff==5.2.3" "deepdiff" \
-      --replace "pygments==2.8.1" "pygments"
+    # relax dependencies
     sed -i 's/==/>=/' requirements.txt
   '';
 
@@ -34,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-storage
     azure-storage-blob
     bcrypt
-    cchardet
+    faust-cchardet
     deepdiff
     feedparser
     iso8601
@@ -63,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     homepage = "https://github.com/AppDaemon/appdaemon";
+    changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.rst";
     license = licenses.mit;
     maintainers = teams.home-assistant.members;
   };

@@ -19,7 +19,7 @@ let
 
   buildLuaApplication = args: buildLuarocksPackage ({ namePrefix = ""; } // args);
 
-  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-lua-package.nix { });
+  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-luarocks-package.nix { });
 
   luaLib = callPackage ../development/lua-modules/lib.nix { };
 
@@ -54,10 +54,10 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = callPackage ../development/tools/misc/luarocks/default.nix { };
+  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
-  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+  luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
@@ -76,7 +76,7 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   }) {};
 
@@ -95,7 +95,7 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   }) {};
 
@@ -140,13 +140,13 @@ rec {
 
   vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.1";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
+      sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
     };
 
     buildInputs = [ lua ];
@@ -160,6 +160,7 @@ rec {
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
+      changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms = platforms.linux;

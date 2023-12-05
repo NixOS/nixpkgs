@@ -1,26 +1,41 @@
 { lib
+, attrs
 , buildPythonPackage
+, deprecated
 , fetchFromGitHub
 , fetchPypi
-, setuptools-scm
-, attrs
-, deprecated
+, hatch-vcs
+, hatchling
 , hepunits
-, pytestCheckHook
-, tabulate
 , pandas
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.20.1";
+  version = "0.23.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HoWWwoGMrkRqlYzrF2apGsxsZAHwHbHSO5TCSCelxUc=";
+    hash = "sha256-2BD4/CfeuOf9ZBdAF9lgfVBSIknAlzoACOWA+T2xF1A=";
   };
+
+  postPatch = ''
+    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
+    # as dependencies
+    substituteInPlace pyproject.toml \
+      --replace '"--benchmark-disable",' ""
+  '';
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -29,28 +44,25 @@ buildPythonPackage rec {
     hepunits
   ];
 
-  pythonImportsCheck = [
-    "particle"
-  ];
-
-  preCheck = ''
-    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
-    # as dependencies
-    substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable", ' ""
-    rm tests/particle/test_performance.py
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tabulate
     pandas
   ];
 
-  meta = {
-    description = "Package to deal with particles, the PDG particle data table, PDGIDs, etc.";
+  pythonImportsCheck = [
+    "particle"
+  ];
+
+  disabledTestPaths = [
+    "tests/particle/test_performance.py"
+  ];
+
+  meta = with lib; {
+    description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

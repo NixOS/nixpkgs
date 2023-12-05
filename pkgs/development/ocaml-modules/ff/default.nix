@@ -3,6 +3,7 @@
 buildDunePackage rec {
   pname = "ff";
   inherit (ff-sig) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     ff-sig

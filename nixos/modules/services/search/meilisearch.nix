@@ -9,20 +9,17 @@ in
 {
 
   meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc meilisearch.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > meilisearch.xml`
-  meta.doc = ./meilisearch.xml;
+  meta.doc = ./meilisearch.md;
 
   ###### interface
 
   options.services.meilisearch = {
     enable = mkEnableOption (lib.mdDoc "MeiliSearch - a RESTful search API");
 
-    package = mkOption {
-      description = lib.mdDoc "The package to use for meilisearch. Use this if you require specific features to be enabled. The default package has no features.";
-      default = pkgs.meilisearch;
-      defaultText = lib.literalExpression "pkgs.meilisearch";
-      type = types.package;
+    package = mkPackageOption pkgs "meilisearch" {
+      extraDescription = ''
+        Use this if you require specific features to be enabled. The default package has no features.
+      '';
     };
 
     listenAddress = mkOption {
@@ -117,7 +114,7 @@ in
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
         MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
-        MEILI_DUMPS_DIR = "/var/lib/meilisearch/dumps";
+        MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
       };

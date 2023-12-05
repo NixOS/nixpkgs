@@ -1,35 +1,34 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchurl
-, lib
-, nixosTests
-, python
-, pythonOlder
-
-# pythonPackages
-, dnspython
-, expiringdict
-, publicsuffix2
-, xmltodict
-, geoip2
-, urllib3
-, requests
-, imapclient
+{ lib
+, azure-identity
+, azure-monitor-ingestion
+, boto3
+, buildPythonPackage
 , dateparser
-, mailsuite
+, dnspython
 , elasticsearch
 , elasticsearch-dsl
-, kafka-python
-, tqdm
-, lxml
-, boto3
-, msgraph-core
-, azure-identity
+, expiringdict
+, fetchPypi
+, fetchurl
+, geoip2
 , google-api-core
 , google-api-python-client
 , google-auth
 , google-auth-httplib2
 , google-auth-oauthlib
+, hatchling
+, imapclient
+, kafka-python
+, lxml
+, mailsuite
+, msgraph-core
+, nixosTests
+, publicsuffixlist
+, pythonOlder
+, requests
+, tqdm
+, urllib3
+, xmltodict
 }:
 
 let
@@ -40,47 +39,54 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.2.0";
+  version = "8.6.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb82328dffb4a62ddaefbcc22efd5a2694350504a56d41ba1e161f2d998dcbff";
+    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace "elasticsearch<7.14.0" "elasticsearch"
   '';
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    dnspython
-    expiringdict
-    publicsuffix2
-    xmltodict
-    geoip2
-    urllib3
-    requests
-    imapclient
+    azure-identity
+    azure-monitor-ingestion
+    boto3
     dateparser
-    mailsuite
+    dnspython
     elasticsearch
     elasticsearch-dsl
-    kafka-python
-    tqdm
-    lxml
-    boto3
-    msgraph-core
-    azure-identity
+    expiringdict
+    geoip2
     google-api-core
     google-api-python-client
     google-auth
     google-auth-httplib2
     google-auth-oauthlib
+    imapclient
+    kafka-python
+    lxml
+    mailsuite
+    msgraph-core
+    publicsuffixlist
+    requests
+    tqdm
+    urllib3
+    xmltodict
   ];
 
   # no tests on PyPI, no tags on GitHub
+  # https://github.com/domainaware/parsedmarc/issues/426
   doCheck = false;
 
   pythonImportsCheck = [ "parsedmarc" ];
@@ -90,10 +96,12 @@ buildPythonPackage rec {
     tests = nixosTests.parsedmarc;
   };
 
-  meta = {
+  meta = with lib; {
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    maintainers = with lib.maintainers; [ talyz ];
-    license = lib.licenses.asl20;
+    mainProgram = "parsedmarc";
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.asl20;
   };
 }

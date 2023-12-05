@@ -62,7 +62,7 @@ buildPerlModule rec {
     substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     TestPod
   ];
 
@@ -83,5 +83,6 @@ buildPerlModule rec {
     license = licenses.artistic2;
     maintainers = with maintainers; [ julm ];
     platforms = platforms.all;
+    mainProgram = "pipe-viewer";
   };
 }

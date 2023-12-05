@@ -8,37 +8,40 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "unstable-2022-10-11";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
-    rev = "273ffd969ca6536df06d9f69076c2badb86f8f8c";
-    sha256 = "sha256-t/3++EeP7a8t2H0IEPLogBri7+6u+2+v+lNb4/Ty1/w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8tDzgsmKLjsfMT5j5HqrQ93LsGHxmC2DJu5KbR3FNXc=";
   };
 
-  cargoHash = "sha256-Pv7SK64+eoK1VUxDh1oH0g1veWoIvBhiZE9JI/alXJ4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustpython-ast-0.3.0" = "sha256-5IR/G6Y9OE0+gTvU1iTob0TxfiV3O9elA/0BUy2GA8g=";
+      "rustpython-doc-0.3.0" = "sha256-34ERuLFKzUD9Xmf1zlafe42GLWZfUlw17ejf/NN6yH4=";
+      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
+    };
+  };
 
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably macOS SDK 10.13 or later. Check the current version in
-    # .../os-specific/darwin/apple-sdk/default.nix
-    #
-    # From the build logs:
-    #
-    # > Undefined symbols for architecture x86_64: "_utimensat"
+    #   = note: Undefined symbols for architecture x86_64:
+    #       "_utimensat", referenced from:
+    #           rustpython_vm::function::builtin::IntoPyNativeFn::into_func::... in
+    #           rustpython-10386d81555652a7.rustpython_vm-f0b5bedfcf056d0b.rustpython_vm.7926b68e665728ca-cgu.08.rcgu.o.rcgu.o
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

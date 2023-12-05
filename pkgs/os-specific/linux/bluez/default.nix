@@ -23,11 +23,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.66";
+  version = "5.70";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Of6mS1kMlJKYSgwnqJ/CA+HNx0hmCG77j0aYZ3qytXQ=";
+    sha256 = "sha256-N+Ny6RaVXhRMuIL4iOS+QImPEK47fCE93N1V7pwAkng=";
   };
 
   patches = [
@@ -85,7 +85,6 @@ in stdenv.mkDerivation rec {
     "--enable-mesh"
     "--enable-midi"
     "--enable-nfc"
-    "--enable-sap"
     "--enable-sixaxis"
     "--enable-btpclient"
     "--enable-hid2hci"
@@ -129,6 +128,10 @@ in stdenv.mkDerivation rec {
     # Add extra configuration
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
+
+    # https://github.com/NixOS/nixpkgs/issues/204418
+    ln -s /etc/bluetooth/input.conf $out/etc/bluetooth/input.conf
+    ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
 
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
     for files in `find tools/ -type f -perm -755`; do

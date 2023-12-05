@@ -1,22 +1,30 @@
 { lib
 , buildPythonPackage
 , coverage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
 , pytest
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "2.1.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PVLXOBTo2xnMBM4wyvrmGgyztW0ajGxMU+oIhrjZiw8=";
+  src = fetchFromGitHub {
+    owner = "tarpas";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M4636yqzChRI37UdGPOZTjj8POLdrOoJtzmECtZZi4k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pytest
@@ -36,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
+    changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dmvianna ];
   };

@@ -8,23 +8,23 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.9.1";
+  version = "0.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rMQjsGqdiXe8zS18hZQAro3UWyHPjNJYyQ/NAoxbE7k=";
+    hash = "sha256-8d/cjD7dcA4/bKZtQUjgUPVgfZdjl+ibOFRpC9dyybA=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

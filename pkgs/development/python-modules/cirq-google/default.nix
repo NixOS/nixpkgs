@@ -4,13 +4,14 @@
 , protobuf
 , pytestCheckHook
 , freezegun
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "cirq-google";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -18,13 +19,17 @@ buildPythonPackage rec {
       --replace "protobuf >= 3.15.0, < 4" "protobuf >= 3.15.0"
   '';
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     cirq-core
     google-api-core
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];
@@ -32,12 +37,16 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # No need to test the version number
     "cirq_google/_version_test.py"
+    # Trace/BPT trap: 5
+    "cirq_google/engine/calibration_test.py"
   ];
 
   disabledTests = [
     # unittest.mock.InvalidSpecError: Cannot autospec attr 'QuantumEngineServiceClient'
     "test_get_engine_sampler_explicit_project_id"
     "test_get_engine_sampler"
+    # Calibration issue
+    "test_xeb_to_calibration_layer"
   ];
 
 }

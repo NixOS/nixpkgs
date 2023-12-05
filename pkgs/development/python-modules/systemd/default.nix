@@ -1,30 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
+, libredirect
 , systemd
 , pkg-config
+, pytest
+, python
 }:
 
 buildPythonPackage rec {
   pname = "systemd";
-  version = "234";
+  version = "235";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "python-systemd";
     rev = "v${version}";
-    sha256 = "1fakw7qln44mfd6pj4kqsgyrhkc6cyr653id34kv0rdnb1bvysrz";
+    hash = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
   };
-
-  patches = [
-    # Fix runtime issues on Python 3.10
-    # https://github.com/systemd/python-systemd/issues/107
-    (fetchpatch {
-      url = "https://github.com/systemd/python-systemd/commit/c71bbac357f0ac722e1bcb2edfa925b68cca23c9.patch";
-      sha256 = "22s72Wa/BCwNNvwbxEUh58jhHlbA00SNwNVchVDovcc=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -34,8 +27,19 @@ buildPythonPackage rec {
     systemd
   ];
 
-  # No module named 'systemd._journal
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest
+  ];
+
+  checkPhase = ''
+    echo "12345678901234567890123456789012" > machine-id
+    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+    LD_PRELOAD=${libredirect}/lib/libredirect.so
+
+    # Those tests assume /etc/machine-id to be available
+    # But our redirection technique does not work apparently
+    pytest $out/${python.sitePackages}/systemd -k 'not test_get_machine and not test_get_machine_app_specific and not test_reader_this_machine'
+  '';
 
   pythonImportsCheck = [
     "systemd.journal"
@@ -46,7 +50,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for native access to the systemd facilities";
-    homepage = "http://www.freedesktop.org/software/systemd/python-systemd/";
+    homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
+    changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ raitobezarius ];
   };
 }

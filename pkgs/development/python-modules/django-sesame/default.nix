@@ -1,21 +1,46 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, django }:
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, poetry-core
+, python
+, pythonOlder
+, ua-parser
+}:
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "1.7";
+  version = "3.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
-    rev = version;
-    sha256 = "0k8s44zn2jmasp0w064vrx685fn4pbmdfx8qmhkab1hd5ys6pi44";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R7ySuop7E1lkxtRSVNFfzyb3Ba1mW0o6PDiTxTztK/Y=";
   };
 
-  checkInputs = [ django ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    django
+    ua-parser
+  ];
+
+  pythonImportsCheck = [
+    "sesame"
+  ];
 
   checkPhase = ''
-    make test
+    runHook preCheck
+
+    ${python.interpreter} -m django test --settings=tests.settings
+
+    runHook postCheck
   '';
 
   meta = with lib; {

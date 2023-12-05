@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, stdenv
+, darwin
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
@@ -9,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-wireguard";
-  version = "0.1.19";
+  version = "0.1.23";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +20,13 @@ buildPythonPackage rec {
     owner = "decathorpe";
     repo = "mitmproxy_wireguard";
     rev = "refs/tags/${version}";
-    hash = "sha256-6LgA8IaUCfScEr+tEG5lkt0MnWoA9Iab4kAseUvZFFo=";
+    hash = "sha256-z9ucTBLLRXc1lcHA0r1wUleoP8X7yIlHrtdZdLD9qJk=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   nativeBuildInputs = [
     setuptools-rust
@@ -31,7 +38,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-wuroElBc0LQL0gf+P6Nffv3YsyDJliXksZCgcBfK0iw=";
+    hash = "sha256-qgyAaUpyuWVYMxUA4Gg8inlUMlSLo++16+nVvmDMhTQ=";
   };
 
   # Module has no tests, only a test client

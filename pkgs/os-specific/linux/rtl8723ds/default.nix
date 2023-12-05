@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation {
   pname = "rtl8723ds";
-  version = "${kernel.version}-unstable-2022-10-20";
+  version = "${kernel.version}-unstable-2022-12-01";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtl8723ds";
-    rev = "912fdb30531bc8c071267a047e7df16feae7a865";
-    sha256 = "sha256-HhoCKrrRg1Q995sekQvzhaiqANeTP8pANItj2vLV+Cw=";
+    rev = "a638cc8639015b8b9390af3350fab0366b6c87e7";
+    sha256 = "sha256-qfVE7k71NPzw3FwoOaUxH66PnDjbpMAF6CyOyUVdSMA=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
 
   makeFlags = [
     "ARCH=${stdenv.hostPlatform.linuxArch}"
@@ -25,7 +24,6 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace "/sbin/depmod" "#" \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.10.2";
+  version = "2.11";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyICU";
     inherit version;
-    hash = "sha256-DDMJ7qf6toV1B6zmJANRW2D+CWy/tPkNFPVf91xUQcE=";
+    hash = "sha256-OrUxJkz+kTKz0qxdcI2ppGSdJfbmgTcwrIjPBAoIqEQ=";
   };
 
   nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
   buildInputs = [ icu ];
-  checkInputs = [ pytestCheckHook six ];
+  nativeCheckInputs = [ pytestCheckHook six ];
 
   pythonImportsCheck = [ "icu" ];
 

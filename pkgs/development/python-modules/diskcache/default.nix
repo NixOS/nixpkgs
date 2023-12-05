@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytest-xdist
     pytestCheckHook
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

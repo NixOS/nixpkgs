@@ -40,7 +40,7 @@ let
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
     };
     propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
     '';
@@ -65,7 +65,7 @@ let
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
     };
     propagatedBuildInputs = [ numpy six sympy ];
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
 
     preCheck = ''
       # Workaround pytest 4.6.3 issue.
@@ -73,6 +73,12 @@ let
       rm test/unit/test_quadrature.py
       rm test/unit/test_reference_element.py
       rm test/unit/test_fiat.py
+
+      # Fix `np.float` deprecation in Numpy 1.20
+      grep -lr 'np.float(' test/ | while read -r fn; do
+        substituteInPlace "$fn" \
+          --replace "np.float(" "np.float64("
+      done
     '';
     checkPhase = ''
       runHook preCheck
@@ -95,7 +101,7 @@ let
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
     };
     propagatedBuildInputs = [ numpy six ];
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     checkPhase = ''
       runHook preCheck
       py.test test/
@@ -128,7 +134,7 @@ let
       ufl
       setuptools
     ];
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
       rm test/unit/ufc/finite_element/test_evaluate.py
@@ -158,7 +164,17 @@ let
         url = "https://bitbucket.org/josef_kemetmueller/dolfin/commits/328e94acd426ebaf2243c072b806be3379fd4340/raw";
         sha256 = "1zj7k3y7vsx0hz3gwwlxhq6gdqamqpcw90d4ishwx5ps5ckcsb9r";
       })
+      (fetchpatch {
+        url = "https://bitbucket.org/fenics-project/dolfin/issues/attachments/1116/fenics-project/dolfin/1602778118.04/1116/0001-Use-__BYTE_ORDER__-instead-of-removed-Boost-endian.h.patch";
+        hash = "sha256-wPaDmPU+jaD3ce3nNEbvM5p8e3zBdLozamLTJ/0ai2c=";
+      })
     ];
+    # https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=dolfin&id=a965ad934f7b3d49a5e77fa6fb5e3c710ec2163e
+    postPatch = ''
+      sed -i '20 a #include <algorithm>' dolfin/geometry/IntersectionConstruction.cpp
+      sed -i '26 a #include <algorithm>' dolfin/mesh/MeshFunction.h
+      sed -i '25 a #include <cstdint>' dolfin/mesh/MeshConnectivity.h
+    '';
     propagatedBuildInputs = [
       dijitso
       fiat

@@ -14,7 +14,7 @@
 , keyrings-alt
 , packaging
 , pathspec
-, Pyro5
+, pyro5
 , requests
 , rich
 , setuptools
@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.6.5";
+  version = "1.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YCPMPkvMaZ0uzTiiCbXFDpgDS0yGlfF0wKK2HhYmH+Y=";
+    hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
   };
 
   propagatedBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     keyrings-alt
     packaging
     pathspec
-    Pyro5
+    pyro5
     requests
     rich
     setuptools
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

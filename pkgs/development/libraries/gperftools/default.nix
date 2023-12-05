@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace stdc++ c++
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
     "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/gperftools/gperftools";
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ vcunat ];
   };

@@ -2,42 +2,65 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
+, hatchling
+, hatch-vcs
+, gevent
 , pytestCheckHook
-, setuptools-scm
-, apipkg
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.9.0";
+  version = "2.0.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f694f3ba9cc92cab508b152dcfe322153975c29bda272e2fd7f3f00f36e47c5";
+    hash = "sha256-zFm8RCN0L9ca0icSLrDdRNtR77PcQJW0WsmgjHcAlq8=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ apipkg ];
-
-  # remove vbox tests
   postPatch = ''
-    rm -v testing/test_termination.py
-    rm -v testing/test_channel.py
-    rm -v testing/test_xspec.py
-    rm -v testing/test_gateway.py
-    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
+    # remove vbox tests
+    rm testing/test_termination.py
+    rm testing/test_channel.py
+    rm testing/test_xspec.py
+    rm testing/test_gateway.py
+  '' + lib.optionalString isPyPy ''
+    rm testing/test_multi.py
   '';
 
-  pythonImportsCheck = [ "execnet" ];
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
+  # sometimes crashes with: OSError: [Errno 9] Bad file descriptor
+  doCheck = !isPyPy;
+
+  nativeCheckInputs = [
+    gevent
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # gets stuck
+    "test_popen_io"
+    # OSError: [Errno 9] Bad file descriptor
+    "test_stdouterrin_setnull"
+  ];
+
+  pytestFlagsArray = [ "-vvv" ];
+
+  pythonImportsCheck = [
+    "execnet"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/pytest-dev/execnet/blob/v${version}/CHANGELOG.rst";
     description = "Distributed Python deployment and communication";
-    license = licenses.mit;
     homepage = "https://execnet.readthedocs.io/";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }

@@ -1,35 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+
+# build-system
+, setuptools
+, setuptools-scm
+, wheel
+
+# tests
 , glibcLocales
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.1.2";
-  format = "setuptools";
+  version = "2.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
+    hash = "sha256-4zkRqxjyxz/dvpvyFtAh504gstWqm+MEA8WPVRMbuKE=";
   };
 
-  # tests need to be able to set locale
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  postPatch = ''
+    sed -i '/addopts =/d' pyproject.toml
+  '';
 
-  # tests which assert on strings don't decode results correctly
-  doCheck = isPy3k;
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+  ];
+
+  env.LC_ALL = "en_US.UTF8";
+
+  disabledTestPaths = [
+    # expect call hangs
+    "urwid/tests/test_vterm.py"
+  ];
 
   pythonImportsCheck = [
     "urwid"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     description = "A full-featured console (xterm et al.) user interface library";
+    downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

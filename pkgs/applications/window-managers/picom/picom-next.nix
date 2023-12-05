@@ -1,14 +1,35 @@
-{ pcre, pcre2, picom, lib, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, libXinerama
+, pcre
+, pcre2
+, picom
+, xcbutil
+}:
 
-picom.overrideAttrs (oldAttrs: rec {
+picom.overrideAttrs (oldAttrs: {
   pname = "picom-next";
-  version = "unstable-2022-12-23";
-  buildInputs = [ pcre2 ] ++ lib.remove pcre oldAttrs.buildInputs;
+  version = "unstable-2023-08-03";
+
+  buildInputs = [
+    pcre2
+    xcbutil
+  ]
+  # remove dependencies that are not used anymore
+  ++ (lib.subtractLists [
+    libXinerama
+    pcre
+  ]
+    oldAttrs.buildInputs);
+
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
-    rev = "60ac2b64db78363fe04189cc734daea3d721d87e";
-    sha256 = "09s8kgczks01xbvg3qxqi2rz3lkzgdfyvhrj30mg6n11b6xfgi0d";
+    rev = "5d6957d3da1bf99311a676eab94c69ef4276bedf";
+    hash = "sha256-Mzf0533roLSODjMCPKyGSMbP7lIbT+PoLTZfoIBAI6g=";
   };
-  meta.maintainers = with lib.maintainers; oldAttrs.meta.maintainers ++ [ GKasparov ];
+
+  meta = oldAttrs.meta // {
+    maintainers = with lib.maintainers; oldAttrs.meta.maintainers ++ [ GKasparov ];
+  };
 })

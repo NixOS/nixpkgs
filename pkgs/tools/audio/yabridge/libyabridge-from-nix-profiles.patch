@@ -1,5 +1,5 @@
 diff --git a/src/chainloader/utils.cpp b/src/chainloader/utils.cpp
-index ccd65d33..c7136b37 100644
+index c43e5693..b8352adf 100644
 --- a/src/chainloader/utils.cpp
 +++ b/src/chainloader/utils.cpp
 @@ -29,8 +29,10 @@

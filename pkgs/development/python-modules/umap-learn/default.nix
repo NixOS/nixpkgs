@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , keras
 , numba
 , numpy
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.3";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = version;
-    hash = "sha256-S2+k7Ec4AxsN6d0GUGnU81oLnBgmlZp8OmUFCNaUJYw=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     keras
     pytestCheckHook
     tensorflow
@@ -64,6 +65,6 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

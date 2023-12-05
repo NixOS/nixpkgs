@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5hVsFanTCT/uLLXrnb2kMvmL6qs9RXVkvxdWaT6m4mk=";
   };
 
+  # fix reported version
+  patches = [ ./fix-version.patch ];
+
   cmakeFlags = [
     "-DCPP_JWT_USE_VENDORED_NLOHMANN_JSON=OFF"
     "-DCPP_JWT_BUILD_EXAMPLES=OFF"

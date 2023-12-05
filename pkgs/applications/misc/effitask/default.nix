@@ -5,21 +5,20 @@
 , openssl
 , gtk3
 , stdenv
-, rust
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "effitask";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "sanpii";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nZn+mINIqAnaCKZCiywG8/BOPx6TlSe0rKV/8gcW/B4=";
+    sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
-  cargoSha256 = "sha256-aCjZRJNsxx75ghK0N95Q9w0h5H5mW9/77j/fumDrvyM=";
+  cargoHash = "sha256-ScqDNfWMFT8a1HOPjpw4J8EBrVSusIkOYReYeArZvZ8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   # default installPhase don't install assets
   installPhase = ''
     runHook preInstall
-    make install PREFIX="$out" TARGET="target/${rust.toRustTarget stdenv.hostPlatform}/release/effitask"
+    make install PREFIX="$out" TARGET="target/${stdenv.hostPlatform.rust.rustcTarget}/release/effitask"
     runHook postInstall
   '';
 

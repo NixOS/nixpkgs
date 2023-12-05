@@ -1,24 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+}:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.10.8";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-D+hZWcywOCynGxMlJtsr5YaGxwRVGODNYO8jZROsGX8=";
+    hash = "sha256-Hy3QuwAHmZSsjy5A/1mrmrxdtle466HsQtDat3tYS8s=";
   };
 
-  vendorSha256 = "sha256-mNvie0PP0758AndWQ629oY4/aFGwiG358NhwYHSdxEU=";
+  vendorHash = "sha256-M7ogR1ya+sqlWVQpaXlvJy9YwhdM4XBDw8e2ZBPvEGY=";
 
   subPackages = [
-    # The server as a monolith: https://matrix-org.github.io/dendrite/installation/install/monolith
-    "cmd/dendrite-monolith-server"
-    # The server as a polylith: https://matrix-org.github.io/dendrite/installation/install/polylith
-    "cmd/dendrite-polylith-multi"
+    # The server
+    "cmd/dendrite"
     # admin tools
     "cmd/create-account"
     "cmd/generate-config"
@@ -31,10 +36,9 @@ buildGoModule rec {
     ## tech demos
     # "cmd/dendrite-demo-pinecone"
     # "cmd/dendrite-demo-yggdrasil"
-    # "cmd/dendritejs-pinecone"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];
@@ -47,8 +51,14 @@ buildGoModule rec {
     rm roomserver/internal/input/input_test.go
   '';
 
+  # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {

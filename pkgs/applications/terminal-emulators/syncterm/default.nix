@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     # error: unsupported option '-fsanitize=safe-stack' for target 'x86_64-apple-darwin'
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    # broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = true; # sendmsg.c:(.text+0x1099): undefined reference to `pthread_yield'
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
     maintainers = with maintainers; [ embr ];

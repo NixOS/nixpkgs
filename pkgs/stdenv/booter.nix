@@ -8,7 +8,7 @@
 # special snowflake due to different authors writing in different times.]
 #
 # The second goal is consistency across each stdenv's stage functions. By
-# writing each stage it terms of the previous stage, commonalities between them
+# writing each stage in terms of the previous stage, commonalities between them
 # are more easily observable. [Before, there usually was a big attribute set
 # with each stage, and stages would access the previous stage by name.]
 #

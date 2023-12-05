@@ -3,39 +3,41 @@
 , fetchFromGitHub
 , fetchurl
 , rustPlatform
+, cargo
 , pkg-config
 , dtc
 , glibc
 , openssl
 , libiconv
 , libkrunfw
+, rustc
 , Hypervisor
 , sevVariant ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "libkrun";
-  version = "1.4.8";
+  version = "1.5.1";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3oNsY91hgor1nZV10mcEZyEdhmHlozF8xXaCR4dvLYg=";
+    hash = "sha256-N9AkG+zkjQHNaaCVrEpMfWUN9bQNHjMA2xi5NUulF5A=";
   } else fetchurl {
     url = "https://github.com/containers/libkrun/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-eKjBUianpW4T8OeVwRSEyZFfDE10d3qogkPA4FUJ7rc=";
+    hash = "sha256-8hPbnZtDbiVdwBrtxt4nZ/QA2OFtui2VsQlaoOmWybo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-9v8UaBBpQDPZwHVurFJ1FaFMe6wywH3upKDjGcPYnuQ=";
+    hash = "sha256-nbtp7FP+ObVGfDOEzTt4Z7TZwcNlREczTKIAXGSflZU=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ] ++ lib.optional sevVariant pkg-config;
 
   buildInputs = [
@@ -61,5 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/libkrun";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
+    platforms = libkrunfw.meta.platforms;
+    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
   };
 }

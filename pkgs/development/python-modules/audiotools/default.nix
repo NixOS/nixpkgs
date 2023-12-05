@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "tuffy";
     repo = "python-audio-tools";
     rev = "v${version}";
-    sha256 = "sha256-y+EiK9BktyTWowOiJvOb2YjtbPa7R62Wb5zinkyt1OM=";
+    hash = "sha256-y+EiK9BktyTWowOiJvOb2YjtbPa7R62Wb5zinkyt1OM=";
   };
 
   meta = with lib; {
     description = "Utilities and Python modules for handling audio";
-    homepage = "http://audiotools.sourceforge.net/";
+    homepage = "https://audiotools.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

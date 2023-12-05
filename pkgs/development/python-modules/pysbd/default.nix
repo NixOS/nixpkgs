@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "12p7qm237z56hw4zr03n8rycgfymhki2m9c4w3ib0mvqq122a5dp";
   };
 
-  checkInputs = [ tqdm spacy ];
+  nativeCheckInputs = [ tqdm spacy ];
 
   doCheck = false; # requires pyconll and blingfire
 

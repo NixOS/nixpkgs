@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
-  kernelPackages = config.boot.kernelPackages;
+
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -25,6 +25,28 @@ let
     };
   };
 
+  finalImage = if cfg.imageModifications == "" then cfg.image else ( pkgs.callPackage (
+    { runCommandNoCC, squashfsTools }:
+
+    runCommandNoCC "${cfg.image.name}-modified.img" {
+      nativeBuildInputs = [
+        squashfsTools
+      ];
+    } ''
+      echo "-> Extracting Anbox root image..."
+      unsquashfs -dest rootfs ${cfg.image}
+
+      echo "-> Modifying Anbox root image..."
+      (
+      cd rootfs
+      ${cfg.imageModifications}
+      )
+
+      echo "-> Packing modified Anbox root image..."
+      mksquashfs rootfs $out -comp xz -no-xattrs -all-root
+    ''
+  ) { });
+
 in
 
 {
@@ -39,6 +61,18 @@ in
       type = types.package;
       description = lib.mdDoc ''
         Base android image for Anbox.
+      '';
+    };
+
+    imageModifications = mkOption {
+      default = "";
+      type = types.lines;
+      description = lib.mdDoc ''
+        Commands to edit the image filesystem.
+
+        This can be used to e.g. bundle a privileged F-Droid.
+
+        Commands are ran with PWD being at the root of the filesystem.
       '';
     };
 
@@ -67,16 +101,19 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
-      message = "Anbox needs user namespace support to work properly";
+      assertion = with config.boot.kernelPackages; kernelAtLeast "5.5" && kernelOlder "5.18";
+      message = "Anbox needs a kernel with binder and ashmem support";
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    services.udev.extraRules = ''
-      KERNEL=="ashmem", NAME="%k", MODE="0666"
-      KERNEL=="binder*", NAME="%k", MODE="0666"
-    '';
+    systemd.mounts = singleton {
+      requiredBy = [ "anbox-container-manager.service" ];
+      description = "Anbox Binder File System";
+      what = "binder";
+      where = "/dev/binderfs";
+      type = "binder";
+    };
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
@@ -86,6 +123,9 @@ in
       enable = true;
       internalInterfaces = [ "anbox0" ];
     };
+
+    # Ensures NetworkManager doesn't touch anbox0
+    networking.networkmanager.unmanaged = [ "anbox0" ];
 
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
@@ -121,12 +161,13 @@ in
         ExecStart = ''
           ${pkgs.anbox}/bin/anbox container-manager \
             --data-path=${anboxloc} \
-            --android-image=${cfg.image} \
+            --android-image=${finalImage} \
             --container-network-address=${cfg.ipv4.container.address} \
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
             --use-rootfs-overlay \
-            --privileged
+            --privileged \
+            --daemon
         '';
       };
     };

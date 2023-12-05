@@ -29,7 +29,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     patchShebangs .
@@ -45,7 +45,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
-    maintainers = [ maintainers.globin ];
+    maintainers = [ ];
     license = licenses.asl20;
     platforms = platforms.all;
     homepage = "https://www.qlcplus.org/";

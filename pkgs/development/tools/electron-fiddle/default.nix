@@ -1,12 +1,13 @@
-{ buildFHSUserEnv
-, electron_20
+{ buildFHSEnv
+, electron_24
 , fetchFromGitHub
 , fetchYarnDeps
+, fetchurl
 , fixup_yarn_lock
 , git
 , lib
 , makeDesktopItem
-, nodejs-16_x
+, nodejs_18
 , stdenvNoCC
 , util-linux
 , zip
@@ -14,21 +15,29 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.31.0";
-  electron = electron_20;
-  nodejs = nodejs-16_x;
+  version = "0.32.6";
+  electron = electron_24;
+  nodejs = nodejs_18;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     rev = "v${version}";
-    hash = "sha256-GueLG+RYFHi3PVVxBTtpTHhfjygcQ6ZCbrp5n5I1gBM=";
+    hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
+  };
+
+  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
+  # from the network and has no stable hash.  Grab an old version from
+  # the repository.
+  releasesJson = fetchurl {
+    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
+    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
   };
 
   inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-WVH1A0wtQl5nR1hvaL6mzm/7XBvo311FPKmsxB82e4U=";
+    hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
   };
 
   electronDummyMirror = "https://electron.invalid/";
@@ -52,9 +61,11 @@ let
       patchShebangs node_modules
 
       mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron}/lib/electron' "$TMPDIR/electron"
+      cp -ra '${electron}/libexec/electron' "$TMPDIR/electron"
       chmod -R u+w "$TMPDIR/electron"
       (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
+
+      ln -s ${releasesJson} static/releases.json
     '';
 
     buildPhase = ''
@@ -86,15 +97,17 @@ let
   };
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "electron-fiddle";
   runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     ln -s "${unwrapped}/share/icons/hicolor/scalable/apps/electron-fiddle.svg" "$out/share/icons/hicolor/scalable/apps/"
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications"/*.desktop "$out/share/applications/"
   '';
+
   targetPkgs = pkgs:
     with pkgs;
     map lib.getLib [

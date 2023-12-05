@@ -2,25 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, makeDesktopItem
 , atomicwrites
 , chardet
 , cloudpickle
 , cookiecutter
 , diff-match-patch
-, flake8
 , intervaltree
 , jedi
 , jellyfish
 , keyring
 , matplotlib
-, mccabe
 , nbconvert
 , numpy
 , numpydoc
 , psutil
 , pygments
-, pylint
 , pylint-venv
 , pyls-spyder
 , pyopengl
@@ -29,14 +25,13 @@
 , python-lsp-server
 , pyxdg
 , pyzmq
-, pycodestyle
 , qdarkstyle
 , qstylizer
 , qtawesome
 , qtconsole
 , qtpy
 , rope
-, Rtree
+, rtree
 , scipy
 , spyder-kernels
 , textdistance
@@ -46,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.4.1";
+  version = "5.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kQBOYRXhjz+OQk7Vlxb/UKiDi92mA8ialsFQ+QzqhlE=";
+    hash = "sha256-zjQmUmkqwtXNnZKssNpl24p4FQscZKGiiJj5iwYl2UM=";
   };
 
   patches = [
@@ -94,7 +89,7 @@ buildPythonPackage rec {
     qtconsole
     qtpy
     rope
-    Rtree
+    rtree
     scipy
     spyder-kernels
     textdistance
@@ -104,16 +99,6 @@ buildPythonPackage rec {
 
   # There is no test for spyder
   doCheck = false;
-
-  desktopItem = makeDesktopItem {
-    name = "Spyder";
-    exec = "spyder";
-    icon = "spyder";
-    comment = "Scientific Python Development Environment";
-    desktopName = "Spyder";
-    genericName = "Python IDE";
-    categories = [ "Development" "IDE" ];
-  };
 
   postPatch = ''
     # Remove dependency on pyqtwebengine
@@ -128,11 +113,6 @@ buildPythonPackage rec {
     # Add Python libs to env so Spyder subprocesses
     # created to run compute kernels don't fail with ImportErrors
     wrapProgram $out/bin/spyder --prefix PYTHONPATH : "$PYTHONPATH"
-
-    # Create desktop item
-    mkdir -p $out/share/icons
-    cp spyder/images/spyder.svg $out/share/icons
-    cp -r $desktopItem/share/applications/ $out/share
   '';
 
   dontWrapQtApps = true;

@@ -11,6 +11,10 @@ buildDunePackage rec {
     sha256 = "sha256-YCPhZCYx8I9njrVyWCCHnte7Wj/+53fN7evCjB+F+ts=";
   };
 
+  preBuild = ''
+    substituteInPlace src/dune --replace "bytes)" ")"
+  '';
+
   meta = {
     description = "Extensible Markdown library and tool in OCaml";
     homepage = "https://github.com/ocaml/omd";

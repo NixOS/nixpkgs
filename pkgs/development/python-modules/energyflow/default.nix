@@ -32,7 +32,7 @@ buildPythonPackage rec {
     wasserstein
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
   pytestFlagsArray = [

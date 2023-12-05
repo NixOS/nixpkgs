@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: .libs/autodetection.o:/build/gtkpod-2.1.5/libgtkpod/gtkpod_app_iface.h:248: multiple definition of
   #       `gtkpod_app'; .libs/gtkpod_app_iface.o:/build/gtkpod-2.1.5/libgtkpod/gtkpod_app_iface.h:248: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   enableParallelBuilding = true;
 
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.skeidel ];
+    maintainers = [ ];
   };
 }

@@ -67,10 +67,19 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.docker")
         (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
-        (onFullSupported "nixos.tests.firefox-esr")
-        (onFullSupported "nixos.tests.firefox")
+
+        # Way too many manual retries required on Hydra.
+        #  Apparently it's hard to track down the cause.
+        #  So let's depend just on the packages for now.
+        #(onFullSupported "nixos.tests.firefox-esr")
+        #(onFullSupported "nixos.tests.firefox")
+        # Note: only -unwrapped variants have a Hydra job.
+        (onFullSupported "nixpkgs.firefox-esr-unwrapped")
+        (onFullSupported "nixpkgs.firefox-unwrapped")
+
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
+        (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
@@ -88,6 +97,8 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.zfsroot")
+        (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-specialisations")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
@@ -100,7 +111,6 @@ in rec {
         (onFullSupported "nixos.tests.login")
         (onFullSupported "nixos.tests.misc")
         (onFullSupported "nixos.tests.mutableUsers")
-        (onFullSupported "nixos.tests.nat.firewall-conntrack")
         (onFullSupported "nixos.tests.nat.firewall")
         (onFullSupported "nixos.tests.nat.standalone")
         (onFullSupported "nixos.tests.networking.scripted.bond")
@@ -131,8 +141,7 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
-        #(onFullSupported "nixos.tests.nfs3.simple")
+        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
@@ -146,7 +155,8 @@ in rec {
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")
         (onFullSupported "nixos.tests.predictable-interface-names.unpredictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.unpredictable")
-        (onFullSupported "nixos.tests.printing")
+        (onFullSupported "nixos.tests.printing-service")
+        (onFullSupported "nixos.tests.printing-socket")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
         (onFullSupported "nixos.tests.shadow")
@@ -155,10 +165,14 @@ in rec {
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
-        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         ["nixpkgs.tarball"]
+
+        # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,
+        # so that a pre-built version can be used in CI for PR's on the corresponding development branches.
+        # See ../pkgs/test/nixpkgs-check-by-name/README.md
+        (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
       ];
     };
 }

@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
+, cargo
 , pkg-config
+, rustc
 , rustfmt
 , setuptools-rust
 , openssl
@@ -13,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "etebase";
-  version = "0.31.5";
+  version = "0.31.6";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
     rev = "v${version}";
-    hash = "sha256-87t3toMaApnOSPBKfTGGLo2VRLqU8irFac9lg3kA1eE=";
+    hash = "sha256-T61nPW3wjBRjmJ81w59T1b/Kxrwwqvyj3gILE9OF/5Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Qg0aJ6CZaPxGneIs4o402A+fhI/nlJ9X/XdMFqkD/YY=";
+    hash = "sha256-wrMNtcaLAsWBVeJbYbYo+Xmobl01lnUbR9NUqqUzUgU=";
   };
 
   format = "pyproject";
@@ -34,11 +36,10 @@ buildPythonPackage rec {
     pkg-config
     rustfmt
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 

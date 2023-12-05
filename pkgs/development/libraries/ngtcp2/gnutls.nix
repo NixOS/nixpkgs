@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.12.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    sha256 = "sha256-nUUbGNxr2pGiEoYbArHppNE29rki9SM/3MZWMS9HmqY=";
+    hash = "sha256-Z8rMujmshdes5SLU5GpXu6QzAHl957sFDK+QSdGYCOc=";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [ cunit ]
+  nativeCheckInputs = [ cunit ]
     ++ lib.optional stdenv.isDarwin ncurses;
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far

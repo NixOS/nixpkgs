@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.2";
+  version = "1.4.4.post2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
-    rev = version;
-    sha256 = "0hbpyns1j1fpvpj7gyb8cz359j7l4hzfqbig74xp4xih59sih0wj";
+    rev = "refs/tags/${version}";
+    hash = "sha256-iWKOxXtOBmszDBgeSHNY4a74D00p/9Pf7h/n+ohpTqs=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

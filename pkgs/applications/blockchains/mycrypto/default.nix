@@ -28,7 +28,7 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
-  multiPkgs = null; # no p32bit needed
+  multiArch = false; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''
@@ -49,6 +49,7 @@ in appimageTools.wrapType2 rec {
     homepage = "https://mycrypto.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = [ ];
+    mainProgram = "MyCrypto";
   };
 }

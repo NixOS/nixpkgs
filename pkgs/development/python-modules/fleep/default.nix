@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "floyernick";
     repo = "fleep-py";
     rev = "994bc2c274482d80ab13d89d8f7343eb316d3e44";
-    sha256 = "sha256-TaU7njx98nxkhZawGMFqWj4g+yCtIX9aPWQHoamzfMY=";
+    hash = "sha256-TaU7njx98nxkhZawGMFqWj4g+yCtIX9aPWQHoamzfMY=";
   };
 
   patches = [

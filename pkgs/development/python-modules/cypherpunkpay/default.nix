@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, APScheduler
+{ lib
+, stdenv
+, apscheduler
 , bitstring
+, buildPythonPackage
 , cffi
 , ecdsa
+, fetchFromGitHub
 , monero
+, poetry-core
 , pypng
 , pyqrcode
 , pyramid
-, pyramid_jinja2
+, pyramid-jinja2
 , pysocks
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , requests
 , tzlocal
 , waitress
-, yoyo-migrations
-, pytestCheckHook
-, pytest-cov
 , webtest
+, yoyo-migrations
 }:
 
 buildPythonPackage rec {
@@ -27,28 +28,31 @@ buildPythonPackage rec {
   version = "1.0.16";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
+    hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "bitstring = '^3.1.9'" "bitstring = '>=3.1.9'" \
-      --replace 'cffi = "1.15.0"' 'cffi = ">=1.15.0"' \
-      --replace 'ecdsa = "^0.17.0"' 'ecdsa = ">=0.17.0"' \
-      --replace 'pypng = "^0.0.20"' 'pypng = ">=0.0.20"' \
-      --replace 'tzlocal = "2.1"' 'tzlocal = ">=2.1"'
-  '';
+  pythonRelaxDeps = [
+    "bitstring"
+    "cffi"
+    "ecdsa"
+    "pypng"
+    "tzlocal"
+    "yoyo-migrations"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    APScheduler
+    apscheduler
     bitstring
     cffi
     ecdsa
@@ -56,7 +60,7 @@ buildPythonPackage rec {
     pypng
     pyqrcode
     pyramid
-    pyramid_jinja2
+    pyramid-jinja2
     pysocks
     requests
     tzlocal
@@ -64,10 +68,14 @@ buildPythonPackage rec {
     yoyo-migrations
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
     webtest
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -94,9 +102,14 @@ buildPythonPackage rec {
     "tests/acceptance/views_dummystore"
   ];
 
+  pythonImportsCheck = [
+    "cypherpunkpay"
+  ];
+
   meta = with lib; {
     description = "Modern self-hosted software for accepting Bitcoin";
-    homepage = "https://cypherpunkpay.org";
+    homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
+    changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ unlicense ];
     maintainers = with maintainers; [ prusnak ];
   };

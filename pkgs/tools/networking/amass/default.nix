@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.21.2";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    rev = "v${version}";
-    hash = "sha256-s5+l5LBDUPhKkP1+m0R2UXywBX0y+4FWtyYP5F7ccaQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lhvU2fUnjQ+D+EZDRircNg/np4Ynk+HzOBgxT1L8BaQ=";
   };
 
-  vendorHash = "sha256-Syi+znSXxjxfD9gqAyqhksWmxuNkwialWaem1NE5MKQ=";
+  vendorHash = "sha256-PdFIWK4yBh8Bb9mzYdU2h7pDPK8FZMhu8meTd9snP48=";
 
   outputs = [
     "out"

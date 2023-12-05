@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     autoSignDarwinBinariesHook
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   dontConfigure = true;
 
   buildPhase =
@@ -53,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Mixed Integer Linear Programming (MILP) solver";
-    homepage = "http://lpsolve.sourceforge.net";
+    homepage = "https://lpsolve.sourceforge.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
     platforms = platforms.unix;

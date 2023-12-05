@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gnupg-pkcs11 is a project to implement a BSD-licensed smart-card
     daemon to enable the use of PKCS#11 tokens with GnuPG.
     '';
-    homepage = "http://gnupg-pkcs11.sourceforge.net/";
+    homepage = "https://gnupg-pkcs11.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthiasbeyer philandstuff ];
     platforms = platforms.unix;

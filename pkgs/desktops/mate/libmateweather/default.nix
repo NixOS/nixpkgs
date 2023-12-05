@@ -3,6 +3,9 @@
 , fetchurl
 , pkg-config
 , gettext
+, glib
+, glib-networking
+, libxml2
 , gtk3
 , libsoup
 , tzdata
@@ -11,22 +14,31 @@
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.26.0";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05bvc220p135l6qnhh3qskljxffds0f7fjbjnrpq524w149rgzd7";
+    sha256 = "ylCoFYZlXPU6j5Z2a5zpCk0H7Q/hYr1eFdra3QBgx/Y=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     gettext
+    glib # glib-compile-schemas
+    libxml2 # xmllint
   ];
 
   buildInputs = [
-    gtk3
     libsoup
     tzdata
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    glib-networking # for obtaining IWIN forecast data
+    gtk3
   ];
 
   configureFlags = [

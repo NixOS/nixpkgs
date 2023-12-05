@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "r2pipe";
-  version = "1.7.4";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bmr9/iqlp5GghY6DOpFhBH3k69ErqR3DHx7iAu3m6f0=";
+    hash = "sha256-T1w4QG0KBPBekETd+nMNbvPF2mgBZgQ/jhWcP9694mg=";
   };
 
   # Tiny sanity check to make sure r2pipe finds radare2 (since r2pipe doesn't

@@ -211,7 +211,7 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
-    raw = mkOptionType rec {
+    raw = mkOptionType {
       name = "raw";
       description = "raw value";
       descriptionClass = "noun";
@@ -436,10 +436,12 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "" // {
-      name = "string";
-      deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
-    };
+    # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
+    string = lib.warn
+      "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
+      (separatedString "" // {
+        name = "string";
+      });
 
     passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
       name = "passwdEntry ${entryType.name}";
@@ -461,6 +463,7 @@ rec {
     # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
     # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
     #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
+    # If you don't need a *top-level* store path, consider using pathInStore instead.
     package = mkOptionType {
       name = "package";
       descriptionClass = "noun";
@@ -476,10 +479,26 @@ rec {
       check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
+    pkgs = addCheck
+      (unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs // {
+        name = "pkgs";
+        descriptionClass = "noun";
+        description = "Nixpkgs package set";
+      })
+      (x: (x._type or null) == "pkgs");
+
     path = mkOptionType {
       name = "path";
       descriptionClass = "noun";
       check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
+      merge = mergeEqualOption;
+    };
+
+    pathInStore = mkOptionType {
+      name = "pathInStore";
+      description = "path in the Nix store";
+      descriptionClass = "noun";
+      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
       merge = mergeEqualOption;
     };
 
@@ -696,6 +715,7 @@ rec {
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       , description ? null
+      , class ? null
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -707,7 +727,7 @@ rec {
         ) defs;
 
         base = evalModules {
-          inherit specialArgs;
+          inherit class specialArgs;
           modules = [{
             # This is a work-around for the fact that some sub-modules,
             # such as the one included in an attribute set, expects an "args"
@@ -762,9 +782,16 @@ rec {
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
-            inherit modules specialArgs shorthandOnlyDefinesConfig description;
+            inherit modules class specialArgs shorthandOnlyDefinesConfig description;
           };
           binOp = lhs: rhs: {
+            class =
+              # `or null` was added for backwards compatibility only. `class` is
+              # always set in the current version of the module system.
+              if lhs.class or null == null then rhs.class or null
+              else if rhs.class or null == null then lhs.class or null
+              else if lhs.class or null == rhs.class then lhs.class or null
+              else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =
               let intersecting = builtins.intersectAttrs lhs.specialArgs rhs.specialArgs;

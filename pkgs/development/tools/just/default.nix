@@ -6,25 +6,26 @@
 , bash
 , installShellFiles
 , libiconv
+, mdbook
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.11.0";
+  version = "1.16.0";
+  outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
-    rev = version;
-    hash = "sha256-TYw2YrilrEUCvyT9VvzrQnHcSnhPrNiAMRjLEk/QjgU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lXZCRoTVIguufyhHn7h4vAajG53qIn8AeDBZuha6be8=";
   };
 
-  cargoHash = "sha256-pgktCRxYlxo/kMdBm3/dzdU3rOXSNFY9IIE8j8Dgro0=";
+  cargoHash = "sha256-+r8fcoG23p7ug3xireAnUvJHiB/PXAUzBAKowGqKN8E=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty
@@ -44,13 +45,25 @@ rustPlatform.buildRustPackage rec {
     cp $TMPDIR/string.rs tests/string.rs
   '';
 
+  postBuild = ''
+    cargo run --package generate-book
+
+    # No linkcheck in sandbox
+    echo 'optional = true' >> book/en/book.toml
+    mdbook build book/en
+    find .
+  '';
+
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
     "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=choose::default" # symlinks cat->fzf which fails as coreutils doesn't understand name
   ];
 
   postInstall = ''
+    mkdir -p $doc/share/doc/$name
+    mv ./book/en/build/html $doc/share/doc/$name
     installManPage man/just.1
 
     installShellCompletion --cmd just \
@@ -59,11 +72,16 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/just.zsh
   '';
 
+  setupHook = ./setup-hook.sh;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk ];
+    maintainers = with maintainers; [ xrelkd jk adamcstephens ];
+    mainProgram = "just";
   };
 }

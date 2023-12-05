@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.1.3";
+  version = "1.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vvUZeKUewZl3cA/nuGrs6knIJYhPOBF1a3SjsVK7TjU=";
+    hash = "sha256-i+VJiG9e2kZDa25VWw5Ic7TxCqIcB99FxLwXNa+8zXo=";
   };
 
   buildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
 
   LC_ALL="en_US.UTF-8";
 

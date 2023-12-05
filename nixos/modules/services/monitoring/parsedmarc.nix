@@ -301,6 +301,7 @@ in
               description = lib.mdDoc ''
                 The addresses to send outgoing mail to.
               '';
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
             };
           };
 
@@ -409,7 +410,7 @@ in
 
       provision = {
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
-        datasources =
+        datasources.settings.datasources =
           let
             esVersion = lib.getVersion config.services.elasticsearch.package;
           in
@@ -435,7 +436,7 @@ in
                 };
               }
             ];
-        dashboards = lib.mkIf cfg.provision.grafana.dashboard [{
+        dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
           options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
         }];
@@ -539,8 +540,6 @@ in
     };
   };
 
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc parsedmarc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > parsedmarc.xml`
-  meta.doc = ./parsedmarc.xml;
+  meta.doc = ./parsedmarc.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

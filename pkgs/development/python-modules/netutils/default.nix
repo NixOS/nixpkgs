@@ -1,8 +1,10 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
+, jsonschema
+, napalm
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -12,23 +14,32 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.4.0";
-  format = "pyproject";
+  version = "1.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
+    repo = "netutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RT6KAliRlH285sEx2fbIXJNwe1gcyH6CrQ8pXKgY/hQ=";
+    hash = "sha256-ocajE7E4xIatEmv58/9gEpWF2plJdiZXjk6ajD2vTzw=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    jsonschema
+  ];
+
+  passthru.optional-dependencies.optionals = [
+    jsonschema
+    napalm
+  ];
+
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     pyyaml
@@ -44,8 +55,14 @@ buildPythonPackage rec {
     "test_is_fqdn_resolvable"
     "test_fqdn_to_ip"
     "test_tcp_ping"
-    # Skip SPhinx test
+    # Skip Sphinx test
     "test_sphinx_build"
+    # OSError: [Errno 22] Invalid argument
+    "test_compare_type5"
+    "test_encrypt_type5"
+    "test_compare_cisco_type5"
+    "test_get_napalm_getters_napalm_installed_default"
+    "test_encrypt_cisco_type5"
   ];
 
   meta = with lib; {

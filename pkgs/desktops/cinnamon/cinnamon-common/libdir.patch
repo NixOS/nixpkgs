@@ -17,6 +17,7 @@ index 3c1e9a4f..a77d9b3c 100644
  schemadir = join_paths(datadir, 'glib-2.0', 'schemas')
 -pkglibdir = join_paths(libdir, meson.project_name().to_lower())
 +pkglibdir = libdir
+ girdir = join_paths(datadir, 'gir-1.0')
  servicedir = join_paths(datadir, 'dbus-1', 'services')
  pkgdatadir = join_paths(datadir, meson.project_name().to_lower())
  po_dir = join_paths(meson.source_root(), 'po')

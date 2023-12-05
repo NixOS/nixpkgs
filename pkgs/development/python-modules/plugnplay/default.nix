@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "A Generic plug-in system for python applications";
     homepage = "https://github.com/daltonmatos/plugnplay";
     license = licenses.gpl2Only;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

@@ -1,55 +1,35 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
+, fetchpatch
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # Upstream is pinning releases incl. dependencies of their dependencies
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.31.0";
-        src = fetchFromGitHub {
-          owner = "jstasiak";
-          repo = "python-zeroconf";
-          rev = version;
-          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
-        };
-      });
-
-      PyChromecast = super.PyChromecast.overridePythonAttrs (oldAttrs: rec {
-        version = "9.2.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02ig2wf2yyrnnl88r2n13s1naskwsifwgx3syifmcxygflsmjd3d";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.7";
+  version = "0.12.11";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q9ePWRLwuuTG+oPKFg7xn1gj4uAVlXUxegWdyH3Yd90=";
+    hash = "sha256-0bqYYfWwF7yYoAbjZPhi/f4CLcL89imWGYaMi5Bwhtc=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      # set explicit build-system
+      url = "https://github.com/skorokithakis/catt/commit/08e7870a239e85badd30982556adc2aa8a8e4fc1.patch";
+      hash = "sha256-QH5uN3zQNVPP6Th2LHdDBF53WxwMhoyhhQUAZOeHh4k=";
+    })
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     click
     ifaddr
-    PyChromecast
+    pychromecast
     protobuf
     requests
     yt-dlp
@@ -66,5 +46,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "catt";
   };
 }

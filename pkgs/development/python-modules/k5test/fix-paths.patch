@@ -1,23 +1,21 @@
-diff --git a/k5test/_utils.py b/k5test/_utils.py
-index e289fac..e2f486a 100644
 --- a/k5test/_utils.py
 +++ b/k5test/_utils.py
-@@ -65,12 +65,12 @@ def find_plugin_dir():
+@@ -63,12 +63,12 @@ def find_plugin_dir():
  
      # if there was no LD_LIBRARY_PATH, or the above failed
      if _PLUGIN_DIR is None:
--        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib64')
-+        lib_dir = os.path.join(get_output('@krb5Dev@/bin/krb5-config --prefix'), 'lib64')
+-        lib_dir = os.path.join(get_output("krb5-config --prefix"), "lib64")
++        lib_dir = os.path.join(get_output("@krb5Dev@/bin/krb5-config --prefix"), "lib64")
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      # /usr/lib64 seems only to be distinct on Fedora/RHEL/Centos family
      if _PLUGIN_DIR is None:
--        lib_dir = os.path.join(get_output('krb5-config --prefix'), 'lib')
-+        lib_dir = os.path.join(get_output('@krb5Dev@/bin/krb5-config --prefix'), 'lib')
+-        lib_dir = os.path.join(get_output("krb5-config --prefix"), "lib")
++        lib_dir = os.path.join(get_output("@krb5Dev@/bin/krb5-config --prefix"), "lib")
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      if _PLUGIN_DIR is not None:
-@@ -89,7 +89,7 @@ def _decide_plugin_dir(dirs):
+@@ -87,7 +87,7 @@ def _decide_plugin_dir(dirs):
  
      for path in shortest_first:
          # check to see if it actually contains .so files
@@ -26,97 +24,93 @@ index e289fac..e2f486a 100644
              return path
  
      return None
-@@ -97,7 +97,7 @@ def _decide_plugin_dir(dirs):
- 
+@@ -96,7 +96,7 @@ def _decide_plugin_dir(dirs):
  def _find_plugin_dirs_installed(search_path):
      try:
--        options_raw = get_output('find %s/ -type d \( ! -executable -o ! -readable \) '
-+        options_raw = get_output('@findutils@/bin/find %s/ -type d \( ! -executable -o ! -readable \) '
-                                  '-prune -o '
-                                  '-type d -path "*/krb5/plugins" -print' % search_path,
-                                  stderr=subprocess.STDOUT)
+         options_raw = get_output(
+-            "find %s/ -type d \( ! -executable -o ! -readable \) "
++            "@findutils@/bin/find %s/ -type d \( ! -executable -o ! -readable \) "
+             "-prune -o "
+             '-type d -path "*/krb5/plugins" -print' % search_path,
+             stderr=subprocess.STDOUT,
 @@ -111,7 +111,7 @@ def _find_plugin_dirs_installed(search_path):
  
  
  def _find_plugin_dirs_src(search_path):
--    options_raw = get_output('find %s/../ -type d -name plugins' % search_path)
-+    options_raw = get_output('@findutils@/bin/find %s/../ -type d -name plugins' % search_path)
+-    options_raw = get_output("find %s/../ -type d -name plugins" % search_path)
++    options_raw = get_output("@findutils@/bin/find %s/../ -type d -name plugins" % search_path)
  
      if options_raw:
-         return options_raw.split('\n')
-diff --git a/k5test/realm.py b/k5test/realm.py
-index 161e5ad..9f50049 100644
+         return options_raw.split("\n")
 --- a/k5test/realm.py
 +++ b/k5test/realm.py
-@@ -90,7 +90,7 @@ class K5Realm(metaclass=abc.ABCMeta):
+@@ -84,7 +84,7 @@ class K5Realm(metaclass=abc.ABCMeta):
+         provider_cls = cls
  
          if provider_cls == K5Realm:
-             krb5_config = _discover_path('krb5-config',
--                                         '/usr/bin/krb5-config', kwargs)
-+                                         '@krb5@/bin/krb5-config', kwargs)
+-            krb5_config = _discover_path("krb5-config", "/usr/bin/krb5-config", kwargs)
++            krb5_config = _discover_path("krb5-config", "@krb5@/bin/krb5-config", kwargs)
  
              try:
                  krb5_version = subprocess.check_output(
-@@ -101,7 +101,7 @@ class K5Realm(metaclass=abc.ABCMeta):
+@@ -96,7 +96,7 @@ class K5Realm(metaclass=abc.ABCMeta):
+ 
                  # macOS output doesn't contain Heimdal
-                 if 'heimdal' in krb5_version.lower() or (
-                         sys.platform == 'darwin' and
--                        krb5_config == '/usr/bin/krb5-config'):
-+                        krb5_config == '@krb5@/bin/krb5-config'):
+                 if "heimdal" in krb5_version.lower() or (
+-                    sys.platform == "darwin" and krb5_config == "/usr/bin/krb5-config"
++                    sys.platform == "darwin" and krb5_config == "@krb5@/bin/krb5-config"
+                 ):
                      provider_cls = HeimdalRealm
                  else:
-                     provider_cls = MITRealm
-@@ -434,14 +434,14 @@ class MITRealm(K5Realm):
+@@ -457,14 +457,14 @@ class MITRealm(K5Realm):
      @property
      def _default_paths(self):
          return [
--            ('kdb5_util', 'kdb5_util', '/usr/sbin/kdb5_util'),
--            ('krb5kdc', 'krb5kdc', '/usr/sbin/kdb5kdc'),
--            ('kadmin', 'kadmin', '/usr/bin/admin'),
--            ('kadmin_local', 'kadmin.local', '/usr/sbin/kadmin.local'),
--            ('kadmind', 'kadmind', '/usr/sbin/kadmind'),
--            ('kprop', 'kprop', '/usr/sbin/kprop'),
--            ('_kinit', 'kinit', '/usr/bin/kinit'),
--            ('_klist', 'klist', '/usr/bin/klist'),
-+            ('kdb5_util', 'kdb5_util', '@krb5@/bin/kdb5_util'),
-+            ('krb5kdc', 'krb5kdc', '@krb5@/bin/kdb5kdc'),
-+            ('kadmin', 'kadmin', '@krb5@/bin/admin'),
-+            ('kadmin_local', 'kadmin.local', '@krb5@/bin/kadmin.local'),
-+            ('kadmind', 'kadmind', '@krb5@/bin/kadmind'),
-+            ('kprop', 'kprop', '@krb5@/bin/kprop'),
-+            ('_kinit', 'kinit', '@krb5@/bin/kinit'),
-+            ('_klist', 'klist', '@krb5@/bin/klist'),
+-            ("kdb5_util", "kdb5_util", "/usr/sbin/kdb5_util"),
+-            ("krb5kdc", "krb5kdc", "/usr/sbin/krb5kdc"),
+-            ("kadmin", "kadmin", "/usr/bin/kadmin"),
+-            ("kadmin_local", "kadmin.local", "/usr/sbin/kadmin.local"),
+-            ("kadmind", "kadmind", "/usr/sbin/kadmind"),
+-            ("kprop", "kprop", "/usr/sbin/kprop"),
+-            ("_kinit", "kinit", "/usr/bin/kinit"),
+-            ("_klist", "klist", "/usr/bin/klist"),
++            ("kdb5_util", "kdb5_util", "@krb5@/bin/kdb5_util"),
++            ("krb5kdc", "krb5kdc", "@krb5@/bin/krb5kdc"),
++            ("kadmin", "kadmin", "@krb5@/bin/kadmin"),
++            ("kadmin_local", "kadmin.local", "@krb5@/bin/kadmin.local"),
++            ("kadmind", "kadmind", "@krb5@/bin/kadmind"),
++            ("kprop", "kprop", "@krb5@/bin/kprop"),
++            ("_kinit", "kinit", "@krb5@/bin/kinit"),
++            ("_klist", "klist", "@krb5@/bin/klist"),
          ]
  
      @property
-@@ -585,12 +585,12 @@ class HeimdalRealm(K5Realm):
+@@ -625,12 +625,12 @@ class HeimdalRealm(K5Realm):
  
          return [
-             ('krb5kdc', 'kdc', os.path.join(base, 'kdc')),
--            ('kadmin', 'kadmin', '/usr/bin/kadmin'),
--            ('kadmin_local', 'kadmin', '/usr/bin/kadmin'),
-+            ('kadmin', 'kadmin', '@krb5@/bin/kadmin'),
-+            ('kadmin_local', 'kadmin', '@krb5@/bin/kadmin'),
-             ('kadmind', 'kadmind', os.path.join(base, 'kadmind')),
--            ('_kinit', 'kinit', '/usr/bin/kinit'),
--            ('_klist', 'klist', '/usr/bin/klist'),
--            ('_ktutil', 'ktutil', '/usr/bin/ktutil'),
-+            ('_kinit', 'kinit', '@krb5@/bin/kinit'),
-+            ('_klist', 'klist', '@krb5@/bin/klist'),
-+            ('_ktutil', 'ktutil', '@krb5@/bin/ktutil'),
+             ("krb5kdc", "kdc", os.path.join(base, "kdc")),
+-            ("kadmin", "kadmin", "/usr/bin/kadmin"),
+-            ("kadmin_local", "kadmin", "/usr/bin/kadmin"),
++            ("kadmin", "kadmin", "@krb5@/bin/kadmin"),
++            ("kadmin_local", "kadmin", "@krb5@/bin/kadmin"),
+             ("kadmind", "kadmind", os.path.join(base, "kadmind")),
+-            ("_kinit", "kinit", "/usr/bin/kinit"),
+-            ("_klist", "klist", "/usr/bin/klist"),
+-            ("_ktutil", "ktutil", "/usr/bin/ktutil"),
++            ("_kinit", "kinit", "@krb5@/bin/kinit"),
++            ("_klist", "klist", "@krb5@/bin/klist"),
++            ("_ktutil", "ktutil", "@krb5@/bin/ktutil"),
          ]
  
      @property
-diff --git a/k5test/unit.py b/k5test/unit.py
-index 3c64b9e..59da1ab 100644
 --- a/k5test/unit.py
 +++ b/k5test/unit.py
-@@ -38,7 +38,7 @@ _KRB_VERSION = None
+@@ -39,7 +39,7 @@ _KRB_VERSION = None
  def krb_minversion_test(target_version, problem, provider=None):
      global _KRB_VERSION
      if _KRB_VERSION is None:
 -        _KRB_VERSION = _utils.get_output("krb5-config --version")
 +        _KRB_VERSION = _utils.get_output("@krb5Dev@/bin/krb5-config --version")
-         _KRB_VERSION = _KRB_VERSION.split(' ')[-1].split('.')
+         _KRB_VERSION = _KRB_VERSION.split(" ")[-1].split(".")
  
      def make_ext_test(func):

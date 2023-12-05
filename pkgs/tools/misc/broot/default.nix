@@ -11,20 +11,22 @@
 , Security
 , xorg
 , zlib
+, buildPackages
+, withClipboard ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.19.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pg+eHmClDd04tWljQUS0IRyMzkHnkpkofuhz/KyQbWo=";
+    hash = "sha256-Wx+hUm0y7w0+IYtaRE5X/5Ra37mMEMEliYFbl7c03Ww=";
   };
 
-  cargoHash = "sha256-+RUYC39L7yyh1xYPfZn7tDIf1cmmBuGcqTNibFk7s6M=";
+  cargoHash = "sha256-7B5Uxr1SsAx+mRpvQPSW7pemxp11WngEIK6vF2cbzh4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
+
   RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
@@ -47,24 +51,20 @@ rustPlatform.buildRustPackage rec {
       --replace "#version" "${version}"
   '';
 
-  postInstall = ''
-    # Do not nag users about installing shell integration, since
-    # it is impure.
-    wrapProgram $out/bin/broot \
-      --set BR_INSTALL no
-
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
     # Install shell function for bash.
-    $out/bin/broot --print-shell-function bash > br.bash
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/broot --print-shell-function bash > br.bash
     install -Dm0444 -t $out/etc/profile.d br.bash
 
     # Install shell function for zsh.
-    $out/bin/broot --print-shell-function zsh > br.zsh
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/broot --print-shell-function zsh > br.zsh
     install -Dm0444 br.zsh $out/share/zsh/site-functions/br
 
     # Install shell function for fish
-    $out/bin/broot --print-shell-function fish > br.fish
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/broot --print-shell-function fish > br.fish
     install -Dm0444 -t $out/share/fish/vendor_functions.d br.fish
 
+  '' + ''
     # install shell completion files
     OUT_DIR=$releaseDir/build/broot-*/out
 
@@ -73,6 +73,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $OUT_DIR/{_br,_broot}
 
     installManPage man/broot.1
+
+    # Do not nag users about installing shell integration, since
+    # it is impure.
+    wrapProgram $out/bin/broot \
+      --set BR_INSTALL no
   '';
 
   doInstallCheck = true;
@@ -86,5 +91,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
+    mainProgram = "broot";
   };
 }

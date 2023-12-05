@@ -1,25 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "fira-go";
   version = "1.001";
-  user = "bBoxType";
-  repo = "FiraGo";
-  rev = "9882ba0851f88ab904dc237f250db1d45641f45d";
-in
-fetchzip {
-  name = "${pname}-${version}";
 
-  url = "https://github.com/${user}/${repo}/archive/${rev}.zip";
+  src = fetchzip {
+    url = "https://github.com/bBoxType/FiraGo/archive/9882ba0851f88ab904dc237f250db1d45641f45d.zip";
+    hash = "sha256-WwgPg7OLrXBjR6oHG5061RO3HeNkj2Izs6ktwIxVw9o=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
-    mv $out/Fonts/FiraGO_OTF_1001/{Roman,Italic}/*.otf \
+    mv Fonts/FiraGO_OTF_1001/{Roman,Italic}/*.otf \
       $out/share/fonts/opentype
-    rm -r $out/{Fonts,'Technical Report PDF',OFL.txt,README.md,*.pdf}
-  '';
 
-  sha256 = "sha256-MDGRba1eao/yVzSuncJ/nvCG8cpdrI4roVPI1G9qCbU=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://bboxtype.com/typefaces/FiraGO";

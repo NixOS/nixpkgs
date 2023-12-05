@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-xdist
     pytestCheckHook
     threat9-test-bed
@@ -52,5 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/threat9/routersploit";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "rsf";
   };
 }

@@ -1,46 +1,42 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap
 , extraArgs ? "" # arguments to always pass to steam
-, runtimeOnly ? false
-, runtimeShell
-, stdenv
-
-# DEPRECATED
-, withJava ? config.steam.java or false
-, withPrimus ? config.steam.primus or false
+, extraEnv ? { } # Environment variables to pass to Steam
+, withGameSpecificLibraries ? true # include game specific libraries
 }:
 
 let
-  commonTargetPkgs = pkgs: with pkgs;
-    [
-      # Needed for operating system detection until
-      # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
-      lsb-release
-      # Errors in output without those
-      pciutils
-      # Games' dependencies
-      xorg.xrandr
-      which
-      # Needed by gdialog, including in the steam-runtime
-      perl
-      # Open URLs
-      xdg-utils
-      iana-etc
-      # Steam Play / Proton
-      python3
-      # Steam VR
-      procps
-      usbutils
+  commonTargetPkgs = pkgs: with pkgs; [
+    # Needed for operating system detection until
+    # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
+    lsb-release
+    # Errors in output without those
+    pciutils
+    # Games' dependencies
+    xorg.xrandr
+    which
+    # Needed by gdialog, including in the steam-runtime
+    perl
+    # Open URLs
+    xdg-utils
+    iana-etc
+    # Steam Play / Proton
+    python3
+    # Steam VR
+    procps
+    usbutils
 
-      # electron based launchers need newer versions of these libraries than what runtime provides
-      mesa
-      sqlite
-    ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
-      ++ lib.optional withPrimus primus
-      ++ extraPkgs pkgs;
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
+
+    # electron based launchers need newer versions of these libraries than what runtime provides
+    mesa
+    sqlite
+  ] ++ extraPkgs pkgs;
 
   ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
@@ -61,11 +57,16 @@ let
     fi
   '';
 
-in buildFHSUserEnv rec {
+  envScript = lib.toShellVars extraEnv;
+
+in buildFHSEnv rec {
   name = "steam";
 
+  # Steam still needs 32bit and various native games do too
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
-    steamPackages.steam
+    steam
     # License agreement
     gnome.zenity
   ] ++ commonTargetPkgs pkgs;
@@ -80,58 +81,15 @@ in buildFHSUserEnv rec {
     xorg.libXfixes
     libGL
     libva
-    pipewire.lib
+    pipewire
 
     # steamwebhelper
     harfbuzz
     libthai
     pango
 
-    # Not formally in runtime but needed by some games
-    at-spi2-atk
-    at-spi2-core   # CrossCode
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-plugins-base
-    json-glib # paradox launcher (Stellaris)
-    libdrm
-    libxkbcommon # paradox launcher
-    libvorbis # Dead Cells
-    mono
-    xorg.xkeyboardconfig
-    xorg.libpciaccess
-    xorg.libXScrnSaver # Dead Cells
-    udev # shadow of the tomb raider
-    icu # dotnet runtime, e.g. stardew valley
-
-    # screeps dependencies
-    gtk3
-    dbus
-    zlib
-    atk
-    cairo
-    freetype
-    gdk-pixbuf
-    fontconfig
-
-    # friends options won't display "Launch Game" without it
-    lsof
-
-    # called by steam's setup.sh
-    file
-
-    # Prison Architect
-    libGLU
-    libuuid
-    libbsd
-    alsa-lib
-
-    # Loop Hero
-    libidn2
-    libpsl
-    nghttp2.lib
-    openssl_1_1
-    rtmpdump
+    lsof # friends options won't display "Launch Game" without it
+    file # called by steam's setup.sh
 
     # dependencies for mesa drivers, needed inside pressure-vessel
     mesa.llvmPackages.llvm.lib
@@ -143,11 +101,7 @@ in buildFHSUserEnv rec {
     xorg.libxshmfence
     xorg.libXxf86vm
     libelf
-
-    # Required
-    glib
-    gtk2
-    bzip2
+    (lib.getLib elfutils)
 
     # Without these it silently fails
     xorg.libXinerama
@@ -166,11 +120,13 @@ in buildFHSUserEnv rec {
     SDL2
     libusb1
     dbus-glib
+    gsettings-desktop-schemas
     ffmpeg
-    # Only libraries are needed from those two
     libudev0-shim
 
     # Verified games requirements
+    fontconfig
+    freetype
     xorg.libXt
     xorg.libXmu
     libogg
@@ -178,10 +134,19 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
+    libdrm
     libidn
     tbb
+    zlib
+
+    # SteamVR
+    udev
+    dbus
 
     # Other things from runtime
+    glib
+    gtk2
+    bzip2
     flac
     freeglut
     libjpeg
@@ -204,15 +169,65 @@ in buildFHSUserEnv rec {
     libcaca
     libcanberra
     libgcrypt
+    libunwind
     libvpx
     librsvg
     xorg.libXft
     libvdpau
+
+    # required by coreutils stuff to run correctly
+    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+    # very old versions of stuff from the runtime.
+    # FIXME: how do we even fix this correctly
+    attr
+  ] ++ lib.optionals withGameSpecificLibraries [
+    # Not formally in runtime but needed by some games
+    at-spi2-atk
+    at-spi2-core   # CrossCode
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-plugins-base
+    json-glib # paradox launcher (Stellaris)
+    libdrm
+    libxkbcommon # paradox launcher
+    libvorbis # Dead Cells
+    libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
+    mono
+    ncurses # Crusader Kings III
+    openssl
+    xorg.xkeyboardconfig
+    xorg.libpciaccess
+    xorg.libXScrnSaver # Dead Cells
+    icu # dotnet runtime, e.g. Stardew Valley
+
+    # screeps dependencies
+    gtk3
+    zlib
+    atk
+    cairo
+    freetype
+    gdk-pixbuf
+    fontconfig
+
+    # Prison Architect
+    libGLU
+    libuuid
+    libbsd
+    alsa-lib
+
+    # Loop Hero
+    # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
+    libidn2
+    libpsl
+    nghttp2.lib
+    rtmpdump
   ]
-  ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  # This needs to come from pkgs as the passed-in steam-runtime-wrapped may not be the same architecture
+  ++ pkgs.steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
-  extraInstallCommands = ''
+  extraInstallCommands = lib.optionalString (steam != null) ''
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
     ln -s ${steam}/share/pixmaps $out/share
@@ -238,8 +253,7 @@ in buildFHSUserEnv rec {
     export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
-  runScript = writeScript "steam-wrapper.sh" ''
-    #!${runtimeShell}
+  runScript = writeShellScript "steam-wrapper.sh" ''
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -259,30 +273,31 @@ in buildFHSUserEnv rec {
 
     ${exportLDPath}
     ${fixBootstrap}
+
+    set -o allexport # Export the following env vars
+    ${envScript}
     exec steam ${extraArgs} "$@"
   '';
 
-  inherit (steam) meta;
+  inherit extraBwrapArgs;
 
-  # allows for some gui applications to share IPC
-  # this fixes certain issues where they don't render correctly
-  unshareIpc = false;
+  meta =
+    if steam != null
+    then
+      steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
+        description = steam.meta.description + " (without game specific libraries)";
+      }
+    else {
+      description = "Steam dependencies (dummy package, do not use)";
+    };
 
-  # Some applications such as Natron need access to MIT-SHM or other
-  # shared memory mechanisms. Unsharing the pid namespace
-  # breaks the ability for application to reference shared memory.
-  unsharePid = false;
-
-  passthru.run = buildFHSUserEnv {
+  passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs profile extraInstallCommands;
+    inherit multiArch multiPkgs profile extraInstallCommands extraBwrapArgs;
 
-    inherit unshareIpc unsharePid;
-
-    runScript = writeScript "steam-run" ''
-      #!${runtimeShell}
+    runScript = writeShellScript "steam-run" ''
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2
@@ -292,11 +307,15 @@ in buildFHSUserEnv rec {
 
       ${exportLDPath}
       ${fixBootstrap}
+
+      set -o allexport # Export the following env vars
+      ${envScript}
       exec -- "$run" "$@"
     '';
 
-    meta = steam.meta // {
+    meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
+      mainProgram = "steam-run";
       name = "steam-run";
     };
   };

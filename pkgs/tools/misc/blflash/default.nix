@@ -2,21 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "blflash";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "spacemeowx2";
     repo = "blflash";
     rev = "v${version}";
-    sha256 = "sha256-hPScmivtugtZm848Itzg4Tb9rppZny+rKi3IBuUxxQY=";
+    hash = "sha256-lv5bUbq5AnZVeR8V0A4pamY9ZIQAhLmvZEr+CRMPcj0=";
   };
 
-  cargoSha256 = "sha256-/y3R8B2TOf8jeB9tcewoA9EGN6kj/EPMTjU6rfTF5Vc=";
+  cargoHash = "sha256-NRBW2rGrtEmmxONTpCM1D+o5HtnLjp175Sq9+aCp7ZE=";
 
   meta = with lib; {
     description = "An bl602 serial flasher written in Rust";
     homepage = "https://github.com/spacemeowx2/blflash";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "blflash";
   };
 }

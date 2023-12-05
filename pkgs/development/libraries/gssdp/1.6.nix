@@ -17,15 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.6.2";
+  version = "1.6.3";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QQs3be7O2YNrV/SI+ABS/koU+J4HWxzszyjlH0kPn7k=";
+    sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -47,14 +50,13 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=true"
     "-Dsniffer=false"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
 
-  postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+  postFixup = ''
     # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \

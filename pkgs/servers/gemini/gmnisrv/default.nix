@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-V9HXXYQIo3zeqZjJEn+dhemNg6AU+ee3FRmBmXgLuYQ=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+  ];
+
   postPatch = ''
     substituteInPlace config.sh \
       --replace "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"

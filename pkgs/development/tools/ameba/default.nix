@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, crystal }:
+{ lib, fetchFromGitHub, fetchpatch, crystal }:
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "1.0.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v${version}";
-    hash = "sha256-dvhGk6IbSV3pxtoIV7+0+qf47hz2TooPhsSwFd2+xkw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TdyEnTloaciSpkPmnm+OM75sz9jaCaQ3VoDEepfescU=";
   };
 
   format = "make";
@@ -16,6 +16,7 @@ crystal.buildCrystalPackage rec {
   meta = with lib; {
     description = "A static code analysis tool for Crystal";
     homepage = "https://crystal-ameba.github.io";
+    changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kimburgess ];
   };

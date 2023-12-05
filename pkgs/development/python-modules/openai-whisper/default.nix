@@ -3,16 +3,22 @@
 , buildPythonPackage
 , substituteAll
 
+# build-system
+, setuptools
+
 # runtime
-, ffmpeg
+, ffmpeg-headless
 
 # propagates
+, more-itertools
+, numba
 , numpy
+, openai-triton
+, scipy
+, tiktoken
 , torch
 , tqdm
-, more-itertools
 , transformers
-, ffmpeg-python
 
 # tests
 , pytestCheckHook
@@ -20,50 +26,60 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "unstable-2022-09-30";
-  format = "setuptools";
+  version = "20231117";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "60132ade70e00b843d93542fcb37b58c0d8bf9e7";
-    hash = "sha256-4mhlCvewA0bVo5bq2sbSEKHq99TQ6jUauiCUkdRSdas=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      inherit ffmpeg;
+      ffmpeg = ffmpeg-headless;
     })
   ];
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    more-itertools
+    numba
     numpy
+    openai-triton
+    scipy
+    tiktoken
     torch
     tqdm
-    more-itertools
     transformers
-    ffmpeg-python
   ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   disabledTests = [
     # requires network access to download models
     "test_transcribe"
+    # requires NVIDIA drivers
+    "test_dtw_cuda_equivalence"
+    "test_median_filter_equivalence"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa MayNiklas ];
   };
 }
-

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -8,40 +9,41 @@
 , vulkan-loader
 , shaderc
 , lcms2
-, libepoxy
 , libGL
 , xorg
 , libunwind
+, libdovi
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.208.0";
+  version = "5.264.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "161dp5781s74ca3gglaxlmchx7glyshf0wg43w98pl22n1jcm5qk";
+    hash = "sha256-YEefuEfJURi5/wswQKskA/J1UGzessQQkBpltJ0Spq8=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3Packages.Mako
+    vulkan-headers
+    python3Packages.jinja2
+    python3Packages.glad2
   ];
 
   buildInputs = [
-    vulkan-headers
     vulkan-loader
     shaderc
     lcms2
-    libepoxy
     libGL
     xorg.libX11
     libunwind
+    libdovi
   ];
 
   mesonFlags = [
@@ -52,6 +54,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace 'python_env.append' '#'
+  '';
 
   meta = with lib; {
     description = "Reusable library for GPU-accelerated video/image rendering primitives";

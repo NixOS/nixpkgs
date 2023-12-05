@@ -10,7 +10,7 @@ let
     inherit version;
 
     inherit src;
-    sourceRoot = "source/clang";
+    sourceRoot = "${src.name}/clang";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
@@ -19,7 +19,6 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
@@ -42,7 +41,7 @@ let
       # mis-compilation in firefox.
       # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
       ./revert-malloc-alignment-assumption.patch
-      ./add-nostdlibinc-flag.patch
+      ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
@@ -51,9 +50,6 @@ let
 
     postPatch = ''
       (cd tools && ln -s ../../clang-tools-extra extra)
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
@@ -70,12 +66,13 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
-      mkdir -p $python/bin $python/share/clang/
+      mkdir -p $python/bin $python/share/{clang,scan-view}
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 
@@ -84,8 +81,9 @@ let
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {

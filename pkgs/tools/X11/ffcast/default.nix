@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, perl
-, ffmpeg, imagemagick, xdpyinfo, xprop, xrectsel, xwininfo
+, ffmpeg-full, imagemagick, xdpyinfo, xprop, xrectsel, xwininfo
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postInstall = let
     binPath = lib.makeBinPath [
-      ffmpeg
+      ffmpeg-full
       imagemagick
       xdpyinfo
       xprop
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "ffcast";
   };
 }

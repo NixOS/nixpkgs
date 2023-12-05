@@ -254,7 +254,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # a cabal flag with '--flag=myflag'.
     developPackage =
       { root
-      , name ? if builtins.typeOf root == "path" then builtins.baseNameOf root else ""
+      , name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root)
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -281,8 +281,9 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # GHC is setup with a package database with all the specified Haskell packages.
     #
     # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
-    ghcWithPackages = self.callPackage ./with-packages-wrapper.nix {
+    ghcWithPackages = buildHaskellPackages.callPackage ./with-packages-wrapper.nix {
       haskellPackages = self;
+      inherit (self) hoogleWithPackages;
     };
 
 
@@ -624,4 +625,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         else pkg
       ) { };
 
+    /*
+      Modify given Haskell package to force GHC to employ the LLVM
+      codegen backend when compiling. Useful when working around bugs
+      in a native codegen backend GHC defaults to.
+
+      Example:
+        forceLlvmCodegenBackend tls
+
+      Type: drv -> drv
+    */
+    forceLlvmCodegenBackend = haskellLib.overrideCabal (drv: {
+      configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
+      buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    });
   }

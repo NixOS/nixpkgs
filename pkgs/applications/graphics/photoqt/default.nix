@@ -1,35 +1,75 @@
-{ mkDerivation, lib, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
-, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
-, extra-cmake-modules, poppler, kimageformats, libarchive}:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, qttools
+, wrapQtAppsHook
+, exiv2
+, graphicsmagick
+, kimageformats
+, libarchive
+, libraw
+, mpv
+, poppler
+, pugixml
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtmultimedia
+, qtquickcontrols
+, qtquickcontrols2
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "1.7.1";
+  version = "3.4";
 
   src = fetchurl {
-    url = "https://${pname}.org/pkgs/${pname}-${version}.tar.gz";
-    sha256 = "1qvxdh3cbjcywqx0da2qp8z092660qyzv5yknqbps2zr12qqb103";
+    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
+    hash = "sha256-kVf9+zI9rtEMmS0N4qrN673T/1fnqfcV3hQPnMXMLas=";
   };
 
-  patches = [
-    # Fixes build with exiv2 0.27.1
-    (fetchpatch {
-      url = "https://gitlab.com/luspi/photoqt/commit/c6fd41478e818f3a651d40f96cab3d790e1c09a4.patch";
-      sha256 = "1j2pdr7hm3js7lswhb4qkf9sj9viclhjqz50qxpyd7pqrl1gf2va";
-    })
+  postPatch = ''
+    # exiv2 0.28.1
+    substituteInPlace CMakeLists.txt \
+      --replace "exiv2lib" "exiv2"
+  ''
+  # error: no member named 'setlocale' in namespace 'std'; did you mean simply 'setlocale'?
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cplusplus/main.cpp \
+      --replace "std::setlocale" "setlocale"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    qttools
+    wrapQtAppsHook
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
-
   buildInputs = [
-    qtbase qtquickcontrols exiv2 graphicsmagick poppler
-    qtmultimedia qtdeclarative libraw qtgraphicaleffects
-    kimageformats libarchive
+    exiv2
+    graphicsmagick
+    kimageformats
+    libarchive
+    libraw
+    mpv
+    poppler
+    pugixml
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtmultimedia
+    qtquickcontrols
+    qtquickcontrols2
   ];
 
   cmakeFlags = [
-    "-DFREEIMAGE=OFF"
     "-DDEVIL=OFF"
+    "-DCHROMECAST=OFF"
+    "-DFREEIMAGE=OFF"
+    "-DIMAGEMAGICK=OFF"
   ];
 
   preConfigure = ''
@@ -37,9 +77,11 @@ mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://photoqt.org/";
     description = "Simple, yet powerful and good looking image viewer";
+    homepage = "https://photoqt.org/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "photoqt";
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
 }

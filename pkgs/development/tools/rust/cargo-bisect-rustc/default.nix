@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , pkg-config
 , openssl
@@ -13,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bisect-rustc";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9birF4HmyDZKmwuTb5K4AMmvZQFTmnhFGSxD5bS2qQ=";
+    hash = "sha256-1edBGjnVsMNoP06HAEERQJ6HCkk0dRKlnt1b8GnJWsY=";
   };
 
   patches =
@@ -38,22 +37,17 @@ rustPlatform.buildRustPackage rec {
             --subst-var libPath
         '';
     in
-    lib.optionals stdenv.isLinux [ patchelfPatch ] ++ [
-      (fetchpatch {
-        name = "fix-cli-date-bounds-checking.patch";
-        url = "https://github.com/rust-lang/cargo-bisect-rustc/commit/baffa98e1a1ae53f6f3605303e0d765015d9d3ae.patch";
-        hash = "sha256-IQlwQvaPUzPK5T4Mbsrdt7Ea3elaPCw2pBCCdBhjtzM=";
-      })
-    ];
+    lib.optionals stdenv.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
 
-  cargoHash = "sha256-7tqo8cxAzoDfTU372uW1qUhm+qqyRhz8bQ7oMiRU528=";
+  cargoHash = "sha256-HzqGSuobGuIuLwoAPQJ1d6xUO2VJ0rcjfOYz2wdIbCk=";
 
   checkFlags = [
     "--skip test_github"  # requires internet

@@ -3,39 +3,46 @@
 , pythonOlder
 , fetchPypi
 , sphinx
+, accessible-pygments
 , beautifulsoup4
 , docutils
 , packaging
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pydata-sphinx-theme";
-  version = "0.12.0";
+  version = "0.14.4";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version format;
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    sha256 = "sha256-wX26tno3dPBvNPY3jolvzQZozItdocG6AX5lzx3wr1g=";
+    hash = "sha256-rBUgH0wuLnBCsMrYswJRQzwfkr52Ldzv20rmiBHZGNk=";
   };
 
   propagatedBuildInputs = [
     sphinx
+    accessible-pygments
     beautifulsoup4
     docutils
     packaging
+    typing-extensions
   ];
 
-  pythonImportsCheck = [ "pydata_sphinx_theme" ];
+  pythonImportsCheck = [
+    "pydata_sphinx_theme"
+  ];
 
   meta = with lib; {
     description = "Bootstrap-based Sphinx theme from the PyData community";
     homepage = "https://github.com/pydata/pydata-sphinx-theme";
+    changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };

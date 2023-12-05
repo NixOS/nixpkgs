@@ -6,8 +6,7 @@ lib.throwIfNot (lib.versionAtLeast "4.12" ocaml.version)
 buildDunePackage rec {
   pname = "spacetime_lib";
   version = "0.3.0";
-
-  useDune2 = true;
+  duneVersion = "2";
 
   src = fetchFromGitHub {
     owner = "lpw25";
@@ -15,6 +14,8 @@ buildDunePackage rec {
     rev = version;
     sha256 = "0biisgbycr5v3nm5jp8i0h6vq76vzasdjkcgh8yr7fhxc81jgv3p";
   };
+
+  patches = [ ./spacetime.diff ];
 
   propagatedBuildInputs = [ owee ];
 

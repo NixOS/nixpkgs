@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "erosmb";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "viktor02";
     repo = "EroSmb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ThJwBKpxoTwHP84OlVKH62gQ3kfv83J8HNs5Mizi8Ck=";
+    hash = "sha256-9Zs5Z+3JiBiJkV9Ixl5pPmLv0dUT59CT0UkQDsmneWc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -44,5 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/viktor02/EroSmb/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "erosmb";
   };
 }

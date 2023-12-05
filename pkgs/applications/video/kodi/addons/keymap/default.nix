@@ -1,19 +1,25 @@
-{ lib, buildKodiAddon, fetchzip, defusedxml, kodi-six }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript, defusedxml, kodi-six }:
 
 buildKodiAddon rec {
   pname = "keymap";
   namespace = "script.keymap";
-  version = "1.1.3+matrix.1";
+  version = "1.1.5";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1icrailzpf60nw62xd0khqdp66dnr473m2aa9wzpmkk3qj1ay6jv";
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-wSztipTEGIqw1icsz+ziNxYuRZOFt3C66T1Ifap/ta0=";
   };
 
   propagatedBuildInputs = [
     defusedxml
     kodi-six
   ];
+
+  passthru = {
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.keymap";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/tamland/xbmc-keymap-editor";

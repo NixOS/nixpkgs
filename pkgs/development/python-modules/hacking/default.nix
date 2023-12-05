@@ -10,16 +10,15 @@
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "4.1.0";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fg19rlcky3n1y1ri61xyjp7534yzf8r102z9dw3zqg93f4kj20m";
+    hash = "sha256-YdeEb8G58m7CFnjpkHQmkJX5ZNe72M1kbrbIxML4jcE=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "flake8<3.9.0,>=3.8.0" "flake8"
+    sed -i 's/flake8.*/flake8/' requirements.txt
     substituteInPlace hacking/checks/python23.py \
       --replace 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
     substituteInPlace hacking/checks/except_checks.py \
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     flake8
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     stestr
     testscenarios

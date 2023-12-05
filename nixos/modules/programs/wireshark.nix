@@ -16,13 +16,8 @@ in {
           setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.wireshark-cli;
-        defaultText = literalExpression "pkgs.wireshark-cli";
-        description = lib.mdDoc ''
-          Which Wireshark package to install in the global environment.
-        '';
+      package = mkPackageOption pkgs "wireshark-cli" {
+        example = "wireshark";
       };
     };
   };
@@ -33,7 +28,7 @@ in {
 
     security.wrappers.dumpcap = {
       source = "${wireshark}/bin/dumpcap";
-      capabilities = "cap_net_raw+p";
+      capabilities = "cap_net_raw,cap_net_admin+eip";
       owner = "root";
       group = "wireshark";
       permissions = "u+rx,g+x";

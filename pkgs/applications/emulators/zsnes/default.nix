@@ -23,6 +23,11 @@ in stdenv.mkDerivation {
     sha256 = "1gy79d5wdaacph0cc1amw7mqm7i0716n6mvav16p1svi26iz193v";
   };
 
+  patches = [
+    ./zlib-1.3.patch
+    ./fortify3.patch
+  ];
+
   buildInputs = [ nasm SDL zlib libpng ncurses libGLU libGL ];
 
   prePatch = ''
@@ -35,7 +40,7 @@ in stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: initc.o:(.bss+0x28): multiple definition of `HacksDisable'; cfg.o:(.bss+0x59e3): first defined here
   # Use pre-c++17 standard (c++17 forbids throw annotations)
-  NIX_CFLAGS_COMPILE = "-fcommon -std=c++14";
+  env.NIX_CFLAGS_COMPILE = "-fcommon -std=c++14";
 
   preConfigure = ''
     cd src

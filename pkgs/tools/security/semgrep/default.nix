@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, callPackage
 , semgrep-core
 , buildPythonApplication
 , pythonPackages
@@ -11,21 +10,31 @@
 }:
 
 let
-  common = callPackage ./common.nix { };
+  common = import ./common.nix { inherit lib; };
 in
 buildPythonApplication rec {
   pname = "semgrep";
-  inherit (common) src version;
+  inherit (common) version;
+  src = fetchFromGitHub {
+    owner = "returntocorp";
+    repo = "semgrep";
+    rev = "v${version}";
+    hash = common.srcHash;
+  };
 
-  postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList (
-    path: submodule: ''
-      # substitute ${path}
-      # remove git submodule placeholder
-      rm -r ${path}
-      # link submodule
-      ln -s ${submodule}/ ${path}
-    ''
-  ) common.submodules)) + ''
+  # prepare a subset of the submodules as we only need a handful
+  # and there are many many submodules total
+  postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (
+      path: submodule: ''
+        # substitute ${path}
+        # remove git submodule placeholder
+        rm -r ${path}
+        # link submodule
+        ln -s ${submodule}/ ${path}
+      ''
+    )
+    passthru.submodulesSubset)) + ''
     cd cli
   '';
 
@@ -36,10 +45,8 @@ buildPythonApplication rec {
   SEMGREP_SKIP_BIN = true;
 
   pythonRelaxDeps = [
-    "attrs"
     "boltons"
-    "jsonschema"
-    "typing-extensions"
+    "glom"
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -50,6 +57,7 @@ buildPythonApplication rec {
     click-option-group
     glom
     requests
+    rich
     ruamel-yaml
     tqdm
     packaging
@@ -64,7 +72,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  checkInputs = [ git pytestCheckHook ] ++ (with pythonPackages; [
+  nativeCheckInputs = [ git pytestCheckHook ] ++ (with pythonPackages; [
     pytest-snapshot
     pytest-mock
     pytest-freezegun
@@ -94,12 +102,18 @@ buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ semgrep-core ]})
   '';
 
+  postInstall = ''
+    chmod +x $out/bin/{,py}semgrep
+  '';
+
   passthru = {
     inherit common;
+    submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;
     updateScript = ./update.sh;
   };
 
   meta = common.meta // {
     description = common.meta.description + " - cli";
+    inherit (semgrep-core.meta) platforms;
   };
 }

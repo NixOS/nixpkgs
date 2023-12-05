@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.9.7";
+  version = "6.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
-    rev = version;
-    sha256 = "sha256-Lx84jmgJz/J5MJtJyqDTVIbN6H63gD2rkJrdNeojd08=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/un/m4Br0Ylk00fS/U+QKeXwM1Ix5TFedaPhCyScWvs=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
     pytestCheckHook
     pyyaml
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for SendGrid";
     homepage = "https://github.com/sendgrid/sendgrid-python";
+    changelog = "https://github.com/sendgrid/sendgrid-python/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -2,20 +2,26 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "5.3.0";
+  version = "6.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-i+JngktUHAmwjbEkkX9Iq1JabD6DcBHzEweBoiTFcJA=";
+    hash = "sha256-7JFKseVsZy3h9cNIOWTmj3GzTkV5BLe3bga5Iq7AZ6g=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
+  '';
+
+  preCheck = ''
+    # avoid FileNotFoundError
+    # FileNotFoundError: [Errno 2] No such file or directory: 'cfgparser.3'
+    cd tests
   '';
 
   meta = with lib; {

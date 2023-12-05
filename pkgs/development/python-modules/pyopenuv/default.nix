@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
@@ -14,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2023.01.0";
-  format = "pyproject";
+  version = "2023.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyopenuv";
     rev = "refs/tags/${version}";
-    hash = "sha256-qPLfah35E0vX2tQhGw4wTSMyE4nIyWMDIaKlJePVSd4=";
+    hash = "sha256-qlyKLovM0h3iWvhGecaFPswnchZXPNkr0PbSqK2UW0c=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +34,10 @@ buildPythonPackage rec {
     backoff
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-asyncio
     pytest-aiohttp
     pytestCheckHook
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API to retrieve data from openuv.io";
     homepage = "https://github.com/bachya/pyopenuv";
+    changelog = "https://github.com/bachya/pyopenuv/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

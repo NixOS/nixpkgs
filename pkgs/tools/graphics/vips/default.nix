@@ -8,24 +8,23 @@
 , Foundation
 , python3
 , fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , gtk-doc
+, docbook-xsl-nons
 , gobject-introspection
   # Optional dependencies
 , libjpeg
 , libexif
 , librsvg
 , poppler
-, libgsf
 , libtiff
 , fftw
 , lcms2
-, libpng
+, libspng
 , libimagequant
 , imagemagick
 , pango
-, orc
 , matio
 , cfitsio
 , libwebp
@@ -34,19 +33,24 @@
 , libjxl
 , openslide
 , libheif
+, cgif
+, libarchive
+, libhwy
+, testers
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.13.3";
+  version = "8.15.0";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
-    rev = "v${version}";
-    sha256 = "sha256-JkG1f2SGLI6tSNlFJ//S37PXIo+L318Mej0bI7p/dVo=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-WfKq+maLcAXyjk1sq66wSU92ALv4MfRDPKe4Mki0KRQ=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -56,9 +60,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    gtk-doc
+    meson
+    ninja
+    docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtk-doc
   ];
 
   buildInputs = [
@@ -71,15 +78,13 @@ stdenv.mkDerivation rec {
     libexif
     librsvg
     poppler
-    libgsf
     libtiff
     fftw
     lcms2
-    libpng
+    libspng
     libimagequant
     imagemagick
     pango
-    orc
     matio
     cfitsio
     libwebp
@@ -88,6 +93,9 @@ stdenv.mkDerivation rec {
     libjxl
     openslide
     libheif
+    cgif
+    libarchive
+    libhwy
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -95,15 +103,37 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  mesonFlags = [
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ]
+  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
+  ;
+
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "vips --version";
+      };
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
+    };
+  };
 
   meta = with lib; {
-    homepage = "https://libvips.github.io/libvips/";
+    changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
+    homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ kovirobi ];
+    maintainers = with maintainers; [ kovirobi anthonyroussel ];
+    pkgConfigModules = [ "vips" "vips-cpp" ];
     platforms = platforms.unix;
+    mainProgram = "vips";
   };
-}
+})

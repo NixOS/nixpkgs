@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
-  version = "1.14.14";
+  version = "1.14.18";
 
   outputs = [ "out" "dev" ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "pupnp";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "sha256-LZFCfYz6MKMt0IDH22EbcmTRUXrrhQMaSjqAZH28nIQ=";
+    sha256 = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
   };
 
   nativeBuildInputs = [

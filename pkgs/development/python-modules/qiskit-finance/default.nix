@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-finance";
-  version = "0.3.3";
+  version = "0.3.4";
 
   disabled = pythonOlder "3.6";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1XM4gBuMsvjwU4GSdQJobMyyDFZOOTbwvnUPG0nXFoc=";
+    hash = "sha256-Ijoqn6nANLsEVKA5nycd1xbW5htJ+TQm6LkiMUWTsSs=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     yfinance
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
     ddt

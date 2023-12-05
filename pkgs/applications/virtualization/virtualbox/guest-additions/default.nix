@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "d456c559926f1a8fdd7259056e0a50f12339fd494122cf30db7736e2032970c6";
+    sha256 = "b37f6aabe5a32e8b96ccca01f37fb49f4fd06674f1b29bc8fe0f423ead37b917";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [ cdrkit ] ++ kernel.moduleBuildDependencies;

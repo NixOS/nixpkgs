@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
+    hash = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
   };
 
   disabled = !isPy3k;
@@ -45,12 +45,17 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     matplotlib
     pillow
     pytest
     pytest-astropy
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
+    "-W" "ignore::DeprecationWarning"
   ];
 
   # Tests must be run in the build directory. The tests create files

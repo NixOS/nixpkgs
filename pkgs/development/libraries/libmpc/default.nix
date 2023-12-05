@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmpc";
-  version = "1.2.1"; # to avoid clash with the MPD client
+  version = "1.3.1"; # to avoid clash with the MPD client
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
-    sha256 = "0n846hqfqvmsmim7qdlms0qr86f1hck19p12nq3g3z2x74n3sl0p";
+    sha256 = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
          built upon and follows the same principles as GNU MPFR.
       '';
 
-    homepage = "http://mpc.multiprecision.org/";
+    homepage = "https://www.multiprecision.org/mpc/";
     license = lib.licenses.lgpl2Plus;
 
     platforms = lib.platforms.all;

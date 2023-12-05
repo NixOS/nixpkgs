@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-security";
 
   buildInputs = [ bluez ];
 
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A small proof-of-concept application to find non discoverable bluetooth devices";
     homepage = "https://gitlab.com/kalilinux/packages/redfang";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

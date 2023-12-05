@@ -5,26 +5,28 @@
 , fetchPypi
 , oscrypto
 , pythonOlder
+, six
 , tqdm
 , unicrypto
 }:
 
 buildPythonPackage rec {
   pname = "minikerberos";
-  version = "0.3.5";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FjeMtf09I2EksVUwZ2UCndmmqqnyTvtgh58HSrqVShw=";
+    hash = "sha256-9VPK15GIPcG+UcyUinevKyEoom6mNA99NKL0XWd9G/M=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     asysocks
     oscrypto
+    six
     tqdm
     unicrypto
   ];

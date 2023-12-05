@@ -1,18 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+# Gomplate 3.x does not build with go > 1.20.
+# Version 4 of gomplate (yet unreleased) should not have this issue.
+#
+# see https://github.com/hairyhenderson/gomplate/issues/1872
 
-buildGoModule rec {
+{ lib
+#, buildGoModule
+, buildGo120Module
+, fetchFromGitHub
+}:
+
+# buildGoModule rec {
+buildGo120Module rec {
   pname = "gomplate";
-  version = "3.11.3";
-  owner = "hairyhenderson";
-  rev = "v${version}";
+  version = "3.11.6";
 
   src = fetchFromGitHub {
-    inherit owner rev;
+    owner = "hairyhenderson";
     repo = pname;
-    sha256 = "sha256-NvTwiGyBHhHiVHdWeXnJONNkHkrvsc1zmHPK8rSHaQw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IXNI+VkmW7k+Hkx2gv8OCpfAe4qJ3sH9KT/mO8y3JcU=";
   };
 
-  vendorSha256 = "sha256-BIcOErtlcnE70Mo6fjmA/btvSpw95RaKLqNWsgyJgpc=";
+  vendorHash = "sha256-DAtgebWwGBYioKTvW2qtzy+GPxYE2SuXIYpex6M85Vc=";
 
   postPatch = ''
     # some tests require network access
@@ -32,13 +41,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
+    "-X github.com/${src.owner}/${pname}/v3/version.Version=${version}"
   ];
 
   meta = with lib; {
     description = "A flexible commandline tool for template rendering";
     homepage = "https://gomplate.ca/";
-    maintainers = with maintainers; [ ris jlesquembre ];
+    changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ris jlesquembre ];
   };
 }

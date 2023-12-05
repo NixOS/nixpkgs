@@ -18,13 +18,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.27";
+  version = "2.0.10";
   pname = "pyglet";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TQDgZ0UfOxD9UbaXZP3atlRENyoto0TuKzXwqObr8AU=";
+    hash = "sha256-JCvrGzvWfFvr3+W6EexWtpathrUMbn8qMX+NeDJWuck=";
     extension = "zip";
   };
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   # tests do run and pass in nix-shell, however.
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

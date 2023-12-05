@@ -1,16 +1,21 @@
-{ lib, buildGoModule, fetchurl, nixosTests, openssl, pkg-config }:
+{ lib
+, buildGoModule
+, fetchurl
+, nixosTests
+, callPackage
+}:
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.17.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.24.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "12"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
 
-  # Kubo makes changes to it's source tarball that don't match the git source.
+  # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-Ls46Dds8lRP2KTOkjiVWtqB8aqPW5jdQ/xwBcQYIwbQ=";
+    hash = "sha256-stSjLvg8G1EiXon3Qby4wLgbhX7Aaj9pnxcvE32/42k=";
   };
 
   # tarball contains multiple files/directories
@@ -25,21 +30,20 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ipfs" ];
 
-  buildInputs = [ openssl ];
-  nativeBuildInputs = [ pkg-config ];
-  tags = [ "openssl" ];
+  passthru.tests = {
+    inherit (nixosTests) kubo;
+    repoVersion = callPackage ./test-repoVersion.nix {};
+  };
 
-  passthru.tests.kubo = nixosTests.kubo;
-
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
 
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
-      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
     substituteInPlace 'misc/systemd/ipfs-hardened.service' \
-      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
   '';
 
   postInstall = ''
@@ -53,11 +57,11 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A global, versioned, peer-to-peer filesystem";
+    description = "An IPFS implementation in Go";
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ Luflosi fpletz ];
   };
 }

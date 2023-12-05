@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           priority = 2000;
           shred = true;
         };
-        # using mail somewhere should add --mail to logrotate invokation
+        # using mail somewhere should add --mail to logrotate invocation
         sendmail = {
           mail = "user@domain.tld";
         };

@@ -24,9 +24,9 @@ python3.pkgs.buildPythonApplication rec {
     aiodns
     aiohttp
     appdirs
-    cchardet
     click
     colorama
+    faust-cchardet
     prompt-toolkit
     xpath-expressions
   ];

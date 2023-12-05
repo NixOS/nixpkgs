@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Simple library for merging two strings with respect to a base one";
     homepage = "https://github.com/spyder-ide/three-merge";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

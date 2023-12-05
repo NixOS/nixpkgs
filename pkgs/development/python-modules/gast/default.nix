@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "serge-sans-paille";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0y2bHT7YEfTvDxTm6yLl3GmnPUYEieoGEnwkzfA6mOg=";
+    hash = "sha256-0y2bHT7YEfTvDxTm6yLl3GmnPUYEieoGEnwkzfA6mOg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     astunparse
     pytestCheckHook
   ];

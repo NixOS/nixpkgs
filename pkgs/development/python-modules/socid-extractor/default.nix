@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "socid-extractor";
-  version = "0.0.23";
+  version = "0.0.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-tDKwYgW1vEyPzuouPGK9tdTf3vNr+UaosHtQe23srG0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3ht/wlxB40k4n0DTBGAvAl7yPiUIZqAe+ECbtkyMTzk=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # https://github.com/soxoj/socid-extractor/pull/125
+    # https://github.com/soxoj/socid-extractor/pull/150
     substituteInPlace requirements.txt \
-      --replace "beautifulsoup4~=4.10.0" "beautifulsoup4>=4.10.0"
+      --replace "beautifulsoup4~=4.11.1" "beautifulsoup4>=4.10.0"
   '';
 
   # Test require network access
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
+    changelog = "https://github.com/soxoj/socid-extractor/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

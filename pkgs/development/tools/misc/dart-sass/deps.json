@@ -1,0 +1,930 @@
+[
+  {
+    "name": "sass",
+    "version": "1.69.0",
+    "kind": "root",
+    "source": "root",
+    "dependencies": [
+      "args",
+      "async",
+      "charcode",
+      "cli_pkg",
+      "cli_repl",
+      "collection",
+      "http",
+      "js",
+      "meta",
+      "native_synchronization",
+      "node_interop",
+      "package_config",
+      "path",
+      "pool",
+      "protobuf",
+      "pub_semver",
+      "source_maps",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "stream_transform",
+      "string_scanner",
+      "term_glyph",
+      "typed_data",
+      "watcher",
+      "analyzer",
+      "archive",
+      "crypto",
+      "dart_style",
+      "dartdoc",
+      "grinder",
+      "node_preamble",
+      "lints",
+      "protoc_plugin",
+      "pub_api_client",
+      "pubspec_parse",
+      "test",
+      "test_descriptor",
+      "test_process",
+      "yaml",
+      "cli_util"
+    ]
+  },
+  {
+    "name": "cli_util",
+    "version": "0.4.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "path",
+    "version": "1.8.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "meta",
+    "version": "1.10.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "yaml",
+    "version": "3.1.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "string_scanner",
+    "version": "1.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_span",
+    "version": "1.10.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "path",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "term_glyph",
+    "version": "1.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "collection",
+    "version": "1.18.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "test_process",
+    "version": "2.1.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "path",
+      "test"
+    ]
+  },
+  {
+    "name": "test",
+    "version": "1.24.6",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "boolean_selector",
+      "collection",
+      "coverage",
+      "http_multi_server",
+      "io",
+      "js",
+      "matcher",
+      "node_preamble",
+      "package_config",
+      "path",
+      "pool",
+      "shelf",
+      "shelf_packages_handler",
+      "shelf_static",
+      "shelf_web_socket",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "test_api",
+      "test_core",
+      "typed_data",
+      "web_socket_channel",
+      "webkit_inspection_protocol",
+      "yaml"
+    ]
+  },
+  {
+    "name": "webkit_inspection_protocol",
+    "version": "1.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "logging"
+    ]
+  },
+  {
+    "name": "logging",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "web_socket_channel",
+    "version": "2.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "crypto",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "stream_channel",
+    "version": "2.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "async",
+    "version": "2.11.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "crypto",
+    "version": "3.0.3",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "typed_data",
+    "version": "1.3.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "test_core",
+    "version": "0.5.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "args",
+      "async",
+      "boolean_selector",
+      "collection",
+      "coverage",
+      "frontend_server_client",
+      "glob",
+      "io",
+      "meta",
+      "package_config",
+      "path",
+      "pool",
+      "source_map_stack_trace",
+      "source_maps",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "test_api",
+      "vm_service",
+      "yaml"
+    ]
+  },
+  {
+    "name": "vm_service",
+    "version": "11.10.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "test_api",
+    "version": "0.6.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "source_maps",
+    "version": "0.10.12",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_map_stack_trace",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "source_maps",
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "pool",
+    "version": "1.5.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "package_config",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "io",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "glob",
+    "version": "2.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "file",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "file",
+    "version": "7.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "frontend_server_client",
+    "version": "3.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "coverage",
+    "version": "1.6.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "logging",
+      "package_config",
+      "path",
+      "source_maps",
+      "stack_trace",
+      "vm_service"
+    ]
+  },
+  {
+    "name": "args",
+    "version": "2.4.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "analyzer",
+    "version": "5.13.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "_fe_analyzer_shared",
+      "collection",
+      "convert",
+      "crypto",
+      "glob",
+      "meta",
+      "package_config",
+      "path",
+      "pub_semver",
+      "source_span",
+      "watcher",
+      "yaml"
+    ]
+  },
+  {
+    "name": "watcher",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "pub_semver",
+    "version": "2.1.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "convert",
+    "version": "3.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "_fe_analyzer_shared",
+    "version": "61.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "shelf_web_socket",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "shelf",
+      "stream_channel",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "shelf",
+    "version": "1.4.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "http_parser",
+      "path",
+      "stack_trace",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "http_parser",
+    "version": "4.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner",
+      "typed_data"
+    ]
+  },
+  {
+    "name": "shelf_static",
+    "version": "1.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "convert",
+      "http_parser",
+      "mime",
+      "path",
+      "shelf"
+    ]
+  },
+  {
+    "name": "mime",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "shelf_packages_handler",
+    "version": "3.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "shelf",
+      "shelf_static"
+    ]
+  },
+  {
+    "name": "node_preamble",
+    "version": "2.0.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
+    "name": "js",
+    "version": "0.6.7",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "http_multi_server",
+    "version": "3.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "test_descriptor",
+    "version": "2.0.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "matcher",
+      "meta",
+      "path",
+      "term_glyph",
+      "test"
+    ]
+  },
+  {
+    "name": "pubspec_parse",
+    "version": "1.2.3",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "checked_yaml",
+      "collection",
+      "json_annotation",
+      "pub_semver",
+      "yaml"
+    ]
+  },
+  {
+    "name": "json_annotation",
+    "version": "4.8.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "checked_yaml",
+    "version": "2.0.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "json_annotation",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "pub_api_client",
+    "version": "2.6.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "http",
+      "oauth2",
+      "path",
+      "pubspec"
+    ]
+  },
+  {
+    "name": "pubspec",
+    "version": "2.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "pub_semver",
+      "yaml",
+      "uri"
+    ]
+  },
+  {
+    "name": "uri",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher",
+      "quiver"
+    ]
+  },
+  {
+    "name": "quiver",
+    "version": "3.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher"
+    ]
+  },
+  {
+    "name": "oauth2",
+    "version": "2.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "crypto",
+      "http",
+      "http_parser"
+    ]
+  },
+  {
+    "name": "http",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "http_parser",
+      "meta"
+    ]
+  },
+  {
+    "name": "protoc_plugin",
+    "version": "21.1.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "fixnum",
+      "path",
+      "protobuf"
+    ]
+  },
+  {
+    "name": "protobuf",
+    "version": "3.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "fixnum",
+      "meta"
+    ]
+  },
+  {
+    "name": "fixnum",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "lints",
+    "version": "2.1.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "grinder",
+    "version": "0.9.4",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "cli_util",
+      "glob",
+      "meta",
+      "path",
+      "collection"
+    ]
+  },
+  {
+    "name": "dartdoc",
+    "version": "6.3.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "args",
+      "cli_util",
+      "collection",
+      "crypto",
+      "glob",
+      "html",
+      "logging",
+      "markdown",
+      "meta",
+      "package_config",
+      "path",
+      "pub_semver",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "markdown",
+    "version": "7.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta"
+    ]
+  },
+  {
+    "name": "html",
+    "version": "0.15.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "csslib",
+      "source_span"
+    ]
+  },
+  {
+    "name": "csslib",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "dart_style",
+    "version": "2.3.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "args",
+      "path",
+      "pub_semver",
+      "source_span"
+    ]
+  },
+  {
+    "name": "archive",
+    "version": "3.3.9",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "crypto",
+      "path",
+      "pointycastle"
+    ]
+  },
+  {
+    "name": "pointycastle",
+    "version": "3.7.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "convert",
+      "js"
+    ]
+  },
+  {
+    "name": "stream_transform",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "node_interop",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "js"
+    ]
+  },
+  {
+    "name": "native_synchronization",
+    "version": "0.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "ffi"
+    ]
+  },
+  {
+    "name": "ffi",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "cli_repl",
+    "version": "0.2.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "js"
+    ]
+  },
+  {
+    "name": "cli_pkg",
+    "version": "2.5.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "archive",
+      "async",
+      "charcode",
+      "cli_util",
+      "collection",
+      "crypto",
+      "glob",
+      "grinder",
+      "http",
+      "js",
+      "meta",
+      "node_interop",
+      "node_preamble",
+      "package_config",
+      "path",
+      "pool",
+      "pub_semver",
+      "pubspec_parse",
+      "retry",
+      "string_scanner",
+      "test",
+      "test_process",
+      "xml",
+      "yaml"
+    ]
+  },
+  {
+    "name": "xml",
+    "version": "6.4.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "petitparser"
+    ]
+  },
+  {
+    "name": "petitparser",
+    "version": "6.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "retry",
+    "version": "3.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "charcode",
+    "version": "1.3.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  }
+]

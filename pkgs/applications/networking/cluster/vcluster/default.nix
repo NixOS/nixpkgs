@@ -1,23 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.12.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PkayQ1sLjnA+1Xatgs0EvZTCTfWV5uoYYtnKX8OAwYQ=";
+    hash = "sha256-xmSp3cNqNv48gBWpt0Pnvl3l5gIyV1oPNGrB58X+OVU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/vclusterctl" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s" "-w"
+    "-X main.version=${version}"
+    "-X main.goVersion=${lib.getVersion go}"
+  ];
 
   # Test is disabled because e2e tests expect k8s.
   doCheck = false;
@@ -40,6 +44,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk berryp ];
+    maintainers = with maintainers; [ peterromfeldhk berryp qjoly ];
   };
 }

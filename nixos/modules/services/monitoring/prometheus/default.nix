@@ -31,7 +31,7 @@ let
     if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package ]; } ''
+        { nativeBuildInputs = [ cfg.package.cli ]; } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
@@ -1408,7 +1408,7 @@ let
       '';
 
       action =
-        mkDefOpt (types.enum [ "replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
+        mkDefOpt (types.enum [ "replace" "lowercase" "uppercase" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
           Action to perform based on regex matching.
         '';
     };
@@ -1564,14 +1564,7 @@ in
 
     enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.prometheus;
-      defaultText = literalExpression "pkgs.prometheus";
-      description = lib.mdDoc ''
-        The prometheus package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "prometheus" { };
 
     port = mkOption {
       type = types.port;
@@ -1614,7 +1607,7 @@ in
 
         The following property holds: switching to a configuration
         (`switch-to-configuration`) that changes the prometheus
-        configuration only finishes successully when prometheus has finished
+        configuration only finishes successfully when prometheus has finished
         loading the new configuration.
       '';
     };

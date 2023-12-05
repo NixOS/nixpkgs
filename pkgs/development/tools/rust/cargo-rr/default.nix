@@ -1,29 +1,26 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, gitUpdater
-, common-updater-scripts
+, nix-update-script
 , makeWrapper
 , rr
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rr";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lQS+bp1u79iO8WGrkZSFEuonr1eYjxIQYhUvM/kBao4";
+    sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
   };
 
-  cargoSha256 = "sha256-PdKqWMxTtBJbNqITs3IjNcpijXy6MHitEY4jDp4jZro=";
+  cargoSha256 = "sha256-P4r4XRolORdSGAsNg5RutZ2VVRR8rAfiBZNm+vIH3aM=";
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with maintainers; [ otavio matthiasbeyer ];
   };
 }

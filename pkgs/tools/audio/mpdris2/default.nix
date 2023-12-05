@@ -13,7 +13,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
   version = "0.9.1";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
@@ -51,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    mainProgram = "mpDris2";
   };
 }

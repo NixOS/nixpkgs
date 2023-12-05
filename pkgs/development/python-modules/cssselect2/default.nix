@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W11t6oGl6wyco58RbIV43UE3eAYMlMH1EZY3FhiQkyU=";
+    hash = "sha256-HM2YTauJ/GiVUEOspOGwPgzynK2YgPbijjunp0sUqlo=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tinycss2 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cssselect2" ];
 

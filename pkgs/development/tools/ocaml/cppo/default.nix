@@ -23,7 +23,7 @@ buildDunePackage rec {
   inherit pname;
   version = "1.6.9";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
@@ -52,7 +52,9 @@ stdenv.mkDerivation {
     sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
 
   inherit meta;
 

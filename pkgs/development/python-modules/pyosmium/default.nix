@@ -1,28 +1,67 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, python
-, libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, shapely, pythonOlder, isPyPy, lz4, requests, pytestCheckHook
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libosmium
+, protozero
+, boost
+, expat
+, bzip2
+, zlib
+, pybind11
+, shapely
+, pythonOlder
+, isPyPy
+, lz4
+, requests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.5.0";
+  version = "3.6.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.4" || isPyPy;
+  disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dumTyca1nLPa6B3p5fmUGWa6jReHOeFPc9heTz/2zao=";
+    hash = "sha256-+YJQGPQm2FGOPhNzlXX2GM+ad4QdipJhwViOKGHtqBk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libosmium protozero boost expat bzip2 zlib pybind11 lz4 ];
-  propagatedBuildInputs = [ requests ];
+  patches = [
+    # Compatibility with recent pybind versions
+    (fetchpatch {
+      url = "https://github.com/osmcode/pyosmium/commit/31b1363389b423f49e14140ce868ecac83e92f69.patch";
+      hash = "sha256-maBuwzyZ4/wVLLGVr4gZFZDKvJckUXiBluxZRPGETag=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libosmium
+    protozero
+    boost
+    expat
+    bzip2
+    zlib
+    pybind11
+    lz4
+  ];
+
+  propagatedBuildInputs = [
+    requests
+  ];
 
   preBuild = "cd ..";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     shapely
   ];

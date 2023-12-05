@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
-    btchip
+    btchip-python
     ckcc-protocol
     keepkey
     trezor
@@ -109,7 +109,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum-ltc
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 

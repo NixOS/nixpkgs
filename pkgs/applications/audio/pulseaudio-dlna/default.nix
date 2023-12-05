@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication {
     notify2
     pyroute2
     pygobject3
-    PyChromecast
+    pychromecast
     lxml
     setuptools
     zeroconf

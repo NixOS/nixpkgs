@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.18.0";
+  version = "0.19.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-UgD9ulJtRlNuux80FQhgLYjJ6OsyWXZCBGY9qdmd9Jk=";
+    sha256 = "sha256-jTyKz9ZvA9xJlDQXv2LHrSMeSDbh4AJBxi1WtqUhjgE=";
   };
 
-  cargoSha256 = "sha256-z5+71I/q1+vz2CPAU06yjRSjpKyT6npjPi48lu21NZs=";
+  cargoSha256 = "sha256-D0H8vChCzBCRjC/S/ceJbuNNAXISiFMZtgu8TMfic+0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

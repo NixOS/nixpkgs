@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
-  version = "1.1.26";
+  version = "1.1.35";
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bXptf1ALanzDyhajQtKMs/0M9TWlrjhWQdC1NZiUgd8=";
+    sha256 = "sha256-GinEbclpIXMwry2J7Ny20S8G99mPgNLse2rs/IpfWoU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     glib
     libglibutil
   ];
+
+  postPatch = ''
+    # Fix pkg-config and ranlib names for cross-compilation
+    substituteInPlace Makefile \
+      --replace "pkg-config" "$PKG_CONFIG" \
+      --replace "ranlib" "$RANLIB"
+  '';
 
   makeFlags = [
     "LIBDIR=$(out)/lib"
@@ -35,11 +42,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s@Cflags: @Cflags: $($PKG_CONFIG --cflags libglibutil) @g" $dev/lib/pkgconfig/$pname.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GLib-style interface to binder";
     homepage = "https://github.com/mer-hybris/libgbinder";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

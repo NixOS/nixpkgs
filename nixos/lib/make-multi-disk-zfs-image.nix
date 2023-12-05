@@ -73,6 +73,9 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Guest memory size
+  memSize ? 1024
+
 , name ? "nixos-disk-image"
 
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
@@ -242,6 +245,7 @@ let
       {
         QEMU_OPTS = "-drive file=$bootDiskImage,if=virtio,cache=unsafe,werror=report"
          + " -drive file=$rootDiskImage,if=virtio,cache=unsafe,werror=report";
+         inherit memSize;
         preVM = ''
           PATH=$PATH:${pkgs.qemu_kvm}/bin
           mkdir $out
@@ -257,8 +261,8 @@ let
           mv $bootDiskImage $out/${bootFilename}
           mv $rootDiskImage $out/${rootFilename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+          ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
+          ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
         ''}
           bootDiskImage=$out/${bootFilename}
           rootDiskImage=$out/${rootFilename}

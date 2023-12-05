@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "strenum";
-  version = "0.4.9";
+  version = "0.4.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "irgeek";
     repo = "StrEnum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tElXpwyjrgTw9eHqGPgXakY+G9JXkBQYG7jSZSjv6P0=";
+    hash = "sha256-LrDLIWiV/zIbl7CwKh7DAy4LoLyY7+hfUu8nqduclnA=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace " --cov=strenum --cov-report term-missing --black --pylint" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

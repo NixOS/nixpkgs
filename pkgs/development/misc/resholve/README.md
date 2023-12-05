@@ -44,7 +44,6 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 { lib
 , fetchFromGitHub
 , resholve
-, substituteAll
 , bash
 , coreutils
 , goss
@@ -53,13 +52,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.18";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "aelsabbahy";
+    owner = "goss-org";
     repo = "goss";
-    rev = "v${version}";
-    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dpMTUBMEG5tDi7E6ZRg1KHqIj5qDlvwfwJEgq/5z7RE=";
   };
 
   dontConfigure = true;
@@ -82,11 +81,12 @@ resholve.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/aelsabbahy/goss/blob/v${version}/extras/dgoss/README.md";
+    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual ];
+    maintainers = with maintainers; [ hyzual anthonyroussel ];
   };
 }
 ```
@@ -154,7 +154,7 @@ that the `resholve` CLI expects. Here's an overview:
 |--------|------|------------|
 | scripts | `<list>` | scripts to resolve (`$out`-relative paths) |
 | interpreter | `"none"` `<path>` | The absolute interpreter `<path>` for the script's shebang. The special value `none` ensures there is no shebang. |
-| inputs | `<packages>` | Packages to resolve external dependencies from. |
+| inputs | `<packages>` `<paths>` | A list of packages and string paths to directories/files to resolve external dependencies from. |
 | fake | `<directives>` | pretend some commands exist |
 | fix | `<directives>` | fix things we can't auto-fix/ignore |
 | keep | `<directives>` | keep things we can't auto-fix/ignore |
@@ -192,7 +192,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve`.
+> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:
@@ -204,7 +204,7 @@ more copies of their specification/behavior than I like, and continuing to
 add more at this early date will only ensure that I spend more time updating
 docs and less time filling in feature gaps.
 
-Full documentation may be greatly accellerated if someone can help me sort out
+Full documentation may be greatly accelerated if someone can help me sort out
 single-sourcing. See: https://github.com/abathur/resholve/issues/19
 -->
 
@@ -252,8 +252,23 @@ with some rules (internal to resholve) for locating sub-executions in
 some of the more common commands.
 
 - "execer" lore identifies whether an executable can, cannot,
-  or might execute its arguments. Every "can" or "might" verdict requires
-  either built-in rules for finding the executable, or human triage.
+  or might execute its arguments. Every "can" or "might" verdict requires:
+  - an update to the matching rules in [binlore](https://github.com/abathur/binlore)
+    if there's absolutely no exec in the executable and binlore just lacks
+    rules for understanding this
+  - an override in [binlore](https://github.com/abathur/binlore) if there is
+    exec but it isn't actually under user control
+  - a parser in [resholve](https://github.com/abathur/resholve) capable of
+    isolating the exec'd words if the command does have exec under user
+    control
+  - overriding the execer lore for the executable if manual triage indicates
+    that all of the invocations in the current package don't include any
+    commands that the executable would exec
+  - if manual triage turns up any commands that would be exec'd, use some
+    non-resholve tool to patch/substitute/replace them before or after you
+    run resholve on them (if before, you may need to also add keep directives
+    for these absolute paths)
+
 - "wrapper" lore maps shell exec wrappers to the programs they exec so
   that resholve can substitute an executable's verdict for its wrapper's.
 

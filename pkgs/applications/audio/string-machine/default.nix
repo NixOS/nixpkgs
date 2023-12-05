@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, boost, cairo, libGL, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "string-machine";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    boost cairo lv2
+    boost cairo libGL lv2
   ];
 
   makeFlags = [

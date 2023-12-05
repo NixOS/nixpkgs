@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -94,5 +93,13 @@ stdenv.mkDerivation rec {
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;
+    # Downstream we experience:
+    #
+    # https://github.com/NixOS/nixpkgs/issues/239424
+    #
+    # Upstream doesn't have a contact page / Bug tracker, so it's not easy to
+    # notify them about it. Using firejail might help, as some commented
+    # downstream.
+    broken = true;
   };
 }

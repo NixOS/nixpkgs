@@ -25,10 +25,10 @@ buildDunePackage rec {
 
   buildInputs = [ angstrom ];
 
-  strictDeps = !doCheck;
-
   checkInputs = [ re ];
   doCheck = true;
+
+  duneVersion = "3";
 
   meta = {
     description = "A library to normalize an ISO-8859 input to Unicode code-point";

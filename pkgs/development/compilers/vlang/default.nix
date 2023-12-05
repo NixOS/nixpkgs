@@ -1,30 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
-stdenv.mkDerivation rec {
+let
+  version = "weekly.2023.44";
+  ptraceSubstitution = ''
+    #include <sys/types.h>
+    #include <sys/ptrace.h>
+  '';
+  # Required for bootstrap.
+  vc = stdenv.mkDerivation {
+    pname = "v.c";
+    version = "unstable-2023-10-30";
+    src = fetchFromGitHub {
+      owner = "vlang";
+      repo = "vc";
+      rev = "66b89ab916c13c5781753797d1f4ff08e427bb6b";
+      hash = "sha256-5Y7/rlcoIHjbf79A1rqFysNFc5+p6CY09MRPQalo7Ak=";
+    };
+
+    # patch the ptrace reference for darwin
+    installPhase = lib.optionalString stdenv.isDarwin ''
+      substituteInPlace v.c \
+        --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
+    '' + ''
+      mkdir -p $out
+      cp v.c $out/
+    '';
+  };
+  # Required for vdoc.
+  markdown = fetchFromGitHub {
+    owner = "vlang";
+    repo = "markdown";
+    rev = "61c47ea0a6c0c79e973a119dcbab3b8fdd0973ca";
+    hash = "sha256-XBD30Pc9CGXzU1Gy6U0pDpTozYVwfgAvZRjIsnXp8ZM=";
+  };
+  boehmgcStatic = boehmgc.override {
+    enableStatic = true;
+  };
+in
+stdenv.mkDerivation {
   pname = "vlang";
-  version = "weekly.2022.20";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
-  };
-
-  # Required for bootstrap.
-  vc = fetchFromGitHub {
-    owner = "vlang";
-    repo = "vc";
-    rev = "167f262866090493650f58832d62d910999dd5a4";
-    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
-  };
-
-  # Required for vdoc.
-  markdown = fetchFromGitHub {
-    owner = "vlang";
-    repo = "markdown";
-    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
-    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
+    hash = "sha256-1yFuheSyKfvm4GqKIbXycdzKx3XcD9LSmmuKlcJmteg=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -32,21 +53,32 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  buildInputs = [
+    binaryen
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals stdenv.isLinux [
+    xorg.libX11
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xorgproto
+  ];
+
   makeFlags = [
     "local=1"
-    "VC=${vc}"
   ];
+
+  env.VC = vc;
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    mkdir -p ./thirdparty/tcc/lib
+    cp -r ${boehmgcStatic}/lib/* ./thirdparty/tcc/lib
   '';
 
   # vcreate_test.v requires git, so we must remove it when building the tools.
-  # vtest.v fails on Darwin, so let's just disable it for now.
   preInstall = ''
-    mv cmd/tools/vcreate_test.v $HOME/vcreate_test.v
-  '' + lib.optionalString stdenv.isDarwin ''
-    mv cmd/tools/vtest.v $HOME/vtest.v
+    mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
   '';
 
   installPhase = ''
@@ -65,6 +97,7 @@ stdenv.mkDerivation rec {
     $out/lib/v -v $out/lib/cmd/tools/vdoc
     $out/lib/v -v $out/lib/cmd/tools/vast
     $out/lib/v -v $out/lib/cmd/tools/vvet
+    $out/lib/v -v $out/lib/cmd/tools/vcreate
 
     runHook postInstall
   '';
@@ -72,15 +105,13 @@ stdenv.mkDerivation rec {
   # Return vcreate_test.v and vtest.v, so the user can use it.
   postInstall = ''
     cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
-  '' + lib.optionalString stdenv.isDarwin ''
-    cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
   '';
 
   meta = with lib; {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [ Madouura delta231 ];
     mainProgram = "v";
     platforms = platforms.all;
   };

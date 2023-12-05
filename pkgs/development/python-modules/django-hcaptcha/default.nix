@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "django-hCaptcha";
-    sha256 = "sha256-slGerwzJeGWscvglMBEixc9h4eSFLWiVmUFgIirLbBo=";
+    hash = "sha256-slGerwzJeGWscvglMBEixc9h4eSFLWiVmUFgIirLbBo=";
   };
 
   propagatedBuildInputs = [

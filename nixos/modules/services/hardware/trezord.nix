@@ -8,7 +8,7 @@ in {
   ### docs
 
   meta = {
-    doc = ./trezord.xml;
+    doc = ./trezord.md;
   };
 
   ### interface

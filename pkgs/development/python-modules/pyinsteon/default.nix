@@ -1,32 +1,37 @@
 { lib
 , aiofiles
 , aiohttp
-, async_generator
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , pypubsub
 , pyserial
 , pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, pyyaml
+, setuptools
+, voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.5.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PMjvic+K/m7beavlZvGhJcizSNCzLPZYLm3P2V9EPLs=";
+    hash = "sha256-7iiB/a8E8E2TSkGuAWR08ESExDz8DKTMjqp4Xnp3wHU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -34,18 +39,12 @@ buildPythonPackage rec {
     pypubsub
     pyserial
     pyserial-asyncio
-    pyyaml
+    voluptuous
   ];
 
-  checkInputs = [
-    async_generator
-    pytest-asyncio
-    pytest-timeout
+  nativeCheckInputs = [
+    async-generator
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_results"
   ];
 
   pythonImportsCheck = [
@@ -60,6 +59,7 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -36,14 +36,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "CouchDB Server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.couchdb3;
-        defaultText = literalExpression "pkgs.couchdb3";
-        description = lib.mdDoc ''
-          CouchDB package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "couchdb3" { };
 
       adminUser = mkOption {
         type = types.str;
@@ -79,7 +72,7 @@ in {
         '';
       };
 
-      # couchdb options: http://docs.couchdb.org/en/latest/config/index.html
+      # couchdb options: https://docs.couchdb.org/en/latest/config/index.html
 
       databaseDir = mkOption {
         type = types.path;
@@ -141,7 +134,7 @@ in {
         type = types.lines;
         default = "";
         description = lib.mdDoc ''
-          Extra configuration. Overrides any other cofiguration.
+          Extra configuration. Overrides any other configuration.
         '';
       };
 

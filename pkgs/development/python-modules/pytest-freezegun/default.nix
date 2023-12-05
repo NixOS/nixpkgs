@@ -33,7 +33,7 @@ buildPythonPackage rec {
     freezegun
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

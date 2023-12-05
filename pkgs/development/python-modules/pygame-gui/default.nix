@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "064";
+  version = "069";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    sha256 = "sha256-13+fK1hYxiMh0T+xbbmHViZjyBoQfRyIDc05fIJ/46U=";
+    hash = "sha256-IXU00Us1odbfS7jLPMYuCPv2l/5TUZdYKES7xHs+EWg=";
   };
 
   propagatedBuildInputs = [ pygame python-i18n ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "xsel" "${pkgs.xsel}/bin/xsel"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

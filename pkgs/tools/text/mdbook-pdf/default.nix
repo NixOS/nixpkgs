@@ -3,23 +3,25 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
+, rustfmt
 , openssl
 , CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pdf";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-v57Geqd1YCzR9oM97K+Y9OdeokzNc4Kbh0sDP0+vxjU=";
+    hash = "sha256-3hyvLLBcS7MLAL707tkvW8LGue/x9DudOYhJDDqAdRg=";
   };
 
-  cargoHash = "sha256-mZUif1qBREM/5GYJU9m20p3rC3fnbZELcEKatwhoQEU=";
+  cargoHash = "sha256-ecIaKSrkqUsQWchkm9uCTXLuQabzGmEz1UqDR13vX8Y=";
 
   nativeBuildInputs = [
     pkg-config
+    rustfmt
   ];
 
   buildInputs = [
@@ -27,6 +29,15 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
+
+  # Stop downloading from the Internet to
+  # generate the Chrome Devtools Protocol
+  DOCS_RS=true;
+
+  # # Stop formating with rustfmt, pending version update for
+  # # https://github.com/mdrokz/auto_generate_cdp/pull/8
+  # # to remove rustfmt dependency
+  # DO_NOT_FORMAT=true;
 
   # No test.
   doCheck = false;

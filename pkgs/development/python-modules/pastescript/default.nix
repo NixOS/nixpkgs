@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # test suite seems to unset PYTHONPATH
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];

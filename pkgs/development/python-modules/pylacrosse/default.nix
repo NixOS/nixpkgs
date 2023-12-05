@@ -5,28 +5,41 @@
 , nose
 , pyserial
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pylacrosse";
   version = "0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
-    rev = version;
-    sha256 = "0g5hqm8lq0gsnvhcydjk54rjf7lpxzph8k7w1nnvnqfbhf31xfcf";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jrkehoPLYbutDfxMBO/vlx4nMylTNs/gtvoBTFHFsDw=";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version = version," "version = '${version}',"
+  '';
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    pyserial
+  ];
+
+  nativeCheckInputs = [
     mock
     nose
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pylacrosse" ];
+  pythonImportsCheck = [
+    "pylacrosse"
+  ];
 
   meta = with lib; {
     description = "Python library for Jeelink LaCrosse";

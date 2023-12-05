@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "saml2aws";
-  version = "2.36.2";
+  version = "2.36.12";
 
   src = fetchFromGitHub {
     owner = "Versent";
     repo = "saml2aws";
     rev = "v${version}";
-    sha256 = "sha256-87s9lcI3URQOfl1zStSVOwmRonC740pZKAqZhDDdMaE=";
+    sha256 = "sha256-egsAUaGYe06hlPUE4J4acdrfMlDEY/8g0g9KPPJyMlI=";
   };
 
-  vendorSha256 = "sha256-cxfanKv25U8U6FQ1YfOXghAR8GYQB9PN0TkfLzG4UbI=";
+  vendorHash = "sha256-hdt/XhxMuR6YlvY/Qu2AjY5F75YvYLlv0LfuMwJQkl4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 
@@ -25,7 +25,6 @@ buildGoModule rec {
     description = "CLI tool which enables you to login and retrieve AWS temporary credentials using a SAML IDP";
     homepage    = "https://github.com/Versent/saml2aws";
     license     = licenses.mit;
-    platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.pmyjavec ];
   };
 }

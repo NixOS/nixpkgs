@@ -1,44 +1,39 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , build
 , git
-, importlib-metadata
-, pep517
 , pytest-mock
 , pytestCheckHook
 , setuptools
-, tomlkit
+, tomli-w
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.3.2";
+  version = "1.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    hash = "sha256-3Ryfq0MwrL/mKP8DmkhLOyFlulf3c73z9fFIzMuqOrg=";
+    hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     build
     git
-    pep517
     pytest-mock
     pytestCheckHook
     setuptools
-    tomlkit
+    tomli-w
     virtualenv
   ];
 
@@ -57,7 +52,10 @@ buildPythonPackage rec {
     "poetry"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
+
   meta = with lib; {
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;

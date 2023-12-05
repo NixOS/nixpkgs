@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , audit
 , libapparmor
@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.4";
+  version = "1.14.10";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-fA+bjl7A/yR5OD5iwAhKOimvme3xUU6fZZuBsw1ONT4=";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     ]) ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
+
+  __darwinAllowLocalNetworking = true;
 
   configureFlags = [
     "--enable-user-session"
@@ -112,7 +114,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple interprocess messaging system";
-    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+    homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;

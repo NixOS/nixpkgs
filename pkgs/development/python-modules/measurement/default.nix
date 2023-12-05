@@ -1,30 +1,53 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k
-, sympy, pytest, pytest-runner, sphinx, setuptools-scm }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPy3k
+, flit-core
+, flit-scm
+, sympy
+, pytestCheckHook
+, sphinx
+}:
 
 buildPythonPackage rec {
   pname = "measurement";
-  version = "3.2.0";
+  version = "3.2.2";
+  format = "pyproject";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "coddingtonbear";
     repo = "python-measurement";
-    rev = version;
-    sha256 = "1mk9qg1q4cnnipr6xa72i17qvwwhz2hd8p4vlsa9gdzrcv4vr8h9";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ULId0W10FaAtSgVY5ctQL3FPETVr+oq6TKWd/W53viM=";
   };
 
+  nativeBuildInputs = [
+    flit-core
+    flit-scm
+    sphinx
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   postPatch = ''
-    sed -i 's|use_scm_version=True|version="${version}"|' setup.py
+    substituteInPlace pyproject.toml \
+      --replace "--cov=measurement" ""
   '';
 
-  checkInputs = [ pytest pytest-runner ];
-  nativeBuildInputs = [ sphinx setuptools-scm ];
-  propagatedBuildInputs = [ sympy ];
+  propagatedBuildInputs = [
+    sympy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Use and manipulate unit-aware measurement objects in Python";
     homepage = "https://github.com/coddingtonbear/python-measurement";
+    changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
   };

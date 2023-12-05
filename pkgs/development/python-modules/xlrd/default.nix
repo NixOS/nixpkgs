@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://www.python-excel.org/";
+    homepage = "https://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
     license = licenses.bsd0;
   };

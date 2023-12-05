@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ lzip ];
+  nativeCheckInputs = [ lzip ];
 
   enableParallelBuilding = true;
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
+    mainProgram = "lziprecover";
   };
 }

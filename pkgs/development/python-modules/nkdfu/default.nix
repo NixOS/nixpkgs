@@ -1,14 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, fire, tqdm, intelhex, libusb1 }:
+{ lib, buildPythonPackage, fetchPypi, flit-core, fire, tqdm, intelhex, libusb1 }:
 
 buildPythonPackage rec {
   pname = "nkdfu";
-  version = "0.1";
-  format = "flit";
+  version = "0.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8GonfCBi3BNMhZ99SN6/SDSa0+dbfPIMPoVzALwH5A=";
+    hash = "sha256-8l913dOCxHKFtpQ83p9RV3sUlu0oT5PVi14FSuYJ9fg=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     fire

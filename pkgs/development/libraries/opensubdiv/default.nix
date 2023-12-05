@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudaSupport ? config.cudaSupport, cudatoolkit
   # For visibility mostly. The whole approach to cuda architectures and capabilities
   # will be reworked soon.
 , cudaArch ? "compute_37"
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensubdiv";
-  version = "3.4.4";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-ejxQ5mGIIrEa/rAfkTrRbIRerrAvEPoWn7e0lIqS1JQ=";
+    sha256 = "sha256-uDKCT0Uoa5WQekMUFm2iZmzm+oWAZ6IWMwfpchkUZY0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
     ] ++ lib.optionals (!openclSupport) [
       "-DNO_OPENCL=1"
     ];
+
+  preBuild = let maxBuildCores = 16; in lib.optionalString cudaSupport ''
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
+  '';
 
   postInstall = "rm $out/lib/*.a";
 

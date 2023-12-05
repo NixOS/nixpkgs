@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "pass-secret-service";
-  meta.maintainers = with lib; [ aidalgol ];
+  meta.maintainers = [ lib.maintainers.aidalgol ];
 
   nodes.machine = { nodes, pkgs, ... }:
     {

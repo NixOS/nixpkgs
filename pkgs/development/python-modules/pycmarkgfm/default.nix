@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pycmarkgfm";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qvTMXpQhC3Yx8LwbQDiELhgdkGzjirKT30N1NkXF5ps=";
+    hash = "sha256-oPklCB54aHn33ewTiSlXgx38T0RzLure5OzGuFwsLNo=";
   };
 
   propagatedNativeBuildInputs = [ cffi ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # pytest in an environment that does not contain this extension, which fails.
   # cmarkgfm has virtually the same build setup as this package, and uses the
   # same trick: pkgs/development/python-modules/cmarkgfm/default.nix
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

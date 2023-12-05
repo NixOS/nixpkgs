@@ -10,13 +10,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ sqlalchemy ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     description = "A one step database access tool, built on the SQLAlchemy ORM";
     homepage = "https://github.com/zzzeek/sqlsoup";
     license = licenses.mit;
-    maintainers = [ maintainers.globin ];
+    maintainers = [];
     broken = true; # incompatible with sqlalchemy>=1.4 and unmaintained since 2016
   };
 }

@@ -4,7 +4,7 @@
 , rustPlatform
 , installShellFiles
 , cmake
-, fetchpatch
+, git
 , nixosTests
 , Security
 , Foundation
@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.12.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HS+vtF+h5M6lbk7TROAXwrHpj92SeC+j0TjmP6ycH2Q=";
+    hash = "sha256-CrD65nHE40n83HO+4QM1sLHvdFaqTvOb96hPBgXKuwk=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -33,9 +33,15 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/starship completions bash) \
       --fish <($out/bin/starship completions fish) \
       --zsh <($out/bin/starship completions zsh)
+
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/.vuepress/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-hs0ImaozKH6QcUfts+oseUqecg7bGX5cx50ixnNamW8=";
+  cargoHash = "sha256-ZHHrpepKZnSGufyEAjNDozaIKAt2GFRt+hU2ej7LceA=";
+
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     HOME=$TMPDIR
@@ -49,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras danth davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ danth davidtwco Br1ght0ne Frostman marsam ];
+    mainProgram = "starship";
   };
 }

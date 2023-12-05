@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "6.1.2";
+  version = "6.6.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-a+Zn2X89ZcC6V8MxyYsL07E89g2NMfqK0liCqtnXnXo=";
+    hash = "sha256-tCZzbclOKwS2mD6ZjE3EJ9wWbWbd6iRsiQ7ZwqRQBE8=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
-    homepage = "https://btrfs.wiki.kernel.org/";
+    homepage = "https://btrfs.readthedocs.io/en/latest/";
+    changelog = "https://github.com/kdave/btrfs-progs/raw/v${version}/CHANGES";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

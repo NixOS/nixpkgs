@@ -17,14 +17,14 @@
 let
   juce-lv2 = stdenv.mkDerivation {
     pname = "juce-lv2";
-    version = "unstable-2021-12-11";
+    version = "unstable-2022-03-30";
 
     # lv2 branch
     src = fetchFromGitHub {
       owner = "lv2-porting-project";
       repo = "JUCE";
-      rev = "5106d9d77b892c22afcb9379c13982f270429e2e";
-      sha256 = "sha256-bpZJ5NEDRfMtmx0RkKQFZWqS/SnYAFRhrDg9MSphh4c=";
+      rev = "e825ad977cf4499a7bfa05b97b208236f8fd253b";
+      sha256 = "sha256-Fqp1y9BN0E9p/12ukG1oh3COhXNRWBAlFRSl0LPyiFc=";
     };
 
     dontConfigure = true;
@@ -37,14 +37,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "surge-XT";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
     rev = "release_xt_${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-u7jXNCDFRzq9oFaxovfTEipQsN+e4+whLexJrSJdXWw=";
+    sha256 = "sha256-LRYKkzeEuuRbMmvU3E0pHAnotOd4DyIJ7rTb+fpW0H4=";
   };
 
   nativeBuildInputs = [

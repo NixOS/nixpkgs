@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, flit-core
 , ipython
 , matplotlib
 , numpy
@@ -10,16 +11,20 @@
 
 buildPythonPackage rec {
   pname = "mediapy";
-  version = "1.1.0";
+  version = "1.1.9";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CejgiCiW7an1GpKB5MUiA1Alkigv3RmfTq0um9pc93E=";
+    hash = "sha256-WUOxtE0NfXi0fpdasZTqixPhVV2+Refatvf6dgCb0Z8=";
   };
 
+  nativeBuildInputs = [ flit-core ];
+
   propagatedBuildInputs = [ ipython matplotlib numpy pillow ];
+
 
   pythonImportsCheck = [ "mediapy" ];
 

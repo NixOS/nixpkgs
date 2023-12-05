@@ -28,14 +28,7 @@ in {
         '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openvswitch;
-      defaultText = literalExpression "pkgs.openvswitch";
-      description = lib.mdDoc ''
-        Open vSwitch package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "openvswitch" { };
   };
 
   config = mkIf cfg.enable (let

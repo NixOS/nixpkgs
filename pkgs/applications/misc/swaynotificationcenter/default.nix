@@ -13,7 +13,9 @@
 , gtk-layer-shell
 , gtk3
 , json-glib
+, libgee
 , libhandy
+, libpulseaudio
 , librsvg
 , meson
 , ninja
@@ -26,14 +28,18 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.7.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = "SwayNotificationCenter";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-RU6zzhRu7YK+zcazxj2wZ5vSwLwlilBaG9l+rEstefc=";
+    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
   };
+
+  patches = [
+    ./001-backport-pr296.patch
+  ];
 
   nativeBuildInputs = [
     bash-completion
@@ -58,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     gtk-layer-shell
     gtk3
     json-glib
+    libgee
     libhandy
+    libpulseaudio
     librsvg
     # systemd # ends with broken permission
   ];
@@ -66,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/functions.vala --replace /usr/local/etc $out/etc
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -76,8 +86,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
+    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "swaync";
     maintainers = with maintainers; [ berbiche pedrohlc ];
   };
 })

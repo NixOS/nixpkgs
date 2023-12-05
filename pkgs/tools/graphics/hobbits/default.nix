@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hobbits";
-  version = "0.53.2";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
     repo = "hobbits";
     rev = "v${version}";
-    hash = "sha256-X2DotmzqeIESkO6o39si4kEkRhLO7yBr6Djh+0s+lFc=";
+    hash = "sha256-zbpYVoWOffMxx2RS5gXw+rpwdxoRutH/yzZqJIc57UU=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_SYSTEM_PFFFT=ON" ];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
   meta = with lib; {
     description = "A multi-platform GUI for bit-based analysis, processing, and visualization";

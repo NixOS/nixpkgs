@@ -1,3 +1,4 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 # Glibc cannot have itself in its RPATH.
 export NIX_NO_SELF_RPATH=1
 

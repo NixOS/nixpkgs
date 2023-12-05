@@ -3,25 +3,35 @@
 , fetchPypi
 , flask
 , mock
-, sqlalchemy
+, flit-core
 , pytestCheckHook
+, pythonOlder
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-SQLAlchemy";
-  version = "2.5.1";
+  pname = "flask-sqlalchemy";
+  version = "3.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912";
+    pname = "flask_sqlalchemy";
+    inherit version;
+    hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     flask
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -33,9 +43,14 @@ buildPythonPackage rec {
     "test_persist_selectable"
   ];
 
+  pythonImportsCheck = [
+    "flask_sqlalchemy"
+  ];
+
   meta = with lib; {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

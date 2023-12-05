@@ -1,39 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pyparsing
+, flit-core
+, pretend
 , pytestCheckHook
 , pythonOlder
-, pretend
-, setuptools
 }:
 
 let
   packaging = buildPythonPackage rec {
     pname = "packaging";
-    version = "21.3";
+    version = "23.1";
     format = "pyproject";
 
-    disabled = pythonOlder "3.6";
+    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-3UfEKSfYmrkR5gZRiQfMLTofOLvQJjhZcGQ/nFuOz+s=";
+      hash = "sha256-o5KYDSts/6ZEQxiYvlSwBFFRMZ0efsNPDP7Uh2fdM08=";
     };
 
     nativeBuildInputs = [
-      setuptools
+      flit-core
     ];
 
-    propagatedBuildInputs = [ pyparsing ];
-
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
       pretend
     ];
 
-    # Prevent circular dependency
+    # Prevent circular dependency with pytest
     doCheck = false;
+
+    pythonImportsCheck = [ "packaging" ];
 
     passthru.tests = packaging.overridePythonAttrs (_: { doCheck = true; });
 

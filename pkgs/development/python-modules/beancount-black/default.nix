@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "beancount-black";
-  version = "0.1.13";
+  version = "0.2.1";
 
   disabled = pythonOlder "3.9";
   format = "pyproject";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beancount-black";
     rev = version;
-    sha256 = "sha256-jhcPR+5+e8d9cbcXC//xuBwmZ14xtXNlYtmH5yNSU0E=";
+    hash = "sha256-wvAQnwnyHn5Koc/UN4zpJ3JDmFbDoUrpCTmJCpSP7Mg=";
   };
 
   buildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -30,6 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -47,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.13.4.14461";
-  versions.x86_64-darwin = "5.13.4.14461";
-  versions.x86_64-linux = "5.13.4.711";
+  versions.aarch64-darwin = "5.16.6.24664";
+  versions.x86_64-darwin = "5.16.6.24664";
+  versions.x86_64-linux = "5.16.6.382";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-gNlY7Cocv6t406o1biZj6UAiP5fwF+g/G2P2uN5bF7I=";
+      hash = "sha256-5xccYYisVRZw7tJ6uri52BuaeURadaHypse4vjwPQIY=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-T5s8ERMNkdvIzsBq8ZtOUKu084/8uBjIoYgopkM09cI=";
+      hash = "sha256-N3jzvxoRY3W5fw1Fs0qevgHC+7cLLYvoGA/ZYiE71JA=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-sQk5fS/bS7e0T0IJ7+UB956XmCAbeMYfS8BVwncpoy0=";
+      hash = "sha256-2O8jGQHGyF5XLQUxHUWA3h9K792lRQmOC2mS0rTukSw=";
     };
   };
 
@@ -102,10 +103,13 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
@@ -190,6 +194,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

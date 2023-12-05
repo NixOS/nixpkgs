@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_EXTERNAL_LCMS=ON"
     "-DUSE_EXTERNAL_TINYXML=ON"
-    # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
+    # External yaml-cpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
     "-DUSE_EXTERNAL_YAML=OFF"
   ] ++ lib.optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
     ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput cmake "$dev"
-    moveToOutput OpenColorIOConfig.cmake "$dev"
+    mv $out/OpenColorIOConfig.cmake $dev/cmake/
 
     substituteInPlace "$dev/cmake/OpenColorIO-release.cmake" \
       --replace "$out/bin" "$bin/bin"

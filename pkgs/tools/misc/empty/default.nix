@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://empty.sourceforge.net";
+    homepage = "https://empty.sourceforge.net";
     description = "A simple tool to automate interactive terminal applications";
     license = licenses.bsd3;
     platforms = platforms.all;
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
       - can easily be ported to almost all UNIX-like systems
     '';
     maintainers = [ maintainers.djwf ];
+    mainProgram = "empty";
   };
 }

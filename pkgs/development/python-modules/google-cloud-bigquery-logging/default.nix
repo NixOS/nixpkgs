@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.1.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TGK5ghwhVBN0VBMj84Jjt4gpsXQC+HKAr5yP756PbDM=";
+    hash = "sha256-7hj42cr9BKwSBEX09kZPngAUPFPrQ/VS5hBzbAaQhH4=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-asyncio

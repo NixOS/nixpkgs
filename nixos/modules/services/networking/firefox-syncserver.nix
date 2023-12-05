@@ -224,10 +224,12 @@ in
           Settings for the sync server. These take priority over values computed
           from NixOS options.
 
-          See the doc comments on the `Settings` structs in
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs>
+          See the example config in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/config/local.example.toml>
+          and the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage-settings/src/lib.rs>
           and
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs>
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/tokenserver-settings/src/lib.rs>
           for available options.
         '';
       };
@@ -304,6 +306,10 @@ in
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
         };
       };
     };
@@ -311,8 +317,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc firefox-syncserver.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > firefox-syncserver.xml`
-    doc = ./firefox-syncserver.xml;
+    doc = ./firefox-syncserver.md;
   };
 }

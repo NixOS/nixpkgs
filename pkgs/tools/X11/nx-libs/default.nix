@@ -1,5 +1,5 @@
 { lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
-, libgcc, libjpeg_turbo
+, libjpeg_turbo
 , libpng, libtool, libxml2, pkg-config, which, xorg
 , libtirpc
 }:
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
-  buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
+  buildInputs = [ libjpeg_turbo libpng libxml2 xorg.fontutil
     xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
     xorg.libXinerama xorg.libXpm xorg.libXrandr xorg.libXtst xorg.pixman
     xorg.xkbcomp xorg.xkeyboardconfig libtirpc
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   postPatch = ''

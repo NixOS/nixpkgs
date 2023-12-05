@@ -5,6 +5,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,8 @@ buildPythonPackage rec {
   version = "2.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  # https://github.com/mlenzen/collections-extended/issues/198
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "mlenzen";
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

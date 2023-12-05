@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   pname = "ocsigen-i18n";
   version = "3.7.0";
 
-  buildInputs = with ocamlPackages; [ ocaml findlib ppx_tools ];
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages; [ ocaml findlib ];
+  buildInputs = with ocamlPackages; [ ppx_tools ];
 
   dontStrip = true;
 

@@ -8,7 +8,7 @@ buildPythonPackage rec {
     inherit version;
     pname = "FVS";
     extension = "tar.gz";
-    sha256 = "sha256-yYd0HzdwbqB9kexJjBRRYmdsoWtZtcjCNRz0ZJVM5CI=";
+    hash = "sha256-yYd0HzdwbqB9kexJjBRRYmdsoWtZtcjCNRz0ZJVM5CI=";
   };
 
   propagatedBuildInputs = [

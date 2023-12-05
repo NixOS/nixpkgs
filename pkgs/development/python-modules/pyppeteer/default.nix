@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
+    hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     syncer
     pytest-xdist
     pytestCheckHook

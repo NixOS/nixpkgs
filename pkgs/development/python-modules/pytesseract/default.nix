@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.3.10";
+  version = "0.3.13";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "madmaze";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-CyKXtaIE/8iPLqi0GHVUgTeJDYZyWBjkRvOKJJKCxZo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/pytesseract/";

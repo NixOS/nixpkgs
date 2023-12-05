@@ -6,15 +6,15 @@
 , perlPackages
 , sharnessExtensions ? {} }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sharness";
-  version = "1.1.0-dev";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = "chriscool";
-    repo = pname;
-    rev = "3f238a740156dd2082f4bd60ced205e05894d367"; # 2020-12-09
-    sha256 = "FCYskpIqkrpNaWCi2LkhEkiow4/rXLe+lfEWNUthLUg=";
+    owner = "felipec";
+    repo = "sharness";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-C0HVWgTm9iXDSFyXcUVRfT0ip31YGaaZ6ZvxggK/x7o=";
   };
 
   # Used for testing
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.SHARNESS_TEST_SRCDIR = finalAttrs.finalPackage + "/share/sharness";
+
   meta = with lib; {
     description = "Portable shell library to write, run and analyze automated tests adhering to Test Anything Protocol (TAP)";
     homepage = "https://github.com/chriscool/sharness";
@@ -48,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.spacefrogg ];
     platforms = platforms.unix;
   };
-}
+})

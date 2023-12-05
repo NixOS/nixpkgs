@@ -27,7 +27,9 @@ buildPythonPackage rec {
       --replace "--durations=2 --verbose" ""
   '';
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

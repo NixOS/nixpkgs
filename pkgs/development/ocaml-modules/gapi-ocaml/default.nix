@@ -5,7 +5,7 @@
 
 buildDunePackage rec {
   pname = "gapi-ocaml";
-  version = "0.4.3";
+  version = "0.4.4";
   duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "astrada";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V0GB9Bd06IdcI5PDFHGVZ0Y/qi7tTs/4ITqPXUOxCLs=";
+    hash = "sha256-+UNFW5tmIh5dVyTDEOfOmy1j+gV4P28jlnBTdpQNAjE=";
   };
 
   propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];
@@ -24,7 +24,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml client for google services";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/astrada/gapi-ocaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bennofs ];
   };

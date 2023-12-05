@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pep440";
   version = "0.1.2";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

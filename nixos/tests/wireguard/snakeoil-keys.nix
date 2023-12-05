@@ -6,6 +6,7 @@
 
   peer1 = {
     privateKey = "uO8JVo/sanx2DOM0L9GUEtzKZ82RGkRnYgpaYc7iXmg=";
-    publicKey = "Ks9yRJIi/0vYgRmn14mIOQRwkcUGBujYINbMpik2SBI=";
+    # readFile'd keys may have trailing newlines, emulate this
+    publicKey = "Ks9yRJIi/0vYgRmn14mIOQRwkcUGBujYINbMpik2SBI=\n";
   };
 }

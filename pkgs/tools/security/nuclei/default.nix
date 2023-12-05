@@ -5,18 +5,17 @@
 
 buildGoModule rec {
   pname = "nuclei";
-  version = "2.8.6";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-hK5l/uDZ0KbpPH14wkFuZL72ssmawINhX3ICgGItx4U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Bx/ryoftrhDExugtvviRU4f4pIlerV2ehJWAJUGizvs=";
   };
 
-  vendorHash = "sha256-GqOuEEYHJRzxPb/i4w913srRv1ckHI0WVNR20eJqE7Q=";
+  vendorHash = "sha256-r5m9yvdy7Bnh9QvcrAwwO6od2C7JCcxwFx4p+W8qlMY=";
 
-  modRoot = "./v2";
   subPackages = [
     "cmd/nuclei/"
   ];
@@ -36,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/projectdiscovery/nuclei";
     changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab Misaka13514 ];
   };
 }

@@ -1,15 +1,24 @@
-{ lib, fetchFromGitHub, buildPythonPackage }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, hatchling
+}:
 
 buildPythonPackage rec {
   pname = "mkdocs-material-extensions";
-  version = "1.0.3";
+  version = "1.1.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = pname;
-    rev = version;
-    sha256 = "1mvc13lz16apnli2qcqf0dvlm8mshy47jmz2vp72lja6x8jfq2p3";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FHI6WEQRd/Ff6pmU13f8f0zPSeFhhbmDdk4/0rdIl4I=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   doCheck = false; # Circular dependency
 

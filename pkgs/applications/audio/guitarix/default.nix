@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , avahi
@@ -50,6 +51,12 @@ stdenv.mkDerivation rec {
     sha256 = "d+g9dU9RrDjFQj847rVd5bPiYSjmC1EbAtLe/PNubBg=";
   };
 
+  # doesnt apply cleanly, so doing with substituteInPlace
+  # https://github.com/brummer10/guitarix/commit/39d7c21c4173eb0f121b1bbff439d9cf43331a00.patch
+  postPatch = ''
+    substituteInPlace wscript --replace "open(src_fname, 'rU')" "open(src_fname, 'r')"
+  '';
+
   nativeBuildInputs = [
     gettext
     hicolor-icon-theme
@@ -97,7 +104,7 @@ stdenv.mkDerivation rec {
     "--install-roboto-font"
   ] ++ optional optimizationSupport "--optimization";
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";

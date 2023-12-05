@@ -3,29 +3,26 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
+, cmake
+, protobuf
 , installShellFiles
-, tinycc
 , libiconv
-, libobjc
-, Security
-, CoreServices
-, Metal
-, Foundation
-, QuartzCore
+, darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.29.1";
+  version = "1.38.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RumRA3uCerWDgWZfLVJhqhaxsZs2YYpINaCjgJDmQBo=";
+    hash = "sha256-Jve2aKfnWZotgzfzUJ+ez+9sainmQiUg3x8FIWnr6/o=";
   };
-  cargoSha256 = "sha256-xKCslS98RB4yjt4v74dW8kSpHNGet0I4YhcA4mLLNwI=";
+
+  cargoHash = "sha256-pDDi0Xm1o61Ng308MeTVoVp+cYVFt34Kh4sj2idH+9s=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -33,33 +30,28 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+  # uses zlib-ng but can't dynamically link yet
+  # https://github.com/rust-lang/libz-sys/issues/158
+  nativeBuildInputs = [
+    # required by libz-ng-sys crate
+    cmake
+    # required by deno_kv crate
+    protobuf
+    installShellFiles
+  ];
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [ libiconv darwin.libobjc ] ++
+    (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
+  );
+
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
 
   buildAndTestSubdir = "cli";
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   RUSTY_V8_ARCHIVE = librusty_v8;
-
-  # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
-  # To avoid this we point it to our copy (dir)
-  # In the future tinycc will be replaced with asm
-  libtcc = tinycc.overrideAttrs (oa: {
-    makeFlags = [ "libtcc.a" ];
-    # tests want tcc binary
-    doCheck = false;
-    outputs = [ "out" ];
-    installPhase = ''
-      mkdir -p $out/lib/
-      mv libtcc.a $out/lib/
-    '';
-    # building the whole of tcc on darwin is broken in nixpkgs
-    # but just building libtcc.a works fine so mark this as unbroken
-    meta.broken = false;
-  });
-  TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -85,6 +77,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = ./update/update.ts;
+  passthru.tests = callPackage ./tests { };
 
   meta = with lib; {
     homepage = "https://deno.land/";
@@ -100,6 +93,7 @@ rustPlatform.buildRustPackage rec {
       bash or python.
     '';
     license = licenses.mit;
+    mainProgram = "deno";
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

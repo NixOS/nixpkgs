@@ -61,6 +61,8 @@ let
       (lib.withFeatureAs httpSupport "serf" serf)
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
+      "--with-apr=${apr.dev}"
+      "--with-apr-util=${aprutil.dev}"
     ] ++ lib.optionals javahlBindings [
       "--enable-javahl"
       "--with-jdk=${jdk}"
@@ -100,14 +102,19 @@ let
     inherit perlBindings pythonBindings;
 
     enableParallelBuilding = true;
+    # Missing install dependencies:
+    # libtool:   error: error: relink 'libsvn_ra_serf-1.la' with the above command before installing it
+    # make: *** [build-outputs.mk:1316: install-serf-lib] Error 1
+    enableParallelInstalling = false;
 
-    checkInputs = [ python3 ];
+    nativeCheckInputs = [ python3 ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
       homepage = "https://subversion.apache.org/";
+      mainProgram = "svn";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };

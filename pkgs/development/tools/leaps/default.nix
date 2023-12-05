@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorSha256 = "sha256-0dwUOoV2bxPB+B6CKxJPImPIDlBMPcm0AwEMrVUkALc=";
+  vendorHash = "sha256-0dwUOoV2bxPB+B6CKxJPImPIDlBMPcm0AwEMrVUkALc=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/jeffail/leaps/";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ qknight ];
-    platforms = lib.platforms.unix;
   };
 }

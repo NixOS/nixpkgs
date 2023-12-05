@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "12.3.0";
+  version = "14.0.0";
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    sha256 = "sha256-egL5k/Y99DLYhGsvC3t0dluwFJRe21sBWI5qG5Gzuck=";
+    hash = "sha256-nAipzYOOv/rSHrMBL64AKg93v5Vpb6RNBbG2OiJ+n8E=";
   };
 
   nativeBuildInputs = [ pbr ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     testscenarios
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     stestr
   ];

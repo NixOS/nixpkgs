@@ -4,16 +4,16 @@
 
 buildPythonPackage rec {
   pname = "plaster";
-  version = "1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8351c7c7efdf33084c1de88dd0f422cbe7342534537b553c49b857b12d98c8c3";
+    hash = "sha256-+L78VL+MEUfBCrQCl+yEwmdvotTqXW9STZQ2qAB075g=";
   };
 
   checkPhase = ''
     py.test
   '';
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
 }

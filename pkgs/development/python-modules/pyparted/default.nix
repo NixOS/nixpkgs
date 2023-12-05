@@ -5,18 +5,19 @@
 , pkgs
 , python
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyparted";
-  version = "3.12.0";
+  version = "3.13.0";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "dcantrell";
-    rev = "v${version}";
-    sha256 = "sha256-LfBLR0A/wnfBtXISAAY6Nl4vnk1rtY03F+PT8UIMrEs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AiUCCrEbDD0OxrvXs1YN3/1IE7SuVasC2YCirIG58iU=";
   };
 
   postPatch = ''
@@ -30,22 +31,13 @@ buildPythonPackage rec {
       tests/test__ped_ped.py
   '';
 
-  patches = [
-    ./fix-test-pythonpath.patch
-  ];
-
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"
   '';
 
   nativeBuildInputs = [ pkgs.pkg-config ];
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six pytestCheckHook ];
   propagatedBuildInputs = [ pkgs.parted ];
-
-  checkPhase = ''
-    patchShebangs Makefile
-    make test PYTHON=${python.executable}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/dcantrell/pyparted/";

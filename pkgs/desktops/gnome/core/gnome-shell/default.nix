@@ -28,7 +28,7 @@
 , libpulseaudio
 , libical
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , libxslt
 , gcr_4
 , accountsservice
@@ -36,8 +36,7 @@
 , gdm
 , upower
 , ibus
-, libnma
-, libgnomekbd
+, libnma-gtk4
 , gnome-desktop
 , gsettings-desktop-schemas
 , gnome-keyring
@@ -57,32 +56,34 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
+, gnome-tecla
 , asciidoc
 , bash-completion
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.2";
+  version = "45.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
+    sha256 = "FfykvWEpqLP5kBl/vR7ljXS2QVEK+q8Igqf6NmNPxfI=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit libgnomekbd unzip;
+      glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
+      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
+      unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -94,11 +95,8 @@ stdenv.mkDerivation rec {
 
     # Fix greeter logo being too big.
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
-      revert = true;
-      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
-    })
+    # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
+    ./greeter-logo-size.patch
 
     # Work around failing fingerprint auth
     (fetchpatch {
@@ -116,11 +114,12 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     gtk-doc
     perl
-    wrapGAppsHook
+    wrapGAppsHook4
     sassc
     desktop-file-utils
     libxslt.bin
     asciidoc
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -154,7 +153,6 @@ stdenv.mkDerivation rec {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     mesa
 
     # recording
@@ -165,7 +163,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -178,6 +176,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''
@@ -185,7 +184,7 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
-    rm data/theme/gnome-shell.css
+    rm data/theme/gnome-shell-{light,dark}.css
   '';
 
   postInstall = ''

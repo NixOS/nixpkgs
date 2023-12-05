@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "3.1.1";
+  version = "4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxptp/${pname}-${version}.tgz";
-    sha256 = "1nf0w4xyzg884v8blb81zkk6q8p6zbiq9lx61jdqwbbzkdgqbmll";
+    hash = "sha256-4XQ9RPggiJfjCJXaNXnmcP+Rm5FP60talJ8+Qh3d5TU=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
-    homepage = "http://linuxptp.sourceforge.net/";
+    homepage = "https://linuxptp.sourceforge.net/";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;

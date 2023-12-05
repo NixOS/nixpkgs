@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.17.0";
+  version = "2.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AsEcoAmOg+J/g8P5o51PzO9R5z0Nce9zQ/EiIYhmaFw=";
+    hash = "sha256-9tjHs6ubV0xml3/O6dM24zStGjhDpyK+GRI2QOeAjqM=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-auth
     google-cloud-bigquery
     pytestCheckHook
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery-storage";
     changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

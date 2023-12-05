@@ -100,7 +100,7 @@ let
     };
   };
 
-  optionalKV = k: v: if v == null then "" else "${k} = ${builtins.toString v}";
+  optionalKV = k: v: optionalString (v != null) "${k} = ${builtins.toString v}";
 
   renderPhocOutput = name: output: let
     modelines = if builtins.isList output.modeline
@@ -135,15 +135,7 @@ in
         description = lib.mdDoc "Enable the Phone Shell.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.phosh;
-        defaultText = literalExpression "pkgs.phosh";
-        example = literalExpression "pkgs.phosh";
-        description = lib.mdDoc ''
-          Package that should be used for Phosh.
-        '';
-      };
+      package = mkPackageOption pkgs "phosh" { };
 
       user = mkOption {
         description = lib.mdDoc "The user to run the Phosh service.";
@@ -173,7 +165,7 @@ in
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/phosh";
+        ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
         Group = cfg.group;
         PAMName = "login";

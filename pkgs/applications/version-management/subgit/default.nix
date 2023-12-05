@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "subgit";
-  version = "3.3.16";
+  version = "3.3.17";
 
   meta = {
     description = "A tool for a smooth, stress-free SVN to Git migration";
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://subgit.com/download/subgit-${version}.zip";
-    sha256 = "sha256-p7uBEG43N4Hed+8HYf3I9lQEvmYLV61oIyRrPHuGmUA=";
+    sha256 = "sha256-u8YhaF4zOlDpEYd/0VUN8k4X8E1G4PB+UkJjBfQKkJY=";
   };
 }

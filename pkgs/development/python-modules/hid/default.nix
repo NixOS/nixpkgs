@@ -11,12 +11,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HpVOf3q5t8nfx421lQRpLBfbO3EklJK5drFSW5fbsOg=";
+    hash = "sha256-HpVOf3q5t8nfx421lQRpLBfbO3EklJK5drFSW5fbsOg=";
   };
 
   propagatedBuildInputs = [ hidapi ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
  postPatch = ''
     hidapi=${hidapi}/lib/

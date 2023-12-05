@@ -1,32 +1,54 @@
-{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, glib, udev, cairo, pango, atk, gdk-pixbuf, gtk3, wrapGAppsHook }:
-rustPlatform.buildRustPackage rec {
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, cargo
+, pkg-config
+, rustc
+, openssl
+, udev
+, gtk3
+, wrapGAppsHook
+}:
+
+stdenv.mkDerivation rec {
   pname = "firmware-manager";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aKatdjHa/k7j48upkR1O6PFxCUfJYE3KhhzZ9Ohe0Jc=";
+    hash = "sha256-Q+LJJ4xK583fAcwuOFykt6GKT0rVJgmTt+zUX4o4Tm4=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-
-  buildInputs = [ xz openssl dbus glib udev cairo pango atk gdk-pixbuf gtk3 ];
-
-  depsExtraArgs.postPatch = "make prefix='$(out)' toml-gen";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
+      "system76-firmware-1.0.51" = "sha256-+GPz7uKygGnFUptQEGYWkEdHgxBc65kLZqpwZqtwets=";
+    };
+  };
 
   postPatch = ''
-    sed -i 's|etc|$(prefix)/etc|' Makefile
+    substituteInPlace Makefile --replace '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
   '';
 
-  buildPhase = "make prefix='$(out)'";
+  nativeBuildInputs = [
+    cargo
+    rustc
+    pkg-config
+    rustPlatform.cargoSetupHook
+    wrapGAppsHook
+  ];
 
-  installPhase = "make prefix='$(out)' install";
+  buildInputs = [
+    openssl
+    gtk3
+    udev
+  ];
 
-  cargoSha256 = "sha256-BUo77ERHvuc8IkDdU3Z/gZZicNHT26IbAgEBnVM3O4U=";
-
-  doCheck = false;
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = {
     description = "Graphical frontend for firmware management";

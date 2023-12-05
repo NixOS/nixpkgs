@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, vtkWithQt5}:
+{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade-occt, libsForQt5, tbb, vtkWithQt5 }:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "9.0";
+  version = "unstable-2023-09-18";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
-    repo = "elmerfem";
-    rev = "release-${version}";
-    sha256 = "VK7jvu4s5d7k0c39XqY9dEzg/vXtX5Yr/09VcuZVQ9A=";
+    repo = pname;
+    rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
+    hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
   };
 
   hardeningDisable = [ "format" ];
@@ -28,19 +28,14 @@ stdenv.mkDerivation rec {
     libsForQt5.qwt
     libGL
     libGLU
-    opencascade
+    opencascade-occt
+    tbb
     vtkWithQt5
   ];
 
   preConfigure = ''
     patchShebangs ./
   '';
-
-  patches = [
-    ./patches/0001-fix-import-of-QPainterPath.patch
-    ./patches/0002-fem-rename-loopvars-to-avoid-redefinition.patch
-    ./patches/0003-ignore-qwt_compat.patch
-  ];
 
   storepath = placeholder "out";
 
@@ -58,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://elmerfem.org/";
+    homepage = "https://elmerfem.org";
     description = "A finite element software for multiphysical problems";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wulfsta broke ];

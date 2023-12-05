@@ -1,3 +1,10 @@
+/*
+  To run:
+
+      nix-shell maintainers/scripts/update.nix
+
+  See https://nixos.org/manual/nixpkgs/unstable/#var-passthru-updateScript
+*/
 { package ? null
 , maintainer ? null
 , predicate ? null
@@ -7,8 +14,6 @@
 , keep-going ? null
 , commit ? null
 }:
-
-# TODO: add assert statements
 
 let
   pkgs = import ./../../default.nix (

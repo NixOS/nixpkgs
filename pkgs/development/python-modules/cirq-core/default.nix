@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , duet
 , matplotlib
 , networkx
@@ -31,26 +31,24 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
+    hash = "sha256-KEei5PJ0ammsduZVmMh2vaW3f58DYI4BCrFCl/SjUoo=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib" \
-      --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy"
-  '';
+      --replace "matplotlib~=3.0" "matplotlib"
+   '';
 
   propagatedBuildInputs = [
     duet
@@ -73,7 +71,7 @@ buildPythonPackage rec {
     quimb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     freezegun
@@ -91,6 +89,12 @@ buildPythonPackage rec {
     "test_metadata_search_path"
     # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
     "test_benchmark_2q_xeb_fidelities"
+    # https://github.com/quantumlib/Cirq/pull/5991
+    "test_json_and_repr_data"
+    # Tests for some changed error handling behavior in SymPy 1.12
+    "test_custom_value_not_implemented"
+    # Calibration issue
+    "test_xeb_to_calibration_layer"
   ];
 
   meta = with lib; {

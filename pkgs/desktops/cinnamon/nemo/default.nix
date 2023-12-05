@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JwwSeY+TsbYc2ZXoxR9aja0Hb8AmrWK79cv1ApAgcpQ=";
+    sha256 = "sha256-JeiBhgfGyGyNT9eNhtUl6Pp1jgG02NRlm5lam592lS0=";
   };
 
   patches = [
@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gvfs
-    gobject-introspection
     libgsf
   ];
 
@@ -60,12 +59,20 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";

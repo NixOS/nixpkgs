@@ -1,0 +1,31 @@
+diff --git a/gdk/macos/gdkmacospasteboard-private.h b/gdk/macos/gdkmacospasteboard-private.h
+index fdeb936..c4b8666 100644
+--- a/gdk/macos/gdkmacospasteboard-private.h
++++ b/gdk/macos/gdkmacospasteboard-private.h
+@@ -27,6 +27,10 @@
+ 
+ G_BEGIN_DECLS
+ 
++#ifndef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
++typedef NSString *NSPasteboardType;
++#endif
++
+ @interface GdkMacosPasteboardItemDataProvider : NSObject <NSPasteboardItemDataProvider>
+ {
+   GdkContentProvider *_contentProvider;
+diff --git a/gdk/macos/gdkmacospasteboard.c b/gdk/macos/gdkmacospasteboard.c
+index 66b3c9f..b9e0d8a 100644
+--- a/gdk/macos/gdkmacospasteboard.c
++++ b/gdk/macos/gdkmacospasteboard.c
+@@ -400,7 +400,11 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
+       gdk_content_formats_get_gtypes (formats, &n_gtypes);
+ 
+       if (n_gtypes)
++#ifdef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
+         [ret addObject:NSPasteboardTypeURL];
++#else
++        [ret addObject:[[NSString alloc] initWithUTF8String:"public.url"]];
++#endif
+ 
+       gdk_content_formats_unref (formats);
+     }

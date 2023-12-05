@@ -4,6 +4,8 @@ in {
   stdenvNoCC,
   fetchzip,
   lib,
+  rdfind,
+  which,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -11,9 +13,14 @@ stdenvNoCC.mkDerivation rec {
   version = source.version;
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${source.revision}.tar.gz";
     hash = source.sourceHash;
   };
+
+  nativeBuildInputs = [
+    rdfind
+    which
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -33,5 +40,8 @@ stdenvNoCC.mkDerivation rec {
     priority = 6; # give precedence to kernel firmware
   };
 
-  passthru = { inherit version; };
+  passthru = {
+    inherit version;
+    updateScript = ./update.sh;
+  };
 }

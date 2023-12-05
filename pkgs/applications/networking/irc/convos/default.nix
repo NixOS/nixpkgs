@@ -2,34 +2,31 @@
 , nixosTests
 }:
 
-with lib;
-
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "7.02";
+  version = "8.05";
 
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i8lDK5/Whi5uo2/Qqh5jgJGLuuHn7kdrfvr+9Ktzp/8=";
+    sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ optionals stdenv.isDarwin [ shortenPerlShebang ];
+    ++ lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
 
   buildInputs = with perlPackages; [
     CryptPassphrase CryptPassphraseArgon2 CryptPassphraseBcrypt
     FileHomeDir FileReadBackwards HTTPAcceptLanguage SyntaxKeywordTry FutureAsyncAwait
     IOSocketSSL IRCUtils JSONValidator LinkEmbedder ModuleInstall
-    Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginSyslog MojoliciousPluginWebpack
-    ParseIRC TextMarkdownHoedown TimePiece UnicodeUTF8
-    CpanelJSONXS EV
+    Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginSyslog ParseIRC
+    TextMarkdownHoedown TimePiece UnicodeUTF8 CpanelJSONXS EV YAMLLibYAML
   ];
 
   propagatedBuildInputs = [ openssl ];
 
-  checkInputs = with perlPackages; [ TestDeep ];
+  nativeCheckInputs = with perlPackages; [ TestDeep ];
 
   postPatch = ''
     patchShebangs script/convos
@@ -49,6 +46,9 @@ perlPackages.buildPerlPackage rec {
     #
     substituteInPlace t/web-register-open-to-public.t \
       --replace '!127.0.0.1!' '!localhost!'
+
+    # Another online test fails, so remove this.
+    rm t/irc-reconnect.t
 
     # A webirc test fails to resolve "localhost" likely due to sandboxing, we
     # remove this test.
@@ -76,10 +76,10 @@ perlPackages.buildPerlPackage rec {
     AUTO_SHARE_PATH=$out/${perl.libPrefix}/auto/share/dist/Convos
     mkdir -p $AUTO_SHARE_PATH
     cp -vR public assets $AUTO_SHARE_PATH/
-    ln -s $AUTO_SHARE_PATH/public/asset $out/asset
+    ln -s $AUTO_SHARE_PATH/public/assets $out/assets
     cp -vR templates $out/templates
-    cp cpanfile $out/cpanfile
-  '' + optionalString stdenv.isDarwin ''
+    cp Makefile.PL $out/Makefile.PL
+  '' + lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/convos
   '' + ''
     wrapProgram $out/bin/convos --set MOJO_HOME $out
@@ -91,6 +91,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://convos.chat";
     description = "Convos is the simplest way to use IRC in your browser";
     license = lib.licenses.artistic2;
-    maintainers = with maintainers; [ sgo ];
+    maintainers = with lib.maintainers; [ sgo ];
   };
 }

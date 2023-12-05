@@ -1,11 +1,12 @@
 { spellChecking ? true
 , lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, autoreconfHook
 , pkg-config
 , gtk3
 , gtkspell3
-, gmime2
+, gmime3
 , gettext
 , intltool
 , itstool
@@ -21,21 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pan";
-  version = "0.146";
+  version = "0.155";
 
-  src = fetchurl {
-    url = "https://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-DsoTqZLcZOc3HlpCC8rmu/rcFeHkb9IWd4PSLwxKqJI=";
   };
 
-  patches = [
-    # Take <glib.h>, <gmime.h>, "gtk-compat.h" out of extern "C"
-    ./move-out-of-extern-c.diff
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext intltool itstool libxml2 makeWrapper ];
 
-  nativeBuildInputs = [ pkg-config gettext intltool itstool libxml2 makeWrapper ];
-
-  buildInputs = [ gtk3 gmime2 libnotify gnutls ]
+  buildInputs = [ gtk3 gmime3 libnotify gnutls ]
     ++ lib.optional spellChecking gtkspell3
     ++ lib.optionals gnomeSupport [ libsecret gcr ];
 

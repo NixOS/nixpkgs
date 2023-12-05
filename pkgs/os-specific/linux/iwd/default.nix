@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.0";
+  version = "2.8";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-9eQ2fW3ha69ngugYonbYdqrpERqt8aM0Ed4HM0CrmUU=";
+    sha256 = "sha256-i+2R8smgLXooApj0Z5e03FybhYgw1X/kIsJkrDzW8y4=";
   };
 
   outputs = [ "out" "man" "doc" ]
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.
@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
   };
 }

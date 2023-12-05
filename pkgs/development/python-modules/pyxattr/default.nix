@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
     pname = "pyxattr";
-    version = "0.7.2";
+    version = "0.8.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "68477027e6d3310669f98aaef15393bfcd9b2823d7a7f00a6f1d91a3c971ae64";
+      hash = "sha256-SMV47PjqC9Q1GxdSRw4wGpCjdhx8IfAPlT3PbW+m7lo=";
     };
 
     # IOError: [Errno 95] Operation not supported (expected)
@@ -21,5 +21,6 @@ buildPythonPackage rec {
     meta = with lib; {
       description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
       license = licenses.lgpl21Plus;
+      inherit (pkgs.attr.meta) platforms;
     };
 }

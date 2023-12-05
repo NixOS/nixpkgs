@@ -33,7 +33,7 @@ in
         default = [];
         description = lib.mdDoc ''
           List of volume definitions for pam_mount.
-          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
+          For more information, visit <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
@@ -44,6 +44,18 @@ in
         description = lib.mdDoc ''
           Additional programs to include in the search path of pam_mount.
           Useful for example if you want to use some FUSE filesystems like bindfs.
+        '';
+      };
+
+      cryptMountOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = literalExpression ''
+          [ "allow_discard" ]
+        '';
+        description = lib.mdDoc ''
+          Global mount options that apply to every crypt volume.
+          You can define volume-specific options in the volume definitions.
         '';
       };
 
@@ -66,7 +78,7 @@ in
         description = lib.mdDoc ''
           Sets the Debug-Level. 0 disables debugging, 1 enables pam_mount tracing,
           and 2 additionally enables tracing in mount.crypt. The default is 0.
-          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
+          For more information, visit <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
@@ -76,7 +88,7 @@ in
         description = lib.mdDoc ''
           Amount of microseconds to wait until killing remaining processes after
           final logout.
-          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
+          For more information, visit <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
@@ -155,9 +167,11 @@ in
           <!-- create mount point if not present -->
           <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${if cfg.removeCreatedMountPoints then "true" else "false"}" />
           <!-- specify the binaries to be called -->
-          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ${concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}</fusemount>
+          <!-- the comma in front of the options is necessary for empty options -->
+          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ,${concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}'</fusemount>
           <fuseumount>${pkgs.fuse}/bin/fusermount -u %(MNTPT)</fuseumount>
-          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt %(VOLUME) %(MNTPT)</cryptmount>
+          <!-- the comma in front of the options is necessary for empty options -->
+          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt -o ,${concatStringsSep "," (cfg.cryptMountOptions ++ [ "%(OPTIONS)" ])} %(VOLUME) %(MNTPT)</cryptmount>
           <cryptumount>${pkgs.pam_mount}/bin/umount.crypt %(MNTPT)</cryptumount>
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>
           ${optionalString oflRequired "<ofl>${fake_ofl}/bin/fake_ofl %(SIGNAL) %(MNTPT)</ofl>"}

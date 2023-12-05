@@ -1,7 +1,8 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
+, gsettings-desktop-schemas, gst_all_1, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
+, desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -20,13 +21,14 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-  ];
+    wrapGAppsHook
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    wrapGAppsHook
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -60,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     cpio
     cdrtools
@@ -83,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://virt-manager.org";
+    homepage = "https://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing
@@ -92,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "virt-manager";
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

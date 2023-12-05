@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.9";
+  version = "4.12";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9kLctjXpCVZMqP2Z6kSrQ/YHI7TXbBWO2BKXjEWzmLk=";
+    hash = "sha256-roWr5BX3vs9LaiuYl+FxLyflqsnDXfvd28zgrX39mfc=";
   };
 
   strictDeps = true;
@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
     sed -e 's|systemctl|true|g' \
         -e 's|systemd-tmpfiles|true|g' \
         -i initsystems/systemd/Makefile
+
+    # Fix systemd detection on NixOS
+    sed -e 's|\(-a ! -x /bin/journalctl\)|\1 -a ! -x /run/current-system/sw/bin/journalctl|g' \
+        -e 's|\(-o ! -x /bin/journalctl\)|\1 -o ! -x /run/current-system/sw/bin/journalctl|g' \
+        -i programs/barf/barf.in
 
     # Fix the ipsec program from crushing the PATH
     sed -e 's|\(PATH=".*"\):.*$|\1:$PATH|' -i programs/ipsec/ipsec.in

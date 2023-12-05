@@ -1,4 +1,6 @@
 { lib, stdenv
+, runCommand
+, newScope
 , fetchFromGitLab
 , gnome
 , dconf
@@ -11,22 +13,32 @@
 , callPackages
 , librsvg
 , cups
+, unzip
+, jq
 
 , pname ? "kicad"
 , stable ? true
-, withOCC ? true
-, withNgspice ? true
+, withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
 , python3
+, addons ? [ ]
 , debug ? false
 , sanitizeAddress ? false
 , sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
-, withPCM ? true # Plugin and Content Manager
 , srcs ? { }
+, symlinkJoin
 }:
+
+# `addons`: https://dev-docs.kicad.org/en/addons/
+#
+# ```nix
+# kicad = pkgs.kicad.override {
+#   addons = with pkgs.kicadAddons; [ kikit kikit-library ];
+# };
+# ```
 
 # The `srcs` parameter can be used to override the kicad source code
 # and all libraries, which are otherwise inaccessible
@@ -107,6 +119,32 @@ let
   wxGTK = wxGTK32;
   python = python3;
   wxPython = python.pkgs.wxPython_4_2;
+  addonPath = "addon.zip";
+  addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
+
+  addonsJoined =
+    runCommand "addonsJoined"
+      {
+        inherit addonsDrvs;
+        nativeBuildInputs = [ unzip jq ];
+      } ''
+      mkdir $out
+
+      for pkg in $addonsDrvs; do
+        unzip $pkg/addon.zip -d unpacked
+
+        folder_name=$(jq .identifier unpacked/metadata.json --raw-output | tr . _)
+        for d in unpacked/*; do
+          if [ -d "$d" ]; then
+            dest=$out/share/kicad/scripting/$(basename $d)/$folder_name
+            mkdir -p $(dirname $dest)
+
+            mv $d $dest
+          fi
+        done
+        rm -r unpacked
+      done
+    '';
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
@@ -114,11 +152,12 @@ stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
-    inherit withOCC withNgspice withScripting withI18n withPCM;
+    inherit withNgspice withScripting withI18n;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -132,12 +171,23 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six ];
+    [ wxPython python.pkgs.six python.pkgs.requests ] ++ addonsDrvs;
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
+  # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
+  # but it's used to find both the templates and the symbol/footprint library tables
+  # https://gitlab.com/kicad/code/kicad/-/issues/14792
+  template_dir = symlinkJoin {
+    name = "KiCad_template_dir";
+    paths = with passthru.libraries; [
+      "${templates}/share/kicad/template"
+      "${footprints}/share/kicad/template"
+      "${symbols}/share/kicad/template"
+    ];
+  };
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
@@ -150,15 +200,24 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
   ]
+  ++ optionals (addons != [ ]) (
+    let stockDataPath = symlinkJoin {
+      name = "kicad_stock_data_path";
+      paths = [
+        "${base}/share/kicad"
+        "${addonsJoined}/share/kicad"
+      ];
+    };
+    in
+    [ "--set-default NIX_KICAD7_STOCK_DATA_PATH ${stockDataPath}" ]
+  )
   ++ optionals (with3d)
   [
-    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
@@ -170,8 +229,9 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
+      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
-      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
     (concatStringsSep "\n"
       (flatten [
@@ -181,13 +241,13 @@ stdenv.mkDerivation rec {
 
         # wrap each of the directly usable tools
         (map
-          (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
             + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
         # link in the CLI utils
-        (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
 
         "runHook postInstall"
       ])
@@ -213,24 +273,16 @@ stdenv.mkDerivation rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
     else "Open Source EDA suite, development build")
-    + (if (!with3d) then ", without 3D models" else "");
+    + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ evils kiwi ];
-    # kicad is cross platform
+    maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
-
-    hydraPlatforms = if (with3d) then [ ] else platforms;
-    # We can't download the 3d models on Hydra,
-    # they are a ~1 GiB download and they occupy ~5 GiB in store.
-    # as long as the base and libraries (minus 3d) are build,
-    # this wrapper does not need to get built
-    # the kicad-*small "packages" cause this to happen
-
+    broken = stdenv.isDarwin;
     mainProgram = "kicad";
   };
 }

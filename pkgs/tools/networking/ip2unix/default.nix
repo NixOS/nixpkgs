@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, libyamlcpp, systemd
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, yaml-cpp, systemd
 , python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
 , libxml2, docbook5
 }:
 
 stdenv.mkDerivation rec {
   pname = "ip2unix";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "1pl8ayadxb0zzh5s26yschkjhr1xffbzzv347m88f9y0jv34d24r";
+    hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  buildInputs = [ libyamlcpp ];
+  buildInputs = [ yaml-cpp ];
 
   doCheck = true;
 

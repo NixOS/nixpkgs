@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for reading and writing collada documents";
     homepage = "http://pycollada.github.io/";
-    license = "BSD"; # they don't specify which BSD variant
+    license = licenses.bsd3;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ bjornfor ];
   };

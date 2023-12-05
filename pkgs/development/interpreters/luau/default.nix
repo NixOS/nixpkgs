@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.558";
+  version = "0.603";
 
   src = fetchFromGitHub {
-    owner = "Roblox";
+    owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-103TLfVmXBN3Vd31nbBu7RlxrG4DX6xn/vpveIdnm5E=";
+    hash = "sha256-8jm58F2AQcmjy19fydGLOD5fehaaNHGqXtDPu121jmw=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.libunwind ];
 
   installPhase = ''
     runHook preInstall
@@ -34,8 +36,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://luau-lang.org/";
     description = "A fast, small, safe, gradually typed embeddable scripting language derived from Lua";
+    homepage = "https://luau-lang.org/";
+    changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.marsam ];

@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.4";
+  version = "0.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VneuAnt9HkIRBeK2T71MIHbZbz6zY1vVy5vOYZ+82gM=";
+    hash = "sha256-wzltcerAGh/QfHGg+M7Hlw4SfDEg23K2plSyrmz/m7E=";
   };
 
   # Module has no tests

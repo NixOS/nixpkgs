@@ -9,17 +9,17 @@
 , makeWrapper
 , perl # for pod2man
 , darwin
+, gitUpdater
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.67";
+  version = "0.68";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8Mu7L3KqOsW9OmidMkWB+q9TofHd1P1sbsNrtE4MUoA=";
+    hash = "sha256-kOY12oejH0xKaaPrKem+l0PACqyPqD4P1jEjOYfNntM=";
   };
 
   preBuild = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
-  buildInputs = optional stdenv.isDarwin darwin.cctools;
+  buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
@@ -40,7 +40,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = {
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "git://git.joeyh.name/moreutils";
+  };
+
+  meta = with lib; {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
     maintainers = with maintainers; [ koral pSub ];

@@ -14,7 +14,8 @@ stdenv.mkDerivation  rec {
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection ];
+  buildInputs =  [ pythonEnv gtk3 libwnck wrapGAppsHook ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -46,5 +47,6 @@ stdenv.mkDerivation  rec {
     homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
+    mainProgram = "clipster";
   };
 }

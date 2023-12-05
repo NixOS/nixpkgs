@@ -8,23 +8,26 @@
 , hatchling
 , cattrs
 , cmake
+, ninja
 , packaging
 , pathspec
 , pyproject-metadata
 , pytest-subprocess
 , pytestCheckHook
+, setuptools
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.1.3";
+  version = "0.5.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-qkVj7fS2+JB8mpJ788vTw4jhD/TGtZAMtCiBlmjbFM8=";
+    hash = "sha256-xtrVpRJ7Kr+qI8uR0jrCEFn9d83fcSKzP9B3kQJNz78=";
   };
 
   postPatch = ''
@@ -55,17 +58,22 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     cattrs
     cmake
+    ninja
     pytest-subprocess
     pytestCheckHook
+    setuptools
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [
     # runs pip, requires network access
+    "tests/test_custom_modules.py"
     "tests/test_pyproject_pep517.py"
     "tests/test_pyproject_pep518.py"
+    "tests/test_pyproject_pep660.py"
     "tests/test_setuptools_pep517.py"
     "tests/test_setuptools_pep518.py"
   ];
@@ -77,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
+    changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

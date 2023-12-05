@@ -7,11 +7,11 @@
 
 buildPythonPackage (rec {
   pname = "elasticsearch";
-  version = "7.16.3";
+  version = "8.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8adf8bc351ed55df7296be1009d38a1c999c0abc7d8700fa88533f1ad6087c5e";
+    sha256 = "sha256-0zZ/wBPgT8eq00mm3p+tHuBPttYnsOeJaqUFwS/eXgQ=";
   };
 
   # Check is disabled because running them destroy the content of the local cluster!
@@ -23,6 +23,7 @@ buildPythonPackage (rec {
   meta = with lib; {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
+    changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };

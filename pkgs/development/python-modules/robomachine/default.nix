@@ -1,27 +1,48 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ stdenv
+, lib
+, allpairspy
+, buildPythonPackage
+, fetchPypi
+, pyparsing
+, pythonRelaxDepsHook
+, robotframework
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "RoboMachine";
-  version = "0.9.0";
+  version = "0.10.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
+    hash = "sha256-XrxHaV9U7mZ2TvySHGm6qw1AsoukppzwPq4wufIjL+k=";
   };
 
-  propagatedBuildInputs = [ pyparsing robotframework allpairspy ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
-  # Remove Windows .bat files
-  postInstall = ''
-    rm "$out/bin/"*.bat
-  '';
+  propagatedBuildInputs = [
+    pyparsing
+    robotframework
+    allpairspy
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "argparse" ""
-  '';
+  pythonRemoveDeps = [
+    "argparse"
+  ];
+
+  pythonRelaxDeps = [
+    "pyparsing"
+  ];
+
+  pythonImportsCheck = [
+    "robomachine"
+  ];
 
   meta = with lib; {
-    broken = true;
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureLocal = ''
     MANPATH_DEFAULT="/run/current-system/sw/share/man"
     MANPATH_BASE="$MANPATH_DEFAULT"
-    OSNAME="NixOS"
+    OSNAME="Nixpkgs"
     PREFIX="$out"
     LD_OHASH="-lutil"
     # Use symlinks instead of hardlinks (more commonly used in nixpkgs)
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "regress";
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
   preCheck = "patchShebangs --build regress/regress.pl";
 
   passthru.tests = {

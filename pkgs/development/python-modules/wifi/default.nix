@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "rockymeza";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
+    hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
 
   disabled = pythonOlder "2.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

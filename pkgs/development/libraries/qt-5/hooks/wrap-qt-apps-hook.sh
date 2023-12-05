@@ -34,7 +34,7 @@ qtHostPathHook() {
         qtWrapperArgs+=(--prefix QML2_IMPORT_PATH : "$qmlDir")
     fi
 }
-addEnvHooks "$hostOffset" qtHostPathHook
+addEnvHooks "$targetOffset" qtHostPathHook
 
 makeQtWrapper() {
     local original="$1"

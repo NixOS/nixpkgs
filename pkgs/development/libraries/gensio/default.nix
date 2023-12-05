@@ -2,19 +2,20 @@
 , fetchFromGitHub
 , lib
 , nix-update-script
+, openssl
 , pkg-config
 , stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.5.5";
+  version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K2A61OflKdVVzdV8qH5x/ggZKa4i8yvs5bdPoOwmm7A=";
+    sha256 = "sha256-fm850eDqKhvjwU5RwdwAro4R23yRn41ePn5++8MXHZ0=";
   };
 
   passthru = {
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ openssl ];
 
   meta = with lib; {
     description = "General Stream I/O";

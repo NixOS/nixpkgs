@@ -10,16 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ghostie";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "attriaayush";
     repo = "ghostie";
     rev = "v${version}";
-    sha256 = "sha256-O05PJa4YFD8+9BOojS7Ti1OYGxaROFKyGT9VJf5V58U=";
+    sha256 = "sha256-lEjJLmBA3dlIVxc8E+UvR7u154QGeCfEbxdgUxAS3Cw=";
   };
 
-  cargoSha256 = "sha256-YF808suqfeM156KkRGCCtGFsCdgQ4eu6n2P6yAVV7qc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "clokwerk-0.4.0-rc1" = "sha256-GQDWEN2arDDRu2ft8QYdXsNhBEIhBNZTnLoLy27cbAI=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     broken = stdenv.isx86_64 && stdenv.isDarwin;
+    mainProgram = "ghostie";
   };
 }
-

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "karabiner-elements";
-  version = "14.8.0";
+  version = "14.11.0";
 
   src = fetchurl {
     url = "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v${version}/Karabiner-Elements-${version}.dmg";
-    sha256 = "sha256-sQJgK3EoJf8wcr0iL9iZXl6NJArptUDTrDeNKwgEfuM=";
+    sha256 = "sha256-InuSfXbaSYsncq8jVO15LbQmDTguRHlOiE/Pj5EfX5c=";
   };
 
   outputs = [ "out" "driver" ];
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
   '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later.";

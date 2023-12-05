@@ -1,12 +1,13 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gmp
 , libX11
 , libpthreadstubs
 , perl
 , readline
-, tex
+, texliveBasic
 , withThread ? true
 }:
 
@@ -14,7 +15,7 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.15.1";
+  version = "2.15.4";
 
   src = fetchurl {
     urls = [
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-RUGdt3xmhb7mfkLg7LeOGe9WK+eq/GN8ikGXDy6Qnj0=";
+    hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
   };
 
   buildInputs = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     libX11
     perl
     readline
-    tex
+    texliveBasic
   ] ++ lib.optionals withThread [
     libpthreadstubs
   ];

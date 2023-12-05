@@ -1,0 +1,31 @@
+From be08356f421825d3d2dd7ab687f86d9981a31f9a Mon Sep 17 00:00:00 2001
+From: "Travis A. Everett" <travis.a.everett@gmail.com>
+Date: Thu, 3 Aug 2023 20:15:40 -0500
+Subject: [PATCH] simplify macOS builds
+
+---
+ Makefile | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6dfd829..19c3ae3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,13 +8,7 @@ CXXFLAGS = -std=c++11 -O2 -MMD -I ./deps
+ OBJECTS := src/text_encoding_detect.o src/Utils.o src/Converter.o src/main.o
+ DEPENDS := $(OBJECTS:.o=.d)
+ EXEC = srt-vtt
+-UNAME_S := $(shell uname -s)
+-ifeq ($(UNAME_S), Darwin)
+-	BIN_DIR = bin/Mac-OSX
+-else
+-	UNAME_M := $(shell uname -m)
+-	BIN_DIR = bin/$(UNAME_S)/$(UNAME_M)
+-endif
++BIN_DIR = bin
+ EXEC_PATH = $(BIN_DIR)/$(EXEC)
+ 
+ .PHONY: test
+-- 
+2.39.0
+

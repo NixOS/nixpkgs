@@ -10,7 +10,7 @@ in {
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
-  # Amazon recomments setting this to the highest possible value for a good EBS
+  # Amazon recommends setting this to the highest possible value for a good EBS
   # experience, which prior to 4.15 was 255.
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
   config.boot.kernelParams =
@@ -43,7 +43,7 @@ in {
 
     sizeMB = mkOption {
       type = with types; either (enum [ "auto" ]) int;
-      default = 2048;
+      default = 3072;
       example = 8192;
       description = lib.mdDoc "The size in MB of the image";
     };
@@ -102,8 +102,8 @@ in {
        ${pkgs.jq}/bin/jq -n \
          --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-         --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
-         --arg boot_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+         --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+         --arg boot_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg boot_mode "${amiBootMode}" \
          --arg root "$rootDisk" \
          --arg boot "$bootDisk" \
@@ -142,7 +142,7 @@ in {
        ${pkgs.jq}/bin/jq -n \
          --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
          --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-         --arg logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+         --arg logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
          --arg boot_mode "${amiBootMode}" \
          --arg file "$diskImage" \
           '{}

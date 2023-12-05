@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-glKjScJoJnFEm7Z9LAVF51haeyHB3wQ946U8RzJXs3k=";
   };
 
-  vendorSha256 = "sha256-YyMySHnrjBHm3hRNJDwWBs86Ih4S5DONYuwlQ3FBjkA=";
+  vendorHash = "sha256-YyMySHnrjBHm3hRNJDwWBs86Ih4S5DONYuwlQ3FBjkA=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz willibutz globin ];
-    platforms = platforms.unix;
   };
 }

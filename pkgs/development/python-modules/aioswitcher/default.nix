@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.2.1";
+  version = "3.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-k3xmW8aMBz6dbWuLnd6tw2BFoTuD80fpY7q2NfYqMlw=";
+    hash = "sha256-coTENnNX8GFLstpQtuJOC8050llW4QuLiutYARDWaSo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     export TZ=Asia/Jerusalem
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     assertpy
     pytest-asyncio
     pytest-mockservers

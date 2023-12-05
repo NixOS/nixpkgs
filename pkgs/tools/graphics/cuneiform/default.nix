@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: CMakeFiles/rbal.dir/src/statsearchbl.cpp.o:(.bss+0x0):
   #     multiple definition of `minrow'; CMakeFiles/rbal.dir/src/linban.c.o:(.bss+0xa3a): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postPatch = ''
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
+    mainProgram = "cuneiform";
   };
 }

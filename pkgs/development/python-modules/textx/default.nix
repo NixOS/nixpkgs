@@ -12,7 +12,6 @@
 , gprof2dot
 , html5lib
 , jinja2
-, memory_profiler
 , psutil
 , pytestCheckHook
 }:
@@ -27,7 +26,7 @@ let
       owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "sha256-uZlO82dKtWQQR5+Q7dWk3+ZoUzAjDJ8qzC4UMLCtnBk=";
+      hash = "sha256-uZlO82dKtWQQR5+Q7dWk3+ZoUzAjDJ8qzC4UMLCtnBk=";
     };
 
     postPatch = ''

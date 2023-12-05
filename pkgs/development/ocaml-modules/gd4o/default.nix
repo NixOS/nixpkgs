@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, ocaml, gd, freetype, findlib, zlib, libpng, libjpeg }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "gd4o is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-gd4o";
   version = "1.0a5";
@@ -12,6 +15,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib libjpeg libpng ];
   propagatedBuildInputs = [ gd zlib freetype ];
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR/stublibs

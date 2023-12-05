@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, patchelf
 , cmake
 , pkg-config
 , intel-gmmlib
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "22.43.24595.35";
+  version = "23.35.27191.9";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-CWiWkv3CmHhXAk2M92voeQ06ximSOnT9hgIA4rIxWmM=";
+    hash = "sha256-yyuP9erK3bQ5oegLXPM+of6x7fslUXHPlX2q71lnGWA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -34,6 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "drivers" ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     # Avoid clash with intel-ocl

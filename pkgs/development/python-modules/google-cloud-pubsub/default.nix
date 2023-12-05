@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.13.11";
+  version = "2.18.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CFh47PuzmR/qavOgEaot2fVBXRnHYNDemlhSTSqhut4=";
+    hash = "sha256-Muth/UwdxshC9ZTWnZr6gFROOzJ6pkChZOtvsCAery0=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     pytestCheckHook
     pytest-asyncio
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
-  version = "3.2.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jNy5huPwp8W0R0qjyDPWduYkaVCfSJkRDd8RjwQIJlE=";
+    sha256 = "w9I7N9/W458uCfCRt3sVQfv6F8Twtr9cibrvcikIDhc=";
   };
 
   nativeBuildInputs = [

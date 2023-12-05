@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # Add a workarounf for -fno-common tollchains like upstream gcc-10.
   # alan-3 is already fixed, but the backport is nontrivial.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/alan2

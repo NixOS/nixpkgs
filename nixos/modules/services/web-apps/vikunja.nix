@@ -11,18 +11,8 @@ let
 in {
   options.services.vikunja = with lib; {
     enable = mkEnableOption (lib.mdDoc "vikunja service");
-    package-api = mkOption {
-      default = pkgs.vikunja-api;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-api";
-      description = lib.mdDoc "vikunja-api derivation to use.";
-    };
-    package-frontend = mkOption {
-      default = pkgs.vikunja-frontend;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-frontend";
-      description = lib.mdDoc "vikunja-frontend derivation to use.";
-    };
+    package-api = mkPackageOption pkgs "vikunja-api" { };
+    package-frontend = mkPackageOption pkgs "vikunja-frontend" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
@@ -55,6 +45,11 @@ in {
     frontendHostname = mkOption {
       type = types.str;
       description = lib.mdDoc "The Hostname under which the frontend is running.";
+    };
+    port = mkOption {
+      type = types.port;
+      default = 3456;
+      description = lib.mdDoc "The TCP port exposed by the API.";
     };
 
     settings = mkOption {
@@ -101,6 +96,7 @@ in {
         inherit (cfg.database) type host user database path;
       };
       service = {
+        interface = ":${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
@@ -132,7 +128,7 @@ in {
           tryFiles = "try_files $uri $uri/ /";
         };
         "~* ^/(api|dav|\\.well-known)/" = {
-          proxyPass = "http://localhost:3456";
+          proxyPass = "http://localhost:${toString cfg.port}";
           extraConfig = ''
             client_max_body_size 20M;
           '';
@@ -141,5 +137,9 @@ in {
     };
 
     environment.etc."vikunja/config.yaml".source = configFile;
+
+    environment.systemPackages = [
+      cfg.package-api # for admin `vikunja` CLI
+    ];
   };
 }

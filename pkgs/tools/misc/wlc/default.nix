@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 with python3.pkgs;
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     twine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -31,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WeblateOrg/wlc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ paperdigits ];
+    mainProgram = "wlc";
   };
 }

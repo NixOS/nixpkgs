@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, CommonMark
+, commonmark
 , docutils
 , sphinx
 , isPy3k
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     sha256 = "0kwm4smxbgq0c0ybkxfvlgrfb3gq9amdw94141jyykk9mmz38379";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ CommonMark docutils sphinx ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ commonmark docutils sphinx ];
 
   dontUseSetuptoolsCheck = true;
 

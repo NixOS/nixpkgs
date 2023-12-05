@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, qmake
 , qtbase
 , qtscript
 , qtsvg

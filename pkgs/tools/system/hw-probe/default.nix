@@ -1,6 +1,5 @@
-{ config
+{ lib
 , stdenv
-, lib
 , fetchFromGitHub
 , makeWrapper
 , makePerlPath
@@ -30,7 +29,7 @@
 , xz
 
 # Conditionally recommended
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 
 # Recommended
@@ -137,5 +136,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
     license = with licenses; [ lgpl21 bsdOriginal ];
     maintainers = with maintainers; [ rehno-lindeque  ];
+    mainProgram = "hw-probe";
   };
 }

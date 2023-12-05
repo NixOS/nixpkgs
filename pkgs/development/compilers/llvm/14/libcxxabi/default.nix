@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./wasm.patch}
+    patch -p1 -d llvm -i ${../../common/libcxxabi/wasm.patch}
   '';
 
   patches = [
@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';
+
+  passthru = {
+    libName = "c++abi";
+  };
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

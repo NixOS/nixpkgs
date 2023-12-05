@@ -50,7 +50,7 @@ in
       ];
       environment.HOME = "/var/lib/evcc";
       path = with pkgs; [
-        glibc # requires getent
+        getent
       ];
       serviceConfig = {
         ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";

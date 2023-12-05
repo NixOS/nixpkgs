@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
+  patches = [
+    # https://github.com/WayneD/rsync/issues/511#issuecomment-1774612577
+    # original source: https://build.opensuse.org/package/view_file/network/rsync/rsync-fortified-strlcpy-fix.patch?expand=1&rev=3f8dd2f4a404c96c0f69176e60893714
+    ./rsync-fortified-strlcpy-fix.patch
+  ];
+
   buildInputs = [ libiconv zlib popt ]
     ++ lib.optional enableACLs acl
     ++ lib.optional enableZstd zstd
@@ -43,6 +49,9 @@ stdenv.mkDerivation rec {
     # disable the included zlib explicitly as it otherwise still compiles and
     # links them even.
     "--with-included-zlib=no"
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
+    # fix `multiversioning needs 'ifunc' which is not supported on this target` error
+    "--disable-roll-simd"
   ];
 
   enableParallelBuilding = true;
@@ -53,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    mainProgram = "rsync";
     maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
+    platforms = platforms.unix;
   };
 }

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "piccolo-theme";
-  version = "0.12.0";
+  version = "0.19.0";
 
   src = fetchPypi {
     pname = "piccolo_theme";
     inherit version;
-    sha256 = "sha256-o6uaqAo/Nb28doByq40XakKJpA4o6/Z/PzMhmb058FE=";
+    hash = "sha256-pGMOc/GSh3q2HW1mfW+XFgpOyiXd3cdh56cvXatseuc=";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Clean and modern Sphinx theme";
     homepage = "https://piccolo-theme.readthedocs.io";
-    license = licenses.mit;
+    license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ loicreynier ];
     platforms = platforms.unix;
   };

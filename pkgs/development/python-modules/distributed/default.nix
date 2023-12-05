@@ -3,7 +3,7 @@
 , click
 , cloudpickle
 , dask
-, fetchPypi
+, fetchFromGitHub
 , jinja2
 , locket
 , msgpack
@@ -11,30 +11,42 @@
 , psutil
 , pythonOlder
 , pyyaml
+, setuptools
+, setuptools-scm
 , sortedcontainers
 , tblib
 , toolz
 , tornado
 , urllib3
+, versioneer
 , zict
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2022.10.2";
-  format = "setuptools";
+  version = "2023.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U/Clv276uaWrM0XNkT9tPz1OpETuLtvqMxx/75b9Z9A=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "distributed";
+    rev = "refs/tags/${version}";
+    hash = "sha256-V0L1qY9xtJgKxNEZ69z8CQuXsUs30cqu6xFrsjKWkbY=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tornado >= 6.0.3, <6.2" "tornado >= 6.0.3"
+    substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
 
   propagatedBuildInputs = [
     click
@@ -64,8 +76,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
+    changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    platforms = platforms.x86; # fails on aarch64
-    maintainers = with maintainers; [ teh costrouc ];
+    maintainers = with maintainers; [ teh ];
   };
 }

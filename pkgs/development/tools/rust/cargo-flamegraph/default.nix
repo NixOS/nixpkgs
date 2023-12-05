@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-flamegraph";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${version}";
-    sha256 = "sha256-LYoyMEALxeUQQI2pBL1u0Q9rrwyy6N6Dg5bNxhJiVrM=";
+    sha256 = "sha256-yeNA6HkhWEUqarBDRbyD3RBIlBZZVrbAMng7d5beBB4=";
   };
 
-  cargoSha256 = "sha256-t8+bjTRQMuXTYhgW1NuC3MXsRh2SMeycyyq4x1nb9MU=";
+  cargoSha256 = "sha256-IHOVaRfjopaSRY8HF8ATdNNLfhTVrIKvYsAuocqRdWI=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = "https://github.com/flamegraph-rs/flamegraph";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ killercup ];
+    maintainers = with maintainers; [ killercup matthiasbeyer ];
   };
 }

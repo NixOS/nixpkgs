@@ -1,29 +1,30 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
 # Based on the work of Hauleth
 # None of this would have happened without him
 
 let
   pname = "elixir-ls";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.17.10";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    hash = "sha256-LUAYfR6MNNGLaqv8EBx0JQ8KYYD7jRvez3HJFnczV+Y=";
     fetchSubmodules = true;
   };
 in
-mixRelease  {
+mixRelease {
   inherit pname version src elixir;
+
+  stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    sha256 = pinData.depsSha256;
+    hash = "sha256-MVGYENy6/xI/ph/X0DxquigCuLK1FAEIONzoQU7TXoM=";
   };
 
-  # elixir_ls is an umbrella app
+  # elixir-ls is an umbrella app
   # override configurePhase to not skip umbrella children
   configurePhase = ''
     runHook preConfigure
@@ -31,7 +32,7 @@ mixRelease  {
     runHook postConfigure
   '';
 
-  # elixir_ls require a special step for release
+  # elixir-ls require a special step for release
   # compile and release need to be performed together because
   # of the no-deps-check requirement
   buildPhase = ''
@@ -48,6 +49,10 @@ mixRelease  {
     substitute release/language_server.sh $out/bin/elixir-ls \
       --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
+
+    substitute release/debugger.sh $out/bin/elixir-debugger \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-debugger
     # prepare the launcher
     substituteInPlace $out/lib/launch.sh \
       --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
@@ -69,7 +74,8 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 }

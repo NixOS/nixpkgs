@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , entrypoints
-, jupyter_core
+, jupyter-core
 , hatchling
 , nest-asyncio
 , python-dateutil
@@ -11,16 +11,18 @@
 , traitlets
 , isPyPy
 , py
+, pythonOlder
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "7.3.5";
+  version = "8.3.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PFhGahuNVdugvzzgg05PW3dguvmNHXPbCt1vGd6ezR0=";
+    hash = "sha256-YClLLVuGk1bIk/V7God+plENYNRc9LOAV/FnLYVpmsk=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +31,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     entrypoints
-    jupyter_core
+    jupyter-core
     nest-asyncio
     python-dateutil
     pyzmq
     tornado
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ] ++ lib.optional isPyPy py;
 
   # Circular dependency with ipykernel

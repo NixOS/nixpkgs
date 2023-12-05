@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "luispedro";
     repo = "mahotas";
     rev = "v${version}";
-    sha256 = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
+    hash = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
   };
 
   propagatedBuildInputs = [
@@ -30,13 +30,18 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace mahotas/io/freeimage.py \
       --replace "ctypes.util.find_library('freeimage')" 'True' \
       --replace 'ctypes.CDLL(libname)' 'np.ctypeslib.load_library("libfreeimage", "${freeimage}/lib")'
   '';
+
+  # mahotas/_morph.cpp:864:10: error: no member named 'random_shuffle' in namespace 'std'
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-std=c++14";
+  };
 
   # tests must be run in the build directory
   preCheck = ''

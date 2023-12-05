@@ -3,7 +3,6 @@
 , git
 , gnugrep
 , fetchFromGitHub
-, installShellFiles
 , lib
 , makeWrapper
 , stdenv
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "steamtinkerlaunch";
-  version = "12.0";
+  version = "12.12";
 
   src = fetchFromGitHub {
     owner = "sonic2kk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cEGERh0INc/xetQhALqc+lp/HNDoy3JdTZr/nHlthYc=";
+    hash = "sha256-oigHNfg5rHxRabwUs66ye+chJzivmCIw8mg/GaJLPkg=";
   };
 
   # hardcode PROGCMD because #150841

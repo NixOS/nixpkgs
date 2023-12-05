@@ -1,5 +1,5 @@
 { stdenv, cmake, fetchFromGitHub, lib }: let
-  version = "1.2.2";
+  version = "1.2.3";
 in stdenv.mkDerivation {
   name = "stduuid-${version}";
 
@@ -7,7 +7,7 @@ in stdenv.mkDerivation {
     owner = "mariusbancila";
     repo = "stduuid";
     rev = "v${version}";
-    hash = "sha256-itx1OF1gmEEMy2tJlkN5dpF6o0dlesecuHYfpJdhf7c=";
+    hash = "sha256-MhpKv+gH3QxiaQMx5ImiQjDGrbKUFaaoBLj5Voh78vg=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -217,9 +217,13 @@ in
               # to remove them if they are stale
               let
                 contentDirs = map dirOf contentFiles;
+                # Multiple "split" parity files can be specified in a single
+                # "parityFile", separated by a comma.
+                # https://www.snapraid.it/manual#7.1
+                splitParityFiles = map (s: splitString "," s) parityFiles;
               in
               unique (
-                attrValues dataDisks ++ parityFiles ++ contentDirs
+                attrValues dataDisks ++ splitParityFiles ++ contentDirs
               );
           } // optionalAttrs touchBeforeSync {
             ExecStartPre = "${pkgs.snapraid}/bin/snapraid touch";

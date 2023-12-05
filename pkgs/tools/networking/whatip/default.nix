@@ -17,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatip";
-  version = "1.1";
+  version = "1.2";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GabMus";
     repo = pname;
     rev = version;
-    hash = "sha256-ltimqdFTvvjXtvLC5jAdRaNX15i2Ww5mB3DIr4r9Yzg=";
+    hash = "sha256-gt/NKgnCpRoVmLvEJJq2geng4miM2g+YhXYEOm5pPTA=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -44,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     librsvg
     libadwaita
-    gobject-introspection
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

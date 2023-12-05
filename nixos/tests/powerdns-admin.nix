@@ -10,6 +10,7 @@ let
   defaultConfig = ''
     BIND_ADDRESS = '127.0.0.1'
     PORT = 8000
+    CAPTCHA_ENABLE = False
   '';
 
   makeAppTest = name: configs: makeTest {
@@ -86,9 +87,7 @@ let
           ensureUsers = [
             {
               name = "powerdnsadmin";
-              ensurePermissions = {
-                "DATABASE powerdnsadmin" = "ALL PRIVILEGES";
-              };
+              ensureDBOwnership = true;
             }
           ];
         };
@@ -98,7 +97,30 @@ let
       tcp = {
         services.powerdns-admin.extraArgs = [ "-b" "127.0.0.1:8000" ];
         system.build.testScript = ''
+          set -euxo pipefail
           curl -sSf http://127.0.0.1:8000/
+
+          # Create account to check that the database migrations ran
+          csrf_token="$(curl -sSfc session http://127.0.0.1:8000/register | grep _csrf_token | cut -d\" -f6)"
+          # Outputs 'Redirecting' if successful
+          curl -sSfb session http://127.0.0.1:8000/register \
+            -F "_csrf_token=$csrf_token" \
+            -F "firstname=first" \
+            -F "lastname=last" \
+            -F "email=a@example.com" \
+            -F "username=user" \
+            -F "password=password" \
+            -F "rpassword=password" | grep Redirecting
+
+          # Login
+          # Outputs 'Redirecting' if successful
+          curl -sSfb session http://127.0.0.1:8000/login \
+            -F "_csrf_token=$csrf_token" \
+            -F "username=user" \
+            -F "password=password" | grep Redirecting
+
+          # Check that we are logged in, this redirects to /admin/setting/pdns if we are
+          curl -sSfb session http://127.0.0.1:8000/dashboard/ | grep /admin/setting
         '';
       };
       unix = {

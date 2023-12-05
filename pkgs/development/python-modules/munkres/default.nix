@@ -26,7 +26,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "http://bmc.github.com/munkres/";

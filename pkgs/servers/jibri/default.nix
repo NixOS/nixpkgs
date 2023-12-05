@@ -13,15 +13,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jibri";
-  version = "8.0-139-g7ab9aa2";
+  version = "8.0-145-g1a4bb8e";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "14V5khp6S9T3SWiNfKyxn2WCzwhcXDCRDtATa15p01M=";
+    sha256 = "Qemr2108R/Lg1C5UvWQbK7PSbrKvBkfATNpvFDqJ3bI=";
   };
 
   dontBuild = true;
   nativeBuildInputs = [ dpkg makeWrapper ];
-  unpackCmd = "dpkg-deb -x $src debcontents";
 
   installPhase = ''
     runHook preInstall

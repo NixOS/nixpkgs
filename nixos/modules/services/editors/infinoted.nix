@@ -8,14 +8,7 @@ in {
   options.services.infinoted = {
     enable = mkEnableOption (lib.mdDoc "infinoted");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.libinfinity;
-      defaultText = literalExpression "pkgs.libinfinity";
-      description = lib.mdDoc ''
-        Package providing infinoted
-      '';
-    };
+    package = mkPackageOption pkgs "libinfinity" { };
 
     keyFile = mkOption {
       type = types.nullOr types.path;

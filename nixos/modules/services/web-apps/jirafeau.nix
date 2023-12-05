@@ -36,7 +36,7 @@ in
       description = lib.mdDoc "Location of Jirafeau storage directory.";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Jirafeau file upload application.");
+    enable = mkEnableOption (lib.mdDoc "Jirafeau file upload application");
 
     extraConfig = mkOption {
       type = types.lines;
@@ -92,12 +92,7 @@ in
       description = lib.mdDoc "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.jirafeau;
-      defaultText = literalExpression "pkgs.jirafeau";
-      description = lib.mdDoc "Jirafeau package to use";
-    };
+    package = mkPackageOption pkgs "jirafeau" { };
 
     poolConfig = mkOption {
       type = with types; attrsOf (oneOf [ str int bool ]);

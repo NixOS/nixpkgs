@@ -67,14 +67,14 @@ in {
   options = {
     services.zoneminder = with lib; {
       enable = lib.mkEnableOption (lib.mdDoc ''
-        ZoneMinder
+        ZoneMinder.
 
         If you intend to run the database locally, you should set
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
         Additionally, you will need to run `zmupdate.pl` yourself when
-        upgrading to a newer version.
+        upgrading to a newer version
       '');
 
       webserver = mkOption {
@@ -283,7 +283,8 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
-          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
+          phpPackage = pkgs.php.withExtensions (
+            { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
           '';
@@ -326,6 +327,15 @@ in {
           fi
 
           ${zoneminder}/bin/zmupdate.pl -nointeractive
+          ${zoneminder}/bin/zmupdate.pl --nointeractive -f
+
+          # Update ZM's Nix store path in the configuration table. Do nothing if the config doesn't
+          # contain ZM's Nix store path.
+          ${config.services.mysql.package}/bin/mysql -u zoneminder zm << EOF
+            UPDATE Config
+              SET Value = REGEXP_REPLACE(Value, "^/nix/store/[^-/]+-zoneminder-[^/]+", "${pkgs.zoneminder}")
+              WHERE Name = "ZM_FONT_FILE_LOCATION";
+          EOF
         '';
         serviceConfig = {
           User = user;
@@ -341,7 +351,7 @@ in {
           CacheDirectory = dirs cacheDirs;
           RuntimeDirectory = dirName;
           ReadWriteDirectories = lib.mkIf useCustomDir [ cfg.storageDir ];
-          StateDirectory = dirs (if useCustomDir then [] else libDirs);
+          StateDirectory = dirs (lib.optionals (!useCustomDir) libDirs);
           LogsDirectory = dirName;
           PrivateTmp = true;
           ProtectSystem = "strict";

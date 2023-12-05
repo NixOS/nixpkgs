@@ -41,8 +41,6 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    # To avoid enabling strictDeps = false (#56943)
-    gobject-introspection
     librsvg
     pango
     webkitgtk

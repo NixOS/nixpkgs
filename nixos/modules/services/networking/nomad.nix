@@ -10,14 +10,7 @@ in
     services.nomad = {
       enable = mkEnableOption (lib.mdDoc "Nomad, a distributed, highly available, datacenter-aware scheduler");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nomad;
-        defaultText = literalExpression "pkgs.nomad";
-        description = lib.mdDoc ''
-          The package used for the Nomad agent and CLI.
-        '';
-      };
+      package = mkPackageOption pkgs "nomad" { };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
@@ -67,10 +60,21 @@ in
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
-          [ "<pluginDir>" pkgs.<plugins-name> ]
+          [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
         '';
       };
 
+      credentials = mkOption {
+        description = lib.mdDoc ''
+          Credentials envs used to configure nomad secrets.
+        '';
+        type = types.attrsOf types.str;
+        default = { };
+
+        example = {
+          logs_remote_write_password = "/run/keys/nomad_write_password";
+        };
+      };
 
       settings = mkOption {
         type = format.type;
@@ -139,9 +143,17 @@ in
         {
           DynamicUser = cfg.dropPrivileges;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
+          ExecStart =
+            let
+              pluginsDir = pkgs.symlinkJoin
+                {
+                  name = "nomad-plugins";
+                  paths = cfg.extraSettingsPlugins;
+                };
+            in
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin" +
             concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (path: " -plugin-dir=${path}/bin") cfg.extraSettingsPlugins;
+            concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (lib.attrNames cfg.credentials);
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;
@@ -150,6 +162,7 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TasksMax = "infinity";
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
         }
         (mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string

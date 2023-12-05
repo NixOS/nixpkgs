@@ -10,6 +10,12 @@ buildPythonPackage rec {
     sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
   };
 
+  # setuptools.extern.packaging.version.InvalidVersion: Invalid version: '1.7.7-SNAPSHOT'
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "1.7.7-SNAPSHOT" "1.7.7"
+  '';
+
   doCheck = false;        # No such file or directory: './run_tests.py
 
   meta = with lib; {

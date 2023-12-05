@@ -1,18 +1,27 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, glibcLocales
+, gnome
 , gobject-introspection
+, gtk3
+, intltool
+, python3
+, python3Packages
+, wrapGAppsHook
+, xdg-utils
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.21";
+  version = "3.11.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
+    sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
   };
 
   patches = [
@@ -27,21 +36,16 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook
     glibcLocales
+    gobject-introspection
   ];
-
-  # as of 2021-07, the gobject-introspection setup hook does not
-  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
-  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   buildInputs = [
     python3
     gtk3
-    gobject-introspection
     gnome.adwaita-icon-theme
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     minimock
     pytest
     pytest-httpserver
@@ -59,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
+    mutagen
   ];
 
   makeFlags = [
@@ -77,6 +82,10 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+
+  passthru.updateScript = gitUpdater {};
+
   meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''
@@ -86,6 +95,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ skeidel mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

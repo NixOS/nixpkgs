@@ -7,9 +7,9 @@
 # files.
 self: super: {
 
-  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
+  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
 
-  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
+  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
@@ -38,4 +38,5 @@ self: super: {
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+
 }

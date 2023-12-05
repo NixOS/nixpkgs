@@ -2,7 +2,9 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , hdf5
 , cython
@@ -19,7 +21,7 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.7.0";
+  version = "3.9.0";
   pname = "h5py";
   format = "pyproject";
 
@@ -27,13 +29,12 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-P883iEODxdpkhGq1EBkHIAJ9ygdo3vNN2Ny2Wdvly/M=";
+    hash = "sha256-5gTbZSHB42fGvX+tI5yEf1PMRmRvLSZRNy0Frl6V+Bc=";
   };
 
   # avoid strict pinning of numpy
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "numpy ==" "numpy >=" \
       --replace "mpi4py ==" "mpi4py >="
   '';
 
@@ -46,12 +47,14 @@ in buildPythonPackage rec {
     ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
-  preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
+  preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
 
   nativeBuildInputs = [
     cython
+    oldest-supported-numpy
     pkgconfig
     setuptools
+    wheel
   ];
 
   buildInputs = [ hdf5 ]
@@ -63,11 +66,12 @@ in buildPythonPackage rec {
 
   # tests now require pytest-mpi, which isn't available and difficult to package
   doCheck = false;
-  checkInputs = [ pytestCheckHook openssh ];
+  nativeCheckInputs = [ pytestCheckHook openssh ];
 
   pythonImportsCheck = [ "h5py" ];
 
   meta = with lib; {
+    changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
     license = licenses.bsd3;

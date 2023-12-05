@@ -22,7 +22,7 @@ let
 
     # circular dependencies if enabled by default
     doCheck = false;
-    checkInputs = [
+    nativeCheckInputs = [
       jinja2
       railroad-diagrams
     ];

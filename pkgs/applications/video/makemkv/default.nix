@@ -14,21 +14,21 @@
 }:
 
 let
-  version = "1.17.2";
+  version = "1.17.5";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "sha256-gACMzJ7oZCk/INSeJaV7GnF9hy/6F9d0QDLp5jPiF4k=";
+    sha256 = "ywCcMfaWAeL2bjFZJaCa0XW60EHyfFCW17Bt1QBN8E8=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "sha256-qD+Kuz8j3vDch4PlNQYqdbffL3YSKRqKg6IfkLk/LaQ=";
+    sha256 = "/C9LDcUxF6tJkn2aQV+nMILRpK5H3wxOMMxHEMTC/CI=";
   };
 
 in mkDerivation {
@@ -38,6 +38,10 @@ in mkDerivation {
   srcs = [ src_bin src_oss ];
 
   sourceRoot = "makemkv-oss-${version}";
+
+  patches = [ ./r13y.patch ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
@@ -80,7 +84,7 @@ in mkDerivation {
       expiration date.
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = [ licenses.unfree licenses.lgpl21 ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ titanous ];

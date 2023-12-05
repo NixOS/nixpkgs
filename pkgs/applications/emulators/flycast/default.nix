@@ -5,25 +5,25 @@
 , pkg-config
 , makeWrapper
 , alsa-lib
-, libX11
-, libevdev
-, udev
+, curl
+, libao
 , libpulseaudio
-, SDL2
 , libzip
+, lua
 , miniupnpc
+, SDL2
 , vulkan-loader
 }:
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
     rev = "v${version}";
-    sha256 = "sha256-vSyLg2lAJBV7crKVbGRbi1PUuCwHF9GB/8pjMTlaigA=";
+    sha256 = "sha256-eQMKaUaZ1b0oXre4Ouli4qIyNaG64KntyRGk3/YIopc=";
     fetchSubmodules = true;
   };
 
@@ -35,13 +35,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libevdev
-    udev
+    curl
+    libao
     libpulseaudio
-    SDL2
     libzip
+    lua
     miniupnpc
+    SDL2
+  ];
+
+  cmakeFlags = [
+    "-DUSE_HOST_SDL=ON"
   ];
 
   postFixup = ''

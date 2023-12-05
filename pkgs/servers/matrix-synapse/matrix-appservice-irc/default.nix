@@ -1,32 +1,82 @@
 { lib
-, buildNpmPackage
+, stdenv
 , fetchFromGitHub
-, python3
+, fetchYarnDeps
+, prefetch-yarn-deps
+, nodejs
+, nodejs-slim
 , matrix-sdk-crypto-nodejs
 , nixosTests
 , nix-update-script
 }:
 
-buildNpmPackage rec {
+let
   pname = "matrix-appservice-irc";
-  version = "0.36.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = "matrix-appservice-irc";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8/jLONqf+0JRAK/SLj3qlG6Dm0VRl4h6YWeZnz4pVXc=";
+    hash = "sha256-wUbWvCa9xvot73nXZjF3/RawM98ffBCW5YR2+ZKzmEo=";
   };
 
-  npmDepsHash = "sha256-fGft7au5js9DRoXYccBPdJyaZ3zfsuCwUwWPOxwAodo=";
+  yarnOfflineCache = fetchYarnDeps {
+    name = "${pname}-${version}-offline-cache";
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-P9u5sK9rIHWRE8kFMj05fVjv26jwsawvHBZgSn7j5BE=";
+  };
+
+in
+stdenv.mkDerivation {
+  inherit pname version src yarnOfflineCache;
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    python3
+    prefetch-yarn-deps
+    nodejs-slim
+    nodejs.pkgs.yarn
+    nodejs.pkgs.node-gyp-build
   ];
 
-  postInstall = ''
-    rm -rv $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
+    fixup-yarn-lock yarn.lock
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    patchShebangs node_modules/ bin/
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn --offline build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp package.json $out
+    cp app.js config.schema.yml $out
+    cp -r bin lib public $out
+
+    # prune dependencies to production only
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts --production
+    cp -r node_modules $out
+
+    # replace matrix-sdk-crypto-nodejs with nixos package
+    rm -rv $out/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/node_modules/@matrix-org/
+
+    runHook postInstall
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;

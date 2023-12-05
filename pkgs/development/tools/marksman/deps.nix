@@ -3,12 +3,14 @@
 
 { fetchNuGet }: [
   (fetchNuGet { pname = "coverlet.collector"; version = "3.1.2"; sha256 = "0gsk2q93qw7pqxwd4pdyq5364wz0lvldcqqnf4amz13jaq86idmz"; })
+  (fetchNuGet { pname = "dotnet-fsharplint"; version = "0.21.2"; sha256 = "188xbqd5hg11lrfwn6vnajwsm8azlri3mk143m8q75br7jbjig7p"; })
+  (fetchNuGet { pname = "fantomas"; version = "5.0.0-beta-009"; sha256 = "0h0ajyllqrj0hj8acracfd9gc9c45i7rbxyn5cljdwy0hqy12xm8"; })
   (fetchNuGet { pname = "FSharp.Core"; version = "6.0.0"; sha256 = "1hjhvr39c1vpgrdmf8xln5q86424fqkvy9nirkr29vl2461d2039"; })
   (fetchNuGet { pname = "FSharp.Core"; version = "6.0.5"; sha256 = "07929km96znf6xnqzmxdk3h48kz2rg9msf4c5xxmnjqr0ikfb8c6"; })
   (fetchNuGet { pname = "FSharp.SystemCommandLine"; version = "0.13.0-beta4"; sha256 = "10h58gqfdg2hdy9laf6ry8djfysrdmwlj9n0d7ydwyszb6zgnd20"; })
   (fetchNuGet { pname = "FSharpPlus"; version = "1.2.4"; sha256 = "08yg36hgmglll053kkqkkadcfcrdd37qqwqwfwzyrmyqp1mw4mj2"; })
   (fetchNuGet { pname = "Glob"; version = "1.1.9"; sha256 = "1q72haq20bf414xwdabsx30lp5c55fjh7hav6r9sp2cqhmva0y53"; })
-  (fetchNuGet { pname = "Markdig"; version = "0.30.2"; sha256 = "0m4vjg3kzvknk376yfzazr6i6qkb833s63857a5xcym0l04chlha"; })
+  (fetchNuGet { pname = "Markdig"; version = "0.33.0"; sha256 = "1dj06wgdqmjji4nfr1dysz7hwp5bjgsrk9qjkdq82d7gk6nmhs9r"; })
   (fetchNuGet { pname = "MessagePack"; version = "2.3.85"; sha256 = "0n7kv4i6knhv1dd35cv45sfpidsiy9albfdmbrdschykd1mzxmiy"; })
   (fetchNuGet { pname = "MessagePack.Annotations"; version = "2.3.85"; sha256 = "0axjgy9r533bw00lflnc6acjyza76mf2x1nn6fw7qacvak9rqxm3"; })
   (fetchNuGet { pname = "Microsoft.Bcl.AsyncInterfaces"; version = "6.0.0"; sha256 = "15gqy2m14fdlvy1g59207h5kisznm355kbw010gy19vh47z8gpz3"; })

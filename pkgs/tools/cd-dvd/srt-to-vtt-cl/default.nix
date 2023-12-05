@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "srt-to-vtt-cl";
@@ -12,14 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-validation.patch;
-    })
+    ./fix-validation.patch
+    ./simplify-macOS-builds.patch
   ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp bin/$(uname -s)/$(uname -m)/srt-vtt $out/bin
+    cp bin/srt-vtt $out/bin
   '';
 
   meta = with lib; {
@@ -27,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "srt-vtt";
   };
 }

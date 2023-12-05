@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flit-core
+, flit
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "pytest-raisin";
   version = "0.4";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "pytest-raisin";
     rev = "v${version}";
-    sha256 = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
+    hash = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    flit
   ];
 
   propagatedBuildInputs = [

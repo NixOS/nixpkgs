@@ -1,9 +1,11 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
+, substituteAll
 , gettext
 , dbus
 , glib
@@ -44,18 +46,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.50.2";
+  version = "1.52.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "A9crjBXvQ4EQ8M9Fe1ZVJmyLUV0EErMPTVXPoNoGrF4=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
+    hash = "sha256-zb1EQPbQh5Km51ISRMFzhuIL1TfTdRFwmfyPto/pF0E=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./hardcode-ssh-path.patch;
+      ssh_program = "${lib.getBin openssh}/bin/ssh";
+    })
+  ];
+
   postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    patchShebangs test test-driver
+    patchShebangs test
   '';
 
   nativeBuildInputs = [
@@ -65,7 +71,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     wrapGAppsHook
-    libxml2
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -81,7 +86,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     libbluray
     libnfs
-    openssh
+    libxml2
     gsettings-desktop-schemas
     libsoup_3
   ] ++ lib.optionals udevSupport [

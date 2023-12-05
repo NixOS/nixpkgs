@@ -9,12 +9,7 @@ in {
     programs.flexoptix-app = {
       enable = mkEnableOption (lib.mdDoc "FLEXOPTIX app + udev rules");
 
-      package = mkOption {
-        description = lib.mdDoc "FLEXOPTIX app package to use";
-        type = types.package;
-        default = pkgs.flexoptix-app;
-        defaultText = literalExpression "pkgs.flexoptix-app";
-      };
+      package = mkPackageOption pkgs "flexoptix-app" { };
     };
   };
 

@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm3";
-  version = "1.0.5";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm3";
     rev = finalAttrs.version;
-    hash = "sha256-/2Ssl/sgKCXbUCtKj2WIcvEC3B16h5/1Jp87AggKxJo=";
+    hash = "sha256-nIxFoKo2HTF2qCawxN0WySwfjaNqtfBg1BMo0P6ZY88=";
   };
 
   nativeBuildInputs = [

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-NPifyZJZLICzmnCeE27c9B6hfyS6Mer4SjFKAsi5vO8=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     # Deprecation warning using collections.abc, https://gitlab.com/ericvsmith/namedlist/-/merge_requests/1
     (fetchpatch {
       url = "https://gitlab.com/ericvsmith/namedlist/-/commit/102d15b455e6f058b9c95fe135167be82b34c14a.patch";
-      sha256 = "sha256-IfDgiObFFSOUnAlXR/+ye8uutGaFJ/AyQvCb76iNaMM=";
+      hash = "sha256-IfDgiObFFSOUnAlXR/+ye8uutGaFJ/AyQvCb76iNaMM=";
     })
   ];
 

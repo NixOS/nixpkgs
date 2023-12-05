@@ -1,36 +1,32 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
+, pythonOlder
+, hatchling
 , flask
 , itsdangerous
 , wtforms
 , email-validator
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "flask-wtf";
-  version = "1.0.1";
+  version = "1.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Flask-WTF";
+    pname = "flask_wtf";
     inherit version;
-    sha256 = "34fe5c6fee0f69b50e30f81a3b7ea16aa1492a771fe9ad0974d164610c09a6c9";
+    hash = "sha256-i7Jp65u0a4fnyCM9fn3r3x+LdL+QzBeJmIwps3qXtpU=";
   };
 
- patches = [
-    # Fix failing `test_set_default_message_language` test
-    #
-    # Caused by Flask 2.2 that throws an error when setup methods are
-    # mistakenly called before the first request.
-    #
-    # Will be fixed upstream with: https://github.com/wtforms/flask-wtf/pull/533
-    #
-    (fetchpatch {
-      url = "https://github.com/wtforms/flask-wtf/commit/36a53fadf7bc42c79a1428657531961ec30ca003.patch";
-      hash = "sha256-bgLwDG9Wpufm6fd/6PS83Jvvuk1Ha6XdyaWngluPs30=";
-    })
+  nativeBuildInputs = [
+    hatchling
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -43,8 +39,12 @@ buildPythonPackage rec {
     email = [ email-validator ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
@@ -52,5 +52,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ mic92 anthonyroussel ];
     homepage = "https://github.com/lepture/flask-wtf/";
+    changelog = "https://github.com/wtforms/flask-wtf/releases/tag/v${version}";
   };
 }

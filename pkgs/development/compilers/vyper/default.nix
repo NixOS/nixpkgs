@@ -6,6 +6,8 @@
 , writeText
 , asttokens
 , pycryptodome
+, importlib-metadata
+, cbor2
 , recommonmark
 , semantic-version
 , sphinx
@@ -27,14 +29,14 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.6";
+  version = "0.3.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8jw92ttKhXubzDr0tt9/OoCsPEyB9yPRsueK+j4PO6Y=";
+    hash = "sha256-jcH1AcqrQX+wzpxoppRFh/AUfsfMfTiJzzpFwZRm5Ik=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +55,8 @@ buildPythonPackage rec {
     asttokens
     pycryptodome
     semantic-version
+    importlib-metadata
+    cbor2
 
     # docs
     recommonmark

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.2.0";
+  version = "18.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GFu/LK+189dh8nLj4YSnAMx7pc99UWGQZb5/XEtbfPQ=";
+    hash = "sha256-a2tq4sEescEI469V6qchGw/JGZk1oimmuj4N5RTBK1A=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     prettytable
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     openssl
     requests-mock

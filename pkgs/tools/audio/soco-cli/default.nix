@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "soco-cli";
-  version = "0.4.21";
+  version = "0.4.55";
   format = "setuptools";
 
   disabled = python3.pythonOlder "3.6";
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "avantrec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kz2zx59gjfs01jiyzmps8j6yca06yqn6wkidvdk4s3izdm0rarw";
+    sha256 = "sha256-zdu1eVtVBTYa47KjGc5fqKN6olxp98RoLGT2sNCfG9E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

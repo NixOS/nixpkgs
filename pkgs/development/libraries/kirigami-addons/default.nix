@@ -12,14 +12,14 @@
 
 mkDerivation rec {
   pname = "kirigami-addons";
-  version = "0.6";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RUu/0O/YRVRsRYeASfW8UQ/Ql2VbLOdVySVo9/hAmLw=";
+    hash = "sha256-KTkEfGmQf9kj+9e/rJM7jd/4BqubDLu5/oLkX88uENA=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/libraries/kirigami-addons";
     # https://invent.kde.org/libraries/kirigami-addons/-/blob/b197d98fdd079b6fc651949bd198363872d1be23/src/treeview/treeviewplugin.cpp#L1-5
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ samueldr matthiasbeyer ];
   };
 }
 

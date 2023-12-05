@@ -1,17 +1,30 @@
-{ lib, buildDunePackage, fetchurl, alcotest
-, cstruct, domain-name, duration, gmap, ipaddr, logs, lru, metrics, ptime, fmt
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, cstruct
+, domain-name
+, duration
+, gmap
+, ipaddr
+, logs
+, lru
+, metrics
+, ptime
+, fmt
 , base64
 }:
 
 buildDunePackage rec {
   pname = "dns";
-  version = "6.3.0";
+  version = "7.0.1";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-dns/releases/download/v${version}/dns-${version}.tbz";
-    sha256 = "sha256-3EAjenN9EIi4PsXCZDevmEPDaS4xbESbcbB7pFgwc1E=";
+    hash = "sha256-vDe1U1NbbIPcD1AmMG265ke7651C64mds7KcFHUN4fU=";
   };
 
   propagatedBuildInputs = [ fmt logs ptime domain-name gmap cstruct ipaddr lru duration metrics base64 ];

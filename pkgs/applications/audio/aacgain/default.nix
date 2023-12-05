@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   meta = with lib; {
     description = "ReplayGain for AAC files";

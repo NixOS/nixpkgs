@@ -1,25 +1,36 @@
 { lib
-, flutter2
+, writeText
+, flutter
 , fetchFromGitHub
-, stdenv
 }:
 
-flutter2.mkFlutterApp {
+flutter.buildFlutterApplication rec {
   pname = "firmware-updater";
-  version = "unstable";
+  version = "unstable-2023-09-17";
 
-  vendorHash =
-    if stdenv.system == "aarch64-linux"
-    then "sha256-+ACmcIKXtGtaYBuwc7jY9hEdIS9qxQCbuxRKJQohX5A="
-    else "sha256-nPblucEpNCBJYpIqx1My6SWq8CjXYuHDG/uphdcrWjQ=";
+  pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-5xd9ppnWleKVA69DJWVdY+rZziu4dQBCu16I0ivD8kE=";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "a51817a2551e29895352618a91df9cf93d944af1";
-    sha256 = "6uhks6a9JcyIC5o0VssqfBlE4pqKiQ7d3KOb6feNTvU=";
-    fetchSubmodules = true;
+    rev = "855999da8d3d0c9930e06f2d296d82b55aeff79e";
+    hash = "sha256-tIeEuHl+sCKd756NYPmxXiV1Sg2m9W0eGUtM/Iskeu8=";
   };
+
+  postPatch = ''
+    rm -f pubspec.lock
+    ln -s "${writeText "${pname}-overrides.yaml" (builtins.toJSON {
+      dependency_overrides = {
+        yaru = "^1.1.0";
+        yaru_icons = "^2.2.1";
+        yaru_widgets = "^3.1.0";
+        mockito = "^5.4.2";
+        test_api = "^0.6.1";
+      };
+    })}" pubspec_overrides.yaml
+  '';
 
   meta = with lib; {
     description = "Firmware Updater for Linux";

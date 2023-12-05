@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "6ac99dda4e7b0b3ae831507b6d0094802e6dd95891feafde8cc5c405b6c149ca";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "fastimport" ];
 

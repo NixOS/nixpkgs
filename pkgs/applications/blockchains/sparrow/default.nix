@@ -16,15 +16,16 @@
 , openimajgrabber
 , hwi
 , imagemagick
+, gzip
 }:
 
 let
   pname = "sparrow";
-  version = "1.7.1";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "0q31b4ncvbhr9gb47wplphg43pwlg5vpd1b12qiidqlrkgm2vjy8";
+    sha256 = "0bz8mx6mszqadx7nlb4ini45r2r57grdgmrq6k9lxgrgcpd8gasy";
   };
 
   launcher = writeScript "sparrow" ''
@@ -46,9 +47,11 @@ let
       --add-opens javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
+      --add-opens=javafx.graphics/javafx.scene.input=com.sparrowwallet.sparrow
       --add-opens javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
       --add-opens java.base/java.net=com.sparrowwallet.sparrow
       --add-opens java.base/java.io=com.google.gson
+      --add-opens=java.smartcardio/sun.security.smartcardio=com.sparrowwallet.sparrow
       --add-reads com.sparrowwallet.merged.module=java.desktop
       --add-reads com.sparrowwallet.merged.module=java.sql
       --add-reads com.sparrowwallet.merged.module=com.sparrowwallet.sparrow
@@ -93,7 +96,7 @@ let
   sparrow-modules = stdenv.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -143,9 +146,9 @@ let
 
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
-      cp ${torWrapper} ./tor
-      tar -cJf tor.tar.xz tor
-      cp tor.tar.xz modules/netlayer.jpms/native/linux/x64/tor.tar.xz
+      gzip -c ${torWrapper}  > tor.gz
+      cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
+      find modules
     '';
 
     installPhase = ''
@@ -156,38 +159,22 @@ let
       ln -s ${hwi}/bin/hwi $out/modules/com.sparrowwallet.sparrow/native/linux/x64/hwi
     '';
   };
-
-  # To use the udev rules for connected hardware wallets,
-  # add "pkgs.sparrow" to "services.udev.packages" and add user accounts to the user group "plugdev".
-  udev-rules = stdenv.mkDerivation {
-    name = "sparrow-udev";
-
-    src = let version = "2.0.2"; in
-      fetchurl {
-        url = "https://github.com/bitcoin-core/HWI/releases/download/${version}/hwi-${version}.tar.gz";
-        sha256 = "sha256-di1fRsMbwpHcBFNTCVivfxpwhUoUKLA3YTnJxKq/jHM=";
-      };
-
-    installPhase = ''
-      mkdir -p $out/etc/udev/rules.d
-      cp -a hwilib/udev/* $out/etc/udev/rules.d
-      rm $out/etc/udev/rules.d/README.md
-    '';
-  };
 in
 stdenv.mkDerivation rec {
-  inherit pname version src;
+  inherit version src;
+  pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Sparrow";
-      exec = pname;
-      icon = pname;
+      name = "sparrow-desktop";
+      exec = "sparrow-desktop";
+      icon = "sparrow-desktop";
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
-      categories = [ "Finance" ];
+      categories = [ "Finance" "Network" ];
       mimeTypes = [ "application/psbt" "application/bitcoin-transaction" "x-scheme-handler/bitcoin" "x-scheme-handler/auth47" "x-scheme-handler/lightning" ];
+      startupWMClass = "Sparrow";
     })
   ];
 
@@ -200,7 +187,7 @@ stdenv.mkDerivation rec {
       for n in 16 24 32 48 64 96 128 256; do
         size=$n"x"$n
         mkdir -p $out/hicolor/$size/apps
-        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow.png
+        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
         done;
     '';
   };
@@ -210,15 +197,15 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out
     ln -s ${sparrow-modules}/modules $out/lib
-    install -D -m 777 ${launcher} $out/bin/sparrow
-    substituteAllInPlace $out/bin/sparrow
-    substituteInPlace $out/bin/sparrow --subst-var-by jdkModules ${jdk-modules}
+    install -D -m 777 ${launcher} $out/bin/sparrow-desktop
+    substituteAllInPlace $out/bin/sparrow-desktop
+    substituteInPlace $out/bin/sparrow-desktop --subst-var-by jdkModules ${jdk-modules}
 
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
 
-    mkdir -p $out/etc/udev
-    ln -s ${udev-rules}/etc/udev/rules.d $out/etc/udev/rules.d
+    mkdir -p $out/etc/udev/rules.d
+    cp ${hwi}/lib/python*/site-packages/hwilib/udev/*.rules $out/etc/udev/rules.d
 
     runHook postInstall
   '';
@@ -235,5 +222,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ emmanuelrosa _1000101 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sparrow-desktop";
   };
 }

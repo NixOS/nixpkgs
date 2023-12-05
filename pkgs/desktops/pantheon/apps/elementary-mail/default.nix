@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -11,7 +10,10 @@
 , gtk3
 , libxml2
 , libhandy
+, libportal-gtk3
 , webkitgtk_4_1
+, elementary-gtk-theme
+, elementary-icon-theme
 , folks
 , glib-networking
 , granite
@@ -22,29 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
+    sha256 = "sha256-hBOogZ9ZNS9KnuNn+jNhTtlupBxZL2DG/CiuBR1kFu0=";
   };
-
-  patches = [
-    # build: fix documentation build
-    # https://github.com/elementary/mail/pull/795
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/52a422cb1c5f061d8a683005e44da0a1c2195096.patch";
-      sha256 = "sha256-ndcIZXvmQbM/31Wtm6OSCnXdMYx+OlJrqV+baq6m+KY=";
-    })
-    # build: support webkit2gtk-4.1
-    # https://github.com/elementary/mail/pull/794
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
-      sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
-    })
-  ];
 
   nativeBuildInputs = [
     libxml2
@@ -57,6 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-icon-theme
     evolution-data-server
     folks
     glib-networking
@@ -64,12 +52,22 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libhandy
+    libportal-gtk3
     webkitgtk_4_1
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
   passthru = {

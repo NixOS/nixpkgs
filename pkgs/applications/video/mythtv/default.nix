@@ -1,7 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, which, qtbase, qtwebkit, qtscript
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
 , perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
-, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders, soundtouch, libzip
+, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
+, soundtouch, libzip, libhdhomerun
 , withWebKit ? false
 }:
 
@@ -35,6 +36,7 @@ mkDerivation rec {
     freetype qtbase qtscript lame zlib libGLU libGL
     perl libsamplerate libbluray lzo alsa-lib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2 soundtouch libzip
+    libhdhomerun
   ] ++ lib.optional withWebKit qtwebkit;
   nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
 

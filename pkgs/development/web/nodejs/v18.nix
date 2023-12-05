@@ -1,25 +1,32 @@
-{ callPackage, openssl, fetchpatch, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, fetchpatch, openssl, python3, enableNpm ? true }:
 
 let
+  # Clang 16+ cannot build Node v18 due to -Wenum-constexpr-conversion errors.
+  # Use an older version of clang with the current libc++ for compatibility (e.g., with icu).
+  ensureCompatibleCC = packages:
+    if packages.stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion packages.stdenv.cc.cc) "16"
+      then overrideCC packages.llvmPackages_15.stdenv (packages.llvmPackages_15.stdenv.cc.override {
+        inherit (packages.llvmPackages) libcxx;
+        extraPackages = [ packages.llvmPackages.libcxxabi ];
+      })
+      else packages.stdenv;
+
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
+    stdenv = ensureCompatibleCC pkgs;
+    buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
     python = python3;
   };
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.12.1";
-  sha256 = "sha256-T6QGRRvFJlmikOUs/bIWKnYL1UnaS4u+vmop8pbZON8=";
+  version = "18.18.2";
+  sha256 = "sha256-ckni8K+UPsOFmVBPSyor0x+5OHhykbbMymyLrfAeO1Y=";
   patches = [
-    (fetchpatch {
-      # Fixes cross compilation to aarch64-linux by reverting https://github.com/nodejs/node/pull/43200
-      name = "revert-arm64-pointer-auth.patch";
-      url = "https://github.com/nodejs/node/pull/43200/commits/d42c42cc8ac652ab387aa93205aed6ece8a5040a.patch";
-      sha256 = "sha256-ipGzg4lEoftTJbt6sW+0QJO/AZqHvUkFKe0qlum+iLY=";
-      revert = true;
-    })
-
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
+    ./revert-arm64-pointer-auth.patch
+    ./node-npm-build-npm-package-logic.patch
+    ./trap-handler-backport.patch
   ];
 }

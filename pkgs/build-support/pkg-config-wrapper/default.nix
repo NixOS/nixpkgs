@@ -36,26 +36,20 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
-
-  inherit targetPrefix suffixSalt baseBinName;
-
   outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (pkg-config ? doc) "doc");
 
   passthru = {
+    inherit targetPrefix suffixSalt;
     inherit pkg-config;
   };
 
   strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
+  dontUnpack = true;
 
   # Additional flags passed to pkg-config.
   addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
-
-  unpackPhase = ''
-    src=$PWD
-  '';
 
   installPhase =
     ''
@@ -82,8 +76,6 @@ stdenv.mkDerivation {
     + ''
       ln -s ${pkg-config}/share $out/share
     '';
-
-  wrapperName = "PKG_CONFIG_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -120,9 +112,15 @@ stdenv.mkDerivation {
     ##
     + extraBuildCommands;
 
+  env = {
+    shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
+    wrapperName = "PKG_CONFIG_WRAPPER";
+    inherit targetPrefix suffixSalt baseBinName;
+  };
+
   meta =
-    let pkg-config_ = if pkg-config != null then pkg-config else {}; in
-    (if pkg-config_ ? meta then removeAttrs pkg-config.meta ["priority"] else {}) //
+    let pkg-config_ = lib.optionalAttrs (pkg-config != null) pkg-config; in
+    (lib.optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
         + " (wrapper script)";

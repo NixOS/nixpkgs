@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
@@ -53,6 +53,7 @@ python3Packages.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;
+    mainProgram = "udocker";
   };
 
 }

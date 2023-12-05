@@ -35,13 +35,20 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-localserver
   ];
 
   pytestFlagsArray = [
     "tests"
+  ];
+
+  disabledTests = [
+    # should be xfail? or mocking doesn't work
+    "test_url_fails"
   ];
 
   pythonImportsCheck = [

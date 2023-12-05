@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "autofaiss";
-  version = "2.15.4";
+  version = "2.15.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "criteo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OnDHwJxJcXx3DGxrkk2D2Ljs4CqPoYx7avdo9C8sDrU=";
+    hash = "sha256-vB906xbpEjNNzc8Dc8i3ENgl9lCPOgB9vs7QVRS7UcM=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

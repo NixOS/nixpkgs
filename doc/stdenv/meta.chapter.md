@@ -24,7 +24,8 @@ It is expected that each meta-attribute is one of the following:
 
 ### `description` {#var-meta-description}
 
-A short (one-line) description of the package. This is shown by `nix-env -q --description` and also on the Nixpkgs release pages.
+A short (one-line) description of the package.
+This is displayed on [search.nixos.org](https://search.nixos.org/packages).
 
 Don’t include a period at the end. Don’t include newline characters. Capitalise the first character. For brevity, don’t repeat the name of package --- just describe what it does.
 
@@ -70,11 +71,11 @@ A list of the maintainers of this Nix expression. Maintainers are defined in [`n
 
 ### `mainProgram` {#var-meta-mainProgram}
 
-The name of the main binary for the package. This effects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
+The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
 
 ### `priority` {#var-meta-priority}
 
-The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the Nix manual page for `nix-env` for details. Example: `"10"` (a low-priority package).
+The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
 
 ### `platforms` {#var-meta-platforms}
 
@@ -85,6 +86,23 @@ meta.platforms = lib.platforms.linux;
 ```
 
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
+
+### `badPlatforms` {#var-meta-badPlatforms}
+
+The list of Nix [platform types](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L75-L81) on which the package is known not to be buildable.
+Hydra will never create prebuilt binaries for these platform types, even if they are in [`meta.platforms`](#var-meta-platforms).
+In general it is preferable to set `meta.platforms = lib.platforms.all` and then exclude any platforms on which the package is known not to build.
+For example, a package which requires dynamic linking and cannot be linked statically could use this:
+
+```nix
+meta.platforms = lib.platforms.all;
+meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
+```
+
+The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L95-L106) function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
+Some packages use this to automatically detect the maximum set of features with which they can be built.
+For example, `systemd` [requires dynamic linking](https://github.com/systemd/systemd/issues/20600#issuecomment-912338965), and [has a `meta.badPlatforms` setting](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/pkgs/os-specific/linux/systemd/default.nix#L752) similar to the one above.
+Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the [`hostPlatform`](#ssec-cross-platform-parameters) for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
 
 ### `tests` {#var-meta-tests}
 
@@ -101,7 +119,7 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
-#### Package tests
+#### Package tests {#var-meta-tests-packages}
 
 Tests that are part of the source package are often executed in the `installCheckPhase`.
 
@@ -111,9 +129,9 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 * we can run `passthru.tests` independently
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+For more on how to write and run package tests, see [](#sec-package-tests).
 
-#### NixOS tests
+#### NixOS tests {#var-meta-tests-nixos}
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
@@ -165,7 +183,7 @@ runCommand "my-package-test" {
 
 ### `timeout` {#var-meta-timeout}
 
-A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
+A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, Hydra will fail it due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
 
 `meta` attributes are not stored in the instantiated derivation.
 Therefore, this setting may be lost when the package is used as a dependency.
@@ -173,7 +191,7 @@ To be effective, it must be presented directly to an evaluation process that han
 
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 
-The list of Nix platform types for which the Hydra instance at `hydra.nixos.org` will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
+The list of Nix platform types for which the [Hydra](https://github.com/nixos/hydra) [instance at `hydra.nixos.org`](https://nixos.org/hydra) will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
 
 ```nix
 meta.platforms = lib.platforms.linux;
@@ -182,7 +200,26 @@ meta.hydraPlatforms = [];
 
 ### `broken` {#var-meta-broken}
 
-If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
+If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_BROKEN`](#opt-allowBroken) is set.
+Such unconditionally-broken packages should be removed from Nixpkgs eventually unless they are fixed.
+
+The value of this attribute can depend on a package's arguments, including `stdenv`.
+This means that `broken` can be used to express constraints, for example:
+
+- Does not cross compile
+
+  ```nix
+   meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+  ```
+
+- Broken if all of a certain set of its dependencies are broken
+
+  ```nix
+  meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ])
+  ```
+
+This makes `broken` strictly more powerful than `meta.badPlatforms`.
+However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
 
 ## Licenses {#sec-meta-license}
 

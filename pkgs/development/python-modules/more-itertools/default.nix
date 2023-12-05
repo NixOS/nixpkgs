@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "8.14.0";
-  format = "flit";
+  version = "10.1.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wJRDzT1UOLja/M2GemvBywiUOJ6Qy1PSJ0VrCwvMt1A=";
+    hash = "sha256-Ymw2n6DrN7rAKRvOglmzMv1ZrHkvpUl7WYNzCc1bEUo=";
   };
 
-  nativeBuildInouts = [
+  nativeBuildInputs = [
     flit-core
   ];
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

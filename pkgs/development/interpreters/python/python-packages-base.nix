@@ -8,40 +8,47 @@ self:
 
 let
   inherit (self) callPackage;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   namePrefix = python.libPrefix + "-";
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: origArgs:
+  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
     let
-      ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if pkgs.lib.isFunction newArgs then newArgs origArgs else newArgs);
+      args = lib.fix (lib.extends
+        (_: previousAttrs: {
+          passthru = (previousAttrs.passthru or { }) // {
+            overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          };
+        })
+        (_: origArgs));
+      result = f args;
+      overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
     in
-      if builtins.isAttrs ff then (ff // {
+      if builtins.isAttrs result then result
+      else if builtins.isFunction result then {
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-      })
-      else if builtins.isFunction ff then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: ff;
+        __functor = self: result;
       }
-      else ff;
+      else result);
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  mkPythonDerivation = if python.isPy3k then
+    ./mk-python-derivation.nix
+  else
+    ./python2/mk-python-derivation.nix;
+
+  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));
 
   # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../../../build-support/build-setupcfg self;
-
-  fetchPypi = callPackage ./fetchpypi.nix { };
+  buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -89,7 +96,6 @@ in {
   inherit lib pkgs stdenv;
   inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
-  inherit fetchPypi;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;

@@ -1,19 +1,19 @@
 { lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
 , aiolifx
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
-, async-timeout
+, pythonOlder
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.4.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U3hIKmgnafkuVLi1r42BBXDKVcSSvLaRnmOEANasEyY=";
+    hash = "sha256-pldmkdkDI6RFMcBOF1MtQBddOo+uF23CMHPztEV+kf0=";
   };
 
   prePatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     aiolifx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytestCheckHook
     pytest-asyncio

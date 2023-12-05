@@ -2,19 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
-  version = "2.7.4";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
     rev = "v${version}";
-    sha256 = "sha256-LaPH6nGQanweAG0niS75hr7zbO/9A3iZjS8wHD//oJ4=";
+    sha256 = "sha256-AFPuHxcDM/cdEJ5nRJnVbPk7Deg97NeSMsg/qwytZX4=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ];
 
   installPhase = ''
     mkdir -p $out/share/wimboot/

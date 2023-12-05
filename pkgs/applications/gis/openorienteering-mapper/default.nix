@@ -14,8 +14,6 @@
 , qtlocation
 , qtsensors
 , qttools
-, qttranslations
-, substituteAll
 , zlib
 }:
 
@@ -31,11 +29,6 @@ mkDerivation rec {
   };
 
   patches = [
-    # https://github.com/NixOS/nixpkgs/issues/86054
-    (substituteAll {
-      src = ./fix-qttranslations-path.diff;
-      inherit qttranslations;
-    })
     # https://github.com/OpenOrienteering/mapper/pull/1907
     (fetchpatch {
       url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
@@ -94,5 +87,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ mpickering sikmir ];
     platforms = with platforms; unix;
     broken = stdenv.isDarwin;
+    mainProgram = "Mapper";
   };
 }

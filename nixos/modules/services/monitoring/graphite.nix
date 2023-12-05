@@ -102,7 +102,7 @@ in {
         default = "";
         description = lib.mdDoc ''
           Graphite webapp settings. See:
-          <http://graphite.readthedocs.io/en/latest/config-local-settings.html>
+          <https://graphite.readthedocs.io/en/latest/config-local-settings.html>
         '';
       };
     };

@@ -1,25 +1,32 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , wrapt
 , pytestCheckHook
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.13";
+  version = "1.2.14";
+  outputs = [ "out" "doc" ];
 
-  src = fetchPypi {
-    pname = "Deprecated";
-    inherit version;
-    sha256 = "sha256-Q6xTNdqQwxwkugKK9TapHUHVP55pAd2wIbzFcs5E440=";
+  src = fetchFromGitHub {
+    owner = "tantale";
+    repo = "deprecated";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
   };
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
 
   propagatedBuildInputs = [
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

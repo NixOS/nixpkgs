@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "robotsuite";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iugVKUPl6HTTO8K1EbSqAk1fl/fsEPoOcsOnnAgcEas=";
+    hash = "sha256-sPmOoR5K+gMfyPk2QMbiDNmWPRcqKrsz6ZPBAKR/3XY=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

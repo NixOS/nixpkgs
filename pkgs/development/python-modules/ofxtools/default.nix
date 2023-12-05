@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "csingley";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
+    hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
   checkPhase = ''

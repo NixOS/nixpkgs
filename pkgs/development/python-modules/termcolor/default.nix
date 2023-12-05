@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "2.0.1";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ayz3aekzZKJnbh3lanwM/yz1vQfzfpzICw3WMg6/44g=";
+    hash = "sha256-tbCPaJN/E4/pL2wIm5nx4toK5WxSt4v3B1/ZVCD9mlo=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     "termcolor"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

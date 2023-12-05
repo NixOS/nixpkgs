@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   patches = [
-    ./no-threads.patch
+    ../../common/libcxxabi/no-threads.patch
     ./gnu-install-dirs.patch
   ];
 
@@ -66,6 +66,10 @@ stdenv.mkDerivation {
     mkdir -p "$dev/include"
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
+
+  passthru = {
+    libName = "c++abi";
+  };
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

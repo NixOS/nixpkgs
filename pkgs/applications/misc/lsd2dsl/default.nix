@@ -17,7 +17,7 @@ mkDerivation rec {
 
   buildInputs = [ boost libvorbis libsndfile minizip gtest qtwebkit ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
 
   desktopItems = lib.singleton (makeDesktopItem {
     name = "lsd2dsl";

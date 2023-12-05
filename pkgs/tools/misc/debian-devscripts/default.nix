@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, xz, dpkg
+{lib, stdenv, fetchurl, fetchpatch, xz, dpkg
 , libxslt, docbook_xsl, makeWrapper, writeShellScript
 , python3Packages
 , perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
@@ -11,13 +11,21 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in stdenv.mkDerivation rec {
-  version = "2.22.2";
+  version = "2.23.5";
   pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
+    hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "hardening-check-obey-binutils-env-vars.patch";
+      url = "https://github.com/Debian/devscripts/pull/2/commits/c6a018e0ef50a1b0cb4962a2f96dae7c6f21f1d4.patch";
+      hash = "sha256-UpS239JiAM1IYxNuJLdILq2h0xlR5t0Tzhj47xiMHww=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
@@ -27,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils bash-completion help2man ] ++
-    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
+    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps Moo FileHomeDir IPCRun FileDirList FileTouch ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -76,6 +84,6 @@ in stdenv.mkDerivation rec {
     description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

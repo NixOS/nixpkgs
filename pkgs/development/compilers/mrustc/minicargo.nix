@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   makefile = "minicargo.mk";
-  makeFlags = [ "tools/bin/minicargo" ];
+  makeFlags = [ "bin/minicargo" ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp tools/bin/minicargo $out/bin
+    cp bin/minicargo $out/bin
 
-    # without it, minicargo defaults to "<minicargo_path>/../../bin/mrustc"
+    # without it, minicargo defaults to "<minicargo_path>/../bin/mrustc"
     wrapProgram "$out/bin/minicargo" --set MRUSTC_PATH ${mrustc}/bin/mrustc
     runHook postInstall
   '';

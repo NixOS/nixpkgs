@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.14.1";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A40lbmMijD0d1B81n2bcJ43gGaRYkVfmquOO8usRXew=";
+    hash = "sha256-2fDvv5QMo5LwfRN4f8LadtHhaN7a+uD48bQgjgwRMtw=";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     grpcio
     mock
     pytestCheckHook
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, appstream-glib
 , desktop-file-utils
 , fetchFromGitHub
 , calf
@@ -10,9 +11,11 @@
 , gsl
 , gtk4
 , itstool
+, ladspaH
 , libadwaita
 , libbs2b
 , libebur128
+, libportal-gtk4
 , libsamplerate
 , libsigcxx30
 , libsndfile
@@ -27,8 +30,8 @@
 , pkg-config
 , rnnoise
 , rubberband
-, speex
 , speexdsp
+, soundtouch
 , tbb
 , wrapGAppsHook4
 , zam-plugins
@@ -37,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.0";
+  version = "7.1.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-SjhJj5kClPd8DT1vzbSdqJ9AJw0XiX9Q8/R8SDnxGPQ=";
+    hash = "sha256-OJy8HhojfpUwWo3zg+FgdFI4pMzWA61VMsdPE03MfeE=";
   };
 
   nativeBuildInputs = [
@@ -56,15 +59,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream-glib
     fftw
     fftwFloat
     fmt_9
     glib
     gsl
     gtk4
+    ladspaH
     libadwaita
     libbs2b
     libebur128
+    libportal-gtk4
     libsamplerate
     libsigcxx30
     libsndfile
@@ -74,7 +80,7 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
-    speex
+    soundtouch
     speexdsp
     tbb
     zita-convolver
@@ -102,11 +108,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    mainProgram = "easyeffects";
   };
 }

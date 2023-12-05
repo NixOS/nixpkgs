@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "brouberol";
     repo = "contexttimer";
     rev = "a866f420ed4c10f29abf252c58b11f9db6706100";
-    sha256 = "sha256-Fc1vK1KSZWgBPtBf5dVydF6dLHEGAOslWMV0FLRdj8w=";
+    hash = "sha256-Fc1vK1KSZWgBPtBf5dVydF6dLHEGAOslWMV0FLRdj8w=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "contexttimer" ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest tests/test_timer.py

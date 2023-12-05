@@ -23,9 +23,11 @@ buildPythonPackage rec {
   # Seems to look for files in the wrong dir
   doCheck = false;
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-s" "tests" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx blockdiag extension";

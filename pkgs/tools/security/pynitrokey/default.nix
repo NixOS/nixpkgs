@@ -1,52 +1,107 @@
-{ python3Packages, lib, nrfutil  }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pythonRelaxDepsHook
+, installShellFiles
+, libnitrokey
+, flit-core
+, certifi
+, cffi
+, click
+, cryptography
+, ecdsa
+, fido2
+, intelhex
+, nkdfu
+, python-dateutil
+, pyusb
+, requests
+, spsdk
+, tqdm
+, tlv8
+, typing-extensions
+, pyserial
+, protobuf
+, click-aliases
+, semver
+, nethsm
+, importlib-metadata
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+let
   pname = "pynitrokey";
-  version = "0.4.27";
-  format = "flit";
+  version = "0.4.43";
+  mainProgram = "nitropy";
+in
+
+buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aWQhMvATcDtyBtj38mGnypkKIqKQgneBzWDh5o/5Wkc=";
+    hash = "sha256-dYOdokqALDg4Xn7N6Yd0skM/tit+j5+xY73sm9k76hE=";
   };
 
   propagatedBuildInputs = [
+    certifi
+    cffi
     click
     cryptography
     ecdsa
     fido2
     intelhex
-    nrfutil
-    pyserial
+    nkdfu
+    python-dateutil
     pyusb
     requests
-    pygments
-    python-dateutil
     spsdk
-    urllib3
-    cffi
-    cbor
-    nkdfu
+    tqdm
+    tlv8
+    typing-extensions
+    pyserial
+    protobuf
+    click-aliases
+    semver
+    nethsm
+    importlib-metadata
   ];
 
-  # spsdk is patched to allow for newer cryptography
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace "cryptography >=3.4.4,<37" "cryptography"
-  '';
+  nativeBuildInputs = [
+    flit-core
+    installShellFiles
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = true;
+
+  # pythonRelaxDepsHook runs in postBuild so cannot be used
+  pypaBuildFlags = [ "--skip-dependency-check" ];
+
+  # libnitrokey is not propagated to users of the pynitrokey Python package.
+  # It is only usable from the wrapped bin/nitropy
+  makeWrapperArgs = [
+    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
+  ];
 
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pynitrokey" ];
 
+  postInstall = ''
+    installShellCompletion --cmd ${mainProgram} \
+      --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
+      --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
+      --fish <(_NITROPY_COMPLETE=fish_source $out/bin/${mainProgram})
+  '';
+
   meta = with lib; {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
+    changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ frogamic ];
-    mainProgram = "nitropy";
+    inherit mainProgram;
   };
 }

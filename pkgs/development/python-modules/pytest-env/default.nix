@@ -1,15 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatch-vcs
+, hatchling
+, pytest
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pytest-env";
-  version = "0.6.2";
+  version = "1.0.1";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hl0ln0cicdid4qjk7mv90lw9xkb0v71dlj7q7rn89vzxxm9b53y";
+    pname = "pytest_env";
+    inherit version;
+    hash = "sha256-YD/iFujgOl0TSYnLQTF8Waq+8BPSJQxxuGSrB5j75vY=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
+
+  buildInputs = [
+    pytest
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Pytest plugin used to set environment variables";

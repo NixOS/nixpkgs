@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "1.6.0";
-  format = "pyproject";
+  version = "2.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";
-    repo = pname;
+    repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-6pQsVGb26FpoV2LgOrs+Cfq2rATRqbljrVJ+NsZUSuc=";
+    hash = "sha256-qlGQtjRG92AhFY+sF3mB4ghIn4kydkbDOolLu9Qh0JM=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

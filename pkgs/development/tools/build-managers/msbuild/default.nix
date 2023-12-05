@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
@@ -21,6 +21,8 @@ let
     </configuration>
   '';
 
+  inherit (stdenv.hostPlatform.extensions) sharedLibrary;
+
 in
 
 stdenv.mkDerivation rec {
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dotnetPackages.Nuget
+    nuget
     glibcLocales
   ];
 
@@ -78,11 +80,17 @@ stdenv.mkDerivation rec {
     mv artifacts/msbuild artifacts/mono-msbuild
     chmod +x artifacts/mono-msbuild/MSBuild.dll
 
-    ln -s $(find ${dotnet-sdk} -name libhostfxr.so) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    # The provided libhostfxr.dylib is for x86_64-darwin, so we remove it
+    rm artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/libhostfxr.dylib
+
+    ln -s $(find ${dotnet-sdk} -name libhostfxr${sharedLibrary}) artifacts/mono-msbuild/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
 
     # overwrite the file
     echo "#!${stdenv.shell}" > eng/common/dotnet-install.sh
     echo "#!${stdenv.shell}" > mono/build/get_sdk_files.sh
+
+    # Prevent msbuild from downloading a new libhostfxr
+    echo "#!${stdenv.shell}" > mono/build/extract_and_copy_hostfxr.sh
 
     mkdir -p mono/dotnet-overlay/msbuild-bin
     cp ${dotnet-sdk}/sdk/*/{Microsoft.NETCoreSdk.BundledVersions.props,RuntimeIdentifierGraph.json} mono/dotnet-overlay/msbuild-bin
@@ -102,7 +110,7 @@ stdenv.mkDerivation rec {
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
-    ln -s $(find ${dotnet-sdk} -name libhostfxr.so) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+    ln -s $(find ${dotnet-sdk} -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
   '';
 
   doInstallCheck = true;

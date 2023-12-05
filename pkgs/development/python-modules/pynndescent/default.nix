@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , importlib-metadata
 , joblib
 , llvmlite
@@ -13,15 +14,23 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.8";
+  version = "0.5.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p8VSVpv2BKEB/VS7odJ8EjieBllF3uOmd3pRjGOkbys=";
+    hash = "sha256-XV3Gg8A+9V/j3faThZcgyhj4XG5uW7C08UhwJ41SiK0=";
   };
+
+  patches = [
+    # https://github.com/lmcinnes/pynndescent/pull/224
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/pynndescent/commit/86e0d716a3a4d5f4e6a0a3c2952f6fe339524e96.patch";
+      hash = "sha256-dfnT5P9Qsn/nSAr4Ysqo/olbLLfoZXvBRz33yzhN3J4=";
+    })
+  ];
 
   propagatedBuildInputs = [
     joblib
@@ -33,7 +42,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

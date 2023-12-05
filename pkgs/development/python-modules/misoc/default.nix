@@ -26,7 +26,7 @@ buildPythonPackage rec {
     migen
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
   ];
 

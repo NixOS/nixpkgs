@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl }:
+{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk17, curl }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.11.0";
+  version = "2.15.1";
 
   dontConfigure = true;
   dontBuild = true;
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    sha256 = "sha256-nY31/coUnBNkKg10SOd64sBBkV44g+eIXyKIrPq1IWU=";
+    hash = "sha256-ksWf5z0PM5osMxnR5XeEyZw4g7UbHUCqnpw2FB5M6kU=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    jdk11
+    jdk17
     stdenv.cc.cc.lib
     curl
   ];
@@ -34,7 +34,13 @@ stdenv.mkDerivation rec {
 
     ln -sf $out/codeql/tools/linux64/lib64trace.so $out/codeql/tools/linux64/libtrace.so
 
-    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java%\${jdk11}%g' $out/codeql/codeql
+    # many of the codeql extractors use CODEQL_DIST + CODEQL_PLATFORM to
+    # resolve java home, so to be able to create databases, we want to make
+    # sure that they point somewhere sane/usable since we can not autopatch
+    # the codeql packaged java dist, but we DO want to patch the extractors
+    # as well as the builders which are ELF binaries for the most part
+    rm -rf $out/codeql/tools/linux64/java
+    ln -s ${jdk17} $out/codeql/tools/linux64/java
 
     ln -s $out/codeql/codeql $out/bin/
   '';

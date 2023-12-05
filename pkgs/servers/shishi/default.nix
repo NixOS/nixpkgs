@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     (enableFeature true                "arcfour")
   ];
 
-  NIX_CFLAGS_COMPILE
+  env.NIX_CFLAGS_COMPILE
     = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
 
   doCheck = true;

@@ -20,19 +20,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenshot";
-  version = "0.2.7";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "sha256-aF8wrPxFIjCy5gw72e/WyL/Wcx9tUGDkrqHS+ZDVK0U=";
+    sha256 = "sha256-axFGNq+Kg8atlaSlG8EKvxj/FwLfpDR8/e4otmnyosM=";
   };
 
   postPatch = ''
     sed -i 's/{UNITTEST++_INCLUDE_DIR}/ENV{UNITTEST++_INCLUDE_DIR}/g' tests/CMakeLists.txt
-    sed -i 's/{_REL_PYTHON_MODULE_PATH}/ENV{_REL_PYTHON_MODULE_PATH}/g' bindings/python/CMakeLists.txt
-    export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Darwin requires both Magick++ and MagickCore or it will fail to link.
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++)' 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++ ImageMagick::MagickCore)'
   '';
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
@@ -62,7 +64,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_RUBY=OFF"
+    "-DPYTHON_MODULE_PATH=${python3.sitePackages}"
+  ];
 
   meta = with lib; {
     homepage = "http://openshot.org/";

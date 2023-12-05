@@ -1,19 +1,21 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "3.23.0";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
-    repo = pname;
+    repo = "dnscontrol";
     rev = "v${version}";
-    sha256 = "sha256-eIFrVeaNJcYSzMHo5I2g0isdkz/VZmw5mPTSBtdUgzM=";
+    hash = "sha256-FcEpUNFPwottpuIsO53voucKULTkWOdbDgEXKYLb9LQ=";
   };
 
-  vendorSha256 = "sha256-fVxzPYyMihxcwWEey5b5mhiRkoSPK4ZOqzYg7zSj0zM=";
+  vendorHash = "sha256-cW6urAJ3H30HY4Q7JLWFsQebg6YhdGSBgICWMl85v9U=";
 
-  ldflags = [ "-s" "-w" ];
+  subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   preCheck = ''
     # requires network
@@ -22,8 +24,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
-    homepage = "https://stackexchange.github.io/dnscontrol/";
+    homepage = "https://dnscontrol.org/";
+    changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "dnscontrol";
   };
 }

@@ -145,13 +145,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.cockroachdb;
-        defaultText = literalExpression "pkgs.cockroachdb";
-        description = lib.mdDoc ''
-          The CockroachDB derivation to use for running the service.
-
+      package = mkPackageOption pkgs "cockroachdb" {
+        extraDescription = ''
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
@@ -164,7 +159,7 @@ in
         example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
         description = lib.mdDoc ''
           Extra CLI arguments passed to {command}`cockroach start`.
-          For the full list of supported argumemnts, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
+          For the full list of supported arguments, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
         '';
       };
     };

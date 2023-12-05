@@ -31,7 +31,7 @@ buildPythonPackage rec {
     setuptools # pkg_resources import in language_data/util.py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -48,6 +48,5 @@ buildPythonPackage rec {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/LuminosoInsight/langcodes";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

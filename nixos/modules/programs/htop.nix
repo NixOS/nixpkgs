@@ -9,7 +9,8 @@ let
   fmt = value:
     if isList value then concatStringsSep " " (map fmt value) else
     if isString value then value else
-    if isBool value || isInt value then toString value else
+    if isBool value then if value then "1" else "0" else
+    if isInt value then toString value else
     throw "Unrecognized type ${typeOf value} in htop settings";
 
 in
@@ -17,14 +18,7 @@ in
 {
 
   options.programs.htop = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.htop;
-      defaultText = lib.literalExpression "pkgs.htop";
-      description = lib.mdDoc ''
-        The htop package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "htop" { };
 
     enable = mkEnableOption (lib.mdDoc "htop process monitor");
 

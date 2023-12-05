@@ -1,26 +1,30 @@
 { stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
 , alsa-lib, glib, libjack2, libsndfile, libpulseaudio
-, AudioUnit, CoreAudio, CoreMIDI, CoreServices
+, AppKit, AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.3.0";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    sha256 = "sha256-7SuM7a8IIecAJ83QvJfUba/wArAEXywqL2HwVbeG8H4=";
+    hash = "sha256-3qLmo9Ibl44v6Jj5Ix17ixwqfPt3ITTXUqBETF5pzE4=";
   };
+
+  outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = [ "-Denable-framework=off" ];
+  cmakeFlags = [
+    "-Denable-framework=off"
+  ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

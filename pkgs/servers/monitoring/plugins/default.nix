@@ -21,6 +21,7 @@
 , openldap
 , procps
 , runtimeShell
+, unixtools
 }:
 
 let
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yLhHOSrPFRjW701aOL8LPe4OnuJxL6f+dTxNqm0evIg=";
   };
 
-  # TODO: Awful hack. Grrr... this of course only works on NixOS.
+  # TODO: Awful hack. Grrr...
   # Anyway the check that configure performs to figure out the ping
   # syntax is totally impure, because it runs an actual ping to
   # localhost (which won't work for ping6 if IPv6 support isn't
@@ -74,8 +75,8 @@ stdenv.mkDerivation rec {
       -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'
 
     configureFlagsArray+=(
-      --with-ping-command='/run/wrappers/bin/ping -4 -n -U -w %d -c %d %s'
-      --with-ping6-command='/run/wrappers/bin/ping -6 -n -U -w %d -c %d %s'
+      --with-ping-command='${lib.getBin unixtools.ping}/bin/ping -4 -n -U -w %d -c %d %s'
+      --with-ping6-command='${lib.getBin unixtools.ping}/bin/ping -6 -n -U -w %d -c %d %s'
     )
 
     install -Dm555 ${share} $out/share

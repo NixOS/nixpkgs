@@ -18,16 +18,16 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
-  version = "0.15.4";
+  version = "0.16.18";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-Dj4Wli1z4X8FgnthjPszC/h4EIeFiMO/YB5Rlkis5f8=";
+    sha256 = "sha256-qyMOHdOj47ef1NMBIO31xzopO6gOT96tvHhK/TO+E70=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   CGO_ENABLED = 0;
 
@@ -37,7 +37,7 @@ buildGoModule rec {
     "-s" "-w"
     "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
-    "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"
+    "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

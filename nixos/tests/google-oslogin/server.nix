@@ -17,8 +17,8 @@ in {
   };
 
   services.openssh.enable = true;
-  services.openssh.kbdInteractiveAuthentication = false;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.KbdInteractiveAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
 
   security.googleOsLogin.enable = true;
 

@@ -1,7 +1,6 @@
 { lib
 , trivialBuild
 , fetchFromGitHub
-, emacs
 , color-theme
 }:
 
@@ -16,23 +15,12 @@ trivialBuild {
     hash = "sha256-oxX0lo6sxotEiR3nPrKPE9H01HKB3ohB/p8eEHFTp5k=";
   };
 
-  buildInputs = [ emacs ];
-  propagatedUserEnvPkgs = [ color-theme ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    emacs -L . -L ${color-theme}/share/emacs/site-lisp/elpa/color-theme-* \
-      --batch -f batch-byte-compile *.el
-
-    runHook postBuild
-  '';
+  packageRequires = [ color-theme ];
 
   meta = with lib; {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = licenses.mit;
     maintainers = with maintainers; [ samuelrivas AndersonTorres ];
-    inherit (emacs.meta) platforms;
   };
 }

@@ -13,17 +13,24 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "0.2.2";
+  version = "2.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    rev = "v${version}";
-    sha256 = "sha256-2/O81MnFYbdOrzLiTSoX7IW+3ZGyyE/tIqgKr/sEaHI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SvsrvGwIAlj/8hdk90+rxigVrx6n3YInvF/4eux2H04=";
   };
+
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -35,18 +42,11 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "pvo"
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

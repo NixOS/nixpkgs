@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cupy
 , fetchFromGitHub
 , filelock
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     cupy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

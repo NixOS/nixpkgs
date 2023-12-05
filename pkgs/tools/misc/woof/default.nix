@@ -1,24 +1,22 @@
 { lib, stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
-  version = "2020-12-17";
+stdenv.mkDerivation {
   pname = "woof";
+  version = "2022-01-13";
 
   src = fetchFromGitHub {
     owner = "simon-budig";
     repo = "woof";
-    rev = "4aab9bca5b80379522ab0bdc5a07e4d652c375c5";
-    sha256 = "0ypd2fs8isv6bqmlrdl2djgs5lnk91y1c3rn4ar6sfkpsqp9krjn";
+    rev = "f51e9db264118d4cbcd839348c4a6223fda49813";
+    sha256 = "sha256-tk55q2Ew2mZkQtkxjWCuNgt9t+UbjH4llIJ42IruqGY=";
   };
 
   propagatedBuildInputs = [ python3 ];
 
-  dontUnpack = true;
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src/woof $out/bin/woof
-    chmod +x $out/bin/woof
+    runHook preInstall
+    install -Dm555 -t $out/bin woof
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -27,6 +25,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "woof";
   };
 }
-

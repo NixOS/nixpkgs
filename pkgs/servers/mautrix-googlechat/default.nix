@@ -1,17 +1,19 @@
-{ fetchFromGitHub, fetchpatch
+{ fetchFromGitHub
+, fetchpatch
 , lib
 , python3
-, protobuf3_20
-, enableE2be ? true, enableMetrics ? true, enableSqlite ? true
+, enableE2be ? true
+, enableMetrics ? true
+, enableSqlite ? true
 }: python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
-    rev = "v${version}";
-    sha256 = "sha256-UVWYT0HTOUEkBG0n6KNhCSSO/2PAF1rIvCaw478z+q0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a/EWz/aCkBE6XdDpmZcx2Q7/xKNwGCiZUhZc9YIIDhU=";
   };
 
   patches = [
@@ -23,13 +25,6 @@
       sha256 = "sha256-DsITDNLsIgBIqN6sD5JHaFW0LToxVUTzWc7mE2L09IQ=";
     })
   ];
-
-  doCheck = false;
-
-  postPatch = ''
-    sed -i requirements.txt \
-      -e 's/asyncpg>=.*/asyncpg/'
-  '';
 
   baseConfigPath = "share/mautrix-googlechat/example-config.yaml";
   postInstall = ''
@@ -43,24 +38,29 @@
       pycryptodome
       unpaddedbase64
     ];
-    metrics = [ prometheus-client ];
-    sqlite = [ aiosqlite ];
+    metrics = [
+      prometheus-client
+    ];
+    sqlite = [
+      aiosqlite
+    ];
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
+    commonmark
     yarl
     asyncpg
     ruamel-yaml
-    CommonMark
+    commonmark
     python-magic
-    (protobuf.override {
-      protobuf = protobuf3_20;
-    })
+    protobuf
     mautrix
   ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
   ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics
   ++ lib.optionals enableSqlite passthru.optional-dependencies.sqlite;
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/googlechat";
@@ -68,5 +68,6 @@
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arcnmx ];
+    mainProgram = "mautrix-googlechat";
   };
 }

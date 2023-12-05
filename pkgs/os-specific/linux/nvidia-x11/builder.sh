@@ -1,8 +1,9 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -63,6 +64,7 @@ installPhase() {
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
+        rm -f $i/lib/libnvidia-wayland-client* # built from source
         if [ "$useGLVND" = "1" ]; then
             # Pre-built libglvnd
             rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
@@ -124,6 +126,12 @@ installPhase() {
             install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
         fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -189,9 +197,12 @@ installPhase() {
         mkdir -p $bin/share/man/man1
         cp -p *.1.gz $bin/share/man/man1
         rm -f $bin/share/man/man1/{nvidia-xconfig,nvidia-settings,nvidia-persistenced}.1.gz
+        if [ -e "nvidia-dbus.conf" ]; then
+            install -Dm644 nvidia-dbus.conf $bin/share/dbus-1/system.d/nvidia-dbus.conf
+        fi
 
         # Install the programs.
-        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
+        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump nvidia-powerd; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
                 # unmodified binary backup for mounting in containers

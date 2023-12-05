@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.33";
+  version = "0.0.36";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mdz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BGG5SQfVxhp6ID2Ob+afm75cInVixSPD5012K4HwthU=";
+    hash = "sha256-cng19NW5Eq3arysl0B3dfK2Hy6lQFBFh7g2hxvxeklU=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

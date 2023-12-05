@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.2.0";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pvao522dfnRx6JJe4osRgU+q1LpBvdOTP4W9UVVZNiY=";
+    hash = "sha256-opifyg6IRjtWQyqoIeZLgcPRce43uEdxGJtI6Ll81JY=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-asyncio

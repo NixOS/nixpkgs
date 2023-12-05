@@ -1,18 +1,21 @@
-{ lib, fetchzip }:
-let
+{ lib, stdenvNoCC, fetchzip }:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "fraunces";
   version = "1.000";
-in
-fetchzip {
-  name = "fraunces-${version}";
 
-  url = "https://github.com/undercasetype/Fraunces/releases/download/${version}/UnderCaseType_Fraunces_${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/undercasetype/Fraunces/releases/download/${version}/UnderCaseType_Fraunces_${version}.zip";
+    hash = "sha256-hu2G4Fs2I3TMEy/EBFnc88Pv3c8Mpc5rm3OwVvol7gQ=";
+  };
 
-  sha256 = "0qgl140qkn9p87x7pk60fd3lj206y5h0fq2xkcj2qiv3sxbqxwqb";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    install -Dm644 */static/otf/*.otf -t $out/share/fonts/opentype
+    install -Dm644 */static/ttf/*.ttf */*.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

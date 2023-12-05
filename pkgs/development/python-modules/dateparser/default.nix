@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
+, setuptools
 , python-dateutil
 , pytz
 , regex
@@ -21,18 +21,22 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.4";
+  version = "1.2.0";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "v${version}";
-    sha256 = "sha256-r13WNI+T2NtTwjnGOqX3ZOqPhvr8fBdXGULW7IXszlo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mnL44hojebOwP6qtEBHs5QM4uRmLuGlVNr+sM3jZEKE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -47,7 +51,7 @@ buildPythonPackage rec {
     langdetect = [ langdetect ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
     gitpython
@@ -76,6 +80,7 @@ buildPythonPackage rec {
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
+    mainProgram = "dateparser-download";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

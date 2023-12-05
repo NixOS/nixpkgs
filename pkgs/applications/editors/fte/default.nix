@@ -17,13 +17,15 @@ stdenv.mkDerivation rec {
   };
   src = [ ftesrc ftecommon ];
 
+  env.NIX_CFLAGS_COMPILE = "-DHAVE_STRLCAT -DHAVE_STRLCPY";
+
   buildFlags = [ "PREFIX=$(out)" ];
 
   installFlags = [ "PREFIX=$(out)" "INSTALL_NONROOT=1" ];
 
   meta = with lib; {
     description = "A free text editor for developers";
-    homepage = "http://fte.sourceforge.net/";
+    homepage = "https://fte.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = [ ];
     platforms = platforms.all;

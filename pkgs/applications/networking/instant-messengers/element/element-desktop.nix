@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , yarn
 , nodejs
 , fetchYarnDeps
+, jq
 , electron
 , element-web
 , sqlcipher
@@ -19,28 +20,28 @@
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
-  inherit (pinData) version;
-  name = "${pname}-${version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
-    rev = "v${version}";
-    sha256 = pinData.desktopSrcHash;
+    rev = "v${finalAttrs.version}";
+    hash = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = pinData.desktopYarnHash;
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
 
     # desktop item
     mkdir -p "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
@@ -117,11 +118,15 @@ stdenv.mkDerivation rec {
     icon = "element";
     desktopName = "Element";
     genericName = "Matrix Client";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
     startupWMClass = "element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -141,9 +146,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
+    mainProgram = "element-desktop";
   };
-}
+})

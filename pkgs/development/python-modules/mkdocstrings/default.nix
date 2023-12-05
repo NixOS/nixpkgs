@@ -1,33 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , jinja2
 , markdown
 , markupsafe
 , mkdocs
 , mkdocs-autorefs
+, pdm-backend
 , pymdown-extensions
 , pytestCheckHook
-, pdm-pep517
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.19.1";
-  format = "pyproject";
+  version = "0.24.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-VCWUV+3vXmKbAXImAqY/K4vsA64gHBg83VkxbJua/ao=";
+    repo = "mkdocstrings";
+    rev = "refs/tags/${version}";
+    hash = "sha256-UqX2jNNYwDNhb71qGdjHNoo2MmSxjf/bZiUoSxlE2XQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -37,17 +44,14 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}'
-  '';
 
   pythonImportsCheck = [
     "mkdocstrings"
@@ -56,6 +60,13 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Circular dependencies
     "tests/test_extension.py"
+  ];
+
+  disabledTests = [
+    # Not all requirements are available
+    "test_disabling_plugin"
+    # Circular dependency on mkdocstrings-python
+    "test_extended_templates"
   ];
 
   meta = with lib; {

@@ -1,6 +1,10 @@
 { lib
-, fetchurl
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildNpmPackage
 , nixosTests
+, gettext
 , python3
 , ghostscript
 , imagemagickBig
@@ -12,60 +16,20 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
-, fetchFromGitHub
+, xcbuild
 }:
 
 let
-  # Use specific package versions required by paperless-ngx
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_4;
+  version = "2.0.1";
 
-      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-
-      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
-      # and https://github.com/django/channels_redis/issues/332
-      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "channels_redis";
-          rev = version;
-          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
-        };
-      });
-
-      channels = super.channels.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.5";
-        pname = "channels";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
-        pytestFlagsArray = [ "--asyncio-mode=auto" ];
-      });
-
-      daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.2";
-        pname = "daphne";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
-        };
-      });
-    };
+  src = fetchFromGitHub {
+    owner = "paperless-ngx";
+    repo = "paperless-ngx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qSX+r99y7a/eITfaC/UYqSgcxx/xYOqJ4tY/iuvoeNA=";
   };
+
+  python = python3;
 
   path = lib.makeBinPath [
     ghostscript
@@ -78,55 +42,103 @@ let
     unpaper
     poppler_utils
   ];
-in
-python.pkgs.pythonPackages.buildPythonApplication rec {
-  pname = "paperless-ngx";
-  version = "1.10.2";
 
-  # Fetch the release tarball instead of a git ref because it contains the prebuilt frontend
-  src = fetchurl {
-    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-uOrRHHNqIYsDbzKcA7EsYZjadpLyAB4Ks+PU+BNsTWE=";
+  frontend = buildNpmPackage {
+    pname = "paperless-ngx-frontend";
+    inherit version src;
+
+    npmDepsHash = "sha256-uDaZ7j7IDgKy7wCWND2xzR1qHwUtdyjR4eyIAVy01dM=";
+
+    nativeBuildInputs = [
+      python3
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+    ];
+
+    postPatch = ''
+      cd src-ui
+    '';
+
+    CYPRESS_INSTALL_BINARY = "0";
+    NG_CLI_ANALYTICS = "false";
+
+    npmBuildFlags = [
+      "--" "--configuration" "production"
+    ];
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/lib/paperless-ui
+      mv ../src/documents/static/frontend $out/lib/paperless-ui/
+      runHook postInstall
+    '';
   };
-
+in
+python.pkgs.buildPythonApplication rec {
+  pname = "paperless-ngx";
   format = "other";
 
-  propagatedBuildInputs = with python.pkgs.pythonPackages; [
-    aioredis
-    arrow
+  inherit version src;
+
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  propagatedBuildInputs = with python.pkgs; [
+    amqp
+    anyio
     asgiref
     async-timeout
     attrs
     autobahn
     automat
-    blessed
+    billiard
+    bleach
     celery
     certifi
     cffi
     channels-redis
     channels
-    chardet
+    charset-normalizer
     click
+    click-didyoumean
+    click-plugins
+    click-repl
     coloredlogs
     concurrent-log-handler
     constantly
     cryptography
-    daphne
     dateparser
+    django-auditlog
     django-celery-results
+    django-compression-middleware
     django-cors-headers
     django-extensions
     django-filter
-    django-picklefield
+    django-guardian
+    django-multiselectfield
     django
+    djangorestframework-guardian2
     djangorestframework
+    drf-writable-nested
     filelock
-    fuzzywuzzy
+    flower
+    gotenberg-client
     gunicorn
     h11
+    h2
     hiredis
     httptools
+    httpx
     humanfriendly
+    humanize
     hyperlink
     idna
     imap-tools
@@ -138,15 +150,17 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     langdetect
     lxml
     msgpack
-    numpy
+    mysqlclient
+    nltk
     ocrmypdf
+    packaging
     pathvalidate
     pdf2image
-    pdfminer-six
     pikepdf
     pillow
     pluggy
     portalocker
+    prompt-toolkit
     psycopg2
     pyasn1-modules
     pyasn1
@@ -154,9 +168,9 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     pyopenssl
     python-dateutil
     python-dotenv
-    python-gnupg
-    python-Levenshtein
+    python-ipware
     python-magic
+    python-gnupg
     pytz
     pyyaml
     pyzbar
@@ -167,37 +181,53 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     requests
     scikit-learn
     scipy
+    setproctitle
     service-identity
-    six
-    sortedcontainers
+    sniffio
     sqlparse
     threadpoolctl
-    tika
+    tika-client
+    tornado
     tqdm
-    twisted.optional-dependencies.tls
+    twisted
     txaio
+    tzdata
     tzlocal
     urllib3
     uvicorn
     uvloop
+    vine
     watchdog
-    watchgod
+    watchfiles
     wcwidth
+    webencodings
     websockets
     whitenoise
     whoosh
+    zipp
     zope_interface
-  ];
+    zxing-cpp
+  ]
+  ++ redis.optional-dependencies.hiredis
+  ++ twisted.optional-dependencies.tls
+  ++ uvicorn.optional-dependencies.standard;
 
-  # Compile manually because `pythonRecompileBytecodeHook` only works for
-  # files in `python.sitePackages`
   postBuild = ''
-    ${python.interpreter} -OO -m compileall src
+    # Compile manually because `pythonRecompileBytecodeHook` only works
+    # for files in `python.sitePackages`
+    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
+
+    # Collect static files
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
+
+    # Compile string translations using gettext
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
-    cp -r . $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx
+    cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
+    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -207,13 +237,22 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  checkInputs = with python.pkgs.pythonPackages; [
+  postFixup = ''
+    # Remove tests with samples (~14M)
+    find $out/lib/paperless-ngx -type d -name tests -exec rm -rv {} +
+  '';
+
+  nativeCheckInputs = with python.pkgs; [
+    daphne
+    factory-boy
+    imagehash
     pytest-django
     pytest-env
-    pytest-sugar
+    pytest-httpx
+    pytest-rerunfailures
     pytest-xdist
-    factory_boy
     pytestCheckHook
+    reportlab
   ];
 
   pytestFlagsArray = [
@@ -231,7 +270,7 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
 
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
-      --replace "--cov --cov-report=html" ""
+      --replace "--cov --cov-report=html --cov-report=xml" ""
     # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
     # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
     substituteInPlace src/paperless_tesseract/tests/test_parser.py \
@@ -246,15 +285,19 @@ python.pkgs.pythonPackages.buildPythonApplication rec {
     "testNormalOperation"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   passthru = {
-    inherit python path;
+    inherit python path frontend;
     tests = { inherit (nixosTests) paperless; };
   };
 
   meta = with lib; {
     description = "Tool to scan, index, and archive all of your physical documents";
-    homepage = "https://paperless-ngx.readthedocs.io/";
+    homepage = "https://docs.paperless-ngx.com/";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
   };
 }

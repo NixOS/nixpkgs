@@ -51,9 +51,9 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 22.11 release](https://hydra.nixos.org/jobset/nixos/release-22.11)
+* [Continuous package builds for the NixOS 23.11 release](https://hydra.nixos.org/jobset/nixos/release-23.11)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 22.11 release](https://hydra.nixos.org/job/nixos/release-22.11/tested#tabs-constituents)
+* [Tests for the NixOS 23.11 release](https://hydra.nixos.org/job/nixos/release-23.11/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
@@ -70,26 +70,7 @@ Linux distribution. The [GitHub Insights](https://github.com/NixOS/nixpkgs/pulse
 page gives a sense of the project activity.
 
 Community contributions are always welcome through GitHub Issues and
-Pull Requests. When pull requests are made, our tooling automation bot,
-[OfBorg](https://github.com/NixOS/ofborg) will perform various checks
-to help ensure expression quality.
-
-The *Nixpkgs maintainers* are people who have assigned themselves to
-maintain specific individual packages. We encourage people who care
-about a package to assign themselves as a maintainer. When a pull
-request is made against a package, OfBorg will notify the appropriate
-maintainer(s). The *Nixpkgs committers* are people who have been given
-permission to merge.
-
-Most contributions are based on and merged into these branches:
-
-* `master` is the main branch where all small contributions go
-* `staging` is branched from master, changes that have a big impact on
-  Hydra builds go to this branch
-* `staging-next` is branched from staging and only fixes to stabilize
-  and security fixes with a big impact on Hydra builds should be
-  contributed to this branch. This branch is merged into master when
-  deemed of sufficiently high quality
+Pull Requests.
 
 For more information about contributing to the project, please visit
 the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.9.0";
+  version = "2.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8/gmeLpdheW7M9nhM0uTlxrpeRcODSgLVOVKPj9O870=";
+    hash = "sha256-Y7MbZ23LJ4amUNI9Mk2PiGxOFFhq/dDP5uJgpz8SRI4=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -52,6 +52,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/test_aggregation_query.py"
     "tests/system/test_allocate_reserve_ids.py"
     "tests/system/test_query.py"
     "tests/system/test_put.py"
@@ -70,6 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-datastore";
     changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

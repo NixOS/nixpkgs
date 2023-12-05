@@ -3,13 +3,13 @@
 with lib;
 
 let
-  inherit (libretro) genesis-plus-gx mgba snes9x;
+  inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
 in
 
 let self = rec {
 
   addonDir = "/share/kodi/addons";
-  rel = "Matrix";
+  rel = "Nexus";
 
   callPackage = newScope self;
 
@@ -62,9 +62,15 @@ let self = rec {
 
   libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
+  libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 { inherit twenty-fortyeight; };
+
+  libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
+
   libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };
 
   libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
+
+  libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia { inherit nestopia; };
 
   libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
@@ -78,6 +84,8 @@ let self = rec {
 
   orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
+  radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
+
   svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
@@ -85,6 +93,8 @@ let self = rec {
   steam-launcher = callPackage ../applications/video/kodi/addons/steam-launcher { };
 
   steam-library = callPackage ../applications/video/kodi/addons/steam-library { };
+
+  somafm = callPackage ../applications/video/kodi/addons/somafm { };
 
   pdfreader = callPackage ../applications/video/kodi/addons/pdfreader { };
 
@@ -96,9 +106,27 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+
+  vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
+
   vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
-  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+  visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
+
+  visualization-goom = callPackage ../applications/video/kodi/addons/visualization-goom { };
+
+  visualization-matrix = callPackage ../applications/video/kodi/addons/visualization-matrix { };
+
+  visualization-pictureit = callPackage ../applications/video/kodi/addons/visualization-pictureit { };
+
+  visualization-projectm = callPackage ../applications/video/kodi/addons/visualization-projectm { };
+
+  visualization-shadertoy = callPackage ../applications/video/kodi/addons/visualization-shadertoy { };
+
+  visualization-spectrum = callPackage ../applications/video/kodi/addons/visualization-spectrum { };
+
+  visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
 
   visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 
@@ -120,6 +148,8 @@ let self = rec {
 
   idna = callPackage ../applications/video/kodi/addons/idna { };
 
+  infotagger = callPackage ../applications/video/kodi/addons/infotagger { };
+
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
 
   inputstream-ffmpegdirect = callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect { };
@@ -137,6 +167,8 @@ let self = rec {
   requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
 
   routing = callPackage ../applications/video/kodi/addons/routing { };
+
+  sendtokodi = callPackage ../applications/video/kodi/addons/sendtokodi { };
 
   signals = callPackage ../applications/video/kodi/addons/signals { };
 

@@ -89,7 +89,7 @@ let
       PrivateNetwork = mkDefault (!needNetwork);
       ProcSubset = "pid";
       ProtectClock = true;
-      ProtectHome = mkDefault true;
+      ProtectHome = "tmpfs";
       ProtectHostname = true;
       ProtectKernelLogs = true;
       ProtectProc = "invisible";
@@ -144,12 +144,7 @@ in
 {
   options.services.public-inbox = {
     enable = mkEnableOption (lib.mdDoc "the public-inbox mail archiver");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.public-inbox;
-      defaultText = literalExpression "pkgs.public-inbox";
-      description = lib.mdDoc "public-inbox package to use.";
-    };
+    package = mkPackageOption pkgs "public-inbox" { };
     path = mkOption {
       type = with types; listOf package;
       default = [];
@@ -177,8 +172,7 @@ in
           description = lib.mdDoc "The email addresses of the public-inbox.";
         };
         options.url = mkOption {
-          type = with types; nullOr str;
-          default = null;
+          type = types.nonEmptyStr;
           example = "https://example.org/lists/example-discuss";
           description = lib.mdDoc "URL where this inbox can be accessed over HTTP.";
         };
@@ -275,9 +269,8 @@ in
           default = {};
           description = lib.mdDoc "public inboxes";
           type = types.submodule {
-            # Keeping in line with the tradition of unnecessarily specific types, allow users to set
-            # freeform settings either globally under the `publicinbox` section, or for specific
-            # inboxes through additional nesting.
+            # Support both global options like `services.public-inbox.settings.publicinbox.imapserver`
+            # and inbox specific options like `services.public-inbox.settings.publicinbox.foo.address`.
             freeformType = with types; attrsOf (oneOf [ iniAtom (attrsOf iniAtom) ]);
 
             options.css = mkOption {
@@ -285,11 +278,23 @@ in
               default = [];
               description = lib.mdDoc "The local path name of a CSS file for the PSGI web interface.";
             };
+            options.imapserver = mkOption {
+              type = with types; listOf str;
+              default = [];
+              example = [ "imap.public-inbox.org" ];
+              description = lib.mdDoc "IMAP URLs to this public-inbox instance";
+            };
             options.nntpserver = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "nntp://news.public-inbox.org" "nntps://news.public-inbox.org" ];
               description = lib.mdDoc "NNTP URLs to this public-inbox instance";
+            };
+            options.pop3server = mkOption {
+              type = with types; listOf str;
+              default = [];
+              example = [ "pop.public-inbox.org" ];
+              description = lib.mdDoc "POP3 URLs to this public-inbox instance";
             };
             options.wwwlisting = mkOption {
               type = with types; enum [ "all" "404" "match=domain" ];
@@ -450,6 +455,8 @@ in
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
+            BindPathsReadOnly =
+              map (c: c.dir) (lib.attrValues cfg.settings.coderepo);
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++
               cfg.http.args ++
@@ -553,16 +560,7 @@ in
                 ${pkgs.git}/bin/git config core.sharedRepository 0640
               fi
             '') cfg.inboxes
-            ) + ''
-            shopt -s nullglob
-            for inbox in ${stateDir}/inboxes/*/; do
-              # This should be idempotent, but only do it for new
-              # inboxes anyway because it's only needed once, and could
-              # be slow for large pre-existing inboxes.
-              ls -1 "$inbox" | grep -q '^xap' ||
-              ${cfg.package}/bin/public-inbox-index "$inbox"
-            done
-          '';
+            );
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;

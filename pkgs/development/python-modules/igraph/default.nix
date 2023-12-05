@@ -10,15 +10,17 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.10.2";
+  version = "0.11.3";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    hash = "sha256-ro2EkJQxW8aHejAvkaXI9mJC5XgFt31akhzFDAPZ4ow=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Pki0ygcQeuC5E4SwhzGX7oIe9LUSgoBKiXbtcpjL3ng=";
   };
 
   postPatch = ''
@@ -42,7 +44,7 @@ buildPythonPackage rec {
   # told to do it. ~ C.
   setupPyGlobalFlags = [ "--use-pkg-config" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 

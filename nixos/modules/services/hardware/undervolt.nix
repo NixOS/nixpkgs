@@ -5,8 +5,8 @@ let
   cfg = config.services.undervolt;
 
   mkPLimit = limit: window:
-    if (isNull limit && isNull window) then null
-    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+    if (limit == null && window == null) then null
+    else assert asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
   cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
@@ -47,14 +47,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.undervolt;
-      defaultText = literalExpression "pkgs.undervolt";
-      description = lib.mdDoc ''
-        undervolt derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "undervolt" { };
 
     coreOffset = mkOption {
       type = types.nullOr types.int;
@@ -159,7 +152,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
 

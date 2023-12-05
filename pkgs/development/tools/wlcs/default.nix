@@ -2,43 +2,32 @@
 , lib
 , gitUpdater
 , fetchFromGitHub
-, fetchpatch
+, testers
 , cmake
 , pkg-config
 , boost
 , gtest
 , wayland
+, wayland-scanner
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.4.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
-    rev = "v${version}";
-    hash = "sha256-ep5BHa9PgfB50gxJySaw0YAc1upBbncOiX9PCqHLbpE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YYrhcN1BSJISn/7lxu7Db5YaOK+okdHVJuMwqSDzAIU=";
   };
 
-  patches = [
-    # Fixes pkg-config paths
-    # Remove when https://github.com/MirServer/wlcs/pull/258 merged & in a release
-    (fetchpatch {
-      name = "0001-wlcs-pkgsconfig-use-FULL-install-vars.patch";
-      url = "https://github.com/MirServer/wlcs/pull/258/commits/9002cb7323d94aba7fc1ce5927f445e9beb30d70.patch";
-      hash = "sha256-+uhFRKhG59w99oES4RA+L5hHyJ5pf4ij97pTokERPys=";
-    })
-    (fetchpatch {
-      name = "0002-wlcs-CMAKE_INSTALL_INCLUDEDIR-for-headers.patch";
-      url = "https://github.com/MirServer/wlcs/pull/258/commits/71263172c9ba57be9c05f1e07dd40d1f378ca6d0.patch";
-      hash = "sha256-nV/72W9DW3AvNGhUZ+tzmQZow3BkxEH3D6QFBZIGjj8=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -47,8 +36,11 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
@@ -72,6 +64,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/MirServer/wlcs/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
-    inherit (wayland.meta) platforms;
+    platforms = platforms.linux;
+    pkgConfigModules = [
+      "wlcs"
+    ];
   };
-}
+})

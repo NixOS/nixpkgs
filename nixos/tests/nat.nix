@@ -3,7 +3,7 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, nftables ? false, ... }:
+import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... }:
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
 
@@ -16,16 +16,11 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
           networking.nat.internalIPs = [ "192.168.1.0/24" ];
           networking.nat.externalInterface = "eth1";
         }
-        (lib.optionalAttrs withConntrackHelpers {
-          networking.firewall.connectionTrackingModules = [ "ftp" ];
-          networking.firewall.autoLoadConntrackHelpers = true;
-        })
       ];
   in
   {
     name = "nat" + (lib.optionalString nftables "Nftables")
-                 + (if withFirewall then "WithFirewall" else "Standalone")
-                 + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
+                 + (if withFirewall then "WithFirewall" else "Standalone");
     meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco rob ];
     };
@@ -39,10 +34,6 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
                 (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
               networking.nftables.enable = nftables;
             }
-            (lib.optionalAttrs withConntrackHelpers {
-              networking.firewall.connectionTrackingModules = [ "ftp" ];
-              networking.firewall.autoLoadConntrackHelpers = true;
-            })
           ];
 
         router =
@@ -95,7 +86,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
         client.succeed("curl -v ftp://server/foo.txt >&2")
 
         # Test whether active FTP works.
-        client.${if withConntrackHelpers then "succeed" else "fail"}("curl -v -P - ftp://server/foo.txt >&2")
+        client.fail("curl -v -P - ftp://server/foo.txt >&2")
 
         # Test ICMP.
         client.succeed("ping -c 1 router >&2")

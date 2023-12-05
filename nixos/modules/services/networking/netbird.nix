@@ -11,12 +11,7 @@ in {
 
   options.services.netbird = {
     enable = mkEnableOption (lib.mdDoc "Netbird daemon");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.netbird;
-      defaultText = literalExpression "pkgs.netbird";
-      description = lib.mdDoc "The package to use for netbird";
-    };
+    package = mkPackageOption pkgs "netbird" { };
   };
 
   config = mkIf cfg.enable {
@@ -41,9 +36,10 @@ in {
       documentation = [ "https://netbird.io/docs/" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [
+        openresolv
+      ];
       serviceConfig = {
-        AmbientCapabilities = [ "CAP_NET_ADMIN" ];
-        DynamicUser = true;
         Environment = [
           "NB_CONFIG=/var/lib/netbird/config.json"
           "NB_LOG_FILE=console"

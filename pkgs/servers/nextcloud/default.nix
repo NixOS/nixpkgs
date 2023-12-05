@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, nixosTests
+, nextcloud27Packages
+, nextcloud26Packages
+}:
 
 let
   generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
-  }: let
-    major = lib.versions.major version;
-  in stdenv.mkDerivation rec {
+    version, hash
+  , eol ? false, extraVulnerabilities ? []
+  , packages
+  }: stdenvNoCC.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
     src = fetchurl {
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
-    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
-
-    passthru.tests = nixosTests.nextcloud;
+    passthru = {
+      tests = nixosTests.nextcloud;
+      inherit packages;
+    };
 
     installPhase = ''
       runHook preInstall
@@ -27,6 +30,7 @@ let
     '';
 
     meta = with lib; {
+      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
@@ -37,26 +41,28 @@ let
     };
   };
 in {
-  nextcloud23 = throw ''
-    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
+  nextcloud25 = throw ''
+    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud24;
+        services.nextcloud.package = pkgs.nextcloud26;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
+    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
+    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  nextcloud24 = generic {
-    version = "24.0.8";
-    sha256 = "a5c3a070516debba991355e6b737b261396b15b9f2cd939617611ab0bed99299";
+  nextcloud26 = generic {
+    version = "26.0.9";
+    hash = "sha256-nVD8a+jjZXyfXrhEj6Fleofh2p5uq0DvYlXSNTMNiIE=";
+    packages = nextcloud26Packages;
   };
 
-  nextcloud25 = generic {
-    version = "25.0.2";
-    sha256 = "d6ab40faa108937bda42395f570ff111f4c97343b55be1420024da3177e37d59";
+  nextcloud27 = generic {
+    version = "27.1.4";
+    hash = "sha256-vsZfIWa4LJMDuvR2weQk9xqhltrQEP/kwMOdA5kNWUw=";
+    packages = nextcloud27Packages;
   };
 
   # tip: get the sha with:

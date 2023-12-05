@@ -4,7 +4,6 @@
 , python3Packages
 , gnupg
 , pass
-, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     secretstorage
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnupg
     pass
     python3Packages.pytestCheckHook

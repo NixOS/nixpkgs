@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gtk3 vte libxml2 gtk-vnc libsecret gnome.adwaita-icon-theme librsvg
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   passthru = {
     updateScript = gnome.updateScript {

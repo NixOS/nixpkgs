@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "monero-ecosystem";
     repo = "monero-python";
     rev = "v${version}";
-    sha256 = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
+    hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov responses ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov responses ];
 
   meta = with lib; {
     description = "Comprehensive Python module for handling Monero";

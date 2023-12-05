@@ -41,7 +41,7 @@ in {
       };
       vmName = mkOption {
         type = types.str;
-        default = "NixOS ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
+        default = "${config.system.nixos.distroName} ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
         description = lib.mdDoc ''
           The name of the VirtualBox appliance.
         '';
@@ -81,7 +81,7 @@ in {
       extraDisk = mkOption {
         description = lib.mdDoc ''
           Optional extra disk/hdd configuration.
-          The disk will be an 'ext4' partition on a separate VMDK file.
+          The disk will be an 'ext4' partition on a separate file.
         '';
         default = null;
         example = {
@@ -106,6 +106,46 @@ in {
             };
           };
         });
+      };
+      postExportCommands = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          ${pkgs.cot}/bin/cot edit-hardware "$fn" \
+            -v vmx-14 \
+            --nics 2 \
+            --nic-types VMXNET3 \
+            --nic-names 'Nic name' \
+            --nic-networks 'Nic match' \
+            --network-descriptions 'Nic description' \
+            --scsi-subtypes VirtualSCSI
+        '';
+        description = lib.mdDoc ''
+          Extra commands to run after exporting the OVA to `$fn`.
+        '';
+      };
+      storageController = mkOption {
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        example = {
+          name = "SCSI";
+          add = "scsi";
+          portcount = 16;
+          bootable = "on";
+          hostiocache = "on";
+        };
+        default = {
+          name = "SATA";
+          add = "sata";
+          portcount = 4;
+          bootable = "on";
+          hostiocache = "on";
+        };
+        description = lib.mdDoc ''
+          Parameters passed to the VirtualBox appliance. Must have at least
+          `name`.
+
+          Run `VBoxManage storagectl --help` to see more options.
+        '';
       };
     };
   };
@@ -143,8 +183,8 @@ in {
           export HOME=$PWD
           export PATH=${pkgs.virtualbox}/bin:$PATH
 
-          echo "creating VirtualBox pass-through disk wrapper (no copying involved)..."
-          VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
+          echo "converting image to VirtualBox format..."
+          VBoxManage convertfromraw $diskImage disk.vdi
 
           ${optionalString (cfg.extraDisk != null) ''
             echo "creating extra disk: data-disk.raw"
@@ -156,8 +196,8 @@ in {
               mkpart primary ext4 1MiB -1
             eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
             mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
-            echo "creating extra disk: data-disk.vmdk"
-            VBoxManage internalcommands createrawvmdk -filename data-disk.vmdk -rawdisk $dataDiskImage
+            echo "creating extra disk: data-disk.vdi"
+            VBoxManage convertfromraw $dataDiskImage data-disk.vdi
           ''}
 
           echo "creating VirtualBox VM..."
@@ -167,18 +207,19 @@ in {
           VBoxManage modifyvm "$vmName" \
             --memory ${toString cfg.memorySize} \
             ${lib.cli.toGNUCommandLineShell { } cfg.params}
-          VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
-          VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
-            --medium disk.vmdk
+          VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
+          VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
+            --medium disk.vdi
           ${optionalString (cfg.extraDisk != null) ''
-            VBoxManage storageattach "$vmName" --storagectl SATA --port 1 --device 0 --type hdd \
-            --medium data-disk.vmdk
+            VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 1 --device 0 --type hdd \
+            --medium data-disk.vdi
           ''}
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
           fn="$out/${cfg.vmFileName}"
           VBoxManage export "$vmName" --output "$fn" --options manifest ${escapeShellArgs cfg.exportParams}
+          ${cfg.postExportCommands}
 
           rm -v $diskImage
 

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       # Rebased version of
       # https://gitlab.com/embeddable-common-lisp/ecl/commit/ac5f011f57a85a38627af154bc3ee7580e7fecd4.patch
       name = "getcwd.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/16.1.2-getcwd.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
+      url = "https://raw.githubusercontent.com/sagemath/sage/07d6c37d18811e2b377a9689790a7c5e24da16ba/build/pkgs/ecl/patches/16.1.2-getcwd.patch";
       sha256 = "1fbi8gn7rv8nqff5mpaijsrch3k3z7qc5cn4h1vl8qrr8xwqlqhb";
     })
     ./ecl-1.16.2-libffi-3.3-abi.patch
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;

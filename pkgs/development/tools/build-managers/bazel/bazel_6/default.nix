@@ -2,10 +2,9 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, diffutils, gnupatch
 # updater
 , python3, writeScript
 # Apple dependencies
@@ -23,25 +22,30 @@
 , file
 , substituteAll
 , writeTextFile
+, writeShellApplication
+, makeBinaryWrapper
 }:
 
 let
-  version = "6.0.0-pre.20220720.3";
+  version = "6.4.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-i8d4yLSq8fL+YT11wYmBvLDLSprq1gVfyjsKBYci1bk=";
+    hash = "sha256-vYj/YCyLuynugroqaxKtCS1R7GaMZXf5Yo8Y5I/05R4=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
-  # then add new dependencies from the dict in ./src-deps.json as required.
+  # Update with
+  # 1. export BAZEL_SELF=$(nix-build -A bazel_6)
+  # 2. update version and hash for sources above
+  # 3. `eval $(nix-build -A bazel_6.updater)`
+  # 4. add new dependencies from the dict in ./src-deps.json if required by failing build
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
       srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        urls = d.urls;
+        urls = d.urls or [d.url];
         sha256 = d.sha256;
       });
     in builtins.listToAttrs (map toFetchurl [
@@ -54,8 +58,8 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.26.0.tar.gz"
-      srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
+      srcs.android_tools_for_testing
+      srcs.openjdk_linux_vanilla
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -69,6 +73,9 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
+      srcs.com_envoyproxy_protoc_gen_validate
+      srcs.com_google_googleapis
+      srcs.bazel_gazelle
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -106,10 +113,12 @@ let
     [
       bash
       coreutils
+      diffutils
       file
       findutils
       gawk
       gnugrep
+      gnupatch
       gnused
       gnutar
       gzip
@@ -120,6 +129,28 @@ let
     ];
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
+
+  bashWithDefaultShellUtilsSh = writeShellApplication {
+    name = "bash";
+    runtimeInputs = defaultShellUtils;
+    text = ''
+      if [[ "$PATH" == "/no-such-path" ]]; then
+        export PATH=${defaultShellPath}
+      fi
+      exec ${bash}/bin/bash "$@"
+    '';
+  };
+
+  # Script-based interpreters in shebangs aren't guaranteed to work,
+  # especially on MacOS. So let's produce a binary
+  bashWithDefaultShellUtils = stdenv.mkDerivation {
+    name = "bash";
+    src = bashWithDefaultShellUtilsSh;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      makeWrapper ${bashWithDefaultShellUtilsSh}/bin/bash $out/bin/bash
+    '';
+  };
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
@@ -168,6 +199,10 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # upb definition inside bazel sets its own copts that take precedence
+    # over flags we set externally, so need to patch them at the source
+    ./upb-clang16.patch
+
     # Force usage of the _non_ prebuilt java toolchain.
     # the prebuilt one does not work in nix world.
     ./java_toolchain.patch
@@ -219,7 +254,7 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
-  #     nix-build . -A bazel_5.tests
+  #     nix-build . -A bazel_6.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
@@ -291,10 +326,10 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (if !stdenv.hostPlatform.isDarwin then {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
-    } else {}) // {
+    }) // {
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
@@ -323,6 +358,8 @@ stdenv.mkDerivation rec {
     installPhase = ''
       runHook preInstall
 
+      # prevent bazel version check failing in the updater
+      rm .bazelversion
       cp -r . "$out"
 
       runHook postInstall
@@ -333,8 +370,8 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
-            query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
+        "$BAZEL_SELF"/bin/bazel \
+            query 'kind(http_archive, //external:*) + kind(http_file, //external:*) + kind(distdir_tar, //external:*) + kind(git_repository, //external:*)' \
             --loading_phase_threads=1 \
             --output build) \
     | "${python3}"/bin/python3 "${./update-srcDeps.py}" \
@@ -370,6 +407,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in external/{absl,upb} dependencies
+      export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -386,10 +425,11 @@ stdenv.mkDerivation rec {
       sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
       sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
-      wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
+      wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
 
@@ -410,8 +450,8 @@ stdenv.mkDerivation rec {
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
-          --replace /bin/bash ${bash}/bin/bash \
-          --replace "/usr/bin/env bash" ${bash}/bin/bash \
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash \
+          --replace "/usr/bin/env bash" ${bashWithDefaultShellUtils}/bin/bash \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -426,17 +466,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -513,7 +553,7 @@ stdenv.mkDerivation rec {
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
-  buildInputs = [buildJdk] ++ defaultShellUtils;
+  buildInputs = [buildJdk bashWithDefaultShellUtils] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
@@ -619,6 +659,12 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+
+    # If .bazelversion file is present in dist files and doesn't match `bazel` version
+    # running `bazel` command within bazel_src will fail.
+    # Let's remove .bazelversion within the test, if present it is meant to indicate bazel version
+    # to compile bazel with, not version of bazel to be built and tested.
+    rm -f .bazelversion
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

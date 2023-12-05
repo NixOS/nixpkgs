@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/jamesmunns/shell-hist";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = [ maintainers.spacekookie ];
+    mainProgram = "shell-hist";
   };
 }

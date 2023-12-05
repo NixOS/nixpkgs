@@ -1,5 +1,5 @@
 { stdenv, lib, stdenvNoCC
-, makeScopeWithSplicing, generateSplicesForMkScope
+, makeScopeWithSplicing', generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
@@ -26,17 +26,15 @@ let
       else "no"}"
   ];
 
-in makeScopeWithSplicing
-  (generateSplicesForMkScope "netbsd")
-  (_: {})
-  (_: {})
-  (self: let
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "netbsd";
+  f = (self: let
     inherit (self) mkDerivation;
   in {
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   #
-  # We use `makeScopeWithSplicing` because this should be used for all
+  # We use `makeScopeWithSplicing'` because this should be used for all
   # nested package sets which support cross, so the inner `callPackage` works
   # correctly. But for the inline packages we don't bother to use
   # `callPackage`.
@@ -54,7 +52,8 @@ in makeScopeWithSplicing
   mkDerivation = lib.makeOverridable (attrs: let
     stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
   in stdenv'.mkDerivation ({
-    name = "${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
+    pname = "${attrs.pname or (baseNameOf attrs.path)}-netbsd";
+    inherit (attrs) version;
     src = fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];
@@ -211,7 +210,7 @@ in makeScopeWithSplicing
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # GNU objcopy produces broken .a libs which won't link into dependers.
       # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
+      "OBJCOPY=${buildPackages.darwin.cctools-port}/bin/strip"
     ];
     RENAME = "-D";
 
@@ -484,7 +483,7 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "0kk6v9k2bygq0wf9gbinliqzqpzs9bgxn0ndyl2wcv3hh2bmsr9p";
     patches = [ ./locale.patch ];
-    NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
+    env.NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
   };
 
   rpcgen = mkDerivation {
@@ -534,7 +533,7 @@ in makeScopeWithSplicing
     path = "usr.bin/uudecode";
     version = "9.2";
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
-    NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-DNO_BASE64";
     NIX_LDFLAGS = lib.optional stdenv.isDarwin "-lresolv";
   };
 
@@ -549,7 +548,7 @@ in makeScopeWithSplicing
     path = "usr.bin/config";
     version = "9.2";
     sha256 = "1yz3n4hncdkk6kp595fh2q5lg150vpqg8iw2dccydkyw4y3hgsjj";
-    NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal install mandoc byacc flex rsync
@@ -604,6 +603,12 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
 
+    # Make the build ignore linker warnings
+    prePatch = ''
+      substituteInPlace sys/conf/Makefile.kern.inc \
+        --replace "-Wa,--fatal-warnings" ""
+    '';
+
     patches = [
       # Fix this error when building bootia32.efi and bootx64.efi:
       # error: PHDR segment not covered by LOAD segment
@@ -613,8 +618,13 @@ in makeScopeWithSplicing
       ./sys-headers-incsdir.patch
     ];
 
-    # multiple header dirs, see above
-    inherit (self.include) postPatch;
+    postPatch =
+      ''
+        substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
+          --replace "-nocombreloc" "-z nocombreloc"
+      '' +
+      # multiple header dirs, see above
+      self.include.postPatch;
 
     CONFIG = "GENERIC";
 
@@ -635,7 +645,11 @@ in makeScopeWithSplicing
     makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
     hardeningDisable = [ "pic" ];
     MKKMOD = "no";
-    NIX_CFLAGS_COMPILE = [ "-Wa,--no-warn" ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-parameter"
+      "-Wno-error=array-bounds"
+      "-Wa,--no-warn"
+    ];
 
     postBuild = ''
       make -C arch/$MACHINE/compile/$CONFIG $makeFlags
@@ -679,6 +693,13 @@ in makeScopeWithSplicing
   ##
   ## START LIBRARIES
   ##
+  libarch = mkDerivation {
+    path = "lib/libarch";
+    version = "9.2";
+    sha256 = "6ssenRhuSwp0Jn71ErT0PrEoCJ+cIYRztwdL4QTDZsQ=";
+    meta.platforms = lib.platforms.netbsd;
+  };
+
   libutil = mkDerivation {
     path = "lib/libutil";
     version = "9.2";
@@ -707,7 +728,7 @@ in makeScopeWithSplicing
         --replace "#define HAVE_STRUCT_DIRENT_D_NAMLEN 1" ""
       substituteInPlace $COMPONENT_PATH/readline/Makefile --replace /usr/include "$out/include"
     '';
-    NIX_CFLAGS_COMPILE = [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-D__noinline="
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
@@ -745,7 +766,7 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
-    NIX_CFLAGS_COMPILE = [
+    env.NIX_CFLAGS_COMPILE = toString [
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
@@ -806,6 +827,16 @@ in makeScopeWithSplicing
     sha256 = "0siqan1wdqmmhchh2n8w6a8x1abbff8n4yb6jrqxap3hqn8ay54g";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
+  };
+
+  libpci = mkDerivation {
+    pname = "libpci";
+    path = "lib/libpci";
+    version = "9.2";
+    sha256 = "+IOEO1Bw3/H3iCp3uk3bwsFZbvCqN5Ciz70irnPl8E8=";
+    env.NIX_CFLAGS_COMPILE = toString [ "-I." ];
+    meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ sys.src ];
   };
 
   libpthread-headers = mkDerivation {
@@ -904,7 +935,7 @@ in makeScopeWithSplicing
       byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
+    env.NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
     MKPICINSTALL = "yes";
@@ -993,4 +1024,5 @@ in makeScopeWithSplicing
   # END MISCELLANEOUS
   #
 
-})
+});
+}

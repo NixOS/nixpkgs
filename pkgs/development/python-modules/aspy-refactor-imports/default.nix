@@ -22,7 +22,7 @@ buildPythonPackage rec {
     "aspy.refactor_imports"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

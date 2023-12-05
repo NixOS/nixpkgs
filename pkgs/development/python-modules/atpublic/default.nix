@@ -3,32 +3,32 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
-, pdm-pep517
+, pdm-backend
 , sybil
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "3.1.1";
+  version = "4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MJjuEtAQfMUAnWH06A5e3PrEzaK9qgRkSvdYJ8sSGxg=";
+    hash = "sha256-D0BDMhnhJO3xFcbDY4CMpvDhz6fRYNhrL7lHkwhtEpQ=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sybil
   ];

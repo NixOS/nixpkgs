@@ -12,26 +12,23 @@
 , gtest
 , nlohmann_json
 , python3
+, cacert
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "9.1.1";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    hash = "sha256-yw7eSm64qFFt9egJWKVyVo0e7xQRSmfUY7pk6Cwvwdk=";
+    hash = "sha256-M1KUXzht4qIjPfHxvzPr7XUnisMwtbegKp18XQjNYHg=";
   };
 
   patches = [
     # https://github.com/OSGeo/PROJ/pull/3252
-    (fetchpatch {
-      name = "only-add-find_dependencyCURL-for-static-builds.patch";
-      url = "https://github.com/OSGeo/PROJ/commit/11f4597bbb7069bd5d4391597808703bd96df849.patch";
-      hash = "sha256-4w5Cu2m5VJZr6E2dUVRyWJdED2TyS8cI8G20EwfQ4u0=";
-    })
+    ./only-add-curl-for-static-builds.patch
   ];
 
   outputs = [ "out" "dev" ];
@@ -40,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ cacert gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -67,10 +64,11 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;
+    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
   };
 })

@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-1c7ZOdoM0/Us7cnTT3sds2P5pcCedrCfl0GqQBnf9Rk=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   preBuild = ''
     cp ${./go.mod} go.mod

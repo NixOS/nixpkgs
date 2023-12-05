@@ -1,6 +1,7 @@
 { buildPythonApplication
 , lib
 , fetchFromGitHub
+, fetchpatch
 
   # build inputs
 , atk
@@ -32,6 +33,8 @@
 , pypresence
 , pyyaml
 , requests
+, protobuf
+, moddb
 
   # commands that lutris needs
 , xrandr
@@ -44,7 +47,6 @@
 , p7zip
 , xgamma
 , libstrangle
-, wine
 , fluidsynth
 , xorgserver
 , xorg
@@ -64,7 +66,6 @@ let
     p7zip
     xgamma
     libstrangle
-    wine
     fluidsynth
     xorgserver
     xorg.setxkbmap
@@ -75,22 +76,30 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.12";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
+    rev = "v${version}";
+    hash = "sha256-h7oHFVqMJU1HuuUgh5oKXxr9uaIPHz7Q4gf8ONLzric=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  # Backport patch to fix a failing test
+  # FIXME: remove in next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lutris/lutris/commit/1f1d554df3b38da64fc65557ad619e55e050641e.patch";
+      hash = "sha256-kVK1RX6T1ijffWVU7VEt2fR62QpvI6VZebiKPgEE/N8=";
+    })
+  ];
+
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   buildInputs = [
     atk
     gdk-pixbuf
     glib-networking
     gnome-desktop
-    gobject-introspection
     gtk3
     libnotify
     pango
@@ -116,6 +125,8 @@ buildPythonApplication rec {
     pypresence
     pyyaml
     requests
+    protobuf
+    moddb
   ];
 
   postPatch = ''
@@ -123,7 +134,7 @@ buildPythonApplication rec {
       --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  checkInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
+  nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
   checkPhase = ''
     runHook preCheck
 
@@ -139,9 +150,6 @@ buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath requiredTools}"
     "\${gappsWrapperArgs[@]}"
   ];
-  # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
-  # see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   meta = with lib; {
     homepage = "https://lutris.net";
@@ -149,5 +157,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

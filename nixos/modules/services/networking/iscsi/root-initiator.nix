@@ -185,6 +185,10 @@ in
         assertion = cfg.loginAll -> cfg.target == null;
         message = "iSCSI target name is set while login on all portals is enabled.";
       }
+      {
+        assertion = !config.boot.initrd.systemd.enable;
+        message = "systemd stage 1 does not support iscsi yet.";
+      }
     ];
   };
 }

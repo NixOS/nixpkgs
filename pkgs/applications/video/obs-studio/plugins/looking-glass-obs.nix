@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio libbfd SDL2 ];
 
-  NIX_CFLAGS_COMPILE = "-mavx";
+  env.NIX_CFLAGS_COMPILE = "-mavx";
 
   installPhase = ''
     mkdir -p $out/lib/obs-plugins/

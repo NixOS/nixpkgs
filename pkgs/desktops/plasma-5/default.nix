@@ -33,8 +33,6 @@
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
     lgpl21Plus
@@ -51,9 +49,9 @@ let
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) { };
+  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) {};
 
-  packages = self: with self;
+  packages = self:
     let
 
       propagate = out:
@@ -98,6 +96,7 @@ let
 
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
+            nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ libsForQt5.wrapQtAppsHook ];
 
             meta =
               let meta = args.meta or { }; in
@@ -106,11 +105,10 @@ let
                 license = meta.license or license;
                 maintainers = (meta.maintainers or [ ]) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
-                broken = meta.broken or broken;
               };
           in
-          mkDerivation (args // {
-            inherit pname version meta outputs setupHook src;
+          qtStdenv.mkDerivation (args // {
+            inherit pname version meta outputs setupHook src nativeBuildInputs;
           });
       };
 
@@ -123,6 +121,7 @@ let
       breeze-grub = callPackage ./breeze-grub.nix { };
       breeze-plymouth = callPackage ./breeze-plymouth { };
       discover = callPackage ./discover.nix { };
+      flatpak-kcm = callPackage ./flatpak-kcm.nix { };
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix { };
       kde-cli-tools = callPackage ./kde-cli-tools.nix { };
       kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
@@ -130,7 +129,7 @@ let
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix { };
       kgamma5 = callPackage ./kgamma5.nix { };
       khotkeys = callPackage ./khotkeys.nix { };
-      kinfocenter = callPackage ./kinfocenter.nix { };
+      kinfocenter = callPackage ./kinfocenter { };
       kmenuedit = callPackage ./kmenuedit.nix { };
       kpipewire = callPackage ./kpipewire.nix { };
       kscreen = callPackage ./kscreen.nix { };
@@ -162,6 +161,7 @@ let
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
       plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault { };
+      plasma-welcome = callPackage ./plasma-welcome.nix { };
       plasma-workspace = callPackage ./plasma-workspace { };
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix { };
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix { };

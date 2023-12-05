@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "driftctl";
-  version = "0.38.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "driftctl";
     rev = "v${version}";
-    sha256 = "sha256-etH/92Nhl5ZkmBeDtgFN0pLUOzgWhd3lClW4+zXYPr4=";
+    sha256 = "sha256-IDKfW0NCEsgKXpHA7SwkHjMeoGAIYITlDVR/vI/b9hk=";
   };
 
-  vendorSha256 = "sha256-tvl0VlMUD7rVlB/OjyptYyllx6brX+ycGTp4In9yEvE=";
+  vendorHash = "sha256-JFvC9PReziktHSXbltGkGHjVR8hTM1hPJ0OqrZQXRQM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,6 +51,6 @@ buildGoModule rec {
       and fills in the missing piece in your DevSecOps toolbox.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ kaction jk ];
+    maintainers = with maintainers; [ kaction jk qjoly ];
   };
 }

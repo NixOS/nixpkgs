@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "murex";
-  version = "2.11.2200";
+  version = "5.2.7610";
 
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nyrZttTOWpr7rBc2Ks04cWMGZFmd7lVIz6mHa0m+dDE=";
+    sha256 = "sha256-YyMt1V9Utar849+HPGLGJc25PvV7Q2pJehpFOOxlraY=";
   };
 
-  vendorSha256 = "sha256-hLz36ESf6To6sT/ha/yXyhG0U1gGw8HDfnrPJnws25g=";
+  vendorHash = "sha256-qOItRqCIxoHigufI6b7j2VdBDo50qGDe+LAaccgDh5w=";
 
   subPackages = [ "." ];
 
@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "Bash-like shell and scripting environment with advanced features designed for safety and productivity";
     homepage = "https://murex.rocks";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya kashw2 ];
   };
 }

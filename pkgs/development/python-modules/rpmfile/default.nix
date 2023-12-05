@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "rpmfile";
-  version = "1.0.8";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e56cfc10e1a7d953b1890d81652a89400c614f4cdd9909464aece434d93c3a3e";
+    sha256 = "sha256-tLDdVTrZlxGk+oYmeCm/4XLAPx6hzkztJP+lXtiDhb4=";
   };
 
   # Tests access the internet
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Read rpm archive files";
     homepage = "https://github.com/srossross/rpmfile";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

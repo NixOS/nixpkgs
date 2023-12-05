@@ -1,48 +1,57 @@
 { lib
-, blinker
 , buildPythonPackage
 , fetchPypi
-, flask
-, pytestCheckHook
-, pythonAtLeast
 , pythonOlder
-, semantic-version
+
+# build-system
+, setuptools
+
+# dependencies
+, flask
 , werkzeug
+
+# tests
+, asgiref
+, blinker
+, pytestCheckHook
+, semantic-version
 }:
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.6.2";
-  format = "setuptools";
+  version = "0.6.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Login";
     inherit version;
-    sha256 = "sha256-wKe6qf3ESM3T3W8JOd9y7sUXey96vmy4L8k00pyqycM=";
+    hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     flask
     werkzeug
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [
+    "flask_login"
+  ];
+
+  nativeCheckInputs = [
+    asgiref
     blinker
     pytestCheckHook
     semantic-version
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    "test_hashable"
-  ];
-
-  pythonImportsCheck = [
-    "flask_login"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/maxcountryman/flask-login/blob/${version}/CHANGES.md";
     description = "User session management for Flask";
     homepage = "https://github.com/maxcountryman/flask-login";
     license = licenses.mit;

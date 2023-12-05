@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xkO4rzjQTf1H4ZtJlzx6dT6BnfSg3VZU8pXdJFraTAI=";
+    hash = "sha256-wlQ/mo9MBQo0t1p0h6/TJir3I87DKYAUc022T3hZjH8=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     pytestCheckHook

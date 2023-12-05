@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.6";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-HPbrtqedGBxEHR0MfG1iPEI4F8YQk/NvIa2q4j5nkJA=";
+    hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
   };
 
-  latex = texlive.combine { inherit (texlive)
-    scheme-basic
+  latex = texliveBasic.withPackages (ps: with ps; [
     collection-pstricks
     collection-fontsrecommended
     l3kernel
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     xcolor
     xkeyval
     xstring
-    ;};
+  ]);
 
   nativeBuildInputs = [ rsync makeWrapper ];
   buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];
@@ -51,7 +50,8 @@ stdenv.mkDerivation rec {
       --replace '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
-      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"
+      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
+      --replace 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
   '';
 
   configureFlags = [

@@ -1,16 +1,16 @@
 diff --git a/data/installed-tests/meson.build b/data/installed-tests/meson.build
-index b8ec916f..38209b36 100644
+index dfce86b1c..5e34c4fa6 100644
 --- a/data/installed-tests/meson.build
 +++ b/data/installed-tests/meson.build
-@@ -83,5 +83,5 @@ configure_file(
-   output : 'fwupd-tests.conf',
-   configuration : con2,
+@@ -86,5 +86,5 @@ configure_file(
+   output: 'fwupd-tests.conf',
+   configuration: con2,
    install: true,
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index b91dd037..d7e20b18 100644
+index ca6ccdf92..36b1b47b0 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -188,8 +188,8 @@ else
@@ -24,7 +24,7 @@ index b91dd037..d7e20b18 100644
    daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
-@@ -492,6 +492,7 @@ gnome = import('gnome')
+@@ -497,6 +497,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -33,27 +33,17 @@ index b91dd037..d7e20b18 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index d00038db..be1c45b4 100644
+index 877891126..bfc5d1afd 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -56,6 +56,7 @@ option('systemd', type : 'feature', description : 'systemd support', deprecated:
- option('systemd_unit_user', type : 'string', description : 'User account to use for fwupd-refresh.service (empty for DynamicUser)')
- option('systemd_root_prefix', type: 'string', value: '', description: 'Directory to base systemd’s installation directories on')
- option('elogind', type : 'feature', description : 'elogind support', deprecated: {'true': 'enabled', 'false': 'disabled'})
-+option('installed_test_prefix', type: 'string', description: 'Prefix for installed tests')
- option('tests', type : 'boolean', value : true, description : 'enable tests')
- option('soup_session_compat', type : 'boolean', value : true, description : 'enable SoupSession runtime compatibility support')
- option('curl', type : 'feature', description : 'libcurl support', deprecated: {'true': 'enabled', 'false': 'disabled'})
-diff --git a/plugins/redfish/fu-self-test.c b/plugins/redfish/fu-self-test.c
-index 4d19e560..91cfaa61 100644
---- a/plugins/redfish/fu-self-test.c
-+++ b/plugins/redfish/fu-self-test.c
-@@ -27,7 +27,7 @@ fu_test_is_installed_test(void)
- 	const gchar *builddir = g_getenv("G_TEST_BUILDDIR");
- 	if (builddir == NULL)
- 		return FALSE;
--	return g_str_has_prefix(builddir, FWUPD_PREFIX);
-+	return g_str_has_prefix(builddir, FWUPD_INSTALLED_TEST_PREFIX);
- }
- 
- static void
+@@ -452,6 +452,10 @@ option('elogind',
+     'false': 'disabled',
+   },
+ )
++option('installed_test_prefix',
++  type: 'string',
++  description: 'Prefix for installed tests'
++)
+ option('tests',
+   type: 'boolean',
+   value: true,

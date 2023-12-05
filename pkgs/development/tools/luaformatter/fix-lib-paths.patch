@@ -12,7 +12,7 @@ index 4a21b94..0ac7911 100644
 -  ${PROJECT_SOURCE_DIR}/third_party/antlr4/runtime/Cpp/runtime/src
 +  @libargs@/include
 +  @catch2@/include
-+  @libyamlcpp@/include
++  @yaml-cpp@/include
 +  @antlr4RuntimeCpp@/include/antlr4-runtime
    ${PROJECT_SOURCE_DIR}/src/
    )

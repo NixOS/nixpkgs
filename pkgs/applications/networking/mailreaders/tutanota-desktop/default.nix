@@ -3,12 +3,12 @@ electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
-  version = "3.106.4";
+  version = "3.118.27";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
     name = "tutanota-desktop-${version}.tar.gz";
-    sha256 = "sha256-RU2JEFtYOpxqA02YDuB/V4t/ZZ608EHGMPpwxVOzRz4=";
+    hash = "sha256-z2Ir8O7IDiE7cYuLshpMQMnOJanaECUvKlUEyPayIPo=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       $out/bin/tutanota-desktop \
       --add-flags $out/share/tutanota-desktop/resources/app.asar \
       --run "mkdir -p /tmp/tutanota" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
 
     runHook postInstall
   '';
@@ -54,8 +54,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tutanota official desktop client";
     homepage = "https://tutanota.com/";
+    changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,29 +1,33 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
-    hash = "sha256-01G7eJRrnee/acEeobYAYMY+93y+I0ASOTVRGuO+IcA=";
+    hash = "sha256-8plnvyb4sQRfEac1TVWgr2yrtAVAPKucgAnsybdUd3U=";
   };
+
+  patches = [
+    # Fix header include path
+    # https://github.com/QtExcel/QXlsx/pull/279
+    (fetchpatch {
+      url = "https://github.com/QtExcel/QXlsx/commit/9d6db9efb92b93c3663ccfef3aec05267ba43723.patch";
+      hash = "sha256-EbE5CNACAcgENCQh81lBZJ52hCIcBsFhNnYOS0Wr25I=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase ];
-
-  # Don't force Qt definitions onto users: https://github.com/QtExcel/QXlsx/commit/8e83402d
-  postPatch = ''
-    substituteInPlace QXlsx/CMakeLists.txt \
-     --replace 'target_compile_definitions(QXlsx PUBLIC' 'target_compile_definitions(QXlsx PRIVATE'
-  '';
 
   preConfigure = ''
     cd QXlsx

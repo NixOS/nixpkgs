@@ -1,27 +1,39 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hoard";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Hyde46";
-    repo = pname;
+    repo = "hoard";
     rev = "v${version}";
-    sha256 = "sha256-WCyu6vW0l8J2Xh8OGXMXVDBs287m2nPlRHeA0j8uvlk=";
+    hash = "sha256-c9iSbxkHwLOeATkO7kzTyLD0VAwZUzCvw5c4FyuR5/E=";
   };
 
-  buildInputs = [ ncurses openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  cargoHash = "sha256-4EeeD1ySR4M1i2aaKJP/BNSn+t1l8ingiv2ZImFFn1A=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-Cku9NnrjWT7VmOCryb0sbCQibG+iU9CHT3Cvd6M/9f4=";
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "CLI command organizer written in rust";
     homepage = "https://github.com/hyde46/hoard";
+    changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ builditluc ];
+    maintainers = with maintainers; [ builditluc figsoda ];
+    mainProgram = "hoard";
   };
 }

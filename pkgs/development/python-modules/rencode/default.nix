@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

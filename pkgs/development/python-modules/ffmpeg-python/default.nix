@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_4
 , future
 , pytest-mock
 , pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./ffmpeg-location.patch;
-      inherit ffmpeg;
+      ffmpeg = ffmpeg_4;
     })
   ];
 

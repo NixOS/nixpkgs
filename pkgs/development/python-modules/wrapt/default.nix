@@ -2,11 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, sphinxHook
+, sphinx-rtd-theme
 }:
 
 buildPythonPackage rec {
   pname = "wrapt";
   version = "1.14.1";
+  outputs = [ "out" "doc" ];
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -16,8 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-nXwDuNo4yZxgjnkus9bVwIZltPaSH93D+PcZMGT2nGM=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
   ];
 
   pythonImportsCheck = [

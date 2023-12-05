@@ -70,9 +70,9 @@ in
           name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
-          name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-x-icons;
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+          name = mkDefault "Mint-Y-Sand";
+          package = mkDefault pkgs.cinnamon.mint-y-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
@@ -109,9 +109,12 @@ in
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
+      services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
+      services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
@@ -177,6 +180,8 @@ in
         nixos-artwork.wallpapers.simple-dark-gray
         mint-artwork
         mint-cursor-themes
+        mint-l-icons
+        mint-l-theme
         mint-themes
         mint-x-icons
         mint-y-icons
@@ -185,6 +190,17 @@ in
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-xapp
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
+      ];
+
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -198,14 +214,16 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt applications under Cinnamon
-      qt.enable = true;
-      qt.platformTheme = "gnome";
-      qt.style = "adwaita";
+      # Qt application style
+      qt = {
+        enable = mkDefault true;
+        style = mkDefault "gtk2";
+        platformTheme = mkDefault "gtk2";
+      };
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
-        source-code-pro # Default monospace font in 3.32
+      fonts.packages = with pkgs; [
+        dejavu_fonts # Default monospace font in LMDE 6+
         ubuntu_font_family # required for default theme
       ];
     })
@@ -214,7 +232,6 @@ in
       programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
@@ -232,6 +249,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
+        gnome-calendar
         gnome-screenshot
       ] config.environment.cinnamon.excludePackages;
     })

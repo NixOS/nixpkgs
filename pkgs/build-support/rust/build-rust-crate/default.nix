@@ -10,7 +10,6 @@
 , fetchCrate
 , pkgsBuildBuild
 , rustc
-, rust
 , cargo
 , jq
 , libiconv
@@ -71,18 +70,14 @@ let
   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
   configureCrate = import ./configure-crate.nix {
-    inherit lib stdenv rust echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
+    inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };
-
-  # Allow access to the rust attribute set from inside buildRustCrate, which
-  # has a parameter that shadows the name.
-  rustAttrs = rust;
 in
 
   /* The overridable pkgs.buildRustCrate function.
@@ -125,10 +120,10 @@ crate_: lib.makeOverridable
       #   hello = attrs: { buildInputs = [ openssl ]; };
       # }
     , crateOverrides
-      # Rust library dependencies, i.e. other libaries that were built
+      # Rust library dependencies, i.e. other libraries that were built
       # with buildRustCrate.
     , dependencies
-      # Rust build dependencies, i.e. other libaries that were built
+      # Rust build dependencies, i.e. other libraries that were built
       # with buildRustCrate and are used by a build script.
     , buildDependencies
       # Specify the "extern" name of a library if it differs from the library target.
@@ -240,6 +235,7 @@ crate_: lib.makeOverridable
         "edition"
         "buildTests"
         "codegenUnits"
+        "links"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -276,7 +272,9 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ] ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
+      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
+        ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
       dependencies = map lib.getLib dependencies_;
       buildDependencies = map lib.getLib buildDependencies_;
@@ -299,7 +297,7 @@ crate_: lib.makeOverridable
         );
 
       libName = if crate ? libName then crate.libName else crate.crateName;
-      libPath = if crate ? libPath then crate.libPath else "";
+      libPath = lib.optionalString (crate ? libPath) crate.libPath;
 
       # Seed the symbol hashes with something unique every time.
       # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols
@@ -308,7 +306,7 @@ crate_: lib.makeOverridable
           depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
           hashedMetadata = builtins.hashString "sha256"
             (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
-              "___" + depsMetadata + "___" + rustAttrs.toRustTarget stdenv.hostPlatform);
+              "___" + depsMetadata + "___" + stdenv.hostPlatform.rust.rustcTarget);
         in
         lib.substring 0 10 hashedMetadata;
 
@@ -320,6 +318,7 @@ crate_: lib.makeOverridable
       crateDescription = crate.description or "";
       crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
       crateHomepage = crate.homepage or "";
+      crateLinks = crate.links or "";
       crateType =
         if lib.attrByPath [ "procMacro" ] false crate then [ "proc-macro" ] else
         if lib.attrByPath [ "plugin" ] false crate then [ "dylib" ] else
@@ -340,7 +339,7 @@ crate_: lib.makeOverridable
 
       configurePhase = configureCrate {
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-          crateFeatures crateRenames libName build workspace_member release libPath crateVersion
+          crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
           crateAuthors crateHomepage verbose colors codegenUnits;
       };
@@ -350,6 +349,11 @@ crate_: lib.makeOverridable
           metadata hasCrateBin crateBin verbose colors
           extraRustcOpts buildTests codegenUnits;
       };
+      dontStrip = !release;
+
+      # We need to preserve metadata in .rlib, which might get stripped on macOS. See https://github.com/NixOS/nixpkgs/issues/218712
+      stripExclude = [ "*.rlib" ];
+
       installPhase = installCrate crateName metadata buildTests;
 
       # depending on the test setting we are either producing something with bins
@@ -359,6 +363,10 @@ crate_: lib.makeOverridable
 
       meta = {
         mainProgram = crateName;
+        badPlatforms = [
+          # Rust is currently unable to target the n32 ABI
+          lib.systems.inspect.patterns.isMips64n32
+        ];
       };
     } // extraDerivationAttrs
     )

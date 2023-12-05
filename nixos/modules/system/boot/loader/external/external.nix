@@ -8,13 +8,11 @@ in
 {
   meta = {
     maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc external.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > external.xml`
-    doc = ./external.xml;
+    doc = ./external.md;
   };
 
   options.boot.loader.external = {
-    enable = mkEnableOption (lib.mdDoc "use an external tool to install your bootloader");
+    enable = mkEnableOption (lib.mdDoc "using an external tool to install your bootloader");
 
     installHook = mkOption {
       type = with types; path;

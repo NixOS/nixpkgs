@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   buildFlags = [ "bootstrap" "SCHEME=scheme" ];
 
   checkTarget = "test";
-  checkInputs = [ gambit nodejs ]; # racket ];
+  nativeCheckInputs = [ gambit nodejs ]; # racket ];
   checkFlags = [ "INTERACTIVE=" ];
 
   # TODO: Move this into its own derivation, such that this can be changed

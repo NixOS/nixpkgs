@@ -1,4 +1,4 @@
-{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_4, freeglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools, wrapQtAppsHook
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
     llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
-    ffmpeg freeglut physfs
+    ffmpeg_4 freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Turn-based strategy artillery game similar to Worms";
-    homepage = "http://hedgewars.org/";
+    homepage = "https://hedgewars.org/";
     license = licenses.gpl2;
     longDescription = ''
        Each player controls a team of several hedgehogs. During the course of

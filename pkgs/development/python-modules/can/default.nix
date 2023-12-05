@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , future
@@ -10,6 +11,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , typing-extensions
 , wrapt
 , uptime
@@ -17,8 +19,8 @@
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,13 +28,17 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNy47SapujTF3ReJtIbwUY53IftIH4cXZjkzHrnZMFQ=";
+    hash = "sha256-JsYAh5Z6RIX6aWpSuW+VIzJRPf5MfNbBGg36v3CQiLU=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     msgpack
@@ -53,7 +59,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     future
     hypothesis
     parameterized
@@ -73,10 +79,16 @@ buildPythonPackage rec {
     # pytest.approx is not supported in a boolean context (since pytest7)
     "test_pack_unpack"
     "test_receive"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # timing sensitive
+    "test_general"
+    "test_gap"
   ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
+    # skips timing senstive tests
+    export CI=1
   '';
 
   pythonImportsCheck = [

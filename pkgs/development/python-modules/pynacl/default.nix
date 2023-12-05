@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, sphinxHook
 , pythonOlder
 , libsodium
 , cffi
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pynacl";
   version = "1.5.0";
+  outputs = [ "out" "doc" ];
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,6 +23,10 @@ buildPythonPackage rec {
     pname = "PyNaCl";
     sha256 = "8ac7448f09ab85811607bdd21ec2464495ac8b7c66d146bf545b0f08fb9220ba";
   };
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
 
   buildInputs = [
     libsodium
@@ -34,7 +40,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

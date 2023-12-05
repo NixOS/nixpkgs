@@ -35,13 +35,11 @@ buildPythonApplication rec {
     texinfo
     txt2man
 
-    # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
     gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     librsvg
   ];
@@ -71,5 +69,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
+    mainProgram = "solfege";
   };
 }

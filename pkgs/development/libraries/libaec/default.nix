@@ -4,19 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libaec";
-  version  = "1.0.6";
+  version  = "1.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.dkrz.de";
     owner = "k202009";
     repo = "libaec";
     rev = "v${version}";
-    sha256 = "sha256-N0YwJuVqv8jv/uSbpn/eJBTMhlHDcY/74+anH2vNvpI=";
+    sha256 = "sha256-mmiPpfUZE7W6Hzalr/tcJUFQe5kF4dYM1uZShjBsoVA=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";

@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "assetnote";
     repo = pname;
     rev = "v${version}";
-    sha256 = "084jywgqjj2hpaprdcb9a7i8hihphnfil0sx3wrlvjpa8sk0z1mw";
+    hash = "sha256-vIYPpkbqyk0zH10DGp2FF0aI4lFpsZavulBIiR/3kiA=";
   };
 
-  vendorSha256 = "1nczzzsnh38qi949ki5268y39ggkwncanc1pv7727qpwllzl62vy";
+  vendorHash = "sha256-fgtDP6X84iPO2Tcwq5jl8700PDKixJlIihgNaPX/n9k=";
 
   ldflags = [
     "-s" "-w" "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}"

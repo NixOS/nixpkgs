@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isx86 ''
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
   '' + lib.optionalString stdenv.hostPlatform.isAarch ''
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.videolan.org/developers/x264.html";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ spwhitt tadeokondrak ];
+    maintainers = with maintainers; [ tadeokondrak ];
   };
 }

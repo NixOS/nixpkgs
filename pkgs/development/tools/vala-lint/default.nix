@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , glib
+, json-glib
 , meson
 , ninja
 , pantheon
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-lint";
-  version = "unstable-2022-09-15";
+  version = "unstable-2023-11-12";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "923adb5d3983ed654566304284607e3367998e22";
-    sha256 = "sha256-AHyc6jJyEPfUON7yf/6O2jfcnRD3fW2R9UfIsx2Zmdc=";
+    rev = "95cf9e61a73fe4a0f69fd8c275c9548703f79838";
+    sha256 = "sha256-w5jW/JM1sR9gIIVl3WJNK9jpaA4CMr56Wt4AuxUlkW8=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    json-glib
   ];
+
+  postPatch = ''
+    # https://github.com/vala-lang/vala-lint/issues/181
+    substituteInPlace test/meson.build \
+      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
+  '';
 
   doCheck = true;
 

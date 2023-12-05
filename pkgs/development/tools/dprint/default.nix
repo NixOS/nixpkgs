@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchCrate, rustPlatform, Security }:
+{ lib, stdenv, fetchCrate, rustPlatform, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.34.1";
+  version = "0.43.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-sdRmBzP5H/engoa68w1hYlzMgIrHhRltKYsMg/TGTv0=";
+    sha256 = "sha256-PUI58DBzPAMrqB4YeWVxGl+moYZfZwGCAiUIflKYK4Q=";
   };
 
-  cargoSha256 = "sha256-nkRD1Qx+OgqTwc/mfVa08d790yj/K7BJO4dqu5qig8o=";
+  cargoHash = "sha256-VZjQ2Q38cHblLwR2XioAjq0CAwWYOsvQ/1ps92Rl99U=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions
@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://dprint.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ khushraj ];
+    mainProgram = "dprint";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security, zlib }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
     libiconv Security
   ];
 
+  checkInputs = lib.optionals stdenv.isDarwin [ zlib ];
+
   # enable all output formats
   buildFeatures = [ "all" ];
 
@@ -28,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/XAMPPRocky/tokei";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner lilyball ];
+    mainProgram = "tokei";
   };
 }

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyclip";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyoungtech";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NCWmCp4VGwwvubqN8FUUJ0kcZbXjOEyB6+BfGky1Kj4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0nOkNgT8XCwtXI9JZntkhoMspKQU602rTKBFajVKBoM=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace docs/README.md README.md
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ] ++ lib.optionals stdenv.isLinux [
     xclip
@@ -40,11 +40,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.isDarwin;
     description = "Cross-platform clipboard utilities supporting both binary and text data";
     homepage = "https://github.com/spyoungtech/pyclip";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

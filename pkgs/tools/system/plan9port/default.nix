@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2022-09-12";
+  version = "2023-03-31";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "ffbdd1aa20c8a20a8e9dcd3cec644b6dfa3c6acb";
-    hash = "sha256-Lq5B4VYUetkHwhFX2EaLr33wR1aLIiVn8OBobxjFt7I=";
+    rev = "cc4571fec67407652b03d6603ada6580de2194dc";
+    hash = "sha256-PZWjf0DJCNs5mjxtXgK4/BcstaOqG2WBKRo+Bh/9U7w=";
   };
 
   postPatch = ''

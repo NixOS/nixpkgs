@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "22.12.1";
+  version = "23.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PdLnR01BDfb3+WsOvOZTsDHWXRNK0pLTxCXOuWik0L0=";
+    sha256 = "sha256-E9efhgMGN9lvMlFeZqo6xco75TtQsXULOzKX00pjqMM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,11 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     rzpipe
     tqdm
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "prompt-toolkit==3.0.19" "prompt-toolkit>=3.0.19"
-  '';
 
   # Project has no tests
   doCheck = false;

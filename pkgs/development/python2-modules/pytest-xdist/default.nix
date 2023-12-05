@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm pytest ];
-  checkInputs = [ pytest filelock ];
+  nativeCheckInputs = [ pytest filelock ];
   propagatedBuildInputs = [ execnet pytest-forked psutil six ];
 
   # Encountered a memory leak

@@ -1,73 +1,179 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
-, fetchurl
-, lib
+{ lib
+, buildNpmPackage
+, cargo
+, copyDesktopItems
+, dbus
+, electron_25
+, fetchFromGitHub
+, fetchpatch2
+, glib
+, gnome
+, gtk3
+, jq
 , libsecret
-, libxshmfence
 , makeDesktopItem
 , makeWrapper
-, stdenv
-, udev
-, wrapGAppsHook
+, moreutils
+, napi-rs-cli
+, nodejs_18
+, pkg-config
+, python3
+, rustc
+, rustPlatform
 }:
 
-stdenv.mkDerivation rec {
+let
+  description = "A secure and free password manager for all of your devices";
+  icon = "bitwarden";
+  electron = electron_25;
+in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2022.12.0";
+  version = "2023.10.1";
 
-  src = fetchurl {
-    url = "https://github.com/bitwarden/clients/releases/download/desktop-v${version}/Bitwarden-${version}-amd64.deb";
-    sha256 = "sha256-deQG1GEYmnQmO5+jASsiQmDphb+4Jyq9aSn/A4z++uE=";
+  src = fetchFromGitHub {
+    owner = "bitwarden";
+    repo = "clients";
+    rev = "desktop-v${version}";
+    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "bitwarden";
-    exec = "bitwarden %U";
-    icon = "bitwarden";
-    comment = "A secure and free password manager for all of your devices";
-    desktopName = "Bitwarden";
-    categories = [ "Utility" ];
-  };
-
-  dontBuild = true;
-  dontConfigure = true;
-  dontPatchELF = true;
-  dontWrapGApps = true;
-
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
-
-  buildInputs = [ libsecret libxshmfence ] ++ atomEnv.packages;
-
-  unpackPhase = "dpkg-deb -x $src .";
-
-  installPhase = ''
-    mkdir -p "$out/bin"
-    cp -R "opt" "$out"
-    cp -R "usr/share" "$out/share"
-    chmod -R g-w "$out"
-
-    # Desktop file
-    mkdir -p "$out/share/applications"
-    cp "${desktopItem}/share/applications/"* "$out/share/applications"
-  '';
-
-  runtimeDependencies = [
-    (lib.getLib udev)
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/bitwarden/clients/issues/6812#issuecomment-1806830091
+      url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
+      hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
+    })
   ];
 
-  postFixup = ''
-    makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
-      "''${gappsWrapperArgs[@]}"
+  nodejs = nodejs_18;
+
+  makeCacheWritable = true;
+  npmWorkspace = "apps/desktop";
+  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit patches src;
+    patchFlags = [ "-p4" ];
+    sourceRoot = "${src.name}/${cargoRoot}";
+    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
+  };
+  cargoRoot = "apps/desktop/desktop_native";
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  nativeBuildInputs = [
+    cargo
+    copyDesktopItems
+    jq
+    makeWrapper
+    moreutils
+    napi-rs-cli
+    pkg-config
+    python3
+    rustc
+    rustPlatform.cargoCheckHook
+    rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libsecret
+  ];
+
+  preBuild = ''
+    if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
+      echo 'ERROR: electron version mismatch'
+      exit 1
+    fi
   '';
 
-  meta = with lib; {
-    description = "A secure and free password manager for all of your devices";
+  postBuild = ''
+    pushd apps/desktop
+
+    # desktop_native/index.js loads a file of that name regarldess of the libc being used
+    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
+
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
+
+    popd
+  '';
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    dbus
+    (gnome.gnome-keyring.override { useWrappedDaemon = false; })
+  ];
+
+  checkFlags = [
+    "--skip=password::password::tests::test"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd ${cargoRoot}
+    export HOME=$(mktemp -d)
+    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export cargoCheckType=release
+    dbus-run-session \
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      -- bash -e -c cargoCheckHook
+    popd
+
+    runHook postCheck
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+
+    pushd apps/desktop/dist/linux-unpacked
+    mkdir -p $out/opt/Bitwarden
+    cp -r locales resources{,.pak} $out/opt/Bitwarden
+    popd
+
+    makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
+      --add-flags $out/opt/Bitwarden/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+
+    pushd apps/desktop/resources/icons
+    for icon in *.png; do
+      dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
+      mkdir -p "$dir"
+      cp "$icon" "$dir"/${icon}.png
+    done
+    popd
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bitwarden";
+      exec = "bitwarden %U";
+      inherit icon;
+      comment = description;
+      desktopName = "Bitwarden";
+      categories = [ "Utility" ];
+    })
+  ];
+
+  meta = {
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
+    inherit description;
     homepage = "https://bitwarden.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kiwi ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ amarshall kiwi ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "bitwarden";
   };
 }

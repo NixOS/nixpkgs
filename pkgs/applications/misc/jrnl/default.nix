@@ -1,18 +1,20 @@
 { lib
 , fetchFromGitHub
 , python3
+, testers
+, jrnl
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "3.0";
+  version = "4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wyN7dlAbQwqvES8qEJ4Zo+fDMM/Lh9tNjf215Ywop10=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -20,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    ansiwrap
     asteval
     colorama
     cryptography
@@ -35,24 +36,13 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
     pytestCheckHook
     toml
   ];
 
-  # Upstream expects a old pytest-bdd version
-  # Once it changes we should update here too
-  # https://github.com/jrnl-org/jrnl/blob/develop/poetry.lock#L732
-  disabledTests = [
-    "bdd"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'tzlocal = ">2.0, <3.0"' 'tzlocal = ">2.0, !=3.0"'
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -62,10 +52,17 @@ python3.pkgs.buildPythonApplication rec {
     "jrnl"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = jrnl;
+    version = "v${version}";
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
     description = "Simple command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zalakain ];
+    maintainers = with maintainers; [ bryanasdev000 zalakain ];
+    mainProgram = "jrnl";
   };
 }

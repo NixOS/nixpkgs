@@ -1,39 +1,57 @@
 { lib
-, python3Packages
+, python3
+, fetchPypi
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    # FlexGet doesn't support transmission-rpc>=5 yet
+    # https://github.com/NixOS/nixpkgs/issues/258504
+    # https://github.com/Flexget/Flexget/issues/3847
+    packageOverrides = self: super: {
+      transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
+        version = "4.3.1";
+        src = fetchPypi {
+          pname = "transmission_rpc";
+          inherit version;
+          hash = "sha256-Kh2eARIfM6MuXu7RjPPVhvPZ+bs0AXkA4qUCbfu5hHU=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.17";
+  version = "3.10.1";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
-    owner = "flexget";
-    repo = "flexget";
+    owner = "Flexget";
+    repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7r/3rB0TI/sRTi69+tx24dGjETBhX0KS1Arhg8aeoCk=";
+    hash = "sha256-4r+PADMUpyvWNvA7MSgjx1VcCJKrYJLyvEn9esZKCRw=";
   };
 
   postPatch = ''
     # remove dependency constraints but keep environment constraints
     sed 's/[~<>=][^;]*//' -i requirements.txt
-
-    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
-    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
-    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
-  # ~400 failures
-  doCheck = false;
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    wheel
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
-    APScheduler
+    apscheduler
     beautifulsoup4
     click
     colorama
+    commonmark
     feedparser
     guessit
     html5lib
@@ -44,7 +62,8 @@ python3Packages.buildPythonApplication rec {
     packaging
     psutil
     pynzb
-    PyRSS2Gen
+    pyrsistent
+    pyrss2gen
     python-dateutil
     pyyaml
     rebulk
@@ -69,6 +88,14 @@ python3Packages.buildPythonApplication rec {
     # Plugins requirements
     transmission-rpc
   ];
+
+  pythonImportsCheck = [
+    "flexget"
+    "flexget.plugins.clients.transmission"
+  ];
+
+  # ~400 failures
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://flexget.com/";

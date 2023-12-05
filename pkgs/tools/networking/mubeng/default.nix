@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.12.0-dev";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NBZmu0VcVUhJSdM3fzZ+4Q5oX8uxO6GLpEUq74x8HUU=";
+    hash = "sha256-AxgvZdsJX16sZi4g8LnfceKuw/wBwvj6uoF/5zKldBk=";
   };
 
-  vendorHash = "sha256-1JxyP6CrJ4/g7o3eGeN1kRXJU/jNLEB8fW1bjJytQqQ=";
+  vendorHash = "sha256-kOLeaEKtpI3l0qLphRTnm27Ms63ID4LJ6VkUHJzGAcc=";
 
   ldflags = [
     "-s"

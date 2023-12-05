@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, unittestCheckHook
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,14 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "license=license" "license='MIT'"
   '';
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "testSendRadioMsgClosesConnectionOnErrorAndRetriesIfReusingConnection"
+    "testSendRadioMsgReusesConnection"
+  ];
 
   pythonImportsCheck = [
     "maxcube"

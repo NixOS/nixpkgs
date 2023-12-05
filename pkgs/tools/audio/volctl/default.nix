@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ill0rwqrgAH7lbzh86DQc1Q71lkYh8PCKZvi4XadsW8=";
+    sha256 = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
   };
 
   postPatch = ''
@@ -53,5 +53,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
+    mainProgram = "volctl";
   };
 }

@@ -125,14 +125,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.self-deploy = {
+    systemd.services.self-deploy = rec {
       inherit (cfg) startAt;
 
-      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
 
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
+      after = requires;
+
+      environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;

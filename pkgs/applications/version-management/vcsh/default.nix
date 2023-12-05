@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git ];
 
-  checkInputs = []
+  nativeCheckInputs = []
     ++ (with perlPackages; [ perl ShellCommand TestMost ]);
 
   outputs = [ "out" "doc" "man" ];
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ttuegel alerque ];
     platforms = platforms.unix;
+    mainProgram = "vcsh";
   };
 }

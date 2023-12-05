@@ -17,9 +17,9 @@ fixQtBuiltinPaths() {
             if grep -q '\$\$\[QT_' "${pr_:?}"; then
                 echo "fixQtBuiltinPaths: Fixing Qt builtin paths in \`${pr_:?}'..."
                 sed -i "${pr_:?}" \
-                    -e "s|\\\$\\\$\\[QT_HOST_BINS[^]]*\\]|$dev/bin|g" \
+                    -e "s|\\\$\\\$\\[QT_HOST_BINS[^]]*\\]|"'$$'"NIX_OUTPUT_DEV/bin|g" \
                     -e "s|\\\$\\\$\\[QT_HOST_DATA[^]]*\\]/mkspecs|$dev/mkspecs|g" \
-                    -e "s|\\\$\\\$\\[QT_HOST_PREFIX[^]]*\\]|$dev|g" \
+                    -e "s|\\\$\\\$\\[QT_HOST_PREFIX[^]]*\\]|"'$$'"NIX_OUTPUT_DEV|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_ARCHDATA[^]]*\\]|$lib|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_BINS[^]]*\\]|$bin/bin|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_CONFIGURATION[^]]*\\]|$bin|g" \
@@ -30,7 +30,7 @@ fixQtBuiltinPaths() {
                     -e "s|\\\$\\\$\\[QT_INSTALL_LIBS[^]]*\\]|$lib/lib|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_LIBEXECS[^]]*\\]|$lib/libexec|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_PLUGINS[^]]*\\]|$bin/$qtPluginPrefix|g" \
-                    -e "s|\\\$\\\$\\[QT_INSTALL_PREFIX[^]]*\\]|$lib|g" \
+                    -e "s|\\\$\\\$\\[QT_INSTALL_PREFIX[^]]*\\]|"'$$'"NIX_OUTPUT_LIB|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_TESTS[^]]*\\]|$dev/tests|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_TRANSLATIONS[^]]*\\]|$lib/translations|g" \
                     -e "s|\\\$\\\$\\[QT_INSTALL_QML[^]]*\\]|$bin/$qtQmlPrefix|g"
@@ -40,9 +40,9 @@ fixQtBuiltinPaths() {
         if grep -q '\$\$\[QT_' "${dir:?}"; then
             echo "fixQtBuiltinPaths: Fixing Qt builtin paths in \`${dir:?}'..."
             sed -i "${dir:?}" \
-                -e "s|\\\$\\\$\\[QT_HOST_BINS[^]]*\\]|$dev/bin|g" \
+                -e "s|\\\$\\\$\\[QT_HOST_BINS[^]]*\\]|"'$$'"NIX_OUTPUT_DEV/bin|g" \
                 -e "s|\\\$\\\$\\[QT_HOST_DATA[^]]*\\]/mkspecs|$dev/mkspecs|g" \
-                -e "s|\\\$\\\$\\[QT_HOST_PREFIX[^]]*\\]|$dev|g" \
+                -e "s|\\\$\\\$\\[QT_HOST_PREFIX[^]]*\\]|"'$$'"NIX_OUTPUT_DEV|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_ARCHDATA[^]]*\\]|$lib|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_BINS[^]]*\\]|$bin/bin|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_CONFIGURATION[^]]*\\]|$bin|g" \
@@ -53,7 +53,7 @@ fixQtBuiltinPaths() {
                 -e "s|\\\$\\\$\\[QT_INSTALL_LIBS[^]]*\\]|$lib/lib|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_LIBEXECS[^]]*\\]|$lib/libexec|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_PLUGINS[^]]*\\]|$bin/$qtPluginPrefix|g" \
-                -e "s|\\\$\\\$\\[QT_INSTALL_PREFIX[^]]*\\]|$lib|g" \
+                -e "s|\\\$\\\$\\[QT_INSTALL_PREFIX[^]]*\\]|"'$$'"NIX_OUTPUT_LIB|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_TESTS[^]]*\\]|$dev/tests|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_TRANSLATIONS[^]]*\\]|$lib/translations|g" \
                 -e "s|\\\$\\\$\\[QT_INSTALL_QML[^]]*\\]|$bin/$qtQmlPrefix|g"

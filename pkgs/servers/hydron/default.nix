@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gitUpdater
 , pkg-config
-, ffmpeg
+, ffmpeg_4
 }:
 
 buildGoModule rec {
@@ -21,7 +21,7 @@ buildGoModule rec {
   proxyVendor = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg ];
+  buildInputs = [ ffmpeg_4 ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -31,6 +31,7 @@ buildGoModule rec {
     homepage = "https://github.com/bakape/hydron";
     description = "High performance media tagger and organizer";
     license = with licenses; [ lgpl3Plus ];
+    knownVulnerabilities = [ "CVE-2023-4863" ];  # Via https://github.com/chai2010/webp dep
     maintainers = with maintainers; [ Madouura ];
   };
 }

@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2022.13";
+  version = "2023.7";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3lU+Xmfyjs6AFnf+vE5xMSAntRoNeHBVrOJZLvv1YyY=";
+    hash = "sha256-OL1PEXGqPbMWFcCTkjRAUk+7zbGTQiwQqmgmkEgfgHE=";
   };
 
   nativeBuildInputs = [
@@ -120,5 +120,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
+    mainProgram = "rpm-ostree";
   };
 }

@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-TjoXHbY0vUQ2rhwdCJ/s/taRd9/MG0P9HaEw2BOIy/s=";
   };
 
-  vendorSha256 = "sha256-YKu+7LFUoQwCH//URIswiaqa0rmnWZJvuSn/68G3TUA=";
+  vendorHash = "sha256-YKu+7LFUoQwCH//URIswiaqa0rmnWZJvuSn/68G3TUA=";
 
   meta = with lib; {
     description = "Discord rich presence for MPRIS music players.";
@@ -22,5 +22,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ misterio77 ];
+    mainProgram = "clematis";
   };
 }

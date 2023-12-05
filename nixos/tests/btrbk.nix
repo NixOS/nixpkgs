@@ -52,8 +52,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
         environment.systemPackages = with pkgs; [ btrfs-progs ];
         services.openssh = {
           enable = true;
-          passwordAuthentication = false;
-          kbdInteractiveAuthentication = false;
+          settings = {
+            KbdInteractiveAuthentication = false;
+            PasswordAuthentication = false;
+          };
         };
         services.btrbk = {
           extraPackages = [ pkgs.lz4 ];

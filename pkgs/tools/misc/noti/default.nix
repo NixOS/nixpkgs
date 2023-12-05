@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "noti";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
     rev = version;
-    sha256 = "sha256-FhVpw6PJcm0aYQBlN7AUjOkJgCzleOHXIXumSegtxfA=";
+    hash = "sha256-8CHSbKOiWNYqKBU1kqQm5t02DJq0JfoIaPsU6Ylc46E=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -48,5 +48,6 @@ buildGoModule rec {
     homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
     maintainers = with maintainers; [ stites marsam ];
+    mainProgram = "noti";
   };
 }

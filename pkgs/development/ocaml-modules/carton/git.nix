@@ -9,6 +9,7 @@ buildDunePackage {
   pname = "carton-git";
 
   inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton

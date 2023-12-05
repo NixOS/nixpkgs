@@ -1,6 +1,8 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, fetchpatch
+, formulaic
 , click
 , num2words
 , numpy
@@ -11,19 +13,26 @@
 , bids-validator
 , sqlalchemy
 , pytestCheckHook
+, versioneer
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
-  version = "0.15.3";
+  version = "0.16.3";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TZnJebxLwgnP9woC0downJv4xrAzjioLZuvqd8fzxGE=";
+    hash = "sha256-EOJ5NQyNFMpgLA1EaaXkv3/zk+hkPIMaVGrnNba4LMM=";
   };
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "sqlalchemy" ];
 
   propagatedBuildInputs = [
     click
+    formulaic
     num2words
     numpy
     scipy
@@ -32,18 +41,23 @@ buildPythonPackage rec {
     patsy
     bids-validator
     sqlalchemy
+    versioneer
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "bids" ];
+  disabledTests = [
+    # looks for missing data:
+    "test_config_filename"
+    # regression associated with formulaic >= 0.6.0
+    # (see https://github.com/bids-standard/pybids/issues/1000)
+    "test_split"
+  ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
-    # Doesn't support sqlalchemy >=1.4
-    # See https://github.com/bids-standard/pybids/issues/680
-    broken = true;
   };
 }

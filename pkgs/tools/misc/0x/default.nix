@@ -14,9 +14,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-NzD/j8rBfk/cpoBnkFHFqpXz58mswLZr8TUS16vlrZQ=";
   };
 
-  cargoPatches = [ ./add-Cargo-lock.diff ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  cargoHash = "sha256-3qaPGIbl1jF4784KGxbfBTgW/0ayxIO9Ufp9vkhIJa4=";
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mcy/0x";

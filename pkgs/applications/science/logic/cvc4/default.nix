@@ -28,12 +28,15 @@ stdenv.mkDerivation rec {
     patch -p1 -i ${./minisat-fenv.patch} -d src/prop/bvminisat
   '';
 
+  patches = [
+    ./cvc4-bash-patsub-replacement.patch
+  ];
+
   preConfigure = ''
     patchShebangs ./src/
   '';
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Production"
-  ];
+
+  cmakeBuildType = "Production";
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

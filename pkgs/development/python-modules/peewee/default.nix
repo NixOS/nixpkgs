@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.15.3";
+  version = "3.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6s+JTUYmuP6Y6D+mi8YTznHbPYUS7yk259MuPpm9H/s=";
+    hash = "sha256-QbbwC55q/BjMGtm3fH8HPd0aETMzLAFwVYFvOS/4dqA=";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mysql-connector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flask
   ];
 

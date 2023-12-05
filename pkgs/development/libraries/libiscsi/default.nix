@@ -11,11 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ajrkkg5awmi8m4b3mha7h07ylg18k252qprvk1sgq0qbyd66zy7";
   };
 
+  postPatch = ''
+    substituteInPlace lib/socket.c \
+      --replace "void iscsi_decrement_iface_rr() {" "void iscsi_decrement_iface_rr(void) {"
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
 
   # This problem is gone on libiscsi master.
-  NIX_CFLAGS_COMPILE =
-    lib.optional stdenv.hostPlatform.is32bit "-Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.hostPlatform.is32bit "-Wno-error=sign-compare");
 
   meta = with lib; {
     description = "iscsi client library and utilities";

@@ -7,46 +7,49 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 , setuptools
+, setuptools-scm
+, jpype1
 }:
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chezou";
-    repo = pname;
+    repo = "tabula-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/N4TqVHIlwqVeBKlUq5Oz1VW/105Ov6Yicvnn/lxlI=";
+    hash = "sha256-MGv2n8DoSjumD3lRcqwI0sEsaEDgs1n+st8DwZuZauo=";
   };
 
-  patches = [
-    ./java-interpreter-path.patch
-  ];
-
   postPatch = ''
-    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+    substituteInPlace tabula/backend.py \
+      --replace '"java"' '"${lib.getExe jre}"'
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+  ];
+
+  buildInputs = [
+    jre
   ];
 
   propagatedBuildInputs = [
     distro
     numpy
     pandas
-    setuptools
+    jpype1
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -60,6 +63,11 @@ buildPythonPackage rec {
     "test_read_pdf_with_remote_template"
     "test_read_remote_pdf"
     "test_read_remote_pdf_with_custom_user_agent"
+    # not sure what it checks
+    # probably related to jpype, but we use subprocess instead
+    # https://github.com/chezou/tabula-py/issues/352#issuecomment-1730791540
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_read_pdf_with_silent_true"
   ];
 
   meta = with lib; {

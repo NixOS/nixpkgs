@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (import ./common.nix { inherit pkgs lib; }) mkTestName mariadbPackages mysqlPackages;
+  inherit (import ./common.nix { inherit pkgs lib; }) mkTestName mariadbPackages mysqlPackages perconaPackages;
 
   makeTest = import ./../make-test-python.nix;
   # Setup common users
@@ -15,7 +15,7 @@ let
     name ? mkTestName package,
     useSocketAuth ? true,
     hasMroonga ? true,
-    hasRocksDB ? true
+    hasRocksDB ? pkgs.stdenv.hostPlatform.is64bit
   }: makeTest {
     inherit name;
     meta = with lib.maintainers; {
@@ -77,9 +77,6 @@ let
               };
             };
           };
-        };
-
-      mariadb =        {
         };
     };
 
@@ -147,3 +144,8 @@ in
   // (lib.mapAttrs (_: package: makeMySQLTest {
     inherit package;
   }) mariadbPackages)
+  // (lib.mapAttrs (_: package: makeMySQLTest {
+    inherit package;
+    name = "percona_8_0";
+    hasMroonga = false; useSocketAuth = false;
+  }) perconaPackages)

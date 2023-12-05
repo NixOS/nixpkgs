@@ -1,20 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "3.046";
-in fetchzip {
-  name = "source-sans-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "source-sans";
+  version = "3.052";
 
-  url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+    hash = "sha256-yzbYy/ZS1GGlgJW+ARVWF4tjFqmMq7x+YqSQnojtQBs=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 OTF/*.otf -t $out/share/fonts/opentype
+    install -Dm444 TTF/*.ttf -t $out/share/fonts/truetype
+    install -Dm444 VF/*.otf -t $out/share/fonts/variable
+
+    runHook postInstall
   '';
-
-  sha256 = "1wxdinnliq0xqbjrs0sqykwaggkmyqawfq862d9xn05g1pnxda94";
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-sans/";

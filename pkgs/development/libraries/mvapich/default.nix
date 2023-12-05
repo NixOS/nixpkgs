@@ -14,12 +14,14 @@ assert builtins.elem network [ "ethernet" "infiniband" "omnipath" ];
 
 stdenv.mkDerivation rec {
   pname = "mvapich";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
-    sha256 = "0jd28vy9ivl3rcpkxmhw73b6krzm0pd9jps8asw92wa00lm2z9mk";
+    sha256 = "sha256-w5pEkvS+UN9hAHhXSLoolOI85FCpQSgYHVFtpXV3Ua4=";
   };
+
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
   propagatedBuildInputs = [ numactl rdma-core zlib opensm ];
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
   ] ++ optional useSlurm "--with-pm=slurm"
     ++ optional (network == "ethernet") "--with-device=ch3:sock"
-    ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" ]
+    ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" "--disable-ibv-dlopen" ]
     ++ optionals (network == "omnipath") ["--with-device=ch3:psm" "--with-psm2=${libpsm2}"];
 
   doCheck = true;
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
     # /tmp/nix-build... ends up in the RPATH, fix it manually
     for entry in $out/bin/mpichversion $out/bin/mpivars; do
       echo "fix rpath: $entry"
-      patchelf --set-rpath "$out/lib" $entry
+      patchelf --allowed-rpath-prefixes ${builtins.storeDir} --shrink-rpath $entry
     done
 
     # Ensure the default compilers are the ones mvapich was built with

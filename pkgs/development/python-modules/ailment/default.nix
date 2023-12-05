@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.33";
-  format = "pyproject";
+  version = "9.2.79";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-PngFhzeBm3lm69KKjcj4NvFb1DVspdkQaiVSg0FZnV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aMp28g7a44u4VC0g3v9oVhYcBkSZkMJ/83eFTNNBbc0=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,9 @@ buildPythonPackage rec {
   # Tests depend on angr (possibly a circular dependency)
   doCheck = false;
 
-  #pythonImportsCheck = [ "ailment" ];
+  pythonImportsCheck = [
+    "ailment"
+  ];
 
   meta = with lib; {
     description = "The angr Intermediate Language";

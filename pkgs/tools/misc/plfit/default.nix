@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals (!isNull python) [
+  ] ++ lib.optionals (python != null) [
     python
     swig
   ];
 
   cmakeFlags = [
     "-DPLFIT_USE_OPENMP=ON"
-  ] ++ lib.optionals (!isNull python) [
+  ] ++ lib.optionals (python != null) [
     "-DPLFIT_COMPILE_PYTHON_MODULE=ON"
   ];
 

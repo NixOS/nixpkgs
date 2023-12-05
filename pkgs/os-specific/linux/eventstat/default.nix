@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eventstat";
-  version = "0.04.13";
+  version = "0.05.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-psamt9omhakiO3Kx2EzofPL2VAsva7XKQTZmn6zKefA=";
+    hash = "sha256-raODDA1EKtZThFg0NV6EfrWj5mSQNaiekywfOfAvYXI=";
   };
 
   buildInputs = [ ncurses ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/eventstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

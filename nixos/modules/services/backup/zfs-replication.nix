@@ -9,7 +9,7 @@ let
 in {
   options = {
     services.zfs.autoReplication = {
-      enable = mkEnableOption (lib.mdDoc "ZFS snapshot replication.");
+      enable = mkEnableOption (lib.mdDoc "ZFS snapshot replication");
 
       followDelete = mkOption {
         description = lib.mdDoc "Remove remote snapshots that don't have a local correspondent.";

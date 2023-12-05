@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ _360ied ];
+    mainProgram = "plzip";
   };
 }

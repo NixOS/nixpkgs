@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt, alsa-lib }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt, alsa-lib, alsa-plugins, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "nano-tts";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool makeWrapper ];
   buildInputs = [ popt alsa-lib ];
 
   patchPhase = ''
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm755 -t $out/bin nanotts
     install -Dm644 -t $out/share/lang $src/lang/*
+    wrapProgram $out/bin/nanotts \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   meta = {
@@ -31,5 +33,6 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.strikerlulu ];
     platforms = lib.platforms.linux;
+    mainProgram = "nanotts";
   };
 }

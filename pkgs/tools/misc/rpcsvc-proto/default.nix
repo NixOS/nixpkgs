@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpcsvc-proto";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DXRLEpOanWcxCSTC8OxEw5SWKpgFz7oTPukzfnPrAOk=";
+    sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
+    mainProgram = "rpcgen";
   };
 }

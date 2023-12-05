@@ -5,6 +5,7 @@
 , configparser
 , distro
 , fetchFromGitHub
+, fetchpatch
 , gevent
 , jinja2
 , paramiko
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.6";
+  version = "2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,8 +28,17 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SNeucJvjnwQ0o+gukXwEKybBaW01hPtYXCFcPeOuXA8=";
+    hash = "sha256-BYd2UYQJD/HsmpnlQjZvjfg17ShPuA3j4rtv6fTQK/A=";
   };
+
+  patches = [
+    # https://github.com/Fizzadar/pyinfra/pull/1018
+    (fetchpatch {
+      name = "bump-paramiko-major-version.patch";
+      url = "https://github.com/Fizzadar/pyinfra/commit/62a8f081279779c4f1eed246139f615cf5fed642.patch";
+      hash = "sha256-aT9SeSqXOD76LFzf6R/MWTtavcW6fZT7chkVg9aXiBg=";
+    })
+  ];
 
   propagatedBuildInputs = [
     click
@@ -44,7 +54,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -63,7 +73,8 @@ buildPythonPackage rec {
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
       ad-hoc command execution, service deployment, configuration management and more.
     '';
-    homepage = "https://github.com/Fizzadar/pyinfra";
+    homepage = "https://pyinfra.com";
+    downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
     changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ totoroot ];
     license = licenses.mit;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pyradius";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    hash = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace "def testBindv6(self):" "def dontTestBindv6(self):"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
   ];
 
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python RADIUS Implementation";
     homepage = "https://github.com/pyradius/pyrad";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

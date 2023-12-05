@@ -1,4 +1,4 @@
-{ runCommand, nix, lib }:
+{ runCommandLocal, nix, lib }:
 
 # Replace a single dependency in the requisites tree of drv, propagating
 # the change all the way up the tree, without a full rebuild. This can be
@@ -23,7 +23,7 @@ with lib;
 
 let
   warn = if verbose then builtins.trace else (x: y: y);
-  references = import (runCommand "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
+  references = import (runCommandLocal "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
     (echo {
     while read path
     do
@@ -61,7 +61,7 @@ let
   drvName = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
 
-  rewriteHashes = drv: hashes: runCommand (drvName drv) { nixStore = "${nix.out}/bin/nix-store"; } ''
+  rewriteHashes = drv: hashes: runCommandLocal (drvName drv) { nixStore = "${nix.out}/bin/nix-store"; } ''
     $nixStore --dump ${drv} | sed 's|${baseNameOf drv}|'$(basename $out)'|g' | sed -e ${
       concatStringsSep " -e " (mapAttrsToList (name: value:
         "'s|${baseNameOf name}|${baseNameOf value}|g'"

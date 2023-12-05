@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , substituteAll
+, dconf
 , gettext
 , meson
 , ninja
@@ -27,32 +28,34 @@
 , networkmanager
 , pango
 , polkit
-, webkitgtk_5_0
+, webkitgtk_6_0
 , systemd
 , libadwaita
 , libnma-gtk4
 , tzdata
-, libgnomekbd
+, gnome-tecla
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "43.2";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "I9eWOlTUlZRQTQ6s2FCWyvtfhvHnSljgQGdbbnmK5pg=";
+    sha256 = "sa/nZHmPiUi+25XHqzG9eFKaxctIHEH3p3d/Jk3lS9g=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-fix-paths.patch;
-      inherit tzdata libgnomekbd;
+      inherit tzdata;
+      tecla = gnome-tecla;
     })
   ];
 
   nativeBuildInputs = [
+    dconf
     gettext
     meson
     ninja
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
     networkmanager
     pango
     polkit
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   mesonFlags = [

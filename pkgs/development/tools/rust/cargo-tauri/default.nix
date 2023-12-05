@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, openssl
 , pkg-config
 , glibc
 , libsoup
@@ -16,22 +17,22 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "1.2.3";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = pname;
     rev = "tauri-v${version}";
-    sha256 = "sha256-4v0ZlFBVBB+0xWbTRncVwELaZWLKyCmIceTfseXvS8s=";
+    hash = "sha256-HdA7c64ru21DvjhIswRW6r+EH3uYj4ipWzBcfVcc644=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
-  sourceRoot = "source/tooling/cli";
+  sourceRoot = "${src.name}/tooling/cli";
 
-  cargoSha256 = "sha256-Hp6+T2CN0CsXaGnCVqAYaOjZNDkmI+MXDfHIgbU1S0g=";
+  cargoHash = "sha256-hmig/QKzdt/rIl4gggTygwZ6rEmekw0OlppN6pXvvmw=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya happysalada ];
   };
 }

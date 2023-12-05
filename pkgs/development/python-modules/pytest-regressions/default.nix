@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.3.1";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-s+xM2zTo9idgYnXYuDTGXmDhowc+MmuzcnpCcnPQIh0=";
+    hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
   ];

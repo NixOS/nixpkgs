@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.9.0";
+  version = "2.11.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gd0cJX6XHwQguNJ7jFDUVwQg9eNk0ZUL4VH5L+3K+Lw=";
+    hash = "sha256-B6zimaY/Wz1EQTdWNIU7Vc6PkMYsaiT4pH6wVBSfb5k=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-videointelligence";
     changelog = "https://github.com/googleapis/python-videointelligence/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

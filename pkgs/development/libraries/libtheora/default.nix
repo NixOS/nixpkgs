@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = [ "--disable-examples" ];
+
   outputs = [ "out" "dev" "devdoc" ];
   outputDoc = "devdoc";
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.theora.org/";
     description = "Library for Theora, a free and open video compression format";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,25 +1,22 @@
 { lib
-, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , geojson
 , google-api-core
 , imagesize
-, ndjson
+, nbconvert
+, nbformat
 , numpy
-, opencv
-  # , opencv-python
+, opencv4
 , packaging
 , pillow
 , pydantic
-  # , pygeotile
 , pyproj
-, pytest-cases
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
-, pythonRelaxDepsHook
-, rasterio
 , requests
+, setuptools
 , shapely
 , tqdm
 , typeguard
@@ -28,8 +25,8 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.34.0";
-  format = "setuptools";
+  version = "3.56.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -37,27 +34,22 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-x/XvcGiFS//f/le3JAd2n/tuUy9MBrCsISpkIkCCNis=";
+    hash = "sha256-JRh14XpW/iGeBWrslm7weCP/vyJ7eZICqRgQpE2wjXs=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "-s -vv -x --reruns 5 --reruns-delay 10 --durations=20" "-s -vv -x --durations=20"
+      --replace "--reruns 5 --reruns-delay 10" ""
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "backoff"
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    backoff
     google-api-core
-    ndjson
     pydantic
+    python-dateutil
     requests
     tqdm
   ];
@@ -68,7 +60,7 @@ buildPythonPackage rec {
       geojson
       numpy
       pillow
-      # opencv-python
+      opencv4
       typeguard
       imagesize
       pyproj
@@ -78,10 +70,17 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    pytest-cases
+  nativeCheckInputs = [
+    nbconvert
+    nbformat
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;
+
+  # disable pytest_plugins which requires `pygeotile`
+  preCheck = ''
+    substituteInPlace tests/conftest.py \
+      --replace "pytest_plugins" "_pytest_plugins"
+  '';
 
   disabledTestPaths = [
     # Requires network access

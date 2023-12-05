@@ -14,7 +14,6 @@ let
       path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
-        #! /bin/sh
         export PATH=${path}
 
         # For convenience in client scripts, extract the remote domain
@@ -34,7 +33,6 @@ let
       '';
 
       downScript = ''
-        #! /bin/sh
         export PATH=${path}
         ${optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
@@ -47,9 +45,9 @@ let
           ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
           ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
+              "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
           ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
+              "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
           ${optionalString (cfg.authUserPass != null)
               "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
                 ${cfg.authUserPass.username}
@@ -57,7 +55,8 @@ let
               ''}"}
         '';
 
-    in {
+    in
+    {
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
@@ -69,6 +68,16 @@ let
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
+
+  restartService = optionalAttrs cfg.restartAfterSleep {
+    openvpn-restart = {
+      wantedBy = [ "sleep.target" ];
+      path = [ pkgs.procps ];
+      script = "pkill --signal SIGHUP --exact openvpn";
+      #SIGHUP makes openvpn process to self-exit and then it got restarted by systemd because of Restart=always
+      description = "Sends a signal to OpenVPN process to trigger a restart after return from sleep";
+    };
+  };
 
 in
 
@@ -82,7 +91,7 @@ in
   options = {
 
     services.openvpn.servers = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
         {
@@ -201,14 +210,21 @@ in
 
     };
 
+    services.openvpn.restartAfterSleep = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc "Whether OpenVPN client should be restarted after sleep.";
+    };
+
   };
 
 
   ###### implementation
 
-  config = mkIf (cfg.servers != {}) {
+  config = mkIf (cfg.servers != { }) {
 
-    systemd.services = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
+    systemd.services = (listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
+      // restartService;
 
     environment.systemPackages = [ openvpn ];
 

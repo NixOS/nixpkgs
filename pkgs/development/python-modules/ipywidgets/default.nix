@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "8.0.2";
+  version = "8.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CMt1xuCpaDYUfL/cVVgK4E0T4F0m/7w3e04caLqiix8=";
+    hash = "sha256-QCEe+1Vq3sb6RQzMKnfVnKRKBg9PnxNoM99ZyfU45ug=";
   };
 
   propagatedBuildInputs = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     widgetsnbextension
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -14,13 +14,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-/EtbXpyXqRm0jGcMfGLAEwdr92061edjFys1V7/w6/Y=";
   };
 
-  # https://github.com/cubicle-model-checker/cubicle/issues/1
-  postPatch = ''
-    substituteInPlace Makefile.in \
-      --replace "@OCAMLC@" "ocamlfind ocamlc -package num" \
-      --replace "@OCAMLOPT@" "ocamlfind ocamlopt -package num"
-  '';
-
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -36,9 +29,15 @@ stdenv.mkDerivation rec {
     num
   ];
 
+  # https://github.com/cubicle-model-checker/cubicle/issues/1
+  env = {
+    OCAMLC = "ocamlfind ocamlc -package num";
+    OCAMLOPT = "ocamlfind ocamlopt -package num";
+  };
+
   meta = with lib; {
     description = "An open source model checker for verifying safety properties of array-based systems";
-    homepage = "http://cubicle.lri.fr/";
+    homepage = "https://cubicle.lri.fr/";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dwarfmaster ];

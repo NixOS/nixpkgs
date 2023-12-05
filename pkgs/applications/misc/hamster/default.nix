@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, intltool, glib, itstool
+{ lib, fetchFromGitHub, python3Packages, intltool, glib, itstool, gtk3
 , wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     pango
     gdk-pixbuf
     atk
+    gtk3
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -36,10 +37,6 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     dbus-python
   ];
-
-  # Setup hooks have trouble with strict deps.
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   dontWrapGApps = true;
 

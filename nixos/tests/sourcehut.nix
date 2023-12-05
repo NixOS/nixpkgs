@@ -18,8 +18,10 @@ let
           # passwordless ssh server
           services.openssh = {
             enable = true;
-            permitRootLogin = "yes";
-            extraConfig = "PermitEmptyPasswords yes";
+            settings = {
+              PermitRootLogin = "yes";
+              PermitEmptyPasswords = true;
+            };
           };
 
           users = {
@@ -124,6 +126,7 @@ in
     virtualisation.diskSize = 4 * 1024;
     virtualisation.memorySize = 2 * 1024;
     networking.domain = domain;
+    networking.enableIPv6 = false;
     networking.extraHosts = ''
       ${config.networking.primaryIPAddress} builds.${domain}
       ${config.networking.primaryIPAddress} git.${domain}
@@ -132,11 +135,6 @@ in
 
     services.sourcehut = {
       enable = true;
-      services = [
-        "builds"
-        "git"
-        "meta"
-      ];
       nginx.enable = true;
       nginx.virtualHost = {
         forceSSL = true;

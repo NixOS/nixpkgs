@@ -15,7 +15,6 @@ with lib.kernel;
 with (lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
-assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
 
 {
   # Report BUG() conditions and kill the offending process.
@@ -29,7 +28,7 @@ assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
   #
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
-  SECURITY_SELINUX_DISABLE = no;
+  SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
   SECURITY_WRITABLE_HOOKS  = option no;
 
   STRICT_KERNEL_RWX = yes;
@@ -42,7 +41,7 @@ assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
-  REFCOUNT_FULL = whenOlder "5.5" yes;
+  REFCOUNT_FULL = whenOlder "5.4.208" yes;
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
@@ -65,8 +64,8 @@ assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
   # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
   GCC_PLUGIN_LATENT_ENTROPY = yes;
 
-  GCC_PLUGIN_STRUCTLEAK = yes; # A port of the PaX structleak plugin
-  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL = yes; # Also cover structs passed by address
+  GCC_PLUGIN_STRUCTLEAK = option yes; # A port of the PaX structleak plugin
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL = option yes; # Also cover structs passed by address
   GCC_PLUGIN_STACKLEAK = whenAtLeast "4.20" yes; # A port of the PaX stackleak plugin
   GCC_PLUGIN_RANDSTRUCT = whenOlder "5.19" yes; # A port of the PaX randstruct plugin
   GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenOlder "5.19" yes;

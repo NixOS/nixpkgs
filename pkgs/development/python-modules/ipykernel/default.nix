@@ -4,6 +4,7 @@
 , fetchPypi
 , hatchling
 , pythonOlder
+, comm
 , ipython
 , jupyter-client
 , packaging
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.15.3";
-  format = "pyproject";
+  version = "6.27.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uB1XsOFxZwhEvynNwRVisQENPahxFcRRPg7mYKg2h2U=";
+    hash = "sha256-fV1ZS2aQZUtNKZ7bpehy3Be7c5ao0GCcl8t7ihxgXeY=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    comm
     ipython
     jupyter-client
     packaging
@@ -51,8 +53,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython Kernel for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ] ++ lib.teams.jupyter.members;
   };
 }

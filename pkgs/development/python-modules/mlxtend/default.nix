@@ -13,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.20.0";
+  version = "0.22.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ECDO3nc9IEgmZNdSA70BzOODOi0wnisI00F2Dxzdz+M=";
+    hash = "sha256-YLCNLpg2qrdFon0/gdggJd9XovHwRHAdleBFQc18qzE=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # image tests download files over the network
   pytestFlagsArray = [ "-sv" "--ignore=mlxtend/image" ];
   # Fixed in master, but failing in release version

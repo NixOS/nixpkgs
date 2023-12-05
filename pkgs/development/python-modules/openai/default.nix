@@ -1,56 +1,62 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, matplotlib
+, pythonOlder
+, hatchling
+# propagated
+, httpx
+, pydantic
+, typing-extensions
+, anyio
+, distro
+, sniffio
+, tqdm
+# optional
 , numpy
-, openpyxl
 , pandas
 , pandas-stubs
-, plotly
-, pytest-mock
+# tests
 , pytestCheckHook
-, pythonOlder
-, requests
-, scikit-learn
-, tenacity
-, tqdm
-, typing-extensions
-, wandb
+, pytest-asyncio
+, pytest-mock
+, respx
+, dirty-equals
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.25.0";
-  format = "setuptools";
+  version = "1.3.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7.1";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    rev = "v${version}";
-    hash = "sha256-bwv7lpdDYlk+y3KBjv7cSvaGr3v02riNCUfPFh6yv1I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Pa53s3U5vby1Fq14WMCJnSR6KA3xkVHmBexkNoX/0sk=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    numpy
-    openpyxl
-    pandas
-    pandas-stubs
-    requests
+    httpx
+    pydantic
+    anyio
+    distro
+    sniffio
     tqdm
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
   passthru.optional-dependencies = {
-    wandb = [
-      wandb
-    ];
-    embeddings = [
-      matplotlib
-      plotly
-      scikit-learn
-      tenacity
+    datalib = [
+      numpy
+      pandas
+      pandas-stubs
     ];
   };
 
@@ -58,28 +64,26 @@ buildPythonPackage rec {
     "openai"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-mock
-  ];
-
-  pytestFlagsArray = [
-    "openai/tests"
+    respx
+    dirty-equals
   ];
 
   OPENAI_API_KEY = "sk-foo";
 
   disabledTestPaths = [
-    # Requires a real API key
-    "openai/tests/test_endpoints.py"
-    # openai: command not found
-    "openai/tests/test_file_cli.py"
-    "openai/tests/test_long_examples_validator.py"
+    # makes network requests
+    "tests/test_client.py"
+    "tests/api_resources"
   ];
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
+    changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
   };

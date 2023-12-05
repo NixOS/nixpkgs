@@ -4,7 +4,6 @@
 , flask
 , flask-login
 , flask-sqlalchemy
-, flexmock
 , psycopg2
 , pymysql
 , pytestCheckHook
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.3.14";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLAlchemy-Continuum";
     inherit version;
-    hash = "sha256-1+k/lx6R8tW9gM3M2kqaVEwpmx8cMhDXeqCjyd8O2hM=";
+    hash = "sha256-Rk+aWxBjUrXuRPE5MSyzWMWS0l7qrjU3wOrHLC+vteU=";
   };
 
   propagatedBuildInputs = [
@@ -42,26 +41,19 @@ buildPythonPackage rec {
     flask-sqlalchemy = [
       flask-sqlalchemy
     ];
-    flexmock = [
-      flexmock
-    ];
     i18n = [
       sqlalchemy-i18n
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     psycopg2
     pymysql
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.flask
-  ++ passthru.optional-dependencies.flask-login
-  ++ passthru.optional-dependencies.flask-sqlalchemy
-  ++ passthru.optional-dependencies.flexmock
-  ++ passthru.optional-dependencies.i18n;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  # indicate tests that we don't have a database server at hand
-  DB = "sqlite";
+  # Indicate tests that we don't have a database server at hand
+  env.DB = "sqlite";
 
   pythonImportsCheck = [
     "sqlalchemy_continuum"

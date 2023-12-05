@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgreen";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
-    rev = version;
-    sha256 = "sha256-uyw5beBZ3MnDyaxBWIDGl/L/0yv0ROafXwgxhQ+A+n4=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-qcOj+NlgbHCYuNsM6ngNI2fNhkCwLL6mIVkNSv9hRE8=";
   };
 
   postPatch = ''
@@ -19,11 +23,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cgreen-devs/cgreen";
     description = "The Modern Unit Test and Mocking Framework for C and C++";
-    license = licenses.isc;
-    maintainers = [ maintainers.nichtsfrei ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

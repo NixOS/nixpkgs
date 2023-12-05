@@ -12,11 +12,12 @@ let
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
   filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.config or {};
-  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
+  configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
-  lovelaceConfig = cfg.lovelaceConfig or {};
+  lovelaceConfig = if (cfg.lovelaceConfig == null) then {}
+    else (lib.recursiveUpdate customLovelaceModulesResources cfg.lovelaceConfig);
   lovelaceConfigFile = format.generate "ui-lovelace.yaml" lovelaceConfig;
 
   # Components advertised by the home-assistant package
@@ -35,7 +36,10 @@ let
   #   ...
   # } ];
   usedPlatforms = config:
-    if isAttrs config then
+    # don't recurse into derivations possibly creating an infinite recursion
+    if isDerivation config then
+      [ ]
+    else if isAttrs config then
       optional (config ? platform) config.platform
       ++ concatMap usedPlatforms (attrValues config)
     else if isList config then
@@ -59,8 +63,24 @@ let
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
     extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
-    extraPackages = ps: (oldArgs.extraPackages or (_: []) ps) ++ (cfg.extraPackages ps);
+    extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
+      ++ (cfg.extraPackages ps)
+      ++ (lib.concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
   }));
+
+  # Create a directory that holds all lovelace modules
+  customLovelaceModulesDir = pkgs.buildEnv {
+    name = "home-assistant-custom-lovelace-modules";
+    paths = cfg.customLovelaceModules;
+  };
+
+  # Create parts of the lovelace config that reference lovelave modules as resources
+  customLovelaceModulesResources = {
+    lovelace.resources = map (card: {
+      url = "/local/nixos-lovelace-modules/${card.entrypoint or card.pname}.js?${card.version}";
+      type = "module";
+    }) cfg.customLovelaceModules;
+  };
 in {
   imports = [
     # Migrations in NixOS 22.05
@@ -131,6 +151,41 @@ in {
 
         A popular example is `python3Packages.psycopg2`
         for PostgreSQL support in the recorder component.
+      '';
+    };
+
+    customComponents = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression ''
+        with pkgs.home-assistant-custom-components; [
+          prometheus-sensor
+        ];
+      '';
+      description = lib.mdDoc ''
+        List of custom component packages to install.
+
+        Available components can be found below `pkgs.home-assistant-custom-components`.
+      '';
+    };
+
+    customLovelaceModules = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression ''
+        with pkgs.home-assistant-custom-lovelace-modules; [
+          mini-graph-card
+          mini-media-player
+        ];
+      '';
+      description = lib.mdDoc ''
+        List of custom lovelace card packages to load as lovelace resources.
+
+        Available cards can be found below `pkgs.home-assistant-custom-lovelace-modules`.
+
+        ::: {.note}
+        Automatic loading only works with lovelace in `yaml` mode.
+        :::
       '';
     };
 
@@ -362,7 +417,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.openFirewall -> !isNull cfg.config;
+        assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
     ];
@@ -400,15 +455,42 @@ in {
           ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
         '';
         copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
+          rm -f "${cfg.configDir}/ui-lovelace.yaml"
           cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
         '' else ''
-          rm -f "${cfg.configDir}/ui-lovelace.yaml"
-          ln -s /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
+          ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
+        '';
+        copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
+          mkdir -p "${cfg.configDir}/www"
+          ln -fns ${customLovelaceModulesDir} "${cfg.configDir}/www/nixos-lovelace-modules"
+        '' else ''
+          rm -f "${cfg.configDir}/www/nixos-lovelace-modules"
+        '';
+        copyCustomComponents = ''
+          mkdir -p "${cfg.configDir}/custom_components"
+
+          # remove components symlinked in from below the /nix/store
+          components="$(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l)"
+          for component in "$components"; do
+            if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
+              rm "$component"
+            fi
+          done
+
+          # recreate symlinks for desired components
+          declare -a components=(${escapeShellArgs cfg.customComponents})
+          for component in "''${components[@]}"; do
+            path="$(dirname $(find "$component" -name "manifest.json"))"
+            ln -fns "$path" "${cfg.configDir}/custom_components/"
+          done
         '';
       in
         (optionalString (cfg.config != null) copyConfig) +
-        (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
+        (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
+        copyCustomLovelaceModules +
+        copyCustomComponents
       ;
+      environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = lib.unique ([
@@ -438,22 +520,31 @@ in {
           "aranet"
           "bluemaestro"
           "bluetooth"
+          "bluetooth_adapters"
           "bluetooth_le_tracker"
           "bluetooth_tracker"
           "bthome"
           "default_config"
           "eq3btsmart"
+          "eufylife_ble"
           "esphome"
           "fjaraskupan"
+          "gardena_bluetooth"
           "govee_ble"
           "homekit_controller"
           "inkbird"
+          "improv_ble"
           "keymitt_ble"
           "led_ble"
+          "medcom_ble"
           "melnor"
           "moat"
+          "mopeka"
           "oralb"
+          "private_ble_device"
           "qingping"
+          "rapt_ble"
+          "ruuvi_gateway"
           "ruuvitag_ble"
           "sensirion_ble"
           "sensorpro"
@@ -500,6 +591,7 @@ in {
           "mysensors"
           "nad"
           "numato"
+          "otbr"
           "rflink"
           "rfxtrx"
           "scsgate"
@@ -575,11 +667,12 @@ in {
           "~@privileged"
         ] ++ optionals (any useComponent componentsUsingPing) [
           "capset"
+          "setuid"
         ];
         UMask = "0077";
       };
       path = [
-        "/run/wrappers" # needed for ping
+        pkgs.unixtools.ping # needed for ping
       ];
     };
 

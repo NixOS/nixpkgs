@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure file wiping utility";
-    homepage    = "http://wipe.sourceforge.net/";
+    homepage    = "https://wipe.sourceforge.net/";
     license     = licenses.gpl2;
     platforms   = platforms.all;
     maintainers = [ maintainers.abbradar ];

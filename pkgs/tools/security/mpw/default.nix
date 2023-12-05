@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     inherit rev;
   };
 
-  sourceRoot = "./source/platform-independent/c/cli";
+  sourceRoot = "${src.name}/platform-independent/c/cli";
 
   postPatch = ''
     rm build

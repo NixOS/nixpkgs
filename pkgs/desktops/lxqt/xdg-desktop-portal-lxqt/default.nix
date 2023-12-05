@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , cmake
 , kwindowsystem
+, libexif
 , libfm-qt
 , lxqt-qtplugin
+, menu-cache
 , qtx11extras
 , gitUpdater
 , extraQtStyles ? []
@@ -12,13 +14,13 @@
 
 mkDerivation rec {
   pname = "xdg-desktop-portal-lxqt";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "oEcFRBIYb/ZJQo9W+yIiq3l3eU1GqUzfDdF/Rvq5SKs=";
+    hash = "sha256-6yfLjDK8g8cpeeyuFUEjERTLLn6h3meKjD2Eb7Cj9qY=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +29,10 @@ mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
+    libexif
     libfm-qt
     lxqt-qtplugin
+    menu-cache
     qtx11extras
   ]
   ++ extraQtStyles;

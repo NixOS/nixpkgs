@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "argocd-autopilot";
-  version = "0.4.9";
+  version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
     rev = "v${version}";
-    sha256 = "sha256-PHs6shuj2wHvlP6n05RPJjMY6wtJ1PbD6t0DxYrJpXE=";
+    sha256 = "sha256-txbs1SzAaV1nCl104m0Ht5DwzCmK+sBDn4rZ1newdLc=";
   };
 
-  vendorHash = "sha256-4ylOLnpvz/aQIoxVz2z69Rq/x2UG91yMmtSHyquvNq0=";
+  vendorHash = "sha256-1nolJLWkArzSKf11fzlvvgiCnvMYSu5MHRNAn1lryms=";
 
   proxyVendor = true;
 

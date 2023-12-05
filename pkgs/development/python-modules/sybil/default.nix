@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "4.0.0";
+  version = "5.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "simplistix";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9fXvQfVS3IVdOV4hbA0bEYFJU7uK0WpqJKMNBltqFTI=";
+    hash = "sha256-FeyamQDm/EqOWrRlxA8iIQniHI5xag+zUVfRGRHmslE=";
   };
 
   # Circular dependency with testfixtures
