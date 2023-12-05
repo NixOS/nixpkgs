@@ -24,26 +24,25 @@
 
 let
   pname = "windmill";
-  version = "1.210.1";
+  version = "1.219.1";
 
-  fullSrc = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-ss3EsIqfuctPOEdI5IQtyFFcDzIqnFm6UUG1vA+OlkQ=";
+    hash = "sha256-HGZuIun9PWi3Fv/kX95k4xnXu1L604teWUKXzjVXKF0=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
 
   frontend-build = buildNpmPackage {
-    inherit version;
+    inherit version src;
 
     pname = "windmill-ui";
-    src = fullSrc;
 
-    sourceRoot = "${fullSrc.name}/frontend";
+    sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-l9MRaa6TaBg9vFoVuIGZNC9jLS29TlWeSniIBRNDRgU=";
+    npmDepsHash = "sha256-1uya/4FjMHTDW/KX1YinhTT/Mb7bJ9XVTWc6cU0oqJ8=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
@@ -64,7 +63,7 @@ let
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
-  src = "${fullSrc}/backend";
+  src = "${src}/backend";
 
   env = {
     SQLX_OFFLINE = "true";
@@ -92,10 +91,10 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
-      "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
       "archiver-rs-0.5.1" = "sha256-ZIik0mMABmhdx/ullgbOrKH5GAtqcOKq5A6vB7aBSjk=";
       "pg-embed-0.7.2" = "sha256-R/SrlzNK7aAOyXVTQ/WPkiQb6FyMg9tpsmPTsiossDY=";
+      "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
+      "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
     };
   };
 
@@ -115,6 +114,14 @@ rustPlatform.buildRustPackage {
 
     substituteInPlace src/main.rs \
       --replace 'unknown-version' 'v${version}'
+
+    pushd ..
+
+    mkdir -p frontend/build
+    cp -R ${frontend-build}/share/windmill-frontend/* frontend/build
+    cp ${src}/openflow.openapi.yaml .
+
+    popd
   '';
 
   buildInputs = [
@@ -130,17 +137,6 @@ rustPlatform.buildRustPackage {
     swagger-cli
     cmake # for libz-ng-sys crate
   ];
-
-  preBuild = ''
-    pushd ..
-
-    mkdir -p frontend/build
-
-    cp -R ${frontend-build}/share/windmill-frontend/* frontend/build
-    cp ${fullSrc}/openflow.openapi.yaml .
-
-    popd
-  '';
 
   # needs a postgres database running
   doCheck = false;
@@ -158,7 +154,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    changelog = "https://github.com/windmill-labs/windmill/blob/${fullSrc.rev}/CHANGELOG.md";
+    changelog = "https://github.com/windmill-labs/windmill/blob/${src.rev}/CHANGELOG.md";
     description = "Open-source developer platform to turn scripts into workflows and UIs";
     homepage = "https://windmill.dev";
     license = lib.licenses.agpl3Only;
