@@ -4848,7 +4848,9 @@ with pkgs;
 
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
-  wl-screenrec = callPackage ../tools/wayland/wl-screenrec { };
+  wl-screenrec = callPackage ../tools/wayland/wl-screenrec {
+    ffmpeg = ffmpeg_5;
+  };
 
   wleave = callPackage ../tools/wayland/wleave { };
 
@@ -8567,7 +8569,9 @@ with pkgs;
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  gifski = callPackage ../tools/graphics/gifski { };
+  gifski = callPackage ../tools/graphics/gifski {
+    ffmpeg = ffmpeg_5;
+  };
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
