@@ -14,6 +14,7 @@
 , udev
 , e2fsprogs
 , python3
+, autoPatchelfHook
 , vmopts ? null
 }:
 
@@ -26,8 +27,11 @@
 , buildNumber
 , jdk
 , meta
+, libdbm
+, fsnotifier
 , extraLdPath ? [ ]
 , extraWrapperArgs ? [ ]
+, extraBuildInputs ? [ ]
 }@args:
 
 let
@@ -56,38 +60,16 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
   vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
-  nativeBuildInputs = [ makeWrapper patchelf unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf unzip autoPatchelfHook ];
+  buildInputs = extraBuildInputs;
 
   postPatch = ''
-    get_file_size() {
-      local fname="$1"
-      echo $(ls -l $fname | cut -d ' ' -f5)
-    }
-
-    munge_size_hack() {
-      local fname="$1"
-      local size="$2"
-      strip $fname
-      truncate --size=$size $fname
-    }
-
     rm -rf jbr
     # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
     ln -s ${jdk.home} jbr
 
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
-    if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
-      target_size=$(get_file_size bin/fsnotifier64)
-      patchelf --set-interpreter "$interpreter" bin/fsnotifier64
-      munge_size_hack bin/fsnotifier64 $target_size
-    else
-      target_size=$(get_file_size bin/fsnotifier)
-      patchelf --set-interpreter "$interpreter" bin/fsnotifier
-      munge_size_hack bin/fsnotifier $target_size
-    fi
-
     if [ -d "plugins/remote-dev-server" ]; then
-      patch -p1 < ${./JetbrainsRemoteDev.patch}
+      patch -p1 < ${../patches/jetbrains-remote-dev.patch}
     fi
 
     vmopts_file=bin/linux/${vmoptsName}
@@ -109,18 +91,19 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname},share/icons/hicolor/scalable/apps}
+    mkdir -p $out/{bin,$pname,share/pixmaps,share/icons/hicolor/scalable/apps}
     cp -a . $out/$pname
     [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
     [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg \
       && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-    mv bin/fsnotifier* $out/libexec/${pname}/.
+    cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
+    cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
     jdk=${jdk.home}
     item=${desktopItem}
 
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
-      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix PATH : "${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
       ${lib.concatStringsSep " " extraWrapperArgs} \
@@ -132,6 +115,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
+    rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
     chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
     ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server

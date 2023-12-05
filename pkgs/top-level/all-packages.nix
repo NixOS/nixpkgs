@@ -32127,6 +32127,7 @@ with pkgs;
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
   }) // {
+    jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk { withJcef = false; };
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
     jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
   });
