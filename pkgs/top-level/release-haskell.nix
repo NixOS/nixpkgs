@@ -60,7 +60,6 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc884
     ghc8107
     ghc902
     ghc924
@@ -390,10 +389,6 @@ let
 
           ghcjs = {};
           ghcjs810 = {};
-
-          # Can't be built with musl, see meta.broken comment in the drv
-          integer-simple.ghc884 = {};
-          integer-simple.ghc88 = {};
         };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -501,8 +496,6 @@ let
       ] released;
       funcmp = released;
       haskell-language-server = lib.subtractLists [
-        # Support ceased as of 1.9.0.0
-        compilerNames.ghc884
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
         # Not yet supported
@@ -534,12 +527,10 @@ let
         compilerNames.ghc981
       ] released;
       ghc-api-compat = [
-        compilerNames.ghc884
         compilerNames.ghc8107
         compilerNames.ghc902
       ];
       ghc-bignum = [
-        compilerNames.ghc884
         compilerNames.ghc8107
       ];
       ghc-lib = lib.subtractLists [
@@ -554,13 +545,11 @@ let
       ghc-source-gen = [
         # Feel free to remove these as they break,
         # ghc-source-gen currently doesn't support GHC 9.4
-        compilerNames.ghc884
         compilerNames.ghc8107
         compilerNames.ghc902
         compilerNames.ghc928
       ];
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc884
         compilerNames.ghc981
       ] released;
       hashable = lib.subtractLists [
@@ -653,7 +642,6 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
-          jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
           jobs.pkgsMusl.haskell.compiler.ghc924

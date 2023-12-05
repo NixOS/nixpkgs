@@ -78,7 +78,7 @@ jobs:
           echo "baseSha=$(git rev-parse HEAD^1)" >> "$GITHUB_ENV"
 
           echo "headSha=$(git rev-parse HEAD^2)" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v24
+      - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
       - name: Determining channel to use for dependencies
         run: |
           echo "Determining the preferred channel to use for PR base branch $GITHUB_BASE_REF"

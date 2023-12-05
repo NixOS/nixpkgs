@@ -19,8 +19,8 @@ jobs:
     # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-    - uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v24
-    - uses: cachix/cachix-action@6a9a34cdd93d0ae4b4b59fd678660efb08109f2f # v13
+    - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
+    - uses: cachix/cachix-action@6a2e08b5ebf7a9f285ff57b1870a4262b06e0bee # v13
       with:
         # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
         name: nixpkgs-ci
