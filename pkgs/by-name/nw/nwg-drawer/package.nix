@@ -12,13 +12,13 @@
 
 let
   pname = "nwg-drawer";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
     rev = "v${version}";
-    hash = "sha256-2/YI91Rcm+N8tNoKBRIDAQ3T2M6T7+kWngbCzyaXOCc=";
+    hash = "sha256-1iylXR3WP39E/0L/vBe5LxXOKV+KisgUr2rxBEHahMo=";
   };
 
   vendorHash = "sha256-8s8+ukMQpciQmKt77fNE7r+3cm/UDxO8VtkrNYdKhM8=";
