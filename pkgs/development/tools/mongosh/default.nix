@@ -1,37 +1,78 @@
 { lib
+, stdenv
+, fetchFromGitHub
 , buildNpmPackage
-, fetchurl
+, git
+, python3
+, darwin
+, krb5
+, libmongocrypt
 , testers
 , mongosh
 }:
 
-let
-  source = lib.importJSON ./source.json;
-in
-buildNpmPackage {
+buildNpmPackage rec {
   pname = "mongosh";
-  inherit (source) version;
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
-    hash = source.integrity;
+  src = fetchFromGitHub {
+    owner = "mongodb-js";
+    repo = "mongosh";
+    rev = "v${version}";
+    hash = "sha256-W8NGoT/kNFjEElQraEg96OqlNtESsdD8WP+aWp6autg=";
   };
 
+  # lerna ERR! ENOGIT The git binary was not found, or this is not a git repository.
   postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+    if [ -x "$(command -v git)" ]; then
+      export HOME="$(mktemp -d)"
+      git config --global user.name "Nix Builder"
+      git config --global user.email "nix-builder@nixos.org"
+      git config --global init.defaultBranch "main"
+      git init .
+    fi
   '';
 
-  npmDepsHash = source.deps;
+  npmDepsHash = "sha256-xiBIlNuZfu/5UOa6IAh1qT7rbrR/LG4N6qj2MZpjI0o=";
 
-  makeCacheWritable = true;
-  dontNpmBuild = true;
-  npmFlags = [ "--omit=optional" ];
+  nativeBuildInputs = [
+    git
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.cctools
+  ];
+
+  buildInputs = [
+    krb5
+    libmongocrypt
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  env = {
+    # error: no such file or directory: '.../lib/libmongocrypt-static.a'
+    BUILD_TYPE = "dynamic";
+    # ERROR: Failed to set up Chrome r...! Set "PUPPETEER_SKIP_DOWNLOAD" env variable to skip download.
+    PUPPETEER_SKIP_DOWNLOAD = true;
+    # Error: Segment key is required
+    SEGMENT_API_KEY = "dummy";
+  };
+
+  npmBuildScript = "compile-cli";
+
+  preInstall = ''
+    sed -i '3i  "version": "${version}",' package.json
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/lib/node_modules/mongosh/packages/cli-repl/package.json \
+      --replace "0.0.0-dev.0" "${version}"
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
       package = mongosh;
     };
-    updateScript = ./update.sh;
   };
 
   meta = with lib; {
