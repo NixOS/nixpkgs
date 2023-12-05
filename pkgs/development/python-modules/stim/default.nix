@@ -1,29 +1,28 @@
 { lib
-, pkgs
 , buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, pytest-xdist
-, fetchFromGitHub
-, numpy
-, pybind11
 , cirq-core
+, fetchFromGitHub
 , matplotlib
 , networkx
+, numpy
+, pandas
+, pybind11
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
 , scipy
 , setuptools
 , wheel
-, pandas
 }:
 
 buildPythonPackage rec {
   pname = "stim";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
     rev = "refs/tags/v${version}";
@@ -57,14 +56,9 @@ buildPythonPackage rec {
     pandas
   ];
 
-  meta = {
-    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits.";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ chrispattison ];
-    homepage = "https://github.com/quantumlib/stim";
-  };
-
-  pythonImportsCheck = [ "stim" ];
+  pythonImportsCheck = [
+    "stim"
+  ];
 
   enableParallelBuilding = true;
 
@@ -77,4 +71,12 @@ buildPythonPackage rec {
     "glue/sample/src/sinter/collection_work_manager.py"
     "glue/sample/src/sinter/worker_test.py"
   ];
+
+  meta = with lib; {
+    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
+    homepage = "https://github.com/quantumlib/stim";
+    changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ chrispattison ];
+  };
 }
