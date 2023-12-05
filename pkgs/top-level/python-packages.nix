@@ -9721,6 +9721,8 @@ self: super: with self; {
 
   proton-client = callPackage ../development/python-modules/proton-client { };
 
+  proton-core = callPackage ../development/python-modules/proton-core { };
+
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib {
