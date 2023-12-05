@@ -4951,6 +4951,8 @@ self: super: with self; {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  habluetooth = callPackage ../development/python-modules/habluetooth { };
+
   habitipy = callPackage ../development/python-modules/habitipy { };
 
   hachoir = callPackage ../development/python-modules/hachoir { };
