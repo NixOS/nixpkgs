@@ -9729,6 +9729,8 @@ self: super: with self; {
 
   proton-vpn-killswitch = callPackage ../development/python-modules/proton-vpn-killswitch { };
 
+  proton-vpn-killswitch-network-manager = callPackage ../development/python-modules/proton-vpn-killswitch-network-manager { };
+
   proton-vpn-logger = callPackage ../development/python-modules/proton-vpn-logger { };
 
   proton-vpn-network-manager = callPackage ../development/python-modules/proton-vpn-network-manager { };
