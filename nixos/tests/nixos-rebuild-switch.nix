@@ -59,8 +59,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
               "/etc/nixos/configuration.nix",
           )
           '';
-      test_for_generation = gen: ''
+      testForBootGeneration = gen: ''
         machine.succeed("""[ "$(nixos-rebuild list-generations --json | jq 'map(select(.current))[0].generation')" -eq ${gen} ]""")
+        '';
+      testForActiveGeneration = gen: ''
         machine.succeed('[ "$(iAmGeneration)" -eq ${gen} ]')
         '';
     in
@@ -77,28 +79,38 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("Switch to the base system with generation number '1'"):
           ${createConfig "1"}
           machine.succeed("nixos-rebuild switch")
-          ${test_for_generation "1"}
+          ${testForBootGeneration "1"}
+          ${testForActiveGeneration "1"}
 
       with subtest("Switch to the base system with generation number '2'"):
           ${createConfig "2"}
           machine.succeed("nixos-rebuild switch")
-          ${test_for_generation "2"}
+          ${testForBootGeneration "2"}
+          ${testForActiveGeneration "2"}
 
       with subtest("Switch to the base system with generation number '3'"):
           ${createConfig "3"}
           machine.succeed("nixos-rebuild switch")
-          ${test_for_generation "3"}
+          ${testForBootGeneration "3"}
+          ${testForActiveGeneration "3"}
 
-      with subtest("`switch --generation` must roll back"):
+      with subtest("must roll back with `switch --generation`"):
           machine.succeed("nixos-rebuild switch --generation 1")
-          ${test_for_generation "1"}
+          ${testForBootGeneration "1"}
+          ${testForActiveGeneration "1"}
 
-      with subtest("`switch --generation` must switch to newer generation"):
-          machine.succeed("nixos-rebuild switch --generation 3")
-          ${test_for_generation "3"}
+      with subtest("must set it for boot, but not activate newer generation `boot --generation`"):
+          machine.succeed("nixos-rebuild boot --generation 3")
+          ${testForBootGeneration "3"}
+          ${testForActiveGeneration "1"}
+          # TODO: QEMU seems to have a tempfs and so after a reboot the content of the disk is lost
+          # This also requires adding the parameter `machine.start(allow_reboot = True)`
+          # machine.reboot()
+          # $ {testForActiveGeneration "3"}
 
       with subtest("Rollback must succeed"):
           machine.succeed("nixos-rebuild switch --rollback")
-          ${test_for_generation "2"}
+          ${testForBootGeneration "2"}
+          ${testForActiveGeneration "2"}
     '';
 })
