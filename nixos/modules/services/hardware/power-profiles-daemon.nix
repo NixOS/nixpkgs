@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.power-profiles-daemon;
   package = pkgs.power-profiles-daemon;
@@ -15,8 +13,8 @@ in
 
     services.power-profiles-daemon = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           Whether to enable power-profiles-daemon, a DBus daemon that allows
@@ -31,7 +29,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = !config.services.tlp.enable;
