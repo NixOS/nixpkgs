@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableSSL openssl
     ++ lib.optional (lineEditingLibrary == "readline") readline;
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [ valgrind ];
 
   strictDeps = true;
 
