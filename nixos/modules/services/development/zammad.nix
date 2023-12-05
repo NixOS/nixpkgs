@@ -21,6 +21,7 @@ let
     NODE_ENV = "production";
     RAILS_SERVE_STATIC_FILES = "true";
     RAILS_LOG_TO_STDOUT = "true";
+    REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
   };
   databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
 in
@@ -63,6 +64,36 @@ in
         type = types.port;
         default = 6042;
         description = lib.mdDoc "Websocket service port.";
+      };
+
+      redis = {
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc "Whether to create a local redis automatically.";
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "zammad";
+          description = lib.mdDoc ''
+            Name of the redis server. Only used if `createLocally` is set to true.
+          '';
+        };
+
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = lib.mdDoc ''
+            Redis server address.
+          '';
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 6379;
+          description = lib.mdDoc "Port of the redis server.";
+        };
       };
 
       database = {
@@ -206,6 +237,10 @@ in
         assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zammad.database.createLocally is set to true";
       }
+      {
+        assertion = cfg.redis.createLocally -> cfg.redis.host == "localhost";
+        message = "the redis host must be localhost if services.zammad.redis.createLocally is set to true";
+      }
     ];
 
     services.mysql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "MySQL") {
@@ -231,6 +266,13 @@ in
       ];
     };
 
+    services.redis = optionalAttrs cfg.redis.createLocally {
+      servers."${cfg.redis.name}" = {
+        enable = true;
+        port = cfg.redis.port;
+      };
+    };
+
     systemd.services.zammad-web = {
       inherit environment;
       serviceConfig = serviceConfig // {
@@ -240,6 +282,8 @@ in
       after = [
         "network.target"
         "postgresql.service"
+      ] ++ optionals cfg.redis.createLocally [
+        "redis-${cfg.redis.name}.service"
       ];
       requires = [
         "postgresql.service"
@@ -303,16 +347,15 @@ in
       script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
     };
 
-    systemd.services.zammad-scheduler = {
-      inherit environment;
-      serviceConfig = serviceConfig // { Type = "forking"; };
+    systemd.services.zammad-worker = {
+      inherit serviceConfig environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
-      description = "Zammad scheduler";
+      description = "Zammad background worker";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/scheduler.rb start";
+      script = "./script/background-worker.rb start";
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ garbas taeer ];
+  meta.maintainers = with lib.maintainers; [ taeer netali ];
 }
