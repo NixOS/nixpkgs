@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ olefile ]
     ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 
-  nativeCheckInputs = [ pytestCheckHook pyroma numpy ];
+  nativeCheckInputs = [ pytestCheckHook numpy ];
 
   nativeBuildInputs = [ setuptools ];
 
