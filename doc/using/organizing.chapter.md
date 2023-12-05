@@ -94,3 +94,52 @@ newScope = extra: lib.callPackageWith (pkgs // extra)
 
 The [`lib.extends`](#function-library-lib.fixedPoints.extends) fixed-point function is used to pass the newly constructed scope (`self`) to `newScope` while making the `callPackage` function produced by `newScope` available in `self` when the scope is being constructed.
 :::
+
+## packagesFromDirectory {#sec-packagesfromdirectory}
+
+Invoking a `callPackage` function for each `.nix` file in a directory is such a common use-case that Nixpkgs includes another helper for it called [`packagesFromDirectory`](#function-library-lib.filesystem.packagesFromDirectory), which recurses through a directory tree and calls a given `callPackage` function for each file.
+
+[The `makeScope` example](#sec-makescope) above can be rewritten with `packagesFromDirectory` by moving `my-cool-library.nix` and `my-cool-program.nix` into new directory called `my-packages`:
+
+```nix
+lib.mkScope pkgs.newScope (self:
+  lib.packagesFromDirectory {
+    callPackage = self.callPackage;
+    directory = ./my-packages;
+  }
+)
+```
+
+Note that `packagesFromDirectory` will also recurse into subdirectories; if a directory contains a `package.nix` file, the directory name will be used as a package. Otherwise, each `.nix` file and subdirectory in the directory will be traversed in the same manner as the top-level directory.
+
+If you need more control over the attribute set structure or how the `callPackage` function is invoked, you can use [`packageFilesFromDirectory`](#function-library-lib.filesystem.packageFilesFromDirectory), which returns an attribute set of paths rather than an attribute set of packages:
+
+```nix
+lib.packageFilesFromDirectory {
+  directory = ./my-packages;
+}
+# {
+#   my-cool-library = ./my-cool-library.nix;
+#   my-cool-program = ./my-cool-program.nix;
+# }
+```
+
+Then, [`mapAttrsRecursive`](#function-library-lib.attrsets.mapAttrsRecursive) can be used to invoke a `callPackage` function on each path:
+
+```nix
+lib.mapAttrsRecursive
+  (_attrPath: packagePath: pkgs.callPackage packagePath { })
+  (lib.packageFilesFromDirectory ./my-packages)
+```
+
+### Defining an overlay with packagesFromDirectory {#sec-packagesfromdirectory-overlay}
+
+`packagesFromDirectory` can also be used to define an [overlay](#sec-overlays-definition):
+
+```nix
+self: super:
+super.lib.packagesFromDirectory {
+  callPackage = self.callPackage;
+  directory = ./my-packages;
+}
+```
