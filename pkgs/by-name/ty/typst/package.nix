@@ -8,21 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-LwRB/AQE8TZZyHEQ7kKB10itzEgYjg4R/k+YFqmutDc=";
+    hash = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "iai-0.1.1" = "sha256-EdNzCPht5chg7uF9O8CtPWR/bzSYyfYIXNdLltqdlR0=";
-      "oxipng-8.0.0" = "sha256-KIbSsQEjwJ12DxYpBTUD1g9CqJqCfSAmnFcSTiGIoio=";
-      "self-replace-1.3.5" = "sha256-N57nmLHgxhVR1CDtkgjYwpo1ypdGyVpjJY7vzuncxDc=";
     };
   };
 
@@ -45,12 +43,12 @@ rustPlatform.buildRustPackage rec {
       --zsh crates/typst-cli/artifacts/_typst
   '';
 
-  meta = with lib; {
-    description = "A new markup-based typesetting system that is powerful and easy to learn";
-    homepage = "https://typst.app";
+  meta = {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drupol figsoda kanashimia ];
+    description = "A new markup-based typesetting system that is powerful and easy to learn";
+    homepage = "https://github.com/typst/typst";
+    license = lib.licenses.asl20;
     mainProgram = "typst";
+    maintainers = with lib.maintainers; [ drupol figsoda kanashimia ];
   };
 }
