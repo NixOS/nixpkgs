@@ -32,6 +32,10 @@
 , git
 , openssh
 , setuptools
+, croniter
+, importlib-resources
+, packaging
+, unidiff
 , pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
@@ -67,14 +71,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.9.2";
+    version = "3.10.0";
     format = "pyproject";
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
+      hash = "sha256-Jlppe6LgDQKQgywINkOX9zKWTomzIz28M5scrj3H94Y=";
     };
 
     propagatedBuildInputs = [
@@ -91,6 +95,10 @@ let
       pyjwt
       pyyaml
       setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
