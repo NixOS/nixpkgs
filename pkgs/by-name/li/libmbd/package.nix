@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ mpi ];
 
   meta = with lib; {
-    description = " Many-body dispersion library";
+    description = "Many-body dispersion library";
     homepage = "https://github.com/libmbd/libmbd";
     license = licenses.mpl20;
     platforms = platforms.linux;
