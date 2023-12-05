@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, gcc12Stdenv
 , fetchFromGitHub
 , rocmUpdateScript
 , pkg-config
@@ -43,6 +44,13 @@
 , extraLicenses ? [ ]
 , isBroken ? false
 }:
+
+let stdenv' = stdenv; in
+let stdenv =
+      if stdenv'.cc.cc.isGNU or false && lib.versionAtLeast stdenv'.cc.cc.version "13.0"
+      then gcc12Stdenv
+      else stdenv';
+in
 
 let
   llvmNativeTarget =
