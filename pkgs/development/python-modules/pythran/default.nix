@@ -2,14 +2,21 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, isPy3k
+, substituteAll
+
+# build-system
+, setuptools
+
+# native dependencies
 , openmp
+, xsimd
+
+# dependencies
 , ply
 , gast
 , numpy
 , beniget
-, xsimd
-, isPy3k
-, substituteAll
 }:
 
 let
@@ -17,14 +24,14 @@ let
 
 in buildPythonPackage rec {
   pname = "pythran";
-  version = "0.13.1";
-  format = "setuptools";
+  version = "0.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
-    hash = "sha256-baDrReJgQXbaKA8KNhHiFjr0X34yb8WK/nUJmiM9EZs=";
+    hash = "sha256-in0ty0aBAIx7Is13hjiHZGS8eKbhxb6TL3bENzfx5vQ=";
   };
 
   patches = [
@@ -40,6 +47,10 @@ in buildPythonPackage rec {
     rm -r third_party/xsimd
     ln -s '${lib.getDev xsimd}'/include/xsimd third_party/
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ply
