@@ -66,6 +66,10 @@ in
         version
         src;
 
+      patches = [
+        ./patches/0001-web-self-hosting-optimizations.patch
+      ];
+
       postPatch = ''
         substituteInPlace vite.config.ts \
           --replace 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'

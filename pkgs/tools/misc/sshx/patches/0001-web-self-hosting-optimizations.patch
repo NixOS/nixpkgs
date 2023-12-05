@@ -1,0 +1,251 @@
+From 66f9a5adbea203232e5f59b5e6aa4ebe6450cb51 Mon Sep 17 00:00:00 2001
+From: Ilan Joselevich <personal@ilanjoselevich.com>
+Date: Tue, 5 Dec 2023 16:10:33 +0200
+Subject: [PATCH] web: self-hosting optimizations
+
+Don't mention sshx.io (except in svg screenshot) or author.
+The author does not want to support self-hosting so I don't mention his
+contacts so people don't come and bother him for help with their
+self-hosted instances.
+---
+ src/app.html               |  20 -------
+ src/lib/ui/Settings.svelte |   7 ---
+ src/routes/+error.svelte   |   6 +-
+ src/routes/+page.svelte    | 115 +++----------------------------------
+ 4 files changed, 9 insertions(+), 139 deletions(-)
+
+diff --git a/src/app.html b/src/app.html
+index aea33c9..c2f21f6 100644
+--- a/src/app.html
++++ b/src/app.html
+@@ -3,27 +3,7 @@
+   <head>
+     <meta charset="utf-8" />
+     <link rel="icon" href="/favicon.svg" />
+-    <meta
+-      name="viewport"
+-      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+-    />
+-
+     <title>sshx</title>
+-    <meta property="og:title" content="sshx · share collaborative terminals" />
+-    <meta
+-      name="description"
+-      content="Fast, collaborative live terminals in the browser, with real-time chat, cursors, and activity tracking."
+-    />
+-    <meta
+-      property="og:description"
+-      content="Fast, collaborative live terminals in the browser, with real-time chat, cursors, and activity tracking."
+-    />
+-    <meta
+-      property="og:image"
+-      content="https://sshx.io/images/social-image2.png"
+-    />
+-    <meta name="twitter:card" content="summary_large_image" />
+-
+     %sveltekit.head%
+   </head>
+   <body class="dark:bg-[#111111] dark:text-white">
+diff --git a/src/lib/ui/Settings.svelte b/src/lib/ui/Settings.svelte
+index 0a33965..66a1a0d 100644
+--- a/src/lib/ui/Settings.svelte
++++ b/src/lib/ui/Settings.svelte
+@@ -60,13 +60,6 @@
+       <div class="text-red-500">Coming soon</div>
+     </div>
+   </div>
+-
+-  <!-- svelte-ignore missing-declaration -->
+-  <p class="mt-6 text-sm text-right text-zinc-400">
+-    <a target="_blank" rel="noreferrer" href="https://github.com/ekzhang/sshx"
+-      >sshx-server v{__APP_VERSION__}</a
+-    >
+-  </p>
+ </OverlayMenu>
+ 
+ <style lang="postcss">
+diff --git a/src/routes/+error.svelte b/src/routes/+error.svelte
+index 7db6edb..a803733 100644
+--- a/src/routes/+error.svelte
++++ b/src/routes/+error.svelte
+@@ -21,11 +21,7 @@
+ </pre>
+     {/if}
+     <p>
+-      Perhaps try coming back later? If you have any feedback, please feel free
+-      to reach out at
+-      <a class="underline text-white" href="mailto:ekzhang1@gmail.com"
+-        >ekzhang1@gmail.com</a
+-      >.
++      Perhaps try coming back later?
+     </p>
+   </div>
+ 
+diff --git a/src/routes/+page.svelte b/src/routes/+page.svelte
+index 7eb6e15..f3ab93e 100644
+--- a/src/routes/+page.svelte
++++ b/src/routes/+page.svelte
+@@ -10,40 +10,11 @@
+     RefreshCwIcon,
+     Share2Icon,
+   } from "svelte-feather-icons";
++  import { browser } from "$app/environment";
++	import { page } from "$app/stores";
+ 
+-  let installationEl: HTMLDivElement;
++  let sharingEl: HTMLDivElement;
+ 
+-  const installs = [
+-    {
+-      title: "macOS / Linux",
+-      steps: `curl -sSf https://sshx.io/get | sh`,
+-    },
+-    {
+-      title: "Rust (from source)",
+-      steps: `cargo install sshx`,
+-    },
+-  ];
+-
+-  const socials = [
+-    {
+-      title: "🤖\xa0 GitHub",
+-      href: "https://github.com/ekzhang/sshx",
+-    },
+-    {
+-      title: "🌸\xa0 Twitter",
+-      href: "https://twitter.com/ekzhang1",
+-    },
+-    {
+-      title: "💌\xa0 Email",
+-      href: "mailto:ekzhang1@gmail.com",
+-    },
+-    {
+-      title: "🌎\xa0 Website",
+-      href: "https://www.ekzhang.com",
+-    },
+-  ];
+-
+-  let selectedInstall = installs[0];
+ </script>
+ 
+ <div class="overflow-x-hidden absolute inset-0">
+@@ -92,7 +63,7 @@
+     <div class="pb-12 md:pb-36">
+       <button
+         class="bg-pink-700 hover:bg-pink-600 active:ring-4 active:ring-pink-500/50 text-lg font-semibold px-8 py-2 rounded-full"
+-        on:click={() => installationEl.scrollIntoView({ behavior: "smooth" })}
++        on:click={() => sharingEl.scrollIntoView({ behavior: "smooth" })}
+       >
+         Get Started
+       </button>
+@@ -152,53 +123,15 @@
+       </div>
+     </div>
+ 
+-    <h2 bind:this={installationEl} class="mt-40 mb-16">
+-      Get started in <span class="title-gradient">two quick steps</span>
++    <h2 bind:this={sharingEl} class="mt-40 mb-12">
++      Share your <span class="title-gradient">terminal</span>
+     </h2>
+ 
+-    <div
+-      class="mx-auto max-w-screen-lg grid lg:grid-cols-2 gap-16 lg:text-center mb-12 text-lg text-gray-300"
+-    >
+-      <div class="space-y-6">
+-        <h3 class="step-heading">
+-          <span class="pill mr-3">1</span> Install the CLI
+-        </h3>
+-        <p class="text-gray-400">
+-          Get the <code>sshx</code> CLI by running this in your terminal. It's tiny
+-          and downloads in seconds (3 MB).
+-        </p>
+-        <div class="flex flex-col items-start text-base">
+-          <div class="flex rounded-t text-sm bg-gray-900">
+-            {#each installs as method}
+-              <button
+-                class="px-2 py-1 border-l border-t last:border-r border-gray-500 first:rounded-tl last:rounded-tr"
+-                class:bg-gray-700={selectedInstall === method}
+-                on:click={() => (selectedInstall = method)}
+-              >
+-                {method.title}
+-              </button>
+-            {/each}
+-          </div>
+-          <pre class="rounded-b rounded-r w-full">{selectedInstall.steps}</pre>
+-        </div>
+-
+-        <p class="text-gray-400">
+-          You can also build it <a
+-            target="_blank"
+-            rel="noreferrer"
+-            class="underline underline-offset-2 text-gray-300"
+-            href="https://github.com/ekzhang/sshx">from source</a
+-          >, if you'd like.
+-        </p>
+-      </div>
++    <div class="mx-auto max-w-screen-lg lg:text-center mb-12 text-lg">
+       <div class="space-y-6">
+-        <h3 class="step-heading">
+-          <span class="pill mr-3">2</span> Share your terminal
+-        </h3>
+-
+         <p class="text-gray-400">Run this command in your favorite terminal.</p>
+ 
+-        <pre class="rounded">sshx</pre>
++				<pre class="rounded">sshx --server {$page.url.origin}</pre>
+ 
+         <p class="text-gray-400">
+           This kicks off a live, encrypted session. Open the link in your web
+@@ -206,25 +139,6 @@
+         </p>
+       </div>
+     </div>
+-
+-    <hr class="mt-40 mb-12" />
+-
+-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+-      {#each socials as social}
+-        <a
+-          target="_blank"
+-          rel="noreferrer"
+-          href={social.href}
+-          class="border border-gray-700 hover:bg-gray-900 transition-colors p-4 text-center text-lg font-medium rounded-lg"
+-        >
+-          {social.title}
+-        </a>
+-      {/each}
+-    </div>
+-
+-    <p class="mb-12 text-center text-gray-400">
+-      open source, &copy; Eric Zhang 2023
+-    </p>
+   </main>
+ </div>
+ 
+@@ -250,10 +164,6 @@
+     @apply bg-gray-900 p-3 whitespace-pre-wrap border border-gray-500;
+   }
+ 
+-  hr {
+-    @apply mx-auto md:w-1/2 border-gray-800;
+-  }
+-
+   .title-gradient {
+     @apply text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-blue-500;
+   }
+@@ -296,13 +206,4 @@
+   .feature-icon {
+     @apply inline-block p-3 rounded-full mb-3 shadow-md border border-gray-600;
+   }
+-
+-  .step-heading {
+-    @apply text-2xl text-gray-200 font-semibold flex items-center md:justify-center;
+-  }
+-
+-  .pill {
+-    @apply flex justify-center items-center w-7 h-7 rounded-full;
+-    @apply text-base font-normal border border-current;
+-  }
+ </style>
+-- 
+2.42.0
