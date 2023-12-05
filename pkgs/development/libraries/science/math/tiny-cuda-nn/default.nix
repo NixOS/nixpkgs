@@ -15,6 +15,7 @@
 
   cuda-common-redist = with cudaPackages; [
     cuda_cudart # cuda_runtime.h
+    cuda_cccl.dev # <nv/target>
     libcublas # cublas_v2.h
     libcusolver # cusolverDn.h
     libcusparse # cusparse.h
