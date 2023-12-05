@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
+  mesonFlags = lib.optionals stdenv.isDarwin [
+    "-Dgl_provider=gl" # glvnd is default
+  ];
+
   enableParallelBuilding = true;
 
   passthru = {
