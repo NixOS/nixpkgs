@@ -1,25 +1,27 @@
-{ lib, fetchgit, php }:
+{ lib, fetchFromGitHub, php }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "psalm";
-  version = "5.15.0";
+  version = "5.16.0";
 
-  src = fetchgit {
-    url = "https://github.com/vimeo/psalm.git";
+  src = fetchFromGitHub {
+    owner = "vimeo";
+    repo = "psalm";
     rev = finalAttrs.version;
-    hash = "sha256-rRExT82+IwgVo7pL3rrTjW/qj/MJf4m4L3PywaeSHYU=";
+    hash = "sha256-0Tq/WeLM9it1uwvzSfVqd7FFRyrBXZCsswtYMXxan0w=";
   };
 
-  # TODO: Open a PR against https://github.com/vimeo/psalm
-  # Missing `composer.lock` from the repository.
+  # To remove if https://github.com/vimeo/psalm/issues/10446 gets fixed.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Vho1ri/Qm2SYeXB9ZoXvH1vB/eSBwHnAT/pI4jjUYhU=";
+  composerStrictValidation = false;
+  vendorHash = "sha256-2CZDRZXgOw+3Kp6lsTik+iVtCitOdeRzoF6aucoYalA=";
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
     description = "A static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
+    mainProgram = "psalm";
     maintainers = lib.teams.php.members;
   };
 })
