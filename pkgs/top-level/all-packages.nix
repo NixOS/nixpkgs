@@ -28970,8 +28970,6 @@ with pkgs;
 
   vdo = callPackage ../os-specific/linux/vdo { };
 
-  windmill = callPackage ../servers/windmill {};
-
   windows = callPackages ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
