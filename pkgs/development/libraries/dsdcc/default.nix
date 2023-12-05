@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsdcc";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "dsdcc";
     rev = "v${version}";
-    sha256 = "sha256-EsjmU0LQOXnOoTFrnn63hAbvqbE6NVlSQTngot5Zuf4=";
+    sha256 = "sha256-DMCk29O2Lmt2tjo6j5e4ZdZeDL3ZFUh66Sm6TGrIaeU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
