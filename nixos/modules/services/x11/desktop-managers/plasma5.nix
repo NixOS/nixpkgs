@@ -338,6 +338,7 @@ in
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
+      programs.dconf.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.power-profiles-daemon.enable = mkDefault true;

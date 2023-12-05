@@ -5150,6 +5150,8 @@ self: super: with self; {
 
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
+  html2image = callPackage ../development/python-modules/html2image { };
+
   html2text = callPackage ../development/python-modules/html2text { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
@@ -8141,6 +8143,8 @@ self: super: with self; {
   netdata = callPackage ../development/python-modules/netdata { };
 
   netdisco = callPackage ../development/python-modules/netdisco { };
+
+  nethsm = callPackage ../development/python-modules/nethsm { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 

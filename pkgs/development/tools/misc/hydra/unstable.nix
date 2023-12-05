@@ -123,16 +123,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-12-01";
+  version = "2023-12-04";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "4d1c8505120961f10897b8fe9a070d4e193c9a13";
-    hash = "sha256-vXTuE83GL15mgZHegbllVAsVdDFcWWSayPfZxTJN5ys=";
+    rev = "4dc8fe0b08edc421c251270ccd4be3e5bf9d66b4";
+    hash = "sha256-FjyMb5ZbPa2GLrRuFMUP/foKb0KvXFKThvgc9faFIw8=";
   };
 
   buildInputs = [
+    unzip
     libpqxx
     top-git
     mercurial
@@ -179,7 +180,6 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     mdbook
-    unzip
     nukeReferences
   ];
 

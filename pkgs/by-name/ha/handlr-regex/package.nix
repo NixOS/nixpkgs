@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X0j62Ntu/ouBVm09iKxU3pps8mbL5V5gA65Maa4b0AY=";
+    hash = "sha256-ndFe5GlSWVUPdGRRWuImcLtcuOMoMXMyGGIa+CXfCug=";
   };
 
-  cargoSha256 = "sha256-byR7CM876z5tAXmbcUfI0CnJrc/D6CxfjBJhuJMSFmg=";
+  cargoHash = "sha256-lCClE8U4188q5rWEEkUt0peLEmYvLoE7vJ6Q9uB5HWg=";
 
   nativeBuildInputs = [ installShellFiles shared-mime-info ];
   buildInputs = [ libiconv ];

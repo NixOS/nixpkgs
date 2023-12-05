@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.libcurand
-  ] ++ lib.optionals withCuDNN [
+  ] ++ lib.optionals (withCUDA && withCuDNN) [
     cudaPackages.cudnn
   ] ++ lib.optionals withOneDNN [
     oneDNN
@@ -87,5 +87,8 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa misuzu ];
+    broken =
+      (lib.versionOlder cudaPackages.cudaVersion "11.4")
+      || !(withCuDNN -> withCUDA);
   };
 }
