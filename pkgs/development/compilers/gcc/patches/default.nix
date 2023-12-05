@@ -175,9 +175,6 @@ in
 
 ## gcc 11.0 and older ##############################################################################
 
-# https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
-++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
-
 # libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
 ++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
