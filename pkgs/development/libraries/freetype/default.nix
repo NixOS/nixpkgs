@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchurl
-, buildPackages, pkgsHostHost
-, pkg-config, which, makeWrapper
-, zlib, bzip2, brotli, libpng, gnumake, glib
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkgsHostHost
+, pkg-config
+, which
+, makeWrapper
+, zlib
+, bzip2
+, brotli
+, libpng
+, gnumake
+, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
   useEncumberedCode ? true
 
-# for passthru.tests
+  # for passthru.tests
 , cairo
 , fontforge
 , ghostscript
