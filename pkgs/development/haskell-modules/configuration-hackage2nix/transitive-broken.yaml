@@ -522,6 +522,7 @@ dont-distribute-packages:
  - apiary-redis
  - apiary-session
  - apiary-websockets
+ - apigen
  - apis
  - apotiki
  - approx-rand-test
@@ -972,7 +973,7 @@ dont-distribute-packages:
  - couch-simple
  - couchdb-enumerator
  - country
- - country_0_2_4_0
+ - country_0_2_4_1
  - cpkg
  - cprng-aes-effect
  - cql-io-tinylog
@@ -1167,6 +1168,7 @@ dont-distribute-packages:
  - dobutokO4
  - doc-review
  - doi
+ - dojang
  - domaindriven
  - dormouse-client
  - dotparse
@@ -1486,7 +1488,7 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
- - ghc-lib_9_8_1_20231009
+ - ghc-lib_9_8_1_20231121
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
@@ -3459,7 +3461,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
- - sandwich_0_2_0_0
+ - sandwich_0_2_1_0
  - sarsi
  - sasha
  - sasl
