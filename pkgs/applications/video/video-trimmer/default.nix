@@ -13,7 +13,7 @@
 , gtk4
 , libadwaita
 , gst_all_1
-, ffmpeg-full
+, ffmpeg-headless
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
     )
   '';
 
