@@ -70,30 +70,30 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("Does not have a system profile initially"):
           machine.fail("nixos-rebuild list-generations");
 
-      with subtest("Switch to the base system with generation number '1'"):
+      with subtest("Create generation 1"):
           ${createConfig "1"}
           machine.succeed("nixos-rebuild switch")
           ${testForBootGeneration "1"}
           ${testForActiveGeneration "1"}
 
-      with subtest("Switch to the base system with generation number '2'"):
+      with subtest("Create generation 2"):
           ${createConfig "2"}
           machine.succeed("nixos-rebuild switch")
           ${testForBootGeneration "2"}
           ${testForActiveGeneration "2"}
 
-      with subtest("Switch to the base system with generation number '3'"):
+      with subtest("Create generation 3"):
           ${createConfig "3"}
           machine.succeed("nixos-rebuild switch")
           ${testForBootGeneration "3"}
           ${testForActiveGeneration "3"}
 
-      with subtest("must roll back with `switch --generation`"):
+      with subtest("must switch to `--generation 1`"):
           machine.succeed("nixos-rebuild switch --generation 1")
           ${testForBootGeneration "1"}
           ${testForActiveGeneration "1"}
 
-      with subtest("must set it for boot, but not activate newer generation `boot --generation`"):
+      with subtest("`boot --generation 3` must not activate it"):
           machine.succeed("nixos-rebuild boot --generation 3")
           ${testForBootGeneration "3"}
           ${testForActiveGeneration "1"}
@@ -102,7 +102,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           # machine.reboot()
           # $ {testForActiveGeneration "3"}
 
-      with subtest("Rollback must succeed"):
+      with subtest("`switch --rollback` must activate previous generation"):
           machine.succeed("nixos-rebuild switch --rollback")
           ${testForBootGeneration "2"}
           ${testForActiveGeneration "2"}
