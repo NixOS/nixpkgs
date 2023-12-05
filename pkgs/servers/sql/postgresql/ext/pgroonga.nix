@@ -10,7 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql msgpack-c groonga ];
+  buildInputs =
+    let
+      groonga-with-msgpack = groonga.overrideAttrs (oa: {
+        buildInputs = oa.buildInputs ++ [ msgpack-c ];
+      });
+    in
+    [
+      postgresql
+      msgpack-c
+      groonga-with-msgpack
+    ];
 
   makeFlags = [
     "HAVE_MSGPACK=1"
