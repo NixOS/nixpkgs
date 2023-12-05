@@ -19228,6 +19228,12 @@
     githubId = 118959;
     name = "VinyMeuh";
   };
+  viperML = {
+    email = "ayatsfer@gmail.com";
+    github = "viperML";
+    githubId = 11395853;
+    name = "Fernando Ayats";
+  };
   viraptor = {
     email = "nix@viraptor.info";
     github = "viraptor";
