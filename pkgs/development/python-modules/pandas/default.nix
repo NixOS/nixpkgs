@@ -2,10 +2,12 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , cython
+, cython_3
 , meson-python
 , meson
 , oldest-supported-numpy
@@ -77,12 +79,14 @@ let pandas = buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "Cython>=0.29.33,<3" "Cython" \
       --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
       --replace "meson==1.2.1" "meson>=1.2.1"
   '';
 
   nativeBuildInputs = [
-    cython
+    # TODO: hack to support pandas on python3.12, remove with pandas 2.2.0
+    (if pythonAtLeast "3.12" then cython_3 else cython)
     meson-python
     meson
     numpy
