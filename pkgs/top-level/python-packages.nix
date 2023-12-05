@@ -9723,6 +9723,8 @@ self: super: with self; {
 
   proton-core = callPackage ../development/python-modules/proton-core { };
 
+  proton-vpn-killswitch = callPackage ../development/python-modules/proton-vpn-killswitch { };
+
   proton-vpn-logger = callPackage ../development/python-modules/proton-vpn-logger { };
 
   proton-vpn-session = callPackage ../development/python-modules/proton-vpn-session { };
