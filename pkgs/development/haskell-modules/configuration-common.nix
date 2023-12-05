@@ -2703,7 +2703,7 @@ self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_6_3_20231121;
   });
   ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231009;
+    ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231121;
   });
 
   # Needs a matching version of ipython-kernel and a
