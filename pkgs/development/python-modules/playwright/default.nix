@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
     substituteInPlace pyproject.toml \
       --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.41.2", "auditwheel==5.4.0"]' \
-                'requires = ["setuptools", "setuptools-scm", "wheel"]' \
+                'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
