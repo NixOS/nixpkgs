@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
+    hash = "sha256-6AoR9vXRlMake+pBNbkLVfrKJNo1RNp89KX3uo+wkhU=";
   };
 
   postPatch = ''
