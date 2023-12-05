@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "KejPi";
     repo = "AbracaDABra";
     rev = "v${version}";
-    sha256 = "sha256-HRwgtNCrEzo6uXNJHG3PwpBAXVTppYUTmiwKWi3reho=";
+    hash = "sha256-HRwgtNCrEzo6uXNJHG3PwpBAXVTppYUTmiwKWi3reho=";
   };
 
   nativeBuildInputs = [
