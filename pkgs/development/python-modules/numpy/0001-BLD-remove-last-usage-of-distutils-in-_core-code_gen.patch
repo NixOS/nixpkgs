@@ -1,0 +1,71 @@
+From 0d0476328a1a2e3dd3e96340bd4ddd04d98c067b Mon Sep 17 00:00:00 2001
+From: Ralf Gommers <ralf.gommers@gmail.com>
+Date: Thu, 26 Oct 2023 16:57:03 +0200
+Subject: [PATCH] BLD: remove last usage of `distutils` in
+ `_core/code_generators/`
+
+---
+ numpy/core/code_generators/genapi.py             | 9 ---------
+ numpy/core/code_generators/generate_numpy_api.py | 7 +------
+ numpy/core/code_generators/generate_ufunc_api.py | 7 +------
+ 3 files changed, 2 insertions(+), 21 deletions(-)
+
+diff --git a/numpy/core/code_generators/genapi.py b/numpy/core/code_generators/genapi.py
+index 2cdaba52d..d9d7862b2 100644
+--- a/numpy/core/code_generators/genapi.py
++++ b/numpy/core/code_generators/genapi.py
+@@ -304,15 +304,6 @@ def find_functions(filename, tag='API'):
+     fo.close()
+     return functions
+ 
+-def should_rebuild(targets, source_files):
+-    from distutils.dep_util import newer_group
+-    for t in targets:
+-        if not os.path.exists(t):
+-            return True
+-    sources = API_FILES + list(source_files) + [__file__]
+-    if newer_group(sources, targets[0], missing='newer'):
+-        return True
+-    return False
+ 
+ def write_file(filename, data):
+     """
+diff --git a/numpy/core/code_generators/generate_numpy_api.py b/numpy/core/code_generators/generate_numpy_api.py
+index ae38c4efc..640bae9e5 100644
+--- a/numpy/core/code_generators/generate_numpy_api.py
++++ b/numpy/core/code_generators/generate_numpy_api.py
+@@ -148,12 +148,7 @@ def generate_api(output_dir, force=False):
+     targets = (h_file, c_file)
+ 
+     sources = numpy_api.multiarray_api
+-
+-    if (not force and not genapi.should_rebuild(targets, [numpy_api.__file__, __file__])):
+-        return targets
+-    else:
+-        do_generate_api(targets, sources)
+-
++    do_generate_api(targets, sources)
+     return targets
+ 
+ def do_generate_api(targets, sources):
+diff --git a/numpy/core/code_generators/generate_ufunc_api.py b/numpy/core/code_generators/generate_ufunc_api.py
+index e03299a52..3734cbd6a 100644
+--- a/numpy/core/code_generators/generate_ufunc_api.py
++++ b/numpy/core/code_generators/generate_ufunc_api.py
+@@ -125,12 +125,7 @@ def generate_api(output_dir, force=False):
+     targets = (h_file, c_file)
+ 
+     sources = ['ufunc_api_order.txt']
+-
+-    if (not force and not genapi.should_rebuild(targets, sources + [__file__])):
+-        return targets
+-    else:
+-        do_generate_api(targets, sources)
+-
++    do_generate_api(targets, sources)
+     return targets
+ 
+ def do_generate_api(targets, sources):
+-- 
+2.42.0
+
