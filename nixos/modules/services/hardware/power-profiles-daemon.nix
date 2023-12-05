@@ -2,7 +2,6 @@
 
 let
   cfg = config.services.power-profiles-daemon;
-  package = pkgs.power-profiles-daemon;
 in
 
 {
@@ -22,6 +21,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "power-profiles-daemon" { };
+
     };
 
   };
@@ -40,13 +41,13 @@ in
       }
     ];
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ package ];
+    services.dbus.packages = [ cfg.package ];
 
-    services.udev.packages = [ package ];
+    services.udev.packages = [ cfg.package ];
 
-    systemd.packages = [ package ];
+    systemd.packages = [ cfg.package ];
 
   };
 
