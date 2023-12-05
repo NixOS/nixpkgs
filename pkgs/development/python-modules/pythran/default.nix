@@ -2,6 +2,7 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , isPy3k
 , substituteAll
 
@@ -40,6 +41,11 @@ in buildPythonPackage rec {
       src = ./0001-hardcode-path-to-libgomp.patch;
       gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+    (fetchpatch {
+      # Python 3.12 support
+      url = "https://github.com/serge-sans-paille/pythran/commit/258ab9aaf26172f669eab1bf2a346b5f65db3ac0.patch";
+      hash = "sha256-T+FLptDYIgzHBSXShULqHr/G8ttBFamq1M5JlB2HxDM=";
+    })
   ];
 
   # xsimd: unvendor this header-only C++ lib
@@ -57,6 +63,7 @@ in buildPythonPackage rec {
     gast
     numpy
     beniget
+    setuptools
   ];
 
   pythonImportsCheck = [
