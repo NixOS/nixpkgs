@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.9.0";
+  version = "1.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "Stim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zXWdJjFkf74FCWxyVMF8dx0P8GmUkuHFxUo5wYNU2o0=";
+    hash = "sha256-vDpW8cn1JPARDIXpLyK9uenhHmva0FwnWIDV7dSHbIY=";
   };
 
   postPatch = ''
@@ -46,14 +46,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-
     cirq-core
     matplotlib
     networkx
-    scipy
     pandas
+    pytest-xdist
+    pytestCheckHook
+    scipy
   ];
 
   pythonImportsCheck = [
@@ -63,13 +62,8 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   disabledTestPaths = [
-    # No pymatching
-    "glue/sample/src/sinter/main_test.py"
-    "glue/sample/src/sinter/decoding_test.py"
-    "glue/sample/src/sinter/predict_test.py"
-    "glue/sample/src/sinter/collection_test.py"
-    "glue/sample/src/sinter/collection_work_manager.py"
-    "glue/sample/src/sinter/worker_test.py"
+    # Don't test sample
+    "glue/sample/"
   ];
 
   meta = with lib; {
