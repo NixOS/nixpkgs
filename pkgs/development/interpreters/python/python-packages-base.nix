@@ -13,39 +13,107 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
+  #
+  # Overridings specified through `overridePythonAttrs` will always be applied
+  # before those specified by `overrideAttrs`, even if invoked after them.
+  makeOverridablePythonPackage = f:
     let
-      args = lib.fix (lib.extends
+      mirrorArgs = lib.mirrorFunctionArgs f;
+    in
+    mirrorArgs (origArgs:
+    let
+      argsRecursive = lib.extends
         (_: previousAttrs: {
           passthru = (previousAttrs.passthru or { }) // {
-            overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+            inherit overridePythonAttrs;
           };
         })
-        (_: origArgs));
+        (lib.toFunction origArgs);
+
+      args = if lib.isFunction origArgs then argsRecursive else lib.fix argsRecursive;
+
       result = f args;
-      overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+
+      overrideWithRecursive = newArgs: finalAttrs: argsRecursive finalAttrs // lib.toFunction newArgs (argsRecursive finalAttrs);
+      overrideWith = if lib.isFunction origArgs then overrideWithRecursive else lib.fix (lib.flip overrideWithRecursive);
+      overridePythonAttrs = mirrorArgs (newArgs: makeOverridablePythonPackage f (overrideWith newArgs));
+
+      # Change the result of the function call by applying g to it
+      overrideResult = g: makeOverridablePythonPackage (mirrorArgs (args: g (f args))) origArgs;
     in
-      if builtins.isAttrs result then result
-      else if builtins.isFunction result then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: result;
-      }
-      else result);
+    if builtins.isAttrs result then result
+      // lib.optionalAttrs (result ? overrideAttrs) { overrideAttrs = fdrv: overrideResult (drv: drv.overrideAttrs fdrv); }
+    else if builtins.isFunction result then {
+      inherit overridePythonAttrs;
+      __functor = self: result;
+    }
+    else result);
+
+  preserveFunctionOverride = decorate: f:
+    let
+      fResult = decorate f;
+    in
+    (if (!builtins.isAttrs fResult) then
+      lib.mirrorFunctionArgs f fResult
+    else fResult)
+    // lib.optionalAttrs (f?override) {
+      override = lib.mirrorFunctionArgs f.override
+        (fdrv: decorate (f.override fdrv));
+    };
+
+  makeOverridableStub = f: origArgs:
+    let
+      result = f origArgs;
+    in
+    if lib.isAttrs result
+    then {
+      override = throw ''
+        Attribute 'override' added by buildPython* is deprecated.
+        Use 'overridePythonAttrs' or 'overrideAttrs' instead, or add '<pkgs>.override' using callPackage.
+      '';
+    } // result
+    else if builtins.isFunction result
+    then lib.mirrorFunctionArgs result result
+    else result;
+
+  compatCustomStdenv = f: origArgs: (
+    if origArgs?stdenv then
+      f.override { inherit (origArgs) stdenv; }
+    else
+      f
+  ) origArgs;
 
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
   else
     ./python2/mk-python-derivation.nix;
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  # This ensures that the function argument of buildPython* is always mirrored
+  # and that buildPython*.override is always preserved.
+  decorateBuildPyhon = f: lib.pipe f (map preserveFunctionOverride [
+    # Throw error when the deprecated improvised <pkg>.override is accessed
+    # This will most likely be shadowed by the typical <pkg>.override
+    # added by another callPackage onto package definitions.
+    makeOverridableStub
+    # Take the obsolete input argument `stdenv`
+    # and pass as `buildPython*.override { stdenv = stdenv; }`
+    # TODO: Remove this after Nixpkgs 24.11 branch-off
+    compatCustomStdenv
+    # Adds <pkg>.overridePythonAttrs
+    makeOverridablePythonPackage
+  ]);
+
+  buildPythonPackage = decorateBuildPyhon (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
-  }));
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonPackage.override without rebuilding python
+  });
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  buildPythonApplication = decorateBuildPyhon (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
-  }));
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonApplication.override without rebuilding python
+  });
 
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../../../build-support/build-setupcfg lib self;

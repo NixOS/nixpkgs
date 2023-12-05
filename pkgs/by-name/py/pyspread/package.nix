@@ -6,28 +6,22 @@
 , makeDesktopItem
 }:
 
-let
-  # get rid of rec
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.2.2";
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyspread";
+    inherit (finalAttrs) version;
     hash = "sha256-vbBu/dMXQf14F7qWvyHX5T8/AkjeZhaQt1eQ6Nidpsc=";
   };
-  inherit (libsForQt5)
-    qtsvg
-    wrapQtAppsHook;
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version src;
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtsvg
+    libsForQt5.qtsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -79,4 +73,4 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "pyspread";
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
-}
+})
