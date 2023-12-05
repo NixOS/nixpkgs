@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pythonRelaxDepsHook
 , installShellFiles
@@ -34,7 +34,7 @@ let
   mainProgram = "nitropy";
 in
 
-buildPythonApplication {
+buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
