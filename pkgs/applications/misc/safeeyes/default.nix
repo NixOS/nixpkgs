@@ -26,7 +26,7 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "sys.prefix" "'/'"
+    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
   '';
 
   nativeBuildInputs = [
