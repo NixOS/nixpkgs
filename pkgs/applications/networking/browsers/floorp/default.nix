@@ -12,7 +12,7 @@
   binaryName = "floorp";
 
   # Must match the contents of `browser/config/version.txt` in the source tree
-  version = "155.6.0";
+  version = "115.6.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
