@@ -164,7 +164,7 @@ mapAliases ({
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang6Stdenv = lowPrio llvmPackages_6.stdenv;
-  clang7Stdenv = lowPrio llvmPackages_7.stdenv;
+  clang7Stdenv = throw "clang7Stdenv has been removed from nixpkgs"; # Added 2023-11-19
   clang8Stdenv = lowPrio llvmPackages_8.stdenv;
   clang9Stdenv = lowPrio llvmPackages_9.stdenv;
   clang10Stdenv = lowPrio llvmPackages_10.stdenv;
@@ -174,6 +174,9 @@ mapAliases ({
   clang14Stdenv = lowPrio llvmPackages_14.stdenv;
   clang15Stdenv = lowPrio llvmPackages_15.stdenv;
   clang16Stdenv = lowPrio llvmPackages_16.stdenv;
+
+  clang-tools_7  = throw "clang-tools_7 has been removed from nixpkgs"; # Added 2023-11-19
+  clang_7  = throw "clang_7 has been removed from nixpkgs"; # Added 2023-11-19
 
   ### D ###
 
@@ -561,6 +564,10 @@ mapAliases ({
   '';
   linux_latest_hardened = linuxPackages_latest_hardened;
 
+  lld_7 = throw "lld_7 has been removed from nixpkgs"; # Added 2023-11-19
+  lldb_7 = throw "lldb_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvmPackages_7 = throw "llvmPackages_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvm_7 = throw "llvm_7 has been removed from nixpkgs"; # Added 2023-11-19
 
   lobster-two = google-fonts; # Added 2021-07-22
   luxcorerender = throw "'luxcorerender' has been removed as it's unmaintained and broken in nixpkgs since a while ago"; # Added 2023-06-07

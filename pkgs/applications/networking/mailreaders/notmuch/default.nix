@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
-  version = "0.38.1";
+  version = "0.38.2";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
-    hash = "sha256-wUGHYNDlPvrR81Jn65mlD4t/ooVcFHPgpMmCuG+OzdQ=";
+    hash = "sha256-UoLr5HQrA+4A/Dq4NZaflNIpJ523IyESvcUAnYYelH4=";
   };
 
   nativeBuildInputs = [
