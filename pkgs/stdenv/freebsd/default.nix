@@ -112,8 +112,9 @@ in
         #bash = bootstrap-tools;
         freebsd = super.freebsd.overrideScope (self': super': {
           boot-install = bootstrap-tools;
-          #curl = bootstrap-tools;
+          install = bootstrap-tools;
         });
+        curl = bootstrap-tools;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -127,6 +128,33 @@ in
     stdenv = import ../generic {
       inherit config;
       name = "stdenv-freebsd-boot-1";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      initialPath = [ prevStage.coreutils prevStage.findutils prevStage.bootstrap-tools];
+      shell = "${prevStage.bootstrap-tools}/bin/bash";
+      fetchurlBoot = prevStage.fetchurl;
+      extraNativeBuildInputs = [./unpack-source.sh];
+      cc = prevStage.stdenv.cc;
+      overrides = self: super: {
+        fetchurl = prevStage.fetchurl;
+        freebsd = super.freebsd.overrideScope (self': super': {
+          boot-install = prevStage.coreutils;
+        });
+        curl = prevStage.bootstrap-tools;
+      };
+      preHook = ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+        '';
+    };
+  })
+
+  (prevStage: rec {
+    inherit config overlays;
+    stdenv = import ../generic {
+      inherit config;
+      name = "stdenv-freebsd-boot-2";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;

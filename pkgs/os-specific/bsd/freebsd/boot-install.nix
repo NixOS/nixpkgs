@@ -2,16 +2,14 @@
 let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
   @out@/bin/xinstall "''${args[@]}"
 ''); in mkDerivation {
+  pname = "xinstall-minimal";
   path = "usr.bin/xinstall";
   extraPaths = [ mtree.path ];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
     buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake??
-    (if stdenv.hostPlatform == stdenv.buildPlatform
-     then buildFreebsd.boot-install
-     else buildFreebsd.install)
     buildPackages.libmd
-    buildFreebsd.libnetbsd
+    #buildFreebsd.libnetbsd
   ];
   skipIncludesPhase = true;
   buildInputs = compatIfNeeded ++ [libmd libnetbsd];  # TODO: WHAT is up with pkgs.libmd and libnetbsd
@@ -20,11 +18,13 @@ let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
     "MK_WERROR=no"
     "TESTSDIR=${builtins.placeholder "test"}"
   ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "INSTALL=boot-install";
-  postInstall = ''
-    install -D -m 0550 ${binstall} $out/bin/binstall
+  installPhase = ''
+    mkdir -p $out/bin
+    cp $BSDSRDIR/usr.bin/xinstall/install $out/bin/xinstall
+    cp ${binstall} $out/bin/binstall
+    chmod +x $out/bin/binstall
     substituteInPlace $out/bin/binstall --subst-var out
-    mv $out/bin/install $out/bin/xinstall
     ln -s ./binstall $out/bin/install
   '';
-  outputs = [ "out" "man" "test" ];
+  outputs = [ "out" ];
 }

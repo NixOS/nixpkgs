@@ -29,6 +29,7 @@
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
+, freebsd
 }:
 
 let
@@ -96,7 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
-  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
+  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration
+  ++ lib.optional stdenv.isFreeBSD freebsd.libkvm;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 

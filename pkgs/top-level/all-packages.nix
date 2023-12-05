@@ -745,6 +745,7 @@ with pkgs;
   inspec = callPackage ../tools/misc/inspec { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
+  buildcatrust-minimal = with python3Minimal.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
     inherit (darwin.apple_sdk.frameworks) AppKit;

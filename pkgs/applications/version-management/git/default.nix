@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
-, gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
+, gnugrep, gnused, gawk, coreutils, findutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
@@ -78,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
+  buildInputs = lib.optionals doInstallCheck [ findutils ]
+    ++ [ curl openssl zlib expat cpio libiconv bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
@@ -88,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
               + lib.optionalString (stdenv.isFreeBSD) "-lthr";
+
+  NUMBER_OF_PROCESSORS = 1;
 
   configureFlags = [
     "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"

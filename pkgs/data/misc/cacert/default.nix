@@ -2,7 +2,7 @@
 , stdenv
 , writeText
 , fetchFromGitHub
-, buildcatrust
+, buildcatrust-minimal
 , blacklist ? []
 , extraCertificateFiles ? []
 , extraCertificateStrings ? []
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "unbundled" "p11kit" ];
 
-  nativeBuildInputs = [ buildcatrust ];
+  nativeBuildInputs = [ buildcatrust-minimal ];
 
   buildPhase = ''
     mkdir unbundled

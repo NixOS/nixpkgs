@@ -43,6 +43,7 @@ lib.makeScope newScope (self: with self; {
   libmd = callPackage ../../../development/libraries/libmd {};
   cp = callPackage ./cp.nix {};
   utils = callPackage ./utils.nix ee;
+  libkvm = callPackage ./libkvm.nix {};
 
   include = callPackage ./include.nix {};
   csu = callPackage ./csu.nix {};
@@ -52,7 +53,8 @@ lib.makeScope newScope (self: with self; {
 
   # Wrap NetBSD's install
   install-wrapper = builtins.readFile ./install-wrapper.sh;
-  boot-install = buildPackages.writeShellScriptBin "boot-install" (install-wrapper + ''
-    ${buildPackages.netbsd.install}/bin/xinstall "''${args[@]}"
-  '');
+  #boot-install = buildPackages.writeShellScriptBin "boot-install" (install-wrapper + ''
+  #  ${buildPackages.netbsd.install}/bin/xinstall "''${args[@]}"
+  #'');
+  boot-install = callPackage ./boot-install.nix {};
 })

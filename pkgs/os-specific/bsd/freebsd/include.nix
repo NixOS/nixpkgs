@@ -1,4 +1,4 @@
-{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, pkgsBuildBuild, ... }:
+{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, mtree, pkgsBuildBuild, ... }:
 mkDerivation {
   isStatic = true;
   inherit hostVersion;
@@ -14,10 +14,11 @@ mkDerivation {
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
     buildFreebsd.makeMinimal
     buildFreebsd.install
-    buildPackages.mandoc buildPackages.groff pkgsBuildBuild.rsync /*nbperf*/ buildFreebsd.rpcgen
+    buildPackages.mandoc buildPackages.groff /*nbperf*/ buildFreebsd.rpcgen
 
     # HACK use NetBSD's for now
-    buildPackages.netbsd.mtree
+    #buildPackages.netbsd.mtree
+    mtree
   ];
 
   patches = [

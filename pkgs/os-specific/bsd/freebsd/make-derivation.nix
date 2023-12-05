@@ -12,7 +12,7 @@ in stdenv'.mkDerivation (rec {
   pname = "${attrs.pname or (baseNameOf attrs.path)}";
   version = hostVersion;
   src = runCommand "${pname}-filtered-src" {
-    nativeBuildInputs = [ pkgsBuildBuild.rsync ];
+    nativeBuildInputs = [ (pkgsBuildBuild.rsync.override { enableZstd = false; enableXXHash = false; }) ];
   } ''
     for p in ${lib.concatStringsSep " " ([ attrs.path ] ++ attrs.extraPaths or [])}; do
       set -x
