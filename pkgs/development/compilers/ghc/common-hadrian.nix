@@ -477,6 +477,14 @@ stdenv.mkDerivation ({
   preInstall = ''
     pushd _build/bindist/*
 
+  ''
+  # the bindist configure script uses different env variables than the GHC configure script
+  # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    export InstallNameToolCmd=$INSTALL_NAME_TOOL
+    export OtoolCmd=$OTOOL
+  ''
+  + ''
     $configureScript $configureFlags "''${configureFlagsArray[@]}"
   '';
 

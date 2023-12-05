@@ -9,14 +9,17 @@
 
 buildGoModule rec {
   pname = "goredo";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://www.goredo.cypherpunks.ru/download/${pname}-${version}.tar.zst";
-    hash = "sha256-oUC/N6NLEVBrFC3tSEsWEXUBl5oyZNmqRTFWFbgL+zg=";
+    hash = "sha256-kVxCHXQ9PjaLYviB8sf8oHiFniyNrHMO6C/qSZhjK7k=";
   };
 
-  patches = [ ./fix-tests.diff ];
+  patches = [
+    # Adapt tests to Linux/nix-build requirements:
+    ./fix-tests.diff
+  ];
 
   nativeBuildInputs = [ zstd ];
 

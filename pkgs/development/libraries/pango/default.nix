@@ -94,7 +94,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
     };

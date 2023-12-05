@@ -10,7 +10,6 @@
 , version
 , kde-channel
 , hash
-, callPackage
 }:
 
 mkDerivation rec {
@@ -18,7 +17,7 @@ mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://download.kde.org/${kde-channel}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://kde/${kde-channel}/krita/${version}/krita-${version}.tar.gz";
     inherit hash;
   };
 

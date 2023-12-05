@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "19";
+  version = "20";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha256-jfcO3WMH0Ir1+VfpZhaRcykTIoTmxA5DK8ZO8orP1Jg=";
+    hash = "sha256-hseSusJiUqdnhIyOBtELProeMjrGdKa22h0VkbML80E=";
   };
 
   buildCommand = ''

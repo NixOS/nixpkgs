@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
     description = "vhost-user virtio-fs device backend written in Rust";
     maintainers = with maintainers; [ qyliss astro ];
+    mainProgram = "virtiofsd";
     platforms = platforms.linux;
     license = with licenses; [ asl20 /* and */ bsd3 ];
   };

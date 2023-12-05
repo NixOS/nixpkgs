@@ -80,6 +80,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   ### LIBRARIES
 
+  accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
+
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
   alkimia = callPackage ../development/libraries/alkimia { };

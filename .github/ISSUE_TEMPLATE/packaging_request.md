@@ -18,7 +18,7 @@ assignees: ''
 * license: mit, bsd, gpl2+ , ...
 * platforms: unix, linux, darwin, ...
 
-**Priorities**
+---
 
 Add a :+1: [reaction] to [issues you find important].
 

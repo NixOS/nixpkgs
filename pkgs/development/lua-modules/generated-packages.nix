@@ -514,6 +514,39 @@ buildLuarocksPackage {
   };
 }) {};
 
+fzy = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "fzy";
+  version = "1.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/fzy-1.0-1.rockspec";
+    sha256 = "1v050lm3rn1k5wwi2nimlbp1b7j6b8vkwvhc1npyqzj8jv7w9w9n";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/swarn/fzy-lua",
+  "rev": "2d018a56e3a240bca4b3142a723b2f56392f3e4a",
+  "date": "2023-01-29T07:05:02-06:00",
+  "path": "/nix/store/nz19glmy52jbz46wl7xf0jd8m441klf0-fzy-lua",
+  "sha256": "0xknm5513a6nlariwxgqndf3wj8xals26swjsv06hx133ihna01x",
+  "hash": "sha256-PQBlYRwjdGjA1pJrIzRVHUk+XLP4dR6zotaoEUqpdnY=",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path" "sha256"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/swarn/fzy-lua";
+    description = "A fuzzy string-matching algorithm";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 gitsigns-nvim = callPackage({ buildLuarocksPackage, fetchgit, lua }:
 buildLuarocksPackage {
   pname = "gitsigns.nvim";
