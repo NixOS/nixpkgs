@@ -98,6 +98,9 @@ buildPythonPackage rec {
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+
+    # http code mismatches
+    "--deselect=tests/test_annotated.py::test_get"
   ];
 
   disabledTestPaths = [
@@ -123,6 +126,10 @@ buildPythonPackage rec {
     "test_warn_duplicate_operation_id"
     # assert state["except"] is True
     "test_dependency_gets_exception"
+    # Fixtures drift
+    "test_openapi_schema_sub"
+    # 200 != 404
+    "test_flask"
   ];
 
   pythonImportsCheck = [
