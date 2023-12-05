@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, simplejson
 , pytestCheckHook
 , pythonOlder
 }:
@@ -17,10 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Q0bt/Fw7efaUvM1tYJmjIrvrYo2/LNhu6lWkVs5RJPA=";
   };
-
-  propagatedBuildInputs = [
-    simplejson
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
