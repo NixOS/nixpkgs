@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"

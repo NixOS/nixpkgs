@@ -617,6 +617,8 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
+  dnf4 =  with python3Packages; toPythonApplication dnf4;
+
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
   documenso = callPackage ../applications/office/documenso { };
@@ -22585,6 +22587,8 @@ with pkgs;
 
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
 
+  libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
+
   libcpr = callPackage ../development/libraries/libcpr { };
 
   libcredis = callPackage ../development/libraries/libcredis { };
@@ -22673,7 +22677,7 @@ with pkgs;
 
   libdnet = callPackage ../development/libraries/libdnet { };
 
-  libdnf = callPackage ../tools/package-management/libdnf { };
+  libdnf = callPackage ../tools/package-management/libdnf { python = python3; };
 
   libdovi = callPackage ../development/libraries/libdovi { };
 
@@ -32128,6 +32132,7 @@ with pkgs;
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
   }) // {
+    jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk { withJcef = false; };
     jdk = callPackage ../development/compilers/jetbrains-jdk {  };
     jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
   });
@@ -38839,9 +38844,9 @@ with pkgs;
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
-  quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso { };
-
-  quantum-espresso-mpi = callPackage ../applications/science/chemistry/quantum-espresso { useMpi = true; };
+  quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
+    hdf5 = hdf5-fortran;
+  };
 
   siesta = callPackage ../applications/science/chemistry/siesta { };
 

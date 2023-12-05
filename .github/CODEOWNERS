@@ -337,8 +337,8 @@ nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
 
 # Zig
-/pkgs/development/compilers/zig @AndersonTorres @figsoda
-/doc/hooks/zig.section.md @AndersonTorres @figsoda
+/pkgs/development/compilers/zig @figsoda
+/doc/hooks/zig.section.md       @figsoda
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
