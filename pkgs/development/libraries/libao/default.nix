@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Upstream fix for clang-16 compatibility
+    # add header time.h for nanosecond
     (fetchpatch {
-      name = "clang-16.patch";
+      name = "nanosecond-header.patch";
       url = "https://github.com/xiph/libao/commit/1f998f5d6d77674dad01b181811638578ad68242.patch";
       hash = "sha256-cvlyhQq1YS4pVya44LfsKD1R6iSOONsHJGRbP5LlanQ=";
     })
