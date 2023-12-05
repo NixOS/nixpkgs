@@ -10318,24 +10318,19 @@ with pkgs;
 
   nodejs = hiPrio nodejs_18;
   nodejs-slim = nodejs-slim_18;
-  corepack = hiPrio corepack_18;
 
   nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
   nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
-  corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
-  corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
   nodejs_21 = callPackage ../development/web/nodejs/v21.nix { };
   nodejs-slim_21 = callPackage ../development/web/nodejs/v21.nix { enableNpm = false; };
-  corepack_21 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_21; });
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_21;
   nodejs-slim_latest = nodejs-slim_21;
-  corepack_latest = hiPrio corepack_21;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
