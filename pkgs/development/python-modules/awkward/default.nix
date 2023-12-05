@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -57,8 +58,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     fsspec
-    jax
-    jaxlib
     numba
     setuptools
     numexpr
@@ -66,6 +65,10 @@ buildPythonPackage rec {
     pyarrow
     pytest-xdist
     pytestCheckHook
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # no support for darwin
+    jax
+    jaxlib
   ];
 
   # The following tests have been disabled because they need to be run on a GPU platform.
