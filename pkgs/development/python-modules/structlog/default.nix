@@ -8,9 +8,9 @@
 , pretend
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , simplejson
+, twisted
 , typing-extensions
 }:
 
@@ -44,6 +44,12 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     simplejson
+    twisted
+  ];
+
+  disabledTests = [
+    # _pickle.PicklingError: Only BytesLoggers to sys.stdout and sys.stderr can be pickled.
+    "test_pickle"
   ];
 
   pythonImportsCheck = [
