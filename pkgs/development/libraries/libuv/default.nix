@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString (finalAttrs.doCheck) ''
+    in lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
