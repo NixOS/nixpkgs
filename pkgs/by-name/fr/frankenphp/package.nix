@@ -96,7 +96,7 @@ in buildGoModule rec {
     homepage = "https://github.com/dunglas/frankenphp";
     license = licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = with maintainers; [ gaelreyrol shyim ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
