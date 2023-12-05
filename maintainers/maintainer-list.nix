@@ -18469,6 +18469,8 @@
   };
   tomkoid = {
     email = "tomaszierl@outlook.com";
+    github = "Tomkoid";
+    githubId = 67477750;
     name = "Tomkoid";
   };
   tomodachi94 = {
