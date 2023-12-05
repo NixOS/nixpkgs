@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.8.0";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-8TOEPPtwxbTlm5nGMjOmH8lvsDu0vNgvxaUOgKS1l/g=";
+    sha256 = "sha256-5pKRZfLEFoB9abQdUTETMJhhgDFqlH/URipUv3cLnxQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
