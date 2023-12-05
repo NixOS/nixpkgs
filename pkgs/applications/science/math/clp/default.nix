@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.epl20;
     homepage = "https://github.com/coin-or/Clp";
     description = "An open-source linear programming solver written in C++";
-    platforms = platforms.darwin ++ [ "x86_64-linux" ];
+    platforms = platforms.darwin ++ platforms.linux;
     maintainers = [ maintainers.vbgl ];
   };
 }
