@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "6.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "pyomo";
