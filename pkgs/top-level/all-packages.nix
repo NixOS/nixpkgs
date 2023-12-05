@@ -33968,9 +33968,7 @@ with pkgs;
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
 
-  mpvpaper = callPackage ../tools/wayland/mpvpaper {
-    wlroots = wlroots_0_15;
-  };
+  mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
   mpvScripts = callPackage ../applications/video/mpv/scripts { };
 
