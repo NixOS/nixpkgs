@@ -58,12 +58,16 @@ in
         self.buildRustPackages.overrideScope (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
           (selectRustPackage buildPackages).packages.prebuilt);
-      bootRustPlatform = makeRustPlatform bootstrapRustPackages;
+      bootRustPlatform = makeRustPlatform {
+        inherit (bootstrapRustPackages) cargo rustc;
+      };
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
       buildRustPackages = (selectRustPackage buildPackages).packages.stable;
       # Analogous to stdenv
-      rustPlatform = makeRustPlatform self.buildRustPackages;
+      rustPlatform = makeRustPlatform {
+        inherit (self.buildRustPackages) cargo rustc;
+      };
       rustc = self.callPackage ./rustc.nix ({
         version = rustcVersion;
         sha256 = rustcSha256;
@@ -90,7 +94,9 @@ in
         # We want to use self, not buildRustPackages, so that
         # buildPackages.clippy uses the cross compiler and supports
         # linting for the target platform.
-        rustPlatform = makeRustPlatform self;
+        rustPlatform = makeRustPlatform {
+          inherit (self) cargo rustc;
+        };
         inherit Security;
       };
     });
