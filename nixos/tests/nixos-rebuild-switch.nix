@@ -8,12 +8,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         ../modules/profiles/base.nix
       ];
 
-      nix.settings = {
-        substituters = lib.mkForce [ ];
-        hashed-mirrors = null;
-        connect-timeout = 1;
-      };
-
       system.includeBuildDependencies = true;
 
       system.extraDependencies = [
