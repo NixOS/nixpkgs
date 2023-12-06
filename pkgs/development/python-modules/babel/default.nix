@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.12.1";
+  version = "2.13.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    hash = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
+    hash = "sha256-M+CVLX3WN0r42/Z2jMTd88z+/CRPmYbUB0cE8vvRiQA=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
