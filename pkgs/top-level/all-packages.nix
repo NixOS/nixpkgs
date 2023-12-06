@@ -29753,7 +29753,6 @@ with pkgs;
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
-    noto-fonts-color-emoji
     ;
 
   nuclear = callPackage ../applications/audio/nuclear { };
