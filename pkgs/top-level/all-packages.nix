@@ -29747,10 +29747,6 @@ with pkgs;
 
   nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
 
-  inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts-cjk-serif
-    ;
-
   noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
     suffix = "-lgc-plus";
     variants = [
