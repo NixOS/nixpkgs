@@ -48,6 +48,10 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       src = ./version.patch;
       inherit (info) version;
     })
+
+  # we remove the web_tests directory in the chromium src FOD to reduce the output size, but this backported patch includes patches on web_tests
+  ++ lib.optional (lib.versions.major info.version == "26")
+    ./electron-26-remove-web_tests-patch.patch
   ;
 
   unpackPhase = ''
