@@ -6441,6 +6441,10 @@ self: super: with self; {
 
   lingua = callPackage ../development/python-modules/lingua { };
 
+  linien-client = callPackage ../development/python-modules/linien-client { };
+
+  linien-common = callPackage ../development/python-modules/linien-common { };
+
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
   linknlink = callPackage ../development/python-modules/linknlink { };
