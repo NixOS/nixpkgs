@@ -285,16 +285,17 @@ This can be done on both open or already merged pull requests.
 To manually create a backport pull request, follow [the standard pull request process][pr-create], with these notable differences:
 
 - Use `release-YY.MM` for the base branch, both for the local branch and the pull request.
-  > [!Warning]
-  > Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
+
+> [!Warning]
+> Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
 
 - Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
   Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pick -xe <commit>` to add a reason for the backport to the commit message.
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8) of this.
 
-  > [!Warning]
-  > Ensure the commits exists on the master branch.
-  > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+> [!Warning]
+> Ensure the commits exists on the master branch.
+> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
