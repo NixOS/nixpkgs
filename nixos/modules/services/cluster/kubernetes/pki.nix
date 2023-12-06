@@ -220,7 +220,6 @@ in
             inherit (cert) action;
             authority = {
               inherit remote;
-              file.path = cert.caCert;
               root_ca = cert.caCert;
               profile = "default";
               auth_key_file = certmgrAPITokenPath;
