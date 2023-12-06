@@ -11,12 +11,13 @@
 , polkit
 , systemdLibs
 , IOKit
+, testers
 , nix-update-script
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "2.0.1";
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "rousseau";
     repo = "PCSC";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-7NGlU4byGxtGBticewg8K4FUiDSQZAiB7Q/y+LaqKPo=";
   };
 
@@ -65,7 +66,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "pcscd --version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
@@ -74,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.anthonyroussel ];
     platforms = with platforms; unix;
   };
-}
+})
