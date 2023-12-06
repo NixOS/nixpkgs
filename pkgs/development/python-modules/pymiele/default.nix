@@ -4,6 +4,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
     aiohttp
     async-timeout
   ];
