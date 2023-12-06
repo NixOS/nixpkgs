@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 
 # build-system
 , setuptools
@@ -26,6 +27,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
   ];
+
+  # aiounittest is not compatible with Python 3.12.
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     aiounittest
