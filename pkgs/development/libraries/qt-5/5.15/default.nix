@@ -46,6 +46,10 @@ let
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
       ./qtbase.patch.d/0015-qtbase-cross-build.patch
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/q/qtbase-opensource-src/5.15.8%2Bdfsg-11/debian/patches/cross_build_mysql.diff";
+        hash = "sha256-tzmmLmMXmeDwRVjdpWekDJvSkrIIlslC12HP7XPcm3E=";
+      })
     ];
     qtdeclarative = [
       ./qtdeclarative.patch

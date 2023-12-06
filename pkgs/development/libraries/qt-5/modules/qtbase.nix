@@ -20,8 +20,7 @@
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
-  # qmake detection for libmysqlclient does not seem to work when cross compiling
-, mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, mysqlSupport ? true
 , libmysqlclient
 , buildExamples ? false
 , buildTests ? false
@@ -393,8 +392,8 @@ stdenv.mkDerivation (finalAttrs: ({
       "-I" "${cups.dev}/include"
 
     ] ++ lib.optionals (mysqlSupport) [
-      "-L" "${libmysqlclient}/lib"
-      "-I" "${libmysqlclient}/include"
+      "-L" "${libmysqlclient}/lib/mysql"
+      "-I" "${libmysqlclient.dev}/include/mysql"
     ]
 
   # cross compilation options
