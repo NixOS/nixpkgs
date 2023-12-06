@@ -4,7 +4,8 @@
 }:
 
 buildHomeAssistantComponent rec {
-  pname = "prometheus-sensor";
+  owner = "mweinelt";
+  domain = "prometheus_sensor";
   version = "1.0.0";
 
   src = fetchFromGitHub {
