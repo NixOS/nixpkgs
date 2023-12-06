@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "unstable-2023-03-02";
+  version = "unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "pipeworld";
-    rev = "9ea79f72ad500fe78b9f46e680be87eaac3bfb0e";
-    hash = "sha256-/cjse6XXrdLoUB35GLgl871qINOm4SvKPTbfoBceLu0=";
+    rev = "edc3821404b3a1274b8a50d2fb1c6b523fbd4a1c";
+    hash = "sha256-PbKejghMkLZdeQJD9fObw9xhGH24IX72X7pyjapTXJM=";
   };
 
   dontConfigure = true;
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalPackages: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/letoram/pipeworld";
     description = "Dataflow 'spreadsheet' desktop environment";
     longDescription = ''
@@ -43,8 +43,8 @@ stdenvNoCC.mkDerivation (finalPackages: {
       application within another desktop as a 'substitute' for your normal
       terminal emulator.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
 })

@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "unstable-2023-06-25";
+  version = "unstable-2023-11-06";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "cat9";
-    rev = "4d8a0c539a5c756acada96fd80e7eb3b9554ac05";
-    hash = "sha256-T3RPuldKTzHm0EdfdMOtHv9kcr9oE9YQgdzv/jjPPnc=";
+    rev = "a807776a85237ab0bdd0a712fb33c176fc295e30";
+    hash = "sha256-OlH8FgVBk76Qw+5mnsrryXOL9GbPJWlwUGtYlLuAPxQ=";
   };
 
   dontConfigure = true;
@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/letoram/cat9";
     description = "A User shell for LASH";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ unlicense ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
 })
