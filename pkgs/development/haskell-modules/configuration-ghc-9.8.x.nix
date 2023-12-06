@@ -54,6 +54,11 @@ self: super: {
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
   github = super.github_0_29;
+  hspec = super.hspec_2_11_7;
+  hspec-core = super.hspec-core_2_11_7;
+  hspec-discover = super.hspec-discover_2_11_7;
+  hspec-hedgehog = super.hspec-hedgehog_0_1_1_0;
+  hspec-meta = super.hspec-meta_2_11_7;
   some = super.some_1_0_6;
   tagged = super.tagged_0_8_8;
 
