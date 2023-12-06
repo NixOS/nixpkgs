@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -48,6 +49,12 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
+    })
+
+    (fetchpatch {
+      # add fixture to mark flaky ref count tests
+      url = "https://github.com/psycopg/psycopg/commit/70ef364324ba3448ef9ac0e29329c9d802380e4b.patch";
+      hash = "sha256-8PlrBcIumlxFjNXCAfm4NpSIxAnvLR8TopHzneJyzf0=";
     })
   ];
 
@@ -205,7 +212,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
-    "-m" "'not timing'"
+    "-m" "'not refcount and not timing'"
   ];
 
   postCheck = ''
