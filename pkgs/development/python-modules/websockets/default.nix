@@ -4,12 +4,13 @@
 , fetchFromGitHub
 , unittestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
   version = "12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   patchPhase = ''
     # Disable all tests that need to terminate within a predetermined amount of
