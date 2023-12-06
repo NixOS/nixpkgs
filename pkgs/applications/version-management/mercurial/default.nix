@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
+# depends on rust-cpython which won't support python312
+# https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
+, rustSupport ? (stdenv.hostPlatform.isLinux && python3Packages.pythonOlder "3.12"), cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -43,7 +45,7 @@ let
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
+    nativeBuildInputs = [ makeWrapper gettext installShellFiles python3Packages.setuptools ]
       ++ lib.optionals rustSupport [
            rustPlatform.cargoSetupHook
            cargo
