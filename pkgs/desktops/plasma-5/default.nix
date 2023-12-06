@@ -49,7 +49,7 @@ let
     mirror = "mirror://kde";
   };
 
-  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) {};
+  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) { };
 
   packages = self:
     let
@@ -96,7 +96,7 @@ let
 
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
-            nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ libsForQt5.wrapQtAppsHook ];
+            nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ libsForQt5.wrapQtAppsHook ];
 
             meta =
               let meta = args.meta or { }; in
@@ -183,6 +183,7 @@ let
         kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
         lightly = callPackage ./3rdparty/lightly { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
+        polonium = callPackage ./3rdparty/addons/polonium.nix { };
       };
 
     } // lib.optionalAttrs config.allowAliases {
