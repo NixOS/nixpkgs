@@ -2,7 +2,6 @@
 , cups
 , dpkg
 , fetchurl
-, gjs
 , glib
 , gtk3
 , lib
@@ -77,7 +76,6 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
     makeWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --prefix PATH : "${lib.makeBinPath [ gjs ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     # Remove bundled libraries
