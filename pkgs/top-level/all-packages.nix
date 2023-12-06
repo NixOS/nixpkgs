@@ -3916,8 +3916,6 @@ with pkgs;
 
   goperf = callPackage ../development/tools/goperf { };
 
-  gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
-
   graphite-cli = nodePackages.graphite-cli;
 
   gucci = callPackage ../tools/text/gucci { };
