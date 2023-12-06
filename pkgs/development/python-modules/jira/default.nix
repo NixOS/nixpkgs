@@ -2,23 +2,30 @@
 , buildPythonPackage
 , fetchFromGitHub
 , defusedxml
+, filemagic
 , flaky
+, ipython
 , keyring
+, packaging
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-futures
 , requests-mock
 , requests-oauthlib
 , requests-toolbelt
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
-, pytestCheckHook
-, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "jira";
   version = "3.5.2";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
@@ -28,16 +35,34 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = [
     defusedxml
-    keyring
+    packaging
+    requests
     requests-oauthlib
     requests-toolbelt
+    typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    cli = [
+      ipython
+      keyring
+    ];
+    opt = [
+      filemagic
+      pyjwt
+      # requests-jwt
+      # requests-keyberos
+    ];
+    async = [
+      requests-futures
+    ];
+  };
 
   nativeCheckInputs = [
     flaky
@@ -63,5 +88,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
+    mainProgram = "jirashell";
   };
 }
