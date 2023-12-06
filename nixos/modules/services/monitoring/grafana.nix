@@ -74,7 +74,7 @@ let
     fi
   '';
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
-    mkdir -p $out/{datasources,dashboards,notifiers,alerting}
+    mkdir -p $out/{alerting,datasources,dashboards,notifiers,plugins}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
     ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
     ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
