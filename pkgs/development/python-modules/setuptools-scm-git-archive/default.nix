@@ -39,5 +39,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    # https://github.com/Changaco/setuptools_scm_git_archive/pull/22
+    broken = versionAtLeast setuptools-scm.version "8";
   };
 }
