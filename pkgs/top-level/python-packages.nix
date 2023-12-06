@@ -6151,6 +6151,8 @@ self: super: with self; {
 
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
+  lcd-i2c = callPackage ../development/python-modules/lcd-i2c { };
+
   lcgit = callPackage ../development/python-modules/lcgit { };
 
   lcov_cobertura = callPackage ../development/python-modules/lcov_cobertura { };
