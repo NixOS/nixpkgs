@@ -10,6 +10,7 @@
 , polkit
 , systemdLibs
 , IOKit
+, gitUpdater
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
@@ -62,6 +63,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://salsa.debian.org/rousseau/PCSC.git";
+  };
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
