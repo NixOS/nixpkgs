@@ -29,6 +29,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  dontWrapPythonPrograms = true;
+
   # Projec thas no released tests
   doCheck = false;
 
