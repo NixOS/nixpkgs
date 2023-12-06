@@ -231,9 +231,17 @@ let
       let
         drvFile-discarded = builtins.unsafeDiscardStringContext drvFile;
         imported = import drvFile;
-        outputs = map
-          (output: builtins.unsafeDiscardStringContext (output.outputName or "out"))
-          imported.all;
+
+        # some derivations, notably pkgs.sagetex, lack an "out"
+        # output.  So we must calculate the name of a valid output;
+        # if we fail to do so, we get errors like:
+        #
+        # error: derivation '/nix/store/k2ihki1cbdz7fma845xpdadnkd3s36zf-sagetex-3.6.1.drv' lacks an 'outputName' attribute
+        # error: derivation '/nix/store/9v3nww63p1cagai3nj1cggpc8g9v0jic-sagetex-3.6.1.drv' does not have wanted outputs 'out'
+        #
+        outputName =
+          builtins.unsafeDiscardStringContext
+            ((builtins.elemAt imported.all 0).outputName or "out");
       in {
         name = "";
         type = "derivation";
@@ -242,6 +250,7 @@ let
             inherit outputs;
           };
         };
+        inherit outputName;
       })
       unrealised-drvpaths;
 
