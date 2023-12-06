@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, simplejson
 , pytestCheckHook
 , pythonOlder
+, simplejson
 }:
 
 buildPythonPackage rec {
