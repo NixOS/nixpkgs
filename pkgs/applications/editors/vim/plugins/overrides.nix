@@ -590,6 +590,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
+  harpoon2 = super.harpoon2.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
