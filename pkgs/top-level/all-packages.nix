@@ -3027,8 +3027,6 @@ with pkgs;
 
   xplorer = callPackage ../applications/file-managers/xplorer { };
 
-  ytree = callPackage ../applications/file-managers/ytree { };
-
   johnny-reborn-engine = callPackage ../applications/misc/johnny-reborn { };
 
   johnny-reborn = callPackage ../applications/misc/johnny-reborn/with-data.nix { };
