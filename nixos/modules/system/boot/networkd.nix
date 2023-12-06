@@ -1612,7 +1612,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };

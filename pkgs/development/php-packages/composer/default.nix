@@ -36,6 +36,7 @@ php.buildComposerProject (finalAttrs: {
     description = "Dependency Manager for PHP";
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
+    mainProgram = "composer";
     maintainers = lib.teams.php.members;
   };
 })

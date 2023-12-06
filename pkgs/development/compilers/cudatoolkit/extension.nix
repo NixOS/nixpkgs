@@ -54,11 +54,28 @@ final: prev: let
         {
           name = "setup-cuda-hook";
 
+          # Point NVCC at a compatible compiler
           substitutions.ccRoot = "${backendStdenv.cc}";
 
           # Required in addition to ccRoot as otherwise bin/gcc is looked up
           # when building CMakeCUDACompilerId.cu
           substitutions.ccFullPath = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
+
+          # Required by cmake's enable_language(CUDA) to build a test program
+          # When implementing cross-compilation support: this is
+          # final.pkgs.targetPackages.cudaPackages.cuda_cudart
+          # Given the multiple-outputs each CUDA redist has, we can specify the exact components we
+          # need from the package. CMake requires:
+          # - the cuda_runtime.h header, which is in the dev output
+          # - the dynamic library, which is in the lib output
+          # - the static library, which is in the static output
+          substitutions.cudartFlags = let cudart = final.cuda_cudart; in
+            builtins.concatStringsSep " " (final.lib.optionals (final ? cuda_cudart) ([
+              "-I${final.lib.getDev cudart}/include"
+              "-L${final.lib.getLib cudart}/lib"
+            ] ++ final.lib.optionals (builtins.elem "static" cudart.outputs) [
+              "-L${cudart.static}/lib"
+            ]));
         }
         ./hooks/setup-cuda-hook.sh)
     { });
