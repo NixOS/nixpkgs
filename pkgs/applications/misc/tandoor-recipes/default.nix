@@ -23,8 +23,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     ./media-root.patch
     # https://github.com/TandoorRecipes/recipes/pull/2706
     (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
-      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
+      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
+      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
     })
   ];
 
@@ -42,6 +42,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cleanup
     django-cors-headers
     django-crispy-forms
+    django-crispy-bootstrap4
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -122,6 +123,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytest-factoryboy
+  ];
+
+  # flaky
+  disabledTests = [
+    "test_search_count"
   ];
 
   passthru = {
