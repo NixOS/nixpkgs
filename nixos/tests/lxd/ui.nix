@@ -1,8 +1,8 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lxd-ui";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ jnsgruk ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
   };
 
   nodes.machine = { lib, ... }: {
