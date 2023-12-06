@@ -50,6 +50,7 @@ self: super: {
   xhtml = null;
 
   alex = super.alex_3_4_0_1;
+  free = super.free_5_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
@@ -61,6 +62,7 @@ self: super: {
   hspec-meta = super.hspec-meta_2_11_7;
   some = super.some_1_0_6;
   tagged = super.tagged_0_8_8;
+  th-abstraction = super.th-abstraction_0_6_0_0;
 
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
   commutative-semigroups = doJailbreak super.commutative-semigroups;
