@@ -30,24 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.4";
-        src = fetchFromGitHub {
-          owner = "CorantGmbH";
-          repo = "aioairq";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
-        };
-      });
-
       # https://github.com/home-assistant/core/pull/101913
       aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.8.5";
+        version = "3.9.1";
         src = fetchPypi {
           inherit (old) pname;
           inherit version;
-          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+          hash = "sha256-j8Sah6wmnUUp2kWHHi/7aHTod3nD0OLM2BPAiZIhI50=";
         };
+        patches = [];
+        doCheck = false;
       });
 
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
@@ -57,6 +49,15 @@ let
           repo = "aiowatttime";
           rev = "refs/tags/${version}";
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
+        };
+      });
+
+      aioresponses = super.aioresponses.overridePythonAttrs (oldAttrs: rec {
+        pname = "aioresponses";
+        version = "0.7.6";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
         };
       });
 
@@ -135,11 +136,6 @@ let
         };
       });
 
-      # moto tests are a nuissance
-      moto = super.moto.overridePythonAttrs (_: {
-        doCheck = false;
-      });
-
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
@@ -180,15 +176,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
         };
       });
 
@@ -324,7 +311,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.3";
+  hassVersion = "2023.12.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -340,7 +327,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-llGHI6LVpTo9m2RMtcDSkW2wWraje2OkVFx5P7lzZ30=";
+    hash = "sha256-TspjqX98adi6cYe/raV1FB5Xy59F4jWJukw1pkuP+Sw=";
   };
 
   # Secondary source is git for tests
@@ -348,7 +335,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-KD53O+UlAjGfVGp4kbLgpgU7j0A+KqZZT492WmeCOnQ=";
+    hash = "sha256-d7H6U5wRU1mOAU5YFyy7gtttsG9p1g7iDxZcaK+cAOg=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -481,6 +468,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
+    # SystemError: PyThreadState_SetAsyncExc failed
+    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # tests are located in tests/
     "tests"
   ];
