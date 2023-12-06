@@ -16,8 +16,8 @@ index 45a120482b..ddaf8ab60e 100644
 --- a/electron/script/lib/get-version.js
 +++ b/electron/script/lib/get-version.js
 @@ -1,22 +1 @@
--const { spawnSync } = require('node:child_process');
--const path = require('node:path');
+-const { spawnSync } = require('child_process');
+-const path = require('path');
 -
 -module.exports.getElectronVersion = () => {
 -  // Find the nearest tag to the current HEAD
