@@ -3,6 +3,7 @@
 , fetchurl
 , autoreconfHook
 , autoconf-archive
+, flex
 , pkg-config
 , perl
 , python3
@@ -17,21 +18,14 @@
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.9.5";
+  version = "2.0.1";
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    hash = "sha256-nuP5szNTdWIXeJNVmtT3uNXCPr6Cju9TBWwC2xQEnQg=";
+    hash = "sha256-XtyvXUVEQDvatu4rXWwCxvl+pk7r8IJbjQ+mG6QX2to=";
   };
-
-  patches = [ ./no-dropdir-literals.patch ];
-
-  postPatch = ''
-    sed -i configure.ac \
-      -e "s@polkit_policy_dir=.*@polkit_policy_dir=$bin/share/polkit-1/actions@"
-  '';
 
   configureFlags = [
     "--enable-confdir=/etc"
@@ -44,11 +38,9 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
   ];
 
-  postConfigure = ''
-    sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
-      s/(DROPDIR *)(.*)/\1(getenv("PCSCLITE_HP_DROPDIR") ? : \2)/
-    }' config.h
-  '';
+  makeFlags = [
+    "POLICY_DIR=$(out)/share/polkit-1/actions"
+  ];
 
   postInstall = ''
     # pcsc-spy is a debugging utility and it drags python into the closure
@@ -57,7 +49,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    flex
+    pkg-config
+    perl
+  ];
 
   buildInputs = [ python3 ]
     ++ lib.optionals stdenv.isLinux [ systemdLibs ]
