@@ -2266,6 +2266,15 @@
     githubId = 16821405;
     name = "Ben Kuhn";
   };
+  benlemasurier = {
+    email = "ben@crypt.ly";
+    github = "benlemasurier";
+    githubId = 47993;
+    name = "Ben LeMasurier";
+    keys = [{
+      fingerprint = "0FD4 7407 EFD4 8FD8 8BF5  87B3 248D 430A E8E7 4189";
+    }];
+  };
   benley = {
     email = "benley@gmail.com";
     github = "benley";
