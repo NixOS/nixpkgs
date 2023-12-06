@@ -3540,7 +3540,8 @@
       renault-api
     ];
     "renson" = ps: with ps; [
-    ]; # missing inputs: renson-endura-delta
+      renson-endura-delta
+    ];
     "reolink" = ps: with ps; [
       aiohttp-cors
       reolink-aio
@@ -5568,6 +5569,7 @@
     "reddit"
     "remote"
     "renault"
+    "renson"
     "reolink"
     "repairs"
     "rest"
