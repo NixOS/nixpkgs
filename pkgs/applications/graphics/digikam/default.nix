@@ -32,6 +32,7 @@
 , lcms2
 , lensfun
 , libgphoto2
+, libheif
 , libkipi
 , libksane
 , liblqr1
@@ -97,6 +98,7 @@ mkDerivation rec {
     lcms2
     lensfun
     libgphoto2
+    libheif
     libkipi
     libksane
     liblqr1
