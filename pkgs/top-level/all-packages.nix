@@ -15864,6 +15864,14 @@ with pkgs;
     })
     else pkg;
 
+  pin-to-gcc12-if-gcc13 = pkg:
+    if !(lib.isDerivation pkg) || !(pkg?override) then pkg else
+    pkg.override (previousArgs:
+      lib.optionalAttrs (previousArgs.stdenv.cc.cc.isGNU or false &&
+                         lib.versionAtLeast previousArgs.stdenv.cc.cc.version "13.0") {
+                           stdenv = gcc12Stdenv;
+                         });
+
   wrapNonDeterministicGcc = stdenv: ccWrapper:
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       env = old.env // {
