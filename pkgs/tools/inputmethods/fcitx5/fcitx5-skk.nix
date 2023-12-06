@@ -9,7 +9,7 @@
 , fcitx5-qt
 , libskk
 , qtbase
-, skk-dicts
+, skkDictionaries
 , wrapQtAppsHook
 , enableQt ? false
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_QT=${toString enableQt}"
-    "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.L"
+    "-DSKK_DEFAULT_PATH=${skkDictionaries.l}/share/skk/SKK-JISYO.L"
   ];
 
   meta = with lib; {
