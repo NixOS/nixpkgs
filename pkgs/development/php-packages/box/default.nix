@@ -2,16 +2,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "box-project";
     repo = "box";
     rev = finalAttrs.version;
-    hash = "sha256-6icHXRxqre2RBIRoc3zfQnxGRHh2kIen2oLJ3eQjD/0=";
+    hash = "sha256-3YfnFd8OZ15nQnXOkhNz2FQygElFn+JOrenKUeyTkXA=";
   };
 
-  vendorHash = "sha256-n/F/il1u+3amSVf8fr0scZSkXuwxW43iq5F2XQJ3xfM=";
+  vendorHash = "sha256-0ul4NLGK+Z+VN1nv4xSGsh2JcJEXeYAYFhxDn7r3kVY=";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";

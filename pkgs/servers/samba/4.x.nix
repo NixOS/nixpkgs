@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python
+    python3Packages.python
     wafHook
     pkg-config
     bison
@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
   '';
 
   disallowedReferences =
-    lib.optionals (buildPackages.python3Packages.python != python)
+    lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
       [ buildPackages.python3Packages.python ];
 
   passthru = {

@@ -74,6 +74,7 @@ builder rec {
 
   patches = [
     ./eai_system.patch
+    ./guile-hurd-posix-spawn.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.isDarwin
     (fetchpatch {

@@ -19,8 +19,8 @@
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
+, cudaPackagesGoogle
+, cudaCapabilities ? cudaPackagesGoogle.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -50,15 +50,15 @@ let
   # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
   # translation units, so the build fails at link time
   stdenv =
-    if cudaSupport then cudaPackages.backendStdenv
+    if cudaSupport then cudaPackagesGoogle.backendStdenv
     else if originalStdenv.isDarwin then llvmPackages_11.stdenv
     else originalStdenv;
-  inherit (cudaPackages) cudatoolkit nccl;
+  inherit (cudaPackagesGoogle) cudatoolkit nccl;
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
   cudnnAttribute = "cudnn_8_6";
-  cudnn = cudaPackages.${cudnnAttribute};
+  cudnn = cudaPackagesGoogle.${cudnnAttribute};
   gentoo-patches = fetchzip {
     url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
     hash = "sha256-SCRX/5/zML7LmKEPJkcM5Tebez9vv/gmE4xhT/jyqWs=";
@@ -486,8 +486,8 @@ let
       broken =
         stdenv.isDarwin
         || !(xlaSupport -> cudaSupport)
-        || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
-        || !(cudaSupport -> cudaPackages ? cudatoolkit);
+        || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackagesGoogle)
+        || !(cudaSupport -> cudaPackagesGoogle ? cudatoolkit);
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
@@ -590,7 +590,7 @@ in buildPythonPackage {
   # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru = {
-    inherit cudaPackages;
+    cudaPackages = cudaPackagesGoogle;
     deps = bazel-build.deps;
     libtensorflow = bazel-build.out;
   };

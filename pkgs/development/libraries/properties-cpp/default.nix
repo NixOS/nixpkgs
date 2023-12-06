@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
   };
 
-  postPatch = lib.optionalString (!finalAttrs.doCheck) ''
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
   '';
 

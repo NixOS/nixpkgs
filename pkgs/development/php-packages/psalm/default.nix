@@ -20,6 +20,7 @@ php.buildComposerProject (finalAttrs: {
     description = "A static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
+    mainProgram = "psalm";
     maintainers = lib.teams.php.members;
   };
 })

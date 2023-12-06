@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , substituteAll
+, cudaSupport ? opencv.cudaSupport or false
 
 # build
 , addOpenGLRunpath
@@ -21,6 +22,7 @@
 , protobuf
 , pugixml
 , tbb
+, cudaPackages
 }:
 
 let
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
       setuptools
     ]))
     shellcheck
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   patches = [
@@ -133,6 +137,8 @@ stdenv.mkDerivation rec {
     protobuf
     pugixml
     tbb
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   enableParallelBuilding = true;

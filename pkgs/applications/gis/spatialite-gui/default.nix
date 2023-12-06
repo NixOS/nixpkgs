@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gaia-gis.it/fossil/spatialite_gui";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     mainProgram = "spatialite_gui";
   };
 }
