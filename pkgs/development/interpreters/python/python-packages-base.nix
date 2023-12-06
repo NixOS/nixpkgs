@@ -32,20 +32,75 @@ let
       }
       else result);
 
+  preserveFunctionOverride = decorate: f:
+    let
+      fResult = decorate f;
+    in
+    (if (!builtins.isAttrs fResult) then
+      lib.mirrorFunctionArgs f fResult
+    else fResult)
+    // lib.optionalAttrs (f?override) {
+      override = lib.mirrorFunctionArgs f.override
+        (fdrv: decorate (f.override fdrv));
+    };
+
+  deprecateOutputAttributes = f: origArgs:
+    let
+      result = f origArgs;
+    in
+    if lib.isAttrs result
+    then {
+      # Output attributes to deprecate
+
+      # Throw error when the deprecated improvised <pkg>.override is accessed
+      # This will most likely be shadowed by the typical <pkg>.override
+      # added by another callPackage onto package definitions.
+      override = throw ''
+        Attribute 'override' added by buildPython* is deprecated.
+        Use 'overridePythonAttrs' or 'overrideAttrs' instead, or add '<pkgs>.override' using callPackage.
+      '';
+
+    } // result
+    else if builtins.isFunction result
+    then lib.mirrorFunctionArgs result result
+    else result;
+
+  compatCustomStdenv = f: origArgs: (
+    if origArgs?stdenv then
+      f.override { inherit (origArgs) stdenv; }
+    else
+      f
+  ) origArgs;
+
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
   else
     ./python2/mk-python-derivation.nix;
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  # This ensures that the function argument of buildPython* is always mirrored
+  # and that buildPython*.override is always preserved.
+  decorateBuildPyhon = f: lib.pipe f (map preserveFunctionOverride [
+    # Throw error upon accessing attempt to deprecated output attributes
+    deprecateOutputAttributes
+    # Take the obsolete input argument `stdenv`
+    # and pass as `buildPython*.override { stdenv = stdenv; }`
+    # TODO: Remove this after Nixpkgs 24.11 branch-off
+    compatCustomStdenv
+    # Adds <pkg>.overridePythonAttrs
+    makeOverridablePythonPackage
+  ]);
+
+  buildPythonPackage = decorateBuildPyhon (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
-  }));
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonPackage.override without rebuilding python
+  });
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  buildPythonApplication = decorateBuildPyhon (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
-  }));
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonApplication.override without rebuilding python
+  });
 
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../../../build-support/build-setupcfg lib self;

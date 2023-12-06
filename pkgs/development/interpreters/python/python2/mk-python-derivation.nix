@@ -2,6 +2,9 @@
 
 { lib
 , config
+# stdenv for buildPython*
+# Customizable through `buildPython*.override`
+, stdenv
 , python
 , wrapPython
 , unzip
