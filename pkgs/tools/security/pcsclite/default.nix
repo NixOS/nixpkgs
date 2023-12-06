@@ -77,7 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
+    changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.bsd3;
+    mainProgram = "pcscd";
     maintainers = [ maintainers.anthonyroussel ];
     platforms = with platforms; unix;
   };
