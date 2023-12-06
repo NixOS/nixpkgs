@@ -55,6 +55,7 @@ self: super: {
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
   github = super.github_0_29;
   some = super.some_1_0_6;
+  tagged = some.tagged_0_8_8;
 
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
   commutative-semigroups = doJailbreak super.commutative-semigroups;
