@@ -89,14 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  # When building a wide-character (Unicode) build, create backward
-  # compatibility links from the the "normal" libraries to the
-  # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postFixup = let
     abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
   ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+  ''
+  # When building a wide-character (Unicode) build, create backward
+  # compatibility links from the the "normal" libraries to the
+  # wide-character libraries (e.g. libncurses.so to libncursesw.so).
+  + lib.optionalString unicodeSupport ''
     libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
     suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
 
@@ -139,10 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
     done
+    ''
+    # Unconditional patches. Leading newline is to avoid mass rebuilds.
+    + ''
 
     # add pkg-config aliases for libraries that are built-in to libncurses(w)
     for library in tinfo tic; do
-      for suffix in "" w; do
+      for suffix in "" ${lib.optionalString unicodeSupport "w"}; do
         ln -svf ncurses$suffix.pc $dev/lib/pkgconfig/$library$suffix.pc
       done
     done

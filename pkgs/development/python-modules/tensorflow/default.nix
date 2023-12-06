@@ -57,7 +57,8 @@ let
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnn = cudaPackages.cudnn_8_6;
+  cudnnAttribute = "cudnn_8_6";
+  cudnn = cudaPackages.${cudnnAttribute};
   gentoo-patches = fetchzip {
     url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
     hash = "sha256-SCRX/5/zML7LmKEPJkcM5Tebez9vv/gmE4xhT/jyqWs=";
@@ -65,15 +66,7 @@ let
   protobuf-extra = linkFarm "protobuf-extra" [
     { name = "include"; path = protobuf-core.src; }
   ];
-in
 
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null;
-
-# unsupported combination
-assert ! (stdenv.isDarwin && cudaSupport);
-
-let
   withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
 
   # FIXME: migrate to redist cudaPackages
@@ -490,7 +483,11 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = stdenv.isDarwin || !(xlaSupport -> cudaSupport);
+      broken =
+        stdenv.isDarwin
+        || !(xlaSupport -> cudaSupport)
+        || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
+        || !(cudaSupport -> cudaPackages ? cudatoolkit);
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
