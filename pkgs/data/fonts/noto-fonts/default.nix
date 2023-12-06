@@ -14,81 +14,7 @@
 , buildPackages
 , variants ? [ ]
 }:
-let
-  notoLongDescription = ''
-    When text is rendered by a computer, sometimes characters are
-    displayed as “tofu”. They are little boxes to indicate your device
-    doesn’t have a font to display the text.
-
-    Google has been developing a font family called Noto, which aims to
-    support all languages with a harmonious look and feel. Noto is
-    Google’s answer to tofu. The name noto is to convey the idea that
-    Google’s goal is to see “no more tofu”.  Noto has multiple styles and
-    weights, and freely available to all.
-  '';
-in
 rec {
-  mkNoto =
-    { pname
-    , variants ? [ ]
-    , longDescription ? notoLongDescription
-    }:
-    stdenvNoCC.mkDerivation rec {
-      inherit pname;
-      version = "23.11.1";
-
-      src = fetchFromGitHub {
-        owner = "notofonts";
-        repo = "notofonts.github.io";
-        rev = "noto-monthly-release-${version}";
-        hash = "sha256-qBHLCOfVBOn9CV194S4cYw9nhHyAe2AUBJHQMvyEfW8=";
-      };
-
-      _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
-
-      installPhase = ''
-        # We check availability in order of variable -> otf -> ttf
-        # unhinted -- the hinted versions use autohint
-        # maintaining maximum coverage.
-        #
-        # We have a mix of otf and ttf fonts
-        local out_font=$out/share/fonts/noto
-      '' + (if _variants == [ ] then ''
-        for folder in $(ls -d fonts/*/); do
-          if [[ -d "$folder"unhinted/variable-ttf ]]; then
-            install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
-          elif [[ -d "$folder"unhinted/otf ]]; then
-            install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
-          else
-            install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
-          fi
-        done
-      '' else ''
-        for variant in $_variants; do
-          if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
-            install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
-          elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
-            install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
-          else
-            install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
-          fi
-        done
-      '');
-
-      passthru.updateScript = gitUpdater {
-        rev-prefix = "noto-monthly-release-";
-      };
-
-      meta = with lib; {
-        description = "Beautiful and free fonts for many languages";
-        homepage = "https://www.google.com/get/noto/";
-        inherit longDescription;
-        license = licenses.ofl;
-        platforms = platforms.all;
-        maintainers = with maintainers; [ mathnerd314 emily jopejoe1 ];
-      };
-    };
-
   mkNotoCJK = { typeface, version, sha256 }:
     stdenvNoCC.mkDerivation {
       pname = "noto-fonts-cjk-${lib.toLower typeface}";
@@ -128,29 +54,6 @@ rec {
         maintainers = with maintainers; [ mathnerd314 emily ];
       };
     };
-
-  noto-fonts = mkNoto {
-    pname = "noto-fonts";
-  };
-
-  noto-fonts-lgc-plus = mkNoto {
-    pname = "noto-fonts-lgc-plus";
-    variants = [
-      "Noto Sans"
-      "Noto Serif"
-      "Noto Sans Mono"
-      "Noto Music"
-      "Noto Sans Symbols"
-      "Noto Sans Symbols 2"
-      "Noto Sans Math"
-    ];
-    longDescription = ''
-      This package provides the Noto Fonts, but only for latin, greek
-      and cyrillic scripts, as well as some extra fonts. To create a
-      custom Noto package with custom variants, see the `mkNoto`
-      helper function.
-    '';
-  };
 
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";
