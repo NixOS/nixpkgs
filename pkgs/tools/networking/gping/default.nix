@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    hash = "sha256-22Nio6yfkL9HWNrI+kk5dGfojTtB/h0sizCWH9w9so8=";
+    hash = "sha256-t9USry3I6tc8EKsfkq28/hPJMbaf0BqqOdzCl3oXd60=";
   };
 
-  cargoHash = "sha256-YfvcCnFXDoZXp/Aug0jVQkilsvSzS+JF90U0QvVFksE=";
+  cargoHash = "sha256-QERmZOyC4U6ZpCkL7ap5MRvPEE2vqK/tD+CrBLg07J0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
