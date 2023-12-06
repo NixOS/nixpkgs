@@ -271,10 +271,6 @@ python.pkgs.buildPythonApplication rec {
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
       --replace "--cov --cov-report=html --cov-report=xml" ""
-    # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
-    # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
-    substituteInPlace src/paperless_tesseract/tests/test_parser.py \
-      --replace "this is awebp document" "this is a webp document"
   '';
 
   disabledTests = [
