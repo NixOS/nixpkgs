@@ -1,16 +1,17 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , openssl
 , check
 , pcsclite
 , PCSC
 , gengetopt
+, help2man
 , cmake
 , zlib
 , withApplePCSC ? stdenv.isDarwin
-, gitUpdater
+, nix-update-script
 , testers
 , yubico-piv-tool
 }:
@@ -21,21 +22,33 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    hash = "sha256-oaqYtrF06yunfyleCMmAWYupR/aXsbcHygjHbPPdzms=";
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubico-piv-tool";
+    rev = "refs/tags/yubico-piv-tool-${version}";
+    hash = "sha256-KprY5BX7Fi/qWRT1pda9g8fqnmDB1Bh7oFM7sCwViuw=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace "-Werror" ""
   '';
 
-  nativeBuildInputs = [ pkg-config cmake gengetopt ];
-  buildInputs = [ openssl check zlib.dev ]
-    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gengetopt
+    help2man
+  ];
+
+  buildInputs = [
+    openssl
+    check
+    zlib.dev
+  ]
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
-    "-DGENERATE_MAN_PAGES=OFF" # Use the man page generated at release time
+    "-DGENERATE_MAN_PAGES=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_MANDIR=share/man"
@@ -45,9 +58,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://github.com/Yubico/yubico-piv-tool.git";
-      rev-prefix = "yubico-piv-tool-";
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
     tests.version = testers.testVersion {
       inherit version;
