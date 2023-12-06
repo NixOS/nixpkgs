@@ -1,19 +1,38 @@
+From 01b35d5f78301b1201db2a4db07f9b4747ab4179 Mon Sep 17 00:00:00 2001
+From: Gaetan Lepage <gaetan@glepage.com>
+Date: Wed, 6 Dec 2023 09:05:01 +0100
+Subject: [PATCH] foo
+
+---
+ python/setup.py | 31 -------------------------------
+ 1 file changed, 31 deletions(-)
+
 diff --git a/python/setup.py b/python/setup.py
-index 2ac3accd2..f26161c72 100644
+index 69479ceb1..55363e91e 100644
 --- a/python/setup.py
 +++ b/python/setup.py
-@@ -101,25 +101,6 @@ def get_thirdparty_packages(triton_cache_path):
+@@ -121,35 +121,6 @@ def get_thirdparty_packages(triton_cache_path):
  # ---- package data ---
  
  
 -def download_and_copy_ptxas():
+-
 -    base_dir = os.path.dirname(__file__)
 -    src_path = "bin/ptxas"
--    url = "https://conda.anaconda.org/nvidia/label/cuda-12.0.0/linux-64/cuda-nvcc-12.0.76-0.tar.bz2"
+-    version = "12.1.105"
+-    url = f"https://conda.anaconda.org/nvidia/label/cuda-12.1.1/linux-64/cuda-nvcc-{version}-0.tar.bz2"
 -    dst_prefix = os.path.join(base_dir, "triton")
 -    dst_suffix = os.path.join("third_party", "cuda", src_path)
 -    dst_path = os.path.join(dst_prefix, dst_suffix)
--    if not os.path.exists(dst_path):
+-    is_linux = platform.system() == "Linux"
+-    download = False
+-    if is_linux:
+-        download = True
+-        if os.path.exists(dst_path):
+-            curr_version = subprocess.check_output([dst_path, "--version"]).decode("utf-8").strip()
+-            curr_version = re.search(r"V([.|\d]+)", curr_version).group(1)
+-            download = curr_version != version
+-    if download:
 -        print(f'downloading and extracting {url} ...')
 -        ftpstream = urllib.request.urlopen(url)
 -        file = tarfile.open(fileobj=ftpstream, mode="r|*")
@@ -27,13 +46,16 @@ index 2ac3accd2..f26161c72 100644
 -
  # ---- cmake extension ----
  
- 
-@@ -200,8 +181,6 @@ class CMakeBuild(build_ext):
-         subprocess.check_call(["cmake", "--build", "."] + build_args, cwd=self.build_temp)
+ class CMakeBuildPy(build_py):
+@@ -262,8 +233,6 @@ class CMakeBuild(build_ext):
+         subprocess.check_call(["cmake", "--build", "."] + build_args, cwd=cmake_dir)
  
  
 -download_and_copy_ptxas()
 -
+ 
  setup(
      name="triton",
-     version="2.0.0",
+-- 
+2.42.0
+

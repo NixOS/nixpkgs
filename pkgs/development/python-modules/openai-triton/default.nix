@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , addOpenGLRunpath
-, pytestCheckHook
+, setuptools
 , pythonRelaxDepsHook
 , pkgsTargetTarget
 , cmake
@@ -34,18 +34,18 @@ let
   # pkgsTargetTarget maybe doesn't matter, because ptxas compiles programs to
   # be executed on the GPU.
   # Cf. https://nixos.org/manual/nixpkgs/unstable/#sec-cross-infra
-  ptxas = "${pkgsTargetTarget.cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+  ptxas = "${pkgsTargetTarget.cudaPackages_12_1.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
 in
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9GZzugab+Pdt74Dj6zjlEzjj4BcJ69rzMJmqcVMxsKU=";
+    repo = "triton";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8UTUwLH+SriiJnpejdrzz9qIquP2zBp1/uwLdHmv0XQ=";
   };
 
   patches = [
@@ -63,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     pythonRelaxDepsHook
     # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
@@ -111,7 +112,7 @@ buildPythonPackage rec {
       --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
   '' + lib.optionalString cudaSupport ''
     # Use our linker flags
-    substituteInPlace python/triton/compiler.py \
+    substituteInPlace python/triton/common/build.py \
       --replace '${oldStr}' '${newStr}'
   '';
 
