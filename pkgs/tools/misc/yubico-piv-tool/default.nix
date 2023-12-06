@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   pname = "yubico-piv-tool";
   version = "2.4.1";
 
+  outputs = [ "out" "dev" "man" ];
+
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
     hash = "sha256-oaqYtrF06yunfyleCMmAWYupR/aXsbcHygjHbPPdzms=";
