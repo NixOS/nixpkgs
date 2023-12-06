@@ -18,6 +18,7 @@ else
   stdenvNoCC.mkDerivation {
     inherit name;
     nativeBuildInputs = [ pijul cacert ];
+    strictDeps = true;
 
     dontUnpack = true;
     dontConfigure = true;
