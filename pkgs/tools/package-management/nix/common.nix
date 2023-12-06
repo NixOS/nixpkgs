@@ -224,6 +224,9 @@ self = stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Nondeterministic failure of tests/gc-auto.sh.test and others.
+  enableParallelChecking = false;
+
   passthru = {
     inherit aws-sdk-cpp boehmgc;
 
