@@ -31959,8 +31959,6 @@ with pkgs;
 
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
-  fmtoy = callPackage ../tools/audio/fmtoy { };
-
   flac = callPackage ../applications/audio/flac { };
 
   redoflacs = callPackage ../applications/audio/redoflacs { };
