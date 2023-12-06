@@ -1001,7 +1001,6 @@ broken-packages:
   - cryptsy-api # failure in job https://hydra.nixos.org/build/233195814 at 2023-09-02
   - csa # failure in job https://hydra.nixos.org/build/233233907 at 2023-09-02
   - cse-ghc-plugin # failure in job https://hydra.nixos.org/build/233251963 at 2023-09-02
-  - csound-expression-dynamic # failure in job https://hydra.nixos.org/build/233225568 at 2023-09-02
   - CSPM-Frontend # failure in job https://hydra.nixos.org/build/233219295 at 2023-09-02
   - cspretty # failure in job https://hydra.nixos.org/build/233246796 at 2023-09-02
   - css-easings # failure in job https://hydra.nixos.org/build/233203513 at 2023-09-02
