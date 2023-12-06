@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , msgpack
 , greenlet
 , pythonOlder
@@ -14,9 +14,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
+  src = fetchFromGitHub {
+    owner = "neovim";
+    repo = "pynvim";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8sgVJh143L9qaoTMC67K8ays+qUF6OufIZE3sb0HXyQ=";
   };
 
   postPatch = ''
