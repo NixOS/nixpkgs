@@ -12933,6 +12933,8 @@ self: super: with self; {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
+  shapely18 = callPackage ../development/python-modules/shapely/1.8.nix { };
+
   shaperglot = callPackage ../development/python-modules/shaperglot { };
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
