@@ -29,6 +29,7 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   futuresql = callPackage ../development/libraries/futuresql { };
