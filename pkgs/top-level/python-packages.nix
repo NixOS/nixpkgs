@@ -10610,6 +10610,8 @@ self: super: with self; {
 
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
 
+  pymiele = callPackage ../development/python-modules/pymiele { };
+
   pymilter = callPackage ../development/python-modules/pymilter { };
 
   pymilvus = callPackage ../development/python-modules/pymilvus { };
