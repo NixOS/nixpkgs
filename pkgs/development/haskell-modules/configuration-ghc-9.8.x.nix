@@ -39,6 +39,7 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
   terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
@@ -48,27 +49,24 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # https://github.com/tibbe/unordered-containers/issues/214
-  unordered-containers = dontCheck super.unordered-containers;
+  alex = super.alex_3_4_0_1;
+  # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
+  ghc-lib = super.ghc-lib_9_8_1_20231121;
+  ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
+  github = super.github_0_29;
+
+  # https://github.com/obsidiansystems/commutative-semigroups/issues/13
+  commutative-semigroups = doJailbreak super.commutative-semigroups;
+
+  # https://github.com/maoe/ghc-trace-events/issues/12
+  ghc-trace-events = doJailbreak super.ghc-trace-events;
+
+  generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
 
   # Test suite does not compile.
-  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
-  dates = doJailbreak super.dates; # base >=4.9 && <4.12
-  Diff = dontCheck super.Diff;
-  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
+  dates = doJailbreak super.dates; # base >=4.9 && <4.16
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
-  http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
-  unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
-  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
-  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
-
-  # https://github.com/jgm/skylighting/issues/55
-  skylighting-core = dontCheck super.skylighting-core;
-
-  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
-  stack = doJailbreak super.stack;
 }
