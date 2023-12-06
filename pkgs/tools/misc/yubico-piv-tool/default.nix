@@ -8,6 +8,7 @@
 , PCSC
 , gengetopt
 , cmake
+, zlib
 , withApplePCSC ? stdenv.isDarwin
 , gitUpdater
 , testers
@@ -16,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yubico-piv-tool";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    hash = "sha256-2ona/YthhapjU0Z1P53bKa8pvEq9kt2B832dZWC11k4=";
+    hash = "sha256-oaqYtrF06yunfyleCMmAWYupR/aXsbcHygjHbPPdzms=";
   };
 
   postPatch = ''
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config cmake gengetopt ];
-  buildInputs = [ openssl check ]
+  buildInputs = [ openssl check zlib.dev ]
     ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
