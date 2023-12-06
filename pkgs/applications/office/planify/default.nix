@@ -23,16 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.1.1";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    # The commit is named as "Release 4.1.1", published to Flathub, but not tags
-    # https://github.com/flathub/io.github.alainm23.planify/commit/2a353ccfcf3379add6778d569f49da37f40accfa
+    # The commit is named as "Release 4.1.4", published to Flathub, but not tags
+    # https://github.com/flathub/io.github.alainm23.planify/commit/f345f81b55e4638bc6605e0bf9d15a057b846252
     # https://github.com/alainm23/planify/issues/1002
-    rev = "adf3629bcacfc9978f6dde5b87eff0278533ab3e";
-    hash = "sha256-xqklvSYmqBQ+IQ3lRjMbV4W4vD/rLCln7rBVCbYiBGo=";
+    rev = "73fd6cb7acfc60937d1403238c255736b97aa94b";
+    hash = "sha256-K3QFFpq2MJxK34Uh0qFyaSGeTPTZbwIVYkosFUrhflQ=";
   };
 
   nativeBuildInputs = [
