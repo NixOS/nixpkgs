@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libsixel
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
@@ -7,11 +11,17 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-uwLVg/bURz2jLAQZgLujDR2Zewu5pcE9bwEBg/DQ4Iw=";
   };
 
+  buildInputs = [
+    libsixel
+  ];
+
   cargoHash = "sha256-tEgXqvSyScO/J/56ykCda3ERrTDQj5jCxlMEDof/fCA=";
+
+  buildFeatures = [ "sixel" ];
 
   # Skip test that currently doesn't work
   checkFlags = [ "--skip=execute::test::shell_code_execution" ];
