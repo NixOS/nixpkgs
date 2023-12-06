@@ -795,6 +795,8 @@ self: super: with self; {
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
 
+  astropy-iers-data = callPackage ../development/python-modules/astropy-iers-data { };
+
   astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
 
   astroquery = callPackage ../development/python-modules/astroquery { };
