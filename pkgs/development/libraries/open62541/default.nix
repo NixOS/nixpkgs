@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-koifSynnJX9IuwX8HUT1TzHoKgJfweNGAVlqUx7nEc4=";
+    hash = "sha256-FnLMR54xjIyYRqwCnvMJsNgsVwH7hVAixCNGhfIZPiw=";
     fetchSubmodules = true;
   };
 
@@ -92,16 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preCheck = let
-    disabledTests =
-      lib.optionals withPubSub [
-        # "Cannot set socket option IP_ADD_MEMBERSHIP"
-        "pubsub_publish"
-        "check_pubsub_get_state"
-        "check_pubsub_publish_rt_levels"
-        "check_pubsub_subscribe_config_freeze"
-        "check_pubsub_subscribe_rt_levels"
-        "check_pubsub_multiple_subscribe_rt_levels"
-      ];
+    disabledTests = lib.optionals withPubSub [
+      # "Cannot set socket option IP_ADD_MEMBERSHIP"
+      "pubsub_publish"
+      "check_pubsub_get_state"
+      "check_pubsub_publish_rt_levels"
+      "check_pubsub_subscribe_config_freeze"
+      "check_pubsub_subscribe_rt_levels"
+      "check_pubsub_multiple_subscribe_rt_levels"
+    ];
     regex = "^(${builtins.concatStringsSep "|" disabledTests})\$";
   in lib.optionalString (disabledTests != []) ''
     checkFlagsArray+=(ARGS="-E ${lib.escapeRegex regex}")
