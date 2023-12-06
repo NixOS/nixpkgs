@@ -29748,12 +29748,26 @@ with pkgs;
   nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
-    mkNoto
-    noto-fonts
-    noto-fonts-lgc-plus
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     ;
+
+  noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
+    suffix = "-lgc-plus";
+    variants = [
+      "Noto Sans"
+      "Noto Serif"
+      "Noto Sans Mono"
+      "Noto Music"
+      "Noto Sans Symbols"
+      "Noto Sans Symbols 2"
+      "Noto Sans Math"
+    ];
+    longDescription = ''
+      This package provides the Noto Fonts, but only for latin, greek
+      and cyrillic scripts, as well as some extra fonts.
+    '';
+  };
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
