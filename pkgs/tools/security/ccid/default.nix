@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pcsclite, pkg-config, libusb1, perl }:
+{ lib
+, stdenv
+, fetchurl
+, pcsclite
+, pkg-config
+, libusb1
+, perl
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "ccid";
@@ -24,6 +32,10 @@ stdenv.mkDerivation rec {
   # The resulting shared object ends up outside of the default paths which are
   # usually getting stripped.
   stripDebugList = ["pcsc"];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://salsa.debian.org/rousseau/CCID.git";
+  };
 
   meta = with lib; {
     description = "ccid drivers for pcsclite";
