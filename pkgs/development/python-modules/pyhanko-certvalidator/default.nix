@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "0.26.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q2YxncyMHmbRmcoLb68huK02CYiKqF2CFRl8vkUfxg4=";
+    hash = "sha256-yGFaRpAOTbuVfY5UefC1sdJS4FFkgkIZnHHG35p3n3E=";
   };
 
   postPatch = ''

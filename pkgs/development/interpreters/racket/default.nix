@@ -141,6 +141,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
+  dontStrip = stdenv.isDarwin;
+
   meta = with lib; {
     description = "A programmable programming language";
     longDescription = ''
