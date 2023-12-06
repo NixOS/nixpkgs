@@ -523,7 +523,6 @@ in {
           "bluetooth_tracker"
           "bthome"
           "default_config"
-          "eq3btsmart"
           "eufylife_ble"
           "esphome"
           "fjaraskupan"
