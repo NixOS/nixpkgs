@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/emersion/slurp";
     license = licenses.mit;
     mainProgram = "slurp";
-    maintainers = with maintainers; [ buffet ];
+    maintainers = with maintainers; [ buffet nickcao ];
   };
 })
