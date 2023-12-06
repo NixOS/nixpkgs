@@ -29748,7 +29748,6 @@ with pkgs;
   nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     ;
 

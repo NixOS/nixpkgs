@@ -55,12 +55,6 @@ rec {
       };
     };
 
-  noto-fonts-cjk-sans = mkNotoCJK {
-    typeface = "Sans";
-    version = "2.004";
-    sha256 = "sha256-IgalJkiOAVjNxKaPAQWfb5hKeqclliR4qVXCq63FGWY=";
-  };
-
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.002";
