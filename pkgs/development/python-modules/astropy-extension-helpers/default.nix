@@ -6,16 +6,18 @@
 , pytestCheckHook
 , pythonOlder
 , pip
+, setuptools
 , setuptools-scm
+, tomli
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "extension-helpers";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,8 +35,13 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
     wheel
+  ];
+
+  propagatedBuildInputs = [
+    tomli
   ];
 
   nativeCheckInputs = [
