@@ -12312,6 +12312,8 @@ self: super: with self; {
 
   rencode = callPackage ../development/python-modules/rencode { };
 
+  renson-endura-delta = callPackage ../development/python-modules/renson-endura-delta { };
+
   reorder-python-imports = callPackage ../development/python-modules/reorder-python-imports { };
 
   reolink = callPackage ../development/python-modules/reolink { };

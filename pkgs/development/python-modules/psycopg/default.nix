@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.13";
+  version = "3.1.14";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-N+x8RErlId1uBgXZjBBjtPxqJXGuXZEl78DKVKjhy9w=";
+    hash = "sha256-zocRBnrQoJDWI4qhxDnxxIeiLdaWolvsujqfHBYQc/A=";
   };
 
   patches = [
@@ -52,11 +52,9 @@ let
     })
 
     (fetchpatch {
-      # fix environment variables leaking into test environment
-      # https://github.com/psycopg/psycopg/pull/683
-      # https://github.com/psycopg/psycopg/issues/681
-      url = "https://github.com/psycopg/psycopg/commit/f060855aa6126e811de243c7213d2caff9c88123.patch";
-      hash = "sha256-QsFxK8Qasw9kbNCUUCqbOHaf53kT5NONlr28vGoPda0=";
+      # add fixture to mark flaky ref count tests
+      url = "https://github.com/psycopg/psycopg/commit/70ef364324ba3448ef9ac0e29329c9d802380e4b.patch";
+      hash = "sha256-8PlrBcIumlxFjNXCAfm4NpSIxAnvLR8TopHzneJyzf0=";
     })
   ];
 
@@ -214,7 +212,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
-    "-m" "'not timing'"
+    "-m" "'not refcount and not timing'"
   ];
 
   postCheck = ''

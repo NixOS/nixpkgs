@@ -3916,8 +3916,6 @@ with pkgs;
 
   goperf = callPackage ../development/tools/goperf { };
 
-  gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
-
   graphite-cli = nodePackages.graphite-cli;
 
   gucci = callPackage ../tools/text/gucci { };
@@ -24583,6 +24581,9 @@ with pkgs;
 
   protobuf = protobuf_24;
 
+  protobuf_25 = callPackage ../development/libraries/protobuf/25.nix {
+    abseil-cpp = abseil-cpp_202308;
+  };
   protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
   protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
   protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
