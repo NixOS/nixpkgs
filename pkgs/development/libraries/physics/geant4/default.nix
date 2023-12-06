@@ -3,7 +3,8 @@
 , enableQT             ? false # deprecated name
 , enableQt             ? enableQT
 , enableXM             ? false
-, enableOpenGLX11      ? true
+, mesa
+, enableOpenGLX11      ? !mesa.meta.broken
 , enablePython         ? false
 , enableRaytracerX11   ? false
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_EXPAT=ON"
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
     "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
     "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
@@ -88,11 +89,13 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs = [ libGLU libXext libXmu ]
+  buildInputs =
+    lib.optionals enableOpenGLX11 [ libGLU libXext libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
+  propagatedBuildInputs = [ clhep expat xercesc zlib ]
+    ++ lib.optionals enableOpenGLX11 [ libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qtbase ];
 

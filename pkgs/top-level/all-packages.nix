@@ -5239,7 +5239,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_26;
+    electron = electron_27;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -16949,7 +16949,7 @@ with pkgs;
       targetPlatform = lib.systems.elaborate {
         # lib.systems.elaborate won't recognize "unknown" as the last component.
         config = "wasm32-unknown-wasi";
-        rust.config = "wasm32-unknown-unknown";
+        rust.rustcTarget = "wasm32-unknown-unknown";
       };
     };
   }).overrideAttrs (old: {
@@ -20950,7 +20950,8 @@ with pkgs;
   ctranslate2 = callPackage ../development/libraries/ctranslate2 rec {
     stdenv = if withCUDA then gcc11Stdenv else pkgs.stdenv;
     withCUDA = pkgs.config.cudaSupport;
-    withCuDNN = pkgs.config.cudaSupport;
+    withCuDNN = withCUDA && (cudaPackages ? cudnn);
+    cudaPackages = pkgs.cudaPackages;
   };
 
   ubus = callPackage ../development/libraries/ubus { };

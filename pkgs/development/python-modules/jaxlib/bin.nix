@@ -34,11 +34,7 @@
 
 let
   inherit (cudaPackages) cudatoolkit cudnn;
-in
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
-
-let
   version = "0.4.20";
 
   inherit (python) pythonVersion;
@@ -213,5 +209,9 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    broken =
+      !(cudaSupport -> (cudaPackages ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
+      || !(cudaSupport -> (cudaPackages ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
+      || !(cudaSupport -> stdenv.isLinux);
   };
 }
