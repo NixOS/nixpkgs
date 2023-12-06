@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
 , autoreconfHook
 , autoconf-archive
 , flex
@@ -11,7 +11,7 @@
 , polkit
 , systemdLibs
 , IOKit
-, gitUpdater
+, nix-update-script
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
@@ -22,9 +22,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "doc" "man" ];
 
-  src = fetchurl {
-    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    hash = "sha256-XtyvXUVEQDvatu4rXWwCxvl+pk7r8IJbjQ+mG6QX2to=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "rousseau";
+    repo = "PCSC";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7NGlU4byGxtGBticewg8K4FUiDSQZAiB7Q/y+LaqKPo=";
   };
 
   configureFlags = [
@@ -62,9 +65,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/PCSC.git";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
