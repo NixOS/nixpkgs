@@ -13,10 +13,9 @@
 , withApplePCSC ? stdenv.isDarwin
 , nix-update-script
 , testers
-, yubico-piv-tool
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
   version = "2.4.1";
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubico-piv-tool";
-    rev = "refs/tags/yubico-piv-tool-${version}";
+    rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
     hash = "sha256-KprY5BX7Fi/qWRT1pda9g8fqnmDB1Bh7oFM7sCwViuw=";
   };
 
@@ -62,8 +61,7 @@ stdenv.mkDerivation rec {
       extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
     tests.version = testers.testVersion {
-      inherit version;
-      package = yubico-piv-tool;
+      package = finalAttrs.finalPackage;
       command = "yubico-piv-tool --version";
     };
   };
@@ -87,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viraptor anthonyroussel ];
     mainProgram = "yubico-piv-tool";
   };
-}
+})
