@@ -1,15 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , pytestCheckHook
 , python-socks
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "websocket-client";
   version = "1.6.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-szJAGbPChXIIbEoxn5HR3NRObhHNNAIyl4xoSnZQ0N8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-socks
