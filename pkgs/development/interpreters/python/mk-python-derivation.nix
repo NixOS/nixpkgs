@@ -11,8 +11,10 @@
 , namePrefix
 , update-python-libraries
 , setuptools
+, wheel
 , pypaBuildHook
 , pypaInstallHook
+, pyprojectSetuptoolsLegacyHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
@@ -21,7 +23,6 @@
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
-, setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
@@ -259,9 +260,11 @@ let
       pythonRemoveBinBytecodeHook
     ] ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
       unzip
-    ] ++ optionals (format' == "setuptools") [
-      setuptoolsBuildHook
-    ] ++ optionals (format' == "pyproject") [(
+    ] ++ lib.optionals (format' == "setuptools") [
+      pyprojectSetuptoolsLegacyHook
+      setuptools
+      wheel
+    ] ++ lib.optionals (format' == "pyproject" || format' == "setuptools") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
