@@ -118,14 +118,15 @@ mkDerivation rec {
     find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
     popd
 
-    sed -i -e 's| [^ ]*/libc_nonshared.a||' $out/lib/libc.so
-
     $CC -nodefaultlibs -lgcc -shared -o $out/lib/libgcc_s.so
     $AR r $out/lib/libgcc_eh.a  # experimental
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
     NIX_LDFLAGS+=" -L$out/lib"
+
+    make -C $BSDSRCDIR/lib/libc_nonshared $makeFlags
+    make -C $BSDSRCDIR/lib/libc_nonshared $makeFlags install
 
     mkdir $BSDSRCDIR/lib/libmd/sys
     make -C $BSDSRCDIR/lib/libmd $makeFlags
