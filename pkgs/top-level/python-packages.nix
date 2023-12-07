@@ -10678,6 +10678,8 @@ self: super: with self; {
 
   python-myq = callPackage ../development/python-modules/python-myq { };
 
+  pymyob = callPackage ../development/python-modules/pymyob { };
+
   pymysensors = callPackage ../development/python-modules/pymysensors { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
