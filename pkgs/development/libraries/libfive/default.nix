@@ -61,6 +61,10 @@ stdenv.mkDerivation {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=enum-constexpr-conversion";
+  };
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
