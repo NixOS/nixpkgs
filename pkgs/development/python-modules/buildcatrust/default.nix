@@ -2,20 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "buildcatrust";
   version = "0.1.3";
 
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256:0s0m0fy943dakw9cbd40h46qmrhhgrcp292kppyb34m6y27sbagy";
   };
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
   disabledTestPaths = [
     # Non-hermetic, needs internet access (e.g. attempts to retrieve NSS store).
     "buildcatrust/tests/test_nonhermetic.py"
