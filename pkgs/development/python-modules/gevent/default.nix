@@ -3,7 +3,6 @@
 , fetchpatch
 , buildPythonPackage
 , isPyPy
-, python
 , libev
 , cffi
 , cython_3
@@ -19,7 +18,7 @@
 buildPythonPackage rec {
   pname = "gevent";
   version = "22.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -68,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
+    changelog = "https://github.com/gevent/gevent/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
