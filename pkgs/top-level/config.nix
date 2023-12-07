@@ -117,6 +117,23 @@ let
       '';
     };
 
+    permittedInsecurePackages = mkOption {
+      type = types.listOf types.singleLineStr;
+      description = lib.mdDoc ''
+        List of packages don't fail the evaluation when marked insecure.
+
+        This option is ignored when `allowInsecurePredicate` is set.
+      '';
+    };
+
+    allowInsecurePredicate = mkOption {
+      type = types.functionTo types.bool;
+      description = lib.mdDoc ''
+        A function that is called with the name of each insecure package and
+        that has to return whether the insecure package should be allowed or not.
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;
