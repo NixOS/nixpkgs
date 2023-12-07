@@ -38,6 +38,9 @@ qtModule {
     })
   ];
 
+  # Bootstrap build produces no out, and that makes nix unhappy and results in an unannotated failure for remote builds.
+  postFixup = ''[ -e $out ] || mkdir $out'';
+
   devTools = [
     "bin/qcollectiongenerator"
     "bin/linguist"

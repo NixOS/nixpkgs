@@ -8774,6 +8774,7 @@ with pkgs;
         python3
         llvmPackages_19
         darwin
+        buildPackages
         ;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
       inherit config;
