@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
-  version = "2.12.0";
+  version = "2.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-xray-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-iGo1YbMRrLFpPNJWwAZEkfiNuYfe5oOPApwX3BLCAgE=";
+    hash = "sha256-NLFNst4Yqsz2u5IXwe8OdJPW77irLRO5tWWn1uV3tMg=";
   };
 
   propagatedBuildInputs = [
