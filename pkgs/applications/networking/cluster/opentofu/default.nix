@@ -35,7 +35,7 @@ let
     patches = [ ./provider-path-0_15.patch ];
 
     passthru = {
-      inherit plugins withPlugins;
+      inherit full plugins withPlugins;
       tests = { inherit opentofu_plugins_test; };
     };
 
@@ -64,6 +64,8 @@ let
       mainProgram = "tofu";
     };
   };
+
+  full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
   opentofu_plugins_test = let
     mainTf = writeText "main.tf" ''
@@ -108,7 +110,6 @@ let
       passthru = {
         withPlugins = newplugins:
           withPlugins (x: newplugins x ++ actualPlugins);
-        full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
         # Expose wrappers around the override* functions of the terraform
         # derivation.
