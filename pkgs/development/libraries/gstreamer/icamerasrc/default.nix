@@ -8,7 +8,7 @@
 , libdrm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
   version = "unstable-2023-10-23";
 
