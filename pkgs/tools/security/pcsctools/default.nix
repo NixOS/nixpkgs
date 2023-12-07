@@ -13,17 +13,18 @@
 , wget
 , coreutils
 , perlPackages
+, testers
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-tools";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pcsc-tools";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-tTeSlS1ncpdIaoJsSVgm3zSCogP6S8zlA9hRFocZ/R4=";
   };
 
@@ -73,7 +74,13 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/pcsc smartcard_list.txt
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "pcsc_scan -V";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
@@ -82,4 +89,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
-}
+})
