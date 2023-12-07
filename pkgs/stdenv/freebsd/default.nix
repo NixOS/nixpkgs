@@ -7,28 +7,28 @@ let inherit (localSystem) system;
   all-bootstrap-urls-table = {
     x86_64-freebsd14 = {
       bash = {
-        url = "http://192.168.1.9:8000/7xqibz202wnpcq20l9hzkpd6blb8rn0m-x86_64-freebsd14-bash";
-        hash = "sha256-7f+JfrtJGy3SVyppr9T7SaH4WkjFFjonFwPZkx34/mU=";
+        url = "http://192.168.1.9:8000/l061q8ma9v26aycp2dqd6zi4gd2hsjj8-x86_64-freebsd14-bash";
+        hash = "sha256-50yIgmIuJ/2tqYzw4e67j6aJPPiEuARyh+LseTVn+k8=";
       };
       mkdir = {
-        url = "http://192.168.1.9:8000/ajb03wdfzmrr29620v37ixgmmbsazqbk-x86_64-freebsd14-mkdir";
+        url = "http://192.168.1.9:8000/whg0nzjw8dxq0yxmgr51l0z4z15irxyi-x86_64-freebsd14-mkdir";
         hash = "sha256-Wje9u9mz5kiTNSoPvmvgGwxQRgLnBM+26jPadbUTkpg=";
       };
       tar = {
-        url = "http://192.168.1.9:8000/mx3d5y48y1xvr7q0hs7f78sxr0rrcpsg-x86_64-freebsd14-tar";
-        hash = "sha256-FtPeqH/IHNmBT9rEzHv9EDOah6VivW9wd7O5x2fMpdE=";
+        url = "http://192.168.1.9:8000/ixr9arqja0vfngnk2jyv622cjllzjvl9-x86_64-freebsd14-tar";
+        hash = "sha256-jpgjjfqsBA/a9St02DQpvO1NVt3Gmzgl8ch5n2yxNg8=";
       };
       unxz = {
-        url = "http://192.168.1.9:8000/0g3qxarqw5fxk149ly3ig57xwl1avy5j-x86_64-freebsd14-unxz";
+        url = "http://192.168.1.9:8000/zmnmsazl5iis7mwx7s732lr7kln7z7sj-x86_64-freebsd14-unxz";
         hash = "sha256-yVPhB2tOwGP5aieKTJw+bXdNaM2ye8foo9SJkU3bgEY=";
       };
       chmod = {
-        url = "http://192.168.1.9:8000/gj7mlcl06zf7ryy880cjifm30hq5yjx1-x86_64-freebsd14-chmod";
+        url = "http://192.168.1.9:8000/zka0x4qbbhnwnxakhhvf2aa8nafr2n41-x86_64-freebsd14-chmod";
         hash = "sha256-01dHQyHH4xnnMTgKgYFN2ksgXhhnub6fBrgUFSYjRJ0=";
       };
       bootstrapFiles = {
-        url = "http://192.168.1.9:8000/sp8hl7xmzscm9498npa41czq97q2ghyg-x86_64-freebsd14-bootstrap-files.tar.xz";
-        hash = "sha256-39yv6WfQv0Nno4O72jXmYFaGgTa8xxQcB1j3GIrCQvM=";
+        url = "http://192.168.1.9:8000/l1g2abvb9c7pbm4nsry2dzvf2g7bilgq-x86_64-freebsd14-bootstrap-files.tar.xz";
+        hash = "sha256-HIByWzTeSkT1+bS1lFhYOib5TZUP0gPw8s4G+h1jv+Q=";
       };
     };
   };

@@ -332,6 +332,8 @@ stdenv.mkDerivation {
 
     + optionalString stdenv.targetPlatform.isFreeBSD ''
       echo "-rpath ${libc_lib}/lib" >> $out/nix-support/libc-ldflags
+      # TODO is this the right place to put this flag?
+      echo "--allow-shlib-undefined" >> $out/nix-support/libc-ldflags
     ''
 
     ##

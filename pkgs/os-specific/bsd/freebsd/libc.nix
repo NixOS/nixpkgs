@@ -4,6 +4,7 @@ mkDerivation rec {
   pname = "libc";
   path = "lib/libc";
   extraPaths = [
+    "lib/libc_nonshared"
     "etc/group"
     "etc/master.passwd"
     "etc/shells"
@@ -88,7 +89,7 @@ mkDerivation rec {
   MK_SYMVER = "yes";
   MK_SSP = "yes";
   MK_NLS = "yes";
-  MK_ICONV = "no"; # TODO make srctop
+  MK_ICONV = "yes"; # TODO make srctop
   MK_NS_CACHING = "yes";
   MK_INET6_SUPPORT = "yes";
   MK_HESIOD = "yes";
