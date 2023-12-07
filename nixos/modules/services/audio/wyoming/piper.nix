@@ -116,6 +116,7 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-piper-${server}" {
+        inherit (options) enable;
         description = "Wyoming Piper server instance ${server}";
         after = [
           "network-online.target"
