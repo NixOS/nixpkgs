@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/wolph/portalocker/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";
     description = "A library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
