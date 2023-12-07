@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -224,16 +223,18 @@ python.pkgs.buildPythonApplication rec {
     ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
-  installPhase = ''
+  installPhase = let
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  in ''
     mkdir -p $out/lib/paperless-ngx
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
     ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
     makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
-      --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/paperless-ngx/src" \
+      --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
   '';
 
@@ -271,10 +272,6 @@ python.pkgs.buildPythonApplication rec {
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
       --replace "--cov --cov-report=html --cov-report=xml" ""
-    # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
-    # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
-    substituteInPlace src/paperless_tesseract/tests/test_parser.py \
-      --replace "this is awebp document" "this is a webp document"
   '';
 
   disabledTests = [

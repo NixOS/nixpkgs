@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/denisidoro/navi";
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "navi";
     maintainers = with maintainers; [ cust0dian ];
   };
 }
