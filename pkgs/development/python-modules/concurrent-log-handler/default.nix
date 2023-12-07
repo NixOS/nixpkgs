@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "concurrent-log-handler";
   version = "0.9.24";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

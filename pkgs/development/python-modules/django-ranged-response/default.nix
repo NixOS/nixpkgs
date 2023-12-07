@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "django-ranged-response";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

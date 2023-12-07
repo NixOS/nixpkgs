@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "5.2.4";
+  format = "setuptools";
   pname = "pyfakefs";
   disabled = pythonOlder "3.5";
 

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "shutilwhich";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mbr";

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pyzbar";
   version = "0.1.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";

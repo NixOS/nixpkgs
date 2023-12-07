@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "eth-keyfile";
   version = "0.6.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

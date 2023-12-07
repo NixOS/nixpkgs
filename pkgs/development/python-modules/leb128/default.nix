@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "leb128";
   version = "1.0.5";
+  format = "setuptools";
 
   # fetchPypi doesn't include files required for tests
   src = fetchFromGitHub {

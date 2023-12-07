@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pyexcel";
   version = "0.7.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

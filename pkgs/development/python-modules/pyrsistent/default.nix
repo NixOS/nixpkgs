@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pyrsistent";
   version = "0.19.3";
+  format = "setuptools";
 
   disabled = isPy27;
 

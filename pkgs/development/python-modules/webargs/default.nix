@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "webargs";
   version = "8.3.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

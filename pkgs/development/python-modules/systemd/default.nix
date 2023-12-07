@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "systemd";
   version = "235";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "systemd";

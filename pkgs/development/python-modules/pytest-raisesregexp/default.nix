@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "pytest-raisesregexp";
   version = "2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

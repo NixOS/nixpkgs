@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "manuel";
   version = "1.12.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

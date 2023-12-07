@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "worldengine";
   version = "0.19.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";

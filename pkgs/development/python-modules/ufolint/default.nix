@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "ufolint";
   version = "1.2.0";
+  format = "setuptools";
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
