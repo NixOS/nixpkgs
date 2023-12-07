@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 , flit-core
 , requests
 , tomli
@@ -10,7 +11,9 @@
 buildPythonPackage rec {
   pname = "wn";
   version = "0.9.5";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
