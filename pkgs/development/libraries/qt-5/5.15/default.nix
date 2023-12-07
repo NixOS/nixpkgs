@@ -53,6 +53,7 @@ let
         url = "https://salsa.debian.org/qt-kde-team/qt/qtbase/-/raw/6910758e1141f8ea65a8f2359ac30163d65bf6e2/debian/patches/cross_build_mysql.diff";
         hash = "sha256-tzmmLmMXmeDwRVjdpWekDJvSkrIIlslC12HP7XPcm3E=";
       })
+      ./qtbase.patch.d/0015-qtbase-cross-build.patch
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
