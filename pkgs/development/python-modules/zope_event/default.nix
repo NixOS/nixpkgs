@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "zope-event";
-  version = "4.6";
+  version = "5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.event";
     inherit version;
-    hash = "sha256-gdmIEwRvyGzEE242mP7mKKMoL5wyDbGGWMIXSSNfzoA=";
+    hash = "sha256-usRA2NmJG0Bo4rWixeLJdlqd92KUS9ppVflrubkeZ80=";
   };
 
   nativeBuildInputs = [
