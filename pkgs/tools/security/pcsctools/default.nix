@@ -1,9 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, autoconf-archive
 , autoreconfHook
+, gobject-introspection
 , makeWrapper
 , pkg-config
+, wrapGAppsHook
 , systemd
 , dbus
 , pcsclite
@@ -15,33 +18,55 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsc-tools";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-c7md8m1llvz0EQqA0qY4aGb3guGFoj+8uS4hUTzie5o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tTeSlS1ncpdIaoJsSVgm3zSCogP6S8zlA9hRFocZ/R4=";
   };
 
-  postPatch = ''
-    substituteInPlace ATR_analysis \
-      --replace /usr/local/pcsc /etc/pcsc \
-      --replace /usr/share/pcsc $out/share/pcsc
-  '';
+  configureFlags = [
+    "--datarootdir=${placeholder "out"}/share"
+  ];
 
   buildInputs = [ dbus perlPackages.perl pcsclite ]
     ++ lib.optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    gobject-introspection
+    makeWrapper
+    pkg-config
+    wrapGAppsHook
+  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC ]}"
+
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
+      ''${makeWrapperArgs[@]} \
+      --set PERL5LIB "${with perlPackages; makePerlPath [
+          ChipcardPCSC
+          libintl-perl
+          GlibObjectIntrospection
+          Glib
+          Gtk3
+          Pango
+          Cairo
+          CairoGObject
+      ]}"
+
     wrapProgram $out/bin/ATR_analysis \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC libintl-perl ]}"
+
     wrapProgram $out/bin/pcsc_scan \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ coreutils wget ]}"
 
