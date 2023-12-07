@@ -30,12 +30,25 @@ else
     cmakeBuildType="Release"
 fi
 
+if [[ -n "@qtPlatformCross@" ]]; then
+    # When cross compiling we're using a native-built qmake binary and
+    # it will need a little help finding the target of cross compilation.
+
+    # Enable cross-compilation in qmake
+    export "XQMAKESPEC=devices/@qtPlatformCross@"
+    # Use the same config for tools marked with host_build
+    export "QMAKESPEC=$XQMAKESPEC"
+fi
+
 providesQtRuntime() {
     [ -d "$1/$qtPluginPrefix" ] || [ -d "$1/$qtQmlPrefix" ]
 }
 
+if ! QMAKE="$(PATH="$_PATH" command -v qmake)"; then
+    echo "FYI: can't find a runnable qmake in PATH. If nothing breaks than it's perfectly fine."
+    echo "Otherwise you should add qmake or qtbase.qmake to nativeBuildInputs."
+fi
 # Build tools are often confused if QMAKE is unset.
-QMAKE=@dev@/bin/qmake
 export QMAKE
 
 QMAKEPATH=

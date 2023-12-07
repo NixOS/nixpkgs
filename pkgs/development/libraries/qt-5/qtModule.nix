@@ -1,14 +1,12 @@
 {
   lib,
   stdenv,
-  buildPackages,
   mkDerivation,
   apple-sdk_14,
   perl,
   qmake,
   patches,
   srcs,
-  pkgsHostTarget,
 }:
 
 let
@@ -42,11 +40,6 @@ mkDerivation (
     propagatedBuildInputs =
       (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
-  }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or [ ]);
-  }
-  // {
 
     outputs =
       args.outputs or [

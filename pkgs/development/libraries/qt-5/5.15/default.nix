@@ -59,6 +59,7 @@ let
         url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/81b14ae4eed038662b53cd20786fd5e0816279ec/community/qt5-qtbase/loongarch64.patch";
         hash = "sha256-BnpejF6/L73kVVts0R0/OMbVN8G4DXVFwBMJPLU9QbE=";
       })
+      ./qtbase.patch.d/0015-qtbase-cross-build.patch
     ];
     qtdeclarative = [
       ./qtdeclarative.patch

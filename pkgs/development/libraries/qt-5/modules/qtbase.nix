@@ -16,6 +16,8 @@
   pkg-config,
   python3,
   which,
+  distccMasquerade,
+  qtbase-bootstrap,
   # darwin support
   apple-sdk_14,
   xcbuild,
@@ -74,11 +76,11 @@
   bootstrapBuild ? false,
   decryptSslTraffic ? false,
   testers,
-  buildPackages,
 }:
 
 let
   debugSymbols = debug || developerBuild;
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
   qtPlatformCross =
     plat:
     with plat;
@@ -147,7 +149,12 @@ stdenv.mkDerivation (
       );
 
       buildInputs = [
+        # We need python3 for hostPlatform to properly patch the shebang of the
+        # mkspecs/features/uikit/devices.py script that we're publishing.
         python3
+        # We need perl for hostPlatform to properly patch shebangs of the
+        # fixqt4headers.pl and syncqt.pl scripts that we're publishing.
+        perl
         at-spi2-core
       ]
       ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
@@ -169,18 +176,24 @@ stdenv.mkDerivation (
         which
       ]
       ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
+      ++ lib.optionals isCrossBuild [
+        # `qtbase` expects to find `cc` (with no prefix) in the `$PATH` for qmake and host_build marked projects.
+        # And we need those to be built for the hostPlatform. So instead of patching configure and mkspeks even
+        # more I'm just masqurading the prefixed tools.
+        # I probably should be using the distccMasquerade._spliced.buildHost here, but it works as it is. It's magic!
+        # Pure wall-of-bash-code-directly-in-derivation-attribute magic!
+        (distccMasquerade.override {
+          gccRaw = stdenv.cc;
+          binutils = stdenv.cc.bintools;
+        })
+      ];
 
-    }
-    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-      # `qtbase` expects to find `cc` (with no prefix) in the
-      # `$PATH`, so the following is needed even if
-      # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
-      depsBuildBuild = [ buildPackages.stdenv.cc ];
-    }
-    // {
-
-      propagatedNativeBuildInputs = [ lndir ];
+      # qtbase needs a runnable qmake and the accompanying tools to build itself, and there are also packages
+      # out there that use cmake as their main configurator (i.e. don't depend on qmake-the-package) but
+      # still need qmake&co to be available at build time. In fact, cmake scripts provided by qtbase.dev
+      # itself look for those tools.
+      propagatedNativeBuildInputs = [ lndir ] ++ lib.optional isCrossBuild qtbase-bootstrap.qmake;
 
       strictDeps = true;
 
@@ -276,6 +289,7 @@ stdenv.mkDerivation (
       qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
       qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
       qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+      qtPlatformCross = lib.optionalString isCrossBuild (qtPlatformCross stdenv.hostPlatform);
 
       setOutputFlags = false;
       preConfigure = ''
@@ -287,14 +301,23 @@ stdenv.mkDerivation (
         export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
         ./bin/syncqt.pl -version $version
-      ''
-      + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        # QT's configure script will refuse to use pkg-config unless these two environment variables are set
-        export PKG_CONFIG_SYSROOT_DIR=/
-        export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
+
+        # generate a cross compilation config unconditionally so we can pass a natively-built qtbase
+        # as a build dependency for a cross build and to avoid specifying CROSS_COMPILE prefix for qmake later
+        sed -i '1 i CROSS_COMPILE=${
+          stdenv.hostPlatform.config + "-"
+        }' mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+        echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+
+        # does this flag propagation really do anything?
         echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
         echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
         echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+      ''
+      + lib.optionalString isCrossBuild ''
+        # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+        export PKG_CONFIG_SYSROOT_DIR=/
+        export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
       '';
 
       postConfigure = ''
@@ -323,8 +346,6 @@ stdenv.mkDerivation (
         NIX_CFLAGS_COMPILE = toString (
           [
             "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-          ]
-          ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
             "-Wno-warn=free-nonheap-object"
             "-Wno-free-nonheap-object"
             "-w"
@@ -342,13 +363,6 @@ stdenv.mkDerivation (
           ]
           ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC"
         );
-      }
-      // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-        NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
-          "-Wno-warn=free-nonheap-object"
-          "-Wno-free-nonheap-object"
-          "-w"
-        ]);
       };
 
       prefixKey = "-prefix ";
@@ -359,7 +373,7 @@ stdenv.mkDerivation (
       PSQL_LIBS = lib.optionalString (libpq != null) "-L${libpq}/lib -lpq";
 
     }
-    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    // lib.optionalAttrs isCrossBuild {
       configurePlatforms = [ ];
     }
     // {
@@ -519,18 +533,15 @@ stdenv.mkDerivation (
       )
 
       # cross compilation options
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ++ lib.optionals isCrossBuild [
         "-device ${qtPlatformCross stdenv.hostPlatform}"
-        "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+        "-external-hostbindir ${qtbase-bootstrap.qmake}/bin"
       ]
 
       # debugging options
       ++ lib.optional debugSymbols "-debug"
       ++ lib.optionals developerBuild [
         "-developer-build"
-        "-no-warnings-are-errors"
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
         "-no-warnings-are-errors"
       ]
 
@@ -568,6 +579,9 @@ stdenv.mkDerivation (
         mkdir -p "$qmake/bin"
         mv "$dev"/bin/* "$qmake/bin/"
         moveToOutput "bin" "$qmake"
+        patchShebangs --host --update "$qmake"
+
+        patchShebangs --host --update "$dev"
 
         # Symlinks from $dev to $qmake for backward compatibility
         mkdir -p "$dev/bin"
@@ -589,6 +603,11 @@ stdenv.mkDerivation (
       postFixup = ''
         # Don't retain build-time dependencies like gdb.
         sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+
+        # Don't propagate nativeBuildInputs
+        sed '/HOST_QT_TOOLS/ d' -i $dev/mkspecs/qmodule.pri
+        sed '/PKG_CONFIG_LIBDIR/ d' -i $dev/mkspecs/qconfig.pri
+
         fixQtModulePaths "''${!outputDev}/mkspecs/modules"
         fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
 
