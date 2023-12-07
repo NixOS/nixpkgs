@@ -10,6 +10,7 @@
 , wget
 , coreutils
 , perlPackages
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
 
     install -Dm444 -t $out/share/pcsc smartcard_list.txt
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
