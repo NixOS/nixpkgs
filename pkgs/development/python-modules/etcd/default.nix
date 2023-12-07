@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "etcd";
   version = "2.0.8";
+  format = "setuptools";
 
   # PyPI package is incomplete
   src = fetchFromGitHub {

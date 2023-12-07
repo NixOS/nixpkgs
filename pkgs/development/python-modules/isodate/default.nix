@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "isodate";
   version = "0.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

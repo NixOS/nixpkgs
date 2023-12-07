@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "sre-yield";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "sre_yield";

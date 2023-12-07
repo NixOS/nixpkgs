@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "coincurve";
   version = "18.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

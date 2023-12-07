@@ -19,6 +19,7 @@ let
 
   pname = "torchvision";
   version = "0.16.1";
+  format = "setuptools";
 in
 buildPythonPackage {
   inherit pname version;

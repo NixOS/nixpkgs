@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "scapy";
   version = "2.5.0";
+  format = "setuptools";
 
   disabled = isPyPy;
 

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "explorerscript";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

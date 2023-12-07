@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "geometric";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "leeping";

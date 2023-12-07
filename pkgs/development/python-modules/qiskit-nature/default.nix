@@ -22,6 +22,7 @@
 buildPythonPackage rec {
   pname = "qiskit-nature";
   version = "0.6.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

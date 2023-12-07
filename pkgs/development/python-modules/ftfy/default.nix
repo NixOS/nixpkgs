@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ftfy";
   version = "6.1.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

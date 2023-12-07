@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "sphinx-copybutton";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "executablebooks";

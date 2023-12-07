@@ -13,6 +13,7 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/128636
   # https://github.com/ansible/ansible/blob/devel/requirements.txt
   version = "0.5.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sarugaku";

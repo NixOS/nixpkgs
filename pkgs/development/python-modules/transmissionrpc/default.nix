@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "transmissionrpc";
   version = "0.11";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

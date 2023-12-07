@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
   version = "0.12.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

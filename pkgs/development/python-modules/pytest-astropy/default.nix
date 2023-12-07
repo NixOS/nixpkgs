@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "pytest-astropy";
   version = "0.10.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

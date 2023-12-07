@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pycapnp";
   version = "1.1.0";
+  format = "setuptools";
   disabled = isPyPy || isPy27;
 
   src = fetchFromGitHub {

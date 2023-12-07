@@ -25,6 +25,7 @@ let
 in buildPythonPackage rec {
   pname = "jpylyzer";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openpreserve";

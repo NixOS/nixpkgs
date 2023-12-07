@@ -12,6 +12,7 @@ in
 buildPythonPackage rec {
   pname = "pyftgl";
   version = "0.4b";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "umlaeute";

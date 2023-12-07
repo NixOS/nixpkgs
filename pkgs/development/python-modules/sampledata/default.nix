@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "sampledata";
   version = "0.3.7";
+  format = "setuptools";
 
   meta = {
     description = "Sample Data generator for Python ";

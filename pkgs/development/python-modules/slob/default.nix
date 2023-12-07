@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "slob";
   version = "unstable-2020-06-26";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
