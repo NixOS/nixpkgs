@@ -16,7 +16,7 @@
 , pcbnew-transition
 , pybars3
 , versioneer
-, shapely18
+, shapely_1_8
 }:
 let
   solidpython = callPackage ./solidpython { };
@@ -46,7 +46,7 @@ buildPythonApplication rec {
     pcbnew-transition
     pybars3
     # https://github.com/yaqwsx/KiKit/issues/574
-    shapely18
+    shapely_1_8
     # https://github.com/yaqwsx/KiKit/issues/576
     solidpython
   ];
