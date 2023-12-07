@@ -86,7 +86,7 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
-luuid,,,,,,
+luuid,,,,20120509-2,,
 luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
