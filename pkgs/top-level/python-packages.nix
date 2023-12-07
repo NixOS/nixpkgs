@@ -9051,7 +9051,10 @@ self: super: with self; {
 
   pem = callPackage ../development/python-modules/pem { };
 
-  pendulum = callPackage ../development/python-modules/pendulum { };
+  pendulum = if pythonAtLeast "3.12" then
+    callPackage ../development/python-modules/pendulum/3.nix { }
+  else
+    callPackage ../development/python-modules/pendulum { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
