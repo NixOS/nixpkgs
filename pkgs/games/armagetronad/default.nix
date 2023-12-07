@@ -82,7 +82,7 @@ let
   let
     # Split the version into the major and minor parts
     versionParts = lib.splitString "-" version;
-    splitVersion = lib.splitString "." (builtins.elemAt versionParts 0);
+    splitVersion = lib.splitVersion (builtins.elemAt versionParts 0);
     majorVersion = builtins.concatStringsSep "." (lib.lists.take 2 splitVersion);
 
     minorVersionPart =  parts: sep: expectedSize:

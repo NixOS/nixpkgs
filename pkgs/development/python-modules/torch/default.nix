@@ -180,7 +180,7 @@ in buildPythonPackage rec {
     # Strangely, this is never set in cmake
     substituteInPlace cmake/public/LoadHIP.cmake \
       --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
-        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitString "." rocmPackages.clr.version))})"
+        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
   ''
   # Detection of NCCL version doesn't work particularly well when using the static binary.
   + lib.optionalString cudaSupport ''
