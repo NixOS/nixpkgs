@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "ccid drivers for pcsclite";
+    description = "PC/SC driver for USB CCID smart card readers";
     homepage = "https://ccid.apdu.fr/";
-    license = licenses.gpl2Plus;
+    license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };
 }
