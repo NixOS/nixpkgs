@@ -33,9 +33,7 @@ default-package-overrides:
   # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
   - hasql-dynamic-statements < 0.3.1.2
   - rope-utf16-splay < 0.4.0.0
-  # hnix < 0.17 (unreleased) needs hnix-store-* 0.5.*
-  - hnix-store-core == 0.5.0.0            # 2022-06-17: Until hnix 0.17
-  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
+  - hnix-store-core < 0.7               # 2023-12-07: required by hnix-store-remote 0.6
 
   # 2023-04-22: For dhall < 1.42 compatibility
   - dhall-nixpkgs == 1.0.9
