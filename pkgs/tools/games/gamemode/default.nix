@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
-    repo = pname;
-    rev = version;
+    repo = "gamemode";
+    rev = "refs/tags/${finalAttrs.version}";
     sha256 = "sha256-DIFcmWFkoZOklo1keYcCl6n2GJgzWKC8usHFcJmfarU=";
   };
 
