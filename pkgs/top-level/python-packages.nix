@@ -6481,10 +6481,6 @@ self: super: with self; {
 
   livereload = callPackage ../development/python-modules/livereload { };
 
-  livestreamer = callPackage ../development/python-modules/livestreamer { };
-
-  livestreamer-curses = callPackage ../development/python-modules/livestreamer-curses { };
-
   lizard = callPackage ../development/python-modules/lizard { };
 
   llfuse = callPackage ../development/python-modules/llfuse {
