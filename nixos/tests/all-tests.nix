@@ -354,6 +354,7 @@ in {
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix {};
   guacamole-server = handleTest ./guacamole-server.nix {};
+  guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
