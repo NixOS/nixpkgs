@@ -19,8 +19,8 @@ index 914a72347..bc0b129d2 100644
  	local subtest=$1; shift
  
  	../../yosys -p "read_verilog ${subtest}.v; proc; clean; write_cxxrtl -print-output std::cerr yosys-${subtest}.cc"
--	${CC:-gcc} -std=c++11 -o yosys-${subtest} -I../.. ${subtest}_tb.cc -lstdc++
-+	${CXX:-gcc} -std=c++11 -o yosys-${subtest} -I../.. ${subtest}_tb.cc -lstdc++
+-	${CC:-gcc} -std=c++11 -o yosys-${subtest} -I../../backends/cxxrtl/runtime ${subtest}_tb.cc -lstdc++
++	${CXX:-gcc} -std=c++11 -o yosys-${subtest} -I../../backends/cxxrtl/runtime ${subtest}_tb.cc -lstdc++
  	./yosys-${subtest} 2>yosys-${subtest}.log
  	iverilog -o iverilog-${subtest} ${subtest}.v ${subtest}_tb.v
  	./iverilog-${subtest} |grep -v '\$finish called' >iverilog-${subtest}.log
@@ -28,8 +28,8 @@ index 914a72347..bc0b129d2 100644
  
  ../../yosys -p "read_verilog display_lm.v" >yosys-display_lm.log
  ../../yosys -p "read_verilog display_lm.v; write_cxxrtl yosys-display_lm.cc"
--${CC:-gcc} -std=c++11 -o yosys-display_lm_cc -I../.. display_lm_tb.cc -lstdc++
-+${CXX:-gcc} -std=c++11 -o yosys-display_lm_cc -I../.. display_lm_tb.cc -lstdc++
+-${CC:-gcc} -std=c++11 -o yosys-display_lm_cc -I../../backends/cxxrtl/runtime display_lm_tb.cc -lstdc++
++${CXX:-gcc} -std=c++11 -o yosys-display_lm_cc -I../../backends/cxxrtl/runtime display_lm_tb.cc -lstdc++
  ./yosys-display_lm_cc >yosys-display_lm_cc.log
  for log in yosys-display_lm.log yosys-display_lm_cc.log; do
  	grep "^%l: \\\\bot\$" "$log"
