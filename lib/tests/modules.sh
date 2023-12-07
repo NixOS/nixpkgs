@@ -111,6 +111,12 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' 
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
 
+# Check boolByOr type.
+checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
+
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
 checkConfigOutput '^42$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
