@@ -221,11 +221,7 @@ mapAliases ({
   elixir_ls = elixir-ls; # Added 2023-03-20
 
   # Emacs
-  emacs28NativeComp = emacs28; # Added 2022-06-08
-  emacs28Packages = emacs28.pkgs; # Added 2021-10-04
-  emacs28WithPackages = emacs28.pkgs.withPackages; # Added 2021-10-04
   emacsMacport = emacs-macport; # Added 2023-08-10
-  emacsNativeComp = emacs28NativeComp; # Added 2022-06-08
   emacsPackagesNg = throw "'emacsPackagesNg' has been renamed to/replaced by 'emacs.pkgs'"; # Converted to throw 2023-09-10
   emacsPackagesNgFor = throw "'emacsPackagesNgFor' has been renamed to/replaced by 'emacsPackagesFor'"; # Converted to throw 2023-09-10
   emacsWithPackages = emacs.pkgs.withPackages; # Added 2020-12-18
