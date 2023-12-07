@@ -47,8 +47,6 @@ stdenv.mkDerivation {
     "-DIPU_VER=${ipuVersion}"
     # missing libiacss
     "-DUSE_PG_LITE_PIPE=ON"
-    # missing libipu4
-    "-DENABLE_VIRTUAL_IPU_PIPE=OFF"
   ];
 
   NIX_CFLAGS_COMPILE = [
@@ -68,11 +66,6 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace src/platformdata/PlatformData.h \
       --replace '/usr/share/' "${placeholder "out"}/share/"
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/lib/pkgconfig/libcamhal.pc \
-      --replace 'prefix=/usr' "prefix=$out"
   '';
 
   passthru = {
