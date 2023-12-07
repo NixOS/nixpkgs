@@ -9,7 +9,7 @@ mkDerivation {
   ];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal buildFreebsd.install buildPackages.mandoc buildPackages.groff  # TODO bmake???
+    buildFreebsd.bmakeMinimal buildFreebsd.install buildPackages.mandoc buildPackages.groff  # TODO bmake???
   ];
   outputs = [ "out" ] ++ lib.optionals (hostVersion == "freebsd14") [ "test" ];
 }

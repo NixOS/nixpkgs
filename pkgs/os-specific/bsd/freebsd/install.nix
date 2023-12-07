@@ -6,7 +6,7 @@ let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
   extraPaths = [ mtree.path ];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake??
+    buildFreebsd.bmakeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake??
     (if stdenv.hostPlatform == stdenv.buildPlatform
      then buildFreebsd.boot-install
      else buildFreebsd.install)
@@ -14,7 +14,7 @@ let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
     buildFreebsd.libnetbsd
   ];
   skipIncludesPhase = true;
-  buildInputs = compatIfNeeded ++ [libmd libnetbsd];  # TODO: WHAT is up with pkgs.libmd and libnetbsd
+  buildInputs = compatIfNeeded ++ [libmd libnetbsd];
   makeFlags = [
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"

@@ -12,13 +12,13 @@ mkDerivation {
 
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal
+    buildFreebsd.bmakeMinimal
     buildFreebsd.install
     buildPackages.mandoc buildPackages.groff /*nbperf*/ buildFreebsd.rpcgen
 
     # HACK use NetBSD's for now
-    #buildPackages.netbsd.mtree
-    mtree
+    buildPackages.netbsd.mtree
+    #mtree
   ];
 
   patches = [

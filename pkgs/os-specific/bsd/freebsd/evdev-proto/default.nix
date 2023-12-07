@@ -10,11 +10,11 @@ stdenv.mkDerivation {
 
   useTempPrefix = true;
 
-  nativeBuildInputs = [ freebsd.makeMinimal ];
+  nativeBuildInputs = [ freebsd.bmakeMinimal ];
 
-  ARCH = freebsd.makeMinimal.MACHINE_ARCH;
+  ARCH = freebsd.bmakeMinimal.MACHINE_ARCH;
   OPSYS = "FreeBSD";
-  _OSRELEASE = "${lib.versions.majorMinor freebsd.makeMinimal.version}-RELEASE";
+  _OSRELEASE = "${lib.versions.majorMinor freebsd.bmakeMinimal.version}-RELEASE";
 
   AWK = "awk";
   CHMOD = "chmod";

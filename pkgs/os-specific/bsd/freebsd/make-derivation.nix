@@ -1,4 +1,4 @@
-{ lib, crossLibcStdenv, stdenv, hostVersion, runCommand, source, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, pkgsBuildBuild, overrideCC, ... }:
+{ lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, overrideCC, ... }:
 lib.makeOverridable (attrs: let
   #crossLibcStdenv' = crossLibcStdenv // {
   #  cc = crossLibcStdenv.cc.override {
@@ -11,28 +11,14 @@ lib.makeOverridable (attrs: let
 in stdenv'.mkDerivation (rec {
   pname = "${attrs.pname or (baseNameOf attrs.path)}";
   version = hostVersion;
-  src = runCommand "${pname}-filtered-src" {
-    nativeBuildInputs = [ (pkgsBuildBuild.rsync.override { enableZstd = false; enableXXHash = false; }) ];
-  } ''
-    for p in ${lib.concatStringsSep " " ([ attrs.path ] ++ attrs.extraPaths or [])}; do
-      set -x
-      path="$out/$p"
-      mkdir -p "$(dirname "$path")"
-      src_path="${source}/$p"
-      if [[ -d "$src_path" ]]; then src_path+=/; fi
-      rsync --chmod="+w" -r "$src_path" "$path"
-      set +x
-    done
-  '';
-
-  extraPaths = [ ];
+  src = filterSource { inherit pname; inherit (attrs) path; extraPaths = attrs.extraPaths or []; };
 
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal  # TODO bmake??
+    buildFreebsd.bmakeMinimal  # TODO bmake??
     buildFreebsd.install buildFreebsd.tsort buildFreebsd.lorder buildPackages.mandoc buildPackages.groff #statHook
   ];
-  buildInputs = compatIfNeeded;  # TODO ?????
+  buildInputs = compatIfNeeded;
 
   HOST_SH = stdenv'.shell;
 

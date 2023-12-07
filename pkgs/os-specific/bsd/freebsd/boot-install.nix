@@ -1,26 +1,28 @@
-{ install-wrapper, mkDerivation, mtree, buildPackages, buildFreebsd, compatIfNeeded, lib, stdenv, libmd, libnetbsd, ... }:
-let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
-  @out@/bin/xinstall "''${args[@]}"
-''); in mkDerivation {
-  pname = "xinstall-minimal";
+{ install-wrapper, mkDerivation, patchesRoot, buildPackages, buildFreebsd, compatIfNeeded, libmd, ... }:
+let
+  binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''@out@/bin/xinstall "''${args[@]}"'');
+in mkDerivation {
+  pname = "xinstall-bootstrap";
   path = "usr.bin/xinstall";
-  extraPaths = [ mtree.path ];
+  extraPaths = [ "contrib/mtree" "contrib/libc-vis" "lib/libnetbsd" ];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake??
-    buildPackages.libmd
-    #buildFreebsd.libnetbsd
+    buildFreebsd.bmakeMinimal buildPackages.mandoc buildPackages.groff
   ];
+  patches = [ /${patchesRoot}/install-bootstrap-Makefile.patch ];
+  postPatch = ''
+    ln -s $BSDSRCDIR/contrib/mtree/getid.c $BSDSRCDIR/usr.bin/xinstall/
+    ln -s $BSDSRCDIR/contrib/mtree/mtree.h $BSDSRCDIR/usr.bin/xinstall/
+    ln -s $BSDSRCDIR/contrib/mtree/extern.h $BSDSRCDIR/usr.bin/xinstall/
+  '';
   skipIncludesPhase = true;
-  buildInputs = compatIfNeeded ++ [libmd libnetbsd];  # TODO: WHAT is up with pkgs.libmd and libnetbsd
-  makeFlags = [
-    "STRIP=-s" # flag to install, not command
-    "MK_WERROR=no"
-    "TESTSDIR=${builtins.placeholder "test"}"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "INSTALL=boot-install";
+  buildInputs = compatIfNeeded ++ [libmd];
+  buildPhase = ''
+    make -C $BSDSRCDIR/usr.bin/xinstall STRIP=-s MK_WERROR=no TESTDIR=${builtins.placeholder "test"}
+  '';
   installPhase = ''
     mkdir -p $out/bin
-    cp $BSDSRDIR/usr.bin/xinstall/install $out/bin/xinstall
+    cp $BSDSRCDIR/usr.bin/xinstall/xinstall $out/bin/xinstall
     cp ${binstall} $out/bin/binstall
     chmod +x $out/bin/binstall
     substituteInPlace $out/bin/binstall --subst-var out

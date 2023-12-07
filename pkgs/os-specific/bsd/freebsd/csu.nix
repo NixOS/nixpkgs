@@ -8,7 +8,7 @@ mkDerivation {
   ];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal
+    buildFreebsd.bmakeMinimal
     buildFreebsd.install
 
     buildPackages.flex buildPackages.byacc buildFreebsd.gencat

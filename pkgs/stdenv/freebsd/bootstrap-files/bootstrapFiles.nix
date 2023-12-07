@@ -30,6 +30,8 @@ in
 
     # dynamic libraries
     freebsd.libc
+    freebsd.libkvm
+    freebsd.libdl
     #freebsd.libcxx
     #freebsd.libcxxrt
     libcxxrt

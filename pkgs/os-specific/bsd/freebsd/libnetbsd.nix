@@ -3,7 +3,7 @@ mkDerivation {
   path = "lib/libnetbsd";
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake???
+    buildFreebsd.bmakeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake???
     (if stdenv.hostPlatform == stdenv.buildPlatform
      then buildFreebsd.boot-install
      else buildFreebsd.install)

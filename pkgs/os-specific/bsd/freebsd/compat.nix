@@ -115,8 +115,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.makeMinimal  # TODO uhhhh bmake?
-    buildFreebsd.boot-install
+    buildFreebsd.bmakeMinimal
 
     buildPackages.which
     buildPackages.expat
@@ -128,12 +127,32 @@ mkDerivation {
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
     "HOST_INCLUDE_ROOT=${lib.getDev stdenv.cc.libc}/include"
-    "INSTALL=boot-install"
   ];
 
-  preIncludes = ''
-    mkdir -p $out/{0,1}-include
+  installPhase = ''
+    mkdir -p $out/{0,1}-include $out/lib $out/share/man $out/bin $out/include
     cp --no-preserve=mode -r cross-build/include/common/* $out/0-include
+    echo awawawawawawawawa
+    pwd
+    ls
+    cp libegacy.a $out/lib
+    cp *.3.gz $out/share/man
+    for grp in $(make $makeFlags -V INCSGROUPS); do
+      DIR=$(make $makeFlags -V ''${grp}DIR)
+      mkdir -p $DIR
+      for inc in $(make $makeFlags -V ''$grp); do
+        found=0
+        for makedir in / . $(make $makeFlags -V .PATH); do
+          if [ -e "$makedir/$inc" ]; then
+            found=$(($found+1))
+            cp "$makedir/$inc" $DIR
+          fi
+        done
+        if [ "$found" = "0" ]; then
+          echo "Could not find header $inc during install"
+        fi
+      done
+    done
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     cp --no-preserve=mode -r cross-build/include/linux/* $out/1-include
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -22,7 +22,7 @@ mkDerivation {
     ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "tools/build/mk";
   skipIncludesPhase = true;
   buildInputs = [];
-  nativeBuildInputs = [ bsdSetupHook freebsdSetupHook buildFreebsd.makeMinimal ];
+  nativeBuildInputs = [ bsdSetupHook freebsdSetupHook buildFreebsd.bmakeMinimal ];
 
   installPhase = ''
     runHook preInstall
