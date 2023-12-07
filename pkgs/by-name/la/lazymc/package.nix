@@ -2,6 +2,8 @@
   lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
+, darwin
 , nix-update-script
 }:
 
@@ -22,6 +24,10 @@ rustPlatform.buildRustPackage rec {
       "minecraft-protocol-0.1.0" = "sha256-vSFS1yVxTBSpx/ZhzA3EjcZyOWHbmoGARl0eMn1fJ+4=";
     };
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   passthru.updateScript = nix-update-script { };
 
