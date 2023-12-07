@@ -7,7 +7,6 @@
 , re2c
 , gperf
 , gawk
-, xxd
 , pkg-config
 , boost182
 , fmt
@@ -18,6 +17,8 @@
 , libcap
 , liburing
 , openssl
+, cereal
+, cmake
 , asciidoctor
 }:
 
@@ -40,13 +41,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
       owner = "emilua";
       repo = "emilua";
       rev = "v${version}";
-      hash = "sha256-vZITPQ1qUHhw24c0HKdR6VenviOc6JizQQ8w7K94irc=";
+      hash = "sha256-5NzxZHdQGw3qLEzW/mv1sLCuqehn5pjUYkCna4PUzDQ=";
   };
 
   buildInputs = [
@@ -59,16 +60,17 @@ stdenv.mkDerivation rec {
     libcap
     liburing
     openssl
+    cereal
   ];
 
   nativeBuildInputs = [
     re2c
     gperf
     gawk
-    xxd
     pkg-config
     asciidoctor
     meson
+    cmake
     ninja
   ];
 
@@ -84,7 +86,6 @@ stdenv.mkDerivation rec {
     "-Denable_http=true"
     "-Denable_file_io=true"
     "-Denable_io_uring=true"
-    "-Denable_linux_namespaces=true"
     "-Denable_tests=true"
     "-Denable_manpages=true"
   ];
