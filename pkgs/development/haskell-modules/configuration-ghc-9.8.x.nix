@@ -64,18 +64,23 @@ self: super: {
   tagged = super.tagged_0_8_8;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
+  ChasingBottoms = doJailbreak super.ChasingBottoms; # base >=4.2 && <4.19
+
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
   commutative-semigroups = doJailbreak super.commutative-semigroups;
+
+  dates = doJailbreak super.dates; # base >=4.9 && <4.16
+
+  generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
 
   # https://github.com/maoe/ghc-trace-events/issues/12
   ghc-trace-events = doJailbreak super.ghc-trace-events;
 
-  generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
+  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
+
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
 
   # Test suite does not compile.
-  dates = doJailbreak super.dates; # base >=4.9 && <4.16
-  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   persistent-sqlite = dontCheck super.persistent-sqlite;
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
-  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
 }
