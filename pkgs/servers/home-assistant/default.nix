@@ -469,6 +469,18 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
     # SystemError: PyThreadState_SetAsyncExc failed
     "--deselect=tests/helpers/test_template.py::test_template_timeout"
+    # Various test failures, because we don't provide matter
+    # dependencies, because they depend on OpenSSL 1.1
+    # https://github.com/home-assistant-libs/chip-wheels/issues/24
+    # https://github.com/project-chip/connectedhomeip/issues/25688
+    "--deselect=tests/helpers/test_config_entry_flow.py::test_webhook_create_cloudhook"
+    "--deselect=tests/helpers/test_config_entry_flow.py::test_webhook_create_cloudhook_aborts_not_connected"
+    "--deselect=tests/helpers/test_script.py::test_validate_action_config"
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_invalid_core_config"
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_invalid_yaml"
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_recovery_mode"
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_recovery_mode_and_safe_mode"
+    "--deselect=tests/test_bootstrap.py::test_setup_recovery_mode_if_no_frontend"
     # tests are located in tests/
     "tests"
   ];
@@ -480,6 +492,8 @@ in python.pkgs.buildPythonApplication rec {
     "tests/pylint"
     # don't bulk test all components
     "tests/components"
+    # depends on matter depenency
+    "tests/helpers/test_network.py"
   ];
 
   preCheck = ''
