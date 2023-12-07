@@ -60,8 +60,6 @@ backendStdenv.mkDerivation (
     # Keep better track of dependencies.
     strictDeps = true;
 
-    # TODO(@connorbaker): Update `cuda-redist-find-features` to produce an attrset of boolean values for the
-    # outputs instead of `has*` attributes.
     # NOTE: Outputs are evaluated jointly with meta, so in the case that this is an unsupported platform,
     # we still need to provide a list of outputs.
     outputs =
@@ -173,10 +171,15 @@ backendStdenv.mkDerivation (
         rm -r lib
         mv lib_new lib
       ''
+      # Create the primary output, out, and move the other outputs into it.
       + ''
         mkdir -p "$out"
         mv * "$out"
-        ${strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)}
+      ''
+      # Move the outputs into their respective outputs.
+      + strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)
+      # Post-install hook
+      + ''
         runHook postInstall
       '';
 
@@ -197,17 +200,15 @@ backendStdenv.mkDerivation (
     postPhases = ["postPatchelf"];
 
     # For each output, create a symlink to it in the out output.
-    # NOTE: We must recreate the out output here, because the setup hook will have deleted it
-    # if it was empty.
-    postPatchelf =
-      let
-        # Note the double dollar sign -- we want to interpolate the variable in bash, not the string.
-        mkJoinWithOutOutputCommand = output: ''${meta.getExe lndir} "${"$" + output}" "$out"'';
-      in
-      ''
-        mkdir -p "$out"
-        ${strings.concatMapStringsSep "\n" mkJoinWithOutOutputCommand (builtins.tail finalAttrs.outputs)}
-      '';
+    # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
+    postPatchelf = ''
+      mkdir -p "$out"
+      for output in $(getAllOutputNames); do
+        if [[ "$output" != "out" ]]; then
+          ${meta.getExe lndir} "''${!output}" "$out"
+        fi
+      done
+    '';
 
     # Make the CUDA-patched stdenv available
     passthru.stdenv = backendStdenv;
