@@ -4273,7 +4273,9 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
-  frida-python = callPackage ../development/python-modules/frida-python { };
+  frida = (pkgs.frida.override { python3Packages = self; }).frida-python;
+
+  frida-tools = (pkgs.frida.override { python3Packages = self; }).frida-tools;
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 

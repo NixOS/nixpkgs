@@ -696,7 +696,9 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
-  frida-tools = callPackage ../tools/security/frida-tools { };
+  frida = recurseIntoAttrs (callPackage ../tools/security/frida { });
+
+  frida-tools = with python3Packages; toPythonApplication frida-tools;
 
   frink = callPackage ../development/tools/frink { };
 

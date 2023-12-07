@@ -1,0 +1,23 @@
+{
+  "version": "16.1.6",
+  "repo": "sha256-LLrcJ04wcn6CQ/8NzLdAz6LWyc/jaQgj67bIscMMtMA=",
+  "tools": {
+    "version": "12.3.0",
+    "hash": "sha256-jtxn0a43kv9bLcY1CM3k0kf5K30Ne/FT10ohptWNwEU="
+  },
+  "barebone": "sha256-QLeJ4/kC+2a7QQY20c3u1CqLgxuFmz6uc9n4laNAY4g=",
+  "compiler": "sha256-CJX1ApWlzIuuPGRr8bCSCpk/TsFaL380rCO5Aoc9cYM=",
+  "deps": {
+    "version": "20230622",
+    "bundles": {
+      "aarch64-linux": {
+        "sdk": "sha256-Dv1dl6GnvHJciTHN6FzqOdqLTWus/RmASQkh4ZeCgW8=",
+        "toolchain": "sha256-ufXdUubobh3LMLPWmaGyiwVuz5ZMY/i5+5QO3sqNeGY="
+      },
+      "x86_64-linux": {
+        "sdk": "sha256-mM6hEMFQUfi4apeR4UVkNf2Jd4vanfHEyFLAADpx69E=",
+        "toolchain": "sha256-6FaKEK8YYXnYA+bHk+QSNmud6q0Hac1BuLBQHoSfaFQ="
+      }
+    }
+  }
+}

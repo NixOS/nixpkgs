@@ -7901,6 +7901,12 @@
       fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293";
     }];
   };
+  itstarsun = {
+    name = "itstarsun";
+    email = "itstarsun@proton.me";
+    github = "itstarsun";
+    githubId = 108435628;
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
