@@ -157,6 +157,7 @@ writeShellApplication {
   name = "show-nixos-org";
 
   runtimeInputs = [ curl w3m ];
+  excludeShellChecks = [ "SC2016" ];
 
   text = ''
     curl -s 'https://nixos.org' | w3m -dump -T text/html
@@ -166,7 +167,7 @@ writeShellApplication {
 
 Unlike with normal `writeShellScriptBin`, there is no need to manually write out `${curl}/bin/curl`, setting the PATH
 was handled by `writeShellApplication`. Moreover, the script is being checked with `shellcheck` for more strict
-validation.
+validation, apart from check SC2016 that is being excluded.
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
