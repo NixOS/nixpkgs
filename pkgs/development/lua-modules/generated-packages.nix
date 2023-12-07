@@ -1655,8 +1655,10 @@ lua_cliargs = callPackage({ buildLuarocksPackage, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "lua_cliargs";
   version = "3.0-2";
-  rockspecDir = "rockspecs";
-
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lua_cliargs-3.0-2.rockspec";
+    sha256 = "0vlmwrldwlxdfkak9kapydfs4ny4pwg3qpkv5agn6lw6gq0aq5za";
+  }).outPath;
   src = fetchurl {
     url    = "https://github.com/amireh/lua_cliargs/archive/v3.0-2.tar.gz";
     sha256 = "0vhpgmy9a8wlxp8a15pnfqfk0aj7pyyb5m41nnfxynx580a6y7cp";
