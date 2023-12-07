@@ -16,13 +16,11 @@ To build a derivation based on build checkpoints, the following steps needs to b
     * - use `mkCheckpointedBuild changedVBox buildOutput`
     * enjoy shorter build times
 
-As Nix has no builtin support for the detection of the previous built derivation, a base version needs to be declared.  
-To create the outputs later used as base version for checkpoint builds, the function `pkgs.checkpointBuildTools.prepareCheckpointBuild` is used.  
-The function takes the original derivation as an argument and transforms the output to a base version for an checkpoint build build.  
-While doing so, the original output is not created and the installation phase is overwritten to produce the checkpoint artifacts.  
+As Nix has no builtin support for the detection of the previous built derivation, a base version needs to be declared.
+To create the outputs later used as base version for checkpoint builds, the function `pkgs.checkpointBuildTools.prepareCheckpointBuild` is used.
+The function takes the original derivation as an argument and transforms the output to a base version for an checkpoint build build.
+While doing so, the original output is not created and the installation phase is overwritten to produce the checkpoint artifacts.
 
-When the built artifacts of the base version of the derivation are created, the code can be modified and changes are built using the `pkgs.checkpointBuildTools.mkCheckpointedBuild` function.  
-The `pkgs.checkpointBuildTools.mkCheckpointedBuild` function detects the changes in the code and places the output of the base version derivation within the build folder.   
+When the built artifacts of the base version of the derivation are created, the code can be modified and changes are built using the `pkgs.checkpointBuildTools.mkCheckpointedBuild` function.
+The `pkgs.checkpointBuildTools.mkCheckpointedBuild` function detects the changes in the code and places the output of the base version derivation within the build folder.
 Then, the build tool is able to detect the changes and makes the decision of which parts of the derivation needs to be recompiled and produces the output, as expected in the derivation, without checkpoint build support.
-
-
