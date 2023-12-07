@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, geos311
+, geos_3_11
 , pytestCheckHook
 , cython
 , numpy
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    geos311 # for geos-config
+    geos_3_11 # for geos-config
     cython
   ];
 

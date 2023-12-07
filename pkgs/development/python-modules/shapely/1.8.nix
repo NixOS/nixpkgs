@@ -7,7 +7,7 @@
 , substituteAll
 
 , cython
-, geos311
+, geos_3_11
 , numpy
 , oldest-supported-numpy
 , setuptools
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   # Environment variable used in shapely/_buildcfg.py
-  GEOS_LIBRARY_PATH = "${geos311}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
+  GEOS_LIBRARY_PATH = "${geos_3_11}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   patches = [
     # Patch to search form GOES .so/.dylib files in a Nix-aware way
@@ -44,14 +44,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    geos311 # for geos-config
+    geos_3_11 # for geos-config
     oldest-supported-numpy
     setuptools
     wheel
   ];
 
   buildInputs = [
-    geos311
+    geos_3_11
   ];
 
   propagatedBuildInputs = [
