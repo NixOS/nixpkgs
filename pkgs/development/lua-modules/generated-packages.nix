@@ -243,21 +243,21 @@ buildLuarocksPackage {
 compat53 = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "compat53";
-  version = "0.7-1";
+  version = "0.12-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/compat53-0.7-1.rockspec";
-    sha256 = "1r7a3q1cjrcmdycrv2ikgl83irjhxs53sa88v2fdpr9aaamlb101";
+    url    = "mirror://luarocks/compat53-0.12-1.rockspec";
+    sha256 = "0ijp8ch3927rnj872l6cq79fd53dyfc2qg82y9b0g6kqs7cdl348";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/keplerproject/lua-compat-5.3/archive/v0.7.zip";
-    sha256 = "02a14nvn7aggg1yikj9h3dcf8aqjbxlws1bfvqbpfxv9d5phnrpz";
+    url    = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.12.zip";
+    sha256 = "177zk7rww76wqxqsd2kxwfzb0nd7wfacm81vxwqsc84bfccsl3j4";
   };
 
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
   propagatedBuildInputs = [ lua ];
 
   meta = {
-    homepage = "https://github.com/keplerproject/lua-compat-5.3";
+    homepage = "https://github.com/lunarmodules/lua-compat-5.3";
     description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
     maintainers = with lib.maintainers; [ vcunat ];
     license.fullName = "MIT";
