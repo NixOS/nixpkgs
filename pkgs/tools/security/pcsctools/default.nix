@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LudovicRousseau/pcsc-tools/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
     mainProgram = "pcsc_scan";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg anthonyroussel ];
     platforms = platforms.linux;
   };
 })
