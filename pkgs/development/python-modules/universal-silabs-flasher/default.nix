@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
 , setuptools
@@ -28,7 +29,9 @@
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
   version = "0.0.15";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
@@ -67,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
+    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];
   };
