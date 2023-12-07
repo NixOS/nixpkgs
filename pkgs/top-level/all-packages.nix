@@ -28001,7 +28001,7 @@ with pkgs;
 
   iproute2 = callPackage ../os-specific/linux/iproute { };
 
-  ipu6-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
+  ipu6-camera-bins = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
 
   ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {};
 
