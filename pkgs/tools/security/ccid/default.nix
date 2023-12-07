@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     description = "PC/SC driver for USB CCID smart card readers";
     homepage = "https://ccid.apdu.fr/";
     license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.anthonyroussel ];
     platforms = platforms.unix;
   };
 }
