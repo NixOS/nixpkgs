@@ -26,13 +26,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.18.1";
+  version = "2.19.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-BURs6NU4LFozG+mdklu3k4CzljSLJBsnsaA68b47oxE=";
+    hash = "sha256-aXfxUtGm+vq8U3jYTxYhOP7UXL6ukCJgmGQO2Wsqobo=";
   };
   patches = [ ];
 
@@ -46,19 +46,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-Sz6zqDhC82MYqRZG4M0XLlzo2WM9mqqPSbh7OEOqqlw=";
+    hash = "sha256-23GTXsbjL8qfGA5NdPlrbdaA8rg8vOZsZCXvevi7Chc=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-Of8qk+Yy4/t/VNOrbFJxHLVlDhMSSNS1vi5rOr/ydCw=";
+    hash = "sha256-TB172hVIilDTl+y0shNp55if+FhrXjWSaGNF7K6GSH8=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-QIgTTKqujqv5t8lWkpU6ttX//3oHRGwj+CtLTX73oAI=";
+    hash = "sha256-tfQ2ogSDDXNPeygBy+el+71iwcafSfY78hvYPHurKPE=";
   };
 
 in
