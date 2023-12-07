@@ -1378,6 +1378,8 @@ self: super: with self; {
   else
     callPackage ../development/python-modules/bcrypt { };
 
+  bdffont = callPackage ../development/python-modules/bdffont { };
+
   beaker = callPackage ../development/python-modules/beaker { };
 
   before-after = callPackage ../development/python-modules/before-after { };
@@ -1961,6 +1963,8 @@ self: super: with self; {
   channels-redis = callPackage ../development/python-modules/channels-redis { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
+
+  character-encoding-utils = callPackage ../development/python-modules/character-encoding-utils { };
 
   chardet = callPackage ../development/python-modules/chardet { };
 
@@ -6151,6 +6155,8 @@ self: super: with self; {
 
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
+  lcd-i2c = callPackage ../development/python-modules/lcd-i2c { };
+
   lcgit = callPackage ../development/python-modules/lcgit { };
 
   lcov_cobertura = callPackage ../development/python-modules/lcov_cobertura { };
@@ -6440,6 +6446,10 @@ self: super: with self; {
   linetable = callPackage ../development/python-modules/linetable { };
 
   lingua = callPackage ../development/python-modules/lingua { };
+
+  linien-client = callPackage ../development/python-modules/linien-client { };
+
+  linien-common = callPackage ../development/python-modules/linien-common { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
@@ -9234,6 +9244,8 @@ self: super: with self; {
   };
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
+
+  pixel-font-builder = callPackage ../development/python-modules/pixel-font-builder { };
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
@@ -15412,6 +15424,8 @@ self: super: with self; {
   unicurses = callPackage ../development/python-modules/unicurses { };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
+
+  unidata-blocks = callPackage ../development/python-modules/unidata-blocks { };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 

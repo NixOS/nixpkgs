@@ -1360,6 +1360,7 @@
   ./services/web-servers/molly-brown.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/nginx/gitweb.nix
+  ./services/web-servers/nginx/tailscale-auth.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/pomerium.nix
   ./services/web-servers/rustus.nix
