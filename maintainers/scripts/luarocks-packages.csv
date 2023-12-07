@@ -7,7 +7,7 @@ binaryheap,,,,,,vcunat
 busted,,,,,,
 cassowary,,,,,,marsam alerque
 cldr,,,,,,alerque
-compat53,,,,0.7-1,,vcunat
+compat53,,,,,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
