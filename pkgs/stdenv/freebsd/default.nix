@@ -27,8 +27,8 @@ let inherit (localSystem) system;
         hash = "sha256-01dHQyHH4xnnMTgKgYFN2ksgXhhnub6fBrgUFSYjRJ0=";
       };
       bootstrapFiles = {
-        url = "http://192.168.1.9:8000/g4vqf2876zwwhkbny3qm59vc00679bk3-x86_64-freebsd14-bootstrap-files.tar.xz";
-        hash = "sha256-S3ch3LEVNqmQoXFzoQbzAqvULhZ90YwWcE6S5AaAHBc=";
+        url = "http://192.168.1.9:8000/gwvagb1rm9wkw9zs4f1mkgw9lq51i471-x86_64-freebsd14-bootstrap-files.tar.xz";
+        hash = "sha256-mhHfRDgAGJA8sb1hU6VCHC1cw1Q5Wim2R/aaG8bO5tg=";
       };
     };
   };

@@ -61,4 +61,8 @@ lib.makeScope newScope (self: with self; {
   libkvm = callPackage ./libkvm.nix {};
   libdl = callPackage ./libdl.nix {};
   libelf = callPackage ./libelf.nix {};
+  iconv = callPackage ./iconv.nix {};
+  libcapsicum = callPackage ./libcapsicum.nix {};
+  libcasper = callPackage ./libcasper.nix {};
+  libnv = callPackage ./libnv.nix {};
 })

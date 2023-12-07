@@ -11,6 +11,7 @@ in
     static.patchelf
   ] ++ (with pkgs; [
     # dynamic programs
+    iconv
     bash
     patch
     diffutils
@@ -32,6 +33,9 @@ in
     freebsd.libc
     freebsd.libkvm
     freebsd.libdl
+    freebsd.libcasper
+    freebsd.libnv
+    freebsd.libcapsicum
     #freebsd.libcxx
     #freebsd.libcxxrt
     libcxxrt
