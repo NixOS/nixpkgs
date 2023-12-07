@@ -35,7 +35,6 @@ in
     #freebsd.libcxx
     #freebsd.libcxxrt
     libcxxrt
-    libiconv
     zlib
     libxml2
     pcre2
@@ -52,7 +51,6 @@ in
     (lib.getLib llvmPackages_16.compiler-rt)
 
     # headers
-    (lib.getDev libiconv)
     (lib.getDev zlib)
     (lib.getDev libxml2)
     (lib.getDev pcre2)
