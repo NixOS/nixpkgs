@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "zigpy-xbee";
   version = "0.19.0";
+  format = "setuptools";
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8

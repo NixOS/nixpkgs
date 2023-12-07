@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "torchaudio";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-mypy";
   version = "0.10.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

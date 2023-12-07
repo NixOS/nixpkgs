@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
   version = "8.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "plantuml";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dougn";

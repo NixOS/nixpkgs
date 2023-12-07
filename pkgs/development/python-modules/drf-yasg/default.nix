@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "drf-yasg";
   version = "1.21.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

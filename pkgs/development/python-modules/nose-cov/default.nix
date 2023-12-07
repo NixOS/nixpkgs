@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "nose-cov";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

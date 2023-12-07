@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pmw";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Pmw";

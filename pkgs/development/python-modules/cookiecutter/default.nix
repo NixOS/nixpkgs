@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "cookiecutter";
   version = "2.3.0";
+  format = "setuptools";
 
   # not sure why this is broken
   disabled = isPyPy;

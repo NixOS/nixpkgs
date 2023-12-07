@@ -7,6 +7,7 @@
 buildPythonPackage {
   pname = "chevron";
   version = "0.13.1";
+  format = "setuptools";
 
   # No tests available in the PyPI tarball
   src = fetchFromGitHub {

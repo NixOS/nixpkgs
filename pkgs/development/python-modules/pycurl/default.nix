@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pycurl";
   version = "7.45.2";
+  format = "setuptools";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {

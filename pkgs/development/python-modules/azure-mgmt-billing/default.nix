@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-billing";
   version = "6.0.0"; #pypi's 0.2.0 doesn't build ootb
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
