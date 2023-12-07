@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = "https://pcsc-tools.apdu.fr/";
+    changelog = "https://github.com/LudovicRousseau/pcsc-tools/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
+    mainProgram = "pcsc_scan";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
