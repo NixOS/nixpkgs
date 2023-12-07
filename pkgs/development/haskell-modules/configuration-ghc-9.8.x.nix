@@ -64,7 +64,7 @@ self: super: {
   tagged = super.tagged_0_8_8;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
-  ChasingBottoms = doJailbreak super.ChasingBottoms; # base >=4.2 && <4.19
+  ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
 
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
   commutative-semigroups = doJailbreak super.commutative-semigroups;
