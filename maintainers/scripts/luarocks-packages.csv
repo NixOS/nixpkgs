@@ -55,7 +55,7 @@ lua-subprocess,https://github.com/0x0ade/lua-subprocess,,,,5.1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
 lua-zlib,,,,,,koral
-lua_cliargs,https://github.com/amireh/lua_cliargs.git,,,,,
+lua_cliargs,,,,,,
 luabitop,https://github.com/teto/luabitop.git,,,,,
 luacheck,,,,,,
 luacov,,,,,,
