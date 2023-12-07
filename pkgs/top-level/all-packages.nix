@@ -892,6 +892,8 @@ with pkgs;
     writePython3 = buildPackages.writers.writePython3;
   };
 
+  fake-background-webcam = callPackage ../applications/video/fake-background-webcam { };
+
   fakeNss = callPackage ../build-support/fake-nss { };
 
   tarsum = callPackage ../build-support/docker/tarsum.nix { };
