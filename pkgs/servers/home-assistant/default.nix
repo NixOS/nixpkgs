@@ -324,18 +324,18 @@ in python.pkgs.buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # Primary source is the pypi sdist, because it contains translations
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TspjqX98adi6cYe/raV1FB5Xy59F4jWJukw1pkuP+Sw=";
-  };
-
-  # Secondary source is git for tests
-  gitSrc = fetchFromGitHub {
+  # Primary source is the git, which has the tests and allows bisecting the core
+  src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
     hash = "sha256-d7H6U5wRU1mOAU5YFyy7gtttsG9p1g7iDxZcaK+cAOg=";
+  };
+
+  # Secondary source is pypi sdist for translations
+  sdist = fetchPypi {
+    inherit pname version;
+    hash = "sha256-TspjqX98adi6cYe/raV1FB5Xy59F4jWJukw1pkuP+Sw=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -365,10 +365,9 @@ in python.pkgs.buildPythonApplication rec {
     "yarl"
   ];
 
-  # copy tests early, so patches apply as they would to the git repo
+  # extract translations from pypi sdist
   prePatch = ''
-    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
-    chmod u+x tests/auth/providers/test_command_line_cmd.sh
+    tar --extract --gzip --file $sdist --strip-components 1 --wildcards "**/translations"
   '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
