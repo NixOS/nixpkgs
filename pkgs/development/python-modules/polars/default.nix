@@ -36,7 +36,6 @@ buildPythonPackage {
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-    cd py-polars
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
@@ -46,7 +45,7 @@ buildPythonPackage {
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
     };
   };
-  cargoRoot = "py-polars";
+  sourceRoot = "source/py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;
