@@ -230,6 +230,7 @@ in {
 
       [nss]
       homedir_substring = /home
+      override_shell = /run/current-system/sw/bin/bash
 
       [pam]
       pam_pwd_expiration_warning = 3
