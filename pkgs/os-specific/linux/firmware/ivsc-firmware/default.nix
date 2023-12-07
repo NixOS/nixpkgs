@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "ivsc-firmware";
-  version = "unstable-2022-11-02";
+  version = "unstable-2023-08-11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ivsc-firmware";
-    rev = "29c5eff4cdaf83e90ef2dcd2035a9cdff6343430";
-    hash = "sha256-GuD1oTnDEs0HslJjXx26DkVQIe0eS+js4UoaTDa77ME=";
+    rev = "10c214fea5560060d387fbd2fb8a1af329cb6232";
+    hash = "sha256-kEoA0yeGXuuB+jlMIhNm+SBljH+Ru7zt3PzGb+EPBPw=";
   };
 
   dontBuild = true;
