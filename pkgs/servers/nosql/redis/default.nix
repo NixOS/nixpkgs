@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, lua, jemalloc, pkg-config, nixosTests
-, tcl, which, ps, getconf
+, tcl, which, ps, getconf, procps
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
@@ -52,7 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  nativeCheckInputs =
+    [ which tcl ps ]
+    ++
+    lib.optionals stdenv.buildPlatform.isLinux [ procps ]
+    ++
+    lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
