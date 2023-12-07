@@ -59,6 +59,7 @@ let
       maintainers = with maintainers; [
         gmemstr
         nickcao
+        zowoq
       ];
       mainProgram = "tofu";
     };
