@@ -106,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
+    mainProgram = "gamemoderun"; # Requires NixOS module to run
   };
 })
