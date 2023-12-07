@@ -9920,6 +9920,8 @@ self: super: with self; {
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
+  pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
+
   pyathena = callPackage ../development/python-modules/pyathena { };
 
   pyatmo = callPackage ../development/python-modules/pyatmo { };
