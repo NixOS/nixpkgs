@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  PKG_CONFIG_PATH = "${lib.getDev ipu6-camera-bins}/lib/${ipuTarget}/pkgconfig";
+  PKG_CONFIG_PATH = "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}/pkgconfig";
 
   cmakeFlags = [
     "-DIPU_VER=${ipuVersion}"
@@ -66,6 +66,12 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace src/platformdata/PlatformData.h \
       --replace '/usr/share/' "${placeholder "out"}/share/"
+  '';
+
+  postFixup = ''
+    for lib in $out/lib/*.so; do
+      patchelf --add-rpath "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}" $lib
+    done
   '';
 
   passthru = {
