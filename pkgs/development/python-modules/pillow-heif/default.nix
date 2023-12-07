@@ -6,6 +6,7 @@
 # build-system
 , cmake
 , nasm
+, pkg-config
 
 # native dependencies
 , libheif
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     nasm
+    pkg-config
   ];
 
   dontUseCmakeConfigure = true;
