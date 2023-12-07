@@ -53,7 +53,18 @@ autoPatchelf() {
         esac
     done
 
-    readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
+    if [ -n "$__structuredAttrs" ]; then
+        local ignoreMissingDepsArray=( "${autoPatchelfIgnoreMissingDeps[@]}" )
+        local appendRunpathsArray=( "${appendRunpaths[@]}" )
+        local runtimeDependenciesArray=( "${runtimeDependencies[@]}" )
+        local patchelfFlagsArray=( "${patchelfFlags[@]}" )
+    else
+        readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
+        local appendRunpathsArray=($appendRunpaths)
+        local runtimeDependenciesArray=($runtimeDependencies)
+        local patchelfFlagsArray=($patchelfFlags)
+    fi
+
     if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
         echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
              "= true;' is deprecated and will be removed in a future release." \
@@ -61,9 +72,6 @@ autoPatchelf() {
         ignoreMissingDepsArray=( "*" )
     fi
 
-    local appendRunpathsArray=($appendRunpaths)
-    local runtimeDependenciesArray=($runtimeDependencies)
-    local patchelfFlagsArray=($patchelfFlags)
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
