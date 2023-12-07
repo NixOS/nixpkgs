@@ -1,4 +1,4 @@
-{ 
+{
   lib
   rustPlatform,
   fetchFromGitHub,
