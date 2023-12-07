@@ -1,0 +1,197 @@
+diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
+index c15559e174..023a4bcb35 100644
+--- a/mkspecs/features/device_config.prf
++++ b/mkspecs/features/device_config.prf
+@@ -1,9 +1,5 @@
+ # This file is loaded by some qmakespecs to get early configuration data.
+ 
+-# Some of these qmakespecs can be used also in host mode, but they are not
+-# supposed to be influenced by -device-option then.
+-host_build: return()
+-
+ DEVICE_PRI = $$[QT_HOST_DATA/get]/mkspecs/qdevice.pri
+ exists($$DEVICE_PRI):include($$DEVICE_PRI)
+ unset(DEVICE_PRI)
+diff --git a/mkspecs/features/qt_build_config.prf b/mkspecs/features/qt_build_config.prf
+index 511b158b91..70d1e10611 100644
+--- a/mkspecs/features/qt_build_config.prf
++++ b/mkspecs/features/qt_build_config.prf
+@@ -15,6 +15,13 @@
+         debug(1, "Cannot load qmodule.pri!")
+     } else {
+         debug(1, "Loaded qmodule.pri from ($$QMAKE_QT_MODULE)")
++
++        # Yeah, there are multiple pkg-config related varialbes and functions
++        # that are used throughout QT modules somewhat interchangeably.
++        # As we're now trying to build all packaged binaries for the hostPlatform
++        # only, let's not create even more confusion and just follow a simple rule:
++        # always get pkg-config from the PKG_CONFIG env variable.
++        PKG_CONFIG_EXECUTABLE = $$(PKG_CONFIG)
+     }
+ } else {
+     debug(1, "Not loading qmodule.pri twice")
+diff --git a/mkspecs/features/qt_configure.prf b/mkspecs/features/qt_configure.prf
+index 6537d98c5d..19ed05db61 100644
+--- a/mkspecs/features/qt_configure.prf
++++ b/mkspecs/features/qt_configure.prf
+@@ -423,16 +423,7 @@ defineReplace(qtConfPkgConfigEnv) {
+ }
+ 
+ defineReplace(qtConfPkgConfig) {
+-    host = $$1
+-    isEmpty(host): host = false
+-
+-    $$host {
+-        pkg_config = $$qtConfFindInPath("pkg-config")
+-    } else {
+-        pkg_config = "$$qtConfPkgConfigEnv()$$PKG_CONFIG_EXECUTABLE"
+-    }
+-
+-    return($$pkg_config)
++    return($$getenv("PKG_CONFIG"))
+ }
+ 
+ defineTest(qtConfPkgConfigPackageExists) {
+diff --git a/mkspecs/features/qt_tool.prf b/mkspecs/features/qt_tool.prf
+index a8d589f0fa..3d0f832a6b 100644
+--- a/mkspecs/features/qt_tool.prf
++++ b/mkspecs/features/qt_tool.prf
+@@ -18,7 +18,7 @@ DEFINES *= QT_USE_QSTRINGBUILDER
+ # If we are doing a prefix build, create a "module" pri which enables
+ # qtPrepareTool() to work with the non-installed build.
+ # Non-bootstrapped tools always need this because of the environment setup.
+-!build_pass:if(!host_build|!force_bootstrap|force_independent|!isEmpty(HOST_QT_TOOLS)) {
++!build_pass:if(!host_build|!force_bootstrap|force_independent|cross_compile) {
+     isEmpty(MODULE):MODULE = $$TARGET
+ 
+     load(qt_build_paths)
+@@ -27,7 +27,7 @@ DEFINES *= QT_USE_QSTRINGBUILDER
+ 
+     vars = binary depends
+ 
+-    !host_build|isEmpty(HOST_QT_TOOLS) {
++    !host_build|!cross_compile {
+         load(resolve_target)
+ 
+         !host_build|!force_bootstrap: MODULE_DEPENDS = $$replace(QT, -private$, _private)
+@@ -55,6 +55,10 @@ DEFINES *= QT_USE_QSTRINGBUILDER
+         bin = $${HOST_QT_TOOLS}/$${TARGET}
+         equals(QMAKE_HOST.os, Windows): bin = $${bin}.exe
+         bin = $$system_path($$bin)
++        !exists($$bin) {
++            # search in PATH as a fallback
++            bin = $$system("command -v $${TARGET}")
++        }
+     }
+ 
+     TOOL_PRI_CONT = \
+diff --git a/src/corelib/Qt5CoreConfigExtras.cmake.in b/src/corelib/Qt5CoreConfigExtras.cmake.in
+index be07a2e1e8..0b9c425ec8 100644
+--- a/src/corelib/Qt5CoreConfigExtras.cmake.in
++++ b/src/corelib/Qt5CoreConfigExtras.cmake.in
+@@ -5,30 +5,20 @@ endif()
+ if (NOT TARGET Qt5::qmake)
+     add_executable(Qt5::qmake IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Core_check_file_exists(${imported_location})
++    find_program(qmake_imported_location \"qmake$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qmake PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qmake_imported_location}
+     )
+ endif()
+ 
+ if (NOT TARGET Qt5::moc)
+     add_executable(Qt5::moc IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Core_check_file_exists(${imported_location})
++    find_program(moc_imported_location \"moc$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::moc PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${moc_imported_location}
+     )
+     # For CMake automoc feature
+     get_target_property(QT_MOC_EXECUTABLE Qt5::moc LOCATION)
+@@ -37,15 +27,10 @@ endif()
+ if (NOT TARGET Qt5::rcc)
+     add_executable(Qt5::rcc IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Core_check_file_exists(${imported_location})
++    find_program(rcc_imported_location \"rcc$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::rcc PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${rcc_imported_location}
+     )
+ endif()
+ 
+diff --git a/src/dbus/Qt5DBusConfigExtras.cmake.in b/src/dbus/Qt5DBusConfigExtras.cmake.in
+index b13b964ec8..f4b7109037 100644
+--- a/src/dbus/Qt5DBusConfigExtras.cmake.in
++++ b/src/dbus/Qt5DBusConfigExtras.cmake.in
+@@ -2,22 +2,20 @@
+ if (NOT TARGET Qt5::qdbuscpp2xml)
+     add_executable(Qt5::qdbuscpp2xml IMPORTED)
+ 
+-    set(imported_location \"$$NIX_OUTPUT_DEV/bin/qdbuscpp2xml$$CMAKE_BIN_SUFFIX\")
+-    _qt5_DBus_check_file_exists(${imported_location})
++    find_program(qdbuscpp2xml_imported_location \"qdbuscpp2xml$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qdbuscpp2xml PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qdbuscpp2xml_imported_location}
+     )
+ endif()
+ 
+ if (NOT TARGET Qt5::qdbusxml2cpp)
+     add_executable(Qt5::qdbusxml2cpp IMPORTED)
+ 
+-    set(imported_location \"$$NIX_OUTPUT_DEV/bin/qdbusxml2cpp$$CMAKE_BIN_SUFFIX\")
+-    _qt5_DBus_check_file_exists(${imported_location})
++    find_program(qdbusxml2cpp_imported_location \"qdbusxml2cpp$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qdbusxml2cpp PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qdbusxml2cpp_imported_location}
+     )
+ endif()
+ 
+diff --git a/src/widgets/Qt5WidgetsConfigExtras.cmake.in b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+index ca0b8e4bfb..f49f09fed2 100644
+--- a/src/widgets/Qt5WidgetsConfigExtras.cmake.in
++++ b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+@@ -2,15 +2,10 @@
+ if (NOT TARGET Qt5::uic)
+     add_executable(Qt5::uic IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"$$NIX_OUTPUT_DEV/$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Widgets_check_file_exists(${imported_location})
++    find_program(uic_imported_location \"uic$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::uic PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${uic_imported_location}
+     )
+ endif()
+ 
