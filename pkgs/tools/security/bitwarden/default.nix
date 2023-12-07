@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_25
+, electron_26
 , fetchFromGitHub
 , fetchpatch2
 , glib
@@ -25,10 +25,10 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_25;
+  electron = electron_26;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.12.0";
+  version = "2023.12.0"; # TODO add back Electron version check below
 
   src = fetchFromGitHub {
     owner = "bitwarden";
@@ -82,12 +82,14 @@ in buildNpmPackage rec {
     libsecret
   ];
 
-  preBuild = ''
+  # FIXME add back once upstream moves to Electron >= 26
+  # we use electron_26 because electron_25 is EOL
+  /*preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
-  '';
+  '';*/
 
   postBuild = ''
     pushd apps/desktop
