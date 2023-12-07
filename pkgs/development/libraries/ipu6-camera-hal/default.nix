@@ -8,7 +8,7 @@
 
 # runtime
 , expat
-, ipu6-camera-bin
+, ipu6-camera-bins
 , libtool
 , gst_all_1
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  PKG_CONFIG_PATH = "${lib.getDev ipu6-camera-bin}/lib/${ipuTarget}/pkgconfig";
+  PKG_CONFIG_PATH = "${lib.getDev ipu6-camera-bins}/lib/${ipuTarget}/pkgconfig";
 
   cmakeFlags = [
     "-DIPU_VER=${ipuVersion}"
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     expat
-    ipu6-camera-bin
+    ipu6-camera-bins
     libtool
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

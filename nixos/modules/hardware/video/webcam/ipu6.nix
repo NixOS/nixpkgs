@@ -29,9 +29,7 @@ in
       ipu6-drivers
     ];
 
-    hardware.firmware = with pkgs; [ ]
-      ++ optional (cfg.platform == "ipu6") ipu6-camera-bin
-      ++ optional (cfg.platform == "ipu6ep") ipu6ep-camera-bin;
+    hardware.firmware = [ pkgs.ipu6-camera-bins ];
 
     services.udev.extraRules = ''
       SUBSYSTEM=="intel-ipu6-psys", MODE="0660", GROUP="video"

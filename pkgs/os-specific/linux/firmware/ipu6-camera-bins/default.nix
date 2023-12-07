@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ipu6-camera-bin";
+  pname = "ipu6-camera-bins";
   version = "unstable-2023-10-26";
 
   src = fetchFromGitHub {
