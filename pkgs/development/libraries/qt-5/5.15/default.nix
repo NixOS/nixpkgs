@@ -13,6 +13,7 @@ Check for any minor version changes.
 , gstreamer, gst-plugins-base, gtk3, dconf
 , llvmPackages_15, overrideSDK, overrideLibcxx
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -228,7 +229,12 @@ let
           (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
       };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
+      qtbase-bootstrap = buildPackages.qt5.qtbase.override { bootstrapBuild = true; };
+      # qtbase won't be spliced here, but that's fine as it's only a buildInput
+      qttools-bootstrap = buildPackages.qt5.qttools.override { qtbase=qtbase-bootstrap; qtdeclarative = null; };
+
+      #                              ↓Things available only to packages in the scope↓
+      callPackage = self.newScope { inherit qtbase-bootstrap qttools-bootstrap stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -340,11 +346,9 @@ let
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
-      qmake = callPackage ({ qtbase }: makeSetupHook {
+      qmake = callPackage ({ qtbase-bootstrap }: makeSetupHook {
         name = "qmake-hook";
-        ${if stdenv.buildPlatform == stdenv.hostPlatform
-          then "propagatedBuildInputs"
-          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
+        propagatedBuildInputs = [ qtbase-bootstrap.qmake ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -358,22 +362,9 @@ let
       } ../hooks/wrap-qt-apps-hook.sh) { };
     };
 
-  baseScope = makeScopeWithSplicing' {
+  finalScope = makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "qt5";
     f = addPackages;
   };
 
-  bootstrapScope = baseScope.overrideScope(final: prev: {
-    qtbase = prev.qtbase.override { qttranslations = null; };
-    qtdeclarative = null;
-  });
-
-  finalScope = baseScope.overrideScope(final: prev: {
-    # qttranslations causes eval-time infinite recursion when
-    # cross-compiling; disabled for now.
-    qttranslations =
-      if stdenv.buildPlatform == stdenv.hostPlatform
-      then bootstrapScope.qttranslations
-      else null;
-  });
 in finalScope

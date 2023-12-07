@@ -27,6 +27,7 @@
 , buildTests ? false
 , debug ? false
 , developerBuild ? false
+, bootstrapBuild ? false
 , decryptSslTraffic ? false
 , testers
 , buildPackages
@@ -105,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
   enableParallelBuilding = true;
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "bin" "dev" "out" "qmake" ];
 
   inherit patches;
 
@@ -134,6 +135,10 @@ stdenv.mkDerivation (finalAttrs: ({
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+
+    #Always build uic and qvkgen for qtbase-bootstrap
+    sed -i '/^TOOLS =/ s/$/ src_tools_qvkgen src_tools_uic/' src/src.pro
+    sed -i '/^SUBDIRS += src_corelib/ s/$/ src_tools_qvkgen src_tools_uic/' src/src.pro
 
     # https://bugs.gentoo.org/803470
     sed -i 's/-lpthread/-pthread/' mkspecs/common/linux.conf src/corelib/configure.json
@@ -246,58 +251,73 @@ stdenv.mkDerivation (finalAttrs: ({
   } // {
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
-    "-plugindir $(out)/$(qtPluginPrefix)"
-    "-qmldir $(out)/$(qtQmlPrefix)"
-    "-docdir $(out)/$(qtDocPrefix)"
-
+  # common options for all types of builds
     "-verbose"
     "-confirm-license"
     "-opensource"
 
     "-release"
     "-shared"
-    "-accessibility"
-    "-optimized-qmake"
     # for separateDebugInfo
     "-no-strip"
-    "-system-proxies"
     "-pkg-config"
 
-    "-gui"
-    "-widgets"
-    "-opengl desktop"
+    "-make tools"
+    ''-${lib.optionalString (!buildExamples || bootstrapBuild) "no"}make examples''
+    ''-${lib.optionalString (!buildTests) "no"}make tests''
+
     "-icu"
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-device ${qtPlatformCross stdenv.hostPlatform}"
-    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ]
-  ++ lib.optional debugSymbols "-debug"
-  ++ lib.optionals developerBuild [
-    "-developer-build"
-    "-no-warnings-are-errors"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-no-warnings-are-errors"
-  ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
-    "-no-sse2"
-  ] else [
-    "-sse2"
-    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
-    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
-    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
-    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
-    ]
-  ) ++ [
-    "-no-mips_dsp"
-    "-no-mips_dspr2"
-  ] ++ [
     "-system-zlib"
     "-L" "${zlib.out}/lib"
     "-I" "${zlib.dev}/include"
+
+  ] ++ (if stdenv.isDarwin then [
+    "-no-fontconfig"
+    "-no-framework"
+  ] else [
+    "-rpath"
+
+  # a bare bones build only to get build tools and mkspecs
+  ]) ++ (if bootstrapBuild then [
+    # We probably can go slimmer than this with some patching and/or selective run of Makefiles
+    # but this is already good enough.
+    "-no-gui"
+    "-no-widgets"
+    "-no-feature-sqlmodel"
+    "-no-sql-sqlite"
+    "-no-feature-bearermanagement"
+    "-no-feature-netlistmgr"
+    "-no-feature-networkdiskcache"
+    "-no-feature-networkinterface"
+    "-no-feature-networkproxy"
+    "-no-feature-concurrent"
+    "-no-feature-dnslookup"
+    "-no-feature-dtls"
+    "-no-feature-ftp"
+    "-no-feature-http"
+    "-no-feature-gssapi"
+    "-no-feature-localserver"
+    "-no-feature-ocsp"
+    "-no-feature-socks5"
+    "-no-feature-sspi"
+    "-no-feature-udpsocket"
+
+  # regular build, platform-independent options
+  ] else ([
+    "-gui"
+    "-widgets"
+    "-opengl desktop"
+    "-accessibility"
+    "-system-proxies"
+    "-make libs"
+
+    "-plugindir $(out)/$(qtPluginPrefix)"
+    "-qmldir $(out)/$(qtQmlPrefix)"
+    "-docdir $(out)/$(qtDocPrefix)"
+
     "-system-libjpeg"
     "-L" "${libjpeg.out}/lib"
     "-I" "${libjpeg.dev}/include"
@@ -312,20 +332,13 @@ stdenv.mkDerivation (finalAttrs: ({
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    "-make libs"
-    "-make tools"
-    ''-${lib.optionalString (!buildExamples) "no"}make examples''
-    ''-${lib.optionalString (!buildTests) "no"}make tests''
-  ]
-    ++ (
-      if stdenv.isDarwin then [
-      "-no-fontconfig"
+  # regular build, Darwin options
+    ] ++ (if stdenv.isDarwin then [
       "-qt-freetype"
       "-qt-libpng"
-      "-no-framework"
+
+  # regular build, other Unixes options
     ] else [
-      "-rpath"
-    ] ++ [
       "-xcb"
       "-qpa xcb"
       "-L" "${libX11.out}/lib"
@@ -340,25 +353,71 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
-    ] ++ [
+
       "-system-libpng"
+      "-inotify"
+
     ] ++ lib.optional withGtk3 "-gtk"
-      ++ [
-        "-inotify"
-    ] ++ lib.optionals (cups != null) [
+      ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
+
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
+
     ] ++ lib.optional (qttranslations != null) [
       "-translationdir" "${qttranslations}/translations"
     ]
-  );
+
+  # cross compilation options
+  ))) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-device ${qtPlatformCross stdenv.hostPlatform}"
+    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
+
+  # debugging options
+  ++ lib.optional debugSymbols "-debug"
+  ++ lib.optionals developerBuild [
+    "-developer-build"
+    "-no-warnings-are-errors"
+
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-no-warnings-are-errors"
+
+  # CPU features support
+  ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
+    "-no-sse2"
+  ] else [
+    "-sse2"
+    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
+    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
+    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
+    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
+    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
+    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
+    ]
+  ) ++ [
+    "-no-mips_dsp"
+    "-no-mips_dspr2"
+  ];
 
   # Move selected outputs.
+  # I don't want to patch moveQtDevTools to support qmake output, so here's a bit of moving binaries around
   postInstall = ''
     moveToOutput "mkspecs" "$dev"
+
+    # Move development tools to $dev and update paths to them in mkspecs
+    moveQtDevTools
+
+    # Move all binaries to $qmake
+    mkdir -p "$qmake/bin"
+    mv "$dev"/bin/* "$qmake/bin/"
+    moveToOutput "bin" "$qmake"
+
+    # Symlinks from $dev to $qmake for backward compatibility
+    mkdir -p "$dev/bin"
+    lndir "$qmake/bin" "$dev/bin"
   '';
 
   devTools = [
@@ -378,10 +437,6 @@ stdenv.mkDerivation (finalAttrs: ({
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     fixQtModulePaths "''${!outputDev}/mkspecs/modules"
     fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-
-    # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput bin "$dev"
 
     # fixup .pc file (where to find 'moc' etc.)
     sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \

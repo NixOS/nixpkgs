@@ -23,12 +23,7 @@ mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
-  nativeBuildInputs =
-    (args.nativeBuildInputs or []) ++ [
-      perl qmake
-    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      pkgsHostTarget.qt5.qtbase.dev
-    ];
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl qmake ];
   propagatedBuildInputs =
     (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
     (args.propagatedBuildInputs or []);
