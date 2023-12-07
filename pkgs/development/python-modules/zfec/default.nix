@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "zfec";
   version = "1.5.7.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "openwrt-ubus-rpc";
   version = "0.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Noltari";

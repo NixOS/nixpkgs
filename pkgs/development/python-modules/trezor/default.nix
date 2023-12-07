@@ -25,6 +25,7 @@
 buildPythonPackage rec {
   pname = "trezor";
   version = "0.13.8";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "hdbscan";
   version = "0.8.33";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

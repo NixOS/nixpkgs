@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "flask-assets";
   version = "2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Assets";

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
   version = "unstable-2022-11-01";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

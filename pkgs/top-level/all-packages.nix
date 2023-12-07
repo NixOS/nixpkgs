@@ -7811,19 +7811,6 @@ with pkgs;
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
-  schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_25;
-  };
-  schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
-    #!/bin/sh
-    NIXOS_OZONE_WL=1 exec ${schildichat-desktop}/bin/schildichat-desktop "$@"
-  '';
-
-  schildichat-web = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-web.nix {
-    conf = config.schildichat-web.conf or { };
-  };
-
   schleuder = callPackage ../tools/security/schleuder { };
 
   schleuder-cli = callPackage ../tools/security/schleuder/cli { };
@@ -15750,6 +15737,10 @@ with pkgs;
 
   cotton = callPackage ../development/tools/cotton {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  critcl = callPackage ../development/compilers/critcl {
+    tcllib = tcllib.override { withCritcl = false; };
   };
 
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
@@ -31346,22 +31337,17 @@ with pkgs;
   em = callPackage ../applications/editors/em { };
 
   inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
-    emacs28
-    emacs28-gtk2
-    emacs28-gtk3
-    emacs28-nox
     emacs29
     emacs29-gtk3
     emacs29-nox
     emacs29-pgtk
-    emacs28-macport
     emacs29-macport
   ;
 
-  emacs-macport = emacs28-macport;
-  emacs = emacs28;
-  emacs-gtk = emacs28-gtk3;
-  emacs-nox = emacs28-nox;
+  emacs-macport = emacs29-macport;
+  emacs = emacs29;
+  emacs-gtk = emacs29-gtk3;
+  emacs-nox = emacs29-nox;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;

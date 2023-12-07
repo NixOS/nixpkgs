@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "memory-allocator";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

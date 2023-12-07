@@ -12002,6 +12002,12 @@
     githubId = 9799623;
     name = "Rick van Schijndel";
   };
+  mindstorms6 = {
+    email = "breland@bdawg.org";
+    github = "mindstorms6";
+    githubId = 92937;
+    name = "Breland Miley";
+  };
   minijackson = {
     email = "minijackson@riseup.net";
     github = "minijackson";

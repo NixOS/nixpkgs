@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "protonup-ng";
   version = "0.2.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

@@ -2789,6 +2789,8 @@ self: super: with self; {
 
   detectron2 = callPackage ../development/python-modules/detectron2 { };
 
+  devialet = callPackage ../development/python-modules/devialet { };
+
   devito = callPackage ../development/python-modules/devito { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
@@ -9919,6 +9921,8 @@ self: super: with self; {
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
+
+  pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
 
   pyathena = callPackage ../development/python-modules/pyathena { };
 

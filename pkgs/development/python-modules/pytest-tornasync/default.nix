@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "pytest-tornasync";
   version = "0.6.0.post2";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

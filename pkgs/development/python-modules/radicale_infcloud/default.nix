@@ -3,6 +3,7 @@
 buildPythonPackage {
   pname = "radicale_infcloud";
   version = "unstable-2022-04-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unrud";

@@ -14,16 +14,17 @@
 let
   package =  buildGoModule rec {
     pname = "opentofu";
-    version = "1.6.0-beta1";
+    version = "1.6.0-beta2";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-bOZzMraJ1Bc5CauYkJLH4riCOhAbZlXh9TdBjJsp4Ds=";
+      hash = "sha256-zUMRjUcFIgLgNcUp+I48dDyncI4cjup4+HMXxxJdXU4=";
     };
-    vendorHash = "sha256-T67VFtAsw6Dn+Ma0znwaa53GvzmrNLFoU17rCeJehKw=";
-    ldflags = [ "-s" "-w" ];
+
+    vendorHash = "sha256-kSm5RZqQRgbmPaKt5IWmuMhHwAu+oJKTX1q1lbE7hWk=";
+    ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyheos";
   version = "0.7.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "andrewsayre";

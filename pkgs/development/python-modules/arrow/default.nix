@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "arrow";
   version = "1.2.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

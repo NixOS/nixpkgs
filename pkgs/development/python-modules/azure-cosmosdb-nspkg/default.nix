@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "azure-cosmosdb-nspkg";
   version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

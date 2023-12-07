@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "sqlitedict";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";

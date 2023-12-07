@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "cld2-cffi";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
