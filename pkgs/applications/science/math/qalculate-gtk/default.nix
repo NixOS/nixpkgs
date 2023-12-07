@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
     license = licenses.gpl2Plus;
+    mainProgram = "qalculate-gtk";
     platforms = platforms.all;
   };
 })
