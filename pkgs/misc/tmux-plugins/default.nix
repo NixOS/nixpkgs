@@ -684,12 +684,12 @@ in rec {
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2022-08-21";
+    version = "1.0-unstable-2024-04-13";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "afb45a55b452b9238159047ce7c6e161bd4a9907";
-      hash = "sha256-8A+Yt9uhhAP76EiqUopE8vl7/UXkgU2x000EOcF7pl0=";
+      rev = "a26954a585b02a2ac02f87145e204f8798a7cbc2";
+      hash = "sha256-6StvzZghkv1pv0Mdy3fvYHXfCxeTMNDG4ERwYTXr2AY=";
     };
   };
 
