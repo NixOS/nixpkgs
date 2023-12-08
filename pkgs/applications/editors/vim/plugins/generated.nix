@@ -5626,6 +5626,18 @@ final: prev:
     meta.homepage = "https://github.com/mawkler/modicator.nvim/";
   };
 
+  modus-themes-nvim = buildVimPlugin {
+    pname = "modus-themes.nvim";
+    version = "2023-11-07";
+    src = fetchFromGitHub {
+      owner = "miikanissi";
+      repo = "modus-themes.nvim";
+      rev = "bd5c541f13ee77c6df5d6a5d5c321ab907aa5e11";
+      sha256 = "1xm691bghn9618czifsrymcxmqjhamk8vj8g790r2bm42lgwcs84";
+    };
+    meta.homepage = "https://github.com/miikanissi/modus-themes.nvim/";
+  };
+
   molokai = buildVimPlugin {
     pname = "molokai";
     version = "2015-11-11";
