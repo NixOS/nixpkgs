@@ -9343,6 +9343,8 @@ self: super: with self; {
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };
 
+  pynitrokey = callPackage ../development/python-modules/pynitrokey { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
