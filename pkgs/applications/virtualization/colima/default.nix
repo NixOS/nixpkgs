@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lIYLoCFYOwu1iqGgE/jhaqrXAL5ooFHDUnwL56qcGIE=";
+    hash = "sha256-kUSRo8fBgeGWVo8aZrdNtbsQKWrBE+qXSi/3NilbRas=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
