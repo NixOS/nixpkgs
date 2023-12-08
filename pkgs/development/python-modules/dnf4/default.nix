@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.18.1";
+  version = "4.18.2";
   format = "other";
 
   outputs = [ "out" "man" ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf";
     rev = version;
-    hash = "sha256-pgS4y87HbFiaS+fftdhKHOZAl2hYTUds3XVXUuQN6tU=";
+    hash = "sha256-WOLVKsrHp0V0wMXXRf1hrxsxuVv2bFOKIw8Aitz0cac=";
   };
 
   patches = [
