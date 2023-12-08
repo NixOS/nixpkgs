@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl rsstail dpkg
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -100,10 +100,12 @@ echo_provider() {
 pushd "$(dirname "$0")" >/dev/null
 
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
-  homepage="https://registry.terraform.io/providers/${provider}"
+  owner=$(dirname "${provider}")
   provider=$(basename "${provider}")
+  homepage="https://github.com/${owner}/terraform-provider-${provider}"
   echo_provider "init"
   update_attr homepage "${homepage}"
+  update_attr rev "0"
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
@@ -112,13 +114,12 @@ fi
 
 homepage="$(read_attr homepage)"
 
-registry_response=$(curl -s "${homepage//providers/v1/providers}")
-
 old_rev="$(read_attr rev)"
-rev="$(jq -r '.tag' <<<"${registry_response}")"
+
+rev="$(rsstail -1 -l -N -n 1 -u "${homepage}/tags.atom" | tail -n 1 | cut -d'/' -f8)"
 if [[ ${force} != 1 ]]; then
-  if [[ ${old_rev} == "${rev}" ]]; then
-    echo_provider "already at version ${rev}"
+  if dpkg --compare-versions "${old_rev//v/}" "ge" "${rev//v/}"; then
+    echo_provider "not updating, ${old_rev} >= ${rev}"
     exit
   fi
   if [[ ${rev//v/} =~ [[:alpha:]] ]]; then
@@ -129,17 +130,11 @@ fi
 echo_provider "updating from ${old_rev} to ${rev}"
 update_attr rev "${rev}"
 
-provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
-
-org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
-update_attr owner "${org}"
-repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
-update_attr repo "${repo}"
-
 if [[ ${spdx} == 1 ]]; then
   old_spdx="$(read_attr spdx)"
   if [[ ${old_spdx} != null ]]; then
-    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+    homepage=${homepage//https:\/\/github.com\//}
+    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${homepage}/license" | jq -r '.license.spdx_id')"
     update_attr spdx "${spdx}"
   fi
 fi
