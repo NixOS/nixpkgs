@@ -638,10 +638,7 @@ in
             gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
-        ++ map getLib (
-            [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
-          )
+        ++ map getLib [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
         # More complicated cases
         ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev
