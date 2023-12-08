@@ -2,14 +2,14 @@
 
 mkTmuxPlugin rec {
   pluginName = "tmux-thumbs";
-  version = "0.7.1";
+  version = "0.8.0";
   rtpFilePath = "tmux-thumbs.tmux";
 
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = pluginName;
     rev = version;
-    sha256 = "sha256-PH1nscmVhxJFupS7dlbOb+qEwG/Pa/2P6XFIbR/cfaQ=";
+    sha256 = "0qw4n41944nirbj39i9gr0i4zvxd6xpw87c4nx1svnpkwijgbk2w";
   };
 
   patches = [
