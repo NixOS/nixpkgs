@@ -23,6 +23,7 @@
 , substituteAll
 , writeTextFile
 , writeShellApplication
+, makeBinaryWrapper
 }:
 
 let
@@ -129,7 +130,7 @@ let
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
 
-  bashWithDefaultShellUtils = writeShellApplication {
+  bashWithDefaultShellUtilsSh = writeShellApplication {
     name = "bash";
     runtimeInputs = defaultShellUtils;
     text = ''
@@ -137,6 +138,17 @@ let
         export PATH=${defaultShellPath}
       fi
       exec ${bash}/bin/bash "$@"
+    '';
+  };
+
+  # Script-based interpreters in shebangs aren't guaranteed to work,
+  # especially on MacOS. So let's produce a binary
+  bashWithDefaultShellUtils = stdenv.mkDerivation {
+    name = "bash";
+    src = bashWithDefaultShellUtilsSh;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      makeWrapper ${bashWithDefaultShellUtilsSh}/bin/bash $out/bin/bash
     '';
   };
 
