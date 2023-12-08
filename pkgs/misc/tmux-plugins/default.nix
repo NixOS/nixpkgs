@@ -330,13 +330,13 @@ in rec {
 
   jump = mkTmuxPlugin {
     pluginName = "jump";
-    version = "2020-06-26";
+    version = "unstable-2023-05-09";
     rtpFilePath = "tmux-jump.tmux";
     src = fetchFromGitHub {
       owner = "schasse";
       repo = "tmux-jump";
-      rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
-      sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
+      rev = "2ff4940f043cd4ad80fa25c6efa33063fb3b386b";
+      hash = "sha256-zgFQKQgESThZGoLRjqZGjxeu/C0HMduUOr7jcgELM7s=";
     };
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
