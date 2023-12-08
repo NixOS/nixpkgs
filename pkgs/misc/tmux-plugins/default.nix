@@ -65,12 +65,12 @@ in rec {
 
   better-mouse-mode = mkTmuxPlugin {
     pluginName = "better-mouse-mode";
-    version = "unstable-2021-08-02";
+    version = "unstable-2017-10-16";
     src = fetchFromGitHub {
       owner = "NHDaly";
       repo = "tmux-better-mouse-mode";
       rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
-      sha256 = "06346ih3hzwszhkj25g4xv5av7292s6sdbrdpx39p0n3kgf5mwww";
+      hash = "sha256-nPNa3JvDgptGvy2vpo0WSZytyu7kFSEn/Jp/OGA0ZBg=";
     };
     rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
