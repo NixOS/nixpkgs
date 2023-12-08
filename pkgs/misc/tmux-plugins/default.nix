@@ -599,12 +599,12 @@ in rec {
 
   tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
-    version = "unstable-2019-07-14";
+    version = "unstable-2022-06-10";
     src = fetchFromGitHub {
       owner = "seebi";
       repo = "tmux-colors-solarized";
-      rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
-      sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+      rev = "4d07f3cc1ce2bdc0c8391290c5b0cf098abddddc";
+      sha256 = "10lg4jc591mpsqv2104bcghw703fylmvl6ykn0wv5r9c8asglp1k";
     };
   };
 
