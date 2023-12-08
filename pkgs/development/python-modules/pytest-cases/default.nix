@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-cases";
   version = "3.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -32,11 +32,6 @@ buildPythonPackage rec {
     decopatch
     makefun
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   # Tests have dependencies (pytest-harvest, pytest-steps) which
   # are not available in Nixpkgs. Most of the packages (decopatch,
