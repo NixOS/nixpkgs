@@ -426,12 +426,12 @@
     "vendorHash": "sha256-yin+UVMkqIxMSoVB4TD6Nv8F24FnEGZP5PFVpmuO2Fg="
   },
   "fortios": {
-    "hash": "sha256-RpcKMndbO3wbkHmrINkbsQ+UeFsZrQ7x02dv8ZpFMec=",
+    "hash": "sha256-3fcbUH3/LjsdNbomN2tl2WN/P0rpf0ZsILVkAOLUbt0=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "proxyVendor": true,
     "repo": "terraform-provider-fortios",
-    "rev": "1.18.0",
+    "rev": "1.18.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-DwRfbD4AqB+4KLuYtqY5fUdzRrEpTIvL4VAM7nieJJA="
   },
