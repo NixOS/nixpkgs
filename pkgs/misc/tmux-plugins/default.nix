@@ -352,12 +352,12 @@ in rec {
 
   logging = mkTmuxPlugin {
     pluginName = "logging";
-    version = "unstable-2019-04-19";
+    version = "2.1.0-unstable-2021-06-10";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-logging";
-      rev = "b085ad423b5d59a2c8b8d71772352e7028b8e1d0";
-      sha256 = "0p0sawysalhi8k2a5hdxniqx6kb24kd8rnvfzkjqigzid5ik37js";
+      rev = "b5c5f7b9bc679ca161a442e932d6186da8d3538f";
+      hash = "sha256-NTDUXxy0Y0dp7qmcH5qqqENGvhzd3lLrIii5u0lYHJk=";
     };
   };
 
