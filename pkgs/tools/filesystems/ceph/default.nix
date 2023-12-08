@@ -26,10 +26,12 @@
 , cryptsetup
 , cunit
 , doxygen
+, gnugrep
 , gperf
 , graphviz
 , gtest
 , icu
+, kmod
 , libcap
 , libcap_ng
 , libnl
@@ -250,9 +252,11 @@ in rec {
       ceph-python-env
       cryptsetup
       cunit
+      gnugrep
       gperf
       gtest
       icu
+      kmod
       libcap
       libnl
       libxml2
@@ -295,9 +299,9 @@ in rec {
     pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
 
     preConfigure =''
-      substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
-      substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
-      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
+      substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "${kmod}/bin/modinfo"
+      substituteInPlace src/common/module.c --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
+      substituteInPlace src/common/module.c --replace "/bin/grep" "${gnugrep}/bin/grep"
 
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
