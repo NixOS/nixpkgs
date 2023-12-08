@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -31,8 +30,10 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+  # https://github.com/ludeeus/pytraccar/issues/31
+  doCheck = lib.versionOlder aiohttp.version "3.9.0";
+
   nativeCheckInputs = [
-    aresponses
     pytestCheckHook
     pytest-asyncio
   ];
