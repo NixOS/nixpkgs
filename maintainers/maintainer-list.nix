@@ -5676,6 +5676,12 @@
     githubId = 454695;
     name = "Artur Taranchiev";
   };
+  ewuuwe = {
+    email = "ewu.uweq@pm.me";
+    github = "ewuuwe";
+    githubId = 63652646;
+    name = "Xaver Oswald";
+  };
   exarkun = {
     email = "exarkun@twistedmatrix.com";
     github = "exarkun";
