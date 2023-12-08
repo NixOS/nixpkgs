@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , openssl
@@ -30,6 +31,11 @@ buildPythonPackage rec {
     openssl
     parameterized
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=incompatible-pointer-types"
+  ]);
 
   nativeCheckInputs = [
     pytestCheckHook
