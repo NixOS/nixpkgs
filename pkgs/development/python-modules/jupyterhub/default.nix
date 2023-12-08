@@ -206,6 +206,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
     # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }
