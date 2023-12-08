@@ -650,7 +650,7 @@ in rec {
 
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
-    version = "unstable-2016-01-06";
+    version = "unstable-2016-03-03";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-urlview";
