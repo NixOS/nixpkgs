@@ -24574,20 +24574,19 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_24;
+  protobufVersions = lib.recurseIntoAttrs (import ../development/libraries/protobuf {
+    inherit lib pkgs;
+  });
 
-  protobuf_25 = callPackage ../development/libraries/protobuf/25.nix {
-    abseil-cpp = abseil-cpp_202308;
-  };
-  protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
-  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
-  protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
-    abseil-cpp = abseil-cpp_202103;
-  };
-
-  protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
-    abseil-cpp = abseil-cpp_202103;
-  };
+  inherit (protobufVersions)
+    protobuf
+    protobuf_25
+    protobuf_24
+    protobuf_23
+    protobuf_21
+    protobuf3_20
+    protobuf_3_20
+    ;
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
