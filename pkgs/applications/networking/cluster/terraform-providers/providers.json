@@ -308,13 +308,14 @@
     "vendorHash": "sha256-8gz6tsmHHH9B3Z5H0TZRdlpCI6LhthIn7fYn8PjYPeg="
   },
   "dhall": {
-    "hash": "sha256-K0j90YAzYqdyJD4aofyxAJF9QBYNMbhSVm/s1GvWuJ4=",
+    "hash": "sha256-QjY5ZazQn4HiLQtdmw9X7o5tFw+27B2IISzmzMMHjHE=",
     "homepage": "https://registry.terraform.io/providers/awakesecurity/dhall",
     "owner": "awakesecurity",
+    "proxyVendor": true,
     "repo": "terraform-provider-dhall",
-    "rev": "v0.0.3",
+    "rev": "v0.0.7",
     "spdx": "BSD-3-Clause",
-    "vendorHash": "sha256-BpXhKjfxyCLdGRHn1GexW0MoLj4/C6Bn7scZ76JARxQ="
+    "vendorHash": "sha256-e/+czUeOACwRC7xY90pZp2EWDzDpLU6Ud9RPzuNKaOY="
   },
   "digitalocean": {
     "hash": "sha256-8T2xWKKoPU54ukMClva/fgZXGDMh92Oi0IacjnbgCCI=",
