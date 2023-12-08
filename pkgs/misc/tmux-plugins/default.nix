@@ -246,22 +246,21 @@ in rec {
   fingers = mkTmuxPlugin rec {
     pluginName = "fingers";
     rtpFilePath = "tmux-fingers.tmux";
-    version = "1.0.1";
+    version = "2.1.5";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
       rev = version;
-      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
+      hash = "sha256-gR3u5IVgFxd6uj7l8Ou8GnEvh8AkjRFgIWKCviISweQ=";
       fetchSubmodules = true;
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
-      wrapProgram $target/scripts/$f \
+      chmod +x $target/tmux-fingers.tmux
+      wrapProgram $target/tmux-fingers.tmux \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
           [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
         )}
-      done
     '';
   };
 
