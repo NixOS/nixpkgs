@@ -2,6 +2,7 @@
 , makeWrapper
 , gawk
 , glibc
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -40,7 +41,16 @@ buildGoModule rec {
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
+
+  passthru = {
+    tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
+
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "v\(1\.14.*\)"
+       ];
+     };
+  };
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";

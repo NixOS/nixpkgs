@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 
 buildGoModule rec {
   pname = "consul";
@@ -20,7 +20,15 @@ buildGoModule rec {
     hash = "sha256-XxT+66CNuDeVBoaNhlgET5bJYB/KDCjcO0RDmyI6S9o=";
   };
 
-  passthru.tests.consul = nixosTests.consul;
+  passthru = {
+    tests.consul = nixosTests.consul;
+
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "v\(1\.16.*\)"
+       ];
+     };
+  };
 
   # This corresponds to paths with package main - normally unneeded but consul
   # has a split module structure in one repo
