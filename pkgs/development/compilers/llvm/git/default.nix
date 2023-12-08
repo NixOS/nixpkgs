@@ -20,7 +20,7 @@
 , gitRelease ? {
   version = "18.0.0";
   rev = "6f44f87011cd52367626cac111ddbb2d25784b90";
-  rev-version = "unstable-2023-10-04";
+  rev-version = "18.0.0-unstable-2023-10-04";
   sha256 = "sha256-CqsCDlzg8I2c9BybKP7B5nfHiQWktqgVavrfiYkjkx4=";
 }
   # i.e.:
@@ -59,9 +59,10 @@ in
 let
   monorepoSrc' = monorepoSrc;
 in let
-  # Import releaseInfo separately to avoid infinite recursion
   inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+
   inherit (releaseInfo) release_version version;
+
   inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
@@ -155,18 +156,8 @@ in let
         cp -r ${monorepoSrc}/lldb "$out"
       '') { };
       patches =
-        let
-          resourceDirPatch = callPackage
-            ({ substituteAll, libclang }: substituteAll
-              {
-                src = ./lldb/resource-dir.patch;
-                clangLibDir = "${libclang.lib}/lib";
-              })
-            { };
-        in
         [
           # FIXME: do we need this? ./procfs.patch
-          resourceDirPatch
           ./lldb/gnu-install-dirs.patch
         ]
         # This is a stopgap solution if/until the macOS SDK used for x86_64 is
@@ -219,14 +210,6 @@ in let
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
-
-          # Combat "__cxxabi_config.h not found". Maybe this could be fixed by
-          # copying these headers into libcxx? Note that building libcxx
-          # outside of monorepo isn't supported anymore, might be related to
-          # https://github.com/llvm/llvm-project/issues/55632
-          # ("16.0.3 libcxx, libcxxabi: circular build dependencies")
-          # Looks like the machinery changed in https://reviews.llvm.org/D120727.
-          "-I${lib.getDev targetLlvmLibraries.libcxx.cxxabi}/include/c++/v1"
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -243,11 +226,13 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-        "-nostdlib++"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-nostdlib++"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -258,10 +243,12 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -270,16 +257,22 @@ in let
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-      nixSupport.cc-cflags = [ "-nostartfiles" ];
+      nixSupport.cc-cflags =
+        [
+          "-nostartfiles"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoCompilerRtWithLibc = wrapCCWith rec {
+    clangNoCompilerRtWithLibc = wrapCCWith (rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintools';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-    };
+    } // lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      nixSupport.cc-cflags = [ "-fno-exceptions" ];
+    });
 
   });
 
