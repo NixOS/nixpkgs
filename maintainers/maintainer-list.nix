@@ -26,8 +26,10 @@
     - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
     - `keys` is a list of your PGP/GPG key fingerprints.
 
-    Specifying a GitHub account ensures that you automatically get a review request on
-    pull requests that modify a package for which you are a maintainer.
+    Specifying a GitHub account ensures that you automatically:
+    - get invited to the @NixOS/nixpkgs-maintainers team ;
+    - once you are part of the @NixOS org, OfBorg will request you review
+      pull requests that modify a package for which you are a maintainer.
 
     `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
