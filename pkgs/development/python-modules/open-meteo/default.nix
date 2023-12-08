@@ -3,8 +3,9 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, mashumaro
+, orjson
 , poetry-core
-, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,9 +14,9 @@
 buildPythonPackage rec {
   pname = "open-meteo";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -30,11 +31,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    aresponses
-    pydantic
+    mashumaro
+    orjson
   ];
 
   nativeCheckInputs = [
+    aresponses
     pytest-asyncio
     pytestCheckHook
   ];
@@ -43,8 +45,7 @@ buildPythonPackage rec {
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace "0.0.0" "${version}" \
-      --replace "--cov" "" \
-      --replace 'aiohttp = "^3.8.1"' 'aiohttp = "^3.8.0"'
+      --replace "--cov" ""
   '';
 
   pythonImportsCheck = [
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
+    changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
