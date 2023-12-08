@@ -485,12 +485,12 @@ in rec {
 
   prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
-    version = "unstable-2021-03-30";
+    version = "unstable-2023-10-10";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-prefix-highlight";
-      rev = "15acc6172300bc2eb13c81718dc53da6ae69de4f";
-      sha256 = "08rkflfnynxgv2s26b33l199h6xcqdfmlqbyqa1wkw7h85br3dgl";
+      rev = "13a16701207f3aac846cf7daed3f45ed3e7ea756";
+      sha256 = "1gv5qdcy0xz3g397mzf2xi6v1q8wf8wzzf71dhmjg9k2dspshdwk";
     };
   };
 
