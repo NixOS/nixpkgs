@@ -13,4 +13,27 @@ for f in $($out/bin/find $out -type f); do
 done
 $out/bin/cp $mkdir $tar $unxz $out/bin
 $out/bin/cp $builder $out/bin/bash
+# scorched earth
+for f in $(find $out -type f); do
+    while true; do
+        BADMAN="$(strings $f | grep -o '/nix/store/.*' | grep -v "$out" | head -n1)"
+        if [ -z "$BADMAN" ]; then
+            break
+        fi
+        echo scorch $f
+        SUFFIX="$(echo "$BADMAN" | cut -d/ -f5-)"
+        GOODMAN="$out/$SUFFIX"
+        if [ ${#GOODMAN} -gt ${#BADMAN} ]; then
+            echo "Can't patch $f: $BADMAN too short"
+            break
+        fi
+        while ! [ ${#GOODMAN} -eq ${#BADMAN} ]; do
+            GOODMAN="/$GOODMAN"
+        done
+        if ! sed -E -i -e "s@$BADMAN@$GOODMAN@g" $f; then
+            echo "Can't patch $f: sed failed"
+            break
+        fi
+    done
+done
 echo $out

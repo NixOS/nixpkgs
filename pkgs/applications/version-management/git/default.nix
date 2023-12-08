@@ -3,7 +3,7 @@
 , gnugrep, gnused, gawk, coreutils, findutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, libiconv
+, libxslt, tcl, tk, makeWrapper, libiconv, iconv
 , svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = lib.optionals doInstallCheck [ findutils ]
-    ++ [ curl openssl zlib expat cpio libiconv bash ]
+    ++ [ curl openssl zlib expat cpio libiconv iconv bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
