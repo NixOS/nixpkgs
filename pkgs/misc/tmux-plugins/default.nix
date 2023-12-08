@@ -437,12 +437,12 @@ in rec {
   onedark-theme = mkTmuxPlugin {
     pluginName = "onedark-theme";
     rtpFilePath = "tmux-onedark-theme.tmux";
-    version = "unstable-2020-06-07";
+    version = "unstable-2020-02-25";
     src = fetchFromGitHub {
       owner = "odedlaz";
       repo = "tmux-onedark-theme";
       rev = "3607ef889a47dd3b4b31f66cda7f36da6f81b85c";
-      sha256 = "19jljshwp2p83b634cd1mw69091x42jj0dg40ipw61qy6642h2m5";
+      hash = "sha256-pQooiDEeB8NvBOQ1IKUgPSSQDK+hMTLMGuiKy6GWVKY=";
     };
   };
 
