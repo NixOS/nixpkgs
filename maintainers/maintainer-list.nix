@@ -14777,6 +14777,12 @@
     githubId = 18549627;
     name = "Proglodyte";
   };
+  programmerino = {
+    email = "davis.davalos.delosh@gmail.com";
+    github = "Programmerino";
+    githubId = 17630263;
+    name = "Davis Davalos-DeLosh";
+  };
   progval = {
     email = "progval+nix@progval.net";
     github = "progval";
