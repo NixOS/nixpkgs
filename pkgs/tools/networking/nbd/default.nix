@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     linuxHeaders
   ];
 
+  configureFlags = [
+    "--sysconfdir=/etc"
+  ];
+
   postInstall = ''
     mkdir -p "$out/share/doc/nbd-${version}"
     cp README.md "$out/share/doc/nbd-${version}/"
