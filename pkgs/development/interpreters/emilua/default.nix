@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+  dontUseCmakeConfigure = "true";
+
   # Meson is no longer able to pick up Boost automatically.
   # https://github.com/NixOS/nixpkgs/issues/86131
   env = {
