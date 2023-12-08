@@ -19,6 +19,11 @@ lib.makeScope pkgs.newScope(self: with self; {
     hash = "sha256-eI+mrsZAOLEsdyTC3B+K+GjD3r16CmPx1KJ2KhCwFdg=";
   };
 
+  protobuf_22 = callPackage ./generic.nix {
+    version = "22.4";
+    hash = "sha256-6G+TfXmE2frf5Okl5zxCOiT/V/+2meCoMLLPMrREUYk=";
+  };
+
   protobuf_21 = callPackage ./generic.nix {
     version = "21.12";
     hash = "sha256-VZQEFHq17UsTH5CZZOcJBKiScGV2xPJ/e6gkkVliRCU=";

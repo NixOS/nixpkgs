@@ -24583,6 +24583,7 @@ with pkgs;
     protobuf_25
     protobuf_24
     protobuf_23
+    protobuf_22
     protobuf_21
     protobuf3_20
     protobuf_3_20
