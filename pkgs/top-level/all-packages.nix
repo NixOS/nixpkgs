@@ -17984,8 +17984,6 @@ with pkgs;
 
   regextester = callPackage ../applications/misc/regextester { };
 
-  regina = callPackage ../development/interpreters/regina { };
-
   inherit (ocamlPackages) reason;
 
   buildRubyGem = callPackage ../development/ruby-modules/gem {
