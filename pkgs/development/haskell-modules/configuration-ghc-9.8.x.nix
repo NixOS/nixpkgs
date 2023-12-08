@@ -53,6 +53,7 @@ self: super: {
   bifunctors = super.bifunctors_5_6_1;
   fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
+  doctest = super.doctest_0_22_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
