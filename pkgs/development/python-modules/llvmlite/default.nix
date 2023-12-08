@@ -17,6 +17,7 @@ buildPythonPackage rec {
   # requires at least this version of llvmlite (also not yet officially
   # released, but at least tagged).
   version = "0.41.0dev0";
+  format = "setuptools";
 
   disabled = isPyPy || !isPy3k;
 

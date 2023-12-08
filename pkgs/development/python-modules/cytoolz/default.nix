@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "cytoolz";
   version = "0.12.2";
+  format = "setuptools";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {

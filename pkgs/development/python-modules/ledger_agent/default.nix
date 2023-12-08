@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "ledger_agent";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

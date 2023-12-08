@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "guppy3";
   version = "3.1.4";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

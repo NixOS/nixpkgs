@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ruamel-yaml";
   version = "0.17.32";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ruamel.yaml";

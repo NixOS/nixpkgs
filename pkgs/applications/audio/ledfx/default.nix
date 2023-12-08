@@ -16,7 +16,7 @@ python3.pkgs.buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace '"sentry-sdk==1.14.0",' "sentry-sdk" \
+      --replace "sentry-sdk==1.14.0" "sentry-sdk" \
       --replace "~=" ">="
   '';
 

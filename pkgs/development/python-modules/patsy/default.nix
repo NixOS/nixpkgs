@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "patsy";
   version = "0.5.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

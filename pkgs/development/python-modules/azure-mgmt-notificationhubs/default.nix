@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-notificationhubs";
   version = "8.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

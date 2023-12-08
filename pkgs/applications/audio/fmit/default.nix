@@ -36,6 +36,17 @@ mkDerivation rec {
       PREFIXSHORTCUT=$out"
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/applications
+    ln -s $out/fmit.desktop $out/share/applications/fmit.desktop
+
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    ln -s $out/fmit.png $out/share/icons/hicolor/128x128/apps/fmit.png
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    ln -s $out/fmit.svg $out/share/icons/hicolor/scalable/apps/fmit.svg
+  '';
+
   meta = with lib; {
     description = "Free Musical Instrument Tuner";
     longDescription = ''

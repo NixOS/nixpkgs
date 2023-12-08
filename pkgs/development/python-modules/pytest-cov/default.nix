@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-cov";
   version = "4.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

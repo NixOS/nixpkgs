@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "dockerspawner";
   version = "12.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

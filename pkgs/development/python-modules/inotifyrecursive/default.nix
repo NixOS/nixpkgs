@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "inotifyrecursive";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

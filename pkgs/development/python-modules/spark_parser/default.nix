@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "spark_parser";
   version = "1.8.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

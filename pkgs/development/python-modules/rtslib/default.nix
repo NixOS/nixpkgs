@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "rtslib";
   version = "2.1.76";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
