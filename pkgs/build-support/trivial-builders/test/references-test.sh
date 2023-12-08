@@ -32,6 +32,7 @@ if [[ -z ${SAMPLE:-} ]]; then
 #   sample=( `nix-build --no-out-link sample.nix` )
 #   directRefs=( `nix-build --no-out-link invoke-writeDirectReferencesToFile.nix` )
 #   references=( `nix-build --no-out-link invoke-writeReferencesToFile.nix` )
+#   allReference="$(nix-build --no-out-link invoke-writeMultipleReferencesToFile.nix)"
 #   echo "sample: ${#sample[@]}"
 #   echo "direct: ${#directRefs[@]}"
 #   echo "indirect: ${#references[@]}"
@@ -41,6 +42,8 @@ else
   sample=($SAMPLE)
   directRefs=($DIRECT_REFS)
   references=($REFERENCES)
+  referencesTestMultiple=($REFERENCES_TEST_MULTIPLE)
+  allReference="$ALL_REFERENCE"
 fi
 
 echo >&2 Testing direct references...
@@ -58,5 +61,19 @@ for i in "${!sample[@]}"; do
     <(sort <${references[$i]}) \
     <(nix-store -q --requisites ${sample[$i]} | sort)
 done
+
+echo >&2 Testing closure made with writeMultipleReferencesToFile...
+for i in "${!sample[@]}"; do
+  echo >&2 Checking "#$i ${sample[$i]} ${referencesTestMultiple[$i]}"
+  diff -U3 \
+    <(sort <"${referencesTestMultiple[$i]}") \
+    <(nix-store -q --requisites "${sample[$i]}" | sort)
+done
+
+echo >&2 Testing mixed closures...
+echo >&2 Checking all samples "(${sample[*]})" and "${allReference}"
+diff -U3 \
+  <(sort <"${allReference}") \
+  <(nix-store -q --requisites "${sample[@]}" | sort)
 
 echo 'OK!'
