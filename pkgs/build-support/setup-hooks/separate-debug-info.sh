@@ -1,6 +1,13 @@
 export NIX_SET_BUILD_ID=1
-export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
-export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
+export NIX_CFLAGS_COMPILE+=" -ggdb"
+if [[ -z "${dontCompressDebugSections-}" ]]; then
+    # Sometimes tools try to process debugging sections and fail on
+    # unusual compression mode like `bpftool`:
+    #   https://github.com/NixOS/nixpkgs/pull/272009#issuecomment-1846205807
+    # Provide a knob to disable compression.
+    export NIX_CFLAGS_COMPILE+=" -Wa,--compress-debug-sections"
+    export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
+fi
 export NIX_RUSTFLAGS+=" -g"
 
 fixupOutputHooks+=(_separateDebugInfo)
