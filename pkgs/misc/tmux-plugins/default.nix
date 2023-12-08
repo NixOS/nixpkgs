@@ -361,14 +361,14 @@ in rec {
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
-    version = "unstable-2021-10-01";
+    version = "unstable-2023-03-24";
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tmux-mode-indicator";
-      rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
-      sha256 = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
+      rev = "7027903adca37c54cb8f5fa99fc113b11c23c2c4";
+      hash = "sha256-SAzsn4LoG8Ju5t13/U3/ctlJQPyPgv2FjpPkWSeKbP0=";
     };
     meta = with lib; {
       homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
