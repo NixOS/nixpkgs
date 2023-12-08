@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontUseCmakeConfigure = true;
-  
+
   # Meson is no longer able to pick up Boost automatically.
   # https://github.com/NixOS/nixpkgs/issues/86131
   env = {
@@ -86,12 +86,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonOption "version_suffix" "-nixpkgs1")  
     (lib.mesonBool "enable_http" true)
-	  (lib.mesonBool "enable_file_io" true)
-	  (lib.mesonBool "enable_io_uring" true)
-	  (lib.mesonBool "enable_tests" true)
-	  (lib.mesonBool "enable_manpages" true)
+    (lib.mesonBool "enable_file_io" true)
+    (lib.mesonBool "enable_io_uring" true)
+    (lib.mesonBool "enable_tests" true)
+    (lib.mesonBool "enable_manpages" true)
   ];
-  
+
   postPatch = ''
     pushd subprojects
     cp -r ${emilua-http-wrap} emilua-http
