@@ -377,6 +377,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
+
+  # Current `bpftool` can't handle BPF objects with compressed secrtions
+  # at least on i686-linux:
+  #   https://github.com/NixOS/nixpkgs/pull/272009#issuecomment-1846205807
+  dontCompressDebugSections = true;
+  separateDebugInfo = true;
+
   nativeBuildInputs =
     [
       pkg-config
