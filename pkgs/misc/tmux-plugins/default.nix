@@ -198,12 +198,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "2.2.0";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "9p+KO3/SrASHGtEk8ioW+BnC4cXndYx4FL0T70lKU2w=";
+      sha256 = "1vmji41kl3av9ginc3wh4mgaw7w6w5v7j7wh6xhdk0r9382l7cr2";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
