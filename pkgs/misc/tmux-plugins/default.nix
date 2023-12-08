@@ -448,12 +448,12 @@ in rec {
 
   pain-control = mkTmuxPlugin {
     pluginName = "pain-control";
-    version = "unstable-2020-02-18";
+    version = "unstable-2021-08-09";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-pain-control";
-      rev = "2db63de3b08fc64831d833240749133cecb67d92";
-      sha256 = "0w7a6n4n86ysiqcqj12j2hg9r5fznvbp3dz8pzas9q1k3avlk0zk";
+      rev = "32b760f6652f2305dfef0acd444afc311cf5c077";
+      hash = "sha256-2VI9w7Naj9OHF3iuV63Ij4QcYhbrtngyJ3GpeyzIKxs=";
     };
   };
 
