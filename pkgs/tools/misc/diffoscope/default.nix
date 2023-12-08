@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , abootimg
+, acl
 , apksigcopier
 , apksigner
 , apktool
@@ -115,13 +116,13 @@ python3.pkgs.buildPythonApplication rec {
   # aapt2
   # dexdump
   # docx2txt
-  # getfacl
   # lipo
   # otool
   # r2pipe
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+    acl
     binutils-unwrapped-all-targets
     bzip2
     cdrkit
