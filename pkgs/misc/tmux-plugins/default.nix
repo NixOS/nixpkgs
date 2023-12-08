@@ -418,8 +418,8 @@ in rec {
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-online-status";
-      rev = "ea86704ced8a20f4a431116aa43f57edcf5a6312";
-      sha256 = "1hy3vg8v2sir865ylpm2r4ip1zgd4wlrf24jbwh16m23qdcvc19r";
+      rev = "82f4fbcaee7ece775f37cf7ed201f9d4beab76b8";
+      sha256 = "062qwxi46j7mjkk7d0mijx3rn4aznx5md7arw45ncaqpywwpzi5y";
     };
   };
 
