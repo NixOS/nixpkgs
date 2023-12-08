@@ -51,8 +51,7 @@ buildPythonPackage rec {
   # OSError: /run/opengl-driver/lib/libnvidia-ml.so.1: cannot open shared object file: No such file or directory
   doCheck = false;
 
-  passthru.tests.nvmlInit = callPackage ./test-gpu.nix { };
-
+  passthru.gpuChecks.nvmlInit = callPackage ./test-gpu.nix { };
 
   meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";
