@@ -108,7 +108,7 @@ stdenvNoCC.mkDerivation {
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx ];
+    maintainers = with maintainers; [ arcnmx pabloaul ];
     platforms = platforms.linux;
     mainProgram = "parsecd";
   };
