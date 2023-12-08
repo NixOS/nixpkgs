@@ -496,12 +496,12 @@ in rec {
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2022-05-01";
+    version = "unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "ca6468e2deef11efadfe3a62832ae67742505432";
-      sha256 = "0d7jg5dy4jq64679rf2zqmqbvgiqvpcj5jxfljk7d7y86dnqhj3n";
+      rev = "cff343cf9e81983d3da0c8562b01616f12e8d548";
+      sha256 = "0djfz7m4l8v2ccn1a97cgss5iljhx9k2p8k9z50wsp534mis7i0m";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
