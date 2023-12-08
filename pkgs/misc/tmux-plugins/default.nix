@@ -558,12 +558,12 @@ in rec {
 
   sidebar = mkTmuxPlugin {
     pluginName = "sidebar";
-    version = "unstable-2018-11-30";
+    version = "0.7.0-unstable-2022-12-08";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sidebar";
-      rev = "aacbdb45bc5ab69db448a72de4155d0b8dbac677";
-      sha256 = "1bp90zbv19kbbiik0bgb893ybss1jqsnk3353a631993xjwsih7c";
+      rev = "a41d72c019093fd6a1216b044e111dd300684f1a";
+      hash = "sha256-5+ISvoXXYDDfzSoPBO6v6Wt7IWsRVb9DcPgnO02rYd4=";
     };
   };
 
