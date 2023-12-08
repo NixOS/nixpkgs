@@ -1,24 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-
-# build-system
 , poetry-core
-
-# propagates
-, typing-extensions
-, repath
+, flet-core
+, httpx
+, oauthlib
 }:
 
 buildPythonPackage rec {
-  pname = "flet-core";
+  pname = "flet-runtime";
   version = "0.15.0";
   format = "pyproject";
 
   src = fetchPypi {
-    pname = "flet_core";
+    pname = "flet_runtime";
     inherit version;
-    hash = "sha256-nmQHWyLlyo6CVzn+dlTSnA10XRoSFBLEeYdcWpfoGBo=";
+    hash = "sha256-CRrAz1V6bISgL2MU7ibhhNEB5IdiQKjRdIt2dmZh0h4=";
   };
 
   nativeBuildInputs = [
@@ -26,17 +23,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    repath
-    typing-extensions
+    flet-core
+    httpx
+    oauthlib
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [
+    "flet_runtime"
+  ];
 
   meta = {
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
-    description = "The library is the foundation of Flet framework and is not intended to be used directly";
+    description = "A base package for Flet desktop and Flet mobile";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = [ lib.maintainers.wegank ];
   };
 }
