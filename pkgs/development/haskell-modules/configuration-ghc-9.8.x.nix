@@ -50,6 +50,7 @@ self: super: {
   xhtml = null;
 
   alex = super.alex_3_4_0_1;
+  bifunctors = super.bifunctors_5_6_1;
   fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
@@ -62,6 +63,8 @@ self: super: {
   hspec-hedgehog = super.hspec-hedgehog_0_1_1_0;
   hspec-meta = super.hspec-meta_2_11_7;
   ormolu = super.ormolu_0_7_3_0;
+  rebase = super.rebase_1_20_1_1;
+  semigroupoids = super.semigroupoids_6_0_0_1;
   some = super.some_1_0_6;
   tagged = super.tagged_0_8_8;
   th-abstraction = super.th-abstraction_0_6_0_0;
@@ -83,8 +86,4 @@ self: super: {
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
 
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
-
-  # Test suite does not compile.
-  persistent-sqlite = dontCheck super.persistent-sqlite;
-  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
 }
