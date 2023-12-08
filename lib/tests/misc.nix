@@ -697,6 +697,11 @@ runTests {
     expected = false;
   };
 
+  testHasAttrByPathNonStrict = {
+    expr = hasAttrByPath [] (throw "do not use");
+    expected = true;
+  };
+
   testLongestValidPathPrefix_empty_empty = {
     expr = attrsets.longestValidPathPrefix [ ] { };
     expected = [ ];

@@ -51,12 +51,19 @@ rec {
 
   /* Return if an attribute from nested attribute set exists.
 
+     **Laws**:
+      1.  ```nix
+          hasAttrByPath [] x == true
+          ```
+
      Example:
        x = { a = { b = 3; }; }
        hasAttrByPath ["a" "b"] x
        => true
        hasAttrByPath ["z" "z"] x
        => false
+       hasAttrByPath [] (throw "no need")
+       => true
 
     Type:
       hasAttrByPath :: [String] -> AttrSet -> Bool
