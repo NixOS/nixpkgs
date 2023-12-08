@@ -115,7 +115,9 @@ in
 
     systemd.services.certspotter = {
       description = "Cert Spotter - Certificate Transparency Monitor";
-      after = [ "network.target" ];
+      after = [
+        "network-online.target" # https://github.com/SSLMate/certspotter/issues/83
+      ];
       wantedBy = [ "multi-user.target" ];
       environment.CERTSPOTTER_CONFIG_DIR = configDir;
       environment.SENDMAIL_PATH = if cfg.sendmailPath != null then cfg.sendmailPath else "/run/current-system/sw/bin/false";
@@ -134,6 +136,9 @@ in
         User = "certspotter";
         Group = "certspotter";
         StateDirectory = "certspotter";
+        # see https://github.com/SSLMate/certspotter/issues/83
+        Restart = "on-failure";
+        RestartSec = "5m";
       };
     };
   };
