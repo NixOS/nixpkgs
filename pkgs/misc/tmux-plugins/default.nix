@@ -280,12 +280,12 @@ in rec {
 
   fuzzback = mkTmuxPlugin {
     pluginName = "fuzzback";
-    version = "unstable-2022-11-21";
+    version = "unstable-2023-10-05";
     src = fetchFromGitHub {
       owner = "roosta";
       repo = "tmux-fuzzback";
-      rev = "bfd9cf0ef1c35488f0080f0c5ca4fddfdd7e18ec";
-      sha256 = "w788xDBkfiLdUVv1oJi0YikFPqVk6LiN6PDfHu8on5E=";
+      rev = "f272cdecb767f996fa181144a5e465d90bb849ef";
+      sha256 = "05d0p1nm8q4y2yf0s481dbm2x1402np9byh29q33wnac9h14dyd9";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
