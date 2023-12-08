@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, async-timeout
 , uvloop
 , postgresql
 , pythonOlder
@@ -13,12 +14,16 @@ buildPythonPackage rec {
   version = "0.29.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-0cSeH0T/+v2aVeGpsQFZCFnYgdY56ikiUW9dnFEtNU4=";
   };
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.12") [
+    async-timeout
+  ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
   doCheck = postgresql.doCheck;
