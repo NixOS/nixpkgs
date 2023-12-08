@@ -203,7 +203,7 @@ in rec {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
+      hash = "sha256-IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -243,27 +243,24 @@ in rec {
   };
 
   fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
+    pluginName = "fingers";
+    rtpFilePath = "tmux-fingers.tmux";
+    version = "1.0.1";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
+      rev = version;
+      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
+      fetchSubmodules = true;
     };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
+      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
+      wrapProgram $target/scripts/$f \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
           [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
         )}
+      done
     '';
   };
 
@@ -310,18 +307,12 @@ in rec {
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2024-04-14";
+    version = "unstable-2021-12-27";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
-      rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
-      hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
-    };
-    meta = with lib; {
-      homepage = "https://github.com/wfxr/tmux-fzf-url";
-      description = "Quickly open urls on your terminal screen!";
-      license = licenses.mit;
-      platforms = platforms.unix;
+      rev = "1241fc5682850fe41812cad81c76541674ee305b";
+      sha256 = "1270c5nfvgsdajgfahlacqfb5xwg4hwfrciiy0v03d50vg4h0kdi";
     };
   };
 
@@ -403,23 +394,10 @@ in rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
-      owner = "nordtheme";
-      repo = "tmux";
+      owner = "arcticicestudio";
+      repo = "nord-tmux";
       rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
-    };
-    meta = {
-      homepage = "https://www.nordtheme.com/ports/tmux";
-      description = "Nord Tmux theme with plugin support";
-      longDescription =
-        ''
-          > An arctic, north-bluish clean and elegant tmux theme.
-          > Designed for a fluent and clear workflow with support for third-party plugins.
-
-          This plugin requires that tmux be used with a Nord terminal emulator
-          theme in order to work properly.
-      '';
-      license = lib.licenses.mit;
+      sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
     };
   };
 
@@ -553,23 +531,6 @@ in rec {
     };
   };
 
-  rose-pine = mkTmuxPlugin {
-    pluginName = "rose-pine";
-    version = "unstable-2024-01-08";
-    rtpFilePath = "rose-pine.tmux";
-    src = fetchFromGitHub {
-      owner = "rose-pine";
-      repo = "tmux";
-      rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
-      sha256 = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
-    };
-    meta = {
-      homepage = "https://github.com/rose-pine/tmux";
-      description = "Rosé Pine theme for tmux";
-      license = lib.licenses.mit;
-    };
-  };
-
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
     version = "unstable-2017-09-05";
@@ -581,39 +542,6 @@ in rec {
     };
     postInstall = lib.optionalString stdenv.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
-    '';
-  };
-
-  session-wizard = mkTmuxPlugin rec {
-    pluginName = "session-wizard";
-    rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "27medkamal";
-      repo = "tmux-session-wizard";
-      rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
-    };
-    meta = with lib; {
-      homepage = "https://github.com/27medkamal/tmux-session-wizard";
-      description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
-      longDescription = ''
-        Session Wizard is using fzf and zoxide to do all the magic. Features:
-        * Creating a new session from a list of recently accessed directories
-        * Naming a session after a folder/project
-        * Switching sessions
-        * Viewing current or creating new sessions in one popup
-      '';
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ mandos ];
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
 
@@ -720,28 +648,6 @@ in rec {
     inherit mkTmuxPlugin;
   };
 
-  t-smart-tmux-session-manager = mkTmuxPlugin rec {
-    pluginName = "t-smart-tmux-session-manager";
-    version = "2.8.0";
-    rtpFilePath = "t-smart-tmux-session-manager.tmux";
-    src = pkgs.fetchFromGitHub {
-      owner = "joshmedeski";
-      repo = "t-smart-tmux-session-manager";
-      rev = "v${version}";
-      sha256 = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
-          --prefix PATH : ${with pkgs; lib.makeBinPath (
-            [ pkgs.fzf pkgs.zoxide ]
-          )}
-
-      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
-      find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
-    '';
-  };
-
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
     version = "unstable-2016-01-06";
@@ -752,7 +658,7 @@ in rec {
       sha256 = "1jp4jq57cn116b3i34v6yy69izd8s6mp2ijr260cw86g0470k0fn";
     };
     postInstall = ''
-      sed -i -e '14,20{s|extract_url|${pkgs.extract_url}/bin/extract_url|g}' $target/urlview.tmux
+      sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
     '';
   };
 
