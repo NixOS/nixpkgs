@@ -4,6 +4,7 @@
 , fetchpatch
 , testers
 , adrgen
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -17,6 +18,9 @@ buildGoModule rec {
     hash = "sha256-9EiJe5shhwbjLIvUQMUTSGTgCA+r3RdkLkPRPoWvZ3g=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
+
   vendorHash = "sha256-RXwwv3Q/kQ6FondpiUm5XZogAVK2aaVmKu4hfr+AnAM=";
 
   ldflags = [ "-s" "-w" ];
@@ -26,6 +30,13 @@ buildGoModule rec {
     command = "adrgen version";
     version = "v${version}";
   };
+
+  postInstall = ''
+    installShellCompletion --cmd adrgen \
+      --bash <($out/bin/adrgen completion bash) \
+      --fish <($out/bin/adrgen completion fish) \
+      --zsh <($out/bin/adrgen completion zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/asiermarques/adrgen";
