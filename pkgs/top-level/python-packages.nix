@@ -5097,6 +5097,8 @@ self: super: with self; {
 
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
+  fhir-resources = callPackage ../development/python-modules/fhir-resources { };
+
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
   fickling = callPackage ../development/python-modules/fickling { };
