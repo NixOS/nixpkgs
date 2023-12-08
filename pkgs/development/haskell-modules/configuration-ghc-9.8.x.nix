@@ -58,6 +58,7 @@ self: super: {
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
   github = super.github_0_29;
+  hedgehog = super.hedgehog_1_4;
   hspec = super.hspec_2_11_7;
   hspec-core = super.hspec-core_2_11_7;
   hspec-discover = super.hspec-discover_2_11_7;
@@ -93,6 +94,8 @@ self: super: {
   lifted-base = dontCheck super.lifted-base;
 
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
+
+  retrie = doJailbreak super.retrie; # base >=4.11 && <4.18, bytestring >=0.10.8 && <0.12
 
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
 }
