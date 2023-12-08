@@ -403,12 +403,12 @@ in rec {
 
   maildir-counter = mkTmuxPlugin {
     pluginName = "maildir-counter";
-    version = "unstable-2016-11-25";
+    version = "unstable-2021-03-15";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-maildir-counter";
-      rev = "9415f0207e71e37cbd870c9443426dbea6da78b9";
-      sha256 = "0dwvqhiv9bjwr01hsi5c57n55jyv5ha5m5q1aqgglf4wyhbnfms4";
+      rev = "68136a8020815f99eeba88bc0aae807a465e0e29";
+      sha256 = "19q9s3rpdwzm6y5hzap7p88b8c5w6hva162mxljli6nzi7d70jnn";
     };
   };
 
