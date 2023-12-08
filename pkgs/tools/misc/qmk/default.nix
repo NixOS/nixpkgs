@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , python3
 , fetchPypi
 , pkgsCross
@@ -9,8 +10,18 @@
 , gcc-arm-embedded
 , gnumake
 , teensy-loader-cli
+, makeSetupHook
 }:
 
+let
+  setupHookDarwin = makeSetupHook {
+    name = "darwin-avr-gcc-hook";
+    substitutions = {
+      darwinSuffixSalt = stdenv.cc.suffixSalt;
+      avrSuffixSalt = pkgsCross.avr.buildPackages.gcc8.suffixSalt;
+    };
+  } ./setup-hook-darwin.sh;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "1.1.2";
@@ -44,9 +55,10 @@ python3.pkgs.buildPythonApplication rec {
     gcc-arm-embedded
     gnumake
     pkgsCross.avr.buildPackages.binutils
-    pkgsCross.avr.buildPackages.binutils.bintools
     pkgsCross.avr.buildPackages.gcc8
     pkgsCross.avr.libcCross
+  ] ++ lib.optionals stdenv.isDarwin [
+    setupHookDarwin
   ];
 
   # no tests implemented
@@ -70,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ekleog ];
+    maintainers = with maintainers; [ bhipple babariviere ekleog emilytrau ];
     mainProgram = "qmk";
   };
 }
