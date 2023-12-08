@@ -266,12 +266,12 @@ in rec {
 
   fpp = mkTmuxPlugin {
     pluginName = "fpp";
-    version = "unstable-2016-03-08";
+    version = "unstable-2024-01-29";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-fpp";
-      rev = "ca125d5a9c80bb156ac114ac3f3d5951a795c80e";
-      sha256 = "1b89s6mfzifi7s5iwf22w7niddpq28w48nmqqy00dv38z4yga5ws";
+      rev = "878302f228ee14f0fa59717f63743d396b327a21";
+      hash = "sha256-ULBwyqXFjA9YACv2oVbni54O8kXpVIERtxIrC6njrUA=";
     };
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
