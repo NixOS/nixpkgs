@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "csrmesh";
   version = "0.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

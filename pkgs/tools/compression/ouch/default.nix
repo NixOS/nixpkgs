@@ -7,6 +7,7 @@
 , xz
 , zlib
 , zstd
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,12 +29,19 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "zstd/pkg-config" ];
 
+  preCheck = ''
+    substituteInPlace tests/ui.rs \
+      --replace 'format!(r"/private{path}")' 'path.to_string()'
+  '';
+
   postInstall = ''
     installManPage artifacts/*.1
     installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
   '';
 
-  env.OUCH_ARTIFACTS_FOLDER = "artifacts";
+  env = { OUCH_ARTIFACTS_FOLDER = "artifacts"; } //
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; };
 
   meta = with lib; {
     description = "A command-line utility for easily compressing and decompressing files and directories";

@@ -312,8 +312,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phalcon = callPackage ../development/php-packages/phalcon { };
 
-    php-spx = callPackage ../development/php-packages/php-spx { };
-
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -332,6 +330,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       inherit (pkgs) darwin;
     };
 
+    spx = callPackage ../development/php-packages/spx { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     ssh2 = callPackage ../development/php-packages/ssh2 { };
@@ -345,6 +345,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+  } // lib.optionalAttrs config.allowAliases {
+    php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
     # Core extensions
     let

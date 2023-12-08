@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
 in
 {
   options.services.greetd = {
@@ -27,7 +27,7 @@ in
       '';
     };
 
-    vt = mkOption  {
+    vt = mkOption {
       type = types.int;
       default = 1;
       description = lib.mdDoc ''
@@ -97,12 +97,18 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
+    # Create directories potentially required by supported greeters
+    # See https://github.com/NixOS/nixpkgs/issues/248323
+    systemd.tmpfiles.rules = [
+      "d '/var/cache/tuigreet' - greeter greeter - -"
+    ];
+
     users.users.greeter = {
       isSystemUser = true;
       group = "greeter";
     };
 
-    users.groups.greeter = {};
+    users.groups.greeter = { };
   };
 
   meta.maintainers = with maintainers; [ queezle ];

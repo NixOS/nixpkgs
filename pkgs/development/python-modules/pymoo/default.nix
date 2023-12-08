@@ -21,6 +21,7 @@
 buildPythonPackage rec {
   pname = "pymoo";
   version = "0.6.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "anyoptimization";

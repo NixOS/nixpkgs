@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
   version = "5.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,11 +1,11 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
-, preLibcCrossHeaders
+{ lowPrio, newScope, pkgs, lib, stdenv, stdenvNoCC, cmake, ninja
+, gccForLibs, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM version's, if LLD is the choice. We use these for
+# than the default LLVM verion's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
@@ -17,7 +17,12 @@
     else pkgs.bintools
 , darwin
 # LLVM release information; specify one of these but not both:
-, gitRelease ? null
+, gitRelease ? {
+  version = "18.0.0";
+  rev = "6f44f87011cd52367626cac111ddbb2d25784b90";
+  rev-version = "unstable-2023-10-04";
+  sha256 = "sha256-CqsCDlzg8I2c9BybKP7B5nfHiQWktqgVavrfiYkjkx4=";
+}
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -25,7 +30,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "15.0.7"; sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s="; }
+, officialRelease ? null
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -40,6 +45,7 @@
 # specified.
 , monorepoSrc ? null
 }:
+
 assert let
   int = a: if a then 1 else 0;
   xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
@@ -60,10 +66,11 @@ in let
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
+    major = lib.versions.major release_version;
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${major}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
@@ -106,16 +113,14 @@ in let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # TODO: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
-    # lldb-manpages = lowPrio (tools.lldb.override {
-    #   enableManpages = true;
-    #   python3 = pkgs.python3;  # don't use python-boot
-    # });
+    lldb-manpages = lowPrio (tools.lldb.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
-      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -160,10 +165,24 @@ in let
             { };
         in
         [
-          ./lldb/procfs.patch # FIXME: do we need this?
+          # FIXME: do we need this? ./procfs.patch
           resourceDirPatch
           ./lldb/gnu-install-dirs.patch
-        ];
+        ]
+        # This is a stopgap solution if/until the macOS SDK used for x86_64 is
+        # updated.
+        #
+        # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
+        # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
+        # of this preprocessor symbol in `lldb` with its expansion.
+        #
+        # See here for some context:
+        # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
+        ++ lib.optional (
+          stdenv.targetPlatform.isDarwin
+            && !stdenv.targetPlatform.isAarch64
+            && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
+        ) ./lldb/cpu_subtype_arm64e_replacement.patch;
       inherit llvm_meta;
     };
 
@@ -200,6 +219,14 @@ in let
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
+
+          # Combat "__cxxabi_config.h not found". Maybe this could be fixed by
+          # copying these headers into libcxx? Note that building libcxx
+          # outside of monorepo isn't supported anymore, might be related to
+          # https://github.com/llvm/llvm-project/issues/55632
+          # ("16.0.3 libcxx, libcxxabi: circular build dependencies")
+          # Looks like the machinery changed in https://reviews.llvm.org/D120727.
+          "-I${lib.getDev targetLlvmLibraries.libcxx.cxxabi}/include/c++/v1"
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -262,7 +289,7 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
@@ -275,7 +302,7 @@ in let
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid
+    compiler-rt = if stdenv.hostPlatform.isAndroid || stdenv.hostPlatform.isDarwin
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 

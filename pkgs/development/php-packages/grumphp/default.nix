@@ -43,6 +43,7 @@ php.buildComposerProject (finalAttrs: {
     description = "A PHP code-quality tool";
     homepage = "https://github.com/phpro/grumphp";
     license = lib.licenses.mit;
+    mainProgram = "grumphp";
     maintainers = lib.teams.php.members;
   };
 })

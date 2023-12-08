@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   version = "0.4.1";
+  format = "setuptools";
   pname = "atsim-potentials";
 
   src = fetchFromGitHub {

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "python-csxcad";
   version = csxcad.version;
+  format = "setuptools";
 
   src = csxcad.src;
 

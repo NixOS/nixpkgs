@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "2.1";
+  version = "2.2";
 
   outputs = [ "out" "dev" ];
 

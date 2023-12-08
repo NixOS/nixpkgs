@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "facebook-sdk";
   version = "3.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

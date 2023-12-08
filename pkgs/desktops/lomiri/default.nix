@@ -17,10 +17,12 @@ let
     gmenuharness = callPackage ./development/gmenuharness { };
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
+    u1db-qt = callPackage ./development/u1db-qt { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
     hfd-service = callPackage ./services/hfd-service { };
+    lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
   };
 in
   lib.makeScope libsForQt5.newScope packages

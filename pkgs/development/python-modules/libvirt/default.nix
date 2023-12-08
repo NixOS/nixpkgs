@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "libvirt";
   version = "9.9.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "libvirt";

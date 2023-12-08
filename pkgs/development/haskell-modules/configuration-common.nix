@@ -904,6 +904,63 @@ self: super: {
     '';
   }) super.structured-haskell-mode;
 
+  inherit (let
+    csound_src_git = pkgs.fetchFromGitHub {
+      owner = "spell-music";
+      repo = "csound-expression";
+      rev = "345df2c91c9831dd895f58951990165598504814";
+      hash = "sha256-6qPiKsZwZpqB2kmckKDKyQPTcWPIaVwi+EYs74tRod0=";
+    };
+  in {
+    # Compilation on recent GHC is fixed on git, but not yet on hackage
+    # https://github.com/spell-music/csound-expression/pull/68
+    csound-expression-typed =
+      assert super.csound-expression-typed.version == "0.2.7";
+      overrideCabal (drv: {
+        src = csound_src_git + "/csound-expression-typed";
+        editedCabalFile = null;
+      }) super.csound-expression-typed;
+
+    csound-expression-dynamic =
+      assert super.csound-expression-dynamic.version == "0.3.9";
+      overrideCabal (drv: {
+        src = csound_src_git + "/csound-expression-dynamic";
+        editedCabalFile = null;
+        libraryHaskellDepends = drv.libraryHaskellDepends ++ [
+          self.base64-bytestring self.cereal self.cereal-text
+          self.cryptohash-sha256 self.pretty-show self.safe
+          self.unordered-containers self.vector self.wl-pprint-text
+        ];
+      }) super.csound-expression-dynamic;
+
+    csound-expression =
+      assert super.csound-expression.version == "5.4.3";
+      overrideCabal (drv: {
+        src = csound_src_git + "/csound-expression";
+        editedCabalFile = null;
+      }) super.csound-expression;
+
+    csound-expression-opcodes =
+      assert super.csound-expression-opcodes.version == "0.0.5.1";
+      overrideCabal (drv: {
+        src = csound_src_git + "/csound-expression-opcodes";
+        editedCabalFile = null;
+      }) super.csound-expression-opcodes;
+
+    csound-sampler =
+      assert super.csound-sampler.version == "0.0.10.1";
+      overrideCabal (drv: {
+        src = csound_src_git + "/csound-sampler";
+        editedCabalFile = null;
+      }) super.csound-sampler;
+  })
+    csound-expression-typed
+    csound-expression-dynamic
+    csound-expression
+    csound-expression-opcodes
+    csound-sampler
+    ;
+
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-socks";
   version = "0.8.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

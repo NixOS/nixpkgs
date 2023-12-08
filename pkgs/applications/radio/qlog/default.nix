@@ -11,6 +11,7 @@
 , hamlib
 , qtkeychain
 , pkg-config
+, cups
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_LDFLAGS = "-lhamlib";
 
+  patches = [
+    ./mac.patch
+  ];
+
   buildInputs = [
     qtbase
     qtcharts
@@ -35,7 +40,9 @@ stdenv.mkDerivation rec {
     qtwebchannel
     hamlib
     qtkeychain
-  ];
+  ] ++ (lib.optionals stdenv.isDarwin [
+    cups
+  ]);
 
   nativeBuildInputs = [
     wrapQtAppsHook

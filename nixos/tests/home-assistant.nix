@@ -43,7 +43,7 @@ in {
 
       # test loading custom components
       customComponents = with pkgs.home-assistant-custom-components; [
-        prometheus-sensor
+        prometheus_sensor
       ];
 
       # test loading lovelace modules

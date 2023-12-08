@@ -26,7 +26,7 @@ This file contains general contributing information, but individual parts also h
 
 This section describes in some detail how changes can be made and proposed with pull requests.
 
-> **Note**
+> [!Note]
 > Be aware that contributing implies licensing those contributions under the terms of [COPYING](./COPYING), an MIT-like license.
 
 0. Set up a local version of Nixpkgs to work with using GitHub and Git
@@ -273,7 +273,7 @@ Once a pull request has been merged into `master`, a backport pull request to th
 
 ### Automatically backporting changes
 
-> **Note**
+> [!Note]
 > You have to be a [Nixpkgs maintainer](./maintainers) to automatically create a backport pull request.
 
 Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the pull request on the `master` branch.
@@ -285,16 +285,17 @@ This can be done on both open or already merged pull requests.
 To manually create a backport pull request, follow [the standard pull request process][pr-create], with these notable differences:
 
 - Use `release-YY.MM` for the base branch, both for the local branch and the pull request.
-  > **Warning**
-  > Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
+
+> [!Warning]
+> Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
 
 - Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
   Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pick -xe <commit>` to add a reason for the backport to the commit message.
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8) of this.
 
-  > **Warning**
-  > Ensure the commits exists on the master branch.
-  > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+> [!Warning]
+> Ensure the commits exists on the master branch.
+> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
@@ -305,7 +306,7 @@ To manually create a backport pull request, follow [the standard pull request pr
 ## How to review pull requests
 [pr-review]: #how-to-review-pull-requests
 
-> **Warning**
+> [!Warning]
 > The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
 
 The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests. Reviewing and approving these is an important task and a way to contribute to the project.
@@ -384,7 +385,7 @@ By keeping the `staging-next` branch separate from `staging`, this batching does
 In order for the `staging` and `staging-next` branches to be up-to-date with the latest commits on `master`, there are regular _automated_ merges from `master` into `staging-next` and `staging`.
 This is implemented using GitHub workflows [here](.github/workflows/periodic-merge-6h.yml) and [here](.github/workflows/periodic-merge-24h.yml).
 
-> **Note**
+> [!Note]
 > Changes must be sufficiently tested before being merged into any branch.
 > Hydra builds should not be used as testing platform.
 

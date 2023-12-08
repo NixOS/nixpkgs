@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aioazuredevops";
   version = "1.4.3";
+  format = "setuptools";
 
   disabled = isPy27;
 

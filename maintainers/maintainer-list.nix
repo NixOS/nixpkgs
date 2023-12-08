@@ -26,8 +26,10 @@
     - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
     - `keys` is a list of your PGP/GPG key fingerprints.
 
-    Specifying a GitHub account ensures that you automatically get a review request on
-    pull requests that modify a package for which you are a maintainer.
+    Specifying a GitHub account ensures that you automatically:
+    - get invited to the @NixOS/nixpkgs-maintainers team ;
+    - once you are part of the @NixOS org, OfBorg will request you review
+      pull requests that modify a package for which you are a maintainer.
 
     `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
@@ -2266,6 +2268,15 @@
     githubId = 16821405;
     name = "Ben Kuhn";
   };
+  benlemasurier = {
+    email = "ben@crypt.ly";
+    github = "benlemasurier";
+    githubId = 47993;
+    name = "Ben LeMasurier";
+    keys = [{
+      fingerprint = "0FD4 7407 EFD4 8FD8 8BF5  87B3 248D 430A E8E7 4189";
+    }];
+  };
   benley = {
     email = "benley@gmail.com";
     github = "benley";
@@ -4131,7 +4142,7 @@
     email = "davidlewis@mac.com";
     github = "oceanlewis";
     githubId = 6754950;
-    name = "David Armstrong Lewis";
+    name = "Ocean Armstrong Lewis";
   };
   davidcromp = {
     email = "davidcrompton1192@gmail.com";
@@ -5162,6 +5173,12 @@
     github = "Eken-beep";
     name = "Edvin Källström";
     githubId = 84442052;
+  };
+  ekimber  = {
+    email = "ekimber@protonmail.com";
+    github = "ekimber";
+    name = "Edward Kimber";
+    githubId = 99987;
   };
   ekleog = {
     email = "leo@gaspard.io";
@@ -6828,6 +6845,12 @@
     githubId = 6893840;
     name = "Yacine Hmito";
   };
+  gracicot = {
+    email = "gracicot42@gmail.com";
+    github = "gracicot";
+    githubId = 2906673;
+    name = "Guillaume Racicot";
+  };
   graham33 = {
     email = "graham@grahambennett.org";
     github = "graham33";
@@ -6932,6 +6955,11 @@
     github = "GTrunSec";
     githubId = 21156405;
     name = "GuangTao Zhang";
+  };
+  guekka = {
+    github = "Guekka";
+    githubId = 39066502;
+    name = "Guekka";
   };
   guibert = {
     email = "david.guibert@gmail.com";
@@ -10793,6 +10821,12 @@
       fingerprint = "97A0 AE5E 03F3 499B 7D7A  65C6 76A4 1432 37EF 5817";
     }];
   };
+  lukas-heiligenbrunner = {
+    email = "lukas.heiligenbrunner@gmail.com";
+    github = "lukas-heiligenbrunner";
+    githubId = 30468956;
+    name = "Lukas Heiligenbrunner";
+  };
   lukaswrz = {
     email = "lukas@wrz.one";
     github = "lukaswrz";
@@ -11974,7 +12008,7 @@
   };
   milran = {
     email = "milranmike@protonmail.com";
-    github = "milran";
+    github = "wattmto";
     githubId = 93639059;
     name = "Milran Mike";
   };
@@ -11989,6 +12023,12 @@
     github = "Mindavi";
     githubId = 9799623;
     name = "Rick van Schijndel";
+  };
+  mindstorms6 = {
+    email = "breland@bdawg.org";
+    github = "mindstorms6";
+    githubId = 92937;
+    name = "Breland Miley";
   };
   minijackson = {
     email = "minijackson@riseup.net";
@@ -15347,7 +15387,7 @@
   revol-xut = {
     email = "revol-xut@protonmail.com";
     name = "Tassilo Tanneberger";
-    github = "revol-xut";
+    github = "tanneberger";
     githubId = 32239737;
     keys = [{
       fingerprint = "91EB E870 1639 1323 642A  6803 B966 009D 57E6 9CC6";
@@ -16051,8 +16091,8 @@
   };
   SamirTalwar = {
     email = "lazy.git@functional.computer";
-    github = "abstracte";
-    githubId = 47852;
+    github = "SamirTalwar";
+    githubId = 47582;
     name = "Samir Talwar";
   };
   samlich = {
@@ -17343,13 +17383,12 @@
     name = "Stel Abrego";
   };
   stepbrobd = {
-    name = "StepBroBD";
-    github = "StepBroBD";
+    name = "Yifei Sun";
+    email = "ysun@hey.com";
+    github = "stepbrobd";
     githubId = 81826728;
-    email = "Hi@StepBroBD.com";
-    matrix = "@stepbrobd:matrix.org";
     keys = [{
-      fingerprint = "5D8B FA8B 286A C2EF 6EE4  8598 F742 B72C 8926 1A51";
+      fingerprint = "AC7C 52E6 BA2F E8DE 8F0F  5D78 D973 170F 9B86 DB70";
     }];
   };
   stephank = {
@@ -19227,6 +19266,12 @@
     github = "vinymeuh";
     githubId = 118959;
     name = "VinyMeuh";
+  };
+  viperML = {
+    email = "ayatsfer@gmail.com";
+    github = "viperML";
+    githubId = 11395853;
+    name = "Fernando Ayats";
   };
   viraptor = {
     email = "nix@viraptor.info";

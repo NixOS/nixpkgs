@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "gbinder-python";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";

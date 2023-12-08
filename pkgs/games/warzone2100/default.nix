@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.4.0";
+  version  = "4.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    hash = "sha256-Ul77OihJWIH9H6FUpibGDjqX1BY4DWDQ3bR4lRDY9+U=";
+    hash = "sha256-8vbwO4PXEOyZqGiSz1yqhe8jfe4E4iv908mc+8xuH8I=";
   };
 
   buildInputs = [
@@ -88,9 +88,6 @@ stdenv.mkDerivation rec {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
-    # https://github.com/Warzone2100/warzone2100/pull/3353
-    substituteInPlace lib/ivis_opengl/gfx_api_vk.cpp \
-      --replace vk::throwResultException vk::detail::throwResultException
   '';
 
   cmakeFlags = [

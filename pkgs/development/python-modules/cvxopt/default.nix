@@ -21,6 +21,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 buildPythonPackage rec {
   pname = "cvxopt";
   version = "1.3.2";
+  format = "setuptools";
 
   disabled = isPyPy; # hangs at [translation:info]
 

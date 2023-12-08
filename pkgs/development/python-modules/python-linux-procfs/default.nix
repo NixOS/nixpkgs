@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-linux-procfs";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${version}.tar.gz";

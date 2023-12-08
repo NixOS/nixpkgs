@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "moretools";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -38,6 +38,7 @@
 in buildPythonPackage rec {
   pname = "pybind11";
   version = "2.11.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pybind";

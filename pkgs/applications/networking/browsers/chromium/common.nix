@@ -246,6 +246,7 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+    ] ++ lib.optionals (!chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M114+ with LLVM 16:
       (githubPatch {
         # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
@@ -253,6 +254,9 @@ let
         hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
       })
+    ] ++ lib.optionals (chromiumVersionAtLeast "120") [
+      # We need to revert this patch to build M120+ with LLVM 16:
+      ./chromium-120-llvm-16.patch
     ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
       # Fix build with at-spi2-core ≥ 2.49
       # This version is still needed for electron.

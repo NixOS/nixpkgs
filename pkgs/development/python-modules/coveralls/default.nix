@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "coveralls";
   version = "3.3.1";
+  format = "setuptools";
   disabled = isPy27;
 
   # wanted by tests

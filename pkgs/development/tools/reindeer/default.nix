@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "unstable-2023-11-09";
+  version = "unstable-2023-12-06";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = pname;
-    rev = "66460cb9628864e230f6b30adc49c4b848d2e843";
-    sha256 = "sha256-pB68YxLHiNFhW+0PZ+UW39V59aE11CXZH7WXyqgyRIk=";
+    rev = "5297f5fbb3140203ad796c5b22ad5ec3607bb640";
+    sha256 = "sha256-o9T7mv01ncstqpOwaj3PBPGtYVXLBnYlfCtP0IbxSpw=";
   };
 
-  cargoSha256 = "sha256-iw+7xsVNpIQIxDAmN878v88k1EYe1FnJPVpGBhyVstA=";
+  cargoSha256 = "sha256-WHoOyJn+F+lMVUx2djfcbrlKAWs1fW+uhF0xiFKQes0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =

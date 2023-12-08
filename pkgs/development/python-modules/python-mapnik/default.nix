@@ -29,6 +29,7 @@
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "unstable-2020-09-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapnik";
@@ -126,6 +127,7 @@ buildPythonPackage rec {
     "test_raster_warping_does_not_overclip_source"
     "test_render_points"
     "test_render_with_scale_factor"
+    "test_style_level_comp_op"
     "test_style_level_image_filter"
     "test_that_coordinates_do_not_overflow_and_polygon_is_rendered_csv"
     "test_that_coordinates_do_not_overflow_and_polygon_is_rendered_memory"
@@ -135,6 +137,7 @@ buildPythonPackage rec {
     "test_wgs84_inverse_forward"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_passing_pycairo_context_pdf"
+    "test_passing_pycairo_context_svg"
   ];
 
   pythonImportsCheck = [ "mapnik" ];
