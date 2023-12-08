@@ -6431,6 +6431,8 @@ with pkgs;
 
   recyclarr = callPackage ../tools/video/recyclarr { };
 
+  tabby = callPackage ../development/tools/tabby { };
+
   tsduck = callPackage ../tools/video/tsduck { };
 
   turso-cli = callPackage ../development/tools/turso-cli {};
