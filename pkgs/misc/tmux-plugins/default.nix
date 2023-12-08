@@ -113,12 +113,12 @@ in rec {
 
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
-    version = "unstable-2022-01-25";
+    version = "unstable-2024-01-20";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "fc2f31d79537a5b349f55b74c8ca69abaac1ddbb";
-      sha256 = "06i1jp83iybw76raaxciqz9a7ypgpkvbyjn6jjap8jpqfmj2wmjb";
+      rev = "0698e8f4b17d6454c71bf5212895ec055c578da0";
+      hash = "sha256-W71QyLwC/MXz3bcLR2aJeWcoXFI/A3itjpcWKAdVFJY=";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
