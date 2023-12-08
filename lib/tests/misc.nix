@@ -697,6 +697,46 @@ runTests {
     expected = false;
   };
 
+  testLongestValidPathPrefix_empty_empty = {
+    expr = attrsets.longestValidPathPrefix [ ] { };
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_empty_nonStrict = {
+    expr = attrsets.longestValidPathPrefix [ ] (throw "do not use");
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero = {
+    expr = attrsets.longestValidPathPrefix [ "a" (throw "do not use") ] { d = null; };
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero_b = {
+    expr = attrsets.longestValidPathPrefix [ "z" "z" ] "remarkably harmonious";
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_one = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a = null; };
+    expected = [ "a" ];
+  };
+
+  testLongestValidPathPrefix_two = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b = null; };
+    expected = [ "a" "b" ];
+  };
+
+  testLongestValidPathPrefix_three = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c = null; };
+    expected = [ "a" "b" "c" ];
+  };
+
+  testLongestValidPathPrefix_three_extra = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c.d = throw "nope"; };
+    expected = [ "a" "b" "c" ];
+  };
+
   testFindFirstIndexExample1 = {
     expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [ 1 6 4 ];
     expected = 1;
