@@ -474,12 +474,12 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2023-11-08";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "1d73c304573b3ae369567d2ef635f0e1c3de7ecc";
+      sha256 = "0v4y5d66xgy6zwwfwjbsj733sqm777rs3g8j1djg4jl6dlp2gr8w";
     };
   };
 
