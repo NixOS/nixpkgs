@@ -7,6 +7,8 @@
 , libdbusmenu-gtk3
 , runtimeShell
 , thunderbirdPackages
+, icu
+, fetchpatch2
 }:
 
 let
@@ -110,6 +112,22 @@ in ((buildMozillaMach {
   webrtcSupport = false;
 
   pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+
+  # Betterbird is broken the same way Thunderbird is regarding VTZONE parsing in
+  # [this issue][1] which is ultimately due to a [bug in Unicode ICU][2].
+  # Therefore, Betterbird should apply the same patch that Thunderbird does at
+  # present (see ../thunderbird/packages.nix, or [permalink][3]).
+  #
+  # [1]: https://bugzilla.mozilla.org/show_bug.cgi?id=1843007
+  # [2]: https://unicode-org.atlassian.net/browse/ICU-22132
+  # [3]: https://github.com/NixOS/nixpkgs/blob/2c7f3c0fb7c08a0814627611d9d7d45ab6d75335/pkgs/applications/networking/mailreaders/thunderbird/packages.nix#L82
+  icu = icu.overrideAttrs (attrs: {
+    patches = attrs.patches ++ [(fetchpatch2 {
+      url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+      stripLen = 3;
+      hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+    })];
+  });
 }).overrideAttrs (oldAttrs: {
   postInstall = oldAttrs.postInstall or "" + ''
     mv $out/lib/thunderbird/* $out/lib/betterbird
