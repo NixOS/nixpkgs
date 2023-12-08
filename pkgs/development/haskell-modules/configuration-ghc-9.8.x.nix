@@ -89,6 +89,9 @@ self: super: {
   hw-fingertree-strict = doJailbreak super.hw-fingertree-strict; # deepseq >=1.4 && <1.5
   hw-prim = doJailbreak super.hw-prim; # ghc-prim >=0.5 && <0.11
 
+  # Can't compile test suite: https://github.com/basvandijk/lifted-base/issues/36
+  lifted-base = dontCheck super.lifted-base;
+
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
 
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
