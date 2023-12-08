@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -484,13 +484,19 @@ in
       };
 
     services.postgresql.package = let
-        mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
-        base = if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
-            else if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
-            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
-            else if versionAtLeast config.system.stateVersion "20.03" then mkThrow "11"
-            else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
-            else mkThrow "9_5";
+      inherit (config.system) stateVersion;
+      defVer = if versionAtLeast stateVersion "23.11" then "15"
+          else if versionAtLeast stateVersion "22.05" then "14"
+          else if versionAtLeast stateVersion "21.11" then "13"
+          else if versionAtLeast stateVersion "20.03" then "11"
+          else if versionAtLeast stateVersion "17.09" then "9_6"
+          else "9_5";
+      base = pkgs."postgresql_${defVer}" or throw ''
+        Your value of `${options.system.stateVersion} = "${stateVersion}";` implies using
+        `pkgs.postgresql_${defVer}`, which has been removed in NixOS ${config.system.nixos.release}.
+
+        Please upgrade your PostgreSQL version by configuring `${options.services.postgresql.package}`.
+      '';
     in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
