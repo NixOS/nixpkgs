@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   };
 
   mesonFlags = [
-    (lib.mesonOption "version_suffix" "-nixpkgs1")  
+    (lib.mesonOption "version_suffix" "-nixpkgs1")
     (lib.mesonBool "enable_http" true)
     (lib.mesonBool "enable_file_io" true)
     (lib.mesonBool "enable_io_uring" true)
