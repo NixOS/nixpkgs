@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_event
+, zope-event
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_event
+    zope-event
   ];
 
   # Circular dependency

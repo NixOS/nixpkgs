@@ -16299,7 +16299,7 @@ self: super: with self; {
 
   zope-dottedname = callPackage ../development/python-modules/zope-dottedname { };
 
-  zope_event = callPackage ../development/python-modules/zope_event { };
+  zope-event = callPackage ../development/python-modules/zope-event { };
 
   zope_exceptions = callPackage ../development/python-modules/zope_exceptions { };
 

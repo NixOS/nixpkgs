@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_event
+, zope-event
 , zope_interface
 , zope_location
 , zope-testing
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_event
+    zope-event
     zope_interface
     zope_location
     zope-testing

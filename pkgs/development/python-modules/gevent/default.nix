@@ -10,7 +10,7 @@
 , importlib-metadata
 , setuptools
 , wheel
-, zope_event
+, zope-event
 , zope_interface
 , pythonOlder
 }:
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     importlib-metadata
-    zope_event
+    zope-event
     zope_interface
   ] ++ lib.optionals (!isPyPy) [
     greenlet
