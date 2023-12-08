@@ -21,6 +21,7 @@
 , libuuid
 , libxcb
 , libxkbcommon
+, makeWrapper
 , mesa
 , nspr
 , nss
@@ -30,6 +31,7 @@
 , stdenv
 , systemd
 , udev
+, wrapGAppsHook
 , xorg
 }:
 
@@ -101,9 +103,19 @@ stdenv.mkDerivation {
       }."${flavor + bits}";
     };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
+  ];
+
   buildInputs = [ nwEnv ];
   appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    )
+  '';
 
   installPhase = ''
       runHook preInstall
