@@ -7,6 +7,7 @@
 , cargo
 , rustPlatform
 , rustc
+, libiconv
   # Python requirements
 , dill
 , numpy
@@ -71,6 +72,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
