@@ -1,0 +1,13 @@
+Don't use timing as there is a type conflict.
+
+--- nix-build-fastcap-2.0-18Sep92.drv-1/src/mulGlobal.h.orig	2015-07-21 15:58:49.199101566 +0200
++++ nix-build-fastcap-2.0-18Sep92.drv-1/src/mulGlobal.h	2015-07-21 16:18:39.456751313 +0200
+@@ -57,7 +57,7 @@
+ /* time variables/structs */
+ #ifndef _TIME_                  /* if not on a Sun4 */
+ #ifndef NEWS                    /* if not on a NWS-38XX */
+-#include <time.h>
++//#include <time.h>
+ #endif
+ #endif
+ 
