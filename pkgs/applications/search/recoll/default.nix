@@ -105,6 +105,8 @@ mkDerivation rec {
   patches = [
     # fix "No/bad main configuration file" error
     ./fix-datadir.patch
+    # use the same configure based build for darwin as linux
+    ./0001-no-qtgui-darwin-bundle.patch
   ];
 
   nativeBuildInputs = [
@@ -150,7 +152,6 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
-    wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
     wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
@@ -158,9 +159,12 @@ mkDerivation rec {
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
+    wrapProgram $out/bin/recoll --prefix PATH : "${filterPath}"
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
     mkdir $out/Applications
     mv $out/bin/recoll.app $out/Applications
+    wrapProgram  $out/Applications/recoll.app/Contents/MacOS/recoll --prefix PATH : "${filterPath}"
+    ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
   '';
 
   enableParallelBuilding = true;
