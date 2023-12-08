@@ -398,6 +398,11 @@ stdenv.mkDerivation rec {
       DISPLAY="\''${DISPLAY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\''${DBUS_SESSION_BUS_ADDRESS:-unix:path=\$XDG_RUNTIME_DIR/bus}" \\
       \
+      NIX_PROFILES="\''${NIX_PROFILES:-}" \
+      XMODIFIERS="\''${XMODIFIERS:-}" \
+      GTK_IM_MODULE="\''${GTK_IM_MODULE:-}" \
+      QT_IM_MODULE="\''${QT_IM_MODULE:-}" \
+      \
       XDG_DATA_HOME="\$HOME/.local/share" \
       XDG_DATA_DIRS="$WRAPPER_XDG_DATA_DIRS" \
       \
