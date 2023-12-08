@@ -29,7 +29,7 @@
 , buildPackages
 , pkgsBuildTarget
 , libxcrypt
-, disableGdbPlugin ? !enablePlugin
+, disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , nukeReferences
 , callPackage
 , majorMinorVersion
@@ -423,7 +423,11 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       maintainers
     ;
   } // lib.optionalAttrs (!atLeast11) {
-    badPlatforms = if !(is48 || is49) then [ "aarch64-darwin" ] else lib.platforms.darwin;
+    badPlatforms =
+      # avr-gcc8 is maintained for the `qmk` package
+      if (is8 && targetPlatform.isAvr) then []
+      else if !(is48 || is49) then [ "aarch64-darwin" ]
+      else lib.platforms.darwin;
   } // lib.optionalAttrs is11 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
   };

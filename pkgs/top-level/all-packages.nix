@@ -20695,8 +20695,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  # may add CoreServices and Security again, when MacOS uses Clang 14.0+ by default.
-  botan3 = callPackage ../development/libraries/botan/3.0.nix { };
+  botan3 = callPackage ../development/libraries/botan/3.0.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   box2d = callPackage ../development/libraries/box2d { };
 
@@ -32500,7 +32501,9 @@ with pkgs;
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
-  indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
+  indiepass-desktop = callPackage ../by-name/in/indiepass-desktop/package.nix {
+    electron = electron_19;
+  };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
@@ -34824,6 +34827,7 @@ with pkgs;
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
 
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
+  protonvpn-gui_legacy = python3Packages.callPackage ../applications/networking/protonvpn-gui/legacy.nix { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
@@ -41718,7 +41722,7 @@ with pkgs;
 
   xrq = callPackage ../applications/misc/xrq { };
 
-  pynitrokey = python3Packages.callPackage ../tools/security/pynitrokey { };
+  pynitrokey = with python3Packages; toPythonApplication pynitrokey;
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
