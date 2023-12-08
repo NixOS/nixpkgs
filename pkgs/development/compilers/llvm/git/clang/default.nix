@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
+, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false

@@ -42,6 +42,12 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/bluez/bluez/commit/3a9c637010f8dc1ba3e8382abe01065761d4f5bb.patch";
       hash = "sha256-UUmYMHnxYrw663nEEC2mv3zj5e0omkLNejmmPUtgS3c=";
     })
+    # CVE-2023-45866 / https://github.com/skysafe/reblog/tree/main/cve-2023-45866
+    (fetchpatch {
+      name = "CVE-2023-45866.patch";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/profiles/input?id=25a471a83e02e1effb15d5a488b3f0085eaeb675";
+      sha256 = "sha256-IuPQ18yN0EO/PkqdT/JETyOxdZCKewBiDjGN4CG2GLo=";
+    })
   ];
 
   buildInputs = [
