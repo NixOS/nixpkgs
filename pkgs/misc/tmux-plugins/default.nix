@@ -664,12 +664,12 @@ in rec {
 
   vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
-    version = "unstable-2020-10-05";
+    version = "1.0.0-unstable-2021-04-27";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux-focus-events";
-      rev = "a568192ca0de4ca0bd7b3cd0249aad491625c941";
-      sha256 = "130l73v18md95djkc4s9d0fr018f8f183sjcgy7dgldwdaxlqdi1";
+      rev = "b1330e04ffb95ede8e02b2f7df1f238190c67056";
+      hash = "sha256-R40ggkvFFcHk9lhVm9nw8b174VfUrlDiy+BUgql+KKc=";
     };
 
     meta = with lib; {
