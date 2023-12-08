@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/majorkingleo/xstow";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nzbr ];
-    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }
