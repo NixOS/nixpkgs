@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
+, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -71,7 +71,7 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $lib/lib/clang
-      mv $lib/lib/18 $lib/lib/clang/18
+      mv $lib/lib/17 $lib/lib/clang/17
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
