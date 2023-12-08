@@ -38,11 +38,6 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  postInstall = ''
-    mkdir -p "$out/share/doc/nbd-${version}"
-    cp README.md "$out/share/doc/nbd-${version}/"
-  '';
-
   doCheck = !stdenv.isDarwin;
 
   passthru.tests = {
