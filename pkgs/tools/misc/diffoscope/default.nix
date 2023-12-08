@@ -79,11 +79,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "252";
+  version = "253";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-NmYv5htZT2v04vVksIWGuaPI1rXfNmrVSmErT/faBbQ=";
+    hash = "sha256-xI+SIEUPKFxz7sk9qqE1ibSJX0WRPnJEpco0Mqv7Wp8=";
   };
 
   outputs = [
@@ -118,7 +118,6 @@ python3.pkgs.buildPythonApplication rec {
   # docx2txt
   # lipo
   # otool
-  # r2pipe
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
