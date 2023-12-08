@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
-, gccForLibs, preLibcCrossHeaders
+, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -53,51 +53,10 @@ in
 let
   monorepoSrc' = monorepoSrc;
 in let
-  releaseInfo = if gitRelease != null then rec {
-    original = gitRelease;
-    release_version = original.version;
-    version = gitRelease.rev-version;
-  } else rec {
-    original = officialRelease;
-    release_version = original.version;
-    version = if original ? candidate then
-      "${release_version}-${original.candidate}"
-    else
-      release_version;
-  };
-
-  monorepoSrc = if monorepoSrc' != null then
-    monorepoSrc'
-  else let
-    sha256 = releaseInfo.original.sha256;
-    rev = if gitRelease != null then
-      gitRelease.rev
-    else
-      "llvmorg-${releaseInfo.version}";
-  in fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    inherit rev sha256;
-  };
-
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
   inherit (releaseInfo) release_version version;
-
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.m68k ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
