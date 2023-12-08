@@ -95,6 +95,15 @@ mkDerivation rec {
 
   dontWrapGApps = true;
 
+  postInstall = ''
+    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.png -t $out/share/icons/hicolor/256x256/apps
+    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/{ccViewer,cloudcompare}.desktop \
+      --replace 'Exec=cloudcompare.' 'Exec=' \
+      --replace 'Icon=''${SNAP}/meta/gui/' 'Icon=' \
+      --replace '.png' ""
+  '';
+
   # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")

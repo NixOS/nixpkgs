@@ -66,6 +66,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=bench"
   ];
 
+  postInstall = ''
+    install -Dm444 $src/res/oculante.png -t $out/share/icons/hicolor/128x128/apps/
+    install -Dm444 $src/res/oculante.desktop -t $out/share/applications
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';

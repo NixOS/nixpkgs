@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dt $out/bin praat
+    install -Dm444 main/praat.desktop -t $out/share/applications
+    install -Dm444 main/praat-32.ico $out/share/icons/hicolor/32x32/apps/praat.ico
+    install -Dm444 main/praat-256.ico $out/share/icons/hicolor/256x256/apps/praat.ico
+    install -Dm444 main/praat-480.png $out/share/icons/hicolor/480x480/apps/praat.png
+    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
 
     runHook postInstall
   '';
