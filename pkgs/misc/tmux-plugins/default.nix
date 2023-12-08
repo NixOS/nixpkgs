@@ -165,12 +165,12 @@ in rec {
 
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
-    version = "unstable-2020-01-09";
+    version = "unstable-2020-07-24";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-copycat";
-      rev = "77ca3aab2aed8ede3e2b941079b1c92dd221cf5f";
-      sha256 = "1bchwzhai8k5rk32n4lrmh56rw944jqxr8imjk74hyaa7bbn81ds";
+      rev = "d7f7e6c1de0bc0d6915f4beea5be6a8a42045c09";
+      hash = "sha256-2dMu/kbKLI/+kO05+qmeuJtAvvO7k9SSF+o2MHNllFk=";
     };
   };
 
