@@ -596,8 +596,11 @@ rec {
      default comparison on a function-derived property, and may be more efficient.
 
      Example:
-       sort (a: b: a < b) [ 5 3 7 ]
+       sort (p: q: p < q) [ 5 3 7 ]
        => [ 3 5 7 ]
+
+     Type:
+       sort :: (a -> a -> Bool) -> [a] -> [a]
   */
   sort = builtins.sort or (
     strictLess: list:
