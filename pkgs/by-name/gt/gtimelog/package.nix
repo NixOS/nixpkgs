@@ -1,39 +1,40 @@
-{ lib, fetchFromGitHub, python3Packages, makeWrapper
-, glibcLocales, gobject-introspection, gtk3, libsoup, libsecret
+{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook
+, glibcLocales, gobject-introspection, gtk3, libsoup_3, libsecret
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gtimelog";
-  version = "unstable-2020-05-16";
+  version = "unstable-2023-10-05";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "80682ddbf9e0d68b8c67257289784f3b49b543d8";
-    sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
+    rev = "ba606cbe8eef0e3dc098c6ab3bcbe381bf7ef410";
+    hash = "sha256-+iBHfbUJtAtI/vcHj0Y8f9OxAp1SnhQyMqedVzSYPZQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper gobject-introspection ];
-  buildInputs = [
-    glibcLocales gtk3 libsoup libsecret
-  ];
-
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  buildInputs = [ glibcLocales gtk3 libsoup_3 libsecret ];
   propagatedBuildInputs = with python3Packages; [
-    pygobject3 freezegun mock
+    pygobject3
+  ];
+  checkInputs = with python3Packages; [
+    freezegun
   ];
 
   checkPhase = ''
-    substituteInPlace runtests --replace "/usr/bin/env python3" "${python3Packages.python.interpreter}"
+    patchShebangs ./runtests
     ./runtests
   '';
 
   pythonImportsCheck = [ "gtimelog" ];
 
+  dontWrapGApps = true;
+
+  # Arguments to be passed to `makeWrapper`, only used by buildPython*
   preFixup = ''
-    wrapProgram $out/bin/gtimelog \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH ":" "${gtk3.out}/lib" \
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
@@ -42,14 +43,9 @@ python3Packages.buildPythonApplication rec {
       GTimeLog is a small time tracking application for GNOME.
       It's main goal is to be as unintrusive as possible.
 
-      To run gtimelog successfully on a system that does not have full GNOME 3
+      To run gtimelog successfully on a system that does not have full GNOME
       installed, the following NixOS options should be set:
       - programs.dconf.enable = true;
-      - services.gnome.gnome-keyring.enable = true;
-
-      In addition, the following packages should be added to the environment:
-      - gnome.adwaita-icon-theme
-      - gnome.dconf
     '';
     homepage = "https://gtimelog.org/";
     license = licenses.gpl2Plus;
