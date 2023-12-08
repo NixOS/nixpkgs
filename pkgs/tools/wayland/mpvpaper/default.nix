@@ -2,7 +2,6 @@
 , lib
 , meson
 , ninja
-, wlroots
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wlroots
     wayland
     wayland-protocols
     egl-wayland
