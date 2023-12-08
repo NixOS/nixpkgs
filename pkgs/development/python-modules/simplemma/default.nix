@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "simplemma";
   version = "0.9.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

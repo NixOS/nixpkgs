@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -Dm644 -t $out/lib/udev/rules.d 95-{3,}dscapture.rules
+    install -Dm444 -t $out/share/applications Cute{3,}DSCapture.desktop
+    install -Dm444 -t $out/share/icons/hicolor/128x128/apps Cute{3,}DSCapture.png
   '';
 
   meta = with lib; {

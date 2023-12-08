@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pynvml";
   version = "11.5.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

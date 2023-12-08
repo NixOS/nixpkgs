@@ -22,6 +22,7 @@
 buildPythonPackage rec {
   pname = "tabcmd";
   version = "2.0.12";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

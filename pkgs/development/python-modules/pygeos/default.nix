@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pygeos";
   version = "0.14";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

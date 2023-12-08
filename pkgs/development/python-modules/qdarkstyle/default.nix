@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "qdarkstyle";
   version = "3.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

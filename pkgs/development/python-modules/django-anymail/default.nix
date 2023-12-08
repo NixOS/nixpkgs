@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "django-anymail";
   version = "10.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "anymail";

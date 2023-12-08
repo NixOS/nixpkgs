@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "axisregistry";
   version = "0.4.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.2";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

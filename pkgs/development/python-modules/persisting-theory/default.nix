@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "persisting-theory";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

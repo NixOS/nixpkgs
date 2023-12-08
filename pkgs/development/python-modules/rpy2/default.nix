@@ -25,6 +25,7 @@
 
 buildPythonPackage rec {
     version = "3.5.14";
+    format = "setuptools";
     pname = "rpy2";
 
     disabled = isPyPy;

@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "types-appdirs";
   version = "1.4.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "3.2.0";
+  format = "setuptools";
   pname = "azure-mgmt-kusto";
   disabled = isPy27;
 

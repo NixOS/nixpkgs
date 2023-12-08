@@ -8,11 +8,17 @@
 , unidiff
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "hgsrht";
   version = "0.32.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -48,6 +54,11 @@ buildPythonPackage rec {
         --replace /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
     '';
   };
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-hglib

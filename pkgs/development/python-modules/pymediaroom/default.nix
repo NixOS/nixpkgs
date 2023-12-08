@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pymediaroom";
   version = "0.6.5.4";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {

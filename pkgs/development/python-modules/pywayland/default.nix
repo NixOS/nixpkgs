@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pywayland";
   version = "0.4.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
