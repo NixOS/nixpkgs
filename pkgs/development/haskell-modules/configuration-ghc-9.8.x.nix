@@ -51,9 +51,9 @@ self: super: {
 
   alex = super.alex_3_4_0_1;
   bifunctors = super.bifunctors_5_6_1;
+  doctest = super.doctest_0_22_2;
   fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
-  doctest = super.doctest_0_22_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
@@ -84,6 +84,10 @@ self: super: {
   ghc-trace-events = doJailbreak super.ghc-trace-events;
 
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
+
+  hw-fingertree = doJailbreak super.hw-fingertree; # deepseq >=1.4 && <1.5
+  hw-fingertree-strict = doJailbreak super.hw-fingertree-strict; # deepseq >=1.4 && <1.5
+  hw-prim = doJailbreak super.hw-prim; # ghc-prim >=0.5 && <0.11
 
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
 
