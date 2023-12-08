@@ -25,6 +25,7 @@ in
     gzip
     bzip2
     xz
+    (lib.getBin curl)
     binutils-unwrapped
     llvmPackages_16.clang-unwrapped
     (runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
@@ -53,8 +54,14 @@ in
     (lib.getLib llvmPackages_16.libcxxabi)
     (lib.getLib llvmPackages_16.libunwind)
     (lib.getLib llvmPackages_16.compiler-rt)
+    (lib.getLib curl)
+    (lib.getLib nghttp2)
+    (lib.getLib brotli)
+    (lib.getLib libidn2)
+    (lib.getLib zstd)
 
     # headers
+    (lib.getDev curl)
     (lib.getDev zlib)
     (lib.getDev libxml2)
     (lib.getDev pcre2)
