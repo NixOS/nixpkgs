@@ -190,13 +190,13 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "buildkite": {
-    "hash": "sha256-+H2ivPSrNBybUSYX2sLL4V8uqLTsJZp7AN1AYQQ/f90=",
+    "hash": "sha256-BKlDhEN2F2WrLmAagCAhteCWR1RY0y49MOPAEvUsnHo=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v1.0.6",
+    "rev": "v1.1.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-GzHqmSS0yWH+pNGA7ZbfpRkjUsc2F9vlJ9XEOjKxFS4="
+    "vendorHash": "sha256-fnB4yXzY6cr72v8MCGzkvNLxBSi3RDvQzyKk0eZ6CVs="
   },
   "checkly": {
     "hash": "sha256-HfmEh+7RmCIjBvacBW6sX3PL295oHOo8Z+5YsFyl0/4=",
