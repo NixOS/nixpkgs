@@ -648,7 +648,6 @@ in
         # Library dependencies
         ++ map lib.getLib (
             [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases
         ++ (map (x: lib.getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )

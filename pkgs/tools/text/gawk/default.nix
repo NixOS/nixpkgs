@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl
 , removeReferencesTo
 , runtimeShellPackage
-# TODO: links -lsigsegv but loses the reference for some reason
-, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
 , interactive ? false, readline
 , autoreconfHook # no-pma fix
 
@@ -51,14 +49,11 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals interactive [
     runtimeShellPackage
     readline
-  ] ++ lib.optionals withSigsegv [
-    libsigsegv
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     locale
   ];
 
   configureFlags = [
-    (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
 
@@ -77,10 +72,6 @@ stdenv.mkDerivation rec {
     rm "$out"/bin/gawk-*
     ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
   '';
-
-  passthru = {
-    libsigsegv = if withSigsegv then libsigsegv else null; # for stdenv bootstrap
-  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/gawk/";
