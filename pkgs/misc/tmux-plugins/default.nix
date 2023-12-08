@@ -425,12 +425,12 @@ in rec {
 
   open = mkTmuxPlugin {
     pluginName = "open";
-    version = "unstable-2019-12-02";
+    version = "3.0.0-unstable-2022-08-22";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-open";
-      rev = "cedb4584908bd8458fadc8d3e64101d3cbb48d46";
-      sha256 = "10s0xdhmg0dhpj13ybcq72pw3xgb2dq5v5h2mwidzqyh9g17wndh";
+      rev = "763d0a852e6703ce0f5090a508330012a7e6788e";
+      hash = "sha256-Thii7D21MKodtjn/MzMjOGbJX8BwnS+fQqAtYv8CjPc=";
     };
   };
 
