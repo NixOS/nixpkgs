@@ -113,11 +113,16 @@ python3.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
+  # Android-specific tools:
   # aapt2
   # dexdump
-  # docx2txt
+  # Darwin-specific tools:
   # lipo
   # otool
+  # Other tools:
+  # docx2txt <- makes tests broken:
+  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
@@ -209,6 +214,7 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
+      # docx2txt, breaks the tests.
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
