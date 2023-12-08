@@ -10,7 +10,7 @@ let
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
 
   # Don't start a redis instance if the user sets a custom redis connection
-  enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
+  enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
 
   env = {
@@ -24,9 +24,11 @@ let
     PAPERLESS_TIME_ZONE = config.time.timeZone;
   } // optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-  } // (
-    lib.mapAttrs (_: toString) cfg.extraConfig
-  );
+  } // (lib.mapAttrs (_: s:
+    if (lib.isAttrs s || lib.isList s) then builtins.toJSON s
+    else if lib.isBool s then lib.boolToString s
+    else toString s
+  ) cfg.settings);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
@@ -82,6 +84,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
+    (mkRenamedOptionModule [ "services" "paperless" "extraConfig" ] [ "services" "paperless" "settings" ])
   ];
 
   options.services.paperless = {
@@ -160,32 +163,30 @@ in
       description = lib.mdDoc "Web interface port.";
     };
 
-    # FIXME this should become an RFC42-style settings attr
-    extraConfig = mkOption {
-      type = types.attrs;
+    settings = mkOption {
+      type = lib.types.submodule {
+        freeformType = with lib.types; attrsOf (let
+          typeList = [ bool float int str path package ];
+        in oneOf (typeList ++ [ (listOf (oneOf typeList)) (attrsOf (oneOf typeList)) ]));
+      };
       default = { };
       description = lib.mdDoc ''
         Extra paperless config options.
 
-        See [the documentation](https://docs.paperless-ngx.com/configuration/)
-        for available options.
+        See [the documentation](https://docs.paperless-ngx.com/configuration/) for available options.
 
-        Note that some options such as `PAPERLESS_CONSUMER_IGNORE_PATTERN` expect JSON values. Use `builtins.toJSON` to ensure proper quoting.
+        Note that some settings such as `PAPERLESS_CONSUMER_IGNORE_PATTERN` expect JSON values.
+        Settings declared as lists or attrsets will automatically be serialised into JSON strings for your convenience.
       '';
-      example = literalExpression ''
-        {
-          PAPERLESS_OCR_LANGUAGE = "deu+eng";
-
-          PAPERLESS_DBHOST = "/run/postgresql";
-
-          PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [ ".DS_STORE/*" "desktop.ini" ];
-
-          PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
-            optimize = 1;
-            pdfa_image_compression = "lossless";
-          };
+      example = {
+        PAPERLESS_OCR_LANGUAGE = "deu+eng";
+        PAPERLESS_DBHOST = "/run/postgresql";
+        PAPERLESS_CONSUMER_IGNORE_PATTERN = [ ".DS_STORE/*" "desktop.ini" ];
+        PAPERLESS_OCR_USER_ARGS = {
+          optimize = 1;
+          pdfa_image_compression = "lossless";
         };
-      '';
+      };
     };
 
     user = mkOption {
