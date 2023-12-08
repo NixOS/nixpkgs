@@ -18571,6 +18571,12 @@
     githubId = 1486805;
     name = "Toon Nolten";
   };
+  tornax = {
+    email = "tornax@pm.me";
+    github = "TornaxO7";
+    githubId = 50843046;
+    name = "tornax";
+  };
   toschmidt = {
     email = "tobias.schmidt@in.tum.de";
     github = "toschmidt";

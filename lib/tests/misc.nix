@@ -650,6 +650,28 @@ runTests {
     expected = [2 30 40 42];
   };
 
+  testSortOn = {
+    expr = sortOn stringLength [ "aa" "b" "cccc" ];
+    expected = [ "b" "aa" "cccc" ];
+  };
+
+  testSortOnEmpty = {
+    expr = sortOn (throw "nope") [ ];
+    expected = [ ];
+  };
+
+  testSortOnIncomparable = {
+    expr =
+      map
+        (x: x.f x.ok)
+        (sortOn (x: x.ok) [
+          { ok = 1; f = x: x; }
+          { ok = 3; f = x: x + 3; }
+          { ok = 2; f = x: x; }
+        ]);
+    expected = [ 1 2 6 ];
+  };
+
   testReplicate = {
     expr = replicate 3 "a";
     expected = ["a" "a" "a"];
