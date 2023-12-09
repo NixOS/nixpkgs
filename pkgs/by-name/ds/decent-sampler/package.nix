@@ -28,6 +28,11 @@ let
     '';
 
   };
+
+  libs = with xorg; [
+    libX11
+  ];
+
 in
 
 buildFHSEnv {
@@ -38,8 +43,7 @@ buildFHSEnv {
     decent-sampler
     freetype
     nghttp2
-    xorg.libX11
-  ];
+  ] ++ libs;
 
   runScript = "decent-sampler";
 
