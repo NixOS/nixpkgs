@@ -1,5 +1,4 @@
-{ pkgs
-, fetchFromGitHub
+{ fetchFromGitHub
 , stdenv
 , lib
 , appstream-glib
