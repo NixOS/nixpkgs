@@ -53,6 +53,11 @@ buildPythonPackage rec {
     # Tests require network access
     "test_server_hostname"
     "test_server_hostname_with_port"
+    "test_get_billing_edition"
+    "test_get_telephony_credits"
+    "test_set_business_billing_edition"
+    "test_set_enterprise_billing_edition"
+    "test_set_telephony_credits"
   ];
 
   meta = with lib; {
