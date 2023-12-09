@@ -687,6 +687,7 @@ mapAliases ({
   orchis = orchis-theme; # Added 2021-06-09
   oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
   osxfuse = macfuse-stubs; # Added 2021-03-20
+  oxen = throw "'oxen' has been removed, because it was broken, outdated and unmaintained"; # Added 2023-12-09
 
   ### P ###
 
