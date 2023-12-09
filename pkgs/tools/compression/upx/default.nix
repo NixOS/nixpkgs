@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , nix-update-script
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
