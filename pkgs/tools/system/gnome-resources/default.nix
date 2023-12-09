@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gnome-resources";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     rev = "v${version}";
-    hash = "sha256-faZ6MDOu/y4+DX9ObjPyVkxKwmLffMJZ93Adf/t8nxQ=";
+    hash = "sha256-OVz1vsmOtH/5sEuyl2BfDqG2/9D1HGtHA0FtPntKQT0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/nokyan/resources";
     description = "Monitor your system resources and processes";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     mainProgram = "resources";
     maintainers = with maintainers; [ ewuuwe ];
     platforms = platforms.linux;
