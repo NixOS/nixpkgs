@@ -10,14 +10,19 @@ let
   inherit (lib.types) attrsOf bool coercedTo either int listOf oneOf path
     str submodule;
 in
-{ }: {
-  type = let
-    section = attrsOf relation;
-    relation = either (attrsOf value) value;
+{ }: rec {
+  sectionType = let
+    relation = oneOf [
+      (listOf (attrsOf value))
+      (attrsOf value)
+      value
+    ];
     value = either (listOf atom) atom;
     atom = oneOf [int str bool];
-  in submodule {
-    freeformType = attrsOf section;
+  in attrsOf relation;
+
+  type = submodule {
+    freeformType = attrsOf sectionType;
     options = {
       include = mkOption {
         default = [ ];
@@ -71,6 +76,9 @@ in
         ${name} = {
         ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
         }''
+      else if isList relation
+      then
+        concatMapStringsSep "\n" (formatRelation name) relation
       else formatValue name relation;
 
     formatValue = name: value:
