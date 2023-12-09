@@ -2,12 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, flit-core
 , python-dateutil
-, typing-extensions
+, types-python-dateutil
 , pytestCheckHook
 , pytest-mock
 , pytz
-, setuptools
 , simplejson
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,11 +29,13 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
-  propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  propagatedBuildInputs = [
+    python-dateutil
+    types-python-dateutil
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
