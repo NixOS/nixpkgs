@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.buildPlatform.isDarwin && !stdenv.hostPlatform.isStatic
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -87,7 +87,7 @@ let
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
+      "--libdir=$(out)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
@@ -166,7 +166,7 @@ let
       # Hardcode the path to pgxs so pg_config returns the path in $out
       substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
     '' + lib.optionalString jitSupport ''
-        # Force lookup of jit stuff in $out instead of $lib
+        # Hardcode lookup of jit stuff in $out
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
@@ -174,10 +174,7 @@ let
 
     postInstall =
       ''
-        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon*.a" "$out"
-        moveToOutput "lib/libpgport*.a" "$out"
-        moveToOutput "lib/libecpg*" "$out"
+        moveToOutput "lib/libpq.*" "$lib"
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
@@ -193,11 +190,6 @@ let
           done
         fi
       '' + lib.optionalString jitSupport ''
-        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
-        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
-        moveToOutput "lib/bitcode" "$out"
-        moveToOutput "lib/llvmjit*" "$out"
-
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${self.llvmPackages.stdenv.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
@@ -221,7 +213,15 @@ let
         ''}
       '';
 
-    postFixup = lib.optionalString (!stdenv'.isDarwin && stdenv'.hostPlatform.libc == "glibc")
+    postFixup = ''
+        substituteInPlace "$out/lib/pkgconfig/libpq.pc" \
+          --replace 'libdir=''${exec_prefix}/lib' \
+                    "libdir=$lib/lib"
+      ''
+      + lib.optionalString stdenv'.isDarwin ''
+        install_name_tool -id $lib/lib/libpq.5.dylib $lib/lib/libpq.5.dylib
+      ''
+      + lib.optionalString (!stdenv'.isDarwin && stdenv'.hostPlatform.libc == "glibc")
       ''
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
