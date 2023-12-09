@@ -25,6 +25,7 @@ let
     lomiri-action-api = callPackage ./qml/lomiri-action-api { };
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
+    qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
