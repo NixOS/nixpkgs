@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                 'find_program( LLVM_SPIRV llvm-spirv PATHS "${buildPackages.spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace CMakeLists.txt \
-      --replace 'COMMAND prepare_builtins' 'COMMAND ${buildPackages.libclc.dev}/bin/prepare_builtins'
+      --replace 'COMMAND prepare_builtins' 'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ];
