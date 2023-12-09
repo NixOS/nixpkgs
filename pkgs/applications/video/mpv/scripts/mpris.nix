@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, mpv-unwrapped, ffmpeg }:
+{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, glib, mpv-unwrapped, ffmpeg }:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
   };
+  passthru.updateScript = gitUpdater {};
 
   nativeBuildInputs = [ pkg-config ];
 
