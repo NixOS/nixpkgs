@@ -2,13 +2,13 @@
 
 buildLua {
   pname = "video-cutter";
-  version = "unstable-2021-02-03";
+  version = "unstable-2023-11-09";
 
   src = fetchFromGitHub {
     owner = "rushmj";
     repo = "mpv-video-cutter";
-    rev = "718d6ce9356e63fdd47208ec44f575a212b9068a";
-    sha256 = "sha256-ramID1DPl0UqEzevpqdYKb9aaW3CAy3Dy9CPb/oJ4eY=";
+    rev = "01a0396c075d5f8bbd1de5b571e6231f8899ab65";
+    sha256 = "sha256-veoRFzUCRH8TrvR7x+WWoycpDyxqrJZ/bnp61dVc0pE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,8 +36,7 @@ buildLua {
   meta = with lib; {
     description = "Cut videos and concat them automatically";
     homepage = "https://github.com/rushmj/mpv-video-cutter";
-    # repo doesn't have a license
-    license = licenses.unfree;
+    license = licenses.mit;
     maintainers = with maintainers; [ lom ];
   };
 }
