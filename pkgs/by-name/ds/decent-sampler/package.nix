@@ -10,7 +10,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.9.4";
+  version = "1.9.8";
 
   decent-sampler = stdenv.mkDerivation {
     inherit pname version;
@@ -31,7 +31,7 @@ let
 in
 
 buildFHSEnv {
-    inherit pname version;
+  inherit pname version;
 
   targetPkgs = pkgs: [
     decent-sampler
