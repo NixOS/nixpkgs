@@ -26657,6 +26657,8 @@ with pkgs;
 
   gotosocial = callPackage ../servers/gotosocial { };
 
+  hotcrp = callPackage ../servers/web-apps/hotcrp { };
+
   materialize = callPackage ../servers/sql/materialize {
     inherit (buildPackages.darwin) bootstrap_cmds;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
