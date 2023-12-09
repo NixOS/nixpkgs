@@ -3,12 +3,12 @@
     handle = {
       # Required
       name = "Your name";
-
-      # Optional, but at least one of email, matrix or githubId must be given
-      email = "address@example.org";
-      matrix = "@user:example.org";
       github = "GithubUsername";
       githubId = your-github-id;
+
+      # Optional
+      email = "address@example.org";
+      matrix = "@user:example.org";
 
       keys = [{
         fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
