@@ -1,6 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
 , buildPackages
-, llvmPackages_16
 , ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
