@@ -33,6 +33,7 @@ let
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
     lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
+    qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
