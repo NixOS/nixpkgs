@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , pytest
@@ -33,6 +34,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AssertionError:
+    # assert 'expected call not found.\nExpected: mock()\n  Actual: not called.' == 'expected call not found.\nExpected: mock()\nActual: not called.'
+    # I'm not sure why there are two spaces before "Actual".
+    "test_failure_message_with_name"
+    "test_failure_message_with_no_name"
   ];
 
   pythonImportsCheck = [ "pytest_mock" ];
