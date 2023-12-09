@@ -31375,10 +31375,10 @@ with pkgs;
     emacs29-macport
   ;
 
-  emacs-macport = emacs28-macport;
-  emacs = emacs28;
-  emacs-gtk = emacs28-gtk3;
-  emacs-nox = emacs28-nox;
+  emacs-macport = emacs29-macport;
+  emacs = emacs29;
+  emacs-gtk = emacs29-gtk3;
+  emacs-nox = emacs29-nox;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
