@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication {
     description = "Render cgroups tree annotated by memory usage";
     homepage = "https://github.com/nbraud/memtree";
     maintainers = with maintainers; [ nicoo ];
+    mainProgram = "memtree";
     platforms = platforms.linux;
   };
 }
