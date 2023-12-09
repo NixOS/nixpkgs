@@ -4273,6 +4273,8 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frelatage = callPackage ../development/python-modules/frelatage { };
+
   frida-python = callPackage ../development/python-modules/frida-python { };
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
