@@ -17,6 +17,7 @@
 , pytest-lazy-fixture
 , pkg-config
 , scipy
+, setuptools
 , setuptools-scm
 , oldest-supported-numpy
 }:
@@ -27,7 +28,6 @@ in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  format = "setuptools";
   inherit (arrow-cpp) version src;
   pyproject = true;
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
     cmake
     cython
     pkg-config
+    setuptools
     setuptools-scm
     oldest-supported-numpy
   ];
