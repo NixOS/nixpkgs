@@ -10046,6 +10046,8 @@ with pkgs;
     lua = lua5_2_compat;
   };
 
+  lttoolbox = callPackage ../applications/misc/lttoolbox { };
+
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
   lunatask = callPackage ../applications/misc/lunatask { };
@@ -26609,6 +26611,8 @@ with pkgs;
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-excalidraw = callPackage ../servers/jitsi-excalidraw { };
+
+  jigasi = callPackage ../servers/jigasi { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
