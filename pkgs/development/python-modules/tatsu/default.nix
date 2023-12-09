@@ -5,12 +5,13 @@
 , pytestCheckHook
 , pythonOlder
 , regex
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
   version = "5.10.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-oCYvDP8TbafyJAgl3k7fZ8MKk9prPytvl971s2BCyWA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     colorama
