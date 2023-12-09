@@ -29,11 +29,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-OVz1vsmOtH/5sEuyl2BfDqG2/9D1HGtHA0FtPntKQT0=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = "${src}/Cargo.lock";
-    outputHashes = {
-      "plotters-cairo-0.4.0" = "sha256-m7ZT5F7WxjZSGQwuytqdMWUgYvcK2UCU/ntJGIJE+UA=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-SkCEA9CKqzy0wSIUj0DG6asIysD7G9i3nJ9jwhwAUqY=";
   };
 
   nativeBuildInputs = [
