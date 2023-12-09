@@ -24,7 +24,7 @@ recurseIntoAttrs {
   references =
     if stdenv.hostPlatform.isLinux
     then references
-    else null;
+    else {};
   writeCBin = callPackage ./writeCBin.nix {};
   writeShellApplication = callPackage ./writeShellApplication.nix {};
   writeScriptBin = callPackage ./writeScriptBin.nix {};
