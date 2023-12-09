@@ -17,6 +17,8 @@ let
     lsb-release
     # Errors in output without those
     pciutils
+    # run.sh wants ldconfig
+    glibc.bin
     # Games' dependencies
     xorg.xrandr
     which
