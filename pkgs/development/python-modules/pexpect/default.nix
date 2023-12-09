@@ -27,7 +27,7 @@ buildPythonPackage (rec {
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
-    downloadPage = "https://github.com/pexpect/pexpect"
+    downloadPage = "https://github.com/pexpect/pexpect";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
 
