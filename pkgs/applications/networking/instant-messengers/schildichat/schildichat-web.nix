@@ -109,5 +109,6 @@ in stdenv.mkDerivation rec {
     maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
     license = licenses.asl20;
     platforms = platforms.all;
+    knownVulnerabilities = [ "CVE-2023-37259" ];
   };
 }
