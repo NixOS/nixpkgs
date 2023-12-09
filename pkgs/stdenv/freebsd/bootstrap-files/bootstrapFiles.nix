@@ -2,7 +2,17 @@
 let
   pkgs = pkgsCross.${system};
   tar-all = name: pkgs: (runCommand name {} ''
-    tar -cJf $out ${lib.concatStringsSep " " (lib.flatten (map (pkg: ["-C" pkg "."]) pkgs))}
+    base=$PWD
+    mkdir nix-support
+    for dir in ${lib.concatStringsSep " " pkgs}; do
+      cd "$dir/nix-support" 2>/dev/null || continue
+      for f in $(find . -type f); do
+        mkdir -p "$base/nix-support/$(dirname $f)"
+        cat $f >>"$base/nix-support/$f"
+      done
+    done
+    rm -f $base/nix-support/propagated-build-inputs
+    tar -cJf $out ${lib.concatStringsSep " " (lib.flatten (map (pkg: ["-C" pkg "."]) pkgs))} -C $base ./nix-support
   '');
   static = import ./static.nix { inherit stdenvAdapters pkgs; };
 in
@@ -26,6 +36,9 @@ in
     xz                   # unpack dependency
     (lib.getBin curl)    # unpack dependency and git dependency
     iconv                # git dependency
+    cacert.out           # curl dependency
+    openssl.out          # curl dependency
+    (lib.getBin openssl) # curl dependency
     binutils-unwrapped   # stdenv dependency
     llvmPackages_16.clang-unwrapped  # stdenv dependency
     (runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")  # stdenv dependency
@@ -57,6 +70,7 @@ in
     (lib.getLib brotli)
     (lib.getLib libidn2)
     (lib.getLib zstd)
+    (lib.getLib openssl)
 
     # headers
     (lib.getDev curl)
@@ -67,6 +81,7 @@ in
     (lib.getDev ncurses)
     (lib.getDev readline)
     (lib.getDev bzip2)
+    (lib.getDev openssl)
     (lib.getDev llvmPackages_16.libcxx)
     (lib.getDev llvmPackages_16.libcxxabi)
     (lib.getDev llvmPackages_16.compiler-rt)

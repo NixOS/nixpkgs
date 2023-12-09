@@ -39,21 +39,76 @@ in
 [
   ({}: let
     bootstrap-tools = (derivation {
+      inherit system;
       name = "bootstrap-tools";
-      pname = "bootstrap-tools";
       builder = all-bootstrap-files.bash;
       args = [ ./unpack-bootstrap-files.sh ];
       inherit (all-bootstrap-files) tar unxz mkdir chmod bootstrapFiles;
-      inherit system;
-      shellPath = "bin/bash";
-
-      version = "16";  # clang version
     });
 
+    linkBS = (attrs: derivation attrs // {
+      name = builtins.baseNameOf (builtins.elemAt attrs.paths 0);
+      src = bootstrap-tools;
+      builder = all-bootstrap-files.bash;
+      args = [./linkBS.sh];
+      paths = attrs.paths;
+      PATH = "${bootstrap-tools}/bin";
+    });
+
+    patchelf = linkBS { paths = [ "bin/patchelf" ]; };
+    bash = linkBS { paths = ["bin/bash"]; shell = "bin/bash"; };
+    curl = linkBS { paths = ["bin/curl" "bin/curl-config" ]; };
+    clang = linkBS { paths = [ "bin/clang" ]; version = "16"; };
+    coreutils = linkBS { paths = map (str: "bin/" + str) [
+      "arch" "base64" "basename" "cat" "chcon"
+      "chgrp" "chmod" "chown" "chroot" "cksum"
+      "comm" "cp" "csplit" "cut" "date"
+      "dd" "df" "dir" "dircolors" "dirname"
+      "du" "echo" "env" "expand" "expr"
+      "factor" "false" "fmt" "fold" "groups"
+      "head" "hostid" "hostname" "id" "install"
+      "join" "kill" "link" "ln" "logname"
+      "ls" "md5sum" "mkdir" "mkfifo" "mknod"
+      "mktemp" "mv" "nice" "nl" "nohup"
+      "nproc" "numfmt" "od" "paste" "pathchk"
+      "pinky" "pr" "printenv" "printf" "ptx"
+      "pwd" "readlink" "realpath" "rm" "rmdir"
+      "runcon" "seq" "shred" "shuf" "sleep"
+      "sort" "split" "stat" "stdbuf" "stty"
+      "sum" "tac" "tail" "tee" "test"
+      "timeout" "touch" "tr" "true" "truncate"
+      "tsort" "tty" "uname" "unexpand" "uniq"
+      "unlink" "uptime" "users" "vdir" "wc"
+      "who" "whoami" "yes"
+    ]; };
+    diffutils = linkBS { paths = map (str: "bin/" + str) [
+      "diff" "cmp" "diff3" "sdiff"
+    ]; };
+    findutils = linkBS { paths = map (str: "bin/" + str) [
+      "find" "locate" "updatedb" "xargs"
+    ]; };
+    iconv = linkBS { paths = [ "bin/iconv" ]; };
+    patch = linkBS { paths = [ "bin/patch" ]; };
+    gnutar = linkBS { paths = [ "bin/tar" ]; };
+    gawk = linkBS { paths = [ "bin/awk" "bin/gawk" ]; };
+    gnumake = linkBS { paths = [ "bin/make" ]; };
+    gnugrep = linkBS { paths = [ "bin/grep" "bin/egrep" "bin/fgrep" "bin/rgrep" ]; };
+    gnused = linkBS { paths = [ "bin/sed" ]; };
+    gzip = linkBS { paths = [ "bin/gzip" "bin/gunzip" ]; };
+    bzip2 = linkBS { paths = [ "bin/bzip2" ]; };
+    xz = linkBS { paths = [ "bin/xz" "bin/unxz" ]; };
+    cacert = linkBS { paths = [ "etc/ssl/certs" "nix-support/setup-hook" ]; };
+    binutils = linkBS { paths = map (str: "bin/" + str) [
+      "ld" "as" "gold" "addr2line" "ar" "c++filt"
+      "dlltool" "elfedit" "gprof" "gprofng" "nlmconv"
+      "nm" "objcopy" "ranlinb" "readelf" "size"
+      "strings" "strip" "windmc" "windres"
+    ]; };
+
+
     fetchurl = import ../../build-support/fetchurl {
-      inherit lib;
+      inherit lib curl;
       stdenvNoCC = stdenvNoCC;
-      curl = bootstrap-tools;
     };
 
     stdenvNoCC = import ../generic {
@@ -63,7 +118,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ bootstrap-tools ];
-      shell = "${bootstrap-tools}/bin/bash";
+      shell = "${bash}/bin/bash";
       fetchurlBoot = fetchurl;
       cc = null;
     };
@@ -74,8 +129,8 @@ in
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [bootstrap-tools];
-      shell = "${bootstrap-tools}/bin/bash";
+      initialPath = [coreutils gnutar findutils gnumake gnused patchelf gnugrep gawk diffutils patch bash xz gzip bzip2];
+      shell = "${bash}/bin/bash";
       fetchurlBoot = fetchurl;
       extraNativeBuildInputs = [./unpack-source.sh];
       cc = import ../../build-support/cc-wrapper ({
@@ -90,9 +145,9 @@ in
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
-        gnugrep = bootstrap-tools;
-        coreutils = bootstrap-tools;
-        cc = bootstrap-tools;
+        gnugrep = gnugrep;
+        coreutils = coreutils;
+        cc = clang;
         #libcxx = bootstrap-tools;
         isClang = true;
         bintools = import ../../build-support/bintools-wrapper {
@@ -103,22 +158,20 @@ in
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
-          bintools = bootstrap-tools;
-          gnugrep = bootstrap-tools;
-          coreutils = bootstrap-tools;
+          bintools = binutils;
+          gnugrep = gnugrep;
+          coreutils = coreutils;
         };
       });
       overrides = self: super: {
         inherit bootstrap-tools fetchurl;
-        #bash = bootstrap-tools;
-        freebsd = super.freebsd.overrideScope (self': super': {
-          boot-install = bootstrap-tools;
-          install = bootstrap-tools;
-          iconv = bootstrap-tools;
-        });
-        curl = bootstrap-tools;
-        cacert = bootstrap-tools;
-        iconv = bootstrap-tools;
+        #freebsd = super.freebsd.overrideScope (self': super': {
+        #  boot-install = bootstrap-tools;
+        #  install = bootstrap-tools;
+        #});
+        curl = curl;
+        cacert = cacert;
+        iconv = iconv;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
