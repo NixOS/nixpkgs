@@ -32302,8 +32302,6 @@ with pkgs;
 
   gostatic = callPackage ../applications/misc/gostatic { };
 
-  gosmore = callPackage ../applications/misc/gosmore { };
-
   gossa = callPackage ../applications/networking/gossa { };
 
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
