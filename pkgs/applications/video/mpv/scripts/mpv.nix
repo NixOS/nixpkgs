@@ -4,14 +4,17 @@
 }:
 
 let mkBuiltin = name: args:
-  buildLua (lib.attrsets.recursiveUpdate rec {
+  let srcPath = "TOOLS/lua/${name}.lua";
+  in buildLua (lib.attrsets.recursiveUpdate rec {
     inherit (mpv-unwrapped) src version;
     pname = "mpv-${name}";
-    scriptPath = "TOOLS/lua/${name}.lua";
+
+    dontUnpack = true;
+    scriptPath = "${src}/${srcPath}";
 
     meta = with lib; {
       inherit (mpv-unwrapped.meta) license;
-      homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${scriptPath}";
+      homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
     };
   } args);
 
