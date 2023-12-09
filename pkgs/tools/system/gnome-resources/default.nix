@@ -56,15 +56,12 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  wrapperPath = lib.makeBinPath ([
-    dmidecode
-  ]);
-
-  postFixup = ''
-    # Ensure all dependencies are in PATH
-    wrapProgram $out/bin/resources \
-      --prefix PATH : "${wrapperPath}"
+  postPatch = ''
+    substituteInPlace src/utils/memory.rs \
+      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
   '';
+
+  mesonFlags = [ "-Dprofile=default" ];
 
   meta = with lib; {
     homepage = "https://github.com/nokyan/resources";
