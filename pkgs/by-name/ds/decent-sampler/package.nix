@@ -31,6 +31,7 @@ let
 in
 
 buildFHSEnv {
+    inherit version;
   name = "decent-sampler";
 
   targetPkgs = pkgs: [
