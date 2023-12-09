@@ -11,6 +11,7 @@
 , gnumake
 , teensy-loader-cli
 , makeSetupHook
+, callPackage
 }:
 
 let
@@ -63,6 +64,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # no tests implemented
   doCheck = false;
+
+  passthru.tests.smoke-test = callPackage ./smoke-test.nix { };
 
   meta = with lib; {
     homepage = "https://github.com/qmk/qmk_cli";
