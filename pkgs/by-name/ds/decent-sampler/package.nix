@@ -9,11 +9,11 @@
 , }:
 
 let
-  name = "decent-sampler";
+  pname = "decent-sampler-unwrapped";
   version = "1.9.4";
 
   decent-sampler = stdenv.mkDerivation {
-    inherit name version;
+    inherit pname version;
 
     src = fetchzip {
       # dropbox link: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
@@ -31,7 +31,7 @@ let
 in
 
 buildFHSEnv {
-  inherit name version;
+  name = "decent-sampler";
 
   targetPkgs = pkgs: [
     decent-sampler
