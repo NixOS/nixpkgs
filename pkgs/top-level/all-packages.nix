@@ -4814,8 +4814,6 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
-  swayimg = callPackage ../tools/wayland/swayimg { };
-
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   swww = callPackage ../tools/wayland/swww { };
