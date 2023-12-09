@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -21,15 +20,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
   };
-
-  patches = [
-    # https://github.com/frederickjansen/polyline/pull/15
-    (fetchpatch {
-      name = "relax-build-dependencies.patch";
-      url = "https://github.com/frederickjansen/polyline/commit/cb9fc80606c33dbbcaa0d94de25ae952358443b6.patch";
-      hash = "sha256-epg2pZAG+9QuICa1ms+/EO2DDmYEz+KEtxxnvG7rsWY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
