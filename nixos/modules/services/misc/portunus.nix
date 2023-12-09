@@ -98,6 +98,10 @@ in
 
           The OIDC secret must be set as the `DEX_CLIENT_''${id}` environment variable
           in the [](#opt-services.dex.environmentFile) setting.
+
+          ::: {.note}
+          Make sure the id only contains characters that are allowed in an environment variable name, e.g. no -.
+          :::
         '';
       };
 
