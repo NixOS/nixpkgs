@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pierrechevalier83/workstyle";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];
+    mainProgram = "workstyle";
   };
 }

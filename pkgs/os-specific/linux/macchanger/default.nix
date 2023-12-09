@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://github.com/alobbs/macchanger";
     platforms = platforms.linux;
+    mainProgram = "macchanger";
   };
 }
