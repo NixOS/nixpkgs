@@ -1,10 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , zope-configuration
 , zope-deferredimport
 , zope-deprecation
-, zope_event
+, zope-event
 , zope-hookable
 , zope-i18nmessageid
 , zope_interface
@@ -14,6 +15,8 @@ buildPythonPackage rec {
   pname = "zope-component";
   version = "6.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.component";
@@ -25,7 +28,7 @@ buildPythonPackage rec {
     zope-configuration
     zope-deferredimport
     zope-deprecation
-    zope_event
+    zope-event
     zope-hookable
     zope-i18nmessageid
     zope_interface
@@ -39,8 +42,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/zopefoundation/zope.component";
     description = "Zope Component Architecture";
+    homepage = "https://github.com/zopefoundation/zope.component";
     changelog = "https://github.com/zopefoundation/zope.component/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

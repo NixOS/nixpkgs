@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_event
+, zope-event
 , zope_interface
 }:
 
@@ -24,7 +24,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ zope_event zope_interface ];
+  propagatedBuildInputs = [
+    zope-event
+    zope_interface
+  ];
 
   # namespace colides with local directory
   doCheck = false;
@@ -35,8 +38,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/zopefoundation/zope.lifecycleevent";
     description = "Object life-cycle events";
+    homepage = "https://github.com/zopefoundation/zope.lifecycleevent";
     changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];
