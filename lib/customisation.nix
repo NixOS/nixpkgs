@@ -5,7 +5,7 @@ let
     intersectAttrs;
   inherit (lib)
     functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs
-    optionalAttrs attrNames filter elemAt concatStringsSep sort take length
+    optionalAttrs attrNames filter elemAt concatStringsSep sortOn take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
     mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
     ;
@@ -174,7 +174,7 @@ rec {
         # levenshteinAtMost is only fast for 2 or less.
         (filter (levenshteinAtMost 2 arg))
         # Put strings with shorter distance first
-        (sort (x: y: levenshtein x arg < levenshtein y arg))
+        (sortOn (levenshtein arg))
         # Only take the first couple results
         (take 3)
         # Quote all entries

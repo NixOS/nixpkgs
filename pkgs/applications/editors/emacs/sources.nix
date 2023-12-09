@@ -67,12 +67,28 @@ let
   };
 in
 {
+  emacs28 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "28.2";
+    variant = "mainline";
+    rev = "28.2";
+    hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+  });
+
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "29.1";
     variant = "mainline";
     rev = "29.1";
     hash = "sha256-3HDCwtOKvkXwSULf3W7YgTz4GV8zvYnh2RrL28qzGKg=";
+  });
+
+  emacs28-macport = import ./make-emacs.nix (mkArgs {
+    pname = "emacs-mac";
+    version = "28.2";
+    variant = "macport";
+    rev = "emacs-28.2-mac-9.1";
+    hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
   });
 
   emacs29-macport = import ./make-emacs.nix (mkArgs {

@@ -221,7 +221,11 @@ mapAliases ({
   elixir_ls = elixir-ls; # Added 2023-03-20
 
   # Emacs
+  emacs28NativeComp = emacs28; # Added 2022-06-08
+  emacs28Packages = emacs28.pkgs; # Added 2021-10-04
+  emacs28WithPackages = emacs28.pkgs.withPackages; # Added 2021-10-04
   emacsMacport = emacs-macport; # Added 2023-08-10
+  emacsNativeComp = emacs28NativeComp; # Added 2022-06-08
   emacsPackagesNg = throw "'emacsPackagesNg' has been renamed to/replaced by 'emacs.pkgs'"; # Converted to throw 2023-09-10
   emacsPackagesNgFor = throw "'emacsPackagesNgFor' has been renamed to/replaced by 'emacsPackagesFor'"; # Converted to throw 2023-09-10
   emacsWithPackages = emacs.pkgs.withPackages; # Added 2020-12-18
@@ -389,6 +393,7 @@ mapAliases ({
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
   imlib = throw "imlib has been dropped due to the lack of maintenance from upstream since 2004"; # Added 2023-01-04
+  indigenous-desktop = throw "'indigenous-desktop' has been renamed to/replaced by 'indiepass-desktop'"; # Added 2023-11-08
   instead-launcher = throw "instead-launcher has been removed, because it depended on qt4"; # Added 2023-07-26
   insync-v3 = throw "insync-v3 has been merged into the insync package; use insync instead"; #Added 2023-05-13
   index-fm = libsForQt5.mauiPackages.index; # added 2022-05-17

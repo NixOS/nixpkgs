@@ -18,6 +18,7 @@
 # runtime
 , libusb1
 , libxml2
+, ocl-icd
 , opencv
 , protobuf
 , pugixml
@@ -134,6 +135,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libxml2
+    ocl-icd
     opencv.cxxdev
     protobuf
     pugixml

@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC ]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC GlibObjectIntrospection Glib Gtk3 Pango Cairo CairoGObject ]}"
     wrapProgram $out/bin/ATR_analysis \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ pcscperl ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC ]}"
     wrapProgram $out/bin/pcsc_scan \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ coreutils wget ]}"
 
