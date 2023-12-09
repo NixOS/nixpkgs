@@ -1,7 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
-let rev = "6f9e27f1795f10475c9f6f5decdff692e1e228da";
+# The update script can update this automatically, the comment is used to find the line.
+let rev = "6f9e27f1795f10475c9f6f5decdff692e1e228da"; # update-commit-sha
 in
 buildGoModule rec {
   pname = "sonobuoy";
@@ -26,6 +27,10 @@ buildGoModule rec {
   vendorHash = "sha256-HE53eIEyhOI9ksEx1EKmv/txaTa7KDrNUMEVRMi4Wuo=";
 
   subPackages = [ "." ];
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Diagnostic tool that makes it easier to understand the state of a Kubernetes cluster";
