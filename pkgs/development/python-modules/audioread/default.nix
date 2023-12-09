@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, flit-core
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   # No tests, need to disable or py3k breaks
