@@ -65,4 +65,5 @@ lib.makeScope newScope (self: with self; {
   libcapsicum = callPackage ./libcapsicum.nix {};
   libcasper = callPackage ./libcasper.nix {};
   libnv = callPackage ./libnv.nix {};
+  libutil = callPackage ./libutil.nix {};
 })

@@ -41,24 +41,27 @@ in
     bootstrap-tools = (derivation {
       inherit system;
       name = "bootstrap-tools";
+      pname = "bootstrap-tools";
+      version = "9.9.9";
       builder = all-bootstrap-files.bash;
       args = [ ./unpack-bootstrap-files.sh ];
       inherit (all-bootstrap-files) tar unxz mkdir chmod bootstrapFiles;
     });
 
-    linkBS = (attrs: derivation attrs // {
+    linkBS = (attrs: derivation (attrs // rec {
+      inherit system;
       name = builtins.baseNameOf (builtins.elemAt attrs.paths 0);
       src = bootstrap-tools;
       builder = all-bootstrap-files.bash;
       args = [./linkBS.sh];
       paths = attrs.paths;
       PATH = "${bootstrap-tools}/bin";
-    });
+    }));
 
     patchelf = linkBS { paths = [ "bin/patchelf" ]; };
     bash = linkBS { paths = ["bin/bash"]; shell = "bin/bash"; };
     curl = linkBS { paths = ["bin/curl" "bin/curl-config" ]; };
-    clang = linkBS { paths = [ "bin/clang" ]; version = "16"; };
+    clang = linkBS { paths = [ "bin/clang" "bin/clang++" ]; version = "16"; };
     coreutils = linkBS { paths = map (str: "bin/" + str) [
       "arch" "base64" "basename" "cat" "chcon"
       "chgrp" "chmod" "chown" "chroot" "cksum"
@@ -172,6 +175,7 @@ in
         curl = curl;
         cacert = cacert;
         iconv = iconv;
+        curlReal = super.curl;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -207,50 +211,66 @@ in
   #  };
   #})
 
-  #(prevStage: rec {
-  #  inherit config overlays;
-  #  stdenv = import ../generic {
-  #    inherit config;
-  #    name = "stdenv-freebsd-boot-2";
-  #    buildPlatform = localSystem;
-  #    hostPlatform = localSystem;
-  #    targetPlatform = localSystem;
-  #    initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz prevStage.freebsd.cp];
-  #    shell = prevStage.bash;
-  #    fetchurlBoot = prevStage.fetchurl;
-  #    cc = import ../../build-support/cc-wrapper ({
-  #      inherit lib;
-  #      name = "stdenv-freebsd-boot-1-cc";
-  #      stdenvNoCC = prevStage.stdenv;
-  #      inherit (prevStage.freebsd) libc;
-  #      inherit (prevStage) gnugrep coreutils;
-  #      propagateDoc = false;
-  #      nativeTools = false;
-  #      nativeLibc = false;
-  #      cc = prevStage.gcc-unwrapped;
-  #      bintools = import ../../build-support/bintools-wrapper {
-  #        inherit lib;
-  #        stdenvNoCC = prevStage.stdenv;
-  #        name = "bootstrap-tools-bintools-wrapper";
-  #        inherit (prevStage.freebsd) libc;
-  #        inherit (prevStage) gnugrep coreutils;
-  #        bintools = prevStage.bintools-unwrapped;
-  #        propagateDoc = false;
-  #        nativeTools = false;
-  #        nativeLibc = false;
-  #      };
-  #    });
-  #    overrides = self: super: {
-  #      fetchurl = prevStage.fetchurl;
-  #      freebsd = super.freebsd.overrideScope (self': super': {
-  #        boot-install = prevStage.coreutils;
-  #        #curl = bootstrap-tools;
-  #      });
-  #    };
-  #    preHook = ''
-  #        export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-  #        export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-  #      '';
-  #  };
-  #})
+  (prevStage: let
+    fetchurlBoot = import ../../build-support/fetchurl {
+      inherit lib stdenvNoCC;
+      curl = prevStage.curlReal;
+    };
+
+    bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
+
+    stdenvNoCC = import ../generic {
+      inherit config fetchurlBoot;
+      name = "stdenvNoCC-freebsd-boot-1";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
+      shell = "${prevStage.bash}/bin/bash";
+      cc = null;
+    };
+
+    in rec {
+    inherit config overlays;
+    stdenv = import ../generic {
+      inherit config fetchurlBoot;
+      name = "stdenv-freebsd-boot-1";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
+      extraNativeBuildInputs = [./unpack-source.sh];
+      shell = "${prevStage.bash}/bin/bash";
+      cc = import ../../build-support/cc-wrapper ({
+        inherit lib stdenvNoCC;
+        name = "stdenv-freebsd-boot-1-cc";
+        inherit (prevStage.freebsd) libc;
+        inherit (prevStage) gnugrep coreutils;
+        propagateDoc = false;
+        nativeTools = false;
+        nativeLibc = false;
+        cc = prevStage.gcc-unwrapped;
+        isGNU = true;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib stdenvNoCC;
+          name = "bootstrap-tools-bintools-wrapper";
+          inherit (prevStage.freebsd) libc;
+          inherit (prevStage) gnugrep coreutils;
+          bintools = prevStage.bintools-unwrapped;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+        };
+      });
+      overrides = self: super: {
+        curl = prevStage.curlReal;
+        bash = prevStage.bash;
+        gitMinimal = prevStage.gitMinimal;
+      };
+      preHook = ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+        '';
+    };
+  })
 ]

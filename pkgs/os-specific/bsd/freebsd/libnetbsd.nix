@@ -8,7 +8,7 @@ mkDerivation {
      then buildFreebsd.boot-install
      else buildFreebsd.install)
   ];
-  patches = lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+  patches = [
     ./libnetbsd-do-install.patch
     #./libnetbsd-define-__va_list.patch
   ];

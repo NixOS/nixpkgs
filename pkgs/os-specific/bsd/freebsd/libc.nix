@@ -89,7 +89,7 @@ mkDerivation rec {
   MK_SYMVER = "yes";
   MK_SSP = "yes";
   MK_NLS = "yes";
-  MK_ICONV = "yes"; # TODO make srctop
+  MK_ICONV = "yes";
   MK_NS_CACHING = "yes";
   MK_INET6_SUPPORT = "yes";
   MK_HESIOD = "yes";
@@ -106,6 +106,8 @@ mkDerivation rec {
   MK_MACHDEP_OPTIMIZATIONS = "yes";
   MK_ASAN = "no";
   MK_UBSAN = "no";
+
+  NO_FSCHG = "yes";
 
   postInstall = ''
     pushd ${include}
