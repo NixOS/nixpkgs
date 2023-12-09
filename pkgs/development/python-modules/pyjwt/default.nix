@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , cryptography
 , pytestCheckHook
 , pythonOlder
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     sphinxHook
     sphinx-rtd-theme
     zope_interface
