@@ -34,8 +34,8 @@ buildFHSEnv {
   inherit pname version;
 
   targetPkgs = pkgs: [
-    decent-sampler
     alsa-lib
+    decent-sampler
     freetype
     nghttp2
     xorg.libX11
