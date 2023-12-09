@@ -11,12 +11,11 @@ buildLua {
     hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
   };
 
-  postPatch = ''
-    substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getExe mpv-unwrapped}"'
-  '';
-
   scriptPath = "thumbfast.lua";
+
+  passthru.extraWrapperArgs = [
+    "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"
+  ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";
