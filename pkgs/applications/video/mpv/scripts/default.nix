@@ -1,6 +1,6 @@
 { lib
-, callPackage
 , config
+, newScope
 , runCommand
 }:
 
@@ -56,33 +56,34 @@ let
     ]; }; });
 in
 
-lib.recurseIntoAttrs
-  (lib.mapAttrs addTests (rec {
-    inherit (callPackage ./mpv.nix { inherit buildLua; })
+lib.recurseIntoAttrs (lib.makeScope newScope (self:
+  let inherit (self) callPackage;
+  in lib.mapAttrs addTests {
+    inherit (callPackage ./mpv.nix { })
       acompressor autocrop autodeint autoload;
-    inherit (callPackage ./occivink.nix { inherit buildLua; })
+    inherit (callPackage ./occivink.nix { })
       blacklistExtensions seekTo;
 
     buildLua = callPackage ./buildLua.nix { };
-    chapterskip = callPackage ./chapterskip.nix { inherit buildLua; };
-    convert = callPackage ./convert.nix { inherit buildLua; };
-    cutter = callPackage ./cutter.nix { inherit buildLua; };
+    chapterskip = callPackage ./chapterskip.nix { };
+    convert = callPackage ./convert.nix { };
+    cutter = callPackage ./cutter.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
-    mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { inherit buildLua; };
-    mpv-webm = callPackage ./mpv-webm.nix { inherit buildLua; };
-    mpvacious = callPackage ./mpvacious.nix { inherit buildLua; };
-    quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
-    simple-mpv-webui = callPackage ./simple-mpv-webui.nix { inherit buildLua; };
+    mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
+    mpv-webm = callPackage ./mpv-webm.nix { };
+    mpvacious = callPackage ./mpvacious.nix { };
+    quality-menu = callPackage ./quality-menu.nix { };
+    simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
-    sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { inherit buildLua; };
-    thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
-    thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
-    uosc = callPackage ./uosc.nix { inherit buildLua; };
-    visualizer = callPackage ./visualizer.nix { inherit buildLua; };
+    sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
+    thumbfast = callPackage ./thumbfast.nix { };
+    thumbnail = callPackage ./thumbnail.nix { };
+    uosc = callPackage ./uosc.nix { };
+    visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
-  }))
+  }
   // lib.optionalAttrs config.allowAliases {
   youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
-}
+  }))
