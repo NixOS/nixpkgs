@@ -648,7 +648,7 @@ buildPythonPackage rec {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    gpuChecks.cudaAvailable = callPackage ./test-cuda.nix { torch = torchWithCuda; };
+    gpuChecks = callPackage ./gpu-checks.nix { };
   };
 
   meta = {
