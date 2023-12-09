@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guacamole-server";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
     rev = finalAttrs.version;
-    hash = "sha256-8VPhaZ+XnbDElF5MOpbA8MDDTUkou9O2z4NUdWwW4FM=";
+    hash = "sha256-Jke9Sp/T/GyamTq7lyu8JakJHqEwSrer0v1DugSg7JY=";
   };
 
   NIX_CFLAGS_COMPILE = [
