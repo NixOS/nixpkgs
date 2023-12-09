@@ -631,6 +631,7 @@
       plexwebsocket
       psutil-home-assistant
       pychromecast
+      python-matter-server
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain
@@ -669,12 +670,16 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+      psutil-home-assistant
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       webrtc-noise-gain
     ];
     "cloudflare" = ps: with ps; [
@@ -815,6 +820,7 @@
       psutil-home-assistant
       pynacl
       pyserial
+      python-matter-server
       pyturbojpeg
       pyudev
       scapy
@@ -1625,7 +1631,11 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
     ];
     "google_assistant_sdk" = ps: with ps; [
       aiohttp-cors
@@ -2658,13 +2668,17 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       loqedapi
       mutagen
+      psutil-home-assistant
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       webrtc-noise-gain
     ];
     "lovelace" = ps: with ps; [
@@ -2944,6 +2958,7 @@
       pillow
       psutil-home-assistant
       pynacl
+      python-matter-server
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain
@@ -3150,6 +3165,7 @@
       mutagen
       psutil-home-assistant
       pyatmo
+      python-matter-server
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain
@@ -3464,6 +3480,7 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3471,8 +3488,11 @@
       janus
       mutagen
       paho-mqtt
+      psutil-home-assistant
       pynacl
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       webrtc-noise-gain
     ];
     "p1_monitor" = ps: with ps; [
@@ -3562,13 +3582,17 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+      psutil-home-assistant
       pyplaato
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       webrtc-noise-gain
     ];
     "plant" = ps: with ps; [
@@ -3759,13 +3783,17 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+      psutil-home-assistant
+      python-matter-server
       pyturbojpeg
       rachiopy
+      sqlalchemy
       webrtc-noise-gain
     ];
     "radarr" = ps: with ps; [
@@ -3855,6 +3883,7 @@
       mutagen
       pillow
       psutil-home-assistant
+      python-matter-server
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain
@@ -4325,14 +4354,18 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+      psutil-home-assistant
       pysmartapp
       pysmartthings
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       webrtc-noise-gain
     ];
     "smarttub" = ps: with ps; [
@@ -4869,12 +4902,16 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      fnv-hash-fast
       ha-ffmpeg
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+      psutil-home-assistant
+      python-matter-server
       pyturbojpeg
+      sqlalchemy
       toonapi
       webrtc-noise-gain
     ];
@@ -5245,6 +5282,7 @@
       home-assistant-intents
       mutagen
       psutil-home-assistant
+      python-matter-server
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain

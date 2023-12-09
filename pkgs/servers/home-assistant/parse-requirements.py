@@ -119,14 +119,7 @@ def parse_components(version: str = "master"):
 def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
     requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
-    after_deps = components[component].get("after_dependencies", [])
-    try:
-        # Don't propagate matter dependency through after_dependencies
-        # TODO: remove after matter integration moves past OpenSSL 1.1
-        after_deps.remove("matter")
-    except ValueError:
-        pass
-    deps.extend(after_deps)
+    deps.extend(components[component].get("after_dependencies", []))
     processed.add(component)
     for dependency in deps:
         if dependency not in processed:
