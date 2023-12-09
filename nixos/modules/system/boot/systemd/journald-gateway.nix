@@ -9,6 +9,7 @@ let
   };
 in
 {
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
   options.services.journald.gateway = {
     enable = lib.mkEnableOption "the HTTP gateway to the journal";
 

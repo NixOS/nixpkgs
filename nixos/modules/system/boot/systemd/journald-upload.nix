@@ -5,6 +5,7 @@ let
   format = pkgs.formats.systemd;
 in
 {
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
   options.services.journald.upload = {
     enable = lib.mkEnableOption "uploading the systemd journal to a remote server";
 
