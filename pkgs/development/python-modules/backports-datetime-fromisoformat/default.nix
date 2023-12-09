@@ -1,14 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# tests
 , pytz
-, unittestCheckHook
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "movermeyer";
@@ -17,9 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-c3LCTOKva99+x96iLHNnL1e1Ft1M1CsjQX+nEqAlXUs=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
     pytz
-    unittestCheckHook
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+      # ModuleNotFoundError: No module named 'developmental_release'
+    "release/test_developmental_release.py"
   ];
 
   pythonImportsCheck = [
