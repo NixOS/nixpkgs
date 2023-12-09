@@ -6689,6 +6689,8 @@ with pkgs;
 
   biber = callPackage ../tools/typesetting/biber { };
 
+  biber-for-tectonic = callPackage ../tools/typesetting/tectonic/biber.nix { };
+
   biber-ms = callPackage ../tools/typesetting/biber-ms { };
 
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
