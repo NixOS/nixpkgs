@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, copyDesktopItems, makeDesktopItem, qmake
+{ stdenv, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
 , ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
-  importer = stdenv.mkDerivation rec {
+  importer = stdenv.mkDerivation {
     pname = "openboard-importer";
     version = "unstable-2016-10-08";
 
@@ -23,15 +23,15 @@ let
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "unstable-2022-11-28";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
-    rev = "9de37af2df1a7c0d88f71c94ab2db1815d082862";
-    sha256 = "sha256-TiKrSyxtF1g1bepCoFxoxGOdREXhsMrS3g8uZKSiugg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
   };
 
   postPatch = ''
@@ -115,4 +115,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
   };
-}
+})
