@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
@@ -8,7 +9,7 @@
 buildPythonPackage rec {
   pname = "dominate";
   version = "2.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-sVeR6+pDIhhUOhcC12rkXS/5X/mU5SAUuGhqadrXcv0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
