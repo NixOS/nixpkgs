@@ -1314,12 +1314,19 @@ self: super: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
   }) super.beam-postgres;
 
-  # Fix for base >= 4.11
   scat = overrideCabal (drv: {
-    patches = [(fetchpatch {
-      url    = "https://github.com/redelmann/scat/pull/6.diff";
-      sha256 = "07nj2p0kg05livhgp1hkkdph0j0a6lb216f8x348qjasy0lzbfhl";
-    })];
+    patches = [
+      # Fix build with base >= 4.11
+      (fetchpatch {
+        url = "https://github.com/redelmann/scat/commit/429f22944b7634b8789cb3805292bcc2b23e3e9f.diff";
+        hash = "sha256-FLr1KfBaSYzI6MiZIBY1CkgAb5sThvvgjrSAN8EV0h4=";
+      })
+      # Fix build with vector >= 0.13
+      (fetchpatch {
+        url = "https://github.com/redelmann/scat/commit/e21cc9c17b5b605b5bc0aacad66d44bbe0beb8c4.diff";
+        hash = "sha256-MifHb2EKZx8skOcs+2t54CzxAS4PaEC0OTEfq4yVXzk=";
+      })
+    ];
   }) super.scat;
 
   # Fix build with attr-2.4.48 (see #53716)
