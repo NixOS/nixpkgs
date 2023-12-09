@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "2.22.3";
+  version = "2.22.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-data";
     rev = "refs/tags/${version}";
-    hash = "sha256-5x+I6Ds7x3JqaZ1oyddrsaX0kbMM8pO+rF3ckpRdcgc=";
+    hash = "sha256-oHW80TqQe7LCvBpdB0kW8+vKCZ36/zXEssp7+kHUrTA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
