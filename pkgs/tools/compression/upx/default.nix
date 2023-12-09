@@ -5,13 +5,13 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "upx";
   version = "4.2.1";
   src = fetchFromGitHub {
     owner = "upx";
-    repo = pname;
-    rev = "v${version}";
+    repo = "upx";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-s4cZAb0rhCJrHI//IXLNYLhOzX1NRmN/t5IFgurwI30=";
   };
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "upx";
   };
-}
+})
