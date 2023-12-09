@@ -10,6 +10,7 @@
 , systemd
 , dbus
 , pcsclite
+, PCSC
 , wget
 , coreutils
 , perlPackages
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ dbus perlPackages.perl pcsclite ]
+    ++ lib.optional stdenv.isDarwin PCSC
     ++ lib.optional stdenv.isLinux systemd;
 
   nativeBuildInputs = [
@@ -89,6 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     mainProgram = "pcsc_scan";
     maintainers = with maintainers; [ peterhoeg anthonyroussel ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })
