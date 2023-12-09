@@ -15477,6 +15477,8 @@ self: super: with self; {
 
   universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
 
+  unlzw3 = callPackage ../development/python-modules/unlzw3 { };
+
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
