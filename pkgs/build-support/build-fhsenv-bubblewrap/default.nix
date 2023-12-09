@@ -150,10 +150,8 @@ let
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
-      if [[ -L $i ]]; then
-        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
-      else
-        ro_mounts+=(--ro-bind-try "$i" "$i")
+      if [[ -e $i ]]; then
+        symlinks+=(--symlink "/.host-etc/''${i#/etc/}" "$i")
       fi
     done
 
@@ -192,6 +190,7 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
+      --ro-bind /etc /.host-etc
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
