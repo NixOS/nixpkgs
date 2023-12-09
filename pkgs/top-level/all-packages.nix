@@ -32302,7 +32302,7 @@ with pkgs;
 
   gostatic = callPackage ../applications/misc/gostatic { };
 
-  gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
+  gosmore = callPackage ../applications/misc/gosmore { };
 
   gossa = callPackage ../applications/networking/gossa { };
 
