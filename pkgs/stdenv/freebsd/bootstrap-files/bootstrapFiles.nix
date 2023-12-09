@@ -11,24 +11,24 @@ in
     static.patchelf
   ] ++ (with pkgs; [
     # dynamic programs
-    iconv
-    bash
-    patch
-    diffutils
-    coreutils
-    findutils
-    gnutar
-    gawk
-    gnumake
-    gnugrep
-    gnused
-    gzip
-    bzip2
-    xz
-    (lib.getBin curl)
-    binutils-unwrapped
-    llvmPackages_16.clang-unwrapped
-    (runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
+    bash                 # shell
+    patch                # build dependency
+    diffutils            # build dependency
+    coreutils            # build dependency
+    findutils            # build dependency
+    gawk                 # build dependency
+    gnumake              # build dependency
+    gnugrep              # build dependency
+    gnused               # build dependency
+    gnutar               # unpack dependency
+    gzip                 # unpack dependency
+    bzip2                # unpack dependency
+    xz                   # unpack dependency
+    (lib.getBin curl)    # unpack dependency and git dependency
+    iconv                # git dependency
+    binutils-unwrapped   # stdenv dependency
+    llvmPackages_16.clang-unwrapped  # stdenv dependency
+    (runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")  # stdenv dependency
 
     # dynamic libraries
     freebsd.libc
@@ -37,8 +37,6 @@ in
     freebsd.libcasper
     freebsd.libnv
     freebsd.libcapsicum
-    #freebsd.libcxx
-    #freebsd.libcxxrt
     libcxxrt
     zlib
     libxml2

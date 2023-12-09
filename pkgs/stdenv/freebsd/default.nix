@@ -27,8 +27,8 @@ let inherit (localSystem) system;
         hash = "sha256-01dHQyHH4xnnMTgKgYFN2ksgXhhnub6fBrgUFSYjRJ0=";
       };
       bootstrapFiles = {
-        url = "http://192.168.1.9:8000/xs6bzm0mbxpb8p7xw8k6s9bjfj1b5ixw-x86_64-freebsd14-bootstrap-files.tar.xz";
-        hash = "sha256-56FA0IOXVLDCo1Ng70Cu91e6K8H+gct4IIyO2onDpAY=";
+        url = "http://192.168.1.9:8000/npna7h5bbgzamk2vp3fqpdnpspq1hgin-x86_64-freebsd14-bootstrap-files.tar.xz";
+        hash = "sha256-xgX5wVX6J+lSQiF12bxEggtvcTYAMIFPgeRtPzC0zKY=";
       };
     };
   };
@@ -114,8 +114,11 @@ in
         freebsd = super.freebsd.overrideScope (self': super': {
           boot-install = bootstrap-tools;
           install = bootstrap-tools;
+          iconv = bootstrap-tools;
         });
         curl = bootstrap-tools;
+        cacert = bootstrap-tools;
+        iconv = bootstrap-tools;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

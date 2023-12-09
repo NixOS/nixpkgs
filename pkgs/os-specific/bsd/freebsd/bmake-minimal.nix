@@ -46,6 +46,8 @@ mkDerivation {
       --replace 'MK_host_egacy= yes' 'MK_host_egacy= no'
   '';
 
+  configureFlags = ["--with-filemon=no"];
+
   buildPhase = ''
     runHook preBuild
 

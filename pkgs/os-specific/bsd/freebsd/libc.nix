@@ -72,7 +72,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
-    buildFreebsd.bmake
+    buildFreebsd.bmakeMinimal
     buildFreebsd.install
 
     buildPackages.flex buildPackages.byacc buildFreebsd.gencat buildFreebsd.rpcgen

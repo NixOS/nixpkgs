@@ -1,7 +1,7 @@
 { mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, ... }:
 mkDerivation {
   path = "usr.bin/tsort";
-  extraPaths = ["sys/conf/newvers.sh" "sys/sys/param.h"];  # TODO this was added to fix a error which appeared but may be spurious
+  extraPaths = [];
   makeFlags = [
     "STRIP=-s" # flag to install, not command
   ] ++ lib.optionals (hostVersion == "freebsd14") [

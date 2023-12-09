@@ -17,8 +17,8 @@ mkDerivation {
     buildPackages.mandoc buildPackages.groff /*nbperf*/ buildFreebsd.rpcgen
 
     # HACK use NetBSD's for now
-    buildPackages.netbsd.mtree
-    #mtree
+    #buildPackages.netbsd.mtree
+    mtree
   ];
 
   patches = [
