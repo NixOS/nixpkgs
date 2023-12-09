@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
-      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC ]}"
+      --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC libintl-perl ]}"
 
     wrapProgram $out/bin/gscriptor \
       ''${makeWrapperArgs[@]} \
