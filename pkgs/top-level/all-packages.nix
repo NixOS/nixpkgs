@@ -10041,6 +10041,8 @@ with pkgs;
     lua = lua5_2_compat;
   };
 
+  lttoolbox = callPackage ../applications/misc/lttoolbox { };
+
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
   lunatask = callPackage ../applications/misc/lunatask { };
