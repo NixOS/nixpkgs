@@ -20020,6 +20020,12 @@
     githubId = 973709;
     name = "Jairo Llopis";
   };
+  yamamech = {
+    email = "yama@yamamech.sh";
+    github = "yamamech";
+    githubId = 30635996;
+    name = "Tsumugchi";
+  };
   yana = {
     email = "yana@riseup.net";
     github = "yanalunaterra";
