@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pbr
 , setuptools
 , callPackage
 }:
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pbr
     setuptools
   ];
 
