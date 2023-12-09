@@ -6739,6 +6739,10 @@
   gm6k = {
     email = "nix@quidecco.pl";
     name = "Isidor Zeuner";
+    /*
+this record is complete as per the documentation:
+https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix#L7
+    */
   };
   gmemstr = {
     email = "git@gmem.ca";
