@@ -21,15 +21,16 @@
 , libexif
 , openexr_3
 , bash-completion
+, testers
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
   version = "1.12";
 
   src = fetchFromGitHub {
     owner = "artemsen";
-    repo = pname;
-    rev = "v${version}";
+    repo = "swayimg";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-aKDt4lPh4w0AOucN7VrA7mo8SHI9eJqdrpJF+hG93gI=";
   };
 
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+
+  mesonFlags = [
+    (lib.mesonOption "version" finalAttrs.version)
+  ];
 
   buildInputs = [
     bash-completion
@@ -60,6 +65,10 @@ stdenv.mkDerivation rec {
     openexr_3
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
@@ -69,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "swayimg";
   };
-}
+})
