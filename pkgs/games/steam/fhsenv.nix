@@ -60,7 +60,10 @@ let
     fi
   '';
 
-  envScript = lib.toShellVars extraEnv;
+  envScript = ''
+    # prevents various error messages
+    unset GIO_EXTRA_MODULES
+  '' + lib.toShellVars extraEnv;
 
 in buildFHSEnv rec {
   name = "steam";
