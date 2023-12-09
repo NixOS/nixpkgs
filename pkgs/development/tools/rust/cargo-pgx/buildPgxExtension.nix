@@ -86,7 +86,7 @@ let
   preBuildAndTest = ''
     export PGX_HOME=$(mktemp -d)
     export PGDATA="$PGX_HOME/data-${pgxPostgresMajor}/"
-    cargo-pgx pgx init "--pg${pgxPostgresMajor}" ${postgresql}/bin/pg_config
+    cargo-pgx pgx init "--pg${pgxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config
     echo "unix_socket_directories = '$(mktemp -d)'" > "$PGDATA/postgresql.conf"
 
     # This is primarily for Mac or other Nix systems that don't use the nixbld user.
@@ -120,7 +120,7 @@ let
       NIX_PGLIBDIR="${postgresql}/lib" \
       PGX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       cargo-pgx pgx package \
-        --pg-config ${postgresql}/bin/pg_config \
+        --pg-config ${lib.getDev postgresql}/bin/pg_config \
         ${maybeDebugFlag} \
         --features "${builtins.concatStringsSep " " buildFeatures}" \
         --out-dir "$out"
