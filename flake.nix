@@ -52,10 +52,9 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system: import ./. {
-        inherit system;
-        overlays = [ self.overlays.setLibVersionInfo ];
-      });
+      legacyPackages = forAllSystems (system:
+        (import ./. { inherit system; }).extend self.overlays.setLibVersionInfo
+      );
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
