@@ -9,6 +9,9 @@
 , progress
 , pyserial
 
+# optional-dependencies
+, intelhex
+
 # tests
 , pytestCheckHook
 }:
@@ -32,9 +35,15 @@ buildPythonPackage rec {
     pyserial
   ];
 
+  passthru.optional-dependencies = {
+    hex = [
+      intelhex
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "tests/unit"
