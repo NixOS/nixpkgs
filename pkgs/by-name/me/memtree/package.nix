@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,12 +30,7 @@ python3Packages.buildPythonApplication {
     pytest
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    python -m pytest -v
-    runHook postCheck
-  '';
-
+  pytestFlagsArray = [ "-v" ];
   pythonImportChecks = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {
