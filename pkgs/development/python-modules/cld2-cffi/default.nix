@@ -21,6 +21,5 @@ buildPythonPackage rec {
     description = "CFFI bindings around Google Chromium's embedded compact language detection library (CLD2)";
     homepage = "https://github.com/GregBowyer/cld2-cffi";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
   };
 }
