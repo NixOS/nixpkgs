@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
-, wheel
+, importlib-metadata
 , pytestCheckHook
 }:
 
@@ -26,7 +26,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
+  ];
+
+  propagatedBuildInputs = [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [ "mockfs" ];
