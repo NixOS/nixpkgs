@@ -2492,6 +2492,8 @@ self: super: with self; {
 
   cwcwidth = callPackage ../development/python-modules/cwcwidth { };
 
+  cwl-eval = callPackage ../development/python-modules/cwl-eval { };
+
   cwl-upgrader = callPackage ../development/python-modules/cwl-upgrader { };
 
   cwl-utils = callPackage ../development/python-modules/cwl-utils { };
