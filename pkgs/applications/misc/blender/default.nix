@@ -374,15 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
     };
-    gpuChecks.cudaAvailable = { blenderWithCuda, runCommand }: runCommand
-      "blender-cuda-available"
-      {
-        nativeBuildInputs = [ blenderWithCuda ];
-        requiredSystemFeatures = [ "cuda" ];
-      }
-      ''
-        blender --background -noaudio --python-exit-code 1 --python ${./test-cuda.py} && touch $out
-      '' { };
+    gpuChecks = callPackage ./gpu-checks.nix { };
   };
 
   meta = {
