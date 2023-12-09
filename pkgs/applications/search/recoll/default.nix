@@ -137,6 +137,10 @@ mkDerivation rec {
     libiconv
   ];
 
+  qtWrapperArgs = [
+    "--prefix PATH : ${filterPath}"
+  ];
+
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
@@ -152,18 +156,19 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
-    wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
-    wrapProgram $out/bin/recoll --prefix PATH : "${filterPath}"
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
     mkdir $out/Applications
     mv $out/bin/recoll.app $out/Applications
-    wrapProgram  $out/Applications/recoll.app/Contents/MacOS/recoll --prefix PATH : "${filterPath}"
+  '';
+
+  # create symlink after fixup to prevent double wrapping of recoll
+  postFixup = lib.optionalString (stdenv.isDarwin && withGui) ''
     ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
   '';
 
