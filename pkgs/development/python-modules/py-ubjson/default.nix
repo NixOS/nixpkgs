@@ -23,7 +23,7 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/Iotic-Labs/py-ubjson/issues/18
     "test_recursion"
-  ]
+  ];
 
   pytestFlagsArray = [
     "test/test.py"
