@@ -1,6 +1,7 @@
 { lib
 , buildLua
 , fetchFromGitHub
+, gitUpdater
 , curl
 , wl-clipboard
 , xclip
@@ -15,6 +16,9 @@ buildLua rec {
     repo = "mpvacious";
     rev = "v${version}";
     sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''
