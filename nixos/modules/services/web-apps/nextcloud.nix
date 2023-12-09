@@ -94,6 +94,22 @@ in {
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
       Use services.nextcloud.enableImagemagick instead.
     '')
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "extraOptions" "loglevel" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "logType" ] [ "services" "nextcloud" "extraOptions" "log_type" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "extraOptions" "default_phone_region" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "extraOptions" "overwriteprotocol" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "extraOptions" "skeletondirectory" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "extraOptions" "trusted_domains" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "extraOptions" "trusted_proxies" ])
   ];
 
   options.services.nextcloud = {
@@ -157,32 +173,6 @@ in {
         Set this to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
       '';
     };
-    logLevel = mkOption {
-      type = types.ints.between 0 4;
-      default = 2;
-      description = lib.mdDoc ''
-        Log level value between 0 (DEBUG) and 4 (FATAL).
-
-        - 0 (debug): Log all activity.
-
-        - 1 (info): Log activity such as user logins and file activities, plus warnings, errors, and fatal errors.
-
-        - 2 (warn): Log successful operations, as well as warnings of potential problems, errors and fatal errors.
-
-        - 3 (error): Log failed operations and fatal errors.
-
-        - 4 (fatal): Log only fatal errors that cause the server to stop.
-      '';
-    };
-    logType = mkOption {
-      type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
-      default = "syslog";
-      description = lib.mdDoc ''
-        Logging backend to use.
-        systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
-        See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
-      '';
-    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -203,16 +193,6 @@ in {
       description = lib.mdDoc ''
         The upload limit for files. This changes the relevant options
         in php.ini and nginx if enabled.
-      '';
-    };
-
-    skeletonDirectory = mkOption {
-      default = "";
-      type = types.str;
-      description = lib.mdDoc ''
-        The directory where the skeleton files are located. These files will be
-        copied to the data directory of new users. Leave empty to not copy any
-        skeleton files.
       '';
     };
 
@@ -315,7 +295,6 @@ in {
 
     };
 
-
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
@@ -380,53 +359,6 @@ in {
           setup of Nextcloud by the systemd service `nextcloud-setup.service`.
         '';
       };
-
-      extraTrustedDomains = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
-          Trusted domains from which the Nextcloud installation will be
-          accessible.  You don't need to add
-          `services.nextcloud.hostname` here.
-        '';
-      };
-
-      trustedProxies = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
-          Trusted proxies to provide if the Nextcloud installation is being
-          proxied to secure against, e.g. spoofing.
-        '';
-      };
-
-      overwriteProtocol = mkOption {
-        type = types.nullOr (types.enum [ "http" "https" ]);
-        default = null;
-        example = "https";
-
-        description = lib.mdDoc ''
-          Force Nextcloud to always use HTTP or HTTPS i.e. for link generation.
-          Nextcloud uses the currently used protocol by default, but when
-          behind a reverse-proxy, it may use `http` for everything although
-          Nextcloud may be served via HTTPS.
-        '';
-      };
-
-      defaultPhoneRegion = mkOption {
-        default = null;
-        type = types.nullOr types.str;
-        example = "DE";
-        description = lib.mdDoc ''
-          An [ISO 3166-1](https://www.iso.org/iso-3166-country-codes.html)
-          country code which replaces automatic phone-number detection
-          without a country code.
-
-          As an example, with `DE` set as the default phone region,
-          the `+49` prefix can be omitted for phone numbers.
-        '';
-      };
-
       objectstore = {
         s3 = {
           enable = mkEnableOption (lib.mdDoc ''
@@ -609,30 +541,109 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
-    globalProfiles = mkEnableOption (lib.mdDoc "global profiles") // {
-      description = lib.mdDoc ''
-        Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
-        Even though it's enabled by default in Nextcloud, it must be explicitly enabled
-        here because it has the side-effect that personal information is even accessible to
-        unauthenticated users by default.
-
-        By default, the following properties are set to “Show to everyone”
-        if this flag is enabled:
-        - About
-        - Full name
-        - Headline
-        - Organisation
-        - Profile picture
-        - Role
-        - Twitter
-        - Website
-
-        Only has an effect in Nextcloud 23 and later.
-      '';
-    };
 
     extraOptions = mkOption {
-      type = jsonFormat.type;
+      type = types.submodule {
+        freeformType = jsonFormat.type;
+        options = {
+
+          loglevel = mkOption {
+            type = types.ints.between 0 4;
+            default = 2;
+            description = lib.mdDoc ''
+              Log level value between 0 (DEBUG) and 4 (FATAL).
+
+              - 0 (debug): Log all activity.
+
+              - 1 (info): Log activity such as user logins and file activities, plus warnings, errors, and fatal errors.
+
+              - 2 (warn): Log successful operations, as well as warnings of potential problems, errors and fatal errors.
+
+              - 3 (error): Log failed operations and fatal errors.
+
+              - 4 (fatal): Log only fatal errors that cause the server to stop.
+            '';
+          };
+          log_type = mkOption {
+            type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
+            default = "syslog";
+            description = lib.mdDoc ''
+              Logging backend to use.
+              systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+              See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
+            '';
+          };
+          skeletondirectory = mkOption {
+            default = "";
+            type = types.str;
+            description = lib.mdDoc ''
+              The directory where the skeleton files are located. These files will be
+              copied to the data directory of new users. Leave empty to not copy any
+              skeleton files.
+            '';
+          };
+          trusted_domains = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = lib.mdDoc ''
+              Trusted domains, from which the nextcloud installation will be
+              accessible. You don't need to add
+              `services.nextcloud.hostname` here.
+            '';
+          };
+          trusted_proxies = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = lib.mdDoc ''
+              Trusted proxies, to provide if the nextcloud installation is being
+              proxied to secure against e.g. spoofing.
+            '';
+          };
+          overwriteprotocol = mkOption {
+            type = types.enum [ "" "http" "https" ];
+            default = "";
+            example = "https";
+            description = lib.mdDoc ''
+              Force Nextcloud to always use HTTP or HTTPS i.e. for link generation.
+              Nextcloud uses the currently used protocol by default, but when
+              behind a reverse-proxy, it may use `http` for everything although
+              Nextcloud may be served via HTTPS.
+            '';
+          };
+          default_phone_region = mkOption {
+            default = "";
+            type = types.str;
+            example = "DE";
+            description = lib.mdDoc ''
+              An [ISO 3166-1](https://www.iso.org/iso-3166-country-codes.html)
+              country code which replaces automatic phone-number detection
+              without a country code.
+
+              As an example, with `DE` set as the default phone region,
+              the `+49` prefix can be omitted for phone numbers.
+            '';
+          };
+          "profile.enabled" = mkEnableOption (lib.mdDoc "global profiles") // {
+            description = lib.mdDoc ''
+              Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
+              Even though it's enabled by default in Nextcloud, it must be explicitly enabled
+              here because it has the side-effect that personal information is even accessible to
+              unauthenticated users by default.
+              By default, the following properties are set to “Show to everyone”
+              if this flag is enabled:
+              - About
+              - Full name
+              - Headline
+              - Organisation
+              - Profile picture
+              - Role
+              - Twitter
+              - Website
+              Only has an effect in Nextcloud 23 and later.
+            '';
+          };
+        };
+      };
       default = {};
       description = lib.mdDoc ''
         Extra options which should be appended to Nextcloud's config.php file.
@@ -770,7 +781,6 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArray = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
           objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
             'objectstore' => [
@@ -833,12 +843,7 @@ in {
                 [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
               ],
               ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
-              'datadirectory' => '${datadir}/data',
-              'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => '${cfg.logType}',
-              'loglevel' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
@@ -851,10 +856,6 @@ in {
                 ''
               }
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArray ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArray (c.trustedProxies)},
-              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
-              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
             ];
 
@@ -907,7 +908,7 @@ in {
             (i: v: ''
               ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
                 ${toString i} --value="${toString v}"
-            '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
+            '') ([ cfg.hostName ] ++ cfg.extraOptions.trusted_domains));
 
         in {
           wantedBy = [ "multi-user.target" ];
@@ -1043,16 +1044,19 @@ in {
         user = "nextcloud";
       };
 
-      services.nextcloud = lib.mkIf cfg.configureRedis {
-        caching.redis = true;
-        extraOptions = {
+      services.nextcloud = {
+        caching.redis = lib.mkIf cfg.configureRedis true;
+        extraOptions = mkMerge [({
+          datadirectory = lib.mkDefault "${datadir}/data";
+          trusted_domains = [ cfg.hostName ];
+        }) (lib.mkIf cfg.configureRedis {
           "memcache.distributed" = ''\OC\Memcache\Redis'';
           "memcache.locking" = ''\OC\Memcache\Redis'';
           redis = {
             host = config.services.redis.servers.nextcloud.unixSocket;
             port = 0;
           };
-        };
+        })];
       };
 
       services.nginx.enable = mkDefault true;
