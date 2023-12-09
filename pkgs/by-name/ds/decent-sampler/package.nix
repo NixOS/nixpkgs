@@ -18,7 +18,9 @@ let
     src = fetchzip {
       # dropbox link: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
 
-      url = "https://archive.org/download/decent-sampler-linux-static-download-mirror/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
+      # there is a strange conflict between 1.9.8 url and 1.9.4
+      # but 1.9.4 downloads 1.9.8 version anyway...
+      url = "https://archive.org/download/decent-sampler-linux-static-download-mirror/Decent_Sampler-1.9.4-Linux-Static-x86_64.tar.gz";
       sha256 = "sha256-O/0R70tZOmSGgth6nzt4zPiJr1P8890uzk8PiQGnC6M=";
     };
 
