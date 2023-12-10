@@ -52,7 +52,6 @@ let
 
   fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
     inherit pname version;
-    name = null; # Appimage sets it to "appimage-env"
 
     # Dependencies of anki
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
