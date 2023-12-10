@@ -31,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     mainProgram = "iwasm";
     maintainers = with maintainers; [ ereslibre ];
-    # TODO (ereslibre): this derivation should be improved to support
-    # more platforms.
-    broken = !stdenv.isLinux;
+    platforms = platforms.unix;
   };
 })
