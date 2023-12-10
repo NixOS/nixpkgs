@@ -111,10 +111,10 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
+  LuaPathSearchPaths    = [ "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = [ "./?.so" ] ++ luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   # copied from python
   passthru = let

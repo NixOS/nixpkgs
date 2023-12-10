@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs:
     sha256 = hash;
   };
 
-  LuaPathSearchPaths  = luaPackages.luaLib.luaPathList;
-  LuaCPathSearchPaths = luaPackages.luaLib.luaCPathList;
+  LuaPathSearchPaths  = [ "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths = [ "./?.so" ] ++ luaPackages.luaLib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook
     finalAttrs.LuaPathSearchPaths
     finalAttrs.LuaCPathSearchPaths;
