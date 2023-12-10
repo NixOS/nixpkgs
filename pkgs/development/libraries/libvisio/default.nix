@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , boost
 , libwpd
 , libwpg
@@ -25,6 +26,16 @@ stdenv.mkDerivation rec {
     url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
     sha256 = "0k7adcbbf27l7n453cca1m6s9yj6qvb5j6bsg2db09ybf3w8vbwg";
   };
+
+  patches = [
+    # Fix build with libxml2 2.12
+    # https://gerrit.libreoffice.org/c/libvisio/+/160542
+    (fetchpatch {
+      url = "https://gerrit.libreoffice.org/changes/libvisio~160542/revisions/2/patch?download";
+      decode = "base64 -d";
+      hash = "sha256-b7Ird68pHpMJg5K1rZfYcFSlMkGydjgiyzSLw+pzIis=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config doxygen perl gperf ];
