@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, dbus, libxml2, pam, pkg-config, pmount, python2Packages, writeScript, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, dbus, libxml2, pam, pkg-config, pmount, python2Packages, writeScript, runtimeShell }:
 
 let
 
@@ -9,23 +9,24 @@ let
     let
       name = baseNameOf path;
       bin = "${drv}${path}";
-    in assert name != "";
-      writeScript "setUID-${name}" ''
-        #!${runtimeShell}
-        inode=$(stat -Lc %i ${bin})
-        for file in $(type -ap ${name}); do
-          case $(stat -Lc %a $file) in
-            ([2-7][0-7][0-7][0-7])
-              if test -r "$file".real; then
-                orig=$(cat "$file".real)
-                if test $inode = $(stat -Lc %i "$orig"); then
-                  exec "$file" "$@"
-                fi
-              fi;;
-          esac
-        done
-        exec ${bin} "$@"
-      '';
+    in
+    assert name != "";
+    writeScript "setUID-${name}" ''
+      #!${runtimeShell}
+      inode=$(stat -Lc %i ${bin})
+      for file in $(type -ap ${name}); do
+        case $(stat -Lc %a $file) in
+          ([2-7][0-7][0-7][0-7])
+            if test -r "$file".real; then
+              orig=$(cat "$file".real)
+              if test $inode = $(stat -Lc %i "$orig"); then
+                exec "$file" "$@"
+              fi
+            fi;;
+        esac
+      done
+      exec ${bin} "$@"
+    '';
 
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
@@ -36,9 +37,11 @@ stdenv.mkDerivation rec {
   pname = "pam_usb";
   version = "0.5.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pamusb/pam_usb-${version}.tar.gz";
-    sha256 = "1g1w0s9d8mfld8abrn405ll5grv3xgs0b0hsganrz6qafdq9j7q1";
+  src = fetchFromGitHub {
+    owner = "aluzzardi";
+    repo = "pam_usb";
+    rev = version;
+    hash = "sha256-f8uExxXJixvczLXlWpn0XuE4Bx1uh8oL04dkomNC5Gc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +51,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # pam_usb dependencies
-    dbus libxml2 pam pmount
+    dbus
+    libxml2
+    pam
+    pmount
     # pam_usb's tools dependencies
     python
     # cElementTree is included with python 2.5 and later.
