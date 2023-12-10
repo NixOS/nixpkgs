@@ -87,7 +87,7 @@ self: super: {
       sha256 = "1f2q5p9nh4ccyrkc2fx6xjiq8v15i6myf01ajcw541dqc8z5aiw0";
     };
     editedCabalFile = null;
-    license = lib.licenses.bsd2;
+    license = pkgs.lib.licenses.bsd2;
   }) super.double-conversion;
 
   generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
