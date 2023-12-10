@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , hypothesis
 , libiconv
@@ -39,6 +40,15 @@ buildPythonPackage rec {
   };
 
   cargoRoot = "native";
+
+  patches = [
+    # https://github.com/Instagram/LibCST/pull/1042
+    (fetchpatch {
+      name = "remove-distutils.patch";
+      url = "https://github.com/Instagram/LibCST/commit/a6834aa0e6eb78e41549fd1087d7ba60ca4dd237.patch";
+      hash = "sha256-lyIXJhm4UMwdCOso6McDslIvtK7Ar8sF5Zy7qo1nicQ=";
+    })
+  ];
 
   postPatch = ''
     # avoid infinite recursion by not formatting the release files
