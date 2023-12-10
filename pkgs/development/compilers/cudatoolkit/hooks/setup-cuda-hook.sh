@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-# Only run the hook from nativeBuildInputs
-(( "$hostOffset" == -1 && "$targetOffset" == 0)) || return 0
+# Starting with 24.05: only run the hook from nativeBuildInputs
+# (( "$hostOffset" == -1 && "$targetOffset" == 0)) || return 0
 
 guard=Sourcing
 reason=
