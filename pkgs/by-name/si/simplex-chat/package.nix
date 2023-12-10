@@ -53,13 +53,13 @@ let
 
   hp = pkgs.haskell.packages."${compiler}".extend haskellOverrides;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "simplex-chat";
     homepage = "https://simplex.chat";
     description = "Command line version of SimpleX Chat.";
-    platforms = platforms.unix;
-    license = licenses.agpl3;
-    maintainers = [ maintainers.eyeinsky ];
+    license = lib.licenses.agpl3;
+    maintainers = [ lib.maintainers.eyeinsky ];
+    platforms = [ "x86_64-linux" ];
   };
 
-in hlib.doJailbreak hp.simplex-chat
+in (hlib.doJailbreak hp.simplex-chat) // { inherit meta; }
