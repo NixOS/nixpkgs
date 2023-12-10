@@ -85,6 +85,9 @@ stdenv.mkDerivation rec {
 
     # we don't need init.d scripts
     rm -r $out/share/solaris-init
+
+    # Suspicious/overly broad rule, remove it until we know better
+    rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
   meta = with lib; {
