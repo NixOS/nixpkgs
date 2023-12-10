@@ -50,6 +50,7 @@ self: super: {
   xhtml = null;
 
   aeson = super.aeson_2_2_1_0;
+  aeson-pretty = super.aeson-pretty_0_8_10;
   alex = super.alex_3_4_0_1;
   bifunctors = super.bifunctors_5_6_1;
   cabal-install-solver = super.cabal-install-solver_3_10_2_1;
