@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication {
   ];
 
   pytestFlagsArray = [ "-v" ];
-  pythonImportChecks = [ "memtree" ];
+  pythonImportsCheck = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
