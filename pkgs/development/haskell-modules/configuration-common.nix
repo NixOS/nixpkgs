@@ -879,6 +879,26 @@ self: super: {
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
 
+  # Build Selda with the latest git version.
+  # See https://github.com/valderman/selda/issues/187
+  inherit (let
+    mkSeldaPackage = name: overrideCabal (drv: {
+      version = "2023-02-05-unstable";
+      src = pkgs.fetchFromGitHub {
+        owner = "valderman";
+        repo = "selda";
+        rev = "ab9619db13b93867d1a244441bb4de03d3e1dadb";
+        hash = "sha256-P0nqAYzbeTyEEgzMij/3mKcs++/p/Wgc7Y6bDudXt2U=";
+      } + "/${name}";
+    }) super.${name};
+  in
+    lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
+  )
+  selda
+  selda-sqlite
+  selda-json
+  ;
+
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal (drv: {
