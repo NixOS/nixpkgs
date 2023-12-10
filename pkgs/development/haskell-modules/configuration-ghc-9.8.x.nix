@@ -64,6 +64,8 @@ self: super: {
   hspec-discover = super.hspec-discover_2_11_7;
   hspec-hedgehog = super.hspec-hedgehog_0_1_1_0;
   hspec-meta = super.hspec-meta_2_11_7;
+  megaparsec = super.megaparsec_9_6_1;
+  megaparsec-tests = super.megaparsec-tests_9_6_1;
   ormolu = super.ormolu_0_7_3_0;
   rebase = super.rebase_1_20_1_1;
   semigroupoids = super.semigroupoids_6_0_0_1;
