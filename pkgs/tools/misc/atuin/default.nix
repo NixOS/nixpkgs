@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "17.0.1";
+  version = "17.1.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-HJRlZwvBra2D7TzVKvMWJ0Hf17QgIEcBDQEHhxdVLIM=";
+    hash = "sha256-srFHVUZerxPmOQXVMoSgeLsylvILcOP7m62s4NCFDJE=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-AhoXmEjXsi/OgFX3htOA6A/lWegUFlsywdotX3PDwcs="
-    else "sha256-/nCnZ64pM8oWVX9a4JCeCZRyuo7aVc8YaBVEMbiRsqE=";
+    then "sha256-FyKcR6H3/2cra9VYJbW37cSCvOpAiC8UJYXnseNQlt4="
+    else "sha256-NfoAjTshmb1L4bIkBctk90bZL93hsyAyIE9AEFUGcGQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
