@@ -176,7 +176,7 @@ let
 
 
   base = rec {
-    pname = "${packageName}-unwrapped";
+    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
