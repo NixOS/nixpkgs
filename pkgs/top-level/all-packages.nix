@@ -10041,6 +10041,8 @@ with pkgs;
     lua = lua5_2_compat;
   };
 
+  lttoolbox = callPackage ../applications/misc/lttoolbox { };
+
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
   lunatask = callPackage ../applications/misc/lunatask { };
@@ -16203,6 +16205,7 @@ with pkgs;
 
   ghdl-llvm = callPackage ../development/compilers/ghdl {
     backend = "llvm";
+    inherit (llvmPackages_15) llvm;
   };
 
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
@@ -20860,11 +20863,7 @@ with pkgs;
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
-  clucene_core_1 = callPackage ../development/libraries/clucene-core {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
-
-  clucene_core = clucene_core_1;
+  clucene_core = clucene_core_2;
 
   clutter = callPackage ../development/libraries/clutter { };
 
@@ -26584,6 +26583,8 @@ with pkgs;
   jicofo = callPackage ../servers/jicofo { };
 
   jitsi-excalidraw = callPackage ../servers/jitsi-excalidraw { };
+
+  jigasi = callPackage ../servers/jigasi { };
 
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
@@ -37167,9 +37168,6 @@ with pkgs;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
-
-  oxen = callPackage ../applications/blockchains/oxen
-    { stdenv = gcc10StdenvCompat; boost = boost179; };
 
   masari = callPackage ../applications/blockchains/masari { };
 

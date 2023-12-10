@@ -175,4 +175,7 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # No instance for (Show B.Builder) arising from a use of ‘print’
+  http-types = dontCheck super.http-types;
 }

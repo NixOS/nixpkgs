@@ -173,4 +173,7 @@ self: super: {
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 
   hspec-megaparsec = super.hspec-megaparsec_2_2_0;
+
+  # No instance for (Show B.Builder) arising from a use of ‘print’
+  http-types = dontCheck super.http-types;
 }

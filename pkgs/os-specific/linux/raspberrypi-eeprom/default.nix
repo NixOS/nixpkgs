@@ -3,13 +3,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2023.01.11-138c0";
+  version = "2023.10.30-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "v${version}";
-    hash = "sha256-z3VyqdSkvxAgVmtMI/Is9qYrOeDXlyVLwHSSC2+AxcA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TKvby0qIXidM5Qk7q+ovLk0DpHsCbdQe7xndrgKrSXk=";
   };
 
   buildInputs = [ python3 ];
@@ -24,18 +24,21 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/rpi-eeprom
+    mkdir -p "$out/bin"
+    cp rpi-eeprom-config rpi-eeprom-update rpi-eeprom-digest "$out/bin"
 
-    cp rpi-eeprom-config rpi-eeprom-update rpi-eeprom-digest $out/bin
-    cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
-    cp -P firmware/default firmware/latest $out/share/rpi-eeprom
+    mkdir -p "$out/lib/firmware/raspberrypi"
+    for dirname in firmware-*; do
+        dirname_suffix="''${dirname/#firmware-}"
+        cp -rP "$dirname" "$out/lib/firmware/raspberrypi/bootloader-$dirname_suffix"
+    done
   '';
 
   fixupPhase = ''
     patchShebangs $out/bin
     for i in rpi-eeprom-update rpi-eeprom-config; do
       wrapProgram $out/bin/$i \
-        --set FIRMWARE_ROOT $out/share/rpi-eeprom \
+        --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
         ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
@@ -51,9 +54,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 EEPROMs";
-    homepage = "https://www.raspberrypi.org/documentation/hardware/raspberrypi/booteeprom.md";
+    description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 and 5 bootloader EEPROMs";
+    homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
     license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [ das_j Luflosi ];
   };
 }
