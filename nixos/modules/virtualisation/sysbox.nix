@@ -25,7 +25,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [{
+  config = mkIf cfg.enable {
       systemd.services.sysbox-mgr = {
         description = "Sysbox Manager Service";
         wantedBy = [ "multi-user.target" ];
@@ -66,5 +66,5 @@ in
           message = "Sysbox require docker to be functional";
         }
       ];
-  ]);
+  };
 }
