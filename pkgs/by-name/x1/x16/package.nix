@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , SDL2
+, callPackage
 , zlib
 }:
 
@@ -41,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     # upstream project recommends emulator and rom to be synchronized; passing
     # through the version is useful to ensure this
     inherit (finalAttrs) version;
+    emulator = finalAttrs.finalPackage;
+    rom = callPackage ./rom.nix { };
+    run = (callPackage ./run.nix { }){
+      inherit (finalAttrs.finalPackage) emulator rom;
+    };
   };
 
   meta = {
