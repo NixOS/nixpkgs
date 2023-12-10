@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neard";
-  version = "0.18";
+  version = "0.19";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/network/nfc/neard.git/snapshot/neard-${version}.tar.gz";
-    sha256 = "wBPjEVMV4uEdFrXw8cjOmvvNuiaACq2RJF/ZtKXck4s=";
+    hash = "sha256-Epu/aUiP21mdSANWdllB8RHXeZSV0NZAlbJeiTxNK+c=";
   };
 
   nativeBuildInputs = [
