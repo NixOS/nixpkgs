@@ -14402,8 +14402,6 @@ with pkgs;
 
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger { };
 
-  volatility = callPackage ../tools/security/volatility { };
-
   volatility3 = callPackage ../tools/security/volatility3 { };
 
   vbetool = callPackage ../tools/system/vbetool { };
