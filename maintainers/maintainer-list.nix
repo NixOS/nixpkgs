@@ -8962,6 +8962,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  juliosueiras = {
+    email = "juliosueiras@gmail.com";
+    github = "juliosueiras";
+    githubId = 3680302;
+    name = "Julio Tain Sueiras";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
