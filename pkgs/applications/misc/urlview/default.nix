@@ -16,6 +16,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
 
+  # urlview appears to be unmaintained
+  # https://salsa.debian.org/debian/urlview/-/commit/4ad7d236c745b665db1d2fd07ce5ffc1748e4240
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-implicit-function-declaration"
+      "-Wno-parentheses"
+      "-Wno-pointer-sign"
+      "-Wno-unknown-escape-sequence"
+    ];
+  };
+
   preAutoreconf = ''
     touch NEWS
   '';
