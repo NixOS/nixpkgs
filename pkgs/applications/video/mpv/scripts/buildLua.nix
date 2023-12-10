@@ -5,31 +5,29 @@ let
   inherit (lib) hasPrefix hasSuffix removeSuffix;
   escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
-  nameFromPath = pathStr:
-    let fN = fileName pathStr; in
-    if hasSuffix ".lua" fN then
-      fN
-    else if !(hasPrefix "." fN) then
-      "${fN}.lua"
-    else
-      null
-  ;
   scriptsDir = "$out/share/mpv/scripts";
+
+  # similar to `lib.extends`, but with inverted precedence and recursive update
+  extendedBy = args: orig: self:
+    let super = args self;
+    in lib.recursiveUpdate (orig super) super
+  ;
 in
-lib.makeOverridable (
+
+lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
+  (if lib.isFunction args then args else (_: args)) (
   { pname
   , extraScripts ? []
   , ... }@args:
   let
     # either passthru.scriptName, inferred from scriptPath, or from pname
     scriptName = (args.passthru or {}).scriptName or (
-      if args ? scriptPath && nameFromPath args.scriptPath != null
-      then nameFromPath args.scriptPath
+      if args ? scriptPath
+      then fileName args.scriptPath
       else "${pname}.lua"
     );
     scriptPath = args.scriptPath or "./${scriptName}";
-  in
-  stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
+  in {
     dontBuild = true;
     preferLocalBuild = true;
 
@@ -59,5 +57,5 @@ lib.makeOverridable (
 
     passthru = { inherit scriptName; };
     meta.platforms = lib.platforms.all;
-  } args)
-)
+  })
+))
