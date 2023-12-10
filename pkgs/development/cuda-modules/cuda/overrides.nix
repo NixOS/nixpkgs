@@ -1,4 +1,8 @@
-{cudaVersion, lib}:
+{
+  cudaVersion,
+  lib,
+  stdenv,
+}:
 let
   inherit (lib) attrsets lists strings;
   # cudaVersionOlder : Version -> Boolean
@@ -43,9 +47,44 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   );
 
   cuda_compat = prev.cuda_compat.overrideAttrs (
-    prevAttrs: {
-      env.autoPatchelfIgnoreMissingDeps =
-        prevAttrs.env.autoPatchelfIgnoreMissingDeps + " libnvrm_gpu.so libnvrm_mem.so libnvdla_runtime.so";
+    prevAttrs: rec {
+      env.autoPatchelfIgnoreMissingDeps = builtins.concatStringsSep " " (
+        [
+          prevAttrs.env.autoPatchelfIgnoreMissingDeps
+          "libnvrm_gpu.so"
+          "libnvrm_mem.so"
+          "libnvdla_runtime.so"
+        ]
+        ++ libcudaExtraNeeded
+      );
+
+      # Append the jetpack's libnvrm_{gpu,mem}.so impure location with the lowest priority.
+      # This way we trade safety for the out-of-the box experience on jetsons.
+      appendRunpaths = [
+        "${stdenv.cc.cc.lib}/lib"
+      ] ++ prevAttrs.appendRunpaths ++ ["/usr/lib/aarch64-linux-gnu/tegra/"];
+
+      libcudaExtraNeeded = [
+        "libnvos.so"
+        "libnvsocsys.so"
+        "libnvrm_sync.so"
+        "libnvos.so"
+        "libnvsciipc.so"
+        "libnvsocsys.so"
+        "libnvrm_chip.so"
+        "libnvrm_host1x.so"
+        "libstdc++.so"
+      ];
+
+      # Remove once autoPatchelfHook supports __structuredAttrs
+      preFixup = ''
+        appendRunpaths="''${appendRunpaths[@]}"
+
+        for needed in "''${libcudaExtraNeeded[@]}" ; do
+          patchelf "$out/compat/libcuda.so" --add-needed "$needed"
+        done
+      '';
+
       # `cuda_compat` only works on aarch64-linux, and only when building for Jetson devices.
       brokenConditions = prevAttrs.brokenConditions // {
         "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" =
