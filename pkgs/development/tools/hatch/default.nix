@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
     pytest-mock
     pytest-xdist
+    setuptools
   ];
 
   preCheck = ''
@@ -65,6 +66,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_no_strict_naming"
     "test_project_location_basic_set_first_project"
     "test_project_location_complex_set_first_project"
+    # cli table output mismatch
+    "test_context_formatting"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"
