@@ -9,6 +9,7 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
+, fetchpatch
 , gettext
 , glib
 , gnutls
@@ -126,6 +127,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+
+    # Fix build with libxml 2.12.
+    # Part of 9.10.
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/7a5f232be2269e74943a029c0e8b1b0124674a6c.patch";
+      hash = "sha256-hwqCnqO7Cc69NK+xMRu58PqoWbWOadEc2sAoeN1XcTg=";
+    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
