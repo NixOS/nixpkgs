@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/nestybox/sysbox";
     description = "An open-source, next-generation 'runc' that empowers rootless containers to run workloads such as Systemd, Docker, Kubernetes, just like VMs.";
-    license = licenses.apache;
+    license = licenses.asl20;
     maintainers = with maintainers; [ juliosueiras ];
   };
 }
