@@ -58,6 +58,7 @@ self: super: {
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
+  ghc-lib-parser-ex = ghc-lib-parser-ex_9_8_0_0;
   github = super.github_0_29;
   hedgehog = super.hedgehog_1_4;
   hspec = super.hspec_2_11_7;
@@ -76,7 +77,7 @@ self: super: {
   tasty-hspec = super.tasty-hspec_1_2_0_4;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
-  cabal-fmt = 
+  cabal-fmt =
     if pkgs.stdenv.targetPlatform.isDarwin && pkgs.stdenv.targetPlatform.isAarch64 then 
       overrideCabal (drv: {
         enableSeparateBinOutput = false;
