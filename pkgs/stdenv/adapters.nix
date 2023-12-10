@@ -417,4 +417,18 @@ rec {
         "propagatedBuildInputs"
       ]);
     });
+
+  withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
+    bintools = let
+      bintools' = stdenv.cc.bintools;
+    in if bintools' ? override then (bintools'.override {
+      inherit defaultHardeningFlags;
+    }) else bintools';
+  in
+    stdenv.override (old: {
+      cc = if stdenv.cc == null then null else stdenv.cc.override {
+        inherit bintools;
+      };
+      allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
+    });
 }
