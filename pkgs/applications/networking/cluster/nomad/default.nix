@@ -41,7 +41,7 @@ let
         homepage = "https://www.nomadproject.io/";
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes amaxine techknowlogick ];
+        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes amaxine techknowlogick cottand ];
       };
     } // attrs');
 in
