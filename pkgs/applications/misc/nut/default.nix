@@ -18,6 +18,7 @@
 , substituteAll
 , systemd
 , udev
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -70,13 +71,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
+      --replace /bin/sed "${gnused}/bin/sed" \
       --replace /bin/sleep "${coreutils}/bin/sleep" \
       --replace /bin/systemctl "${systemd}/bin/systemctl"
 
     for file in system/{nut-monitor.service,nut-driver-enumerator.service,nut-server.service,nut-driver@.service} system-shutdown/nutshutdown; do
-    substituteInPlace $out/lib/systemd/$file \
-      --replace "$out/etc/nut.conf" "/etc/nut.conf"
+      substituteInPlace $out/lib/systemd/$file \
+        --replace "$out/etc/nut.conf" "/etc/nut/nut.conf"
     done
+
+    substituteInPlace $out/lib/systemd/system/nut-driver-enumerator.path \
+      --replace "$out/etc/ups.conf" "/etc/nut/ups.conf"
 
     # we don't need init.d scripts
     rm -r $out/share/solaris-init
