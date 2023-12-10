@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "44";
+  version = "46";
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-emulator";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-NDtfbhqGldxtvWQf/t6UnMRjI2DR7JYKbm2KFAMZhHY=";
+    hash = "sha256-cYr6s69eua1hCFqNkcomZDK9akxBqMTIaGqOl/YX2kc=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm 755 -t $out/bin/ x16emu
-    install -Dm 444 -t $out/share/doc/x16-emulator/ README.md
+    install -Dm 464 -t $out/share/doc/x16-emulator/ README.md
 
     runHook postInstall
   '';
