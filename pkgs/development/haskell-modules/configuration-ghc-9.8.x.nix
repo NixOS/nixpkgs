@@ -130,6 +130,9 @@ self: super: {
 
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
 
+  # Because we're using hspec-core-2.11.7 :)
+  hspec-api = unmarkBroken super.hspec-api;
+
   hw-fingertree = doJailbreak super.hw-fingertree; # deepseq >=1.4 && <1.5
   hw-fingertree-strict = doJailbreak super.hw-fingertree-strict; # deepseq >=1.4 && <1.5
   hw-prim = doJailbreak super.hw-prim; # ghc-prim >=0.5 && <0.11
