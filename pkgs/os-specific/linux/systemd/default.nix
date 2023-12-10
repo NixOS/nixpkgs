@@ -55,6 +55,7 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnutls
 , iptables
 , withSelinux ? false
 , libselinux
@@ -431,7 +432,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
@@ -768,7 +769,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
-      inherit (nixosTests) switchTest;
+      inherit (nixosTests)
+        switchTest
+        systemd-journal
+        systemd-journal-gateway
+        systemd-journal-upload;
       cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
