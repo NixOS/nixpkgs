@@ -2,6 +2,7 @@
 , asyncclick
 , buildPythonPackage
 , fetchPypi
+, firebase-messaging
 , oauthlib
 , poetry-core
 , pytest-asyncio
@@ -39,6 +40,12 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
   ];
+
+  passthru.optional-dependencies = {
+    listen = [
+      firebase-messaging
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio

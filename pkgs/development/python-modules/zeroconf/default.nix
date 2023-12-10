@@ -1,6 +1,5 @@
 { lib
-, stdenv
-, cython
+, cython_3
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.119.0";
+  version = "0.128.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,11 +23,16 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-VaqKk2WrRLZM2tfx3+y9GngEc6rMcw0b12ExFVfDYf4=";
+    hash = "sha256-44Ibjbimpl+KSnQ2QMwVg79F38gdWPYTR/ZRyW7JHEU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "Cython>=3.0.5" "Cython"
+  '';
+
   nativeBuildInputs = [
-    cython
+    cython_3
     poetry-core
     setuptools
   ];

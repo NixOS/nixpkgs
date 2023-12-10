@@ -157,7 +157,7 @@ in {
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [
-          prometheus-sensor
+          prometheus_sensor
         ];
       '';
       description = lib.mdDoc ''
@@ -523,7 +523,6 @@ in {
           "bluetooth_tracker"
           "bthome"
           "default_config"
-          "eq3btsmart"
           "eufylife_ble"
           "esphome"
           "fjaraskupan"

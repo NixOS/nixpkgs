@@ -3,13 +3,14 @@
 , fetchFromGitHub
 , poetry-core
 , aiohttp
+, aiohttp-retry
 , pythonOlder
 , pyjwt
 }:
 
 buildPythonPackage rec {
   pname = "apple-weatherkit";
-  version = "1.0.4";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "tjhorner";
     repo = "python-weatherkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G/0hyK2rjdSSnVnvAUGyDvsfNMHVgAD7NHfNFmdBCNA=";
+    hash = "sha256-ZwHomiRkoV2Oi5c7qgTOKdu6R8dFfiVBi5XQMxrQvIU=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    aiohttp-retry
     pyjwt
   ] ++ pyjwt.optional-dependencies.crypto;
 
