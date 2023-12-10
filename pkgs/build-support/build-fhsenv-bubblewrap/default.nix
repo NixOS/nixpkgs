@@ -32,7 +32,7 @@ with builtins;
 let
   name = args.name or "${args.pname}-${args.version}";
   pname = args.pname or (lib.getName args.name);
-  version = args.version or (lib.getVersion args.name);
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key ["name" "pname" "version"]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
@@ -228,8 +228,7 @@ let
   '';
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
-in runCommandLocal name {
-  inherit pname version;
+in runCommandLocal name (nameAttrs // {
   inherit meta;
 
   passthru = passthru // {
@@ -243,7 +242,7 @@ in runCommandLocal name {
     '';
     inherit args fhsenv;
   };
-} ''
+}) ''
   mkdir -p $out/bin
   ln -s ${bin} $out/bin/${pname}
 
