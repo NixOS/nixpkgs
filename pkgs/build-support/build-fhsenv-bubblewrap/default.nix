@@ -31,8 +31,8 @@ assert (!args ? pname || !args ? version) -> (args ? name); # You must provide n
 with builtins;
 let
   name = args.name or "${args.pname}-${args.version}";
-  pname = args.pname or (lib.getName args.name);
-  nameAttrs = lib.filterAttrs (key: value: builtins.elem key ["name" "pname" "version"]) args;
+  executableName = args.pname or args.name;
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
@@ -244,7 +244,7 @@ in runCommandLocal name (nameAttrs // {
   };
 }) ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${executableName}
 
   ${extraInstallCommands}
 ''
