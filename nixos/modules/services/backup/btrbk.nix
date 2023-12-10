@@ -13,7 +13,7 @@ let
     mkIf
     mkOption
     optionalString
-    sort
+    sortOn
     types
     ;
 
@@ -37,7 +37,7 @@ let
   genConfig = set:
     let
       pairs = mapAttrsToList (name: value: { inherit name value; }) set;
-      sortedPairs = sort (a: b: prioOf a < prioOf b) pairs;
+      sortedPairs = sortOn prioOf pairs;
     in
       concatMap genPair sortedPairs;
   genSection = sec: secName: value:

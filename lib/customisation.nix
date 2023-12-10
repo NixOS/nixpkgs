@@ -162,7 +162,7 @@ rec {
         # levenshteinAtMost is only fast for 2 or less.
         (lib.filter (lib.strings.levenshteinAtMost 2 arg))
         # Put strings with shorter distance first
-        (lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg))
+        (lib.sortOn (lib.strings.levenshtein arg))
         # Only take the first couple results
         (lib.take 3)
         # Quote all entries
