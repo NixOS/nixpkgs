@@ -1,0 +1,69 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+  cfg = config.virtualisation.sysbox;
+in
+
+{
+  ###### interface
+
+  options.virtualisation.sysbox = {
+    enable =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            This option enables sysbox
+          '';
+      };
+    };
+
+    package = mkPackageOption pkgs "sysbox" { };
+  };
+
+  ###### implementation
+
+  config = mkIf cfg.enable (mkMerge [{
+      systemd.services.sysbox-mgr = {
+        description = "Sysbox Manager Service";
+        wantedBy = [ "multi-user.target" ];
+
+        path = [ pkgs.rsync pkgs.kmod pkgs.iptables ];
+        script = "${sysbox}/bin/sysbox-mgr";
+
+        preStart = ''
+          mkdir /sbin || true
+          cp ${pkgs.iptables}/bin/* /sbin || true
+        '';
+
+        serviceConfig = {
+          User = "root";
+          Group = "root";
+        };
+      };
+
+      systemd.services.sysbox-fs = {
+        description = "Sysbox FileSystem Service";
+        wantedBy = [ "multi-user.target" ];
+
+        path = [ pkgs.rsync pkgs.kmod pkgs.fuse pkgs.iptables ];
+        script = "${sysbox}/bin/sysbox-fs";
+
+        serviceConfig = {
+          User = "root";
+          Group = "root";
+        };
+      };
+
+      virtualisation.docker.extraOptions = pkgs.lib.mkForce ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
+
+      assertions = [
+        { assertion = !virtualisation.docker.enable or virtualisation.podman.enable;
+          message = "Sysbox require docker to be functional";
+        }
+      ];
+  ]);
+}
