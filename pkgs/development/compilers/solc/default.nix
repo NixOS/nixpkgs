@@ -86,7 +86,7 @@ let
     buildInputs = [ boost ]
       ++ lib.optionals z3Support [ z3 ]
       ++ lib.optionals cvc4Support [ cvc4 cln gmp ];
-    nativeCheckInputs = [ jq ncurses (python3.withPackages (ps: with ps; [ colorama deepdiff devtools docopt docutils requests sphinx tabulate z3 ])) ]; # contextlib2 glob2 textwrap3 traceback2 urllib3
+    nativeCheckInputs = [ jq ncurses (python3.withPackages (ps: with ps; [ colorama deepdiff devtools docopt docutils requests sphinx tabulate z3-solver ])) ]; # contextlib2 glob2 textwrap3 traceback2 urllib3
 
     # tests take 60+ minutes to complete, only run as part of passthru tests
     doCheck = false;
