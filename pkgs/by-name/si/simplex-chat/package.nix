@@ -33,36 +33,25 @@ let
     rev = "f5525b755ff2418e6e6ecc69e877363b0d0bcaeb";
     sha256 = "sha256-ZiG0vBtm8FZW1Lpe6zJnBMkzfq0iiEtjShXudwgA3Ts=";
   };
-
-  pkgs = import <nixpkgs> {
-    config = {
-      packageOverrides = pkgs: rec {
-        haskell = pkgs.haskell // {
-          packages = pkgs.haskell.packages // {
-            "${compiler}" = pkgs.haskell.packages."${compiler}".override {
-              overrides = self: super: {
-                direct-sqlcipher = self.callCabal2nix "direct-sqlcipher" git_direct-sqlcipher {};
-                sqlcipher-simple = hlib.dontCheck (self.callCabal2nix "sqlcipher-simple" git_sqlcipher-simple {});
-                simplexmq = hlib.dontCheck (hlib.doJailbreak (self.callCabal2nix "simplexmq" git_simplexmq {}));
-                cryptostore = hlib.dontCheck super.cryptostore;
-                aeson = hlib.dontCheck (self.callCabal2nix "aeson" git_aeson {});
-                aeson-pretty = super.aeson-pretty_0_8_10;
-                vector = hlib.doJailbreak super.vector;
-                attoparsec-aeson = super.attoparsec-aeson_2_2_0_1;
-                http2 = self.callCabal2nix "http2" git_http2 {};
-                socks = self.callCabal2nix "socks" git_hs-socks {};
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-
   git_simplex-chat = simplexGit "simplex-chat"
     "eabe17a88ed0ac12a59445cbc0c688821013442d"
     "sha256-yzLKMlpSSrxsVvLwud+vJRGCI29drpZ8QtvLqhfi9fY=";
-  simplex-chat = pkgs.haskell.packages.${compiler}.callCabal2nix name git_simplex-chat {};
+
+  haskellOverrides = self: super: {
+    direct-sqlcipher = self.callCabal2nix "direct-sqlcipher" git_direct-sqlcipher {};
+    sqlcipher-simple = hlib.dontCheck (self.callCabal2nix "sqlcipher-simple" git_sqlcipher-simple {});
+    simplexmq = hlib.dontCheck (hlib.doJailbreak (self.callCabal2nix "simplexmq" git_simplexmq {}));
+    cryptostore = hlib.dontCheck super.cryptostore;
+    aeson = hlib.dontCheck (self.callCabal2nix "aeson" git_aeson {});
+    aeson-pretty = super.aeson-pretty_0_8_10;
+    vector = hlib.doJailbreak super.vector;
+    attoparsec-aeson = super.attoparsec-aeson_2_2_0_1;
+    http2 = self.callCabal2nix "http2" git_http2 {};
+    socks = self.callCabal2nix "socks" git_hs-socks {};
+    simplex-chat = self.callCabal2nix name git_simplex-chat {};
+  };
+
+  hp = pkgs.haskell.packages."${compiler}".extend haskellOverrides;
 
   meta = with lib; {
     mainProgram = "simplex-chat";
@@ -73,4 +62,4 @@ let
     maintainers = [ maintainers.eyeinsky ];
   };
 
-in hlib.doJailbreak simplex-chat
+in hlib.doJailbreak hp.simplex-chat
