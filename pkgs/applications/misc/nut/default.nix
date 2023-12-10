@@ -30,6 +30,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # This patch injects a default value for NUT_CONFPATH into the nutshutdown script
+    # since the way we build the package results in the binaries being hardcoded to check
+    # $out/etc/ups.conf instead of /etc/nut/ups.conf (where the module places the file).
+    # We also cannot use `--sysconfdir=/etc/nut` since that results in the install phase
+    # trying to install directly into /etc/nut which predictably fails
+    ./nutshutdown-conf-default.patch
+
     (substituteAll {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
