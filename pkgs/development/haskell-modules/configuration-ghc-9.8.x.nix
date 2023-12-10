@@ -70,6 +70,7 @@ self: super: {
   singleton-bool = super.singleton-bool_0_1_7;
   some = super.some_1_0_6;
   tagged = super.tagged_0_8_8;
+  tasty-hspec = super.tasty-hspec_1_2_0_4;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
   ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
