@@ -31,7 +31,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       path = [ pkgs.rsync pkgs.kmod pkgs.iptables ];
-      script = "${sysbox}/bin/sysbox-mgr";
+      script = "${cfg.package}/bin/sysbox-mgr";
 
       preStart = ''
         mkdir /sbin || true
@@ -49,7 +49,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       path = [ pkgs.rsync pkgs.kmod pkgs.fuse pkgs.iptables ];
-      script = "${sysbox}/bin/sysbox-fs";
+      script = "${cfg.package}/bin/sysbox-fs";
 
       serviceConfig = {
         User = "root";
