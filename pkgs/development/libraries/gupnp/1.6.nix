@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -24,6 +25,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-ydxQ6MeLN5LRsObFxfUsk+k0XT2uKJHjEamTpXT1oE8=";
   };
+
+  patches = [
+    # Fix build against libxml2 2.12
+    (fetchpatch {
+      name = "libxml2-2.12-fix.patch";
+      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/00514fb62ebd341803fa44e26a6482a8c25dbd34.patch";
+      hash = "sha256-IfhjFwjlSaFBi58hjU52a6GC2PBJRQCYmmxVtp2GYTs=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
