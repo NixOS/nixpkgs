@@ -71,7 +71,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.10";
+  version = "6.26.14";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
+    hash = "sha256-gQRaNaGViQbD6t7NmwESemCH2twZOFr46SrlyE8GzjU=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
