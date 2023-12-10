@@ -36,6 +36,12 @@ in stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
       sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
     })
+    # fixes Playstation controller pairing: https://github.com/bluez/bluez/issues/614
+    # should be fixed in next bluez release
+    (fetchpatch {
+      url = "https://github.com/BluezTestBot/bluez/commit/1608878095ba93f9e2385dde2cfdb1488ae6ebea.patch";
+      sha256 = "sha256-UUmYMHnxYrw663nEEC2mv3zj5e0omkLNejmmPUtgS3c=";
+    })
   ];
 
   buildInputs = [
