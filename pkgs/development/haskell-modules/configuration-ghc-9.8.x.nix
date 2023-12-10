@@ -119,6 +119,7 @@ self: super: {
     hls-gadt-plugin = null;
     hls-hlint-plugin = null;
     hls-rename-plugin = null;
+    hls-stylish-haskell-plugin = null;
     hls-floskell-plugin = null;
     hls-retrie-plugin = null;
     hls-splice-plugin = null;
