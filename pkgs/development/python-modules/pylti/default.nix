@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
   nativeCheckInputs = [
-    flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov 
+    flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov
     pytest-flakes sphinx mock chalice
   ];
 
