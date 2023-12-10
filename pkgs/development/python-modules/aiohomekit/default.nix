@@ -60,6 +60,17 @@ buildPythonPackage rec {
     "tests/test_ip_pairing.py"
   ];
 
+  disabledTests = [
+    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
+    "test_discover_find_one_unpaired"
+    "test_find_device_id_case_lower"
+    "test_find_device_id_case_upper"
+    "test_discover_missing_csharp"
+    "test_discover_csharp_case"
+    "test_discover_device_id_case_lower"
+    "test_discover_device_id_case_upper"
+  ];
+
   pythonImportsCheck = [
     "aiohomekit"
   ];
