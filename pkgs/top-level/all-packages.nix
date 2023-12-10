@@ -33945,6 +33945,8 @@ with pkgs;
 
   memento = libsForQt5.callPackage ../applications/video/memento { };
 
+  memgpt = with python3Packages; toPythonApplication memgpt;
+
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
