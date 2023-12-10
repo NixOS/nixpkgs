@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B/jGsHImRfj0iEio2b6R6laWBI1LL3OI407O7sren8s=";
+    hash = "sha256-bK/xpBmM8KtLsncYSqPHuGPkgtvbJFn00iU61nwl0QQ=";
   };
 
   nativeBuildInputs = [
