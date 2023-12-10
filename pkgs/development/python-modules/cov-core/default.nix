@@ -13,6 +13,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ coverage ];
 
   meta = with lib; {
-    description = "Plugin core for use by pytest-cov, nose-cov and nose2-cov";
+    description = "Plugin core for use by pytest-cov and nose2-cov";
   };
 }
