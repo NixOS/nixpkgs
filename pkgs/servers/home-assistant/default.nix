@@ -105,10 +105,10 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
         };
-        nativeBuildInputs = with super; [
+        nativeBuildInputs = with self; [
           setuptools
         ];
-        propagatedBuildInputs = with super; [
+        propagatedBuildInputs = with self; [
           aenum
           aiohttp
           pydantic
@@ -151,11 +151,11 @@ let
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
-        nativeBuildInputs = with super; [
+        nativeBuildInputs = with self; [
           setuptools
         ];
 
-        propagatedBuildInputs = with super; [
+        propagatedBuildInputs = with self; [
           requests
         ];
 
