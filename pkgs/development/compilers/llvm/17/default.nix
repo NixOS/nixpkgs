@@ -25,7 +25,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "17.0.2"; sha256 = "08w6mksm7mkws3hhhsy5gg881b4whr6abrshmh6q4c32qlni94nn"; }
+, officialRelease ? { version = "17.0.6"; sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
