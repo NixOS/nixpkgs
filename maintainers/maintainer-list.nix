@@ -17929,6 +17929,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  teburd = {
+    email = "foss@electromatic.us";
+    github = "teburd";
+    githubId = 135839;
+    name = "Tom Burdick";
+  };
   techknowlogick = {
     email = "techknowlogick@gitea.com";
     github = "techknowlogick";
