@@ -70,6 +70,7 @@ self: super: {
   megaparsec-tests = super.megaparsec-tests_9_6_1;
   ormolu = super.ormolu_0_7_3_0;
   rebase = super.rebase_1_20_1_1;
+  rerebase = super.rerebase_1_20_1_1;
   semigroupoids = super.semigroupoids_6_0_0_1;
   singleton-bool = super.singleton-bool_0_1_7;
   some = super.some_1_0_6;
