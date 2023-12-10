@@ -6117,8 +6117,6 @@ with pkgs;
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
-  nix-direnv = callPackage ../tools/misc/nix-direnv { };
-
   nixel = callPackage ../tools/nix/nixel { };
 
   nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { };
