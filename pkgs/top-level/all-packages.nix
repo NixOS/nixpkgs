@@ -846,6 +846,14 @@ with pkgs;
 
   oauth2c = callPackage ../tools/security/oauth2c { };
 
+  octodns = python3Packages.callPackage ../tools/networking/octodns { };
+
+  octodns-providers = recurseIntoAttrs {
+    bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
+    hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
+    powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
+  };
+
   octosuite = callPackage ../tools/security/octosuite { };
 
   octosql = callPackage ../tools/misc/octosql { };
