@@ -56,6 +56,7 @@ self: super: {
   fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
+  
   ghc-lib = super.ghc-lib_9_8_1_20231121;
   ghc-lib-parser = super.ghc-lib-parser_9_8_1_20231121;
   ghc-lib-parser-ex = super.ghc-lib-parser-ex_9_8_0_0;
@@ -109,6 +110,18 @@ self: super: {
   # https://github.com/maoe/ghc-trace-events/issues/12
   ghc-trace-events = doJailbreak super.ghc-trace-events;
 
+  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
+  # lmao
+  haskell-language-server = super.haskell-language-server.override {
+    hls-refactor-plugin = null;
+    hls-class-plugin = null;
+    hls-hlint-plugin = null;
+    hls-rename-plugin = null;
+    hls-floskell-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+  };
+
   hiedb = dontCheck super.hiedb;
 
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
@@ -123,9 +136,7 @@ self: super: {
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
 
   # https://github.com/haskell-primitive/primitive-unlifted/issues/39
-  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring >=0.10.8.2 && <0.12
-
-  retrie = doJailbreak super.retrie; # base >=4.11 && <4.18, bytestring >=0.10.8 && <0.12
+  primitive-unlifted = doJailbreak super.primitive-unlifted_2_1_0_0; # bytestring >=0.10.8.2 && <0.12
 
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
 }
