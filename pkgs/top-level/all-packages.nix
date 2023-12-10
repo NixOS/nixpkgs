@@ -35524,8 +35524,6 @@ with pkgs;
 
   spotify-player = callPackage ../applications/audio/spotify-player { };
 
-  spotifywm = callPackage ../applications/audio/spotifywm { };
-
   psst = callPackage ../applications/audio/psst { };
 
   squeezelite = darwin.apple_sdk_11_0.callPackage ../applications/audio/squeezelite {
