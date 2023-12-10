@@ -31602,7 +31602,7 @@ with pkgs;
 
   fluxus = callPackage ../applications/graphics/fluxus { stdenv = gcc10StdenvCompat; };
 
-  flwrap = callPackage ../applications/radio/flwrap { stdenv = gcc10StdenvCompat; };
+  flwrap = callPackage ../applications/radio/flwrap { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
     inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreAudio CoreMIDI CoreServices;
