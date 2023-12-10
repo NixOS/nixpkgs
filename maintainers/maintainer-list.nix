@@ -13937,6 +13937,12 @@
     githubId = 14935550;
     name = "Brad Pfannmuller";
   };
+  paretoOptimalDev = {
+    email = "pareot.optimal@mailfence.com";
+    github = "ParetoOptimalDev";
+    githubId = 93023868;
+    name = "ParetoOptimalDev";
+  };
   parras = {
     email = "c@philipp-arras.de";
     github = "phiadaarr";
