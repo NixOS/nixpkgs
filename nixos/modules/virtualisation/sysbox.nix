@@ -26,45 +26,45 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-      systemd.services.sysbox-mgr = {
-        description = "Sysbox Manager Service";
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.sysbox-mgr = {
+      description = "Sysbox Manager Service";
+      wantedBy = [ "multi-user.target" ];
 
-        path = [ pkgs.rsync pkgs.kmod pkgs.iptables ];
-        script = "${sysbox}/bin/sysbox-mgr";
+      path = [ pkgs.rsync pkgs.kmod pkgs.iptables ];
+      script = "${sysbox}/bin/sysbox-mgr";
 
-        preStart = ''
-          mkdir /sbin || true
-          cp ${pkgs.iptables}/bin/* /sbin || true
-        '';
+      preStart = ''
+        mkdir /sbin || true
+        cp ${pkgs.iptables}/bin/* /sbin || true
+      '';
 
-        serviceConfig = {
-          User = "root";
-          Group = "root";
-        };
+      serviceConfig = {
+        User = "root";
+        Group = "root";
       };
+    };
 
-      systemd.services.sysbox-fs = {
-        description = "Sysbox FileSystem Service";
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.sysbox-fs = {
+      description = "Sysbox FileSystem Service";
+      wantedBy = [ "multi-user.target" ];
 
-        path = [ pkgs.rsync pkgs.kmod pkgs.fuse pkgs.iptables ];
-        script = "${sysbox}/bin/sysbox-fs";
+      path = [ pkgs.rsync pkgs.kmod pkgs.fuse pkgs.iptables ];
+      script = "${sysbox}/bin/sysbox-fs";
 
-        serviceConfig = {
-          User = "root";
-          Group = "root";
-        };
+      serviceConfig = {
+        User = "root";
+        Group = "root";
       };
+    };
 
-      virtualisation.docker.extraOptions = pkgs.lib.mkForce ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
+    virtualisation.docker.extraOptions = pkgs.lib.mkForce ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
 
-      security.unprivilegedUsernsClone = true;
+    security.unprivilegedUsernsClone = true;
 
-      assertions = [
-        { assertion = !virtualisation.docker.enable or virtualisation.podman.enable;
-          message = "Sysbox require docker to be functional";
-        }
-      ];
+    assertions = [
+      { assertion = !virtualisation.docker.enable or virtualisation.podman.enable;
+        message = "Sysbox require docker to be functional";
+      }
+    ];
   };
 }
