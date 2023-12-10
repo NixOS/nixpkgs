@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "44";
+  version = "45";
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-emulator";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-NDtfbhqGldxtvWQf/t6UnMRjI2DR7JYKbm2KFAMZhHY=";
+    hash = "sha256-5iVoN3V2uLzNgAQ5TlJju9K2u4M65kALWtytyrY1eiQ=";
   };
 
   postPatch = ''
