@@ -108,6 +108,8 @@ self: super: {
   # https://github.com/maoe/ghc-trace-events/issues/12
   ghc-trace-events = doJailbreak super.ghc-trace-events;
 
+  hiedb = dontCheck super.hiedb;
+
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
 
   hw-fingertree = doJailbreak super.hw-fingertree; # deepseq >=1.4 && <1.5
