@@ -34,6 +34,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=server::web::proxy::test::add_proxy_trailing_slash"
   ];
 
+  # Omitted: --doc
+  # Can be removed after 0.4.3 or when https://github.com/DioxusLabs/dioxus/pull/1706 is resolved
+  # Matches upstream package test CI https://github.com/DioxusLabs/dioxus/blob/544ca5559654c8490ce444c3cbd85c1bfb8479da/Makefile.toml#L94-L108
+  cargoTestFlags = "--lib --bins --tests --examples";
+
   passthru.tests.version = testers.testVersion {
     package = dioxus-cli;
     command = "${meta.mainProgram} --version";
