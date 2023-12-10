@@ -50,6 +50,14 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/bc56f02b0f89e96f2bd74af811903d9931965f58.patch";
       hash = "sha256-KCHlq7Es+WLIWKgIgGVTaHarVQIiZPEi5r6nMAhXTgY=";
     })
+
+    # Fix build against libxml2 2.12
+    # https://gitlab.gnome.org/GNOME/gupnp/-/merge_requests/35
+    (fetchpatch2 {
+      name = "libxml2-2.12-fix.patch";
+      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/387ca6714bcef64399e1bfdd599612cf3f9e75db.patch";
+      hash = "sha256-Dy0kOOT27+HQIZBfEsOus9+ibLWc2Wtni63lAp7jIWw=";
+    })
   ];
 
   depsBuildBuild = [
