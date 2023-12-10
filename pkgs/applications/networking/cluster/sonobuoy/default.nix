@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, sonobuoy }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
@@ -30,6 +30,11 @@ buildGoModule rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = sonobuoy;
+      command = "sonobuoy version";
+      version = "v${version}";
+    };
   };
 
   meta = with lib; {
