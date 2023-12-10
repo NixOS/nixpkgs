@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.5.8";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     rev = "v${version}";
-    hash = "sha256-1KDcc9Hms1hQgpvf/49zFJ85kDUsieNcoOTYaZWV+S0=";
+    hash = "sha256-cLzQnNmQYyAIdTGygk/CNU/mxGgcgoFTg5G/0DNwpz4=";
   };
 
-  vendorHash = "sha256-UJLwSOJ4vZt3kquKllm5OMfFheZtAG5gLSA20313PpA=";
+  vendorHash = "sha256-DZI4APnrldnwOmLZ9ucFBGQDxzPXTIi44eLu74WrSBI=";
 
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
   buildInputs = [ libGL libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXfixes wine ];
