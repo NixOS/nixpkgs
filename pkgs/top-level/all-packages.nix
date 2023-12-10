@@ -3597,9 +3597,7 @@ with pkgs;
 
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
 
-  bonnie = callPackage ../tools/filesystems/bonnie {
-    stdenv = gcc10StdenvCompat;
-  };
+  bonnie = callPackage ../tools/filesystems/bonnie { };
 
   boron = callPackage ../development/interpreters/boron { };
 
