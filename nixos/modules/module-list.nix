@@ -1256,8 +1256,8 @@
   ./services/security/kanidm.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
-  ./services/security/oauth2_proxy.nix
-  ./services/security/oauth2_proxy_nginx.nix
+  ./services/security/oauth2-proxy.nix
+  ./services/security/oauth2-proxy-nginx.nix
   ./services/security/opensnitch.nix
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix

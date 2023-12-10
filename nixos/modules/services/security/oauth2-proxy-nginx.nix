@@ -1,26 +1,26 @@
 { config, lib, ... }:
 with lib;
 let
-  cfg = config.services.oauth2_proxy.nginx;
+  cfg = config.services.oauth2-proxy.nginx;
 in
 {
-  options.services.oauth2_proxy.nginx = {
+  options.services.oauth2-proxy.nginx = {
     proxy = mkOption {
       type = types.str;
-      default = config.services.oauth2_proxy.httpAddress;
-      defaultText = literalExpression "config.services.oauth2_proxy.httpAddress";
+      default = config.services.oauth2-proxy.httpAddress;
+      defaultText = literalExpression "config.services.oauth2-proxy.httpAddress";
       description = ''
-        The address of the reverse proxy endpoint for oauth2_proxy
+        The address of the reverse proxy endpoint for oauth2-proxy
       '';
     };
 
     domain = mkOption {
       type = types.str;
       description = ''
-        The domain under which the oauth2_proxy will be accesible and the path of cookies are set to.
+        The domain under which the oauth2-proxy will be accesible and the path of cookies are set to.
         This setting must be set to ensure back-redirects are working properly
-        if oauth2-proxy is configured with {option}`services.oauth2_proxy.cookie.domain`
-        or multiple {option}`services.oauth2_proxy.nginx.virtualHosts` that are not on the same domain.
+        if oauth2-proxy is configured with {option}`services.oauth2-proxy.cookie.domain`
+        or multiple {option}`services.oauth2-proxy.nginx.virtualHosts` that are not on the same domain.
       '';
     };
 
@@ -47,7 +47,7 @@ in
         };
         oldType = types.listOf types.str;
         convertFunc = x:
-          lib.warn "services.oauth2_proxy.nginx.virtualHosts should be an attrset, found ${lib.generators.toPretty {} x}"
+          lib.warn "services.oauth2-proxy.nginx.virtualHosts should be an attrset, found ${lib.generators.toPretty {} x}"
           lib.genAttrs x (_: {});
         newType = types.attrsOf vhostSubmodule;
       in types.coercedTo oldType convertFunc newType;
@@ -65,11 +65,11 @@ in
     };
   };
 
-  config.services.oauth2_proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
+  config.services.oauth2-proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
     enable = true;
   };
 
-  config.services.nginx = mkIf (cfg.virtualHosts != [] && config.services.oauth2_proxy.enable) (mkMerge ([
+  config.services.nginx = mkIf (cfg.virtualHosts != [] && config.services.oauth2-proxy.enable) (mkMerge ([
     {
       virtualHosts.${cfg.domain}.locations."/oauth2/" = {
         proxyPass = cfg.proxy;

@@ -1,15 +1,13 @@
-# NixOS module for oauth2_proxy.
-
 { config, lib, pkgs, ... }:
 
 with lib;
 let
-  cfg = config.services.oauth2_proxy;
+  cfg = config.services.oauth2-proxy;
 
-  # oauth2_proxy provides many options that are only relevant if you are using
+  # oauth2-proxy provides many options that are only relevant if you are using
   # a certain provider. This set maps from provider name to a function that
   # takes the configuration and returns a string that can be inserted into the
-  # command-line to launch oauth2_proxy.
+  # command-line to launch oauth2-proxy.
   providerSpecificOptions = {
     azure = cfg: {
       azure-tenant = cfg.azure.tenant;
@@ -85,8 +83,8 @@ let
   configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
 in
 {
-  options.services.oauth2_proxy = {
-    enable = mkEnableOption "oauth2_proxy";
+  options.services.oauth2-proxy = {
+    enable = mkEnableOption "oauth2-proxy";
 
     package = mkPackageOption pkgs "oauth2-proxy" { };
 
@@ -557,28 +555,30 @@ in
         OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
         and specify the path here.
       '';
-      example = "/run/keys/oauth2_proxy";
+      example = "/run/keys/oauth2-proxy";
     };
-
   };
 
-  config = mkIf cfg.enable {
+  imports = [
+    (mkRenamedOptionModule [ "services" "oauth2_proxy" ] [ "services" "oauth2-proxy" ])
+  ];
 
-    services.oauth2_proxy = mkIf (cfg.keyFile != null) {
+  config = mkIf cfg.enable {
+    services.oauth2-proxy = mkIf (cfg.keyFile != null) {
       clientID = mkDefault null;
       clientSecret = mkDefault null;
       cookie.secret = mkDefault null;
     };
 
-    users.users.oauth2_proxy = {
+    users.users.oauth2-proxy = {
       description = "OAuth2 Proxy";
       isSystemUser = true;
-      group = "oauth2_proxy";
+      group = "oauth2-proxy";
     };
 
-    users.groups.oauth2_proxy = {};
+    users.groups.oauth2-proxy = {};
 
-    systemd.services.oauth2_proxy = {
+    systemd.services.oauth2-proxy = {
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
@@ -586,7 +586,7 @@ in
       after = [ "network-online.target" ];
 
       serviceConfig = {
-        User = "oauth2_proxy";
+        User = "oauth2-proxy";
         Restart = "always";
         ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
         EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
