@@ -8,12 +8,13 @@
 , idna
 , multidict
 , typing-extensions
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.9.3";
+  version = "1.9.4";
 
   disabled = pythonOlder "3.7";
 
@@ -21,11 +22,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ShSQe1l+xVdA9j5S1/7g6e4J1bnVek85mnQjJo5Fe1c=";
+    hash = "sha256-Vm24ZxfPgIC5m1iwg7dzqQiuQPBmgeh+WJqXb6+CRr8=";
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    sed -i '/cov/d' pytest.ini
   '';
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
