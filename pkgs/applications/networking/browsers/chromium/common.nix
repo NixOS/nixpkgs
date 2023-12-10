@@ -237,7 +237,7 @@ let
       ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
-      ./cross-compile.patch
+      ./patches/cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
@@ -256,7 +256,7 @@ let
       })
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M120+ with LLVM 16:
-      ./chromium-120-llvm-16.patch
+      ./patches/chromium-120-llvm-16.patch
     ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
       # Fix build with at-spi2-core ≥ 2.49
       # This version is still needed for electron.
