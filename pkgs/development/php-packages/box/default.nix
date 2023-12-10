@@ -1,6 +1,6 @@
-{ lib, php, fetchFromGitHub }:
+{ lib, php82, fetchFromGitHub }:
 
-php.buildComposerProject (finalAttrs: {
+php82.buildComposerProject (finalAttrs: {
   pname = "box";
   version = "4.6.0";
 
