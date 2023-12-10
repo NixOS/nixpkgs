@@ -36,10 +36,9 @@ let
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
-    "pname" "version"
   ]);
 
   etcBindEntries = let
