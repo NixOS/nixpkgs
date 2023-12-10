@@ -9388,6 +9388,7 @@
   katexochen = {
     github = "katexochen";
     githubId = 49727155;
+    matrix = "@katexochen:matrix.org";
     name = "Paul Meyer";
   };
   kayhide = {
