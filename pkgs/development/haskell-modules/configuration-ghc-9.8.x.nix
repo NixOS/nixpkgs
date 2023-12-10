@@ -75,7 +75,7 @@ self: super: {
   ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
 
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
-  commutative-semigroups = doJailbreak super.commutative-semigroups;
+  commutative-semigroups = doJailbreak super.commutative-semigroups; # base >=4.6 && <4.19
 
   dates = doJailbreak super.dates; # base >=4.9 && <4.16
 
@@ -105,6 +105,9 @@ self: super: {
   lifted-base = dontCheck super.lifted-base;
 
   newtype-generics = doJailbreak super.newtype-generics; # base >=4.9 && <4.19
+
+  # https://github.com/haskell-primitive/primitive-unlifted/issues/39
+  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring >=0.10.8.2 && <0.12
 
   retrie = doJailbreak super.retrie; # base >=4.11 && <4.18, bytestring >=0.10.8 && <0.12
 
