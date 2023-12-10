@@ -58,7 +58,7 @@ buildPythonPackage rec {
     description = "LlamaIndex (formerly GPT Index) is a data framework for your LLM applications ";
     homepage = "https://github.com/run-llama/llama_index";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ paretoOptimalDev ];
   };
 
 }
