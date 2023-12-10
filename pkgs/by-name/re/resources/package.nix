@@ -13,6 +13,8 @@
 , glib
 , gtk4
 , libadwaita
+, dmidecode
+, util-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
+  postPatch = ''
+    substituteInPlace src/utils/memory.rs \
+      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
+    substituteInPlace src/utils/cpu.rs \
+      --replace '"lscpu"' '"${util-linux}/bin/lscpu"'
+    substituteInPlace src/utils/memory.rs \
+      --replace '"pkexec"' '"/run/wrappers/bin/pkexec"'
+  '';
+
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
@@ -60,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
     mainProgram = "resources";
-    maintainers = with lib.maintainers; [ lukas-heiligenbrunner ];
+    maintainers = with lib.maintainers; [ lukas-heiligenbrunner ewuuwe ];
     platforms = lib.platforms.linux;
   };
 })
