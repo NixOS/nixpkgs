@@ -18,8 +18,7 @@ in
           lib.mdDoc ''
             This option enables sysbox
           '';
-      };
-    };
+        };
 
     package = mkPackageOption pkgs "sysbox" { };
   };
