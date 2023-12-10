@@ -9,10 +9,7 @@
 , bubblewrap
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, runScript ? "bash"
+{ runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -29,13 +26,13 @@
 , ...
 } @ args:
 
-assert (pname == null || version == null) -> (name != null); # You must declare name if pname + version (preferred) is missing.
+assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
 
 with builtins;
 let
-  name = if args ? name && args.name != null then args.name else "${pname}-${version}";
-  pname = if args ? pname && args.pname != null then args.pname else lib.getName args.name;
-  version = if args ? version && args.version != null then args.version else lib.getVersion args.name;
+  name = args.name or "${args.pname}-${args.version}";
+  pname = args.pname or (lib.getName args.name);
+  version = args.version or (lib.getVersion args.name);
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
