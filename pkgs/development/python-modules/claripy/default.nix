@@ -8,7 +8,7 @@
 , pysmt
 , pythonOlder
 , pytestCheckHook
-, z3
+, z3-solver
 }:
 
 buildPythonPackage rec {
@@ -34,18 +34,12 @@ buildPythonPackage rec {
     decorator
     future
     pysmt
-    z3
+    z3-solver
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Use upstream z3 implementation
-    substituteInPlace setup.cfg \
-      --replace "z3-solver==4.10.2.0" ""
-  '';
 
   pythonImportsCheck = [
     "claripy"

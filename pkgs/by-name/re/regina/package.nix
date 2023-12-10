@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
-  pname = "Regina-REXX";
-  version = "3.9.1";
+  pname = "regina-rexx";
+  version = "3.9.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/regina-rexx/regina-rexx/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1vpksnjmg6y5zag9li6sxqxj2xapgalfz8krfxgg49vyk0kdy4sx";
+    hash = "sha256-COmpBhvuADjPtFRG3iB2b/2uUO6jf2ZCRG7E5zoqvFE=";
   };
 
   buildInputs = [ ncurses ];
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "REXX interpreter";
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl2;
   };
 }

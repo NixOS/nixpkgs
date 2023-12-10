@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchsvn, libxml2, gtk2, curl, pkg-config } :
+{ lib, stdenv, fetchFromGitHub, libxml2, gtk2, curl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "gosmore";
-  version = "31801";
-  # the gosmore svn repository does not lock revision numbers of its externals
-  # so we explicitly disable them to avoid breaking the hash
-  # especially as the externals appear to be unused
-  src = fetchsvn {
-    url = "http://svn.openstreetmap.org/applications/rendering/gosmore";
-    sha256 = "0qsckpqx7i7f8gkqhkzdamr65250afk1rpnh3nbman35kdv3dsxi";
-    rev = version;
-    ignoreExternals = true;
+  version = "unstable-2014-03-17";
+
+  src = fetchFromGitHub {
+    owner = "openstreetmap";
+    repo = "svn-archive";
+    rev = "89b1fbfbc9e9a8b5e78795fd40bdfa60550322fc";
+    sparseCheckout = [ "applications/rendering/gosmore" ];
+    hash = "sha256-MfuJVsyGWspGNAFD6Ktbbyawb4bPwUITe7WkyFs6JxI=";
   };
+
+  sourceRoot = "${src.name}/applications/rendering/gosmore";
 
   buildInputs = [ libxml2 gtk2 curl ];
 
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -e '/curl.types.h/d' -i *.{c,h,hpp,cpp}
+    sed -e "24i #include <ctime>" -e "s/data/dat/g" -i jni/libgosm.cpp
   '';
 
   patches = [ ./pointer_int_comparison.patch ];
