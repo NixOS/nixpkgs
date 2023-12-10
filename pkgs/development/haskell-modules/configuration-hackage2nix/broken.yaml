@@ -4792,7 +4792,6 @@ broken-packages:
   - scale # failure in job https://hydra.nixos.org/build/233222189 at 2023-09-02
   - scaleimage # failure in job https://hydra.nixos.org/build/233240688 at 2023-09-02
   - scalendar # failure in job https://hydra.nixos.org/build/233206581 at 2023-09-02
-  - scat # failure in job https://hydra.nixos.org/build/233199202 at 2023-09-02
   - scc # failure in job https://hydra.nixos.org/build/233247446 at 2023-09-02
   - scgi # failure in job https://hydra.nixos.org/build/233247314 at 2023-09-02
   - schedevr # failure in job https://hydra.nixos.org/build/233240124 at 2023-09-02
