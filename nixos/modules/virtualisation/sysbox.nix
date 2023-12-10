@@ -60,6 +60,8 @@ in
 
       virtualisation.docker.extraOptions = pkgs.lib.mkForce ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
 
+      security.unprivilegedUsernsClone = true;
+
       assertions = [
         { assertion = !virtualisation.docker.enable or virtualisation.podman.enable;
           message = "Sysbox require docker to be functional";
