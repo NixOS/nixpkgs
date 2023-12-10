@@ -9,6 +9,7 @@
 , django_treebeard
 , djangorestframework
 , draftjs-exporter
+, fetchpatch
 , fetchPypi
 , html5lib
 , l18n
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-45809.patch";
+      url = "https://github.com/wagtail/wagtail/commit/0bacd29473107d9d7f5b723a15a683449679756d.patch";
+      sha256 = "sha256-f14ZvO3UYZDlUNYup9OeqSdArGBL7QZYNP0KB/sQgWc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
