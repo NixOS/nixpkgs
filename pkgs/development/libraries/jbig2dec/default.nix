@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
+    # Strip ./configure invocation from autogen (which create some required
+    # files), and allow default mechanism to call ./configure with all required
+    # arguments
+    sed -i '$d' autogen.sh
+
     ./autogen.sh
   '';
 
