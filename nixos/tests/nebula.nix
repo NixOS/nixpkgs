@@ -144,6 +144,7 @@ in
 
     restartAndCheckNebula = name: ip: ''
       ${name}.systemctl("restart nebula@smoke.service")
+      ${name}.wait_for_unit("nebula@smoke.service")
       ${name}.succeed("ping -c5 ${ip}")
     '';
 
@@ -179,6 +180,8 @@ in
       ${nodeB}.succeed("iptables -I INPUT -s " + node_a + " -j DROP")
       ${nodeA}.systemctl("restart nebula@smoke.service")
       ${nodeB}.systemctl("restart nebula@smoke.service")
+      ${nodeA}.wait_for_unit("nebula@smoke.service")
+      ${nodeB}.wait_for_unit("nebula@smoke.service")
     '';
     allowTrafficBetween = nodeA: nodeB: ''
       node_a = ${getPublicIp nodeA}
@@ -187,6 +190,8 @@ in
       ${nodeB}.succeed("iptables -D INPUT -s " + node_a + " -j DROP")
       ${nodeA}.systemctl("restart nebula@smoke.service")
       ${nodeB}.systemctl("restart nebula@smoke.service")
+      ${nodeA}.wait_for_unit("nebula@smoke.service")
+      ${nodeB}.wait_for_unit("nebula@smoke.service")
     '';
   in ''
     # Create the certificate and sign the lighthouse's keys.
