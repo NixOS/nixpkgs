@@ -15,10 +15,6 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
-      overlays.setLibVersionInfo = final: prev: {
-        lib = prev.lib.extend libVersionInfoOverlay;
-      };
-
       lib = lib.extend (final: prev: {
 
         nixos = import ./nixos/lib { lib = final; };
@@ -53,7 +49,9 @@
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
       legacyPackages = forAllSystems (system:
-        (import ./. { inherit system; }).extend self.overlays.setLibVersionInfo
+        (import ./. { inherit system; }).extend (final: prev: {
+          lib = prev.lib.extend libVersionInfoOverlay;
+        })
       );
 
       nixosModules = {
