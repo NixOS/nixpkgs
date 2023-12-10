@@ -72,7 +72,7 @@ self: super: {
   tagged = super.tagged_0_8_8;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
-  double-conversion = appendPatch (pkgs.fetchPatch {
+  double-conversion = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/haskell/double-conversion/commit/d480fb057c5387251b8cfdeb3666b24087811219.patch";
     sha256 = "0b25l9lac0iici5sqa03xsn6hdw9kr2zh045i1s394xrabksgd60";
   }) (super.double-conversion);
