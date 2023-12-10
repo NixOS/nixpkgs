@@ -51,6 +51,7 @@ self: super: {
 
   alex = super.alex_3_4_0_1;
   bifunctors = super.bifunctors_5_6_1;
+  cabal-install-solver = super.cabal-install-solver_3_10_2_1;
   doctest = super.doctest_0_22_2;
   fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
@@ -74,6 +75,14 @@ self: super: {
   tagged = super.tagged_0_8_8;
   tasty-hspec = super.tasty-hspec_1_2_0_4;
   th-abstraction = super.th-abstraction_0_6_0_0;
+
+  cabal-fmt = 
+    if pkgs.stdenv.targetPlatform.isDarwin && pkgs.stdenv.targetPlatform.isAarch64 then 
+      overrideCabal (drv: {
+        enableSeparateBinOutput = false;
+      }) (super.cabal-fmt)
+    else 
+      super.cabal-fmt;
 
   ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
 
