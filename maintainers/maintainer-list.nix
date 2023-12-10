@@ -5735,6 +5735,12 @@
     githubId = 25955146;
     name = "eyJhb";
   };
+  eymeric = {
+    name = "Eymeric Dechelette";
+    email = "hatchchcien@protonmail.com";
+    github = "hatch01";
+    githubId = 42416805;
+  };
   f2k1de = {
     name = "f2k1de";
     email = "hi@f2k1.de";
