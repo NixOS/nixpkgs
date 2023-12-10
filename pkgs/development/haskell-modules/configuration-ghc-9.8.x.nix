@@ -115,6 +115,7 @@ self: super: {
   haskell-language-server = super.haskell-language-server.override {
     hls-refactor-plugin = null;
     hls-class-plugin = null;
+    hls-gadt-plugin = null;
     hls-hlint-plugin = null;
     hls-rename-plugin = null;
     hls-floskell-plugin = null;
