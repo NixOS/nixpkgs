@@ -8673,6 +8673,8 @@ with pkgs;
 
   gnome-randr = callPackage ../tools/wayland/gnome-randr { };
 
+  gnome-resources = callPackage ../tools/system/gnome-resources { };
+
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
   gnu-shepherd = callPackage ../misc/gnu-shepherd { };
@@ -14399,8 +14401,6 @@ with pkgs;
   vk-cli = callPackage ../applications/networking/instant-messengers/vk-cli { };
 
   vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger { };
-
-  volatility = callPackage ../tools/security/volatility { };
 
   volatility3 = callPackage ../tools/security/volatility3 { };
 
@@ -35475,6 +35475,18 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
+  bambu-studio = callPackage ../applications/misc/bambu-studio {
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
+
+    glew = glew-egl;
+
+    wxGTK31 = wxGTK31.override {
+      withCurl = true;
+      withPrivateFonts = true;
+      withWebKit = true;
+    };
+  };
+
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
@@ -37519,21 +37531,6 @@ with pkgs;
   airshipper = callPackage ../games/airshipper { };
 
   airstrike = callPackage ../games/airstrike { };
-
-  alephone = callPackage ../games/alephone { };
-  alephone-apotheosis-x = callPackage ../games/alephone/apotheosis-x { };
-  alephone-durandal = callPackage ../games/alephone/durandal { };
-  alephone-eternal = callPackage ../games/alephone/eternal { };
-  alephone-evil = callPackage ../games/alephone/evil { };
-  alephone-infinity = callPackage ../games/alephone/infinity { };
-  alephone-marathon = callPackage ../games/alephone/marathon { };
-  alephone-pheonix = callPackage ../games/alephone/pheonix { };
-  alephone-red = callPackage ../games/alephone/red { };
-  alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
-  alephone-pathways-into-darkness =
-    callPackage ../games/alephone/pathways-into-darkness { };
-  alephone-yuge =
-    callPackage ../games/alephone/yuge { };
 
   alienarena = callPackage ../games/alienarena { };
 
@@ -40746,7 +40743,7 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_18;
+    nix = nixVersions.nix_2_19;
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };

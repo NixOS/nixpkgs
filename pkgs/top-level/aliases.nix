@@ -994,6 +994,7 @@ mapAliases ({
   varnish72Packages = throw "varnish 7.2 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
   varnish73Packages = throw "varnish 7.3 is EOL. Either use the LTS or upgrade."; # Added 2023-10-09
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
+  volatility = throw "'volatility' has been removed, as it was broken and unmaintained"; # Added 2023-12-10
 
   ### W ###
   waybar-hyprland = throw "waybar-hyprland has been removed: hyprland support is now built into waybar by default."; # Added 2023-08-21
