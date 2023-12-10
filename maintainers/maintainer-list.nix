@@ -6744,8 +6744,6 @@
   };
   gm6k = {
     email = "nix@quidecco.pl";
-    github = "zeuner";
-    githubId = 2545850;
     name = "Isidor Zeuner";
   };
   gmemstr = {
