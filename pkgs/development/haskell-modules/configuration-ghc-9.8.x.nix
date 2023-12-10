@@ -72,20 +72,23 @@ self: super: {
   tagged = super.tagged_0_8_8;
   th-abstraction = super.th-abstraction_0_6_0_0;
 
-  double-conversion = overrideCabal (drv: {
-    patches = [(pkgs.fetchpatch {
-      url = "https://github.com/haskell/double-conversion/commit/d480fb057c5387251b8cfdeb3666b24087811219.patch";
-      sha256 = "0b25l9lac0iici5sqa03xsn6hdw9kr2zh045i1s394xrabksgd60";
-    })];
-    patchFlags = [ "--binary" ];
-  }) super.double-conversion;
-
   ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
 
   # https://github.com/obsidiansystems/commutative-semigroups/issues/13
   commutative-semigroups = doJailbreak super.commutative-semigroups;
 
   dates = doJailbreak super.dates; # base >=4.9 && <4.16
+
+  double-conversion = overrideCabal (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell";
+      repo = "double-conversion";
+      rev = "d480fb057c5387251b8cfdeb3666b24087811219";
+      sha256 = "1f2q5p9nh4ccyrkc2fx6xjiq8v15i6myf01ajcw541dqc8z5aiw0";
+    };
+    editedCabalFile = null;
+    license = lib.licenses.bsd2;
+  }) super.double-conversion;
 
   generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
 
