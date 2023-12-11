@@ -13,6 +13,7 @@
 , libiconv
 , coreutils
 , CoreServices
+, SystemConfiguration
 , tzdata
 , cmake
 , perl
@@ -62,8 +63,9 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  buildInputs =
+    [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
