@@ -722,6 +722,7 @@ Reviewing process:
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
+- Ensure that any added lockfiles that are not parsed at eval-time, are fetched rather than vendored.
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
@@ -755,6 +756,7 @@ Sample template for a package update review is provided below.
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
+- [ ] non-eval lockfiles are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -775,6 +777,7 @@ Review process:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
+- Ensure that any added lockfiles that are not parsed at eval-time, are fetched rather than vendored.
 - Report detected typos.
 - Ensure the package source:
   - Uses `mirror://` URLs when available.
@@ -802,6 +805,7 @@ Sample template for a new package review is provided below.
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
+- [ ] non-eval lockfiles are fetched rather than vendored
 
 ##### Possible improvements
 
