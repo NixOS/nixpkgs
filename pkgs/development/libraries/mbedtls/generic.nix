@@ -3,6 +3,7 @@
 , version
 , hash
 , fetchFromGitHub
+, patches ? []
 
 , cmake
 , ninja
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mbedtls";
-  inherit version;
+  inherit version patches;
 
   src = fetchFromGitHub {
     owner = "Mbed-TLS";
