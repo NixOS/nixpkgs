@@ -48,6 +48,8 @@ buildGoModule rec {
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";
     license = licenses.mit;
+    platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ mikaelfangel ];
     mainProgram = "darktile";
   };
