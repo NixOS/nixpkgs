@@ -1,4 +1,4 @@
-{ pkgs, lib, haskell, fetchFromGitHub, ... }:
+{ lib, haskell, fetchFromGitHub }:
 
 let
   name = "simplex-chat";
