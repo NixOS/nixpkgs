@@ -1,36 +1,26 @@
 { lib
-, python3
-, fetchPypi
+, pythonPackages
 , mopidy
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.25.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonPackage rec {
   pname = "mopidy-ytmusic";
   version = "0.3.8";
 
-  src = fetchPypi {
+  src = pythonPackages.fetchPypi {
     inherit version;
     pname = "mopidy_ytmusic";
     sha256 = "6b4d8ff9c477dbdd30d0259a009494ebe104cad3f8b37241ae503e5bce4ec2e8";
   };
 
+  nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "ytmusicapi" "pytube" ];
+
   propagatedBuildInputs = [
-    (mopidy.override { pythonPackages = python.pkgs; })
-    python.pkgs.ytmusicapi
-    python.pkgs.pytube
+    mopidy
+    pythonPackages.ytmusicapi
+    pythonPackages.pytube
   ];
 
   pythonImportsCheck = [ "mopidy_ytmusic" ];
