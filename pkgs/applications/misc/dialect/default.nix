@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";
     description = "A translation app for GNOME";
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ foo-dogsquared ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
