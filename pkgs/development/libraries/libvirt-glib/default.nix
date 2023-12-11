@@ -33,7 +33,17 @@ stdenv.mkDerivation rec {
     # Fix build with GLib 2.70
     (fetchpatch {
       url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/9a34c4ea55e0246c34896e48b8ecd637bc559ac7.patch";
-      sha256 = "UU70uTi55EzPMuLYVKRzpVcd3WogeAtWAWEC2hWlR7k=";
+      hash = "sha256-UU70uTi55EzPMuLYVKRzpVcd3WogeAtWAWEC2hWlR7k=";
+    })
+
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/56acbe8a0765a02418f80fb3599b3cf7160ef446.patch";
+      hash = "sha256-LmhgIzxxvZaoPI5cOMCdmYjO0oEiDFTq4TEKCRKlRw0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/bcc82de1d74057f6d124c2eaff0ac97cbbf52657.patch";
+      hash = "sha256-6Xo/plNN7My5K7vW0FYENhbjti9XkFwSjUs8yrJAqpI=";
     })
   ];
 
