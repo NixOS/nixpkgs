@@ -38118,7 +38118,7 @@ with pkgs;
 
   openlierox = callPackage ../games/openlierox { };
 
-  openclonk = callPackage ../games/openclonk { stdenv = gcc10StdenvCompat; };
+  openclonk = callPackage ../games/openclonk { };
 
   openjk = callPackage ../games/openjk { };
 
