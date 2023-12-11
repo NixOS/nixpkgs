@@ -8,24 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.0.3-beta";
+  version = "4.3.0-beta";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-m+iDBfsHo+PLYd3K8JaKwhIXcnj+Q8w7gIgmHp+0plk=";
+    hash = "sha256-H1CZ7rAM1QpdmSnUpvg6ytln/0MQKju/C4aIk3xl0PA=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
   ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'main_windows.c' 'main_posix.c'
-    '';
 
   buildInputs = lib.optionals stdenv.isLinux [
     libgpiod
