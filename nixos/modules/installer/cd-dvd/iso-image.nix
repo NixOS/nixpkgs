@@ -429,7 +429,7 @@ let
       echo "If you see this message, your EFI system doesn't support this feature."
       echo ""
     }
-    menuentry 'Next EFI boot entry' {
+    menuentry 'Next EFI boot entry' --class next-boot-entry {
       exit
     }
     menuentry 'Shutdown' --class shutdown {
