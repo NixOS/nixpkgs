@@ -6,7 +6,7 @@ let
   hlib = pkgs.haskell.lib;
 
   # helper to add git repo from simplex-chat org
-  simplexGit = name: rev: sha: pkgs.fetchFromGitHub {
+  simplexGit = name: rev: sha: fetchFromGitHub {
     owner = "simplex-chat"; repo = name;
     rev = rev;
     sha256 = sha;
