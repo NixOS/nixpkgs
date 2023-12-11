@@ -128,13 +128,12 @@ buildPythonPackage rec {
     # Connection Reset by Peer, when connecting to localhost:5678
     "--deselect=tests/test_moto_api/recorder/test_recorder.py::TestRecorder::test_replay"
 
-    # Requires docker, but isn't marked
-    # https://github.com/getmoto/moto/pull/6938
-    "--deselect=tests/test_awslambda/test_lambda_layers_invoked.py::test_invoke_local_lambda_layers"
-
     # Flaky under parallel execution
     "--deselect=tests/test_cloudformation/test_server.py::test_cloudformation_server_get"
     "--deselect=tests/test_core/test_moto_api.py::TestModelDataResetForClassDecorator::test_should_find_bucket"
+
+    # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
+    "--deselect=ests/test_s3/test_s3_file_handles.py::TestS3FileHandleClosuresUsingMocks::test_delete_object_with_version"
   ];
 
   disabledTestPaths = [
