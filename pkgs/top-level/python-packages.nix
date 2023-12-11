@@ -16175,7 +16175,7 @@ self: super: with self; {
 
   yarg = callPackage ../development/python-modules/yarg { };
 
-  yagry = callPackage ../development/python-modules/yargy { };
+  yargy = callPackage ../development/python-modules/yargy { };
 
   yark = callPackage ../development/python-modules/yark { };
 
