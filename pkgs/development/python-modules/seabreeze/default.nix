@@ -51,7 +51,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependenices = {
+  passthru.optional-dependencies = {
     pyseabreeze = [
       pyusb
     ];
