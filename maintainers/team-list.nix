@@ -290,6 +290,7 @@ with lib.maintainers; {
     members = [
       theuni
       dpausp
+      frlan
       leona
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";

@@ -7,6 +7,7 @@
 , frankenphp
 , darwin
 , pkg-config
+, makeBinaryWrapper
 , runCommand
 , writeText
 }:
@@ -41,7 +42,7 @@ in buildGoModule rec {
   vendorHash = "sha256-Lgj/pFtSQIgjrycajJ1zNY3ytvArmuk0E3IjsAzsNdM=";
 
   buildInputs = [ phpUnwrapped ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 
@@ -63,10 +64,13 @@ in buildGoModule rec {
     # replace hard-code homebrew path
     substituteInPlace ../frankenphp.go \
       --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${darwin.libiconv}/lib"
+  '';
 
-    # remove when https://github.com/dunglas/frankenphp/pull/331 is merged and released
-    substituteInPlace ../frankenphp.go \
-      --replace "darwin pkg-config: libxml-2.0 sqlite3" "darwin pkg-config: libxml-2.0"
+  preFixup = ''
+    mkdir -p $out/lib
+    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/php.ini"
+
+    wrapProgram $out/bin/frankenphp --set-default PHP_INI_SCAN_DIR $out/lib
   '';
 
   doCheck = false;

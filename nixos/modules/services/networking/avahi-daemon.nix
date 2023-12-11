@@ -272,7 +272,7 @@ in
 
     users.groups.avahi = { };
 
-    system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
+    system.nssModules = optional (cfg.nssmdns4 || cfg.nssmdns6) pkgs.nssmdns;
     system.nssDatabases.hosts = let
       mdnsMinimal = if (cfg.nssmdns4 && cfg.nssmdns6) then
         "mdns_minimal"
