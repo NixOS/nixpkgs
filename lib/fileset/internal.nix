@@ -874,6 +874,8 @@ rec {
       throw "lib.fileset.${function}: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
     else if ! isPath path then
       throw "lib.fileset.${function}: Expected the ${argument} to be a path, but it's a ${typeOf path} instead."
+    else if pathType path != "directory" then
+      throw "lib.fileset.${function}: Expected the ${argument} (${toString path}) to be a directory, but it's a file instead."
     # We can identify local working directories by checking for .git,
     # see https://git-scm.com/docs/gitrepository-layout#_description.
     # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
