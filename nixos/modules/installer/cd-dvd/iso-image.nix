@@ -201,13 +201,13 @@ let
       --cmdline init=${config.system.build.toplevel}/init\ ${escapeShellArg (toString config.boot.kernelParams)}
       --os-release ${config.system.build.etc}/os-release
       --stub ${pkgs.systemd}/lib/systemd/boot/efi/linuxx64.efi.stub
-      --sbat ${./sbat.csv}
+      --sbat ${config.secureboot.sbat}
     )
     ${pkgs.buildPackages.ukify}/lib/systemd/ukify "''${args[@]}"
   '';
 
   nomodesetCmdlineEfi = pkgs.runCommand "nomodeset.efi" {} ''
-    ${pkgs.buildPackages.ukify}/lib/systemd/ukify build --cmdline nomodeset --output $out --sbat ${./sbat.csv}
+    ${pkgs.buildPackages.ukify}/lib/systemd/ukify build --cmdline nomodeset --output $out --sbat ${config.secureboot.sbat}
   '';
 
 
@@ -349,7 +349,7 @@ let
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
-      --sbat=${./sbat.csv} \
+      --sbat=${config.secureboot.sbat} \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
       -o $out/grub.efi \
       -p /EFI/boot \
@@ -815,6 +815,13 @@ in
         For most use cases, this should be the one signed with the
         official NixOS keys, which will allow booting on systems with
         Secure Boot enabled and only Microsoft keys trusted.
+      '';
+    };
+
+    secureboot.sbat = mkOption {
+      type = types.pathInStore;
+      description = ''
+        Path to an SBAT CSV file which will be embedded in the signed GRUB binary.
       '';
     };
 
