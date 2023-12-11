@@ -30899,6 +30899,7 @@ with pkgs;
 
   inherit (mopidyPackages)
     mopidy
+    mopidy-argos
     mopidy-bandcamp
     mopidy-iris
     mopidy-jellyfin
