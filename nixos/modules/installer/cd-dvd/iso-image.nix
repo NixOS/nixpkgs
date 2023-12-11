@@ -178,7 +178,7 @@ let
   isolinuxCfg = concatStringsSep "\n"
     ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
-  refindBinary = if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
+  refindBinary = if config.isoImage.includeRefind && (targetArch == "x64" || targetArch == "aa64") then "refind_${targetArch}.efi" else null;
 
   # Setup instructions for rEFInd.
   refind =
@@ -636,6 +636,8 @@ in
         Nix store in the generated ISO image.
       '';
     };
+
+    isoImage.includeRefind = mkEnableOption "rEFInd as a boot option" // { default = true; };
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
