@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ yanganto ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
+    mainProgram = "leftwm";
   };
 }
