@@ -7,6 +7,7 @@
 , nim_builder
 , defaultNimVersion ? 2
 , nimOverrides
+, buildNimPackage
 }:
 
 let
@@ -90,6 +91,7 @@ let
         , nativeBuildInputs ? [ ]
         , nimFlags ? [ ]
         , requiredNimVersion ? defaultNimVersion
+        , passthru ? { }
         , ...
         }:
         (if requiredNimVersion == 1 then {
@@ -102,6 +104,25 @@ let
           throw
             "requiredNimVersion ${toString requiredNimVersion} is not valid") // {
           nimFlags = lockFileNimFlags ++ nimFlags;
+          passthru = passthru // {
+            # allow overriding the result of buildNimPackageArgs before this composition is applied
+            # this allows overriding the lockFile for packages built using buildNimPackage
+            # this is adapted from mkDerivationExtensible in stdenv.mkDerivation
+            overrideNimAttrs = f0:
+              let
+                f = self: super:
+                  let x = f0 super;
+                  in
+                    if builtins.isFunction x
+                    then f0 self super
+                    else x;
+              in
+              buildNimPackage
+                (self:
+                  let super = (asFunc ((asFunc buildNimPackageArgs) self)) baseAttrs;
+                  in
+                    super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+          };
         };
 
       attrs = postLock // finalOverride postLock;

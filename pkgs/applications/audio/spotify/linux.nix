@@ -2,7 +2,7 @@
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
-, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu
+, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
 , deviceScaleFactor ? null
@@ -44,6 +44,7 @@ let
     libdbusmenu
     libdrm
     libgcrypt
+    libGL
     libnotify
     libpng
     libpulseaudio

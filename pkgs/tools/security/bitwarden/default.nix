@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_25
+, electron_26
 , fetchFromGitHub
 , fetchpatch2
 , glib
@@ -25,16 +25,16 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_25;
+  electron = electron_26;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.10.1";
+  version = "2023.12.0"; # TODO add back Electron version check below
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
+    hash = "sha256-WYhLKV3j3Ktite5u1H4fSku38hCCrMzKoxtjq6aT9yo=";
   };
 
   patches = [
@@ -49,14 +49,14 @@ in buildNpmPackage rec {
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
+  npmDepsHash = "sha256-bnYpvHO9Pnob+MbrSshv03mSwXCADH/2xw33nLVKMdg=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit patches src;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
+    hash = "sha256-pCy3hGhI3mXm4uTOaFMykOzJqK2PC0t0hE8MrJKtA/k=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -82,12 +82,14 @@ in buildNpmPackage rec {
     libsecret
   ];
 
-  preBuild = ''
+  # FIXME add back once upstream moves to Electron >= 26
+  # we use electron_26 because electron_25 is EOL
+  /*preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
-  '';
+  '';*/
 
   postBuild = ''
     pushd apps/desktop

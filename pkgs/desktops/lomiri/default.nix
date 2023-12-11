@@ -9,6 +9,7 @@ let
   in {
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
+    suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
     #### Development tools / libraries
     cmake-extras = callPackage ./development/cmake-extras { };
@@ -21,6 +22,7 @@ let
 
     #### QML / QML-related
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
+    lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };

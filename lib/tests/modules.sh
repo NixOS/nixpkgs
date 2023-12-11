@@ -94,6 +94,14 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+# https://github.com/NixOS/nixpkgs/pull/131205
+# We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
+# We currently throw this error already in `config`, but throwing in `config.nest.wrong2` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
+checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
@@ -110,6 +118,12 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: 
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+# Check boolByOr type.
+checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
 
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix

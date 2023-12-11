@@ -1,4 +1,4 @@
-# Nixpkgs Manual {#nixpkgs-manual}
+# Nixpkgs Reference Manual {#nixpkgs-manual}
 ## Version @MANUAL_VERSION@
 
 ```{=include=} chapters

@@ -1,37 +1,18 @@
-{ lib, callPackage, mkYarnPackage, fetchYarnDeps, imagemagick }:
+{ lib, callPackage, buildNpmPackage, imagemagick }:
 
 let
   common = callPackage ./common.nix { };
 in
-mkYarnPackage rec {
-  src = "${common.src}/js";
+buildNpmPackage {
+  inherit (common) pname version src;
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = "sha256-VkJ6vBt9EFoQVMWMV8FhPJBHcLJDDfOxd+NLb+DZy3U=";
-  };
-
-  packageJSON = ./package.json;
-
-  # Somehow $out/deps/mobilizon/node_modules ends up only containing nothing
-  # more than a .bin directory otherwise.
-  yarnPostBuild = ''
-    rm -rf $out/deps/mobilizon/node_modules
-    ln -s $out/node_modules $out/deps/mobilizon/node_modules
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn run build
-
-    runHook postBuild
-  '';
-
-  doCheck = true;
-  checkPhase = "yarn run test";
+  npmDepsHash = "sha256-z/xWumL1wri63cGGMHMBq6WVDe81bp8tILsZa53a7FM=";
 
   nativeBuildInputs = [ imagemagick ];
+
+  postInstall = ''
+    cp -r priv/static $out/static
+  '';
 
   meta = with lib; {
     description = "Frontend for the Mobilizon server";

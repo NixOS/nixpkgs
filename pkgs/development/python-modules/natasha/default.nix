@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];
-  pythonImportCheck = [ "natasha" ];
+  pythonImportsCheck = [ "natasha" ];
 
   meta = with lib; {
     description = "NLP framework for Russian language";
