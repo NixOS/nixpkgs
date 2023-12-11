@@ -114,5 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aidalgol huantian ];
     inherit (electron.meta) platforms;
+    mainProgram = pname;
   };
 }
