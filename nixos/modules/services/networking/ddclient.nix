@@ -126,7 +126,7 @@ with lib;
         default = "dyndns2";
         type = str;
         description = lib.mdDoc ''
-          Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
+          Protocol to use with dynamic DNS provider (see https://ddclient.net/protocols.html ).
         '';
       };
 

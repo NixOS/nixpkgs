@@ -240,7 +240,7 @@ in {
     };
 
     phpOptions = mkOption {
-      type = types.attrsOf types.str;
+      type = with types; attrsOf (oneOf [ str int ]);
       defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
       description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.

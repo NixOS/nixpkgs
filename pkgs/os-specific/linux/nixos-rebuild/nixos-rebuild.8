@@ -10,7 +10,7 @@
 .Sh SYNOPSIS
 .Nm
 .Bro
-.Cm switch | boot | test | build | dry-build | dry-activate | edit | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | repl | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
 .Brc
 .br
 .Op Fl -upgrade | -upgrade-all
@@ -142,6 +142,10 @@ The list of changes is not guaranteed to be complete.
 Opens
 .Pa configuration.nix
 in the default editor.
+.
+.It Cm repl
+Opens the configuration in
+.Ic nix repl Ns .
 .
 .It Cm build-vm
 Build a script that starts a NixOS virtual machine with the desired

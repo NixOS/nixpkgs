@@ -97,6 +97,9 @@ rustPlatform.buildRustPackage rec {
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
 
+  # This variable is read by build script, so that Lapce editor knows its version
+  env.RELEASE_TAG_NAME = "v${version}";
+
   buildInputs = [
     glib
     gtk3
