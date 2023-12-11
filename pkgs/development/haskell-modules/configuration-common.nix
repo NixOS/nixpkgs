@@ -477,11 +477,16 @@ self: super: {
   matterhorn = doJailbreak super.matterhorn;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = dontCheck super.hnix;
+  hnix = dontCheck (super.hnix.override {
+    # 2023-12-11: Needs older core due to remote
+    hnix-store-core = self.hnix-store-core_0_6_1_0;
+  });
 
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core = doJailbreak super.hnix-store-core;
+  hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
+  # 2023-12-11: Needs older core
+  hnix-store-remote = super.hnix-store-remote.override { hnix-store-core = self.hnix-store-core_0_6_1_0; };
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
