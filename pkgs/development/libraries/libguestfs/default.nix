@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , autoreconfHook
 , makeWrapper
@@ -114,6 +115,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
   patches = [
     ./libguestfs-syms.patch
+
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://github.com/libguestfs/libguestfs/commit/02c39dc5e8109ddb911d90759883a504008ba509.patch";
+      hash = "sha256-glYWztbDFokZf05OvOPfARCT16LsjgiL5b37VK87UXA=";
+    })
   ];
 
   createFindlibDestdir = true;
