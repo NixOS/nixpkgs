@@ -162,6 +162,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_JACK=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
+    (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
+    (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
   ];
 
   dontWrapGApps = true;
