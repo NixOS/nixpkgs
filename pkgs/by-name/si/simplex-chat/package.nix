@@ -27,7 +27,7 @@ let
   git_aeson = simplexGit "aeson"
     "aab7b5a14d6c5ea64c64dcaee418de1bb00dcc2b"
     "sha256-OTuJENv5I+9bWy6crllDm1lhkncmye33SCiqh1Sb50s=";
-  git_http2 = pkgs.fetchFromGitHub {
+  git_http2 = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "http2";
     rev = "f5525b755ff2418e6e6ecc69e877363b0d0bcaeb";
