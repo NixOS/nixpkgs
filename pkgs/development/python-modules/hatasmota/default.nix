@@ -2,14 +2,15 @@
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
-, voluptuous
 , pythonOlder
+, setuptools
+, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "hatasmota";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Kbz/ETSJGx6u0ZNfEWfl9klBIB3yPcfHGy1uKK50TGA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
