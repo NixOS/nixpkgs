@@ -84,6 +84,12 @@ stdenv.mkDerivation rec {
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
 
+    # Adds support for ZFS zstd compression on root
+    (fetchpatch {
+      url = "https://github.com/BrainSlayer/grub/commit/9227b76fb547e2402b77b0f0a132c84242aaa9bd.patch";
+      hash = "sha256-ILyJRwIlE8uj9fM2LBHNPoCm4PszjtZECTueYtikEGE=";
+    })
+
     # Revert upstream commit that breaks reading XFS filesystems
     # FIXME: remove when fixed upstream
     (fetchpatch {
