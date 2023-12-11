@@ -124,6 +124,10 @@ buildPythonPackage rec {
     # tests for missing https support in usage
     echo 'ServiceTests.test_HTTPSFailureOnMissingSSL.skip = "Expectation Mismatch"' >> src/twisted/web/test/test_tap.py
 
+    # fail on Python 3.12
+    echo 'WorkerReporterTests.test_addSkipPyunit.skip = "'WorkerReporter' object has no attribute '_testStarted'"' >> src/twisted/trial/_dist/test/test_workerreporter.py
+    echo 'LocalWorkerAMPTests.test_runSkip.skip = "twisted.protocols.amp.UnknownRemoteError: Code<UNKNOWN>: Unknown Error"' >> src/twisted/trial/_dist/test/test_worker.py
+
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
       --replace "from cython_test_exception_raiser import raiser  # type: ignore[import]" "raiser = None"
