@@ -51,7 +51,7 @@ let
     simplex-chat = self.callCabal2nix name git_simplex-chat {};
   };
 
-  hp = pkgs.haskell.packages."${compiler}".extend haskellOverrides;
+  hp = haskell.packages."${compiler}".extend haskellOverrides;
 
   meta = {
     mainProgram = "simplex-chat";
