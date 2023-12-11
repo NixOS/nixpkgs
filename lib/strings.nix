@@ -771,12 +771,13 @@ rec {
        cmakeOptionType "string" "ENGINE" "sdl2"
        => "-DENGINE:STRING=sdl2"
   */
-  cmakeOptionType = type: feature: value:
-    assert (lib.elem (lib.toUpper type)
-      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    "-D${feature}:${lib.toUpper type}=${value}";
+  cmakeOptionType = let
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+  in type: feature: value:
+    assert (elem (toUpper type) types);
+    assert (isString feature);
+    assert (isString value);
+    "-D${feature}:${toUpper type}=${value}";
 
   /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
      CMake invocations.
