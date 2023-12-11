@@ -978,9 +978,11 @@ rec {
      Many types of value are coercible to string this way, including int, float,
      null, bool, list of similarly coercible values.
   */
-  isConvertibleWithToString = x:
+  isConvertibleWithToString = let
+    types = [ "null" "int" "float" "bool" ];
+  in x:
     isStringLike x ||
-    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    elem (typeOf x) types ||
     (isList x && lib.all isConvertibleWithToString x);
 
   /* Check whether a value can be coerced to a string.
