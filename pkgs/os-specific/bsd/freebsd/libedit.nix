@@ -1,8 +1,8 @@
-{ mkDerivation, libc, libelf, ...}:
+{ mkDerivation, libncurses-tinfo, ...}:
 mkDerivation {
-  path = "lib/libkvm";
-  extraPaths = ["sys"];
-  buildInputs = [libelf];
+  path = "lib/libedit";
+  extraPaths = ["contrib/libedit"];
+  buildInputs = [libncurses-tinfo];
   MK_TESTS = "no";
 
   preBuild = ''

@@ -1,7 +1,10 @@
 { lib, stdenv, mkDerivation, libc, libnv, ...}:
 mkDerivation {
-  path = "lib/libcasper/libcasper";
-  buildInputs = [libc libnv];
+  path = "lib/libcasper";
+  extraPaths = ["lib/Makefile.inc"];
+  buildInputs = [libnv];
+
+  MK_TESTS = "no";
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command

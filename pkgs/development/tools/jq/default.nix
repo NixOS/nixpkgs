@@ -6,6 +6,7 @@
 , bison
 , onigurumaSupport ? true
 , oniguruma
+, patchelf
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
   # jq is linked to libjq:
   ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+
+  preFixup = ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes /nix/store "$bin/bin/jq"
+  '';
 
   # Break the dependency cycle: $dev refers to $bin via propagated-build-outputs, and
   # $bin refers to $dev because of https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100

@@ -120,8 +120,9 @@ mkDerivation rec {
     find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
     popd
 
-    $CC -nodefaultlibs -lgcc -shared -o $out/lib/libgcc_s.so
-    $AR r $out/lib/libgcc_eh.a  # experimental
+    mkdir -p $libgcc/lib
+    $CC -nodefaultlibs -lgcc -shared -o $libgcc/lib/libgcc_s.so
+    $AR r $libgcc/lib/libgcc_eh.a
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
@@ -162,4 +163,6 @@ mkDerivation rec {
 
   # definitely a bad idea to enable stack protection on the stack protection initializers
   hardeningDisable = [ "stackprotector" ];
+
+  outputs = ["out" "libgcc"];
 }

@@ -5,6 +5,7 @@ setFreeBSDSrcTop() {
 addFreeBSDMakeFlags() {
   makeFlags="SBINDIR=${!outputBin}/bin $makeFlags"
   makeFlags="LIBEXECDIR=${!outputLib}/libexec $makeFlags"
+  makeFlags="LIBDATADIR=${!outputLib}/data $makeFlags"
   makeFlags="INCLUDEDIR=${!outputDev}/include $makeFlags"
 }
 

@@ -57,7 +57,7 @@ lib.makeScope newScope (self: with self; {
   rpcgen = callPackage ./rpcgen.nix {};
   gencat = callPackage ./gencat.nix {};
   cp = callPackage ./cp.nix {};
-  utils = callPackage ./utils.nix {};
+  bin = callPackage ./bin.nix {};
   libkvm = callPackage ./libkvm.nix {};
   libdl = callPackage ./libdl.nix {};
   libelf = callPackage ./libelf.nix {};
@@ -66,4 +66,9 @@ lib.makeScope newScope (self: with self; {
   libcasper = callPackage ./libcasper.nix {};
   libnv = callPackage ./libnv.nix {};
   libutil = callPackage ./libutil.nix {};
+  libjail = callPackage ./libjail.nix {};
+  libxo = callPackage ./libxo.nix {};
+  libncurses-tinfo = callPackage ./libncurses-tinfo.nix {};
+  libedit = callPackage ./libedit.nix {};
+  libsm = callPackage ./libsm.nix {};
 })

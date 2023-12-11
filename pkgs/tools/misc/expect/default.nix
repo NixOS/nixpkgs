@@ -38,6 +38,11 @@ tcl.mkTclDerivation rec {
     sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
+  # software doesn't work on clang16 yet...
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-implicit-int -Wno-implicit-function-declaration"
+  '';
+
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
   strictDeps = true;

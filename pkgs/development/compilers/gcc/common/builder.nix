@@ -217,22 +217,20 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     # Move runtime libraries to lib output.
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.so*" "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
+    # libssp_nonshared.a is needed because it is referenced by libssp.la
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a"  "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll" "''${!outputLib}"
     moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
-    # Runtime libraries should need no runtime dependencies on $out
-    OUT_HASH="$(echo $out | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")"
-    sed -i -e "s|$OUT_HASH|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" $(find ''${!outputLib} -type f)
-
-    if [ -z "$enableShared" ]; then
-        moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a" "''${!outputLib}"
-    fi
-
     for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "''${!outputLib}"
     done
+
+    # Runtime libraries should need no runtime dependencies on $out
+    OUT_HASH="$(echo $out | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")"
+    sed -i -e "s|$OUT_HASH|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" $(find ''${!outputLib} -type f)
 
     if [ -n "$enableMultilib" ]; then
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
