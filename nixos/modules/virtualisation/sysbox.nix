@@ -57,7 +57,7 @@ in
       };
     };
 
-    virtualisation.docker.extraOptions = pkgs.lib.mkForce ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
+    virtualisation.docker.extraOptions = ''--add-runtime=sysbox=${cfg.package}/bin/sysbox-runc'';
 
     security.unprivilegedUsernsClone = true;
 
