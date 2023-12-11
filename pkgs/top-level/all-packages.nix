@@ -40443,7 +40443,7 @@ with pkgs;
   };
 
   vector = callPackage ../tools/misc/vector {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
   };
 
   hjson = with python3Packages; toPythonApplication hjson;
