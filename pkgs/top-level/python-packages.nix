@@ -16205,6 +16205,8 @@ self: super: with self; {
 
   youseedee = callPackage ../development/python-modules/youseedee { };
 
+  youtokentome = callPackage ../development/python-modules/youtokentome { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
