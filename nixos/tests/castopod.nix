@@ -36,14 +36,17 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       lameMp3FileAdjust = -800;
       targetPodcastDuration = toString
         ((targetPodcastSize + lameMp3FileAdjust) / (lameMp3Bitrate / 8));
-      mp3file = with pkgs;
-        runCommand "gen-castopod.mp3" { nativeBuildInputs = [ sox lame ]; } ''
+      mp3file-derivation = builtins.toFile "mp3file-derivation-file" ''
+        pkgs: with pkgs;
+        runCommand "gen-castopod.mp3" { nativeBuildInputs = [ sox lame ]; } '''
           sox -n -r 48000 -t wav - synth ${targetPodcastDuration} sine 440 `
-          `| lame --noreplaygain -cbr -q 9 -b 320 - $out
+          `| lame --noreplaygain --cbr -q 9 -b 320 - $out
           FILESIZE="$(stat -c%s $out)"
           [ "$FILESIZE" -gt 0 ]
           [ "$FILESIZE" -le "${toString targetPodcastSize}" ]
-        '';
+        '''
+      '';
+      mp3file = import mp3file-derivation pkgs;
 
       bannerWidth = 3000;
       banner = pkgs.runCommand "gen-castopod-cover.jpg" { } ''
@@ -70,6 +73,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       '';
     in
     {
+      virtualisation.memorySize = 0
+        + 200 # for OS
+        + 800 # for selenium (why so much is needed!?)
+        + targetPodcastSize / 1024 / 1024; # for mp3 file
+      system.extraDependencies = [ mp3file.inputDerivation ];
+      nix.settings.substituters = lib.mkForce [ ];
+
+      # use this when doing lots of testing, so that mp3file is built only once
+      # virtualisation.additionalPaths = [ mp3file ];
+
       networking.extraHosts =
         lib.strings.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList
@@ -185,7 +198,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             # upload podcast ###################################################
 
             driver.find_element(By.CSS_SELECTOR, '#audio_file').send_keys(
-                '${mp3file}'
+                '${builtins.unsafeDiscardStringContext mp3file.outPath}'
             )
             driver.find_element(By.CSS_SELECTOR, '#cover').send_keys(
                 '${cover}'
@@ -206,7 +219,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             driver.quit()
           '';
         in
-        [ pkgs.firefox-unwrapped pkgs.geckodriver browser-test ];
+        [
+          pkgs.firefox-unwrapped
+          pkgs.geckodriver
+          (pkgs.writeScriptBin "build-mp3file" ''
+            nix-build -E "import ${mp3file-derivation} (import ${pkgs.path} {})"
+          '')
+          browser-test
+        ];
     };
 
   testScript = ''
@@ -216,6 +236,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     castopod.wait_for_unit("nginx.service")
     castopod.wait_for_open_port(80)
     castopod.wait_until_succeeds("curl -sS -f http://castopod.example.com")
+
+    client.succeed("build-mp3file")
 
     with subtest("Create superadmin, log in, create and upload a podcast"):
         client.succeed(\
