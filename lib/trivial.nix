@@ -58,9 +58,7 @@ rec {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = val: functions:
-    let reverseApply = x: f: f x;
-    in builtins.foldl' reverseApply val functions;
+  pipe = builtins.foldl' (x: f: f x);
 
   # note please don’t add a function like `compose = flip pipe`.
   # This would confuse users, because the order of the functions
