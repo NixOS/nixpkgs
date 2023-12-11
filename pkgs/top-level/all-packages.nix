@@ -31599,7 +31599,7 @@ with pkgs;
 
   flrig = callPackage ../applications/radio/flrig { };
 
-  fluxus = callPackage ../applications/graphics/fluxus { stdenv = gcc10StdenvCompat; };
+  fluxus = callPackage ../applications/graphics/fluxus { };
 
   flwrap = callPackage ../applications/radio/flwrap { };
 
