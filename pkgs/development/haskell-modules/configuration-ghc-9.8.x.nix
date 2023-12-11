@@ -56,7 +56,6 @@ self: super: {
   bifunctors = super.bifunctors_5_6_1;
   cabal-install-solver = super.cabal-install-solver_3_10_2_1;
   doctest = super.doctest_0_22_2;
-  fourmolu = super.fourmolu_0_14_1_0;
   free = super.free_5_2;
   # ghc-lib 9.8.1.20231121 required for Cabal to build: https://github.com/digital-asset/ghc-lib/issues/495
   ghc-lib = super.ghc-lib_9_8_1_20231121;
@@ -107,6 +106,10 @@ self: super: {
     license = pkgs.lib.licenses.bsd2;
   }) super.double-conversion;
 
+  # Tests fail due to the newly-built fourmolu not being in PATH
+  # https://github.com/fourmolu/fourmolu/issues/231
+  fourmolu = dontCheck super.fourmolu_0_14_1_0;
+
   generic-lens-core = doJailbreak super.generic-lens-core; # text >= 1.2 && < 1.3 || >= 2.0 && < 2.1
 
   # https://github.com/maoe/ghc-trace-events/issues/12
@@ -114,17 +117,27 @@ self: super: {
 
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
   # lmao
-  haskell-language-server = super.haskell-language-server.override {
-    hls-refactor-plugin = null;
-    hls-class-plugin = null;
-    hls-gadt-plugin = null;
-    hls-hlint-plugin = null;
-    hls-rename-plugin = null;
-    hls-stylish-haskell-plugin = null;
-    hls-floskell-plugin = null;
-    hls-retrie-plugin = null;
-    hls-splice-plugin = null;
-  };
+  haskell-language-server = overrideCabal (drv: {
+    configureFlags = ([ 
+      "-f-class"
+      "-f-rename"
+      "-f-retrie"
+      "-f-splice"
+      "-f-gadt"
+      "-f-floskell"
+      "-f-stylishhaskell"
+    ]) ++ (drv.configureFlags or []);
+  }) (super.haskell-language-server.override {
+      hls-refactor-plugin = null;
+      hls-class-plugin = null;
+      hls-gadt-plugin = null;
+      hls-hlint-plugin = null;
+      hls-rename-plugin = null;
+      hls-stylish-haskell-plugin = null;
+      hls-floskell-plugin = null;
+      hls-retrie-plugin = null;
+      hls-splice-plugin = null;
+    });
 
   hiedb = dontCheck super.hiedb;
 
