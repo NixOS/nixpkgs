@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , bash-completion
 , bison
 , cdrkit
@@ -35,6 +36,16 @@ stdenv.mkDerivation rec {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
     sha256 = "sha256-rH/MK9Xid+lb1bKnspCE3gATefBnHDZAQ3NRavhTvLA=";
   };
+
+  patches = [
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://github.com/libguestfs/libguestfs-common/commit/6185aa8431b00ea3669e9e81e75233f4e865f828.patch";
+      hash = "sha256-bS0gXNSt2iCZudpiuGAotHQ7fo5E8CERlGCWo0GCFFA=";
+      stripLen = 1;
+      extraPrefix = "common/";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
