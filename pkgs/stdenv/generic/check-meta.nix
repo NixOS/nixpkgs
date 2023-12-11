@@ -492,16 +492,21 @@ let
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
-    in validity // {
+      inherit (validity) valid;
+  in validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =
-        {
-          no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          yes = true;
-        }.${validity.valid};
-
+        (
+          if valid == "yes" then true
+          else if valid == "no" then (
+            handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else if valid == "warn" then (
+            handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else throw "Unknown validitiy: '${valid}'"
+        );
   };
 
 in { inherit assertValidity commonMeta; }
