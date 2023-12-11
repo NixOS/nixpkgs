@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
     maintainers = with maintainers; [ fleaz ];
+    platforms = platforms.all;
   };
 }
