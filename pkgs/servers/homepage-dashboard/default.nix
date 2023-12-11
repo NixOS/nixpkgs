@@ -79,5 +79,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
