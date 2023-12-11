@@ -126,9 +126,10 @@ in
           Maximum supported size for a file upload in. Maximum HTTP body
           size is set to this value for nginx and PHP (because castopod doesn't
           support chunked uploads yet:
-          https://code.castopod.org/adaures/castopod/-/issues/330). Note, that
-          practical upload size limit is smaller. For example, with 512 MiB
-          setting - around 500 MiB is possible.
+          https://code.castopod.org/adaures/castopod/-/issues/330).
+
+          Note, that practical upload size limit is smaller. For example, with
+          512 MiB setting - around 500 MiB is possible.
         '';
       };
     };
