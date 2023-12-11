@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, tzdata
 , autoreconfHook
 , openssl
 }:
@@ -27,6 +28,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-ZnlbdWBjL9lEtNLEF/ZPa0IzvJ7i4xWI4GbY8KeA6A4=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace src/tz.cpp \
+      --replace '::getenv("TZDIR")' '"${tzdata}/share/zoneinfo"'
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
