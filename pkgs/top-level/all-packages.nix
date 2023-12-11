@@ -7019,7 +7019,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security CoreServices SystemConfiguration;
   };
 
-  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
+  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
   kime = callPackage ../tools/inputmethods/kime { };
 
