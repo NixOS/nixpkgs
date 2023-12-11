@@ -24,7 +24,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
-# for passthru.tests
+  # for passthru.tests
 , gimp
 , gtk3
 , gtk4
