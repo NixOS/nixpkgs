@@ -29,7 +29,25 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
+  cmakeFlags = []
+    ++ stdenv.lib.optional (!enableSharedLibs) "-DBUILD_SHARED_LIBS=ON"
+    ++ stdenv.lib.optional (!doCheck) "-DBUILD_TESTS=OFF";
+#    ++ stdenv.lib.optional (!doCheck) "-DBUILD_TESTING=OFF";
+    ++ stdenv.lib.optional (!doCheck) "-DENABLE_THREADS=ON";
+    ++ stdenv.lib.optional (!doCheck) "-DENABLE_FLOAT=OFF";
+    ++ stdenv.lib.optional (!doCheck) "-DENABLE_LONG_DOUBLE=ON"
+    ++ stdenv.lib.optional (!doCheck) "-DENABLE_QUAD_PRECISION=OFF"
+
+#    ++ stdenv.lib.optional enableCfp "-DBUILD_CFP=ON"
+#    ++ stdenv.lib.optional enableZforp "-DBUILD_ZFORP=ON"
+#    ++ stdenv.lib.optional enableZFPy "-DBUILD_ZFPY=ON"
+#    ++ stdenv.lib.optional (!enableUtilities) "-DBUILD_UTILITIES=OFF" # Default on
+#    ++ stdenv.lib.optional enableExamples "-DBUILD_EXAMPLES=ON"
+#    ++ stdenv.lib.optional (!enableTestingSmall) "-DBUILD_TESTING_SMALL=OFF" # Default on
+#    ++ stdenv.lib.optional enableTestingLarge "-DBUILD_TESTING_LARGE=ON"
+
   nativeBuildInputs = [ cmake gfortran ];
+    ++ stdenv.lib.optional;
 
   buildInputs = lib.optionals stdenv.cc.isClang [
     # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
