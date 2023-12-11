@@ -14,13 +14,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-zyF2NAOPNJe23tIuOHalsvnYytALKZq8QY1L8EWJMno=";
+    sha256 = "sha256-gZEz0UtgNwumsZbweAyx3TOVHJshpBigc9pzWN7Gb/A=";
   };
 
   # Use system openssl.
