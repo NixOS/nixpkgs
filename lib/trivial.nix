@@ -520,22 +520,20 @@ in {
 
      toHexString 250 => "FA"
   */
-  toHexString = i:
-    let
-      toHexDigit = d:
-        if d < 10
-        then toString d
-        else
-          {
-            "10" = "A";
-            "11" = "B";
-            "12" = "C";
-            "13" = "D";
-            "14" = "E";
-            "15" = "F";
-          }.${toString d};
-    in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  toHexString = let
+    hexDigits = {
+      "10" = "A";
+      "11" = "B";
+      "12" = "C";
+      "13" = "D";
+      "14" = "E";
+      "15" = "F";
+    };
+    toHexDigit = d:
+      if d < 10
+      then toString d
+      else hexDigits.${toString d};
+  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
