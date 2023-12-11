@@ -771,12 +771,13 @@ rec {
        cmakeOptionType "string" "ENGINE" "sdl2"
        => "-DENGINE:STRING=sdl2"
   */
-  cmakeOptionType = type: feature: value:
-    assert (lib.elem (lib.toUpper type)
-      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    "-D${feature}:${lib.toUpper type}=${value}";
+  cmakeOptionType = let
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+  in type: feature: value:
+    assert (elem (toUpper type) types);
+    assert (isString feature);
+    assert (isString value);
+    "-D${feature}:${toUpper type}=${value}";
 
   /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
      CMake invocations.
@@ -977,9 +978,11 @@ rec {
      Many types of value are coercible to string this way, including int, float,
      null, bool, list of similarly coercible values.
   */
-  isConvertibleWithToString = x:
+  isConvertibleWithToString = let
+    types = [ "null" "int" "float" "bool" ];
+  in x:
     isStringLike x ||
-    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    elem (typeOf x) types ||
     (isList x && lib.all isConvertibleWithToString x);
 
   /* Check whether a value can be coerced to a string.
