@@ -25767,7 +25767,7 @@ with pkgs;
 
   zlib-ng = callPackage ../development/libraries/zlib-ng { };
 
-  libdynd = callPackage ../development/libraries/libdynd { stdenv = gcc10StdenvCompat; };
+  libdynd = callPackage ../development/libraries/libdynd { };
 
   zlog = callPackage ../development/libraries/zlog { };
 
