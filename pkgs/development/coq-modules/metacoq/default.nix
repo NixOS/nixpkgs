@@ -48,7 +48,6 @@ let
         propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
         patchPhase =  ''
-          patchShebangs ./configure.sh
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh
           patchShebangs ./pcuic/clean_extraction.sh

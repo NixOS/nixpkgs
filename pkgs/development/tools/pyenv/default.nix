@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-tNTHRSzYCelByEt8bN7BhUBGQCAJfZVjWIYTr0VhbO4=";
   };
 
-  postPatch = ''
-    patchShebangs --build src/configure
-  '';
-
   nativeBuildInputs = [
     installShellFiles
   ];
