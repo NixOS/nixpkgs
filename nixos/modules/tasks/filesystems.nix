@@ -193,7 +193,10 @@ let
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
-      + " " + escape (builtins.concatStringsSep "," fs.options)
+      + " " + escape (builtins.concatStringsSep "," (
+        fs.options ++
+        map (path: "x-systemd.requires-mounts-for=${path}") fs.depends
+      ))
       + " 0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")
       + "\n"
     ) fstabFileSystems;
