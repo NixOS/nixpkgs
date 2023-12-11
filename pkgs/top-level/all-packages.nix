@@ -11583,7 +11583,7 @@ with pkgs;
 
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
-  opendbx = callPackage ../development/libraries/opendbx { stdenv = gcc10StdenvCompat; };
+  opendbx = callPackage ../development/libraries/opendbx { };
 
   opendht = callPackage ../development/libraries/opendht  {
     inherit (darwin.apple_sdk.frameworks) Security;
