@@ -125,13 +125,18 @@ self: super: {
       "-f-splice"
       "-f-gadt"
       "-f-floskell"
+      "-f-fourmolu"
+      "-f-ormolu"
       "-f-stylishhaskell"
+      "-f-refactor"
     ]) ++ (drv.configureFlags or []);
   }) (super.haskell-language-server.override {
       hls-refactor-plugin = null;
       hls-class-plugin = null;
+      hls-fourmolu-plugin = null;
       hls-gadt-plugin = null;
       hls-hlint-plugin = null;
+      hls-ormolu-plugin = null;
       hls-rename-plugin = null;
       hls-stylish-haskell-plugin = null;
       hls-floskell-plugin = null;
