@@ -62,7 +62,10 @@ in
     security.unprivilegedUsernsClone = true;
 
     assertions = [
-      { assertion = !virtualisation.docker.enable or virtualisation.podman.enable;
+      { assertion = !virtualisation.docker.enable;
+        message = "Sysbox require docker to be functional";
+      }
+      { assertion = virtualisation.podman.enable;
         message = "Sysbox require docker to be functional";
       }
     ];
