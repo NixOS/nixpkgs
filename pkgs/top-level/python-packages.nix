@@ -15455,6 +15455,8 @@ self: super: with self; {
 
   universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
 
+  unix-ar = callPackage ../development/python-modules/unix-ar { };
+
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
