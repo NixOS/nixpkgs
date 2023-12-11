@@ -24094,8 +24094,6 @@ with pkgs;
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
-  mugshot = callPackage ../os-specific/linux/mugshot { };
-
   mujoco = callPackage ../applications/science/robotics/mujoco { };
 
   muparser = callPackage ../development/libraries/muparser {

@@ -1,15 +1,12 @@
 { lib
 , fetchFromGitHub
 , runtimeShell
-
 , gobject-introspection
 , intltool
 , wrapGAppsHook
-
 , gtk3
 , python3
 , python3Packages
-
 , cameraSupport ? true
 , gnome
 , clutter-gtk
