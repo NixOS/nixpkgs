@@ -11,6 +11,7 @@
 , minizip-ng
 , mkDerivation
 , qtgraphicaleffects
+, qtmultimedia
 , qtquickcontrols2
 , qttools
 }:
@@ -33,7 +34,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "5.0.16";
+  version = "5.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +42,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-zS0JyK+HGiHY7tPdl3RK6fJJOUS+fKM1u3npNxDAAYE=";
+    hash = "sha256-Pu2tGKe3C1uR4lzXkC5sJFu8iJBqF76UfWJXYjPwBkc=";
   };
 
   patches = [
@@ -72,6 +73,7 @@ mkDerivation rec {
 
     minizip-ng
     qtgraphicaleffects
+    qtmultimedia
     qtquickcontrols2
   ];
 
@@ -86,6 +88,9 @@ mkDerivation rec {
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # Requires EQt5Keychain
+    "-DENABLE_QT_KEYCHAIN=OFF"
   ];
 
   # The default install phase fails because the paths are somehow messed up in
