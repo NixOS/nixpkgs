@@ -3,7 +3,7 @@
 let
   name = "simplex-chat";
   compiler = "ghc96";
-  hlib = pkgs.haskell.lib;
+  hlib = haskell.lib;
 
   # helper to add git repo from simplex-chat org
   simplexGit = name: rev: sha: fetchFromGitHub {
