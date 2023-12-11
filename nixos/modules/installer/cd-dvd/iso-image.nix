@@ -206,6 +206,11 @@ let
     ${pkgs.buildPackages.ukify}/lib/systemd/ukify "''${args[@]}"
   '';
 
+  nomodesetCmdlineEfi = pkgs.runCommand "nomodeset.efi" {} ''
+    ${pkgs.buildPackages.ukify}/lib/systemd/ukify build --cmdline nomodeset --output $out --sbat ${./sbat.csv}
+  '';
+
+
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
@@ -378,6 +383,7 @@ let
     ''}
 
     cp ${maybeSignFile "${uki}/uki.efi"} $out/EFI/boot/uki.efi
+    cp ${maybeSignFile "${nomodesetCmdlineEfi}"} $out/EFI/boot/nomodeset.efi
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -418,6 +424,10 @@ let
 
     # TODO: get rid of this and make all the entries use the UKI with optional aux binaries for commandline extensions
     menuentry "Secure Boot" {
+      chainloader /EFI/boot/uki.efi
+    }
+    menuentry "Secure Boot nomodeset" {
+      chainloader /EFI/boot/nomodeset.efi
       chainloader /EFI/boot/uki.efi
     }
     ${buildMenuGrub2}
