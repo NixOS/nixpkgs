@@ -3,6 +3,7 @@
   lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # buildtime
@@ -25,6 +26,7 @@
 
 # optional-dependencies
 , babel
+, setuptools
 
 # testing deps
 , mock
@@ -69,6 +71,8 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     i18n = [
       babel
+    ] ++ lib.optionals (pythonAtLeast "3.12") [
+      setuptools
     ];
   };
 
