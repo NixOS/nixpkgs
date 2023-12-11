@@ -16,6 +16,14 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ ncurses ];
 
+  # https://github.com/Aloxaf/fzf-tab/issues/337
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   postConfigure = ''
     pushd modules
     ./configure --disable-gdbm --without-tcsetpgrp
