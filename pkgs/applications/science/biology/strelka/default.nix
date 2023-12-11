@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, python2}:
+{lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, zlib, python2}:
 
 stdenv.mkDerivation rec {
   pname = "strelka";
@@ -21,8 +21,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace src/cmake/boost.cmake \
+      --replace "1.58.0" "${boost.version}" \
+      --replace "Boost_USE_STATIC_LIBS ON" "Boost_USE_STATIC_LIBS OFF"
+  '';
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 ];
+  buildInputs = [ boost zlib python2 ];
+
+  cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=14"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=maybe-uninitialized"
@@ -47,7 +57,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/strelka";
     maintainers = with maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 
 }
