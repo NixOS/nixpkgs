@@ -4,14 +4,17 @@
 , isPy3k
 , isPyPy
 , python
+ ,pythonAtLeast
 , coverage
-, buildPackages
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
   format = "setuptools";
   pname = "nose";
+
+  # unmaintained, relies on the imp module
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
