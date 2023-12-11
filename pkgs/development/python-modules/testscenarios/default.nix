@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    pbr
     testtools
   ];
 
