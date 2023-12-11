@@ -38,13 +38,13 @@
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.3";
+  version = "0.32.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4AD+5bPzYseRFPDs/44is0yaKGW1nkGi2j5NxdLKLDw=";
+    url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-3iqUUIRtHOwUxqEDA3X9SeGvJNySCtZIA0QST5zLhW8=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "shotwell";
       versionPolicy = "odd-unstable";
     };
   };
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
-}
+})
