@@ -7299,9 +7299,7 @@ with pkgs;
 
   cringify = callPackage ../tools/text/cringify { };
 
-  cromfs = callPackage ../tools/archivers/cromfs {
-    stdenv = gcc10StdenvCompat;
-  };
+  cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
 
