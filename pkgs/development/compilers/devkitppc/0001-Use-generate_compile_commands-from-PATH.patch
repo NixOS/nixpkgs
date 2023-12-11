@@ -1,0 +1,25 @@
+From 743a1c9cc3e354ccfbca535931267b1f70c174c9 Mon Sep 17 00:00:00 2001
+From: novenary <novenary@kwak.zip>
+Date: Mon, 11 Dec 2023 15:28:14 +0200
+Subject: [PATCH 1/2] Use generate_compile_commands from PATH
+
+---
+ base_tools | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base_tools b/base_tools
+index 0a9e0ac..89e67f3 100644
+--- a/base_tools
++++ b/base_tools
+@@ -63,7 +63,7 @@ endef
+ # Generate compile commands
+ #---------------------------------------------------------------------------------
+ ifeq ($(GENERATE_COMPILE_COMMANDS),1)
+-    ADD_COMPILE_COMMAND := @/opt/devkitpro/tools/bin/generate_compile_commands
++    ADD_COMPILE_COMMAND := @generate_compile_commands
+ else
+     ADD_COMPILE_COMMAND := @true
+ endif
+-- 
+2.40.1
+

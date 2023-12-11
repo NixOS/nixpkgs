@@ -1,0 +1,32 @@
+From ef0070ec175f37bfc1750c736cde4b6ac809d90f Mon Sep 17 00:00:00 2001
+From: novenary <novenary@kwak.zip>
+Date: Mon, 11 Dec 2023 15:36:38 +0200
+Subject: [PATCH 2/2] Allow installing to another prefix
+
+For distro packaging
+---
+ Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index e9d142f..b4fbe8d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,11 +4,13 @@ _PATCH	:= 1
+ 
+ FILES	:=	base_rules base_tools gamecube_rules wii_rules
+ 
++PREFIX	?=	$(DEVKITPRO)/devkitPPC
++
+ all:
+ 	@echo "use dist or install targets"
+ 
+ install:
+-	@cp -v $(FILES) $(DESTDIR)$(DEVKITPRO)/devkitPPC
++	@cp -v $(FILES) $(DESTDIR)$(PREFIX)
+ 
+ dist:
+ 	@tar -cJf devkitppc-rules-$(_MAJOR).$(_MINOR).$(_PATCH).tar.xz $(FILES) Makefile
+-- 
+2.40.1
+

@@ -3853,6 +3853,16 @@ with pkgs;
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
+  devkitPPC = callPackage ../development/compilers/devkitppc { };
+  devkitPPC-rules = callPackage ../development/compilers/devkitppc/rules.nix { };
+  devkitPPC-binutils = callPackage ../development/compilers/devkitppc/binutils.nix { };
+  devkitPPC-newlib = callPackage ../development/compilers/devkitppc/newlib.nix {
+    devkitPPC-gcc = devkitPPC-gcc.override {
+      stage1 = true;
+    };
+  };
+  devkitPPC-gcc = callPackage ../development/compilers/devkitppc/gcc.nix { };
+
   gammaray = qt6Packages.callPackage ../development/tools/gammaray { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
