@@ -7,6 +7,7 @@
 with lib;
 
 let
+  sysroot = "/sysroot";
   /**
    * Given a list of `options`, concats the result of mapping each options
    * to a menuentry for use in grub.
@@ -829,11 +830,9 @@ in
         options = [ "mode=0755" ];
       };
 
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1
-    # init script.
     "/iso" = mkImageMediaOverride
-      { device = "/dev/root";
+      { label = config.isoImage.volumeID;
+        fsType = "auto";
         neededForBoot = true;
         noCheck = true;
       };
@@ -842,7 +841,7 @@ in
     # image) to make this a live CD.
     "/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
-        device = "/iso/nix-store.squashfs";
+        device = "${sysroot}/iso/nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
@@ -857,14 +856,14 @@ in
       { fsType = "overlay";
         device = "overlay";
         options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
+          "lowerdir=${sysroot}/nix/.ro-store"
+          "upperdir=${sysroot}/nix/.rw-store/store"
+          "workdir=${sysroot}/nix/.rw-store/work"
         ];
         depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
+          "${sysroot}/nix/.ro-store"
+          "${sysroot}/nix/.rw-store/store"
+          "${sysroot}/nix/.rw-store/work"
         ];
       };
   };
@@ -905,8 +904,10 @@ in
     # UUID of the USB stick.  It would be nicer to write
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
+
+    # TODO: restore this label, at least when not secure-booting
     boot.kernelParams =
-      [ "root=LABEL=${config.isoImage.volumeID}"
+      [ #"root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
       ];
 
@@ -914,7 +915,7 @@ in
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" "sr_mod" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -999,6 +1000,34 @@ in
       efiBootable = true;
       efiBootImage = "boot/efi.img";
     });
+
+    boot.initrd.systemd.enable = true;
+
+    boot.initrd.systemd.mounts = [
+      {
+        where = "/sysroot";
+        what = "tmpfs";
+        mountConfig = {
+          Type = "tmpfs";
+          Options = ["mode=0755"];
+        };
+      }
+    ];
+    # overlayfs requires the mutable directories, but
+    # won't create them by itself.
+    boot.initrd.systemd.services.mkdir-rw-store = {
+      description = "Store Overlay Mutable Directories";
+      wantedBy = [ "sysroot-nix-store.mount" ];
+      before = [ "sysroot-nix-store.mount" ];
+      unitConfig.RequiresMountsFor = "/sysroot/nix/.rw-store";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        mkdir -p /sysroot/nix/.rw-store/{work,store}
+      '';
+    };
 
     boot.postBootCommands =
       ''
