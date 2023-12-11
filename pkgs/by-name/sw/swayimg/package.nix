@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -20,26 +19,20 @@
 , libpng
 , libjxl
 , libexif
+, openexr_3
 , bash-completion
+, testers
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "artemsen";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UwIufR3EwbpNVHD1GypV3qNgiqDRllwtxAM0CZPodn0=";
+    repo = "swayimg";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-aKDt4lPh4w0AOucN7VrA7mo8SHI9eJqdrpJF+hG93gI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "link-libwebp-1.3.1.patch";
-      url = "https://github.com/artemsen/swayimg/commit/bd3d6c838c699b876fd8c19b408c475eb47e17b6.patch";
-      hash = "sha256-2aMq/GTqyKw+CQr8o8ij4P4yNjBXYKXShQUknStUb5c=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -48,6 +41,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+
+  mesonFlags = [
+    (lib.mesonOption "version" finalAttrs.version)
+  ];
 
   buildInputs = [
     bash-completion
@@ -65,7 +62,12 @@ stdenv.mkDerivation rec {
     libpng
     libjxl
     libexif
+    openexr_3
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";
@@ -76,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "swayimg";
   };
-}
+})
