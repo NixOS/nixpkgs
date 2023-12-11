@@ -1,22 +1,23 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
-  versions = if stdenv.isLinux then {
-    stable = "0.0.35";
-    ptb = "0.0.56";
-    canary = "0.0.184";
-    development = "0.0.0";
-  } else {
-    stable = "0.0.284";
-    ptb = "0.0.87";
-    canary = "0.0.340";
-    development = "0.0.2";
-  };
+  versions =
+    if stdenv.isLinux then {
+      stable = "0.0.37";
+      ptb = "0.0.56";
+      canary = "0.0.184";
+      development = "0.0.0";
+    } else {
+      stable = "0.0.284";
+      ptb = "0.0.87";
+      canary = "0.0.340";
+      development = "0.0.2";
+    };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        hash = "sha256-VcSRV9LDiUXduRt20kVeAnwinl6FmACQgn//W6eFyys=";
+        hash = "sha256-uyflZ1Zks7M1Re6DxuNUAkIuPY4wFSydf2AGMtIube8=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
