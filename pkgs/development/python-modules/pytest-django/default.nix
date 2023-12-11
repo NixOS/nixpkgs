@@ -38,7 +38,18 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  env.DJANGO_SETTINGS_MODULE = "pytest_django_test.settings_sqlite";
+  preCheck = ''
+    # bring pytest_django_test module into PYTHONPATH
+    export PYTHONPATH="$(pwd):$PYTHONPATH"
+
+    # test the lightweight sqlite flavor
+    export DJANGO_SETTINGS_MODULE="pytest_django_test.settings_sqlite"
+  '';
+
+  disabledTests = [
+    # AttributeError: type object 'TestLiveServer' has no attribute '_test_settings_before_run'
+    "test_settings_restored"
+  ];
 
   meta = with lib; {
     description = "py.test plugin for testing of Django applications";
