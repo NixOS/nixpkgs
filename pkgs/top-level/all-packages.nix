@@ -27527,7 +27527,7 @@ with pkgs;
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 
-  xqilla = callPackage ../development/tools/xqilla { stdenv = gcc10StdenvCompat; };
+  xqilla = callPackage ../development/tools/xqilla { };
 
   xquartz = callPackage ../servers/x11/xquartz { };
 
