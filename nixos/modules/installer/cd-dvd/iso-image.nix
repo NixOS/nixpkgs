@@ -194,12 +194,13 @@ let
 
   uki = pkgs.runCommand "uki" {} ''
     mkdir $out
+    hash=$(sha256sum ${config.system.build.squashfsStore} | cut -d ' ' -f 1)
     args=(
       build
       --output $out/uki.efi
       --linux ${config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile}
       --initrd ${config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile}
-      --cmdline init=${config.system.build.toplevel}/init\ ${escapeShellArg (toString config.boot.kernelParams)}
+      --cmdline init=${config.system.build.toplevel}/init\ ${escapeShellArg (toString config.boot.kernelParams)}\ store_squashfs_hash=$hash
       --os-release ${config.system.build.etc}/os-release
       --stub ${pkgs.systemd}/lib/systemd/boot/efi/linuxx64.efi.stub
       --sbat ${config.secureboot.sbat}
@@ -1013,6 +1014,34 @@ in
         };
       }
     ];
+    boot.initrd.systemd.services.verify-squashfs = {
+      requiredBy = ["sysroot-nix-.ro\\x2dstore.mount"];
+      before = ["sysroot-nix-.ro\\x2dstore.mount"];
+      requires = ["sysroot-iso.mount"];
+      after = ["sysroot-iso.mount"];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig = {
+        Type = "oneshot";
+        StandardOutput = "kmsg+console";
+        RemainAfterExit = true;
+      };
+      script = ''
+        set -x
+        </proc/cmdline readarray -d ' ' params
+        for param in "''${params[@]}"; do
+          [[ $param = store_squashfs_hash=* ]] || continue
+          hash="''${param#store_squashfs_hash=}"
+          hash="''${hash%$'\n'}"
+        done
+        if [[ -z "$hash" ]]; then
+          echo "Could not find expected Nix store squashfs hash on command line."
+          false
+        fi
+        sha256sum -c <<EOF
+        $hash ${config.fileSystems."/nix/.ro-store".device}
+        EOF
+      '';
+    };
     # overlayfs requires the mutable directories, but
     # won't create them by itself.
     boot.initrd.systemd.services.mkdir-rw-store = {
