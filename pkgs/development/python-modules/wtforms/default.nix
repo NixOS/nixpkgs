@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
 , markupsafe
 , babel
 , pytestCheckHook
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "wtforms";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-XlHfivmmD2vurXXvoQl16XdoglqCFGplx8v1uRWZBiA=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     markupsafe
