@@ -13,7 +13,6 @@
 , pkg-config
 , pythran
 , wheel
-, nose
 , pytestCheckHook
 , pytest-xdist
 , numpy
@@ -109,7 +108,6 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     pytest-xdist
   ];
