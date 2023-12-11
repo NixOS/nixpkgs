@@ -101,7 +101,7 @@
         minCudaVersion = "10.2";
         maxCudaVersion = "10.2";
         url = "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.5/cudnn-10.2-linux-x64-v7.6.5.32.tgz";
-        hash = "sha256-fq7IA5osMKsLx1jTA1iHZ2k972v0myJIWiwAvy4TbLN=";
+        hash = "sha256-YAJn8squ0v1Y6yFLpmnY6jXzlqfRm5SCLms2+fcIjCA='";
       }
       {
         version = "8.0.5.39";
