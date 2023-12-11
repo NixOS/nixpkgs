@@ -235,6 +235,10 @@
       "SomaFm-Radio@alireza6677.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
     ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
@@ -293,6 +297,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
@@ -338,6 +346,20 @@
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
+    ]
+  },
+  "45": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
     ],
     "battery-time": [
       "batime@martin.zurowietz.de",

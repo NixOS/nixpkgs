@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "mysqlclient";
   version = "2.2.0";
+  format = "setuptools";
 
   nativeBuildInputs = [
     pkg-config

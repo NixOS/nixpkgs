@@ -1,51 +1,30 @@
-{ callPackage
-, lib
-, pkgs
+{ mkDerivation, base, bytestring, cabal-install-parsers
+, Cabal-syntax, containers, directory, fetchgit, filepath
+, generic-lens-lite, lib, mtl, optparse-applicative, parsec, pretty
+, regex-applicative
 }:
-
-(callPackage ./changelog-d.nix { }).overrideAttrs (finalAttrs: oldAttrs: {
-
-  version = oldAttrs.version + "-git-${lib.strings.substring 0 7 oldAttrs.src.rev}";
-
-  passthru.updateScript = lib.getExe (pkgs.writeShellApplication {
-    name = "update-changelog-d";
-    runtimeInputs = [
-      pkgs.cabal2nix
-    ];
-    text = ''
-      cd pkgs/development/misc/haskell/changelog-d
-      cabal2nix https://codeberg.org/fgaz/changelog-d >changelog-d.nix
-    '';
-  });
-  passthru.tests = {
-    basic = pkgs.runCommand "changelog-d-basic-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        mkdir changelogs
-        cat > changelogs/config <<EOF
-        organization: NixOS
-        repository: boondoggle
-        EOF
-        cat > changelogs/a <<EOF
-        synopsis: Support numbers with incrementing base-10 digits
-        issues: #1234
-        description: {
-        This didn't work before.
-        }
-        EOF
-        changelog-d changelogs >$out
-        cat -n $out
-        echo Checking the generated output
-        set -x
-        grep -F 'Support numbers with incrementing base-10 digits' $out >/dev/null
-        grep -F 'https://github.com/NixOS/boondoggle/issues/1234' $out >/dev/null
-        set +x
-      '';
+mkDerivation {
+  pname = "changelog-d";
+  version = "0.1";
+  src = fetchgit {
+    url = "https://codeberg.org/fgaz/changelog-d";
+    sha256 = "0r0gr3bl88am9jivic3i8lfi9l5v1dj7xx4fvw6hhy3wdx7z50z7";
+    rev = "2816ddb78cec8b7fa4462c25028437ebfe3ad314";
+    fetchSubmodules = true;
   };
-
-  meta = oldAttrs.meta // {
-    homepage = "https://codeberg.org/fgaz/changelog-d";
-    maintainers = [ lib.maintainers.roberth ];
-  };
-
-})
+  isLibrary = false;
+  isExecutable = true;
+  libraryHaskellDepends = [
+    base bytestring cabal-install-parsers Cabal-syntax containers
+    directory filepath generic-lens-lite mtl parsec pretty
+    regex-applicative
+  ];
+  executableHaskellDepends = [
+    base bytestring Cabal-syntax directory filepath
+    optparse-applicative
+  ];
+  doHaddock = false;
+  description = "Concatenate changelog entries into a single one";
+  license = lib.licenses.gpl3Plus;
+  mainProgram = "changelog-d";
+}

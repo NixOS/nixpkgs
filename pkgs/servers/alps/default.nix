@@ -46,5 +46,6 @@ buildGoModule rec {
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner madonius hmenke ];
+    mainProgram = "alps";
   };
 }

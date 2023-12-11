@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "django-logentry-admin";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yprez";

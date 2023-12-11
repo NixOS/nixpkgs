@@ -1,7 +1,7 @@
 { buildPecl, lib, fetchFromGitHub }:
 
 let
-  version = "3.3.0alpha3";
+  version = "3.3.0";
 in buildPecl {
   inherit version;
 
@@ -11,7 +11,7 @@ in buildPecl {
     owner = "xdebug";
     repo = "xdebug";
     rev = version;
-    hash = "sha256-LBrKQCR4qpV3yJpTknUNKX6mq+qSdBSveIoYmk5Vmoc=";
+    hash = "sha256-i14po+0i25gRR87H6kUdyXF4rXZM70CqXi2EdFBn808=";
   };
 
   doCheck = true;

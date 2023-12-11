@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "openstackdocstheme";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

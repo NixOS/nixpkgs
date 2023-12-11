@@ -20,13 +20,13 @@
 , gnome-desktop
 , gnome-online-accounts
 , gnome-settings-daemon
+, gnome-tecla
 , gnome
 , gsettings-desktop-schemas
 , gsound
 , gst_all_1
 , gtk4
 , ibus
-, libgnomekbd
 , libgtop
 , libgudev
 , libadwaita
@@ -50,6 +50,7 @@
 , polkit
 , python3
 , samba
+, setxkbmap
 , shadow
 , shared-mime-info
 , sound-theme-freedesktop
@@ -62,22 +63,23 @@
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "44.3";
+  version = "45.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BmplBS/D7ProYAJehfeX5qsrh6WMT4q5xm7CBxioDHo=";
+    sha256 = "sha256-0obHYnFQ4RKqy7S3uRcX+tjokHYGFHnfxhCy3XRLV3o=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc libgnomekbd tzdata shadow;
+      inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
@@ -110,6 +112,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
+    gnome-tecla
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
@@ -141,9 +144,32 @@ stdenv.mkDerivation rec {
     gst-plugins-good
   ]);
 
+  nativeCheckInputs = [
+    python3.pkgs.python-dbusmock
+    setxkbmap
+    xvfb-run
+  ];
+
+  doCheck = true;
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    testEnvironment=(
+      # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
+      "ADW_DISABLE_PORTAL=1"
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+    )
+
+    env "''${testEnvironment[@]}" xvfb-run \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postInstall = ''

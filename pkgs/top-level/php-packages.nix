@@ -208,6 +208,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phpmd = callPackage ../development/php-packages/phpmd { };
 
+    phpspy = callPackage ../development/php-packages/phpspy { };
+
     phpstan = callPackage ../development/php-packages/phpstan { };
 
     psalm = callPackage ../development/php-packages/psalm { };
@@ -310,8 +312,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phalcon = callPackage ../development/php-packages/phalcon { };
 
-    php-spx = callPackage ../development/php-packages/php-spx { };
-
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -330,6 +330,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       inherit (pkgs) darwin;
     };
 
+    spx = callPackage ../development/php-packages/spx { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     ssh2 = callPackage ../development/php-packages/ssh2 { };
@@ -343,6 +345,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+  } // lib.optionalAttrs config.allowAliases {
+    php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
     # Core extensions
     let
@@ -600,7 +604,15 @@ lib.makeScope pkgs.newScope (self: with self; {
           doCheck = false;
         }
         { name = "sodium"; buildInputs = [ libsodium ]; }
-        { name = "sqlite3"; buildInputs = [ sqlite ]; }
+        {
+          name = "sqlite3";
+          buildInputs = [ sqlite ];
+
+          # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
+          # - https://github.com/php/php-src/issues/12076
+          # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
+          patches = lib.optional (stdenv.isi686 && stdenv.isLinux) ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch;
+        }
         { name = "sysvmsg"; }
         { name = "sysvsem"; }
         { name = "sysvshm"; }

@@ -650,6 +650,28 @@ runTests {
     expected = [2 30 40 42];
   };
 
+  testSortOn = {
+    expr = sortOn stringLength [ "aa" "b" "cccc" ];
+    expected = [ "b" "aa" "cccc" ];
+  };
+
+  testSortOnEmpty = {
+    expr = sortOn (throw "nope") [ ];
+    expected = [ ];
+  };
+
+  testSortOnIncomparable = {
+    expr =
+      map
+        (x: x.f x.ok)
+        (sortOn (x: x.ok) [
+          { ok = 1; f = x: x; }
+          { ok = 3; f = x: x + 3; }
+          { ok = 2; f = x: x; }
+        ]);
+    expected = [ 1 2 6 ];
+  };
+
   testReplicate = {
     expr = replicate 3 "a";
     expected = ["a" "a" "a"];
@@ -829,6 +851,26 @@ runTests {
       bar = 3;     # 'bar' from the first set
       baz = 4;     # 'baz' from the second set
     };
+  };
+
+  testMatchAttrsMatchingExact = {
+    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMismatch = {
+    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expected = false;
+  };
+
+  testMatchAttrsMatchingImplicit = {
+    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMissingAttrs = {
+    expr = matchAttrs { cpu = {}; } { };
+    expected = false;
   };
 
   testOverrideExistingEmpty = {
@@ -1948,4 +1990,24 @@ runTests {
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
   );
+
+  testPlatformMatch = {
+    expr = meta.platformMatch { system = "x86_64-linux"; } "x86_64-linux";
+    expected = true;
+  };
+
+  testPlatformMatchAttrs = {
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expected = true;
+  };
+
+  testPlatformMatchNoMatch = {
+    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expected = false;
+  };
+
+  testPlatformMatchMissingSystem = {
+    expr = meta.platformMatch { } "x86_64-linux";
+    expected = false;
+  };
 }

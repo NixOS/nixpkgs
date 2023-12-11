@@ -5,7 +5,7 @@
 
 , nodejs
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , fetchYarnDeps
 
 , setuptools
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     nodejs
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
   ];
 
   yarnDeps = fetchYarnDeps {
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
 
     yarn config --offline set yarn-offline-mirror ${yarnDeps}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     substituteInPlace package.json --replace jlpm yarn
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pyutil";
   version = "3.3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

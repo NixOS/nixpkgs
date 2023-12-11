@@ -55,5 +55,6 @@ buildGoModule rec {
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ twey marsam ];
+    mainProgram = "git-lfs";
   };
 }

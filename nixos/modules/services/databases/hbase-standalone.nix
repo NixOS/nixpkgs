@@ -46,15 +46,7 @@ in {
         Do not use this configuration for production nor for evaluating HBase performance.
       '');
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.hbase;
-        defaultText = literalExpression "pkgs.hbase";
-        description = lib.mdDoc ''
-          HBase package to use.
-        '';
-      };
-
+      package = mkPackageOption pkgs "hbase" { };
 
       user = mkOption {
         type = types.str;

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.11.2";
+  version = "2023.11.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -3540,7 +3540,8 @@
       renault-api
     ];
     "renson" = ps: with ps; [
-    ]; # missing inputs: renson-endura-delta
+      renson-endura-delta
+    ];
     "reolink" = ps: with ps; [
       aiohttp-cors
       reolink-aio
@@ -4871,6 +4872,7 @@
       pymitv
     ];
     "xmpp" = ps: with ps; [
+      emoji
       slixmpp
     ];
     "xs1" = ps: with ps; [
@@ -5567,6 +5569,7 @@
     "reddit"
     "remote"
     "renault"
+    "renson"
     "reolink"
     "repairs"
     "rest"

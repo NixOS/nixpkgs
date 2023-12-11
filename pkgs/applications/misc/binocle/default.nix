@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "binocle";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L4l8Gl7Ok/TWqHjNujPx8Qk3UWebs0SgOQNyBNtpnZo=";
+    sha256 = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
   };
 
-  cargoHash = "sha256-9d0MNQ7jEJKpGbjVtl1XBoOBEVNKDgFouSMrcZ7tXNU=";
+  cargoHash = "sha256-ZmY88WcoQiDLSXkBbnE/+jPX713qh6n+nyNXeWWTBKA=";
 
   nativeBuildInputs = [
     makeWrapper

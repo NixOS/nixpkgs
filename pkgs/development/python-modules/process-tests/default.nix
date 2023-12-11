@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "process-tests";
   version = "2.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

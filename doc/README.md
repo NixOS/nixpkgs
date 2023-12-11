@@ -48,7 +48,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 ## Syntax {#sec-contributing-markup}
 ```
 
-> **Note**
+> [!Note]
 > NixOS option documentation does not support headings in general.
 
 #### Inline Anchors

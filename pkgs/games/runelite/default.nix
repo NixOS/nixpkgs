@@ -6,17 +6,18 @@
 , jre
 , xorg
 , gitUpdater
+, libGL
 }:
 
 maven.buildMavenPackage rec {
   pname = "runelite";
-  version = "2.6.9";
+  version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
     rev = version;
-    hash = "sha256-wU97uiotKZfui0ir7rmO1WLN3G6lTMxqF6vTyrlax1Q=";
+    hash = "sha256-tu3sEhmFZLMqPiBdPCiNYj5s08hMCo8mXpOCx/BP1EM=";
   };
   mvnHash = "sha256-iGnoAZcJvaVoACi9ozG/f+A8tjvDuwn22bMRyuUU5Jg=";
 
@@ -37,12 +38,15 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     mkdir -p $out/share/icons
+    mkdir -p $out/share/applications
 
     cp target/RuneLite.jar $out/share
     cp appimage/runelite.png $out/share/icons
 
+    ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
+
     makeWrapper ${jre}/bin/java $out/bin/runelite \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm libGL ]}" \
       --add-flags "-jar $out/share/RuneLite.jar"
   '';
 

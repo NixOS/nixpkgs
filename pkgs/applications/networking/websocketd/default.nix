@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "http://websocketd.com/";
     maintainers = [ maintainers.bjornfor ];
     license = licenses.bsd2;
+    mainProgram = "websocketd";
   };
 }

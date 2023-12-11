@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "piper";
   };
 })

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "coverage";
   version = "7.3.1";
+  format = "setuptools";
   # uses f strings
   disabled = pythonOlder "3.5";
 

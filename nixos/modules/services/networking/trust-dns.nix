@@ -48,13 +48,11 @@ in
   options = {
     services.trust-dns = with lib; {
       enable = mkEnableOption (lib.mdDoc "trust-dns");
-      package = mkOption {
-        type = types.package;
-        default = pkgs.trust-dns;
-        defaultText = "pkgs.trust-dns";
-        description = mdDoc ''
-          Trust-dns package to use.
-          The package must provide `meta.mainProgram` which names the server binary; any other utilities (client, resolver) are not needed.
+      package = mkPackageOption pkgs "trust-dns" {
+        extraDescription = ''
+          ::: {.note}
+          The package must provide `meta.mainProgram` which names the server binayr; any other utilities (client, resolver) are not needed.
+          :::
         '';
       };
       quiet = mkOption {

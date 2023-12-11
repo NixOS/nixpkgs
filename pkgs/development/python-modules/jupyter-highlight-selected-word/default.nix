@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "jupyter-highlight-selected-word";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jcb91";

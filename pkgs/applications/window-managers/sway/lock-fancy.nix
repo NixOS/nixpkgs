@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, jq, swaylock
-, imagemagick, getopt, fontconfig, wmctrl, makeWrapper, bash
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, grim
+, gawk
+, jq
+, swaylock
+, imagemagick
+, getopt
+, fontconfig
+, wmctrl
+, makeWrapper
+, bash
 }:
 
 let
@@ -14,19 +26,22 @@ let
     fontconfig
     wmctrl
   ];
-in stdenv.mkDerivation rec {
-  pname = "swaylock-fancy-unstable";
-  version = "2021-10-11";
+  mainProgram = "swaylock-fancy";
+in
+
+stdenv.mkDerivation {
+  pname = "swaylock-fancy";
+  version = "unstable-2023-11-21";
 
   src = fetchFromGitHub {
     owner = "Big-B";
     repo = "swaylock-fancy";
-    rev = "265fbfb438392339bf676b0a9dbe294abe2a699e";
-    sha256 = "NjxeJyWYXBb1P8sXKgb2EWjF+cNodTE83r1YwRYoBjM=";
+    rev = "ff37ae3c6d0f100f81ff64fdb9d422c37de2f4f6";
+    hash = "sha256-oS4YCbZOIrMP4QSM5eHWzTn18k3w2OnJ2k+64x/DnuM=";
   };
 
   postPatch = ''
-    substituteInPlace swaylock-fancy \
+    substituteInPlace ${mainProgram} \
       --replace "/usr/share" "$out/share"
   '';
 
@@ -37,7 +52,7 @@ in stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/swaylock-fancy \
+    wrapProgram $out/bin/${mainProgram} \
       --prefix PATH : "${depsPath}"
   '';
 
@@ -46,6 +61,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ frogamic ];
+    inherit mainProgram;
   };
 }

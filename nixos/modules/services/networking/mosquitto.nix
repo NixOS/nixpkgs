@@ -482,14 +482,7 @@ let
   globalOptions = with types; {
     enable = mkEnableOption (lib.mdDoc "the MQTT Mosquitto broker");
 
-    package = mkOption {
-      type = package;
-      default = pkgs.mosquitto;
-      defaultText = literalExpression "pkgs.mosquitto";
-      description = lib.mdDoc ''
-        Mosquitto package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "mosquitto" { };
 
     bridges = mkOption {
       type = attrsOf bridgeOptions;

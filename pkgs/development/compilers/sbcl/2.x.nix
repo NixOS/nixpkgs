@@ -18,11 +18,11 @@ let
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.3.8" = {
-      sha256 = "sha256-QhVxsqyRbli+jrzqXvSr+NeQKGPbah0KXvqVAK3KDSk=";
+    "2.3.10" = {
+      sha256 = "sha256-NYAzMV0H5MWmyDjufyLPxNSelISOtx7BOJ1JS8Mt0qs=";
     };
-    "2.3.9" = {
-      sha256 = "sha256-fSiakSMgIgKL8BKJAMMr8A5MVDDDLyivBZTIpZKphlQ=";
+    "2.3.11" = {
+      sha256 = "sha256-hL7rjXLIeJeEf8AoWtyz+k9IG9s5ECxPuat5aEGErSk=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for

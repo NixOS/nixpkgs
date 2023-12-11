@@ -18,5 +18,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/yskoht/keymapviz";
     license = licenses.mit;
     maintainers = with maintainers; [ lom ];
+    mainProgram = "keymapviz";
   };
 }

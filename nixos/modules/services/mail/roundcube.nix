@@ -29,19 +29,8 @@ in
       description = lib.mdDoc "Hostname to use for the nginx vhost";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.roundcube;
-      defaultText = literalExpression "pkgs.roundcube";
-
-      example = literalExpression ''
-        roundcube.withPlugins (plugins: [ plugins.persistent_login ])
-      '';
-
-      description = lib.mdDoc ''
-        The package which contains roundcube's sources. Can be overridden to create
-        an environment which contains roundcube and third-party plugins.
-      '';
+    package = mkPackageOption pkgs "roundcube" {
+      example = "roundcube.withPlugins (plugins: [ plugins.persistent_login ])";
     };
 
     database = {
@@ -131,7 +120,7 @@ in
       ${lib.optionalString (!localDB) ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
-        $password = end($password);
+        $password = rtrim(end($password));
         $password = str_replace("\\:", ":", $password);
         $password = str_replace("\\\\", "\\", $password);
       ''}

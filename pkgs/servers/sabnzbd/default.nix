@@ -83,5 +83,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ fridh jojosch adamcstephens ];
+    mainProgram = "sabnzbd";
   };
 }

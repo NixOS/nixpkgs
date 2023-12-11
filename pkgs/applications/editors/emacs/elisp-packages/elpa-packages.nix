@@ -98,7 +98,7 @@ self: let
         '';
 
         postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh --prefix=$out
+          ./install.sh "$out"
         '';
 
         meta = old.meta // {

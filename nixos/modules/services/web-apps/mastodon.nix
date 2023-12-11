@@ -229,7 +229,7 @@ in {
       streamingProcesses = lib.mkOption {
         description = lib.mdDoc ''
           Number of processes used by the mastodon-streaming service.
-          Recommended is the amount of your CPU cores minus one.
+          Please define this explicitly, recommended is the amount of your CPU cores minus one.
         '';
         type = lib.types.ints.positive;
         example = 3;

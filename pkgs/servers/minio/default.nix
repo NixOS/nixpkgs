@@ -21,16 +21,16 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2023-09-20T22-49-55Z";
+  version = "2023-11-01T18-37-25Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-JX+bxFAxTmOjpY6HAVVhdZftFx9HlniX+3zKY7Qui9w=";
+    sha256 = "sha256-3YCXIn/xBhkKrmM41JBBfzc6re1nAFHO9GCwTE6AddY=";
   };
 
-  vendorHash = "sha256-fcaMYm7Tw5zqtHhPzmUS/5E7AYI8P2fuxT2sDQwNttc=";
+  vendorHash = "sha256-UZqICN3vPJRgO7fKzVTlP/sFx4cWUnEN9BpSp1bFgL0=";
 
   doCheck = false;
 
@@ -57,5 +57,6 @@ buildGoModule rec {
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
     license = licenses.agpl3Plus;
+    mainProgram = "minio";
   };
 }

@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "fast-histogram";
   version = "0.12";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

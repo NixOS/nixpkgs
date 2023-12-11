@@ -305,6 +305,7 @@ in {
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
         home = stateDir;
+        homeMode = "755";
         createHome = true;
         isSystemUser = true;
       };

@@ -240,9 +240,9 @@
     ]
   },
   "spreed": {
-    "sha256": "06cixw0bbmz20fybdqq192bk11xraaaplqybbxa0xjs3x6pcw1na",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.7/spreed-v16.0.7.tar.gz",
-    "version": "16.0.7",
+    "sha256": "1fm80hqrqan4w1jd896x2j0pav56xd55bcljmpqliyirylayni9x",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.8/spreed-v16.0.8.tar.gz",
+    "version": "16.0.8",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

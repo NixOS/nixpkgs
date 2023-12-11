@@ -94,6 +94,7 @@ let
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
+      mainProgram = "hg";
     };
   };
 

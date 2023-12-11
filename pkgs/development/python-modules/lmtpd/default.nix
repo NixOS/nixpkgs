@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "lmtpd";
   version = "6.2.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

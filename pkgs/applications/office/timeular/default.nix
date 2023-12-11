@@ -10,7 +10,7 @@ let
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    sha256 = "sha256-RmWRNKy2w3BM/ipQyFpkNC3+XXsJXjN6VYWNo8OKpy0=";
+    hash = "sha256-kacJSlctE1bNAByH26Qpu609ZNbdkYTx6OUEgCmefqg=";
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.11.2";
+  version = "2023.11.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7VYGrWoElc/urs+jomJrRt0dzdmJhCenRvb9bHCl6H4=";
+    hash = "sha256-9LqZlhCt+7p6tnSHFhbnUzkEOJQDsg/Pd/hgd/Il0ZQ=";
   };
 
   postPatch = ''
@@ -57,6 +57,7 @@ python.pkgs.buildPythonApplication rec {
     protobuf
     pyparsing
     pyserial
+    python-magic
     pyyaml
     requests
     tornado
@@ -106,5 +107,6 @@ python.pkgs.buildPythonApplication rec {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with maintainers; [ globin hexa ];
+    mainProgram = "esphome";
   };
 }

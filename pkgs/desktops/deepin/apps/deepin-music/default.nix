@@ -3,46 +3,38 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, qttools
 , wrapQtAppsHook
 , dtkwidget
+, dtkdeclarative
 , qt5integration
 , qt5platform-plugins
-, dde-qt-dbus-factory
 , udisks2-qt5
 , qtmpris
-, qtdbusextended
 , qtmultimedia
-, qttools
 , kcodecs
 , ffmpeg
 , libvlc
-, libpulseaudio
-, libcue
 , taglib
-, gsettings-qt
 , SDL2
-, gtest
 , qtbase
 , gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-music";
-  version = "6.2.31";
+  version = "7.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-OXyHB47orv9ix+Jg0b7wciA6DWUsXzFmIg4SM+piO3c=";
+    hash = "sha256-MLfkSO8ru8MKiwgiQ0mPO3zGlnIeSHPc0Op5jjzJ6PE=";
   };
 
-  postPatch = ''
-    substituteInPlace src/music-player/CMakeLists.txt \
-      --replace "/usr/include/vlc" "${libvlc}/include/vlc"
-    substituteInPlace src/music-player/data/deepin-music.desktop \
-      --replace "/usr/bin/deepin-music" "$out/bin/deepin-music"
-  '';
+  patches = [
+    "${src}/patches/fix-library-path.patch"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,22 +45,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    dtkdeclarative
     qt5integration
     qt5platform-plugins
-    dde-qt-dbus-factory
     udisks2-qt5
     qtmpris
-    qtdbusextended
     qtmultimedia
     kcodecs
     ffmpeg
     libvlc
-    libpulseaudio
-    libcue
     taglib
-    gsettings-qt
     SDL2
-    gtest
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
@@ -77,6 +64,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DVERSION=${version}"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-I${libvlc}/include/vlc/plugins"
+    "-I${libvlc}/include/vlc"
   ];
 
   strictDeps = true;

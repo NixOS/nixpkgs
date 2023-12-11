@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "rs-git-fsmonitor";
   };
 }

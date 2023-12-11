@@ -8,11 +8,16 @@
 , factory-boy
 , python
 , unzip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "todosrht";
   version = "0.74.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -32,6 +37,10 @@ buildPythonPackage rec {
     modRoot = "api";
     vendorHash = "sha256-rvfG5F6ez8UM0dYVhKfzwtb7ZEJlaKMBAfKDbo3Aofc=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht

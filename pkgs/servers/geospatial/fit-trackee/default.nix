@@ -21,6 +21,15 @@ let
           "test/ext/mypy"
         ];
       });
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.5";
+
+        src = fetchPypi {
+          pname = "flask_sqlalchemy";
+          inherit version;
+          hash = "sha256-xXZeWMoUVAG1IQbA9GF4VpJDxdolVWviwjHsxghnxbE=";
+        };
+      });
     };
   };
 

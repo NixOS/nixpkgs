@@ -88,5 +88,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ javimerino ];
     license = [ licenses.gpl2 ];
     platforms = platforms.all;
+    mainProgram = "guilt";
   };
 }

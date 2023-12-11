@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = [ maintainers.doronbehar ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sacd";
   };
 })

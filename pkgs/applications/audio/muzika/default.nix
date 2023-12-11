@@ -2,7 +2,7 @@
 , desktop-file-utils
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , gjs
 , glib-networking
 , gobject-introspection
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook4
     yarn
+    prefetch-yarn-deps
   ];
 
   buildInputs = [
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export HOME="$PWD"
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
   '';
 
   mesonFlags = [

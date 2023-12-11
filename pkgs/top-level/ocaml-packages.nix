@@ -593,6 +593,7 @@ let
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
+    gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
     gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
 
@@ -806,7 +807,7 @@ let
         lwt_ppx = self.lwt_ppx.override { inherit ppxlib; };
         sedlex = self.sedlex.override { inherit ppxlib ppx_expect; };
         in callPackage ../development/ocaml-modules/bap {
-          inherit (pkgs.llvmPackages) llvm;
+          inherit (pkgs.llvmPackages_14) llvm;
           ezjsonm = self.ezjsonm.override { inherit sexplib0; };
           ppx_bitstring = self.ppx_bitstring.override { inherit ppxlib; };
           ocurl = self.ocurl.override { inherit lwt_ppx; };
@@ -1579,6 +1580,10 @@ let
 
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
+    readline = callPackage ../development/ocaml-modules/readline {
+      readline = pkgs.readline;
+    };
+
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
@@ -1895,6 +1900,8 @@ let
     zelus = callPackage ../development/ocaml-modules/zelus { };
 
     zelus-gtk = callPackage ../development/ocaml-modules/zelus-gtk { };
+
+    zipc = callPackage ../development/ocaml-modules/zipc { };
 
     zmq = callPackage ../development/ocaml-modules/zmq { };
 

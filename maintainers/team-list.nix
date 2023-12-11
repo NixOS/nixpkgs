@@ -127,14 +127,6 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  chia = {
-    members = [
-      lourkeur
-    ];
-    scope = "Maintain the Chia blockchain and its dependencies";
-    shortName = "Chia Blockchain";
-  };
-
   coq = {
     members = [
       cohencyril
@@ -322,8 +314,10 @@ with lib.maintainers; {
 
   geospatial = {
     members = [
+      das-g
       imincik
       nh2
+      nialov
       sikmir
       willcohen
     ];
@@ -435,6 +429,7 @@ with lib.maintainers; {
       cleeyv
       ryantm
       lassulus
+      yayayayaka
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -568,6 +563,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lxc = {
+    members = [
+      aanderse
+      adamcstephens
+      jnsgruk
+      megheaiulian
+      mkg20001
+    ];
+    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
+    shortName = "lxc";
+  };
+
   lxqt = {
     members = [
       romildo
@@ -675,18 +682,6 @@ with lib.maintainers; {
     scope = "Maintain Node.js runtimes and build tooling.";
     shortName = "Node.js";
     enableFeatureFreezePing = true;
-  };
-
-  numtide = {
-    members = [
-      mic92
-      flokli
-      jfroche
-      tazjin
-      zimbatm
-    ];
-    scope = "Group registration for Numtide team members who collectively maintain packages.";
-    shortName = "Numtide team";
   };
 
   ocaml = {

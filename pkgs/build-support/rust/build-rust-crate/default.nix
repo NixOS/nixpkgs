@@ -235,6 +235,7 @@ crate_: lib.makeOverridable
         "edition"
         "buildTests"
         "codegenUnits"
+        "links"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -317,6 +318,7 @@ crate_: lib.makeOverridable
       crateDescription = crate.description or "";
       crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
       crateHomepage = crate.homepage or "";
+      crateLinks = crate.links or "";
       crateType =
         if lib.attrByPath [ "procMacro" ] false crate then [ "proc-macro" ] else
         if lib.attrByPath [ "plugin" ] false crate then [ "dylib" ] else
@@ -337,7 +339,7 @@ crate_: lib.makeOverridable
 
       configurePhase = configureCrate {
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-          crateFeatures crateRenames libName build workspace_member release libPath crateVersion
+          crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
           crateAuthors crateHomepage verbose colors codegenUnits;
       };

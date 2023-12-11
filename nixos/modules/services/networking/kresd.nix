@@ -57,14 +57,8 @@ in {
         and give commands interactively to kresd@1.service.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      description = lib.mdDoc ''
-        knot-resolver package to use.
-      '';
-      default = pkgs.knot-resolver;
-      defaultText = literalExpression "pkgs.knot-resolver";
-      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
+    package = mkPackageOption pkgs "knot-resolver" {
+      example = "knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;

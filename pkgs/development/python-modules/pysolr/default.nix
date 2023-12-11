@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pysolr";
   version = "3.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

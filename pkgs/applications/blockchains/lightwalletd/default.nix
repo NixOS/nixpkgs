@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/zcash/lightwalletd";
     maintainers = with maintainers; [ centromere ];
     license = licenses.mit;
+    mainProgram = "lightwalletd";
   };
 }

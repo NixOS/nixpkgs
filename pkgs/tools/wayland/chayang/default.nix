@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with maintainers; [ mxkrsv ];
     platforms = platforms.linux;
+    mainProgram = "chayang";
   };
 })

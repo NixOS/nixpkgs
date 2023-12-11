@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
+    mainProgram = "spirv-cross";
   };
 })

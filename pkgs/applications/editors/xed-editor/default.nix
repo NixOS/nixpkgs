@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-nc8YS1PcmtM37TJpGl691SlxJliyI2gSGJtNzkWbk9A=";
+    sha256 = "sha256-IpUBB7Viwc/nRfwzFllRiWoOmUxRZzS2BcxyM7W3oHI=";
   };
 
   nativeBuildInputs = [
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    mainProgram = "xed";
   };
 }

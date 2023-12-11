@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "bitcoinlib";
   version = "0.12.2";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -244,7 +244,10 @@ final: prev: {
         inherit (final) postcss-cli;
       };
     };
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ Luflosi ]; };
+    meta = oldAttrs.meta // {
+      maintainers = with lib.maintainers; [ Luflosi ];
+      license = lib.licenses.mit;
+    };
   });
 
   # To update prisma, please first update prisma-engines to the latest
@@ -257,7 +260,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-rwpwB+vli3CXRhUFL+UvyUpPlxRk6P/2zLCn0SL9E6s=";
+      hash = "sha256-ej3h4LlF/pkAYeDxePb7wMc8zrfxKMnrp1ogZLoFU+0=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -311,10 +314,11 @@ final: prev: {
     };
   };
 
-  teck-programmer = prev.teck-programmer.override {
+  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
     nativeBuildInputs = [ final.node-gyp-build ];
     buildInputs = [ pkgs.libusb1 ];
-  };
+    meta = meta // { license = lib.licenses.gpl3Plus; };
+  });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
@@ -418,12 +422,61 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  wrangler = prev.wrangler.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = before "16.13"; };
-    buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
-    preFixup = ''
-      # patch elf is trying to patch binary for sunos
-      rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
-    '';
-  });
+  wrangler = prev.wrangler.override (oldAttrs:
+    let
+      linuxWorkerd = {
+        name = "_at_cloudflare_slash_workerd-linux-64";
+        packageName = "@cloudflare/workerd-linux-64";
+        # Should be same version as workerd
+        version = "1.20231030.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20231030.0.tgz";
+          sha512 = "2HUeRTvoCC17fxE0qdBeR7J9dO8j4A8ZbdcvY8pZxdk+zERU6+N03RTbk/dQMU488PwiDvcC3zZqS4gwLfVT8g==";
+        };
+      };
+      linuxWorkerdArm = {
+        name = "_at_cloudflare_slash_workerd-linux-arm64";
+        packageName = "@cloudflare/workerd-linux-arm64";
+        # Should be same version as workerd
+        version = "1.20231030.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20231030.0.tgz";
+          sha512 = "4/GK5zHh+9JbUI6Z5xTCM0ZmpKKHk7vu9thmHjUxtz+o8Ne9DoD7DlDvXQWgMF6XGaTubDWyp3ttn+Qv8jDFuQ==";
+        };
+      };
+      darwinWorkerd = {
+        name = "_at_cloudflare_slash_workerd-darwin-64";
+        packageName = "@cloudflare/workerd-darwin-64";
+        # Should be same version as workerd
+        version = "1.20231030.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20231030.0.tgz";
+          sha512 = "0iy34j997llj3jl3l8dipnsyms89qv9nxkza9l2gxmcj6mqwv5m6c8cvgca78qfccl1f5zsrzj855q1fz631p91yydbri2gxgvd10r7";
+        };
+      };
+      darwinWorkerdArm = {
+        name = "_at_cloudflare_slash_workerd-darwin-arm64";
+        packageName = "@cloudflare/workerd-darwin-arm64";
+        # Should be same version as workerd
+        version = "1.20231030.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20231030.0.tgz";
+          sha512 = "WSJJjm11Del4hSneiNB7wTXGtBXI4QMCH9l5qf4iT5PAW8cESGcCmdHtWDWDtGAAGcvmLT04KNvmum92vRKKQQ==";
+        };
+      };
+
+    in
+    {
+      meta = oldAttrs.meta // { broken = before "16.13"; };
+      buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
+      preFixup = ''
+        # patch elf is trying to patch binary for sunos
+        rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
+      '';
+      dependencies = oldAttrs.dependencies
+        ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) linuxWorkerd
+        ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) linuxWorkerdArm
+        ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) darwinWorkerd
+        ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwinWorkerdArm;
+    });
 }

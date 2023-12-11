@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
   version = "0.7.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
@@ -55,6 +55,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_show_identifier"
     "test_plugin_show_nonexisting"
     "test_plugin_show_uuid"
+    # Tests compare STDOUT results
+    "test_check_valid"
+    "test_check_stdin"
+    "test_check_exclude"
   ];
 
   pythonImportsCheck = [

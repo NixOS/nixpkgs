@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
   version = "5.10";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

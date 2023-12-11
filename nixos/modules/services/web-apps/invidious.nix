@@ -185,12 +185,7 @@ in
   options.services.invidious = {
     enable = lib.mkEnableOption (lib.mdDoc "Invidious");
 
-    package = lib.mkOption {
-      type = types.package;
-      default = pkgs.invidious;
-      defaultText = lib.literalExpression "pkgs.invidious";
-      description = lib.mdDoc "The Invidious package to use.";
-    };
+    package = lib.mkPackageOption pkgs "invidious" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;

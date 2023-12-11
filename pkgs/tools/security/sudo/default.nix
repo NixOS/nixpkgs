@@ -71,9 +71,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) sudo; };
 
-  meta = {
+  meta = with lib; {
     description = "A command to run commands as root";
-
     longDescription =
       ''
         Sudo (su "do") allows a system administrator to delegate
@@ -81,13 +80,10 @@ stdenv.mkDerivation rec {
         to run some (or all) commands as root or another user while
         providing an audit trail of the commands and their arguments.
       '';
-
     homepage = "https://www.sudo.ws/";
-
-    license = "https://www.sudo.ws/sudo/license.html";
-
-    maintainers = with lib.maintainers; [ delroth ];
-
-    platforms = lib.platforms.linux;
+    # From https://www.sudo.ws/about/license/
+    license = with licenses; [ sudo bsd2 bsd3 zlib ];
+    maintainers = with maintainers; [ delroth ];
+    platforms = platforms.linux;
   };
 }

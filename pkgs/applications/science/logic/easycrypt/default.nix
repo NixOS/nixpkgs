@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, why3 }:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages, why3, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     findlib
     menhir
     ocaml
+    python3.pkgs.wrapPython
   ];
   buildInputs = with ocamlPackages; [
     batteries
@@ -33,10 +34,13 @@ stdenv.mkDerivation rec {
     substituteInPlace dune-project --replace '(name easycrypt)' '(name easycrypt)(version ${version})'
   '';
 
+  pythonPath = with python3.pkgs; [ pyyaml ];
+
   installPhase = ''
     runHook preInstall
     dune install --prefix $out ${pname}
     rm $out/bin/ec-runtest
+    wrapPythonProgramsIn "$out/lib/easycrypt/commands" "$pythonPath"
     runHook postInstall
   '';
 

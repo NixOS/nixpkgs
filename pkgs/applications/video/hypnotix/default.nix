@@ -9,17 +9,18 @@
 , mpv
 , python3
 , wrapGAppsHook
+, yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "3.7";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-H8+KJ9+HLAorGIeljw8H3N8W3E2yYhAno1xy+jI54zM=";
+    hash = "sha256-YmVMcNbvbkODAmEgv8Ofgo07Mew/F4xv5cBaWKsH1S4=";
   };
 
   patches = [
@@ -32,8 +33,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
       --replace __DEB_VERSION__ ${version} \
+      --replace /usr/bin/yt-dlp ${yt-dlp}/bin/yt-dlp \
       --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
       --replace /usr/share/hypnotix $out/share/hypnotix
+
+    substituteInPlace usr/bin/hypnotix \
+      --replace /usr/lib/hypnotix/hypnotix.py $out/lib/hypnotix/hypnotix.py
   '';
 
   nativeBuildInputs = [
@@ -47,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cinnamon.xapp
+    python3 # for patchShebangs
   ];
 
   pythonPath = with python3.pkgs; [
@@ -62,8 +68,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    cp -r usr/lib $out
-    cp -r usr/share $out
+    cp -r usr/* $out
 
     glib-compile-schemas $out/share/glib-2.0/schemas
 
@@ -72,8 +77,10 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
-    makeWrapper ${python3.interpreter} $out/bin/hypnotix \
-      --add-flags $out/lib/hypnotix/hypnotix.py \
+
+    # yt-dlp is needed for mpv to play YouTube channels.
+    wrapProgram $out/bin/hypnotix \
+      --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}" \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       ''${gappsWrapperArgs[@]}
   '';
@@ -85,5 +92,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
     platforms = lib.platforms.linux;
+    mainProgram = "hypnotix";
   };
 }

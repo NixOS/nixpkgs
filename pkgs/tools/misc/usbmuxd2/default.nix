@@ -90,5 +90,6 @@ clangStdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "usbmuxd";
   };
 }

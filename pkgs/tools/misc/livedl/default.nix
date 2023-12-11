@@ -23,5 +23,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ wakira ];
     platforms = platforms.linux ++ platforms.darwin;
     broken = stdenv.isDarwin; # build fails with go > 1.17
+    mainProgram = "livedl";
   };
 }

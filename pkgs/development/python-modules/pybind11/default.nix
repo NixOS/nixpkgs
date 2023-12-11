@@ -12,7 +12,6 @@
 , pytestCheckHook
 , libxcrypt
 , makeSetupHook
-, darwin
 }: let
   setupHook = makeSetupHook {
     name = "pybind11-setup-hook";
@@ -39,6 +38,7 @@
 in buildPythonPackage rec {
   pname = "pybind11";
   version = "2.11.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pybind";

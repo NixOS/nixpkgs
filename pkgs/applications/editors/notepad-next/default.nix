@@ -39,5 +39,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
     broken = stdenv.isAarch64;
+    mainProgram = "NotepadNext";
   };
 }

@@ -26,5 +26,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ colinsane ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "zecwallet-lite";
   };
 }

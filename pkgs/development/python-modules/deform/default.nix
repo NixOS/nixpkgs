@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "deform";
   version = "2.0.15";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

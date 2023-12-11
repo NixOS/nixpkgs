@@ -21,12 +21,12 @@
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
@@ -232,6 +232,12 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
+  gdk3 = attrs: {
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf cairo ];
+  };
+
   gpgme = attrs: {
     buildInputs = [ gpgme ];
     nativeBuildInputs = [ pkg-config ];
@@ -316,6 +322,36 @@ in
       pcre pcre2
       xorg.libpthreadstubs
       xorg.libXdmcp
+    ];
+    dontStrip = stdenv.isDarwin;
+  };
+
+  gtk3 = attrs: {
+    nativeBuildInputs = [
+      binutils
+      pkg-config
+    ] ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [
+      atk
+      gdk-pixbuf
+      fribidi
+      gobject-introspection
+      gtk3
+      cairo
+      harfbuzz
+      libdatrie
+      libthai
+      pcre
+      pcre2
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+      xorg.libXtst
+      libxkbcommon
+      libepoxy
     ];
     dontStrip = stdenv.isDarwin;
   };

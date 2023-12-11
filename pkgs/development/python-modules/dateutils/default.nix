@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "dateutils";
   version = "0.6.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

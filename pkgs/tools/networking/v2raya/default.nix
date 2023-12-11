@@ -11,13 +11,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.4";
+  version = "2.2.4.3";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    hash = "sha256-X2fCp9uVdt7fIW1C/tdRK1Tmr8mq6VBk6UBnt99E+1c=";
+    hash = "sha256-6643sdKVHOHrGRocTm881GCHoON4tlrKcNfOFMHwnQY=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
   guiSrc = "${src}/gui";
@@ -30,7 +30,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-pB0B5Iy6dLfU5CL2E9OBQGJKLJqYQRwPxx9aaCDg1Qk=";
+      sha256 = "sha256-rZIcVLolTMdtN27W6gCw9uk9m4N5v9SZn2563+aN/gs=";
     };
 
     buildPhase = ''
@@ -62,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorHash = "sha256-lK6oTI9o8oLXPPMFO/Q97tIsdRd9smUk1v7GwwCFitg=";
+  vendorHash = "sha256-wwDv2ThHwtnUpAnQoc0Ms0mGC44jRvABcE4K5MrF8S4=";
 
   ldflags = [
     "-s"

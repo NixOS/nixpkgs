@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysignalclirestapi";
-  version = "0.3.21";
+  version = "0.3.22";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "bbernhard";
     repo = "pysignalclirestapi";
     rev = version;
-    hash = "sha256-CAZ6UgGz7ZDXlQlngi+hEhczOphvAT/Yl9vLqnrS1Qc=";
+    hash = "sha256-m8Sihf5vTDntd5Tbaa5o55G/k/rqtmjWreoTab58CHU=";
   };
 
   nativeBuildInputs = [

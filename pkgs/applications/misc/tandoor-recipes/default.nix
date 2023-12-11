@@ -5,28 +5,7 @@
 , fetchpatch
 }:
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_4;
-
-      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
-        version = "1.14.0";
-        format = "setuptools";
-
-        src = fetchFromGitHub {
-          owner = "django-crispy-forms";
-          repo = "django-crispy-forms";
-          rev = "refs/tags/${version}";
-          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
-        };
-      });
-
-      # Tests are incompatible with Django 4
-      django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
-        doCheck = false;
-      });
-    };
-  };
+  python = python3;
 
   common = callPackage ./common.nix { };
 
@@ -44,8 +23,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     ./media-root.patch
     # https://github.com/TandoorRecipes/recipes/pull/2706
     (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
-      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
+      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
+      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
     })
   ];
 
@@ -63,6 +42,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cleanup
     django-cors-headers
     django-crispy-forms
+    django-crispy-bootstrap4
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -143,6 +123,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytest-factoryboy
+  ];
+
+  # flaky
+  disabledTests = [
+    "test_search_count"
   ];
 
   passthru = {

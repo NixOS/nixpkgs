@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
     platforms = platforms.unix;
+    mainProgram = "repo";
   };
 }

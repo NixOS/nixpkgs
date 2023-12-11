@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "htmllaundry";
   version = "2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -25,7 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N5L6k2oVXfnER7JRoX0JtzgEhb/vFMexu7hUKQhmcoE=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "uuu_\([0-9.]+\)" ];
+  };
 
   nativeBuildInputs = [
     cmake

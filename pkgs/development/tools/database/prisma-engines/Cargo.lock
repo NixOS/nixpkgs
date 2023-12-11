@@ -321,11 +321,12 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "enumflags2",
- "indoc",
+ "indoc 2.0.3",
  "insta",
  "query-engine-metrics",
  "query-engine-tests",
  "query-tests-setup",
+ "regex",
  "reqwest",
  "serde_json",
  "tokio",
@@ -433,7 +434,7 @@ dependencies = [
  "connection-string",
  "either",
  "enumflags2",
- "indoc",
+ "indoc 2.0.3",
  "lsp-types",
  "once_cell",
  "psl-core",
@@ -673,6 +674,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "console_error_panic_hook"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a06aeb73f470f66dcdbf7223caeebb85984942f22f1adb2a088cf9668146bbbc"
+dependencies = [
+ "cfg-if",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -860,29 +871,26 @@ dependencies = [
 [[package]]
 name = "cuid"
 version = "1.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51294db11d38eb763c92936c5c88425d0090e27dce21dd15748134af9e53e739"
+source = "git+https://github.com/prisma/cuid-rust?branch=wasm32-support#81309f9a11f70d178bb545971d51ceb7da692c52"
 dependencies = [
  "base36",
  "cuid-util",
  "cuid2",
- "hostname",
  "num",
  "once_cell",
  "rand 0.8.5",
+ "sha3",
 ]
 
 [[package]]
 name = "cuid-util"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ea2bfe0336ff1b7ca74819b2df8dfae9afea358aff6b1688baa5c181d8c3713"
+source = "git+https://github.com/prisma/cuid-rust?branch=wasm32-support#81309f9a11f70d178bb545971d51ceb7da692c52"
 
 [[package]]
 name = "cuid2"
 version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "47d99cacd52fd67db7490ad051c8c1973fb75520174d69aabbae08c534c9d0e8"
+source = "git+https://github.com/prisma/cuid-rust?branch=wasm32-support#81309f9a11f70d178bb545971d51ceb7da692c52"
 dependencies = [
  "cuid-util",
  "num",
@@ -892,12 +900,36 @@ dependencies = [
 
 [[package]]
 name = "darling"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d706e75d87e35569db781a9b5e2416cff1236a47ed380831f959382ccd5f858"
+dependencies = [
+ "darling_core 0.10.2",
+ "darling_macro 0.10.2",
+]
+
+[[package]]
+name = "darling"
 version = "0.13.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a01d95850c592940db9b8194bc39f4bc0e89dee5c4265e4b1807c34a9aba453c"
 dependencies = [
- "darling_core",
- "darling_macro",
+ "darling_core 0.13.4",
+ "darling_macro 0.13.4",
+]
+
+[[package]]
+name = "darling_core"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0c960ae2da4de88a91b2d920c2a7233b400bc33cb28453a2987822d8392519b"
+dependencies = [
+ "fnv",
+ "ident_case",
+ "proc-macro2",
+ "quote",
+ "strsim 0.9.3",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -916,11 +948,22 @@ dependencies = [
 
 [[package]]
 name = "darling_macro"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9b5a2f4ac4969822c62224815d069952656cadc7084fdca9751e6d959189b72"
+dependencies = [
+ "darling_core 0.10.2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "darling_macro"
 version = "0.13.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c972679f83bdf9c42bd905396b6c3588a843a17f0f16dfcfa3e2c5d57441835"
 dependencies = [
- "darling_core",
+ "darling_core 0.13.4",
  "quote",
  "syn 1.0.109",
 ]
@@ -950,7 +993,7 @@ version = "0.1.0"
 dependencies = [
  "base64 0.13.1",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "once_cell",
  "psl",
  "regex",
@@ -991,7 +1034,7 @@ name = "diagnostics"
 version = "0.1.0"
 dependencies = [
  "colored",
- "indoc",
+ "indoc 2.0.3",
  "pest",
 ]
 
@@ -1036,7 +1079,7 @@ dependencies = [
  "expect-test",
  "flate2",
  "indexmap 1.9.3",
- "indoc",
+ "indoc 2.0.3",
  "itertools",
  "pretty_assertions",
  "prisma-models",
@@ -1378,6 +1421,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuchsia-cprng"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a06f77d526c1a601b7c4cdd98f54b5eaabffc14d5f2f0296febdc7f357c6d3ba"
+
+[[package]]
 name = "funty"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1506,8 +1555,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be4136b2a15dd319360be1c07d9933517ccf0be8f16bf62a3bee4f0d618df427"
 dependencies = [
  "cfg-if",
+ "js-sys",
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -1521,6 +1572,19 @@ name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
+
+[[package]]
+name = "gloo-utils"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "037fcb07216cb3a30f7292bd0176b050b7b9a052ba830ef7d5d65f6dc64ba58e"
+dependencies = [
+ "js-sys",
+ "serde",
+ "serde_json",
+ "wasm-bindgen",
+ "web-sys",
+]
 
 [[package]]
 name = "graphql-parser"
@@ -1824,9 +1888,32 @@ dependencies = [
 
 [[package]]
 name = "indoc"
+version = "0.3.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "47741a8bc60fb26eb8d6e0238bbb26d8575ff623fdc97b1a2c00c050b9684ed8"
+dependencies = [
+ "indoc-impl",
+ "proc-macro-hack",
+]
+
+[[package]]
+name = "indoc"
 version = "2.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c785eefb63ebd0e33416dfcb8d6da0bf27ce752843a45632a67bf10d4d4b5c4"
+
+[[package]]
+name = "indoc-impl"
+version = "0.3.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ce046d161f000fffde5f432a0d034d0341dc152643b2598ed5bfce44c4f3a8f0"
+dependencies = [
+ "proc-macro-hack",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+ "unindent",
+]
 
 [[package]]
 name = "insta"
@@ -2310,9 +2397,9 @@ dependencies = [
 
 [[package]]
 name = "mobc"
-version = "0.8.2"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bdeff49b387edef305eccfe166af3e1483bb57902dbf369dddc42dc824df23b"
+checksum = "90eb49dc5d193287ff80e72a86f34cfb27aae562299d22fea215e06ea1059dd3"
 dependencies = [
  "async-trait",
  "futures-channel",
@@ -2426,11 +2513,11 @@ dependencies = [
  "enumflags2",
  "expect-test",
  "futures",
- "indoc",
+ "indoc 2.0.3",
  "mongodb",
  "mongodb-client",
  "mongodb-schema-describer",
- "names",
+ "names 0.12.0",
  "once_cell",
  "psl",
  "regex",
@@ -2525,6 +2612,15 @@ dependencies = [
  "thiserror",
  "time 0.3.25",
  "uuid",
+]
+
+[[package]]
+name = "names"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ef320dab323286b50fb5cdda23f61c796a72a89998ab565ca32525c5c556f2da"
+dependencies = [
+ "rand 0.3.23",
 ]
 
 [[package]]
@@ -2973,6 +3069,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "paste"
+version = "1.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
+
+[[package]]
 name = "pbkdf2"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3234,7 +3336,7 @@ dependencies = [
  "dmmf",
  "enumflags2",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "log",
  "lsp-types",
  "once_cell",
@@ -3251,6 +3353,7 @@ dependencies = [
  "bigdecimal",
  "chrono",
  "cuid",
+ "getrandom 0.2.10",
  "itertools",
  "nanoid",
  "prisma-value",
@@ -3314,6 +3417,12 @@ dependencies = [
  "quote",
  "version_check",
 ]
+
+[[package]]
+name = "proc-macro-hack"
+version = "0.5.20+deprecated"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc375e1527247fe1a97d8b7156678dfe7c1af2fc075c9a4db3690ecd2a148068"
 
 [[package]]
 name = "proc-macro2"
@@ -3386,7 +3495,7 @@ dependencies = [
  "dissimilar",
  "either",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "psl-core",
 ]
 
@@ -3398,7 +3507,7 @@ dependencies = [
  "chrono",
  "diagnostics",
  "enumflags2",
- "indoc",
+ "indoc 2.0.3",
  "itertools",
  "lsp-types",
  "once_cell",
@@ -3463,16 +3572,23 @@ dependencies = [
  "either",
  "futures",
  "hex",
+ "indoc 0.3.6",
  "lru-cache",
  "metrics 0.18.1",
  "mobc",
  "mysql_async",
+ "names 0.11.0",
  "native-tls",
  "num_cpus",
+ "once_cell",
+ "paste",
  "percent-encoding",
  "postgres-native-tls",
  "postgres-types",
+ "quaint-test-macros",
+ "quaint-test-setup",
  "rusqlite",
+ "serde",
  "serde_json",
  "sqlformat",
  "thiserror",
@@ -3484,6 +3600,30 @@ dependencies = [
  "tracing-core",
  "url",
  "uuid",
+]
+
+[[package]]
+name = "quaint-test-macros"
+version = "0.1.0"
+dependencies = [
+ "darling 0.10.2",
+ "once_cell",
+ "proc-macro2",
+ "quaint-test-setup",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "quaint-test-setup"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bitflags 1.3.2",
+ "names 0.11.0",
+ "once_cell",
+ "quaint",
+ "tokio",
 ]
 
 [[package]]
@@ -3567,7 +3707,7 @@ dependencies = [
  "enumflags2",
  "graphql-parser",
  "hyper",
- "indoc",
+ "indoc 2.0.3",
  "mongodb-query-connector",
  "opentelemetry",
  "opentelemetry-otlp",
@@ -3652,7 +3792,7 @@ dependencies = [
  "colored",
  "enumflags2",
  "futures",
- "indoc",
+ "indoc 2.0.3",
  "insta",
  "once_cell",
  "prisma-value",
@@ -3669,10 +3809,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "query-engine-wasm"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "connection-string",
+ "console_error_panic_hook",
+ "futures",
+ "js-sys",
+ "log",
+ "prisma-models",
+ "psl",
+ "serde",
+ "serde-wasm-bindgen",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-futures",
+ "tracing-subscriber",
+ "tsify",
+ "url",
+ "user-facing-errors",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "wasm-logger",
+]
+
+[[package]]
 name = "query-test-macros"
 version = "0.1.0"
 dependencies = [
- "darling",
+ "darling 0.13.4",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -3687,7 +3856,7 @@ dependencies = [
  "enumflags2",
  "hyper",
  "indexmap 1.9.3",
- "indoc",
+ "indoc 2.0.3",
  "itertools",
  "jsonrpc-core",
  "nom",
@@ -3748,6 +3917,29 @@ dependencies = [
 
 [[package]]
 name = "rand"
+version = "0.3.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "64ac302d8f83c0c1974bf758f6b041c6c8ada916fbb44a609158ca8b064cc76c"
+dependencies = [
+ "libc",
+ "rand 0.4.6",
+]
+
+[[package]]
+name = "rand"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "552840b97013b1a26992c11eac34bdd778e464601a4c2054b5f0bff7c6761293"
+dependencies = [
+ "fuchsia-cprng",
+ "libc",
+ "rand_core 0.3.1",
+ "rdrand",
+ "winapi",
+]
+
+[[package]]
+name = "rand"
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a6b1679d49b24bbfe0c803429aa1874472f50d9b363131f0e89fc356b544d03"
@@ -3789,6 +3981,21 @@ dependencies = [
  "ppv-lite86",
  "rand_core 0.6.4",
 ]
+
+[[package]]
+name = "rand_core"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7a6fdeb83b075e8266dcc8762c22776f6877a63111121f5f8c7411e5be7eed4b"
+dependencies = [
+ "rand_core 0.4.2",
+]
+
+[[package]]
+name = "rand_core"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9c33a3c44ca05fa6f1807d8e6743f3824e8509beca625669633be0acbdf509dc"
 
 [[package]]
 name = "rand_core"
@@ -3846,6 +4053,15 @@ dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
  "num_cpus",
+]
+
+[[package]]
+name = "rdrand"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "678054eb77286b51581ba43620cc911abf02758c91f93f479767aed0f90458b2"
+dependencies = [
+ "rand_core 0.3.1",
 ]
 
 [[package]]
@@ -4266,7 +4482,7 @@ dependencies = [
  "base64 0.13.1",
  "connection-string",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "jsonrpc-core",
  "quaint",
  "schema-connector",
@@ -4371,6 +4587,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde-wasm-bindgen"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f3b143e2833c57ab9ad3ea280d21fd34e285a42837aeb0ee301f4f41890fa00e"
+dependencies = [
+ "js-sys",
+ "serde",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "serde_bytes"
 version = "0.11.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4384,6 +4611,17 @@ name = "serde_derive"
 version = "1.0.183"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aafe972d60b0b9bee71a91b92fee2d4fb3c9d7e8f6b179aa99f27203d99a4816"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.28",
+]
+
+[[package]]
+name = "serde_derive_internals"
+version = "0.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e578a843d40b4189a4d66bba51d7684f57da5bd7c304c64e14bd63efbef49509"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4441,7 +4679,7 @@ version = "1.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e182d6ec6f05393cc0e5ed1bf81ad6db3a8feedf8ee515ecdd369809bcce8082"
 dependencies = [
- "darling",
+ "darling 0.13.4",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -4624,7 +4862,7 @@ checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 name = "sql-ddl"
 version = "0.1.0"
 dependencies = [
- "indoc",
+ "indoc 2.0.3",
 ]
 
 [[package]]
@@ -4635,7 +4873,7 @@ dependencies = [
  "connection-string",
  "enumflags2",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "pretty_assertions",
  "psl",
  "quaint",
@@ -4661,7 +4899,7 @@ dependencies = [
  "connection-string",
  "enumflags2",
  "expect-test",
- "indoc",
+ "indoc 2.0.3",
  "jsonrpc-core",
  "once_cell",
  "pretty_assertions",
@@ -4722,7 +4960,7 @@ dependencies = [
  "datamodel-renderer",
  "either",
  "enumflags2",
- "indoc",
+ "indoc 2.0.3",
  "once_cell",
  "prisma-value",
  "psl",
@@ -4753,7 +4991,7 @@ dependencies = [
  "enumflags2",
  "expect-test",
  "indexmap 1.9.3",
- "indoc",
+ "indoc 2.0.3",
  "once_cell",
  "pretty_assertions",
  "prisma-value",
@@ -4819,6 +5057,12 @@ name = "strsim"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
+
+[[package]]
+name = "strsim"
+version = "0.9.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6446ced80d6c486436db5c078dde11a9f73d42b57fb273121e160b84f63d894c"
 
 [[package]]
 name = "strsim"
@@ -5495,13 +5739,38 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3528ecfd12c466c6f163363caf2d02a71161dd5e1cc6ae7b34207ea2d42d81ed"
 
 [[package]]
+name = "tsify"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6b26cf145f2f3b9ff84e182c448eaf05468e247f148cf3d2a7d67d78ff023a0"
+dependencies = [
+ "gloo-utils",
+ "serde",
+ "serde_json",
+ "tsify-macros",
+ "wasm-bindgen",
+]
+
+[[package]]
+name = "tsify-macros"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7a94b0f0954b3e59bfc2c246b4c8574390d94a4ad4ad246aaf2fb07d7dfd3b47"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "serde_derive_internals",
+ "syn 2.0.28",
+]
+
+[[package]]
 name = "twox-hash"
 version = "1.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fee6b57c6a41524a810daee9286c02d7752c4253064d0b05472833a438f675"
 dependencies = [
  "cfg-if",
- "rand 0.7.3",
+ "rand 0.8.5",
  "static_assertions",
 ]
 
@@ -5574,6 +5843,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39ec24b3121d976906ece63c9daad25b85969647682eee313cb5779fdd69e14e"
 
 [[package]]
+name = "unindent"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1766d682d402817b5ac4490b3c3002d91dfa0d22812f341609f97b08757359c"
+
+[[package]]
 name = "unreachable"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5614,7 +5889,7 @@ name = "user-facing-errors"
 version = "0.1.0"
 dependencies = [
  "backtrace",
- "indoc",
+ "indoc 2.0.3",
  "itertools",
  "quaint",
  "serde",

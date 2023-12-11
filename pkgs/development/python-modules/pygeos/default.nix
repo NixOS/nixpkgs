@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pygeos";
   version = "0.14";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygeos/pygeos";
     changelog = "https://github.com/pygeos/pygeos/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nialov ];
+    maintainers = teams.geospatial.members;
   };
 }

@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "static-web-server";
   };
 }

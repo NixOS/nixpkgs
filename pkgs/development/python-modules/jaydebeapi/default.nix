@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "jaydebeapi";
   version = "1.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "JayDeBeApi";

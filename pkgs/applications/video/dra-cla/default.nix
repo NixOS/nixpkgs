@@ -41,5 +41,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ idlip ];
     platforms = platforms.unix;
+    mainProgram = "dra-cla";
   };
 }

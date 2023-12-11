@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Gobidev/pfetch-rs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gobidev ];
+    mainProgram = "pfetch";
   };
 }

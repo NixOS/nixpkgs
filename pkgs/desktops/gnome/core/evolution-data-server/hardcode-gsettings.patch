@@ -128,10 +128,10 @@ index e85a56b..59d3fe2 100644
  	g_object_unref (settings);
  
 diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
-index 4aaabee..dd6ce6d 100644
+index 63e1016..0492756 100644
 --- a/src/addressbook/libedata-book/e-book-meta-backend.c
 +++ b/src/addressbook/libedata-book/e-book-meta-backend.c
-@@ -143,7 +143,18 @@ ebmb_is_power_saver_enabled (void)
+@@ -144,7 +144,18 @@ ebmb_is_power_saver_enabled (void)
  	GSettings *settings;
  	gboolean enabled = FALSE;
  
@@ -175,15 +175,42 @@ index 42f3457..b4926af 100644
  	cbc->priv->notifyid = 0;
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
+diff --git a/src/calendar/backends/file/e-cal-backend-file.c b/src/calendar/backends/file/e-cal-backend-file.c
+index 2525856..7ecc1a8 100644
+--- a/src/calendar/backends/file/e-cal-backend-file.c
++++ b/src/calendar/backends/file/e-cal-backend-file.c
+@@ -3682,7 +3682,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
+ 			if (is_declined) {
+ 				GSettings *settings;
+ 
+-				settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
++				{
++					g_autoptr(GSettingsSchemaSource) schema_source;
++					g_autoptr(GSettingsSchema) schema;
++					schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++												    g_settings_schema_source_get_default(),
++												    TRUE,
++												    NULL);
++					schema = g_settings_schema_source_lookup(schema_source,
++										 "org.gnome.evolution-data-server.calendar",
++										 FALSE);
++					settings = g_settings_new_full(schema,
++								       NULL,
++								       NULL);
++				}
+ 				can_delete = g_settings_get_boolean (settings, "delete-meeting-on-decline");
+ 				g_clear_object (&settings);
+ 			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 5087de1..5c24b87 100644
+index ade0a73..d7c3e73 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2578,7 +2578,19 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2626,8 +2626,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
 -	watcher->priv->settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
+-	watcher->priv->desktop_settings = g_settings_new ("org.gnome.desktop.interface");
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
@@ -197,11 +224,25 @@ index 5087de1..5c24b87 100644
 +		watcher->priv->settings = g_settings_new_full(schema, NULL,
 +							      NULL);
 +	}
- 	watcher->priv->scheduled = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, e_reminder_watcher_free_rd_slist);
- 	watcher->priv->default_zone = e_cal_util_copy_timezone (zone);
- 	watcher->priv->timers_enabled = TRUE;
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@GDS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.desktop.interface",
++							 FALSE);
++		watcher->priv->desktop_settings = g_settings_new_full(schema,
++								      NULL,
++								      NULL);
++	}
+ 	if (watcher->priv->desktop_settings) {
+ 		g_signal_connect_object (
+ 			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index cd91f07..79ede04 100644
+index 27fa153..3679d72 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
 @@ -156,7 +156,18 @@ ecmb_is_power_saver_enabled (void)
@@ -224,11 +265,33 @@ index cd91f07..79ede04 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
+@@ -2633,7 +2644,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+ 			if (is_declined) {
+ 				GSettings *settings;
+ 
+-				settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
++				{
++					g_autoptr(GSettingsSchemaSource) schema_source;
++					g_autoptr(GSettingsSchema) schema;
++					schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++												    g_settings_schema_source_get_default(),
++												    TRUE,
++												    NULL);
++					schema = g_settings_schema_source_lookup(schema_source,
++										 "org.gnome.evolution-data-server.calendar",
++										 FALSE);
++					settings = g_settings_new_full(schema,
++								       NULL,
++								       NULL);
++				}
+ 				is_declined = g_settings_get_boolean (settings, "delete-meeting-on-decline");
+ 				g_clear_object (&settings);
+ 			}
 diff --git a/src/camel/camel-cipher-context.c b/src/camel/camel-cipher-context.c
-index 8013ba7..1bba6d1 100644
+index bef9188..ce92f6c 100644
 --- a/src/camel/camel-cipher-context.c
 +++ b/src/camel/camel-cipher-context.c
-@@ -1625,7 +1625,18 @@ camel_cipher_can_load_photos (void)
+@@ -1631,7 +1631,18 @@ camel_cipher_can_load_photos (void)
  	GSettings *settings;
  	gboolean load_photos;
  
@@ -249,10 +312,10 @@ index 8013ba7..1bba6d1 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index 205372e..f75a88e 100644
+index 4deae76..ebe0a1b 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
-@@ -582,7 +582,18 @@ gpg_ctx_get_executable_name (void)
+@@ -747,7 +747,18 @@ gpg_ctx_get_executable_name (void)
  		GSettings *settings;
  		gchar *path;
  
@@ -298,11 +361,11 @@ index e61160c..b6553a4 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 78abb89..9f2a891 100644
+index ef34665..59f294b 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5591,7 +5591,18 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)
- 	if (!skip_old_flags_update) {
+@@ -5627,7 +5627,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+ 	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
 -		eds_settings = g_settings_new ("org.gnome.evolution-data-server");
@@ -322,10 +385,10 @@ index 78abb89..9f2a891 100644
  		if (g_settings_get_boolean (eds_settings, "limit-operations-in-power-saver-mode")) {
  			GPowerProfileMonitor *power_monitor;
 diff --git a/src/camel/providers/smtp/camel-smtp-transport.c b/src/camel/providers/smtp/camel-smtp-transport.c
-index effaf06..1b2a003 100644
+index 6556f1e..90f0a5e 100644
 --- a/src/camel/providers/smtp/camel-smtp-transport.c
 +++ b/src/camel/providers/smtp/camel-smtp-transport.c
-@@ -1462,7 +1462,18 @@ smtp_helo (CamelSmtpTransport *transport,
+@@ -1471,7 +1471,18 @@ smtp_helo (CamelSmtpTransport *transport,
  		transport->authtypes = NULL;
  	}
  
@@ -442,7 +505,7 @@ index 3bb1071..199e822 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 7eca355..795d822 100644
+index af59b0b..0c7e75e 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,

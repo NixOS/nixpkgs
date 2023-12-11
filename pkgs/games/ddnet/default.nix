@@ -30,6 +30,7 @@
 , Cocoa
 , OpenGL
 , Security
+, buildClient ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -64,16 +65,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    freetype
-    libGLU
     libnotify
-    libogg
-    libX11
-    opusfile
     pcre
     python3
-    SDL2
     sqlite
+  ] ++ lib.optionals buildClient ([
+    freetype
+    libGLU
+    libogg
+    opusfile
+    SDL2
     wavpack
     ffmpeg
     x264
@@ -81,7 +82,14 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    Cocoa
+    OpenGL
+    Security
+  ]);
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -90,10 +98,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DAUTOUPDATE=OFF"
+    "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
   doCheck = true;
   checkTarget = "run_tests";
+
+  postInstall = lib.optionalString (!buildClient) ''
+    # DDNet's CMakeLists.txt automatically installs .desktop
+    # shortcuts and icons for the client, even if the client
+    # is not supposed to be built
+    rm -rf $out/share/applications
+    rm -rf $out/share/icons
+    rm -rf $out/share/metainfo
+  '';
 
   meta = with lib; {
     description = "A Teeworlds modification with a unique cooperative gameplay.";

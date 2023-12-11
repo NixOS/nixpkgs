@@ -25,5 +25,6 @@ buildGoModule rec {
     description = "The lightweight swiss army knife for websockets";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ montag451 ];
+    mainProgram = "webcat";
   };
 }

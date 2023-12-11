@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/gopherdata/gophernotes";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    mainProgram = "gophernotes";
   };
 }

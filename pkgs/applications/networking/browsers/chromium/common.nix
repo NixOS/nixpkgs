@@ -246,12 +246,30 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+    ] ++ lib.optionals (!chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M114+ with LLVM 16:
       (githubPatch {
         # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
         commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
         hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
+      })
+    ] ++ lib.optionals (chromiumVersionAtLeast "120") [
+      # We need to revert this patch to build M120+ with LLVM 16:
+      ./chromium-120-llvm-16.patch
+    ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # This version is still needed for electron.
+      (githubPatch {
+        commit = "fc09363b2278893790d131c72a4ed96ec9837624";
+        hash = "sha256-l60Npgs/+0ozzuKWjwiHUUV6z59ObUjAPTfXN7eXpzw=";
+      })
+    ] ++ lib.optionals (!chromiumVersionAtLeast "121.0.6104.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5001687
+      (githubPatch {
+        commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
+        hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
     ];
 
@@ -475,11 +493,11 @@ let
     '';
 
     postFixup = ''
-      # Make sure that libGLESv2 and libvulkan are found by dlopen.
+      # Make sure that libGLESv2 and libvulkan are found by dlopen in both chromium binary and ANGLE libGLESv2.so.
       # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
-      chromiumBinary="$libExecPath/$packageName"
-      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
+      for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do
+        patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$(patchelf --print-rpath "$chromiumBinary")" "$chromiumBinary"
+      done
     '';
 
     passthru = {

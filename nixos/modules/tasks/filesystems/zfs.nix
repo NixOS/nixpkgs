@@ -16,6 +16,10 @@ let
   cfgTrim = config.services.zfs.trim;
   cfgZED = config.services.zfs.zed;
 
+  selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
+  clevisDatasets = map (e: e.device) (filter (e: e.device != null && (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
+
+
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
@@ -119,12 +123,12 @@ let
       # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      wants = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
-      ];
+      ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       unitConfig = {
@@ -153,6 +157,9 @@ let
           poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         fi
         if poolImported "${pool}"; then
+        ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true ") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
+
+
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
               {
@@ -210,11 +217,17 @@ in
   options = {
     boot.zfs = {
       package = mkOption {
-        readOnly = true;
         type = types.package;
-        default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
-        description = lib.mdDoc "Configured ZFS userland tools package.";
+        default = if cfgZfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+        defaultText = literalExpression "if zfsUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
+        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfsUnstable` if you want to track the latest staging ZFS branch.";
+      };
+
+      modulePackage = mkOption {
+        internal = true; # It is supposed to be selected automatically, but can be overridden by expert users.
+        default = selectModulePackage cfgZfs.package;
+        type = types.package;
+        description = lib.mdDoc "Configured ZFS kernel module package.";
       };
 
       enabled = mkOption {
@@ -534,6 +547,10 @@ in
     (mkIf cfgZfs.enabled {
       assertions = [
         {
+          assertion = cfgZfs.modulePackage.version == cfgZfs.package.version;
+          message = "The kernel module and the userspace tooling versions are not matching, this is an unsupported usecase.";
+        }
+        {
           assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
           message = ''
             To allow ZED to send emails, ZFS needs to be configured to enable
@@ -571,18 +588,14 @@ in
         # https://github.com/NixOS/nixpkgs/issues/106093
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
-        extraModulePackages = let
-          kernelPkg = if config.boot.zfs.enableUnstable then
-            config.boot.kernelPackages.zfsUnstable
-           else
-            config.boot.kernelPackages.zfs;
-        in [
-          (kernelPkg.override { inherit (cfgZfs) removeLinuxDRM; })
+        extraModulePackages = [
+          (cfgZfs.modulePackage.override { inherit (cfgZfs) removeLinuxDRM; })
         ];
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
+        # spl has been removed in ≥ 2.2.0.
+        kernelModules = [ "zfs" ] ++ lib.optional (lib.versionOlder "2.2.0" version) "spl";
         extraUtilsCommands =
           mkIf (!config.boot.initrd.systemd.enable) ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
@@ -616,6 +629,9 @@ in
               fi
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
+
+            ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
+
             ${if isBool cfgZfs.requestEncryptionCredentials
               then optionalString cfgZfs.requestEncryptionCredentials ''
                 zfs load-key -a

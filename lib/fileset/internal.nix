@@ -52,6 +52,7 @@ let
     concatStringsSep
     substring
     stringLength
+    hasSuffix
     ;
 
 in
@@ -181,7 +182,8 @@ rec {
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} (${toString value}) is a path that does not exist.''
+        ${context} (${toString value}) is a path that does not exist.
+            To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.''
     else
       _singleton value;
 
@@ -381,7 +383,7 @@ rec {
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
-  # Type: Path -> fileset -> (String -> String -> Bool)
+  # Type: fileset -> (String -> String -> Bool)
   _toSourceFilter = fileset:
     let
       # Simplify the tree, necessary to make sure all empty directories are null
@@ -753,9 +755,9 @@ rec {
 
       resultingTree =
         _differenceTree
-        positive._internalBase
-        positive._internalTree
-        negativeTreeWithPositiveBase;
+          positive._internalBase
+          positive._internalTree
+          negativeTreeWithPositiveBase;
     in
     # If the first file set is empty, we can never have any files in the result
     if positive._internalIsEmptyWithoutBase then
@@ -796,9 +798,11 @@ rec {
         if
           predicate {
             inherit name type;
+            hasExt = ext: hasSuffix ".${ext}" name;
+
             # To ensure forwards compatibility with more arguments being added in the future,
             # adding an attribute which can't be deconstructed :)
-            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file, hasExt }:`, use `{ name, file, hasExt, ... }:` instead." = null;
           }
         then
           type

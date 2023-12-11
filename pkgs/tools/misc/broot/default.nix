@@ -12,20 +12,21 @@
 , xorg
 , zlib
 , buildPackages
+, withClipboard ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.27.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yZsb/G+8XoJS4Fg6WFuEk1v3Ht5i3G3p+sKi+Z3jeGU=";
+    hash = "sha256-Wx+hUm0y7w0+IYtaRE5X/5Ra37mMEMEliYFbl7c03Ww=";
   };
 
-  cargoHash = "sha256-xHmrFIXXkuhYGApgNoJxcL1Kpf8ellwQgiH8AEZvDRU=";
+  cargoHash = "sha256-7B5Uxr1SsAx+mRpvQPSW7pemxp11WngEIK6vF2cbzh4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     Security
     zlib
   ];
+
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -88,5 +91,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
+    mainProgram = "broot";
   };
 }

@@ -77,7 +77,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs "photoprism" { };
+    package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;

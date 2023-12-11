@@ -54,12 +54,7 @@ in
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
 
-      package = mkOption {
-        default = pkgs.nitter;
-        type = types.package;
-        defaultText = literalExpression "pkgs.nitter";
-        description = lib.mdDoc "The nitter derivation to use.";
-      };
+      package = mkPackageOption pkgs "nitter" { };
 
       server = {
         address = mkOption {

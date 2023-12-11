@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Richard-W/uefi-run";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "uefi-run";
   };
 }

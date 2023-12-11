@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/railwayapp/nixpacks";
     license = licenses.mit;
     maintainers = [ maintainers.zoedsoupe ];
+    mainProgram = "nixpacks";
   };
 }

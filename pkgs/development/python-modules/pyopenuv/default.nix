@@ -4,7 +4,6 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -14,31 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2023.08.0";
-  format = "pyproject";
+  version = "2023.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyopenuv";
     rev = "refs/tags/${version}";
-    hash = "sha256-6JYYkEH873beEQf2agAF85YLSb7+n0UVzIuRz3amXpU=";
+    hash = "sha256-qlyKLovM0h3iWvhGecaFPswnchZXPNkr0PbSqK2UW0c=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/pyopenuv/pull/244
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/pyopenuv/commit/1663f697dd5528fb03af1400e5ffd3fba076c64c.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

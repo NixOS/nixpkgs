@@ -38,6 +38,13 @@ in mkLicense lset) ({
     redistributable = false;
   };
 
+  activision = {
+    # https://doomwiki.org/wiki/Raven_source_code_licensing
+    fullName = "Activision EULA";
+    url = "https://www.doomworld.com/eternity/activision_eula.txt";
+    free = false;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -1059,6 +1066,12 @@ in mkLicense lset) ({
     shortName = "stk";
     fullName = "Synthesis Tool Kit 4.3";
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
+  };
+
+  sudo = {
+    shortName = "sudo";
+    fullName = "Sudo License (ISC-style)";
+    url = "https://www.sudo.ws/about/license/";
   };
 
   sustainableUse = {

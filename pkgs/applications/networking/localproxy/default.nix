@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ spalf ];
     platforms = platforms.unix;
+    mainProgram = "localproxy";
   };
 })

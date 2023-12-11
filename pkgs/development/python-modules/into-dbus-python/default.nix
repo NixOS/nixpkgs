@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "into-dbus-python";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";

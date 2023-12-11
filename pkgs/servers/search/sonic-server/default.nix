@@ -1,7 +1,10 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
+, nixosTests
 , testers
 , sonic-server
 }:
@@ -17,7 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-V97K4KS46DXje4qKA11O9NEm0s13aTUnM+XW8lGc6fo=";
   };
 
-  cargoHash = "sha256-vWAFWoscV0swwrBQoa3glKXMRgdGYa+QrPprlVCP1QM=";
+  cargoPatches = [
+    # Update rocksdb to 0.21 to fix compilation issues against clang 16, see:
+    # https://github.com/valeriansaliou/sonic/issues/315
+    # https://github.com/valeriansaliou/sonic/pull/316
+    (fetchpatch {
+      url = "https://github.com/valeriansaliou/sonic/commit/81d5f1efec21ef8b911ed3303fcbe9ca6335f562.patch";
+      hash = "sha256-nOvHThTc2L3UQRVusUsD/OzbSkhSleZc6n0WyZducHM=";
+    })
+  ];
+
+  cargoHash = "sha256-k+gPCkf8DCnuv/aLXcQwjmsDUu/eqSEqKXlUyj8bRq8=";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
@@ -42,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
+      inherit (nixosTests) sonic-server;
       version = testers.testVersion {
         command = "sonic --version";
         package = sonic-server;

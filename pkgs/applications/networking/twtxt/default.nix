@@ -33,5 +33,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/buckket/twtxt";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "twtxt";
   };
 }

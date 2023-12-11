@@ -144,6 +144,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
+, withLogTrace ? false
 }:
 
 assert withImportd -> withCompression;
@@ -571,6 +572,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withKmod [
     "-Dkmod=true"
     "-Dkmod-path=${kmod}/bin/kmod"
+  ] ++ lib.optionals withLogTrace [
+    "-Dlog-trace=true"
   ];
   preConfigure =
     let

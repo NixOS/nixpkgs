@@ -48,16 +48,16 @@
 , serviceSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "monado";
-  version = "unstable-2023-08-22";
+  version = "unstable-2023-11-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "4cc68f07c0f3c2fee57b01dde28a02e314d3bee6";
-    sha256 = "sha256-VibdOSA/b4RmwwwXrwhivuiukNK10YazYF/p+YnqRZ8=";
+    rev = "e983eecd73b1b91d2dfb356e1bc054e9202b2a7f";
+    hash = "sha256-a4ukfmJbDkhr7P3NMTfbuhXjyOta3WCc5gswX7KUAw0=";
   };
 
   nativeBuildInputs = [
@@ -135,16 +135,13 @@ stdenv.mkDerivation rec {
   patches = [
     # We don't have $HOME/.steam when building
     ./force-enable-steamvr_lh.patch
-
-    # A recent (as of August 2023) SteamVR Beta has upgraded a driver interface which is incompatible with Monado
-    ./steamvr_lh-use-old-interface.patch
   ];
 
   meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ expipiplus1 prusnak ];
+    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak ];
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };

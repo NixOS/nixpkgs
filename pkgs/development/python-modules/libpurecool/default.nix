@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "libpurecool";
   version = "0.6.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

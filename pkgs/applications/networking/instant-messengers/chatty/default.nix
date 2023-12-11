@@ -12,6 +12,7 @@
 , evolution-data-server
 , feedbackd
 , glibmm
+, libsecret
 , gnome-desktop
 , gspell
 , gtk3
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     feedbackd
     glibmm
+    libsecret
     gnome-desktop
     gspell
     gtk3

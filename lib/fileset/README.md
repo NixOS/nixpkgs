@@ -253,7 +253,15 @@ The `fileFilter` function takes a path, and not a file set, as its second argume
       it would change the `subpath`/`components` value depending on which files are included.
 - (+) If necessary, this restriction can be relaxed later, the opposite wouldn't be possible
 
-## To update in the future
+### Strict path existence checking
 
-Here's a list of places in the library that need to be updated in the future:
-- If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function
+Coercing paths that don't exist to file sets always gives an error.
+
+- (-) Sometimes you want to remove a file that may not always exist using `difference ./. ./does-not-exist`,
+  but this does not work because coercion of `./does-not-exist` fails,
+  even though its existence would have no influence on the result.
+  - (+) This is dangerous, because you wouldn't be protected against typos anymore.
+    E.g. when trying to prevent `./secret` from being imported, a typo like `difference ./. ./sercet` would import it regardless.
+  - (+) `difference ./. (maybeMissing ./does-not-exist)` can be used to do this more explicitly.
+  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation"). Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
+    This could be fixed, but would require significant changes to the internal representation that are not worth the effort and the risk of introducing implicit behavior.

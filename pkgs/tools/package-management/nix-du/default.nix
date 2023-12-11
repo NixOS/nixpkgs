@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.symphorien ];
     platforms = platforms.unix;
+    mainProgram = "nix-du";
   };
 }

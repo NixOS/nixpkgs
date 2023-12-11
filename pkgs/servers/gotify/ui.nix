@@ -1,6 +1,6 @@
 { stdenv
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs-slim
 , fetchFromGitHub
 , fetchYarnDeps
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs-slim ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs-slim ];
 
   postPatch = ''
     export HOME=$NIX_BUILD_TOP/fake_home
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
   '';

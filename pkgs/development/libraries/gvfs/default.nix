@@ -46,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.50.6";
+  version = "1.52.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-xPbhH8TqqZM/TbjHo0R14GaM6tK//tloZ9Bhvj053aU=";
+    hash = "sha256-zb1EQPbQh5Km51ISRMFzhuIL1TfTdRFwmfyPto/pF0E=";
   };
 
   patches = [
@@ -61,10 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    patchShebangs test test-driver
+    patchShebangs test
   '';
 
   nativeBuildInputs = [

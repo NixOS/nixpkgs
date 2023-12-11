@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
         mv Archi.app "$out/Applications/"
       '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.tests = { inherit (nixosTests) archi; };
 
   meta = with lib; {
@@ -78,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ earldouglas paumr ];
+    mainProgram = "Archi";
   };
 }

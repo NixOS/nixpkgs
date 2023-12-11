@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.6.4";
+  version = "0.7.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fH290QRhhglkhkMrpwHUkqVuYvZ6w/MDIYo9V0queVY=";
+    hash = "sha256-BHWoyjYYxblw5I3ADqXTUzAdntLU28uk/Qv3Zm0arGo=";
   };
 
   nativeBuildInputs = [

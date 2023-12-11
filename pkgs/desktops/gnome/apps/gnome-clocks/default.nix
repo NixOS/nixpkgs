@@ -13,7 +13,6 @@
 , libxml2
 , gtk4
 , glib
-, gsound
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
 , gnome-desktop
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "44.0";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "F9epc2XLjxoCOh1491AfM1Mhf6dXfXOv59DKHjtPODg=";
+    sha256 = "/I60/ZUw8eZB3ADuIIbufTVKegCwoNFyLjBdXJqrkbU=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +44,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
-    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
-    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
-    gsound
   ];
 
   buildInputs = [
@@ -59,7 +55,6 @@ stdenv.mkDerivation rec {
     geocode-glib_2
     geoclue2
     libgweather
-    gsound
     libadwaita
   ];
 

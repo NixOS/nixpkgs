@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "hiredis";
   version = "1.2.0";
+  nativeBuildInputs = [openssl];
 
   src = fetchFromGitHub {
     owner = "redis";
@@ -12,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   PREFIX = "\${out}";
+  USE_SSL = 1;
 
   meta = with lib; {
     homepage = "https://github.com/redis/hiredis";

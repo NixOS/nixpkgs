@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-httpdomain";
   version = "1.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

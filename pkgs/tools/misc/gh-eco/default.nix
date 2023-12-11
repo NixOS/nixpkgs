@@ -27,6 +27,7 @@ buildGoModule rec {
     description = "gh extension to explore the ecosystem";
     license = licenses.mit;
     maintainers = with maintainers; [ helium ];
+    mainProgram = "gh-eco";
   };
 }
 

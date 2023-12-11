@@ -847,7 +847,7 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neotest = super.neorg.overrideAttrs {
+  neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
 
@@ -1635,6 +1635,10 @@ self: super: {
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [ vimwiki fzf-vim ];
+  };
+
+  wtf-nvim = super.wtf-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim ];
   };
 
   YankRing-vim = super.YankRing-vim.overrideAttrs {

@@ -7,6 +7,7 @@
 , nix-update-script
 
 , autoPatchelfHook
+, cmake
 , ncurses
 , pkg-config
 
@@ -29,7 +30,9 @@
 let
   rlinkLibs = if stdenv.isDarwin then [
     darwin.libobjc
-    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
     fontconfig
@@ -48,20 +51,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.19";
+  version = "0.0.29";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-N7eHIyp2imkMUVwiOCameOROoaDJ7g+zNKdIB2aGZy0=";
+    hash = "sha256-S+mqamTm8GHCyJF/L1V4XnhJDuhwo9n3Zf+UCKXg8p8=";
   };
 
-  cargoHash = "sha256-XD+/DaaJEJ9jHZITTUma/wfsbduPUTc/SralPOx46Yo=";
+  cargoHash = "sha256-aKj3L1s+FgN8T4IrBuTAQyzfKOPgCt2R0C6+YIv56Zw=";
 
   nativeBuildInputs = [
     ncurses
   ] ++ lib.optionals stdenv.isLinux [
+    cmake
     pkg-config
     autoPatchelfHook
   ];
@@ -84,8 +88,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 644 misc/rio.desktop -t $out/share/applications
-    install -D -m 644 rio/src/screen/window/resources/images/logo.png \
-                      $out/share/icons/hicolor/scalable/apps/rio.png
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
@@ -110,7 +114,7 @@ rustPlatform.buildRustPackage rec {
     description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ otavio oluceps ];
+    maintainers = with lib.maintainers; [ tornax otavio oluceps ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
     mainProgram = "rio";

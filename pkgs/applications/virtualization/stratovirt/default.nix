@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mulan-psl2;
     maintainers = with maintainers; [ astro ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "stratovirt";
   };
 }

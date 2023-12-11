@@ -146,16 +146,11 @@ in
 {
   options.services.kanata = {
     enable = mkEnableOption (mdDoc "kanata");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.kanata;
-      defaultText = literalExpression "pkgs.kanata";
-      example = literalExpression "pkgs.kanata-with-cmd";
-      description = mdDoc ''
-        The kanata package to use.
-
+    package = mkPackageOption pkgs "kanata" {
+      example = "kanata-with-cmd";
+      extraDescription = ''
         ::: {.note}
-        If `danger-enable-cmd` is enabled in any of the keyboards, the
+        If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
         `kanata-with-cmd` package should be used.
         :::
       '';

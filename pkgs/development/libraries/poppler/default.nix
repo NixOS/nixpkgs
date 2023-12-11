@@ -102,10 +102,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
     (mkFlag gpgmeSupport "GPGME")
-  ] ++ lib.optionals finalAttrs.doCheck [
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
     "-DTESTDATADIR=${testData}"
   ];
-  disallowedReferences = lib.optional finalAttrs.doCheck testData;
+  disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
 

@@ -11,12 +11,7 @@ in {
 
   options.services.netbird = {
     enable = mkEnableOption (lib.mdDoc "Netbird daemon");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.netbird;
-      defaultText = literalExpression "pkgs.netbird";
-      description = lib.mdDoc "The package to use for netbird";
-    };
+    package = mkPackageOption pkgs "netbird" { };
   };
 
   config = mkIf cfg.enable {

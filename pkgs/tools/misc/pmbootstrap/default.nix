@@ -102,5 +102,6 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "pmbootstrap";
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-DENABLE_LOMIRI_FEATURES=OFF"
     "-DGSETTINGS_LOCALINSTALL=ON"
     "-DGSETTINGS_COMPILE=ON"

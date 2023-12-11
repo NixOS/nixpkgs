@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "rw";
   };
 }

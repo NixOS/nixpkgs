@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;
+    mainProgram = "swayimg";
   };
 }

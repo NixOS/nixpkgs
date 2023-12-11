@@ -39,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ tomsiewert ];
+    mainProgram = "changelogger";
   };
 }

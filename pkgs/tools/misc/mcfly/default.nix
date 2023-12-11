@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = [ maintainers.melkor333 ];
+    mainProgram = "mcfly";
   };
 }

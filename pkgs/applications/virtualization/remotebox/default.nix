@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
       client which is able to manage a VirtualBox server installation.
     '';
     platforms = platforms.all;
+    mainProgram = "remotebox";
   };
 }

@@ -15,6 +15,7 @@
 , pciutils
 , usbutils
 , util-linux
+, nixosTests
 , testers
 , ocsinventory-agent
 , nix-update-script
@@ -75,11 +76,14 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = ocsinventory-agent;
-      command = "ocsinventory-agent --version";
-      # upstream has not updated version in lib/Ocsinventory/Agent/Config.pm
-      version = "2.10.0";
+    tests = {
+      inherit (nixosTests) ocsinventory-agent;
+      version = testers.testVersion {
+        package = ocsinventory-agent;
+        command = "ocsinventory-agent --version";
+        # upstream has not updated version in lib/Ocsinventory/Agent/Config.pm
+        version = "2.10.0";
+      };
     };
     updateScript = nix-update-script { };
   };

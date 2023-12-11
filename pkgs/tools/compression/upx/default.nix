@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "The Ultimate Packer for eXecutables";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "upx";
   };
 }

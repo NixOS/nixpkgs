@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "yahooweather";
   version = "0.10";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -40,5 +40,6 @@ buildGoModule rec {
     changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
     maintainers = with maintainers; [ marsam techknowlogick caarlos0 ];
     license = with licenses; [ mit ];
+    mainProgram = "nfpm";
   };
 }

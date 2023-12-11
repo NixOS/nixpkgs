@@ -25,5 +25,6 @@ buildGoModule rec {
     description = "Age based repository file encryption gitops tool";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse ];
+    mainProgram = "agebox";
   };
 }

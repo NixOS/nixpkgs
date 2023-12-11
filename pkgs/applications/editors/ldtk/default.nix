@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    mainProgram = "ldtk";
   };
 })

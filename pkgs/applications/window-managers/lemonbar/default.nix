@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ meisternu moni ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "lemonbar";
   };
 }

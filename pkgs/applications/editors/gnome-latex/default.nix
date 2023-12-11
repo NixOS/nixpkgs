@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.manveru ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-latex";
   };
 }

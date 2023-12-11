@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests }:
 
 let
-  version = "3.5.9";
+  version = "3.5.10";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    hash = "sha256-Vp8U49fp0FowIuSSvbrMWjAKG2oDO1o0qO4izSnTR3U=";
+    hash = "sha256-X/de8YA55SZ6p8r/pV8CGxfDKN8voJlyA0r4ckan6ZE=";
   };
 
   CGO_ENABLED = 0;
@@ -25,7 +25,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-vu5VKHnDbvxSd8qpIFy0bA88IIXLaQ5S8dVUJEwnKJA=";
+    vendorHash = "sha256-kFR6RvHoNM4SZOgJd7inUuw5GfRLM+3WsKU73We8UzU=";
 
     modRoot = "./server";
 
@@ -45,7 +45,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-i60rKCmbEXkdFOZk2dTbG5EtYKb5eCBSyMcsTtnvATs=";
+    vendorHash = "sha256-oVabZ2JZlLKHFCuAeeWRTrcSCxzz05HlvDu/YSMKuCs=";
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +55,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-awl/4kuOjspMVEwfANWK0oi3RId6ERsFkdluiRaaXlA=";
+    vendorHash = "sha256-0j35caQfLh7kwDKgmTe1novqKfz/3JlQLbUk3+GFPhk=";
 
     modRoot = "./etcdctl";
   };

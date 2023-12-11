@@ -8,10 +8,11 @@
 , curl
 , bash
 , debugInfo ? false
-}:
+} @ inputs:
 
 { baseName ? "elixir"
 , version
+, erlang ? inputs.erlang
 , minimumOTPVersion
 , sha256 ? null
 , rev ? "v${version}"
@@ -20,7 +21,7 @@
 } @ args:
 
 let
-  inherit (lib) getVersion versionAtLeast optional;
+  inherit (lib) getVersion versionAtLeast optional concatStringsSep;
 
 in
 assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -36,7 +37,12 @@ stdenv.mkDerivation ({
   LANG = "C.UTF-8";
   LC_TYPE = "C.UTF-8";
 
-  buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
+  ERLC_OPTS =
+    let
+      erlc_opts = [ "deterministic" ]
+        ++ optional debugInfo "debug_info";
+    in
+    "[${concatStringsSep "," erlc_opts}]";
 
   preBuild = ''
     patchShebangs ${escriptPath} || true

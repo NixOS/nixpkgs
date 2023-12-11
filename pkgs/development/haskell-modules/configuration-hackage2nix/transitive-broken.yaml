@@ -116,16 +116,14 @@ dont-distribute-packages:
  - FiniteCategoriesGraphViz
  - FiniteMap
  - FirstOrderTheory
+ - Flint2-Examples
  - Flippi
  - ForSyDe
  - Forestry
  - FormalGrammars
  - Foster
- - Frames
- - Frames-beam
  - Frames-dsv
  - Frames-map-reduce
- - Frames-streamly
  - Frank
  - GLFW-OGL
  - GLFW-task
@@ -706,6 +704,7 @@ dont-distribute-packages:
  - borel
  - both
  - breakout
+ - brick_2_1_1
  - bricks
  - bricks-internal-test
  - bricks-parsec
@@ -1006,12 +1005,6 @@ dont-distribute-packages:
  - cryptonite-cd
  - crystalfontz
  - csg
- - csound-catalog
- - csound-controllers
- - csound-expression
- - csound-expression-opcodes
- - csound-expression-typed
- - csound-sampler
  - cspmchecker
  - csv-enumerator
  - ctpl
@@ -1019,6 +1012,8 @@ dont-distribute-packages:
  - curryer-rpc
  - cv-combinators
  - cypher
+ - dahdit-network
+ - dahdit-test
  - daino
  - dapi
  - darcs-benchmark
@@ -1309,6 +1304,7 @@ dont-distribute-packages:
  - fast-bech32
  - fastcdc
  - fastirc
+ - fastparser
  - fault-tree
  - fay-base
  - fay-builder
@@ -1726,6 +1722,7 @@ dont-distribute-packages:
  - gogol-youtube-reporting
  - google-drive
  - google-mail-filters
+ - google-maps-geocoding
  - googleplus
  - gore-and-ash-actor
  - gore-and-ash-async
@@ -2031,7 +2028,7 @@ dont-distribute-packages:
  - hesql
  - heterolist
  - hetzner
- - hetzner_0_5_0_0
+ - hetzner_0_6_0_0
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2173,6 +2170,9 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
+ - hsqml-datamodel-vinyl
+ - hsqml-demo-morris
+ - hsqml-morris
  - hsreadability
  - hssqlppp-th
  - hstar
@@ -2678,6 +2678,12 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-types
  - midimory
+ - mig
+ - mig-client
+ - mig-extra
+ - mig-server
+ - mig-swagger-ui
+ - mig-wai
  - mighttpd
  - minecraft-data
  - minesweeper
@@ -2810,6 +2816,7 @@ dont-distribute-packages:
  - named-servant-client
  - named-servant-server
  - nanq
+ - national-australia-bank
  - nats-queue
  - natural-number
  - nemesis-titan
@@ -3446,6 +3453,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
+ - sandwich_0_2_0_0
  - sarsi
  - sasha
  - sasl
@@ -3504,6 +3512,7 @@ dont-distribute-packages:
  - selda-sqlite
  - selenium-server
  - semantic-source
+ - semantic-version
  - semi-iso
  - semialign-extras
  - semiring
@@ -3862,7 +3871,6 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
- - temporal-csound
  - ten-lens
  - ten-unordered-containers
  - tensorflow-opgen
@@ -4103,6 +4111,7 @@ dont-distribute-packages:
  - voicebase
  - vorbiscomment
  - vpq
+ - vty-crossplatform
  - vty-ui-extras
  - waargonaut
  - wahsp

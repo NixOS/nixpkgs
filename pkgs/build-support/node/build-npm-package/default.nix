@@ -21,6 +21,9 @@
   # Whether to force the usage of Git dependencies that have install scripts, but not a lockfile.
   # Use with care.
 , forceGitDeps ? false
+  # Whether to force allow an empty dependency cache.
+  # This can be enabled if there are truly no remote dependencies, but generally an empty cache indicates something is wrong.
+, forceEmptyCache ? false
   # Whether to make the cache writable prior to installing dependencies.
   # Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 , makeCacheWritable ? false
@@ -42,7 +45,7 @@
 , npmWorkspace ? null
 , nodejs ? topLevelArgs.nodejs
 , npmDeps ?  fetchNpmDeps {
-  inherit forceGitDeps src srcs sourceRoot prePatch patches postPatch;
+  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch;
   name = "${name}-npm-deps";
   hash = npmDepsHash;
 }

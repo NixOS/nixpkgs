@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , python3
 , makeWrapper
@@ -17,23 +17,23 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-umPQIxwIahjbO4QbkKEoeSSeYT2UatsTGRPrLgw5KW8=";
+    hash = "sha256-N+9wNlDARE1zdXW/vka6whFNu5CF240zCJ00EDT1cM0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-o5ztk4okH21Op1jqHZfranR12M8B1Y/K95aWb10tf5o=";
+    hash = "sha256-P7Mm9TMNjr2glLQppjJZRMeN9sYKyZWzRaerZIcY3Y8=";
   };
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     python3
     makeWrapper
@@ -45,9 +45,6 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
-    # Fix reg add infinite loop
-    # Submitted upstream: https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3210
-    ./fix-infinite-loop.patch
   ];
 
   postPatch = ''
@@ -62,7 +59,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

@@ -2,12 +2,9 @@
 , fetchurl
 , makeDesktopItem
 , writeText
+, autoPatchelfHook
 , callPackage
 
-# Common run-time dependencies
-, zlib
-
-# libxul run-time dependencies
 , atk
 , cairo
 , dbus
@@ -22,13 +19,32 @@
 , libXext
 , libXrender
 , libXt
+, libXtst
+, mesa
 , pango
+, pciutils
+, zlib
+
+, libnotifySupport ? stdenv.isLinux
+, libnotify
+
+, waylandSupport ? stdenv.isLinux
+, libxkbcommon
+, libdrm
+, libGL
 
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? mediaSupport
+
+, pipewireSupport ? audioSupport
+, pipewire
+
+, pulseaudioSupport ? audioSupport
 , libpulseaudio
 , apulse
 , alsa-lib
+
+, libvaSupport ? mediaSupport
+, libva
 
 # Media support (implies audio support)
 , mediaSupport ? true
@@ -58,35 +74,39 @@ lib.warnIf (useHardenedMalloc != null)
   "tor-browser: useHardenedMalloc is deprecated and enabling it can cause issues"
 
 (let
-  libPath = lib.makeLibraryPath libPkgs;
+  libPath = lib.makeLibraryPath (
+    [
+      alsa-lib
+      atk
+      cairo
+      dbus
+      dbus-glib
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk3
+      libxcb
+      libX11
+      libXext
+      libXrender
+      libXt
+      libXtst
+      mesa # for libgbm
+      pango
+      pciutils
+      stdenv.cc.cc
+      stdenv.cc.libc
+      zlib
+    ] ++ lib.optionals libnotifySupport [ libnotify ]
+      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
+      ++ lib.optionals pipewireSupport [ pipewire ]
+      ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+      ++ lib.optionals libvaSupport [ libva ]
+      ++ lib.optionals mediaSupport [ ffmpeg ]
+  );
 
-  libPkgs = [
-    alsa-lib
-    atk
-    cairo
-    dbus
-    dbus-glib
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    libxcb
-    libX11
-    libXext
-    libXrender
-    libXt
-    pango
-    stdenv.cc.cc
-    stdenv.cc.libc
-    zlib
-  ]
-  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-  ++ lib.optionals mediaSupport [
-    ffmpeg
-  ];
-
-  version = "13.0.1";
+  version = "13.0.6";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -96,7 +116,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-ORa973US2VY9Can4Nr35YSpZrYGqBP4I/S/ulsbRJLc=";
+      hash = "sha256-7T+PJEsGIge+JJOz6GiG8971lnnbQL2jdHfldNmT4jQ=";
     };
 
     i686-linux = fetchurl {
@@ -106,7 +126,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-OBUleXLTNFG+aFuftnphgBtQCfyoIWDcoVFs5elJ0tA=";
+      hash = "sha256-nPhzUu1BYNij3toNRUFFxNVLZ2JnzDBFVlzo4cyskjY=";
     };
   };
 
@@ -128,6 +148,14 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = [
+    gtk3
+    alsa-lib
+    dbus-glib
+    libXtst
+  ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;

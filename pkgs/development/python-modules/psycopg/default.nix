@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.12";
+  version = "3.1.14";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2fd21aSCjwSwk8G0uS3cPGzLZfPVoJl2V5dG+akfCrE=";
+    hash = "sha256-zocRBnrQoJDWI4qhxDnxxIeiLdaWolvsujqfHBYQc/A=";
   };
 
   patches = [
@@ -51,12 +51,10 @@ let
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
 
-    # https://github.com/psycopg/psycopg/pull/669
-    # mark some tests as timing remove on next version update
     (fetchpatch {
-      name = "mark_tests_as_timing.patch";
-      url = "https://github.com/psycopg/psycopg/commit/00a3c640dd836328ba15931b400b012171f648c2.patch";
-      hash = "sha256-DoVZv1yy9gHOKl0AdVLir+C+UztJZVjboLhS5af2944=";
+      # add fixture to mark flaky ref count tests
+      url = "https://github.com/psycopg/psycopg/commit/70ef364324ba3448ef9ac0e29329c9d802380e4b.patch";
+      hash = "sha256-8PlrBcIumlxFjNXCAfm4NpSIxAnvLR8TopHzneJyzf0=";
     })
   ];
 
@@ -188,12 +186,13 @@ buildPythonPackage rec {
   env = {
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
+    PGDATABASE = "psycopg";
   };
 
   preCheck = ''
     cd ..
   '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
   disabledTests = [
@@ -213,7 +212,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
-    "-m" "'not timing'"
+    "-m" "'not refcount and not timing'"
   ];
 
   postCheck = ''

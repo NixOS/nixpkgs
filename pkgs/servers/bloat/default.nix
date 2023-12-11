@@ -38,5 +38,6 @@ buildGoModule {
     downloadPage = "https://git.freesoftwareextremist.com/bloat/";
     license = licenses.cc0;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "bloat";
   };
 }

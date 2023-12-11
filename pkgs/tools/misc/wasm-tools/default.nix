@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/wasm-tools";
     license = licenses.asl20;
     maintainers = with maintainers; [ ereslibre ];
+    mainProgram = "wasm-tools";
   };
 }

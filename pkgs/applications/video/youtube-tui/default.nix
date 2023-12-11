@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://siriusmart.github.io/youtube-tui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Ruixi-rebirth ];
+    mainProgram = "youtube-tui";
   };
 }

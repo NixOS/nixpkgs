@@ -53,7 +53,7 @@ in
         '';
       };
 
-      package = mkPackageOptionMD pkgs "dnsmasq" {};
+      package = mkPackageOption pkgs "dnsmasq" {};
 
       resolveLocalQueries = mkOption {
         type = types.bool;

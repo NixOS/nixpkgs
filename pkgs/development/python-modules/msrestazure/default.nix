@@ -13,6 +13,7 @@
 
 buildPythonPackage rec {
   version = "0.6.4";
+  format = "setuptools";
   pname = "msrestazure";
 
   # Pypi tarball doesnt include tests

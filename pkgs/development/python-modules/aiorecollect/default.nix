@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "2023.09.0";
+  version = "2023.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-45LgfCA8037GqP4WfEjE4hj2YdKUGu2hGrQ/f0r1PAI=";
+    hash = "sha256-CRiYde3FKVXhqB3W5rD7T3v93PAcsXBj0gG0L0umHSg=";
   };
 
   postPatch = ''

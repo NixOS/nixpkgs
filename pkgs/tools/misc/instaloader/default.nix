@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Download pictures (or videos) along with their captions and other metadata from Instagram";
     maintainers = with maintainers; [ creator54 ];
     license = licenses.mit;
+    mainProgram = "instaloader";
   };
 }

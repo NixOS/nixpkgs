@@ -1,5 +1,26 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchFromGitHub, fetchpatch, ocaml, pkg-config, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
-libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps, darwin }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchFromGitHub
+, ocaml
+, pkg-config
+, mupdf
+, libX11
+, jbig2dec
+, openjpeg
+, libjpeg
+, lcms2
+, harfbuzz
+, libGLU
+, libGL
+, gumbo
+, freetype
+, zlib
+, xclip
+, inotify-tools
+, procps
+, darwin
+}:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
@@ -27,11 +48,6 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  configurePhase = ''
-    mkdir -p build/mupdf/thirdparty
-    ln -s ${freetype.dev} build/mupdf/thirdparty/freetype
-  '';
-
   buildPhase = ''
     bash ./build.bash build
   '';
@@ -40,6 +56,7 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install build/llpp $out/bin
     install misc/llpp.inotify $out/bin/llpp.inotify
+    install -Dm444 misc/llpp.desktop -t $out/share/applications
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"
@@ -51,10 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://repo.or.cz/w/llpp.git";
+    homepage = "https://github.com/criticic/llpp";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = [ licenses.publicDomain licenses.bsd3 ];
   };
 }

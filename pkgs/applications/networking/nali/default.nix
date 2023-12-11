@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/zu1k/nali";
     license = licenses.mit;
     maintainers = with maintainers; [ diffumist xyenon ];
+    mainProgram = "nali";
   };
 }

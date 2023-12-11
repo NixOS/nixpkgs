@@ -128,7 +128,7 @@ in {
           '';
         };
       };
-      package = mkPackageOptionMD pkgs "listmonk" {};
+      package = mkPackageOption pkgs "listmonk" {};
       settings = mkOption {
         type = types.submodule { freeformType = tomlFormat.type; };
         description = lib.mdDoc ''

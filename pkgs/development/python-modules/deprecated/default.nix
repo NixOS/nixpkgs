@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "deprecated";
   version = "1.2.14";
+  format = "setuptools";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "tesserocr";
   version = "2.6.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    mainProgram = "dtach";
   };
 }

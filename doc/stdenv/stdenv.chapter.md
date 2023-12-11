@@ -119,13 +119,18 @@ phases="${prePhases[*]:-} unpackPhase patchPhase" genericBuild
 ```
 
 Then, run more phases up until the failure is reached.
-For example, if the failure is in the build phase, the following phases would be required:
+If the failure is in the build or check phase, the following phases would be required:
 
 ```bash
-phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase" genericBuild
+phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase" genericBuild
 ```
 
-Re-run a single phase as many times as necessary to examine the failure like so:
+Use this command to run all install phases:
+```bash
+phases="${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase" genericBuild
+```
+
+Single phase can be re-run as many times as necessary to examine the failure like so:
 
 ```bash
 phases="buildPhase" genericBuild

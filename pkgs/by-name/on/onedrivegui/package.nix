@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/bpozdena/OneDriveGUI";
     description = "A simple GUI for Linux OneDrive Client, with multi-account support";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jgarcia ];
+    maintainers = with maintainers; [ chewblacka ];
     platforms = platforms.linux;
   };
 }

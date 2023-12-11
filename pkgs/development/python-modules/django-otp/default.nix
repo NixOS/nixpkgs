@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "django-otp";
   version = "1.1.3";
+  format = "setuptools";
   disabled = pythonOlder "3";
 
   src = fetchFromGitHub {

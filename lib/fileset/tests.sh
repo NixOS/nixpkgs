@@ -413,7 +413,8 @@ expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; 
 \s*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.
+\s*To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
@@ -846,7 +847,7 @@ checkFileset 'fileFilter (file: abort "this is not needed") ./.'
 
 # The predicate must be able to handle extra attributes
 touch a
-expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file \}:`, use `\{ name, file, ... \}:` instead."'\'
+expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type, hasExt }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file, hasExt \}:`, use `\{ name, file, hasExt, ... \}:` instead."'\'
 rm -rf -- *
 
 # .name is the name, and it works correctly, even recursively
@@ -893,6 +894,39 @@ expectEqual \
     'toSource { root = ./.; fileset = fileFilter (file: file.type != "unknown") ./.; }' \
     'toSource { root = ./.; fileset = union ./d/a ./d/b; }'
 rm -rf -- *
+
+# Check that .hasExt checks for the file extension
+# The empty extension is the same as a file ending with a .
+tree=(
+    [a]=0
+    [a.]=1
+    [a.b]=0
+    [a.b.]=1
+    [a.b.c]=0
+)
+checkFileset 'fileFilter (file: file.hasExt "") ./.'
+
+# It can check for the last extension
+tree=(
+    [a]=0
+    [.a]=1
+    [.a.]=0
+    [.b.a]=1
+    [.b.a.]=0
+)
+checkFileset 'fileFilter (file: file.hasExt "a") ./.'
+
+# It can check for any extension
+tree=(
+    [a.b.c.d]=1
+)
+checkFileset 'fileFilter (file:
+  all file.hasExt [
+    "b.c.d"
+    "c.d"
+    "d"
+  ]
+) ./.'
 
 # It's lazy
 tree=(
@@ -1064,12 +1098,17 @@ rm -rf -- *
 ## lib.fileset.fromSource
 
 # Check error messages
-expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 
+# String-like values are not supported
 expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
 \s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
 
+# Wrong type
+expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 expectFailure 'fromSource (lib.cleanSource null)' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+# fromSource on non-existent paths gives an error
+expectFailure 'fromSource ./a' 'lib.fileset.fromSource: The source origin \('"$work"'/a\) of the argument is a path that does not exist.'
 
 # fromSource on a path works and is the same as coercing that path
 mkdir a
@@ -1444,6 +1483,40 @@ git -C sub rm -f -q a
 checkGitTracked
 
 rm -rf -- *
+
+## lib.fileset.maybeMissing
+
+# Argument must be a path
+expectFailure 'maybeMissing "someString"' 'lib.fileset.maybeMissing: Argument \("someString"\) is a string-like value, but it should be a path instead.'
+expectFailure 'maybeMissing null' 'lib.fileset.maybeMissing: Argument is of type null, but it should be a path instead.'
+
+tree=(
+)
+checkFileset 'maybeMissing ./a'
+checkFileset 'maybeMissing ./b'
+checkFileset 'maybeMissing ./b/c'
+
+# Works on single files
+tree=(
+    [a]=1
+    [b/c]=0
+    [b/d]=0
+)
+checkFileset 'maybeMissing ./a'
+tree=(
+    [a]=0
+    [b/c]=1
+    [b/d]=0
+)
+checkFileset 'maybeMissing ./b/c'
+
+# Works on directories
+tree=(
+    [a]=0
+    [b/c]=1
+    [b/d]=1
+)
+checkFileset 'maybeMissing ./b'
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 

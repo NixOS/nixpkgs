@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aldente";
-  version = "1.22.3";
+  version = "1.24";
 
   src = fetchurl {
     url = "https://github.com/davidwernhart/aldente-charge-limiter/releases/download/${finalAttrs.version}/AlDente.dmg";
-    hash = "sha256-pSqBDDumCbORLQ+B3skSqKmgG2KybR5Zb4ojiNQcAaM=";
+    hash = "sha256-5byGKtVgKiE8m0+GXDtUpTwQpuUj4lv0hPOl4jhH9wk=";
   };
 
   dontBuild = true;
@@ -47,13 +47,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "macOS tool to limit maximum charging percentage";
     homepage = "https://apphousekitchen.com";
     changelog = "https://github.com/davidwernhart/aldente-charge-limiter/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = with lib.licenses; [ unfree ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
 })

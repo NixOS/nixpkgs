@@ -61,7 +61,9 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
   # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2"
+    || (versionOlder cfg.package.version "27.0.0"
+      && versionAtLeast cfg.package.version "26.0.8");
 
 in {
 
@@ -125,12 +127,7 @@ in {
       '';
       example = literalExpression ''
         {
-          maps = pkgs.fetchNextcloudApp {
-            name = "maps";
-            sha256 = "007y80idqg6b6zk6kjxg4vgw0z8fsxs9lajnv49vv1zjy6jx2i1i";
-            url = "https://github.com/nextcloud/maps/releases/download/v0.1.9/maps-0.1.9.tar.gz";
-            version = "0.1.9";
-          };
+          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
@@ -195,13 +192,8 @@ in {
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud26" "nextcloud27" ];
     };
-    phpPackage = mkOption {
-      type = types.package;
-      relatedPackages = [ "php81" "php82" ];
-      defaultText = "pkgs.php";
-      description = lib.mdDoc ''
-        PHP package to use for Nextcloud.
-      '';
+    phpPackage = mkPackageOption pkgs "php" {
+      example = "php82";
     };
 
     maxUploadSize = mkOption {

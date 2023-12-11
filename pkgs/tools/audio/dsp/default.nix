@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.isc;
     maintainers = with maintainers; [ aaronjheng ];
     platforms = platforms.linux;
+    mainProgram = "dsp";
   };
 })

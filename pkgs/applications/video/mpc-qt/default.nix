@@ -24,5 +24,6 @@ mkDerivation rec {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "mpc-qt";
   };
 }

@@ -5,7 +5,7 @@
 , breeze-qt5
 , cmake
 , extra-cmake-modules
-, ffmpeg-full
+, ffmpeg-headless
 , kconfig
 , kcoreaddons
 , kfilemetadata
@@ -47,7 +47,7 @@ mkDerivation rec {
     qqc2-desktop-style
     yt-dlp
 
-    ffmpeg-full
+    ffmpeg-headless
     kconfig
     kcoreaddons
     kfilemetadata
@@ -74,5 +74,6 @@ mkDerivation rec {
     description = "Open source video player built with Qt/QML and libmpv";
     license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
     maintainers = with maintainers; [ jojosch kashw2 ];
+    mainProgram = "haruna";
   };
 }

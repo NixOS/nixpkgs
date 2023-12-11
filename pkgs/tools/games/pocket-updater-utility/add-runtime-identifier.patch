@@ -1,14 +1,14 @@
-From ccbe5c0401d6965a6daaa0b7bb022f63908c8942 Mon Sep 17 00:00:00 2001
+From c9ca58262045b82537bd8284d426c91582cc7ed7 Mon Sep 17 00:00:00 2001
 From: Philipp Rintz <git@rintz.net>
-Date: Mon, 28 Aug 2023 19:19:41 +0200
+Date: Thu, 28 Sep 2023 21:22:18 +0200
 Subject: [PATCH] uncommited
 
 ---
- pocket_updater.csproj | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ pocket_updater.csproj | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/pocket_updater.csproj b/pocket_updater.csproj
-index 11f604c..410bd47 100644
+index 30f77d5..ad6bf69 100644
 --- a/pocket_updater.csproj
 +++ b/pocket_updater.csproj
 @@ -12,6 +12,7 @@
@@ -19,13 +19,6 @@ index 11f604c..410bd47 100644
    </PropertyGroup>
    <ItemGroup>
      <PackageReference Include="CommandLineParser" Version="2.9.1" />
-@@ -26,4 +27,4 @@
-   <ItemGroup>
-     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
-   </ItemGroup>
--</Project>
-\ No newline at end of file
-+</Project>
 -- 
 2.40.1
 

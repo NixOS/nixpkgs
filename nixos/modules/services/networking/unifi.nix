@@ -36,21 +36,14 @@ in
       '';
     };
 
-    services.unifi.unifiPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.unifi5;
-      defaultText = lib.literalExpression "pkgs.unifi5";
-      description = lib.mdDoc ''
-        The unifi package to use.
-      '';
-    };
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi5" { };
 
-    services.unifi.mongodbPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.mongodb-4_4;
-      defaultText = lib.literalExpression "pkgs.mongodb";
-      description = lib.mdDoc ''
-        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
+    services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
+      default = "mongodb-4_4";
+      extraDescription = ''
+        ::: {.note}
+        unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
+        :::
       '';
     };
 

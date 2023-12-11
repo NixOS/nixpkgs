@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "frogmouth";
-  version = "0.9.0";
+  version = "0.9.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "frogmouth";
     rev = "v${version}";
-    hash = "sha256-TMCeIwMEoNDQV9iue4XrdYQMmwofXDvdMMLTZKILQ9Q=";
+    hash = "sha256-0fcCON/M9JklE7X9aRfzTkEFG4ckJqLoQlYCSrWHHGQ=";
   };
 
   # Per <https://github.com/srstevenson/xdg-base-dirs/tree/6.0.0#xdg-base-dirs>, the package is

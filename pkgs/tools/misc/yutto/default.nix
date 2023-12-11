@@ -44,5 +44,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/yutto-dev/yutto";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
+    mainProgram = "yutto";
   };
 }

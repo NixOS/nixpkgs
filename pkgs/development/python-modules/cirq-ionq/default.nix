@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-ionq";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";

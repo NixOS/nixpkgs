@@ -199,12 +199,7 @@ with lib;
 
     gatewayRole.enable = mkEnableOption (lib.mdDoc "gateway role for deploying hadoop configs");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.hadoop;
-      defaultText = literalExpression "pkgs.hadoop";
-      description = lib.mdDoc "";
-    };
+    package = mkPackageOption pkgs "hadoop" { };
   };
 
 

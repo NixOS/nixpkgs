@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    mainProgram = "stumpish";
   };
 }

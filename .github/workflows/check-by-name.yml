@@ -16,6 +16,9 @@ jobs:
     # This is x86_64-linux, for which the tool is always prebuilt on the nixos-* channels,
     # as specified in nixos/release-combined.nix
     runs-on: ubuntu-latest
+    # This should take 1 minute at most, but let's be generous.
+    # The default of 6 hours is definitely too long
+    timeout-minutes: 10
     steps:
       - name: Resolving the merge commit
         env:
@@ -23,6 +26,11 @@ jobs:
         run: |
           # This checks for mergeability of a pull request as recommended in
           # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
+
+          # Retry the API query this many times
+          retryCount=3
+          # Start with 5 seconds, but double every retry
+          retryInterval=5
           while true; do
             echo "Checking whether the pull request can be merged"
             prInfo=$(gh api \
@@ -33,10 +41,19 @@ jobs:
             mergedSha=$(jq -r .merge_commit_sha <<< "$prInfo")
 
             if [[ "$mergeable" == "null" ]]; then
-              # null indicates that GitHub is still computing whether it's mergeable
-              # Wait a couple seconds before trying again
-              echo "GitHub is still computing whether this PR can be merged, waiting 5 seconds before trying again"
-              sleep 5
+              if (( retryCount == 0 )); then
+                echo "Not retrying anymore, probably GitHub is having internal issues"
+                exit 1
+              else
+                (( retryCount -= 1 )) || true
+
+                # null indicates that GitHub is still computing whether it's mergeable
+                # Wait a couple seconds before trying again
+                echo "GitHub is still computing whether this PR can be merged, waiting $retryInterval seconds before trying again ($retryCount retries left)"
+                sleep "$retryInterval"
+
+                (( retryInterval *= 2 )) || true
+              fi
             else
               break
             fi
@@ -49,7 +66,7 @@ jobs:
             exit 1
           fi
           echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           # pull_request_target checks out the base branch by default
           ref: ${{ env.mergedSha }}
@@ -61,18 +78,24 @@ jobs:
           echo "baseSha=$(git rev-parse HEAD^1)" >> "$GITHUB_ENV"
 
           echo "headSha=$(git rev-parse HEAD^2)" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@v23
+      - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
       - name: Determining channel to use for dependencies
         run: |
-          echo "Determining which channel to use for PR base branch $GITHUB_BASE_REF"
+          echo "Determining the preferred channel to use for PR base branch $GITHUB_BASE_REF"
           if [[ "$GITHUB_BASE_REF" =~ ^(release|staging|staging-next)-([0-9][0-9]\.[0-9][0-9])$ ]]; then
               # Use the release channel for all PRs to release-XX.YY, staging-XX.YY and staging-next-XX.YY
               channel=nixos-${BASH_REMATCH[2]}
-              echo "PR is for a release branch, using release channel $channel"
+              echo "PR is for a release branch, preferred channel is $channel"
           else
               # Use the nixos-unstable channel for all other PRs
               channel=nixos-unstable
-              echo "PR is for a non-release branch, using unstable channel $channel"
+              echo "PR is for a non-release branch, preferred channel is $channel"
+          fi
+          # Check that the channel exists. It doesn't exist for fresh release branches
+          if ! curl -fSs "https://channels.nixos.org/$channel"; then
+            # Fall back to nixos-unstable, makes sense for fresh release branches
+            echo "Preferred channel $channel could not be fetched, falling back to nixos-unstable"
+            channel=nixos-unstable
           fi
           echo "channel=$channel" >> "$GITHUB_ENV"
       - name: Fetching latest version of channel
@@ -170,4 +193,3 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
           exit "$exitCode"
-

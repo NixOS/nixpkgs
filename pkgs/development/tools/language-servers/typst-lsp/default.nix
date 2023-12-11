@@ -9,19 +9,19 @@ rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-L0d+fDCLxU/XHC99VlIcZdiO3RohtWfoRnUPGIHodcc=";
+    hash = "sha256-7T5BxAq67mHve2FeYCN0L63e+2LE7agG1LgmKy5y1bc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.9.0" = "sha256-LwRB/AQE8TZZyHEQ7kKB10itzEgYjg4R/k+YFqmutDc=";
+      "typst-0.10.0" = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
       "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
       "typstfmt_lib-0.2.6" = "sha256-UUVbnxIj7kQVpZvSbbB11i6wAvdTnXVk5cNSNoGBeRM=";
     };

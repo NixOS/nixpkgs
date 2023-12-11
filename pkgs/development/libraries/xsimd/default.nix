@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if (finalAttrs.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${if (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
   ];
 
   doCheck = true;

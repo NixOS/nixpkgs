@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.qyliss.net/pr-tracker";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ qyliss sumnerevans ];
+    mainProgram = "pr-tracker";
   };
 }

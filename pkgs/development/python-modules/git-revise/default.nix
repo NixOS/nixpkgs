@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "git-revise";
   version = "0.7.0";
+  format = "setuptools";
 
   # Missing tests on PyPI
   src = fetchFromGitHub {

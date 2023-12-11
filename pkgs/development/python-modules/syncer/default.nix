@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "syncer";
   version = "2.0.3";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

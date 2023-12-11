@@ -1,0 +1,39 @@
+diff -Naur ytree-2.06-old/Makefile ytree-2.06-new/Makefile
+--- ytree-2.06-old/Makefile	2023-11-26 06:15:34.000000000 -0300
++++ ytree-2.06-new/Makefile	2023-12-01 12:25:36.641958285 -0300
+@@ -11,13 +11,13 @@
+ # ADD_CFLAGS: Add -DVI_KEYS if you want vi-cursor-keys
+ #
+ 
+-DESTDIR     = /usr
++PREFIX      = /usr
+ 
+ ADD_CFLAGS  = -O # -DVI_KEYS
+ 
+-BINDIR      = $(DESTDIR)/bin
+-MANDIR      = $(DESTDIR)/share/man/man1
+-MANESDIR    = $(DESTDIR)/share/man/es/man1
++BINDIR      = $(DESTDIR)$(PREFIX)/bin
++MANDIR      = $(DESTDIR)$(PREFIX)/share/man/man1
++MANESDIR    = $(DESTDIR)$(PREFIX)/share/man/es/man1
+ 
+ 
+ # Uncomment the lines for your system (default is linux)
+@@ -224,14 +224,14 @@
+ 
+ install:	$(MAIN)
+ 		install $(MAIN) $(BINDIR)
+-		gzip -9c ytree.1 > ytree.1.gz
++		gzip -n -9c ytree.1 > ytree.1.gz
+ 		if [ -d $(MANDIR) ]; then install -m 0644 ytree.1.gz  $(MANDIR)/; fi
+-		gzip -9c ytree.1.es > ytree.1.es.gz
++		gzip -n -9c ytree.1.es > ytree.1.es.gz
+ 		if [ -d $(MANESDIR) ]; then install -m 0644 ytree.1.es.gz $(MANESDIR)/; fi
+ 
+ clean:
+ 		rm -f core *.o *~ *.orig *.bak 
+-		
++
+ clobber:	clean
+ 		rm -f $(MAIN) ytree.1.es.gz ytree.1.gz
+ 

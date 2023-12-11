@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "Matrix <-> Whatsapp hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vskilet ma27 chvp ];
+    mainProgram = "mautrix-whatsapp";
   };
 }

@@ -166,7 +166,7 @@ rec {
 
   noto-fonts-color-emoji =
     let
-      version = "2.038";
+      version = "2.042";
       emojiPythonEnv =
         buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
     in
@@ -178,7 +178,7 @@ rec {
         owner = "googlefonts";
         repo = "noto-emoji";
         rev = "v${version}";
-        sha256 = "1rgmcc6nqq805iqr8kvxxlk5cf50q714xaxk3ld6rjrd69kb8ix9";
+        hash = "sha256-otJQMXrBIPrxD1vCdgcrZ2h1a9XAMbqEBFumjz1XJ54=";
       };
 
       depsBuildBuild = [

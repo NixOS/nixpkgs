@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.bennofs ];
+    mainProgram = "gvolicon";
   };
 }

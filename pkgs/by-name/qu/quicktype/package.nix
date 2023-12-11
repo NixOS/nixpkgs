@@ -2,13 +2,13 @@
 
 buildNpmPackage rec {
   pname = "quicktype";
-  version = "23.0.78"; # version from https://npm.im/quicktype
+  version = "23.0.80"; # version from https://npm.im/quicktype
 
   src = fetchFromGitHub {
-    owner = "quicktype";
+    owner = "glideapps";
     repo = "quicktype";
-    rev = "317deefa6a0c8ba0201b9b2b50d00c7e93c41d78"; # version not tagged
-    hash = "sha256-KkyxS3mxOmUA8ZpB0tqdpdafvP429R5Y39C3CszTiZk=";
+    rev = "2a60269d431b392b658e671df2c1fb5479aec855"; # version not tagged
+    hash = "sha256-3VW/CyvgetS9sqLflJgOmQERn4e/0nLQsezRHb6km3s=";
   };
 
   postPatch = ''

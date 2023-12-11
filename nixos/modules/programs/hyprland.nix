@@ -23,7 +23,7 @@ in
       '';
     };
 
-    package = mkPackageOptionMD pkgs "hyprland" { };
+    package = mkPackageOption pkgs "hyprland" { };
 
     finalPackage = mkOption {
       type = types.package;
@@ -39,7 +39,7 @@ in
       '';
     };
 
-    portalPackage = mkPackageOptionMD pkgs "xdg-desktop-portal-hyprland" { };
+    portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
 
@@ -64,6 +64,7 @@ in
     xdg.portal = {
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
+      configPackages = mkDefault [ cfg.finalPackage ];
     };
   };
 

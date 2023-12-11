@@ -10,7 +10,9 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPower
+              || stdenv.targetPlatform.isSparc);
 
   useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux"
                 || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
@@ -38,7 +40,7 @@ let
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
   ]
-  ++ lib.optionals useLLVM [
+  ++ lib.optionals (assert useLLVM -> !(llvmPackages == null); useLLVM) [
     (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
@@ -65,10 +67,6 @@ stdenv.mkDerivation rec {
       # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
       url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
       sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
-    };
-    aarch64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
-      sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
     };
     x86_64-darwin = {
       url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
@@ -216,7 +214,12 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "powerpc64le-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "powerpc64le-linux"
+    ];
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
     maintainers = with lib.maintainers; [

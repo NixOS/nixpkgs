@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "ecdsa";
   version = "0.18.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

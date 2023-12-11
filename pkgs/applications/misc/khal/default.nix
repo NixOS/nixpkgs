@@ -86,6 +86,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://lostpackets.de/khal/";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
-    broken = stdenv.isDarwin;
   };
 }

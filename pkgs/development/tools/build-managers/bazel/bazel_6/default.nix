@@ -23,6 +23,7 @@
 , substituteAll
 , writeTextFile
 , writeShellApplication
+, makeBinaryWrapper
 }:
 
 let
@@ -129,7 +130,7 @@ let
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
 
-  bashWithDefaultShellUtils = writeShellApplication {
+  bashWithDefaultShellUtilsSh = writeShellApplication {
     name = "bash";
     runtimeInputs = defaultShellUtils;
     text = ''
@@ -137,6 +138,17 @@ let
         export PATH=${defaultShellPath}
       fi
       exec ${bash}/bin/bash "$@"
+    '';
+  };
+
+  # Script-based interpreters in shebangs aren't guaranteed to work,
+  # especially on MacOS. So let's produce a binary
+  bashWithDefaultShellUtils = stdenv.mkDerivation {
+    name = "bash";
+    src = bashWithDefaultShellUtilsSh;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      makeWrapper ${bashWithDefaultShellUtilsSh}/bin/bash $out/bin/bash
     '';
   };
 
@@ -187,6 +199,10 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # upb definition inside bazel sets its own copts that take precedence
+    # over flags we set externally, so need to patch them at the source
+    ./upb-clang16.patch
+
     # Force usage of the _non_ prebuilt java toolchain.
     # the prebuilt one does not work in nix world.
     ./java_toolchain.patch
@@ -391,6 +407,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in external/{absl,upb} dependencies
+      export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , pkg-config
 , python3
@@ -72,12 +73,14 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
+
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
+    "-DPKG_CONFIG_EXECUTABLE=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"

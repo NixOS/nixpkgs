@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "jsonpickle";
   version = "3.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "css-html-js-minify";
   version = "2.5.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

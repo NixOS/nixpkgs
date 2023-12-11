@@ -28,7 +28,7 @@ in
   options.services.certspotter = {
     enable = lib.mkEnableOption "Cert Spotter, a Certificate Transparency log monitor";
 
-    package = lib.mkPackageOptionMD pkgs "certspotter" { };
+    package = lib.mkPackageOption pkgs "certspotter" { };
 
     startAtEnd = lib.mkOption {
       type = lib.types.bool;

@@ -5,20 +5,24 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.78";
-  format = "setuptools";
+  version = "2.0.80";
+  pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IalfA/nfQrnE90ycOnPEZ4A/L8rwi08ECNA/8YxeAgQ=";
+    hash = "sha256-vwLk3EpXqUSAwzY2oX0ZpXrmH2cT0GdYdL/Mifav6mU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace '"sentry-sdk==1.14.0",' "" \
+      --replace "sentry-sdk==1.14.0" "sentry-sdk" \
       --replace "~=" ">="
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -36,6 +40,8 @@ python3.pkgs.buildPythonPackage rec {
     psutil
     pyserial
     pystray
+    python-mbedtls
+    python-osc
     python-rtmidi
     # rpi-ws281x # not packaged
     requests

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bruno";
-  version = "0.27.2";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/usebruno/bruno/releases/download/v${version}/bruno_${version}_amd64_linux.deb";
-    hash = "sha256-FhlwwdX845Say6I/g9HYRTexh94DXhc/K9jmqFiHwVY=";
+    hash = "sha256-vZNl5qdK8hztfGaQCL6RnWlL8hPJaL/GBh7AOT5D3Js=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Open-source IDE For exploring and testing APIs.";
     homepage = "https://www.usebruno.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew ];
+    maintainers = with maintainers; [ water-sucks lucasew kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
 }

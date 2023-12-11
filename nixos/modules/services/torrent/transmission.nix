@@ -174,7 +174,7 @@ in
         };
       };
 
-      package = mkPackageOptionMD pkgs "transmission" {};
+      package = mkPackageOption pkgs "transmission" {};
 
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
@@ -333,10 +333,10 @@ in
             cfg.settings.watch-dir;
         StateDirectory = [
           "transmission"
-          "transmission/.config/transmission-daemon"
-          "transmission/.incomplete"
-          "transmission/Downloads"
-          "transmission/watch-dir"
+          "transmission/${settingsDir}"
+          "transmission/${incompleteDir}"
+          "transmission/${downloadsDir}"
+          "transmission/${watchDir}"
         ];
         StateDirectoryMode = mkDefault 750;
         # The following options are only for optimizing:

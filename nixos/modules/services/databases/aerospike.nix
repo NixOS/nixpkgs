@@ -41,12 +41,7 @@ in
     services.aerospike = {
       enable = mkEnableOption (lib.mdDoc "Aerospike server");
 
-      package = mkOption {
-        default = pkgs.aerospike;
-        defaultText = literalExpression "pkgs.aerospike";
-        type = types.package;
-        description = lib.mdDoc "Which Aerospike derivation to use";
-      };
+      package = mkPackageOption pkgs "aerospike" { };
 
       workDir = mkOption {
         type = types.str;

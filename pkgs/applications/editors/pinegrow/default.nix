@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ unfreeRedistributable ];
     maintainers = with maintainers; [ gador ];
+    mainProgram = "pinegrow";
   };
 }

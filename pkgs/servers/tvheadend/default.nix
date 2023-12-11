@@ -131,5 +131,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ simonvandel ];
+    mainProgram = "tvheadend";
   };
 }

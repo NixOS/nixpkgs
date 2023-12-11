@@ -16,6 +16,6 @@ rustPlatform.buildRustPackage rec {
     description = "one CLI to format the code tree";
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
-    maintainers = lib.teams.numtide.members;
+    maintainers = [ lib.maintainers.zimbatm ];
   };
 }

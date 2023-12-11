@@ -4,6 +4,8 @@
   "mpd.conf(5)": "https://mpd.readthedocs.io/en/latest/mpd.conf.5.html",
   "nix.conf(5)": "https://nixos.org/manual/nix/stable/command-ref/conf-file.html",
 
+  "portals.conf(5)": "https://github.com/flatpak/xdg-desktop-portal/blob/1.18.1/doc/portals.conf.rst.in",
+
   "journald.conf(5)": "https://www.freedesktop.org/software/systemd/man/journald.conf.html",
   "logind.conf(5)": "https://www.freedesktop.org/software/systemd/man/logind.conf.html",
   "networkd.conf(5)": "https://www.freedesktop.org/software/systemd/man/networkd.conf.html",

@@ -3,7 +3,7 @@
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -66,7 +66,7 @@ let
       deprecatedNativeMessagingHost = option: pkg:
         if (cfg.${option} or false)
           then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts.packages` instead"
             [pkg]
           else [];
 
@@ -87,7 +87,7 @@ let
 
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg_5
+            ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
@@ -115,18 +115,15 @@ let
 
       nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
-      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
-                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
-
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
-        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
+      else if browser.requireSigning || !browser.allowAddonSideload then
+        throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
-        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
+        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
         else
         a
       ) (lib.optionals usesNixExtensions nixExtensions);

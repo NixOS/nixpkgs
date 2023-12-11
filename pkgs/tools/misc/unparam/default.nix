@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/mvdan/unparam";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "unparam";
   };
 }

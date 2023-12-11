@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "takethetime";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "TakeTheTime";

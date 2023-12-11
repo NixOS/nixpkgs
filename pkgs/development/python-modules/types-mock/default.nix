@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.2";
+  version = "5.1.0.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3kjTdm5OMDTv2LJtqeCeSQjzHlMTel/i778fur7haZY=";
+    hash = "sha256-7urCVIAoe7ch+xf82i6XaNcKR23MFKLB0DiVNcVPgYQ=";
   };
 
   # Module has no tests

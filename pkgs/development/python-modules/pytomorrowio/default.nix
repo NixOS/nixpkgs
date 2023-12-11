@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pytomorrowio";
   version = "0.3.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.9";
 

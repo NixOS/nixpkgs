@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.azuwis ];
     platforms = lib.platforms.unix;
+    mainProgram = "uxplay";
   };
 })

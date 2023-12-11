@@ -102,12 +102,7 @@ in
     services.mattermost = {
       enable = mkEnableOption (lib.mdDoc "Mattermost chat server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mattermost;
-        defaultText = lib.literalExpression "pkgs.mattermost";
-        description = lib.mdDoc "Mattermost derivation to use.";
-      };
+      package = mkPackageOption pkgs "mattermost" { };
 
       statePath = mkOption {
         type = types.str;
@@ -250,12 +245,7 @@ in
 
       matterircd = {
         enable = mkEnableOption (lib.mdDoc "Mattermost IRC bridge");
-        package = mkOption {
-          type = types.package;
-          default = pkgs.matterircd;
-          defaultText = lib.literalExpression "pkgs.matterircd";
-          description = lib.mdDoc "matterircd derivation to use.";
-        };
+        package = mkPackageOption pkgs "matterircd" { };
         parameters = mkOption {
           type = types.listOf types.str;
           default = [ ];

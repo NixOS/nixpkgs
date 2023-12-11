@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "python_openzwave";
   version = "0.4.19";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

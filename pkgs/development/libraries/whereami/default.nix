@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=strict-prototypes";
+
   makeFlags = [
     "-C_gnu-make"
     "build-library"

@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac jwoudenberg ];
+    mainProgram = "rslsync";
   };
 }

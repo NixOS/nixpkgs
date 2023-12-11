@@ -14,17 +14,18 @@
 , libicns
 , jq
 , moreutils
+, cacert
 , nodePackages
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
+    hash = "sha256-Ot2O5J1wUZAWgdpJNaEUSwtbcNqDdGhzuCtx8Qg+4gg=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
         jq
         moreutils
         nodePackages.pnpm
+        cacert
       ];
 
       pnpmPatch = builtins.toJSON {
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
+      outputHash = "sha256-v6ibAcfYgr1VjGK7NUF4DKd5da03mZndPUAnSl++RqE=";
     };
 
   nativeBuildInputs = [
@@ -148,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "VencordDesktop";
       genericName = "Internet Messenger";
       keywords = [ "discord" "vencord" "electron" "chat" ];
+      categories = [ "Network" "InstantMessaging" "Chat" ];
     })
   ];
 

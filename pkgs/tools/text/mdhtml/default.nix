@@ -5,14 +5,14 @@
 
 buildGoModule rec {
   pname = "mdhtml";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Tomkoid";
     repo = pname;
     rev = version;
-    hash = "sha256-Pzl6Hmc24uWQ02FQM84rsypTJy1GdvYqfLDjN6Ryq4Q=";
+    hash = "sha256-ISZUadJZOWwUygLnGYvuMUNCmTNGZLYq+q/FeK++kWE=";
   };
 
   vendorHash = null;

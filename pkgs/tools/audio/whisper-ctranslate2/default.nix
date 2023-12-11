@@ -45,5 +45,6 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/Softcatala/whisper-ctranslate2/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "whisper-ctranslate2";
   };
 }

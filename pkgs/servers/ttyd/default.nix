@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.mit;
     maintainers = [ lib.maintainers.thoughtpolice ];
     platforms   = lib.platforms.all;
+    mainProgram = "ttyd";
   };
 }

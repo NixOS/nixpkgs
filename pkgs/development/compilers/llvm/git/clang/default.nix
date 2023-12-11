@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
+, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -30,6 +30,7 @@ let
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_INCLUDE_TESTS=OFF"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -51,10 +52,11 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
-      (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
-        libllvmLibdir = "${libllvm.lib}/lib";
-      })
+      # FIMXE: do we need this patch?
+      # (substituteAll {
+      #   src = ../../clang-11-12-LLVMgold-path.patch;
+      #  libllvmLibdir = "${libllvm.lib}/lib";
+      # })
     ];
 
     postPatch = ''
@@ -65,14 +67,11 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-      # The following warning is triggered with (at least) gcc >=
-      # 12, but appears to occur only for cross compiles.
-      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
-    };
-
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
+
+      mkdir -p $lib/lib/clang
+      mv $lib/lib/18 $lib/lib/clang/18
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
@@ -81,13 +80,12 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
-      mkdir -p $python/bin $python/share/{clang,scan-view}
+      mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
-      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 

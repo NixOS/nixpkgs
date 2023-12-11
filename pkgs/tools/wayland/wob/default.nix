@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, cmocka
 , scdoc
 , wayland-scanner
 , wayland
@@ -14,20 +15,20 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.14.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u4jLVLGcMTgDEgN8jW5d59m3GorJX7Z6+qKhzvbON3k=";
+    sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
   };
 
   strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  nativeBuildInputs = [ meson ninja pkg-config cmocka scdoc wayland-scanner ];
   buildInputs = [ inih wayland wayland-protocols ]
     ++ lib.optional stdenv.isLinux libseccomp;
 
@@ -44,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;
+    mainProgram = "wob";
   };
 }

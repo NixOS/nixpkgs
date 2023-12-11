@@ -65,6 +65,13 @@
   - pkgs/top-level/haskell-packages.nix
   - pkgs/top-level/release-haskell.nix
 
+"6.topic: jupyter":
+  - pkgs/development/python-modules/jupyter*/**/*
+  - pkgs/development/python-modules/mkdocs-jupyter/*
+  - nixos/modules/services/development/jupyter/**/*
+  - pkgs/applications/editors/jupyter-kernels/**/*
+  - pkgs/applications/editors/jupyter/**/*
+
 "6.topic: kernel":
   - pkgs/build-support/kernel/**/*
   - pkgs/os-specific/linux/kernel/**/*
