@@ -8,6 +8,7 @@
 , setuptools
 , subunit
 , testtools
+, tomlkit
 , voluptuous
 , callPackage
 }:
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     pbr
     subunit
     testtools
+    tomlkit
     voluptuous
   ];
 
