@@ -24,13 +24,17 @@ buildPythonPackage ({
     setupPyBuildFlags="$setupPyBuildFlags $(sed 's/-D\(\S*\)/--set \1/g' <<< "$cmakeFlags")"
   '';
 
-  # The tests attempt to use CUDA on the build platform.
-  doCheck = !dlib.cudaSupport;
+  doCheck = !(
+    # The tests attempt to use CUDA on the build platform.
+    dlib.cudaSupport
 
-  # although AVX can be enabled, we never test with it. Some Hydra machines
-  # fail because of this, however their build results are probably used on hardware
-  # with AVX support.
+      # although AVX can be enabled, we never test with it. Some Hydra machines
+      # fail because of this, however their build results are probably used on hardware
+      # with AVX support.
+      || dlib.avxSupport
+  );
+
   checkPhase = ''
-    ${python.interpreter} nix_run_setup test --no USE_AVX_INSTRUCTIONS
+    ${python.interpreter} nix_run_setup test
   '';
 } // lib.optionalAttrs dlib.cudaSupport { stdenv = dlib.cudaPackages.backendStdenv; })
