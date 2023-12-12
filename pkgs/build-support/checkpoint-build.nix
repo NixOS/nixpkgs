@@ -36,8 +36,10 @@ rec {
     # Build tools, building in the source directory, instead of
     # having a build root directory, e.G the Linux kernel.
     installPhase = ''
+      runHook preCheckpointInstall
       mkdir -p $out/outputs
       cp -r ./* $out/outputs/
+      runHook postCheckpointInstall
     '';
   });
 
