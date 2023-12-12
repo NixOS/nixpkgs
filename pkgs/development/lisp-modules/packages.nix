@@ -306,17 +306,16 @@ let
     lispLibs = [ super.moptilities ];
   };
 
-  nfiles = build-asdf-system {
+  nfiles = build-asdf-system rec {
     pname = "nfiles";
-    version = "20230705-git";
+    version = "1.1.4";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nfiles";
-      rev = "3626e8d512a84efc12479ceb3969d194511757f7";
-      sha256 = "sha256-MoJdbTOVfw2rJk4cf/rEnR55BxdXkoqqu9Txd/R9OYQ=";
+      rev = version;
+      sha256 = "sha256-4rhpBErQgZHcwZRblxgiYaUmKalvllSbJjnRteDVH6k=";
     };
     lispLibs = [
-      self.nasdf
       self.nclasses
       super.quri
       super.alexandria
