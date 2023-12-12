@@ -1,14 +1,23 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, gawk, kmod, pciutils, libraspberrypi
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, python3
+, binutils-unwrapped
+, findutils
+, gawk
+, kmod
+, pciutils
+, libraspberrypi
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
   version = "2023.10.30-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-TKvby0qIXidM5Qk7q+ovLk0DpHsCbdQe7xndrgKrSXk=";
   };
 
@@ -60,4 +69,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ das_j Luflosi ];
     platforms = platforms.linux;
   };
-}
+})
