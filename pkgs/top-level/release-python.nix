@@ -11,7 +11,6 @@
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = {
     allowUnfree = false;
-    allowInsecure = false;
     inHydra = true;
     permittedInsecurePackages = [
       # Keep evaluating home-assistant, which is transitively affected
