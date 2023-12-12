@@ -3764,7 +3764,7 @@ with pkgs;
 
   dfmt = callPackage ../tools/text/dfmt { };
 
-  diopser = callPackage ../applications/audio/diopser { stdenv = gcc10StdenvCompat; };
+  diopser = callPackage ../applications/audio/diopser { };
 
   diskonaut = callPackage ../tools/misc/diskonaut { };
 
