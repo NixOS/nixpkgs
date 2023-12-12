@@ -20202,7 +20202,7 @@ with pkgs;
 
   c3c = callPackage ../development/compilers/c3c { };
 
-  swfmill = callPackage ../tools/video/swfmill { stdenv = gcc10StdenvCompat; };
+  swfmill = callPackage ../tools/video/swfmill { };
 
   swftools = callPackage ../tools/video/swftools {
     stdenv = gccStdenv;
