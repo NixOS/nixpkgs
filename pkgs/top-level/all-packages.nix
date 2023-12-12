@@ -8329,8 +8329,6 @@ with pkgs;
 
   fontmatrix = libsForQt5.callPackage ../applications/graphics/fontmatrix { };
 
-  footswitch = callPackage ../tools/inputmethods/footswitch { };
-
   foremost = callPackage ../tools/system/foremost { };
 
   forktty = callPackage ../os-specific/linux/forktty { };
