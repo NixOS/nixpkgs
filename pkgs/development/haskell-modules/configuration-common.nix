@@ -321,6 +321,14 @@ self: super: {
   # https://github.com/FPtje/GLuaFixer/issues/165
   glualint = dontCheck super.glualint;
 
+  # PortMidi needs an environment variable to have ALSA find its plugins:
+  # https://github.com/NixOS/nixpkgs/issues/6860
+  PortMidi = overrideCabal (drv: {
+    processEnvVars = [
+      { key = "ALSA_PLUGIN_DIR"; value = "${pkgs.alsa-plugins}/lib/alsa-lib"; }
+    ];
+  }) super.PortMidi;
+
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = overrideCabal (drv: {
