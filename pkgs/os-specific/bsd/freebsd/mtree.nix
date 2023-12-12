@@ -13,6 +13,7 @@ mkDerivation {
   # _VA_LIST is required to prevent freebsd headers from clashing with clang headers
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lmd -lnetbsd ${if compatIsNeeded then "-legacy" else ""} ${if stdenv.isFreeBSD then "-lutil" else ""}"
+  '' + lib.optionalString stdenv.cc.isClang ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST"
   '';
 }

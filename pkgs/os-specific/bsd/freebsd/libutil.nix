@@ -1,8 +1,8 @@
-{ mkDerivation, ...}:
+{ mkDerivation, lib, stdenv, ...}:
 mkDerivation {
   path = "lib/libutil";
   extraPaths = ["lib/libc/gen"];
-  preBuild = ''
+  preBuild = lib.optionalString stdenv.cc.isClang ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST_DECLARED -D_SIZE_T"
   '';
   MK_TESTS = "no";

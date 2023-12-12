@@ -52,6 +52,11 @@ mkDerivation rec {
     #"contrib/llvm-project/libunwind"
     #"contrib/llvm-project/libcxx"
     #"lib/libcompiler_rt"
+
+    # terminfo
+    "lib/ncurses"
+    "contrib/ncurses"
+    "lib/Makefile.inc"
   ];
 
   patches = [
@@ -152,6 +157,9 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
+
+    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags
+    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install
 
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
