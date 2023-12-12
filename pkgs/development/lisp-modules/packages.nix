@@ -230,15 +230,15 @@ let
     };
   };
 
-  prompter = build-asdf-system {
+  prompter = build-asdf-system rec {
     pname = "prompter";
-    version = "0.1.0";
+    version = "0.1.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "prompter";
-      rev = "0.1.0";
-      sha256 = "sha256-Duv7L2lMjr3VXsoujQDOMNHCbdUDX4RWoncVm9LDCZE=";
+      rev = version;
+      sha256 = "sha256-A9gIUBj0oUDFGR5aqHz+tdNR6t03LPMrx0n9qM3ACwE=";
     };
 
     lispLibs = [
