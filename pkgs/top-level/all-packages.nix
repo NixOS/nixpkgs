@@ -17934,8 +17934,6 @@ with pkgs;
 
   pypi-mirror = callPackage ../development/tools/pypi-mirror { };
 
-  setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix { };
-
   svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   svg2pdf = callPackage ../tools/graphics/svg2pdf { };
