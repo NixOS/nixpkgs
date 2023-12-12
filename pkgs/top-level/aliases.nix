@@ -862,6 +862,7 @@ mapAliases ({
   sdlmame = throw "'sdlmame' has been renamed to/replaced by 'mame'"; # Converted to throw 2023-09-10
   searx = throw "'searx' has been removed as it is unmaintained. Please switch to searxng"; # Added 2023-10-03
   session-desktop-appimage = session-desktop;
+  setupcfg2nix = throw "'setupcfg2nix' has been removed. Please switch to buildPythonPackage"; # Added 2023-12-12
   sequoia = sequoia-sq; # Added 2023-06-26
   sexp = sexpp; # Added 2023-07-03
   sget = throw "sget has been removed from nixpkgs, as it is not supported upstream anymore see https://github.com/sigstore/sget/issues/145"; # Added 2023-05-26

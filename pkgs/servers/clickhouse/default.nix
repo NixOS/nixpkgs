@@ -28,7 +28,7 @@ let
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.10.3.5";
+  version = "23.11.1.2711";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -36,7 +36,7 @@ in mkDerivation rec {
     rev = "v${version}-stable";
     fetchSubmodules = true;
     name = "clickhouse-${rev}.tar.gz";
-    hash = "sha256-H3nIhBydLBxSesGrvqmwHmBoQGCGQlWgVVUudKLLkIY=";
+    hash = "sha256-xRg9NzUkjTbR2Lp6DgDzcUp2Hrc4sfgkot7KxPw2Uy8=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -60,6 +60,20 @@ in mkDerivation rec {
       mv temp "$out"
     '';
   };
+
+  patches = [
+    # They updated the Cargo.toml without updating the Cargo.lock :/
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/bccd33932b5fe17ced2dc2f27813da0b1c034afa.patch";
+      revert = true;
+      hash = "sha256-4idwr+G8WGuT/VILKtDIJIvbCvi6pZokJFze4dP6ExE=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/b6bd5ecb199ef8a10e3008a4ea3d96087db8a8c1.patch";
+      revert = true;
+      hash = "sha256-nbb/GV2qWEZ+BEfT6/9//yZf4VWdhOdJCI3PLeh6o0M=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [

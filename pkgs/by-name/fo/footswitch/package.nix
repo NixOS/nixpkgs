@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "footswitch";
-  version = "unstable-2022-04-12";
+  version = "unstable-2023-10-10";
 
   src = fetchFromGitHub {
     owner = "rgerganov";
     repo = "footswitch";
-    rev = "1cf63643e18e688e4ebe96451db24edf52338cc0";
-    sha256 = "0gfvi2wgrljndyz889cjjh2q13994fnaf11n7hpdd82c4wgg06kj";
+    rev = "b7493170ecc956ac87df2c36183253c945be2dcf";
+    sha256 = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Command line utlities for programming PCsensor and Scythe foot switches.";
-    homepage    = "https://github.com/rgerganov/footswitch";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/rgerganov/footswitch";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ baloo ];
   };
 }

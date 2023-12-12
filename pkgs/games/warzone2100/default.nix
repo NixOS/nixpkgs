@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   version  = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
+    url = "mirror://sourceforge/project/warzone2100/releases/${version}/warzone2100_src.tar.xz";
     hash = "sha256-8vbwO4PXEOyZqGiSz1yqhe8jfe4E4iv908mc+8xuH8I=";
   };
 

@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
   };
 
+  # FIXME: remove for next release
   patches = [
     (fetchpatch {
       name = "nodejs-20.patch";

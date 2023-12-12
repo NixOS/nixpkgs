@@ -11,7 +11,8 @@
 , json-glib
 , libgee
 , libhandy
-, libsoup
+, libportal-gtk3
+, libsoup_3
 , libxml2
 , meson
 , ninja
@@ -23,13 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.4.0";
+  version = "7.4.0-unstable-2023-12-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-L6MGbzzujr4tEB2Cpd7IU+3mOtSCt2hLPw4mOfZ4TkQ=";
+    # Add support for AppStream 1.0.
+    # https://github.com/elementary/appcenter/pull/2099
+    rev = "d93e135a0b0c9a6e0fbad18fe90d46425823a42c";
+    hash = "sha256-b7xux6MuvYZFxufQ5T7DoDNBlsJ/fDR0aUY2Hk/xJoY=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +53,8 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libportal-gtk3
+    libsoup_3
     libxml2
     polkit
   ];
