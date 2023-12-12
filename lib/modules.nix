@@ -817,28 +817,21 @@ let
       };
 
   # Merge definitions of a value of a given type.
-  mergeDefinitions = loc: type: defs: rec {
-    defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
+  mergeDefinitions = loc: type: defs: let
+    # Process mkOverride properties.
+    defs' = filterOverrides' (
+      # Process mkMerge and mkIf properties.
+      concatMap (m:
+        map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+      ) defs
+    );
 
-        # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
-
-        # Sort mkOrder properties.
-        defs''' =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values
-          then sortProperties defs''.values
-          else defs''.values;
-      in {
-        values = defs''';
-        inherit (defs'') highestPrio;
-      };
-    defsFinal = defsFinal'.values;
+    # Sort mkOrder properties.
+    defsFinal =
+      # Avoid sorting if we don't have to.
+      if any (def: def.value._type or "" == "order") defs'.values
+      then sortProperties defs'.values
+      else defs'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
@@ -856,6 +849,13 @@ let
     optionalValue =
       if isDefined then { value = mergedValue; }
       else {};
+
+  in {
+    inherit defsFinal mergedValue isDefined optionalValue;
+    defsFinal' = {
+      inherit (defs') highestPrio;
+      values = defsFinal;
+    };
   };
 
   /* Given a config set, expand mkMerge properties, and push down the
