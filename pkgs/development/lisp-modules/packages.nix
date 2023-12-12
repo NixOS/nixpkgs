@@ -267,16 +267,16 @@ let
     };
   };
 
-  njson = build-asdf-system {
+  njson = build-asdf-system rec {
     pname = "njson";
-    version = "1.1.0";
+    version = "1.2.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "njson";
-      rev = "1.1.0";
-      sha256 = "sha256-hVo5++QCns7Mv3zATpAP3EVz1pbj+jbQmzSLqs6hqQo=";
+      rev = version;
+      sha256 = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
     };
-    lispLibs = [ self.nasdf super.cl-json super.com_dot_inuoe_dot_jzon];
+    lispLibs = [ super.cl-json super.com_dot_inuoe_dot_jzon];
     systems = [ "njson" "njson/cl-json" "njson/jzon"];
   };
 
