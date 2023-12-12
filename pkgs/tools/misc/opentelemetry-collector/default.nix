@@ -2,23 +2,24 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nix-update-script
 , testers
 , opentelemetry-collector
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.90.1";
+  version = "0.92.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-JKcYvJtuN38VrhcVFHRc0CKTH+x8HShs1/Ui0iN1jNo=";
+    hash = "sha256-4hvnvRBow5H4x8zvPNEFxx8bvRzZy+aQxCqmihIZ13A=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-vaWOUc4CwiCDqe1szrBcgbHXQH/OkGTN0iqh+3CKPLQ=";
+  vendorHash = "sha256-PE9KGw0Wi9kTd+CY6AC/t2PTfBufH254xOJI6T59dj8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,10 +42,12 @@ buildGoModule rec {
       --zsh <($out/bin/otelcorecol completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = opentelemetry-collector;
-    command = "otelcorecol -v";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = opentelemetry-collector;
+      command = "otelcorecol -v";
+    };
   };
 
   meta = with lib; {
