@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./py_pybind11_no_external_download.patch
+    ./install-presets.patch
   ];
 
   nativeBuildInputs = [
