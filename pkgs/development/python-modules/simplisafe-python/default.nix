@@ -4,6 +4,7 @@
 , backoff
 , beautifulsoup4
 , buildPythonPackage
+, certifi
 , docutils
 , fetchFromGitHub
 , poetry-core
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     aiohttp
     backoff
     beautifulsoup4
+    certifi
     docutils
     pytz
     voluptuous
