@@ -12,6 +12,7 @@ in lib.recurseIntoAttrs
     autoload = callPackage ./autoload.nix { };
     chapterskip = callPackage ./chapterskip.nix { inherit buildLua; };
     convert = callPackage ./convert.nix { inherit buildLua; };
+    cutter = callPackage ./cutter.nix { inherit buildLua; };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { inherit buildLua; };
@@ -27,7 +28,6 @@ in lib.recurseIntoAttrs
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
-    cutter = callPackage ./cutter.nix { };
   }
   // (callPackage ./occivink.nix { inherit buildLua; }))
   // lib.optionalAttrs config.allowAliases {
