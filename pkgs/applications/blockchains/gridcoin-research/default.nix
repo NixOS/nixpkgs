@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gridcoin.us/";
     license = licenses.mit;
     maintainers = with maintainers; [ gigglesquid ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
