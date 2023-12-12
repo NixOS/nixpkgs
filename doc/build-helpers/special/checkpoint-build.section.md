@@ -6,17 +6,17 @@ For hermeticity, Nix derivations do not allow any state to carry over between bu
 
 However, we can tell Nix explicitly what the previous build state was, by representing that previous state as a derivation output. This allows the passed build state to be used for an incremental build.
 
-To build a derivation based on build checkpoints, the following steps needs to be fullfilled:
-    * - run prepareCheckpointBuild on the desired derivation
-    *   e.G `checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);`
-    * - change something you want in the sources of the package( e.G using source override)
+To change a normal derivation to a checkpoint based build, these steps must be taken:
+  * apply `prepareCheckpointBuild` on the desired derivation
+    e.g. `checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);`
+  - change something you want in the sources of the package. (e.g. using a source override)
     *   changedVBox = pkgs.virtualbox.overrideAttrs (old: {
     *      src = path/to/vbox/sources;
     *   }
     * - use `mkCheckpointedBuild changedVBox buildOutput`
     * enjoy shorter build times
 
-As Nix has no builtin support for the detection of the previous built derivation, a base version needs to be declared.
+As Nix intentionally has no built-in support for the detection of the previously built derivation, a base version must be declared.
 To create the outputs later used as base version for checkpoint builds, the function `pkgs.checkpointBuildTools.prepareCheckpointBuild` is used.
 The function takes the original derivation as an argument and transforms the output to a base version for an checkpoint build build.
 While doing so, the original output is not created and the installation phase is overwritten to produce the checkpoint artifacts.
