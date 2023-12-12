@@ -7,54 +7,53 @@
 let
   buildLua = callPackage ./buildLua.nix { };
 
-  inherit (lib.attrsets) filterAttrs optionalAttrs recursiveUpdate unionOfDisjoint;
+  unionOfDisjoints = lib.fold lib.attrsets.unionOfDisjoint {};
 
   addTests = name: drv: let
     inherit (drv) scriptName;
     scriptPath = "share/mpv/scripts/${scriptName}";
     fullScriptPath = "${drv}/${scriptPath}";
 
-  in drv.override { passthru.tests = unionOfDisjoint (drv.passthru.tests or {}) {
+  in drv.override { passthru.tests = unionOfDisjoints [
+    (drv.passthru.tests or {})
 
-    scriptName-is-valid = runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid" {
-      meta.maintainers = with lib.maintainers; [ nicoo ];
-      preferLocalBuild = true;
-    } ''
-      if [ -e "${fullScriptPath}" ]; then
-        touch $out
-      else
-        echo "mpvScripts.\"${name}\" does not contain a script named \"${scriptName}\"" >&2
-        exit 1
-      fi
-    '';
+    {
+      scriptName-is-valid = runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid" {
+        meta.maintainers = with lib.maintainers; [ nicoo ];
+        preferLocalBuild = true;
+      } ''
+        if [ -e "${fullScriptPath}" ]; then
+          touch $out
+        else
+          echo "mpvScripts.\"${name}\" does not contain a script named \"${scriptName}\"" >&2
+          exit 1
+        fi
+      '';
+    }
 
-    # TODO(nicoo): Avoid emitting the test for scripts that aren't dir-packaged
-    single-main-in-script-dir = runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir" {
-      meta.maintainers = with lib.maintainers; [ nicoo ];
-      preferLocalBuild = true;
-    } ''
-      die() {
-        echo "$@" >&2
-        exit 1
-      }
+    # can't check whether `fullScriptPath` is a directory, in pure-evaluation mode
+    (with lib; optionalAttrs (! any (s: hasSuffix s drv.passthru.scriptName) [ ".js" ".lua" ".so" ]) {
+      single-main-in-script-dir = runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir" {
+        meta.maintainers = with lib.maintainers; [ nicoo ];
+        preferLocalBuild = true;
+      } ''
+        die() {
+          echo "$@" >&2
+          exit 1
+        }
 
-      if ! [ -d "${fullScriptPath}" ]; then
-        echo "This script isn't dir-packaged" >&2
-        touch $out
-        exit 0
-      fi
-
-      cd "${drv}/${scriptPath}"  # so the glob expands to filenames only
-      mains=( main.* )
-      if [ "''${#mains[*]}" -eq 1 ]; then
-        touch $out
-      elif [ "''${#mains[*]}" -eq 0 ]; then
-        die "'${scriptPath}' contains no 'main.*' file"
-      else
-        die "'${scriptPath}' contains multiple 'main.*' files:" "''${mains[*]}"
-      fi
-    '';
-  }; };
+        cd "${drv}/${scriptPath}"  # so the glob expands to filenames only
+        mains=( main.* )
+        if [ "''${#mains[*]}" -eq 1 ]; then
+          touch $out
+        elif [ "''${#mains[*]}" -eq 0 ]; then
+          die "'${scriptPath}' contains no 'main.*' file"
+        else
+          die "'${scriptPath}' contains multiple 'main.*' files:" "''${mains[*]}"
+        fi
+      '';
+    })
+  ]; };
 in
 
 lib.recurseIntoAttrs
@@ -83,6 +82,6 @@ lib.recurseIntoAttrs
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
   }
   // (callPackage ./occivink.nix { inherit buildLua; })))
-  // optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
 }
