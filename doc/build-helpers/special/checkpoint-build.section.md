@@ -10,7 +10,7 @@ To build a derivation based on build checkpoints, the following steps needs to b
     * - run prepareCheckpointBuild on the desired derivation
     *   e.G `checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);`
     * - change something you want in the sources of the package( e.G using source override)
-    *   changedVBox = pkgs.virtuabox.overrideAttrs (old: {
+    *   changedVBox = pkgs.virtualbox.overrideAttrs (old: {
     *      src = path/to/vbox/sources;
     *   }
     * - use `mkCheckpointedBuild changedVBox buildOutput`
