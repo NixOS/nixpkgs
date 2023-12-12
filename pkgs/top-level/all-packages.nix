@@ -15484,8 +15484,8 @@ with pkgs;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-19;
-  temurin-jre-bin = temurin-jre-bin-19;
+  temurin-bin = temurin-bin-21;
+  temurin-jre-bin = temurin-jre-bin-21;
 
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
@@ -16483,8 +16483,8 @@ with pkgs;
   jdk21_headless = openjdk21_headless;
 
   /* default JDK */
-  jdk = jdk19;
-  jdk_headless = jdk19_headless;
+  jdk = jdk21;
+  jdk_headless = jdk21_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
