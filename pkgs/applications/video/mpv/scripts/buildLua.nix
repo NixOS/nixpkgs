@@ -2,7 +2,6 @@
 , stdenvNoCC }:
 
 let
-  inherit (lib) hasPrefix hasSuffix removeSuffix;
   escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
   scriptsDir = "$out/share/mpv/scripts";
