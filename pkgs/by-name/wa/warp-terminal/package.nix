@@ -5,12 +5,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "warp-terminal";
-  version = "0.2023.11.07.08.02.stable_00";
+  version = "0.2023.12.05.08.02.stable_00";
 
   src = fetchurl {
     url = "https://releases.warp.dev/stable/v${finalAttrs.version}/Warp.dmg";
-    hash = "sha256-oGsoIzNlrknaZtrGWT3oUEzwJIutxB1wnAvxTzF6Fis=";
+    hash = "sha256-9olAmczIPRXV15NYCOYmwuEmJ7lMeaQRTTfukaYXMR0=";
   };
+
   sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
