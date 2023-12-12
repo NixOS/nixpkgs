@@ -944,15 +944,15 @@ let
   /* Sort a list of properties.  The sort priority of a property is
      defaultOrderPriority by default, but can be overridden by wrapping the property
      using mkOrder. */
-  sortProperties = defs:
+  sortProperties =
     let
       strip = def:
         if def.value._type or "" == "order"
         then def // { value = def.value.content; inherit (def.value) priority; }
         else def;
-      defs' = map strip defs;
       compare = a: b: (a.priority or defaultOrderPriority) < (b.priority or defaultOrderPriority);
-    in sort compare defs';
+    in
+    defs: sort compare (map strip defs);
 
   # This calls substSubModules, whose entire purpose is only to ensure that
   # option declarations in submodules have accurate position information.
