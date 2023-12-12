@@ -39,4 +39,5 @@ self: super: {
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
 
+  simplex-chat = self.callPackage ../misc/haskell/simplex-chat.nix {};
 }
