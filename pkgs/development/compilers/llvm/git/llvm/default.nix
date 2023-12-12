@@ -8,8 +8,7 @@
 , python3
 , python3Packages
 , libffi
-# TODO: Gold plugin on LLVM16 has a severe memory corruption bug: https://github.com/llvm/llvm-project/issues/61350.
-, enableGoldPlugin ? false
+, enableGoldPlugin ? true
 , libbfd
 , libpfm
 , libxml2
@@ -66,8 +65,8 @@ let
   else python3;
 
 in
-  assert (lib.assertMsg (!enableGoldPlugin) "Gold plugin cannot be enabled on LLVM16 due to a upstream issue: https://github.com/llvm/llvm-project/issues/61350");
-  stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
@@ -325,7 +324,7 @@ in
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (false) [
+  ] ++ optionals enableGoldPlugin [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
