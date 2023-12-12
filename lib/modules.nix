@@ -807,7 +807,7 @@ let
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
-        inherit (res.defsFinal') highestPrio;
+        inherit (res) highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         definitionsWithLocations = res.defsFinal;
@@ -855,11 +855,7 @@ let
       else {};
 
   in {
-    inherit defsFinal mergedValue isDefined optionalValue;
-    defsFinal' = {
-      inherit highestPrio;
-      values = defsFinal;
-    };
+    inherit defsFinal mergedValue isDefined optionalValue highestPrio;
   };
 
   /* Given a config set, expand mkMerge properties, and push down the
@@ -993,7 +989,7 @@ let
                   let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
                   in {
                     value = merging.mergedValue;
-                    inherit (merging.defsFinal') highestPrio;
+                    inherit (merging) highestPrio;
                   })
                 defsByAttr;
 
