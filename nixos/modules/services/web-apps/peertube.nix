@@ -61,8 +61,8 @@ let
     eval -- "\$@"
   '';
 
-  peertubeCli = pkgs.writeShellScriptBin "peertube" ''
-    node ~/dist/server/tools/peertube.js $@
+  peertubeCli = pkgs.writeShellScriptBin "peertube-cli" ''
+    node ~/apps/peertube-cli/dist/peertube.js $@
   '';
 
   nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
@@ -355,12 +355,13 @@ in {
           tmp_persistent = lib.mkDefault "/var/lib/peertube/storage/tmp_persistent/";
           bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
-          videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
+          web_videos = lib.mkDefault "/var/lib/peertube/storage/web-videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
           redundancy = lib.mkDefault "/var/lib/peertube/storage/redundancy/";
           logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
           previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           thumbnails = lib.mkDefault "/var/lib/peertube/storage/thumbnails/";
+          storyboards = lib.mkDefault "/var/lib/peertube/storage/storyboards/";
           torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
           captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
@@ -428,7 +429,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs_18 openssl yarn python3 ];
+      path = with pkgs; [ nodejs_18 yarn ffmpeg-headless openssl ];
 
       script = ''
         #!/bin/sh
@@ -456,7 +457,7 @@ in {
         ln -sf ${cfg.package}/config/default.yaml /var/lib/peertube/config/default.yaml
         ln -sf ${cfg.package}/client/dist -T /var/lib/peertube/www/client
         ln -sf ${cfg.settings.storage.client_overrides} -T /var/lib/peertube/www/client-overrides
-        npm start
+        node dist/server
       '';
       serviceConfig = {
         Type = "simple";
@@ -778,7 +779,7 @@ in {
 
         locations."^~ /static/webseed/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.videos;
+          root = cfg.settings.storage.web_videos;
           priority = 1480;
           extraConfig = ''
             set $peertube_limit_rate                    800k;
@@ -807,7 +808,7 @@ in {
             limit_rate                                  $peertube_limit_rate;
             limit_rate_after                            5M;
 
-            rewrite ^/static/webseed/(.*)$              /$1 break;
+            rewrite ^/static/webseed/(.*)$              /web-videos/$1 break;
           '';
         };
 
@@ -848,7 +849,7 @@ in {
           home = cfg.package;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs_18 pkgs.yarn ])
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ peertubeEnv peertubeCli pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ])
       (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 
