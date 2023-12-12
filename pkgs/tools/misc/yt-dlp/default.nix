@@ -9,6 +9,7 @@
 , pycryptodomex
 , websockets
 , mutagen
+, requests
 , secretstorage
 , atomicparsleySupport ? true
 , ffmpegSupport ? true
@@ -22,11 +23,11 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2023.10.13";
+  version = "2023.11.14";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4CbqHENf827vEhW8TFu4xHmTi5AFSZe6mfY6RUH+Y7Q=";
+    hash = "sha256-s8JTU7oQaSLYcKWlnk1qLrhXg+vRfinsQ1vD4XZN6L4=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     certifi
     mutagen
     pycryptodomex
+    requests
     secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
     websockets
   ];
@@ -60,6 +62,11 @@ buildPythonPackage rec {
 
   postInstall = lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+  '';
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "requests>=2.31.0" "requests>=2.29.0"
   '';
 
   passthru.updateScript = [ update-python-libraries (toString ./.) ];
