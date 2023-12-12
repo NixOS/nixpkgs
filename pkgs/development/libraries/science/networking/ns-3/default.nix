@@ -1,5 +1,4 @@
 { stdenv
-, breakpointHook
 , fetchFromGitLab
 , python
 , libxml2
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     sqlite.dev
     gsl
     boost
-    root
+    root # provides cppyy
     glib.out
     glib.dev
     libpcap
