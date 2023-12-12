@@ -54,6 +54,11 @@ stdenv.mkDerivation rec {
     text-engine
   ];
 
+  mesonFlags = [
+    (lib.mesonOption "package" "Nix")
+    (lib.mesonOption "distributor" "nixpkgs")
+  ];
+
   meta = with lib; {
     description = "Desktop app for managing GNOME shell extensions";
     homepage = "https://github.com/mjakeman/extension-manager";
