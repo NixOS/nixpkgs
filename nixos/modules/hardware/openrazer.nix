@@ -19,7 +19,9 @@ let
       [Startup]
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
-      mouse_battery_notifier = ${toPyBoolStr cfg.mouseBatteryNotifier}
+      battery_notifier = ${toPyBoolStr cfg.mouseBatteryNotifier}
+      battery_notifier_freq = ${builtins.toString cfg.mouseBatteryNotifierFrequency}
+      battery_notifier_percent = ${builtins.toString cfg.mouseBatteryNotifierPercentage}
 
       [Statistics]
       key_statistics = ${toPyBoolStr cfg.keyStatistics}
@@ -86,6 +88,24 @@ in
         '';
       };
 
+      mouseBatteryNotifierFrequency = mkOption {
+        type = types.int;
+        default = 600;
+        description = lib.mdDoc ''
+          How often battery notifications should be shown (in seconds).
+          A value of 0 disables notifications.
+        '';
+      };
+
+      mouseBatteryNotifierPercentage = mkOption {
+        type = types.int;
+        default = 33;
+        description = lib.mdDoc ''
+          At what battery percentage the device should reach before
+          sending notifications.
+        '';
+      };
+
       keyStatistics = mkOption {
         type = types.bool;
         default = false;
@@ -127,15 +147,15 @@ in
     systemd.user.services.openrazer-daemon = {
       description = "Daemon to manage razer devices in userspace";
       unitConfig.Documentation = "man:openrazer-daemon(8)";
-        # Requires a graphical session so the daemon knows when the screensaver
-        # starts. See the 'devicesOffOnScreensaver' option.
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.razer";
-          ExecStart = "${daemonExe} --foreground";
-          Restart = "always";
+      # Requires a graphical session so the daemon knows when the screensaver
+      # starts. See the 'devicesOffOnScreensaver' option.
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.razer";
+        ExecStart = "${daemonExe} --foreground";
+        Restart = "always";
       };
     };
   };
