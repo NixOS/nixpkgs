@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   '';
   outputDocdev = "out";
 
+  enableParallelInstalling = true;
+
   meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
