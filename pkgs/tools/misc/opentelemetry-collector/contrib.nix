@@ -4,22 +4,25 @@
 , stdenv
 , systemdMinimal
 , withSystemd ? false
+, nix-update-script
+, testers
+, opentelemetry-collector-contrib
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.87.0";
+  version = "0.92.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-b1TCj3aKupqUMQ74O58O5WJfQM9tj1G0ny5YeeilFAM=";
+    sha256 = "sha256-fDcxxlGUT67KGr5BT55aWwr8s0r+TX2KBFvSqM8k/OI=";
   };
 
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-o/51Z2Zmdza3pNZa0u3j4uG46orE9S7pUsZOXjHKrnI=";
+  vendorHash = "sha256-/Pvf13BLJ4fovrqsf2b8RpAvO5un92kS+G2e02vb8zk=";
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
@@ -28,6 +31,11 @@ buildGoModule rec {
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
   # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
   CGO_ENABLED = 0;
+
+  preBuild = ''
+    # set the build version, can't be done via ldflags
+    sed -i -E 's/Version:(\s*)".*"/Version:\1"${version}"/' main.go
+  '';
 
   # journalctl is required in-$PATH for the journald receiver tests.
   nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
@@ -41,15 +49,24 @@ buildGoModule rec {
 
   preCheck = "export CGO_ENABLED=1";
 
+  # Mezmo exporter attempts to call https://logs.mezmo.com/otel/ingest/rest endpoint.
+  checkFlags = [ "-skip=TestDefaultExporters/mezmo" ]
   # This test fails on darwin for mysterious reasons.
-  checkFlags = lib.optionals stdenv.isDarwin
+  ++ lib.optionals stdenv.isDarwin
     [ "-skip" "TestDefaultExtensions/memory_ballast" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/open-telemetry/opentelemetry-collector-contrib/internal/version.Version=v${version}"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = opentelemetry-collector-contrib;
+      command = "otelcontribcol -v";
+    };
+  };
 
   meta = with lib; {
     description = "OpenTelemetry Collector superset with additional community collectors";
