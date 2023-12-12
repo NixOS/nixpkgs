@@ -3,12 +3,13 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "pycfdns";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -18,9 +19,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'version="master",' 'version="${version}",'
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0"' 'version = "${version}"'
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
