@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "High performance sFlow/IPFIX/NetFlow Collector";
     homepage = "https://github.com/netsampler/goflow2";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = teams.wdz.members;
     mainProgram = "goflow2";
   };
 }
