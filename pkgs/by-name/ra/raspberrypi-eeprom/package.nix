@@ -58,5 +58,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
     license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
     maintainers = with maintainers; [ das_j Luflosi ];
+    platforms = platforms.linux;
   };
 }
