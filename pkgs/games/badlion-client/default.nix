@@ -2,11 +2,11 @@
 
 let
   pname = "badlion-client";
-  version = "3.15.0";
+  version = "4.1.2";
 
   src = fetchurl {
-    url = "https://client-updates-cdn77.badlion.net/BadlionClient";
-    hash = "sha256-HqMgY9+Xnp4uSTWr//REZGv3p7ivwLX97vxGD5wqu9E=";
+    url = "https://web.archive.org/web/20240318143435/https://client-updates-cdn77.badlion.net/BadlionClient";
+    hash = "sha256-dayClA7dinwktioW7FSADJPqifN02Q8i5Jo/HfPGlp8=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
