@@ -327,14 +327,14 @@ let
     ];
   };
 
-  nhooks = build-asdf-system {
+  nhooks = build-asdf-system rec {
     pname = "nhooks";
-    version = "1.2.1";
+    version = "1.2.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nhooks";
-      rev = "1.2.1";
-      hash = "sha256-D61QHxHTceIu5mCGKf3hy53niQMfs0idEYQK1ZYn1YM=";
+      rev = version;
+      hash = "sha256-6A3fsemsv2KbTmdGMQeL9iHFUBHc4kK6CRNVyc91LdU=";
     };
     lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
   };
