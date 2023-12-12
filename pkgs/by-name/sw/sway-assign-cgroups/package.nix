@@ -4,7 +4,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "assign-cgroups";
+  pname = "sway-assign-cgroups";
   version = "0.4.0";
   src = fetchFromGitHub {
     owner = "alebastr";
