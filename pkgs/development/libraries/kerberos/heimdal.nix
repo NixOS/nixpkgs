@@ -173,5 +173,6 @@ stdenv.mkDerivation {
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ h7x4 ];
   };
 }
