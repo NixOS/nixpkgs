@@ -1789,6 +1789,19 @@ let
       beamDeps = [ combine gettext tzdata ];
     };
 
+    tls_certificate_check = buildRebar3 rec {
+      name = "tls_certificate_check";
+      version = "1.20.0";
+
+      src = fetchHex {
+        pkg = "tls_certificate_check";
+        version = "${version}";
+        sha256 = "ab57b74b1a63dc5775650699a3ec032ec0065005eff1f020818742b7312a8426";
+      };
+
+      beamDeps = [ ssl_verify_fun ];
+    };
+
     tz_world = buildMix rec {
       name = "tz_world";
       version = "1.3.1";

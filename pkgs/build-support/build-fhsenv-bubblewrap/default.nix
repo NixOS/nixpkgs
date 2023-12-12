@@ -200,6 +200,7 @@ let
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
       --tmpfs ${glibc}/etc \
+      --tmpfs /etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
