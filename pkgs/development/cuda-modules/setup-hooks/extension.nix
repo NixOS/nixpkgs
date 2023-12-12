@@ -58,7 +58,8 @@ final: _: {
           {
             name = "auto-add-cuda-compat-runpath-hook";
             substitutions = {
-              libcudaPath = "${cuda_compat}/compat";
+              # Hotfix Ofborg evaluation
+              libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;
             };
             meta.broken = !final.flags.isJetsonBuild;
           }
