@@ -356,18 +356,17 @@ let
 
   history-tree = build-asdf-system rec {
     pname = "history-tree";
-    version = "0.1.1";
+    version = "0.1.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "history-tree";
       rev = version;
-      hash = "sha256-lOORalyTybdut/If+dBXS4PlZt2AnZrEI/qjQWS03pk=";
+      hash = "sha256-wpVONvShNnvrPOlbNoX/t9sYiwxnIKnnJaJyALEyeNg=";
     };
     lispLibs = with self; [
       alexandria
       cl-custom-hash-table
       local-time
-      nasdf
       nclasses
       trivial-package-local-nicknames
     ];
