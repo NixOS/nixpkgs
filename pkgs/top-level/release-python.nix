@@ -9,7 +9,17 @@
     "x86_64-linux"
   ]
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  nixpkgsArgs ? { config = {
+    allowUnfree = false;
+    allowInsecure = false;
+    inHydra = true;
+    permittedInsecurePackages = [
+      # Keep evaluating home-assistant, which is transitively affected
+      # by home-assistant-chip-core consuming OpenSSL 1.1. Affects roughly
+      # 800 jobs.
+      "openssl-1.1.1w"
+    ];
+  }; }
 }:
 
 with import ./release-lib.nix {inherit supportedSystems nixpkgsArgs; };
