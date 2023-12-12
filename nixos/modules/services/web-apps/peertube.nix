@@ -61,10 +61,6 @@ let
     eval -- "\$@"
   '';
 
-  peertubeCli = pkgs.writeShellScriptBin "peertube-cli" ''
-    node ~/apps/peertube-cli/dist/peertube.js $@
-  '';
-
   nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
     add_header Strict-Transport-Security      'max-age=63072000; includeSubDomains';
   '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
@@ -329,6 +325,8 @@ in {
           '';
       }
     ];
+
+    environment.systemPackages = [ cfg.package.cli ];
 
     services.peertube.settings = lib.mkMerge [
       {
@@ -849,7 +847,7 @@ in {
           home = cfg.package;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ peertubeEnv peertubeCli pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ])
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ peertubeEnv pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ])
       (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 

@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-xsB71bnaPn/9/f1KHyU3TTwx+Q+1dLjWmNK2aVJgoRY=";
   };
 
+  outputs = [ "out" "cli" ];
+
   nativeBuildInputs = [ brotli prefetch-yarn-deps jq which yarn ];
 
   buildInputs = [ nodejs ];
@@ -107,7 +109,7 @@ stdenv.mkDerivation rec {
     # Build PeerTube client
     npm run build:client
 
-    # Build PeerTube tools
+    # Build PeerTube cli
     npm run build:peertube-cli
     patchShebangs ~/apps/peertube-cli/dist/peertube.js
 
@@ -128,8 +130,6 @@ stdenv.mkDerivation rec {
     mv ~/node_modules $out/node_modules
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
-    mkdir -p $out/apps/peertube-cli
-    mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $out/apps/peertube-cli
     mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,typescript-utils}
     mv ~/packages/core-utils/{dist,package.json} $out/packages/core-utils
     mv ~/packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
@@ -138,6 +138,10 @@ stdenv.mkDerivation rec {
     mv ~/packages/server-commands/{dist,package.json} $out/packages/server-commands
     mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
     mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,yarn.lock} $out
+
+    mkdir -p $cli/bin
+    mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
+    ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
 
     # Create static gzip and brotli files
     find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
