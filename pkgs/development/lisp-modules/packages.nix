@@ -280,14 +280,14 @@ let
     systems = [ "njson" "njson/cl-json" "njson/jzon"];
   };
 
-  nsymbols = build-asdf-system {
+  nsymbols = build-asdf-system rec {
     pname = "nsymbols";
-    version = "0.3.1";
+    version = "0.3.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nsymbols";
-      rev = "0.3.1";
-      sha256 = "sha256-KcrE06bG5Khp5/807wb/TbPG3nWTlNWHrDpmK6bm7ZM=";
+      rev = version;
+      sha256 = "sha256-psk29WEA7Hxgp29oUniBNvI+lyZfMkdpa5A7okc6kKs=";
     };
     lispLibs = [ super.closer-mop ];
     systems = [ "nsymbols" "nsymbols/star" ];
