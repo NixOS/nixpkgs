@@ -4823,8 +4823,6 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
-  swayimg = callPackage ../tools/wayland/swayimg { };
-
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   swww = callPackage ../tools/wayland/swww { };
@@ -12180,9 +12178,7 @@ with pkgs;
     python = null;
   };
 
-  ploticus = callPackage ../tools/graphics/ploticus {
-    libpng = libpng12;
-  };
+  ploticus = callPackage ../tools/graphics/ploticus { };
 
   plotinus = callPackage ../tools/misc/plotinus { };
 
@@ -13215,7 +13211,8 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  signalbackup-tools = callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
+  signalbackup-tools = darwin.apple_sdk_11_0.callPackage
+    ../applications/networking/instant-messengers/signalbackup-tools { };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
@@ -24354,7 +24351,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
     pythonPackages = python3Packages;
-    ffmpeg = ffmpeg_4;
   };
 
   opencv4WithoutCuda = opencv4.override {
