@@ -10,6 +10,8 @@
 , openssl
 , libscrypt
 , wrapQtAppsHook
+, testers
+, qMasterPassword
 , x11Support ? true
 , waylandSupport ? false
 }:
@@ -48,6 +50,13 @@ stdenv.mkDerivation rec {
     cp ./translations/translation_de.qm $out/share/qMasterPassword/translations/translation_de.qm
     cp ./translations/translation_pl.qm $out/share/qMasterPassword/translations/translation_pl.qm
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = qMasterPassword;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Stateless Master Password Manager";
