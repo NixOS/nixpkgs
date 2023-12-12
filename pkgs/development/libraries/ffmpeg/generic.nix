@@ -213,6 +213,7 @@
 , libopenmpt
 , libopus
 , libplacebo
+, libplacebo_5
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -577,7 +578,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
-  ++ optionals withLibplacebo [ libplacebo vulkan-headers ]
+  ++ optionals withLibplacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
