@@ -4,20 +4,18 @@
 , CoreFoundation, Security, SystemConfiguration
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "heimdal";
-  version = "7.8.0";
+  version = "7.8.0-unstable-2023-11-29";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "heimdal-${version}";
-    sha256 = "sha256-iXOaar1S3y0xHdL0S+vS0uxoFQjy43kABxqE+KEhxjU=";
+    rev = "3253c49544eacb33d5ad2f6f919b0696e5aab794";
+    sha256 = "sha256-uljzQBzXrZCZjcIWfioqHN8YsbUUNy14Vo+A3vZIXzM=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
-
-  patches = [ ./heimdal-make-missing-headers.patch ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 perl bison flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
@@ -70,9 +68,6 @@ stdenv.mkDerivation rec {
     # Install hcrypto
     (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
     (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
-
-    # Do we need it?
-    rm $out/bin/su
 
     mkdir -p $dev/bin
     mv $out/bin/krb5-config $dev/bin/
