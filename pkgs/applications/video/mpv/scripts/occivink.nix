@@ -13,12 +13,12 @@ let
   mkScript = name: args:
     let self = rec {
       pname = camelToKebab name;
-      version = "unstable-2022-10-02";
+      version = "unstable-2023-12-18";
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";
-        rev = "af360f332897dda907644480f785336bc93facf1";
-        hash = "sha256-KdCrUkJpbxxqmyUHksVVc8KdMn8ivJeUA2eerFZfEE8=";
+        rev = "f0426bd6b107b1f4b124552dae923b62f58ce3b6";
+        hash = "sha256-oag5lcDoezyNXs5EBr0r0UE3ikeftvbfxSzfbxV1Oy0=";
       };
       passthru.updateScript = unstableGitUpdater {};
 
@@ -39,13 +39,7 @@ in
 lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = {
-    meta.description = "Mpv script for seeking to a specific position";
-    outputHash = "sha256-3RlbtUivmeoR9TZ6rABiZSd5jd2lFv/8p/4irHMLshs=";
-  };
-
-  blacklistExtensions = {
-    meta.description = "Automatically remove playlist entries based on their extension.";
-    outputHash = "sha256-qw9lz8ofmvvh23F9aWLxiU4YofY+YflRETu+nxMhvVE=";
-  };
+  seekTo.meta.description = "Mpv script for seeking to a specific position";
+  blacklistExtensions.meta.description =
+    "Automatically remove playlist entries based on their extension.";
 }
