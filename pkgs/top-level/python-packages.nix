@@ -5345,6 +5345,8 @@ self: super: with self; {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  icalevents = callPackage ../development/python-modules/icalevents { };
+
   icecream = callPackage ../development/python-modules/icecream { };
 
   iceportal = callPackage ../development/python-modules/iceportal { };
