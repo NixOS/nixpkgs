@@ -81,11 +81,11 @@ self: super: {
   th-abstraction = super.th-abstraction_0_6_0_0;
 
   cabal-fmt =
-    if pkgs.stdenv.targetPlatform.isDarwin && pkgs.stdenv.targetPlatform.isAarch64 then 
+    if pkgs.stdenv.targetPlatform.isDarwin && pkgs.stdenv.targetPlatform.isAarch64 then
       overrideCabal (drv: {
         enableSeparateBinOutput = false;
       }) (super.cabal-fmt)
-    else 
+    else
       super.cabal-fmt;
 
   ChasingBottoms = dontCheck (doJailbreak super.ChasingBottoms); # base >=4.2 && <4.19
@@ -118,7 +118,7 @@ self: super: {
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
   # lmao
   haskell-language-server = overrideCabal (drv: {
-    configureFlags = ([ 
+    configureFlags = ([
       "-f-class"
       "-f-rename"
       "-f-retrie"
