@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/netsampler/goflow2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuka ];
+    mainProgram = "goflow2";
   };
 }
