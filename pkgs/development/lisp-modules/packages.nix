@@ -373,7 +373,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.9.0";
+    version = "3.10.0";
 
     lispLibs = (with super; [
       alexandria
@@ -411,7 +411,6 @@ let
       plump
       clss
       spinneret
-      slynk
       trivia
       trivial-features
       trivial-garbage
@@ -427,8 +426,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "snmsts";
           repo = "trivial-clipboard";
-          rev = "6ddf8d5dff8f5c2102af7cd1a1751cbe6408377b";
-          sha256 = "sha256-n15IuTkqAAh2c1OfNbZfCAQJbH//QXeH0Bl1/5OpFRM=";
+          rev = "f7b2c96fea00ca06a83f20b00b7b1971e76e03e7";
+          sha256 = "sha256-U6Y9BiM2P1t9P8fdX8WIRQPRWl2v2ZQuKdP1IUqvOAk=";
         };}))
       (cl-gobject-introspection.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
@@ -445,26 +444,45 @@ let
           sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
         };
       }))
+      (slynk.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "joaotavora";
+          repo = "sly";
+          rev = "9c43bf65b967e12cef1996f1af5f0671d8aecbf4";
+          hash = "sha256-YlHZ/7VwvHe2PBPRshN+Gr3WuGK9MpkOJprP6QXI3pY=";
+        };
+        systems = [ "slynk" "slynk/arglists" "slynk/fancy-inspector"
+                    "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
+                    "slynk/profiler" "slynk/stickers" "slynk/indentation"
+                    "slynk/retro" ];
+      }))
     ]) ++ (with self; [
       history-tree
       nhooks
       nkeymaps
-      nasdf
       prompter
       cl-colors2_0_5_4
       njson
       nsymbols
       nclasses
       nfiles
-      swank
       cl-containers
+      (swank.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "slime";
+          repo = "slime";
+          rev = "735258a26bb97e85d25f39e4bef83c1f80c12f5d";
+          hash = "sha256-vMMer6qLJDKTwNE3unsOQezujISqFtn2AYl8cxsJvrc=";
+        };
+        systems = [ "swank" "swank/exts" ];
+      }))
     ]);
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.9.0";
-      sha256 = "sha256-bZoAE0FErgXPylOzh6AfMq3befms9dHms8+slbYdctk=";
+      rev = "3.10.0";
+      sha256 = "sha256-yEa5Lx1egkg9Jh3EQfvaBQicm31uxIq/3s2NOQUC4uc=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -484,8 +502,14 @@ let
     # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
     patches = [ ./patches/nyxt-remove-build-operation.patch ];
 
+    NASDF_USE_LOGICAL_PATHS = true;
+
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
       (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
+      (require :uiop)
+      (let ((pwd (uiop:ensure-directory-pathname (uiop/os:getcwd))))
+        (asdf:load-asd (uiop:merge-pathnames* "libraries/nasdf/nasdf.asd" pwd))
+        (asdf:load-asd (uiop:merge-pathnames* "nyxt.asd" pwd)))
       ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:operare :program-op instead
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
