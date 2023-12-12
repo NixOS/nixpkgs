@@ -114,6 +114,7 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false
+, processEnvVars ? []
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -774,6 +775,12 @@ stdenv.mkDerivation ({
 
     env = envFunc { };
 
+    processEnv = processEnvVars
+      ++ lib.concatMap (dep:
+                         if (dep == null)
+                           then []
+                           else dep.passthru.processEnv or [])
+                       libraryHaskellDepends;
   };
 
   meta = { inherit homepage license platforms; }

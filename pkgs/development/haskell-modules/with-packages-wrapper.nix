@@ -74,6 +74,11 @@ let
   llvm          = lib.makeBinPath
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
+  getShellEnv   = pkg:
+                    if pkg == null
+                      then []
+                      else pkg.passthru.processEnv or [];
+  shellEnv      = lib.concatMap getShellEnv packages;
 in
 
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
@@ -102,6 +107,10 @@ symlinkJoin {
           --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
           ${lib.optionalString (ghc.isGhcjs or false)
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
+          } \
+          ${lib.concatMapStringsSep " "
+            (entry: ''--set "${entry.key}" "${entry.value}"'')
+            shellEnv
           } \
           ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
