@@ -25,7 +25,7 @@ in lib.recurseIntoAttrs
     thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
     thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
     uosc = callPackage ./uosc.nix { inherit buildLua; };
-    visualizer = callPackage ./visualizer.nix { };
+    visualizer = callPackage ./visualizer.nix { inherit buildLua; };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
   }
