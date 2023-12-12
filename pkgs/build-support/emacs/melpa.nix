@@ -3,7 +3,9 @@
 
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
-with lib;
+let
+  handledArgs = [ "meta" ];
+in
 
 { /*
     pname: Nix package name without special symbols and without version or
@@ -19,14 +21,6 @@ with lib;
 , meta ? {}
 , ...
 }@args:
-
-let
-
-  defaultMeta = {
-    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
-  };
-
-in
 
 import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
@@ -104,7 +98,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     runHook postInstall
   '';
 
-  meta = defaultMeta // meta;
+  meta = {
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
+  } // meta;
 }
 
-// removeAttrs args [ "meta" ])
+// removeAttrs args handledArgs)

@@ -70,6 +70,14 @@ rec {
     let
       # prevent infinite recursion for the default stdenv value
       defaultStdenv = stdenv;
+
+      # Preallocated for performance
+      passAsFile = [ "buildCommand" ];
+      handledArgs = [ "passAsFile" ];
+      runLocalAttrs = {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+      };
     in
     {
     # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
@@ -85,8 +93,7 @@ rec {
     stdenv.mkDerivation ({
       enableParallelBuilding = true;
       inherit buildCommand name;
-      passAsFile = [ "buildCommand" ]
-        ++ (derivationArgs.passAsFile or []);
+      passAsFile = passAsFile ++ (derivationArgs.passAsFile or []);
     }
     // lib.optionalAttrs (! derivationArgs?meta) {
       pos = let args = builtins.attrNames derivationArgs; in
@@ -94,11 +101,8 @@ rec {
         then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
         else null;
     }
-    // (lib.optionalAttrs runLocal {
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-       })
-    // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
+    // (lib.optionalAttrs runLocal runLocalAttrs)
+    // builtins.removeAttrs derivationArgs handledArgs);
 
 
   /* Writes a text file to the nix store.

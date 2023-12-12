@@ -6,6 +6,13 @@
 
 { lib, fetchurl, patchutils }:
 
+let
+  handledArgs = [
+    "relative" "stripLen" "decode" "extraPrefix" "excludes" "includes" "revert"
+    "postFetch"
+  ];
+in
+
 { relative ? null
 , stripLen ? 0
 , decode ? "cat" # custom command to decode patch e.g. base64 -d
@@ -87,7 +94,4 @@ fetchurl ({
     ${patchutils}/bin/interdiff "$out" /dev/null > "$tmpfile"
     mv "$tmpfile" "$out"
   '' + postFetch;
-} // builtins.removeAttrs args [
-  "relative" "stripLen" "decode" "extraPrefix" "excludes" "includes" "revert"
-  "postFetch"
-])
+} // builtins.removeAttrs args handledArgs)

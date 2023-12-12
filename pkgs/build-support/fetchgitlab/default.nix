@@ -1,5 +1,13 @@
 { fetchgit, fetchzip, lib }:
 
+let
+  inherit (lib) replaceStrings optional concatStringsSep;
+  escapeSlug = replaceStrings [ "." "/" ] [ "%2E" "%2F" ];
+  escapeRev = replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ];
+  passthruAttrs' = [ "protocol" "domain" "owner" "group" "repo" "rev" "fetchSubmodules" "leaveDotGit" "deepClone" ];
+
+in
+
 lib.makeOverridable (
 # gitlab example
 { owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
@@ -8,10 +16,10 @@ lib.makeOverridable (
 } @ args:
 
 let
-  slug = lib.concatStringsSep "/" ((lib.optional (group != null) group) ++ [ owner repo ]);
-  escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
-  escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
-  passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" "fetchSubmodules" "leaveDotGit" "deepClone" ];
+  slug = concatStringsSep "/" ((optional (group != null) group) ++ [ owner repo ]);
+  escapedSlug = escapeSlug slug;
+  escapedRev = escapeRev rev;
+  passthruAttrs = removeAttrs args passthruAttrs';
 
   useFetchGit = deepClone || fetchSubmodules || leaveDotGit;
   fetcher = if useFetchGit then fetchgit else fetchzip;
