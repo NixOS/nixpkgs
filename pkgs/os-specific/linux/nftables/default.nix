@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
       python3.pkgs.setuptools
     ];
 
+  patches = [ ./fix-py-libnftables.patch ];
+
+  postPatch = ''
+    substituteInPlace "py/src/nftables.py" \
+      --subst-var-by "out" "$out"
+  '';
+
   configureFlags = [
     "--with-json"
     (lib.withFeatureAs withCli "cli" "editline")

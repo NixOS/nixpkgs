@@ -150,6 +150,7 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtsvg
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
