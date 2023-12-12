@@ -69,7 +69,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-xsB71bnaPn/9/f1KHyU3TTwx+Q+1dLjWmNK2aVJgoRY=";
   };
 
-  outputs = [ "out" "cli" ];
+  yarnOfflineCacheAppsRunner = fetchYarnDeps {
+    yarnLock = "${src}/apps/peertube-runner/yarn.lock";
+    hash = "sha256-9w3aLuiLs7SU00YwuE0ixfiD77gCakXT4YeRpfsgGz0=";
+  };
+
+  outputs = [ "out" "cli" "runner" ];
 
   nativeBuildInputs = [ brotli prefetch-yarn-deps jq which yarn ];
 
@@ -81,6 +86,7 @@ stdenv.mkDerivation rec {
     fixup-yarn-lock ~/yarn.lock
     fixup-yarn-lock ~/client/yarn.lock
     fixup-yarn-lock ~/apps/peertube-cli/yarn.lock
+    fixup-yarn-lock ~/apps/peertube-runner/yarn.lock
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/client
@@ -89,8 +95,11 @@ stdenv.mkDerivation rec {
     cd ~/apps/peertube-cli
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsCli
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+    cd ~/apps/peertube-runner
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsRunner
+    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
-    patchShebangs ~/{node_modules,client/node_modules,/apps/peertube-cli/node_modules,scripts}
+    patchShebangs ~/{node_modules,client/node_modules,/apps/peertube-cli/node_modules,apps/peertube-runner/node_modules,scripts}
 
     # Fix bcrypt node module
     cd ~/node_modules/bcrypt
@@ -112,6 +121,10 @@ stdenv.mkDerivation rec {
     # Build PeerTube cli
     npm run build:peertube-cli
     patchShebangs ~/apps/peertube-cli/dist/peertube.js
+
+    # Build PeerTube runner
+    npm run build:peertube-runner
+    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.js
 
     # Clean up declaration files
     find ~/dist/ \
@@ -142,6 +155,10 @@ stdenv.mkDerivation rec {
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
     ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
+
+    mkdir -p $runner/bin
+    mv ~/apps/peertube-runner/{dist,node_modules,package.json,yarn.lock} $runner
+    ln -s $runner/dist/peertube-runner.js $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
     find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
