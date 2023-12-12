@@ -1,0 +1,1761 @@
+[
+  {
+    "name": "intiface_central",
+    "version": "2.5.3+21",
+    "kind": "root",
+    "source": "root",
+    "dependencies": [
+      "flutter",
+      "device_info_plus",
+      "cupertino_icons",
+      "json_annotation",
+      "flutter_local_notifications",
+      "flutter_rust_bridge",
+      "plugin_platform_interface",
+      "ffi",
+      "path_provider",
+      "path",
+      "window_manager",
+      "web_socket_channel",
+      "network_info_plus",
+      "permission_handler",
+      "bloc",
+      "flutter_bloc",
+      "equatable",
+      "shared_preferences",
+      "settings_ui",
+      "flutter_markdown",
+      "loggy",
+      "flutter_loggy",
+      "github",
+      "markdown",
+      "version",
+      "package_info_plus",
+      "url_launcher",
+      "intl",
+      "easy_debounce",
+      "percent_indicator",
+      "buttplug",
+      "flutter_foreground_task",
+      "tuple",
+      "sentry_flutter",
+      "sentry",
+      "rxdart",
+      "screen_retriever",
+      "flutter_test",
+      "json_serializable",
+      "build_runner",
+      "flutter_lints",
+      "ffigen",
+      "flutter_launcher_icons"
+    ]
+  },
+  {
+    "name": "flutter_launcher_icons",
+    "version": "0.13.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "checked_yaml",
+      "cli_util",
+      "image",
+      "json_annotation",
+      "path",
+      "yaml"
+    ]
+  },
+  {
+    "name": "yaml",
+    "version": "3.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "string_scanner",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_span",
+    "version": "1.10.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "path",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "term_glyph",
+    "version": "1.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "path",
+    "version": "1.8.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "collection",
+    "version": "1.17.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "json_annotation",
+    "version": "4.8.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "meta",
+    "version": "1.9.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "image",
+    "version": "4.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "archive",
+      "meta",
+      "xml"
+    ]
+  },
+  {
+    "name": "xml",
+    "version": "6.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "petitparser"
+    ]
+  },
+  {
+    "name": "petitparser",
+    "version": "5.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "archive",
+    "version": "3.4.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "crypto",
+      "path",
+      "pointycastle"
+    ]
+  },
+  {
+    "name": "pointycastle",
+    "version": "3.7.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "convert",
+      "js"
+    ]
+  },
+  {
+    "name": "js",
+    "version": "0.6.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "convert",
+    "version": "3.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "typed_data",
+    "version": "1.3.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "crypto",
+    "version": "3.0.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "cli_util",
+    "version": "0.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "checked_yaml",
+    "version": "2.0.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "json_annotation",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "args",
+    "version": "2.4.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "ffigen",
+    "version": "9.0.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "yaml",
+      "path",
+      "quiver",
+      "args",
+      "logging",
+      "cli_util",
+      "glob",
+      "file",
+      "package_config",
+      "yaml_edit"
+    ]
+  },
+  {
+    "name": "yaml_edit",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "package_config",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "file",
+    "version": "7.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "glob",
+    "version": "2.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "file",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "async",
+    "version": "2.11.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "logging",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "quiver",
+    "version": "3.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher"
+    ]
+  },
+  {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
+    "name": "test_api",
+    "version": "0.6.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "stream_channel",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "ffi",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_lints",
+    "version": "3.0.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "lints"
+    ]
+  },
+  {
+    "name": "lints",
+    "version": "3.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "build_runner",
+    "version": "2.4.6",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "args",
+      "async",
+      "build",
+      "build_config",
+      "build_daemon",
+      "build_resolvers",
+      "build_runner_core",
+      "code_builder",
+      "collection",
+      "crypto",
+      "dart_style",
+      "frontend_server_client",
+      "glob",
+      "graphs",
+      "http_multi_server",
+      "io",
+      "js",
+      "logging",
+      "meta",
+      "mime",
+      "package_config",
+      "path",
+      "pool",
+      "pub_semver",
+      "pubspec_parse",
+      "shelf",
+      "shelf_web_socket",
+      "stack_trace",
+      "stream_transform",
+      "timing",
+      "watcher",
+      "web_socket_channel",
+      "yaml"
+    ]
+  },
+  {
+    "name": "web_socket_channel",
+    "version": "2.4.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "crypto",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "watcher",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "timing",
+    "version": "1.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "json_annotation"
+    ]
+  },
+  {
+    "name": "stream_transform",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "shelf_web_socket",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "shelf",
+      "stream_channel",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "shelf",
+    "version": "1.4.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "http_parser",
+      "path",
+      "stack_trace",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "http_parser",
+    "version": "4.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner",
+      "typed_data"
+    ]
+  },
+  {
+    "name": "pubspec_parse",
+    "version": "1.2.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "checked_yaml",
+      "collection",
+      "json_annotation",
+      "pub_semver",
+      "yaml"
+    ]
+  },
+  {
+    "name": "pub_semver",
+    "version": "2.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "pool",
+    "version": "1.5.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "mime",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "io",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "http_multi_server",
+    "version": "3.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "graphs",
+    "version": "2.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "frontend_server_client",
+    "version": "3.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "dart_style",
+    "version": "2.3.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "args",
+      "path",
+      "pub_semver",
+      "source_span"
+    ]
+  },
+  {
+    "name": "analyzer",
+    "version": "6.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "_fe_analyzer_shared",
+      "collection",
+      "convert",
+      "crypto",
+      "glob",
+      "meta",
+      "package_config",
+      "path",
+      "pub_semver",
+      "source_span",
+      "watcher",
+      "yaml"
+    ]
+  },
+  {
+    "name": "_fe_analyzer_shared",
+    "version": "64.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "code_builder",
+    "version": "4.7.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "built_collection",
+      "built_value",
+      "collection",
+      "matcher",
+      "meta"
+    ]
+  },
+  {
+    "name": "built_value",
+    "version": "8.6.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "built_collection",
+      "collection",
+      "fixnum",
+      "meta"
+    ]
+  },
+  {
+    "name": "fixnum",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "built_collection",
+    "version": "5.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "build_runner_core",
+    "version": "7.2.11",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "build",
+      "build_config",
+      "build_resolvers",
+      "collection",
+      "convert",
+      "crypto",
+      "glob",
+      "graphs",
+      "json_annotation",
+      "logging",
+      "meta",
+      "package_config",
+      "path",
+      "pool",
+      "timing",
+      "watcher",
+      "yaml"
+    ]
+  },
+  {
+    "name": "build_resolvers",
+    "version": "2.4.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "build",
+      "collection",
+      "convert",
+      "crypto",
+      "graphs",
+      "logging",
+      "package_config",
+      "path",
+      "pool",
+      "pub_semver",
+      "stream_transform",
+      "yaml"
+    ]
+  },
+  {
+    "name": "build",
+    "version": "2.4.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "convert",
+      "crypto",
+      "glob",
+      "logging",
+      "meta",
+      "package_config",
+      "path"
+    ]
+  },
+  {
+    "name": "build_config",
+    "version": "1.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "checked_yaml",
+      "json_annotation",
+      "path",
+      "pubspec_parse",
+      "yaml"
+    ]
+  },
+  {
+    "name": "build_daemon",
+    "version": "4.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "built_collection",
+      "built_value",
+      "http_multi_server",
+      "logging",
+      "path",
+      "pool",
+      "shelf",
+      "shelf_web_socket",
+      "stream_transform",
+      "watcher",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "json_serializable",
+    "version": "6.7.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "build",
+      "build_config",
+      "collection",
+      "json_annotation",
+      "meta",
+      "path",
+      "pub_semver",
+      "pubspec_parse",
+      "source_gen",
+      "source_helper"
+    ]
+  },
+  {
+    "name": "source_helper",
+    "version": "1.3.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "collection",
+      "source_gen"
+    ]
+  },
+  {
+    "name": "source_gen",
+    "version": "1.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "build",
+      "dart_style",
+      "glob",
+      "path",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "flutter_test",
+    "version": "0.0.0",
+    "kind": "dev",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "test_api",
+      "matcher",
+      "path",
+      "fake_async",
+      "clock",
+      "stack_trace",
+      "vector_math",
+      "async",
+      "boolean_selector",
+      "characters",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "source_span",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph",
+      "web"
+    ]
+  },
+  {
+    "name": "web",
+    "version": "0.1.4-beta",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "material_color_utilities",
+    "version": "0.5.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "characters",
+    "version": "1.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "vector_math",
+    "version": "2.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "clock",
+    "version": "1.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "fake_async",
+    "version": "1.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "collection"
+    ]
+  },
+  {
+    "name": "flutter",
+    "version": "0.0.0",
+    "kind": "direct",
+    "source": "sdk",
+    "dependencies": [
+      "characters",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "vector_math",
+      "web",
+      "sky_engine"
+    ]
+  },
+  {
+    "name": "sky_engine",
+    "version": "0.0.99",
+    "kind": "transitive",
+    "source": "sdk",
+    "dependencies": []
+  },
+  {
+    "name": "screen_retriever",
+    "version": "0.1.9",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "rxdart",
+    "version": "0.27.7",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "sentry",
+    "version": "7.10.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "http",
+      "meta",
+      "stack_trace",
+      "uuid"
+    ]
+  },
+  {
+    "name": "uuid",
+    "version": "3.0.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "crypto"
+    ]
+  },
+  {
+    "name": "http",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "http_parser",
+      "meta"
+    ]
+  },
+  {
+    "name": "sentry_flutter",
+    "version": "7.10.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "sentry",
+      "package_info_plus",
+      "meta",
+      "ffi"
+    ]
+  },
+  {
+    "name": "package_info_plus",
+    "version": "4.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "flutter",
+      "flutter_web_plugins",
+      "http",
+      "meta",
+      "path",
+      "package_info_plus_platform_interface",
+      "win32"
+    ]
+  },
+  {
+    "name": "win32",
+    "version": "5.0.9",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi"
+    ]
+  },
+  {
+    "name": "package_info_plus_platform_interface",
+    "version": "2.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "plugin_platform_interface",
+    "version": "2.1.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_web_plugins",
+    "version": "0.0.0",
+    "kind": "transitive",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "characters",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "vector_math",
+      "web"
+    ]
+  },
+  {
+    "name": "tuple",
+    "version": "2.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_foreground_task",
+    "version": "6.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface",
+      "platform",
+      "shared_preferences"
+    ]
+  },
+  {
+    "name": "shared_preferences",
+    "version": "2.2.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "shared_preferences_android",
+      "shared_preferences_foundation",
+      "shared_preferences_linux",
+      "shared_preferences_platform_interface",
+      "shared_preferences_web",
+      "shared_preferences_windows"
+    ]
+  },
+  {
+    "name": "shared_preferences_windows",
+    "version": "2.3.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "file",
+      "flutter",
+      "path",
+      "path_provider_platform_interface",
+      "path_provider_windows",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "shared_preferences_platform_interface",
+    "version": "2.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "path_provider_windows",
+    "version": "2.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "flutter",
+      "path",
+      "path_provider_platform_interface",
+      "win32"
+    ]
+  },
+  {
+    "name": "path_provider_platform_interface",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "platform",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "platform",
+    "version": "3.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "shared_preferences_web",
+    "version": "2.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "shared_preferences_linux",
+    "version": "2.3.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "file",
+      "flutter",
+      "path",
+      "path_provider_linux",
+      "path_provider_platform_interface",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "path_provider_linux",
+    "version": "2.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "flutter",
+      "path",
+      "path_provider_platform_interface",
+      "xdg_directories"
+    ]
+  },
+  {
+    "name": "xdg_directories",
+    "version": "1.0.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "shared_preferences_foundation",
+    "version": "2.3.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "shared_preferences_android",
+    "version": "2.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "buttplug",
+    "version": "0.0.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "json_annotation",
+      "loggy",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "loggy",
+    "version": "2.0.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "percent_indicator",
+    "version": "4.2.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "easy_debounce",
+    "version": "2.0.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "intl",
+    "version": "0.18.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "url_launcher",
+    "version": "6.1.14",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_android",
+      "url_launcher_ios",
+      "url_launcher_linux",
+      "url_launcher_macos",
+      "url_launcher_platform_interface",
+      "url_launcher_web",
+      "url_launcher_windows"
+    ]
+  },
+  {
+    "name": "url_launcher_windows",
+    "version": "3.0.8",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_platform_interface",
+    "version": "2.1.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_web",
+    "version": "2.0.20",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_macos",
+    "version": "3.0.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_linux",
+    "version": "3.0.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_ios",
+    "version": "6.1.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "url_launcher_android",
+    "version": "6.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher_platform_interface"
+    ]
+  },
+  {
+    "name": "version",
+    "version": "3.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "markdown",
+    "version": "7.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta"
+    ]
+  },
+  {
+    "name": "github",
+    "version": "9.19.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "http",
+      "http_parser",
+      "json_annotation",
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_loggy",
+    "version": "2.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "loggy",
+      "rxdart"
+    ]
+  },
+  {
+    "name": "flutter_markdown",
+    "version": "0.6.18",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "markdown",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "settings_ui",
+    "version": "2.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "equatable",
+    "version": "2.0.5",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_bloc",
+    "version": "8.1.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "bloc",
+      "flutter",
+      "provider"
+    ]
+  },
+  {
+    "name": "provider",
+    "version": "6.0.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "flutter",
+      "nested"
+    ]
+  },
+  {
+    "name": "nested",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "bloc",
+    "version": "8.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "permission_handler",
+    "version": "11.0.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "permission_handler_android",
+      "permission_handler_apple",
+      "permission_handler_windows",
+      "permission_handler_platform_interface"
+    ]
+  },
+  {
+    "name": "permission_handler_platform_interface",
+    "version": "3.12.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "permission_handler_windows",
+    "version": "0.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "permission_handler_platform_interface"
+    ]
+  },
+  {
+    "name": "permission_handler_apple",
+    "version": "9.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "permission_handler_platform_interface"
+    ]
+  },
+  {
+    "name": "permission_handler_android",
+    "version": "11.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "permission_handler_platform_interface"
+    ]
+  },
+  {
+    "name": "network_info_plus",
+    "version": "4.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "nm",
+      "flutter",
+      "flutter_web_plugins",
+      "meta",
+      "network_info_plus_platform_interface",
+      "win32",
+      "ffi"
+    ]
+  },
+  {
+    "name": "network_info_plus_platform_interface",
+    "version": "1.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "nm",
+    "version": "0.5.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "dbus"
+    ]
+  },
+  {
+    "name": "dbus",
+    "version": "0.7.8",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "ffi",
+      "meta",
+      "xml"
+    ]
+  },
+  {
+    "name": "window_manager",
+    "version": "0.3.7",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "path",
+      "screen_retriever"
+    ]
+  },
+  {
+    "name": "path_provider",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "path_provider_android",
+      "path_provider_foundation",
+      "path_provider_linux",
+      "path_provider_platform_interface",
+      "path_provider_windows"
+    ]
+  },
+  {
+    "name": "path_provider_foundation",
+    "version": "2.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "path_provider_platform_interface"
+    ]
+  },
+  {
+    "name": "path_provider_android",
+    "version": "2.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "path_provider_platform_interface"
+    ]
+  },
+  {
+    "name": "flutter_rust_bridge",
+    "version": "1.82.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "build_cli_annotations",
+      "js",
+      "meta",
+      "path",
+      "puppeteer",
+      "shelf",
+      "shelf_static",
+      "shelf_web_socket",
+      "uuid",
+      "web_socket_channel",
+      "yaml",
+      "tuple"
+    ]
+  },
+  {
+    "name": "shelf_static",
+    "version": "1.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "convert",
+      "http_parser",
+      "mime",
+      "path",
+      "shelf"
+    ]
+  },
+  {
+    "name": "puppeteer",
+    "version": "3.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "archive",
+      "async",
+      "collection",
+      "http",
+      "logging",
+      "path",
+      "petitparser",
+      "pool"
+    ]
+  },
+  {
+    "name": "build_cli_annotations",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_local_notifications",
+    "version": "16.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "flutter",
+      "flutter_local_notifications_linux",
+      "flutter_local_notifications_platform_interface",
+      "timezone"
+    ]
+  },
+  {
+    "name": "timezone",
+    "version": "0.9.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "flutter_local_notifications_platform_interface",
+    "version": "7.0.0+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "flutter_local_notifications_linux",
+    "version": "4.0.0+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "dbus",
+      "ffi",
+      "flutter",
+      "flutter_local_notifications_platform_interface",
+      "path",
+      "xdg_directories"
+    ]
+  },
+  {
+    "name": "cupertino_icons",
+    "version": "1.0.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "device_info_plus",
+    "version": "9.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "device_info_plus_platform_interface",
+      "ffi",
+      "file",
+      "flutter",
+      "flutter_web_plugins",
+      "meta",
+      "win32",
+      "win32_registry"
+    ]
+  },
+  {
+    "name": "win32_registry",
+    "version": "1.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "win32"
+    ]
+  },
+  {
+    "name": "device_info_plus_platform_interface",
+    "version": "7.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  }
+]

@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ pacien martinetd ];
+    mainProgram = "rmfakecloud";
   };
 }
