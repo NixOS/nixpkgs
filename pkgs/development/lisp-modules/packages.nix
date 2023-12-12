@@ -256,17 +256,6 @@ let
 
   };
 
-  nasdf = build-asdf-system {
-    pname = "nasdf";
-    version = "20230911-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "ntemplate";
-      rev = "ab7a018f3a67a999c72710644b10b4545130c139";
-      sha256 = "sha256-fXGh0h6CXLoBgK1jRxkSNyQVAY1gvi4iyHQBuzueR5Y=";
-    };
-  };
-
   njson = build-asdf-system rec {
     pname = "njson";
     version = "1.2.2";
