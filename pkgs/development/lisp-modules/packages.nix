@@ -341,12 +341,12 @@ let
 
   nkeymaps = build-asdf-system rec {
     pname = "nkeymaps";
-    version = "1.1.0";
+    version = "1.1.1";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nkeymaps";
       rev = version;
-      hash = "sha256-ewMu2IgEzCYY72vG91IA7l8X78Ph6jpQvbKeOFZdAyM=";
+      hash = "sha256-/t85Yh4EvnSyIM6xeDBLmfVz3wddmavInXzeYafNMJ0=";
     };
     lispLibs = with self; [ alexandria fset trivial-package-local-nicknames
                             str ];
