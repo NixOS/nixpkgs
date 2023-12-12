@@ -6,6 +6,7 @@
 , numpy
 , psutil
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , trio
 , untangle
@@ -56,6 +57,11 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    "test_case_handled_and_unhandled_exception_generator"
+    "test_case_stop_async_iteration_exception"
+    "test_case_unhandled_exception_generator"
+    "test_function_breakpoints_async"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_multiprocessing_simple"
     "test_evaluate_exception_trace"
