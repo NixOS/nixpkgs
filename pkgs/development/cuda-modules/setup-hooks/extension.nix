@@ -60,6 +60,7 @@ final: _: {
             substitutions = {
               libcudaPath = "${cuda_compat}/compat";
             };
+            meta.broken = !final.flags.isJetsonBuild;
           }
           ./auto-add-cuda-compat-runpath.sh
       )
