@@ -5,7 +5,6 @@
 , desktop-file-utils
 , fetchurl
 , glibmm
-, kernel
 , libavc1394
 , libconfig
 , libiec61883
@@ -16,11 +15,13 @@
 , scons
 , which
 , wrapQtAppsHook
+, withMixer ? true
 }:
 
 let
-  inherit (python3.pkgs) pyqt5 dbus-python;
-  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+  python = if withMixer
+           then python3.withPackages (p: with p; [ pyqt5 dbus-python ])
+           else python3;
 in
 mkDerivation rec {
   pname = "ffado";
@@ -49,7 +50,6 @@ mkDerivation rec {
     pkg-config
     which
     python
-    pyqt5
     wrapQtAppsHook
   ];
 
@@ -59,7 +59,7 @@ mkDerivation rec {
     "ENABLE_ALL=True"
     "BUILD_TESTS=True"
     "WILL_DEAL_WITH_XDG_MYSELF=True"
-    "BUILD_MIXER=True"
+    "BUILD_MIXER=${if withMixer then "True" else "False"}"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
     "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
     "BINDIR=${placeholder "bin"}/bin"
@@ -96,6 +96,13 @@ mkDerivation rec {
 
   preFixup = ''
     wrapQtApp $bin/bin/ffado-mixer
+  '';
+
+  doDist = true;
+
+  distPhase = ''
+    # don't propagate runtime deps to `dev`
+    rm -rf "$dev/nix-support"
   '';
 
   meta = with lib; {
