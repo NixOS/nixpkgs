@@ -109,7 +109,7 @@ symlinkJoin {
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
           } \
           ${lib.concatMapStringsSep " "
-            (entry: ''--set "${entry.key}" "${entry.value}"'')
+            (entry: ''--set-default "${entry.key}" "${entry.value}"'')
             shellEnv
           } \
           ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
