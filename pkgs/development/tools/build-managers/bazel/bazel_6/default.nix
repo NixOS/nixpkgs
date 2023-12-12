@@ -199,6 +199,9 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # fixes bootstrapping issue https://github.com/bazelbuild/bazel/issues/20501
+    ./bootstrap.patch
+
     # upb definition inside bazel sets its own copts that take precedence
     # over flags we set externally, so need to patch them at the source
     ./upb-clang16.patch
@@ -593,6 +596,7 @@ stdenv.mkDerivation rec {
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
     ${bash}/bin/bash ./bazel_src/compile.sh
+
     ./bazel_src/scripts/generate_bash_completion.sh \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.bash \
@@ -685,6 +689,13 @@ stdenv.mkDerivation rec {
 
     # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
+
+    ## Test that the GSON serialisation files are present
+    gson_classes=$(unzip -l $($out/bin/bazel info install_base)/A-server.jar | grep -F -c GsonTypeAdapter.class)
+    if [ "$gson_classes" -lt 10 ]; then
+      echo "Missing GsonTypeAdapter classes in A-server.jar. Lockfile generation will not work"
+      exit 1
+    fi
 
     runHook postInstall
   '';
