@@ -818,20 +818,24 @@ let
 
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: let
-    # Process mkOverride properties.
-    defs' = filterOverrides' (
-      # Process mkMerge and mkIf properties.
+    # Process mkMerge and mkIf properties.
+    defs' = (
       concatMap (m:
         map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
       ) defs
     );
 
+    highestPrio = getHighestPrio defs';
+
+    # Process mkOverride properties.
+    defs'' = filterOverrides' highestPrio defs';
+
     # Sort mkOrder properties.
     defsFinal =
       # Avoid sorting if we don't have to.
-      if any (def: def.value._type or "" == "order") defs'.values
-      then sortProperties defs'.values
-      else defs'.values;
+      if any (def: def.value._type or "" == "order") defs''
+      then sortProperties defs''
+      else defs'';
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
@@ -853,7 +857,7 @@ let
   in {
     inherit defsFinal mergedValue isDefined optionalValue;
     defsFinal' = {
-      inherit (defs') highestPrio;
+      inherit highestPrio;
       values = defsFinal;
     };
   };
@@ -926,17 +930,16 @@ let
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides = defs: (filterOverrides' defs).values;
+  filterOverrides = defs: filterOverrides' (getHighestPrio defs) defs;
 
-  filterOverrides' = defs:
+  getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
+  getHighestPrio = defs: foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+
+  filterOverrides' =
     let
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
-    in {
-      values = concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
-      inherit highestPrio;
-    };
+    in
+    highestPrio: defs: concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Sort a list of properties.  The sort priority of a property is
      defaultOrderPriority by default, but can be overridden by wrapping the property
@@ -1329,7 +1332,6 @@ private //
     doRename
     evalModules
     filterOverrides
-    filterOverrides'
     fixMergeModules
     fixupOptionType  # should be private?
     importJSON
