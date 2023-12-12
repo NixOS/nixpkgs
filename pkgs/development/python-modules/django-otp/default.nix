@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, python
+, hatchling
 , django
 , freezegun
 , pythonOlder
@@ -9,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "django-otp";
-  version = "1.1.3";
-  format = "setuptools";
+  version = "1.3.0";
+  format = "pyproject";
   disabled = pythonOlder "3";
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     rev = "v${version}";
-    hash = "sha256-Ac9p7q9yaUr3WTTGxCY16Yo/Z8i1RtnD2g0Aj2pqSXY=";
+    hash = "sha256-T9sAKAjH8ZbfxYzRKgTDoAlZ/+uLj2R/T/ZHXhtjjVk=";
   };
 
-  postPatch = ''
-    patchShebangs manage.py
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     django
@@ -30,19 +32,22 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    django
     freezegun
   ];
 
   checkPhase = ''
-    ./manage.py test django_otp
+    export PYTHONPATH="test:$PYTHONPATH"
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+    ${python.interpreter} -s -m django test django_otp
   '';
 
   pythonImportsCheck = [ "django_otp" ];
 
   meta = with lib; {
-    homepage = "https://github.com/jazzband/django-model-utils";
+    homepage = "https://github.com/django-otp/django-otp/";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
-    license = licenses.bsd2;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ ];
   };
 }
