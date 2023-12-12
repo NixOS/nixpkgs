@@ -224,8 +224,8 @@ let
     version = "0.5.4";
 
     src = pkgs.fetchgit {
-      url = "https://notabug.org/cage/cl-colors2";
-      rev = "refs/tags/v0.5.4";
+      url = "https://codeberg.org/cage/cl-colors2";
+      rev = "v0.5.4";
       sha256 = "sha256-JbT1BKjaXDwdlzHLPjX1eg0RMIOT86R17SPgbe2h+tA=";
     };
   };
