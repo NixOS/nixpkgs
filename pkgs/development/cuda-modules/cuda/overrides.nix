@@ -45,7 +45,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   cuda_compat = prev.cuda_compat.overrideAttrs (
     prevAttrs: {
       env.autoPatchelfIgnoreMissingDeps =
-        prevAttrs.env.autoPatchelfIgnoreMissingDeps + " libnvrm_gpu.so libnvrm_mem.so";
+        prevAttrs.env.autoPatchelfIgnoreMissingDeps + " libnvrm_gpu.so libnvrm_mem.so libnvdla_runtime.so";
       # `cuda_compat` only works on aarch64-linux, and only when building for Jetson devices.
       brokenConditions = prevAttrs.brokenConditions // {
         "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" =
