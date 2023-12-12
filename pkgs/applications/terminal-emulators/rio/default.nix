@@ -51,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.30";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-H5kFgLHw1UXJksrlDO/Owhm/O3+vpohl4h6XYokNWPA=";
+    hash = "sha256-D8Ty3en9hlL8U/8Pilrok22u36ejuOELDYcoN6Tj3is=";
   };
 
-  cargoHash = "sha256-FACRG25ORnSu4pPpn5ibUqtkylWiNBV88Pabqc81Gvg=";
+  cargoHash = "sha256-waHgVbek1la2DfHayjN9MIUi61X/oPhsQs/d6lH8p+Y=";
 
   nativeBuildInputs = [
     ncurses
