@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , flex
 , bison
@@ -31,7 +32,16 @@ stdenv.mkDerivation rec {
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
   # fixed properly
-  patches = [ ./cmake-fix-libxml2-find-package.patch ];
+  patches = [
+    ./cmake-fix-libxml2-find-package.patch
+
+    # Fix build with libxml 2.12
+    #https://github.com/analogdevicesinc/libiio/pull/1103
+    (fetchpatch {
+      url = "https://github.com/analogdevicesinc/libiio/commit/b1170cacff24cdfd3858edc2285c51cadef11488.patch";
+      hash = "sha256-YPNhGT/dV1Bd+ry/w6E9GfoD0Ly94MFZi1bHI47wAQc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
