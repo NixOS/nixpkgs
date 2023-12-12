@@ -28654,8 +28654,6 @@ with pkgs;
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi { };
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
 
-  raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom { };
-
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix { };
 
   reap = callPackage ../os-specific/linux/reap { };
