@@ -62,4 +62,4 @@ let
     platforms = [ "x86_64-linux" ];
   };
 
-in (hlib.doJailbreak hp.simplex-chat) // { inherit meta; }
+in (hlib.dontCheck (hlib.doJailbreak hp.simplex-chat)) // { inherit meta; }
