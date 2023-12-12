@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.12.0";
+  version = "1.13.2";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    hash = "sha256-6dTAPetJgYrvIEtu+2QxcBOeYFZfN/dFhM0CZFzcC/E=";
+    hash = "sha256-KEoKUg5CRYP0kNT4jr7pjUp6gK4cQ/qQEiOBNCrhbFM=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +100,5 @@ stdenv.mkDerivation rec {
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     platforms = [ "x86_64-linux" ];
-    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }
