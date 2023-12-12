@@ -7,6 +7,7 @@
 , ninja
 , gettext
 , gtk4
+, appstream
 , appstream-glib
 , desktop-file-utils
 , gobject-introspection
@@ -16,7 +17,6 @@
 , libsoup_3
 , glib
 , libbacktrace
-, python3
 , text-engine
 }:
 
@@ -32,16 +32,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    appstream
     appstream-glib
     desktop-file-utils
     gettext
     glib
     gobject-introspection
-    libadwaita
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
@@ -49,6 +48,7 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     gtk4
     json-glib
+    libadwaita
     libsoup_3
     libbacktrace
     text-engine
