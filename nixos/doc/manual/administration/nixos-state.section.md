@@ -1,10 +1,20 @@
 # NixOS {#sec-nixos-state}
 
-NixOS itself obviously needs `/nix` to be persistent, so the system environment
-can be linked from the nix store during activation.
+## `/nix` {#sec-state-nix}
 
-Moreover, `/boot` should also be persistent, as it contains the kernel, initrd,
-and the command-line determining the system environment's path in the nix store.
+NixOS needs the entirety of `/nix` to be persistent, as it includes:
+- `/nix/store`, which contains all the system's executables, libraries, and supporting data;
+- `/nix/var/nix`, which contains:
+  - the Nix daemon's database;
+  - roots whose transitive closure is preserved when garbage-collecting the Nix store;
+  - system-wide and per-user profiles.
+
+## `/boot` {#sec-state-boot}
+
+`/boot` should also be persistent, as it contains:
+- the kernel and initrd which the bootloader loads,
+- the bootloader's configuration, including the kernel's command-line which
+  determines the store path to use as system environment.
 
 
 ## Users and groups {#sec-state-users}
