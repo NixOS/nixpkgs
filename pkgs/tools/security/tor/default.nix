@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.8.9";
+  version = "0.4.8.10";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Wbt9iJD2ExtM5TRPPc6l3rIYK39PEP8MtOTYHxGyz2U=";
+    sha256 = "sha256-5ii0+rcO20cncVsjzykxN1qfdoWsCPLFnqSYoXhGOoY=";
   };
 
   outputs = [ "out" "geoip" ];
