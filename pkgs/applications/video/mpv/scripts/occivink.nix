@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, unstableGitUpdater
 , buildLua
 }:
 
@@ -10,15 +11,16 @@ let
   in stringAsChars (c: if isUpper c != null then "-${toLower c}" else c);
 
   mkScript = name: args:
-    buildLua (lib.attrsets.recursiveUpdate rec {
+    let self = rec {
       pname = camelToKebab name;
+      version = "unstable-2022-10-02";
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";
         rev = "af360f332897dda907644480f785336bc93facf1";
         hash = "sha256-KdCrUkJpbxxqmyUHksVVc8KdMn8ivJeUA2eerFZfEE8=";
       };
-      version = "unstable-2022-10-02";
+      passthru.updateScript = unstableGitUpdater {};
 
       scriptPath = "scripts/${pname}.lua";
 
@@ -27,7 +29,11 @@ let
         license = licenses.unlicense;
         maintainers = with maintainers; [ nicoo ];
       };
-    } args);
+
+      # Sadly needed to make `common-updaters` work here
+      pos = builtins.unsafeGetAttrPos "version" self;
+    };
+    in buildLua (lib.attrsets.recursiveUpdate self args);
 
 in
 lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
