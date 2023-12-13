@@ -33,8 +33,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "jackMort";
       repo = "ChatGPT.nvim";
-      rev = "fc0a13f803653051801cfcf7acfd600ce44454a9";
-      sha256 = "0csinl0z5jy0wnrl2rbg04kbblwb4kzsx0s6hd4n9iq9iz2k51z8";
+      rev = "f189c51d03316b4ab02766c5fed6f876f5d57cbb";
+      sha256 = "1h6fggfqifx47vhd3n0c4vldrx5lqbizkijm14nkj55224sq5i61";
     };
     meta.homepage = "https://github.com/jackMort/ChatGPT.nvim/";
   };
@@ -1171,12 +1171,12 @@ final: prev:
 
   bufferline-nvim = buildVimPlugin {
     pname = "bufferline.nvim";
-    version = "2023-12-08";
+    version = "2023-12-13";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "bufferline.nvim";
-      rev = "ac788fbc493839c1e76daa8d119934b715fdb90e";
-      sha256 = "0zy8z80s32hqa6jsffh9wygb77dnp7zhsp2zqgbl63lpyy0ffrvc";
+      rev = "e48ce1805697e4bb97bc171c081e849a65859244";
+      sha256 = "06af2lvydw7c2yswin968vdh2f06s5xmwx6pip45c4am8q68a2y6";
     };
     meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
   };
@@ -3380,6 +3380,18 @@ final: prev:
       sha256 = "1w183g0hj8jvzm6m1jw7m6xz3x1dld8n8342vnycsh6hyzdcg3mg";
     };
     meta.homepage = "https://github.com/bogado/file-line/";
+  };
+
+  fileline-nvim = buildVimPlugin {
+    pname = "fileline.nvim";
+    version = "2023-08-30";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "fileline.nvim";
+      rev = "64fc4b24f559467ff7fdbf4b3d9eaf4724f331e4";
+      sha256 = "0q68mz6kd3zbf2blwz84q39wn2kq9svl8516p5vyn9jpn70rnmgv";
+    };
+    meta.homepage = "https://github.com/lewis6991/fileline.nvim/";
   };
 
   firenvim = buildVimPlugin {
@@ -7763,12 +7775,12 @@ final: prev:
 
   nvim-web-devicons = buildVimPlugin {
     pname = "nvim-web-devicons";
-    version = "2023-12-08";
+    version = "2023-12-13";
     src = fetchFromGitHub {
       owner = "nvim-tree";
       repo = "nvim-web-devicons";
-      rev = "8b2e5ef9eb8a717221bd96cb8422686d65a09ed5";
-      sha256 = "0s7vhlr71f3n8in2dnpqj1p1jgncn0mdl1y6a7ksl8yx2vrxqdyl";
+      rev = "a1425903ab52a0a0460622519e827f224e5b4fee";
+      sha256 = "11ag1v91b6pbrvrrmw4dvi9r46zrni9pgg1a5ndli5w5wdy7sf67";
     };
     meta.homepage = "https://github.com/nvim-tree/nvim-web-devicons/";
   };
@@ -8535,11 +8547,11 @@ final: prev:
 
   rainbow-delimiters-nvim = buildVimPlugin {
     pname = "rainbow-delimiters.nvim";
-    version = "2023-12-12";
+    version = "2023-12-13";
     src = fetchgit {
       url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim";
-      rev = "cc1783ca5f1f9bfed18bfc051bb88e0e4faaf17a";
-      sha256 = "174fx4ijyjczqb2lg6s1i3g4m4mvph02s7wfdk2jf0png7dg2mq4";
+      rev = "0b4c1ab6724062f3582746c6a5a8c0636bf7ed81";
+      sha256 = "0xz7m7xr6v467hglncdqc6jayh7qj4fyh3f7sgv8yyxlm8bf8prd";
     };
     meta.homepage = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim";
   };
@@ -8954,12 +8966,12 @@ final: prev:
 
   sg-nvim = buildVimPlugin {
     pname = "sg.nvim";
-    version = "2023-11-15";
+    version = "2023-12-13";
     src = fetchFromGitHub {
       owner = "sourcegraph";
       repo = "sg.nvim";
-      rev = "41378567217097a3d78b624c9f11d29436381e99";
-      sha256 = "0dwh7zb8l83d8l63ps6qc5am7r95bnyavz5r8qpxnzgzdic2r5nv";
+      rev = "9eeb00c758a394cccd2828720b0eaadce6f1ad51";
+      sha256 = "085vpy7vrmzcx5143gcxsgan99g6g9p05rljs0pkrw5kn7fw6szb";
     };
     meta.homepage = "https://github.com/sourcegraph/sg.nvim/";
   };
@@ -10466,8 +10478,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "unisonweb";
       repo = "unison";
-      rev = "37ca00c65e9ba2f5adfe87780efda8071d894fae";
-      sha256 = "07prqlwjlxix80ji537giam6w70699rgn5xslig5ivrmsldr42s7";
+      rev = "a91e3c32060862ea2ba1ebdedd3d3eaa636edcdd";
+      sha256 = "15wm2jx6vrrx8f00g7p0w3jzqgpg6c0jbzj2n7h6vl93s7d65207";
     };
     meta.homepage = "https://github.com/unisonweb/unison/";
   };
@@ -12912,12 +12924,12 @@ final: prev:
 
   vim-just = buildVimPlugin {
     pname = "vim-just";
-    version = "2023-12-12";
+    version = "2023-12-13";
     src = fetchFromGitHub {
       owner = "NoahTheDuke";
       repo = "vim-just";
-      rev = "a9761618b04ee1bf22005661cc8f598398d7b8d9";
-      sha256 = "0hyqqk87fijraknkwwx9wzlvb6lpmn0wzrfzfb3j7as7rzbrb8gp";
+      rev = "db122b74305993402150e18fad9568a5a0b542e8";
+      sha256 = "0d1m1nda6r8wpbywl27xg3dwjfxnxy1vwiq9pp3m77d9blcnwgwf";
     };
     meta.homepage = "https://github.com/NoahTheDuke/vim-just/";
   };
