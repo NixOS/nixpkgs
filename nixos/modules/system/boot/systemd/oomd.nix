@@ -3,6 +3,10 @@
   cfg = config.systemd.oomd;
 
 in {
+  imports = [
+    (lib.mkRemovedOptionModule [ "systemd" "oomd" "enableUserServices" ] "Use systemd.oomd.enableUserSlices instead.")
+  ];
+
   options.systemd.oomd = {
     enable = lib.mkEnableOption (lib.mdDoc "the `systemd-oomd` OOM killer") // { default = true; };
 
