@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
     hash = "sha256-irPExb8rwQjkPp0b3x5hJG4Ay6OnITWIGRPxBSoP/Dk=";
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
-    # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
+    # https://github.com/element-hq/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
 
     # Remove version pin on build dependencies. Upstream does this on purpose to
@@ -149,7 +149,7 @@ python3.pkgs.buildPythonApplication rec {
 
     # high parallelisem makes test suite unstable
     # upstream uses 2 cores but 4 seems to be also stable
-    # https://github.com/matrix-org/synapse/blob/develop/.github/workflows/latest_deps.yml#L103
+    # https://github.com/element-hq/synapse/blob/develop/.github/workflows/latest_deps.yml#L103
     if (( $NIX_BUILD_CORES > 4)); then
       NIX_BUILD_CORES=4
     fi
@@ -167,7 +167,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://matrix.org";
-    changelog = "https://github.com/matrix-org/synapse/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
