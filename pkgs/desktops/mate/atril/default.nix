@@ -1,7 +1,11 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , pkg-config
+, gtk-doc
+, yelp-tools
 , gettext
 , gtk3
 , glib
@@ -14,7 +18,7 @@
 , mate
 , wrapGAppsHook
 , enableEpub ? true
-, webkitgtk
+, webkitgtk_4_1
 , enableDjvu ? true
 , djvulibre
 , enablePostScript ? true
@@ -34,8 +38,21 @@ stdenv.mkDerivation rec {
     sha256 = "pTphOsuXAaGK1nG/WQJU0c6Da6CuG+LAvYlI/fa0kaQ=";
   };
 
+
+
+  patches = [
+    # Use webkigtk 4.1 ABI.
+    (fetchpatch {
+      url = "https://github.com/mate-desktop/atril/commit/92f7d054d2a534bb08f92821e910625ecc0a3760.patch";
+      hash = "sha256-8vFCgvs+ll+BHM6c/paPDulDWFkF4T1M/RAO8RCPYcc=";
+    })
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
+    gtk-doc
+    yelp-tools
     gettext
     wrapGAppsHook
   ];
@@ -53,7 +70,7 @@ stdenv.mkDerivation rec {
     texlive.bin.core # for synctex, used by the pdf back-end
   ]
   ++ lib.optionals enableDjvu [ djvulibre ]
-  ++ lib.optionals enableEpub [ webkitgtk ]
+  ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
   ++ lib.optionals enablePostScript [ libspectre ]
   ++ lib.optionals enableXps [ libgxps ]
   ;
