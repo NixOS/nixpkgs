@@ -86,7 +86,7 @@ buildGoModule rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://ubuntu.com/lxd";
     changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 agpl3 ];
     maintainers = teams.lxc.members;
     platforms = platforms.linux;
   };
