@@ -18,23 +18,20 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
         1 => {
             let initial_url = get_initial_url()?;
 
-            lockfile
-                .dependencies
-                .map(|p| to_new_packages(p, &initial_url))
-                .transpose()?
+            to_new_packages(lockfile.dependencies.unwrap_or_default(), &initial_url)?
         }
-        2 | 3 => lockfile.packages.map(|pkgs| {
-            pkgs.into_iter()
-                .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-                .map(|(n, p)| Package { name: Some(n), ..p })
-                .collect()
-        }),
+        2 | 3 => lockfile
+            .packages
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
+            .map(|(n, p)| Package { name: Some(n), ..p })
+            .collect(),
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
             lockfile.version
         ),
-    }
-    .expect("lockfile should have packages");
+    };
 
     packages.par_sort_by(|x, y| {
         x.resolved
@@ -182,6 +179,7 @@ impl fmt::Display for Hash {
     }
 }
 
+#[allow(clippy::incorrect_partial_ord_impl_on_ord_type)]
 impl PartialOrd for Hash {
     fn partial_cmp(&self, other: &Hash) -> Option<Ordering> {
         let lhs = self.0.split_once('-')?.0;
