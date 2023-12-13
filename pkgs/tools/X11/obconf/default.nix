@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac --replace 2.0.4 ${version}
+    # Compatibility with libxml2-2.12.x
+    sed -i '37a #include <libxml/xmlsave.h>' src/main.c
   '';
 
   meta = {
