@@ -21,12 +21,13 @@
 
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
-            args // { inherit (self) lib; } // lib.optionalAttrs (! args?system) {
+            {
+              lib = final;
               # Allow system to be set modularly in nixpkgs.system.
               # We set it to null, to remove the "legacy" entrypoint's
               # non-hermetic default.
               system = null;
-            }
+            } // args
           );
       });
 
