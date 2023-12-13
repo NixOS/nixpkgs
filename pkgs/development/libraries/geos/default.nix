@@ -2,7 +2,7 @@
 , stdenv
 , callPackage
 , fetchpatch
-, fetchurl
+, fetchFromGitHub
 , testers
 
 , cmake
@@ -12,9 +12,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
   version = "3.11.2";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
+  src = fetchFromGitHub {
+    owner = "libgeos";
+    repo = "geos";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-j/kPviWTCRJutk3g1c2c7yQFKBbObKxSqyukkhXQiA4=";
   };
 
   patches = [
