@@ -270,6 +270,8 @@ stdenv.mkDerivation rec {
 
   postPatch =
     let
+      # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+      nixpkgs166205ldflag = lib.optionalString stdenv.cc.isClang "-l${stdenv.cc.libcxx.cxxabi.libName}";
       darwinPatches = ''
         bazelLinkFlags () {
           eval set -- "$NIX_LDFLAGS"
@@ -284,11 +286,13 @@ stdenv.mkDerivation rec {
 
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
-        export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks -F${IOKit}/Library/Frameworks"
+        export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks -F${IOKit}/Library/Frameworks ${nixpkgs166205ldflag}"
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+        # for CLang 16 compatibility in external/upb dependency
+        export NIX_CFLAGS_COMPILE+=" -Wno-gnu-offsetof-extensions"
 
         # This variable is used by bazel to propagate env vars for homebrew,
         # which is exactly what we need too.
