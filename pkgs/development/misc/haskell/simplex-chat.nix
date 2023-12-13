@@ -6,16 +6,20 @@ let
   hlib = haskell.lib;
 
   haskellOverrides = self: super: {
-    direct-sqlcipher = self.callPackage ./simplex-chat/direct-sqlcipher.nix {};
-    sqlcipher-simple = hlib.dontCheck (self.callPackage ./simplex-chat/sqlcipher-simple.nix {});
+    # original
     simplexmq = hlib.dontCheck (hlib.doJailbreak (self.callPackage ./simplex-chat/simplexmq.nix {}));
-    cryptostore = hlib.dontCheck super.cryptostore;
-    aeson = hlib.dontCheck (self.callPackage ./simplex-chat/aeson.nix {});
-    aeson-pretty = super.aeson-pretty_0_8_10;
-    vector = hlib.doJailbreak super.vector;
+
+    # specific versions, already in the package set
     attoparsec-aeson = super.attoparsec-aeson_2_2_0_1;
-    http2 = self.callPackage ./simplex-chat/http2.nix {};
-    socks = self.callPackage ./simplex-chat/hs-socks.nix {};
+    http2 = self.http2_4_2_2;
+    aeson-pretty = super.aeson-pretty_0_8_10;
+
+    # forks
+    direct-sqlcipher = self.callPackage ./simplex-chat/direct-sqlcipher.nix {}; # https://github.com/IreneKnapp/direct-sqlite
+    sqlcipher-simple = hlib.dontCheck (self.callPackage ./simplex-chat/sqlcipher-simple.nix {}); # https://github.com/nurpax/sqlite-simple
+    aeson = self.callPackage ./simplex-chat/aeson.nix {}; # https://github.com/haskell/aeson
+    socks = self.callPackage ./simplex-chat/hs-socks.nix {}; # https://github.com/vincenthz/hs-socks, unmaintained, archived by the original author
+
     simplex-chat = self.callPackage ./simplex-chat/simplex-chat.nix {};
   };
 
