@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-run-bin";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-FPkZk5qKHrRR3V8s04yLgOVOKj+Rln3Cu/VW2bnr2fE=";
+    hash = "sha256-PB44m39TDH1z8N3DrxAlZ/FKOdZmpe+U84tbmBBP9VQ=";
   };
 
-  cargoHash = "sha256-aFHuIEDpGCel1FC7D0hTUmzHbEj7wVarsE0wNZ/3Khw=";
+  cargoHash = "sha256-FMlirUr3c8QhnTmTHvfNPff7PYlWSl83vCGLOLbyaR4=";
 
   # multiple impurities in tests
   doCheck = false;
