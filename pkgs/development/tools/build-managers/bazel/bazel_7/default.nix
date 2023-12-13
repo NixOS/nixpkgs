@@ -140,11 +140,6 @@ let
   # on aarch64 Darwin, `uname -m` returns "arm64"
   arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
-  #build --extra_toolchains=@local_jdk//:all
-  #build --tool_java_runtime_version=local_jdk
-  #build --java_runtime_version=local_jdk
-  #build --repo_env=JAVA_HOME=${buildJdk}${if isDarwin then "/zulu-11.jdk/Contents/Home" else "/lib/openjdk"}
-
   bazelRC = writeTextFile {
     name = "bazel-rc";
     text = ''
@@ -223,20 +218,6 @@ stdenv.mkDerivation rec {
     # argument if it's found to be an empty string.
     ../trim-last-argument-to-gcc-if-empty.patch
 
-    # XXX: This seems merged / not a real problem. See PR.
-    # TODO: Remove when protobuf tests confirm it is not needed.
-    # `java_proto_library` ignores `strict_proto_deps`
-    # https://github.com/bazelbuild/bazel/pull/16146
-    # ./strict_proto_deps.patch
-
-    # On Darwin, using clang 6 to build fails because of a linker error (see #105573),
-    # but using clang 7 fails because libarclite_macosx.a cannot be found when linking
-    # the xcode_locator tool.
-    # This patch removes using the -fobjc-arc compiler option and makes the code
-    # compile without automatic reference counting. Caveat: this leaks memory, but
-    # we accept this fact because xcode_locator is only a short-lived process used during the build.
-    ./no-arc.patch
-
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
     # action environment to a non hermetic value (e.g. "/usr/local/bin").
@@ -303,20 +284,7 @@ stdenv.mkDerivation rec {
         # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
         sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
 
-        # clang installed from Xcode has a compatibility wrapper that forwards
-        # invocations of gcc to clang, but vanilla clang doesn't
-        sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
-
-        # This is necessary to avoid:
-        # "error: no visible @interface for 'NSDictionary' declares the selector
-        # 'initWithContentsOfURL:error:'"
-        # This can be removed when the apple_sdk is upgraded beyond 10.13+
-        sedVerbose tools/osx/xcode_locator.m \
-          -e '/initWithContentsOfURL:versionPlistUrl/ {
-            N
-            s/error:nil\];/\];/
-          }'
-
+        # XXX: What do these do ?
         sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
         wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
         for wrapper in "''${wrappers[@]}"; do
@@ -502,8 +470,9 @@ stdenv.mkDerivation rec {
     # $out/bin/bazel-{version}-{os_arch} The binary _must_ exist with this
     # naming if your project contains a .bazelversion file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
-    wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
-    mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
+    versionned_bazel="$out/bin/bazel-${version}-${system}-${arch}"
+    mv ./bazel_src/output/bazel "$versionned_bazel"
+    wrapProgram "$versionned_bazel" --suffix PATH : ${defaultShellPath}
 
     mkdir $out/share
     cp ./bazel_src/output/parser_deploy.jar $out/share/parser_deploy.jar
@@ -525,9 +494,6 @@ stdenv.mkDerivation rec {
       ./bazel_src/output/bazel-complete.fish
   '';
 
-  # Install check fails on `aarch64-darwin`
-  # https://github.com/NixOS/nixpkgs/issues/145587
-  doInstallCheck = false; #stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
@@ -595,8 +561,7 @@ stdenv.mkDerivation rec {
       inherit Foundation bazel_self lockfile repoCache;
     };
 
-    updater = throw "TODO";
-
+    # For ease of debugging
     inherit distDir repoCache;
   };
 }

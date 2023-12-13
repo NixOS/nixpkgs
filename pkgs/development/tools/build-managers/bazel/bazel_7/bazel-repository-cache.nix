@@ -6,8 +6,6 @@
 , lockfile
   # A predicate used to select only some dependencies based on their name
 , requiredDepNamePredicate ? _: true
-  # Extra deps in the form of derivations producing a "single file" output path
-, extraDeps ? [ ]
 , canonicalIds ? true
 }:
 let
@@ -92,13 +90,12 @@ let
     mkdir -p $out/content_addressable/sha256
     cd $out
   '' + lib.concatMapStrings
-    # TODO: Do not re-hash. Use nix-hash to convert hashes
     (drv: ''
       filename=$(basename "${lib.head drv.urls}")
       echo Bundling $filename ${lib.optionalString (drv?source_name) "from ${drv.source_name}"}
 
       # 1. --repository_cache format:
-      # 1.a. A file unde a content-hash directory
+      # 1.a. A file under a content-hash directory
       hash=$(${rnix-hashes}/bin/rnix-hashes --encoding BASE16 ${drv.sha256} | cut -f 2)
       mkdir -p content_addressable/sha256/$hash
       ln -sfn ${drv} content_addressable/sha256/$hash/file
@@ -115,7 +112,7 @@ let
       # This is brittle because of expected file name conflicts
       ln -sn ${drv} $filename || true
     '')
-    (builtins.attrValues requiredDeps ++ extraDeps)
+    (builtins.attrValues requiredDeps)
   ;
 
   repository_cache = runCommand "bazel-repository-cache" { } command;
