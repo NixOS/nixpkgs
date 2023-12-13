@@ -28,8 +28,6 @@
 }:
 
 let
-  platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-
   inherit (stdenv.hostPlatform) system;
 
   # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
@@ -203,6 +201,7 @@ rec {
             --replace-needed libcrypt.so.1 libcrypt.so
 
           for dir in lib/ReSharperHost/linux-*; do
+            rm -rf $dir/dotnet
             ln -s ${dotnet-sdk_7} $dir/dotnet
           done
         )
