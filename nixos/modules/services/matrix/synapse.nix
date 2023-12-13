@@ -873,7 +873,7 @@ in {
                 Redis configuration for synapse.
 
                 See the
-                [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/usage/configuration/config_documentation.md#redis)
+                [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/usage/configuration/config_documentation.md#redis)
                 for available options.
               '';
             };
