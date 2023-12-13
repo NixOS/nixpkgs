@@ -110,9 +110,6 @@
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
 
-  # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
-  "flypie@schneegans.github.com" = null;
-
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually
   # being replaced by automatic packaging where possible.
