@@ -5,6 +5,7 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -63,6 +64,12 @@ stdenv.mkDerivation rec {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
+
+    # Fix build with libxml 2.12
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/7ecabc0b55cf364577ccbf778a0ab872958e85d9.patch";
+      hash = "sha256-2mevUXKJdOVpsuAP5CGG6dedLfphXlFAHUXJ4jH6Sts=";
+    })
   ];
 
   nativeBuildInputs = [
