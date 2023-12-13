@@ -23,7 +23,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.45.0";
+  version = "2.54.2";
 
   outputs = [ "out" "dev" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0aqf48zl7825v7x8c3x5w4d17m4qq377f1mn6xyqzf9b0dnk4i1j";
+    sha256 = "sha256-EbnIHnsUgsqN/SVv4m9H7K8gfwni+u82+M55QBstAGI=";
   };
 
   buildInputs = [
@@ -42,21 +42,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
 
   patches = [
-    # fix build on aarch64-darwin
-    # https://github.com/IntelRealSense/librealsense/pull/9253
-    (fetchpatch {
-      url = "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
-      sha256 = "05mxsd2pz3xrvywdqyxkwdvxx8hjfxzcgl51897avz4v2j89pyq8";
-    })
-    ./py_sitepackage_dir.patch
     ./py_pybind11_no_external_download.patch
+    ./install-presets.patch
   ];
-
-  postPatch = ''
-    # https://github.com/IntelRealSense/librealsense/issues/11092
-    # insert a "#include <iostream" at beginning of file
-    sed '1i\#include <iostream>' -i wrappers/python/pyrs_device.cpp
-  '';
 
   nativeBuildInputs = [
     cmake
