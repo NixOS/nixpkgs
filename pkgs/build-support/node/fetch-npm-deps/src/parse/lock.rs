@@ -216,29 +216,35 @@ fn to_new_packages(
         }
 
         if let UrlOrString::Url(v) = &package.version {
-            for (scheme, host) in [
-                ("github", "github.com"),
-                ("bitbucket", "bitbucket.org"),
-                ("gitlab", "gitlab.com"),
-            ] {
-                if v.scheme() == scheme {
-                    package.version = {
-                        let mut new_url = initial_url.clone();
+            if v.scheme() == "npm" {
+                if let Some(UrlOrString::Url(ref url)) = &package.resolved {
+                    package.version = UrlOrString::Url(url.clone());
+                }
+            } else {
+                for (scheme, host) in [
+                    ("github", "github.com"),
+                    ("bitbucket", "bitbucket.org"),
+                    ("gitlab", "gitlab.com"),
+                ] {
+                    if v.scheme() == scheme {
+                        package.version = {
+                            let mut new_url = initial_url.clone();
 
-                        new_url.set_host(Some(host))?;
+                            new_url.set_host(Some(host))?;
 
-                        if v.path().ends_with(".git") {
-                            new_url.set_path(v.path());
-                        } else {
-                            new_url.set_path(&format!("{}.git", v.path()));
-                        }
+                            if v.path().ends_with(".git") {
+                                new_url.set_path(v.path());
+                            } else {
+                                new_url.set_path(&format!("{}.git", v.path()));
+                            }
 
-                        new_url.set_fragment(v.fragment());
+                            new_url.set_fragment(v.fragment());
 
-                        UrlOrString::Url(new_url)
-                    };
+                            UrlOrString::Url(new_url)
+                        };
 
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -268,7 +274,8 @@ fn get_initial_url() -> anyhow::Result<Url> {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_initial_url, to_new_packages, Hash, HashCollection, OldPackage, Package, UrlOrString,
+        get_initial_url, packages, to_new_packages, Hash, HashCollection, OldPackage, Package,
+        UrlOrString,
     };
     use std::{
         cmp::Ordering,
@@ -328,6 +335,38 @@ mod tests {
             })
             .into_best(),
             Some(Hash(String::from("sha512-foo")))
+        );
+    }
+
+    #[test]
+    fn parse_lockfile_correctly() {
+        let packages = packages(
+            r#"{
+                "name": "node-ddr",
+                "version": "1.0.0",
+                "lockfileVersion": 1,
+                "requires": true,
+                "dependencies": {
+                    "string-width-cjs": {
+                        "version": "npm:string-width@4.2.3",
+                        "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
+                        "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
+                        "requires": {
+                            "emoji-regex": "^8.0.0",
+                            "is-fullwidth-code-point": "^3.0.0",
+                            "strip-ansi": "^6.0.1"
+                        }
+                    }
+                }
+            }"#).unwrap();
+
+        assert_eq!(packages.len(), 1);
+        assert_eq!(
+            packages[0].resolved,
+            Some(UrlOrString::Url(
+                Url::parse("https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz")
+                    .unwrap()
+            ))
         );
     }
 }
