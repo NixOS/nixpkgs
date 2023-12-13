@@ -6515,6 +6515,18 @@ final: prev:
     meta.homepage = "https://github.com/fiatjaf/neuron.vim/";
   };
 
+  nfnl = buildVimPlugin {
+    pname = "nfnl";
+    version = "2023-09-08";
+    src = fetchFromGitHub {
+      owner = "Olical";
+      repo = "nfnl";
+      rev = "979dbfc48bcb601a9107764a99f9459cb5bd4051";
+      sha256 = "0m1yf62w4r75amva8708c4i0qvhgfia2i9p64z6i6589mq4mw6ip";
+    };
+    meta.homepage = "https://github.com/Olical/nfnl/";
+  };
+
   nginx-vim = buildVimPlugin {
     pname = "nginx.vim";
     version = "2023-11-26";
