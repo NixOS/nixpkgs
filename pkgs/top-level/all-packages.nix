@@ -36964,6 +36964,8 @@ with pkgs;
 
   zotero = callPackage ../applications/office/zotero { };
 
+  zotero_7 = callPackage ../applications/office/zotero/zotero_7.nix { };
+
   zscroll = callPackage ../applications/misc/zscroll { };
 
   zsteg = callPackage ../tools/security/zsteg { };
