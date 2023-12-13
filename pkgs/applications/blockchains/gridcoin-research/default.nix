@@ -16,6 +16,7 @@
 , libtool
 , miniupnpc
 , hexdump
+, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     libtool
     hexdump
+  ] ++ lib.optionals stdenv.isDarwin [
+    perl
   ];
 
   buildInputs = [
@@ -48,6 +51,12 @@ stdenv.mkDerivation rec {
     miniupnpc
     curl
   ];
+
+  patchPhase = lib.optionalString stdenv.isDarwin ''
+    cd src/
+    ../contrib/nomacro.pl
+    cd ..
+  '';
 
   configureFlags = [
     "--with-gui=qt5"
