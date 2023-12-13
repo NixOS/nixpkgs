@@ -1401,10 +1401,60 @@ createGitRepo() {
     git -C "$1" commit -q --allow-empty -m "Empty commit"
 }
 
-# Check the error message for pure eval mode
+# Check that gitTracked[With] works as expected when evaluated out-of-tree
+
+## First we create a git repositories (and a subrepository) with `default.nix` files referring to their local paths
+## Simulating how it would be used in the wild
 createGitRepo .
-expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTracked ./.; }' 'lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
-expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTrackedWith {} ./.; }' 'lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > default.nix
+git add .
+
+## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./.).outPath'
+
+## We can also evaluate when importing from fetched store paths
+storePath=$(expectStorePath 'builtins.fetchGit ./.')
+expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePath"\"
+
+## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
+expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*\) is a store path within a working tree of a Git repository.
+\s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+\s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+\s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+\s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+
+## Even with submodules
+if [[ -n "$fetchGitSupportsSubmodules" ]]; then
+    ## Both the main repo with the submodule
+    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTrackedWith { recurseSubmodules = true; } ./.; }' > default.nix
+    createGitRepo sub
+    git submodule add ./sub sub >/dev/null
+    ## But also the submodule itself
+    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > sub/default.nix
+    git -C sub add .
+
+    ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
+    expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit { url = ./.; submodules = true; }).outPath'
+    expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./sub).outPath'
+
+    ## We can also evaluate when importing from fetched store paths
+    storePathWithSub=$(expectStorePath 'builtins.fetchGit { url = ./.; submodules = true; }')
+    expectEqual '(import '"$storePathWithSub"' { fs = lib.fileset; }).outPath' \""$storePathWithSub"\"
+    storePathSub=$(expectStorePath 'builtins.fetchGit ./sub')
+    expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$storePathSub"\"
+
+    ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
+    expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
+    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+    expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
+    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+fi
 rm -rf -- *
 
 # Go through all stages of Git files
