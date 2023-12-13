@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     badPlatforms = [
       "alpha-linux"
       "loongarch64-linux"
+      "m68k-linux"
+      "microblaze-linux"
+      "microblazeel-linux"
       "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"
