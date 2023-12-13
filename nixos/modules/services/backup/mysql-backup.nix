@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) mariadb gzip;
+  inherit (pkgs) gzip;
 
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${config.services.mysql.package}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
