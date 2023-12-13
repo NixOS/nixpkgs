@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
       url = "https://cgit.freebsd.org/ports/plain/shells/bash/files/patch-configure?id=3e147a1f594751a68fea00a28090d0792bee0b51";
       sha256 = "XHFMQ6eXTReNoywdETyrfQEv1rKF8+XFbQZP4YoVKFk=";
     })
+    # When building statically, don't install the loadables dir. Port of
+    # the following FreeBSD patch from BSD make to GNU make:
+    # https://cgit.freebsd.org/ports/plain/shells/bash/files/patch-Makefile.in?id=3e147a1f594751a68fea00a28090d0792bee0b51
+    ./static-no-install-loadables-dir.patch
     # Apply parallel build fix pending upstream inclusion:
     #   https://savannah.gnu.org/patch/index.php?10373
     # Had to fetch manually to workaround -p0 default.
@@ -87,7 +91,14 @@ stdenv.mkDerivation rec {
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
     "--disable-nls"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--enable-static-link"
   ];
+
+  # The configure script option for static linking is called `--enable-static-link`, not `--enable-static`.
+  # As the latter is a substring of the former, the stdenv setup assumes the configure script has a `--enable-static` option.
+  # We pass the `--enable-static-link` option as a `configureFlags` if we build statically.
+  dontDisableStatic = true;
 
   strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.

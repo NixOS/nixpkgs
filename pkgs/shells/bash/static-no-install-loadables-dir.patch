@@ -1,0 +1,14 @@
+diff --git Makefile.in Makefile.in
+index 0b4df73a..1556d2b5 100644
+--- Makefile.in
++++ Makefile.in
+@@ -846,7 +846,9 @@ install:	.made installdirs
+ 		infodir=$(infodir) htmldir=$(htmldir) DESTDIR=$(DESTDIR) $@ )
+ 	-( cd $(DEFDIR) ; $(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) $@ )
+ 	-( cd $(PO_DIR) ; $(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) $@ )
++ifeq (,$(findstring -static,$(STATIC_LD)))
+ 	-( cd $(LOADABLES_DIR) && $(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) $@ )
++endif
+ 
+ install-strip:
+ 	$(MAKE) $(MFLAGS) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' \
