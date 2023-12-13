@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.7.1";
+  version = "8.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-uAx3Egz/woJINpruDaZOyuAlbIZUMv93VNaFHLmUjCY=";
+    hash = "sha256-ia+D0OeB/MQWRniYkBEWZsDCwEApYGgu0++I/HupK6w=";
   };
 
   patches = [
