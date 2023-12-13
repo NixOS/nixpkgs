@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dservice_manager=systemd"
     "-Dsample_config=false"
-    "-Ddebug_tools="
+    "-Ddebug_tools=calibrate"
     "-Db_lto=false"  # plugin needed to handle lto object -> undefined reference to ...
   ];
 
