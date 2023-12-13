@@ -14,3 +14,30 @@ index 0358fb0ffe..baae1bf65b 100644
  """
  
  genrule(
+diff --git a/tools/osx/xcode_configure.bzl b/tools/osx/xcode_configure.bzl
+index a4a712a341..dfbf4869a9 100644
+--- a/tools/osx/xcode_configure.bzl
++++ b/tools/osx/xcode_configure.bzl
+@@ -135,7 +135,6 @@ def run_xcode_locator(repository_ctx, xcode_locator_src_label):
+         "macosx",
+         "clang",
+         "-mmacosx-version-min=10.13",
+-        "-fobjc-arc",
+         "-framework",
+         "CoreServices",
+         "-framework",
+diff --git a/tools/osx/xcode_locator.m b/tools/osx/xcode_locator.m
+index c602b0bb4b..1f7eb64810 100644
+--- a/tools/osx/xcode_locator.m
++++ b/tools/osx/xcode_locator.m
+@@ -21,10 +21,6 @@
+ // 6,6.4,6.4.1 = 6.4.1
+ // 6.3,6.3.0 = 6.3
+ 
+-#if !defined(__has_feature) || !__has_feature(objc_arc)
+-#error "This file requires ARC support."
+-#endif
+-
+ #import <CoreServices/CoreServices.h>
+ #import <Foundation/Foundation.h>
+ 

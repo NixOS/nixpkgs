@@ -214,8 +214,12 @@ stdenv.mkDerivation rec {
     ./darwin_sleep.patch
 
     # Make DARWIN_XCODE_LOCATOR_COMPILE_COMMAND behave properly by diabling
-    # multi-arch support (I could not get it to work) and using proper /usr/bin
-    # paths that will get fixed below.
+    # multi-arch support and using proper /usr/bin paths that will get fixed
+    # below.
+    # Also, xcode_locator requires arc support, but it seems pretty difficult
+    # to provide, so we disable it altogether for xcode_locator. Caveat: this
+    # leaks memory, but we accept this fact because xcode_locator is only a
+    # short-lived process used during the build.
     ./xcode_locator.patch
 
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
