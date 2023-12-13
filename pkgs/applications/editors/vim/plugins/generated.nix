@@ -7726,29 +7726,6 @@ final: prev:
     meta.homepage = "https://github.com/joosepalviste/nvim-ts-context-commentstring/";
   };
 
-  nvim-ts-rainbow = buildVimPlugin {
-    pname = "nvim-ts-rainbow";
-    version = "2023-06-07";
-    src = fetchFromGitHub {
-      owner = "mrjones2014";
-      repo = "nvim-ts-rainbow";
-      rev = "8312b513ce930e7669a1721befbe56f2e1853301";
-      sha256 = "16s8kppsn9m831ymcz5w3kpnq40sxg98nykd0gz3hfj27hinqag5";
-    };
-    meta.homepage = "https://github.com/mrjones2014/nvim-ts-rainbow/";
-  };
-
-  nvim-ts-rainbow2 = buildVimPlugin {
-    pname = "nvim-ts-rainbow2";
-    version = "2023-07-12";
-    src = fetchgit {
-      url = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
-      rev = "b3120cd5ae9ca524af9cb602f41e12e301fa985f";
-      sha256 = "0mjg0pkd8wv8cfar30lkyywdrd3g5lz36bbsfb7lrqi7kbksyzxv";
-    };
-    meta.homepage = "https://gitlab.com/HiPhish/nvim-ts-rainbow2";
-  };
-
   nvim-ufo = buildVimPlugin {
     pname = "nvim-ufo";
     version = "2023-12-02";
