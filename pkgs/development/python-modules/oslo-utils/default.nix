@@ -17,6 +17,7 @@
 , setuptools
 , stestr
 , testscenarios
+, tzdata
 , pyyaml
 , iana-etc
 , libredirect
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     packaging
     pyparsing
     pytz
+    tzdata
   ];
 
   nativeCheckInputs = [
