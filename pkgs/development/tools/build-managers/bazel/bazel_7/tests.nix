@@ -158,10 +158,10 @@ recurseIntoAttrs {
   vanilla = callBazelTests { };
   withNixHacks = callBazelTests { bazel = bazelWithNixHacks; };
 
-  # downstream packages using buildBazelPackage
-  # fixed-output hashes of the fetch phase need to be spot-checked manually
+  # add some downstream packages using buildBazelPackage
   downstream = recurseIntoAttrs ({
-    inherit bazel-watcher;
+    # TODO: fix bazel-watcher build with bazel 7, or find other packages
+    #inherit bazel-watcher;
   });
 }
 
