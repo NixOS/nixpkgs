@@ -5,8 +5,6 @@
 , pkg-config
 , wrapGAppsHook
 , gtk3
-, imlib2
-, libSM
 , libstartup_notification
 , libxml2
 , openbox
@@ -30,8 +28,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    imlib2
-    libSM
     libstartup_notification
     libxml2
     openbox
