@@ -189,6 +189,9 @@ backendStdenv.mkDerivation (
       ''
       # Move the outputs into their respective outputs.
       + strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)
+      # Add a newline to the end of the installPhase, so that the post-install hook doesn't
+      # get concatenated with the last moveToOutput command.
+      + "\n"
       # Post-install hook
       + ''
         runHook postInstall
