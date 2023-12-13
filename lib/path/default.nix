@@ -127,6 +127,9 @@ let
   storeDirComponents = splitRelPath ("./" + storeDir);
   # The number of store directory components, typically 2
   storeDirLength = length storeDirComponents;
+  # The number of store path components, typically 3,
+  # e.g. the length of [ "nix" "store" "nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-example" ]
+  storePathLength = storeDirLength + 1;
 
   # Type: [ String ] -> Bool
   #
@@ -401,6 +404,73 @@ in /* No rec! Add dependencies on this file at the top. */ {
       (deconstructed.root == /. && toString deconstructed.root == "/")
       "lib.path.hasStorePathPrefix: Argument has a filesystem root (${toString deconstructed.root}) that's not /, which is currently not supported.";
     componentsHaveStorePathPrefix deconstructed.components;
+
+  /*
+    Split the [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
+    from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
+    If the path does not [have a store path as a prefix](#function-library-lib.path.hasStorePathPrefix), an error is thrown.
+
+    The result is an attribute set with these attributes:
+    - `storePath`: The store path, typically of the form `/nix/store/<hash>-<name>`.
+    - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `storePath` returns the original path.
+
+    :::{.note}
+    As with all functions of this `lib.path` library, it does not work on paths in strings,
+    which is how you'd typically get store paths.
+
+    Instead, this function only handles path values themselves,
+    which occur when Nix files in the store use relative path expressions.
+    :::
+
+    Type:
+      splitStorePath :: Path -> { storePath :: Path, subpath :: String }
+
+    Example:
+      splitStorePath /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
+      => {
+        storePath = /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo;
+        subpath = "./bar/baz";
+      }
+
+      # The store directory is not a store path
+      splitStorePath /nix/store
+      => <error>
+
+      splitStorePath /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo
+      => {
+        storePath = /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo;
+        subpath = "./.";
+      }
+
+      # Paths without a store path prefix give an error.
+      splitStorePath /foo/bar
+      => <error>
+  */
+  splitStorePath =
+    # The path to split the store path off of
+    path:
+    let
+      deconstructed = deconstructPath path;
+
+      storePathComponents = take storePathLength deconstructed.components;
+      subpathComponents = drop storePathLength deconstructed.components;
+    in
+    assert assertMsg
+      (isPath path)
+      "lib.path.splitStorePath: Argument is of type ${typeOf path}, but a path was expected";
+    assert assertMsg
+      # This function likely breaks or needs adjustment if used with other filesystem roots, if they ever get implemented.
+      # Let's try to error nicely in such a case, though it's unclear how an implementation would work even and whether this could be detected.
+      # See also https://github.com/NixOS/nix/pull/6530#discussion_r1422843117
+      (deconstructed.root == /. && toString deconstructed.root == "/")
+      "lib.path.splitStorePath: Argument (${toString path}) has a filesystem root (${toString deconstructed.root}) that's not /, which is currently not supported.";
+    assert assertMsg
+      (componentsHaveStorePathPrefix deconstructed.components)
+      "lib.path.splitStorePath: Argument (${toString path}) does not have a store path as a prefix.";
+    {
+      storePath = deconstructed.root + ("/" + joinRelPath storePathComponents);
+      subpath = joinRelPath subpathComponents;
+    };
 
   /*
     Whether a value is a valid subpath string.

@@ -3,7 +3,15 @@
 { libpath }:
 let
   lib = import libpath;
-  inherit (lib.path) hasPrefix removePrefix append splitRoot hasStorePathPrefix subpath;
+  inherit (lib.path)
+    hasPrefix
+    removePrefix
+    append
+    splitRoot
+    hasStorePathPrefix
+    splitStorePath
+    subpath
+    ;
 
   # This is not allowed generally, but we're in the tests here, so we'll allow ourselves.
   storeDirPath = /. + builtins.storeDir;
@@ -117,6 +125,40 @@ let
     testHasStorePathPrefixExample6 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
       expected = true;
+    };
+
+    testSplitStorePathExample1 = {
+      expr = (builtins.tryEval (splitStorePath /home/user)).success;
+      expected = false;
+    };
+    testSplitStorePathExample2 = {
+      expr = (builtins.tryEval (splitStorePath storeDirPath)).success;
+      expected = false;
+    };
+    testSplitStorePathExample3 = {
+      expr = (builtins.tryEval (splitStorePath (storeDirPath + "/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq"))).success;
+      expected = false;
+    };
+    testSplitStorePathExample4 = {
+      expr = splitStorePath (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo");
+      expected = {
+        storePath = storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo";
+        subpath = "./.";
+      };
+    };
+    testSplitStorePathExample5 = {
+      expr = splitStorePath (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz");
+      expected = {
+        storePath = storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo";
+        subpath = "./bar/baz";
+      };
+    };
+    testSplitStorePathExample6 = {
+      expr = splitStorePath (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
+      expected = {
+        storePath = storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv";
+        subpath = "./.";
+      };
     };
 
     # Test examples from the lib.path.subpath.isValid documentation
