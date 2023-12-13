@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -50,6 +52,13 @@ stdenv.mkDerivation rec {
         gst-plugins-base
         gst-plugins-bad
       ]);
+    })
+
+    # Fix build with libxml2 2.12
+    # https://gitlab.gnome.org/GNOME/grilo-plugins/-/merge_requests/140
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/grilo-plugins/-/commit/b07f872defd826ebcf10931a138f8d7ef7d6657e.patch";
+      hash = "sha256-t9T3AyCe9TKHdRhgzNRp5djGQYvPOMwEP39JcW8FPAA=";
     })
   ];
 
