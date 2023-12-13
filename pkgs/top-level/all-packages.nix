@@ -32402,8 +32402,6 @@ with pkgs;
 
   himalaya = callPackage ../applications/networking/mailreaders/himalaya { };
 
-  hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
-
   hydrogen-web-unwrapped = callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix { };
 
   hydrogen-web = callPackage ../applications/networking/instant-messengers/hydrogen-web/wrapper.nix {

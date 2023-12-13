@@ -1113,6 +1113,10 @@ self: super: {
     dependencies = with self; [ nvim-treesitter ];
   };
 
+  startup-nvim = super.startup-nvim.overrideAttrs {
+    dependencies = with super; [ plenary-nvim ];
+  };
+
   statix = buildVimPlugin rec {
     inherit (statix) pname src meta;
     version = "0.1.0";
