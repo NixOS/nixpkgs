@@ -169,7 +169,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://matrix.org";
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
     maintainers = teams.matrix.members;
   };
 }
