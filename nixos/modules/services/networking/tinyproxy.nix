@@ -85,7 +85,7 @@ in
         User = "tinyproxy";
         Group = "tinyproxy";
         Type = "simple";
-        ExecStart = "${getExe pkgs.tinyproxy} -d -c ${configFile}";
+        ExecStart = "${getExe cfg.package} -d -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
