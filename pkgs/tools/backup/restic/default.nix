@@ -48,5 +48,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
     maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
+    mainProgram = "restic";
   };
 }
