@@ -14,14 +14,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "aseprite";
-  version = "1.3";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MSLStUmKAbGKFOQmUcRVrkjZCDglSjTmC6MGWJOCjKU=";
+    hash = "sha256-8PXqMDf2ATxmtFqyZlGip+DhGrdK8M6Ztte7fGH6Fmo=";
   };
 
   nativeBuildInputs = [
