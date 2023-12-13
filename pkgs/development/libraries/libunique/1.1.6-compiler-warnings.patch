@@ -1,0 +1,50 @@
+From 9df132a70d54b768a8e1d0335d24b85ac9b3fb76 Mon Sep 17 00:00:00 2001
+From: Emmanuele Bassi <ebassi@linux.intel.com>
+Date: Sun, 27 Mar 2011 08:42:22 +0000
+Subject: Remove compiler warnings
+
+(cherry picked from commit f791ed16b19dddc7fbaf90d8f797520e67883021)
+
+Signed-off-by: Emmanuele Bassi <ebassi@linux.intel.com>
+---
+diff --git a/unique/dbus/uniquebackend-dbus.c b/unique/dbus/uniquebackend-dbus.c
+index 3ae1bed..69faa00 100644
+--- a/unique/dbus/uniquebackend-dbus.c
++++ b/unique/dbus/uniquebackend-dbus.c
+@@ -84,7 +84,6 @@ unique_backend_dbus_register_proxy (UniqueBackendDBus *backend_dbus)
+ static gboolean
+ unique_backend_dbus_request_name (UniqueBackend *backend)
+ {
+-  UniqueBackendDBus *backend_dbus;
+   const gchar *name;
+   DBusGConnection *connection;
+   DBusGProxy *proxy;
+@@ -97,8 +96,6 @@ unique_backend_dbus_request_name (UniqueBackend *backend)
+   if (!connection)
+     return FALSE;
+ 
+-  backend_dbus = UNIQUE_BACKEND_DBUS (backend);
+-
+   retval = TRUE;
+   name = unique_backend_get_name (backend);
+   g_assert (name != NULL);
+@@ -207,10 +204,14 @@ unique_backend_dbus_send_message (UniqueBackend     *backend,
+                                         cmd, data, time_,
+                                         &resp,
+                                         &error);
+-  if (error)
++  if (!res)
+     {
+-      g_warning ("Error while sending message: %s", error->message);
+-      g_error_free (error);
++      if (error)
++        {
++          g_warning ("Error while sending message: %s", error->message);
++          g_error_free (error);
++        }
++
+       g_free (cmd);
+       
+       return UNIQUE_RESPONSE_INVALID;
+--
+cgit v0.9

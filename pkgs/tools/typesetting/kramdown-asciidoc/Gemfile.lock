@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    kramdown (1.17.0)
+    kramdown-asciidoc (1.0.1)
+      kramdown (~> 1.17.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  kramdown-asciidoc
+
+BUNDLED WITH
+   2.1.4

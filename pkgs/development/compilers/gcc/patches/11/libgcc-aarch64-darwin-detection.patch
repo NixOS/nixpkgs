@@ -1,0 +1,21 @@
+diff -u a/libgcc/config.host b/libgcc/config.host
+--- a/libgcc/config.host	2023-11-05 11:01:55.778638446 -0500
++++ b/libgcc/config.host	2023-11-05 11:07:29.405103979 -0500
+@@ -227,7 +227,7 @@
+   tmake_file="$tmake_file t-slibgcc-darwin"
+   # newer toolsets produce warnings when building for unsupported versions.
+   case ${host} in
+-    *-*-darwin1[89]* | *-*-darwin2* )
++    *-*-darwin1[89]* | *-*-darwin2* | aarch64*-*-darwin*)
+       tmake_file="t-darwin-min-8 $tmake_file"
+       ;;
+     *-*-darwin9* | *-*-darwin1[0-7]*)
+diff -ur a/libgcc/config/t-darwin-rpath b/libgcc/config/t-darwin-rpath
+--- a/libgcc/config/t-darwin-rpath	2023-11-05 11:34:18.691150009 -0500
++++ b/libgcc/config/t-darwin-rpath	2023-11-05 11:50:36.968920904 -0500
+@@ -2,4 +2,4 @@
+ SHLIB_RPATH = @rpath
+
+ # Which does not work for Darwin < 9
+-HOST_LIBGCC2_CFLAGS += -mmacosx-version-min=10.5
++SHLIB_LOADER_PATH = -Wl,-rpath,@loader_path

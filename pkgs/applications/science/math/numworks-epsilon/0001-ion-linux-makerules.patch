@@ -1,0 +1,12 @@
+diff --git a/ion/src/simulator/linux/Makefile b/ion/src/simulator/linux/Makefile
+index ca7da03fa..b05bba115 100644
+--- a/ion/src/simulator/linux/Makefile
++++ b/ion/src/simulator/linux/Makefile
+@@ -28,7 +28,6 @@ ion_src += $(addprefix ion/src/simulator/shared/, \
+   collect_registers.cpp \
+   haptics.cpp \
+   journal.cpp \
+-  platform_action_modifier_ctrl.cpp \
+   state_file.cpp \
+ )
+ 

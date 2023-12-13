@@ -1,0 +1,27 @@
+Taken from:
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/games-action/gltron/files/gltron-0.70-prototypes.patch?revision=1.1&view=markup
+
+scripting.h declares these params as const so make sure they're the same.
+
+--- a/nebu/scripting/scripting.c
++++ b/nebu/scripting/scripting.c
+@@ -169,16 +169,16 @@
+   return status;
+ }    
+ 
+-void scripting_RunFile(char *name) {
++void scripting_RunFile(const char *name) {
+   lua_dofile(L, name);
+ }
+ 
+-void scripting_Run(char *command) {
++void scripting_Run(const char *command) {
+   /* fprintf(stderr, "[command] %s\n", command); */
+   lua_dostring(L, command);
+ }
+ 
+-void scripting_RunFormat(char *format, ... ) {
++void scripting_RunFormat(const char *format, ... ) {
+   char buf[4096];
+   va_list ap;
+   va_start(ap, format);

@@ -1,0 +1,13 @@
+diff --git a/dmensamenu/dmensamenu.py b/dmensamenu/dmensamenu.py
+index 7df49f2..052ef1b 100644
+--- a/dmensamenu/dmensamenu.py
++++ b/dmensamenu/dmensamenu.py
+@@ -99,7 +99,7 @@ def main():
+     parser.add_argument('--city',
+                         help='When searching for a canteen, only show the ones from the city specified'
+                             +' (case-insensitive).')
+-    parser.add_argument('--dmenu', metavar='CMD', default='dmenu -i -l "$lines" -p "$date"',
++    parser.add_argument('--dmenu', metavar='CMD', default='@dmenu@/bin/dmenu -i -l "$lines" -p "$date"',
+                         help='Command to execute. '
+                              'Can be used to pass custom parameters to dmenu. '
+                              'The shell variable $lines will be set to the number of items on the menu '

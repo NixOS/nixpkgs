@@ -1,0 +1,79 @@
+From 958b63ceec02b179482141cfb846ddbcae711a1b Mon Sep 17 00:00:00 2001
+From: Scott Mcdermott <scott@smemsh.net>
+Date: Sat, 28 Aug 2021 21:12:38 -0700
+Subject: [PATCH] RcFile: _read: try taskrc directory when trying to load
+ includes
+
+Taskwarrior itself tries includes as absolute path, then cwd, then
+relative to rcfile, then in various search paths (see
+GothenburgBitFactory/libshared -> src/Configuration.cpp ->
+Configuration::parse()).
+
+We won't try to duplicate that whole arrangement here, but at least look
+relative to the rcfile in addition to cwd/absolute, like taskwarrior
+does.  This will allow specification as relative path in most cases.
+Otherwise, we'd have to chdir anyways because includes are always tried
+as-is by taskw.  They would only work if specified as absolute paths or
+if in cwd
+
+We use a TaskRc() class variable to store the rcdir because there could
+be an include chain and all the instances will need to know the same
+one, but will be processing different paths, so we have to capture the
+directory of the first one processed, ie the base rcfile.
+
+Fixes #150
+
+Co-authored-by: Raito Bezarius <masterancpp@gmail.com>
+---
+ taskw/taskrc.py | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/taskw/taskrc.py b/taskw/taskrc.py
+index 1b6f8e5..b72dee6 100644
+--- a/taskw/taskrc.py
++++ b/taskw/taskrc.py
+@@ -1,5 +1,6 @@
+ import logging
+ import os
++import os.path
+ 
+ from taskw.fields import (
+     ChoiceField,
+@@ -39,6 +40,7 @@ class TaskRc(dict):
+ 
+     """
+ 
++    rcdir = None
+     UDA_TYPE_MAP = {
+         'date': DateField,
+         'duration': DurationField,
+@@ -54,6 +56,8 @@ class TaskRc(dict):
+                     path
+                 )
+             )
++            if not self.rcdir:
++                TaskRc.rcdir = os.path.dirname(os.path.realpath(self.path))
+             config = self._read(self.path)
+         else:
+             self.path = None
+@@ -92,6 +96,17 @@ class TaskRc(dict):
+ 
+     def _read(self, path):
+         config = {}
++        if not os.path.exists(path) and TaskRc.rcdir is not None:
++            # include path may be given relative to dir of rcfile
++            oldpath = path
++            path = os.path.join(TaskRc.rcdir, oldpath)
++            if not os.path.exists(path):
++                logger.error(
++                    "rcfile does not exist, tried %s and %s",
++                    oldpath, path
++                )
++                raise FileNotFoundError
++
+         with open(path, 'r') as config_file:
+             for raw_line in config_file.readlines():
+                 line = sanitize(raw_line)
+-- 
+2.42.0
+

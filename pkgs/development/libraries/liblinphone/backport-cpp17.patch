@@ -1,0 +1,98 @@
+From 9ece6e77dcf6545c3b8104068302c6243e3a5e88 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micka=C3=ABl=20Turnel?=
+ <mickael.turnel@belledonne-communications.com>
+Date: Wed, 1 Mar 2023 09:14:53 +0100
+Subject: [PATCH] Set c++ version 17 and fix compilation errors
+
+Backported-by: Lorenz Brun <lorenz@brun.one>
+
+---
+ CMakeLists.txt                           |  2 +-
+ daemon/daemon.cc                         |  2 +-
+ libxsd/xsd/cxx/config.hxx                |  2 +-
+ src/conference/session/streams-group.cpp | 10 +++++-----
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 475ff16a8..a771e4595 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -92,7 +92,7 @@ cmake_dependent_option(ENABLE_QRCODE "Enable QRCode support" YES "ENABLE_VIDEO"
+ # * DISABLE_BC_PACKAGE_SEARCH: skip find_package() for every BC package (bctoolbox, ortp, etc.)
+ # * DISABLE_SOCI_PACKAGE_SEARCH: skip find_package() for Soci.
+ 
+-set(CMAKE_CXX_STANDARD 14)
++set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_EXTENSIONS NO)
+ 
+ if(NOT CMAKE_BUILD_TYPE)
+diff --git a/daemon/daemon.cc b/daemon/daemon.cc
+index 197fc22ef..fd09edb26 100644
+--- a/daemon/daemon.cc
++++ b/daemon/daemon.cc
+@@ -628,7 +628,7 @@ void Daemon::execCommand(const string &command) {
+ 	ist.get(argsbuf);
+ 	string args = argsbuf.str();
+ 	if (!args.empty() && (args[0] == ' ')) args.erase(0, 1);
+-	list<DaemonCommand*>::iterator it = find_if(mCommands.begin(), mCommands.end(), bind2nd(mem_fun(&DaemonCommand::matches), name));
++	list<DaemonCommand*>::iterator it = find_if(mCommands.begin(), mCommands.end(), [&name](const DaemonCommand *dc) { return dc->matches(name); });
+ 	if (it != mCommands.end()) {
+ 		ms_mutex_lock(&mMutex);
+ 		(*it)->exec(this, args);
+diff --git a/libxsd/xsd/cxx/config.hxx b/libxsd/xsd/cxx/config.hxx
+index 076b107f5..385841731 100644
+--- a/libxsd/xsd/cxx/config.hxx
++++ b/libxsd/xsd/cxx/config.hxx
+@@ -19,7 +19,7 @@
+ #  endif
+ #else
+ #  if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
+-#    ifdef __GNUC__
++#    if defined(__GNUC__) && !defined(__clang__)
+ #      if (__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4
+ #        define XSD_CXX11_NULLPTR
+ #      endif
+diff --git a/src/conference/session/streams-group.cpp b/src/conference/session/streams-group.cpp
+index bff739dda..84277a6b7 100644
+--- a/src/conference/session/streams-group.cpp
++++ b/src/conference/session/streams-group.cpp
+@@ -447,11 +447,11 @@ float StreamsGroup::computeOverallQuality(_functor func){
+ }
+ 
+ float StreamsGroup::getAverageQuality(){
+-	return computeOverallQuality(mem_fun(&Stream::getAverageQuality));
++	return computeOverallQuality(mem_fn(&Stream::getAverageQuality));
+ }
+ 
+ float StreamsGroup::getCurrentQuality(){
+-	return computeOverallQuality(mem_fun(&Stream::getCurrentQuality));
++	return computeOverallQuality(mem_fn(&Stream::getCurrentQuality));
+ }
+ 
+ int StreamsGroup::getAvpfRrInterval()const{
+@@ -481,11 +481,11 @@ bool StreamsGroup::avpfEnabled() const{
+ }
+ 
+ void StreamsGroup::refreshSockets(){
+-	forEach<Stream>(mem_fun(&Stream::refreshSockets));
++	forEach<Stream>(mem_fn(&Stream::refreshSockets));
+ }
+ 
+ void StreamsGroup::computeAndReportBandwidth(){
+-	forEach<Stream>(mem_fun(&Stream::updateBandwidthReports));
++	forEach<Stream>(mem_fn(&Stream::updateBandwidthReports));
+ 	
+ 	if (!bctbx_log_level_enabled(BCTBX_LOG_DOMAIN, BCTBX_LOG_MESSAGE)) return;
+ 	
+@@ -540,7 +540,7 @@ void StreamsGroup::finish(){
+ 	mIceService->finish(); // finish ICE first, as it has actions on the streams.
+ 	for (auto & ss : mSharedServices) ss.second->checkDestroy();
+ 	mSharedServices.clear();
+-	forEach<Stream>(mem_fun(&Stream::finish));
++	forEach<Stream>(mem_fn(&Stream::finish));
+ 	mFinished = true;
+ }
+ 
+-- 
+2.41.0
+

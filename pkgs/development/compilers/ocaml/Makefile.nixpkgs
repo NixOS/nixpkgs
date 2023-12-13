@@ -1,0 +1,16 @@
+# ocaml build system does not allow for parallel building of some
+# top-level targets like 'world', 'bootstrap', 'world.opt' as
+# then spawn '$(MAKE) all' subprocesses that conflict among each
+# other. But we would still like to run each target in parallel
+# individually. This file defines such entry points.
+
+# Re-export all existing phases to make 'make install' work as is.
+include Makefile
+
+nixpkgs_world:
+	$(MAKE) world
+
+nixpkgs_world_bootstrap_world_opt:
+	$(MAKE) world
+	$(MAKE) bootstrap
+	$(MAKE) world.opt

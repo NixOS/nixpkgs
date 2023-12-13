@@ -1,0 +1,109 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 090cfa352078..624b7c9f3400 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,12 +38,26 @@ if(CLANG_BUILT_STANDALONE)
+   find_package(LLVM REQUIRED HINTS "${LLVM_CMAKE_DIR}")
+   list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
+ 
+-  # Turn into CACHE PATHs for overwritting
+-  set(LLVM_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS} CACHE PATH "Path to llvm/include and any other header dirs needed")
+-  set(LLVM_BINARY_DIR "${LLVM_BINARY_DIR}" CACHE PATH "Path to LLVM build tree")
+-  set(LLVM_MAIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../llvm" CACHE PATH "Path to LLVM source tree")
+-  set(LLVM_TOOLS_BINARY_DIR "${LLVM_TOOLS_BINARY_DIR}" CACHE PATH "Path to llvm/bin")
+-  set(LLVM_LIBRARY_DIR "${LLVM_LIBRARY_DIR}" CACHE PATH "Path to llvm/lib")
++  # We can't check LLVM_CONFIG here, because find_package(LLVM ...) also sets
++  # LLVM_CONFIG.
++  if (NOT LLVM_CONFIG_FOUND)
++    # Pull values from LLVMConfig.cmake.  We can drop this once the llvm-config
++    # path is removed.
++    set(INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
++    set(LLVM_OBJ_DIR "${LLVM_BINARY_DIR}")
++    # N.B. this is just a default value, the CACHE PATHs below can be overriden.
++    set(MAIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../llvm")
++    set(TOOLS_BINARY_DIR "${LLVM_TOOLS_BINARY_DIR}")
++    set(LIBRARY_DIR "${LLVM_LIBRARY_DIR}")
++  else()
++    set(INCLUDE_DIRS "${LLVM_BINARY_DIR}/include" "${MAIN_INCLUDE_DIR}")
++  endif()
++
++  set(LLVM_INCLUDE_DIRS ${INCLUDE_DIRS} CACHE PATH "Path to llvm/include and any other header dirs needed")
++  set(LLVM_BINARY_DIR "${LLVM_OBJ_ROOT}" CACHE PATH "Path to LLVM build tree")
++  set(LLVM_MAIN_SRC_DIR "${MAIN_SRC_DIR}" CACHE PATH "Path to LLVM source tree")
++  set(LLVM_TOOLS_BINARY_DIR "${TOOLS_BINARY_DIR}" CACHE PATH "Path to llvm/bin")
++  set(LLVM_LIBRARY_DIR "${LIBRARY_DIR}" CACHE PATH "Path to llvm/lib")
+ 
+   find_program(LLVM_TABLEGEN_EXE "llvm-tblgen" ${LLVM_TOOLS_BINARY_DIR}
+     NO_DEFAULT_PATH)
+diff --git a/cmake/modules/AddClang.cmake b/cmake/modules/AddClang.cmake
+index 75b0080f6715..c895b884cd27 100644
+--- a/cmake/modules/AddClang.cmake
++++ b/cmake/modules/AddClang.cmake
+@@ -119,8 +119,8 @@ macro(add_clang_library name)
+         install(TARGETS ${lib}
+           COMPONENT ${lib}
+           ${export_to_clangtargets}
+-          LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-          ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++          LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
++          ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
+           RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+         if (NOT LLVM_ENABLE_IDE)
+diff --git a/lib/Headers/CMakeLists.txt b/lib/Headers/CMakeLists.txt
+index bb9a11eabbef..e2de91c65fbb 100644
+--- a/lib/Headers/CMakeLists.txt
++++ b/lib/Headers/CMakeLists.txt
+@@ -437,7 +437,7 @@ add_header_target("openmp-resource-headers" ${openmp_wrapper_files})
+ add_header_target("windows-resource-headers" ${windows_only_files})
+ add_header_target("utility-resource-headers" ${utility_files})
+ 
+-set(header_install_dir lib${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION_MAJOR}/include)
++set(header_install_dir ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION_MAJOR}/include)
+ 
+ #############################################################
+ # Install rules for the catch-all clang-resource-headers target
+diff --git a/tools/libclang/CMakeLists.txt b/tools/libclang/CMakeLists.txt
+index 4f23065a2472..6a0f55991e24 100644
+--- a/tools/libclang/CMakeLists.txt
++++ b/tools/libclang/CMakeLists.txt
+@@ -234,7 +234,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
+           COMPONENT
+             libclang-python-bindings
+           DESTINATION
+-            "lib${LLVM_LIBDIR_SUFFIX}/python${PythonVersion}/site-packages")
++            "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/python${PythonVersion}/site-packages")
+ endforeach()
+ if(NOT LLVM_ENABLE_IDE)
+   add_custom_target(libclang-python-bindings)
+diff --git a/tools/scan-build-py/CMakeLists.txt b/tools/scan-build-py/CMakeLists.txt
+index 3aca22c0b0a8..3115353e3fe3 100644
+--- a/tools/scan-build-py/CMakeLists.txt
++++ b/tools/scan-build-py/CMakeLists.txt
+@@ -88,7 +88,7 @@ foreach(lib ${LibScanbuild})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/${lib})
+   install(FILES lib/libscanbuild/${lib}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild"
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -106,7 +106,7 @@ foreach(resource ${LibScanbuildResources})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/resources/${resource})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/resources/${resource})
+   install(FILES lib/libscanbuild/resources/${resource}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild/resources
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild/resources"
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -122,7 +122,7 @@ foreach(lib ${LibEar})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libear/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libear/${lib})
+   install(FILES lib/libear/${lib}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libear
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libear"
+           COMPONENT scan-build-py)
+ endforeach()
+ 

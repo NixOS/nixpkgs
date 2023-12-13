@@ -1,0 +1,15 @@
+diff --git a/xpra/server/server_util.py b/xpra/server/server_util.py
+index f46998ee9f..60068f21b6 100644
+--- a/xpra/server/server_util.py
++++ b/xpra/server/server_util.py
+@@ -157,6 +157,10 @@ def xpra_env_shell_script(socket_dir, env):
+     return b"\n".join(script)
+ 
+ def xpra_runner_shell_script(xpra_file, starting_dir):
++    # Nixpkgs contortion:
++    # xpra_file points to a shell wrapper, not to the python script.
++    dirname, basename = os.path.split(xpra_file)
++    xpra_file = os.path.join(dirname, "."+basename+"-wrapped")
+     script = []
+     # We ignore failures in cd'ing, b/c it's entirely possible that we were
+     # started from some temporary directory and all paths are absolute.

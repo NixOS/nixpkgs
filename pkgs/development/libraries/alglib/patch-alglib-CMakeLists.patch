@@ -1,0 +1,23 @@
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,20 @@
++cmake_minimum_required(VERSION 2.8)
++
++project(alglib3 CXX)
++
++file(GLOB_RECURSE sources src/*.cpp)
++file(GLOB_RECURSE headers src/*.h)
++
++add_library(${PROJECT_NAME} STATIC ${sources} ${headers})
++
++install(
++  TARGETS ${PROJECT_NAME}
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++
++install(
++  FILES ${headers}
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/alglib
++)

@@ -1,0 +1,13 @@
+diff --git a/lib/discourse_js_processor.rb b/lib/discourse_js_processor.rb
+index 3fee4259af9..53cc3107f46 100644
+--- a/lib/discourse_js_processor.rb
++++ b/lib/discourse_js_processor.rb
+@@ -111,8 +111,6 @@ class DiscourseJsProcessor
+ 
+     def self.generate_js_processor
+       Discourse::Utils.execute_command(
+-        "yarn",
+-        "--silent",
+         "esbuild",
+         "--log-level=warning",
+         "--bundle",

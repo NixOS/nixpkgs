@@ -1,0 +1,19 @@
+Index: grantlee-5.1.0/templates/lib/engine.cpp
+===================================================================
+--- grantlee-5.1.0.orig/templates/lib/engine.cpp
++++ grantlee-5.1.0/templates/lib/engine.cpp
+@@ -48,6 +48,14 @@ Engine::Engine(QObject *parent)
+ 
+   d_ptr->m_pluginDirs = QCoreApplication::instance()->libraryPaths();
+   d_ptr->m_pluginDirs << QString::fromLocal8Bit(GRANTLEE_PLUGIN_PATH);
++
++  // Add library paths derived from NIX_PROFILES.
++  const QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
++  for (const QByteArray &profile: profiles) {
++    if (!profile.isEmpty()) {
++      d_ptr->m_pluginDirs << (QFile::decodeName(profile) + QStringLiteral("/lib"));
++    }
++  }
+ }
+ 
+ Engine::~Engine()

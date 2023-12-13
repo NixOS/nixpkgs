@@ -1,0 +1,10 @@
+--- a/support/mksignames.c
++++ b/support/mksignames.c
+@@ -68,6 +68,7 @@ write_signames (stream)
+   fprintf (stream, "};\n\n");
+   fprintf (stream, "#define initialize_signames()\n\n");
+ #endif
++  fflush(stream);
+ }
+ 
+ int

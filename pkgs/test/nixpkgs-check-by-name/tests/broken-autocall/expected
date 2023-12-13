@@ -1,0 +1,1 @@
+pkgs.foo: This attribute is not defined but it should be defined automatically as pkgs/by-name/fo/foo/package.nix

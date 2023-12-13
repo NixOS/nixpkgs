@@ -1,0 +1,47 @@
+diff --git a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
+index 3fb887c3..e8cbe1bd 100644
+--- a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
++++ b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
+@@ -5,7 +5,7 @@
+ [Desktop Entry]
+ Type=Application
+ Name=GSConnect
+-Exec=gapplication launch org.gnome.Shell.Extensions.GSConnect %U
++Exec=@gapplication@ launch org.gnome.Shell.Extensions.GSConnect %U
+ Terminal=false
+ NoDisplay=true
+ Icon=org.gnome.Shell.Extensions.GSConnect
+diff --git a/src/__nix-prepend-search-paths.js b/src/__nix-prepend-search-paths.js
+new file mode 100644
+index 00000000..d009dfd9
+--- /dev/null
++++ b/src/__nix-prepend-search-paths.js
+@@ -0,0 +1,2 @@
++import GIRepository from 'gi://GIRepository';
++'@typelibPath@'.split(':').forEach(path => GIRepository.Repository.prepend_search_path(path));
+diff --git a/src/extension.js b/src/extension.js
+index 53ecd5fc..78782357 100644
+--- a/src/extension.js
++++ b/src/extension.js
+@@ -2,6 +2,8 @@
+ //
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
++import './__nix-prepend-search-paths.js';
++
+ import Gio from 'gi://Gio';
+ import GObject from 'gi://GObject';
+ 
+diff --git a/src/prefs.js b/src/prefs.js
+index dd20fd20..5f82c53a 100644
+--- a/src/prefs.js
++++ b/src/prefs.js
+@@ -2,6 +2,8 @@
+ //
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
++import './__nix-prepend-search-paths.js';
++
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import Adw from 'gi://Adw';

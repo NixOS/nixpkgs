@@ -1,0 +1,52 @@
+diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
+index a9671e2..da36405 100644
+--- a/src/wl/sys/wl_cfg80211_hybrid.c
++++ b/src/wl/sys/wl_cfg80211_hybrid.c
+@@ -30,6 +30,9 @@
+ #include <linux/kthread.h>
+ #include <linux/netdevice.h>
+ #include <linux/ieee80211.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++#include <linux/sched/signal.h>
++#endif
+ #include <net/cfg80211.h>
+ #include <linux/nl80211.h>
+ #include <net/rtnetlink.h>
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index 489c9f5..f8278ad 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -117,6 +117,9 @@ int wl_found = 0;
+ 
+ typedef struct priv_link {
+ 	wl_if_t *wlif;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++	unsigned long last_rx;
++#endif
+ } priv_link_t;
+ 
+ #define WL_DEV_IF(dev)          ((wl_if_t*)((priv_link_t*)DEV_PRIV(dev))->wlif)
+@@ -2450,6 +2453,9 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
+ {
+ 	struct sk_buff *oskb = (struct sk_buff *)p;
+ 	struct sk_buff *skb;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++	priv_link_t *priv_link;
++#endif
+ 	uchar *pdata;
+ 	uint len;
+ 
+@@ -2916,7 +2922,13 @@ wl_monitor(wl_info_t *wl, wl_rxsts_t *rxsts, void *p)
+ 	if (skb == NULL) return;
+ 
+ 	skb->dev = wl->monitor_dev;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++	priv_link = MALLOC(wl->osh, sizeof(priv_link_t));
++	priv_link = netdev_priv(skb->dev);
++	priv_link->last_rx = jiffies;
++#else
+ 	skb->dev->last_rx = jiffies;
++#endif
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 22)
+ 	skb_reset_mac_header(skb);
+ #else

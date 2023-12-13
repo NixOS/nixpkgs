@@ -1,0 +1,8 @@
+--- a/scriptbin/dyalogscript
++++ b/scriptbin/dyalogscript
+@@ -5,1 +5,1 @@
+-INSTALLDIR="/opt/mdyalog/18.2/64/unicode"
++INSTALLDIR="@installdir@"
+@@ -40,1 +40,1 @@
+-: ${SCRIPTDIR:=$INSTALLDIR}
++SCRIPTDIR="@scriptdir@"

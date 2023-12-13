@@ -1,0 +1,38 @@
+From 20c3fe76340981c43eeed16a5509480a0f5cb56d Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 6 Aug 2021 10:55:01 +0200
+Subject: [PATCH] Forcefully disable docs build
+
+This currently affects the following statement in `src/Makefile.am`
+only:
+
+    if !DISABLE_DOCUMENTATION
+    all-local: lnav
+            if test -w $(srcdir)/internals; then \
+                    env DUMP_INTERNALS_DIR=$(srcdir)/internals DUMP_CRASH=1 ./lnav Makefile; \
+                    mv $(srcdir)/internals/*.schema.json $(top_srcdir)/docs/schemas; \
+            fi
+    endif
+
+We cannot do this (even on non-cross builds) since `lnav` requires e.g.
+`/etc/nsswitch.conf` and other impurities here.
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index ce311fd8..e3c9ebe0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -287,7 +287,7 @@ AS_IF([test $? -eq 0],
+ 
+ AM_CONDITIONAL(USE_INCLUDED_YAJL, test $HAVE_LOCAL_YAJL -eq 0)
+ AM_CONDITIONAL(HAVE_LIBCURL, test x"$LIBCURL" != x"")
+-AM_CONDITIONAL([DISABLE_DOCUMENTATION], [ test x"$cross_compiling" != x"no" ])
++AM_CONDITIONAL([DISABLE_DOCUMENTATION], [ true ])
+ 
+ AC_CONFIG_HEADERS([src/config.h])
+ AC_CONFIG_FILES([Makefile])
+-- 
+2.31.1
+
