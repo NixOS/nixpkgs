@@ -58,23 +58,18 @@
 }@args:
 
 let
-  #version = "7.0.0-pre.20231011.2";
-  version = "7.0.0rc7";
+  version = "7.0.0";
   sourceRoot = ".";
 
   src = fetchurl {
-    #url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    #hash = "sha256-3kwNnFPGyRLBKSSzsa+pTNAHowH+fLjtwxiSY8RkbQc=";
-    url = "https://releases.bazel.build/7.0.0/rc7/bazel-${version}-dist.zip";
-    hash = "sha256-stJ/X8kqeqKUXAtH4doaXv04f5Kl6FPycGZdEgRDj1Y=";
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    hash = "sha256-R35U9jdAAfQ5qUcbod6deCTa8SnblVEISezF4ZzogXA=";
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
   lockfile = builtins.fetchurl {
-    #url = "https://raw.githubusercontent.com/bazelbuild/bazel/${version}/MODULE.bazel.lock";
-    #sha256 = "sha256:0wdwkfq3mrg4dxvmq2prdsj1i5jyql8jc2wf3wx948cnc10pbfy7";
     url = "https://raw.githubusercontent.com/bazelbuild/bazel/release-${version}/MODULE.bazel.lock";
-    sha256 = "sha256:15yfks5j63ak3gwjr7iggxybwvd1qvpp2mc4ndsmlacmwl4yj4z7";
+    sha256 = "sha256-5xPpCeWVKVp1s4RVce/GoW2+fH8vniz5G1MNI4uezpc=";
   };
 
   # Two-in-one format
