@@ -213,6 +213,11 @@ stdenv.mkDerivation rec {
     # I do not know yet how to allow IOPMAssertion{CreateWithName,Release}
     ./darwin_sleep.patch
 
+    # Make DARWIN_XCODE_LOCATOR_COMPILE_COMMAND behave properly by diabling
+    # multi-arch support (I could not get it to work) and using proper /usr/bin
+    # paths that will get fixed below.
+    ./xcode_locator.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
