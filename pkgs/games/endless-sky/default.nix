@@ -4,18 +4,24 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.9.16.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "sha256-bohljxAtSVqsfnge6t4LF3pC1s1r99v3hNLKTBquC20=";
+    sha256 = "sha256-z53hFNuXiD5pwmpL7v8uttL+DvQpe5/hT2EE/WhP9FA=";
   };
 
   patches = [
     ./fixes.patch
+    ./fixes2.patch
   ];
+
+  postPatch = ''
+    substituteInPlace source/Files.cpp \
+      --replace '%NIXPKGS_RESOURCES_PATH%' "$out/share/games/endless-sky"
+  '';
 
   preBuild = ''
     export AR="${stdenv.cc.targetPrefix}gcc-ar"
