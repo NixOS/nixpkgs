@@ -1,4 +1,14 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nodejs_18
+, electron
+, python3
+, nix-update-script
+}:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
@@ -18,10 +28,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
 
+  nodejs = nodejs_18;
+
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    python3
   ];
 
   buildInputs = [
