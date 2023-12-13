@@ -73,6 +73,7 @@ let
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
+    reload = callPackage ./reload.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
     sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
