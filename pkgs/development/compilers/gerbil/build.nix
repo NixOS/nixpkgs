@@ -106,6 +106,9 @@ stdenv.mkDerivation rec {
     ./install.sh
     (cd $out/bin ; ln -s ../gerbil/bin/* .)
     runHook postInstall
+  '' + lib.optionalString stdenv.isDarwin ''
+    libgerbil="$(realpath "$out/gerbil/lib/libgerbil.so")"
+    install_name_tool -id "$libgerbil" "$libgerbil"
   '';
 
   dontStrip = true;
