@@ -1,5 +1,6 @@
 { lib, stdenvNoCC, fetchurl, nixosTests
 , nextcloud27Packages
+, nextcloud28Packages
 , nextcloud26Packages
 }:
 
@@ -63,6 +64,12 @@ in {
     version = "27.1.4";
     hash = "sha256-vsZfIWa4LJMDuvR2weQk9xqhltrQEP/kwMOdA5kNWUw=";
     packages = nextcloud27Packages;
+  };
+
+  nextcloud28 = generic {
+    version = "28.0.0";
+    hash = "sha256-TosLdLQCIehfkquGnQhzxppS1+Q4idklnGJZQopqNvI=";
+    packages = nextcloud28Packages;
   };
 
   # tip: get the sha with:
