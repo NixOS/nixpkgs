@@ -72,6 +72,7 @@ let
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
+    quack = callPackage ./quack.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
