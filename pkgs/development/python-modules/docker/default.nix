@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
   disabledTests = lib.optionals stdenv.isDarwin [
-    "api_test"      
+    "api_test"
     "stream_response"
     "socket_file"
   ];
