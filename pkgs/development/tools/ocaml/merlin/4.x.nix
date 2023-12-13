@@ -25,7 +25,7 @@ let
     "4.14.1" = "4.13-414";
     "5.0.0" = "4.12-500";
     "5.1.0" = "4.13-501";
-    # "5.1.1" = "4.13.1-501";
+    "5.1.1" = "4.13.1-501";
   };
 
   hashes = {
@@ -34,6 +34,7 @@ let
     "4.12-500" = "sha256-j49R7KVzNKlXDL7WibTHxPG4VSOVv0uaz5/yMZZjkH8=";
     "4.13-414" = "sha256-AlzxqTuh5AkW9dnPIv51abv7r0A/VOS3JOT5IHix2wM=";
     "4.13-501" = "sha256-G/VrI+qBVj2wxuB2qE9P1M73IvDmqmTrBFAA6mp+NRE=";
+    "4.13.1-501" = "sha256-NVfgX3DFsQghApEgWilCgr5O2WSkwKtenZZFSJ1wwa0=";
   };
 
   version = lib.getAttr ocaml.version merlinVersions;
