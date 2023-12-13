@@ -1,4 +1,4 @@
-args@{ pkgs, nextcloudVersion ? 22, ... }:
+args@{ pkgs, nextcloudVersion ? 28, ... }:
 
 (import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "notproduction";
