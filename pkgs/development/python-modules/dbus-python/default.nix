@@ -1,11 +1,12 @@
 { lib, stdenv, fetchPypi, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
-, ncurses, pygobject3, isPy3k }:
+, ncurses, pygobject3, isPy3k, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "dbus-python";
   version = "1.2.18";
 
-  disabled = isPyPy;
+  # ModuleNotFoundError: No module named 'distutils'
+  disabled = isPyPy || pythonAtLeast "3.12";
   format = "other";
   outputs = [ "out" "dev" ];
 
