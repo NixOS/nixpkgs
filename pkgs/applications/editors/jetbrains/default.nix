@@ -21,6 +21,8 @@
 , libgcc
 , lttng-ust_2_12
 , xz
+, xorg
+, libGL
 
 , vmopts ? null
 }:
@@ -149,7 +151,7 @@ rec {
       # fortify source breaks build since delve compiles with -O0
       ''--prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"''
     ];
-    extraBuildInputs = [ libgcc ];
+    extraBuildInputs = [ libgcc stdenv.cc.cc ];
   }).overrideAttrs
     (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
@@ -215,6 +217,9 @@ rec {
       python3
       openssl
       libxcrypt-legacy
+      fontconfig
+      xorg.libX11
+      libGL
     ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
       expat
       libxml2
