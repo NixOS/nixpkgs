@@ -1317,6 +1317,12 @@ rm -rf -- *
 expectFailure 'gitTracked null' 'lib.fileset.gitTracked: Expected the argument to be a path, but it'\''s a null instead.'
 expectFailure 'gitTrackedWith {} null' 'lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it'\''s a null instead.'
 
+# The path must be a directory
+touch a
+expectFailure 'gitTracked ./a' 'lib.fileset.gitTracked: Expected the argument \('"$work"'/a\) to be a directory, but it'\''s a file instead'
+expectFailure 'gitTrackedWith {} ./a' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'/a\) to be a directory, but it'\''s a file instead'
+rm -rf -- *
+
 # The path has to contain a .git directory
 expectFailure 'gitTracked ./.' 'lib.fileset.gitTracked: Expected the argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
 expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
