@@ -748,6 +748,8 @@ self: super: with self; {
 
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
+  asgi-logger = callPackage ../development/python-modules/asgi-logger { };
+
   asgineer = callPackage ../development/python-modules/asgineer { };
 
   asgiref = callPackage ../development/python-modules/asgiref { };
@@ -5416,6 +5418,8 @@ self: super: with self; {
   imgsize = callPackage ../development/python-modules/imgsize { };
 
   imgtool = callPackage ../development/python-modules/imgtool { };
+
+  imia = callPackage ../development/python-modules/imia { };
 
   iminuit = callPackage ../development/python-modules/iminuit { };
 
@@ -13242,6 +13246,8 @@ self: super: with self; {
 
   smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
 
+  smtpdfix = callPackage ../development/python-modules/smtpdfix { };
+
   snack = toPythonModule (pkgs.newt.override {
     inherit (self) python;
   });
@@ -13645,6 +13651,8 @@ self: super: with self; {
   starlette = callPackage ../development/python-modules/starlette {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
@@ -15998,6 +16006,8 @@ self: super: with self; {
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
+
+  wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 

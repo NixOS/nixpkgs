@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "apfel";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
     rev = version;
-    hash = "sha256-RXzHcLgitIk+6pINqcvpQv7QpDpAuFrOHKqjwZ0K5zI=";
+    hash = "sha256-0Ix7KwEZUG/NmGJ380DVJbUA0PcoEJDlcGSc09l5Tbc=";
   };
 
   patches = [

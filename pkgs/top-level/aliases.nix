@@ -598,6 +598,8 @@ mapAliases ({
   miopen-hip = throw "'miopen-hip' has been replaced with 'rocmPackages.miopen-hip'"; # Added 2023-10-08
   miopen-opencl = throw "'miopen-opencl' has been replaced with 'rocmPackages.miopen-opencl'"; # Added 2023-10-08
   mime-types = mailcap; # Added 2022-01-21
+  minetestclient_5 = minetestclient; # Added 2023-12-11
+  minetestserver_5 = minetestserver; # Added 2023-12-11
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
   mirage-im = throw "'mirage-im' has been removed, as it was broken and unmaintained"; # Added 2023-11-26
   monero = monero-cli; # Added 2021-11-28
