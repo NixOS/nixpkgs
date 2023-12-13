@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilds = true;
 
   passthru.tests = {
-    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
 
