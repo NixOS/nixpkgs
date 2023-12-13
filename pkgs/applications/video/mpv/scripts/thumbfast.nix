@@ -11,8 +11,6 @@ buildLua {
     hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
   };
 
-  scriptPath = "thumbfast.lua";
-
   passthru.extraWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"
   ];
