@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gasket";
-  version = "1.0-18";
+  version = "1.0-18-unstable-2023-09-05";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gasket-driver";
-    rev = "97aeba584efd18983850c36dcf7384b0185284b3";
-    sha256 = "pJwrrI7jVKFts4+bl2xmPIAD01VKFta2SRuElerQnTo=";
+    rev = "09385d485812088e04a98a6e1227bf92663e0b59";
+    sha256 = "fcnqCBh04e+w8g079JyuyY2RPu34M+/X+Q8ObE+42i4=";
   };
 
   makeFlags = [

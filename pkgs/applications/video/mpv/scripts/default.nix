@@ -12,6 +12,7 @@ in lib.recurseIntoAttrs
     autoload = callPackage ./autoload.nix { };
     chapterskip = callPackage ./chapterskip.nix { inherit buildLua; };
     convert = callPackage ./convert.nix { inherit buildLua; };
+    cutter = callPackage ./cutter.nix { inherit buildLua; };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { inherit buildLua; };
@@ -20,13 +21,13 @@ in lib.recurseIntoAttrs
     quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { inherit buildLua; };
     sponsorblock = callPackage ./sponsorblock.nix { };
+    sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { inherit buildLua; };
     thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
     thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
     uosc = callPackage ./uosc.nix { inherit buildLua; };
-    visualizer = callPackage ./visualizer.nix { };
+    visualizer = callPackage ./visualizer.nix { inherit buildLua; };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
-    cutter = callPackage ./cutter.nix { };
   }
   // (callPackage ./occivink.nix { inherit buildLua; }))
   // lib.optionalAttrs config.allowAliases {

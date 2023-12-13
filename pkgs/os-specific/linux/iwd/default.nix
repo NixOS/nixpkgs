@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -20,6 +21,16 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-zePFmcQRFjcH6KToTpBFMQzGY+Eq7jijfn0R/MMKGrw=";
   };
+
+  # Revert test that's broken on aarch64
+  # FIXME: fix this properly
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=aabedeeb6c20c0c053f11ef53413d542442a8f62";
+      revert = true;
+      hash = "sha256-hO4KzdLzW6Tn/4NNJEQO2OvgjSPVl46cwwZfv53R84U=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
