@@ -10,7 +10,6 @@
 }:
 
 let
-
   cargo-pgrx_0_10_2 = cargo-pgrx.overrideAttrs (old: rec {
     name = "cargo-pgrx-${version}";
     version = "0.10.2";
@@ -23,7 +22,7 @@ let
 
     cargoDeps = old.cargoDeps.overrideAttrs (_: {
       inherit src;
-      outputHash = "sha256-itU000vyVGnDUUZx6qOLJqiPdyNHikW2KNFzBmJPqv0=";
+      outputHash = "sha256-XyI3RaPI3Edm/tCP2xoZemib2d2n2cAhobgk9Oafg6s=";
     });
   });
 
