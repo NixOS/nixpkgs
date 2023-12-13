@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mate-desktop/atril/commit/92f7d054d2a534bb08f92821e910625ecc0a3760.patch";
       hash = "sha256-8vFCgvs+ll+BHM6c/paPDulDWFkF4T1M/RAO8RCPYcc=";
     })
+
+    # Fix build with libxml2 2.12
+    # https://github.com/mate-desktop/atril/pull/597
+    (fetchpatch {
+      url = "https://github.com/mate-desktop/atril/commit/8349abf17c46a64e6a16f00051b6e0e9ff69342a.patch";
+      hash = "sha256-ykR8XTkRJ5YRmjiOSutQRotF0SviC+CASASsp5PLx0Q=";
+    })
   ];
 
   nativeBuildInputs = [
