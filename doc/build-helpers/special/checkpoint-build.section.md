@@ -1,6 +1,6 @@
 # pkgs.checkpointBuildTools  {#sec-checkpoint-build}
 
-`pkgs.checkpointBuildTools` provides a way to build derivations incrementally. It consists of two functions to make checkpoint builds using nix possible.
+`pkgs.checkpointBuildTools` provides a way to build derivations incrementally. It consists of two functions to make checkpoint builds using Nix possible.
 
 For hermeticity, Nix derivations do not allow any state to carry over between builds, making a transparent incremental build within a derivation impossible.
 
