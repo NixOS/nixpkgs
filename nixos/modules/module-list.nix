@@ -12,6 +12,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/ldso.nix
   ./config/locale.nix
   ./config/malloc.nix
   ./config/mysql.nix
@@ -28,6 +29,7 @@
   ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/stevenblack.nix
+  ./config/stub-ld.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix
