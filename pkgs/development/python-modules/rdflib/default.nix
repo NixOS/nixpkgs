@@ -24,6 +24,7 @@
 , pip
 , pytest-cov
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     pip
     pytest-cov
     pytestCheckHook
+    setuptools
   ]
   ++ passthru.optional-dependencies.networkx
   ++ passthru.optional-dependencies.html;
