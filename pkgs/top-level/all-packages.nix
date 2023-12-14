@@ -24925,6 +24925,12 @@ with pkgs;
     version = "2.0.5";
     hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
   });
+  SDL2_image_2_6 = SDL2_image.override({
+    # Pinned for hedgewars:
+    #   https://github.com/NixOS/nixpkgs/pull/274185#issuecomment-1856764786
+    version = "2.6.3";
+    hash = "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw=";
+  });
 
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
