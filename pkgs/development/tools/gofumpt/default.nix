@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gofumpt";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8wTS8CAAL65VSN+sM275W5eWDivp9qOMbAQmFTCKUI0=";
+    hash = "sha256-3buGLgxAaAIwLXWLpX+K7VRx47DuvUI4W8vw4TuXSts=";
   };
 
-  vendorHash = "sha256-SFKS9lYPiZNu1w20Z7UEp2d0xjc5kuqVEADZaUF1Gyc=";
+  vendorHash = "sha256-W0WKEQgOIFloWsB4E1RTICVKVlj9ChGSpo92X+bjNEk=";
 
   checkFlags = [
     # Requires network access (Error: module lookup disabled by GOPROXY=off).
