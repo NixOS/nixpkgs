@@ -1,18 +1,19 @@
-{ fetchFromGitHub,
-  findutils,
-  gnugrep,
-  gnused,
-  iproute2,
-  iptables,
-  lib,
-  nettools, # for hostname
-  openssh,
-  openssl,
-  parted,
-  procps, # for pidof,
-  python39, # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
-  shadow, # for useradd, usermod
-  util-linux, # for (u)mount, fdisk, sfdisk, mkswap
+{ fetchFromGitHub
+, findutils
+, gnugrep
+, gnused
+, iproute2
+, iptables
+, lib
+, nettools
+, openssh
+, openssl
+, parted
+, procps
+  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
+, python39
+, shadow
+, util-linux
 }:
 
 let
@@ -52,13 +53,13 @@ python39.pkgs.buildPythonPackage rec {
   ];
 
   fixupPhase = ''
-     mkdir -p $out/bin/
-     WAAGENT=$(find $out -name waagent | grep sbin)
-     cp $WAAGENT $out/bin/waagent
-     wrapProgram "$out/bin/waagent" \
-         --prefix PYTHONPATH : $PYTHONPATH \
-         --prefix PATH : "${makeBinPath runtimeDeps}"
-     patchShebangs --build "$out/bin/"
+    mkdir -p $out/bin/
+    WAAGENT=$(find $out -name waagent | grep sbin)
+    cp $WAAGENT $out/bin/waagent
+    wrapProgram "$out/bin/waagent" \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : "${makeBinPath runtimeDeps}"
+    patchShebangs --build "$out/bin/"
   '';
 
   meta = {
