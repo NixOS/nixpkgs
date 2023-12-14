@@ -8440,6 +8440,8 @@ self: super: with self; {
 
   pandas-ta = callPackage ../development/python-modules/pandas-ta { };
 
+  llama_index = callPackage ../development/python-modules/llama_index { };
+
   ccxt = callPackage ../development/python-modules/ccxt { };
 
   pycoingecko = callPackage ../development/python-modules/pycoingecko { };
