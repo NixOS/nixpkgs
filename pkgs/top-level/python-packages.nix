@@ -8446,6 +8446,8 @@ self: super: with self; {
 
   financetoolkit = callPackage ../development/python-modules/financetoolkit { };
 
+  fundamentalanalysis = callPackage ../development/python-modules/fundamentalanalysis { };
+
   intrinio_sdk = callPackage ../development/python-modules/intrinio_sdk { };
 
   financedatabase = callPackage ../development/python-modules/financedatabase { };
