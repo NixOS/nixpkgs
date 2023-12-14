@@ -61,7 +61,7 @@ with pkgs;
   };
 
   stdenvNoLibs =
-    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
+    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.useLLVM or false)
     then
       # We cannot touch binutils or cc themselves, because that will cause
       # infinite recursion. So instead, we just choose a libc based on the
