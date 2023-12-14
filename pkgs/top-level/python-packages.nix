@@ -8438,6 +8438,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Carbon WebKit;
   };
 
+  pandas-ta = callPackage ../development/python-modules/pandas-ta { };
+
   ccxt = callPackage ../development/python-modules/ccxt { };
 
   pycoingecko = callPackage ../development/python-modules/pycoingecko { };
