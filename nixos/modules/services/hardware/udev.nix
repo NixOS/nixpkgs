@@ -222,6 +222,9 @@ in
         description = lib.mdDoc ''
           Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
+
+          coreutils, gnu{sed,grep}, util-linux and config.systemd.package are
+          automatically included.
         '';
       };
 
