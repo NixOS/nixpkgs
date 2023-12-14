@@ -554,6 +554,8 @@ self: super: with self; {
 
   anonip = callPackage ../development/python-modules/anonip { };
 
+  anova-wifi = callPackage ../development/python-modules/anova-wifi { };
+
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
   ansi2image = callPackage ../development/python-modules/ansi2image { };
