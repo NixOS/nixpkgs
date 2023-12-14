@@ -1,4 +1,4 @@
-{ fetchFromGitHub, buildGoModule, lib }:
+{ fetchFromGitHub, buildGoModule, nixosTests, lib }:
 buildGoModule rec {
   pname = "bitw";
   version = "unstable-2023-04-08";
@@ -15,6 +15,7 @@ buildGoModule rec {
     sha256 = "0fglyw5gidybzyjlqi255yqrgdx1dp1a4jb5in4gfa9p87gd6nvm";
   };
 
+  passthru.tests = [ nixosTests.vaultwarden ];
   meta = with lib; {
     homepage = "https://github.com/mvdan/bitw";
     description = "Bitwarden client implementing the freedesktop secrets API";
