@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "sha256": "14dkyqm04d4ix114jbcgbx10zvkv4qlx4n56chpqz0w1y7x8idpd",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.1/bookmarks-13.1.1.tar.gz",
-    "version": "13.1.1",
+    "sha256": "04yngkmsjq6zj5qih86ybfr2cybqsz3gb5dasm6yhmkvd1ar5s39",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.2/bookmarks-13.1.2.tar.gz",
+    "version": "13.1.2",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
