@@ -59,6 +59,8 @@ stdenv.mkDerivation {
     libclang
   ];
 
+  ninjaFlags = [ "-C" "build" ];
+
   postUnpack = lib.concatStringsSep "\n" (builtins.map unpackDependency dependencies);
 
   configurePhase = ''
@@ -73,14 +75,6 @@ stdenv.mkDerivation {
       --bin-path=$out/bin \
       --lib-path=$out/lib \
       --share-path=$out/share
-  '';
-
-  buildPhase = ''
-    ninja -C build
-  '';
-
-  installPhase = ''
-    ninja -C build install
   '';
 
   meta = {
