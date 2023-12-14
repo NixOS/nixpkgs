@@ -180,6 +180,16 @@
       },
       "name": "-deprecated-rust-beta"
     },
+    "8327": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "233.11799.300": "https://plugins.jetbrains.com/files/8327/439463/Minecraft_Development-2023.3-1.6.11.zip"
+      },
+      "name": "minecraft-development"
+    },
     "8554": {
       "compatible": [
         "goland",
@@ -493,6 +503,7 @@
     "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip": "sha256-ZlSfPvhPixEz5JxU9qyG0nL3jiSjr4gKaf/xYcQI1vQ=",
     "https://plugins.jetbrains.com/files/8182/373256/intellij-rust-0.4.200.5421-232.zip": "sha256-NeAF3umfaSODjpd6J1dT8Ei5hF8g8OA+sgk7VjBodoU=",
     "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip": "sha256-pVwBEyUCx/DJET9uIm8vxFeChE8FskWyfLjDpfg2mAE=",
+    "https://plugins.jetbrains.com/files/8327/439463/Minecraft_Development-2023.3-1.6.11.zip": "sha256-ny1ECCBb6GgjKyEnc2b7QDWxNqPDthvaF47tS9BON8Q=",
     "https://plugins.jetbrains.com/files/8554/445635/featuresTrainer-233.11799.172.zip": "sha256-xN0FUCIa4KcqFAGwaOWf74qpIEY2f/QtksEeNTKG7zw=",
     "https://plugins.jetbrains.com/files/8607/422943/NixIDEA-0.4.0.11.zip": "sha256-Dwitpu5yLPWx+IUilpN5iqnN8FkKgaxUNjroBEx5lkM=",
     "https://plugins.jetbrains.com/files/9568/445967/go-plugin-233.11799.196.zip": "sha256-d8O5VRNdw7ru20l0VOicVJRUcVxje5A2Gua1O9yXogM="
