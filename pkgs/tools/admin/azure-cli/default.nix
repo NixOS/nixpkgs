@@ -2,6 +2,10 @@
 , callPackage
 , fetchFromGitHub
 , installShellFiles
+
+  # Whether to include patches that enable placing certain behavior-defining
+  # configuration files in the Nix store.
+, withImmutableConfig ? true
 }:
 
 let
@@ -177,7 +181,13 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
       --replace register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
     installShellCompletion --bash --name az.bash az.completion.sh
     installShellCompletion --zsh --name _az az.completion.sh
-
+  '' + lib.optionalString withImmutableConfig ''
+    export HOME=$TMPDIR
+    $out/bin/az --version
+    mkdir -p $out/etc/azure
+    mv $TMPDIR/.azure/commandIndex.json $out/etc/azure/commandIndex.json
+    mv $TMPDIR/.azure/versionCheck.json $out/etc/azure/versionCheck.json
+  '' + ''
     # remove garbage
     rm $out/bin/az.bat
     rm $out/bin/az.completion.sh
@@ -187,8 +197,12 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   # it's just a shebang script which calls `python -m azure.cli "$@"`
   postFixup = ''
     wrapProgram $out/bin/az \
-      --set PYTHONPATH $PYTHONPATH
-  '';
+  '' + lib.optionalString withImmutableConfig ''
+    --set AZURE_IMMUTABLE_DIR $out/etc/azure \
+  '' + ''
+    --set PYTHONPATH $PYTHONPATH
+  ''
+  ;
 
   doInstallCheck = true;
   installCheckPhase = ''
