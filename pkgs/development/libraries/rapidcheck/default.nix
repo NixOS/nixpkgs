@@ -3,9 +3,10 @@
 , fetchFromGitHub
 , cmake
 , unstableGitUpdater
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidcheck";
   version = "unstable-2023-12-14";
 
@@ -25,13 +26,25 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "RC_INSTALL_ALL_EXTRAS" true)
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "A C++ framework for property based testing inspired by QuickCheck";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     maintainers = with maintainers; [ ];
     license = licenses.bsd2;
+    pkgConfigModules = [
+      "rapidcheck"
+      # Extras
+      "rapidcheck_boost"
+      "rapidcheck_boost_test"
+      "rapidcheck_catch"
+      "rapidcheck_doctest"
+      "rapidcheck_gtest"
+    ];
     platforms = platforms.all;
   };
-}
+})
