@@ -40,8 +40,6 @@ let
     export LD='${darwin.cctools}/bin/ld'
     export LIBTOOL='${darwin.cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
-    export BAZEL_LINKLIBS='-lstdc++:-lm'
-    export BAZEL_LINKOPTS='-x:c++'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
     # See: https://github.com/bazelbuild/bazel/issues/4231
@@ -67,33 +65,25 @@ let
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''
-      set -x
-      env | grep c..abi
       ${bazel}/bin/bazel build //... \
         --enable_bzlmod \
         --verbose_failures \
         --repository_cache=${mergedDistDir} \
-        --action_env=NIX_DEBUG=1 \
-        --announce_rc \
         --curses=no \
     '' + lib.optionalString (stdenv.isDarwin) ''
-        --repo_env=BAZEL_LINKLIBS \
-        --repo_env=BAZEL_LINKOPTS \
         --cxxopt=-x --cxxopt=c++ \
         --host_cxxopt=-x --host_cxxopt=c++ \
-        --action_env=NIX_CFLAGS_COMPILE \
-        --action_env=NIX_LDFLAGS \
+    '' + lib.optionalString (stdenv.cc.isClang && stdenv ? cc.libcxx.cxxabi.libName) ''
+        --linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
+        --linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
+        --host_linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
+        --host_linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
     '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
         --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
         --linkopt=-L${darwin.libobjc}/lib \
     '' + ''
 
     '';
-    #'' + lib.optionalString (stdenv.isDarwin) ''
-    #    --repo_env=BAZEL_LINKLIBS='-lstdc++:-lm' \
-    #'' + lib.optionalString (stdenv.isDarwin) ''
-    #    --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-    #    --linkopt=-Wl,-lstdc++ --host_linkopt=-Wl,-lstdc++ \
   };
 
 in testBazel

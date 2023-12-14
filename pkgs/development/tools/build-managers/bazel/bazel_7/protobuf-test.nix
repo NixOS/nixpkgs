@@ -1,24 +1,25 @@
 { bazel
+, Foundation
 , bazelTest
+, callPackage
+, darwin
+, distDir
+, extraBazelArgs ? ""
 , fetchFromGitHub
 , fetchurl
-, stdenv
-, darwin
-, extraBazelArgs ? ""
-, lib
-, openjdk8
 , jdk11_headless
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
-, Foundation
-, callPackage
+, lib
 , libtool
 , lndir
+, openjdk8
 , repoCache
+, runLocal
+, runtimeShell
+, stdenv
+, symlinkJoin
 , tree
+, writeScript
+, writeText
 }:
 
 # This test uses bzlmod because I could not make it work without it.
@@ -35,7 +36,7 @@ let
   #    [nix-shell]$ cp MODULE.bazel.lock $HERE/protobuf-test.MODULE.bazel.lock
   lockfile = ./protobuf-test.MODULE.bazel.lock;
 
-  protocbufRepoCache = callPackage ./bazel-repository-cache.nix {
+  protobufRepoCache = callPackage ./bazel-repository-cache.nix {
     # We are somewhat lucky that bazel's own lockfile works for our tests.
     # Use extraDeps if the tests need things that are not in that lockfile.
     # But most test dependencies are bazel's builtin deps, so that at least aligns.
@@ -44,6 +45,11 @@ let
     # Remove platform-specific binaries, as they are large and useless.
     requiredDepNamePredicate = name:
       null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name;
+  };
+
+  mergedRepoCache = symlinkJoin {
+    name = "mergedDistDir";
+    paths = [ protobufRepoCache distDir ];
   };
 
   MODULE = writeText "MODULE.bazel" ''
@@ -137,29 +143,26 @@ let
     ];
 
     bazelScript = ''
-      # Augment bundled repository_cache with our extra paths
-      mkdir -p $PWD/.repository_cache/content_addressable
-      ${lndir}/bin/lndir ${repoCache}/content_addressable \
-        $PWD/.repository_cache/content_addressable
-      ${lndir}/bin/lndir ${protocbufRepoCache}/content_addressable \
-        $PWD/.repository_cache/content_addressable
-
-      tree $PWD/.repository_cache
-
       ${bazel}/bin/bazel \
         build \
-        --repository_cache=$PWD/.repository_cache \
+        --repository_cache=${mergedRepoCache} \
         ${extraBazelArgs} \
         --enable_bzlmod \
         --verbose_failures \
         //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-      --host_javabase='@local_jdk//:jdk' \
-      --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-      --javabase='@local_jdk//:jdk' \
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
     '' + lib.optionalString (stdenv.isDarwin) ''
-      --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-      --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
+        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+    '' + lib.optionalString (stdenv.cc.isClang && stdenv ? cc.libcxx.cxxabi.libName) ''
+        --linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
+        --linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
+        --host_linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
+        --host_linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
+    '' + ''
+
     '';
   };
 

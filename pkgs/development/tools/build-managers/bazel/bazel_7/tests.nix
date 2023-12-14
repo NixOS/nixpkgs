@@ -126,26 +126,32 @@ let
     hash = "sha256-DaPKp7Sn5uvfZRjdDx6grot3g3B7trqCyL0TRIdwg98=";
   };
 
-  callBazelTests = args:
+  callBazelTests = bazel:
     let
       callBazelTest = newScope {
         inherit runLocal bazelTest bazel-examples;
         inherit Foundation;
-        bazel = bazel_self;
+        inherit bazel;
         distDir = testsDistDir;
         extraBazelArgs = "";
+        repoCache = testsRepoCache;
       };
     in
     recurseIntoAttrs (
       (lib.optionalAttrs (!isDarwin) {
         # `extracted` doesn’t work on darwin
-        shebang = callBazelTest ../shebang-test.nix (args // { inherit extracted; });
+        shebang = callBazelTest ../shebang-test.nix {
+          inherit extracted;
+          extraBazelArgs = "--noenable_bzlmod";
+        };
       }) // {
-        bashTools = callBazelTest ../bash-tools-test.nix args;
-        cpp = callBazelTest ./cpp-test.nix args;
-        java = callBazelTest ../java-test.nix args;
-        pythonBinPath = callBazelTest ../python-bin-path-test.nix args;
-        protobuf = callBazelTest ./protobuf-test.nix (args // { repoCache = testsRepoCache; });
+        bashTools = callBazelTest ../bash-tools-test.nix { };
+        cpp = callBazelTest ./cpp-test.nix { };
+        java = callBazelTest ../java-test.nix {
+          extraBazelArgs = "--noenable_bzlmod";
+        };
+        pythonBinPath = callBazelTest ../python-bin-path-test.nix { };
+        protobuf = callBazelTest ./protobuf-test.nix { };
       }
     );
 
@@ -156,8 +162,8 @@ recurseIntoAttrs {
   distDir = testsDistDir;
   testsRepoCache = testsRepoCache;
 
-  vanilla = callBazelTests { };
-  withNixHacks = callBazelTests { bazel = bazelWithNixHacks; };
+  vanilla = callBazelTests bazel_self;
+  withNixHacks = callBazelTests bazelWithNixHacks;
 
   # add some downstream packages using buildBazelPackage
   downstream = recurseIntoAttrs ({
