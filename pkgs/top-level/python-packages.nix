@@ -8440,6 +8440,8 @@ self: super: with self; {
 
   ccxt = callPackage ../development/python-modules/ccxt { };
 
+  pycoingecko = callPackage ../development/python-modules/pycoingecko { };
+
   pyluach = callPackage ../development/python-modules/pyluach { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
