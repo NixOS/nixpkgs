@@ -5711,8 +5711,6 @@ with pkgs;
     udis86 = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
-  hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
-
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
