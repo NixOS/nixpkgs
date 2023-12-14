@@ -16,12 +16,25 @@ impl Nixpkgs {
     /// Compares two Nixpkgs versions against each other, returning validation errors only if the
     /// `from` version satisfied the stricter checks, while the `to` version doesn't satisfy them
     /// anymore.
-    pub fn compare(from: Self, to: Self) -> Validation<()> {
+    pub fn compare(optional_from: Option<Self>, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
             to.attributes.into_iter().map(|(name, attr_to)| {
-                Attribute::compare(&name, from.attributes.get(&name), &attr_to)
+                let attr_from = if let Some(from) = &optional_from {
+                    from.attributes.get(&name)
+                } else {
+                    // This pretends that if there's no base version to compare against, all
+                    // attributes existed without conforming to the new strictness check for
+                    // backwards compatibility.
+                    // TODO: Remove this case. This is only needed because the `--base`
+                    // argument is still optional, which doesn't need to be once CI is updated
+                    // to pass it.
+                    Some(&Attribute {
+                        empty_non_auto_called: EmptyNonAutoCalled::Invalid,
+                    })
+                };
+                Attribute::compare(&name, attr_from, &attr_to)
             }),
         )
     }

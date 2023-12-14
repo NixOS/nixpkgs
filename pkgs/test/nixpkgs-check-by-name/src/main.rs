@@ -75,14 +75,16 @@ pub fn process<W: io::Write>(
     let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths)?;
     let check_result = main_result.result_map(|nixpkgs_version| {
         if let Some(base) = base_nixpkgs {
-            check_nixpkgs(base, eval_accessible_paths)?.result_map(|base_nixpkgs_version| {
-                Ok(Nixpkgs::compare(base_nixpkgs_version, nixpkgs_version))
-            })
+            check_nixpkgs(base, eval_accessible_paths, error_writer)?.result_map(
+                |base_nixpkgs_version| {
+                    Ok(Nixpkgs::compare(
+                        Some(base_nixpkgs_version),
+                        nixpkgs_version,
+                    ))
+                },
+            )
         } else {
-            Ok(Nixpkgs::compare(
-                version::Nixpkgs::default(),
-                nixpkgs_version,
-            ))
+            Ok(Nixpkgs::compare(None, nixpkgs_version))
         }
     })?;
 

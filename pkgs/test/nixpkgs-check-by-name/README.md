@@ -10,8 +10,13 @@ This API may be changed over time if the CI workflow making use of it is adjuste
 
 - Command line: `nixpkgs-check-by-name [--base <BASE_NIXPKGS>] <NIXPKGS>`
 - Arguments:
-  - `<BASE_NIXPKGS>`: The path to the Nixpkgs to check against
-  - `<NIXPKGS>`: The path to the Nixpkgs to check
+  - `<NIXPKGS>`: The path to the Nixpkgs to check.
+  - `<BASE_NIXPKGS>`: The path to the Nixpkgs to use as the base to compare `<NIXPKGS>` against.
+    This allows the strictness of checks to increase over time by only preventing _new_ violations from being introduced,
+    while allowing violations that already existed.
+
+    If not specified, all violations of stricter checks are allowed.
+    However, this flag will become required once CI passes it.
 - Exit code:
   - `0`: If the [validation](#validity-checks) is successful
   - `1`: If the [validation](#validity-checks) is not successful
