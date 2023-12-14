@@ -81,6 +81,10 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
 
+    ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
+      llvmPackages = pkgs.llvmPackages_15;
+    };
+
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       bootPkgs =
         # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -389,8 +393,14 @@ in {
     };
     ghc96 = compiler.ghc963;
     ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
-      # No bindist packaged for 9.4.* yet
-      bootPkgs = packages.ghc947;
+      bootPkgs =
+        # For GHC 9.6 no armv7l bindists are available.
+        if stdenv.hostPlatform.isAarch32 then
+          packages.ghc963
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc963
+        else
+          packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -402,7 +412,14 @@ in {
     };
     ghc98 = compiler.ghc981;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc963;
+      bootPkgs =
+        # For GHC 9.6 no armv7l bindists are available.
+        if stdenv.hostPlatform.isAarch32 then
+          packages.ghc963
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc963
+        else
+          packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -469,6 +486,12 @@ in {
       buildHaskellPackages = bh.packages.ghc924Binary;
       ghc = bh.compiler.ghc924Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc963Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc963Binary;
+      ghc = bh.compiler.ghc963Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc8107 = callPackage ../development/haskell-modules {
