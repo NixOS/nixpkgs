@@ -14,6 +14,12 @@ let
   # nodeDependencies / package / shell
   playwright-test-raw = (callPackage ./default.nix { })."@playwright/test-${driver.version}";
 
+  /*
+  playwright-test usually installs patched browsers from their servers in a versioned folder
+  such as ~/.cache/ms-playwright/chromium-{browser_revision}
+  playwright-browsers contain the (potentially patched) browsers as expected by playwright, we tell
+  them plawyright-test how to find them via PLAYWRIGHT_BROWSERS_PATH
+  */
   playwright-test = playwright-test-raw.overrideAttrs (oa: {
     nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [
       makeWrapper
