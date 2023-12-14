@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     longDescription = ''
       A CLI tool to help admins of Matrix Synapse homeservers
       conveniently issue commands available via its admin API's
-      (matrix-org/synapse@master/docs/admin_api)
+      (element-hq/synapse@master/docs/admin_api)
     '';
     changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
     homepage = "https://github.com/JOJ0/synadm";
