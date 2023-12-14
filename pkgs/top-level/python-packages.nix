@@ -8448,6 +8448,8 @@ self: super: with self; {
 
   intrinio_sdk = callPackage ../development/python-modules/intrinio_sdk { };
 
+  financedatabase = callPackage ../development/python-modules/financedatabase { };
+
   detecta = callPackage ../development/python-modules/detecta { };
 
   exchange-calendars = callPackage ../development/python-modules/exchange-calendars { };
