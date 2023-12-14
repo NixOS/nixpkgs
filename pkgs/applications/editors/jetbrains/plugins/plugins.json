@@ -342,6 +342,37 @@
       },
       "name": "eclipse-keymap"
     },
+    "12839": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "232.10072.781": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.284": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.286": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.287": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.290": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.293": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.296": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.297": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.298": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.300": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip",
+        "233.11799.303": "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip"
+      },
+      "name": "minecraft-nbt-support"
+    },
     "13017": {
       "compatible": [
         "clion",
@@ -487,6 +518,7 @@
     "https://plugins.jetbrains.com/files/12062/445740/keymap-vscode-233.11799.188.zip": "sha256-9keDJ73bSHkzAEq8nT96I5sp05BgMZ08/4BzarOjO5g=",
     "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip": "sha256-eRCsivZbDNrc+kesa9jVsOoMFFz+WpYfSMXxPCCjWjw=",
     "https://plugins.jetbrains.com/files/12559/445772/keymap-eclipse-233.11799.165.zip": "sha256-IsmoWuUroAp1LLuphp4F1dun4tQOOitZxoG+Nxs5pYk=",
+    "https://plugins.jetbrains.com/files/12839/115174/minecraft-nbt-intellij-plugin-1.5.2.zip": "sha256-Uq0m6qWSNHZbkEydWMFxnlvXCcS6xIM3uTlGdAQ6nzs=",
     "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip": "sha256-5S8u7w14fLkaTcjACfUSun9pMNtPk20/8+Dr5Sp9sDE=",
     "https://plugins.jetbrains.com/files/13017/445774/keymap-visualStudio-233.11799.165.zip": "sha256-Nb2tSxL+mAY1qJ3waipgV8ep+0R/BaYnzz7zfwtLHmk=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
