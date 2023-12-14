@@ -4812,6 +4812,8 @@ self: super: with self; {
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
+  grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
