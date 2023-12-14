@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , python3
 , fetchPypi
 , fetchpatch
@@ -29,6 +30,16 @@ let
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
+
+        patches = [
+          # Adding the possibility to configure an immutable configuration dir via `AZURE_IMMUTABLE_DIR`.
+          # This enables us to place configuration files that alter the behavior of the CLI in the Nix store.
+          #
+          # This is a downstream patch without an commit or PR upstream.
+          # There is an issue to discuss possible solutions upstream:
+          # https://github.com/Azure/azure-cli/issues/28093
+          ./0001-optional-immutable-configuration-dir.patch
+        ];
 
         propagatedBuildInputs = with self; [
           argcomplete
