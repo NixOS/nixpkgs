@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.20.0";
+  version = "0.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ja9U/X9YblS6uUD7MX3t2tItG9AMiNF7OFgvIotdvQs=";
+    hash = "sha256-H0rs4EOzz2Nx5YuwqTZp2FGF1z2phBgSIyraKHHx4RA=";
   };
 
   postPatch = ''
