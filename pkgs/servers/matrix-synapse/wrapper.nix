@@ -14,11 +14,11 @@
 let
   extraPackages = lib.concatMap (extra: matrix-synapse-unwrapped.optional-dependencies.${extra}) (lib.unique extras);
 
-  pluginsEnv = matrix-synapse-unwrapped.python.buildEnv.override {
-    extraLibs = plugins;
+  pythonEnv = matrix-synapse-unwrapped.python.buildEnv.override {
+    extraLibs = extraPackages ++ plugins;
   };
 
-  searchPath = lib.makeSearchPathOutput "lib" matrix-synapse-unwrapped.python.sitePackages (extraPackages ++ [ pluginsEnv ]);
+  searchPath = "${pythonEnv}/${matrix-synapse-unwrapped.python.sitePackages}";
 in
 stdenv.mkDerivation {
   name = (lib.appendToName "wrapped" matrix-synapse-unwrapped).name;
