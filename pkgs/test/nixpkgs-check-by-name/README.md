@@ -81,6 +81,10 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
   allowing the simulation of package overrides to the real [`pkgs/top-level/all-packages.nix`](../../top-level/all-packages.nix`).
   The default is an empty overlay.
 
+- `base` (optional):
+  Contains another subdirectory imitating Nixpkgs with potentially any of the above structures.
+  This will be used as the `--base` argument, allowing tests of gradual transitions.
+
 - `expected` (optional):
   A file containing the expected standard output.
   The default is expecting an empty standard output.
