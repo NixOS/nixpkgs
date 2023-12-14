@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-W0WKEQgOIFloWsB4E1RTICVKVlj9ChGSpo92X+bjNEk=";
 
+  CGO_ENABLED = "0";
+
+  ldflags = "-s -w -X main.version=v${version}";
+
   checkFlags = [
     # Requires network access (Error: module lookup disabled by GOPROXY=off).
     "-skip=^TestScript/diagnose$"
