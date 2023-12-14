@@ -435,6 +435,16 @@
       },
       "name": "darcula-pitch-black"
     },
+    "16210": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "233.11799.300": "https://plugins.jetbrains.com/files/16210/262619/architectury-idea-plugin-1.6.3.jar"
+      },
+      "name": "architectury"
+    },
     "17718": {
       "compatible": [
         "clion",
@@ -522,6 +532,7 @@
     "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip": "sha256-5S8u7w14fLkaTcjACfUSun9pMNtPk20/8+Dr5Sp9sDE=",
     "https://plugins.jetbrains.com/files/13017/445774/keymap-visualStudio-233.11799.165.zip": "sha256-Nb2tSxL+mAY1qJ3waipgV8ep+0R/BaYnzz7zfwtLHmk=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
+    "https://plugins.jetbrains.com/files/16210/262619/architectury-idea-plugin-1.6.3.jar": "sha256-rPPnj9nNi/aNBln0P775ZGWH8WEcTvaM1o+v5jjFyj4=",
     "https://plugins.jetbrains.com/files/164/442850/IdeaVim-2.7.5-signed.zip": "sha256-MiF8MVWBEQqupoYyI+QOyXhSvJcoSgptePENByURphI=",
     "https://plugins.jetbrains.com/files/17718/450592/github-copilot-intellij-1.4.4.3955.zip": "sha256-JmME4MEN6nK1ueiz12VefCQHaE629jXYqYM5jxIyfGQ=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
