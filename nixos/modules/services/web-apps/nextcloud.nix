@@ -702,7 +702,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 26 "24.05"));
+        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -712,16 +712,13 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
           else nextcloud28
         );
 
-      services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "26" then pkgs.php81
-        else pkgs.php82;
+      services.nextcloud.phpPackage = pkgs.php82;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
