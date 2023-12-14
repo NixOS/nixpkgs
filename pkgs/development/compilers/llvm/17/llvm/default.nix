@@ -17,6 +17,7 @@
 , version
 , release_version
 , zlib
+, enableZstd? true, zstd
 , which
 , sysctl
 , buildLlvmTools
@@ -95,7 +96,8 @@ in
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = [ ncurses zlib ]
+    ++ optional enableZstd zstd;
 
   nativeCheckInputs = [
     which
@@ -319,6 +321,9 @@ in
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
     "-DLLVM_ENABLE_LIBXML2=OFF"
+  ] ++ optionals enableZstd [
+    # Since llvm 16, we can use this option to make llvm to use static version of zstd.
+    "-DLLVM_USE_STATIC_ZSTD=${toString stdenv.hostPlatform.isStatic}"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
@@ -386,6 +391,8 @@ in
 
   # For the update script:
   passthru.monorepoSrc = monorepoSrc;
+  # Fir the zstd feature tests:
+  passthru.enableZstd = enableZstd;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
