@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/linuxwacom/libwacom/blob/${src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     maintainers = teams.freedesktop.members;
-    license = licenses.mit;
+    license = licenses.hpnd;
   };
 }
