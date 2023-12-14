@@ -19,6 +19,7 @@ in
 with python3.pkgs; buildPythonApplication rec {
   version = "4.8";
   pname = "buku";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
@@ -26,6 +27,10 @@ with python3.pkgs; buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     hypothesis
