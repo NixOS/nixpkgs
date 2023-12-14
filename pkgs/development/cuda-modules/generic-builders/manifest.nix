@@ -42,6 +42,9 @@ let
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
+  # redistArch :: String
+  # The redistArch is the name of the architecture for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the target platform.
   redistArch = flags.getRedistArch hostPlatform.system;
 in
 backendStdenv.mkDerivation (
@@ -86,8 +89,18 @@ backendStdenv.mkDerivation (
           "sample"
           "python"
         ];
+        # Filter out outputs that don't exist in the redistributable.
+        # NOTE: In the case the redistributable isn't supported on the target platform,
+        # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
+        # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
+        # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
+        # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
+        # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
+        # `cudaSupport = false`!
         additionalOutputs =
-          if redistArch == "unsupported" then possibleOutputs else builtins.filter hasOutput possibleOutputs;
+          if redistArch == "unsupported"
+          then possibleOutputs
+          else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
         outputs = [ "out" ] ++ additionalOutputs;
       in
@@ -114,18 +127,27 @@ backendStdenv.mkDerivation (
     # Useful for introspecting why something went wrong.
     # Maps descriptions of why the derivation would be marked broken to
     # booleans indicating whether that description is true.
-    brokenConditions = {};
-
-    src = fetchurl {
-      url =
-        if (builtins.hasAttr redistArch redistribRelease) then
-          "https://developer.download.nvidia.com/compute/${redistName}/redist/${
-            redistribRelease.${redistArch}.relative_path
-          }"
-        else
-          "cannot-construct-an-url-for-the-${redistArch}-platform";
-      sha256 = redistribRelease.${redistArch}.sha256 or lib.fakeHash;
+    # brokenConditions :: AttrSet Bool
+    brokenConditions = {
+      # Using an unrecognized redistArch
+      "Unrecognized NixOS platform ${hostPlatform.system}" = redistArch == "unsupported";
+      # Trying to build for a platform that doesn't have a redistributable
+      "Unsupported NixOS platform (or configuration) ${hostPlatform.system}" = finalAttrs.src == null;
     };
+
+    # src :: Optional Derivation
+    src = trivial.pipe redistArch [
+      # If redistArch doesn't exist in redistribRelease, return null.
+      (redistArch: redistribRelease.${redistArch} or null)
+      # If the release is non-null, fetch the source; otherwise, return null.
+      (trivial.mapNullable (
+        { relative_path, sha256, ... }:
+        fetchurl {
+          url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+          inherit sha256;
+        }
+      ))
+    ];
 
     postPatch = ''
       if [[ -d pkg-config ]] ; then
@@ -284,16 +306,12 @@ backendStdenv.mkDerivation (
     meta = {
       description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
       sourceProvenance = [sourceTypes.binaryNativeCode];
-      platforms =
-        lists.concatMap
-          (
-            redistArch:
-            let
-              nixSystem = flags.getNixSystem redistArch;
-            in
-            lists.optionals (!(strings.hasPrefix "unsupported-" nixSystem)) [ nixSystem ]
-          )
-          supportedRedistArchs;
+      platforms = trivial.pipe supportedRedistArchs [
+        # Map each redist arch to the equivalent nix system or null if there is no equivalent.
+        (builtins.map flags.getNixSystem)
+        # Filter out unsupported systems
+        (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
+      ];
       broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
       license = licenses.unfree;
       maintainers = teams.cuda.members;

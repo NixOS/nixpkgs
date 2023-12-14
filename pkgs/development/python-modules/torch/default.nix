@@ -7,7 +7,8 @@
   magma,
   magma-hip,
   magma-cuda-static,
-  useSystemNccl ? true,
+  # Use the system NCCL as long as it is supported.
+  useSystemNccl ? !cudaPackages.nccl.meta.unsupported,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -57,6 +58,7 @@
 let
   inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
+  ncclSupported = cudaSupport && !cudaPackages.nccl.meta.unsupported;
 
   setBool = v: if v then "1" else "0";
 
@@ -121,6 +123,7 @@ let
     "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
     "Magma cudaPackages does not match cudaPackages" = cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
+    "Requested system NCCL, but cudaPackages.nccl is not supported" = useSystemNccl && !ncclSupported;
   };
 in buildPythonPackage rec {
   pname = "torch";
@@ -273,9 +276,9 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (cudaSupport && cudaPackages ? nccl);
-  USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
-  USE_STATIC_NCCL = setBool useSystemNccl;
+  USE_NCCL = setBool (cudaSupport && ncclSupported);
+  USE_SYSTEM_NCCL = setBool (cudaSupport && useSystemNccl);                  # don't build pytorch's third_party NCCL
+  USE_STATIC_NCCL = setBool (cudaSupport && useSystemNccl);
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -363,7 +366,7 @@ in buildPythonPackage rec {
     ] ++ lists.optionals (cudaPackages ? cudnn) [
       cudnn.dev
       cudnn.lib
-    ] ++ lists.optionals (useSystemNccl && cudaPackages ? nccl) [
+    ] ++ lists.optionals (useSystemNccl && ncclSupported) [
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl.dev # Provides nccl.h AND a static copy of NCCL!
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
