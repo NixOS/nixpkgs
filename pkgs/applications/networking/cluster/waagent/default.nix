@@ -1,18 +1,9 @@
-{ fetchFromGitHub
-, findutils
-, gnugrep
-, gnused
-, iproute2
-, iptables
+{ bash
+, coreutils
+, fetchFromGitHub
 , lib
-, nettools
-, openssh
-, openssl
-, parted
-, procps
 , python39
-, shadow
-, util-linux
+, substituteAll
 }:
 
 let
@@ -46,26 +37,6 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [ python.pkgs.distro ];
-
-  makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [
-      findutils
-      gnugrep
-      gnused
-      iproute2
-      iptables
-      nettools # for hostname
-      openssh
-      openssl
-      parted
-      procps # for pidof
-      shadow # for useradd, usermod
-      util-linux # for (u)mount, fdisk, sfdisk, mkswap
-    ])
-  ];
 
   # The binary entrypoint and udev rules are placed to the wrong place.
   # Move them to their default location.

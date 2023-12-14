@@ -245,6 +245,27 @@ in
         pkgs.e2fsprogs
         pkgs.bash
 
+        pkgs.findutils
+        pkgs.gnugrep
+        pkgs.gnused
+        pkgs.iproute2
+        pkgs.iptables
+
+        # for hostname
+        pkgs.nettools
+
+        pkgs.openssh
+        pkgs.openssl
+        pkgs.parted
+
+        # for pidof
+        pkgs.procps
+
+        # for useradd, usermod
+        pkgs.shadow
+
+        pkgs.util-linux # for (u)mount, fdisk, sfdisk, mkswap
+
         # waagent's Microsoft.OSTCExtensions.VMAccessForLinux needs Python 3
         pkgs.python39
 
