@@ -1,0 +1,34 @@
+From daadf57d82c9e818975e1ba953fef5e7225559bc Mon Sep 17 00:00:00 2001
+From: techknowlogick <techknowlogick@gitea.com>
+Date: Fri, 15 Dec 2023 13:33:25 -0500
+Subject: [PATCH] check if directory exists
+
+---
+ openbb_terminal/terminal_helper.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/openbb_terminal/terminal_helper.py b/openbb_terminal/terminal_helper.py
+index 9c3b062d71..9de5f59f24 100644
+--- a/openbb_terminal/terminal_helper.py
++++ b/openbb_terminal/terminal_helper.py
+@@ -21,7 +21,7 @@ from packaging import version
+ import openbb_terminal.core.session.local_model as Local
+ from openbb_terminal import thought_of_the_day as thought
+ from openbb_terminal.base_helpers import load_env_files
+-from openbb_terminal.core.config.paths import HIST_FILE_PATH, SETTINGS_ENV_FILE
++from openbb_terminal.core.config.paths import HIST_FILE_PATH, SETTINGS_ENV_FILE, SETTINGS_DIRECTORY
+ from openbb_terminal.core.plots.backend import plots_backend
+ from openbb_terminal.core.session.constants import BackendEnvironment
+ from openbb_terminal.core.session.current_system import get_current_system
+@@ -459,6 +459,8 @@ def first_time_user() -> bool:
+     bool
+         Whether or not the user is a first time user
+     """
++    SETTINGS_DIRECTORY.mkdir(exist_ok=True)
++    SETTINGS_ENV_FILE.touch()
+     if SETTINGS_ENV_FILE.stat().st_size == 0:
+         set_preference("PREVIOUS_USE", True)
+         write_to_dotenv("OPENBB_PREVIOUS_USE", "True")
+-- 
+2.42.0
+
