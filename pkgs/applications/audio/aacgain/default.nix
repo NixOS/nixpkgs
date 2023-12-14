@@ -5,10 +5,17 @@
 , autoconf
 , automake
 , libtool
-, faad2
 , mp4v2
 }:
 
+let
+  faad2.src = fetchFromGitHub {
+    owner = "knik0";
+    repo = "faad2";
+    rev = "2.10.1";
+    hash = "sha256-k7y12OwCn3YkNZY9Ov5Y9EQtlrZh6oFUzM27JDR960w=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "aacgain";
   version = "2.0.0";
