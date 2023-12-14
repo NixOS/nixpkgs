@@ -105,6 +105,8 @@ in stdenv.mkDerivation rec {
     pytest
   ]);
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
     description = "A multilayer virtual switch";
