@@ -221,6 +221,8 @@ self: super: with self; {
 
   aiogram = callPackage ../development/python-modules/aiogram { };
 
+  aiohappyeyeballs = callPackage ../development/python-modules/aiohappyeyeballs { };
+
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
