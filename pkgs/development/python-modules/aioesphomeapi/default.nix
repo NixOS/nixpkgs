@@ -8,6 +8,7 @@
 , setuptools
 
 # dependencies
+, aiohappyeyeballs
 , async-timeout
 , chacha20poly1305-reuseable
 , noiseprotocol
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "19.2.1";
+  version = "21.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
+    hash = "sha256-KT38NY1BZM6Qr1EeC05vM9IcVKO7GaEx0102TUzkyRE=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohappyeyeballs
     chacha20poly1305-reuseable
     noiseprotocol
     protobuf
