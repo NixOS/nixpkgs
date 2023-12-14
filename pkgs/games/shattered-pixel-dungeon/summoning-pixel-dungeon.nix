@@ -21,7 +21,7 @@ callPackage ./generic.nix rec {
     replacements = [ "--subst-var-by" "version" version ];
   })];
 
-  depsHash = "sha256-0P/BcjNnbDN25DguRcCyzPuUG7bouxEx1ySodIbSwvg=";
+  depsPath = "deps-summoning.json";
 
   desktopName = "Summoning Pixel Dungeon";
 

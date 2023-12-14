@@ -13,7 +13,7 @@ callPackage ./generic.nix rec {
     hash = "sha256-UgUm7GIn1frS66YYrx+ax+oqMKnQnDlqpn9e1kWwDzo=";
   };
 
-  depsHash = "sha256-yE6zuLnFLtNq76AhtyE+giGLF2vcCqF7sfIvcY8W6Lg=";
+  depsPath = "deps-rka.json";
 
   desktopName = "Rat King Adventure";
 

@@ -1,0 +1,244 @@
+{
+ "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames/gdx-controllers": {
+  "gdx-controllers-core/2.2.4-SNAPSHOT/gdx-controllers-core-2.2.4-20231021.200112-6": {
+   "jar": "Gdz2J1IvDJFktUD2XeGNS0SIrOyym19X/+dCbbbe3/U=",
+   "pom": "90QW/Mtz1jbDUhKjdJ88ekhulZR2a7eCaEJoswmeny4="
+  },
+  "gdx-controllers-core/2.2.4-SNAPSHOT/maven-metadata": {
+   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<metadata modelVersion=\"1.1.0\">\n  <groupId>com.badlogicgames.gdx-controllers</groupId>\n  <artifactId>gdx-controllers-core</artifactId>\n  <version>2.2.4-SNAPSHOT</version>\n  <versioning>\n    <snapshot>\n      <timestamp>20231021.200112</timestamp>\n      <buildNumber>6</buildNumber>\n    </snapshot>\n    <lastUpdated>20231021200112</lastUpdated>\n    <snapshotVersions>\n      <snapshotVersion>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200112-6</value>\n        <updated>20231021200112</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <extension>pom</extension>\n        <value>2.2.4-20231021.200112-6</value>\n        <updated>20231021200112</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>library</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200112-6</value>\n        <updated>20231021200112</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>sources</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200112-6</value>\n        <updated>20231021200112</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>javadoc</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200112-6</value>\n        <updated>20231021200112</updated>\n      </snapshotVersion>\n    </snapshotVersions>\n  </versioning>\n</metadata>\n"
+  },
+  "gdx-controllers-desktop/2.2.4-SNAPSHOT/gdx-controllers-desktop-2.2.4-20231021.200114-6": {
+   "jar": "4mhLijZwQHk2pP5qXIIzrsO9CwNC3CDti/5szclkVa8=",
+   "pom": "10+zD8flpKIPzji5NFgtYcwE5O74hSzzvvqBh84wLf4="
+  },
+  "gdx-controllers-desktop/2.2.4-SNAPSHOT/maven-metadata": {
+   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<metadata modelVersion=\"1.1.0\">\n  <groupId>com.badlogicgames.gdx-controllers</groupId>\n  <artifactId>gdx-controllers-desktop</artifactId>\n  <version>2.2.4-SNAPSHOT</version>\n  <versioning>\n    <snapshot>\n      <timestamp>20231021.200114</timestamp>\n      <buildNumber>6</buildNumber>\n    </snapshot>\n    <lastUpdated>20231021200114</lastUpdated>\n    <snapshotVersions>\n      <snapshotVersion>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200114-6</value>\n        <updated>20231021200114</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <extension>pom</extension>\n        <value>2.2.4-20231021.200114-6</value>\n        <updated>20231021200114</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>library</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200114-6</value>\n        <updated>20231021200114</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>sources</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200114-6</value>\n        <updated>20231021200114</updated>\n      </snapshotVersion>\n      <snapshotVersion>\n        <classifier>javadoc</classifier>\n        <extension>jar</extension>\n        <value>2.2.4-20231021.200114-6</value>\n        <updated>20231021200114</updated>\n      </snapshotVersion>\n    </snapshotVersions>\n  </versioning>\n</metadata>\n"
+  }
+ },
+ "https://repo.maven.apache.org/maven2": {
+  "com/badlogicgames/gdx#gdx-backend-lwjgl3/1.11.0": {
+   "jar": "my0CJorGB5QwSi4E5ep1H62fX5bsyvFdgCOm4LF6994=",
+   "module": "o7gpPFXSp2lb60LCcKrfKpQcK4NqQL8Ob4W6OOY0VwY=",
+   "pom": "wa55d83hp9muWlhfDe8Ap2d4LzcR5/+RYTX2UPA2HOo="
+  },
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.11.0": {
+   "pom": "a5PHPPIyrqNpnueP5GEkJ14KwbsROJkXUcz96l8Au9c="
+  },
+  "com/badlogicgames/gdx#gdx-freetype/1.11.0": {
+   "jar": "u5hP1RQ13YCN0HaSWOqzJikXG19OnkPzmvRUPh7E3yI=",
+   "module": "n5oGuAY9dyn7H94+ippXm3vuPUqevY+xrDubsj78b/M=",
+   "pom": "xkjQNIE46uOtYmScUTA8R5rr5czpsbXQeLX3rkVQG+0="
+  },
+  "com/badlogicgames/gdx#gdx-jnigen-loader/2.3.1": {
+   "jar": "ZJDdoiWmHHYCwnu+xOSBE3/1lfjOCy3bpBTww0Bq7mA=",
+   "module": "nNWFK9nlHTbRJxrypGzZfOwk5XEHblQTbsmtNxhGua8=",
+   "pom": "7e2XZPzSpbw8peeAUEHppiAZ+ovkNLWZ8D1JR+KkQng="
+  },
+  "com/badlogicgames/gdx#gdx-platform/1.11.0": {
+   "pom": "8cBBk8LQnXP8lVNQL05ZFMIOgDWrdpoZ0z4bxJJ0AkA="
+  },
+  "com/badlogicgames/gdx#gdx/1.11.0": {
+   "jar": "IxU8Z+GVYGROD6EjUjK12F7kHPKJKBwtp+yMKONXULk=",
+   "module": "twUVE1CLWninINOZQrsifRvrOrzgBpskstIAA2TPbbM=",
+   "pom": "2W6H3BZixRugifIY1Cy3/U3b3sZQiytosvCsZ5dvJSU="
+  },
+  "com/badlogicgames/gdx/gdx-freetype-platform/1.11.0/gdx-freetype-platform-1.11.0-natives-desktop": {
+   "jar": "9GCzmqhP9bnWC4mT4j/zKtpWellmThTrfha7VcWk9yE="
+  },
+  "com/badlogicgames/gdx/gdx-platform/1.11.0/gdx-platform-1.11.0-natives-desktop": {
+   "jar": "yUFpxwl25LGMCL1qKWtETqiLtUlF67EtHy5DK5L4OTA="
+  },
+  "com/badlogicgames/jamepad#jamepad/2.26.5.0": {
+   "jar": "sO+RC6Uxyt/gQYSWow2Hy6xGAhsGJUf1tZR+A1Q1cRo=",
+   "module": "KGmFPVwJdU2vuY9u6veZLc2Q6K3uFxL/bgjmUgBKflA=",
+   "pom": "Up7mQ8lbw+6SfuSnRqwFaOQSnbb5dscD82IjN9/6Inc="
+  },
+  "com/badlogicgames/jlayer#jlayer/1.0.1-gdx": {
+   "jar": "qrze3C4/pBxOE4hwUj10MzfxiZMQgGMLoaIoVTjNAPs=",
+   "pom": "nGCRe2JnOIvFeWpSDswPF8ed2hVGUM0FQdTEE4ghv0k="
+  },
+  "org/jcraft#jorbis/0.0.17": {
+   "jar": "4GfymjcBQmtn7ZcwNpScbljKW7U+73JAsuceKG0lKp4=",
+   "pom": "GN47DZMq+Zgy202DL2g1B/vdWgsMJN1oDoTOb1cYLiQ="
+  },
+  "org/json#json/20170516": {
+   "jar": "gT835IIPGFTopOtPgN+UvxsfLsbDtyaS8jq5pVYlavY=",
+   "pom": "ZMFVQ6PV2yeaIK6w36A0oqecIVn4zUAd6kj/DyNMGN0="
+  },
+  "org/lwjgl#lwjgl-glfw/3.3.1": {
+   "jar": "CLvDTrdS+GPjf4OrHHsMIvfLJtD4+wpKSoxgKKxFs4U=",
+   "pom": "TKQrQ8iqDodIWWB0d0C5lFqqH99+QTTm+iTo+d8cF2A="
+  },
+  "org/lwjgl#lwjgl-jemalloc/3.3.1": {
+   "jar": "7kn8Co2UVkUuVM1vd3gj7aZm4sY/wU1lsv0sws/tXb4=",
+   "pom": "+ZSGEVVV8RPaHOOs1f7LyWk7X9o1P/era9Lj1//dsn4="
+  },
+  "org/lwjgl#lwjgl-openal/3.3.1": {
+   "jar": "cyXuG5GooQwGJsabVXqI8t9qwb3KDlLiqS0yQknyytA=",
+   "pom": "+ZzowctqhyXSbdyzNFxAPNu8x8qO6WYIu/PCxP2WaiE="
+  },
+  "org/lwjgl#lwjgl-opengl/3.3.1": {
+   "jar": "5DbSFE86Nv/3cv1kIzMWgJt5XzkN79TVVmD8aG58KDQ=",
+   "pom": "LL9XxnqNBGatgI4aJ/4908EQ6KwC3IqyushKhRl3VUE="
+  },
+  "org/lwjgl#lwjgl-stb/3.3.1": {
+   "jar": "ZOXMzi/Hy88Mg0pb6GQtniSYzj/jHBT/HfdBh4o/gSE=",
+   "pom": "dKgsbPvqhNIxAk2f2FgO2VumPCAafUeqsmO6hofDCVk="
+  },
+  "org/lwjgl#lwjgl-tinyfd/3.3.1": {
+   "jar": "SI9R7ZXw+sSNHYfLDjusCMAS3L9u88FohoXXCM28zVY=",
+   "pom": "78RtVita7rFRzJnBhn5KUeVLzwWs+2EwOtZUh45Nyq8="
+  },
+  "org/lwjgl#lwjgl/3.3.1": {
+   "jar": "z4P5DjL7lz/17fyk7zX1XKUbtwpXm2ofKQdE9VLo5IQ=",
+   "pom": "xMXHr6uOt4JTZqIwhsPf7droMIwRXF1iF6gm7DJLN+M="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-linux": {
+   "jar": "Ze0Ev/fQf+ybf958OxHEBShsjWbk609Mm3kuJn7OWwY="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-linux-arm32": {
+   "jar": "hOvo8klGPrF84PrpnYsto8G/kcjUEHOjtYNFd7dS4/s="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-linux-arm64": {
+   "jar": "IgDyzcENHaZ215o+oFybpVnaCZUFwbdWtu0iL2FagSA="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-macos": {
+   "jar": "G2z/nmSKci7gzBRmlhIFKqW6gJRp+os/sh8kw6vnDek="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-macos-arm64": {
+   "jar": "nHlVeHSNWPQtXUcu2A0ulpk71Psf/ABYztosYx7zmJo="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-windows": {
+   "jar": "nnROy4QCnXrO2uh24lV2WRhKKa/uVeRT9KslZzSb+Ek="
+  },
+  "org/lwjgl/lwjgl-glfw/3.3.1/lwjgl-glfw-3.3.1-natives-windows-x86": {
+   "jar": "pYAgBm4ePVP/xMf7ShWMDLP/tPM6rrPlTSVScyGUxBI="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-linux": {
+   "jar": "m3mvXH/Q2UkG7h0qU6NCCidQfWYiS0/0a59ncmRd7TQ="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-linux-arm32": {
+   "jar": "Bj8Lsu2V5d4q0G4Q0xJ/hJDdviBKyj5qOc5C3pF4TF8="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-linux-arm64": {
+   "jar": "X4nVRq4fr1Gv+/sMZBR60swze/ajLwv4fEbTTDQvxdU="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-macos": {
+   "jar": "B6qwMJQFjjiph2upM54IoiQDlO+Ii35/z9R2I1j22Wg="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-macos-arm64": {
+   "jar": "500OE6wC9BAsIMF/DUFmCK2FNDSV7K4wAp32VousLSc="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-windows": {
+   "jar": "Il8331UAYUZ1vprLYnjLbJyAo0kmR5iyz8fsQ08e1HI="
+  },
+  "org/lwjgl/lwjgl-jemalloc/3.3.1/lwjgl-jemalloc-3.3.1-natives-windows-x86": {
+   "jar": "Y5uy113z3Vnqewv4uEfgr1cHRpTXk5ILoclTeJeyw9g="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-linux": {
+   "jar": "C3OB9R7cYQy2ByRdw0p2LSsht0R4FARAaKGmADu4eDg="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-linux-arm32": {
+   "jar": "PQ39lwowYdM7FdvxjT7u/PB83EFx6skgUU8DhkY4mmI="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-linux-arm64": {
+   "jar": "RPO9inlEGNtNU+51Rtkdl9nK9/QuE+ojU2PMM18u9ig="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-macos": {
+   "jar": "UYTKJLjf6XJVtstVjFKb1qOImBu+VeITcY4/0r2ehuQ="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-macos-arm64": {
+   "jar": "wi7Lzvj+5K7q+YEDLfPiy8MKkRqQJS7awfFJeX1YdXU="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-windows": {
+   "jar": "X35maqJMqLP7dY5ywD/7nYCbMEicantH6tZ8aXf/ZU4="
+  },
+  "org/lwjgl/lwjgl-openal/3.3.1/lwjgl-openal-3.3.1-natives-windows-x86": {
+   "jar": "fVtbb61e+7Lowk80dgDHy8bv3RNh/TewtaEzGSMehR4="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-linux": {
+   "jar": "vPzZ+N/SKUiK2ew1PUjHsC3lyiG63UCS8ZAiOaHtBpA="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-linux-arm32": {
+   "jar": "IDPJfXY+YL2sAX/bsI06Q7vlwXqjZ7QsU3ycw6tAYY8="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-linux-arm64": {
+   "jar": "EFjEunNUzavz75NZUeKT91tJYedT13/XU13ccy4oPyg="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-macos": {
+   "jar": "cR8plyiIUJJiqVfxsxOL+ptQVRnRHfbldj0cmj+LPF0="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-macos-arm64": {
+   "jar": "29EQBE6uitvKjjx6cwUpo1FVnnTOqIe7PNbvDcAW8pU="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-windows": {
+   "jar": "hRubWTysIeOvUd1MMD6N8/5qNEo/gda5vMGG5+VAv9o="
+  },
+  "org/lwjgl/lwjgl-opengl/3.3.1/lwjgl-opengl-3.3.1-natives-windows-x86": {
+   "jar": "aD2K09DQl3puoYuIpMvn6P1PBsGrIbq+2riDCXQLzGA="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-linux": {
+   "jar": "+BuZjoxdYj1XHi/NRvy4e30w7SXfd95jrsjP7bNMSnA="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-linux-arm32": {
+   "jar": "6xnGjFt5MUjKOT24bzHQ3pVALZ9MFOUADjkYSA9iKkc="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-linux-arm64": {
+   "jar": "XOyb0h8xIAJaLIOB3BCax+yI5o5xX9fK27kPXVVfZZs="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-macos": {
+   "jar": "oXjWYDA5nGmJeN/kqVALdVep2vTAYeg8iHAzfpsL0+c="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-macos-arm64": {
+   "jar": "DXoP8tto86vkFpFn4vSJ3/d72igvQvhuQelEvnxDbdg="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-windows": {
+   "jar": "/W/3om6GRa95oNIcpz6NyeRz80AtEzPlRKgdIcpQd+c="
+  },
+  "org/lwjgl/lwjgl-stb/3.3.1/lwjgl-stb-3.3.1-natives-windows-x86": {
+   "jar": "v3PjtRu0MOWIvRWOlsyimOmMoS8p3FzxRFwfDFw5uhs="
+  },
+  "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1-natives-linux": {
+   "jar": "e9cLKCM/RiGdoZiaw+n27vcuvyEc43Uv8eZFzqQYpM8="
+  },
+  "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1-natives-linux-arm64": {
+   "jar": "pLai7OGbhNkzyXmwx1+46BgCpoLVJEmWXDP0xaH+cAw="
+  },
+  "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1-natives-macos": {
+   "jar": "H1yGorLASVqlahKnTHwvwsk1PMOKoAzBOjJAR2QcMk0="
+  },
+  "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1-natives-macos-arm64": {
+   "jar": "EY1ViXZdZobUeDcZwt6MpmWiSX2LncKK00/RDtU0P6o="
+  },
+  "org/lwjgl/lwjgl-tinyfd/3.3.1/lwjgl-tinyfd-3.3.1-natives-windows": {
+   "jar": "7McVIQloBZdWnZsyIEXynBp93uxxgs9pGJ2uFUE4ucg="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-linux": {
+   "jar": "Iu8q+jGhdAozfsnGgGxrjZfpMaY+LEMnDLrxT7P2/E4="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-linux-arm32": {
+   "jar": "9rVYGOx25ewBfiW8OvbsTbe3ol56KhdW+i/6uojIZWQ="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-linux-arm64": {
+   "jar": "T9lq94+cKTsXAAEcfbGg7AI3xNGIPjf6vgj3To0uAiQ="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-macos": {
+   "jar": "9I5hCpgdylFbm75zRcx240UME0BLBS2Kw1fvCvjpCr8="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-macos-arm64": {
+   "jar": "cZfomrgKKiGDtO6SXMtE5XLwy3V6kndq34JlJpIAo2o="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-windows": {
+   "jar": "CT0T1ipkNLxla/EKOzfiUw/ZrzsLwg+OlUW+WGWdFEM="
+  },
+  "org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-windows-x86": {
+   "jar": "6QwfnPVwGu7ymC6/CQWiuZH0YiuKf4JQ6vCHO1oKAiM="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/sonatype/oss#oss-parent/9": {
+   "pom": "+0AmX5glSCEv+C42LllzKyGH7G8NgBgohcFO8fmCgno="
+  }
+ }
+}

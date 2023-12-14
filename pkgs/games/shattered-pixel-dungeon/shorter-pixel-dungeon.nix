@@ -13,12 +13,7 @@ callPackage ./generic.nix rec {
     hash = "sha256-8vmh65XlNqfIh4WHLPuWU68tb3ajKI8kBMI68CYlsSk=";
   };
 
-  postPatch = ''
-    substituteInPlace build.gradle \
-      --replace "gdxControllersVersion = '2.2.4-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
-  '';
-
-  depsHash = "sha256-MUUeWZUCVPakK1MJwn0lPnjAlLpPWB/J17Ad68XRcHg=";
+  depsPath = "deps-shorter.json";
 
   desktopName = "Shorter Pixel Dungeon";
 
