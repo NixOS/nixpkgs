@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-TeOBLPQc4y1lstqZUBDS3vUPama80UieifmxL2Qswvw=";
+    hash = "sha256-twysPSuCu++dVqoRKTNSvxwrO1ljUu4k2vPZEBkaj10=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
