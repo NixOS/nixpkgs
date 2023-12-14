@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_26
+, electron_27
 , fetchFromGitHub
 , fetchpatch2
 , glib
@@ -25,10 +25,10 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_26;
+  electron = electron_27;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.12.0"; # TODO add back Electron version check below
+  version = "2023.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
@@ -43,13 +43,15 @@ in buildNpmPackage rec {
       url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
       hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
     })
+    # Workaround Electron 25 EOL and 26 has https://github.com/bitwarden/clients/issues/6560
+    ./electron-27.patch
   ];
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-bnYpvHO9Pnob+MbrSshv03mSwXCADH/2xw33nLVKMdg=";
+  npmDepsHash = "sha256-QwG+D0M94HN1AyQlmzKeScZyksiUr5A9igEaox9DYN4=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -82,14 +84,12 @@ in buildNpmPackage rec {
     libsecret
   ];
 
-  # FIXME add back once upstream moves to Electron >= 26
-  # we use electron_26 because electron_25 is EOL
-  /*preBuild = ''
+  preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
-  '';*/
+  '';
 
   postBuild = ''
     pushd apps/desktop
