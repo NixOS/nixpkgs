@@ -298,12 +298,13 @@ mkDerivation (finalAttrs: {
     OSAKit
     Quartz
     QuartzCore
-    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
     ImageCaptureCore
     ImageIO
+  ] ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
+    UniformTypeIdentifiers
   ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail
