@@ -8446,6 +8446,8 @@ self: super: with self; {
 
   intrinio_sdk = callPackage ../development/python-modules/intrinio_sdk { };
 
+  detecta = callPackage ../development/python-modules/detecta { };
+
   pyluach = callPackage ../development/python-modules/pyluach { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
