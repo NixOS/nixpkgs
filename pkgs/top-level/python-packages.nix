@@ -8434,6 +8434,10 @@ self: super: with self; {
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
+  pywry = callPackage ../development/python-modules/pywry {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Carbon WebKit;
+  };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
