@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/web/yarn.lock";
-    hash = "sha256-0JpoAQKRmU7P1bzYNR/vqtPjOOSw8wSlNjXl2f6uBrw=";
+    hash = "sha256-3bCsvZy1dlnSYxhBWrPzCQMUkvpkWy7HGoYJS9uLrA4=";
   };
 
   configurePhase = ''
