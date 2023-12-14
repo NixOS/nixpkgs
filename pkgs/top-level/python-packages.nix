@@ -8444,6 +8444,8 @@ self: super: with self; {
 
   pycoingecko = callPackage ../development/python-modules/pycoingecko { };
 
+  intrinio_sdk = callPackage ../development/python-modules/intrinio_sdk { };
+
   pyluach = callPackage ../development/python-modules/pyluach { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
