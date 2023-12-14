@@ -420,6 +420,15 @@ final: prev: {
 
   wrangler = prev.wrangler.override (oldAttrs:
     let
+      workerd = {
+        name = "workerd";
+        packageName = "workerd";
+        version = "1.20231030.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/workerd/-/workerd-1.20231030.0.tgz";
+          sha512 = "36r129nzz4caz8i44blbbd2isfgypn6jdbprggif8vzy1pbj7zndrn2mq19hkrppxnfpp0zrg8rj3zls7zib9vniimw8zzmvpwrcm7q";
+        };
+      };
       linuxWorkerd = {
         name = "_at_cloudflare_slash_workerd-linux-64";
         packageName = "@cloudflare/workerd-linux-64";
@@ -469,7 +478,8 @@ final: prev: {
         # patch elf is trying to patch binary for sunos
         rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
       '';
-      dependencies = oldAttrs.dependencies
+      dependencies = builtins.filter (d: d.packageName != "workerd") oldAttrs.dependencies
+        ++ [ workerd ]
         ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) linuxWorkerd
         ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) linuxWorkerdArm
         ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) darwinWorkerd
