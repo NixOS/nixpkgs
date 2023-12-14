@@ -6,8 +6,12 @@
 , runtimeShell
 , installShellFiles
 , bc
+, bash
+, coreutils
+, gawk
 , ncurses
 , perl
+, tmux
 , glibcLocales
 , testers
 , fzf
@@ -42,7 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ bash ncurses ];
 
   ldflags = [
     "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
@@ -63,8 +67,23 @@ buildGoModule rec {
       --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
-   substituteInPlace bin/fzf-tmux \
-     --replace "bc" "${bc}/bin/bc"
+    sed -i \
+      -e "s/fzf-tmux/FZF-TMUX/g" \
+      -e "s/ (requires tmux 3.2 or above)//" \
+      -e "s|fzf=.*|fzf=$out/bin/fzf|" \
+      -e "/fzf executable not found/d" \
+      bin/fzf-tmux
+    substituteInPlace bin/fzf-tmux \
+      --replace awk ${gawk}/bin/awk \
+      --replace bash ${bash}/bin/bash \
+      --replace bc ${bc}/bin/bc \
+      --replace cat ${coreutils}/bin/cat \
+      --replace "cut " "${coreutils}/bin/cut " \
+      --replace dirname ${coreutils}/bin/dirname \
+      --replace mkfifo ${coreutils}/bin/mkfifo \
+      --replace "tmux " "${tmux}/bin/tmux " \
+      --replace tput ${ncurses}/bin/tput
+    sed -i "s/FZF-TMUX/fzf-tmux/g" bin/fzf-tmux
   '';
 
   postInstall = ''
