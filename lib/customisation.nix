@@ -358,6 +358,7 @@ rec {
   makeScope = newScope: f:
     let self = f self // {
           newScope = scope: newScope (self // scope);
+          callFunction = callFunctionWith self;
           callPackage = self.newScope {};
           overrideScope = g: makeScope newScope (extends g f);
           # Remove after 24.11 is released.
@@ -433,6 +434,7 @@ rec {
       spliced = extra spliced0 // spliced0 // keep self;
       self = f self // {
         newScope = scope: newScope (spliced // scope);
+        callFunction = callFunctionWith spliced;
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.

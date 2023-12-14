@@ -102,6 +102,8 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
+  callFunction = lib.callFunctionWith pkgs;
+
   ### Evaluating the entire Nixpkgs naively will fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     Please be informed that this pseudo-package is not the only part
