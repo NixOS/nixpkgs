@@ -41,7 +41,7 @@ buildGoModule rec {
     homepage = "https://github.com/mvdan/gofumpt";
     changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs katexochen ];
     mainProgram = "gofumpt";
   };
 }
