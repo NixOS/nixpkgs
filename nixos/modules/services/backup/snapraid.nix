@@ -2,10 +2,15 @@
 
 with lib;
 
-let cfg = config.snapraid;
+let cfg = config.services.snapraid;
 in
 {
-  options.snapraid = with types; {
+  imports = [
+    # Should have never been on the top-level.
+    (mkRenamedOptionModule [ "snapraid" ] [ "services" "snapraid" ])
+  ];
+
+  options.services.snapraid = with types; {
     enable = mkEnableOption (lib.mdDoc "SnapRAID");
     dataDisks = mkOption {
       default = { };
