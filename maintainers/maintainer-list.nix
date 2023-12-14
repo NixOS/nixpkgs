@@ -4674,6 +4674,12 @@
     githubId = 283316;
     name = "Dane Lipscombe";
   };
+  dlyons = {
+    email = "dustin@dlyons.dev";
+    github = "dustinlyons";
+    githubId = 1292576;
+    name = "Dustin Lyons";
+  };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
     github = "dmalikov";
