@@ -8440,6 +8440,8 @@ self: super: with self; {
 
   ccxt = callPackage ../development/python-modules/ccxt { };
 
+  pyluach = callPackage ../development/python-modules/pyluach { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
