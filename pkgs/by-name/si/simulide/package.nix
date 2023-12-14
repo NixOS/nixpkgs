@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, gccStdenv # Darwin also needs gcc
 , fetchbzr
 , substituteAll
 , libsForQt5
@@ -26,7 +26,7 @@ let
   versionInfo = if old then versionTable.old else versionTable.new;
 in
 
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   pname = "simulide";
   version = "${versionInfo.version}-${versionInfo.release}";
 
@@ -39,11 +39,18 @@ stdenv.mkDerivation {
     sed -i resources/simulide.desktop \
       -e "s|^Exec=.*$|Exec=simulide|" \
       -e "s|^Icon=.*$|Icon=simulide|"
+
     sed -i SimulIDE.pro \
       -e "s|^VERSION = .*$|VERSION = ${versionInfo.version}|" \
       -e "s|^RELEASE = .*$|RELEASE = -${versionInfo.release}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${versionInfo.rev}|" \
       -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
+
+    # Remove hardcoded compiler for darwin
+    sed -i SimulIDE.pro \
+      -e "/QMAKE_CC = .*$/d" \
+      -e "/QMAKE_CXX = .*$/d" \
+      -e "/QMAKE_LINK = .*$/d"
   '';
 
   preConfigure = ''
@@ -67,17 +74,27 @@ stdenv.mkDerivation {
     install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
     install -Dm644 ../resources/icons/hicolor/256x256/simulide.png $out/share/icons/hicolor/256x256/apps/simulide.png
 
-    mkdir -p $out/share/simulide $out/bin
-
     pushd executables/SimulIDE_*
-    ${lib.optionalString old ''
-      cp -r share/simulide/* $out/share/simulide
-      cp bin/simulide $out/bin/simulide
+    dir -R .
+
+    ${lib.optionalString gccStdenv.isLinux ''
+      mkdir -p $out/share/simulide $out/bin
+      ${lib.optionalString old ''
+        cp -r share/simulide/* $out/share/simulide
+        cp bin/simulide $out/bin/simulide
+      ''}
+      ${lib.optionalString (!old) ''
+        cp -r * $out/share/simulide
+        mv $out/share/simulide/simulide $out/bin/simulide
+      ''}
     ''}
-    ${lib.optionalString (!old) ''
-      cp -r * $out/share/simulide
-      mv $out/share/simulide/simulide $out/bin/simulide
+    ${lib.optionalString gccStdenv.isDarwin ''
+      mkdir -p $out/Applications $out/bin
+      cp -r simulide.app $out/Applications/simulide.app
+      ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
     ''}
+
+    dir -R $out
     popd
 
     runHook postInstall
