@@ -1,7 +1,8 @@
 { buildPythonPackage
+, flaky
 , hypothesis
-, pytest
 , pytest-asyncio
+, pytest-trio
 , pytestCheckHook
 }:
 
@@ -21,7 +22,9 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    flaky
     hypothesis
+    pytest-trio
     pytestCheckHook
-  ] ++ pytest.optional-dependencies.testing;
+  ];
 }
