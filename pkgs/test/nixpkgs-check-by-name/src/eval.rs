@@ -116,8 +116,18 @@ pub fn check_values(
             let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
             if let Some(attribute_info) = actual_files.get(package_name) {
-                let valid = match &attribute_info.variant {
-                    AttributeVariant::AutoCalled => true,
+                let check_result = if !attribute_info.is_derivation {
+                    NixpkgsProblem::NonDerivation {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into()
+                } else {
+                    Success(())
+                };
+
+                check_result.and(match &attribute_info.variant {
+                    AttributeVariant::AutoCalled => Success(()),
                     AttributeVariant::CallPackage { path, empty_arg } => {
                         let correct_file = if let Some(call_package_path) = path {
                             absolute_package_file == *call_package_path
@@ -131,26 +141,22 @@ pub fn check_values(
                         } else {
                             true
                         };
-                        correct_file && non_empty
+                        if correct_file && non_empty {
+                            Success(())
+                        } else {
+                            NixpkgsProblem::WrongCallPackage {
+                                relative_package_file: relative_package_file.clone(),
+                                package_name: package_name.clone(),
+                            }
+                            .into()
+                        }
                     }
-                    AttributeVariant::Other => false,
-                };
-
-                if !valid {
-                    NixpkgsProblem::WrongCallPackage {
+                    AttributeVariant::Other => NixpkgsProblem::WrongCallPackage {
                         relative_package_file: relative_package_file.clone(),
                         package_name: package_name.clone(),
                     }
-                    .into()
-                } else if !attribute_info.is_derivation {
-                    NixpkgsProblem::NonDerivation {
-                        relative_package_file: relative_package_file.clone(),
-                        package_name: package_name.clone(),
-                    }
-                    .into()
-                } else {
-                    Success(())
-                }
+                    .into(),
+                })
             } else {
                 NixpkgsProblem::UndefinedAttr {
                     relative_package_file: relative_package_file.clone(),
