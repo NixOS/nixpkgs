@@ -2,7 +2,7 @@
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages_16, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
@@ -43,7 +43,7 @@
     ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
       # QEMU virtualized GPU (aka VirGL)
       # Requires ATOMIC_INT_LOCK_FREE == 2.
-      "virtio-experimental"
+      "virtio"
     ]
     ++ lib.optionals stdenv.isAarch64 [
       "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
@@ -65,6 +65,7 @@
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
 , jdupes
+, rust-bindgen
 , rustc
 , spirv-llvm-translator
 , zstd
@@ -84,27 +85,14 @@
 */
 
 let
-  version = "23.1.9";
-  hash = "sha256-KVuifCgUbtCSFOjOea+hZZ7fnRQt7MPJH4BFUtZPdRA=";
+  version = "23.3.1";
+  hash = "sha256-bkgSbXD9s/IP/rJGygwuQf/cg18GY6A9RSa4v120HeY=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   branch = lib.versions.major version;
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
-
-  llvmPackages = llvmPackages_16;
-  # Align all the Mesa versions used. Required to prevent explosions when
-  # two different LLVMs are loaded in the same process.
-  # FIXME: these should really go into some sort of versioned LLVM package set
-  rust-bindgen' = buildPackages.rust-bindgen.override {
-    rust-bindgen-unwrapped = buildPackages.rust-bindgen.unwrapped.override {
-      clang = buildPackages.llvmPackages_15.clang;
-    };
-  };
-  spirv-llvm-translator' = spirv-llvm-translator.override {
-    inherit (llvmPackages) llvm;
-  };
 
   haveWayland = lib.elem "wayland" eglPlatforms;
   haveZink = lib.elem "zink" galliumDrivers;
@@ -245,7 +233,7 @@ self = stdenv.mkDerivation {
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator' ]
+    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
@@ -258,7 +246,7 @@ self = stdenv.mkDerivation {
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optionals enableOpenCL [ rust-bindgen' rustc ]
+  ] ++ lib.optionals enableOpenCL [ rust-bindgen rustc ]
     ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
