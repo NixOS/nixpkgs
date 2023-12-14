@@ -8,8 +8,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
-    sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
+    hash = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
+
+  # Remove once a new version of qrencode is released that includes
+  # https://github.com/fukuchi/libqrencode/pull/208
+  patches = [ ./add_pic_image_type.patch ];
 
   nativeBuildInputs = [ pkg-config ];
 
