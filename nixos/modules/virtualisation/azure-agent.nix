@@ -202,6 +202,13 @@ in
 
     services.udev.packages = [ pkgs.waagent ];
 
+    # Provide waagent-shipped udev rules in initrd too.
+    boot.initrd.services.udev.packages = [ pkgs.waagent ];
+    # udev rules shell out to chmod, cut and readlink, which are all
+    # provided by pkgs.coreutils, which is in services.udev.path, but not
+    # boot.initrd.services.udev.binPackages.
+    boot.initrd.services.udev.binPackages = [ pkgs.coreutils ];
+
     networking.dhcpcd.persistent = true;
 
     services.logrotate = {
