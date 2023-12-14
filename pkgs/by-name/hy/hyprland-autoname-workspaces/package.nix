@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-ImQIewPFsKZ+9Q5KoV9DL9K1ZWRR1cd6I81Ri/fAqak=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Automatically rename workspaces with icons of started applications";
