@@ -4,7 +4,7 @@
 , substitute
 }:
 
-callPackage ./generic.nix rec {
+callPackage ../generic.nix rec {
   pname = "summoning-pixel-dungeon";
   version = "1.2.5a";
 
@@ -20,8 +20,6 @@ callPackage ./generic.nix rec {
     src = ./disable-git-version.patch;
     substitutions = [ "--subst-var-by" "version" version ];
   })];
-
-  depsHash = "sha256-0P/BcjNnbDN25DguRcCyzPuUG7bouxEx1ySodIbSwvg=";
 
   desktopName = "Summoning Pixel Dungeon";
 

@@ -14,7 +14,7 @@ callPackage ./generic.nix rec {
     hash = "sha256-1msmjKDEd/pFMqLB4vJgR6GPC9z4CnNew2hlemLw2d0=";
   };
 
-  depsHash = "sha256-vihoR0bPh7590sRxeYJ1uuynNRxtRBuiFUrdmsRNUJc=";
+  depsPath = ./deps.json;
 
   passthru.tests = {
     shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;

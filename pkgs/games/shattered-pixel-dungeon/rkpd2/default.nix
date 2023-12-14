@@ -2,7 +2,7 @@
 , fetchFromGitHub
 }:
 
-callPackage ./generic.nix rec {
+callPackage ../generic.nix rec {
   pname = "rkpd2";
   version = "2.0.6";
 
@@ -12,8 +12,6 @@ callPackage ./generic.nix rec {
     rev = "v${version}";
     hash = "sha256-jwH0nEsv3agUCZt5Mhuv1JSeELOKfrsj3cnmAJsV9sM=";
   };
-
-  depsHash = "sha256-vihoR0bPh7590sRxeYJ1uuynNRxtRBuiFUrdmsRNUJc=";
 
   desktopName = "Rat King Pixel Dungeon 2";
 
