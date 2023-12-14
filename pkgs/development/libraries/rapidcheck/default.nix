@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidcheck";
-  version = "unstable-2023-04-16";
+  version = "unstable-2023-12-14";
 
   src = fetchFromGitHub {
     owner = "emil-e";
     repo  = "rapidcheck";
-    rev   = "a5724ea5b0b00147109b0605c377f1e54c353ba2";
-    hash = "sha256-nq2VBDREkAOnvtdYr3m0TYNXx7mv9hbV5HZFVL2uTTg=";
+    rev   = "ff6af6fc683159deb51c543b065eba14dfcf329b";
+    hash = "sha256-Ixz5RpY0n8Un/Pv4XoTfbs40+70iyMbkQUjDqoLaWOg=";
   };
 
   outputs = [ "out" "dev" ];
