@@ -9,8 +9,9 @@ mod version;
 use crate::structure::check_structure;
 use crate::validation::Validation::Failure;
 use crate::validation::Validation::Success;
+use crate::version::Nixpkgs;
 use anyhow::Context;
-use clap::{Parser, ValueEnum};
+use clap::Parser;
 use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -22,25 +23,20 @@ use std::process::ExitCode;
 pub struct Args {
     /// Path to nixpkgs
     nixpkgs: PathBuf,
-    /// The version of the checks
-    /// Increasing this may cause failures for a Nixpkgs that succeeded before
-    /// TODO: Remove default once Nixpkgs CI passes this argument
-    #[arg(long, value_enum, default_value_t = Version::V0)]
-    version: Version,
-}
 
-/// The version of the checks
-#[derive(Debug, Clone, PartialEq, PartialOrd, ValueEnum)]
-pub enum Version {
-    /// Initial version
-    V0,
-    /// Empty argument check
-    V1,
+    /// Path to the base Nixpkgs to compare against
+    #[arg(long)]
+    base: Option<PathBuf>,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(&args.nixpkgs, args.version, vec![], &mut io::stderr()) {
+    match process(
+        args.base.as_deref(),
+        &args.nixpkgs,
+        &vec![],
+        &mut io::stderr(),
+    ) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -59,7 +55,8 @@ fn main() -> ExitCode {
 /// Does the actual work. This is the abstraction used both by `main` and the tests.
 ///
 /// # Arguments
-/// - `nixpkgs_path`: The path to the Nixpkgs to check
+/// - `base_nixpkgs`: The path to the base Nixpkgs to compare against
+/// - `main_nixpkgs`: The path to the main Nixpkgs to check
 /// - `eval_accessible_paths`:
 ///   Extra paths that need to be accessible to evaluate Nixpkgs using `restrict-eval`.
 ///   This is used to allow the tests to access the mock-nixpkgs.nix file
@@ -70,21 +67,23 @@ fn main() -> ExitCode {
 /// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
 /// - `Ok(true)` if there are no problems
 pub fn process<W: io::Write>(
-    nixpkgs_path: &Path,
-    version: Version,
-    eval_accessible_paths: Vec<&Path>,
+    base_nixpkgs: Option<&Path>,
+    main_nixpkgs: &Path,
+    eval_accessible_paths: &Vec<&Path>,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
-    let nixpkgs_result = check_nixpkgs(nixpkgs_path, eval_accessible_paths)?;
-    let check_result = nixpkgs_result.result_map(|nixpkgs_version| {
-        let empty_non_auto_called_base = match version {
-            Version::V0 => version::EmptyNonAutoCalled::Invalid,
-            Version::V1 => version::EmptyNonAutoCalled::Valid,
-        };
-        Ok(version::Nixpkgs::compare(
-            &empty_non_auto_called_base,
-            nixpkgs_version,
-        ))
+    let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths)?;
+    let check_result = main_result.result_map(|nixpkgs_version| {
+        if let Some(base) = base_nixpkgs {
+            check_nixpkgs(base, eval_accessible_paths)?.result_map(|base_nixpkgs_version| {
+                Ok(Nixpkgs::compare(base_nixpkgs_version, nixpkgs_version))
+            })
+        } else {
+            Ok(Nixpkgs::compare(
+                version::Nixpkgs::default(),
+                nixpkgs_version,
+            ))
+        }
     })?;
 
     match check_result {
@@ -94,7 +93,7 @@ pub fn process<W: io::Write>(
             }
             Ok(false)
         }
-        Success(_) => Ok(true),
+        Success(()) => Ok(true),
     }
 }
 
@@ -102,7 +101,7 @@ pub fn process<W: io::Write>(
 /// and returns to which degree it's valid for checks with increased strictness.
 pub fn check_nixpkgs(
     nixpkgs_path: &Path,
-    eval_accessible_paths: Vec<&Path>,
+    eval_accessible_paths: &Vec<&Path>,
 ) -> validation::Result<version::Nixpkgs> {
     Ok({
         let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
@@ -128,7 +127,6 @@ pub fn check_nixpkgs(
 mod tests {
     use crate::process;
     use crate::utils;
-    use crate::Version;
     use anyhow::Context;
     use std::fs;
     use std::path::Path;
@@ -217,7 +215,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(&path, Version::V1, vec![&extra_nix_path], &mut writer)
+            process(None, &path, &vec![&extra_nix_path], &mut writer)
                 .context(format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

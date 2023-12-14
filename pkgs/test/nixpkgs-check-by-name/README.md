@@ -8,16 +8,10 @@ This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pu
 
 This API may be changed over time if the CI workflow making use of it is adjusted to deal with the change appropriately.
 
-- Command line: `nixpkgs-check-by-name <NIXPKGS>`
+- Command line: `nixpkgs-check-by-name [--base <BASE_NIXPKGS>] <NIXPKGS>`
 - Arguments:
+  - `<BASE_NIXPKGS>`: The path to the Nixpkgs to check against
   - `<NIXPKGS>`: The path to the Nixpkgs to check
-  - `--version <VERSION>`: The version of the checks to perform.
-
-    Possible values:
-    - `v0` (default)
-    - `v1`
-
-    See [validation](#validity-checks) for the differences.
 - Exit code:
   - `0`: If the [validation](#validity-checks) is successful
   - `1`: If the [validation](#validity-checks) is not successful
@@ -42,7 +36,8 @@ These checks are performed by this tool:
 
 ### Nix evaluation checks
 - `pkgs.${name}` is defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
-  - **Only after --version v1**: If `pkgs.${name}` is not auto-called from `pkgs/by-name`, `args` must not be empty
+  - If `pkgs.${name}` is not auto-called from `pkgs/by-name`, `args` must not be empty,
+    with the exception that if `BASE_NIXPKGS` also has a definition for the same package with empty `args`, it's allowed
 - `pkgs.lib.isDerivation pkgs.${name}` is `true`.
 
 ## Development

@@ -16,12 +16,12 @@ impl Nixpkgs {
     /// Compares two Nixpkgs versions against each other, returning validation errors only if the
     /// `from` version satisfied the stricter checks, while the `to` version doesn't satisfy them
     /// anymore.
-    pub fn compare(empty_non_auto_called_from: &EmptyNonAutoCalled, to: Self) -> Validation<()> {
+    pub fn compare(from: Self, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
             to.attributes.into_iter().map(|(name, attr_to)| {
-                Attribute::compare(&name, empty_non_auto_called_from, &attr_to)
+                Attribute::compare(&name, from.attributes.get(&name), &attr_to)
             }),
         )
     }
@@ -33,12 +33,12 @@ pub struct Attribute {
 }
 
 impl Attribute {
-    pub fn compare(
-        name: &str,
-        empty_non_auto_called_from: &EmptyNonAutoCalled,
-        to: &Self,
-    ) -> Validation<()> {
-        EmptyNonAutoCalled::compare(name, empty_non_auto_called_from, &to.empty_non_auto_called)
+    pub fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
+        EmptyNonAutoCalled::compare(
+            name,
+            optional_from.map(|x| &x.empty_non_auto_called),
+            &to.empty_non_auto_called,
+        )
     }
 }
 
@@ -53,12 +53,9 @@ pub enum EmptyNonAutoCalled {
 }
 
 impl EmptyNonAutoCalled {
-    fn compare(
-        name: &str,
-        empty_non_auto_called_from: &EmptyNonAutoCalled,
-        to: &Self,
-    ) -> Validation<()> {
-        if to >= empty_non_auto_called_from {
+    fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
+        let from = optional_from.unwrap_or(&Self::Valid);
+        if to >= from {
             Success(())
         } else {
             NixpkgsProblem::WrongCallPackage {

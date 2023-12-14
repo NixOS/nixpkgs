@@ -41,7 +41,7 @@ enum AttributeVariant {
 pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
-    eval_accessible_paths: Vec<&Path>,
+    eval_accessible_paths: &Vec<&Path>,
 ) -> validation::Result<version::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
