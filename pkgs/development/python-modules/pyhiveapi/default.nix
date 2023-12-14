@@ -15,8 +15,7 @@
 buildPythonPackage rec {
   pname = "pyhiveapi";
   version = "0.5.16";
-
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -59,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
+    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

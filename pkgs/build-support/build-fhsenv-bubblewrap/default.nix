@@ -16,6 +16,7 @@
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraPreBwrapCmds ? ""
 , extraBwrapArgs ? []
 , unshareUser ? false
 , unshareIpc ? false
@@ -23,6 +24,7 @@
 , unshareNet ? false
 , unshareUts ? false
 , unshareCgroup ? false
+, privateTmp ? false
 , dieWithParent ? true
 , ...
 } @ args:
@@ -38,8 +40,8 @@ let
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
   fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
-    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
     "pname" "version"
   ]);
 
@@ -116,7 +118,8 @@ let
 
   indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ignored=(/nix /dev /proc /etc)
+    ${extraPreBwrapCmds}
+    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
@@ -150,10 +153,8 @@ let
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
-      if [[ -L $i ]]; then
-        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
-      else
-        ro_mounts+=(--ro-bind-try "$i" "$i")
+      if [[ -e $i ]]; then
+        symlinks+=(--symlink "/.host-etc/''${i#/etc/}" "$i")
       fi
     done
 
@@ -192,6 +193,8 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
+      --ro-bind /etc /.host-etc
+      ${lib.optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
