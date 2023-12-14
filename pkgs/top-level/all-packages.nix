@@ -22662,6 +22662,8 @@ with pkgs;
 
   libdex = callPackage ../development/libraries/libdex { };
 
+  libdicom = callPackage ../development/libraries/libdicom { };
+
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
