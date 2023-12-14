@@ -65,12 +65,17 @@ autoPatchelf() {
         local patchelfFlagsArray=($patchelfFlags)
     fi
 
-    if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
-        echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
-             "= true;' is deprecated and will be removed in a future release." \
-             "Use 'autoPatchelfIgnoreMissingDeps = [ \"*\" ];' instead." >&2
-        ignoreMissingDepsArray=( "*" )
-    fi
+    # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
+    # "*", printing a deprecation warning.
+    for dep in "${ignoreMissingDepsArray[@]}"; do
+        if [ "$dep" == "1" ]; then
+            echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
+                 "= true;' is deprecated and will be removed in a future release." \
+                 "Use 'autoPatchelfIgnoreMissingDeps = [ \"*\" ];' instead." >&2
+            ignoreMissingDepsArray=( "*" )
+            break
+        fi
+    done
 
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
