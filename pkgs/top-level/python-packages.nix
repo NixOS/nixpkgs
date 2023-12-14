@@ -8653,6 +8653,8 @@ self: super: with self; {
 
   orange-widget-base = callPackage ../development/python-modules/orange-widget-base { };
 
+  oras = callPackage ../development/python-modules/oras { };
+
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
