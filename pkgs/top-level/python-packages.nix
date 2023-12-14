@@ -8454,6 +8454,8 @@ self: super: with self; {
 
   detecta = callPackage ../development/python-modules/detecta { };
 
+  pandas-market-calendars = callPackage ../development/python-modules/pandas-market-calendars { };
+
   exchange-calendars = callPackage ../development/python-modules/exchange-calendars { };
 
   pyluach = callPackage ../development/python-modules/pyluach { };
