@@ -7,12 +7,14 @@
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, service-identity
 }:
 
 buildPythonPackage rec {
   pname = "aioquic";
   version = "0.9.23";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,6 +22,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-UsnaYO0IN/6LimoNfc8N++vsjpoCfhDr9yBPBWnFj6g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -33,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    service-identity
   ];
 
   pythonImportsCheck = [
