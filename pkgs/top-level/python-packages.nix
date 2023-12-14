@@ -8444,6 +8444,8 @@ self: super: with self; {
 
   pycoingecko = callPackage ../development/python-modules/pycoingecko { };
 
+  financetoolkit = callPackage ../development/python-modules/financetoolkit { };
+
   intrinio_sdk = callPackage ../development/python-modules/intrinio_sdk { };
 
   detecta = callPackage ../development/python-modules/detecta { };
