@@ -42,6 +42,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./clasp-pin-repos-commits.patch
+    ./remove-unused-command-line-argument.patch
   ];
 
   nativeBuildInputs = [
