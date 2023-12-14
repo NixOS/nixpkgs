@@ -2,7 +2,7 @@
 , fetchFromGitHub
 }:
 
-callPackage ./generic.nix rec {
+callPackage ../generic.nix rec {
   pname = "rat-king-adventure";
   version = "1.5.3";
 
@@ -12,8 +12,6 @@ callPackage ./generic.nix rec {
     rev = version;
     hash = "sha256-Q/smIObu7khcRnwdT8m7+WstpPE1tbDFJcZ4OGYJ338=";
   };
-
-  depsHash = "sha256-yE6zuLnFLtNq76AhtyE+giGLF2vcCqF7sfIvcY8W6Lg=";
 
   desktopName = "Rat King Adventure";
 

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 }:
 
-callPackage ./generic.nix rec {
+callPackage ../generic.nix rec {
   pname = "experienced-pixel-dungeon";
   version = "2.18";
 
@@ -12,13 +12,6 @@ callPackage ./generic.nix rec {
     rev = "ExpPD-${version}";
     hash = "sha256-jOKHBd9LaDn3oqLdQWqAcJnicktlbkDGw00nT8JveoI=";
   };
-
-  postPatch = ''
-    substituteInPlace build.gradle \
-      --replace-fail "gdxControllersVersion = '2.2.4-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
-  '';
-
-  depsHash = "sha256-PyBEhlOOVD3/YH4SWs1yMkdg3U96znk1/VV6SAr8S30=";
 
   desktopName = "Experienced Pixel Dungeon";
 
