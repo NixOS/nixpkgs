@@ -47,7 +47,7 @@ in
   };
 
   config = lib.mkIf config.programs.nix-ld.enable {
-    systemd.tmpfiles.packages = [ cfg.package ];
+    environment.ldso = "${cfg.package}/libexec/nix-ld";
 
     environment.systemPackages = [ nix-ld-libraries ];
 

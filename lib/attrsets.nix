@@ -14,6 +14,14 @@ rec {
 
   /* Return an attribute from nested attribute sets.
 
+     Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
+     # and
+     (x.${f p}."example.com" or 6) == attrByPath [ (f p) "example.com" ] 6 x
+     ```
+
      Example:
        x = { a = { b = 3; }; }
        # ["a" "b"] is equivalent to x.a.b
@@ -50,6 +58,14 @@ rec {
       attrByPath' 0 set;
 
   /* Return if an attribute from nested attribute set exists.
+
+     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x?a.b) == hasAttryByPath ["a" "b"] x
+     # and
+     (x?${f p}."example.com") == hasAttryByPath [ (f p) "example.com" ] x
+     ```
 
      **Laws**:
       1.  ```nix
@@ -176,6 +192,14 @@ rec {
 
   /* Like `attrByPath`, but without a default value. If it doesn't find the
      path it will throw an error.
+
+     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+    ```nix
+     x.a.b == getAttrByPath ["a" "b"] x
+     # and
+     x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
+     ```
 
      Example:
        x = { a = { b = 3; }; }
