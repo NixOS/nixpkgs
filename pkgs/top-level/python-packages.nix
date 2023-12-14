@@ -8438,6 +8438,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Carbon WebKit;
   };
 
+  ccxt = callPackage ../development/python-modules/ccxt { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
