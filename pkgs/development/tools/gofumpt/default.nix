@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, testVersion
+, gofumpt
+}:
 
 buildGoModule rec {
   pname = "gofumpt";
@@ -22,9 +28,18 @@ buildGoModule rec {
     "-skip=^TestScript/diagnose$"
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testVersion {
+      package = gofumpt;
+      version = "v${version}";
+    };
+  };
+
   meta = with lib; {
     description = "A stricter gofmt";
     homepage = "https://github.com/mvdan/gofumpt";
+    changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];
     mainProgram = "gofumpt";
