@@ -7043,6 +7043,18 @@ final: prev:
     meta.homepage = "https://github.com/theHamsta/nvim-dap-virtual-text/";
   };
 
+  nvim-docs-view = buildVimPlugin {
+    pname = "nvim-docs-view";
+    version = "2023-10-19";
+    src = fetchFromGitHub {
+      owner = "amrbashir";
+      repo = "nvim-docs-view";
+      rev = "74a5e989e3fdcfd9418bb9dfec0ace308e00a5a0";
+      sha256 = "sha256-EmQbnleqxE+VHO5bMI9U/gMpwbJbPdNhrEWE7357MCE=";
+    };
+    meta.homepage = "https://github.com/amrbashir/nvim-docs-view/";
+  };
+
   nvim-expand-expr = buildVimPlugin {
     pname = "nvim-expand-expr";
     version = "2021-08-14";
