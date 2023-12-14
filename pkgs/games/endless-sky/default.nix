@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fixes.patch
-    ./fixes2.patch
   ];
 
   postPatch = ''
