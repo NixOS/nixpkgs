@@ -181,6 +181,39 @@ rec {
       else result);
 
 
+  /* Call the function or file continaing a function `fn` with the required
+    arguments automatically.  This should be preferred over callPackage
+    when the result is not a derivation.  The function
+    is called with the arguments `args`, but any missing arguments are obtained
+    from `autoArgs`.  This function is intended to be partially
+    parameterised, e.g.,
+
+      ```nix
+      callFunction = callFunctionWith pkgs;
+      pkgs = {
+        pkgSet = callFunction ./foo.nix { };
+        helperFn = callFunction ./bar.nix { };
+      };
+      ```
+
+    If the `myPkgSet` function expects an argument named `makeScope`, it is
+    automatically passed as an argument.  Overrides or missing
+    arguments can be supplied in `args`, e.g.
+
+      ```nix
+      python3PkgSet = callFunction ./myPkgSet.nix {
+        newScope = python3.pkgs.newScope;
+      };
+      ```
+
+    <!-- TODO: Apply "Example:" tag to the examples above -->
+
+    Type:
+      callFunctionWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+  */
+  callFunctionWith = callFunctionWithContinuation "callFunctionWith" lib.id;
+
+
   /* Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
     arguments `args`, but any missing arguments are obtained from
