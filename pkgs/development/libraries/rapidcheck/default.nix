@@ -16,19 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-nq2VBDREkAOnvtdYr3m0TYNXx7mv9hbV5HZFVL2uTTg=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${lib.toUpper (lib.boolToString (!stdenv.hostPlatform.isStatic))}"
+    "-DRC_INSTALL_ALL_EXTRAS=TRUE"
   ];
-
-  # Install the extras headers
-  postInstall = ''
-    cp -r $src/extras $out
-    chmod -R +w $out/extras
-    rm $out/extras/CMakeLists.txt
-    rm $out/extras/**/CMakeLists.txt
-  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

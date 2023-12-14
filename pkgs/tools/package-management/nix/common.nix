@@ -171,8 +171,6 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!atLeast24) [
     # option was removed in 2.4
     "--disable-init-state"
-  ] ++ lib.optionals atLeast214 [
-    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
