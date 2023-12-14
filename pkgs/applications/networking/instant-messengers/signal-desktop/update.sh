@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nix-update curl coreutils
+#!nix-shell -i bash -p bash nix-update curl coreutils jq
 
 set -ex
 
@@ -18,7 +18,7 @@ signal-desktop)
   echo "Updating signal-desktop for x86_64-linux"
   nix-update --version "$latestVersion" \
     --system x86_64-linux \
-    --override-filename "$SCRIPT_DIR/signal-desktop.nix"
+    --override-filename "$SCRIPT_DIR/signal-desktop.nix" \
   signal-desktop
 
   echo "Updating signal-desktop for aarch64-linux"

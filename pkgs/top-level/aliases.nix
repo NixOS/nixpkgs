@@ -372,6 +372,7 @@ mapAliases ({
   hepmc = throw "'hepmc' has been renamed to/replaced by 'hepmc2'"; # Converted to throw 2023-09-10
   hip = throw "'hip' has been removed in favor of 'rocmPackages.clr'"; # Added 2023-10-08
   hipcc = throw "'hipcc' has been replaced with 'rocmPackages.hipcc'"; # Added 2023-10-08
+  hipchat = throw "'hipchat' has been discontinued since 2019; upstream recommends Slack."; # Added 2023-12-02
   hipify = throw "'hipify' has been replaced with 'rocmPackages.hipify'"; # Added 2023-10-08
   hipcub = throw "'hipcub' has been replaced with 'rocmPackages.hipcub'"; # Added 2023-10-08
   hipsparse = throw "'hipsparse' has been replaced with 'rocmPackages.hipsparse'"; # Added 2023-10-08
@@ -598,6 +599,8 @@ mapAliases ({
   miopen-hip = throw "'miopen-hip' has been replaced with 'rocmPackages.miopen-hip'"; # Added 2023-10-08
   miopen-opencl = throw "'miopen-opencl' has been replaced with 'rocmPackages.miopen-opencl'"; # Added 2023-10-08
   mime-types = mailcap; # Added 2022-01-21
+  minetestclient_5 = minetestclient; # Added 2023-12-11
+  minetestserver_5 = minetestserver; # Added 2023-12-11
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
   mirage-im = throw "'mirage-im' has been removed, as it was broken and unmaintained"; # Added 2023-11-26
   monero = monero-cli; # Added 2021-11-28

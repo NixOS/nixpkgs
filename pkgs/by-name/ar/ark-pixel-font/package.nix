@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2023.08.15";
+  version = "2023.11.26";
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = pname;
     rev = version;
-    hash = "sha256-Qaa3uuMCPrRG0wo2AGU0v+fonY1c/KuQYTGoyvITcio=";
+    hash = "sha256-6a9wNmcXlEesPthpMt+GrWyO3x6WVtemVTXP8rbWmLk=";
   };
 
   format = "other";

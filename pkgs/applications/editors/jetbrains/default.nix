@@ -21,13 +21,13 @@
 , libgcc
 , lttng-ust_2_12
 , xz
+, xorg
+, libGL
 
 , vmopts ? null
 }:
 
 let
-  platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-
   inherit (stdenv.hostPlatform) system;
 
   # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
@@ -149,7 +149,7 @@ rec {
       # fortify source breaks build since delve compiles with -O0
       ''--prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"''
     ];
-    extraBuildInputs = [ libgcc ];
+    extraBuildInputs = [ libgcc stdenv.cc.cc ];
   }).overrideAttrs
     (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
@@ -201,6 +201,7 @@ rec {
             --replace-needed libcrypt.so.1 libcrypt.so
 
           for dir in lib/ReSharperHost/linux-*; do
+            rm -rf $dir/dotnet
             ln -s ${dotnet-sdk_7} $dir/dotnet
           done
         )
@@ -215,6 +216,9 @@ rec {
       python3
       openssl
       libxcrypt-legacy
+      fontconfig
+      xorg.libX11
+      libGL
     ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
       expat
       libxml2
