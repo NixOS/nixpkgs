@@ -86,14 +86,9 @@ pub fn check_nixpkgs<W: io::Write>(
         );
         Success(())
     } else {
-        match check_structure(&nixpkgs_path)? {
-            Failure(errors) => Failure(errors),
-            Success(package_names) =>
+        check_structure(&nixpkgs_path)?.result_map(|package_names|
             // Only if we could successfully parse the structure, we do the evaluation checks
-            {
-                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths)?
-            }
-        }
+            eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths))?
     };
 
     match check_result {
