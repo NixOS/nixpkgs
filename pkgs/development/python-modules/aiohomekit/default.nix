@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , aiocoap
+, aiohappyeyeballs
 , async-interrupt
 , bleak
 , bleak-retry-connector
@@ -19,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.0.9";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
-    repo = pname;
+    repo = "aiohomekit";
     rev = "refs/tags/${version}";
-    hash = "sha256-YaLSpWSaiEP7X+IujrQgXgWl3aPc1WDMq2yaMUTu328=";
+    hash = "sha256-yaPliPKa/mS9amUkEx/iM398HGoiKrR6miCtK7fThNw=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiocoap
+    aiohappyeyeballs
     async-interrupt
     bleak
     bleak-retry-connector

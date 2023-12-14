@@ -2,39 +2,32 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, substituteAll
-, pythonOlder
-, geos
 , pytestCheckHook
+, pythonOlder
+, substituteAll
+
 , cython
+, geos_3_11
 , numpy
+, oldest-supported-numpy
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.8.4";
-  disabled = pythonOlder "3.6";
+  version = "1.8.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
+    hash = "sha256-6CttYOz7EkEgyI/hBqR4WWu+qxQhFtfn9ko2TayQKpI=";
   };
 
-  nativeBuildInputs = [
-    geos # for geos-config
-    cython
-  ];
-
-  propagatedBuildInputs = [
-    numpy
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
   # Environment variable used in shapely/_buildcfg.py
-  GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
+  GEOS_LIBRARY_PATH = "${geos_3_11}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   patches = [
     # Patch to search form GOES .so/.dylib files in a Nix-aware way
@@ -43,6 +36,30 @@ buildPythonPackage rec {
       libgeos_c = GEOS_LIBRARY_PATH;
       libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace "setuptools<64" "setuptools"
+  '';
+
+  nativeBuildInputs = [
+    cython
+    geos_3_11 # for geos-config
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
+
+  buildInputs = [
+    geos_3_11
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -63,9 +80,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shapely" ];
 
   meta = with lib; {
-    description = "Geometric objects, predicates, and operations";
-    homepage = "https://pypi.python.org/pypi/Shapely/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ knedlsepp ];
+    changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
+    description = "Manipulation and analysis of geometric objects";
+    homepage = "https://github.com/shapely/shapely";
+    license = licenses.bsd3;
+    maintainers = teams.geospatial.members;
   };
 }
