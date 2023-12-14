@@ -10,7 +10,6 @@
 , openssl
 , parted
 , procps
-  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
 , python39
 , shadow
 , util-linux
@@ -18,9 +17,11 @@
 
 let
   inherit (lib) makeBinPath;
+  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
+  python = python39;
 
 in
-python39.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "waagent";
   version = "2.8.0.11";
   src = fetchFromGitHub {
@@ -30,36 +31,50 @@ python39.pkgs.buildPythonApplication rec {
     sha256 = "0fvjanvsz1zyzhbjr2alq5fnld43mdd776r2qid5jy5glzv0xbhf";
   };
   patches = [
-    # Suppress the following error when waagent try to configure sshd:
+    # Suppress the following error when waagent tries to configure sshd:
     # Read-only file system: '/etc/ssh/sshd_config'
     ./dont-configure-sshd.patch
   ];
   doCheck = false;
 
-  buildInputs = with python39.pkgs; [ distro ];
-  runtimeDeps = [
-    findutils
-    gnugrep
-    gnused
-    iproute2
-    iptables
-    nettools # for hostname
-    openssh
-    openssl
-    parted
-    procps # for pidof
-    shadow # for useradd, usermod
-    util-linux # for (u)mount, fdisk, sfdisk, mkswap
+  # azure-product-uuid chmod rule invokes chmod to change the mode of
+  # product_uuid (which is not a device itself).
+  # Replace this with an absolute path.
+  postPatch = ''
+    substituteInPlace config/99-azure-product-uuid.rules \
+      --replace "/bin/chmod" "${coreutils}/bin/chmod"
+  '';
+
+  propagatedBuildInputs = [ python.pkgs.distro ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      findutils
+      gnugrep
+      gnused
+      iproute2
+      iptables
+      nettools # for hostname
+      openssh
+      openssl
+      parted
+      procps # for pidof
+      shadow # for useradd, usermod
+      util-linux # for (u)mount, fdisk, sfdisk, mkswap
+    ])
   ];
 
-  fixupPhase = ''
-    mkdir -p $out/bin/
-    WAAGENT=$(find $out -name waagent | grep sbin)
-    cp $WAAGENT $out/bin/waagent
-    wrapProgram "$out/bin/waagent" \
-        --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix PATH : "${makeBinPath runtimeDeps}"
-    patchShebangs --build "$out/bin/"
+  # The binary entrypoint and udev rules are placed to the wrong place.
+  # Move them to their default location.
+  preFixup = ''
+    mv $out/${python.sitePackages}/usr/sbin $out/bin
+    rm $out/bin/waagent2.0
+    rmdir $out/${python.sitePackages}/usr
+
+    mv $out/${python.sitePackages}/etc $out/
   '';
 
   meta = {
