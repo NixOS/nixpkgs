@@ -1514,6 +1514,8 @@ self: super: with self; {
 
   bleak = callPackage ../development/python-modules/bleak { };
 
+  bleak-esphome = callPackage ../development/python-modules/bleak-esphome { };
+
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
 
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
