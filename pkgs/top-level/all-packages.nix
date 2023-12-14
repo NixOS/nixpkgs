@@ -31360,7 +31360,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
-  inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
+  inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
     emacs28-gtk3
