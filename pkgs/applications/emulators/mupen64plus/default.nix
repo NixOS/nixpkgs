@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       extraPrefix = "source/mupen64plus-core/";
     })
+    ./larger_cart_rom.patch
   ];
 
   nativeBuildInputs = [ pkg-config nasm ];
