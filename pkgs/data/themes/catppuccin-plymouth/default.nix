@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
   };
 
-  sourceRoot = "source/themes/catppuccin-${variant}";
+  sourceRoot = "${src.name}/themes/catppuccin-${variant}";
 
   installPhase = ''
     runHook preInstall

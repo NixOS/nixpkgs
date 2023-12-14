@@ -1,28 +1,27 @@
-{ beautifulsoup4
-, bleach
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, fetchpatch
+{ lib
 , fetchurl
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , hatchling
-, importlib-metadata
-, ipywidgets
+, beautifulsoup4
+, bleach
+, defusedxml
 , jinja2
 , jupyter-core
 , jupyterlab-pygments
-, lib
 , markupsafe
 , mistune
 , nbclient
 , packaging
 , pandocfilters
 , pygments
-, pyppeteer
-, pytestCheckHook
-, pythonOlder
 , tinycss2
 , traitlets
+, importlib-metadata
+, flaky
+, ipywidgets
+, pytestCheckHook
 }:
 
 let
@@ -33,15 +32,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.2.5";
+  version = "7.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j9xE/X2UJNt/3G4eg0oC9rhiD/tlN2c4i+L56xb4QYQ=";
+    hash = "sha256-q+3AHPVDF3/94L/Cppcm1aR49q8QozL8G/Kfy08M8AA=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -85,8 +83,8 @@ in buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    flaky
     ipywidgets
-    pyppeteer
     pytestCheckHook
   ];
 
@@ -104,8 +102,9 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/nbconvert";
+    changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -6,7 +6,6 @@
 , gnome-power-manager
 , pkg-config
 , meson
-, python3
 , ninja
 , vala
 , gtk3
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TxrskbwitsilTidWifSWg9IP6BzH1y/OOrFohlENJmM=";
+    sha256 = "sha256-EEY32O7GeXBHSjZQ3XGogT1sUzIKGX+CzcGx8buGLq4=";
   };
 
   patches = [
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
@@ -55,11 +53,6 @@ stdenv.mkDerivation rec {
     udev
     wingpanel
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

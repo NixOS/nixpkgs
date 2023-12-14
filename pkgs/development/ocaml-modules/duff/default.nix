@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/duff/releases/download/v${version}/duff-${version}.tbz";
-    sha256 = "sha256-0eqpfPWNOHYjkcjXRnZUTUFF0/L9E+TNoOqKCETN5hI=";
+    sha256 = "sha256-+UU89Ko7aFDv6MxvE/BT6+XyER+vF3zqv7sD5dmtbt4=";
   };
 
   propagatedBuildInputs = [ fmt ];

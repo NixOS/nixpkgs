@@ -4,6 +4,7 @@
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
 , yasm, glslang
+, linuxPackages
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -24,14 +25,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "7.0.8";
+  version = "7.0.12";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}a.tar.bz2";
-    sha256 = "7de37359518d467b7f888235175cd388f66e9f16bd9359dd6265fbc95933c1e6";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    sha256 = "d76634c6ccf62503726a5aeae6c78a3462474c51a0ebe4942591ccc2d939890a";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -212,6 +213,10 @@ in stdenv.mkDerivation {
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+
+    mkdir -p "$out/share/virtualbox"
+    cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
+    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-openfiles";
   version = "0.5.0";
+  format = "setuptools";
   disabled = isPy27; # abandoned
 
   src = fetchPypi {
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for detecting inadvertent open file handles";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

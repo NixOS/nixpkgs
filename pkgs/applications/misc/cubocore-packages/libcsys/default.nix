@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "libcsys";
-  version = "4.4.1";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IWzgRwouI/0bQBuEd9CV0Ue6cF2HwRw3jMdLyGA1+TY=";
+    hash = "sha256-1MHyx01w+dCeAeumcSXRBStgAec2yu1rLwaZaCXRgTc=";
   };
 
   nativeBuildInputs = [

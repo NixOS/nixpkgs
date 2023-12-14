@@ -64,7 +64,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/root-project/root/commit/c75458024082de0cc35b45505c652b8460a9e71b.patch";
       sha256 = "sha256-A5zEjQE9OGPFp/L1HUs4NIdxQMRiwbwCRNWOLN2ENrM=";
     })
+    # Backport Python 3.11 fix to v5 from v6.26
+    # https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc
+    ./root5-python311-fix.patch
   ];
+
+  # https://github.com/root-project/root/issues/13216
+  hardeningDisable = [ "fortify3" ];
 
   preConfigure = ''
     # binutils 2.37 fixes
@@ -149,7 +155,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
-    broken = !stdenv.isx86_64;
+    broken = !stdenv.isx86_64 || stdenv.cc.isClang or false;
     maintainers = with maintainers; [ veprbl ];
     license = licenses.lgpl21;
   };

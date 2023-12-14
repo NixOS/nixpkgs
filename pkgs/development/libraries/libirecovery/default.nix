@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
-  version = "1.0.0+date=2022-04-04";
+  version = "1.1.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "82d235703044c5af9da8ad8f77351fd2046dac47";
-    hash = "sha256-OESN9qme+TlSt+ZMbR4F3z/3RN0I12R7fcSyURBqUVk=";
+    rev = version;
+    hash = "sha256-84xwSOLwPU2Py6X2r6FYESxdc1EuuD6xHEXTUUEdvTE=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     readline
     libimobiledevice-glue
   ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
 
   # Packager note: Not clear whether this needs a NixOS configuration,
   # as only the `idevicerestore` binary was tested so far (which worked

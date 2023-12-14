@@ -12,7 +12,7 @@ in appimageTools.wrapAppImage rec {
     src = fetchurl {
       url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
-      sha512 = "WZB2pMzSuWGPj6uad+rIECOhuWEOxi0hVUQifOrhUrKj4SnBDws+oy7V2+NpDGkzbG+Kf3IO8rcWBD4wfFoo2Q==";
+      hash = "sha512-WZB2pMzSuWGPj6uad+rIECOhuWEOxi0hVUQifOrhUrKj4SnBDws+oy7V2+NpDGkzbG+Kf3IO8rcWBD4wfFoo2Q==";
     };
   };
 
@@ -45,5 +45,6 @@ in appimageTools.wrapAppImage rec {
     changelog = "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ enderger ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "lbry";
   };
 }

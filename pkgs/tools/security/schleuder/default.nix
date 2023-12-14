@@ -2,7 +2,6 @@
 , bundlerApp
 , ruby
 , bundlerUpdateScript
-, defaultGemConfig
 , nixosTests
 }:
 

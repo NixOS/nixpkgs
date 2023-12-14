@@ -1,16 +1,24 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, bashInteractive
-, rpm, urllib3, cryptography, diffstat
+{ stdenv
+, bashInteractive
+, buildPythonPackage
+, cryptography
+, diffstat
+, fetchFromGitHub
+, lib
+, rpm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.0.0b1";
+  version = "1.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    sha256 = "cMltsR4Nxe0plHU5cP2Lj/qqlIqRbCXi6FXP8qx7908=";
+    sha256 = "sha256-pywSXGM3IX3cTr1uJIP7pNGIYE/skMIoJeoaMU75zwc=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
@@ -18,8 +26,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ urllib3 cryptography ];
 
   postInstall = ''
-    install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
-    install -D -m555 dist/osc.complete $out/share/bash-completion/helpers/osc-helper
+    install -D -m444 contrib/osc.fish $out/etc/fish/completions/osc.fish
+    install -D -m555 contrib/osc.complete $out/share/bash-completion/helpers/osc-helper
     mkdir -p $out/share/bash-completion/completions
     cat >>$out/share/bash-completion/completions/osc <<EOF
     test -z "\$BASH_VERSION" && return

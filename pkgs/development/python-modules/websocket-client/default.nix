@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.5.1";
+  version = "1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Pwnm2CMIklRxMhd/V1pOPnPP3wZSbiDMAqocO0cYTUA=";
+    hash = "sha256-Oq0l0xKEJmvPz9H9inQ/YygjBaNkuNCUikO9YGrMZS8=";
   };
 
   propagatedBuildInputs = [

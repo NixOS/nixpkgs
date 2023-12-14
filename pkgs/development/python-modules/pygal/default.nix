@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pygal";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

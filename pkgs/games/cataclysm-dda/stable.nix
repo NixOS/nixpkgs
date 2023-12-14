@@ -44,7 +44,7 @@ let
 
     meta = common.meta // {
       maintainers = with lib.maintainers;
-        common.meta.maintainers ++ [ skeidel ];
+        common.meta.maintainers;
       changelog = "https://github.com/CleverRaven/Cataclysm-DDA/blob/${version}/data/changelog.txt";
     };
   });

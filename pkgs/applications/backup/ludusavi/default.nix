@@ -12,22 +12,23 @@
 , libXcursor
 , libXrandr
 , libXi
+, vulkan-loader
 , gnome
 , libsForQt5
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.19.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1Na+xGcb15/ZRbuy96qJwPg6Zo7FsGwCUXD3XgzWXo0=";
+    hash = "sha256-eEuaDMfFxWcNM9+5TvZZXLgbDuGbyIAIuzEMVWbvYbg=";
   };
 
-  cargoSha256 = "sha256-JjeOODm5xsRM5cJgCDb89cN60SuEeDzTVe6siKVDdcU=";
+  cargoSha256 = "sha256-ENo562Y6K238NNEtgYoPw6EXjbcuxPuXiftIp/bGYYU=";
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage rec {
         libXcursor
         libXrandr
         libXi
+        vulkan-loader
       ];
     in
     ''
@@ -81,5 +83,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ pasqui23 ];
+    mainProgram = "ludusavi";
   };
 }

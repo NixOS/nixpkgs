@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "22.12.0";
+  version = "23.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pFTF2SQ9giRzPhG24FLqLPJRXaFdQ7Xi5EeltS7J3DI=";
+    hash = "sha256-WDiEuve9P9fLHxpK0UjxhbZUmWXtP+DV7e6OT19TASs=";
   };
 
   outputs = [

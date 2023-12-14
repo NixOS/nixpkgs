@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubectl-images";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "chenjiandongx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Zs9ok5jDhNeEw+dbER0cpLYn41uXwHNx0w0t1A3CSlI=";
+    sha256 = "sha256-FHfj2qRypqQA0Vj9Hq7wuYd0xmpD+IZj3MkwKljQio0=";
   };
 
   vendorHash = "sha256-8zV2iZ10H5X6fkRqElfc7lOf3FhmDzR2lb3Jgyhjyio=";

@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.11.1";
+  version = "3.11.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z+EVi8WBgna6dllZ2oonr9zaoR+j+p7tCX1WOSl9/nQ=";
+    hash = "sha256-aX3xFyQaIoO8u5OyHhC63BTlHJqQgA0qfho+HH2EKXQ=";
   };
 
   propagatedBuildInputs = [
@@ -127,10 +127,12 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # Not compatible with pyarrow13 yet.
+    broken = true;
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

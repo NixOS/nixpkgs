@@ -7,11 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nshttpd";
     repo = "mikrotik-exporter";
-    sha256 = "1vqn1f159g0l76021gifbxpjf7zjhrj807qqqn51h5413lbi6r66";
     rev = "4bfa7adfef500ff621a677adfab1f7010af920d1";
+    hash = "sha256-xmQTFx2BFBiKxRgfgGSG8h8nb18uviCAORS8VIILFu8=";
   };
 
-  vendorSha256 = "0b244z3hly5726vwkr7vhdzzm2fi38cv1qh7nvfp3vpsxnii04md";
+  vendorHash = "sha256-rRIQo+367nHdtgfisBka0Yn6f4P75Mm3Ead4CscnRCw=";
 
   doCheck = false;
 

@@ -8,15 +8,17 @@
   # them when fixed.
   inherit (import ./installer.nix { inherit system config pkgs; systemdStage1 = true; })
     # bcache
+    bcachefsSimple
+    bcachefsEncrypted
     btrfsSimple
     btrfsSubvolDefault
     btrfsSubvolEscape
     btrfsSubvols
-    # encryptedFSWithKeyfile
+    encryptedFSWithKeyfile
     # grub1
-    # luksroot
-    # luksroot-format1
-    # luksroot-format2
+    luksroot
+    luksroot-format1
+    luksroot-format2
     # lvm
     separateBoot
     separateBootFat
@@ -28,8 +30,12 @@
     simpleUefiGrubSpecialisation
     simpleUefiSystemdBoot
     stratisRoot
-    # swraid
+    swraid
     zfsroot
+    clevisLuks
+    clevisLuksFallback
+    clevisZfs
+    clevisZfsFallback
     ;
 
 }

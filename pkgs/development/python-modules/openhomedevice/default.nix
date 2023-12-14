@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "openhomedevice";
-  version = "2.1";
+  version = "2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bazwilliams";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KNQelldqHx4m8IfgGUwWw/+AVzBotIa7cJGy1SfbRy0=";
+    hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
   };
 
   propagatedBuildInputs = [

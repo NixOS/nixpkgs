@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, libsodium, ncurses, libopus, msgpack
-, libvpx, check, libconfig, pkg-config }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libsodium
+, ncurses
+, libopus
+, libvpx
+, check
+, libconfig
+, pkg-config
+}:
 
 let buildToxAV = !stdenv.isAarch32;
 in stdenv.mkDerivation rec {
@@ -14,14 +24,18 @@ in stdenv.mkDerivation rec {
       sha256 = "sha256-8pQFN5mIY1k+KLxqa19W8JZ19s2KKDJre8MbSDbAiUI=";
     };
 
-  cmakeFlags =
-    [ "-DBUILD_NTOX=ON" "-DDHT_BOOTSTRAP=ON" "-DBOOTSTRAP_DAEMON=ON" ]
-    ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
+  cmakeFlags = [
+    "-DDHT_BOOTSTRAP=ON"
+    "-DBOOTSTRAP_DAEMON=ON"
+  ] ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
 
   buildInputs = [
-    libsodium msgpack ncurses libconfig
+    libsodium
+    ncurses
+    libconfig
   ] ++ lib.optionals buildToxAV [
-    libopus libvpx
+    libopus
+    libvpx
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];

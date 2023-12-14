@@ -23,17 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DofAOv7sCe7RAJpgz9PEYm+C8RAl0a1KgFm9jToMsEY=";
+    sha256 = "sha256-4LfS2F8pLbZw+HhnEVmZqbEaNCM96q+lqnf4sUBDVJI=";
   };
 
   patches = [
-    ./0001-Remove-Install-Unlisted-Engines-function.patch
+    # This will try to install packages with apt.
+    # https://github.com/elementary/switchboard-plug-keyboard/issues/324
+    ./hide-install-unlisted-engines-button.patch
+
     (substituteAll {
       src = ./fix-paths.patch;
       inherit ibus onboard libgnomekbd;

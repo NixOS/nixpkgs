@@ -1,30 +1,57 @@
-{ fetchurl, lib, stdenv, parted, libuuid, gettext, guile }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, guile
+, libuuid
+, parted
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnufdisk";
-  version = "2.0.0a"; # .0a1 seems broken, see https://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
+  version = "2.0.0a1";
 
   src = fetchurl {
     url = "mirror://gnu/fdisk/gnufdisk-${version}.tar.gz";
-    sha256 = "04nd7civ561x2lwcmxhsqbprml3178jfc58fy1v7hzqg5k4nbhy3";
+    hash = "sha256-yWPYTf8RxBIQ//mUdC6fkKct/csEgbzEtTAiPtNRH7U=";
   };
 
-  buildInputs = [ parted libuuid gettext guile ];
+  postPatch = ''
+    sed -i "s/gnufdisk-common.h .*/\n/g" backend/configure
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    guile
+  ];
+
+  buildInputs = [
+    guile
+    libuuid
+    parted
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+    "-I../common/include"
+    "-I../debug/include"
+    "-I../exception/include"
+  ];
 
   doCheck = true;
 
   meta = {
     description = "A command-line disk partitioning tool";
-
     longDescription = ''
-      GNU fdisk provides alternatives to util-linux fdisk and util-linux
-      cfdisk.  It uses GNU Parted.
+      GNU fdisk provides a GNU version of the common disk partitioning tool
+      fdisk.  fdisk is used for the creation and manipulation of disk partition
+      tables, and it understands a variety of different formats.
     '';
-
-    license = lib.licenses.gpl3Plus;
-
     homepage = "https://www.gnu.org/software/fdisk/";
-
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "gnufdisk";
+    maintainers = [ lib.maintainers.wegank ];
     platforms = lib.platforms.linux;
   };
 }

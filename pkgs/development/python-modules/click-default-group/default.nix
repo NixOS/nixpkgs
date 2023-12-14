@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "click-default-group";
   version = "1.2.2";
+  format = "setuptools";
 
   # No tests in Pypi tarball
   src = fetchFromGitHub {

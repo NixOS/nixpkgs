@@ -10,24 +10,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.4.0";
+  version = "9.9.2";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-b2ntm5Yja806JZEmcrLi1CSsDRmBot85LPy39Zn7ULw=";
+      sha256 = "sha256-UfzHkgqxEaSsoiDwFLsyIBW2min9AvSBrLPJ2MlKh3U=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-GV1TVjxPSosRIB99QSnOcowp8p9dWLNX2VxP6LDlQ6w=";
+      sha256 = "sha256-ble0n+giM8xmuSewBVdj+RuT2093rW0taNzsyQLO92I=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "sha256-65HloijD1Z7EEiiG+qUr5Rj+z+eYAaeN6HmuBm1bGgs=";
+      sha256 = "sha256-QYhYzjqbCO0/pRDK7c5jYifj+/UY7SLpRqQUQ3LBFkE=";
     };
   };
 
@@ -40,6 +40,7 @@ let
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ xnwdd evanjs arkivm ];
+    mainProgram = "gitkraken";
   };
 
   linux = stdenv.mkDerivation rec {
@@ -139,9 +140,15 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/GitKraken.app
       cp -R . $out/Applications/GitKraken.app
+
+      runHook postInstall
     '';
+
+    dontFixup = true;
   };
 in
 if stdenv.isDarwin

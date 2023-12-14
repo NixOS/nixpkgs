@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "alterx";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "alterx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F60nEkHmmhlRuHI2Hc3no2RvILhVN2oPXgwxpTdPDYM=";
+    hash = "sha256-A01XROFB2NkArfFtRMv/r9Nu5QoKMTOVzVIUnFoVe78=";
   };
 
-  vendorHash = "sha256-tIXSkNJbbT6X23WCUnB+c0FbxJdV3RF1iOrEJxETeaE=";
+  vendorHash = "sha256-efwU41kFR8QYa2cevvj4pYAXgCisJ4OHaRIhWVnETvc=";
 
   meta = with lib; {
     description = "Fast and customizable subdomain wordlist generator using DSL";

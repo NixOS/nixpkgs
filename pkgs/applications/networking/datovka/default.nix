@@ -29,5 +29,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.mmahut ];
     platforms = platforms.linux;
+    mainProgram = "datovka";
   };
 }

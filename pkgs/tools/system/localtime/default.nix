@@ -15,7 +15,7 @@ buildGoModule {
     hash = "sha256-bPQ1c2KUTkxx2g7IvLmrKgJKfRHTLlTXLR/QQ0O4CrI=";
   };
 
-  vendorSha256 = "sha256-12JnEU41sp9qRP07p502EYogveE+aNdfmLwlDRbIdxU=";
+  vendorHash = "sha256-12JnEU41sp9qRP07p502EYogveE+aNdfmLwlDRbIdxU=";
 
   nativeBuildInputs = [ m4 ];
 
@@ -39,5 +39,6 @@ buildGoModule {
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "localtimed";
   };
 }

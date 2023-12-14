@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Keyring backend for password-store";
     homepage = "https://github.com/stv0g/keyrings.passwordstore";
     maintainers = [ lib.maintainers.shlevy ];
+    broken = true; # https://github.com/stv0g/keyrings.passwordstore/issues/2
   };
 }

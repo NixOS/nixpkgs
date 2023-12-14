@@ -1,22 +1,26 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
 , beautifulsoup4
-, python-slugify
-, unidecode
+, buildPythonPackage
 , css-html-js-minify
+, fetchPypi
 , lxml
+, python-slugify
+, pythonOlder
+, sphinx
+, unidecode
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-material";
-  version = "0.0.35";
+  version = "0.0.36";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sphinx_material";
     inherit version;
-    sha256 = "27f0f1084aa0201b43879aef24a0521b78dc8df4942b003a4e7d79ab11515852";
+    hash = "sha256-7v9ffT3AFq8yuv33DGbmcdFch1Tb4GE9+9Yp++2RKGk=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +34,9 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [ "sphinx_material" ];
+  pythonImportsCheck = [
+    "sphinx_material"
+  ];
 
   meta = with lib; {
     description = "A material-based, responsive theme inspired by mkdocs-material";

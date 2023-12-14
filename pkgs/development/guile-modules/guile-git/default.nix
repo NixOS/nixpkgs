@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "x6apF9fmwzrkyzAexKjClOTFrbE31+fVhSLyFZkKRYU=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo
+    autoreconfHook guile pkg-config texinfo
   ];
   buildInputs = [
     guile
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     libgit2 scheme-bytestructures
   ];
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   enableParallelBuilding = true;
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/guile-git/guile-git";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }
 

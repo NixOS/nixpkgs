@@ -50,11 +50,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  env.NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-fPIC"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=enum-constexpr-conversion"
+  ]);
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 

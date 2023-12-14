@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, autoPatchelfHook, makeDesktopItem, copyDesktopItems, makeWrapper, gnugrep, nodePackages
+, autoPatchelfHook, makeDesktopItem, copyDesktopItems, makeWrapper, gnugrep, asar
 , electron, python3, alsa-lib, gtk3, libdbusmenu, libxshmfence, mesa, nss
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     copyDesktopItems
     gnugrep
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [ alsa-lib gtk3 libdbusmenu libxshmfence mesa nss ];

@@ -55,7 +55,6 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gnu-efi
 , iptables
 , withSelinux ? false
 , libselinux
@@ -82,16 +81,22 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
+, withBootloader ? withEfi && !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
+, withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
+, withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
@@ -112,12 +117,15 @@
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
 , withPam ? true
+, withPasswordQuality ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
+, withSysusers ? true
+, withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -126,6 +134,8 @@
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
+  # build only libudev and libsystemd
+, buildLibsOnly ? false
 
   # name argument
 , pname ? "systemd"
@@ -134,6 +144,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
+, withLogTrace ? false
 }:
 
 assert withImportd -> withCompression;
@@ -141,17 +152,21 @@ assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
 assert withUkify -> withEfi;
+assert withRepart -> withCryptsetup;
+assert withBootloader -> withEfi;
+# passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
+assert !withPasswordQuality;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.5";
+  version = "254.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1676488940";
+  releaseTimestamp = "1690536449";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -162,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-B3A9AvpfZ8SYsiZvHnWO4RHs1/6EdczWF2NmrSqxQ7c=";
+    hash = "sha256-Ku24ecDeQt0t7A8/adR3Jm47QZ19+wdMPyJRzCxU4uU=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -189,12 +204,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
-    ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
+    ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
-        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-eb8a86fee9eeae787cc0a58ef2ed087fd48d93eb.tar.gz";
+        sha256 = "tE2KpXLvOknIpEZFdOnNxvBmDvZrra3kvQp9tKxa51c=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
@@ -202,14 +217,12 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
       (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
       (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
       (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -219,22 +232,24 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0023-Handle-missing-gshadow.patch")
       (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
+      (musl-patches + "/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0029-shared-Do-not-use-malloc_info-on-musl.patch")
     ]
   );
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
-    substituteInPlace src/boot/efi/meson.build \
-      --replace \
-      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
-      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
       --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
-    # BPF does not work with stack protector
-    substituteInPlace src/core/bpf/meson.build \
-      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -311,6 +326,9 @@ stdenv.mkDerivation (finalAttrs: {
 
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
           { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
+
+          # Password quality support
+          { name = "libpasswdqc.so.1"; pkg = opt withPasswordQuality null; }
         ];
 
       patchDlOpen = dl:
@@ -360,7 +378,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
   nativeBuildInputs =
     [
@@ -381,7 +399,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_45
       bash
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ] ++ lib.optional withEfi ps.pyelftools))
     ]
     ++ lib.optionals withLibBPF [
       bpftools
@@ -408,7 +426,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
@@ -425,7 +442,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
-  #dontAddPrefix = true;
+  mesonBuildType = "release";
 
   mesonFlags = [
     "-Dversion-tag=${version}"
@@ -471,7 +488,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
-    "-Dsysusers=false"
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
     "-Duserdb=${lib.boolToString withUserDb}"
@@ -482,6 +498,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=${lib.boolToString withLibidn2}"
+    "-Dfirstboot=${lib.boolToString withFirstboot}"
+    "-Dsysusers=${lib.boolToString withSysusers}"
+    "-Drepart=${lib.boolToString withRepart}"
+    "-Dsysupdate=${lib.boolToString withSysupdate}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -508,9 +528,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dsulogin-path=${util-linux}/bin/sulogin"
-    "-Dmount-path=${util-linux}/bin/mount"
-    "-Dumount-path=${util-linux}/bin/umount"
+    "-Dsulogin-path=${util-linux.login}/bin/sulogin"
+    "-Dnologin-path=${util-linux.login}/bin/nologin"
+    "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
+    "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
@@ -520,12 +541,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman=true"
 
     "-Defi=${lib.boolToString withEfi}"
-    "-Dgnu-efi=${lib.boolToString withEfi}"
+    "-Dbootloader=${lib.boolToString withBootloader}"
 
     "-Dukify=${lib.boolToString withUkify}"
-  ] ++ lib.optionals withEfi [
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
@@ -546,6 +564,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withKmod [
     "-Dkmod=true"
     "-Dkmod-path=${kmod}/bin/kmod"
+  ] ++ lib.optionals withLogTrace [
+    "-Dlog-trace=true"
   ];
   preConfigure =
     let
@@ -561,14 +581,15 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
           where = [
             "man/systemd-analyze.xml"
             "man/systemd.service.xml"
+            "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
@@ -578,7 +599,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
@@ -684,7 +705,9 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  postInstall = ''
+  mesonInstallTags = lib.optionals buildLibsOnly [ "devel" "libudev" "libsystemd" ];
+
+  postInstall = lib.optionalString (!buildLibsOnly) ''
     mkdir -p $out/example/systemd
     mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -702,8 +725,10 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
-  '' + lib.optionalString withKmod ''
+  '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
+  '' + lib.optionalString withSysusers ''
+    mv $out/lib/sysusers.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -711,7 +736,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/NixOS/nixpkgs/issues/169693
   # The hack is to move EFI file out of lib/ before doStrip
   # run and return it after doStrip run.
-  preFixup = lib.optionalString withEfi ''
+  preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
 
@@ -721,8 +746,13 @@ stdenv.mkDerivation (finalAttrs: {
       # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
-  '' + lib.optionalString withEfi ''
+  '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/lib/systemd/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
@@ -755,6 +785,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
-    maintainers = with maintainers; [ flokli kloenk mic92 ];
+    maintainers = with maintainers; [ flokli kloenk ];
   };
 })

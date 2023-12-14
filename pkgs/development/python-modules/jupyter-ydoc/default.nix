@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "0.3.4";
+  version = "1.1.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-WiJi5wvwBLgsxs5xZ16TMKoFj+MNsuh82BJa1N0a5OE=";
+    hash = "sha256-APizOm59VcvhK5G4emqGtnPikz13w6EmG7qLJHU2Rd0=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -6,6 +6,7 @@
 , pythonOlder
 # build_requires
 , setuptools
+, wheel
 # install_requires
 , attrs
 , charset-normalizer
@@ -17,11 +18,9 @@
 , aiodns
 , brotli
 , faust-cchardet
-, asynctest
 , typing-extensions
-, idna-ssl
 # tests_require
-, async_generator
+, async-generator
 , freezegun
 , gunicorn
 , pytest-mock
@@ -32,33 +31,32 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.4";
+  version = "3.8.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vy4akWLB5EG/gFof0WbiSdV0ygTgOzT5fikodp6Rq1w=";
+    hash = "sha256-sM8qRQG/+TMKilJItM6VGFHkFb3M6dwVjnbP1V4VCFw=";
   };
 
   patches = [
     (fetchpatch {
-      # https://github.com/aio-libs/aiohttp/pull/7178
-      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
-      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+      # https://github.com/aio-libs/aiohttp/pull/7260
+      # Merged upstream, should be dropped once updated to 3.9.0
+      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
+      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
     })
   ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
-
-    substituteInPlace setup.cfg \
-      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -73,16 +71,11 @@ buildPythonPackage rec {
     aiodns
     brotli
     faust-cchardet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    idna-ssl
   ];
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
-    async_generator
+    async-generator
     freezegun
     gunicorn
     pytest-mock
@@ -103,6 +96,10 @@ buildPythonPackage rec {
     "test_async_with_session"
     "test_session_close_awaitable"
     "test_close_run_until_complete_not_deprecated"
+    # https://github.com/aio-libs/aiohttp/issues/7130
+    "test_static_file_if_none_match"
+    "test_static_file_if_match"
+    "test_static_file_if_modified_since_past_date"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [

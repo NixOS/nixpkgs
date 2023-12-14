@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aiohttp-wsgi";
   version = "0.10.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.6.2";
+  version = "22.7.3";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-b7a9LD291LT28TujOQ3DE76+wtmBYeAGrXZXTM0quWw=";
+    hash = "sha256-Vo+lFUGLeGPKq3aUCiiBcBYu6BZ4KQI5vCtnQyRUUiU=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
   ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";

@@ -1,29 +1,88 @@
+diff --git a/src/cpp/conf/rsession-dev.conf b/src/cpp/conf/rsession-dev.conf
+index d18362b..98cdd4c 100644
+--- a/src/cpp/conf/rsession-dev.conf
++++ b/src/cpp/conf/rsession-dev.conf
+@@ -39,7 +39,7 @@ external-mathjax-path=${RSTUDIO_DEPENDENCIES_MATHJAX_DIR}
+ external-pandoc-path=${RSTUDIO_DEPENDENCIES_PANDOC_DIR}
+ external-quarto-path=${RSTUDIO_DEPENDENCIES_QUARTO_DIR}
+ external-libclang-path=${RSTUDIO_DEPENDENCIES_DIR}/common/libclang
+-external-node-path=${RSTUDIO_DEPENDENCIES_DIR}/common/node/16.14.0/bin/node
++external-node-path=@node@/bin/node
+ 
+ # enable copilot
+ copilot-enabled=1
+diff --git a/src/cpp/server/CMakeLists.txt b/src/cpp/server/CMakeLists.txt
+index 30dd638..cb4a645 100644
+--- a/src/cpp/server/CMakeLists.txt
++++ b/src/cpp/server/CMakeLists.txt
+@@ -250,10 +250,6 @@ if (UNIX AND NOT APPLE)
+            DESTINATION ${RSERVER_SYSTEMD_DIR})
+ 
+    # install node
+-   install(
+-      DIRECTORY "${RSTUDIO_DEPENDENCIES_DIR}/common/node/${RSTUDIO_NODE_VERSION}/"
+-      DESTINATION "${RSTUDIO_INSTALL_BIN}/node"
+-      USE_SOURCE_PERMISSIONS)
+ 
+ elseif(APPLE)
+ 
+diff --git a/src/gwt/build.xml b/src/gwt/build.xml
+index 033d605..f1ee63d 100644
 --- a/src/gwt/build.xml
 +++ b/src/gwt/build.xml
-@@ -83,24 +83,7 @@
-       <echo>Concatenated acesupport files to 'acesupport.js'</echo>
-    </target>
- 
--   <!-- panmirror typescript library -->
--   <!-- ensure version matches RSTUDIO_NODE_VERSION -->
--   <property name="node.version" value="16.14.0"/>
--   <property name="node.dir" value="../../dependencies/common/node/${node.version}"/>
--   <condition property="node.bin" value="../../../${node.dir}/bin/node">
+@@ -87,29 +87,7 @@
+    <!-- ensure version matches RSTUDIO_NODE_VERSION -->
+    <property name="node.version" value="16.14.0"/>
+    <property name="node.dir" value="../../dependencies/common/node/${node.version}"/>
+-   <!-- use yarn from system but will prefer yarn from dependencies if available -->
+-   <condition property="yarn.bin" value="yarn">
 -     <not>
 -        <os family="windows" />
 -     </not>
 -   </condition>
--   <condition property="node.bin" value="${node.dir}/node.exe">
+-   <available
+-      property="yarn.bin"
+-      value="${node.dir}/bin/yarn"
+-      file="${node.dir}/bin/yarn"/>
+-   <condition property="yarn.bin" value="${node.dir}/node_modules/yarn/bin/yarn.cmd">
 -     <os family="windows" />
 -   </condition>
--
--   <!-- use node from /opt/rstudio-tools if installed (typical for Docker) -->
+-   <!-- use yarn from /opt/rstudio-tools if installed (typical for Docker) -->
 -   <available
--      property="node.bin"
--      value="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/node"
--      file="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/node"/>
-+    <property name="node.bin" value="@node@/bin/node"/>
+-      property="yarn.bin"
+-      value="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/yarn"
+-      file="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/yarn"/>
+-   <!-- use yarn from c:/rstudio-tools if installed (typical for Docker on Windows) -->
+-   <available
+-      property="yarn.bin"
+-      value="c:\rstudio-tools\dependencies\common\node\${node.version}\node_modules\yarn\bin\yarn.cmd"
+-      file="c:\rstudio-tools\dependencies\common\node\${node.version}\node_modules\yarn\bin\yarn.cmd"/>
++   <property name="node.bin" value="@node@/bin/node"/>
  
-    <property name="panmirror.dir" value="./panmirror/src/editor"/>
+    <property name="panmirror.dir" value="./lib/quarto/apps/panmirror"/>
     <property name="panmirror.build.dir" value="./www/js/panmirror"/>
-
+@@ -126,21 +104,11 @@
+       file="c:\rstudio-tools\src\gwt\lib\quarto\apps\panmirror"/>
+ 
+    <target name="panmirror" description="Compile panmirror library">
+-      <echo message="yarn location: ${yarn.bin}"/>
+-      <echo message="panmirror location: ${panmirror.dir}"/>
+       <mkdir dir="${panmirror.build.dir}"/>
+-      <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
+-         <arg value="install"/>
+-         <arg value="--network-timeout"/>
+-         <arg value="240000"/>
+-      </exec>
+-      <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
+-         <arg value="build"/>
+-         <env key="PANMIRROR_OUTDIR" value="dist-rstudio"/>
++      <exec executable="${node.bin}" dir="${panmirror.dir}" spawn="${panmirror.spawn}">
++         <arg value="fuse"/>
++         <arg value="${panmirror.target}"/>
+       </exec>
+-      <copy todir="${panmirror.build.dir}">
+-         <fileset dir="${panmirror.dir}/dist-rstudio"/>
+-      </copy>
+    </target>
+ 
+    <target name="javac" description="Compile java source">

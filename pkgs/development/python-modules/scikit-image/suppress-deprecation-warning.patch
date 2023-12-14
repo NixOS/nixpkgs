@@ -1,0 +1,30 @@
+diff --git a/skimage/exposure/tests/test_exposure.py b/skimage/exposure/tests/test_exposure.py
+index ed8dd6bc8..8ec7d13bf 100644
+--- a/skimage/exposure/tests/test_exposure.py
++++ b/skimage/exposure/tests/test_exposure.py
+@@ -368,19 +368,16 @@ def test_rescale_nan_warning(in_range, out_range):
+     )
+ 
+     # 2019/11/10 Passing NaN to np.clip raises a DeprecationWarning for
+-    # versions above 1.17
+-    # TODO: Remove once NumPy removes this DeprecationWarning
++    # versions above 1.17, "|\A\Z" marks as optional warning
++    # TODO: Remove once NumPy 1.25.0 is minimal dependency
+     numpy_warning_1_17_plus = (
+-        "Passing `np.nan` to mean no clipping in np.clip"
++        "|\\A\\ZPassing `np.nan` to mean no clipping in np.clip"
+     )
+ 
+-    if in_range == "image":
+-        exp_warn = [msg, numpy_warning_1_17_plus]
+-    else:
+-        exp_warn = [msg]
++    with expected_warnings([msg, numpy_warning_1_17_plus]):
++        result = exposure.rescale_intensity(image, in_range, out_range)
+ 
+-    with expected_warnings(exp_warn):
+-        exposure.rescale_intensity(image, in_range, out_range)
++    assert np.all(np.isnan(result))
+ 
+ 
+ @pytest.mark.parametrize(

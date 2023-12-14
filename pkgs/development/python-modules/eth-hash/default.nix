@@ -10,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.3.2";
+  version = "0.5.2";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
     rev = "v${version}";
-    hash = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
+    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
   };
 
   nativeCheckInputs = [
@@ -43,6 +44,6 @@ buildPythonPackage rec {
     description = "The Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

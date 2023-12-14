@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.10.7";
+  version = "1.17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "v${version}";
-    hash = "sha256-AT5cFQ4CldlHv3MQYAGXdZVB3bNAAvbJeosdxZjcPBM=";
+    hash = "sha256-FExDKugFP94C3zMnR1V4QDPWeM2OtRH2ei0LNs3h06c=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -25,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     art
     click
-    fsspec
     pandas
     pillow
     pymupdf
@@ -33,35 +32,25 @@ python3.pkgs.buildPythonApplication rec {
     rich-click
     rich-pixels
     textual
-    universal-pathlib
+    textual-universal-directorytree
   ] ++ lib.attrVals extras passthru.optional-dependencies;
 
   passthru.optional-dependencies = with python3.pkgs; {
     all = [
-      adlfs
-      aiohttp
-      gcsfs
-      paramiko
       pyarrow
-      requests
-      s3fs
+      textual-universal-directorytree.optional-dependencies.remote
     ];
     parquet = [
       pyarrow
     ];
     remote = [
-      adlfs
-      aiohttp
-      gcsfs
-      paramiko
-      requests
-      s3fs
+      textual-universal-directorytree.optional-dependencies.remote
     ];
   };
 
   pythonRelaxDeps = [
     "art"
-    "fsspec"
+    "pandas"
     "pymupdf"
     "rich-click"
     "textual"
@@ -78,8 +67,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A file explorer in your terminal";
-    homepage = "https://github.com/juftin/browsr";
-    changelog = "https://github.com/fsspec/universal_pathlib/releases/tag/${src.rev}";
+    homepage = "https://juftin.com/browsr";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

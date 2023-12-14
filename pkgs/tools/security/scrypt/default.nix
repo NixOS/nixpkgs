@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/scrypt/${pname}-${version}.tgz";
-    sha256 = "1hnl0r6pmyxiy4dmafmqk1db7wpc0x9rqpzqcwr9d2cmghcj6byz";
+    sha256 = "sha256-1jLBGTQgrG+uv5SC5l4z06VmTszWQ7CaUJ0h0cHym+I=";
   };
 
   outputs = [ "out" "lib" "dev" ];

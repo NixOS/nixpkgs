@@ -28,6 +28,15 @@ stdenv.mkDerivation rec {
     ./link-library-against-libjpeg.patch
   ];
 
+  postPatch = ''
+    mkdir -p $out/lib/pkgconfig
+    cp ${./yuv.pc} $out/lib/pkgconfig/libyuv.pc
+
+    substituteInPlace $out/lib/pkgconfig/libyuv.pc \
+      --replace "@PREFIX@" "$out" \
+      --replace "@VERSION@" "$version"
+  '';
+
   meta = with lib; {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";

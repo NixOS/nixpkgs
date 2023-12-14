@@ -5,6 +5,7 @@
 , decorator
 , ipython
 , isPyPy
+, exceptiongroup
 , tomli
 , setuptools
 , unittestCheckHook
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     ipython
     decorator
   ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
     tomli
   ];
 
@@ -45,7 +47,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

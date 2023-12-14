@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ lib, ... }: {
   name = "apfs";
-  meta.maintainers = with pkgs.lib.maintainers; [ Luflosi ];
+  meta.maintainers = with lib.maintainers; [ Luflosi ];
 
-  nodes.machine = { pkgs, ... }: {
+  nodes.machine = {
     virtualisation.emptyDiskImages = [ 1024 ];
 
     boot.supportedFilesystems = [ "apfs" ];
@@ -62,4 +62,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "apfsck /dev/vdb",
       )
   '';
-})
+}

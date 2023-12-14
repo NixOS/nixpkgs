@@ -7,19 +7,24 @@
 , pythonOlder
 , requests
 , responses
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.16.7";
-  format = "setuptools";
+  version = "3.18.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qYXxR+jXjMfqrxJ62j5do33EbjfeoYSq+IeMrO14FnQ=";
+    hash = "sha256-vytpQHYZcMFLU/yPwTWvVnxYuXCdsyFL5AOjg91Ryrs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyjwt
@@ -51,6 +56,8 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "test/test_container_token_manager.py"
+    # Tests require credentials
+    "test_integration/"
   ];
 
   meta = with lib; {

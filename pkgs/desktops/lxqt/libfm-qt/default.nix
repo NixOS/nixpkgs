@@ -4,6 +4,7 @@
 , cmake
 , pkg-config
 , lxqt-build-tools
+, lxqt-menu-data
 , pcre
 , libexif
 , xorg
@@ -16,29 +17,30 @@
 
 mkDerivation rec {
   pname = "libfm-qt";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     rev = version;
-    sha256 = "MK1QMYfr0T/cE46IUWarG9a/PJUSSskk1W3y2+kvEwg=";
+    hash = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
+    lxqt-menu-data
     pcre
     libexif
     xorg.libpthreadstubs
     xorg.libxcb
     xorg.libXdmcp
     qtx11extras
-    qttools
     libfm
     menu-cache
   ];

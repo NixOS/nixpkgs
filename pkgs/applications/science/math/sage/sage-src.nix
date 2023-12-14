@@ -52,32 +52,84 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # https://github.com/sagemath/sage/pull/35584, positively reviewed
+    # https://github.com/sagemath/sage/pull/35584, landed in 10.1.beta1
     (fetchpatch {
       name = "networkx-3.1-upgrade.patch";
-      url = "https://github.com/sagemath/sage/compare/10.0.rc2..e599562cf5fdfb9799a5412fac40c2f8e9f97341.diff";
-      sha256 = "sha256-3A90kXqNR0c7+k8xrZXAt5wqWg/VFAPNhQujwTdOyhI=";
+      url = "https://github.com/sagemath/sage/commit/be0aab74fd7e399e146988ef27260d2837baebae.diff";
+      sha256 = "sha256-xBGrylNaiF7CpfmX9/4lTioP2LSYKoRCkKlKSGZuv9U=";
     })
 
-    # https://github.com/sagemath/sage/pull/35612, positively reviewed
+    # https://github.com/sagemath/sage/pull/35612, landed in 10.1.beta1
     (fetchpatch {
       name = "linbox-1.7-upgrade.patch";
-      url = "https://github.com/sagemath/sage/compare/10.0.rc2..9c8796c7b677e3a056348e3510331ea8b8c3c42e.diff";
+      url = "https://github.com/sagemath/sage/commit/35cbd2f2a2c4c355455d39b1424f05ea0aa4349b.diff";
       sha256 = "sha256-/TpvIQZUqmbUuz6wvp3ni9oRir5LBA2FKDJcmnHI1r4=";
     })
 
-    # https://github.com/sagemath/sage/pull/35619
+    # https://github.com/sagemath/sage/pull/35619, landed in 10.1.beta1
     (fetchpatch {
       name = "maxima-5.46.0-upgrade.patch";
-      url = "https://github.com/sagemath/sage/compare/10.0.rc3..7e86af5dae8f89868b25a6f57189bb5ca618da89.diff";
-      sha256 = "sha256-pxSxdJ2lyHoMUIxhlIn1nTHaddRxGvvTj9IbwFCTBFU=";
+      url = "https://github.com/sagemath/sage/commit/4ddf9328e7598284d4bc03cd2ed890f0be6b6399.diff";
+      sha256 = "sha256-f6YaZiLSj+E0LJMsMZHDt6vecWffSAuUHYVkegBEhno=";
     })
 
-    # https://github.com/sagemath/sage/pull/35635, positively reviewed
+    # https://github.com/sagemath/sage/pull/35635, landed in 10.1.beta1
     (fetchpatch {
       name = "sympy-1.12-upgrade.patch";
-      url = "https://github.com/sagemath/sage/compare/10.0.rc2..aa4193cdc8ec9fb7bd7c49696b7f914668f7913a.diff";
-      sha256 = "sha256-UAmYCxHvnE5p+H2DySNZTPFVm915jHtOEoG+tZz5n7I=";
+      url = "https://github.com/sagemath/sage/commit/1a73b3bbbfa0f4a297e05d49305070e1ed5ae598.diff";
+      sha256 = "sha256-k8Oam+EiRcfXC7qCdLacCx+7vpUAw2K1wsjKcQbeGb4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35826, landed in 10.1.beta5
+    (fetchpatch {
+      name = "numpy-1.25.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/ecfe06b8f1fe729b07e885f0de55244467e5c137.diff";
+      sha256 = "sha256-G0xhl+LyNdDYPzRqSHK3fHaepcIzpuwmqRiussraDf0=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35826#issuecomment-1658569891
+    ./patches/numpy-1.25-deprecation.patch
+
+    # https://github.com/sagemath/sage/pull/35842, landed in 10.1.beta5
+    (fetchpatch {
+      name = "scipy-1.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/90ece168c3c61508baa36659b0027b7dd8b43add.diff";
+      sha256 = "sha256-Y5TmuJcUJR+veb2AuSVODGs+xkVV+pTM8fWTm4q+NDs=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35825, landed in 10.1.beta6
+    (fetchpatch {
+      name = "singular-4.3.2p2-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/1a1b49f814cdf4c4c8d0ac8930610f3fef6af5b0.diff";
+      sha256 = "sha256-GqMgoi0tsP7zcCcPumhdsbvhPB6fgw1ufx6gHlc6iSc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36006, landed in 10.2.beta2
+    (fetchpatch {
+      name = "gmp-6.3-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/5e841de46c3baa99cd1145b36ff9163e9340a55c.diff";
+      sha256 = "sha256-fJPDryLtGBQz9qHDiCkBwjiW2lN6v7HiHgxY7CTeHcs=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36279, landed in 10.2.beta4
+    (fetchpatch {
+       name = "matplotlib-3.8-upgrade.patch";
+       url = "https://github.com/sagemath/sage/commit/0fcf88935908440930c5f79202155aca4ad57518.diff";
+       sha256 = "sha256-mvqAHaTCXsxPv901L8HSTnrfghfXYdq0wfLoP/cYQZI=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35658, landed in 10.1.beta2
+    (fetchpatch {
+      name = "sphinx-7-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/cacd9a89b5c4fdcf84a8dd2b7d5bdc10cc78109a.diff";
+      sha256 = "sha256-qJvliTJjR3XBc5pH6Q0jtm8c4bhtZcTcF3O04Ro1uaU=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36296, landed in 10.2.beta4
+    (fetchpatch {
+      name = "duplicate-args-region_plot.patch";
+      url = "https://github.com/sagemath/sage/commit/461727b453712550a2c5dc0ae11933523255aaed.diff";
+      sha256 = "sha256-mC8084VQoUBk4hocALF+Y9Cwb38Zt360eldi/SSjna8=";
     })
   ];
 

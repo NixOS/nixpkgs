@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -43,6 +44,6 @@ buildPythonPackage rec {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

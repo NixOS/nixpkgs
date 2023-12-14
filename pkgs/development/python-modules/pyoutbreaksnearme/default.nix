@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
@@ -9,20 +10,21 @@
 , pytestCheckHook
 , pythonOlder
 , ujson
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2023.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyoutbreaksnearme";
     rev = "refs/tags/${version}";
-    hash = "sha256-D7oXkKDSg+yF+j1WyG/VVY12hLU6oyhEtxLrF6IkMSA=";
+    hash = "sha256-G+/ooNhiYOaV0kjfr8Z1d31XxRYFArQnt1oIuMQfXdY=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +33,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     ujson
+    yarl
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

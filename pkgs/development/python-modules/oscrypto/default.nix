@@ -22,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
 
+  patches = [
+    ./support-openssl-3.0.10.patch
+  ];
+
   postPatch = ''
     for file in oscrypto/_openssl/_lib{crypto,ssl}_c{ffi,types}.py; do
       substituteInPlace $file \

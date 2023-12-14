@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_MINIZIP=1"
   ];
 
+  # TEST 428/429 worksheet:worksheet_table15 *** buffer overflow detected ***: terminated
+  hardeningDisable = [ "fortify3" ];
+
   doCheck = true;
 
   checkTarget = "test";

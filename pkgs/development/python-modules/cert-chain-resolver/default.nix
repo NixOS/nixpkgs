@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cert-chain-resolver";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rkoopmans";
     repo = "python-certificate-chain-resolver";
-    rev = version;
-    hash = "sha256-NLTRx6J6pjs7lyschHN5KtgrnpQpEyvZ2zz0pSd5sc4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2itpu/Ap5GNnqAiw3Cp+8rndreWlwfPd+WwM99G7U2E=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
+    changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch ];
   };

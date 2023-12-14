@@ -1,29 +1,33 @@
 { lib, fetchFromGitHub, buildPythonPackage, pythonOlder,
-cython, numpy, pytest, requests-toolbelt }:
+cython, smart-open, pytestCheckHook, moto, requests-toolbelt }:
 
 buildPythonPackage rec {
   pname = "streaming-form-data";
-  version = "1.8.1";
+  version = "1.13.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
     rev = "v${version}";
-    sha256 = "1wnak8gwkc42ihgf0g9r7r858hxbqav2xdgqa8azid8v2ff6iq4d";
+    hash = "sha256-Ntiad5GZtfRd+2uDPgbDzLBzErGFroffK6ZAmMcsfXA=";
   };
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [ requests-toolbelt ];
+  propagatedBuildInputs = [ smart-open ];
 
-  nativeCheckInputs = [ numpy pytest ];
+  nativeCheckInputs = [ pytestCheckHook moto requests-toolbelt ];
 
-  checkPhase = ''
-    make test
-  '';
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "streaming_form_data" ];
+
+  preCheck = ''
+    # remove in-tree copy to make pytest find the installed one, with the native parts already built
+    rm -rf streaming_form_data
+  '';
 
   meta = with lib; {
     description = "Streaming parser for multipart/form-data";

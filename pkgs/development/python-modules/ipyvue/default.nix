@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ipyvue";
-  version = "1.9.1";
+  version = "1.10.1";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QhHWFb+OHRXoguqTN5+W7X1YaK0xyn4Ja+1M52fFees=";
+    hash = "sha256-IGFc6GulFs8Leq2EzGB+TiyRBCMulUzQ7MvzNTCl4dQ=";
   };
 
   propagatedBuildInputs = [ ipywidgets ];
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {
-    description = "Jupyter widgets base for Vue libraries.";
-    homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
+    description = "Jupyter widgets base for Vue libraries";
+    homepage = "https://github.com/mariobuikhuizen/ipyvue";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };

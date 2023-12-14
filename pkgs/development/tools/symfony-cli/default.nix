@@ -1,21 +1,28 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+, testers
+, symfony-cli
+}:
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.5.6";
-  vendorHash = "sha256-AfgDsd4W8wV0GeymD9SLeHtOeFP9qbFy+GTdMxQSkDA=";
+  version = "5.7.5";
+  vendorHash = "sha256-2+Q93tm3ooOd/m6aUWAwFGh5CzARPNISNx0Tcrjc7NY=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    sha256 = "sha256-lE8RBjBXucL0DJjEnBLbHqOVE6g358rwmaEUqU6QhOw=";
+    hash = "sha256-Zz2akBfrhuC2lOZdvpjDFwlxWd4NUhfoAPkoLpFLzwk=";
   };
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
+    "-X main.channel=stable"
   ];
 
   postInstall = ''
@@ -23,14 +30,23 @@ buildGoModule rec {
   '';
 
   # Tests requires network access
-  checkPhase = ''
-    $GOPATH/bin/symfony-cli
-  '';
+  doCheck = false;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      inherit version;
+      package = symfony-cli;
+      command = "symfony version --no-ansi";
+    };
+  };
+
+  meta = {
+    changelog = "https://github.com/symfony-cli/symfony-cli/releases/tag/v${version}";
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.agpl3Plus;
+    mainProgram = "symfony";
+    maintainers = with lib.maintainers; [ drupol ];
   };
 }

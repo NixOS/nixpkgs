@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, curl, wrapGAppsHook, desktopToDarwinBundle }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "4.6.1";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
-    rev = "v${version}";
-    sha256 = "sha256-eBclDq9Uiu5rA74tlBkOiP3fRwAZn84F3LPA2cKkuw8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rQxOOxM4TazkDs/H3KEPbdo6WBl0ptyAlZwv8nnGMss=";
   };
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook ];
-  buildInputs = [ libqalculate gtk3 ];
+  nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  buildInputs = [ libqalculate gtk3 curl ];
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
     license = licenses.gpl2Plus;
+    mainProgram = "qalculate-gtk";
     platforms = platforms.all;
   };
-}
+})

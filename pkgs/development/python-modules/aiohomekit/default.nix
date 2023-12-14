@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , aiocoap
+, async-interrupt
 , bleak
 , bleak-retry-connector
 , chacha20poly1305
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "2.6.5";
+  version = "3.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Q5pz/irC+yA/A2GhGCug+jmxr4tCnPpkAV/AZEhd64A=";
+    hash = "sha256-YaLSpWSaiEP7X+IujrQgXgWl3aPc1WDMq2yaMUTu328=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiocoap
+    async-interrupt
     bleak
     bleak-retry-connector
     chacha20poly1305
@@ -56,6 +58,17 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/test_ip_pairing.py"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
+    "test_discover_find_one_unpaired"
+    "test_find_device_id_case_lower"
+    "test_find_device_id_case_upper"
+    "test_discover_missing_csharp"
+    "test_discover_csharp_case"
+    "test_discover_device_id_case_lower"
+    "test_discover_device_id_case_upper"
   ];
 
   pythonImportsCheck = [

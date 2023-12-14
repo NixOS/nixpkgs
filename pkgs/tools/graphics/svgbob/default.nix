@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchCrate {
     inherit version;
     crateName = "svgbob_cli";
-    sha256 = "sha256-iWcd+23/Ou7K2YUDf/MJx84LsVMXXqAkGNPs6B0RDqA=";
+    sha256 = "sha256-QWDi6cpADm5zOzz8hXuqOBtVrqb0DteWmiDXC6PsLS4=";
   };
 
-  cargoHash = "sha256-YbbVv2ln01nJfCaopKCwvVN7cgrcuaRHNXGHf9j9XUY=";
+  cargoHash = "sha256-Fj1qjG4SKlchUWW4q0tBC+9fHFFuY6MHngJCFz6J5JY=";
 
   postInstall = ''
     mv $out/bin/svgbob_cli $out/bin/svgbob
@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ivanceras/svgbob/raw/${version}/Changelog.md";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "svgbob";
   };
 }

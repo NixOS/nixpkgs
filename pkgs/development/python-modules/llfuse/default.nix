@@ -3,7 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython
+, cython_3
 , fuse
 , pkg-config
 , pytestCheckHook
@@ -14,20 +14,20 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.4";
+  version = "1.5.0";
 
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-qsnmhnZsK0j9dPhXT9mymQTzVHmmGnB5vgONatxDLIo=";
+    hash = "sha256-6/iW5eHmX6ODVPLFkOo3bN9yW8ixqy2MHwQ2r9FA0iI=";
   };
 
-  nativeBuildInputs = [ cython pkg-config setuptools ];
+  nativeBuildInputs = [ cython_3 pkg-config setuptools ];
 
   buildInputs = [ fuse ];
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.

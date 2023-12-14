@@ -3,8 +3,10 @@
 , aioresponses
 , buildPythonPackage
 , callee
-, fetchPypi
+, fetchFromGitHub
 , mock
+, poetry-core
+, poetry-dynamic-versioning
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -13,15 +15,22 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "4.6.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DyFRCQGjyv75YVBPN+1xWjKQtPUv29xblYu2TehkkVo=";
+  src = fetchFromGitHub {
+    owner = "auth0";
+    repo = "auth0-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-weXEwrOP+TKVwhqCeFVqUw4x+q2Wplr0QWVUzpbNPSc=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -52,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

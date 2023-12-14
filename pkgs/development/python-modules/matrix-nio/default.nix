@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.20.1";
+  version = "0.22.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-6oMOfyl8yR8FMprPYD831eiXh9g/bqslvxDmVcrNK80=";
+    hash = "sha256-hFSS2Nys95YJgBNED8SBan24iRo2q/UOr6pqUPAF5Ms=";
   };
 
   postPatch = ''

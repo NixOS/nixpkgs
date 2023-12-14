@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.7";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d3b7872ac8aa80f7f54ddb1bb3b1e2f90ec55f7270a2c4a9338eab42b7d2767b";
+    sha256 = "aab40aab2acd735c500f296bacaa5c84ff0488221a4068ce9946e973beacc5ae";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
   ];
-
-  # Upstream mistake in 3.2.7: too strict constraint.
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'libngtcp2 = 0.13.0' 'libngtcp2 = 0.13.1'
-  '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
@@ -66,6 +60,7 @@ stdenv.mkDerivation rec {
     inherit knot-resolver;
   } // lib.optionalAttrs stdenv.isLinux {
     inherit (nixosTests) knot kea;
+    prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
     # or embedded after some update, even if the nixPackagers didn't intend to.
     # For non-linux I don't know a good replacement for `ldd`.

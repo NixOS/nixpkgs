@@ -7,19 +7,26 @@
 , file
 , libintl
 , hicolor-icon-theme
+, python3
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geany";
-  version = "1.38";
+  version = "2.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
-    url = "https://download.geany.org/${pname}-${version}.tar.bz2";
-    sha256 = "abff176e4d48bea35ee53037c49c82f90b6d4c23e69aed6e4a5ca8ccd3aad546";
+    url = "https://download.geany.org/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-VltM0vAxHB46Fn7HHEoy26ZC4P5VSuW7a4F3t6dMzJI=";
   };
+
+  patches = [
+    # The test runs into UB in headless environments and crashes at least on headless Darwin.
+    # Remove if https://github.com/geany/geany/pull/3676 is merged (or the issue fixed otherwise).
+    ./disable-test-sidebar.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -28,12 +35,18 @@ stdenv.mkDerivation rec {
     which
     file
     hicolor-icon-theme
+    python3
     wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
   ];
+
+  preCheck = ''
+    patchShebangs --build tests/ctags/runner.sh
+    patchShebangs --build scripts
+  '';
 
   doCheck = true;
 
@@ -61,8 +74,9 @@ stdenv.mkDerivation rec {
       - Plugin interface
     '';
     homepage = "https://www.geany.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
+    mainProgram = "geany";
   };
-}
+})

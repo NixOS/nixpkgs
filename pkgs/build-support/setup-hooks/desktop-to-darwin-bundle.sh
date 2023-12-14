@@ -204,8 +204,8 @@ processExecFieldCodes() {
   local -r execNoKC="${execNoK/\%c/$(getDesktopParam "${file}" "Name")}"
   local -r icon=$(getDesktopParam "${file}" "Icon")
   local -r execNoKCI="${execNoKC/\%i/${icon:+--icon }${icon}}"
-  local -r execNoKCIfu="${execNoKCI/\%[fu]/\$1}"
-  local -r exec="${execNoKCIfu/\%[FU]/\$@}"
+  local -r execNoKCIfu="${execNoKCI/ \%[fu]/}"
+  local -r exec="${execNoKCIfu/ \%[FU]/}"
   if [[ "$exec" != "$execRaw" ]]; then
     echo 1>&2 "desktopToDarwinBundle: Application bundles do not understand desktop entry field codes. Changed '$execRaw' to '$exec'."
   fi

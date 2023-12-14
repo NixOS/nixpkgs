@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme";
-  version = "23.04.26";
+  version = "23.11.20";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6tkE23G67nH/aZjDEtW64RcZsBrcd9iNj1r9lDlUFsk=";
+    sha256 = "sha256-jH3bzwyiDRovrH8GyJhwMJRHM5du8ek4leKnFSO8vAo=";
   };
 
   nativeBuildInputs = [

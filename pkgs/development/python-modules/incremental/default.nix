@@ -8,6 +8,7 @@
 let incremental = buildPythonPackage rec {
   pname = "incremental";
   version = "22.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,6 +40,6 @@ let incremental = buildPythonPackage rec {
     homepage = "https://github.com/twisted/incremental";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }; in incremental

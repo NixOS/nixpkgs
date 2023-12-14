@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , cmake
 , pkg-config
@@ -25,6 +26,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-AAub8UwAvX3zNX+SM/T9biyNxFTgfqUQG/MUGfwWuno=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-40274.patch";
+      url = "https://github.com/getzola/zola/commit/fe1967fb0fe063b1cee1ad48820870ab2ecc0e5b.patch";
+      hash = "sha256-B/SVGhVX5hAbvMhBYO+mU5+xdZXU2JyS4uKmOj+aZuI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

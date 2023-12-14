@@ -10,18 +10,19 @@
 , gobject-introspection
 , xapp
 , polkit
+, gitUpdater
 }:
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.4.1";
+  version = "21";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = version;
+    rev = "refs/tags/master.mint${version}";
     hash = "sha256-Kvhp+biZ+KK9FYma/8cUEaQCHPKMLjOO909kbyMLQ3o=";
   };
 
@@ -52,6 +53,10 @@ buildPythonPackage rec {
 
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";

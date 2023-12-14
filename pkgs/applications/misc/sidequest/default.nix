@@ -1,4 +1,31 @@
-{ stdenv, lib, fetchurl, buildFHSEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, libxkbcommon, libxshmfence, at-spi2-atk, icu, openssl, zlib }:
+{ stdenv
+, lib
+, fetchurl
+, buildFHSEnv
+, makeDesktopItem
+, makeWrapper
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, mesa
+, nss
+, nspr
+, libdrm
+, xorg
+, libxkbcommon
+, libxshmfence
+, pango
+, systemd
+, icu
+, openssl
+, zlib
+}:
   let
     pname = "sidequest";
     version = "0.10.33";
@@ -21,20 +48,46 @@
 
       nativeBuildInputs = [ makeWrapper ];
 
-      buildCommand = ''
+      installPhase = ''
         mkdir -p "$out/lib/SideQuest" "$out/bin"
         tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
 
         ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
+      '';
 
-        fixupPhase
-
-        # mkdir -p "$out/share/applications"
-        # ln -s "${desktopItem}/share/applications/*" "$out/share/applications"
-
+      postFixup = let
+        libPath = lib.makeLibraryPath [
+          alsa-lib
+          at-spi2-atk
+          cairo
+          cups
+          dbus
+          expat
+          gdk-pixbuf
+          glib
+          gtk3
+          mesa
+          nss
+          nspr
+          libdrm
+          xorg.libX11
+          xorg.libxcb
+          xorg.libXcomposite
+          xorg.libXdamage
+          xorg.libXext
+          xorg.libXfixes
+          xorg.libXrandr
+          xorg.libxshmfence
+          libxkbcommon
+          xorg.libxkbfile
+          pango
+          stdenv.cc.cc.lib
+          systemd
+        ];
+      in ''
         patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${atomEnv.libPath}/lib:${lib.makeLibraryPath [libuuid at-spi2-atk]}:$out/lib/SideQuest" \
+          --set-rpath "${libPath}:$out/lib/SideQuest" \
           "$out/lib/SideQuest/sidequest"
       '';
     };

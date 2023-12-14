@@ -6,11 +6,13 @@
 , fftw
 , blas
 , lapack
-, withMPI ? false
-, mpi
 , cmake
+, cudaPackages
+, pkg-config
 # Available list of packages can be found near here:
-# https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
+#
+# - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
+# - https://docs.lammps.org/Build_extras.html
 , packages ? {
   ASPHERE = true;
   BODY = true;
@@ -35,32 +37,48 @@
   SRD = true;
   REAXFF = true;
 }
+# Extra cmakeFlags to add as "-D${attr}=${value}"
+, extraCmakeFlags ? {}
+# Extra `buildInputs` - meant for packages that require more inputs
+, extraBuildInputs ? []
 }:
 
-stdenv.mkDerivation rec {
-  # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "23Jun2022_update4";
+stdenv.mkDerivation (finalAttrs: {
+  # LAMMPS has weird versioning convention. Updates should go smoothly with:
+  # nix-update --commit lammps --version-regex 'stable_(.*)'
+  version = "2Aug2023_update1";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
-    rev = "stable_${version}";
-    hash = "sha256-zGztc+iUFNIa0KKtfpAhwitInvMmXeTHp1XsOLibfzM=";
+    rev = "stable_${finalAttrs.version}";
+    hash = "sha256-Zmn87a726qdidBfyvJlYleYv9jqyFAakxjGrg3lipc0=";
   };
   preConfigure = ''
     cd cmake
   '';
   nativeBuildInputs = [
     cmake
+    pkg-config
+    # Although not always needed, it is needed if cmakeFlags include
+    # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
+    cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   passthru = {
-    inherit mpi;
+    # Remove these at some point - perhaps after release 23.11. See discussion at:
+    # https://github.com/NixOS/nixpkgs/pull/238771#discussion_r1235459961
+    mpi = throw "`lammps-mpi.passthru.mpi` was removed in favor of `extraBuildInputs`";
     inherit packages;
+    inherit extraCmakeFlags;
+    inherit extraBuildInputs;
   };
   cmakeFlags = [
-  ] ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)));
+  ]
+  ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)))
+  ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags)
+  ;
 
   buildInputs = [
     fftw
@@ -68,13 +86,17 @@ stdenv.mkDerivation rec {
     blas
     lapack
     gzip
-  ] ++ lib.optionals withMPI [
-    mpi
-  ];
+  ] ++ extraBuildInputs
+  ;
 
-  # For backwards compatibility
   postInstall = ''
+    # For backwards compatibility
     ln -s $out/bin/lmp $out/bin/lmp_serial
+    # Install vim and neovim plugin
+    install -Dm644 ../../tools/vim/lammps.vim $out/share/vim-plugins/lammps/syntax/lammps.vim
+    install -Dm644 ../../tools/vim/filetype.vim $out/share/vim-plugins/lammps/ftdetect/lammps.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
   '';
 
   meta = with lib; {
@@ -94,5 +116,6 @@ stdenv.mkDerivation rec {
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    mainProgram = "lmp";
   };
-}
+})

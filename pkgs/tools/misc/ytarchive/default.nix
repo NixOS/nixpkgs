@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeBinaryWrapper, ffmpeg }:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper, ffmpeg-headless }:
 
 buildGoModule rec {
   pname = "ytarchive";
-  version = "unstable-2023-02-21";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
-    rev = "90aaf17b5e86eec52a95752e3c2dba4f54ee1068";
-    hash = "sha256-JRjQRbMqtd04/aO6NkInoDqfOrHnDrXj4C4/URiU6yo=";
+    rev = "v${version}";
+    hash = "sha256-mQgpwuTIEHeDv/PzBHpK1sraxFj8Ef3y8vN5bLw5E94=";
   };
 
   vendorHash = "sha256-sjwQ/zEYJRkeWUDB7TzV8z+kET8lVRnQkXYbZbcUeHY=";
@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.Commit=-${src.rev}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/ytarchive --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+    wrapProgram $out/bin/ytarchive --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   meta = with lib; {
@@ -26,5 +26,6 @@ buildGoModule rec {
     description = "Garbage Youtube livestream downloader";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "ytarchive";
   };
 }

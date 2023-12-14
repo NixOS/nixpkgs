@@ -4,6 +4,7 @@
   "date": "2023-02-12T14:42:20+00:00",
   "path": "/nix/store/hg229jskwvgmfgi9awznvp9cj5riacay-tree-sitter-fish",
   "sha256": "1yxvibmmpkwswwrg1mzvcnfj6y0rpccrwyg27k4wpr2630ma9xcw",
+  "hash": "sha256-nPWkKhhG5MvJPOJ5nhm7GXgjnWX71/Ay55rPW+uKu/s=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

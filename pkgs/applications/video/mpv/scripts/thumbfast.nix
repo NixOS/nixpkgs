@@ -1,33 +1,19 @@
-{ lib, stdenvNoCC, fetchFromGitHub, mpv-unwrapped }:
+{ lib, fetchFromGitHub, buildLua, mpv-unwrapped }:
 
-stdenvNoCC.mkDerivation {
-  name = "mpv-thumbfast";
-  version = "unstable-2023-06-04";
+buildLua {
+  pname = "mpv-thumbfast";
+  version = "unstable-2023-12-08";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "6f1d92da25a7b807427f55f085e7ad4d60c4e0d7";
-    hash = "sha256-7CCxMPmZZRDIcWn+YbV4xzZFL80qZS5UFA25E+Y2P2Q=";
+    rev = "03e93feee5a85bf7c65db953ada41b4826e9f905";
+    hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
   };
 
-  postPatch = ''
-    substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getBin mpv-unwrapped}/bin/mpv"'
-  '';
-
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/mpv/scripts
-    cp -r thumbfast.lua $out/share/mpv/scripts/thumbfast.lua
-
-    runHook postInstall
-  '';
-
-  passthru.scriptName = "thumbfast.lua";
+  passthru.extraWrapperArgs = [
+    "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"
+  ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";

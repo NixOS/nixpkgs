@@ -25,18 +25,17 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
-      cmdLineToolsVersion = "9.0";
-      platformTools = "34.0.1";
-      buildTools = "33.0.2";
+      cmdLineToolsVersion = "11.0";
+      platformTools = "34.0.5";
+      buildTools = "34.0.0";
       ndk = [
-        "25.1.8937393" # LTS NDK
-        "25.2.9519653"
+        "26.1.10909125"
       ];
       cmake = "3.6.4111459";
-      emulator = "33.1.6";
+      emulator = "34.1.9";
     };
 
-    platforms = ["23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33"];
+    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
     abis = ["armeabi-v7a" "arm64-v8a"];
     extras = ["extras;google;gcm"];
   };
@@ -165,19 +164,20 @@ pkgs.mkShell rec {
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
       packages=(
-        "build-tools;33.0.2" "platform-tools" \
+        "build-tools;34.0.0" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-        "platforms;android-31" "platforms;android-32" "platforms;android-33" \
+        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" \
         "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
         "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
-        "sources;android-31" "sources;android-32" "sources;android-33" \
+        "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
         "system-images;android-28;google_apis_playstore;arm64-v8a" \
         "system-images;android-29;google_apis_playstore;arm64-v8a" \
         "system-images;android-30;google_apis_playstore;arm64-v8a" \
         "system-images;android-31;google_apis_playstore;arm64-v8a" \
         "system-images;android-32;google_apis_playstore;arm64-v8a" \
-        "system-images;android-33;google_apis_playstore;arm64-v8a"
+        "system-images;android-33;google_apis_playstore;arm64-v8a" \
+        "system-images;android-34;google_apis_playstore;arm64-v8a"
       )
 
       for package in "''${packages[@]}"; do

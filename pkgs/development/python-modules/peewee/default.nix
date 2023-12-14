@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.16.2";
+  version = "3.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-eHTbVhgVqxMR3ZuaC6FPyYbxRpRBi53EfDqERpPBjVQ=";
+    hash = "sha256-QbbwC55q/BjMGtm3fH8HPd0aETMzLAFwVYFvOS/4dqA=";
   };
 
   buildInputs = [

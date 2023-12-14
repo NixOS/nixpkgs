@@ -17,9 +17,9 @@
     Hydra). We use these channels for testing and to fix build errors in advance
     so that `chromium` updates are trivial and can be merged fast.
   - `google-chrome`, `google-chrome-beta`, `google-chrome-dev`: Updated via
-    Chromium's `upstream-info.json`
+    Chromium's `upstream-info.nix`
   - `ungoogled-chromium`: @squalus
-  - `chromedriver`: Updated via Chromium's `upstream-info.json` and not built
+  - `chromedriver`: Updated via Chromium's `upstream-info.nix` and not built
     from source.
 
 # Upstream links
@@ -35,9 +35,9 @@
 # Updating Chromium
 
 Simply run `./pkgs/applications/networking/browsers/chromium/update.py` to
-update `upstream-info.json`. After updates it is important to test at least
+update `upstream-info.nix`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
-reuses `upstream-info.json`).
+reuses `upstream-info.nix`).
 
 Note: Due to the script downloading many large tarballs it might be
 necessary to adjust the available tmpfs size (it defaults to 10% of the
@@ -75,7 +75,7 @@ All updates are considered security critical and should be ported to the stable
 channel ASAP. When there is a new stable release the old one should receive
 security updates for roughly one month. After that it is important to mark
 Chromium as insecure (see 69e4ae56c4b for an example; it is important that the
-tested job still succeeds and that all browsers that use `upstream-info.json`
+tested job still succeeds and that all browsers that use `upstream-info.nix`
 are marked as insecure).
 
 ## Major version updates

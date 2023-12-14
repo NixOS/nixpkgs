@@ -14,8 +14,10 @@ mkDerivation rec {
   propagatedBuildInputs = [ glib libaccounts-glib ];
   nativeBuildInputs = [ doxygen pkg-config qmake ];
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
+  '';
 
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";

@@ -63,13 +63,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.1.11";
+  version = "6.9.16";
   pname = "feishu";
-  packageHash = "e82bd3ef"; # A hash value used in the download url
+  packageHash = "fe01b99b"; # A hash value used in the download url
 
   src = fetchurl {
     url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
-    hash = "sha256-IBNMNOcOYIdiTlr4+Ziju7Pbf9XJV0O+w2arHTa1zZ0=";
+    hash = "sha256-+koH6/K0J8KCVaNGIVvmLmPn/Ttyc9WcNAp0f7PLkqg=";
   };
 
   nativeBuildInputs = [

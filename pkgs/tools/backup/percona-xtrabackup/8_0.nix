@@ -1,8 +1,8 @@
 { callPackage, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  version = "8.0.29-22";
-  sha256 = "sha256-dGpfU+IesAyr2s1AEjfYggOEkMGQ9JdEesu5PtJHNXA=";
+  version = "8.0.34-29";
+  hash = "sha256-dO5ciIIAnKj2t+fYhrtnY7MvBThoA+SymBzN8H07giM=";
 
   # includes https://github.com/Percona-Lab/libkmip.git
   fetchSubmodules = true;

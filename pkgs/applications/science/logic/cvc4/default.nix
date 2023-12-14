@@ -35,9 +35,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./src/
   '';
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Production"
-  ];
+
+  cmakeBuildType = "Production";
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

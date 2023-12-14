@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "MAC Address CLI Toolkit";
     homepage = "https://github.com/thatmattlove/oui";
     license = with licenses; [ bsd3 ];
-    maintainers = [ maintainers.netali ];
+    maintainers = teams.wdz.members;
   };
 }

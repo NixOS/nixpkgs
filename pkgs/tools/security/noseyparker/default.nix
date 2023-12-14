@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , cmake
 , pkg-config
 , openssl

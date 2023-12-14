@@ -572,7 +572,7 @@ let format' = format; in let
       ${lib.optionalString installBootLoader ''
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
-        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+        ${optionalString (config.boot.loader.grub.enable && config.boot.loader.grub.device != "/dev/vda") ''
             mkdir -p $(dirname ${config.boot.loader.grub.device})
             ln -s /dev/vda ${config.boot.loader.grub.device}
         ''}

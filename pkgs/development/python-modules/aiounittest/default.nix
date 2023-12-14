@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.2";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

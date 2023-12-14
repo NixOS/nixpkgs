@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "A simple GOG client for Linux";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srapenne ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

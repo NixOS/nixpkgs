@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     gnome.adwaita-icon-theme
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     pycairo
   ];
@@ -69,5 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
+    mainProgram = "meld";
   };
 }

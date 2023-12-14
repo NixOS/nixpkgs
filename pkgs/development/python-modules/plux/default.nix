@@ -1,23 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, stevedore
+, fetchpatch
 , pytestCheckHook
+, setuptools
+, stevedore
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.3.1";
+  version = "1.4.0";
   format = "pyproject";
 
   # Tests are not available from PyPi
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "plux";
-    # Request for proper tags: https://github.com/localstack/plux/issues/4
-    rev = "a412ab0a0d7d17c3b5e1f560b7b31dc1876598f7";
-    hash = "sha256-zFwrRc93R4cXah7zYXjVLBIeBpDedsInxuyXOyBI8SA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AybMHkCUNJsL51XwiskkIltEtqZ27fGHrpyct8IUjmo=";
   };
+
+  patches = [
+    # https://github.com/localstack/plux/pull/8
+    (fetchpatch {
+      name = "remove-pytest-runner.patch";
+      url = "https://github.com/localstack/plux/commit/3cda22e51f43a86304d0dedd7e554b21aa82c8b0.patch";
+      hash = "sha256-ZFHUTkUYFSTgKbx+c74JQzre0la+hFW9gNOxOehvVoE=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     stevedore

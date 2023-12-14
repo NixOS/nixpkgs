@@ -7,8 +7,8 @@ let
   cfg = config.boot.initrd.network;
 
   dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
-  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
-  dhcpIfShellExpr = if config.networking.useDHCP
+  doDhcp = cfg.udhcpc.enable || dhcpInterfaces != [];
+  dhcpIfShellExpr = if config.networking.useDHCP || cfg.udhcpc.enable
                       then "$(ls /sys/class/net/ | grep -v ^lo$)"
                       else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
@@ -79,13 +79,24 @@ in
       '';
     };
 
+    boot.initrd.network.udhcpc.enable = mkOption {
+      default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
+      defaultText = "networking.useDHCP";
+      type = types.bool;
+      description = lib.mdDoc ''
+        Enables the udhcpc service during stage 1 of the boot process. This
+        defaults to {option}`networking.useDHCP`. Therefore, this useful if
+        useDHCP is off but the initramfs should do dhcp.
+      '';
+    };
+
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
       description = lib.mdDoc ''
-        Additional command-line arguments passed verbatim to udhcpc if
-        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
-        are enabled.
+        Additional command-line arguments passed verbatim to
+        udhcpc if {option}`boot.initrd.network.enable` and
+        {option}`boot.initrd.network.udhcpc.enable` are enabled.
       '';
     };
 
@@ -105,11 +116,11 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = ''
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
-    boot.initrd.preLVMCommands = mkBefore (
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore (
       # Search for interface definitions in command line.
       ''
         ifaces=""
@@ -127,7 +138,7 @@ in
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
+          ip link set dev "$iface" up && ifaces="$ifaces $iface"
         done
 
         # Acquire DHCP leases.
@@ -137,12 +148,12 @@ in
         done
       ''
 
-      + cfg.postCommands);
+      + cfg.postCommands));
 
-    boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
+    boot.initrd.postMountCommands = mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
       for iface in $ifaces; do
-        ip address flush "$iface"
-        ip link set "$iface" down
+        ip address flush dev "$iface"
+        ip link set dev "$iface" down
       done
     '';
 

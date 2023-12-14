@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net gtk3 gobject-introspection ];
+  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook gobject-introspection ];
+  buildInputs = [ SDL2 SDL2_mixer SDL2_net gtk3 ];
 
   postInstall = ''
     make -C menu PREFIX=$out all install

@@ -58,6 +58,7 @@
   tree-sitter-nickel = lib.importJSON ./tree-sitter-nickel.json;
   tree-sitter-nix = lib.importJSON ./tree-sitter-nix.json;
   tree-sitter-norg = lib.importJSON ./tree-sitter-norg.json;
+  tree-sitter-norg-meta = lib.importJSON ./tree-sitter-norg-meta.json;
   tree-sitter-nu = lib.importJSON ./tree-sitter-nu.json;
   tree-sitter-ocaml = lib.importJSON ./tree-sitter-ocaml.json;
   tree-sitter-org-nvim = lib.importJSON ./tree-sitter-org-nvim.json;
@@ -66,6 +67,7 @@
   tree-sitter-php = lib.importJSON ./tree-sitter-php.json;
   tree-sitter-pioasm = lib.importJSON ./tree-sitter-pioasm.json;
   tree-sitter-prisma = lib.importJSON ./tree-sitter-prisma.json;
+  tree-sitter-proto = lib.importJSON ./tree-sitter-proto.json;
   tree-sitter-pug = lib.importJSON ./tree-sitter-pug.json;
   tree-sitter-python = lib.importJSON ./tree-sitter-python.json;
   tree-sitter-ql = lib.importJSON ./tree-sitter-ql.json;
@@ -93,10 +95,14 @@
   tree-sitter-tsq = lib.importJSON ./tree-sitter-tsq.json;
   tree-sitter-turtle = lib.importJSON ./tree-sitter-turtle.json;
   tree-sitter-typescript = lib.importJSON ./tree-sitter-typescript.json;
+  tree-sitter-typst = lib.importJSON ./tree-sitter-typst.json;
+  tree-sitter-uiua = lib.importJSON ./tree-sitter-uiua.json;
   tree-sitter-verilog = lib.importJSON ./tree-sitter-verilog.json;
   tree-sitter-vim = lib.importJSON ./tree-sitter-vim.json;
   tree-sitter-vue = lib.importJSON ./tree-sitter-vue.json;
+  tree-sitter-wing = lib.importJSON ./tree-sitter-wing.json;
   tree-sitter-yaml = lib.importJSON ./tree-sitter-yaml.json;
   tree-sitter-yang = lib.importJSON ./tree-sitter-yang.json;
   tree-sitter-zig = lib.importJSON ./tree-sitter-zig.json;
+  tree-sitter-wgsl = lib.importJSON ./tree-sitter-wgsl.json;
 }

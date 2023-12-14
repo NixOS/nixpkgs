@@ -6,26 +6,27 @@
 , gettext
 , appstream
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , gobject-introspection
-, gtksourceview4
-, gspell
-, libhandy
-, poppler_gi
-, webkitgtk_4_1
+, gtk4
+, gtksourceview5
+, libadwaita
+, libportal
 , librsvg
+, poppler_gi
+, webkitgtk_6_0
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "55";
+  version = "63";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-Mcl9kWeo4w/wW8crR58Yyqoh26w8/SmNrjmHps6DmRA=";
+    hash = "sha256-/DAd3Neypx/H9mPVC9VkvpdQhLRNIBoR8GXxuIdJF0Y=";
   };
 
   format = "other";
@@ -36,26 +37,30 @@ python3.pkgs.buildPythonApplication rec {
     gettext
     appstream # for appstreamcli
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     gobject-introspection
   ];
 
   buildInputs = [
-    gtksourceview4
-    gspell
-    libhandy
-    poppler_gi
-    webkitgtk_4_1
+    gtk4
+    gtksourceview5
+    libadwaita
+    libportal
     librsvg
+    poppler_gi
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    bibtexparser
+    numpy
+    pdfminer-six
+    pexpect
+    pillow
+    pycairo
     pygobject3
     pyxdg
-    pdfminer-six
-    pycairo
-    pexpect
   ];
 
   checkPhase = ''

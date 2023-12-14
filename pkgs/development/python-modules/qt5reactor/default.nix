@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "qt5reactor";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

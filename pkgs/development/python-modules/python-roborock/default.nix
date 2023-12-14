@@ -14,24 +14,35 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.23.6";
+  version = "0.36.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5WgCVdmEhFrKYT7Uflnjv6OIISk//VH2aoxVwlWuPTk=";
+    hash = "sha256-FyoYAXWdNANxZJ9EKyfRrywKPJmSyt8QRPBlrk9jRIw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry-core==1.7.0" "poetry-core"
+  '';
+
+  pythonRelaxDeps = [
+    "pycryptodome"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

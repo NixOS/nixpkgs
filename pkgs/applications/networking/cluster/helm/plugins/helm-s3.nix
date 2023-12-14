@@ -2,25 +2,30 @@
 
 buildGoModule rec {
   pname = "helm-s3";
-  version = "0.10.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2BQ/qtoL+iFbuLvrJGUuxWFKg9u1sVDRcRm2/S0mgyc=";
+    hash = "sha256-D79nUIueOV2FC3I2LreHMzl/xOpzNa+OsfL5wcnyY78=";
   };
 
-  vendorSha256 = "sha256-/9TiY0XdkiNxW5JYeC5WD9hqySCyYYU8lB+Ft5Vm96I=";
+  vendorHash = "sha256-dKKggD/VlBiopt2ygh07+6bTBbRgQfWbiY/1qJSSx/0=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
     sed -i '/^hooks:/,+2 d' plugin.yaml
   '';
 
+  # NOTE: make test-unit, but skip awsutil, which needs internet access
   checkPhase = ''
-    make test-unit
+    go test $(go list ./... | grep -vE '(awsutil|e2e)')
   '';
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  subPackages = [ "cmd/helm-s3" ];
 
   postInstall = ''
     install -dm755 $out/${pname}
@@ -29,7 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Helm plugin that shows a diff";
+    description = "A Helm plugin that allows to set up a chart repository using AWS S3";
     homepage = "https://github.com/hypnoglow/helm-s3";
     license = licenses.mit;
     maintainers = with maintainers; [ yurrriq ];

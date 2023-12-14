@@ -1,26 +1,35 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchYarnDeps
+, prefetch-yarn-deps
 , grafana-agent
 , nixosTests
+, nodejs
 , stdenv
 , systemd
 , testers
+, yarn
 }:
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.34.1";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    hash = "sha256-xgmh5oFI6Pd0q31zJluLtbhF0ZfuXy2cEPk06sW9SH8=";
+    rev = "v${version}";
+    hash = "sha256-caqJE92yEzqU/UQS7Cgxe+4+wGqBqPshhhPAyPP2WPQ=";
   };
 
-  vendorHash = "sha256-LKHs6KHdXtCMImYiUmi2pfMbfpt9alpvWS4rlo5kuCI=";
+  vendorHash = "sha256-aN/vIBbezieMhWG/czwXxx+/M40mDySZmM8pxVVs3Vs=";
   proxyVendor = true; # darwin/linux hash mismatch
+
+  frontendYarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/web/ui/yarn.lock";
+    hash = "sha256-rT0UCInISo/p60xzQC7wAJFuKFByIzhNf0RxFFJx+3k=";
+  };
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -34,7 +43,10 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
+  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
+
   tags = [
+    "builtinassets"
     "nonetwork"
     "nodocker"
     "promtail_journal_enabled"
@@ -43,7 +55,26 @@ buildGoModule rec {
   subPackages = [
     "cmd/grafana-agent"
     "cmd/grafana-agentctl"
+    "web/ui"
   ];
+
+  preBuild = ''
+    export HOME="$TMPDIR"
+
+    pushd web/ui
+    fixup-yarn-lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+    yarn --offline run build
+    popd
+  '';
+
+  # do not pass preBuild to go-modules.drv, as it would otherwise fail to build.
+  # but even if it would work, it simply isn't needed in that scope.
+  overrideModAttrs = (_: {
+    preBuild = null;
+  });
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
@@ -67,10 +98,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
-    maintainers = with maintainers; [ flokli emilylange ];
+    changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ flokli emilylange ];
+    mainProgram = "grafana-agent";
   };
 }

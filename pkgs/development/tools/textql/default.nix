@@ -8,7 +8,7 @@ buildGoModule rec {
     owner  = "dinedal";
     repo   = "textql";
     rev    = "fca00ecc76c8d9891b195ad2c1359d39f0213604";
-    sha256 = "1v1nq7q2jr7d7kimlbykmh9d73cw750ybcz7v7l091qxjsii3irm";
+    hash   = "sha256-NccRo5YdhwTo2eez5UE5nI3TEqzTL1rjPO1kKfDBNuw=";
   };
 
   patches = [
@@ -19,7 +19,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "1h77wfs3plgcsysb13jk526gnbcw2j0xbbrvc68mz6nk1mj6scgw";
+  vendorHash = "sha256-/DFtZA3Tml+RYTuv1YEUnC37jChTjrC01+zRO7Tj58A=";
 
   postInstall = ''
     install -Dm644 -t $out/share/man/man1 ${src}/man/textql.1

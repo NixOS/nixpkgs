@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.19.0";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EebMccj9DmrPj+/GCECLkqplq3bSmRkNqlI3gYq0qzo=";
+    hash = "sha256-2fDvv5QMo5LwfRN4f8LadtHhaN7a+uD48bQgjgwRMtw=";
   };
 
   propagatedBuildInputs = [
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

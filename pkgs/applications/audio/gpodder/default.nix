@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.11.1";
+  version = "3.11.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "Ns03MFhd4ZLtyeQTLTgLWY2Ot6gmrksFMOZm8jFaLIg=";
+    sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
   };
 
   patches = [
@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
+    mutagen
   ];
 
   makeFlags = [
@@ -94,6 +95,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ skeidel mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

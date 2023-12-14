@@ -23,7 +23,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
+  vendorHash = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -218,7 +218,7 @@ in
         default = null;
         example = "/run/keys/sympa-dbpassword";
         description = lib.mdDoc ''
-          A file containing the password for {option}`services.sympa.database.user`.
+          A file containing the password for {option}`services.sympa.database.name`.
         '';
       };
 
@@ -342,6 +342,7 @@ in
 
       db_type = cfg.database.type;
       db_name = cfg.database.name;
+      db_user = cfg.database.name;
     }
     // (optionalAttrs (cfg.database.host != null) {
       db_host = cfg.database.host;
@@ -354,9 +355,6 @@ in
     })
     // (optionalAttrs (cfg.database.port != null) {
       db_port = cfg.database.port;
-    })
-    // (optionalAttrs (cfg.database.user != null) {
-      db_user = cfg.database.user;
     })
     // (optionalAttrs (cfg.mta.type == "postfix") {
       sendmail_aliases = "${dataDir}/sympa_transport";
@@ -393,7 +391,7 @@ in
     users.groups.${group} = {};
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.sympa.database.user must be set to ${user} if services.sympa.database.createLocally is set to true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -579,7 +577,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

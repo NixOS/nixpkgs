@@ -56,7 +56,7 @@ let
 
     src = djvSrc;
 
-    sourceRoot = "source/etc/SuperBuild";
+    sourceRoot = "${src.name}/etc/SuperBuild";
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [

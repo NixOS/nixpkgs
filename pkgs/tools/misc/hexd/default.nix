@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.FireyFly ];
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "hexd";
   };
 }

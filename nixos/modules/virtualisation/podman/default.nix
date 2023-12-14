@@ -206,6 +206,11 @@ in
 
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
+      systemd.timers.podman-prune.timerConfig = lib.mkIf cfg.autoPrune.enable {
+        Persistent = true;
+        RandomizedDelaySec = 1800;
+      };
+
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.

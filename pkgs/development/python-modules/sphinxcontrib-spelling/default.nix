@@ -5,7 +5,9 @@
 , importlib-metadata
 , sphinx
 , pyenchant
-, pbr
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -21,7 +23,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pbr
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -37,6 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sphinxcontrib.spelling"
   ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx spelling extension";

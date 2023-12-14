@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-u2flib-host";
   version = "3.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

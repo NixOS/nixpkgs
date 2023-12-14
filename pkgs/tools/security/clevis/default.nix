@@ -16,6 +16,7 @@
 , ninja
 , pkg-config
 , tpm2-tools
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-3J3ti/jRiv+p3eVvJD7u0ko28rPd8Gte0mCJaVaqyOs=";
   };
+
+  patches = [
+    # Replaces the clevis-decrypt 300s timeout to a 10s timeout
+    # https://github.com/latchset/clevis/issues/289
+    ./tang-timeout.patch
+  ];
 
   postPatch = ''
     for f in $(find src/ -type f); do
@@ -64,6 +71,14 @@ stdenv.mkDerivation rec {
     "out"
     "man"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests.installer) clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback clevisZfs clevisZfsFallback;
+    clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
+    clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
+    clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
+    clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
+  };
 
   meta = with lib; {
     description = "Automated Encryption Framework";

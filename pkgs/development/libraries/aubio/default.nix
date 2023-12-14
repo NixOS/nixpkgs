@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
   dontAddWafCrossFlags = true;
   wafFlags = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-tests";
 
+  postPatch = ''
+    # U was removed in python 3.11 because it had no effect
+    substituteInPlace waflib/*.py \
+      --replace "m='rU" "m='r" \
+      --replace "'rU'" "'r'"
+  '';
+
   meta = with lib; {
     description = "Library for audio labelling";
     homepage = "https://aubio.org/";

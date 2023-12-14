@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.20.0";
+  version = "2.23.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F61ZHBaE8cEaQl0+7wyWcrjQlk66QHQiUbUasjyjfZw=";
+    hash = "sha256-hJbG0wV177IkwYlAVm+awAbTsSCudZACkYaXw0B5l+Y=";
   };
 
   propagatedBuildInputs = [
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery-storage";
     changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

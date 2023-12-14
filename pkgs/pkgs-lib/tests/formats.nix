@@ -210,7 +210,6 @@ in runBuildTests {
       list = [1, 2]
       str = "foo"
       true = true
-
       [attrs]
       foo = "foo"
 

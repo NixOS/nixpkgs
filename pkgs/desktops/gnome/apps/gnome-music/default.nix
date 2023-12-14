@@ -30,13 +30,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "44.0";
+  version = "45.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "m9GqyVcuYkcgJKaVDYOubyhr4zzZx3fz1E+hbQOPHVE=";
+    sha256 = "M+dwFmImp0U31MELFTjvqIQklP/pvyyQoWyrmKuZe98=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     glib
     libmediaart
     gnome-online-accounts
-    gobject-introspection
     gdk-pixbuf
     python3
     grilo

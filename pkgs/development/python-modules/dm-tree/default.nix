@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "dm-tree";
   version = "0.1.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";

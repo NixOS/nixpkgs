@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
-  version = "0.2.3";
+  version = "0.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YXZeqIX8cxNDvM4Pn0or6Lqj2ffX9aQb3b/xMIeBHRk=";
+    sha256 = "sha256-QBURvPfDBbhF+AhQ0SsHYnZzr5RN36Cqa2DrAQZW0gU=";
   };
 
   doCheck = false; # there are no tests

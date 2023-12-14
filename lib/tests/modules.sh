@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-#
+
 # This script is used to test that the module system is working as expected.
+# Executing it runs tests for `lib.modules`, `lib.options` and `lib.types`.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
+#
+# Run:
+# [nixpkgs]$ lib/tests/modules.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -33,7 +39,7 @@ reportFailure() {
 checkConfigOutput() {
     local outputContains=$1
     shift
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
+    if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
@@ -61,12 +67,63 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
+
+# Check that a module argument is passed, also when a default is available
+# (but not needed)
+#
+# When the default is needed, we currently fail to do what the users expect, as
+# we pass our own argument anyway, even if it *turns out* not to exist.
+#
+# The reason for this is that we don't know at invocation time what is in the
+# _module.args option. That value is only available *after* all modules have been
+# invoked.
+#
+# Hypothetically, Nix could help support this by giving access to the default
+# values, through a new built-in function.
+# However the default values are allowed to depend on other arguments, so those
+# would have to be passed in somehow, making this not just a getter but
+# something more complicated.
+#
+# At that point we have to wonder whether the extra complexity is worth the cost.
+# Another - subjective - reason not to support it is that default values
+# contradict the notion that an option has a single value, where _module.args
+# is the option.
+checkConfigOutput '^true$' config.result ./module-argument-default.nix
+
+# gvariant
+checkConfigOutput '^true$' config.assertion ./gvariant.nix
+
+# https://github.com/NixOS/nixpkgs/pull/131205
+# We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
+# We currently throw this error already in `config`, but throwing in `config.nest.wrong2` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
+checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
+
+# types.pathInStore
+checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+# Check boolByOr type.
+checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
 
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
@@ -184,8 +241,16 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 
 # Check mkPackageOption
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
 # submoduleWith
 
@@ -195,7 +260,7 @@ checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "In module ..*define-submoduleWith-shorthand.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -353,6 +418,14 @@ checkConfigError \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
+# Options: accidental use of an option-type instead of option (or other tagged type; unlikely)
+checkConfigError 'In module .*/options-type-error-typical.nix: expected an option declaration at option path .result. but got an attribute set with type option-type' config.result ./options-type-error-typical.nix
+checkConfigError 'In module .*/options-type-error-typical-nested.nix: expected an option declaration at option path .result.here. but got an attribute set with type option-type' config.result.here ./options-type-error-typical-nested.nix
+checkConfigError 'In module .*/options-type-error-configuration.nix: expected an option declaration at option path .result. but got an attribute set with type configuration' config.result ./options-type-error-configuration.nix
+
+# Check that that merging of option collisions doesn't depend on type being set
+checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
+
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
 checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
@@ -395,6 +468,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
+
+# Declaration positions
+# Line should be present for direct options
+checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+# Generated options may not have line numbers but they will at least get the
+# right file
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+# Submodules don't break it
+checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+# New options under freeform submodules get collected into the parent submodule
+# (consistent with .declarations behaviour, but weird; notably appears in system.build)
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+# nested options work
+checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

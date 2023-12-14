@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tableau/document-api-python";
     changelog = "https://github.com/tableau/document-api-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

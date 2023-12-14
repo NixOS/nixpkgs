@@ -16,28 +16,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-krO/iPGnzXeY3W8xSFerlKa1DvDl7ss00bGaAMkHUtw=";
+    sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "bevy_simple_tilemap-0.10.1" = "sha256-Q/AsBZjsr+uTIh/oN0OsIJxntZ4nuc1AReo0Ronj930=";
-      "bones_asset-0.1.0" = "sha256-YyY5OsbRLkpAgvNifRiXfmzfsgFw/oFV1nQVCkXG4j4=";
+      "bevy_egui-0.21.0" = "sha256-hu55tZQppw1NajwqIsYsw6de0IAwQwgra3D9OFzSSLc=";
+      "bones_asset-0.3.0" = "sha256-1UeOXW6O/gMQBBUnHxRreJgmiUTPC5SJB+uLn9V8aa4=";
+      "kira-0.8.5" = "sha256-z4R5aIaoRQQprL6JsVrFI69rwTOsW5OH01+jORS+hBQ=";
     };
   };
-
-  patches = [
-    # jumpy uses an outdated version of mimalloc
-    # which fails to build on aarch64-linux
-    ./update-mimalloc.patch
-  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -57,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk_11_0.frameworks.Cocoa
     rustPlatform.bindgenHook
   ];
 
@@ -67,11 +62,12 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+  # jumpy only loads assets from the current directory
+  # https://github.com/fishfolk/bones/blob/f84d07c2f2847d9acd5c07098fe1575abc496400/framework_crates/bones_asset/src/io.rs#L50
   postInstall = ''
     mkdir $out/share
     cp -r assets $out/share
-    wrapProgram $out/bin/jumpy \
-      --set-default JUMPY_ASSET_DIR $out/share/assets
+    wrapProgram $out/bin/jumpy --chdir $out/share
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''

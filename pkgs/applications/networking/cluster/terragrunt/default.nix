@@ -5,23 +5,23 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.46.3";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2SC1HPmAQYUNrLMvtp87EaZ/K1dYD5LHhH+jB0si+Hs=";
+    hash = "sha256-BbJ8XJ2zdKm1awDEkWZIZMDku/NWN3Y+nl/GtBBHgBQ=";
   };
 
-  vendorHash = "sha256-5Umoqi2D6iUk2Ut7YB/nmkOyA6Rx2qFhy/ZbfqoX5qA=";
+  vendorHash = "sha256-OIkrDvNk4XD11j/+BdOkzbw86cYUj0Vz7pZ5/vIZopY=";
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.VERSION=v${version}"
+    "-X github.com/gruntwork-io/go-commons/version.Version=v${version}"
   ];
 
   doInstallCheck = true;
@@ -38,6 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/gruntwork-io/terragrunt/releases/tag/v${version}";
     description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices";
     license = licenses.mit;
-    maintainers = with maintainers; [ jk qjoly ];
+    maintainers = with maintainers; [ jk qjoly kashw2 ];
   };
 }

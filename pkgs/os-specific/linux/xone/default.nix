@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   setSourceRoot = ''
-    export sourceRoot=$(pwd)/source
+    export sourceRoot=$(pwd)/${src.name}
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

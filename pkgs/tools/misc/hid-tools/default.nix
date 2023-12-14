@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "hid-tools";
-  version = "0.3.1";
+  version = "0.4";
 
   format = "setuptools";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "libevdev";
     repo = "hid-tools";
     rev = version;
-    sha256 = "r496SKBGgHriIhriWYhhCSiChQUKhnHT/lEx9sEoT/0=";
+    hash = "sha256-pxU1BvB+rjc5sptafMGnWi+vWPNDyCyUv8gTWg6z5hU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

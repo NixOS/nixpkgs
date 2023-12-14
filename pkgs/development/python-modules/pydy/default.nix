@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

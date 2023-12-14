@@ -4,20 +4,22 @@
 , installShellFiles
 , stdenv
 , darwin
+, bottom
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom";
-  version = "0.9.2";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    hash = "sha256-QHr4FvoXIqsAE7wE/eFKH18ivagVpZkQbGO7qR0dev8=";
+    hash = "sha256-czOYEZevZD7GfExmqwB7vhLXl6+etag1PjZFA2G9aGA=";
   };
 
-  cargoHash = "sha256-KsM28vcu/C8orB+TSDGu4nGSpxX1mnEP2Yg7Fu4uh5Q=";
+  cargoHash = "sha256-RDOGf1jujZikcRXRtL71BUGgmZyt7vQOTk1LkKpXDuo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,6 +37,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   BTM_GENERATE = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = bottom;
+  };
 
   meta = with lib; {
     description = "A cross-platform graphical process/system monitor with a customizable interface";

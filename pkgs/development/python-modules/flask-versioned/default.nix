@@ -17,7 +17,7 @@ buildPythonPackage rec {
     description = "Flask plugin to rewrite file paths to add version info";
     homepage = "https://github.com/pilt/flask-versioned";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }
 

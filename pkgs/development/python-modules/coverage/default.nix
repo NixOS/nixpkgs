@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.2.1";
+  version = "7.3.1";
+  format = "setuptools";
   # uses f strings
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x38qkJPM8yndUjqbKzyFTCDSo9lott7zuCAnLKZzIkI=";
+    hash = "sha256-bLf+FYHetnt4LBUxNlQeIJAaoxLO7a8UZ9yzUlV4eVI=";
   };
 
   # No tests in archive

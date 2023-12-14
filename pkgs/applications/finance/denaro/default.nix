@@ -1,5 +1,4 @@
 { lib
-, stdenvNoCC
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -15,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.6.0";
+  version = "2023.9.2";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
     rev = version;
-    hash = "sha256-oLEk3xHDkz98wOMwqr+lLtsFmOJdyPYK1YAutegic7U=";
+    hash = "sha256-3Atdi0R7OHpP1HUBWGu2Y4L8hr9jLPMIFYCEWeoEq6A=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -30,10 +29,6 @@ buildDotnetModule rec {
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
   nugetDeps = ./deps.nix;
   executables = "NickvisionMoney.GNOME";
-
-  # Prevent installing native libraries for all platforms
-  dotnetBuildFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
-  dotnetInstallFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
 
   nativeBuildInputs = [
     pkg-config
@@ -59,6 +54,7 @@ buildDotnetModule rec {
     gtk4
     libadwaita
     glib # Fixes "Could not retrieve parent type - is the typeid valid?"
+    gdk-pixbuf
   ];
 
   passthru.updateScript = ./update.sh;
@@ -69,7 +65,7 @@ buildDotnetModule rec {
     mainProgram = "NickvisionMoney.GNOME";
     license = licenses.mit;
     changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu kashw2 ];
     platforms = platforms.linux;
   };
 }

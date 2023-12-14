@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, writeText, vulkan-headers, jq }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, writeText, vulkan-headers, vulkan-utility-libraries,  jq, libX11, libXrandr, libxcb, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.248";
+  version = "1.3.268.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
-    rev = "v${version}";
-    hash = "sha256-CuwYpB8HX8pnR+ElkQfckpKDLKyZIzqm4F9kluM1cKo=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-rSKPTeTDOz6IeJGRt9aIu1VH8VfVzXNYZfjdiSXEJxg=";
   };
 
-  nativeBuildInputs = [ cmake jq ];
+  nativeBuildInputs = [ cmake pkg-config jq ];
 
-  buildInputs = [ vulkan-headers ];
+  buildInputs = [ vulkan-headers vulkan-utility-libraries libX11 libXrandr libxcb wayland ];
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+    addToSearchPath XDG_DATA_DIRS @out@/share
   '';
 
   # Tests are not for gpu-less and headless environments

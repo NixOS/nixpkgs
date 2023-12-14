@@ -34,15 +34,15 @@ let
     "${util-linux}/bin"
   ];
 in
-stdenv.mkDerivation rec {
-  version = "18.3.1-53614";
+stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
+  version = "19.1.1-54734";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
-    url = "https://download.parallels.com/desktop/v${lib.versions.major version}/${version}/ParallelsDesktop-${version}.dmg";
-    hash = "sha256-MZtNxByY2GSoPFeH9mPieCPPNfUgfla+lYgpeD+SgOc=";
+    url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
+    hash = "sha256-02YxBkV9pZGfXuK6GvUDTgE9U5H2MOMk24h9qGJdFTM=";
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -173,4 +173,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ catap wegank ];
     platforms = platforms.linux;
   };
-}
+})

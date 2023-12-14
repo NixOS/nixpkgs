@@ -1,19 +1,40 @@
 { lib
 , fetchFromGitLab
-, python
+, fetchPypi
 , apksigner
+, buildPythonApplication
+, python3
+, pythonRelaxDepsHook
+, installShellFiles
+, androguard
+, babel
+, clint
+, defusedxml
+, gitpython
+, libcloud
+, mwclient
+, paramiko
+, pillow
+, pyasn1
+, pyasn1-modules
+, python-vagrant
+, pyyaml
+, qrcode
+, requests
+, ruamel-yaml
+, yamllint
 }:
 
-python.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.2.1";
+  version = "unstable-2023-10-23";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-+Y1YTgELsX834WIrhx/NX34yLMHdkKM+YUNvnHPiC/s=";
+    rev = "f4b10cf83935432d19948dac669964384bef0728";
+    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
   };
 
   pythonRelaxDeps = [
@@ -27,23 +48,26 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python.pythonForBuild.interpreter} setup.py compile_catalog
+    ${python3.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
+    installShellCompletion --cmd fdroid \
+      --bash completion/bash-completion
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = [
     pythonRelaxDepsHook
+    installShellFiles
   ];
 
-  buildInputs = with python.pkgs; [
+  buildInputs = [
     babel
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = [
     androguard
     clint
     defusedxml
@@ -58,7 +82,13 @@ python.pkgs.buildPythonApplication rec {
     pyyaml
     qrcode
     requests
-    ruamel-yaml
+    (ruamel-yaml.overrideAttrs (old: {
+      src = fetchPypi {
+        pname = "ruamel.yaml";
+        version = "0.17.21";
+        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+      };
+    }))
     yamllint
   ];
 
@@ -81,7 +111,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ obfusk ];
+    maintainers = with maintainers; [ linsui jugendhacker ];
   };
-
 }

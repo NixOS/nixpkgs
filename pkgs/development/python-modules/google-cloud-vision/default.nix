@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.4.2";
+  version = "3.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uLKI2lY094rCMXPdXV69hrorN85cTLrbVkyqeBiOBRg=";
+    hash = "sha256-DfgkGrJ3GZuRnKODen3oUFk2P+oOPWYAYIcL587/wEc=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-vision";
     changelog = "https://github.com/googleapis/python-vision/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

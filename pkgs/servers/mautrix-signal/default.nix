@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UbetU1n9zD/mVFaJc9FECDq/Zell1TI/aYPsGXGB8Js=";
+    sha256 = "sha256-QShyuwHiWRcP1hGkvCQfixvoUQ/FXr2DYC5VrcMKX48=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with python3.pkgs; [
     commonmark
     aiohttp
+    aiosqlite
     asyncpg
     attrs
     commonmark
@@ -66,5 +67,6 @@ python3.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ expipiplus1 ];
+    mainProgram = "mautrix-signal";
   };
 }

@@ -22,12 +22,9 @@ in
         default = false;
         description = lib.mdDoc "Whether to enable the sickbeard server.";
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sickbeard;
-        defaultText = literalExpression "pkgs.sickbeard";
-        example = literalExpression "pkgs.sickrage";
-        description =lib.mdDoc ''
+      package = mkPackageOption pkgs "sickbeard" {
+        example = "sickrage";
+        extraDescription = ''
           Enable `pkgs.sickrage` or `pkgs.sickgear`
           as an alternative to SickBeard
         '';

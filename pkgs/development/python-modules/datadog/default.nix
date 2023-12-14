@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.45.0";
+  version = "0.47.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a//tZ0SMtL9d/1WfsqzuHAbn2oYSuOKnNPJ4tQs5ZgM=";
+    hash = "sha256-R747LD1wmn9bcJ6xJu1P5sx5d9YY/lwVjdicKp99mRY=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     click
@@ -60,6 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = true; # https://github.com/DataDog/datadogpy/issues/800
     description = "The Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
     changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";

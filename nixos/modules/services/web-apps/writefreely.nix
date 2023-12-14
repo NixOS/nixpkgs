@@ -120,7 +120,7 @@ let
     withConfigFile ''
       query () {
         local result=$(${sqlite}/bin/sqlite3 \
-          '${cfg.stateDir}/${settings.database.filename}'
+          '${cfg.stateDir}/${settings.database.filename}' \
           "$1" \
         )
 

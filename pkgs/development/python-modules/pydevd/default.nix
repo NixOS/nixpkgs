@@ -1,6 +1,8 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , numpy
 , psutil
 , pytestCheckHook
@@ -22,6 +24,17 @@ buildPythonPackage rec {
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
     hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
   };
+
+  patches = [
+    # https://github.com/fabioz/PyDev.Debugger/pull/258
+    (fetchpatch {
+      name = "numpy-1.25-test-compatibility.patch";
+      url = "https://github.com/fabioz/PyDev.Debugger/commit/6f637d951cda62dc2202a2c7b6af526c4d1e8a00.patch";
+      hash = "sha256-DLzZZwQHtqGZGA8nsBLNQqamuI4xUfQ89Gd21sJa9/s=";
+    })
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     numpy
@@ -48,6 +61,9 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_multiprocessing_simple"
+    "test_evaluate_exception_trace"
   ];
 
   pythonImportsCheck = [

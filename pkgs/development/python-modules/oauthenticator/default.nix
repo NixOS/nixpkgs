@@ -14,29 +14,43 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "15.1.0";
+  version = "16.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0dmHPJtm4a+XMpGWi5Vz0lN4vYxkfzDXO42PsnsaC4U=";
+    hash = "sha256-qJrreq2GhJxrX9keZOYVzjihs0RCymad+MGErW5ecPc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=oauthenticator" ""
+  '';
 
   propagatedBuildInputs = [
     jupyterhub
   ];
 
+  passthru.optional-dependencies = {
+    azuread = [
+      pyjwt
+    ];
+    googlegroups = [
+      google-api-python-client
+      google-auth-oauthlib
+    ];
+    mediawiki = [
+      mwoauth
+    ];
+  };
+
   nativeCheckInputs = [
-    google-api-python-client
-    google-auth-oauthlib
-    mwoauth
-    pyjwt
     pytest-asyncio
     pytestCheckHook
     requests-mock
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
@@ -49,9 +63,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
+    description = "Authenticate JupyterHub users with common OAuth providers";
     homepage =  "https://github.com/jupyterhub/oauthenticator";
+    changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

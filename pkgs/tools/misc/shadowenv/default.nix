@@ -2,16 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    hash = "sha256-11Zce3eehyuDOl2zYl0sf/yh8SOOnu8W/CrL18e3zzw=";
+    hash = "sha256-NKqoeJ2sejbe7Gghk3H7oJtP16SX1PcIIjsh/bZdTfQ=";
   };
 
-  cargoHash = "sha256-eo+/mZ6QFoXgIT1uT65TVR65xWBm/Cw5yBzvRUVgQUY=";
+  cargoPatches = [ ./Cargo.lock.patch ];
+
+  cargoHash = "sha256-CGAwb+UduM2QKne2bPntOcFnaUQN/3uUANc6z7f/Oig=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     description = "reversible directory-local environment variable manipulations";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "shadowenv";
   };
 }

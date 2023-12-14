@@ -5,62 +5,31 @@
 , maven
 , makeWrapper
 , openjdk
-, stdenv
 }:
 
 let
-  version = "1.6.53";
+  version = "1.6.57";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    sha256 = "sha256-tNPG90mw8HZjp37YJ9JQlOBiVNPRo6xuNur651Adva8=";
+    hash = "sha256-pxnnqLfyblbIgIRZZrx8Y8K43zUv9mu7PzZ7zltpEUQ=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
   patches = [ ./no-launch4j.patch ];
 
-  mavenRepository = stdenv.mkDerivation {
-    pname = "forge-mtg-maven-repository";
-    inherit version src patches;
-
-    nativeBuildInputs = [ maven ];
-
-    buildPhase = ''
-      runHook preBuild
-      # Tests need a running Xorg.
-      mvn package -Dmaven.repo.local=$out -DskipTests
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      find $out -type f \( \
-        -name \*.lastUpdated \
-        -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
-        -delete
-      runHook postInstall
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-6FTbYXaF3rBIZov2WJxjG/ovmvimjXFPaFchAduVzI8=";
-  };
-
-in stdenv.mkDerivation {
+in
+maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  # Tests need a running Xorg.
+  mvnParameters = "-DskipTests";
+  mvnHash = "sha256-QK9g0tG75lIhEtf4jW03N32YbD9Fe5iI0JTuqmCTtnE=";
 
-  buildPhase = ''
-    runHook preBuild
-    # Tests need a running Xorg.
-    mvn --offline -Dmaven.repo.local=${mavenRepository} -DskipTests package;
-    runHook postBuild
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -68,7 +37,9 @@ in stdenv.mkDerivation {
     cp -a \
       forge-gui-desktop/target/forge.sh \
       forge-gui-desktop/target/forge-gui-desktop-${version}-jar-with-dependencies.jar \
-      forge-adventure/target/forge-adventure.sh \
+      forge-gui-mobile-dev/target/forge-adventure.sh \
+      forge-gui-mobile-dev/target/forge-gui-mobile-dev-${version}-jar-with-dependencies.jar \
+      forge-adventure/target/forge-adventure-editor.sh \
       forge-adventure/target/forge-adventure-${version}-jar-with-dependencies.jar \
       forge-gui/res \
       $out/share/forge
@@ -76,7 +47,7 @@ in stdenv.mkDerivation {
   '';
 
   preFixup = ''
-    for commandToInstall in forge forge-adventure; do
+    for commandToInstall in forge forge-adventure forge-adventure-editor; do
       chmod 555 $out/share/forge/$commandToInstall.sh
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \
         --prefix PATH : ${lib.makeBinPath [ coreutils openjdk gnused ]} \
@@ -88,7 +59,6 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://www.slightlymagic.net/forum/viewforum.php?f=26";
-    platforms = openjdk.meta.platforms;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eigengrau ];
   };

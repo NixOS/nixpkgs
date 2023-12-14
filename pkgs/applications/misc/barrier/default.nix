@@ -49,5 +49,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.phryneas ];
     platforms = lib.platforms.linux;
+    mainProgram = "barrier";
   };
 }

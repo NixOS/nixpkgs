@@ -51,6 +51,7 @@ with lib;
       mc = super.mc.override { x11Support = false; };
       mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
+      mupdf = super.mupdf.override { enableGL = false; enableX11 = false; };
       neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
@@ -62,6 +63,12 @@ with lib;
       pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
       pipewire = super.pipewire.override { x11Support = false; };
+      pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
+        (python-final: python-prev: {
+          # tk feature requires wayland which fails to compile
+          matplotlib = python-prev.matplotlib.override { enableTk = false; };
+        })
+      ];
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {

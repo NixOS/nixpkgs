@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sslscan";
-  version = "2.0.16";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "rbsec";
     repo = "sslscan";
-    rev = version;
-    sha256 = "sha256-1j5p9cuSxc8u6/+puP9ywHEljeva18m+WO3M8gbpkIU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6teCWzv9DXhGSBjyIurRW3ymSTwMUlbJGjuXmsqpkUc=";
   };
 
   buildInputs = [ openssl ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";
     homepage = "https://github.com/rbsec/sslscan";
+    changelog = "https://github.com/rbsec/sslscan/blob/${version}/Changelog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fpletz globin ];
   };

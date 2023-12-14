@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.22.1";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K6xWTPu2a5NKYAYBt/sCWQOmuw9TCoKPA4ZxkoLWmeY=";
+    hash = "sha256-mT5toF4mKRP0dlwlfKHjmFFQJ/cWSb2vwg1uZbhZRhI=";
   };
 
-  cargoSha256 = "sha256-MZrx72poA6uOIulWIQkfOr9gy5qr5f61UtLITfES/rk=";
+  cargoHash = "sha256-8j0NtJB2ErrpljPHSMRD/4IGZuqA8wLuzPnuQqxaXRg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,10 +37,19 @@ rustPlatform.buildRustPackage rec {
   # environment: delete them.
   postPatch = "rm .cargo/config";
 
+
+  # Getting app_config_path fails with a permission denied
+  checkFlags = [
+    "--skip=keys::key_config::tests::test_symbolic_links"
+  ];
+
+
   meta = with lib; {
     description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
+    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
+    mainProgram = "gitui";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne yanganto ];
+    maintainers = with maintainers; [ Br1ght0ne yanganto mfrw ];
   };
 }

@@ -1,23 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, util-linux }:
+{ lib, stdenv, fetchFromGitHub, zlib, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "pigz";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
       owner = "madler";
       repo = pname;
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-RYp3vRwlI6S/lcib+3t7qLYFWv11GUnj1Cmxm9eaVro=";
+      sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
-
-  patches = [
-    # needed to build the pigzn test binary
-    (fetchpatch {
-      url = "https://github.com/madler/pigz/commit/67fd6e436f4f479aead529a719e24d6864cf1dfa.patch";
-      sha256 = "sha256-FkzLYob/WIVIB7eh03cdzpLy6SzoHLqEMsWyHdMTjbU=";
-    })
-  ];
 
   enableParallelBuilding = true;
 
@@ -28,11 +20,15 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pigz "$out/bin/pigz"
     ln -s pigz "$out/bin/unpigz"
     install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
     ln -s pigz.1 "$out/share/man/man1/unpigz.1"
     install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

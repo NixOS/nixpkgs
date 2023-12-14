@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     python3 # for build scripts
     pkgconf
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -79,7 +80,6 @@ stdenv.mkDerivation rec {
     elfutils
     gexiv2
     glib
-    gobject-introspection
     gst-plugins-base
     gstreamer
     gtk3
@@ -133,5 +133,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
+    mainProgram = "entangle";
   };
 }

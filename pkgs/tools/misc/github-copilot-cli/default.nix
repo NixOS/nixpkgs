@@ -20,9 +20,10 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "A CLI experience for letting GitHub Copilot help you on the command line";
     homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.free;
+    license = licenses.unfree; # upstream has no license
     maintainers = [ maintainers.malo ];
     platforms = platforms.all;
+    mainProgram = "github-copilot-cli";
   };
 }
 

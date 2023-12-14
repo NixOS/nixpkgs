@@ -15,7 +15,7 @@ buildGoModule rec {
     ./bump-golang-x-sys.patch
   ];
 
-  vendorSha256 = "sha256-p4KUBmJw6hWG1J2qwg4QBbh6Vo1cr/HQz0IqytIDJjU=";
+  vendorHash = "sha256-p4KUBmJw6hWG1J2qwg4QBbh6Vo1cr/HQz0IqytIDJjU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

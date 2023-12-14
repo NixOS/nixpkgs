@@ -2,28 +2,29 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.1.36";
+  version = "0.1.131";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-zB+zmOXkbITm+CFB1dg3ELlrN+VDNy3t56hzCyXp0YU=";
+    hash = "sha256-q24QQExHsIUkMQBhIdYN9ra6tSPfB21SxXnZzVJIpJk=";
   };
 
-  vendorHash = "sha256-g4S0zHSNCaOl2kYwaR074KYSBChYWvZVfWBK/nHI9t8=";
+  vendorHash = "sha256-UHG0pUJzA3I8uBbll+4fEpwpEvNBxoQYKr8wuupc8NQ=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
-    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
-    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
   ];
+  tags = ["production"];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
     go generate ./...
@@ -56,6 +57,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick viraptor ];
+    maintainers = with maintainers; [ aaronjanse adtya jsierles techknowlogick viraptor ];
+    mainProgram = "flyctl";
   };
 }

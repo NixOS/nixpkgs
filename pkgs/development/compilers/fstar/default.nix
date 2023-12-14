@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2023.02.01";
+  version = "2023.09.03";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    hash = "sha256-sLhbIGF7j1tH8zKsPq1qOSwHvYDrVCyfln9UbE3IYv0=";
+    hash = "sha256-ymoP5DvaLdrdwJcnhZnLEvwNxUFzhkICajPyK4lvacc=";
   };
 
   strictDeps = true;
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     removeReferencesTo
   ] ++ (with ocamlPackages; [
     ocaml
+    dune_3
     findlib
     ocamlbuild
     menhir
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     stdint
     yojson
     fileutils
+    memtrace
     menhirLib
     pprint
     sedlex
@@ -45,8 +47,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    patchShebangs ulib/gen_mllib.sh
-    substituteInPlace src/ocaml-output/Makefile --replace '$(COMMIT)' 'v${version}'
+    patchShebangs ulib/install-ulib.sh
   '';
 
   preInstall = ''

@@ -43,6 +43,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             mv $GOPATH/tracee-integration $out/bin/
           '';
           doInstallCheck = false;
+
+          meta = oa.meta // {
+            outputsToInstall = [];
+          };
         }))
       ];
     };

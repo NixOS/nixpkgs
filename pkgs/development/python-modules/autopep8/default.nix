@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , glibcLocales
 , pycodestyle
 , pytestCheckHook
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.1";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,17 +19,8 @@ buildPythonPackage rec {
     owner = "hhatto";
     repo = "autopep8";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YEPSsUzJG4MPiiloVAf9m/UiChkhkN0+lK6spycpSvo=";
+    hash = "sha256-TuaDnZqn9mRUsoDJkj9JK4ztvzl9JTwAk8nghIkZBvw=";
   };
-
-  patches = [
-    # Ignore DeprecationWarnings to fix tests on Python 3.11, https://github.com/hhatto/autopep8/pull/665
-    (fetchpatch {
-      name = "ignore-deprecation-warnings.patch";
-      url = "https://github.com/hhatto/autopep8/commit/75b444d7cf510307ef67dc2b757d384b8a241348.patch";
-      hash = "sha256-5hcJ2yAuscvGyI7zyo4Cl3NEFG/fZItQ8URstxhzwzE=";
-    })
-  ];
 
   propagatedBuildInputs = [
     pycodestyle
@@ -43,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";

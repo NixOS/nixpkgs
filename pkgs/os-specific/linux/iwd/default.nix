@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -8,17 +9,28 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.5";
+  version = "2.10";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-QGrZid1MVAofFcsnZ20f8RJdyNrVsRkUg2yPGC/iGVU=";
+    hash = "sha256-zePFmcQRFjcH6KToTpBFMQzGY+Eq7jijfn0R/MMKGrw=";
   };
+
+  # Revert test that's broken on aarch64
+  # FIXME: fix this properly
+  patches = [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=aabedeeb6c20c0c053f11ef53413d542442a8f62";
+      revert = true;
+      hash = "sha256-hO4KzdLzW6Tn/4NNJEQO2OvgjSPVl46cwwZfv53R84U=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
@@ -87,11 +99,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
+
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
   };
 }

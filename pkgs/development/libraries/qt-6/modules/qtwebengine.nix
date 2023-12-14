@@ -14,8 +14,6 @@
 , python3
 , which
 , nodejs
-, qtbase
-, perl
 , xorg
 , libXcursor
 , libXScrnSaver
@@ -51,8 +49,6 @@
 , systemd
 , pipewire
 , gn
-, runCommand
-, writeScriptBin
 , ffmpeg_4
 , lib
 , stdenv
@@ -60,13 +56,10 @@
 , libxml2
 , libxslt
 , lcms2
-, re2
 , libkrb5
 , mesa
-, xkeyboard_config
 , enableProprietaryCodecs ? true
   # darwin
-, clang_14
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -99,7 +92,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
     bison
     coreutils
@@ -113,7 +105,6 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
-    clang_14
     bootstrap_cmds
     cctools
     xcbuild
@@ -135,6 +126,11 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+
+    ../patches/qtwebengine-link-pulseaudio.patch
+
+    # Override locales install path so they go to QtWebEngine's $out
+    ../patches/qtwebengine-locales-path.patch
   ];
 
   postPatch = ''
@@ -167,7 +163,7 @@ qtModule {
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
   + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.cmake \
+    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
@@ -202,6 +198,11 @@ qtModule {
   ];
 
   propagatedBuildInputs = [
+    qtdeclarative
+    qtwebchannel
+    qtwebsockets
+    qtpositioning
+
     # Image formats
     libjpeg
     libpng
@@ -224,7 +225,6 @@ qtModule {
     libxml2
     libxslt
     lcms2
-    re2
 
     libevent
     ffmpeg_4
@@ -308,8 +308,7 @@ qtModule {
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

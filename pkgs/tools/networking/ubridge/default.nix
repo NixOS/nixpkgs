@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , libpcap
+, testers
+, ubridge
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +25,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  preInstall = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
+    install -Dm755 ubridge $out/bin/ubridge
+
+    runHook postInstall
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = ubridge;
+      command = "ubridge -v";
+    };
+  };
 
   meta = with lib; {
     description = "Bridge for UDP tunnels, Ethernet, TAP, and VMnet interfaces";
@@ -35,7 +51,8 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    mainProgram = "ubridge";
     maintainers = with maintainers; [ primeos ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

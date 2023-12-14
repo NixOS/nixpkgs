@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "10.4";
+  version = "11.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
-    rev = version;
-    hash = "sha256-IylvnaS8cHatA+WMc5uY9E+l+52INqOMITU1VJPO2xY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RdkbIiZI/UYsWdnnl5gJPsnJ/6adfFtkiXC7MO/HwcI=";
   };
 
   patchPhase = ''

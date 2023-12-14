@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "nifi";
-  version = "1.21.0";
+  version = "1.24.0";
 
   src = fetchzip {
     url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
-    sha256 = "sha256-AnDvZ9SV+VFdsP6KoqZIPNinAe2erT/IBY4c6i+2iTQ=";
+    hash = "sha256-8S06E8RiH/EnfAa60eRzjmHmzMn+3UZbykJpvFFXEho=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk11 ];
 
   installPhase = ''
-    mv ../$sourceRoot $out
+    cp -r ../$sourceRoot $out
     rm -f $out/bin/*bat
     rm -rf $out/extensions
     mkdir -p $out/share/nifi
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = "https://nifi.apache.org";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ izorkin ];
   };
 }

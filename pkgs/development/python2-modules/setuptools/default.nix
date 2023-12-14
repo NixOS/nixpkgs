@@ -29,8 +29,8 @@ let
     ];
 
     buildPhase = ''
-      ${python.pythonForBuild.interpreter} bootstrap.py
-      ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
+      ${python.pythonOnBuildForHost.interpreter} bootstrap.py
+      ${python.pythonOnBuildForHost.interpreter} setup.py sdist --formats=gztar
 
       # Here we untar the sdist and retar it in order to control the timestamps
       # of all the files included

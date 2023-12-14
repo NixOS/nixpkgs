@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "timewarrior-synchronize";
     repo = pname;
     rev = "v${version}";
-    sha256 = "GaDcnPJBcDJ3AQaHzifDgdl0QT4GSbAOIqp4RrAcO3M=";
+    hash = "sha256-GaDcnPJBcDJ3AQaHzifDgdl0QT4GSbAOIqp4RrAcO3M=";
   };
 
-  vendorSha256 = "iROqiRWkHG6N6kivUmgmu6sg14JDdG4f98BdR7CL1gs=";
+  vendorHash = "sha256-iROqiRWkHG6N6kivUmgmu6sg14JDdG4f98BdR7CL1gs=";
 
   meta = with lib; {
     homepage = "https://github.com/timewarrior-synchronize/timew-sync-server";

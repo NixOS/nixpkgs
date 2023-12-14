@@ -20,12 +20,16 @@ in rec {
       pkgs.runCommand "unit-${mkPathSafeName name}"
         { preferLocalBuild = true;
           allowSubstitutes = false;
-          inherit (unit) text;
+          # unit.text can be null. But variables that are null listed in
+          # passAsFile are ignored by nix, resulting in no file being created,
+          # making the mv operation fail.
+          text = optionalString (unit.text != null) unit.text;
+          passAsFile = [ "text" ];
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          echo -n "$text" > "$out/$name"
+          mv "$textPath" "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -63,7 +67,12 @@ in rec {
 
   assertMacAddress = name: group: attr:
     optional (attr ? ${name} && ! isMacAddress attr.${name})
-      "Systemd ${group} field `${name}' must be a valid mac address.";
+      "Systemd ${group} field `${name}' must be a valid MAC address.";
+
+  assertNetdevMacAddress = name: group: attr:
+    optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
+      "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
+
 
   isPort = i: i >= 0 && i <= 65535;
 
@@ -73,6 +82,10 @@ in rec {
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
+      "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
+
+  assertValuesSomeOfOr = name: values: default: group: attr:
+    optional (attr ? ${name} && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default))
       "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField = name: group: attr:
@@ -269,7 +282,7 @@ in rec {
       });
     in "${out}/bin/${scriptName}";
 
-  unitConfig = { config, options, ... }: {
+  unitConfig = { config, name, options, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -289,9 +302,9 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
-          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers" (toString config.restartTriggers)}"; }
+          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (toString config.restartTriggers)}"; }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
-          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers" (toString config.reloadTriggers)}"; }
+          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (toString config.reloadTriggers)}"; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -363,24 +376,23 @@ in rec {
 
   serviceToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Service]
-          ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n:
-              let s = optionalString (env.${n} != null)
-                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              # systemd max line length is now 1MiB
-              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
-          ${if def ? reloadIfChanged && def.reloadIfChanged then ''
-            X-ReloadIfChanged=true
-          '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
-            X-RestartIfChanged=false
-          '' else ""}
-          ${optionalString (def ? stopIfChanged && !def.stopIfChanged) "X-StopIfChanged=false"}
-          ${attrsToSection def.serviceConfig}
-        '';
+      text = commonUnitText def + ''
+        [Service]
+      '' + (let env = cfg.globalEnvironment // def.environment;
+        in concatMapStrings (n:
+          let s = optionalString (env.${n} != null)
+            "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+          # systemd max line length is now 1MiB
+          # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env))
+      + (if def ? reloadIfChanged && def.reloadIfChanged then ''
+        X-ReloadIfChanged=true
+      '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
+        X-RestartIfChanged=false
+      '' else "")
+       + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
+         X-StopIfChanged=false
+      '' + attrsToSection def.serviceConfig;
     };
 
   socketToUnit = name: def:
@@ -438,4 +450,21 @@ in rec {
           ${attrsToSection def.sliceConfig}
         '';
     };
+
+  # Create a directory that contains systemd definition files from an attrset
+  # that contains the file names as keys and the content as values. The values
+  # in that attrset are determined by the supplied format.
+  definitions = directoryName: format: definitionAttrs:
+    let
+      listOfDefinitions = lib.mapAttrsToList
+        (name: format.generate "${name}.conf")
+        definitionAttrs;
+    in
+    pkgs.runCommand directoryName { } ''
+      mkdir -p $out
+      ${(lib.concatStringsSep "\n"
+        (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
+      )}
+    '';
+
 }

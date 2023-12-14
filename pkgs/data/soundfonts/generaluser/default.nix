@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   # we can't use fetchurl since stdenv does not handle unpacking *.zip's by default.
   src = fetchzip {
-    # Linked on http://www.schristiancollins.com/generaluser.php:
+    # Linked on https://www.schristiancollins.com/generaluser.php:
     url = "https://www.dropbox.com/s/4x27l49kxcwamp5/GeneralUser_GS_${version}.zip";
     sha256 = "sha256-lwUlWubXiVZ8fijKuNF54YQjT0uigjNAbjKaNjmC51s=";
   };
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "a SoundFont bank featuring 259 instrument presets and 11 drum kits";
-    homepage = "http://www.schristiancollins.com/generaluser.php";
+    homepage = "https://www.schristiancollins.com/generaluser.php";
     license = licenses.generaluser;
     platforms = platforms.all;
     maintainers = with maintainers; [ ckie ];

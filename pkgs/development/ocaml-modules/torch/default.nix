@@ -20,7 +20,6 @@ buildDunePackage rec {
   pname = "torch";
   version = "0.17";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -57,7 +56,6 @@ buildDunePackage rec {
   preBuild = "export LIBTORCH=${torch.dev}/";
 
   doCheck = !stdenv.isAarch64;
-  checkPhase = "dune runtest";
 
   meta = with lib; {
     inherit (src.meta) homepage;

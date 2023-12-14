@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     "-DBLADERF_GROUP=bladerf"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
+
   hardeningDisable = [ "fortify" ];
 
   meta = with lib; {

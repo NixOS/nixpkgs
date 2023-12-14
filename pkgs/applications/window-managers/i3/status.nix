@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    mainProgram = "i3status";
   };
 
 }

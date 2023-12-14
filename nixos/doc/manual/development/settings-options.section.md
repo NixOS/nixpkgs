@@ -58,7 +58,7 @@ have a predefined type and string generator already declared under
     and returning a set with YAML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
-`pkgs.formats.ini` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \... }
+`pkgs.formats.ini` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
 
 :   A function taking an attribute set with values
 

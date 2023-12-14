@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ptpb/pb_cli";
     maintainers = [ maintainers.ar1a ];
     license = licenses.gpl3Plus;
+    mainProgram = "pb";
   };
 }

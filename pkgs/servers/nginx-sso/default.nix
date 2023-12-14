@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "nginx-sso";
-  version = "0.26.0";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
     rev = "v${version}";
-    hash = "sha256-vtbomeezW8PMv2lCR6PJqYw+PCFJ3M1SAQPGaIWouXY=";
+    hash = "sha256-Lpaqcxw1q609rYuEd1zrAKXE0GDEi72wl2eoFezvrV8=";
   };
 
-  vendorHash = "sha256-THTQhUgIfDDTgnR4qZxWFoGQzvqr3xrrz5ZxnV9ipBM=";
+  vendorHash = "sha256-XReXxugMfR2l2LMTvXpSJa7Z9BX7LytwYdYNijPtciE=";
 
   postInstall = ''
     mkdir -p $out/share
@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/Luzifer/nginx-sso";
     license = licenses.asl20;
     maintainers = with maintainers; [ delroth ];
+    mainProgram = "nginx-sso";
   };
 }

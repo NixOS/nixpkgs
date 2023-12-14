@@ -63,6 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "TOTP Authentication application for mobile";
     homepage = "https://sr.ht/~martijnbraam/numberstation/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

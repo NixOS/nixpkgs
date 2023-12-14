@@ -3,6 +3,7 @@
 , fetchPypi
 , fixtures
 , pbr
+, six
 , subunit
 , callPackage
 }:
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "oslotest";
   version = "4.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     fixtures
+    six
     subunit
   ];
 

@@ -2,28 +2,47 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, flaky
+, pythonOlder
 , numpy
-, pandas
-, torch
 , scikit-learn
 , scipy
 , tabulate
+, torch
 , tqdm
+, flaky
+, pandas
+, pytestCheckHook
+, safetensors
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.13.0";
+  version = "0.15.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k9Zs4uqskHLqVHOKK7dIOmBSUmbDpOMuPS9eSdxNjO0=";
+    hash = "sha256-39XVBlCmbg162z9uL84GZrU+v+M8waXbGdVV72ZYf84=";
   };
 
-  propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
-  nativeCheckInputs = [ flaky pandas pytestCheckHook ];
+  disabled = pythonOlder "3.8";
+
+  propagatedBuildInputs = [
+    numpy
+    scikit-learn
+    scipy
+    tabulate
+    torch
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pandas
+    pytestCheckHook
+    safetensors
+  ];
 
   # patch out pytest-cov dep/invocation
   postPatch = ''
@@ -40,6 +59,10 @@ buildPythonPackage rec {
     "test_pickle_load"
   ] ++ lib.optionals stdenv.isDarwin [
     # there is a problem with the compiler selection
+    "test_fit_and_predict_with_compile"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Python 3.11+ not yet supported for torch.compile
+    # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/_dynamo/eval_frame.py#L376-L377
     "test_fit_and_predict_with_compile"
   ];
 

@@ -1,23 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "summon";
-  version = "0.8.2";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
     rev = "v${version}";
-    sha256 = "1z4xnrncwvp3rfm97zvc0ivvw2fh1hrjhj3rplvidzxjfyasbvwv";
+    hash = "sha256-OOIq6U7HCxcYvBFZdewSpglg9lFzITsb6IPu/EID+Z0=";
   };
 
-  vendorSha256 = "1597vrs4b7k6gkmkvf7xnd38rvjixmlcz0j7npmik9nbkm57l74m";
+  vendorHash = "sha256-qh3DJFxf1FqYgbULo4M+0nSOQ6uTlMTjAqNl7l+IPvk=";
 
   subPackages = [ "cmd" ];
-
-  # Patches provider resolver to support resolving unqualified names
-  # from $PATH, e.g. `summon -p gopass` instead of `summon -p $(which gopass)`
-  patches = lib.optionals patchResolver [ ./resolve-paths.patch ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/summon

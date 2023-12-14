@@ -7,6 +7,7 @@
 , wrapQtAppsHook
 , gst_all_1
 , qtbase
+, qtsvg
 , qtmultimedia
 , qttools
 , qtwayland
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.3-1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
-    rev = "dd41a00b3c6c8b881fa62945165c965634df66f0";
-    sha256 = "11yj1zl8hdnqbynkbyzg8kwyx1jl8c87x8f8qyllpk0s6cg304d0";
+    rev = "v${version}";
+    hash = "sha256-UQbyzkFjrIDPcrE6yGuOWsXNjz8jWyJEWiQwHmf91/8=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     zlib
     qtbase
+    qtsvg
     qtmultimedia
     qttools
   ] ++ lib.optionals stdenv.isLinux [
@@ -70,10 +72,10 @@ stdenv.mkDerivation rec {
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
     "-DUSE_QTPDF=OFF"
-    "-DUSE_MUPDF_THIRD=ON"
+    "-DLINK_MUPDF_THIRD=OFF"
     "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
-    "-DUSE_MUJS=OFF"
-    "-DUSE_GUMBO=ON"
+    "-DLINK_MUJS=OFF"
+    "-DLINK_GUMBO=ON"
     "-DUSE_TRANSLATIONS=ON"
     "-DQT_VERSION_MAJOR=${lib.versions.major qtbase.version}"
   ];
@@ -88,5 +90,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ agpl3 gpl3Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien dotlambda ];
+    mainProgram = "beamerpresenter";
   };
 }

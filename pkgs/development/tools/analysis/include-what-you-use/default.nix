@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3 ];
   buildInputs = with llvmPackages; [ libclang clang-unwrapped python3 ];
 
-  cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
+  cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${llvmPackages.llvm.dev}" ];
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \

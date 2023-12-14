@@ -29,7 +29,7 @@ let
 
       export PATH=$PATH:${pkgs.iproute2}/sbin
 
-      ip link set $IFNAME up
+      ip link set dev $IFNAME up
       ip address add ${cfg.ipAddress} dev $IFNAME
       ip route add ${cfg.subnet} dev $IFNAME
 

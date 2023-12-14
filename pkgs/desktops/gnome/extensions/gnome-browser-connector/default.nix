@@ -32,7 +32,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gnome.gnome-shell
-    gobject-introspection # for Gio typelib
   ];
 
   pythonPath = [

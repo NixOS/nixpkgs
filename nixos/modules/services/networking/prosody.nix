@@ -496,12 +496,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc "Prosody package to use";
-        default = pkgs.prosody;
-        defaultText = literalExpression "pkgs.prosody";
-        example = literalExpression ''
+      package = mkPackageOption pkgs "prosody" {
+        example = ''
           pkgs.prosody.override {
             withExtraLibs = [ pkgs.luaPackages.lpty ];
             withCommunityModules = [ "auth_external" ];
@@ -757,9 +753,8 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems = if (cfg.uploadHttp != null)
-            then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}]
-            else [];
+        httpDiscoItems = optionals (cfg.uploadHttp != null)
+            [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}];
         mucDiscoItems = builtins.foldl'
             (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
             []
@@ -779,9 +774,6 @@ in
       ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
 
       admins = ${toLua cfg.admins}
-
-      -- we already build with libevent, so we can just enable it for a more performant server
-      use_libevent = true
 
       modules_enabled = {
 

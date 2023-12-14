@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , imagemagickBig
 , pkg-config
 , withXorg ? true
@@ -41,6 +42,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
+
+  patches = [
+    ./0.23.92-CVE-2023-40889.patch
+    ./0.23.92-CVE-2023-40890.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config

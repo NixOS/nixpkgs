@@ -2,7 +2,7 @@
     and out-of-tree mod packages (mod.nix).
 */
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
-, lua, mono, dotnetPackages, python3
+, lua, mono, python3
 , libGL, freetype, openal, SDL2
 , zenity
 }:
@@ -40,24 +40,7 @@ in {
   '';
 
   packageAttrs = {
-    buildInputs = with dotnetPackages; [
-      FuzzyLogicLibrary
-      MaxMindDb
-      MaxMindGeoIP2
-      MonoNat
-      NewtonsoftJson
-      NUnit3
-      NUnitConsole
-      OpenNAT
-      RestSharp
-      SharpFont
-      SharpZipLib
-      SmartIrc4net
-      StyleCopMSBuild
-      StyleCopPlusMSBuild
-    ] ++ [
-      libGL
-    ];
+    buildInputs = [ libGL ];
 
     # TODO: Test if this is correct.
     nativeBuildInputs = [
@@ -78,7 +61,7 @@ in {
     dontStrip = true;
 
     meta = {
-      maintainers = with maintainers; [ fusion809 msteen rardiol ];
+      maintainers = with maintainers; [ fusion809 msteen ];
       license = licenses.gpl3;
       platforms = platforms.linux;
     };

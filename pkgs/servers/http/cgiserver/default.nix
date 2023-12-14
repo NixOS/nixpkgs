@@ -7,10 +7,10 @@ buildGoModule rec {
   src = fetchzip {
     url = "https://src.anomalous.eu/cgiserver/snapshot/cgiserver-${version}.tar.zst";
     nativeBuildInputs = [ zstd ];
-    sha256 = "14bp92sw0w6n5dzs4f7g4fcklh25nc9k0xjx4ia0gi7kn5jwx2mq";
+    hash = "sha256-uIrOZbHzxAdUJF12MBOzRUA6mSPvOKJ/K9ZwwLVId5E=";
   };
 
-  vendorSha256 = "00jslxzf6p8zs1wxdx3qdb919i80xv4w9ihljd40nnydasshqa4v";
+  vendorHash = "sha256-mygMtVbNWwtIkxTGxMnuAMUU0mp49NZ50B9d436nWgI=";
 
   meta = with lib; {
     homepage = "https://src.anomalous.eu/cgiserver/about/";

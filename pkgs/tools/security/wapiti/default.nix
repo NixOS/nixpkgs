@@ -5,33 +5,47 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.7";
-  format = "setuptools";
+  version = "3.1.8";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-muAugc0BgVSER2LSRv7ATbCqpXID8/WH+hfhmtoS36o=";
+    hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
   };
+
+  postPatch = ''
+    # Ignore pinned versions
+    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" pyproject.toml
+
+    # Remove code coverage checking
+    substituteInPlace pyproject.toml \
+      --replace "--cov --cov-report=xml" ""
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocache
+    aiohttp
     aiosqlite
     arsenic
     beautifulsoup4
-    brotli
     browser-cookie3
-    cryptography
     dnspython
+    h11
     httpcore
     httpx
-    humanize
-    importlib-metadata
+    httpx-ntlm
     loguru
     mako
     markupsafe
     mitmproxy
+    pyasn1
     six
     sqlalchemy
     tld
@@ -39,20 +53,13 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ httpx.optional-dependencies.brotli
   ++ httpx.optional-dependencies.socks;
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-report=xml" ""
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -114,6 +121,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_xxe"
     # Requires a PHP installation
     "test_cookies"
+    "test_fallback_to_html_injection"
     "test_loknop_lfi_to_rce"
     "test_redirect"
     "test_timesql"
@@ -121,6 +129,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_xss_inside_src_iframe"
     # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
+    # Requires creating a socket to an external URL
+    "test_attack_unifi"
   ];
 
   disabledTestPaths = [

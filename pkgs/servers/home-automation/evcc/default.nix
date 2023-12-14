@@ -2,7 +2,6 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
-, fetchpatch
 , cacert
 , go
 , git
@@ -17,28 +16,20 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.118.0";
+  version = "0.122.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-LQtFmN4IyDj/SRTik+ML3h1/tMwnTQ13dQHnghcDuUo=";
+    hash = "sha256-mD4D2DVai9KV7/RYFmcY7iOGVQGRpwg+rTfNsP8OpCY=";
   };
 
-  patches = [
-    (fetchpatch {
-      # fix ISO15118 vehicle setup
-      url = "https://github.com/evcc-io/evcc/commit/cc22337b422e4ee541a2c75740c039f2d029bd9b.patch";
-      hash = "sha256-Q+5Klpdv1cWVg716lbKl1JLwkr4LiLPRUoZHemFUQZc=";
-    })
-  ];
-
-  vendorHash = "sha256-1YTVFn/DngzSQwYxGHCAaJl4ZnVj4au32YcpNo1m4w8=";
+  vendorHash = "sha256-B4gR9sXpGuVv3x6sktFSPlbhq5n5aD5d7ksz67X5nY8=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-QRjOmanO+phyqgZb/cAyU0dFKI6T6o84MuObANZoYNE=";
+    hash = "sha256-KTMUZOW56vPGoJviKRJWM9UL28gXL0L3j4ZmUzSeavU=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +85,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
-    changelog = "https://github.com/andig/evcc/releases/tag/${version}";
+    changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

@@ -26,5 +26,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://github.com/taylorthurlow/thicket";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "thicket";
   };
 }

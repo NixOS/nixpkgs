@@ -6,9 +6,6 @@ let
   defaultGroup = "patroni";
   format = pkgs.formats.yaml { };
 
-  #boto doesn't support python 3.10 yet
-  patroni = pkgs.patroni.override { pythonPackages = pkgs.python39Packages; };
-
   configFileName = "patroni-${cfg.scope}-${cfg.name}.yaml";
   configFile = format.generate configFileName cfg.settings;
 in
@@ -108,7 +105,7 @@ in
     };
 
     otherNodesIps = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "192.168.1.2" "192.168.1.3" ];
       description = mdDoc ''
         IP addresses of the other nodes.
@@ -224,7 +221,7 @@ in
 
         script = ''
           ${concatStringsSep "\n" (attrValues (mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles))}
-          exec ${patroni}/bin/patroni ${configFile}
+          exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
         serviceConfig = mkMerge [
@@ -252,7 +249,7 @@ in
     '';
 
     environment.systemPackages = [
-      patroni
+      pkgs.patroni
       cfg.postgresqlPackage
       (mkIf cfg.raft pkgs.python310Packages.pysyncobj)
     ];

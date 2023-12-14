@@ -3,19 +3,27 @@
 , buildPythonPackage
 , pythonOlder
 , rustPlatform
+, cmake
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, jemalloc
+, rust-jemalloc-sys
 , darwin
 }:
 let
   pname = "polars";
-  version = "0.18.0"; # Can't update to >0.18.0 until we get rust 1.71
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-uzo8KPEegaVuzrfKUmsHheQfmm9hVMgkNJMWdfqDrw8=";
+    hash = "sha256-6tn3Q6oZfMjgQ5l5xCFnGimLSDLOjTWCW5uEbi6yFZY=";
+  };
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override {
+      disableInitExecTls = true;
+    };
   };
 in
 buildPythonPackage {
@@ -45,9 +53,20 @@ buildPythonPackage {
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [
+    # needed for libz-ng-sys
+    # TODO: use pkgs.zlib-ng
+    cmake
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
+
+  buildInputs = [
+    rust-jemalloc-sys'
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

@@ -15,14 +15,14 @@
 , libpulseaudio
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsp";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "bmc0";
     repo = "dsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-S1pzVQ/ceNsx0vGmzdDWw2TjPVLiRgzR4edFblWsekY=";
   };
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "An audio processing program with an interactive mode";
     license = licenses.isc;
     maintainers = with maintainers; [ aaronjheng ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
+    mainProgram = "dsp";
   };
-}
+})

@@ -2,11 +2,13 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -28,6 +30,7 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
@@ -42,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.23";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
+    hash = "sha256-HclPnxeDtWzlyOEXKgTrypiHVJezuUCBhfUW+9ytPVg=";
   };
 
   prePatch = ''
@@ -62,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -83,6 +87,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit

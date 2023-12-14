@@ -1,17 +1,18 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
+, nixosTests
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "ferretdb";
-  version = "1.3.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    sha256 = "sha256-V33NeNpQZFUN/aUCaaxnCgIYaVgbAI5L6GZQo8ZMvUI=";
+    hash = "sha256-Oh8VHWsV7jD2HgG2IVDV2krTBSCz4dyCENej1m6xnM4=";
   };
 
   postPatch = ''
@@ -19,13 +20,11 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorSha256 = "sha256-QoDNQXZGfUq/t8fiovCv0+N9e4shJGpwS3y/z0YXMi4=";
+  vendorHash = "sha256-iDPZ3DG/aWOHz61gVd56KhB7/RvsWOS+gfzk6Rx5c4o=";
 
   CGO_ENABLED = 0;
 
   subPackages = [ "cmd/ferretdb" ];
-
-  tags = [ "ferretdb_tigris" ];
 
   # tests in cmd/ferretdb are not production relevant
   doCheck = false;
@@ -35,6 +34,8 @@ buildGoModule rec {
   installCheckPhase = ''
     $out/bin/ferretdb --version | grep ${version}
   '';
+
+  passthru.tests = nixosTests.ferretdb;
 
   meta = with lib; {
     description = "A truly Open Source MongoDB alternative";

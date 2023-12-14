@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
-, dpkg
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -7,6 +6,7 @@
 , cairo
 , cups
 , dbus
+, dpkg
 , expat
 , fontconfig
 , freetype
@@ -15,32 +15,34 @@
 , gnome
 , gsettings-desktop-schemas
 , gtk3
-, libuuid
-, libdrm
 , libX11
+, libXScrnSaver
 , libXcomposite
 , libXcursor
 , libXdamage
 , libXext
 , libXfixes
 , libXi
-, libxkbcommon
 , libXrandr
 , libXrender
-, libXScrnSaver
-, libxshmfence
 , libXtst
+, libdrm
+, libkrb5
+, libuuid
+, libxkbcommon
+, libxshmfence
 , mesa
 , nspr
 , nss
 , pango
 , pipewire
+, snappy
 , udev
 , wayland
+, xdg-utils
+, coreutils
 , xorg
 , zlib
-, xdg-utils
-, snappy
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -73,7 +75,7 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy libkrb5
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -90,11 +92,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.52.126";
+  version = "1.61.101";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-M/25YFqET4G89S7ihiFige047+fk/jWKpEiD8O22W74=";
+    hash = "sha256-s+YjTZs+dT/T/MSzOAvXMHzd3pWMbLa8v9amnd2sqns=";
   };
 
   dontConfigure = true;
@@ -170,7 +172,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils coreutils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}

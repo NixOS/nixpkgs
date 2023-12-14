@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-trovo";
   version = "0.1.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-VSu0ASnLmRzOGOEKqb/zB43+HxEwMpKLpbdbWY5QrEk=";
   };
 
-  vendorSha256 = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
+  vendorHash = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
 
   # upstream did not update the tests, so they are broken now
   # https://github.com/sorenisanerd/gotty/issues/13

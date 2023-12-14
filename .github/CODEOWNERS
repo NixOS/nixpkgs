@@ -11,9 +11,6 @@
 # This also holds true for GitHub teams. Since almost none of our teams have write
 # permissions, you need to list all members of the team with commit access individually.
 
-# This file
-/.github/CODEOWNERS @edolstra
-
 # GitHub actions
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
@@ -22,45 +19,71 @@
 /.editorconfig @Mic92 @zowoq
 
 # Libraries
-/lib                        @edolstra @infinisil
-/lib/systems                @alyssais @ericson2314 @matthewbauer
-/lib/generators.nix         @edolstra @Profpatsch
-/lib/cli.nix                @edolstra @Profpatsch
-/lib/debug.nix              @edolstra @Profpatsch
-/lib/asserts.nix            @edolstra @Profpatsch
+/lib                        @infinisil
+/lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
+/lib/generators.nix         @infinisil @Profpatsch
+/lib/cli.nix                @infinisil @Profpatsch
+/lib/debug.nix              @infinisil @Profpatsch
+/lib/asserts.nix            @infinisil @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
+/lib/fileset                @infinisil
+## Libraries / Module system
+/lib/modules.nix            @infinisil @roberth
+/lib/types.nix              @infinisil @roberth
+/lib/options.nix            @infinisil @roberth
+/lib/tests/modules.sh       @infinisil @roberth
+/lib/tests/modules          @infinisil @roberth
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
 /pkgs/top-level/default.nix                      @Ericson2314
 /pkgs/top-level/impure.nix                       @Ericson2314
-/pkgs/top-level/stage.nix                        @Ericson2314 @matthewbauer
-/pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
-/pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
-/pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
-/pkgs/build-support/cc-wrapper                   @Ericson2314
+/pkgs/top-level/stage.nix                        @Ericson2314
+/pkgs/top-level/splice.nix                       @Ericson2314
+/pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/stdenv/generic                             @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @piegamesde
+/pkgs/stdenv/cross                               @Ericson2314 @amjoseph-nixpkgs
+/pkgs/build-support/cc-wrapper                   @Ericson2314 @amjoseph-nixpkgs
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
+## Format generators/serializers
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee
+
+# pkgs/by-name
+/pkgs/test/nixpkgs-check-by-name @infinisil
+/pkgs/by-name/README.md @infinisil
+/pkgs/top-level/by-name-overlay.nix @infinisil
+/.github/workflows/check-by-name.yml @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs make-disk-image
-/doc/builders/images/makediskimage.section.md  @raitobezarius
+/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 
-/doc/build-aux/pandoc-filters @jtojnar
-/doc/contributing/ @fricklerhandwerk
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk
+# Contributor documentation
+/CONTRIBUTING.md @infinisil
+/.github/PULL_REQUEST_TEMPLATE.md @infinisil
+/doc/contributing/ @fricklerhandwerk @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/lib/README.md @infinisil
+/doc/README.md @infinisil
+/nixos/README.md @infinisil
+/pkgs/README.md @infinisil
+/maintainers/README.md @infinisil
+
+# User-facing development documentation
+/doc/development.md @infinisil
+/doc/development @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil
@@ -82,6 +105,13 @@
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
 /pkgs/os-specific/linux/systemd             @NixOS/systemd
 
+# Systemd-boot
+/nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
+
+# Images and installer media
+/nixos/modules/installer/cd-dvd/            @samueldr
+/nixos/modules/installer/sd-card/           @samueldr
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar
@@ -93,17 +123,16 @@
 /maintainers/scripts/update-python-libraries	              @FRidh
 /pkgs/development/interpreters/python                       @FRidh
 /doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @ncfavier
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @ncfavier
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
@@ -124,12 +153,10 @@
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
-/pkgs/development/compilers/gcc @matthewbauer
-/pkgs/development/compilers/llvm @matthewbauer @RaitoBezarius
-
-# Compatibility stuff
-/pkgs/top-level/unix-tools.nix @matthewbauer
-/pkgs/development/tools/xcbuild @matthewbauer
+/pkgs/development/compilers/gcc @amjoseph-nixpkgs
+/pkgs/development/compilers/llvm @RaitoBezarius
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
@@ -196,6 +223,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
+# Web servers
+/doc/packages/nginx.section.md @raitobezarius
+/pkgs/servers/http/nginx/ @raitobezarius
+/nixos/modules/services/web-servers/nginx/ @raitobezarius
+
 # Dhall
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
@@ -226,30 +258,26 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
-# Prometheus exporter modules and tests
-/nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
-/nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
-/nixos/tests/prometheus-exporters.nix                        @WilliButz
-
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @etu @globin @ma27 @talyz
-/pkgs/build-support/build-pecl.nix                @aanderse @etu @globin @ma27 @talyz
-/pkgs/development/interpreters/php       @jtojnar @aanderse @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @etu @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol @etu
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @zowoq @adisbladis
-/nixos/modules/virtualisation/cri-o.nix      @zowoq @adisbladis
-/nixos/modules/virtualisation/podman         @zowoq @adisbladis
-/nixos/tests/cri-o.nix                       @zowoq @adisbladis
-/nixos/tests/podman                          @zowoq @adisbladis
+/nixos/modules/virtualisation/containers.nix @adisbladis
+/nixos/modules/virtualisation/cri-o.nix      @adisbladis
+/nixos/modules/virtualisation/podman         @adisbladis
+/nixos/tests/cri-o.nix                       @adisbladis
+/nixos/tests/podman                          @adisbladis
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
 /nixos/tests/docker-tools*                   @roberth
-/doc/builders/images/dockertools.section.md  @roberth
+/doc/build-helpers/images/dockertools.section.md  @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood
@@ -275,12 +303,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
-# kubernetes
-/nixos/doc/manual/configuration/kubernetes.chapter.md @zowoq
-/nixos/modules/services/cluster/kubernetes            @zowoq
-/nixos/tests/kubernetes                               @zowoq
-/pkgs/applications/networking/cluster/kubernetes      @zowoq
-
 # Matrix
 /pkgs/servers/heisenbridge                                 @piegamesde
 /pkgs/servers/matrix-conduit                               @piegamesde
@@ -288,14 +310,20 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
 
+# Forgejo
+nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
+pkgs/applications/version-management/forgejo @bendlas @emilylange
+
 # Dotnet
-/pkgs/build-support/dotnet          @IvarWithoutBones
-/pkgs/development/compilers/dotnet  @IvarWithoutBones
+/pkgs/build-support/dotnet                  @IvarWithoutBones
+/pkgs/development/compilers/dotnet          @IvarWithoutBones
+/pkgs/test/dotnet                           @IvarWithoutBones
+/doc/languages-frameworks/dotnet.section.md @IvarWithoutBones
 
 # Node.js
-/pkgs/build-support/node/build-npm-package      @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @winterqt
-/doc/languages-frameworks/javascript.section.md @winterqt
+/pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
+/doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
@@ -303,8 +331,14 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/ocaml-modules     @ulrikstrid
 
 # ZFS
-pkgs/os-specific/linux/zfs                @raitobezarius
-nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
-nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
+pkgs/os-specific/linux/zfs/2_1.nix        @raitobezarius
+pkgs/os-specific/linux/zfs/generic.nix    @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
+
+# Zig
+/pkgs/development/compilers/zig @figsoda
+/doc/hooks/zig.section.md       @figsoda
+
+# Linux Kernel
+pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs

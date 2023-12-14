@@ -9,11 +9,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.28.0a9";
+        version = "1.33.0a1";
         pname = "tulir-telethon";
         src = fetchPypi {
           inherit pname version;
-          hash = "sha256-7lRoJYhy9c8RxJTW1/7SrNtA36mwIrPcyRMPVNhWJTk=";
+          hash = "sha256-at/MiVXAKFhMH1N1m+K9HmYvxvzYa7xKhIlpDs7Kk3U=";
         };
         doCheck = false;
       });
@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.14.0";
+  version = "0.15.0";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OPWa3jqaLnV7M1Q77N10A3HT65dNon6RWE5mbQRvjEs=";
+    hash = "sha256-2XPZkBAe15Rf1tv4KGhwRhoRf1wv+moADWDMNmkERtk=";
   };
 
   format = "setuptools";
@@ -60,6 +60,8 @@ python.pkgs.buildPythonPackage rec {
     prometheus-client
     # sqlite
     aiosqlite
+    # proxy support
+    pysocks
   ] ++ lib.optionals withE2BE [
     # e2be
     python-olm
@@ -76,5 +78,6 @@ python.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 nickcao ];
+    mainProgram = "mautrix-telegram";
   };
 }

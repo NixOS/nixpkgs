@@ -1,133 +1,162 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, versioningit
-
-  # mandatory
 , broadbean
+, buildPythonPackage
+, cf-xarray
+, dask
+, deepdiff
+, fetchFromGitHub
 , h5netcdf
 , h5py
+, hypothesis
 , importlib-metadata
-, importlib-resources
-, ipywidgets
 , ipykernel
+, ipython
+, ipywidgets
 , jsonschema
+, lxml
 , matplotlib
 , numpy
 , opencensus
 , opencensus-ext-azure
+, opentelemetry-api
 , packaging
 , pandas
-, pyvisa
-, ruamel-yaml
-, tabulate
-, typing-extensions
-, tqdm
-, uncertainties
-, websockets
-, wrapt
-, xarray
-, ipython
 , pillow
-, rsa
-
-  # optional
-, qcodes-loop
-
-  # test
-, pytestCheckHook
-, deepdiff
-, hypothesis
-, lxml
+, pip
 , pytest-asyncio
 , pytest-mock
 , pytest-rerunfailures
 , pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyvisa
 , pyvisa-sim
+, rsa
+, ruamel-yaml
+, setuptools
 , sphinx
+, tabulate
+, tqdm
+, typing-extensions
+, uncertainties
+, versioningit
+, websockets
+, wheel
+, wrapt
+, xarray
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.38.1";
+  version = "0.42.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-  format = "pyproject";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-whUGkRvYQOdYxWoj7qhv2kiiyTwq3ZLLipI424PBzFg=";
+  src = fetchFromGitHub {
+    owner = "QCoDeS";
+    repo = "Qcodes";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+NtPE9mQKWftk3vR5WFZgM+7jl8HWr9MxVA+VpbuHvE=";
   };
 
-  nativeBuildInputs = [ setuptools versioningit ];
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+    wheel
+  ];
 
   propagatedBuildInputs = [
     broadbean
+    cf-xarray
+    dask
     h5netcdf
     h5py
-    ipywidgets
     ipykernel
+    ipython
+    ipywidgets
     jsonschema
     matplotlib
     numpy
     opencensus
     opencensus-ext-azure
+    opentelemetry-api
     packaging
     pandas
+    pillow
     pyvisa
+    rsa
     ruamel-yaml
     tabulate
-    typing-extensions
     tqdm
+    typing-extensions
     uncertainties
     websockets
     wrapt
     xarray
-    ipython
-    pillow
-    rsa
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
-  passthru.optional-dependencies = {
-    loop = [
-      qcodes-loop
-    ];
-  };
-
   nativeCheckInputs = [
-    pytestCheckHook
     deepdiff
     hypothesis
     lxml
+    pip
     pytest-asyncio
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
+    pytestCheckHook
     pyvisa-sim
     sphinx
   ];
 
-  disabledTestPaths = [
-    # depends on qcodes-loop, causing a cyclic dependency
-    "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlagsArray = [
+    "-v"
+    "-n"
+    "$NIX_BUILD_CORES"
+    # Follow upstream with settings
+    "--durations=20"
   ];
 
-  pythonImportsCheck = [ "qcodes" ];
+  disabledTestPaths = [
+    # Test depends on qcodes-loop, causing a cyclic dependency
+    "tests/dataset/measurement/test_load_legacy_data.py"
+    # TypeError
+    "tests/dataset/test_dataset_basic.py"
+  ];
+
+  disabledTests = [
+    # Tests are time-sensitive and power-consuming
+    # Those tests fails repeatably and are flaky
+    "test_access_channels_by_slice"
+    "test_aggregator"
+    "test_datasaver"
+    "test_do1d_additional_setpoints_shape"
+    "test_dond_1d_additional_setpoints_shape"
+    "test_field_limits"
+    "test_get_array_in_scalar_param_data"
+    "test_get_parameter_data"
+    "test_ramp_safely"
+  ];
+
+  pythonImportsCheck = [
+    "qcodes"
+  ];
 
   postInstall = ''
     export HOME="$TMPDIR"
   '';
 
-  meta = {
-    homepage = "https://qcodes.github.io/Qcodes/";
+  meta = with lib; {
     description = "Python-based data acquisition framework";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    downloadPage = "https://github.com/QCoDeS/Qcodes";
+    homepage = "https://qcodes.github.io/Qcodes/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ evilmav ];
   };
 }

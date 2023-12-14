@@ -1,30 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , ncurses
+, perl
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvi";
-  version = "7.3.22";
+  version = "7.4.27";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
     rev = version;
-    hash = "sha256-yXYiH2FCT7ffRPmb28V54+KO1RLs8L9KHk3remkMWmA=";
+    hash = "sha256-3cqe6woJvJt0ckI3aOhF0gARKy8VMCfWxIiiglkHBTo=";
   };
 
-  patches = [
-    # do not attempt to install to /var/tmp/vi.recover
-    (fetchpatch {
-      url = "https://github.com/johnsonjh/OpenVi/commit/5205f0234369963c443e83ca5028ca63feaaac91.patch";
-      hash = "sha256-hoKzQLnpdRbc48wffWbzFtivr20VqEPs4WRPXuDa/88=";
-    })
-  ];
-
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses perl ];
 
   makeFlags = [
     "PREFIX=$(out)"

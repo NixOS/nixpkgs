@@ -1,21 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , fetchPypi
 , mercantile
 , pytestCheckHook
 , requests
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "xyzservices";
-  version = "2023.2.0";
-  format = "setuptools";
+  version = "2023.7.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0K7pBDXlBKQ7tDlii5arbD3uXhj7EKDsoPEBu5yOig=";
+    hash = "sha256-DskodCIn1vXUNn6ntFf8/tlDQp9N4pSbWwKoLN9VadY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   disabledTests = [
     # requires network connections

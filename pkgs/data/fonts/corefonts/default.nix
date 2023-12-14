@@ -39,9 +39,11 @@ stdenv.mkDerivation {
     cabextract --lowercase viewer1.cab
 
     # rename to more standard names
+    # handle broken macOS file-system
     mv andalemo.ttf  Andale_Mono.ttf
     mv ariblk.ttf    Arial_Black.ttf
-    mv arial.ttf     Arial.ttf
+    mv arial.ttf     Arial.ttf.tmp
+    mv Arial.ttf.tmp Arial.ttf
     mv arialbd.ttf   Arial_Bold.ttf
     mv arialbi.ttf   Arial_Bold_Italic.ttf
     mv ariali.ttf    Arial_Italic.ttf
@@ -51,12 +53,15 @@ stdenv.mkDerivation {
     mv courbd.ttf    Courier_New_Bold.ttf
     mv couri.ttf     Courier_New_Italic.ttf
     mv courbi.ttf    Courier_New_Bold_Italic.ttf
-    mv georgia.ttf   Georgia.ttf
+    mv georgia.ttf   Georgia.ttf.tmp
+    mv Georgia.ttf.tmp   Georgia.ttf
     mv georgiab.ttf  Georgia_Bold.ttf
     mv georgiai.ttf  Georgia_Italic.ttf
     mv georgiaz.ttf  Georgia_Bold_Italic.ttf
-    mv impact.ttf    Impact.ttf
-    mv tahoma.ttf    Tahoma.ttf
+    mv impact.ttf    Impact.ttf.tmp
+    mv Impact.ttf.tmp    Impact.ttf
+    mv tahoma.ttf    Tahoma.ttf.tmp
+    mv Tahoma.ttf.tmp    Tahoma.ttf
     mv times.ttf     Times_New_Roman.ttf
     mv timesbd.ttf   Times_New_Roman_Bold.ttf
     mv timesbi.ttf   Times_New_Roman_Bold_Italic.ttf
@@ -65,11 +70,13 @@ stdenv.mkDerivation {
     mv trebucbd.ttf  Trebuchet_MS_Bold.ttf
     mv trebucit.ttf  Trebuchet_MS_Italic.ttf
     mv trebucbi.ttf  Trebuchet_MS_Italic.ttf
-    mv verdana.ttf   Verdana.ttf
+    mv verdana.ttf   Verdana.ttf.tmp
+    mv Verdana.ttf.tmp   Verdana.ttf
     mv verdanab.ttf  Verdana_Bold.ttf
     mv verdanai.ttf  Verdana_Italic.ttf
     mv verdanaz.ttf  Verdana_Bold_Italic.ttf
-    mv webdings.ttf  Webdings.ttf
+    mv webdings.ttf  Webdings.ttf.tmp
+    mv Webdings.ttf.tmp  Webdings.ttf
 
     install -m444 -Dt $out/share/fonts/truetype *.ttf
 

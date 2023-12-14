@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.22.0";
+  version = "1.24.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lRFWozkurWzP3v80VkvH9XrFobrqFsQ9J3jtUeKl1AE=";
+    hash = "sha256-P1Hj4HidTr4R29PwpAhT5xn6sTKDo6gL6M7AgunEU5k=";
   };
 
   propagatedBuildInputs = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Security Command Center API API client library";
-    homepage = "https://github.com/googleapis/python-securitycenter";
-    changelog = "https://github.com/googleapis/python-securitycenter/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

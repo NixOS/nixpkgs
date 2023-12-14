@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, luaPackages }:
+{ lib, stdenv, fetchFromGitHub, luaPackages, unstableGitUpdater }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nelua";
-  version = "unstable-2023-01-21";
+  version = "unstable-2023-11-19";
 
   src = fetchFromGitHub {
     owner = "edubart";
     repo = "nelua-lang";
-    rev = "d10cc61bc54050b07874a8597f8df20534885105";
-    hash = "sha256-HyNYqhPCQVBJqEcAUUXfvycXE8tWIMIUJJMTIV48ne8=";
+    rev = "e82695abf0a68a30a593cefb0bf1143cf9e14b6b";
+    hash = "sha256-Srgoq07JQirxmZcDvw4UdfoYZ5HFT0PbYPoHY99BW/c=";
   };
+
+  postPatch = ''
+    substituteInPlace lualib/nelua/version.lua \
+      --replace "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${src.rev}'" \
+      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "unstable-" version}'"
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   nativeCheckInputs = [ luaPackages.luacheck ];
 
   doCheck = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Minimal, efficient, statically-typed and meta-programmable systems programming language heavily inspired by Lua, which compiles to C and native code";

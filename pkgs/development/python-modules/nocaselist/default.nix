@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "1.1.1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UnKyMuCCRmlqsm/g670ouJidrJ7lcytQJklQMjtRPSM=";
+    hash = "sha256-RWqgAMZ3fF0hsCnFLlMvlDKNT7TxWtKk3T3WLbMLOJI=";
   };
 
   propagatedBuildInputs = [

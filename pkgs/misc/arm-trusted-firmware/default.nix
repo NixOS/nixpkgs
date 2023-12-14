@@ -26,13 +26,13 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.8";
+    version = "2.10.0";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      hash = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
+      hash = "sha256-CAuftVST9Fje/DWaaoX0K2SfWwlGMaUFG4huuwsTOSU=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -52,6 +52,8 @@ let
     buildInputs = [ openssl ];
 
     makeFlags = [
+      "HOSTCC=$(CC_FOR_BUILD)"
+      "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       # binutils 2.39 regression
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
@@ -87,6 +89,11 @@ in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+    # Normally, arm-trusted-firmware builds the build tools for buildPlatform
+    # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
+    # for the hostPlatform here, we trick it by overriding the HOSTCC setting
+    # and, to be safe, remove CC_FOR_BUILD from the environment.
+    depsBuildBuild = [ ];
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
       "fiptool" "certtool"
@@ -134,7 +141,6 @@ in {
     platform = "rk3328";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-    platformCanUseHDCPBlob = true;
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {

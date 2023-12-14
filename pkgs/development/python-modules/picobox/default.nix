@@ -1,27 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , flask
 , hatchling
 , hatch-vcs
-, isPy27
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "picobox";
-  version = "3.0.0";
+  version = "4.0.0";
 
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LQiSurL+eFRJ9iQheoo66o44BlfBtAatk8deuMFROcc=";
+    hash = "sha256-JtrwUVo3b4G34OUShX4eJS2IVubl4vBmEtB/Jhk4eJI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

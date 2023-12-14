@@ -7,7 +7,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

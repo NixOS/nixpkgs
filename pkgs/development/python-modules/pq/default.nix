@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pq";
   version = "1.9.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -22,6 +23,6 @@ buildPythonPackage rec {
     description = "PQ is a transactional queue for PostgreSQL";
     homepage = "https://github.com/malthe/pq/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

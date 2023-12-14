@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/oz/tz";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "tz";
   };
 }

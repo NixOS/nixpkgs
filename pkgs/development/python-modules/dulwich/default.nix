@@ -17,15 +17,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.21.5";
+  version = "0.21.7";
   pname = "dulwich";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cJVeTiSd3abjSkY2uQ906THlWPmTsXxSVw+mFEuZMQM=";
+    hash = "sha256-qenGaDPOpYDDrBKSfkuXEZhddq/KmNqXFAXUFN5g6Wg=";
   };
 
   LC_ALL = "en_US.UTF-8";

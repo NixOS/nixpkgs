@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , openssl
 , nettle
 , expat
@@ -18,7 +19,7 @@
 , nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
-  # commmon dependency. The transitive dependency closure of systemd also
+  # common dependency. The transitive dependency closure of systemd also
   # contains unbound.
   # Since most (all?) (lib)unbound users outside of the unbound daemon usage do
   # not need the systemd integration it is likely best to just default to no
@@ -46,13 +47,13 @@
 , gnutls
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.17.1";
+  version = "1.19.0";
 
   src = fetchurl {
-    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-7kCFzszhJYTmAPPYFKKPqCLfqs7B+UyEv9Z/ilVxpfQ=";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
+    hash = "sha256-qXUyRohUxhwt5IykFw3oVP07yVyAQ7sM+w/iZgWWZiQ=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -147,11 +148,12 @@ stdenv.mkDerivation rec {
   + ''substituteInPlace "$lib/lib/libunbound.la" ''
   + lib.concatMapStrings
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
-    (builtins.filter (p: p != null) buildInputs);
+    (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
   passthru.tests = {
     inherit gnutls;
     nixos-test = nixosTests.unbound;
+    nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
   };
 
   meta = with lib; {
@@ -161,4 +163,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.unix;
   };
-}
+})

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tevent";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "sha256-74X8qoD/0jUQNrpLNHYw/vKhrD2pZKfxggRmutA80A0=";
+    sha256 = "sha256-GqWPIQF+2ML2Bq6Eqn55W1Q57dTdX2jxo4in1vtA9oI=";
   };
 
   nativeBuildInputs = [

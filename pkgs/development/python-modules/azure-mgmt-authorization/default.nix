@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-authorization";
-  version = "3.0.0";
+  version = "4.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-Cl1/aDvzNyI2uEHNvUZ39rCO185BuZnD5kTUKGJSBX0=";
+    hash = "sha256-abhavAmuZPxyl1vUNDEXDYx+tdFmdUuYqsXzhF3lfcQ=";
   };
 
   propagatedBuildInputs = [

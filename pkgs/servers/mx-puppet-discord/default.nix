@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitLab, pkgs, lib, nodejs_14, pkg-config
+{ stdenv, fetchFromGitLab, pkgs, lib, nodejs_18, pkg-config
 , libjpeg, pixman, cairo, pango, which, postgresql }:
 
 let
-  nodejs = nodejs_14;
+  nodejs = nodejs_18;
 
   version = "0.1.1";
 
@@ -48,5 +48,6 @@ in myNodePackages.package.override {
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
+    mainProgram = "mx-puppet-discord";
   };
 }

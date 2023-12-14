@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     description = "The RISC-V Virtual Machine";
     license = with licenses; [ gpl3 /* or */ mpl20 ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nebulka ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "rvvm";
   };
 }

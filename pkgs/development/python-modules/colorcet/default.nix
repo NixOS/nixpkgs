@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "colorcet";
   version = "3.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,6 +46,6 @@ buildPythonPackage rec {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

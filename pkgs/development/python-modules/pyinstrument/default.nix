@@ -2,18 +2,29 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "4.4.0";
+  version = "4.6.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joerick";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0GbJkYBgSOIZrHSKM93SW93jXD+ieYN6A01kWoFbyvQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NSE2mZPbKmvlQbBPx0MoqYfAOjmsf9CllX7dxygZfc4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   # Module import recursion
   doCheck = false;
@@ -25,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Call stack profiler for Python";
     homepage = "https://github.com/joerick/pyinstrument";
+    changelog = "https://github.com/joerick/pyinstrument/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

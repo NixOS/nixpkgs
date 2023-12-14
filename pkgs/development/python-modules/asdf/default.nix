@@ -93,6 +93,8 @@ buildPythonPackage rec {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
+    # Many tests fail, according to Hydra
+    broken = true;
   };
 }

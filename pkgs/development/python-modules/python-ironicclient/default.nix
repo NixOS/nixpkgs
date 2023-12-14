@@ -20,11 +20,12 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.2.0";
+  version = "5.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bnWUfNIx85vSV0P5zcI7syjP0+wTXYDmC8wiuInjGfc=";
+    hash = "sha256-Q9yGuYf9TS7RCo9aV1hnNSrHoll7AOUiSpzRYxi+JXU=";
   };
 
   propagatedBuildInputs = [

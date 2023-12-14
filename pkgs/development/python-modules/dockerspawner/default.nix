@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "dockerspawner";
   version = "12.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     description = "Dockerspawner: A custom spawner for Jupyterhub";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

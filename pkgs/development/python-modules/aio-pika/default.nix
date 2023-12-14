@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.1.2";
-  format = "pyproject";
+  version = "9.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
+    repo = "aio-pika";
     rev = "refs/tags/${version}";
-    hash = "sha256-iyy6HaB3S/CPYuo62SThe3m96eg9rPTMaKg2KWt0Kf0=";
+    hash = "sha256-RbDiJvbFNuXIqFvevLpk5sy5WDinwaWwSqa+XI6Dljo=";
   };
 
   nativeBuildInputs = [

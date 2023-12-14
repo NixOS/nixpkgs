@@ -13,6 +13,7 @@ on:
     # * is a special character in YAML so you have to quote this string
     # Merge every 6 hours
     - cron:  '0 */6 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -38,10 +39,10 @@ jobs:
             into: staging
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
-        uses: devmasx/merge-branch@1.4.0
+        uses: devmasx/merge-branch@854d3ac71ed1e9deb668e0074781b81fdd6e771f # 1.4.0
         with:
           type: now
           from_branch: ${{ matrix.pairs.from }}
@@ -49,7 +50,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@23ff15729ef2fc348714a3bb66d2f655ca9066f2 # v3.1.0
         if: ${{ failure() }}
         with:
           issue-number: 105153

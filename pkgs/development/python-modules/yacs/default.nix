@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "yacs";
   version = "0.1.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rbgirshick";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ lucasew ];
   };
 }

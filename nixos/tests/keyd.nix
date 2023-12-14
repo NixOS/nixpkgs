@@ -26,13 +26,13 @@ let
   '';
 
 
-  mkKeyboardTest = name: { settings, test }: with pkgs.lib; makeTest {
+  mkKeyboardTest = name: { default, test }: with pkgs.lib; makeTest {
     inherit name;
 
     nodes.machine = {
       services.keyd = {
         enable = true;
-        inherit settings;
+        keyboards = { inherit default; };
       };
     };
 
@@ -70,13 +70,20 @@ let
 in
 pkgs.lib.mapAttrs mkKeyboardTest {
   swap-ab_and_ctrl-as-shift = {
-    test.press = [ "a" "ctrl-b" "c" ];
-    test.expect = [ "b" "A" "c" ];
+    test.press = [ "a" "ctrl-b" "c" "alt_r-h" ];
+    test.expect = [ "b" "A" "c" "q" ];
 
-    settings.main = {
-      "a" = "b";
-      "b" = "a";
-      "control" = "oneshot(shift)";
+    default = {
+      settings.main = {
+        "a" = "b";
+        "b" = "a";
+        "control" = "oneshot(shift)";
+        "rightalt" = "layer(rightalt)";
+      };
+      extraConfig = ''
+        [rightalt:G]
+        h = q
+      '';
     };
   };
 }

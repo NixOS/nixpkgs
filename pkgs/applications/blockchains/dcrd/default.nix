@@ -1,21 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "dcrd";
-  version = "1.5.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
     rev = "refs/tags/release-v${version}";
-    sha256 = "14pxajc8si90hnddilfm09kmljwxq6i6p53fk0g09jp000cbklkl";
+    hash = "sha256-nSocqwXgJhvfbdElddbb1gGxoygmtVtK6DbiSuMxYew=";
   };
 
-  vendorSha256 = "03aw6mcvp1vr01ppxy673jf5hdryd5032cxndlkaiwg005mxp1dy";
+  patches = [
+    (fetchpatch {
+      name = "dcrd-appdata-env-variable.patch";
+      url = "https://github.com/decred/dcrd/pull/3152/commits/216132d7d852f3f2e2a6bf7f739f47ed62ac9387.patch";
+      hash = "sha256-R1GzP0qVP5XW1GnSJqFOpJVnwrVi/62tL1L2mc33+Dw=";
+    })
+  ];
 
-  doCheck = false;
+  vendorHash = "sha256-Napcfj1+KjQ21Jb/qpIzg2W/grzun2Pz5FV5yIBXoTo=";
 
-  subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
+  subPackages = [ "." "cmd/promptsecret" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    export DCRD_APPDATA="$TMPDIR"
+  '';
 
   meta = {
     homepage = "https://decred.org";

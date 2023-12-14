@@ -1,5 +1,6 @@
 { stdenv
 , fetchgit
+, fetchpatch
 , lib
 , meson
 , ninja
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "doc" ];
+
+  patches = [
+    (fetchpatch {
+      # https://git.libcamera.org/libcamera/libcamera.git/commit/?id=6cb92b523bd60bd7718df134cc5b1eff51cf42e5
+      name = "libcamera-sphinx7.0-compat.patch";
+      url = "https://git.libcamera.org/libcamera/libcamera.git/patch/?id=6cb92b523bd60bd7718df134cc5b1eff51cf42e5";
+      hash = "sha256-gs0EiT3gWlmRjDim+o2C0VmnoWqEouP5pNTD4XbNSdE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs utils/

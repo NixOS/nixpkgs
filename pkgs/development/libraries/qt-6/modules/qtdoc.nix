@@ -13,8 +13,8 @@ qtModule {
           --replace '$QT_INSTALL_DOCS' "${qtbase}/share/doc"
     done
   '';
-  nativeBuildInputs = [ qttools ];
-  qtInputs = [ qtdeclarative ];
+  nativeBuildInputs = [ (qttools.override { withClang = true; }) ];
+  propagatedBuildInputs = [ qtdeclarative ];
   cmakeFlags = [
     "-DCMAKE_MESSAGE_LOG_LEVEL=STATUS"
   ];

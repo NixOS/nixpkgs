@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zxLFj5AeTVAxE0En7ZlbBdJEm3WrcPv23MgOhyfNi14=";
+    hash = "sha256-xaz9oelkyS8lWECCmKs8P3mHB3Usv0KMUoh/K7rBnAs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

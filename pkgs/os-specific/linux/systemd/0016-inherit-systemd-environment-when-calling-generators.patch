@@ -16,10 +16,10 @@ executables that are being called from managers.
  1 file changed, 8 insertions(+)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index 342892490e..1117251fe0 100644
+index 771e8e7f16..acf3ead8d7 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -3771,9 +3771,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
+@@ -3899,9 +3899,17 @@ static int build_generator_environment(Manager *m, char ***ret) {
           * adjust generated units to that. Let's pass down some bits of information that are easy for us to
           * determine (but a bit harder for generator scripts to determine), as environment variables. */
  
@@ -35,5 +35,5 @@ index 342892490e..1117251fe0 100644
                  return -ENOMEM;
 +#endif
  
-         r = strv_env_assign(&nl, "SYSTEMD_SCOPE", MANAGER_IS_SYSTEM(m) ? "system" : "user");
+         r = strv_env_assign(&nl, "SYSTEMD_SCOPE", runtime_scope_to_string(m->runtime_scope));
          if (r < 0)

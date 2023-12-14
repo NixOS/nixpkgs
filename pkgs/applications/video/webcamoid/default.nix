@@ -4,10 +4,10 @@
 , v4l-utils }:
 mkDerivation rec {
   pname = "webcamoid";
-  version = "9.0.0";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-NV1BmG+fgy+ZcvHl+05VX5J1BAz8PxKiZ3z9BxjhMU0=";
+    sha256 = "sha256-E2hHFrksJtdDLWiX7wL1z9LBbBKT04a853V8u+WiwbA=";
     rev = version;
     repo = "webcamoid";
     owner = "webcamoid";
@@ -31,5 +31,6 @@ mkDerivation rec {
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ robaca ];
+    mainProgram = "webcamoid";
   };
 }

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyfcm";
   version = "1.4.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "olucurious";

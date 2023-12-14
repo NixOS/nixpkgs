@@ -20,14 +20,7 @@ in
   options.services.zigbee2mqtt = {
     enable = mkEnableOption (lib.mdDoc "zigbee2mqtt service");
 
-    package = mkOption {
-      description = lib.mdDoc "Zigbee2mqtt package to use";
-      default = pkgs.zigbee2mqtt;
-      defaultText = literalExpression ''
-        pkgs.zigbee2mqtt
-      '';
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "zigbee2mqtt" { };
 
     dataDir = mkOption {
       description = lib.mdDoc "Zigbee2mqtt data directory";
@@ -66,9 +59,10 @@ in
         server = mkDefault "mqtt://localhost:1883";
       };
       serial.port = mkDefault "/dev/ttyACM0";
-      # reference device configuration, that is kept in a separate file
+      # reference device/group configuration, that is kept in a separate file
       # to prevent it being overwritten in the units ExecStartPre script
       devices = mkDefault "devices.yaml";
+      groups = mkDefault "groups.yaml";
     };
 
     systemd.services.zigbee2mqtt = {

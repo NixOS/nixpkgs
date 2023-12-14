@@ -12,19 +12,20 @@
 
 buildPythonPackage rec {
   pname = "eth-abi";
-  version = "3.0.1";
+  version = "4.1.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-abi";
     rev = "v${version}";
-    hash = "sha256-xrZpT/9zwDtjSwSPDDse+Aq8plPm26OR/cIrliZUpLY=";
+    hash = "sha256-CGAfu3Ovz2WPJOD+4W2+cOAz+wYvuIyFL333Jw66ozA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "parsimonious>=0.8.0,<0.9.0" "parsimonious"
+      --replace "parsimonious>=0.9.0,<0.10.0" "parsimonious"
   '';
 
   propagatedBuildInputs = [
@@ -56,6 +57,6 @@ buildPythonPackage rec {
     description = "Ethereum ABI utilities";
     homepage = "https://github.com/ethereum/eth-abi";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

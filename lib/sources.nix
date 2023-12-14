@@ -1,26 +1,20 @@
-# Functions for copying sources to the Nix store.
+/* Functions for copying sources to the Nix store. */
 { lib }:
 
 # Tested in lib/tests/sources.sh
 let
   inherit (builtins)
     match
-    readDir
     split
     storeDir
-    tryEval
     ;
   inherit (lib)
     boolToString
     filter
-    getAttr
     isString
-    pathExists
     readFile
     ;
   inherit (lib.filesystem)
-    pathType
-    pathIsDirectory
     pathIsRegularFile
     ;
 

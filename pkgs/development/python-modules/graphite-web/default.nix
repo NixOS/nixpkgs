@@ -4,7 +4,7 @@
 , python
 , cairocffi
 , django
-, django_tagging
+, django-tagging
 , fetchFromGitHub
 , fetchpatch
 , gunicorn
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cairocffi
     django
-    django_tagging
+    django-tagging
     gunicorn
     pyparsing
     python-memcached

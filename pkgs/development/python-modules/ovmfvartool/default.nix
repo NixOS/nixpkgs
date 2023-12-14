@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ovmfvartool";
   version = "unstable-2022-09-04";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hlandau";

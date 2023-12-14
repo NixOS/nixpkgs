@@ -50,12 +50,7 @@ in
       type = types.bool;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Elasticsearch package to use.";
-      default = pkgs.elasticsearch;
-      defaultText = literalExpression "pkgs.elasticsearch";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "elasticsearch" { };
 
     listenAddress = mkOption {
       description = lib.mdDoc "Elasticsearch listen address.";

@@ -33,7 +33,7 @@ let
     }
     trap on_exit EXIT
 
-    archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
+    archiveName="${optionalString (cfg.archiveBaseName != null) (cfg.archiveBaseName + "-")}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''
@@ -84,8 +84,8 @@ let
       backupScript = mkBackupScript backupJobName cfg;
     in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
-      path = with pkgs; [
-        borgbackup openssh
+      path =  [
+        config.services.borgbackup.package pkgs.openssh
       ];
       script = "exec " + optionalString cfg.inhibitsSleep ''\
         ${pkgs.systemd}/bin/systemd-inhibit \
@@ -137,7 +137,7 @@ let
     '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
-    original = "${pkgs.borgbackup}/bin/borg";
+    original = getExe config.services.borgbackup.package;
     name = "borg-job-${name}";
     set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
   };
@@ -230,6 +230,8 @@ in {
   meta.doc = ./borgbackup.md;
 
   ###### interface
+
+  options.services.borgbackup.package = mkPackageOption pkgs "borgbackup" { };
 
   options.services.borgbackup.jobs = mkOption {
     description = lib.mdDoc ''
@@ -600,53 +602,56 @@ in {
           };
 
           extraArgs = mkOption {
-            type = types.str;
+            type = with types; coercedTo (listOf str) escapeShellArgs str;
             description = lib.mdDoc ''
               Additional arguments for all {command}`borg` calls the
               service has. Handle with care.
             '';
-            default = "";
-            example = "--remote-path=/path/to/borg";
+            default = [ ];
+            example = [ "--remote-path=/path/to/borg" ];
           };
 
           extraInitArgs = mkOption {
-            type = types.str;
+            type = with types; coercedTo (listOf str) escapeShellArgs str;
             description = lib.mdDoc ''
               Additional arguments for {command}`borg init`.
               Can also be set at runtime using `$extraInitArgs`.
             '';
-            default = "";
-            example = "--append-only";
+            default = [ ];
+            example = [ "--append-only" ];
           };
 
           extraCreateArgs = mkOption {
-            type = types.str;
+            type = with types; coercedTo (listOf str) escapeShellArgs str;
             description = lib.mdDoc ''
               Additional arguments for {command}`borg create`.
               Can also be set at runtime using `$extraCreateArgs`.
             '';
-            default = "";
-            example = "--stats --checkpoint-interval 600";
+            default = [ ];
+            example = [
+              "--stats"
+              "--checkpoint-interval 600"
+            ];
           };
 
           extraPruneArgs = mkOption {
-            type = types.str;
+            type = with types; coercedTo (listOf str) escapeShellArgs str;
             description = lib.mdDoc ''
               Additional arguments for {command}`borg prune`.
               Can also be set at runtime using `$extraPruneArgs`.
             '';
-            default = "";
-            example = "--save-space";
+            default = [ ];
+            example = [ "--save-space" ];
           };
 
           extraCompactArgs = mkOption {
-            type = types.str;
+            type = with types; coercedTo (listOf str) escapeShellArgs str;
             description = lib.mdDoc ''
               Additional arguments for {command}`borg compact`.
               Can also be set at runtime using `$extraCompactArgs`.
             '';
-            default = "";
-            example = "--cleanup-commits";
+            default = [ ];
+            example = [ "--cleanup-commits" ];
           };
         };
       }
@@ -769,6 +774,7 @@ in {
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
+      environment.systemPackages =
+        [ config.services.borgbackup.package ] ++ (mapAttrsToList mkBorgWrapper jobs);
     });
 }

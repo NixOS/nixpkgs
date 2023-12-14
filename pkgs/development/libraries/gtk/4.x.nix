@@ -1,12 +1,15 @@
 { lib
 , stdenv
+, buildPackages
 , substituteAll
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , graphene
 , gi-docgen
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -38,6 +41,7 @@
 , libGL
 # experimental and can cause crashes in inspector
 , vulkanSupport ? false
+, shaderc
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -45,6 +49,7 @@
 , wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
 , Cocoa
@@ -64,7 +69,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.10.4";
+  version = "4.12.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -76,12 +81,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "dyVABILgaF4oJl4ibGKEf05zz8qem0FqxYOCB/U3eiQ=";
+    sha256 = "FIziYvbIZIdFX7HZeTw/WLw+HaR3opYX+tsEIPWHCok=";
   };
 
   patches = [
     # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
     ./patches/4.0-fix-darwin-build.patch
+
+    # gdk: Fix compilation on macos
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/6208
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/aa888c0b3f775776fe3b71028396b7a8c6adb1d6.patch";
+      sha256 = "sha256-Jw6BvWDX0wIs4blUiX3qdQCR574yhcaO06Vy/IqfbJo=";
+    })
   ];
 
   depsBuildBuild = [
@@ -99,8 +111,12 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
+  ] ++ lib.optionals vulkanSupport [
+    shaderc # for glslc
   ] ++ setupHooks;
 
   buildInputs = [
@@ -163,7 +179,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    "-Dgtk_doc=${lib.boolToString x11Support}"
+    "-Ddocumentation=${lib.boolToString x11Support}"
     "-Dbuild-tests=false"
     "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
     "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
@@ -190,8 +206,13 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+
     files=(
       build-aux/meson/gen-demo-header.py
+      build-aux/meson/gen-visibility-macros.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py

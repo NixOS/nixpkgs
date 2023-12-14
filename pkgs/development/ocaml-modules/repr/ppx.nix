@@ -3,8 +3,7 @@
 buildDunePackage {
   pname = "ppx_repr";
 
-  inherit (repr) src version strictDeps;
-  duneVersion = "3";
+  inherit (repr) src version;
 
   propagatedBuildInputs = [
     ppx_deriving
@@ -12,7 +11,7 @@ buildDunePackage {
     repr
   ];
 
-  doCheck = false; # tests fail with ppxlib >= 0.23.0
+  doCheck = true;
   checkInputs = [
     alcotest
     hex

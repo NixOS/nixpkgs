@@ -263,8 +263,8 @@ in
       serviceConfig.RemainAfterExit = true;
 
       wantedBy = [ "multi-user.target" ];
-      requires = if cfg.database.host == null then [] else [ "postgresql.service" ];
-      after = [ "network.target" ] ++ (if cfg.database.host == null then [] else [ "postgresql.service" ]);
+      requires = lib.optional (cfg.database.host != null) "postgresql.service";
+      after = [ "network.target" ] ++ (lib.optional (cfg.database.host != null) "postgresql.service");
 
       script = ''
         rm -rf "${runDir}"

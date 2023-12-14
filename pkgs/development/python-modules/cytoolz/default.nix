@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.12.1";
+  version = "0.12.2";
+  format = "setuptools";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/DOQk5dIHJDePOyDG/uI2X4iDckZOdmWkgIC8YS0ZI4=";
+    hash = "sha256-MdSwRV1y2RRkX4A9kX2vTzFNEVxw3gV404IN64sQH2Y=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -32,10 +33,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
-    license = "licenses.bsd3";
+    license = licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

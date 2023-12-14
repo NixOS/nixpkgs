@@ -1,20 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+
+# build-system
+, cython_3
+, setuptools
+
+# dependencies
 , async-timeout
-, mock
+, chacha20poly1305-reuseable
 , noiseprotocol
 , protobuf
+, zeroconf
+
+# tests
+, mock
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.9.0";
-  format = "setuptools";
+  version = "19.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -22,30 +31,36 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RjLzOl8Cb6Vrq+75SvBntAmmiK70i3o2rED7Smnpiws=";
+    hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    cython_3
+  ];
+
   propagatedBuildInputs = [
-    async-timeout
+    chacha20poly1305-reuseable
     noiseprotocol
     protobuf
     zeroconf
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
+  pythonImportsCheck = [
+    "aioesphomeapi"
+  ];
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab hexa ];
   };

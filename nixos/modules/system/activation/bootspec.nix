@@ -79,7 +79,7 @@ in
       // { default = true; internal = true; };
     enableValidation = lib.mkEnableOption (lib.mdDoc ''the validation of bootspec documents for each build.
       This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
-      Enable this option if you want to ascertain that your documents are correct.
+      Enable this option if you want to ascertain that your documents are correct
       ''
     );
 

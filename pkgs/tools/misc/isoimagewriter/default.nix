@@ -26,5 +26,6 @@ mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ k900 ];
+    mainProgram = "isoimagewriter";
   };
 }

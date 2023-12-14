@@ -9,14 +9,15 @@
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.9.0";
-  disabled = pythonOlder "3.7";
+  version = "3.12.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "reorder_python_imports";
     rev = "v${version}";
-    hash = "sha256-z8giVbW8+k/y9Kg+O2tMle5MoRAar2Gccx2YCtFQvxw=";
+    hash = "sha256-bKv9APbraR2359IzzkzXs4sEXrTvGK3J4LO3wFHOti0=";
   };
 
   propagatedBuildInputs = [

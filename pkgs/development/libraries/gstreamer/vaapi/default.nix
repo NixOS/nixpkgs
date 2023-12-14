@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.22.3";
+  version = "1.22.7";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-onhnBi6LaTBfylt9PxPtfDGLcD59cnVslDlb0wXHsyw=";
+    hash = "sha256-Dp//douJ3m0xizQUbk54HYK5oPQCXcVBssg0nHvLf2c=";
   };
 
   outputs = [

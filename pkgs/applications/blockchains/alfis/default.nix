@@ -2,7 +2,6 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , makeWrapper
 , webkitgtk
@@ -15,24 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     rev = "v${version}";
-    sha256 = "sha256-QOKFnre5MW9EvrKrKBHWpOxi2fBKTDMhzCDX3ISd2cQ=";
+    sha256 = "sha256-BNpz4SjWeZ20CxjyEIaFI43X7P3uoyWqOQssFb38Gv8=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "bump-rust-web-view.patch";
-      url = "https://github.com/Revertron/Alfis/commit/03b461a740ab6ccbacd576eafc7a3faf4a66648f.patch";
-      sha256 = "sha256-CSqSMdVD31w7QxxXWtjKmqlaEirmbs1EVuiefSf1NKY=";
-    })
-  ];
-
-  cargoSha256 = "sha256-B4xI++U6RCljXCyaOmNj/SwA6I16zoiZsgk2VTiKfkg=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "web-view-0.7.3" = "sha256-8C/2bXAbxP5tdo9RLvNn89krzy08+yKy3kERfz31HJE=";
+    };
+  };
 
   checkFlags = [
     # these want internet access, disable them
@@ -61,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ misuzu ];
     platforms = platforms.unix;
+    mainProgram = "alfis";
   };
 }

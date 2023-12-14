@@ -63,14 +63,7 @@ in
     };
 
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.emacs;
-      defaultText = literalExpression "pkgs.emacs";
-      description = lib.mdDoc ''
-        emacs derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "emacs" { };
 
     defaultEditor = mkOption {
       type = types.bool;
@@ -78,6 +71,15 @@ in
       description = lib.mdDoc ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.
+      '';
+    };
+
+    startWithGraphical = mkOption {
+      type = types.bool;
+      default = config.services.xserver.enable;
+      defaultText = literalExpression "config.services.xserver.enable";
+      description = lib.mdDoc ''
+        Start emacs with the graphical session instead of any session. Without this, emacs clients will not be able to create frames in the graphical session.
       '';
     };
   };
@@ -92,11 +94,17 @@ in
         ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart = "always";
       };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+
+      unitConfig = optionalAttrs cfg.startWithGraphical {
+        After = "graphical-session.target";
+      };
+    } // optionalAttrs cfg.enable {
+      wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
+    };
 
     environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
   };
 
   meta.doc = ./emacs.md;

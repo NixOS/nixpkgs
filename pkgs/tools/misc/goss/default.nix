@@ -1,26 +1,68 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ bash
+, buildGoModule
+, fetchFromGitHub
+, getent
+, goss
+, lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, stdenv
+, systemd
+, testers
+}:
 
 buildGoModule rec {
   pname = "goss";
-  version = "0.3.18";
+
+  # Don't forget to update dgoss to the same version.
+  version = "0.4.4";
 
   src = fetchFromGitHub {
-    owner = "aelsabbahy";
+    owner = "goss-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dH052t30unWmrFTZK5niXNvbg1nngzWY7mwuZr4ULbM=";
   };
 
-  vendorSha256 = "sha256-zlQMVn4w6syYmntxpeiIc1UTbFrIJzOMg0RVDCICTM8=";
+  vendorHash = "sha256-4fEEz/c/xIeWxIzyyjwgSn2/2FWLA2tIedK65jGgYhY=";
 
   CGO_ENABLED = 0;
   ldflags = [
     "-s" "-w" "-X main.version=v${version}"
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  checkFlags = [
+    # Prometheus tests are skipped upstream
+    # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
+    "-skip" "^TestPrometheus"
+  ];
+
+  postInstall = let
+    runtimeDependencies = [ bash getent ]
+      ++ lib.optionals stdenv.isLinux [ systemd ];
+  in ''
+    wrapProgram $out/bin/goss \
+      --prefix PATH : "${lib.makeBinPath runtimeDependencies}"
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) goss;
+      version = testers.testVersion {
+        command = "goss --version";
+        package = goss;
+        version = "v${version}";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/aelsabbahy/goss/";
-    changelog = "https://github.com/aelsabbahy/goss/releases/tag/v${version}";
+    homepage = "https://github.com/goss-org/goss/";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Quick and easy server validation";
     longDescription = ''
       Goss is a YAML based serverspec alternative tool for validating a server’s configuration.
@@ -28,7 +70,8 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual jk ];
+    mainProgram = "goss";
+    maintainers = with maintainers; [ hyzual jk anthonyroussel ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

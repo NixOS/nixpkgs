@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyls-spyder";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     description = "Spyder extensions for the python-language-server";
     homepage = "https://github.com/spyder-ide/pyls-spyder";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

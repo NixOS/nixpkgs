@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.7.2.1";
+  version = "0.7.2.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MPDSCp49UzU/sg62m34i5vAaU+1PIbPhfdQI8L5QUaA=";
+    hash = "sha256-O3aTwFLIJpEAD+SpJHXbgv/DtachoSsQ37yHEZxLTTA=";
   };
 
   nativeBuildInputs = [

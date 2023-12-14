@@ -11,11 +11,14 @@
 , qtutilities
 , qtforkawesome
 , boost
+, wrapQtAppsHook
 , cmake
 , kio
 , plasma-framework
 , qttools
 , iconv
+, cppunit
+, syncthing
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -29,15 +32,15 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 , autostartExecPath ? "syncthingtray"
 }:
 
-mkDerivation rec {
-  version = "1.4.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.9";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
-    rev = "v${version}";
-    sha256 = "sha256-6J/P/DDD17QtXAISQn77EDIYqQu1hY7EnIX0FC6H/20=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-I9+q9GQ1QMbo7BdVG159iRYbDvRyfXmwBIW5AeJ3sC4=";
   };
 
   buildInputs = [
@@ -54,23 +57,38 @@ mkDerivation rec {
   ;
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
     qttools
+    # Although these are test dependencies, we add them anyway so that we test
+    # whether the test units compile. On Darwin we don't run the tests but we
+    # still build them.
+    cppunit
+    syncthing
   ]
     ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
   ;
 
-  # No tests are available by upstream, but we test --help anyway
-  # Don't test on Darwin because output is .app
+  # syncthing server seems to hang on darwin, causing tests to fail.
+  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+  '';
+  # don't test --help  on Darwin because output is .app
   doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${version}
+    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
 
   cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+    # See https://github.com/Martchus/syncthingtray/issues/208
+    "-DEXCLUDE_TESTS_FROM_ALL=OFF"
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
-    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
+    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
@@ -84,4 +102,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

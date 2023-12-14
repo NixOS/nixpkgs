@@ -36,7 +36,7 @@ in {
         name = "cmsd";
         protocol = "udp";
         user = "root";
-        server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
+        server = "${pkgs.cdesktopenv}/bin/rpc.cmsd";
         extraConfig = ''
           type  = RPC UNLISTED
           rpc_number  = 100068
@@ -64,7 +64,7 @@ in {
     services.xserver.desktopManager.session = [
     { name = "CDE";
       start = ''
-        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
+        exec ${pkgs.cdesktopenv}/bin/Xsession
       '';
     }];
   };

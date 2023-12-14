@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, nix, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, nix, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -16,8 +16,8 @@
 
     cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = lib.optional stdenvNoCC.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper pkg-config ];
+    buildInputs = [ curl ];
 
     postInstall = ''
       wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip nix ]}
@@ -36,8 +36,8 @@
           '';
         };
 
-        makeTest = { name, src, hash, forceGitDeps ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash forceGitDeps;
+        makeTest = { name, src, hash, forceGitDeps ? false, forceEmptyCache ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
+          inherit name hash forceGitDeps forceEmptyCache;
 
           src = makeTestSrc { inherit name src; };
         };
@@ -98,6 +98,20 @@
           hash = "sha256-VzQhArHoznYSXUT7l9HkJV4yoSOmoP8eYTLel1QwmB4=";
         };
 
+        # This package has no resolved deps whatsoever, which will not actually work but does test the forceEmptyCache option.
+        emptyCache = makeTest {
+          name = "empty-cache";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/bufbuild/protobuf-es/v1.2.1/package-lock.json";
+            hash = "sha256-UdBUEb4YRHsbvyjymIyjemJEiaI9KQRirqt+SFSK0wA=";
+          };
+
+          hash = "sha256-Cdv40lQjRszzJtJydZt25uYfcJVeJGwH54A+agdH9wI=";
+
+          forceEmptyCache = true;
+        };
+
         # This package contains both hosted Git shorthand, and a bundled dependency that happens to override an existing one.
         etherpadLite1818 = makeTest {
           name = "etherpad-lite-1.8.18";
@@ -111,11 +125,23 @@
 
           forceGitDeps = true;
         };
+
+        # This package has a lockfile v1 git dependency with no `dependencies` attribute, since it sementically has no dependencies.
+        jitsiMeet9111 = makeTest {
+          name = "jitsi-meet-9111";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/jitsi/jitsi-meet/stable/jitsi-meet_9111/package-lock.json";
+            hash = "sha256-NU+eQD4WZ4BMur8uX79uk8wUPsZvIT02KhPWHTmaihk=";
+          };
+
+          hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
+        };
       };
 
     meta = with lib; {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
-      maintainers = with maintainers; [ winter ];
+      maintainers = with maintainers; [ lilyinstarlight winter ];
       license = licenses.mit;
     };
   };
@@ -124,6 +150,7 @@
     { name ? "npm-deps"
     , hash ? ""
     , forceGitDeps ? false
+    , forceEmptyCache ? false
     , ...
     } @ args:
     let
@@ -136,6 +163,7 @@
         };
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
+      forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
     in
     stdenvNoCC.mkDerivation (args // {
       inherit name;
@@ -165,6 +193,14 @@
 
       dontInstall = true;
 
+      # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+      # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+
+      SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
+        then "${cacert}/etc/ssl/certs/ca-bundle.crt"
+        else "/no-cert-file.crt";
+
       outputHashMode = "recursive";
-    } // hash_ // forceGitDeps_);
+    } // hash_ // forceGitDeps_ // forceEmptyCache_);
 }

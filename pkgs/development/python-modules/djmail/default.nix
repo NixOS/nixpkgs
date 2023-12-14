@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "djmail";
   version = "2.0.0";
+  format = "setuptools";
 
   meta = {
     description = "Simple, powerfull and nonobstructive django email middleware";

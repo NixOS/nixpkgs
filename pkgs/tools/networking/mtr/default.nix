@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
   };
 
+  patches = [ (fetchpatch { # https://github.com/traviscross/mtr/pull/468
+                url = "https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch";
+                hash = "sha256-rTydtU8+Wc4nGEKh1GOkhcpgME4hwsACy82gKPaIe64=";
+              }) ];
+
   # we need this before autoreconfHook does its thing
   postPatch = ''
     echo ${version} > .tarball-version

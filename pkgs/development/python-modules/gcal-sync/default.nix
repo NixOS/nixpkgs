@@ -9,27 +9,34 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "6.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z5XRyhObREj38BWnexQnwHS1y2Ewyv5/KPkl/ybHvUE=";
+    hash = "sha256-i5K4kJcieugPkXIuDje8tk5TEX6EwDywUB6MByLmukA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     ical
     pydantic
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     freezegun

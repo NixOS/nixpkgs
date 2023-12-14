@@ -1,0 +1,21 @@
+diff -ur a/db/drivers/mysql/db.c b/db/drivers/mysql/db.c
+--- a/db/drivers/mysql/db.c	1969-12-31 19:00:01.000000000 -0500
++++ b/db/drivers/mysql/db.c	2023-11-09 23:26:25.329700495 -0500
+@@ -52,9 +52,16 @@
+ 
+         db_get_login2("mysql", name, &user, &password, &host, &port);
+ 
++        const char* errstr;
++        unsigned int port_number = (unsigned int)strtonum(port, 0, 65536, &errstr);
++        if (errstr != NULL) {
++            db_d_append_error("%s", errstr);
++            return DB_FAILED;
++        }
++
+         connection = mysql_init(NULL);
+         res = mysql_real_connect(connection, host, user, password,
+-                                 connpar.dbname, port, NULL, 0);
++                                 connpar.dbname, port_number, NULL, 0);
+ 
+         if (res == NULL) {
+             db_d_append_error("%s\n%s", _("Connection failed."),

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osi";
-  version = "0.108.8";
+  version = "0.108.9";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Osi";
     rev = "releases/${version}";
-    hash = "sha256-Wyxeyn49QWzGvW6bMwCp39iLkB1eMQUEpIxUgpLcxgA=";
+    hash = "sha256-ueIa9CL4K5ygKpkMRvfuWR0emEG6omg65ZKCsConWsw=";
   };
 
   buildInputs =

@@ -19,7 +19,6 @@
 , intltool
 , json-glib
 , callPackage
-, libsoup
 , libstartup_notification
 , libXtst
 , libXdamage
@@ -72,13 +71,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.8.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-KY5ctByMYKxigiZ0X/blaHJuyiAUNB6B2gpGtC/k100=";
+    hash = "sha256-kQvPdamS0t7YcWyCekdsLNXZfidaV3tdSptzHPGMSZ0=";
   };
 
   patches = [
@@ -100,7 +99,6 @@ stdenv.mkDerivation rec {
     gsound
     gtk3
     json-glib
-    libsoup # referenced in js/ui/environment.js
     libstartup_notification
     libXtst
     libXdamage
@@ -162,9 +160,10 @@ stdenv.mkDerivation rec {
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
       substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
-      substituteInPlace ./bin/CinnamonGtkSettings.py      --replace "'python3'" "'${pythonEnv.interpreter}'"
       substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
-      substituteInPlace ./bin/Spices.py                   --replace "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./bin/Spices.py                   --replace "subprocess.run(['/usr/bin/" "subprocess.run(['" \
+                                                          --replace 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
+                                                          --replace "msgfmt" "${gettext}/bin/msgfmt"
       substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
       substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
     popd
@@ -193,7 +192,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" ];
+    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
   };
 
   meta = with lib; {

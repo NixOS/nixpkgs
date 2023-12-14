@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
+  vendorHash = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
 
   doCheck = false;
 
@@ -36,6 +36,7 @@ buildGoModule rec {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
-    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam dtzWill ];
+    mainProgram = "lab";
   };
 }

@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-lAJ2bjs5VLzrHd09eFK4X0V/cCee2QsgdgiKq+y2c10=";
   };
 
-  vendorSha256 = "sha256-aiX+NGUsFK0N9vC5baAHHMr28CbF5Xa4WgYLFFLBYTs=";
+  vendorHash = "sha256-aiX+NGUsFK0N9vC5baAHHMr28CbF5Xa4WgYLFFLBYTs=";
 
   buildInputs = [
     libpcap

@@ -121,10 +121,10 @@ int main(int argc, char **argv)
 
     rdef = malloc(sizeof(struct xkb_rule_names));
 
-    TRY_KEYMAP(model,   argv[1], "xkbModel");
-    TRY_KEYMAP(layout,  argv[2], "layout");
-    TRY_KEYMAP(variant, argv[3], "xkbVariant");
-    TRY_KEYMAP(options, argv[4], "xkbOptions");
+    TRY_KEYMAP(model,   argv[1], "xkb.model");
+    TRY_KEYMAP(layout,  argv[2], "xkb.layout");
+    TRY_KEYMAP(variant, argv[3], "xkb.variant");
+    TRY_KEYMAP(options, argv[4], "xkb.options");
 
     free_logs();
     rdef->model = argv[1];

@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.2.0";
+  version = "2.5.1";
 
   disabled = pythonOlder "3.6";
 
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-SMkY3uN3kAlb/pbm047W0G8MJ7G8mCsfGVSPhzd5aEo=";
+    hash = "sha256-0mVbjfNYTfuo8uyd7NFKlneUZMt78mcitQ5nCgPxmFs=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -57,8 +57,12 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    ${python.pythonForBuild.interpreter} buildconfig/config.py
+    ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   checkPhase = ''
     runHook preCheck

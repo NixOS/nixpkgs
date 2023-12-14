@@ -9,14 +9,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b24";
+  version = "2.0.0b31";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZnRDGgJu78KoSHvznYhBNEDJihUm9rUdlb5tXmcpuTc=";
+    hash = "sha256-PWUZ4adH6uaNRIXVMGN3Yun7muYljQC8xDeEes0MB2U=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     aiohttp
     aiofiles
     biliass
-    dicttoxml
+    dict2xml
     colorama
   ];
 
@@ -44,5 +44,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/yutto-dev/yutto";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
+    mainProgram = "yutto";
   };
 }

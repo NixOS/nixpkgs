@@ -9,16 +9,10 @@ with lib;
       1714 to 1764 as they are needed for it to function properly.
       You can use the {option}`package` to use
       `gnomeExtensions.gsconnect` as an alternative
-      implementation if you use Gnome.
+      implementation if you use Gnome
     '');
-    package = mkOption {
-      default = pkgs.plasma5Packages.kdeconnect-kde;
-      defaultText = literalExpression "pkgs.plasma5Packages.kdeconnect-kde";
-      type = types.package;
-      example = literalExpression "pkgs.gnomeExtensions.gsconnect";
-      description = lib.mdDoc ''
-        The package providing the implementation for kdeconnect.
-      '';
+    package = mkPackageOption pkgs [ "plasma5Packages" "kdeconnect-kde" ] {
+      example = "gnomeExtensions.gsconnect";
     };
   };
   config =

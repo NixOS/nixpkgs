@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.16";
+  version = "0.7.17";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-yATIsX2nKsW5DBwg9/LznQqf+XPY3q46WZut18Sr0v0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wBqw+YHKlxYplgsYL1pbkusHyPfCaVPcH/Yku6WDYbE=";
   };
 
   nativeCheckInputs = [
@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests are outdated
-    "test_exception_msg"
     "test_method"
   ];
 

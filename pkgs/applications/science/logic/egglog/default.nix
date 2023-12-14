@@ -5,18 +5,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "egglog";
-  version = "unstable-2023-06-11";
+  version = "unstable-2023-09-12";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "c7ef8b000caf7fa17f6127847db4b9c285c03f09";
-    hash = "sha256-OGuqC/HgH7UhUhW5RU8nkqj6roPjXXOyVRHmnJdIolg=";
+    rev = "4d67f262a6f27aa5cfb62a2cfc7df968959105df";
+    hash = "sha256-1mc7dW2pgaK4D7ZmlSHohb+6lcr7M9SRLUV/Dod8Rv0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "egraph-serialize-0.1.0" = "sha256-sdkn7lmtmbLwAopabLWkrD6GjM3LIHseysuvwPz26G4=";
       "symbol_table-0.2.0" = "sha256-f9UclMOUig+N5L3ibBXou0pJ4S/CQqtaji7tnebVbis=";
       "symbolic_expressions-5.0.3" = "sha256-mSxnhveAItlTktQC4hM8o6TYjgtCUgkdZj7i6MR4Oeo=";
     };

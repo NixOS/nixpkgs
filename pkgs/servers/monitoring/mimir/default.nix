@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.8.0";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    sha256 = "sha256-gVt334HTKOotRaO1ga774FaxpblADpgdTtucADOHsCE=";
+    hash = "sha256-0OFuMWoYgo8qCxWk93wOy45diLb2JIBsoxptLKTeOC4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     "cmd/mimir"
@@ -26,15 +26,16 @@ buildGoModule rec {
     };
   };
 
-  ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
-  in [
-    ''-extldflags "-static"''
-    "-s"
-    "-w"
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=unknown"
-    "-X ${t}.Branch=unknown"
-  ];
+  ldflags =
+    let t = "github.com/grafana/mimir/pkg/util/version";
+    in [
+      ''-extldflags "-static"''
+      "-s"
+      "-w"
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=unknown"
+      "-X ${t}.Branch=unknown"
+    ];
 
   meta = with lib; {
     description =

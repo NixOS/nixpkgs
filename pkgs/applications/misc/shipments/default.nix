@@ -1,5 +1,5 @@
 { desktop-file-utils
-, fetchurl
+, fetchFromSourcehut
 , gobject-introspection
 , gtk3
 , lib
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
   pname = "shipments";
   version = "0.3.0";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~martijnbraam/shipments/archive/${version}.tar.gz";
-    sha256 = "1znybldx21wjnb8qy6q9p52pi6lfz81743xgrnjmvjji4spwaipf";
+  src = fetchFromSourcehut {
+    owner = "~martijnbraam";
+    repo = "shipments";
+    rev = version;
+    hash = "sha256-8wX1s5mPCdMINIQP4m5q5StKqxY6CGBBxIxyQAvU7Pc=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +29,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libhandy
     (python3.withPackages (ps: with ps; [

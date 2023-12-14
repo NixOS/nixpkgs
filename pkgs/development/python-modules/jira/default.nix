@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.5.1";
+  version = "3.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pycontribs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n0V9FZ1agzvzqCriqls8C2IKhHKOmOAWqa8iCnXHKY4=";
+    hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycontribs/jira";
     changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

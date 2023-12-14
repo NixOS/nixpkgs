@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pynut2";
   version = "2.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mezz64";

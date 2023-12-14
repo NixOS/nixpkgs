@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "docker-compose-language-service";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "compose-language-service";
     rev = "v${version}";
-    hash = "sha256-faQvUHzqtCipceGnamVQIlAWCDpo7oX01/zGz9RLjMY=";
+    hash = "sha256-UBnABi7DMKrAFkRA8H6us/Oq4yM0mJ+kwOm0Rt8XnGw=";
   };
 
-  npmDepsHash = "sha256-gWaZMsI1HVIXKZInfgzfH8syzOwU2C6kcKvB2M6KLX4=";
+  npmDepsHash = "sha256-G1X9WrnwN6wM9S76PsGrPTmmiMBUKu4T2Al3HH3Wo+w=";
 
   meta = with lib; {
     description = "Language service for Docker Compose documents";

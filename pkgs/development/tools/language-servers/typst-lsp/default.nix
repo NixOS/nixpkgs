@@ -1,41 +1,56 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.6.2";
+  # Please update the corresponding vscode extension when updating
+  # this derivation.
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "nvarner";
-    repo = pname;
+    repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-RYFIJYgyBe0WhNEP1cDI7JvM4Ka+39uyOx5pcpWhq3I=";
+    hash = "sha256-7T5BxAq67mHve2FeYCN0L63e+2LE7agG1LgmKy5y1bc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "elsa-1.8.1" = "sha256-/85IriplPxx24TE/CsvjIsve100QUZiVqS0TWgPFRbw=";
-      "svg2pdf-0.4.1" = "sha256-WeVP+yhqizpTdRfyoj2AUxFKhGvVJIIiRV0GTXkgLtQ=";
-      "typst-0.5.0" = "sha256-obUe9OVQ8M7MORudQGN7zaYjUv4zjeh7XidHHmUibTA=";
+      "typst-0.10.0" = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
+      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
+      "typstfmt_lib-0.2.6" = "sha256-UUVbnxIj7kQVpZvSbbB11i6wAvdTnXVk5cNSNoGBeRM=";
     };
   };
 
-  patches = [
-    # typst-library tries to access the workspace with include_bytes, which
-    # fails when it is vendored as its own separate crate
-    # this patch moves the required assets into the crate and fixes the issue
-    # see https://github.com/typst/typst/pull/1515
-    ./move-typst-assets.patch
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  checkFlags = [
+    # requires internet access
+    "--skip=workspace::package::external::remote_repo::test::full_download"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # both tests fail on darwin with 'Attempted to create a NULL object.'
+    "--skip=workspace::fs::local::test::read"
+    "--skip=workspace::package::external::manager::test::local_package"
+  ];
+
+  # workspace::package::external::manager::test::local_package tries to access the data directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "A brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
+    mainProgram = "typst-lsp";
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
-    license = with licenses; [ mit ];
+    license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda GaetanLepage ];
   };
 }

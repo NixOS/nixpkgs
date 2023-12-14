@@ -12,7 +12,7 @@
 , mkDerivation
 , qtgraphicaleffects
 , qtquickcontrols2
-, qttranslations
+, qttools
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -73,11 +73,11 @@ mkDerivation rec {
     minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
-    qttranslations
   ];
 
   nativeBuildInputs = [
     cmake
+    qttools
   ];
 
   cmakeFlags = [

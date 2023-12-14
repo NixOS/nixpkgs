@@ -9,7 +9,8 @@
 }:
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "15.0.0";
+  version = "17.14.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     repo = "sqlglot";
     owner = "tobymao";
     rev = "v${version}";
-    hash = "sha256-F95JUYUgimWMyfPAV55e+bOcvWy5A95djKcJuSQ8RRs=";
+    hash = "sha256-aImshQ5jf0k62ucpK4X8G7uHGAFQkhGgjMYo4mvSvew=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

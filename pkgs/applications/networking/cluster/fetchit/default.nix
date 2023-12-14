@@ -18,7 +18,7 @@ buildGoModule rec {
     sha256 = "sha256-hxS/+/fbYOpMJ5VfvvG5l7wWKBUUR22rYn9X79DzUUk=";
   };
 
-  vendorSha256 = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
+  vendorHash = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
 
   subPackages = [ "cmd/fetchit" ];
 

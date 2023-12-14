@@ -1,10 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
-, coreutils
 , fetchFromGitHub
 , icontract
 , pytestCheckHook
 , pythonOlder
+, substituteAll
 , typing-extensions
 }:
 
@@ -21,10 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Gm82VRu8GP52BohQzpMUJfh6q2tiUA2GJWOcG7ymGgg=";
   };
 
-  postPatch = ''
-    substituteInPlace lddwrap/__init__.py \
-      --replace '/usr/bin/env' '${coreutils}/bin/env'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./replace_env_with_placeholder.patch;
+      ldd_bin = "${stdenv.cc.bintools.libc_bin}/bin/ldd";
+    })
+  ];
 
   # Upstream adds some plain text files direct to the package's root directory
   # https://github.com/Parquery/pylddwrap/blob/master/setup.py#L71
@@ -39,6 +42,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # uses mocked ldd from PATH, but we are patching the source to not look at PATH
+  disabledTests = [
+    "TestAgainstMockLdd"
+    "TestMain"
+  ];
+
   pythonImportsCheck = [ "lddwrap" ];
 
   meta = with lib; {
@@ -47,5 +56,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ thiagokokada ];
+    # should work in any Unix platform that uses glibc, except for darwin
+    # since it has its own tool (`otool`)
+    badPlatforms = platforms.darwin;
   };
 }

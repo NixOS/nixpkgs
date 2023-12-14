@@ -1,28 +1,22 @@
-{ lib, fetchzip, stdenv, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-getopt";
-  version = "20120615";
+buildDunePackage rec {
+  pname = "getopt";
+  version = "20230213";
 
-  src = fetchzip {
-    url = "https://download.ocamlcore.org/ocaml-getopt/ocaml-getopt/${version}/ocaml-getopt-${version}.tar.gz";
-    sha256 = "0bng2mmdixpmj23xn8krlnaq66k22iclwz46r8zjrsrq3wcn1xgn";
+  minimalOCamlVersion = "4.07";
+
+  src = fetchFromGitHub {
+    owner = "scemama";
+    repo = "ocaml-getopt";
+    rev = version;
+    hash = "sha256-oYDm945LgjIW+8x7UrO4FlbHywnu8480aiEVvnjBxc8=";
   };
 
-  nativeBuildInputs = [
-    ocaml
-    findlib
-    ocamlbuild
-  ];
-
-  strictDeps = true;
-
   doCheck = true;
-  createFindlibDestdir = true;
 
   meta = {
-    inherit (ocaml.meta) platforms;
-    homepage = "https://github.com/gildor478/ocaml-getopt";
+    homepage = "https://github.com/scemama/ocaml-getopt";
     description = "Parsing of command line arguments (similar to GNU GetOpt) for OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];

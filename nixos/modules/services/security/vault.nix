@@ -45,12 +45,7 @@ in
     services.vault = {
       enable = mkEnableOption (lib.mdDoc "Vault daemon");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vault;
-        defaultText = literalExpression "pkgs.vault";
-        description = lib.mdDoc "This option specifies the vault package to use.";
-      };
+      package = mkPackageOption pkgs "vault" { };
 
       dev = mkOption {
         type = types.bool;
@@ -221,6 +216,7 @@ in
         ProtectHome = "read-only";
         AmbientCapabilities = "cap_ipc_lock";
         NoNewPrivileges = true;
+        LimitCORE = 0;
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
         Restart = "on-failure";

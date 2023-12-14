@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "23.1.0";
+  version = "23.11.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sL2XvqiQP1orpyGSV6ROPx+dAAc9bMGt1o8L7saWkqw=";
+    hash = "sha256-TGiFWCX/Qy0ZcimEb5cbxNZmbOkEkuWwIBO8rKTZqwU=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,6 @@ buildPythonPackage rec {
     platformdirs
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
@@ -108,6 +107,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
+    mainProgram = "black";
     maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

@@ -17,5 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "a git extension to work with CODEOWNERS files";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
+    mainProgram = "git-codeowners";
   };
 }

@@ -5,7 +5,6 @@
 , buildPythonPackage
 , click
 , fetchPypi
-, intbitset
 , pytest-xdist
 , pytestCheckHook
 , pythonAtLeast
@@ -14,25 +13,19 @@
 , saneyaml
 , setuptools-scm
 , text-unidecode
-, typing
 }:
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "31.0.2";
+  version = "31.0.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UWd8fTHVEC5ywETfMIWjfXm4xiNaMrVpwkQ/woeXc0k=";
+    hash = "sha256-ura55/m/iesqN6kSYmdHB1sbthSHXaFWiQ76wVmyl0E=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
-  '';
 
   dontConfigure = true;
 
@@ -44,12 +37,9 @@ buildPythonPackage rec {
     attrs
     beautifulsoup4
     click
-    intbitset
     requests
     saneyaml
     text-unidecode
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
   nativeCheckInputs = [
@@ -83,7 +73,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -16,17 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-clone";
-  version = "5.0.11";
+  version = "5.0.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZOJc8R82R9q87Qpf/J4CXE+xL6nvbsXRIs0boNY+2uk=";
+    hash = "sha256-yxYmRSiw/pjgHftu75S9yx0ZXrWRz0VbU8jPjl4baqQ=";
   };
 
   postPatch = ''
-    substituteInPlace app/{deepin-clone-ionice,deepin-clone-pkexec,deepin-clone.desktop,com.deepin.pkexec.deepin-clone.policy.tmp} \
+    substituteInPlace app/{deepin-clone-ionice,deepin-clone-pkexec,com.deepin.pkexec.deepin-clone.policy.tmp} \
       --replace "/usr" "$out"
 
     substituteInPlace app/src/corelib/ddevicediskinfo.cpp \
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
+    broken = true;
   };
 }
 

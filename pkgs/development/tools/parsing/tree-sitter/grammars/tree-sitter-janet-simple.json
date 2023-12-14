@@ -4,6 +4,7 @@
   "date": "2023-04-29T13:15:11+09:00",
   "path": "/nix/store/53gscixcapdpckbr4gfx26ax0jk84xcp-tree-sitter-janet-simple",
   "sha256": "0hy1dm2jzghd7mi74n4b1ac5bhm809mcg3bcl9f300bh5m79qnyq",
+  "hash": "sha256-2FucTi1wATBcomyNx2oCqMJVmAqLWHJiPQ2+L0VtwUM=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

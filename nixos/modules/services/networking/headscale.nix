@@ -17,14 +17,7 @@ in {
     services.headscale = {
       enable = mkEnableOption (lib.mdDoc "headscale, Open Source coordination server for Tailscale");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.headscale;
-        defaultText = literalExpression "pkgs.headscale";
-        description = lib.mdDoc ''
-          Which headscale package to use for the running server.
-        '';
-      };
+      package = mkPackageOption pkgs "headscale" { };
 
       user = mkOption {
         default = "headscale";
@@ -292,7 +285,7 @@ in {
               };
 
               client_secret_path = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.str;
                 default = null;
                 description = lib.mdDoc ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.

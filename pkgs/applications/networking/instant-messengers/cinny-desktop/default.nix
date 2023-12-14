@@ -1,45 +1,84 @@
-{ stdenv
-, lib
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, glib-networking
-, openssl
-, webkitgtk
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cinny
+, copyDesktopItems
 , wrapGAppsHook
+, pkg-config
+, openssl
+, dbus
+, glib
+, glib-networking
+, libayatana-appindicator
+, webkitgtk
+, makeDesktopItem
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
-  version = "2.2.6";
+  version = "3.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/cinnyapp/cinny-desktop/releases/download/v${version}/Cinny_desktop-x86_64.deb";
-    sha256 = "sha256-Bh7qBlHh2bQ6y2HnI4TtxMU6N3t04tr1Juoul2KMrqs=";
+  src = fetchFromGitHub {
+    owner = "cinnyapp";
+    repo = "cinny-desktop";
+    rev = "v${version}";
+    hash = "sha256-v5D0/EHVQ2xo7TGo+jZoRDBVFczkaZu2ka6QpwV4dpw=";
   };
 
+  sourceRoot = "${src.name}/src-tauri";
+
+  # modififying $cargoDepsCopy requires the lock to be vendored
+  cargoLock.lockFile = ./Cargo.lock;
+
+  postPatch = let
+    cinny' =
+      assert lib.assertMsg (cinny.version == version) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+      cinny;
+  in ''
+    substituteInPlace tauri.conf.json \
+      --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
+
+  postInstall = ''
+    install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
+    install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
+    install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
+  '';
+
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
+    copyDesktopItems
+    wrapGAppsHook
+    pkg-config
   ];
 
   buildInputs = [
-    glib-networking
     openssl
+    dbus
+    glib
+    glib-networking
+    libayatana-appindicator
     webkitgtk
-    wrapGAppsHook
   ];
 
-  unpackCmd = "dpkg-deb -x $curSrc source";
-
-  installPhase = "mv usr $out";
+  desktopItems = [
+    (makeDesktopItem {
+      name = "cinny";
+      exec = "cinny";
+      icon = "cinny";
+      desktopName = "Cinny";
+      comment = meta.description;
+      categories = [ "Network" "InstantMessaging" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
-    maintainers = [ maintainers.aveltras ];
+    maintainers = [ ];
     license = licenses.agpl3Only;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     mainProgram = "cinny";
   };

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "adext";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";

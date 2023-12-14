@@ -35,12 +35,7 @@ in
         description = lib.mdDoc "Group under which Jackett runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.jackett;
-        defaultText = literalExpression "pkgs.jackett";
-        description = lib.mdDoc "Jackett package to use.";
-      };
+      package = mkPackageOption pkgs "jackett" { };
     };
   };
 

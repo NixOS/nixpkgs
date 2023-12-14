@@ -142,6 +142,15 @@ in
     '';
   };
 
+  # Check that mkDerivation rejects MD5 hashes
+  rejectedHashes = lib.recurseIntoAttrs {
+    md5 =
+      let drv = runCommand "md5 outputHash rejected" {
+        outputHash = "md5-fPt7dxVVP7ffY3MxkQdwVw==";
+      } "true";
+      in assert !(builtins.tryEval drv).success; {};
+  };
+
   test-inputDerivation = let
     inherit (stdenv.mkDerivation {
       dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };

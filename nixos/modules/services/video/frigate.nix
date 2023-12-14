@@ -10,6 +10,7 @@ let
     mkDefault
     mdDoc
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     types;
@@ -62,13 +63,7 @@ in
   options.services.frigate = with types; {
     enable = mkEnableOption (mdDoc "Frigate NVR");
 
-    package = mkOption {
-      type = package;
-      default = pkgs.frigate;
-      description = mdDoc ''
-        The frigate package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "frigate" { };
 
     hostname = mkOption {
       type = str;
@@ -322,6 +317,16 @@ in
       '';
     };
 
+    systemd.services.nginx.serviceConfig.SupplementaryGroups = [
+      "frigate"
+    ];
+
+    users.users.frigate = {
+      isSystemUser = true;
+      group = "frigate";
+    };
+    users.groups.frigate = {};
+
     systemd.services.frigate = {
       after = [
         "go2rtc.service"
@@ -349,15 +354,18 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
 
-        DynamicUser = true;
         User = "frigate";
+        Group = "frigate";
+
+        UMask = "0027";
 
         StateDirectory = "frigate";
-        UMask = "0077";
+        StateDirectoryMode = "0750";
 
         # Caches
         PrivateTmp = true;
         CacheDirectory = "frigate";
+        CacheDirectoryMode = "0750";
 
         BindPaths = [
           "/migrations:${cfg.package}/share/frigate/migrations:ro"

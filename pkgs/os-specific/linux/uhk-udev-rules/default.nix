@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   dontBuild = true;
   installPhase = ''
     runHook preInstall
-    install -D -m 644 ${uhk-agent.out}/rules/50-uhk60.rules $out/lib/udev/rules.d/50-uhk60.rules
+    install -D -m 644 ${uhk-agent.out}/opt/uhk-agent/rules/50-uhk60.rules $out/lib/udev/rules.d/50-uhk60.rules
     runHook postInstall
   '';
 

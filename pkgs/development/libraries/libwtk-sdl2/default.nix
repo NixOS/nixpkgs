@@ -9,13 +9,13 @@
 , SDL2_image
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwtk-sdl2";
   version = "unstable-2023-02-28";
 
   src = fetchFromGitHub {
     owner = "muesli4";
-    repo = pname;
+    repo = "libwtk-sdl2";
     rev = "0504f8342c8c97d0c8b43d33751427c564ad8d44";
     sha256 = "sha256-NAjsDQ4/hklYRfa85uleOr50tmc6UJVo2xiDnEbmIxk=";
   };
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     */
     platforms = platforms.linux;
   };
-}
+})

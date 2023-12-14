@@ -41,14 +41,18 @@ stdenv.mkDerivation rec {
     ./gcc-13.patch
   ];
 
-  # tests are determined to use /var/tmp on unix
   postPatch = ''
+    # tests are determined to use /var/tmp on unix
     find . -name tmpDir.h | while read -r f ; do
       substituteInPlace $f --replace '/var/tmp' "$TMPDIR"
     done
+    # On slower machines this test can take more than the default 1500 seconds
+    echo 'set_tests_properties(OpenEXR.IlmImf PROPERTIES TIMEOUT 3000)' >> OpenEXR/IlmImfTest/CMakeLists.txt
   '';
 
-  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+  cmakeFlags = [
+    "-DCMAKE_CTEST_ARGUMENTS=--timeout;3600"
+  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];

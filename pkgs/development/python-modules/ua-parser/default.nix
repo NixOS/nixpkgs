@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "0.16.1";
+  version = "0.18.0";
 
   format = "setuptools";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "uap-python";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-vyzeRi/wYEyezSU+EigJATgrNvABGCWVWlSFhKGipLE=";
+    hash = "sha256-GiuGPnyYL0HQ/J2OpDTD1/panZCuzKtD3mKW5op5lXA=";
   };
 
   patches = [

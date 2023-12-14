@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "dateutils";
   version = "0.6.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +21,6 @@ buildPythonPackage rec {
     description = "Utilities for working with datetime objects.";
     homepage = "https://github.com/jmcantrell/python-dateutils";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

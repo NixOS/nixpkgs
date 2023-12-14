@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corepaint";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wRF2Z2n9rEixmKYDRqKxQad2JDSxsgfGIWQWpjz/+yU=";
+    hash = "sha256-ndknVT/gl2P0s3ADW0txiVtAyI/l/ZFWEgufFleS0A4=";
   };
 
   nativeBuildInputs = [

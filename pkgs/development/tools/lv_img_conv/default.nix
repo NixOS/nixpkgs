@@ -52,9 +52,7 @@ buildNpmPackage rec {
     makeWrapper ${nodePackages.ts-node}/bin/ts-node $out/bin/lv_img_conv --add-flags $out/lib/node_modules/lv_img_conv/lib/cli.ts
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/lvgl/lv_img_conv/releases/tag/v${version}";

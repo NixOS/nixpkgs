@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "genpy";
   version = "2022.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +24,6 @@ buildPythonPackage rec {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/genpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

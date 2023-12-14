@@ -13,7 +13,7 @@ buildGoModule rec {
     hash = "sha256-cSOYHYJJEGzFtkD4mjTmYBiM9CaWKt64xgV/JeNHpfM=";
   };
 
-  vendorSha256 = "sha256-RpjLs4+9abbbysYAlPDUXBLe1cz4Lp+QmR1yv+LpYwQ=";
+  vendorHash = "sha256-RpjLs4+9abbbysYAlPDUXBLe1cz4Lp+QmR1yv+LpYwQ=";
 
   doCheck = false;
 
@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Serve NAR file contents via HTTP";
     homepage = "https://github.com/numtide/nar-serve";
     license = licenses.mit;
-    maintainers = with maintainers; [ rizary ];
+    maintainers = with maintainers; [ rizary zimbatm ];
   };
 }

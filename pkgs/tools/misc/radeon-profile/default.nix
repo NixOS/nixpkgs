@@ -27,6 +27,7 @@ mkDerivation rec {
     homepage    = "https://github.com/marazmista/radeon-profile";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
+    mainProgram = "radeon-profile";
   };
 
 }

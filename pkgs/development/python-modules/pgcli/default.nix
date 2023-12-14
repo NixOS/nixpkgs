@@ -22,11 +22,12 @@
 # integrating with ipython-sql
 buildPythonPackage rec {
   pname = "pgcli";
-  version = "3.5.0";
+  version = "4.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zESNlRWfwJA9NhgpkneKCW7aV1LWYNR2cTg8jiv2M/E=";
+    hash = "sha256-8v7qIJnOGtXoqdXZOw7a9g3GHpeyG3XpHZcjk5zlO9I=";
   };
 
   propagatedBuildInputs = [

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "wcag-contrast-ratio";
   version = "0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "Library for computing contrast ratios, as required by WCAG 2.0";
     homepage = "https://github.com/gsnedders/wcag-contrast-ratio";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

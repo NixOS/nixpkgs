@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, rpmextract, patchelf, bash }:
+{ lib, stdenv, fetchurl, rpmextract, patchelf, bash, testers, scaleft }:
 
 stdenv.mkDerivation rec {
   pname = "scaleft";
-  version = "1.45.4";
+  version = "1.67.4";
 
   src =
     fetchurl {
       url = "http://pkg.scaleft.com/rpm/scaleft-client-tools-${version}-1.x86_64.rpm";
-      sha256 = "1yskybjba9ljy1wazddgrm7a4cc72i1xbk7sxnjpcq4hdy3b50l0";
+      sha256 = "kRCShTMKf5qKFth/8H8XHLj12YIVQ9G5f2MvVJRtyDs=";
     };
 
   nativeBuildInputs = [ patchelf rpmextract ];
@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     patchShebangs $out
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = scaleft;
+    command = "sft -v";
+    version = "sft version ${version}";
+  };
+
   meta = with lib; {
     description = "ScaleFT provides Zero Trust software which you can use to secure your internal servers and services";
     homepage = "https://www.scaleft.com";
@@ -38,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ jloyet ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sft";
   };
 }

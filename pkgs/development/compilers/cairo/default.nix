@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "1.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-8dzDe4Kw9OASD0i3bMooqEclStxS/Ta/tOVCcFhvwSI=";
+    hash = "sha256-5UOLfsNgtg5EDDId23ysmWfeqMeh8R2UfMeBAtFCx6s=";
   };
 
-  cargoHash = "sha256-IY3RE+EeNRhUSZX+bqojhPl6y8qm+i9C0zQmNApmat8=";
+  cargoHash = "sha256-YoPStyPeEqLoUvGLEPwXR8XVhXtb6XwFuPNoDCiT7OA=";
 
   nativeCheckInputs = [
     rustfmt

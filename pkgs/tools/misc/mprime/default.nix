@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     # Untested on linux-32 and osx. Works in theory.
     platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    mainProgram = "mprime";
   };
 }

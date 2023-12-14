@@ -4,20 +4,16 @@
 }:
 buildGoModule rec {
   pname = "clash-meta";
-  version = "1.14.5";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "Clash.Meta";
     rev = "v${version}";
-    # macOS has a case-insensitive filesystem, so these two can be the same file
-    postFetch = ''
-      rm -f $out/.github/workflows/{Delete,delete}.yml
-    '';
-    hash = "sha256-4jhe+zhcRACcwwPWFd5oW8eIKTpPWfz0z5cnA9E8Wkc=";
+    hash = "sha256-ORyjCYf2OPrSt/juiBk0Gf2Az4XoZipKBWWFXf8nIqE=";
   };
 
-  vendorHash = "sha256-VcT9dda5E9IMrDB/3QWBGWiNxGAEM2yKDbJwhGpN8og=";
+  vendorHash = "sha256-ySCmHLuMTCxBcAYo7YD8zOpUAa90PQmeLLt+uOn40Pk=";
 
   # Do not build testing suit
   excludedPackages = [ "./test" ];
@@ -44,5 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/MetaCubeX/Clash.Meta";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
+    mainProgram = "clash-meta";
   };
 }

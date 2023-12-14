@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
   # Mitmproxy requirements
+, aioquic
 , asgiref
 , blinker
 , brotli
@@ -14,7 +16,8 @@
 , hyperframe
 , kaitaistruct
 , ldap3
-, mitmproxy-wireguard
+, mitmproxy-macos
+, mitmproxy-rs
 , msgpack
 , passlib
 , protobuf
@@ -41,19 +44,20 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "9.0.1";
+  version = "10.1.5";
+  pyproject = true;
+
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CINKvRnBspciS+wefJB8gzBE13L8CjbYCkmLmTTeYlA=";
+    hash = "sha256-WtZ5KPkTjYMCjrghVcihxuQ2cS88OOCbMYHfqzeo4qQ=";
   };
 
   propagatedBuildInputs = [
-    setuptools
-    # setup.py
+    aioquic
     asgiref
     blinker
     brotli
@@ -65,20 +69,23 @@ buildPythonPackage rec {
     hyperframe
     kaitaistruct
     ldap3
-    mitmproxy-wireguard
+    mitmproxy-rs
     msgpack
     passlib
     protobuf
-    pyopenssl
     publicsuffix2
+    pyopenssl
     pyparsing
     pyperclip
     ruamel-yaml
+    setuptools
     sortedcontainers
     tornado
     urwid
     wsproto
     zstandard
+  ] ++ lib.optionals stdenv.isDarwin [
+    mitmproxy-macos
   ];
 
   nativeCheckInputs = [
@@ -91,10 +98,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  postPatch = ''
-    # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
-  '';
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -110,10 +114,12 @@ buildPythonPackage rec {
     "test_flowview"
     # ValueError: Exceeds the limit (4300) for integer string conversion
     "test_roundtrip_big_integer"
-
     "test_wireguard"
     "test_commands_exist"
     "test_statusbar"
+    # AssertionError: Playbook mismatch!
+    "test_untrusted_cert"
+    "test_mitmproxy_ca_is_untrusted"
   ];
 
   disabledTestPaths = [
@@ -128,6 +134,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };

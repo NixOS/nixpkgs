@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pysatochip";
   version = "0.14.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

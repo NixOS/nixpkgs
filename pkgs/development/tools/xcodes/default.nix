@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://github.com/XcodesOrg/xcodes/releases/download/${finalAttrs.version}/xcodes.zip";
-    hash = "sha256:0cqb0gfb80xrnm4fipr46kbzqz2kicc13afhdxkbifzm4k83any5";
+    hash = "sha256-PtXF2eqNfEX29EtXlcjdxrUs7BPn/YurUuFFeLpXwrk=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontFixup = true;
 
   meta = with lib; {
+    changelog = "https://github.com/XcodesOrg/xcodes/releases/tag/${finalAttrs.version}";
     description = "Command-line tool to install and switch between multiple versions of Xcode";
     homepage = "https://github.com/XcodesOrg/xcodes";
     license = licenses.mit;

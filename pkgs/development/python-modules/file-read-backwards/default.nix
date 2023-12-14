@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "file-read-backwards";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "file_read_backwards";

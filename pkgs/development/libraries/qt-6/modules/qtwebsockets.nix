@@ -6,6 +6,6 @@
 
 qtModule {
   pname = "qtwebsockets";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ openssl ];
 }

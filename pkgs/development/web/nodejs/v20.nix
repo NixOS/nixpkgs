@@ -5,12 +5,11 @@ let
     inherit openssl;
     python = python3;
   };
-
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.3.0";
-  sha256 = "sha256-G6jUlCPtOnVykGa7PqJkk+6ct9ZWjvlIWX/J70VPdDU=";
+  version = "20.10.0";
+  sha256 = "sha256-MuslbuvYys1VdOZjHlS0K+fsjr4lrUeoymhUA7rRVTU=";
   patches = [
     ./revert-arm64-pointer-auth.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch

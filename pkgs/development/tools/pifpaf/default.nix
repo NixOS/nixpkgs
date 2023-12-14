@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     requests
+    testtools
   ];
 
   pythonImportsCheck = [ "pifpaf" ];

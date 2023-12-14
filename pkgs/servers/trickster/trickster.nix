@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/trickster" ];
 

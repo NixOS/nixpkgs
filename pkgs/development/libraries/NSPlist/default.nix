@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, flex, cmake }:
 
 stdenv.mkDerivation {
   pname = "NSPlist";
@@ -11,7 +11,12 @@ stdenv.mkDerivation {
     sha256 = "0v4yfiwfd08hmh2ydgy6pnmlzjbd96k78dsla9pfd56ka89aw74r";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ flex cmake ];
+
+  preConfigure = ''
+    # Regenerate the lexer for improved compatibility with clang 16.
+    flex -o src/NSPlistLexer.cpp <(tail --lines=+17 src/NSPlistLexer.l)
+  '';
 
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];

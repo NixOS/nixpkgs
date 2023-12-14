@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "sha256-SGCISHkWNFubgKkQYx8Vf5/fknNDfPNYkSuw1mMhZaE=";
   }) ];
 
-  vendorSha256 = "sha256-+8dXfqOu8XTw2uEx3GAynQSHtzifejZtddr1CdxrupA=";
+  vendorHash = "sha256-+8dXfqOu8XTw2uEx3GAynQSHtzifejZtddr1CdxrupA=";
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}-nixpkgs" ];
 
@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/zmwangx/ets/";
     license = licenses.mit;
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "ets";
   };
 }

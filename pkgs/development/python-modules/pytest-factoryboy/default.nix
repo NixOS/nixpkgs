@@ -1,42 +1,59 @@
 { lib
 , buildPythonPackage
-, factory_boy
 , fetchFromGitHub
-, inflection
-, mock
+
+# build-system
+, poetry-core
+
+# unpropagated
 , pytest
-, pytestcache
+
+# propagated
+, inflection
+, factory-boy
+, typing-extensions
+
+# tests
 , pytestCheckHook
-, pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "pytest-factoryboy";
-  version = "2.1.0";
+  version = "2.5.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-factoryboy";
     rev = version;
-    sha256 = "0v6b4ly0p8nknpnp3f4dbslfsifzzjx2vv27rfylx04kzdhg4m9p";
+    sha256 = "sha256-zxgezo2PRBKs0mps0qdKWtBygunzlaxg8s9BoBaU1Ig=";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     inflection
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [
+    "pytest_factoryboy"
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
-    pytestcache
-    pytest-cov
   ];
 
-  pytestFlagsArray = [ "--ignore=docs" ];
-  pythonImportsCheck = [ "pytest_factoryboy" ];
+  pytestFlagsArray = [
+    "--ignore=docs"
+  ];
 
   meta = with lib; {
     description = "Integration of factory_boy into the pytest runner";

@@ -18,17 +18,10 @@ let
       maintainers = with maintainers; [ mjanczyk svsdep mgregoire ];
     };
 
-    pluginFilename = "KeePassRPC.plgx";
-
-    unpackCmd = ''
-      mkdir deps/
-      cp -p $src deps/$pluginFilename
-    '';
-    sourceRoot = "deps";
-
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/lib/dotnet/keepass/
-      cp $pluginFilename $out/lib/dotnet/keepass/$pluginFilename
+      cp $src $out/lib/dotnet/keepass/
     '';
   };
 in

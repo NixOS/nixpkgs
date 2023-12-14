@@ -3,7 +3,6 @@
 , dunamai
 , fetchFromGitHub
 , jinja2
-, markupsafe
 , poetry-core
 , poetry
 , pytestCheckHook
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.21.5";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFbIQLIbedErdKiPlZf0+6qtZexuJ6Q6pzhy54vSK5Y=";
+    hash = "sha256-BGAo3c0TzyhIiDtZjoEP+Eeu51WJB3Wg71poFMWJ+VM=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dunamai
     jinja2
-    markupsafe
     tomlkit
   ];
 

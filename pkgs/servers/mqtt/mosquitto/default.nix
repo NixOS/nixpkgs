@@ -13,23 +13,29 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
+, nixosTests
 }:
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
-  libwebsockets' = libwebsockets.override {
+  libwebsockets' = (libwebsockets.override {
     withExternalPoll = true;
-  };
+  }).overrideAttrs (old: {
+    # Avoid bug in firefox preventing websockets being created over http/2 connections
+    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+  });
+
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.15";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H2oaTphx5wvwXWDDaf9lLSVfHWmb2rMlxQmyRB4k5eg=";
+    sha256 = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -53,6 +59,8 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  outputs = [ "out" "dev" "lib" ];
+
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
 
   buildInputs = [
@@ -68,6 +76,10 @@ stdenv.mkDerivation rec {
     "-DWITH_THREADING=ON"
     "-DWITH_WEBSOCKETS=ON"
   ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
+
+  passthru.tests = {
+    inherit (nixosTests) mosquitto;
+  };
 
   meta = with lib; {
     description = "An open source MQTT v3.1/3.1.1/5.0 broker";

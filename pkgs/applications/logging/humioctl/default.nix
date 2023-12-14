@@ -1,39 +1,32 @@
 { buildGoModule, fetchFromGitHub, installShellFiles, lib }:
 
-let
-  humioCtlVersion = "0.30.2";
-  sha256 = "sha256-FqBS6PoEKMqK590f58re4ycYmrJScyij74Ngj+PLzLs=";
-  vendorSha256 = "sha256-70QxW2nn6PS6HZWllmQ8O39fbUcbe4c/nKAygLnD4n0=";
-in buildGoModule {
-    name = "humioctl-${humioCtlVersion}";
-    pname = "humioctl";
-    version = humioCtlVersion;
+buildGoModule rec {
+  pname = "humioctl";
+  version = "0.32.3";
 
-    vendorSha256 = vendorSha256;
+  src = fetchFromGitHub {
+    owner = "humio";
+    repo = "cli";
+    rev = "v${version}";
+    hash = "sha256-MaBJL/3TZYmXjwt5/WmBBTXVhlJ6oyCgm+Lb8id6J3c=";
+  };
 
-    doCheck = false;
+  vendorHash = "sha256-FAy0LNmesEDgS3JTz5DPd8vkR5CHHhAbms++N8TQApA=";
 
-    src = fetchFromGitHub {
-      owner = "humio";
-      repo = "cli";
-      rev = "v${humioCtlVersion}";
-      sha256 = sha256;
-    };
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
-    ldflags = [ "-X main.version=${humioCtlVersion}" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-    nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd humioctl \
+      --bash <($out/bin/humioctl completion bash) \
+      --zsh <($out/bin/humioctl completion zsh)
+  '';
 
-    postInstall = ''
-      $out/bin/humioctl completion bash > humioctl.bash
-      $out/bin/humioctl completion zsh > humioctl.zsh
-      installShellCompletion humioctl.{bash,zsh}
-    '';
-
-    meta = with lib; {
-      homepage = "https://github.com/humio/cli";
-      description = "A CLI for managing and sending data to Humio";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ lucperkins ];
-    };
-  }
+  meta = with lib; {
+    homepage = "https://github.com/humio/cli";
+    description = "A CLI for managing and sending data to Humio";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lucperkins ];
+  };
+}

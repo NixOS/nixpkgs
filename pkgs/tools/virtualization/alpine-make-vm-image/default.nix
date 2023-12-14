@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, apk-tools, coreutils, e2fsprogs, findutils, gnugrep, gnused, kmod, qemu-utils
+, apk-tools, coreutils, dosfstools, e2fsprogs, findutils, gnugrep, gnused, kmod, qemu-utils
 , rsync, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "alpine-make-vm-image";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-vm-image";
     rev = "v${version}";
-    sha256 = "sha256-0e1KmLzORFmPUYZMH8ERXRMnQFk+B91GhBtT5BemqYI=";
+    sha256 = "sha256-IV/MC6dnvWMs5akM6Zw3TBzWPpsLL9FllK0sOV9MRGY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/alpine-make-vm-image --set PATH ${lib.makeBinPath [
-      apk-tools coreutils e2fsprogs findutils gnugrep gnused kmod qemu-utils
+      apk-tools coreutils dosfstools e2fsprogs findutils gnugrep gnused kmod qemu-utils
       rsync util-linux
     ]}
   '';
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "alpine-make-vm-image";
   };
 }

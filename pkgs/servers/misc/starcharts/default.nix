@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "starcharts";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "starcharts";
     rev = "v${version}";
-    hash = "sha256-XlR3AZgxp3ZljDR4H/BANeCqfR/G0a1KXo789GqNN8Y=";
+    hash = "sha256-B5w6S3qNLdUayYpF03cnxpLzyRBaC9jhaYnNqDZ2AsU=";
   };
 
-  vendorHash = "sha256-ki+LaJ3dgN/cPA5zpbV/LiWIjuTKqojjpdRZ8VCZ0Kk=";
+  vendorHash = "sha256-sZS3OA1dTLLrL5csXV6nWbY/TLiqJUH1UQnJUEva7Jk=";
 
   ldflags = [
     "-s"

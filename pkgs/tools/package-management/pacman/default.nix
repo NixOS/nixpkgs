@@ -106,6 +106,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+  hardeningDisable = [ "fortify3" ];
+
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman
     wrapProgram $out/bin/makepkg \

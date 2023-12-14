@@ -1,51 +1,35 @@
 { lib
 , stdenv
-, rust
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
+, just
 , pkg-config
 , wrapGAppsHook4
 , cairo
+, dbus
 , gdk-pixbuf
 , glib
 , graphene
-, gtk3
 , gtk4
 , libadwaita
-, libappindicator-gtk3
 , librclone
 , pango
 , rclone
 }:
 
-let
-  # https://github.com/trevyn/librclone/pull/8
-  librclone-mismatched-types-patch = fetchpatch {
-    name = "use-c_char-to-be-platform-independent.patch";
-    url = "https://github.com/trevyn/librclone/commit/91fdf3fa5f5eea0dfd06981ba72e09034974fdad.patch";
-    hash = "sha256-8YDyUNP/ISP5jCliT6UCxZ89fdRFud+6u6P29XdPy58=";
-  };
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.5.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-pFtyfKGPlwum/twGXi/e82BjINy6/MMvvmVfrwWHTQg=";
+    hash = "sha256-fJK3UTa5NS+dSsjnqZtRN3HmHQ1bYU2jepkJ5tchYD4=";
   };
 
-  cargoHash = "sha256-wcgu4KApkn68Tpk3PQ9Tkxif++/8CmS4f8AOOpCA/X8=";
-
-  patches = [
-    (substituteAll {
-      src = ./target-dir.patch;
-      rustTarget = rust.toRustTarget stdenv.hostPlatform;
-    })
-  ];
+  cargoHash = "sha256-/0w52bh9CsBoMTJsnWuEAQNgQzf92mbzh53H4iQYswc=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
@@ -56,12 +40,11 @@ in rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo-checksum.json \
       --replace $oldHash $(sha256sum build.rs | cut -d " " -f 1)
     popd
-    pushd $cargoDepsCopy/librclone
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    patch -p1 < ${librclone-mismatched-types-patch}
-    substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
+
+    substituteInPlace justfile \
+      --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
+    # buildRustPackage takes care of installing the binary
+    sed -i "#/bin/celeste#d" justfile
   '';
 
   # Cargo.lock is outdated
@@ -69,17 +52,10 @@ in rustPlatform.buildRustPackage rec {
     cargo update --offline
   '';
 
-  # We need to build celeste-tray first because celeste/src/launch.rs reads that file at build time.
-  # Upstream does the same: https://github.com/hwittenborn/celeste/blob/765dfa2/justfile#L1-L3
-  cargoBuildFlags = [ "--bin" "celeste-tray" ];
-  postConfigure = ''
-    cargoBuildHook
-    cargoBuildFlags=
-  '';
-
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
+    just
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook4
@@ -87,10 +63,10 @@ in rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     cairo
+    dbus
     gdk-pixbuf
     glib
     graphene
-    gtk3
     gtk4
     libadwaita
     librclone
@@ -99,9 +75,12 @@ in rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
+  '';
+
+  postInstall = ''
+    just install
   '';
 
   meta = {

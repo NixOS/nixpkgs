@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildPackages
 , version
 , src
 , extraMeta ? { }
-, callPackage
 , self
 , packageOverrides ? (final: prev: {})
 , pkgsBuildBuild
@@ -24,6 +22,7 @@
 , enableGDBJITSupport ? false
 , enableAPICheck ? false
 , enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
 , useSystemMalloc ? false
 # Upstream generates randomized string id's by default for security reasons
 # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
@@ -50,6 +49,7 @@ let
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
     ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 
@@ -98,7 +98,8 @@ stdenv.mkDerivation rec {
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
     "HOST_CC=${buildStdenv.cc}/bin/cc"
-  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
+    ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
     luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
     luaOnHostForHost = override pkgsHostHost.${luaAttr};
-    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
+    luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
   };
 
   meta = with lib; {

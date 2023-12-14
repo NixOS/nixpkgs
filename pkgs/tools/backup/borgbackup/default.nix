@@ -6,33 +6,23 @@
 , lz4
 , openssh
 , openssl
-, python3
+, python3Packages
 , xxHash
 , zstd
 , installShellFiles
 , nixosTests
-, fetchpatch
 , fetchPypi
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.3";
+  version = "1.2.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4yQY+GM8lvqWgTUqVutjuY4pQgNHLBFKUkJwnTaWZ4U=";
+    hash = "sha256-9j8oozg8BBlxzsh7BhyjmoFbX9RF2ySqgXLKxBfZQRo=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix HashIndexSizeTestCase.test_size_on_disk_accurate problems on ZFS,
-      # see https://github.com/borgbackup/borg/issues/7250
-      url = "https://github.com/borgbackup/borg/pull/7252/commits/fe3775cf8078c18d8fe39a7f42e52e96d3ecd054.patch";
-      hash = "sha256-gdssHfhdkmRfSAOeXsq9Afg7xqGM3NLIq4QnzmPBhw4=";
-    })
-  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
@@ -40,14 +30,14 @@ python3.pkgs.buildPythonApplication rec {
       --replace "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     cython
     setuptools-scm
     pkgconfig
 
     # docs
     sphinxHook
-    guzzle_sphinx_theme
+    guzzle-sphinx-theme
 
     # shell completions
     installShellFiles
@@ -65,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -82,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     e2fsprogs
     py
     python-dateutil
@@ -125,6 +115,7 @@ python3.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

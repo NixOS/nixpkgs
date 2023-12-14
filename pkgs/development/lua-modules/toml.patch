@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ab3884c..9432df7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,26 +38,17 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+ 	${TOML++}
+-	GIT_REPOSITORY "https://github.com/marzer/tomlplusplus.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v3.3.0"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_Declare(
+ 	${SOL2}
+-	GIT_REPOSITORY "https://github.com/ThePhD/sol2.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v3.3.0"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_Declare(
+ 	${MAGIC_ENUM}
+-	GIT_REPOSITORY "https://github.com/Neargye/magic_enum.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v0.8.2"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(${TOML++})
+@@ -113,7 +104,7 @@ if(NOT LUA_INCLUDE_DIR OR (WIN32 AND NOT LUA_LIBRARIES))
+     find_package(Lua)
+ endif()
+ 
+-include_directories(${LUA_INCLUDE_DIR} src src/include ${${TOML++}_SOURCE_DIR} ${${SOL2}_SOURCE_DIR}/include ${${MAGIC_ENUM}_SOURCE_DIR}/include)
++include_directories(${LUA_INCLUDE_DIR} src src/include TOML_PLUS_PLUS_SRC ${${SOL2}_SOURCE_DIR}/include ${${MAGIC_ENUM}_SOURCE_DIR}/include)
+ 
+ set(SOURCES
+     src/toml.cpp

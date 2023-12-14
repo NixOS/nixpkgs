@@ -2,11 +2,11 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.60.0";
+  version = "2.71.1";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-dR6F6elUxZW3EuH71d5P9SOSDq5f5lAsYnrfWrsj2KA=";
+    hash = "sha256-+1i4ycURuT0xSF2yLQM5uyDFzeeGQ8H4On2Pb3oIRYc=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -22,6 +22,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
     ${imagemagick}/bin/convert ${appimageContents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png
     install -m 444 -D ledger-live-desktop_512.png $out/share/icons/hicolor/512x512/apps/ledger-live-desktop.png
+
     substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
@@ -32,5 +33,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ledger-live-desktop";
   };
 }

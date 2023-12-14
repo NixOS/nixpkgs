@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.8.0";
+  version = "3.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    hash = "sha256-iXf9K/xI4u+dDV0Zf6S08nbws4NqycrTEW0B8/qCjQc=";
+    hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "A simple packaging tool for simple packages";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh SuperSandro2000 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

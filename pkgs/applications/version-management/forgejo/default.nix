@@ -6,6 +6,7 @@
 , gzip
 , lib
 , makeWrapper
+, nix-update-script
 , nixosTests
 , openssh
 , pam
@@ -16,15 +17,14 @@
 , stdenv
 , fetchFromGitea
 , buildNpmPackage
-, writeShellApplication
 }:
 
 let
-  frontend = buildNpmPackage rec {
+  frontend = buildNpmPackage {
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-dB/uBuS0kgaTwsPYnqklT450ejLHcPAqBdDs3JT8Uxg=";
+    npmDepsHash = "sha256-7ruJczJ2cE51UmoER8C3JsGm0p3RTwfqKx0eErB7LZs=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.3-0";
+  version = "1.21.2-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-0T26EsU5lJ+Rxy/jSDn8nTk5IdHO8oK3LvN7tPArPgs=";
+    hash = "sha256-2dkl8QI82URhPV2f4cOUZfpAhlGwU197ZkLD9KitIiA=";
   };
 
-  vendorHash = "sha256-bnLcHmwOh/fw6ecgsndX2BmVf11hJWllE+f2J8YSzec=";
+  vendorHash = "sha256-+/wOEF44dSqy7ZThZyd66xyI3wVnFwZbsAd4ujyVku8=";
 
   subPackages = [ "." ];
 
@@ -89,13 +89,16 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in go-modules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv and preBuild isn't needed
   overrideModAttrs = (_: {
     postPatch = null;
     preBuild = null;
   });
 
   passthru = {
+    # allow nix-update to handle npmDepsHash
+    inherit (frontend) npmDeps;
+
     data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
@@ -109,14 +112,15 @@ buildGoModule rec {
     '';
 
     tests = nixosTests.forgejo;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "A self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilylange urandom ];
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

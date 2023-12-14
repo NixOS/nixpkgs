@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
 , common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
-, gettext ? null, enableNls ? true, enableTiny ? false }:
+, file ? null, gettext ? null, enableNls ? true, enableTiny ? false }:
 
 assert enableNls -> (gettext != null);
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optional (!enableTiny) file;
 
   outputs = [ "out" "info" ];
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature enableTiny "tiny")
   ];
 
-  postInstall = ''
+  postInstall = if enableTiny then null else ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
 
@@ -75,5 +75,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
+    mainProgram = "nano";
   };
 }

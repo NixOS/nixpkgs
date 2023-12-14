@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , bison
 , cmake
 , doxygen
@@ -8,7 +9,7 @@
 , git
 , python3
 , swig4
-, boost17x
+, boost179
 , cbc       # for clp
 , cimg
 , clp       # for or-tools
@@ -34,14 +35,14 @@
 
 mkDerivation rec {
   pname = "openroad";
-  version = "unstable-2023-03-31";
+  version = "unstable-2023-08-26";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "cd03c5cf8a8eb78c0e07fe33a56b8e9d64672efe";
+    rev = "6dba515c2aacd3fca58ef8135424884146efd95b";
     fetchSubmodules = true;
-    hash = "sha256-BWUvFCuWKWQpifErpak03J+A7ni0jZWIrCMhMdKIbD0=";
+    hash = "sha256-LAj7X+Vq0+H3tIo5zgyUuIjQwTj+2DLL18/KMJ/kf4A=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +56,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost17x
+    boost179
     cbc
     cimg
     clp
@@ -79,7 +80,16 @@ mkDerivation rec {
   ];
 
   patches = [
-    ./0001-Fix-string-formatting-in-tests.patch
+    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/3911
+    (fetchpatch {
+      name = "openroad-fix-fmt-10.patch";
+      url = "https://github.com/The-OpenROAD-Project/OpenROAD/commit/9396f07f28e0260cd64acfc51909f6566b70e682.patch";
+      hash = "sha256-jy8K8pdhSswVz6V6otk8JAI7nndaFVMuKQ/4A3Kzwns=";
+    })
+    # Upstream is not aware of these failures
+    ./0001-Disable-failing-regression-tests.patch
+    # This is an issue we experience in the sandbox, and upstream
+    # probably wouldn't mind merging this change, but no PR was opened.
     ./0002-Ignore-warning-on-stderr.patch
   ];
 
@@ -89,19 +99,16 @@ mkDerivation rec {
 
   # Enable output images from the placer.
   cmakeFlags = [
+    # Tries to download gtest 1.13 as part of the build. We currently rely on
+    # the regression tests so we can get by without building unit tests.
+    "-DENABLE_TESTS=OFF"
     "-DUSE_SYSTEM_BOOST=ON"
     "-DUSE_CIMG_LIB=ON"
     "-DOPENROAD_VERSION=${src.rev}"
-
-    # 2023-03-31: see discussion on fmt workaround in
-    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/2696
-    "-DCMAKE_CXX_FLAGS=-DFMT_DEPRECATED_OSTREAM"
   ];
 
   # Resynthesis needs access to the Yosys binaries.
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
-
-  checkInputs = [ gtest ];
 
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.

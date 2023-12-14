@@ -13,7 +13,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.0";
+  version = "6.1.2";
+  format = "setuptools";
   pname = "robotframework-seleniumlibrary";
 
   # no tests included in PyPI tarball
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iCZU+9xFUPoyucdQ/26dgxAm8jRf92P3JyA2KqV8bYI=";
+    sha256 = "sha256-QbAwPm1Y76KPIcHkopiyISULQSwUet021erFa/zi8Zw=";
   };
 
   propagatedBuildInputs = [

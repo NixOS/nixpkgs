@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.99.4";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+    url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
     hash = "sha256-AjIjG7LynWvyQm5woIp+DGOg1ZqbRIY7f14jV6bkn+o=";
   };
 
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
+    mainProgram = "tcpdump";
   };
 }

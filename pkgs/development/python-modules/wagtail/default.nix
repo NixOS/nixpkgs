@@ -7,7 +7,7 @@
 , django-filter
 , django-modelcluster
 , django-taggit
-, django_treebeard
+, django-treebeard
 , djangorestframework
 , draftjs-exporter
 , fetchPypi
@@ -24,26 +24,27 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "4.2.2";
+  version = "5.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
+    hash = "sha256-RfrHlOTCDH51sBgGnX+XYfJfqjYZ7zDfJAE8okq/mnQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8"
+      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8" \
+      --replace "draftjs_exporter>=2.1.5,<3.0" "draftjs_exporter>=2.1.5,<6.0"
   '';
 
   propagatedBuildInputs = [
     anyascii
     beautifulsoup4
     django
-    django_treebeard
+    django-treebeard
     django-filter
     django-modelcluster
     django-taggit
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     requests
     telepath
     willow
-  ];
+  ] ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)

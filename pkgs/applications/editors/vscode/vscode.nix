@@ -5,6 +5,12 @@
 , nixosTests
 , srcOnly
 , isInsiders ? false
+# sourceExecutableName is the name of the binary in the source archive over
+# which we have no control and it is needed to run the insider version as
+# documented in https://nixos.wiki/wiki/Visual_Studio_Code#Insiders_Build
+# On MacOS the insider binary is still called code instead of code-insiders as
+# of 2023-08-06.
+, sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.isLinux) "-insiders"
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
 }:
@@ -24,26 +30,26 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0ykchyksfc7aqar2f691jva36v0syn575rj6hydws0y79pplvinh";
-    x86_64-darwin = "1zayc6z4zfkjb238dx51b1f2s9clqzhxhvb91j5w0ayqk735bd5d";
-    aarch64-linux = "1nbnprf6sjqqrw7qha0r6f78n7jjvhn8kv1wxh5pi535nlmxza14";
-    aarch64-darwin = "0lijfhlbj0vsjd6kdfr0fmks2spjazrzwnlxxw0ka80psxghavs6";
-    armv7l-linux = "0dhgb1lxq8r4fk6nkb14h986w3dj19llvjvn8jq4mxdbscnik2j5";
+    x86_64-linux = "1vdgc4mnysij2sf87d5dfh0yw9j2a58lvmnwzzsj1icaydhkhfjy";
+    x86_64-darwin = "0zxky35ifgjwb6p41mi3z34fvn49fpl09r1n9kp46ip8mqsm7gm7";
+    aarch64-linux = "0qv0gbkfx78a393x44g6zmi5gs57d2cnjqlwfv0yrhkgi5s8v1ma";
+    aarch64-darwin = "1rl4256h8i52akzy8g2bkydsi5llp05qqj0jr2di896x4niw57iz";
+    armv7l-linux = "18mcf5x3h3mwlvhkl86b2wcl0adj7pr4aqr12va07mwlh2fp83h4";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.79.2";
-    pname = "vscode";
+    version = "1.84.2";
+    pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
-    rev = "695af097c7bd098fbf017ce3ac85e09bbc5dda06";
+    rev = "1a5daa3a0231a0fbba4f14db7ec463cf99d7768e";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-    inherit commandLineArgs useVSCodeRipgrep;
+    inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -62,7 +68,7 @@ in
       src = fetchurl {
         name = "vscode-server-${rev}.tar.gz";
         url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-        sha256 = "0xbc20vh6rj2g6wvw73k8wqm1lxwirph3swwilq5f9hmkzha1z7i";
+        sha256 = "18kx7szx1v7dk0qqsw6cf40zd8mrc7a8snvm6i1n8q039d9mx2jz";
       };
     };
 
@@ -91,7 +97,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 Enzime ];
+      maintainers = with maintainers; [ eadwu synthetica amaxine bobby285271 Enzime ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

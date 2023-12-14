@@ -11,7 +11,7 @@ py.toPythonApplication
       py.mysqlclient
     ];
 
-    postPatch = ''
+    postPatch = (old.postPatch or "") + ''
       substituteInPlace mlflow/utils/process.py --replace \
         "child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True," \
         "cmd[0]='$out/bin/gunicornMlflow'; child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True,"

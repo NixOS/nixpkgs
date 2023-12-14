@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-storage-common";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

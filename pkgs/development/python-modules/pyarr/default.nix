@@ -7,11 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyarr";
-  version = "4.1.0";
+  version = "5.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3DX02V3Srpx6hqimWbesxfkDqslVH4+8uXY7XYDmjX0=";
+    hash = "sha256-jlcc9Kj1MYSsnvJkKZXXWWJVDx3KIuojjbGtl8kDUpw=";
   };
 
   propagatedBuildInputs = [

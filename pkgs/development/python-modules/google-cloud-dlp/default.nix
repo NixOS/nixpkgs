@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.12.1";
+  version = "3.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KBqnGp56U2lGLo/2MWu5kfHr7pfIJJDT857+xnrK+iU=";
+    hash = "sha256-mFqptqEvHQAKNevzawDOfQsH0SCn9EanJ2js4vIpCGo=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires credentials
     "test_inspect_content"
+    "test_list_dlp_jobs"
   ];
 
   pythonImportsCheck = [
@@ -51,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-dlp";
     changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

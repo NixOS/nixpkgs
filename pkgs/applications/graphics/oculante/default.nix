@@ -17,17 +17,18 @@
 , gtk3
 , darwin
 , perl
+, wrapGAppsHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.65";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    hash = "sha256-99wA8BELw/FsiwGtWmbZedANjHamK1IHnl4wHwPAGIE=";
+    hash = "sha256-uDSZ7qwDC/eR0aZN372ju21PBGuBiiYmlx/26Ta3luE=";
   };
 
   cargoLock = {
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     nasm
     perl
+    wrapGAppsHook
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
@@ -64,6 +66,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=bench"
   ];
 
+  postInstall = ''
+    install -Dm444 $src/res/oculante.png -t $out/share/icons/hicolor/128x128/apps/
+    install -Dm444 $src/res/oculante.desktop -t $out/share/applications
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';
@@ -74,6 +81,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "oculante";
     maintainers = with maintainers; [ dit7ya figsoda ];
   };
 }

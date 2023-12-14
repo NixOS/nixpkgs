@@ -29,7 +29,6 @@
 , bettercap
 , bully
 , crunch
-, dhcp
 , dnsmasq
 , ettercap
 , hashcat
@@ -94,7 +93,6 @@ let
     wireshark-cli
   ] ++ lib.optionals supportEvilTwin [
     bettercap
-    dhcp
     dnsmasq
     ettercap
     hostapd
@@ -163,7 +161,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
     changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pedrohlc ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

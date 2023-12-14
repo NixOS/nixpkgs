@@ -4,9 +4,9 @@
 }:
 
 buildFHSEnv {
-  name = "sparrow";
+  name = "sparrow-desktop";
 
-  runScript = "${sparrow-unwrapped}/bin/sparrow";
+  runScript = "${sparrow-unwrapped}/bin/sparrow-desktop";
 
   targetPkgs = pkgs: with pkgs; [
     sparrow-unwrapped

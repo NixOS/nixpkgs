@@ -1,24 +1,30 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "heatshrink2";
-  version = "0.11.0";
+  version = "0.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "pyheatshrink";
-    rev = version;
+    rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-P3IofGbW4x+erGCyxIPvD9aNHIJ/GjjWgno4n95SQoQ=";
+    hash = "sha256-JthHYq78SYr49+sTNtLZ8GjtrHcr1dzXcPskTrb4M3o=";
   };
 
-  pythonImportsCheck = [ "heatshrink2" ];
+  pythonImportsCheck = [
+    "heatshrink2"
+  ];
 
   meta = with lib; {
-    description = "Compression using the Heatshrink algorithm in Python 3.";
+    description = "Compression using the Heatshrink algorithm";
     homepage = "https://github.com/eerimoq/pyheatshrink";
     license = licenses.isc;
     maintainers = with maintainers; [ prusnak ];

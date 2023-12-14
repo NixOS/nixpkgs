@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "ase";
   version = "3.22.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

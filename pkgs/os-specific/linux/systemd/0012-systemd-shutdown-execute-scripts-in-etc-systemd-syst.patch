@@ -10,10 +10,10 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+)
 
 diff --git a/src/shutdown/shutdown.c b/src/shutdown/shutdown.c
-index 5dee1b3a92..c08cf80548 100644
+index 8395bb429d..14fbc85bb4 100644
 --- a/src/shutdown/shutdown.c
 +++ b/src/shutdown/shutdown.c
-@@ -339,6 +339,7 @@ static void init_watchdog(void) {
+@@ -334,6 +334,7 @@ static void init_watchdog(void) {
  int main(int argc, char *argv[]) {
          static const char* const dirs[] = {
                  SYSTEM_SHUTDOWN_PATH,

@@ -6,15 +6,15 @@
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
-  version = "1.9.10";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hDXCH5B4bc0SKv/qzk92bPm366LmdYWTuVVn8KI0avo=";
+    hash = "sha256-KtSmDBr2JRxyBUJ5UWMmnfN87oO1/TiCrtuxA2b9Ph0=";
   };
-  vendorHash = "sha256-myjHRZXTjsLXD8kibcdf1/Nhvx50fDsFtmZd63DpiiI=";
+  vendorHash = "sha256-B7t1syBJjwaTM4Tgj/OhhmHJRAhJ/Ewg+g55AKpdj4c=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -27,6 +27,11 @@ buildGoModule rec {
     wrapProgram $out/bin/aws-sso \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
+
+  checkFlags = [
+    # requires network access
+    "-skip=TestAWSConsoleUrl|TestAWSFederatedUrl"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/synfinatic/aws-sso-cli";

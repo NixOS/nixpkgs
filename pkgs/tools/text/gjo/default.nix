@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "skanehira";
     repo = "gjo";
     rev = version;
-    sha256 = "07halr0jzds4rya6hlvp45bjf7vg4yf49w5q60mch05hk8qkjjdw";
+    hash = "sha256-vEk5MZqwAMgqMLjwRJwnbx8nVyF3U2iUz0S3L0GmCh4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "Small utility to create JSON objects";

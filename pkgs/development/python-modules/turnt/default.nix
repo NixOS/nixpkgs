@@ -1,14 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, click, tomli }:
+{ lib, buildPythonPackage, fetchPypi, flit, click, tomli }:
 
 buildPythonPackage rec {
   pname = "turnt";
-  version = "1.10.0";
-  format = "flit";
+  version = "1.11.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pwUNmUvyUYxke39orGkziL3DVRWoJY5AQLz/pTyf3M8=";
+    hash = "sha256-XN+qzRgZMSdeBmW0OM36mQ79sRCuP8E++SqH8FOoEq0=";
   };
+
+  nativeBuildInputs = [
+    flit
+  ];
 
   propagatedBuildInputs = [
     click

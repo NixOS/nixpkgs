@@ -1,7 +1,7 @@
 { stdenv, lib, haskellPackages, writeText, gawk }:
 let
   awk                   = "${gawk}/bin/awk";
-  dockerCredentialsFile = import ./credentials.nix;
+  dockerCredentialsFile = import ./credentials.nix { inherit lib; };
 in
 { fetcher
 , name

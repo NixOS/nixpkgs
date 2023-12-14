@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "sphinx-comments";
   version = "0.0.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;

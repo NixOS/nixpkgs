@@ -4,17 +4,15 @@
 , pythonOlder
 , fetchFromGitHub
 , installShellFiles
+, pythonRelaxDepsHook
 , build
 , cachecontrol
 , cleo
 , crashtest
 , dulwich
-, filelock
-, html5lib
 , installer
 , jsonschema
 , keyring
-, lockfile
 , packaging
 , pexpect
 , pkginfo
@@ -27,7 +25,6 @@
 , shellingham
 , tomlkit
 , trove-classifiers
-, urllib3
 , virtualenv
 , xattr
 , tomli
@@ -44,20 +41,26 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.4.2";
+  version = "1.7.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
+    hash = "sha256-PM3FIZYso7p0Oe0RpiPuxHrQrgnMlkT5SVeaJPK/J94=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # only pinned to avoid dependency on Rust
+    "jsonschema"
   ];
 
   propagatedBuildInputs = [
@@ -66,12 +69,9 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
-    filelock
-    html5lib
     installer
     jsonschema
     keyring
-    lockfile
     packaging
     pexpect
     pkginfo
@@ -84,7 +84,6 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     trove-classifiers
-    urllib3
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -123,12 +122,16 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_env_system_packages_are_relative_to_lib"
+    "test_install_warning_corrupt_root"
+    "test_installer_with_pypi_repository"
     # touches network
     "git"
     "solver"
     "load"
     "vcs"
     "prereleases_if_they_are_compatible"
+    "test_builder_setup_generation_runs_with_pip_editable"
     "test_executor"
     # requires git history to work correctly
     "default_with_excluded_data"
@@ -137,6 +140,7 @@ buildPythonPackage rec {
     # fs permission errors
     "test_builder_should_execute_build_scripts"
     # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
+    "test_isolated_env_install_success"
     "test_prepare_sdist"
     "test_prepare_directory"
     "test_prepare_directory_with_extensions"
@@ -162,5 +166,6 @@ buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    mainProgram = "poetry";
   };
 }

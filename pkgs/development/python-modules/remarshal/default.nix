@@ -18,22 +18,15 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.14.0";
+  version = "0.17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256:nTM3jrPf0kGE15J+ZXBIt2+NGSW2a6VlZCKj70n5kHM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api" \
-      --replace 'PyYAML = "^5.3"' 'PyYAML = "*"' \
-      --replace 'tomlkit = "^0.7"' 'tomlkit = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -52,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
     description = "Convert between TOML, YAML and JSON";
     license = licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";

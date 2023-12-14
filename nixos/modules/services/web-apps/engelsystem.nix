@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types literalExpression;
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption types mkPackageOption;
   cfg = config.services.engelsystem;
 in {
   options = {
@@ -22,12 +22,7 @@ in {
         description = lib.mdDoc "Domain to serve on.";
       };
 
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc "Engelsystem package used for the service.";
-        default = pkgs.engelsystem;
-        defaultText = literalExpression "pkgs.engelsystem";
-      };
+      package = mkPackageOption pkgs "engelsystem" { };
 
       createDatabase = mkOption {
         type = types.bool;
@@ -104,6 +99,7 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
+      phpPackage = pkgs.php81;
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

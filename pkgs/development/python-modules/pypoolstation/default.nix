@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pypoolstation";
-  version = "0.5.1";
+  version = "0.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ID3K6dzD8HSi8UYosK+CiOtdyHUyeHQXbmlL9cnrmn8=";
+    hash = "sha256-hszGCA2DDGQSh37lxp8G0bqHliH/+i2so5imDyzyOJw=";
   };
 
   nativeBuildInputs = [

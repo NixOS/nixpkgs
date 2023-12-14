@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Sweets/tiramisu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wishfort36 fortuneteller2k ];
+    maintainers = with maintainers; [ wishfort36 moni ];
   };
 }

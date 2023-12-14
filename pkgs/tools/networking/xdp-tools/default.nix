@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , libbpf
 , elfutils
 , zlib
@@ -16,22 +15,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    sha256 = "ctggXzc3qA+m2/nJ9lmR/pERj0YyPko3MTttm8e85cU=";
+    hash = "sha256-5rc3RbAgWVd7Tt16NoHymFME5a9tBCmup+1ZmnMGPhs=";
   };
-
-  patches = [
-    # Fix function detection for btf__type_cnt()
-    (fetchpatch {
-      url = "https://github.com/xdp-project/xdp-tools/commit/a7df567634af77381832a2212c5f5099b07734f3.patch";
-      sha256 = "n6qG/bojSGUowrAaJWxecYpWdv9OceHkoaGlhbl81hA=";
-    })
-  ];
 
   outputs = [ "out" "lib" ];
 

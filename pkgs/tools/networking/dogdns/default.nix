@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+  dontUseJustInstall = true;
+
   postPatch = ''
     # update Cargo.lock to work with openssl 3
     ln -sf ${./Cargo.lock} Cargo.lock
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line DNS client";
     homepage = "https://dns.lookup.dog";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ bbigras figsoda ];
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "dog";
   };
 }

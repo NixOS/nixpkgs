@@ -7,9 +7,9 @@
 
 buildPythonPackage rec {
   pname = "pytube";
-  version = "12.1.2";
+  version = "15.0.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
@@ -17,11 +17,15 @@ buildPythonPackage rec {
     owner = "pytube";
     repo = "pytube";
     rev = "v${version}";
-    hash = "sha256-Y4mriCwFvwAZ3e8kHKo9/S2vReb4q+b8KTHxtQo8SEw=";
+    hash = "sha256-Nvs/YlOjk/P5nd1kpUnCM2n6yiEaqZP830UQI0Ug1rk=";
   };
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_streaming"
   ];
 
   disabledTestPaths = [

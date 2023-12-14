@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    boost17x
+    boost179
     asio avahi flac libogg libvorbis
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio

@@ -3,13 +3,13 @@
 # Requires the acpi_call kernel module in order to run.
 stdenv.mkDerivation rec {
   pname = "tpacpi-bat";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "teleshoes";
     repo = "tpacpi-bat";
     rev = "v${version}";
-    sha256 = "0wbaz34z99gqx721alh5vmpxpj2yxg3x9m8jqyivfi1wfpwc2nd5";
+    sha256 = "sha256-9XnvVNdgB5VeI3juZfc8N5weEyULXuqu1IDChZfQqFk=";
   };
 
   buildInputs = [ perl ];

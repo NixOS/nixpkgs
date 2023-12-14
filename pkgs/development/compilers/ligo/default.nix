@@ -15,31 +15,28 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.66.0";
+  version = "1.0.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-BFeNnpMT+WKqTvjVg+H2qHl5EUMcbe7xmJohbpD99gY=";
+    sha256 = "sha256-tHIIA1JE7mzDIf2v9IEZt1pjVQEA89zjTsmqhzTn3Wc=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
+    substituteInPlace "vendors/tezos-ligo/dune-project" \
       --replace \
-        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg" \
-        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg ()" \
+        "(using ctypes 0.1)" \
+        "(using ctypes 0.3)" \
       --replace \
-        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg" \
-        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg ()"
+        "(lang dune 3.0)" \
+        "(lang dune 3.7)"
 
-    substituteInPlace "vendors/tezos-ligo/src/lib_crypto/crypto_box.ml" \
+    substituteInPlace "src/coq/dune" \
       --replace \
-        "secretbox_open ~key ~nonce ~cmsg ~msg" \
-        "secretbox_open ~key ~nonce ~cmsg ~msg ()" \
-      --replace \
-        "Box.box_open ~k ~nonce ~cmsg ~msg" \
-        "Box.box_open ~k ~nonce ~cmsg ~msg ()"
+        "(name ligo_coq)" \
+        "(name ligo_coq)(mode vo)"
   '';
 
   # The build picks this up for ligo --version
@@ -47,8 +44,6 @@ ocamlPackages.buildDunePackage rec {
 
   # This is a hack to work around the hack used in the dune files
   OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
-
-  duneVersion = "3";
 
   strictDeps = true;
 
@@ -75,6 +70,7 @@ ocamlPackages.buildDunePackage rec {
     decompress
     ppx_deriving
     ppx_deriving_yojson
+    ppx_yojson_conv
     ppx_expect
     ppx_import
     terminal_size
@@ -92,6 +88,8 @@ ocamlPackages.buildDunePackage rec {
     parse-argv
     hacl-star
     prometheus
+    lwt_ppx
+    msgpck
     # lsp
     linol
     linol-lwt
@@ -103,8 +101,6 @@ ocamlPackages.buildDunePackage rec {
     # vendored tezos' deps
     aches
     aches-lwt
-    tezos-plonk
-    tezos-bls12-381-polynomial
     ctypes
     ctypes_stubs_js
     class_group_vdf
@@ -128,6 +124,8 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+    seqes
+    stdint
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

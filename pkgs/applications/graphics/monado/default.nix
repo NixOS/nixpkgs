@@ -8,6 +8,7 @@
 , pkg-config
 , python3
 , SDL2
+, bluez
 , dbus
 , eigen
 , ffmpeg
@@ -28,8 +29,10 @@
 , libuvc
 , libv4l
 , libxcb
+, onnxruntime
 , opencv4
 , openhmd
+, openvr
 , udev
 , vulkan-headers
 , vulkan-loader
@@ -45,16 +48,16 @@
 , serviceSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "monado";
-  version = "unstable-2023-01-14";
+  version = "unstable-2023-11-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "1ef49b92f2d6cb519039edd7ba7f70e8073fbe88";
-    sha256 = "sha256-zieJmI6BKHpYyCPOOUora9qoWn+NXehbHKvoi4h81UA=";
+    rev = "e983eecd73b1b91d2dfb356e1bc054e9202b2a7f";
+    hash = "sha256-a4ukfmJbDkhr7P3NMTfbuhXjyOta3WCc5gswX7KUAw0=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +75,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+    bluez
     dbus
     eigen
     ffmpeg
@@ -92,8 +96,10 @@ stdenv.mkDerivation rec {
     libuvc
     libv4l
     libxcb
+    onnxruntime
     opencv4
     openhmd
+    openvr
     udev
     vulkan-headers
     vulkan-loader
@@ -103,6 +109,13 @@ stdenv.mkDerivation rec {
     libdrm
     zlib
   ];
+
+  # known disabled drivers:
+  #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core
+  #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR
+  #  - DRIVER_REALSENSE - see below
+  #  - DRIVER_SIMULAVR - needs realsense
+  #  - DRIVER_ULV2 - needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html
 
   # realsense is disabled, the build ends with the following error:
   #
@@ -119,11 +132,16 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
+  patches = [
+    # We don't have $HOME/.steam when building
+    ./force-enable-steamvr_lh.patch
+  ];
+
   meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ expipiplus1 prusnak ];
+    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak ];
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };

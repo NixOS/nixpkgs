@@ -4,19 +4,18 @@
 , parsec, process, regex-compat, text, time }:
 
 let
-  version = "2.4.0";
+  version = "2.4.2";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-+evs5g0qrplUMr8zC51GvUx2JXQBYJb39IaI4rC6CSA=";
+    sha256 = "sha256-sVjaIzOxNuBtDswpDl5gLB10Sw945TQAf2ywrKumqqk=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
     pname = "kklib";
     inherit version;
     src = "${src}/kklib";
-    patches = [ ./kklib-mimalloc-macos-fix.diff ];
     nativeBuildInputs = [ cmake ];
     outputs = [ "out" "dev" ];
     postInstall = ''

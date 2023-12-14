@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , django
 , django-allauth
 , djangorestframework
@@ -12,14 +13,23 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "3.0.0";
+  version = "5.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = "refs/tags/${version}";
-    hash = "sha256-wkbFUrvKhdp2Hd4QkXAvhMiaqSXFD/fgIw03nLPaO5I=";
+    hash = "sha256-PTFUZ54vKlufKCQyJb+QB/+hI15r+Z0auTjnc38yMLg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/iMerica/dj-rest-auth/pull/561
+      url = "https://github.com/iMerica/dj-rest-auth/commit/be0cf53d94582183320b0994082f0a312c1066d9.patch";
+      hash = "sha256-BhZ7BWW8m609cVn1WCyPfpZq/706YVZAesrkcMKTD3A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -63,6 +73,6 @@ buildPythonPackage rec {
     description = "Authentication for Django Rest Framework";
     homepage = "https://github.com/iMerica/dj-rest-auth";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

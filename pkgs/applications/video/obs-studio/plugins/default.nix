@@ -20,6 +20,10 @@
 
   obs-command-source = callPackage ./obs-command-source.nix { };
 
+  obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
+
+  obs-gradient-source = callPackage ./obs-gradient-source.nix { };
+
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
@@ -38,15 +42,31 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
+
+  obs-rgb-levels-filter = callPackage ./obs-rgb-levels-filter.nix { };
+
+  obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
+
   obs-shaderfilter = qt6Packages.callPackage ./obs-shaderfilter.nix { };
 
   obs-source-clone = callPackage ./obs-source-clone.nix { };
 
   obs-source-record = callPackage ./obs-source-record.nix { };
 
+  obs-source-switcher = callPackage ./obs-source-switcher.nix { };
+
   obs-teleport = callPackage ./obs-teleport { };
 
+  obs-text-pthread = callPackage ./obs-text-pthread.nix { };
+
+  obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
+
+  obs-tuna = qt6Packages.callPackage ./obs-tuna { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
+
+  obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
 
   obs-vintage-filter = callPackage ./obs-vintage-filter.nix { };
 
@@ -57,4 +77,6 @@
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
   wlrobs = callPackage ./wlrobs.nix { };
+
+  waveform = callPackage ./waveform { };
 }

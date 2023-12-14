@@ -5,18 +5,19 @@
 , click
 , setuptools-scm
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "cloup";
-  version = "2.1.1";
+  version = "3.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u/4RaGM0MJs/vodq99ubwmXU6uqTtWL9E0cnZ69khhU=";
+    hash = "sha256-5b13idF8DelxOaxeuK+ML42Wotg2PoQRIk32JaaFjSE=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   nativeCheckInputs = [

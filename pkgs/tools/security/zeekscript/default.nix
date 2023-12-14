@@ -13,8 +13,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-LogI9sJHvLN5WHJGdW47D09XZInKln/I2hNmG62d1JU=";
   };
 
+  postPatch = ''
+    sed -i '/name = "zeekscript"/a version = "${version}"' pyproject.toml
+  '';
+
   nativeBuildInputs = with python3.pkgs; [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

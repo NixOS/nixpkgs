@@ -18,7 +18,7 @@ mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+    hash = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
   };
 
   postPatch = ''

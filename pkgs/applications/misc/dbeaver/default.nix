@@ -14,9 +14,8 @@
 , libXtst
 , zlib
 , maven
-, webkitgtk_4_1
+, webkitgtk
 , glib-networking
-, javaPackages
 }:
 
 let
@@ -24,9 +23,7 @@ let
     jdk = jdk17;
   };
 in
-(javaPackages.mavenfod.override {
-  maven = mavenJdk17;
-}) rec {
+mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
   version = "22.2.2"; # When updating also update mvnHash
 
@@ -37,13 +34,12 @@ in
     hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnHash = "sha256-87pf7XRXCuZlAbL54pX+a5Lo/874DmUr/W37/V+5YpQ=";
+  mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    mavenJdk17
   ];
 
   buildInputs = [
@@ -57,7 +53,7 @@ in
     libXtst
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    webkitgtk_4_1
+    webkitgtk
     glib-networking
   ];
 
@@ -113,7 +109,7 @@ in
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk17}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_1 glib-networking ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
@@ -139,5 +135,6 @@ in
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+    mainProgram = "dbeaver";
   };
 }

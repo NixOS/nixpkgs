@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "pgf-umlcd";
   version = "unstable-2020-05-28";
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-})
+}

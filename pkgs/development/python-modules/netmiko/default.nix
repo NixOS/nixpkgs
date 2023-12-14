@@ -3,11 +3,12 @@
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.1.2";
+  version = "4.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9e3iooZw09/TRwBhRoZl+A+bSQbtIOaw+02eHJvmevw=";
+    hash = "sha256-et3m/j6mMzYij0moY2UMLYP7DmgODw0Vi1sPsExBAOE=";
   };
 
   buildInputs = [ setuptools ];

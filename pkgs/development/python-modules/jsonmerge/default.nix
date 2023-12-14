@@ -7,21 +7,18 @@
 
 buildPythonPackage rec {
   pname = "jsonmerge";
-  version = "1.9.0";
+  version = "1.9.2";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-otH4ACHFwdcKSeMfhitfBo+dsGYIDYVh6AZU3nSjWE0=";
+    hash = "sha256-xDdX4BgLDhm3rkwTCtQqB8xYDDGRL2H0gj6Ory+jlKM=";
   };
 
   propagatedBuildInputs = [ jsonschema ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Fails with "Unresolvable JSON pointer"
-    "test_local_reference_in_meta"
-  ];
 
   meta = with lib; {
     description = "Merge a series of JSON documents";

@@ -8,6 +8,7 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, reflink
 , setuptools-scm
 , shortuuid
 , tqdm
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "0.22.0";
+  version = "1.4.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-MJuvpFXsywtkzW6XZdivo3FETMWA24gAvkeebhGAfdw=";
+    hash = "sha256-9fuxlZDy83nl+rnVEFdAza1NHun8PdewgowMl3G5wZU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -47,10 +48,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    reflink
   ];
 
   pythonImportsCheck = [
     "dvc_objects"
+  ];
+
+  disabledTestPaths = [
+    # Disable benchmarking
+    "tests/benchmarks/"
   ];
 
   meta = with lib; {

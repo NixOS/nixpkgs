@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/br0xen/boltbrowser";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "boltbrowser";
   };
 }

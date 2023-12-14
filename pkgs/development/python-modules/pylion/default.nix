@@ -11,15 +11,15 @@
 
 buildPythonPackage {
   pname = "pylion";
-  version = "0.5.2";
+  version = "0.5.3";
   format = "setuptools";
 
   src = fetchFromBitbucket {
     owner = "dtrypogeorgos";
     repo = "pylion";
     # Version is set in setup.cfg, but not in a git tag / bitbucket release
-    rev = "8945a7b6f1912ae6b9c705f8a2bd521101f5ba59";
-    hash = "sha256-4AdJkoQ1hAssDUpgmARGmN+ihQqRPPOncWJ5ErQyWII=";
+    rev = "3e6b96b542b97107c622d66b0be0551c3bd9f948";
+    hash = "sha256-c0UOv2Vlv9wJ6YW+QdHinhpdaclUh3As5TDvyoRhpSI=";
   };
 
   # Docs are not available online, besides the article:

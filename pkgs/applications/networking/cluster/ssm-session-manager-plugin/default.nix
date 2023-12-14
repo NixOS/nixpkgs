@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   pname = "ssm-session-manager-plugin";
-  version = "1.2.463.0";
+  version = "1.2.497.0";
 
   goPackagePath = "github.com/aws/session-manager-plugin";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "aws";
     repo = "session-manager-plugin";
     rev = version;
-    hash = "sha256-0n7/3CAPf+ioSE041Zik9xeHt5qtrdHotJjBWhizExo=";
+    hash = "sha256-DX+Jm7u0gNX3o0QYIbE6Vzsmqys+09lQGHpIuqBEwMI=";
   };
 
   postPatch = ''

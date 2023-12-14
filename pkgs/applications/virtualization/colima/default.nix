@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.5.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i+JveX9cXF+2Po5NFM8HTmwcSJJ/iSPrlwbA/7aNhc0=";
+    hash = "sha256-7s/e/fV6azT26oeEJhh6PPcnI/cjpmEHf9TsZHspcwE=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -35,7 +35,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles makeWrapper ]
     ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-lsTvzGFoC3Brnr1Q0Hl0ZqEDfcTeQ8vWGe+xylTyvts=";
+  vendorHash = "sha256-ET9n15+YK8ByodePztee6tKdFvvgk7jEKSUjRYSEpq8=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log
@@ -68,5 +68,6 @@ buildGoModule rec {
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
     maintainers = with maintainers; [ aaschmid tricktron ];
+    mainProgram = "colima";
   };
 }

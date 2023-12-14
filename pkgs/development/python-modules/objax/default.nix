@@ -1,24 +1,29 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, jax
+, fetchFromGitHub
+, fetchpatch
 , jaxlib
+, jax
 , numpy
 , parameterized
 , pillow
 , scipy
 , tensorboard
+, keras
+, pytestCheckHook
+, tensorflow
 }:
 
 buildPythonPackage rec {
   pname = "objax";
-  version = "1.6.0";
+  version = "1.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
-    rev = "v${version}";
-    hash = "sha256-/6tZxVDe/3C53Re14odU9VA3mKvSj9X3/xt6bHFLHwQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 
   # Avoid propagating the dependency on `jaxlib`, see
@@ -38,6 +43,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "objax"
+  ];
+
+  # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
+  # older version).
+  catchConflicts = false;
+
+  nativeCheckInputs = [
+    keras
+    pytestCheckHook
+    tensorflow
+  ];
+
+  pytestFlagsArray = [
+    "tests/*.py"
+  ];
+
+  disabledTests = [
+    # Test requires internet access for prefetching some weights
+    "test_pretrained_keras_weight_0_ResNet50V2"
   ];
 
   meta = with lib; {

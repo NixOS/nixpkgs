@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/collectd/collectd/commit/3f575419e7ccb37a3b10ecc82adb2e83ff2826e1.patch";
       sha256 = "0jwjdlfl0dp7mlbwygp6h0rsbaqfbgfm5z07lr5l26z6hhng2h2y";
     })
+    (fetchpatch {
+      name = "no_include_longintrepr.patch";
+      url = "https://github.com/collectd/collectd/commit/623e95394e0e62e7f9ced2104b786d21e9c0bf53.patch";
+      hash = "sha256-0eD7yNW3TWVyNMpLsADhYFDvy6COoCaI0kS1XJrwDgM=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

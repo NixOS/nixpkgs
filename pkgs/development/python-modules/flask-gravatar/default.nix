@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "flask-gravatar";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Gravatar";

@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = teams.gnome.members ++ teams.pantheon.members;
-    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+    platforms = platforms.unix;
   };
 }

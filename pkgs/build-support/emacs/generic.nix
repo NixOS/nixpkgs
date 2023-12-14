@@ -3,7 +3,7 @@
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
 { pname
-, version ? null
+, version
 , buildInputs ? []
 , packageRequires ? []
 , meta ? {}
@@ -19,8 +19,8 @@ let
   };
 in
 
-stdenv.mkDerivation ({
-  name = "emacs-${pname}${lib.optionalString (version != null) "-${version}"}";
+stdenv.mkDerivation (finalAttrs: ({
+  name = "emacs-${pname}-${finalAttrs.version}";
 
   unpackCmd = ''
     case "$curSrc" in
@@ -83,4 +83,4 @@ stdenv.mkDerivation ({
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires" "meta" ])
+// removeAttrs args [ "buildInputs" "packageRequires" "meta" ]))

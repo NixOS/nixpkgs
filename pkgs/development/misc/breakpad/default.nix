@@ -1,28 +1,25 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchgit, zlib }:
 let
   lss = fetchgit {
     url = "https://chromium.googlesource.com/linux-syscall-support";
-    rev = "d9ad2969b369a9f1c455fef92d04c7628f7f9eb8";
-    sha256 = "952dv+ZE1ge/WF5RyHmEqht+AofoRHKAeFmGasVF9BA=";
+    rev = "v2022.10.12";
+    hash = "sha256-rF10v5oH4u9i9vnmFCVVl2Ew3h+QTiOsW64HeB0nRQU=";
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "breakpad";
 
-  version = "unstable-3b3469e";
+  version = "2023.01.27";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
-    rev = "3b3469e9ed0de3d02e4450b9b95014a4266cf2ff";
-    sha256 = "bRGOBrGPK+Zxp+KK+E5MFkYlDUNVhVeInVSwq+eCAF0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8msKz0K10r13TwM3oS6GCIlMdf8k8HBKfKJkPmrUrIs=";
   };
+
+  buildInputs = [ zlib ];
 
   postUnpack = ''
     ln -s ${lss} $sourceRoot/src/third_party/lss
-  '';
-
-  postPatch = ''
-    substituteInPlace src/client/linux/handler/exception_handler.cc \
-      --replace "max(16384" "max(static_cast<long>(16384)"
   '';
 
   meta = with lib; {
@@ -32,4 +29,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ berberman ];
     platforms = platforms.all;
   };
-}
+})

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LonnyGomes/hexcurse";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "hexcurse";
   };
 }

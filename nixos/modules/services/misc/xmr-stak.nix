@@ -7,7 +7,7 @@ let
   cfg = config.services.xmr-stak;
 
   pkg = pkgs.xmr-stak.override {
-    inherit (cfg) openclSupport cudaSupport;
+    inherit (cfg) openclSupport;
   };
 
 in
@@ -17,7 +17,6 @@ in
     services.xmr-stak = {
       enable = mkEnableOption (lib.mdDoc "xmr-stak miner");
       openclSupport = mkEnableOption (lib.mdDoc "support for OpenCL (AMD/ATI graphics cards)");
-      cudaSupport = mkEnableOption (lib.mdDoc "support for CUDA (NVidia graphics cards)");
 
       extraArgs = mkOption {
         type = types.listOf types.str;
@@ -64,15 +63,12 @@ in
       wantedBy = [ "multi-user.target" ];
       bindsTo = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment = mkIf cfg.cudaSupport {
-        LD_LIBRARY_PATH = "${pkgs.linuxPackages_latest.nvidia_x11}/lib";
-      };
 
       preStart = concatStrings (flip mapAttrsToList cfg.configFiles (fn: content: ''
         ln -sf '${pkgs.writeText "xmr-stak-${fn}" content}' '${fn}'
       ''));
 
-      serviceConfig = let rootRequired = cfg.openclSupport || cfg.cudaSupport; in {
+      serviceConfig = let rootRequired = cfg.openclSupport; in {
         ExecStart = "${pkg}/bin/xmr-stak ${concatStringsSep " " cfg.extraArgs}";
         # xmr-stak generates cpu and/or gpu configuration files
         WorkingDirectory = "/tmp";

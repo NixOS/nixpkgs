@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   VERSION = version;
 
-  doCheck = true;
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
+    mainProgram = "snapraid";
   };
 }

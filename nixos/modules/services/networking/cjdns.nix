@@ -239,7 +239,7 @@ in
       after = [ "network-online.target" ];
       bindsTo = [ "network-online.target" ];
 
-      preStart = if cfg.confFile != null then "" else ''
+      preStart = optionalString (cfg.confFile == null) ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then

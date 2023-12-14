@@ -8,6 +8,7 @@
 , asciidoc
 , wrapGAppsHook
 , glib
+, libei
 , libepoxy
 , libdrm
 , nv-codec-headers-11
@@ -21,20 +22,16 @@
 , fdk_aac
 , tpm2-tss
 , fuse3
-, mesa
-, libgudev
-, xvfb-run
-, dbus
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "44.2";
+  version = "45.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ep/9NBtfy2NtJmden2JpZQlSFj//UpUydhjMLVzIe44=";
+    hash = "sha256-3NnBisIwZpVjH88AqIZFw443DroFxp3zn1QCBNTq/Y0=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +51,7 @@ stdenv.mkDerivation rec {
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    libei
     libepoxy
     libdrm
     nv-codec-headers-11
@@ -62,32 +60,12 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     systemd
-  ] ++ nativeCheckInputs;
-
-  nativeCheckInputs = [
-    mesa # for gbm
-    libgudev
-    xvfb-run
-    python3.pkgs.dbus-python
-    python3.pkgs.pygobject3
-    dbus # for dbus-run-session
   ];
 
   mesonFlags = [
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
+    "-Dtests=false" # Too deep of a rabbit hole.
   ];
-
-  # Too deep of a rabbit hole.
-  doCheck = false;
-
-  postPatch = ''
-    patchShebangs \
-      tests/vnc-test-runner.sh \
-      tests/run-vnc-tests.py
-
-    substituteInPlace tests/vnc-test-runner.sh \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

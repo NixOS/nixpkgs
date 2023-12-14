@@ -4,17 +4,19 @@
 , cmake
 , numpy
 , scipy
+, hatchling
 , stdenv
 , xgboost
 }:
 
 buildPythonPackage {
   pname = "xgboost";
+  format = "pyproject";
   inherit (xgboost) version src meta;
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake hatchling ];
   buildInputs = [ xgboost ];
   propagatedBuildInputs = [ numpy scipy ];
 

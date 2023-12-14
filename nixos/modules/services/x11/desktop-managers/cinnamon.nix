@@ -200,6 +200,8 @@ in
         })
       ];
 
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
@@ -212,14 +214,16 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt applications under Cinnamon
-      qt.enable = true;
-      qt.platformTheme = "gnome";
-      qt.style = "adwaita";
+      # Qt application style
+      qt = {
+        enable = mkDefault true;
+        style = mkDefault "gtk2";
+        platformTheme = mkDefault "gtk2";
+      };
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
-        source-code-pro # Default monospace font in 3.32
+      fonts.packages = with pkgs; [
+        dejavu_fonts # Default monospace font in LMDE 6+
         ubuntu_font_family # required for default theme
       ];
     })

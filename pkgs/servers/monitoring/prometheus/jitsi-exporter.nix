@@ -10,7 +10,7 @@ buildGoModule rec {
     sha256 = "1cf46wp96d9dwlwlffcgbcr0v3xxxfdv6il0zqkm2i7cfsfw0skf";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) jitsi; };
 

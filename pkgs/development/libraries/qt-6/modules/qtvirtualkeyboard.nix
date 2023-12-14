@@ -8,7 +8,6 @@
 
 qtModule {
   pname = "qtvirtualkeyboard";
-  qtInputs = [ qtbase qtdeclarative qtsvg ];
-  propagatedBuildInputs = [ hunspell ];
+  propagatedBuildInputs = [ qtbase qtdeclarative qtsvg hunspell ];
   nativeBuildInputs = [ pkg-config ];
 }

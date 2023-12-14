@@ -18,23 +18,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.15.6";
+  version = "0.16.3";
+  format = "setuptools";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OjWW08tyVDHkF0X3Pa+10HYD/7Gysp5DkEt9LaVxsdM=";
+    hash = "sha256-EOJ5NQyNFMpgLA1EaaXkv3/zk+hkPIMaVGrnNba4LMM=";
   };
-
-  patches = [
-    # remove after next release
-    (fetchpatch {
-      name = "fix-pybids-sqlalchemy-dep";
-      url = "https://github.com/bids-standard/pybids/commit/5f008dfc282394ef94a68d47dba37ceead9eac9a.patch";
-      hash = "sha256-gx6w35XqDBZ8cTGHeY/mz2xNQqza9E5z8bRJR7mbPcg=";
-      excludes = [ "pyproject.toml" ];  # not in PyPI dist
-    })
-  ];
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
 
@@ -56,8 +47,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "bids" ];
-  # looks for missing data:
-  disabledTests = [ "test_config_filename" ];
+  disabledTests = [
+    # looks for missing data:
+    "test_config_filename"
+    # regression associated with formulaic >= 0.6.0
+    # (see https://github.com/bids-standard/pybids/issues/1000)
+    "test_split"
+  ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";

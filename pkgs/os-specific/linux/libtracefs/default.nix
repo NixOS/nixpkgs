@@ -8,38 +8,50 @@
 , docbook_xml_dtd_45
 , docbook_xsl
 , coreutils
-, which
 , valgrind
 , sourceHighlight
+, meson
+, flex
+, bison
+, ninja
+, cunit
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtracefs";
-  version = "1.6.4";
+  version = "1.7.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git";
     rev = "libtracefs-${version}";
-    sha256 = "sha256-fWop0EMkoVulLBzU7q8x1IhMtdnEJ89wMz0cz964F6s=";
+    sha256 = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
   };
 
   postPatch = ''
-    substituteInPlace scripts/utils.mk --replace /bin/pwd ${coreutils}/bin/pwd
-    patchShebangs check-manpages.sh
+    chmod +x samples/extract-example.sh
+    patchShebangs --build check-manpages.sh samples/extract-example.sh Documentation/install-docs.sh.in
   '';
 
   outputs = [ "out" "dev" "devman" "doc" ];
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl which valgrind sourceHighlight ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    valgrind
+    sourceHighlight
+    flex
+    bison
+  ];
   buildInputs = [ libtraceevent ];
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "doc"                       # build docs
-  ];
-  installFlags = [
-    "pkgconfig_dir=${placeholder "out"}/lib/pkgconfig"
-    "install_doc"
-  ];
+
+  ninjaFlags = [ "all" "docs" ];
+
+  doCheck = true;
+  checkInputs = [ cunit ];
 
   meta = with lib; {
     description = "Linux kernel trace file system library";

@@ -1,12 +1,13 @@
 { stdenv, lib, fetchurl
-, dpkg, patchelf, wrapGAppsHook
+, dpkg, wrapGAppsHook
 , hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr
 , atk, at-spi2-atk, dbus
 , gdk-pixbuf, pango, cairo
 , expat, libdrm, mesa
-, alsa-lib, at-spi2-core, cups }:
+, alsa-lib, at-spi2-core, cups
+, libxkbcommon }:
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -14,21 +15,21 @@ let
     xorg.libX11 xorg.libxcb xorg.libXcomposite
     xorg.libXcursor xorg.libXext xorg.libXfixes
     xorg.libXi xorg.libXrender xorg.libXtst
-    nss nspr atk at-spi2-atk dbus
-    gdk-pixbuf pango cairo
+    xorg.libxshmfence libxkbcommon nss
+    nspr atk at-spi2-atk
+    dbus gdk-pixbuf pango cairo
     xorg.libXrandr expat libdrm
     mesa alsa-lib at-spi2-core
     cups
   ];
 in
-stdenv.mkDerivation rec {
-  version = "4.1.6";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.0.1";
   pname = "staruml";
 
-  src =
-    fetchurl {
-      url = "https://staruml.io/download/releases-v4/StarUML_${version}_amd64.deb";
-      sha256 = "sha256-CUOdpR8RExMLeOX8469egENotMNuPU4z8S1IGqA21z0=";
+  src = fetchurl {
+      url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
+      sha256 = "sha256-LxulOfYjdJrDjRL661S0W9slIXvhLc+kXZN6e3TfXVs=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook dpkg ];
@@ -72,7 +73,8 @@ stdenv.mkDerivation rec {
     homepage = "https://staruml.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "staruml";
   };
-}
+})

@@ -13,9 +13,9 @@
 }:
 
 buildPythonPackage rec {
-  pname = "monai";
-  version = "0.5.0";
-  format = "pyproject";
+  pname = "monai-deploy";
+  version = "0.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,8 +23,14 @@ buildPythonPackage rec {
     owner = "Project-MONAI";
     repo = "monai-deploy-app-sdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-oaNZ0US0YR/PSwAZ5GfRpAW+HRYVhdCZI83fC00rgok=";
+    hash = "sha256-a5WtU+1XjsYsXB/uZS8ufE0fOOWDf+Wy7mOX2xPEQEg=";
   };
+
+  postPatch = ''
+    # Asked in https://github.com/Project-MONAI/monai-deploy-app-sdk/issues/450
+    # if this patch can be incorporated upstream.
+    substituteInPlace pyproject.toml --replace 'versioneer-518' 'versioneer'
+  '';
 
   nativeBuildInputs = [ versioneer ];
 

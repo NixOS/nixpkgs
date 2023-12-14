@@ -13,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "python-efl";
-  version = "1.26.0";
+  version = "1.26.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
-    sha256 = "0dj6f24n33hkpy0bkdclnzpxhvs8vpaxqaf7hkw0di19pjwrq25h";
+    hash = "sha256-3Ns5fhIHihnpDYDnxvPP00WIZL/o1UWLzgNott4GKNc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,11 +32,11 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext
   '';
 
   installPhase = ''
-    ${python.pythonForBuild.interpreter} setup.py install --prefix=$out --single-version-externally-managed
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;
@@ -48,8 +49,5 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
-    # The generated files in the tarball aren't compatible with python 3.11
-    # See https://sourceforge.net/p/enlightenment/mailman/message/37794291/
-    broken = python.pythonAtLeast "3.11";
   };
 }

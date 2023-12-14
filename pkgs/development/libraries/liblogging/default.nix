@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config
-, systemd ? null
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd ];
+  buildInputs = lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
     "--enable-rfc3195"
     "--enable-stdlog"
-    (if systemd != null then "--enable-journal" else "--disable-journal")
+    (if withSystemd then "--enable-journal" else "--disable-journal")
     "--enable-man-pages"
   ];
 

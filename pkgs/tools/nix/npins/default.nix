@@ -1,7 +1,5 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
-, nix-gitignore
 , makeWrapper
 , stdenv
 , darwin
@@ -21,7 +19,7 @@ in rustPlatform.buildRustPackage rec {
   version = src.version;
   src = passthru.mkSource sources.npins;
 
-  cargoSha256 = "sha256-NDu4nl4Os7Mgal8gBHC6bsZ2Z+Fqt0PlGdLHiPd/8T4=";
+  cargoSha256 = "sha256-eySVpmCVWBJfyAkTQv+LqojWMO/3r6kBYP1a4z+FYHY=";
 
   buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
   nativeBuildInputs = [ makeWrapper ];

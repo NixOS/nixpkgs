@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -22,12 +22,11 @@ with lib;
 
   config = mkIf config.security.lockKernelModules {
     boot.kernelModules = concatMap (x:
-      if x.device != null
-        then
-          if x.fsType == "vfat"
-            then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
-            else [ x.fsType ]
-        else []) config.system.build.fileSystems;
+      optionals (x.device != null) (
+        if x.fsType == "vfat"
+        then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
+        else [ x.fsType ])
+      ) config.system.build.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
@@ -50,7 +49,7 @@ with lib;
         };
 
       script = ''
-        ${pkgs.udev}/bin/udevadm settle
+        ${config.systemd.package}/bin/udevadm settle
         echo -n 1 >/proc/sys/kernel/modules_disabled
       '';
     };

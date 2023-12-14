@@ -7,6 +7,7 @@
 , kirigami2
 , mauikit
 , mauikit-filebrowsing
+, prison
 , qtgraphicaleffects
 , qtmultimedia
 , qtquickcontrols2
@@ -27,6 +28,7 @@ mkDerivation {
     kirigami2
     mauikit
     mauikit-filebrowsing
+    prison
     qtgraphicaleffects
     qtmultimedia
     qtquickcontrols2

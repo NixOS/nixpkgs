@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , flake8
 , flaky
+, importlib-metadata
 , jedi
 , matplotlib
 , mccabe
@@ -18,9 +19,9 @@
 , pylint
 , pyqt5
 , pytestCheckHook
-, pythonRelaxDepsHook
 , python-lsp-jsonrpc
 , pythonOlder
+, pythonRelaxDepsHook
 , rope
 , setuptools
 , setuptools-scm
@@ -28,30 +29,31 @@
 , ujson
 , websockets
 , whatthepatch
+, wheel
 , yapf
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.7.2";
+  version = "1.9.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jsWk2HDDRjOAPGX1K9NqhWkA5xD2fM830z7g7Kee0yQ=";
+    hash = "sha256-9za0et/W+AwrjqUVoHwk8oqLXk4eqgRON8Z4F5GSKXM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" ""
   '';
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "autopep8"
@@ -65,6 +67,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -74,6 +77,8 @@ buildPythonPackage rec {
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   passthru.optional-dependencies = {

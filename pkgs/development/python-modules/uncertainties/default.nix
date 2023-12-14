@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "uncertainties";
   version = "3.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

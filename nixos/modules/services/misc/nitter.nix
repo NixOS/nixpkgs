@@ -54,12 +54,7 @@ in
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
 
-      package = mkOption {
-        default = pkgs.nitter;
-        type = types.package;
-        defaultText = literalExpression "pkgs.nitter";
-        description = lib.mdDoc "The nitter derivation to use.";
-      };
+      package = mkPackageOption pkgs "nitter" { };
 
       server = {
         address = mkOption {
@@ -334,7 +329,8 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

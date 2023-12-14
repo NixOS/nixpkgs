@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "repro-get";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "repro-get";
     rev = "v${version}";
-    sha256 = "sha256-2B4jNP58t+cfeHi5pICtB9+NwujRzkhl1d/cPkWlNrk=";
+    sha256 = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
   };
 
-  vendorHash = "sha256-GM8sKIZb2G9dBj2RoRO80hQrv8D+hHYo0O9FbBuK780=";
+  vendorHash = "sha256-clpQLRozXFeUGrItL2pfNft2hUNyuyeCP9oMQxagAWs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -69,5 +69,6 @@ buildGoModule rec {
     homepage = "https://github.com/reproducible-containers/repro-get";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "repro-get";
   };
 }

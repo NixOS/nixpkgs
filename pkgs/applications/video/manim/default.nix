@@ -1,10 +1,9 @@
 { lib
 , fetchFromGitHub
-, fetchPypi
 
 , cairo
 , ffmpeg
-, texlive
+, texliveInfraOnly
 
 , python3
 }:
@@ -21,11 +20,10 @@ let
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
   #
   # these two combined add up to:
-  manim-tinytex = {
-    inherit (texlive)
+  manim-tinytex = texliveInfraOnly.withPackages (ps: with ps; [
 
     # tinytex
-    scheme-infraonly amsfonts amsmath atbegshi atveryend auxhook babel bibtex
+    amsfonts amsmath atbegshi atveryend auxhook babel bibtex
     bigintcalc bitset booktabs cm dehyph dvipdfmx dvips ec epstopdf-pkg etex
     etexcmds etoolbox euenc everyshi fancyvrb filehook firstaid float fontspec
     framed geometry gettitlestring glyphlist graphics graphics-cfg graphics-def
@@ -41,54 +39,36 @@ let
     # manim-latex
     standalone everysel preview doublestroke ms setspace rsfs relsize ragged2e
     fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
-    babel-english gnu-freefont mathastext cbfonts-fd;
-  };
+    babel-english gnu-freefont mathastext cbfonts-fd
+  ]);
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      networkx = super.networkx.overridePythonAttrs (oldAttrs: rec {
-        pname = "networkx";
-        version = "2.8.8";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-Iw04gRevhw/OVkejxSQB/PdT6Ucg5uprQZelNVZIiF4=";
-        };
-      });
-
-      watchdog = super.watchdog.overridePythonAttrs (oldAttrs: rec{
-        pname = "watchdog";
-        version = "2.3.1";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-2fntJu0iqdMxggqEMsNoBwfqi1QSHdzJ3H2fLO6zaQY=";
-        };
-      });
-    };
-  };
+  python = python3;
 
 in python.pkgs.buildPythonApplication rec {
   pname = "manim";
-  format = "pyproject";
-  version = "0.16.0.post0";
+  pyproject = true;
+  version = "0.18.0";
   disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
-    repo = pname;
+    repo = "manim";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
+    sha256 = "sha256-TI7O0b1JvUZAxTj6XfpAJKhbGqrGnhcrE9eRJUVx4GM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
   ];
 
+  patches = [
+    ./pytest-report-header.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
       --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
-      --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
-      --replace 'click = ">=7.2<=9.0"' 'click = ">=7.2,<=9.0"' # https://github.com/ManimCommunity/manim/pull/2954
   '';
 
   buildInputs = [ cairo ];
@@ -119,6 +99,7 @@ in python.pkgs.buildPythonApplication rec {
     screeninfo
     skia-pathops
     srt
+    svgelements
     tqdm
     watchdog
   ];
@@ -126,13 +107,13 @@ in python.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [
       ffmpeg
-      (texlive.combine manim-tinytex)
+      manim-tinytex
     ])
   ];
 
   nativeCheckInputs = [
     ffmpeg
-    (texlive.combine manim-tinytex)
+    manim-tinytex
   ] ++ (with python.pkgs; [
     pytest-xdist
     pytestCheckHook

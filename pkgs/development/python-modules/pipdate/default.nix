@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "pip update helpers";
     homepage = "https://github.com/nschloe/pipdate";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

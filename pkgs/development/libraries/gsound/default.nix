@@ -14,11 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
   buildInputs = [ glib libcanberra ];
 
-  mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Denable_vala=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-  ];
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

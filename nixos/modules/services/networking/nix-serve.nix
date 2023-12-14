@@ -26,14 +26,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nix-serve;
-        defaultText = literalExpression "pkgs.nix-serve";
-        description = lib.mdDoc ''
-          nix-serve package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "nix-serve" { };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -67,6 +60,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    nix.settings = lib.optionalAttrs (lib.versionAtLeast config.nix.package.version "2.4") {
+      extra-allowed-users = [ "nix-serve" ];
+    };
+
     systemd.services.nix-serve = {
       description = "nix-serve binary cache server";
       after = [ "network.target" ];

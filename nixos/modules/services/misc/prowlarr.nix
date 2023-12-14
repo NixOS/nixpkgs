@@ -11,6 +11,8 @@ in
     services.prowlarr = {
       enable = mkEnableOption (lib.mdDoc "Prowlarr");
 
+      package = mkPackageOption pkgs "prowlarr" { };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -29,7 +31,7 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${pkgs.prowlarr}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
+        ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
     };

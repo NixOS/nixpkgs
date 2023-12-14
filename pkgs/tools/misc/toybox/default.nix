@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3boPoq/wm0af0DqEWcUCUyCmVFopVMitRHJI1xsjAWM=";
+    sha256 = "sha256-MMkNLhQP3ztWoRYhCU/cNXE/M+/ny41OK1SA9oM/lZg=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];

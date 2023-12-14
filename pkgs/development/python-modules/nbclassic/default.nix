@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, ipython_genutils
+, ipython-genutils
 , jinja2
 , jupyter-client
 , jupyter-core
@@ -26,20 +26,20 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.5.2";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QPEbvMWeiVbD1e8TLeyOWoU+iT7Pgx55HVTaDYpQ150=";
+    hash = "sha256-CuEesjGUVdgFWWvzIDNs2pVUtB2Zq5o8Mb+BgL/6MOM=";
   };
 
   propagatedBuildInputs = [
     argon2-cffi
     ipykernel
-    ipython_genutils
+    ipython-genutils
     jinja2
     jupyter-client
     jupyter-core
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension";
-    homepage = "https://github.com/jupyterlab/nbclassic";
+    homepage = "https://github.com/jupyter/nbclassic";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ elohmeier ];
   };

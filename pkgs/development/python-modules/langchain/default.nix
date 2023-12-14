@@ -1,84 +1,91 @@
 { lib
+, bash
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , poetry-core
-, numpy
-, pyyaml
-, sqlalchemy
-, requests
-, async-timeout
 , aiohttp
-, numexpr
-, openapi-schema-pydantic
+, anyio
+, async-timeout
 , dataclasses-json
-, tqdm
+, jsonpatch
+, langsmith
+, numpy
+, pydantic
+, pyyaml
+, requests
+, sqlalchemy
 , tenacity
-, bash
   # optional dependencies
-, anthropic
+, atlassian-python-api
+, azure-core
+, azure-cosmos
+, azure-identity
+, beautifulsoup4
+, chardet
+, clarifai
 , cohere
-, openai
-, nlpcloud
+, duckduckgo-search
+, elasticsearch
+, esprima
+, faiss
+, google-api-python-client
+, google-auth
+, google-search-results
+, gptcache
+, html2text
 , huggingface-hub
+, jinja2
+, jq
+, lark
+, librosa
+, lxml
 , manifest-ml
+, neo4j
+, networkx
+, nlpcloud
+, nltk
+, openai
+, opensearch-py
+, pdfminer-six
+, pgvector
+, pinecone-client
+, psycopg2
+, pymongo
+, pyowm
+, pypdf
+, pytesseract
+, python-arango
+, qdrant-client
+, rdflib
+, redis
+, requests-toolbelt
+, sentence-transformers
+, tiktoken
 , torch
 , transformers
-, qdrant-client
-, sentence-transformers
-, azure-identity
-, azure-cosmos
-, azure-core
-, elasticsearch
-, opensearch-py
-, google-search-results
-, faiss
-, spacy
-, nltk
-, beautifulsoup4
-, tiktoken
-, jinja2
-, pinecone-client
+, typer
 , weaviate-client
-, redis
-, google-api-python-client
-, pypdf
-, networkx
-, psycopg2
-, boto3
-, pyowm
-, pytesseract
-, html2text
-, atlassian-python-api
-, duckduckgo-search
-, lark
-, jq
-, steamship
-, pdfminer-six
-, lxml
-, chardet
-, requests-toolbelt
-, neo4j
-, langchainplus-sdk
+, wikipedia
   # test dependencies
-, pytest-vcr
+, freezegun
+, pandas
+, pexpect
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pandas
+, pytestCheckHook
+, requests-mock
+, responses
 , syrupy
 , toml
-, freezegun
-, responses
-, pexpect
-, pytestCheckHook
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.201";
-  format = "pyproject";
+  version = "0.0.334";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -86,15 +93,10 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+mS6rKypDrlKFg+c0GPAZ0YX7UYN+mlilnbX2hptLt0=";
+    hash = "sha256-mXPqc8wF9DhEtITm8h5R9kHBcMJ7AEK4kL5Z7V2p8NE=";
   };
 
-  postPatch = ''
-    substituteInPlace langchain/utilities/bash.py \
-      --replace '"env", ["-i", "bash", ' '"${lib.getExe bash}", ['
-    substituteInPlace tests/unit_tests/test_bash.py \
-      --replace "/bin/sh" "${bash}/bin/sh"
-  '';
+  sourceRoot = "${src.name}/libs/langchain";
 
   nativeBuildInputs = [
     poetry-core
@@ -106,25 +108,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    pyyaml
+    pydantic
     sqlalchemy
     requests
-    aiohttp
-    numexpr
-    openapi-schema-pydantic
+    pyyaml
+    numpy
     dataclasses-json
-    tqdm
     tenacity
+    aiohttp
+    langsmith
+    anyio
+    jsonpatch
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   passthru.optional-dependencies = {
     llms = [
-      anthropic
+      clarifai
       cohere
       openai
+      # openlm
       nlpcloud
       huggingface-hub
       manifest-ml
@@ -136,9 +140,13 @@ buildPythonPackage rec {
     ];
     openai = [
       openai
+      tiktoken
     ];
     text_helpers = [
       chardet
+    ];
+    clarifai = [
+      clarifai
     ];
     cohere = [
       cohere
@@ -149,19 +157,25 @@ buildPythonPackage rec {
     embeddings = [
       sentence-transformers
     ];
+    javascript = [
+      esprima
+    ];
     azure = [
       azure-identity
       azure-cosmos
       openai
       azure-core
+      # azure-ai-formrecognizer
+      # azure-ai-vision
+      # azure-cognitiveservices-speech
+      # azure-search-documents
     ];
     all = [
-      anthropic
+      clarifai
       cohere
       openai
       nlpcloud
       huggingface-hub
-      # jina
       manifest-ml
       elasticsearch
       opensearch-py
@@ -169,18 +183,20 @@ buildPythonPackage rec {
       faiss
       sentence-transformers
       transformers
-      spacy
       nltk
-      # wikipedia
+      wikipedia
       beautifulsoup4
       tiktoken
       torch
       jinja2
       pinecone-client
       # pinecone-text
+      # marqo
+      pymongo
       weaviate-client
       redis
       google-api-python-client
+      google-auth
       # wolframalpha
       qdrant-client
       # tensorflow-text
@@ -189,14 +205,14 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
-      # pgvector
+      # libdeeplake
+      pgvector
       psycopg2
-      boto3
       pyowm
       pytesseract
       html2text
       atlassian-python-api
-      # gptcache
+      gptcache
       duckduckgo-search
       # arxiv
       azure-identity
@@ -210,7 +226,6 @@ buildPythonPackage rec {
       # O365
       jq
       # docarray
-      steamship
       pdfminer-six
       lxml
       requests-toolbelt
@@ -219,30 +234,40 @@ buildPythonPackage rec {
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
-      langchainplus-sdk
+      # momento
+      # singlestoredb
+      # tigrisdb
+      # nebula3-python
+      # awadb
+      esprima
+      rdflib
+      # amadeus
+      librosa
+      python-arango
+    ];
+    cli = [
+      typer
     ];
   };
 
-  pythonRelaxDeps = [
-    "langchainplus-sdk"
-  ];
-
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-vcr
+    freezegun
+    lark
+    pandas
+    pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-asyncio
-    pandas
+    pytestCheckHook
+    requests-mock
+    responses
     syrupy
     toml
-    freezegun
-    responses
   ];
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+    "--only-core"
   ];
 
   disabledTests = [
@@ -252,6 +277,10 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+  ];
+
+  pythonImportsCheck = [
+    "langchain"
   ];
 
   meta = with lib; {

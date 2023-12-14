@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pluginsDir ? null
+}:
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.154.0";
+  version = "0.159.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-AKrTpV5Ky94H610iYO31/CBuZkTd1OcxX5Tl0GjNWaA=";
+    sha256 = "sha256-7RFDa8Yw2tPjVvJLVPb7VbDNhrHNxzqmE0uogm7X/HY=";
   };
 
-  vendorHash = "sha256-PenQxs5Ds5GQ2LSlFRdpNUN8Y+jKCFSllMncWZwaL4c=";
+  vendorHash = "sha256-kVr6h5u71RimRER6tNxZUewSqqjaAPptriD5bfsE85U=";
 
   doCheck = false;
 
@@ -19,9 +25,14 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs =
+    [ installShellFiles ] ++
+    lib.optional (pluginsDir != null) makeWrapper;
 
-  postInstall = ''
+  postInstall = lib.optionalString (pluginsDir != null) ''
+    wrapProgram $out/bin/helmfile \
+      --set HELM_PLUGINS "${pluginsDir}"
+  '' + ''
     installShellCompletion --cmd helmfile \
       --bash <($out/bin/helmfile completion bash) \
       --fish <($out/bin/helmfile completion fish) \

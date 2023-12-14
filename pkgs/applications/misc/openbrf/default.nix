@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, fetchpatch, qtbase, vcg, glew, qmake, libGLU, eigen, libGL }:
 
 
 mkDerivation {
@@ -12,11 +12,22 @@ mkDerivation {
     sha256 = "16254cnr60ihcn7bki7wl1qm6gkvzb99cn66md1pnb7za8nvzf4j";
   };
 
-  buildInputs = [ qtbase vcg glew ];
+  patches = [
+    # https://github.com/cfcohen/openbrf/pull/7
+    (fetchpatch {
+      name = "fix-build-against-newer-vcglib.patch";
+      url = "https://github.com/cfcohen/openbrf/commit/6d82a25314a393e72bfbe2ffc3965bcac407df4c.patch";
+      hash = "sha256-rNxAw6Le6QXMSirIAMhMmqVgNJLq6osnEOhWrY3mTpM=";
+    })
+  ];
+
+  buildInputs = [ qtbase vcg glew eigen ];
 
   nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "openBrf.pro" ];
+
+  env.NIX_CFLAGS_COMPILE = "-isystem ${lib.getDev eigen}/include/eigen3";
 
   postPatch = ''
     sed -i 's,^VCGLIB .*,VCGLIB = ${vcg}/include,' openBrf.pro

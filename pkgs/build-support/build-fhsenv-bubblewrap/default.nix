@@ -17,12 +17,12 @@
 , meta ? {}
 , passthru ? {}
 , extraBwrapArgs ? []
-, unshareUser ? true
-, unshareIpc ? true
-, unsharePid ? true
+, unshareUser ? false
+, unshareIpc ? false
+, unsharePid ? false
 , unshareNet ? false
-, unshareUts ? true
-, unshareCgroup ? true
+, unshareUts ? false
+, unshareCgroup ? false
 , dieWithParent ? true
 , ...
 } @ args:
@@ -31,7 +31,7 @@ assert (pname != null || version != null) -> (name == null && pname != null); # 
 
 with builtins;
 let
-  pname = if args.name != null then args.name else args.pname;
+  pname = if args ? name && args.name != null then args.name else args.pname;
   versionStr = lib.optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
@@ -200,6 +200,7 @@ let
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
       --tmpfs ${glibc}/etc \
+      --tmpfs /etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
@@ -223,6 +224,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name {
+  inherit pname version;
   inherit meta;
 
   passthru = passthru // {

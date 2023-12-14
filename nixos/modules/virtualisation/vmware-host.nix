@@ -37,12 +37,7 @@ in
           :::
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vmware-workstation;
-        defaultText = literalExpression "pkgs.vmware-workstation";
-        description = lib.mdDoc "VMware host virtualisation package to use";
-      };
+      package = mkPackageOption pkgs "vmware-workstation" { };
       extraPackages = mkOption {
         type = with types; listOf package;
         default = with pkgs; [ ];

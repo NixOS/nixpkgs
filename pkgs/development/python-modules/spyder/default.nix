@@ -7,19 +7,16 @@
 , cloudpickle
 , cookiecutter
 , diff-match-patch
-, flake8
 , intervaltree
 , jedi
 , jellyfish
 , keyring
 , matplotlib
-, mccabe
 , nbconvert
 , numpy
 , numpydoc
 , psutil
 , pygments
-, pylint
 , pylint-venv
 , pyls-spyder
 , pyopengl
@@ -28,7 +25,6 @@
 , python-lsp-server
 , pyxdg
 , pyzmq
-, pycodestyle
 , qdarkstyle
 , qstylizer
 , qtawesome
@@ -45,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.4.2";
+  version = "5.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L8zgT7M7N+P5/9FQgf6ab7afUQXC1afzwUjAp6yKxC8=";
+    hash = "sha256-zjQmUmkqwtXNnZKssNpl24p4FQscZKGiiJj5iwYl2UM=";
   };
 
   patches = [

@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "23.1.0";
+  version = "23.2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-0zHvBMiZB4cGntdYXA7C9V9+FfnDB6sHGuFRYAo/LJw=";
+    hash = "sha256-KSHKgkv+kObKCdWZDg5o6QYe0AMND9VLdEuseY/GyDY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

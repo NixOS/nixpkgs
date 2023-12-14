@@ -4,7 +4,6 @@
 , extra-cmake-modules
 , qtbase
 , qtmultimedia
-, qtquick1
 , qttools
 , libGL
 , libX11
@@ -25,7 +24,6 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtmultimedia
-    qtquick1
     libGL
     libX11
     libass

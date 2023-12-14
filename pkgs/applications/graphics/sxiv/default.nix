@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/muennich/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ h7x4 ];
   };
 }

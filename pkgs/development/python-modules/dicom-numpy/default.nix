@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "dicom-numpy";
-  version = "0.6.3";
+  version = "0.6.5";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "innolitics";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QIPuSFaWgHmcTddZ8H9kgzLYuwGUzy/FVsi/ttSUskA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
 
   propagatedBuildInputs = [

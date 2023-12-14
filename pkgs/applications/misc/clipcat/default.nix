@@ -1,48 +1,50 @@
-{ lib, fetchFromGitHub, installShellFiles, rustPlatform, rustfmt, xorg
-, pkg-config, llvmPackages, clang, protobuf, python3 }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, xvfb-run
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.5.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rxl3ksjinw07q3p2vjqg80k3c6wx2q7pzpf2344zyfb4gkqzx1c";
+    hash = "sha256-BpJI6IseQpAHrdZ+rbh9Ar8HhAVD6grdM2tpviKd51c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "x11-clipboard-0.6.0" = "sha256-dKx2kda5JC79juksP2qiO9yfeFCWymcYhGPSygQ0mrg=";
-    };
-  };
-
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  cargoHash = "sha256-BcqrQ4oUZazTSVtaAPgNKmLxhBbxR+sfpFFD1WiYP40=";
 
   nativeBuildInputs = [
-    pkg-config
-
-    rustPlatform.bindgenHook
-
-    rustfmt
     protobuf
-
-    python3
-
     installShellFiles
   ];
-  buildInputs = [ xorg.libxcb ];
 
-  buildFeatures = [ "all" ];
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  useNextest = true;
+
+  # cargo-nextest help us retry the failed test cases
+  NEXTEST_RETRIES = 5;
+
+  # Some test cases interact with X11, we use xvfb-run here
+  checkPhase = ''
+    xvfb-run --auto-servernum cargo nextest run --release --workspace --no-fail-fast --no-capture
+  '';
 
   postInstall = ''
-    installShellCompletion --bash completions/bash-completion/completions/*
-    installShellCompletion --fish completions/fish/completions/*
-    installShellCompletion --zsh  completions/zsh/site-functions/*
+    for cmd in clipcatd clipcatctl clipcat-menu clipcat-notify; do
+      installShellCompletion --cmd $cmd \
+        --bash <($out/bin/$cmd completions bash) \
+        --fish <($out/bin/$cmd completions fish) \
+        --zsh  <($out/bin/$cmd completions zsh)
+    done
   '';
 
   meta = with lib; {
@@ -51,5 +53,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "clipcatd";
   };
 }

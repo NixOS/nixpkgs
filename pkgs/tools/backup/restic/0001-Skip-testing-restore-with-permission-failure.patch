@@ -1,18 +1,18 @@
-From 8e6186be04e2819b6e3586e5d1aeb8a824e1979f Mon Sep 17 00:00:00 2001
+From 72f7d8abee34107b815e49540f2fad7f1ab0b2cc Mon Sep 17 00:00:00 2001
 From: Simon Bruder <simon@sbruder.de>
 Date: Thu, 25 Feb 2021 09:20:51 +0100
 Subject: [PATCH] Skip testing restore with permission failure
 
 The test fails in sandboxed builds.
 ---
- cmd/restic/integration_test.go | 1 +
+ cmd/restic/cmd_restore_integration_test.go | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/cmd/restic/integration_test.go b/cmd/restic/integration_test.go
-index 7d198d33..1588ccb1 100644
---- a/cmd/restic/integration_test.go
-+++ b/cmd/restic/integration_test.go
-@@ -1170,6 +1170,7 @@ func TestRestoreLatest(t *testing.T) {
+diff --git a/cmd/restic/cmd_restore_integration_test.go b/cmd/restic/cmd_restore_integration_test.go
+index 2c7cbe1fb..f25f13754 100644
+--- a/cmd/restic/cmd_restore_integration_test.go
++++ b/cmd/restic/cmd_restore_integration_test.go
+@@ -200,6 +200,7 @@ func TestRestoreLatest(t *testing.T) {
  }
  
  func TestRestoreWithPermissionFailure(t *testing.T) {
@@ -21,5 +21,5 @@ index 7d198d33..1588ccb1 100644
  	defer cleanup()
  
 -- 
-2.29.2
+2.41.0
 

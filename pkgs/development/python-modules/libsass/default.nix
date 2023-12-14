@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "libsass";
   version = "0.22.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sass";
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     description = "Python binding for libsass to compile Sass/SCSS";
     homepage = "https://sass.github.io/libsass-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kipe";

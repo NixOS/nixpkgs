@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "easygui";
   version = "0.98.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +22,6 @@ buildPythonPackage rec {
     description = "Very simple, very easy GUI programming in Python";
     homepage = "https://github.com/robertlugg/easygui";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

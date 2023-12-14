@@ -7,11 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "doitintl";
     repo = "kube-no-trouble";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-QIvMhKAo30gInqJBpHvhcyjgVkdRqgBKwLQ80ng/75U=";
   };
 
-  vendorSha256 = "sha256-XXf6CPPHVvCTZA4Ve5/wmlgXQ/gZZUW0W/jXA0bJgLA=";
+  vendorHash = "sha256-XXf6CPPHVvCTZA4Ve5/wmlgXQ/gZZUW0W/jXA0bJgLA=";
 
   ldflags = [
     "-w" "-s"

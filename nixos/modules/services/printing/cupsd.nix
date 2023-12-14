@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups-filters;
+  inherit (pkgs) cups cups-pk-helper cups-filters xdg-utils;
 
   cfg = config.services.printing;
 
@@ -108,6 +108,12 @@ let
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
+  parsePorts = addresses: let
+    splitAddress = addr: strings.splitString ":" addr;
+    extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
+  in
+    builtins.map (address: strings.toInt (extractPort address)) addresses;
+
 in
 
 {
@@ -169,6 +175,15 @@ in
         apply = concatMapStringsSep "\n" (x: "Allow ${x}");
         description = lib.mdDoc ''
           From which hosts to allow unconditional access.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for TCP/UDP ports specified in
+          listenAdrresses option.
         '';
       };
 
@@ -313,7 +328,9 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
+    # https://github.com/NixOS/nixpkgs/pull/237994#issuecomment-1597510969
+    environment.systemPackages = [ cups.out xdg-utils ] ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
@@ -460,6 +477,13 @@ in
       '';
 
     security.pam.services.cups = {};
+
+    networking.firewall = let
+      listenPorts = parsePorts cfg.listenAddresses;
+    in mkIf cfg.openFirewall {
+      allowedTCPPorts = listenPorts;
+      allowedUDPPorts = listenPorts;
+    };
 
   };
 

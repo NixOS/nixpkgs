@@ -22,6 +22,7 @@
 , openssl
 , portaudioSupport ? stdenv.isDarwin
 , portaudio
+, slimserver
 , AudioToolbox
 , AudioUnit
 , Carbon
@@ -43,13 +44,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1430";
+  version = "1.9.9.1449";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "663db8f64d73dceca6a2a18cdb705ad846daa272";
-    hash = "sha256-PROb6d5ixO7lk/7wsjh2vkPkPgAvd6x+orQOY078IAs=";
+    rev = "8581aba8b1b67af272b89b62a7a9b56082307ab6";
+    hash = "sha256-/qyoc0/7Q8yiu5AhuLQFUiE88wf+/ejHjSucjpoN5bI=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -95,12 +96,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit (slimserver) tests;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
+    mainProgram = binName;
     maintainers = with maintainers; [ adamcstephens ];
     platforms = if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
   };

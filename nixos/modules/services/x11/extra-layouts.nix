@@ -3,7 +3,7 @@
 with lib;
 
 let
-  layouts = config.services.xserver.extraLayouts;
+  layouts = config.services.xserver.xkb.extraLayouts;
 
   layoutOpts = {
     options = {
@@ -15,10 +15,10 @@ let
       languages = mkOption {
         type = types.listOf types.str;
         description =
-        lib.mdDoc ''
-          A list of languages provided by the layout.
-          (Use ISO 639-2 codes, for example: "eng" for english)
-        '';
+          lib.mdDoc ''
+            A list of languages provided by the layout.
+            (Use ISO 639-2 codes, for example: "eng" for english)
+          '';
       };
 
       compatFile = mkOption {
@@ -80,29 +80,37 @@ let
   };
 
   xkb_patched = pkgs.xorg.xkeyboardconfig_custom {
-    layouts = config.services.xserver.extraLayouts;
+    layouts = config.services.xserver.xkb.extraLayouts;
   };
 
 in
 
 {
 
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2311;
+      from = [ "services" "xserver" "extraLayouts" ];
+      to = [ "services" "xserver" "xkb" "extraLayouts" ];
+    })
+  ];
+
   ###### interface
 
-  options.services.xserver = {
+  options.services.xserver.xkb = {
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
-      default = {};
+      default = { };
       example = literalExpression
-      ''
-        {
-          mine = {
-            description = "My custom xkb layout.";
-            languages = [ "eng" ];
-            symbolsFile = /path/to/my/layout;
-          };
-        }
-      '';
+        ''
+          {
+            mine = {
+              description = "My custom xkb layout.";
+              languages = [ "eng" ];
+              symbolsFile = /path/to/my/layout;
+            };
+          }
+        '';
       description = lib.mdDoc ''
         Extra custom layouts that will be included in the xkb configuration.
         Information on how to create a new layout can be found here:
@@ -121,11 +129,11 @@ in
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
       # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = config.services.xserver.xkbDir;
+      XKB_CONFIG_ROOT = config.services.xserver.xkb.dir;
     };
 
     services.xserver = {
-      xkbDir = "${xkb_patched}/etc/X11/xkb";
+      xkb.dir = "${xkb_patched}/etc/X11/xkb";
       exportConfiguration = config.services.xserver.displayManager.startx.enable
         || config.services.xserver.displayManager.sx.enable;
     };

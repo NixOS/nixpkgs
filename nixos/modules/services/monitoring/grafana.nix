@@ -10,7 +10,26 @@ let
   useMysql = cfg.settings.database.type == "mysql";
   usePostgresql = cfg.settings.database.type == "postgres";
 
-  settingsFormatIni = pkgs.formats.ini { };
+  # Prefer using the values from the default config file[0] directly. This way,
+  # people reading the NixOS manual can see them without cross-referencing the
+  # official documentation.
+  #
+  # However, if there is no default entry or if the setting is optional, use
+  # `null` as the default value. It will be turned into the empty string.
+  #
+  # If a setting is a list, always allow setting it as a plain string as well.
+  #
+  # [0]: https://github.com/grafana/grafana/blob/main/conf/defaults.ini
+  settingsFormatIni = pkgs.formats.ini {
+    listToValue = concatMapStringsSep " " (generators.mkValueStringDefault { });
+    mkKeyValue = generators.mkKeyValueDefault
+      {
+        mkValueString = v:
+          if v == null then ""
+          else generators.mkValueStringDefault { } v;
+      }
+      "=";
+  };
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
   mkProvisionCfg = name: attr: provisionCfg:
@@ -55,7 +74,7 @@ let
     fi
   '';
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
-    mkdir -p $out/{datasources,dashboards,notifiers,alerting}
+    mkdir -p $out/{alerting,datasources,dashboards,notifiers,plugins}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
     ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
     ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
@@ -69,27 +88,7 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
-  # FIXME(@Ma27) remove before 23.05. This is just a helper-type
-  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
-  # to `foo.bar.baz`.
-  submodule' = module: types.coercedTo
-    (mkOptionType {
-      name = "grafana-provision-submodule";
-      description = "Wrapper-type for backwards compat of Grafana's declarative provisioning";
-      check = x:
-        if builtins.isList x then
-          throw ''
-            Provisioning dashboards and datasources declaratively by
-            setting `dashboards` or `datasources` to a list is not supported
-            anymore. Use `services.grafana.provision.datasources.settings.datasources`
-            (or `services.grafana.provision.dashboards.settings.providers`) instead.
-          ''
-        else isAttrs x || isFunction x;
-    })
-    id
-    (types.submodule module);
-
-  # http://docs.grafana.org/administration/provisioning/#datasources
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -141,7 +140,7 @@ let
     };
   };
 
-  # http://docs.grafana.org/administration/provisioning/#dashboards
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards
   grafanaTypes.dashboardConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -311,12 +310,7 @@ in
       apply = x: if isList x then lib.unique x else x;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.grafana;
-      defaultText = literalExpression "pkgs.grafana";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "grafana" { };
 
     dataDir = mkOption {
       description = lib.mdDoc "Data directory.";
@@ -405,7 +399,6 @@ in
                 This setting is also important if you have a reverse proxy in front of Grafana that exposes it through a subpath.
                 In that case add the subpath to the end of this URL setting.
               '';
-              # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L54
               default = "%(protocol)s://%(domain)s:%(http_port)s/";
               type = types.str;
             };
@@ -453,16 +446,16 @@ in
               description = lib.mdDoc ''
                 Path to the certificate file (if `protocol` is set to `https` or `h2`).
               '';
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             cert_key = mkOption {
               description = lib.mdDoc ''
                 Path to the certificate key file (if `protocol` is set to `https` or `h2`).
               '';
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             socket_gid = mkOption {
@@ -505,8 +498,8 @@ in
                 For example, given a cdn url like `https://cdn.myserver.com`
                 grafana will try to load a javascript file from `http://cdn.myserver.com/grafana-oss/7.4.0/public/build/app.<hash>.js`.
               '';
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             read_timeout = mkOption {
@@ -572,7 +565,7 @@ in
 
             max_open_conn = mkOption {
               description = lib.mdDoc "The maximum number of open connections to the database.";
-              default = 0; # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L123-L124
+              default = 0;
               type = types.int;
             };
 
@@ -606,7 +599,7 @@ in
                 For Postgres, use either `disable`, `require` or `verify-full`.
                 For MySQL, use either `true`, `false`, or `skip-verify`.
               '';
-              default = "disable"; # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L134
+              default = "disable";
               type = types.enum [ "disable" "require" "verify-full" "true" "false" "skip-verify" ];
             };
 
@@ -621,20 +614,20 @@ in
 
             ca_cert_path = mkOption {
               description = lib.mdDoc "The path to the CA certificate to use.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             client_key_path = mkOption {
               description = lib.mdDoc "The path to the client key. Only if server requires client authentication.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             client_cert_path = mkOption {
               description = lib.mdDoc "The path to the client cert. Only if server requires client authentication.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             server_cert_name = mkOption {
@@ -642,8 +635,8 @@ in
                 The common name field of the certificate used by the `mysql` or `postgres` server.
                 Not necessary if `ssl_mode` is set to `skip-verify`.
               '';
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             path = mkOption {
@@ -751,8 +744,8 @@ in
                 Format: `ip_or_domain:port` separated by spaces.
                 PostgreSQL, MySQL, and MSSQL data sources do not use the proxy and are therefore unaffected by this setting.
               '';
-              default = "";
-              type = types.str;
+              default = [ ];
+              type = types.oneOf [ types.str (types.listOf types.str) ];
             };
 
             disable_brute_force_login_protection = mkOption {
@@ -870,6 +863,27 @@ in
             # how exactly the quoting of the default value works. See also
             # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L364
             # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L373
+
+            # These two options are lists joined with spaces:
+            # https://github.com/grafana/grafana/blob/916d9793aa81c2990640b55a15dee0db6b525e41/pkg/middleware/csrf/csrf.go#L37-L38
+
+            csrf_trusted_origins = mkOption {
+              description = lib.mdDoc ''
+                List of additional allowed URLs to pass by the CSRF check.
+                Suggested when authentication comes from an IdP.
+              '';
+              default = [ ];
+              type = types.oneOf [ types.str (types.listOf types.str) ];
+            };
+
+            csrf_additional_headers = mkOption {
+              description = lib.mdDoc ''
+                List of allowed headers to be set by the user.
+                Suggested to use for if authentication lives behind reverse proxies.
+              '';
+              default = [ ];
+              type = types.oneOf [ types.str (types.listOf types.str) ];
+            };
           };
 
           smtp = {
@@ -887,8 +901,8 @@ in
 
             user = mkOption {
               description = lib.mdDoc "User used for authentication.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             password = mkOption {
@@ -905,14 +919,14 @@ in
 
             cert_file = mkOption {
               description = lib.mdDoc "File path to a cert file.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             key_file = mkOption {
               description = lib.mdDoc "File path to a key file.";
-              default = "";
-              type = types.str;
+              default = null;
+              type = types.nullOr types.str;
             };
 
             skip_verify = mkOption {
@@ -931,6 +945,12 @@ in
               description = lib.mdDoc "Name to be used as client identity for EHLO in SMTP dialog.";
               default = "Grafana";
               type = types.str;
+            };
+
+            ehlo_identity = mkOption {
+              description = lib.mdDoc "Name to be used as client identity for EHLO in SMTP dialog.";
+              default = null;
+              type = types.nullOr types.str;
             };
 
             startTLS_policy = mkOption {
@@ -1050,6 +1070,8 @@ in
               type = types.str;
             };
 
+            # Lists are joined via space, so this option can't be a list.
+            # Users have to manually join their values.
             hidden_users = mkOption {
               description = lib.mdDoc ''
                 This is a comma-separated list of usernames.
@@ -1079,7 +1101,7 @@ in
                 It will notify, via the UI, when a new version is available.
                 The check itself will not prompt any auto-updates of the Grafana software, nor will it send any sensitive information.
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1113,7 +1135,7 @@ in
           Declaratively provision Grafana's datasources.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana datasource configuration in Nix. Can't be used with
@@ -1188,7 +1210,7 @@ in
           Declaratively provision Grafana's dashboards.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana dashboard configuration in Nix. Can't be used with
@@ -1726,7 +1748,7 @@ in
 
         # Warn about deprecated notifiers.
         deprecatedNotifiers = optional (cfg.provision.notifiers != [ ]) ''
-          Notifiers are deprecated upstream and will be removed in Grafana 10.
+          Notifiers are deprecated upstream and will be removed in Grafana 11.
           Use `services.grafana.provision.alerting.contactPoints` instead.
         '';
 
@@ -1809,11 +1831,12 @@ in
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir} -config ${configFile}
+        exec ${cfg.package}/bin/grafana server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
+        Restart = "on-failure";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening

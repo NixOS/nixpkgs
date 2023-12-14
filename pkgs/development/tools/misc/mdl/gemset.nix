@@ -48,10 +48,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gk42gayn8d2084ak6wvdwch00wb0acvncglfdhi5n0ap93q6wb6";
+      sha256 = "1a463jx8v4a3lgmmfalq73c337d66hc21q4vnfar1qf4lhk5wyi0";
       type = "gem";
     };
-    version = "0.12.0";
+    version = "0.13.0";
   };
   mixlib-cli = {
     groups = ["default"];

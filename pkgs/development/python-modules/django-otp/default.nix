@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "django-otp";
   version = "1.1.3";
+  format = "setuptools";
   disabled = pythonOlder "3";
 
   src = fetchFromGitHub {
@@ -42,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-model-utils";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

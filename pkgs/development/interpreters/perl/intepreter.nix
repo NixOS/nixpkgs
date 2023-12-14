@@ -63,16 +63,16 @@ stdenv.mkDerivation (rec {
   disallowedReferences = [ stdenv.cc ];
 
   patches =
-    [
-      # Do not look in /usr etc. for dependencies.
-      ./no-sys-dirs-5.31.patch
+    # Enable TLS/SSL verification in HTTP::Tiny by default
+    lib.optional (lib.versionOlder version "5.38.0") ./http-tiny-verify-ssl-by-default.patch
 
-      # Enable TLS/SSL verification in HTTP::Tiny by default
-      ./http-tiny-verify-ssl-by-default.patch
-    ]
+    # Do not look in /usr etc. for dependencies.
+    ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
+    ++ lib.optional (lib.versionAtLeast version "5.38.0") ./no-sys-dirs-5.38.0.patch
+
     ++ lib.optional stdenv.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-    ++ lib.optional crossCompiling ./MakeMaker-cross.patch;
+    ++ lib.optional crossCompiling ./cross.patch;
 
   # This is not done for native builds because pwd may need to come from
   # bootstrap tools when building bootstrap perl.
@@ -123,7 +123,7 @@ stdenv.mkDerivation (rec {
 
   dontAddPrefix = !crossCompiling;
 
-  enableParallelBuilding = !crossCompiling;
+  enableParallelBuilding = false;
 
   # perl includes the build date, the uname of the build system and the
   # username of the build user in some files.
@@ -150,6 +150,7 @@ stdenv.mkDerivation (rec {
     LIB          = ${zlib.out}/lib
     OLD_ZLIB     = False
     GZIP_OS_CODE = AUTO_DETECT
+    USE_ZLIB_NG  = False
     EOF
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
@@ -195,9 +196,11 @@ stdenv.mkDerivation (rec {
       substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
         --replace "${libcInc}" /no-such-path \
         --replace "${
-            if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
+            if stdenv.hasCC then stdenv.cc else "/no-such-path"
           }" /no-such-path \
-        --replace "${stdenv.cc}" /no-such-path \
+        --replace "${
+            if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
+        }" /no-such-path \
         --replace "$man" /no-such-path
     '' + lib.optionalString crossCompiling
       ''
@@ -225,21 +228,22 @@ stdenv.mkDerivation (rec {
 
   meta = with lib; {
     homepage = "https://www.perl.org/";
-    description = "The standard implementation of the Perl 5 programmming language";
+    description = "The standard implementation of the Perl 5 programming language";
     license = licenses.artistic1;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
+    mainProgram = "perl";
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-  crossVersion = "c876045741f5159318085d2737b0090f35a842ca"; # June 5, 2022
+  crossVersion = "84db4c71ae3d3b01fb2966cd15a060a7be334710"; # Nov 29, 2023
 
   perl-cross-src = fetchFromGitHub {
-    name = "perl-cross-unstable-${crossVersion}";
+    name = "perl-cross-${crossVersion}";
     owner = "arsv";
     repo = "perl-cross";
     rev = crossVersion;
-    sha256 = "sha256-m9UCoTQgXBxSgk9Q1Zv6wl3Qnd0aZm/jEPXkcMKti8U=";
+    sha256 = "sha256-1Zqw4sy/lD2nah0Z8rAE11tSpq1Ym9nBbatDczR+mxs=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];

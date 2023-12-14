@@ -3,7 +3,9 @@
 , ansible-core
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , glibcLocales
+, importlib-metadata
 , mock
 , openssh
 , pbr
@@ -21,15 +23,24 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.1";
+  version = "2.3.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HS8C06Ylc/OOaKI3kBGLeYF5HCvtK18i96NqIhwoh1Y=";
+    hash = "sha256-eaG9E02BPI6jdAWZxv2WGhFCXOd1fy/XJc9W1qGnI2w=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-tests.patch";
+      url = "https://github.com/ansible/ansible-runner/commit/0d522c90cfc1f305e118705a1b3335ccb9c1633d.patch";
+      hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
+      excludes = [ ".github/workflows/ci.yml" "tox.ini" ];
+    })
+  ];
 
   nativeBuildInputs = [
     pbr
@@ -42,6 +53,8 @@ buildPythonPackage rec {
     python-daemon
     pyyaml
     six
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -70,10 +83,6 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # test_process_isolation_settings is currently broken on Darwin Catalina
-    # https://github.com/ansible/ansible-runner/issues/413
-    "process_isolation_settings"
   ];
 
   disabledTestPaths = [
@@ -96,6 +105,6 @@ buildPythonPackage rec {
     description = "Helps when interfacing with Ansible";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

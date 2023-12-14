@@ -6,11 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pamela";
-  version = "1.0.0";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65c9389bef7d1bb0b168813b6be21964df32016923aac7515bdf05366acbab6c";
+    sha256 = "sha256-1LE5/mAOGS4Xaio2gFkgemv/oOeHmHmxP0/LoBY0gb4=";
   };
 
   postUnpack = ''

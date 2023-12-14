@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes
+{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes, python3
 , # build, install and link to a CDI library [default=no]
   enable_cdi_lib ? false
 , # build a completely statically linked CDO binary
@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cdo";
-  version = "2.0.5";
+  version = "2.2.2";
 
   # Dependencies
-  buildInputs = [ curl netcdf hdf5 ];
+  buildInputs = [ curl netcdf hdf5 python3 ];
 
   src = fetchurl {
-    url = "https://code.mpimet.mpg.de/attachments/download/26823/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7e678cOxofDGQtrmvIx2JODFS6vkYQZNxcfaykpbDc4=";
+    url = "https://code.mpimet.mpg.de/attachments/download/28882/${pname}-${version}.tar.gz";
+    sha256 = "sha256-QZx3MVJEAZr0GilsBQZvR0zMv5Tev6rp4hBtpRvHyTc=";
   };
 
  configureFlags = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       There are more than 600 operators available.
     '';
     homepage = "https://code.mpimet.mpg.de/projects/cdo/";
-    license = licenses.gpl2;
+    license = licenses.bsd3;
     maintainers = [ maintainers.ltavard ];
     platforms = with platforms; linux ++ darwin;
   };

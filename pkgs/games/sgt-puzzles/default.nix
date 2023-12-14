@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook, nixosTests
+, pkg-config, perl, wrapGAppsHook, nixosTests, writeScript
 , isMobile ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20220913.27dd36e";
+  version = "20231025.35f7965";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-fj1XWuXcW01uuC5dK2wDIrweyruSRdfEZBfmEj99zZE=";
+    hash = "sha256-c9D8lr5V/1BrKQjBsj931uGpnpR5p80CgP0Y/HNc40E=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -59,7 +59,18 @@ stdenv.mkDerivation rec {
     install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
 
-  passthru.tests.sgtpuzzles = nixosTests.sgtpuzzles;
+  passthru = {
+    tests.sgt-puzzles = nixosTests.sgt-puzzles;
+    updateScript = writeScript "update-sgt-puzzles" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      version="$(curl -sI 'https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz' | grep -Fi Location: | pcregrep -o1 'puzzles-([0-9a-f.]*).tar.gz')"
+      update-source-version sgt-puzzles "$version"
+    '';
+  };
 
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";

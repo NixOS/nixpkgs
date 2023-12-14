@@ -3,6 +3,11 @@
 
 { lib }:
 
+let
+  inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (builtins) isString match typeOf;
+
+in
 rec {
 
 
@@ -83,14 +88,21 @@ rec {
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
-  platformMatch = platform: elem: let
-      pattern =
-        if builtins.isString elem
-        then { system = elem; }
-        else if elem?parsed
-        then elem
-        else { parsed = elem; };
-    in lib.matchAttrs pattern platform;
+  platformMatch = platform: elem: (
+    # Check with simple string comparison if elem was a string.
+    #
+    # The majority of comparisons done with this function will be against meta.platforms
+    # which contains a simple platform string.
+    #
+    # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
+    # because this is a hot path for nixpkgs.
+    if isString elem then platform ? system && elem == platform.system
+    else matchAttrs (
+      # Normalize platform attrset.
+      if elem ? parsed then elem
+      else { parsed = elem; }
+    ) platform
+  );
 
   /* Check if a package is available on a given platform.
 
@@ -102,8 +114,8 @@ rec {
        2. None of `meta.badPlatforms` pattern matches the given platform.
   */
   availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
-    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
+    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
      from the SPDX ID.
@@ -132,10 +144,9 @@ rec {
         { shortName = licstr; }
       );
 
-  /* Get the path to the main program of a derivation with either
-     meta.mainProgram or pname or name
+  /* Get the path to the main program of a package based on meta.mainProgram
 
-     Type: getExe :: derivation -> string
+     Type: getExe :: package -> string
 
      Example:
        getExe pkgs.hello
@@ -143,6 +154,28 @@ rec {
        getExe pkgs.mustache-go
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
-  getExe = x:
-    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
+  getExe = x: getExe' x (x.meta.mainProgram or (
+    # This could be turned into an error when 23.05 is at end of life
+    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+    lib.getName
+    x
+  ));
+
+  /* Get the path of a program of a derivation.
+
+     Type: getExe' :: derivation -> string -> string
+     Example:
+       getExe' pkgs.hello "hello"
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe' pkgs.imagemagick "convert"
+       => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
+  */
+  getExe' = x: y:
+    assert assertMsg (isDerivation x)
+      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert assertMsg (isString y)
+      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert assertMsg (match ".*\/.*" y == null)
+      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    "${getBin x}/bin/${y}";
 }

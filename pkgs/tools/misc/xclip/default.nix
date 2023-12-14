@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/astrand/xclip";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
+    mainProgram = "xclip";
   };
 }

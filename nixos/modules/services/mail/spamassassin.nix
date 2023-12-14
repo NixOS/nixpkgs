@@ -77,9 +77,9 @@ in
           loadplugin Mail::SpamAssassin::Plugin::Check
           #loadplugin Mail::SpamAssassin::Plugin::DCC
           loadplugin Mail::SpamAssassin::Plugin::DKIM
+          loadplugin Mail::SpamAssassin::Plugin::DMARC
           loadplugin Mail::SpamAssassin::Plugin::DNSEval
           loadplugin Mail::SpamAssassin::Plugin::FreeMail
-          loadplugin Mail::SpamAssassin::Plugin::Hashcash
           loadplugin Mail::SpamAssassin::Plugin::HeaderEval
           loadplugin Mail::SpamAssassin::Plugin::HTMLEval
           loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch

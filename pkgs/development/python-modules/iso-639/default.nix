@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "iso-639";
   version = "0.4.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

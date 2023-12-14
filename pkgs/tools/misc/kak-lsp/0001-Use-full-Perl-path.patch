@@ -1,0 +1,37 @@
+From b93660cfa8a80a5e5bf72e1f06fb7bf95272c7e4 Mon Sep 17 00:00:00 2001
+From: PoweredByPie <poweredbypie@users.noreply.github.com>
+Date: Fri, 8 Dec 2023 04:39:01 -0800
+Subject: [PATCH] Use full Perl path
+
+---
+ rc/lsp.kak | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/rc/lsp.kak b/rc/lsp.kak
+index d695a2e..7c6a436 100644
+--- a/rc/lsp.kak
++++ b/rc/lsp.kak
+@@ -2339,11 +2339,6 @@ define-command -hidden lsp-snippets-insert-completion -params 1 %{ evaluate-comm
+ }}
+ 
+ define-command lsp-snippets-insert -hidden -params 1 %[
+-    evaluate-commands %sh{
+-        if ! command -v perl > /dev/null 2>&1; then
+-            printf "fail '''perl'' must be installed to use the ''snippets-insert'' command'"
+-        fi
+-    }
+     evaluate-commands -draft -save-regs '^"' %[
+         set-register '"' %arg{1}
+         execute-keys <a-P>
+@@ -2397,7 +2392,7 @@ define-command lsp-snippets-insert -hidden -params 1 %[
+ 
+ define-command -hidden lsp-snippets-insert-perl-impl %[
+     evaluate-commands %sh[ # $kak_quoted_selections
+-        perl -e '
++        @perlPath@/bin/perl -e '
+ use strict;
+ use warnings;
+ use Text::ParseWords();
+-- 
+2.42.0
+
