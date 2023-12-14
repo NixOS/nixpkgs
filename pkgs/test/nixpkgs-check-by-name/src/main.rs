@@ -4,6 +4,7 @@ mod references;
 mod structure;
 mod utils;
 mod validation;
+mod version;
 
 use crate::structure::check_structure;
 use crate::validation::Validation::Failure;
@@ -39,7 +40,7 @@ pub enum Version {
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match check_nixpkgs(&args.nixpkgs, args.version, vec![], &mut io::stderr()) {
+    match process(&args.nixpkgs, args.version, vec![], &mut io::stderr()) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -55,7 +56,7 @@ fn main() -> ExitCode {
     }
 }
 
-/// Checks whether the pkgs/by-name structure in Nixpkgs is valid.
+/// Does the actual work. This is the abstraction used both by `main` and the tests.
 ///
 /// # Arguments
 /// - `nixpkgs_path`: The path to the Nixpkgs to check
@@ -68,28 +69,23 @@ fn main() -> ExitCode {
 /// - `Err(e)` if an I/O-related error `e` occurred.
 /// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
 /// - `Ok(true)` if there are no problems
-pub fn check_nixpkgs<W: io::Write>(
+pub fn process<W: io::Write>(
     nixpkgs_path: &Path,
     version: Version,
     eval_accessible_paths: Vec<&Path>,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
-    let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
-        "Nixpkgs path {} could not be resolved",
-        nixpkgs_path.display()
-    ))?;
-
-    let check_result = if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
-        eprintln!(
-            "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
-            utils::BASE_SUBPATH
-        );
-        Success(())
-    } else {
-        check_structure(&nixpkgs_path)?.result_map(|package_names|
-            // Only if we could successfully parse the structure, we do the evaluation checks
-            eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths))?
-    };
+    let nixpkgs_result = check_nixpkgs(nixpkgs_path, eval_accessible_paths)?;
+    let check_result = nixpkgs_result.result_map(|nixpkgs_version| {
+        let empty_non_auto_called_base = match version {
+            Version::V0 => version::EmptyNonAutoCalled::Invalid,
+            Version::V1 => version::EmptyNonAutoCalled::Valid,
+        };
+        Ok(version::Nixpkgs::compare(
+            &empty_non_auto_called_base,
+            nixpkgs_version,
+        ))
+    })?;
 
     match check_result {
         Failure(errors) => {
@@ -102,9 +98,35 @@ pub fn check_nixpkgs<W: io::Write>(
     }
 }
 
+/// Checks whether the pkgs/by-name structure in Nixpkgs is valid,
+/// and returns to which degree it's valid for checks with increased strictness.
+pub fn check_nixpkgs(
+    nixpkgs_path: &Path,
+    eval_accessible_paths: Vec<&Path>,
+) -> validation::Result<version::Nixpkgs> {
+    Ok({
+        let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
+            "Nixpkgs path {} could not be resolved",
+            nixpkgs_path.display()
+        ))?;
+
+        if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
+            eprintln!(
+                "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
+                utils::BASE_SUBPATH
+            );
+            Success(version::Nixpkgs::default())
+        } else {
+            check_structure(&nixpkgs_path)?.result_map(|package_names|
+                // Only if we could successfully parse the structure, we do the evaluation checks
+                eval::check_values(&nixpkgs_path, package_names, eval_accessible_paths))?
+        }
+    })
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::check_nixpkgs;
+    use crate::process;
     use crate::utils;
     use crate::Version;
     use anyhow::Context;
@@ -195,7 +217,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            check_nixpkgs(&path, Version::V1, vec![&extra_nix_path], &mut writer)
+            process(&path, Version::V1, vec![&extra_nix_path], &mut writer)
                 .context(format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

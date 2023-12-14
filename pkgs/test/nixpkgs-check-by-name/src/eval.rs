@@ -1,7 +1,7 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
 use crate::validation::{self, Validation::Success};
-use crate::Version;
+use crate::version;
 use std::path::Path;
 
 use anyhow::Context;
@@ -39,11 +39,10 @@ enum AttributeVariant {
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values(
-    version: Version,
     nixpkgs_path: &Path,
     package_names: Vec<String>,
     eval_accessible_paths: Vec<&Path>,
-) -> validation::Result<()> {
+) -> validation::Result<version::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
@@ -110,8 +109,8 @@ pub fn check_values(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    Ok(validation::sequence_(package_names.iter().map(
-        |package_name| {
+    Ok(
+        validation::sequence(package_names.iter().map(|package_name| {
             let relative_package_file = structure::relative_file_for_package(package_name);
             let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
@@ -126,23 +125,25 @@ pub fn check_values(
                     Success(())
                 };
 
-                check_result.and(match &attribute_info.variant {
-                    AttributeVariant::AutoCalled => Success(()),
+                let check_result = check_result.and(match &attribute_info.variant {
+                    AttributeVariant::AutoCalled => Success(version::Attribute {
+                        empty_non_auto_called: version::EmptyNonAutoCalled::Valid,
+                    }),
                     AttributeVariant::CallPackage { path, empty_arg } => {
                         let correct_file = if let Some(call_package_path) = path {
                             absolute_package_file == *call_package_path
                         } else {
                             false
                         };
-                        // Only check for the argument to be non-empty if the version is V1 or
-                        // higher
-                        let non_empty = if version >= Version::V1 {
-                            !empty_arg
-                        } else {
-                            true
-                        };
-                        if correct_file && non_empty {
-                            Success(())
+
+                        if correct_file {
+                            Success(version::Attribute {
+                                empty_non_auto_called: if *empty_arg {
+                                    version::EmptyNonAutoCalled::Invalid
+                                } else {
+                                    version::EmptyNonAutoCalled::Valid
+                                },
+                            })
                         } else {
                             NixpkgsProblem::WrongCallPackage {
                                 relative_package_file: relative_package_file.clone(),
@@ -156,7 +157,9 @@ pub fn check_values(
                         package_name: package_name.clone(),
                     }
                     .into(),
-                })
+                });
+
+                check_result.map(|value| (package_name.clone(), value))
             } else {
                 NixpkgsProblem::UndefinedAttr {
                     relative_package_file: relative_package_file.clone(),
@@ -164,6 +167,9 @@ pub fn check_values(
                 }
                 .into()
             }
-        },
-    )))
+        }))
+        .map(|elems| version::Nixpkgs {
+            attributes: elems.into_iter().collect(),
+        }),
+    )
 }
