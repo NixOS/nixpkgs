@@ -20,7 +20,7 @@ let
   inherit (lib) makeBinPath;
 
 in
-python39.pkgs.buildPythonPackage rec {
+python39.pkgs.buildPythonApplication rec {
   pname = "waagent";
   version = "2.8.0.11";
   src = fetchFromGitHub {
