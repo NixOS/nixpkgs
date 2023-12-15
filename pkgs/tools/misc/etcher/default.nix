@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bash,
-  util-linux,
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  udev,
-  electron_25,
+{ lib
+, stdenv
+, fetchurl
+, bash
+, util-linux
+, autoPatchelfHook
+, dpkg
+, makeWrapper
+, udev
+, electron_25
 }:
+
 stdenv.mkDerivation rec {
   pname = "etcher";
   version = "1.18.13"; # 1.18.13 uses electron 25
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     homepage = "https://etcher.io/";
     license = licenses.asl20;
     mainProgram = pname;
-    maintainers = with maintainers; [wegank];
-    platforms = ["x86_64-linux"];
-    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    maintainers = with maintainers; [ wegank ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
