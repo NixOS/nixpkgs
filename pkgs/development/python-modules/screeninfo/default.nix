@@ -1,14 +1,5 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, libX11
-, libXinerama
-, libXrandr
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, libX11, libXinerama
+, libXrandr, poetry-core, pytestCheckHook, pythonOlder, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "screeninfo";
@@ -24,8 +15,24 @@ buildPythonPackage rec {
     hash = "sha256-TEy4wff0eRRkX98yK9054d33Tm6G6qWrd9Iv+ITcFmA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  nativeBuildInputs = [ poetry-core ];
+
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      url =
+        "https://github.com/rr-/screeninfo/commit/26647c49000397236c0fbd023e90a6de80233d3a.patch";
+      hash = "sha256-wTZK1H7qKujfzFT4SMGOGUpo5ueC+sHbMPQIDQ6X4C0=";
+    })
+    (fetchpatch {
+      url =
+        "https://github.com/rr-/screeninfo/commit/14de5bcae417fb85e3071bdaf2e7d2448a246a12.patch";
+      hash = "sha256-7VRn7uzU9InwKzpYl99KHDV8hqyEeG69fwzdBgVrGH8=";
+    })
+    (fetchpatch {
+      url =
+        "https://github.com/rr-/screeninfo/commit/7de22e3fc4662586e13e87fbd65684efe0cca05e.patch";
+      hash = "sha256-InbqJwAxP1TpAxlKx1cdumA5ozO6HHo5jNTb5tx78K8=";
+    })
   ];
 
   postPatch = ''
@@ -37,9 +44,7 @@ buildPythonPackage rec {
       --replace 'load_library("Xrandr")' 'ctypes.cdll.LoadLibrary("${libXrandr}/lib/libXrandr.so")'
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # We don't have a screen
@@ -49,10 +54,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "screeninfo" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [ nickhu techknowlogick ];
   };
 }
