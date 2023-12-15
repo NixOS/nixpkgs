@@ -2145,7 +2145,7 @@ with pkgs;
   vrrtest = callPackage ../tools/video/vrrtest { };
 
   winbox = callPackage ../tools/admin/winbox {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.stable;
   };
 
   wtwitch = callPackage ../tools/video/wtwitch { };
