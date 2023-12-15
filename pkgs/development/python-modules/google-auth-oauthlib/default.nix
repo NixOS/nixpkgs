@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g+qMOwiB5FN5C6/0RI6KYRKsh3jR3p2gtoAQuEOTevs=";
+    hash = "sha256-KS0tN4M0nysHNKCgIHseHjIqwZPCwJ2PfGE/t8xQHqg=";
   };
 
   propagatedBuildInputs = [
