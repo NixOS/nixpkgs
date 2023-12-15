@@ -1,7 +1,7 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
+use crate::ratchet;
 use crate::structure;
 use crate::validation::{self, Validation::Success};
-use crate::version;
 use std::path::Path;
 
 use anyhow::Context;
@@ -42,7 +42,7 @@ pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
     eval_accessible_paths: &[&Path],
-) -> validation::Result<version::Nixpkgs> {
+) -> validation::Result<ratchet::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
@@ -126,8 +126,8 @@ pub fn check_values(
                 };
 
                 let check_result = check_result.and(match &attribute_info.variant {
-                    AttributeVariant::AutoCalled => Success(version::Attribute {
-                        empty_non_auto_called: version::EmptyNonAutoCalled::Valid,
+                    AttributeVariant::AutoCalled => Success(ratchet::Package {
+                        empty_non_auto_called: ratchet::EmptyNonAutoCalled::Valid,
                     }),
                     AttributeVariant::CallPackage { path, empty_arg } => {
                         let correct_file = if let Some(call_package_path) = path {
@@ -137,11 +137,12 @@ pub fn check_values(
                         };
 
                         if correct_file {
-                            Success(version::Attribute {
+                            Success(ratchet::Package {
+                                // Empty arguments for non-auto-called packages are not allowed anymore.
                                 empty_non_auto_called: if *empty_arg {
-                                    version::EmptyNonAutoCalled::Invalid
+                                    ratchet::EmptyNonAutoCalled::Invalid
                                 } else {
-                                    version::EmptyNonAutoCalled::Valid
+                                    ratchet::EmptyNonAutoCalled::Valid
                                 },
                             })
                         } else {
@@ -168,8 +169,8 @@ pub fn check_values(
                 .into()
             }
         }))
-        .map(|elems| version::Nixpkgs {
-            attributes: elems.into_iter().collect(),
+        .map(|elems| ratchet::Nixpkgs {
+            packages: elems.into_iter().collect(),
         }),
     )
 }

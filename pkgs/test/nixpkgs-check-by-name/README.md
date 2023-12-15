@@ -10,13 +10,15 @@ This API may be changed over time if the CI workflow making use of it is adjuste
 
 - Command line: `nixpkgs-check-by-name [--base <BASE_NIXPKGS>] <NIXPKGS>`
 - Arguments:
-  - `<NIXPKGS>`: The path to the Nixpkgs to check.
-  - `<BASE_NIXPKGS>`: The path to the Nixpkgs to use as the base to compare `<NIXPKGS>` against.
-    This allows the strictness of checks to increase over time by only preventing _new_ violations from being introduced,
-    while allowing violations that already existed.
+  - `<NIXPKGS>`:
+    The path to the Nixpkgs to check.
+    For PRs, this should be set to a checkout of the PR branch.
+  - `<BASE_NIXPKGS>`:
+    The path to the Nixpkgs to use as the [ratchet check](#ratchet-checks) base.
+    For PRs, this should be set to a checkout of the PRs base branch.
 
-    If not specified, all violations of stricter checks are allowed.
-    However, this flag will become required once CI passes it.
+    If not specified, no ratchet checks will be performed.
+    However, this flag will become required once CI uses it.
 - Exit code:
   - `0`: If the [validation](#validity-checks) is successful
   - `1`: If the [validation](#validity-checks) is not successful
@@ -41,9 +43,19 @@ These checks are performed by this tool:
 
 ### Nix evaluation checks
 - `pkgs.${name}` is defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
-  - If `pkgs.${name}` is not auto-called from `pkgs/by-name`, `args` must not be empty,
-    with the exception that if `BASE_NIXPKGS` also has a definition for the same package with empty `args`, it's allowed
 - `pkgs.lib.isDerivation pkgs.${name}` is `true`.
+
+### Ratchet checks
+
+Furthermore, this tool implements certain [ratchet](https://qntm.org/ratchet) checks.
+This allows gradually phasing out deprecated patterns without breaking the base branch or having to migrate it all at once.
+It works by not allowing new instances of the pattern to be introduced, but allowing already existing instances.
+The existing instances are coming from `<BASE_NIXPKGS>`, which is then checked against `<NIXPKGS>` for new instances.
+Ratchets should be removed eventually once the pattern is not used anymore.
+
+The current ratchets are:
+
+- If `pkgs.${name}` is not auto-called from `pkgs/by-name`, the `args` in its `callPackage` must not be empty,
 
 ## Development
 
@@ -88,7 +100,7 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
 
 - `base` (optional):
   Contains another subdirectory imitating Nixpkgs with potentially any of the above structures.
-  This will be used as the `--base` argument, allowing tests of gradual transitions.
+  This is used for [ratchet checks](#ratchet-checks).
 
 - `expected` (optional):
   A file containing the expected standard output.

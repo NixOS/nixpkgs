@@ -1,15 +1,14 @@
 mod eval;
 mod nixpkgs_problem;
+mod ratchet;
 mod references;
 mod structure;
 mod utils;
 mod validation;
-mod version;
 
 use crate::structure::check_structure;
 use crate::validation::Validation::Failure;
 use crate::validation::Validation::Success;
-use crate::version::Nixpkgs;
 use anyhow::Context;
 use clap::Parser;
 use colored::Colorize;
@@ -21,10 +20,14 @@ use std::process::ExitCode;
 #[derive(Parser, Debug)]
 #[command(about)]
 pub struct Args {
-    /// Path to nixpkgs
+    /// Path to the main Nixpkgs to check.
+    /// For PRs, this should be set to a checkout of the PR branch.
     nixpkgs: PathBuf,
 
-    /// Path to the base Nixpkgs to compare against
+    /// Path to the base Nixpkgs to run ratchet checks against.
+    /// For PRs, this should be set to a checkout of the PRs base branch.
+    /// If not specified, no ratchet checks will be performed.
+    /// However, this flag will become required once CI uses it.
     #[arg(long)]
     base: Option<PathBuf>,
 }
@@ -50,8 +53,8 @@ fn main() -> ExitCode {
 /// Does the actual work. This is the abstraction used both by `main` and the tests.
 ///
 /// # Arguments
-/// - `base_nixpkgs`: The path to the base Nixpkgs to compare against
-/// - `main_nixpkgs`: The path to the main Nixpkgs to check
+/// - `base_nixpkgs`: Path to the base Nixpkgs to run ratchet checks against.
+/// - `main_nixpkgs`: Path to the main Nixpkgs to check.
 /// - `eval_accessible_paths`:
 ///   Extra paths that need to be accessible to evaluate Nixpkgs using `restrict-eval`.
 ///   This is used to allow the tests to access the mock-nixpkgs.nix file
@@ -67,19 +70,22 @@ pub fn process<W: io::Write>(
     eval_accessible_paths: &[&Path],
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
+    // Check the main Nixpkgs first
     let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths, error_writer)?;
     let check_result = main_result.result_map(|nixpkgs_version| {
+        // If the main Nixpkgs doesn't have any problems, run the ratchet checks against the base
+        // Nixpkgs
         if let Some(base) = base_nixpkgs {
             check_nixpkgs(base, eval_accessible_paths, error_writer)?.result_map(
                 |base_nixpkgs_version| {
-                    Ok(Nixpkgs::compare(
+                    Ok(ratchet::Nixpkgs::compare(
                         Some(base_nixpkgs_version),
                         nixpkgs_version,
                     ))
                 },
             )
         } else {
-            Ok(Nixpkgs::compare(None, nixpkgs_version))
+            Ok(ratchet::Nixpkgs::compare(None, nixpkgs_version))
         }
     })?;
 
@@ -96,16 +102,14 @@ pub fn process<W: io::Write>(
 
 /// Checks whether the pkgs/by-name structure in Nixpkgs is valid.
 ///
-/// This does not include checks that depend on the base version of Nixpkgs to compare against,
-/// which is used for checks that were only introduced later and increased strictness.
-///
-/// Instead a `version::Nixpkgs` is returned, whose `compare` method allows comparing the
-/// result of this function for the base Nixpkgs against the one for the main Nixpkgs.
+/// This does not include ratchet checks, see ../README.md#ratchet-checks
+/// Instead a `ratchet::Nixpkgs` value is returned, whose `compare` method allows performing the
+/// ratchet check against another result.
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
     eval_accessible_paths: &[&Path],
     error_writer: &mut W,
-) -> validation::Result<version::Nixpkgs> {
+) -> validation::Result<ratchet::Nixpkgs> {
     Ok({
         let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
             "Nixpkgs path {} could not be resolved",
@@ -118,7 +122,7 @@ pub fn check_nixpkgs<W: io::Write>(
                 "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
                 utils::BASE_SUBPATH
             )?;
-            Success(version::Nixpkgs::default())
+            Success(ratchet::Nixpkgs::default())
         } else {
             check_structure(&nixpkgs_path)?.result_map(|package_names|
                 // Only if we could successfully parse the structure, we do the evaluation checks

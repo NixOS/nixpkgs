@@ -1,30 +1,28 @@
+//! This module implements the ratchet checks, see ../README.md#ratchet-checks
+//!
+//! Each type has a `compare` method that validates the ratchet checks for that item.
+
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
 use crate::validation::{self, Validation, Validation::Success};
 use std::collections::HashMap;
 
-/// The check version conformity of a Nixpkgs path:
-/// When the strictness of the check increases, this structure should be extended to distinguish
-/// between parts that are still valid, and ones that aren't valid anymore.
+/// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
 pub struct Nixpkgs {
-    /// The package attributes tracked in `pkgs/by-name`
-    pub attributes: HashMap<String, Attribute>,
+    /// The ratchet values for each package in `pkgs/by-name`
+    pub packages: HashMap<String, Package>,
 }
 
 impl Nixpkgs {
-    /// Compares two Nixpkgs versions against each other, returning validation errors only if the
-    /// `from` version satisfied the stricter checks, while the `to` version doesn't satisfy them
-    /// anymore.
-    /// This enables a gradual transition from weaker to stricter checks, by only allowing PRs to
-    /// increase strictness.
+    /// Validates the ratchet checks for Nixpkgs
     pub fn compare(optional_from: Option<Self>, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
-            to.attributes.into_iter().map(|(name, attr_to)| {
+            to.packages.into_iter().map(|(name, attr_to)| {
                 let attr_from = if let Some(from) = &optional_from {
-                    from.attributes.get(&name)
+                    from.packages.get(&name)
                 } else {
                     // This pretends that if there's no base version to compare against, all
                     // attributes existed without conforming to the new strictness check for
@@ -32,22 +30,24 @@ impl Nixpkgs {
                     // TODO: Remove this case. This is only needed because the `--base`
                     // argument is still optional, which doesn't need to be once CI is updated
                     // to pass it.
-                    Some(&Attribute {
+                    Some(&Package {
                         empty_non_auto_called: EmptyNonAutoCalled::Invalid,
                     })
                 };
-                Attribute::compare(&name, attr_from, &attr_to)
+                Package::compare(&name, attr_from, &attr_to)
             }),
         )
     }
 }
 
-/// The check version conformity of an attribute defined by `pkgs/by-name`
-pub struct Attribute {
+/// The ratchet value for a single package in `pkgs/by-name`
+pub struct Package {
+    /// The ratchet value for the check for non-auto-called empty arguments
     pub empty_non_auto_called: EmptyNonAutoCalled,
 }
 
-impl Attribute {
+impl Package {
+    /// Validates the ratchet checks for a single package defined in `pkgs/by-name`
     pub fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
         EmptyNonAutoCalled::compare(
             name,
@@ -57,17 +57,19 @@ impl Attribute {
     }
 }
 
-/// Whether an attribute conforms to the new strictness check that
-/// `callPackage ... {}` is not allowed anymore in `all-package.nix`
+/// The ratchet value of a single package in `pkgs/by-name`
+/// for the non-auto-called empty argument check of a single.
+///
+/// This checks that packages defined in `pkgs/by-name` cannot be overridden
+/// with an empty second argument like `callPackage ... { }`.
 #[derive(PartialEq, PartialOrd)]
 pub enum EmptyNonAutoCalled {
-    /// The attribute is not valid anymore with the new check
     Invalid,
-    /// The attribute is still valid with the new check
     Valid,
 }
 
 impl EmptyNonAutoCalled {
+    /// Validates the non-auto-called empty argument ratchet check for a single package defined in `pkgs/by-name`
     fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
         let from = optional_from.unwrap_or(&Self::Valid);
         if to >= from {
