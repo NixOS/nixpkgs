@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rofi modi that allows controlling rofi content through communication with an external program";
     homepage = "https://github.com/OmarCastro/rofi-blocks";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ edenkras ];
     platforms = platforms.linux;
   };
