@@ -2,13 +2,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "cope";
-  version = "unstable-2015-01-29";
+  version = "unstable-2023-08-11";
 
   src = fetchFromGitHub {
-    owner = "lotrfan";
+    owner = "deftdawg";
     repo = pname;
-    rev = "0dc82a939a9498ff80caf472841c279dfe03efae";
-    sha256 = "sha256-Tkv26M6YnaUB0nudjKGG482fvUkCobPk0VF1manBCoY=";
+    rev = "b6f3d56dbe49c02c98eaadc763fd6cb35c01933b";
+    sha256 = "sha256-Slno/ke1XaHoIExbFwS3Rs/x1yno6E7rwQeJHpvFahM=";
   };
 
   buildInputs = with perlPackages; [ EnvPath FileShareDir IOPty IOStty ListMoreUtils RegexpCommon RegexpIPv6 ];
@@ -21,7 +21,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     description = "A colourful wrapper for terminal programs";
-    homepage = "https://github.com/lotrfan/cope";
+    homepage = "https://github.com/deftdawg/cope";
     license = with licenses; [ artistic1 gpl1Plus ];
     maintainers = with maintainers; [ ];
   };
