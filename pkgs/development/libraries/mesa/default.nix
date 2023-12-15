@@ -95,8 +95,10 @@ let
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
   haveWayland = lib.elem "wayland" eglPlatforms;
-  haveZink = lib.elem "zink" galliumDrivers;
-  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
+  haveAllGallium = lib.elem "all" galliumDrivers;
+  haveAllVulkan = lib.elem "all" vulkanDrivers;
+  haveZink = haveAllGallium || lib.elem "zink" galliumDrivers;
+  haveDozen = haveAllGallium || (lib.elem "d3d12" galliumDrivers) || haveAllVulkan || (lib.elem "microsoft-experimental" vulkanDrivers);
 self = stdenv.mkDerivation {
   pname = "mesa";
   inherit version;
