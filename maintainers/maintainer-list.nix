@@ -19719,6 +19719,15 @@
     githubId = 20464732;
     name = "Willi Butz";
   };
+  willow_ch = {
+    email = "nix@w.wolo.dev";
+    github = "spaghetus";
+    githubId = 28763739;
+    name = "Willow Carlson-Huber";
+    keys = [{
+      fingerprint = "FE21E0981CDFD50ADD086423C21A693BA4693A60";
+    }];
+  };
   willswats = {
     email = "williamstuwatson@gmail.com";
     github = "willswats";
