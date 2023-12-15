@@ -16,6 +16,8 @@ let
     sha256 = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
   };
 
+  gradleWithJdk = gradle.override { java = jdk17_headless; };
+
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
     # from https://gitlab.com/signald/signald/-/blob/0.23.0/build.gradle#L173
@@ -39,7 +41,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradleWithJdk perl ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -118,7 +120,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle makeWrapper ];
+  nativeBuildInputs = [ git gradleWithJdk makeWrapper ];
 
   doCheck = true;
 

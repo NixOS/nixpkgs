@@ -404,7 +404,7 @@ in
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <https://www.postgresql.org/docs/15/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
           for an overview of `postgresql.conf`.
 
           ::: {.note}
