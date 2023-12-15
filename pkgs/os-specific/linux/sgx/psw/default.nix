@@ -5,14 +5,11 @@
 , coreutils
 , curl
 , file
-, glibc
 , makeWrapper
 , nixosTests
 , protobuf
 , python3
 , sgx-sdk
-, shadow
-, systemd
 , util-linux
 , which
 , debug ? false
@@ -25,14 +22,14 @@ stdenv.mkDerivation rec {
     let
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
+        hash = "sha256-ggxxP2tFMbe6R1/bKI1hZkcnfVqxYBmYxtxQ12G4hp4=";
       };
       dcap = rec {
-        version = "1.13";
+        version = "1.19";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-0kD6hxN8qZ/7/H99aboQx7Qg7ewmYPEexoU6nqczAik=";
+          hash = "sha256-u7MfN2+vLD8e/i6KznNdvPzHJmZ8DwSXHGOeaIe3YWg=";
         };
       };
     in

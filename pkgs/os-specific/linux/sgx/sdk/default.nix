@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, fetchzip
 , autoconf
 , automake
 , binutils
@@ -13,10 +12,9 @@
 , git
 , libtool
 , linkFarmFromDrvs
-, nasm
 , ocaml
 , ocamlPackages
-, openssl_1_1
+, openssl
 , perl
 , python3
 , texinfo
@@ -29,15 +27,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.16.100.4";
+  version = "2.22.100.3";
   # Version as used in the Git tag
-  versionTag = "2.16";
+  versionTag = "2.12";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-qgXuJJWiqmcU11umCsE3DnlK4VryuTDAsNf53YPw6UY=";
+    hash = "sha256-YzngoFVW8L7rTNMugC5WUuFsO6bzXmTrX1F65LFcUn8=";
     fetchSubmodules = true;
   };
 
@@ -84,7 +82,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    openssl_1_1
+    openssl
   ];
 
   BINUTILS_DIR = "${binutils}/bin";
@@ -101,11 +99,13 @@ stdenv.mkDerivation rec {
       nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
       ipp-crypto-cve_2020_0551_load = callPackage ./ipp-crypto.nix {
         extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
+        nameSuffix = "-load";
       };
 
       nasm-cf = writeShellScript "nasm-cf" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
       ipp-crypto-cve_2020_0551_cf = callPackage ./ipp-crypto.nix {
         extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
+        nameSuffix = "-cf";
       };
     in
     ''
