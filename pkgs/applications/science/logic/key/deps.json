@@ -1,0 +1,614 @@
+{
+ "https://jcenter.bintray.com": {
+  "com/google/guava#guava-jdk5/17.0": {
+   "jar": "Wb9FZUe23aPO2WjLVvfy0+FEdOLeKWCjLEfjHB5FbGE=",
+   "pom": "+MFSYngT1FvE58wXrW7WpkmgIxroGf+44F0ZsgWj22Y="
+  },
+  "com/google/guava#guava-parent-jdk5/17.0": {
+   "pom": "WpYGvCdjKVazwR34h+mz54WFQGiqpOCAjtVmD2Cx+28="
+  },
+  "com/mycila#license-maven-plugin-parent/3.0": {
+   "pom": "DR8XPOud8hKSZ2Z8EMiR5eXXJm2C46hQcGaNtW2wy/o="
+  },
+  "com/mycila#license-maven-plugin/3.0": {
+   "jar": "Ul/o866FI9Be7ac2ZFxB6cMw8CV4K1s95u8Lqs8teMw=",
+   "pom": "kmJwjckIctcrvmfLFVITU6feJkgJzh6zLflfvqR2/IM="
+  },
+  "com/mycila#mycila-pom/3": {
+   "pom": "QCd6OyVlPuZDPEaFLacOlzbBmNlLyvbSw0cIqHOjGyY="
+  },
+  "com/mycila#mycila-xmltool/4.4.ga": {
+   "jar": "ddeyvpOBpl9vrDLzEIIhEvgFVm6fipekXY8Tz1UEnOA=",
+   "pom": "wMaee7roquvUQOFnjOn1AotD07ToHNQ26Y+BOkvDIrI="
+  },
+  "com/mycila/xmltool#xmltool/3.3": {
+   "jar": "hw+TlnieL0inuPso38BwwvjnSyAHJ0ziPmm2WBEP0pQ=",
+   "pom": "64P2FpRcjH37TYDm+QnnKG9SO7EQd4ArzSFr1w6ccXo="
+  },
+  "commons-io#commons-io/2.11.0": {
+   "jar": "lhsvbYfbrMXVSr9Fq3puJJX4m3VZiWLYxyPOqbwhCQg=",
+   "pom": "LgFv1+MkS18sIKytg02TqkeQSG7h5FZGQTYaPoMe71k="
+  },
+  "commons-io#commons-io/2.4": {
+   "jar": "zGpB3D6qzJ5ECmvQ0okLINNrTuQI/i1nEi8yi7bgFYE=",
+   "pom": "srXdRs+Zj6Ym62+KHBFPYWfI05JpQWTmJTPliY6bMfI="
+  },
+  "commons-logging#commons-logging/1.1.1": {
+   "jar": "zm+RPK0fDbOq1wGG1lxbx//Mmpnj/o4LE3MSgZ98Ni8=",
+   "pom": "0PLhbQVOi7l63ZyiZSXrI0b2koCfzSooeH2ozrPDXug="
+  },
+  "org/apache#apache/10": {
+   "pom": "gC/uznKFLa/L0KQlpgNnxyxcubbqWq5ZSBEoVpGJ2vk="
+  },
+  "org/apache#apache/13": {
+   "pom": "/1E9sDYf1BI3vvR4SWi8FarkeNTsCpSW+BEHLMrzhB0="
+  },
+  "org/apache#apache/16": {
+   "pom": "n4X/L9fWyzCXqkf7QZ7n8OvoaRCfmKup9Oyj9J50pA4="
+  },
+  "org/apache#apache/23": {
+   "pom": "vBBiTgYj82V3+sVjnKKTbTJA7RUvttjVM6tNJwVDSRw="
+  },
+  "org/apache#apache/4": {
+   "pom": "npMjomuo6yOU7+8MltMbcN9XCAhjDcFHyrHnNUHMUZQ="
+  },
+  "org/apache#apache/9": {
+   "pom": "SUbmClR8jtpp87wjxbbw2tz4Rp6kmx0dp940rs/PGN0="
+  },
+  "org/apache/ant#ant-launcher/1.10.11": {
+   "jar": "2rUw33qYC1rI/X6NIIJDrg0+vW3gmxqiznVjYMwu0lY=",
+   "pom": "7SoGiCYb624I7FSzgxLx1ILM8aO4Y8R9KNW5CkRtHB4="
+  },
+  "org/apache/ant#ant-parent/1.10.11": {
+   "pom": "V6BTJoLzD6MHQWoiWSnVcQrNpy17Je4IyvmNyCzTXbY="
+  },
+  "org/apache/ant#ant/1.10.11": {
+   "jar": "iMC4m7uq4B4Nn8rpO+eS9au+NAkQb47uhY/fNl28B1Q=",
+   "pom": "wiiU2ctGq/XOv27rK8z+TXjhju6jEaDqat3VnftLH+M="
+  },
+  "org/apache/commons#commons-collections4/4.1": {
+   "jar": "sf6LWWi1fYRlQlNX7S2dxpVQRRi+0t9bVlxLjmjByKU=",
+   "pom": "wK1C6RA1N5YNmnTaWOzCTdGjehPR5MSPCWm+k+QBg2k="
+  },
+  "org/apache/commons#commons-lang3/3.4": {
+   "jar": "c0yDVkIMyOMMeV1k/R/NXUTqnZA0KizDJixRWPvG2Ys=",
+   "pom": "aG51tWGhPBAx1Dp2R6Nk4u0+RWRnBQ6sRSe5SwbXP9E="
+  },
+  "org/apache/commons#commons-parent/25": {
+   "pom": "RnrmUEQuh2hnN5CU51GN/dZ9IsU1Lr05gIyEJZ6XkLo="
+  },
+  "org/apache/commons#commons-parent/33": {
+   "pom": "U9ABE1Li5RBvN52vzNrHdU7G8PeCQ8AwXklp9azd+Ps="
+  },
+  "org/apache/commons#commons-parent/37": {
+   "pom": "7nBaTdaNjc2cyNEknVeQhh6xRc57DG1sBVW6lEidAUs="
+  },
+  "org/apache/commons#commons-parent/38": {
+   "pom": "VY2WF0Xrrcxdw5HP3n1HQIbUyq7iTdPm35Me2fa1tJU="
+  },
+  "org/apache/commons#commons-parent/5": {
+   "pom": "i9YywAvfgKfeNsIrYPEkUsFH2Oyi8A151maZ6+faoCo="
+  },
+  "org/apache/commons#commons-parent/52": {
+   "pom": "ddvo806Y5MP/QtquSi+etMvNO18QR9VEYKzpBtu0UC4="
+  },
+  "org/apache/commons#commons-pool2/2.2": {
+   "jar": "h4Czu7Mah5fnTp8wIvBD3a3Crui+Y9lPgIKmoWVGxBs=",
+   "pom": "SPll6CQtvwF4bQqS0K1j4gogHUpTbgMh0DsQ0uDJgVM="
+  },
+  "org/apache/logging#logging-parent/3": {
+   "pom": "djouwrgJTUFh3rbCZLEmIIW5vjC/OjHCzhNyQuV3Iqc="
+  },
+  "org/apache/logging/log4j#log4j-api/2.17.1": {
+   "jar": "sNikyKtPuLGIjQCVgicDsObUeTxBlVAgPanmkZYWHeQ=",
+   "pom": "HirO8yILKb4QrgmXKLFYsY2UP5Ghk8xFAbtC+SnB6Io="
+  },
+  "org/apache/logging/log4j#log4j-core/2.17.1": {
+   "jar": "yWfyI0h5gLk2TpSnx/mooB/T7nwZvb8LD5+MuFEfPUE=",
+   "pom": "C7s79tTSKhv6PDwJJ8KUEK8UoPsm47Ark3JvXH6Yqv0="
+  },
+  "org/apache/logging/log4j#log4j/2.17.1": {
+   "pom": "lnq8AkRDqcsJaTVVmvXprW8P9hN1+Esn1EDS+nCAawk="
+  },
+  "org/apache/maven#maven-parent/21": {
+   "pom": "/EWviRHqMH0bV1ZO7x94tpgB6cEaVhnn61jV0Arp244="
+  },
+  "org/apache/maven#maven-settings-builder/3.0.4": {
+   "jar": "o4pU7B5pow3fwUQ04K7Cdk/CaGaKvMDhMthmkqXc4+Q=",
+   "pom": "Pgs/YCZ7YHCnQbFdtbQPvYJMYdsSofTxZu1li59i7OA="
+  },
+  "org/apache/maven#maven-settings/3.0.4": {
+   "jar": "Pj3xf1315M4ee38gEcV9YdMo5lZ4VCreIEjw0PopXwk=",
+   "pom": "vu3/18fkmtNe+UXDQT8YGfBOQ+opSjGARxTIy7DzcrM="
+  },
+  "org/apache/maven#maven/3.0.4": {
+   "pom": "TSI+AaZWnWZVwfT86Elp1FFCzbq9sRjqCMXIwz7GMvY="
+  },
+  "org/codehaus/plexus#plexus-component-annotations/1.5.5": {
+   "jar": "Tfemp75ks1u8z2C1wRVpf56jQh0iZ0rmcTXd43X8yh8=",
+   "pom": "gV8+wxa4xfpwE4X99ACb+1HgfXgOj2puKv5yDFLX4pI="
+  },
+  "org/codehaus/plexus#plexus-components/1.1.18": {
+   "pom": "7128f6kYttu6cdJ+Wz16AN9iS8+iVJpyl/Nv4nX2NNc="
+  },
+  "org/codehaus/plexus#plexus-containers/1.5.5": {
+   "pom": "G8Jkgk7IdrDKb09YOBdcVBxjjLxDMmomi5rufUd4te8="
+  },
+  "org/codehaus/plexus#plexus-interpolation/1.14": {
+   "jar": "f8YzeNPoRmNhm5vtrOn5/niydsK+PGLKIkVEkpTIQXY=",
+   "pom": "0IFVxJffN7LD2bWw39sC7AUlsgcLW+Nzn//elC/Kya8="
+  },
+  "org/codehaus/plexus#plexus-utils/2.0.5": {
+   "pom": "Nbx9EhNhYjZXEHKyxW2hj3pXZY3otKQQBkW3BUorJzs="
+  },
+  "org/codehaus/plexus#plexus-utils/2.0.6": {
+   "jar": "i5CfTKl4hkeUL4g9TlWbzGQhI/fGvNOEaYOi5GVGnDM=",
+   "pom": "/drU+mLIIxCuxDUl5RnNWfJ9BMdWn+IbGwPKIQiHgQw="
+  },
+  "org/codehaus/plexus#plexus-utils/3.4.1": {
+   "jar": "UtheBLORhyKvEdEoVbSoJX35ag52yPTjhS5vqoUfNXs=",
+   "pom": "sUTP+bHGJZ/sT+5b38DzYNacI6vU6m5URTOpSbaeNYI="
+  },
+  "org/codehaus/plexus#plexus/2.0.6": {
+   "pom": "vqEudHcI0l5zQQyhxzHr36EC6L227H2BvUUiWDsjS8w="
+  },
+  "org/codehaus/plexus#plexus/2.0.7": {
+   "pom": "K1kGIDCrChXF0Jd7oiQhcGNokmSIc5pl8leT5xXMinQ="
+  },
+  "org/codehaus/plexus#plexus/8": {
+   "pom": "/6NJ2wTnq/ZYhb3FogYvQZfA/50/H04qpXILdyM/dCw="
+  },
+  "org/jdom#jdom2/2.0.6": {
+   "jar": "E0XxG6YG0VYD1nQFUajCGUfAIVZAdw7GcnH+eL6pfPU=",
+   "pom": "R7I6ef4za3QbgkNMbgSdaBZSVuQF51wQkh/XL6imXY0="
+  },
+  "org/junit#junit-bom/5.7.2": {
+   "module": "87zrHFndT2mT9DBN/6WAFyuN9lp2zTb6T9ksBXjSitg=",
+   "pom": "zRSqqGmZH4ICHFhdVw0x/zQry6WLtEIztwGTdxuWSHs="
+  },
+  "org/ow2#ow2/1.5": {
+   "pom": "D4obEW52C4/mOJxRuE5LB6cPwRCC1Pk25FO1g91QtDs="
+  },
+  "org/ow2/asm#asm-analysis/9.2": {
+   "jar": "h4++UhcxwHLRTS1luYOxvq5q0G/aAAe2qLroH3P0M8Q=",
+   "pom": "dzzBor/BTGxKl5xRoHXAI0oL9pT8Or5PrPRU83oUXxs="
+  },
+  "org/ow2/asm#asm-commons/9.2": {
+   "jar": "vkzlMTiiOLtSLNeBz5Hzulzi9sqT7GLUahYqEnIl4KY=",
+   "pom": "AoJOg58qLw5ylZ/dMLSJckDwWvxD3kLXugsYQ3YBwHA="
+  },
+  "org/ow2/asm#asm-tree/9.2": {
+   "jar": "qr+b0jCRpOv8EJwfPufPPkuJ9rotP1HFJD8Ws8/64BE=",
+   "pom": "9h8+vqVSDd8Z9FKwPEJscjG92KgdesKHZctScSJaw3g="
+  },
+  "org/ow2/asm#asm/9.2": {
+   "jar": "udT+TXGTjfOIOfDspCqqpkz4sxPWeNoDbwyzyhmbR/U=",
+   "pom": "37EqGyJL8Bvh/WBAIEZviUJBvLZF3M45Xt2M1vilDfQ="
+  },
+  "org/sonarsource/parent#parent/54": {
+   "pom": "QVl5Y/x9ObDgJArLTYT1dbQCQtbhR9xQsCbUzvwFMV8="
+  },
+  "org/sonarsource/scanner/api#sonar-scanner-api-parent/2.15.0.2182": {
+   "pom": "JcR02YT0wD5P147u53D0Pqks+5Xrixf3+qyFVpNgFoY="
+  },
+  "org/sonarsource/scanner/api#sonar-scanner-api/2.15.0.2182": {
+   "jar": "h+foNKu97912pce/pM7ztxUhsfVQ/Iu+qLCphVPjNeg=",
+   "pom": "H+gEKIHd2qgREtNNv0k30OM+TQFYYIJ7/R/fb0YLH9U="
+  },
+  "org/sonatype/forge#forge-parent/4": {
+   "pom": "GDjRMkeQBbS3RZt5jp2ZFVFQkMKICC/c2G2wsQmDokw="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/sonatype/plexus#plexus-cipher/1.4": {
+   "jar": "WhX9uiJmng/dBuENzOYyCHnh9zmPvJEM0Gd7UGcqeMQ=",
+   "pom": "pjouI5iMyn+sbJOIbW8FBv0m2I1+jMDLibnG4NbJlK0="
+  },
+  "org/sonatype/plexus#plexus-sec-dispatcher/1.3": {
+   "jar": "OwVZu4Qy8ok37+bKGT71SoUG0Addc/10BrmxFsahEGM=",
+   "pom": "1eZQxQ72lYwCjtAktZrwTPPTjhRTp31UK2tIS8D0ygs="
+  },
+  "org/sonatype/spice#spice-parent/12": {
+   "pom": "IaGbJtvlw43bURTPTq2/XMtBG8axKP3VlJscyxLzaD4="
+  },
+  "org/springframework#spring-asm/3.1.3.RELEASE": {
+   "jar": "za8dBwQOdREzok+Zesp9mOrL/mfhsoddzoynOCUngTA=",
+   "pom": "f7b7uYdEDEjGc9sVsIdwqcLWySBSBEIZl5z0j0ZvcSM="
+  },
+  "org/springframework#spring-core/3.1.3.RELEASE": {
+   "jar": "AUp7IdtoD9iGfgJrGMO/idME3sWyEJCotqezy1z8d9I=",
+   "pom": "8xqLb1m2oBgOOMnBKboGB7rnoNShC5U3V3DIFKtMx1M="
+  },
+  "org/springframework#spring-parent/3.1.3.RELEASE": {
+   "pom": "ZOkRARj4KhQnWaMW0J09jY1xfV2VB51/aziO5Hn6eC8="
+  },
+  "org/vafer#jdependency/2.7.0": {
+   "jar": "1j79V0b/QIlDp91++Frp8Jqn+2O7KxaRFCfObEW1n9A=",
+   "pom": "6yRCKwo+nofVrG6oCHeG+1HEsbvg0iXvdSFSxzaiBNA="
+  }
+ },
+ "https://plugins.gradle.org/m2": {
+  "ca/coglinc#javacc-gradle-plugin/2.4.0": {
+   "jar": "RsMHTru+ENUOzWkQpiYxCkE5FlZ5Ct0JF+kBp9afidw=",
+   "pom": "NTSsuHwtwH2hAqOP1wn1oANHgSkM+gcjPZTLXMOiyrA="
+  },
+  "ca/coglinc/javacc#ca.coglinc.javacc.gradle.plugin/2.4.0": {
+   "pom": "zmWjvt7VamHG21s6/cHApVuH6mvAewTxamaqn8DP2jw="
+  },
+  "com/github/hierynomus/license-base#com.github.hierynomus.license-base.gradle.plugin/0.15.0": {
+   "pom": "jWmQF6e7GyViPR4EGOKapRwtUYEHkgNaR8PG+hgMSXU="
+  },
+  "com/github/hierynomus/license-report#com.github.hierynomus.license-report.gradle.plugin/0.15.0": {
+   "pom": "OIRMJK0goaid41C254nDEz3FeeD51kZSyQi9uCgwAxM="
+  },
+  "com/github/johnrengelman/shadow#com.github.johnrengelman.shadow.gradle.plugin/7.1.0": {
+   "pom": "mh4hygODDXleq/uKbALOM4QuvCPGd+xqqZ50W1FPKt4="
+  },
+  "com/google/guava#guava-jdk5/17.0": {
+   "jar": "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.jar",
+   "pom": "https://jcenter.bintray.com/com/google/guava/guava-jdk5/17.0/guava-jdk5-17.0.pom"
+  },
+  "com/google/guava#guava-parent-jdk5/17.0": {
+   "pom": "https://jcenter.bintray.com/com/google/guava/guava-parent-jdk5/17.0/guava-parent-jdk5-17.0.pom"
+  },
+  "com/mycila#license-maven-plugin-parent/3.0": {
+   "pom": "https://jcenter.bintray.com/com/mycila/license-maven-plugin-parent/3.0/license-maven-plugin-parent-3.0.pom"
+  },
+  "com/mycila#license-maven-plugin/3.0": {
+   "jar": "https://jcenter.bintray.com/com/mycila/license-maven-plugin/3.0/license-maven-plugin-3.0.jar",
+   "pom": "https://jcenter.bintray.com/com/mycila/license-maven-plugin/3.0/license-maven-plugin-3.0.pom"
+  },
+  "com/mycila#mycila-pom/3": {
+   "pom": "https://jcenter.bintray.com/com/mycila/mycila-pom/3/mycila-pom-3.pom"
+  },
+  "com/mycila#mycila-xmltool/4.4.ga": {
+   "jar": "https://jcenter.bintray.com/com/mycila/mycila-xmltool/4.4.ga/mycila-xmltool-4.4.ga.jar",
+   "pom": "https://jcenter.bintray.com/com/mycila/mycila-xmltool/4.4.ga/mycila-xmltool-4.4.ga.pom"
+  },
+  "com/mycila/xmltool#xmltool/3.3": {
+   "jar": "https://jcenter.bintray.com/com/mycila/xmltool/xmltool/3.3/xmltool-3.3.jar",
+   "pom": "https://jcenter.bintray.com/com/mycila/xmltool/xmltool/3.3/xmltool-3.3.pom"
+  },
+  "commons-io#commons-io/2.11.0": {
+   "jar": "https://jcenter.bintray.com/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar",
+   "pom": "https://jcenter.bintray.com/commons-io/commons-io/2.11.0/commons-io-2.11.0.pom"
+  },
+  "commons-io#commons-io/2.4": {
+   "jar": "https://jcenter.bintray.com/commons-io/commons-io/2.4/commons-io-2.4.jar",
+   "pom": "https://jcenter.bintray.com/commons-io/commons-io/2.4/commons-io-2.4.pom"
+  },
+  "commons-logging#commons-logging/1.1.1": {
+   "jar": "https://jcenter.bintray.com/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+   "pom": "https://jcenter.bintray.com/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.pom"
+  },
+  "gradle/plugin/com/github/johnrengelman#shadow/7.1.0": {
+   "jar": "Bar4oiGwbGeS7hmZYZPolH7zv3Il6nWOUYsywoNxCJA=",
+   "pom": "q7tz6sHPSyR/wBbmyohafaFjNk/vyYDICvjTy+jRSQI="
+  },
+  "gradle/plugin/com/hierynomus/gradle/plugins#license-gradle-plugin/0.15.0": {
+   "jar": "gpLVOVy+k7lGe/p64JgC70z9316oNexy6jxKahfw9ZY=",
+   "pom": "IAmy13nhNo/tPGzHVwS58EVRv+3tFpk4F0ltrbtDyiw="
+  },
+  "org/apache#apache/10": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/10/apache-10.pom"
+  },
+  "org/apache#apache/13": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/13/apache-13.pom"
+  },
+  "org/apache#apache/16": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/16/apache-16.pom"
+  },
+  "org/apache#apache/23": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/23/apache-23.pom"
+  },
+  "org/apache#apache/4": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/4/apache-4.pom"
+  },
+  "org/apache#apache/9": {
+   "pom": "https://jcenter.bintray.com/org/apache/apache/9/apache-9.pom"
+  },
+  "org/apache/ant#ant-launcher/1.10.11": {
+   "jar": "https://jcenter.bintray.com/org/apache/ant/ant-launcher/1.10.11/ant-launcher-1.10.11.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/ant/ant-launcher/1.10.11/ant-launcher-1.10.11.pom"
+  },
+  "org/apache/ant#ant-parent/1.10.11": {
+   "pom": "https://jcenter.bintray.com/org/apache/ant/ant-parent/1.10.11/ant-parent-1.10.11.pom"
+  },
+  "org/apache/ant#ant/1.10.11": {
+   "jar": "https://jcenter.bintray.com/org/apache/ant/ant/1.10.11/ant-1.10.11.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/ant/ant/1.10.11/ant-1.10.11.pom"
+  },
+  "org/apache/commons#commons-collections4/4.1": {
+   "jar": "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom"
+  },
+  "org/apache/commons#commons-lang3/3.4": {
+   "jar": "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.pom"
+  },
+  "org/apache/commons#commons-parent/25": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/25/commons-parent-25.pom"
+  },
+  "org/apache/commons#commons-parent/33": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/33/commons-parent-33.pom"
+  },
+  "org/apache/commons#commons-parent/37": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/37/commons-parent-37.pom"
+  },
+  "org/apache/commons#commons-parent/38": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/38/commons-parent-38.pom"
+  },
+  "org/apache/commons#commons-parent/5": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/5/commons-parent-5.pom"
+  },
+  "org/apache/commons#commons-parent/52": {
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-parent/52/commons-parent-52.pom"
+  },
+  "org/apache/commons#commons-pool2/2.2": {
+   "jar": "https://jcenter.bintray.com/org/apache/commons/commons-pool2/2.2/commons-pool2-2.2.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/commons/commons-pool2/2.2/commons-pool2-2.2.pom"
+  },
+  "org/apache/logging#logging-parent/3": {
+   "pom": "https://jcenter.bintray.com/org/apache/logging/logging-parent/3/logging-parent-3.pom"
+  },
+  "org/apache/logging/log4j#log4j-api/2.17.1": {
+   "jar": "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-api/2.17.1/log4j-api-2.17.1.pom"
+  },
+  "org/apache/logging/log4j#log4j-core/2.17.1": {
+   "jar": "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-core/2.17.1/log4j-core-2.17.1.pom"
+  },
+  "org/apache/logging/log4j#log4j/2.17.1": {
+   "pom": "https://jcenter.bintray.com/org/apache/logging/log4j/log4j/2.17.1/log4j-2.17.1.pom"
+  },
+  "org/apache/maven#maven-parent/21": {
+   "pom": "https://jcenter.bintray.com/org/apache/maven/maven-parent/21/maven-parent-21.pom"
+  },
+  "org/apache/maven#maven-settings-builder/3.0.4": {
+   "jar": "https://jcenter.bintray.com/org/apache/maven/maven-settings-builder/3.0.4/maven-settings-builder-3.0.4.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/maven/maven-settings-builder/3.0.4/maven-settings-builder-3.0.4.pom"
+  },
+  "org/apache/maven#maven-settings/3.0.4": {
+   "jar": "https://jcenter.bintray.com/org/apache/maven/maven-settings/3.0.4/maven-settings-3.0.4.jar",
+   "pom": "https://jcenter.bintray.com/org/apache/maven/maven-settings/3.0.4/maven-settings-3.0.4.pom"
+  },
+  "org/apache/maven#maven/3.0.4": {
+   "pom": "https://jcenter.bintray.com/org/apache/maven/maven/3.0.4/maven-3.0.4.pom"
+  },
+  "org/codehaus/plexus#plexus-component-annotations/1.5.5": {
+   "jar": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar",
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom"
+  },
+  "org/codehaus/plexus#plexus-components/1.1.18": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-components/1.1.18/plexus-components-1.1.18.pom"
+  },
+  "org/codehaus/plexus#plexus-containers/1.5.5": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom"
+  },
+  "org/codehaus/plexus#plexus-interpolation/1.14": {
+   "jar": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.jar",
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom"
+  },
+  "org/codehaus/plexus#plexus-utils/2.0.5": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/2.0.5/plexus-utils-2.0.5.pom"
+  },
+  "org/codehaus/plexus#plexus-utils/2.0.6": {
+   "jar": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/2.0.6/plexus-utils-2.0.6.jar",
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/2.0.6/plexus-utils-2.0.6.pom"
+  },
+  "org/codehaus/plexus#plexus-utils/3.4.1": {
+   "jar": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/3.4.1/plexus-utils-3.4.1.jar",
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus-utils/3.4.1/plexus-utils-3.4.1.pom"
+  },
+  "org/codehaus/plexus#plexus/2.0.6": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus/2.0.6/plexus-2.0.6.pom"
+  },
+  "org/codehaus/plexus#plexus/2.0.7": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus/2.0.7/plexus-2.0.7.pom"
+  },
+  "org/codehaus/plexus#plexus/8": {
+   "pom": "https://jcenter.bintray.com/org/codehaus/plexus/plexus/8/plexus-8.pom"
+  },
+  "org/jdom#jdom2/2.0.6": {
+   "jar": "https://jcenter.bintray.com/org/jdom/jdom2/2.0.6/jdom2-2.0.6.jar",
+   "pom": "https://jcenter.bintray.com/org/jdom/jdom2/2.0.6/jdom2-2.0.6.pom"
+  },
+  "org/junit#junit-bom/5.7.2": {
+   "module": "https://jcenter.bintray.com/org/junit/junit-bom/5.7.2/junit-bom-5.7.2.module",
+   "pom": "https://jcenter.bintray.com/org/junit/junit-bom/5.7.2/junit-bom-5.7.2.pom"
+  },
+  "org/ow2#ow2/1.5": {
+   "pom": "https://jcenter.bintray.com/org/ow2/ow2/1.5/ow2-1.5.pom"
+  },
+  "org/ow2/asm#asm-analysis/9.2": {
+   "jar": "https://jcenter.bintray.com/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar",
+   "pom": "https://jcenter.bintray.com/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.pom"
+  },
+  "org/ow2/asm#asm-commons/9.2": {
+   "jar": "https://jcenter.bintray.com/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.jar",
+   "pom": "https://jcenter.bintray.com/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.pom"
+  },
+  "org/ow2/asm#asm-tree/9.2": {
+   "jar": "https://jcenter.bintray.com/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar",
+   "pom": "https://jcenter.bintray.com/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.pom"
+  },
+  "org/ow2/asm#asm/9.2": {
+   "jar": "https://jcenter.bintray.com/org/ow2/asm/asm/9.2/asm-9.2.jar",
+   "pom": "https://jcenter.bintray.com/org/ow2/asm/asm/9.2/asm-9.2.pom"
+  },
+  "org/sonarqube#org.sonarqube.gradle.plugin/3.0": {
+   "pom": "1Pg7ynlN6ZPv/gtqt/HO572zNJgWc4BVkHgvv6Mj420="
+  },
+  "org/sonarsource/parent#parent/54": {
+   "pom": "https://jcenter.bintray.com/org/sonarsource/parent/parent/54/parent-54.pom"
+  },
+  "org/sonarsource/scanner/api#sonar-scanner-api-parent/2.15.0.2182": {
+   "pom": "https://jcenter.bintray.com/org/sonarsource/scanner/api/sonar-scanner-api-parent/2.15.0.2182/sonar-scanner-api-parent-2.15.0.2182.pom"
+  },
+  "org/sonarsource/scanner/api#sonar-scanner-api/2.15.0.2182": {
+   "jar": "https://jcenter.bintray.com/org/sonarsource/scanner/api/sonar-scanner-api/2.15.0.2182/sonar-scanner-api-2.15.0.2182.jar",
+   "pom": "https://jcenter.bintray.com/org/sonarsource/scanner/api/sonar-scanner-api/2.15.0.2182/sonar-scanner-api-2.15.0.2182.pom"
+  },
+  "org/sonarsource/scanner/gradle#sonarqube-gradle-plugin/3.0": {
+   "jar": "KLTNnuKtiAHAxeXJhPNtLizGDRkhwC61jujORTpejb8=",
+   "pom": "2jJNuKvT65d8B0lY/9E4vdVTWwYojfN7WiRv53Uad7Y="
+  },
+  "org/sonatype/forge#forge-parent/4": {
+   "pom": "https://jcenter.bintray.com/org/sonatype/forge/forge-parent/4/forge-parent-4.pom"
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+  },
+  "org/sonatype/plexus#plexus-cipher/1.4": {
+   "jar": "https://jcenter.bintray.com/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar",
+   "pom": "https://jcenter.bintray.com/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom"
+  },
+  "org/sonatype/plexus#plexus-sec-dispatcher/1.3": {
+   "jar": "https://jcenter.bintray.com/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar",
+   "pom": "https://jcenter.bintray.com/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom"
+  },
+  "org/sonatype/spice#spice-parent/12": {
+   "pom": "https://jcenter.bintray.com/org/sonatype/spice/spice-parent/12/spice-parent-12.pom"
+  },
+  "org/springframework#spring-asm/3.1.3.RELEASE": {
+   "jar": "https://jcenter.bintray.com/org/springframework/spring-asm/3.1.3.RELEASE/spring-asm-3.1.3.RELEASE.jar",
+   "pom": "https://jcenter.bintray.com/org/springframework/spring-asm/3.1.3.RELEASE/spring-asm-3.1.3.RELEASE.pom"
+  },
+  "org/springframework#spring-core/3.1.3.RELEASE": {
+   "jar": "https://jcenter.bintray.com/org/springframework/spring-core/3.1.3.RELEASE/spring-core-3.1.3.RELEASE.jar",
+   "pom": "https://jcenter.bintray.com/org/springframework/spring-core/3.1.3.RELEASE/spring-core-3.1.3.RELEASE.pom"
+  },
+  "org/springframework#spring-parent/3.1.3.RELEASE": {
+   "pom": "https://jcenter.bintray.com/org/springframework/spring-parent/3.1.3.RELEASE/spring-parent-3.1.3.RELEASE.pom"
+  },
+  "org/vafer#jdependency/2.7.0": {
+   "jar": "https://jcenter.bintray.com/org/vafer/jdependency/2.7.0/jdependency-2.7.0.jar",
+   "pom": "https://jcenter.bintray.com/org/vafer/jdependency/2.7.0/jdependency-2.7.0.pom"
+  }
+ },
+ "https://repo.maven.apache.org/maven2": {
+  "antlr#antlr/2.7.7": {
+   "jar": "iPvaS5Ellrn1bo4S5YDMlUus+1F3bs/d0+GPwc9W3Ew=",
+   "pom": "EA95O6J/i05CBO20YXHr825U4PlM/AJSf+oHoLsfzrc="
+  },
+  "com/atlassian/commonmark#commonmark-ext-gfm-tables/0.15.2": {
+   "jar": "Wn3BAWFAwPHGnFV21kvjcYJcWlStc1sMaZuWLMTgpPo=",
+   "pom": "rRZxS5MgMZDpRiSFMrWCkDdBQkg7RhdrsD3CrijycN0="
+  },
+  "com/atlassian/commonmark#commonmark-parent/0.15.2": {
+   "pom": "PhTratCeeq+Uow5I3kexFm+QCz6Ncm+UfMWkD3HkfCU="
+  },
+  "com/atlassian/commonmark#commonmark/0.15.2": {
+   "jar": "/UmFBUzWYXaB9smSH/yTq2uGQraeV3T48InZc9HGbmo=",
+   "pom": "3ZVTaHcyCDS90YRnvtbgKE7UhXKdU8LcLfWEE2vmGaI="
+  },
+  "com/atlassian/pom#base-pom/5.0.13": {
+   "pom": "CN0hBF/fYQSL7zj/7FbiHuslxuLYRPwJ9rlW4JNzdUM="
+  },
+  "com/atlassian/pom#central-pom/5.0.13": {
+   "pom": "zihFbTZlB8oPkQIpQqBeOI/Zj4YqbY2zEFxcRJenTOU="
+  },
+  "com/google/code/findbugs#jsr305/3.0.2": {
+   "jar": "dmrSoHg/JoeWLIrXTO7MOKKLn3Ki0IXuQ4t4E+ko0Mc=",
+   "pom": "GYidvfGyVLJgGl7mRbgUepdGRIgil2hMeYr+XWPXjf4="
+  },
+  "com/ibm/icu#icu4j/58.2": {
+   "jar": "lT4eg7K+fD6i+I2obBNhT0fp5x01eMhSHX8Yd1a2OWI=",
+   "pom": "R7Zq1yxypJmlRL57ixEzX2xz/bcyFxfRGBHfs+k0FGo="
+  },
+  "com/miglayout#miglayout-core/5.2": {
+   "jar": "Zp8NqP12vlPXX1lA9IFibym1RM2ZJbfaJhEYfSaEvHo=",
+   "pom": "scvva6qqt3IaCLKlAZtpajfV4+wKfQzXmRo4MOJrfGA="
+  },
+  "com/miglayout#miglayout-parent/5.2": {
+   "pom": "+STS0Cl2vIQu0u/4sx4Hp2Zb/NJUY9TXmtvkEFis6Zs="
+  },
+  "com/miglayout#miglayout-swing/5.2": {
+   "jar": "g2n2guoVPvtoGj9YKsxIjoKpfub0fSU1LwgOl38TjIY=",
+   "pom": "52Q1kq9JpxIUc+OUOzdO3Xw/u5zJBdDGq5DOcCvkQqE="
+  },
+  "com/sun/activation#all/1.2.0": {
+   "pom": "HYUY46x1MqEE5Pe+d97zfJguUwcjxr2z1ncIzOKwwsQ="
+  },
+  "javax/activation#javax.activation-api/1.2.0": {
+   "jar": "Q/3vC1ts6zGwQksgi5MMdKtY+sLO63s/b9OuuLXKQ5M=",
+   "pom": "2ikm88i+iYZDzBCs3sbeCwNRpX+yc1dw+gF3sGrecbk="
+  },
+  "javax/xml/bind#jaxb-api-parent/2.4.0-b180830.0359": {
+   "pom": "ctEy4shY0iMPFdBI8ek6J5xAxOnshLxW+fLz61r0tLg="
+  },
+  "javax/xml/bind#jaxb-api/2.4.0-b180830.0359": {
+   "jar": "VrnpcCdTdjAHQ1Fi6niAVe/P78hquSDwMsBBHcVHuDY=",
+   "pom": "sck/wwHX9f5M3hPRlTKZJR2jfv/8kfUjg1UEw/+HNwc="
+  },
+  "junit#junit/4.12": {
+   "jar": "WXIfCAXiI9hLkGd4h9n/Vn3FNNfFAsqQPAwrF/BcEWo=",
+   "pom": "kPFj944/+28cetl96efrpO6iWAcUG4XW0SvmfKJUScQ="
+  },
+  "net/java#jvnet-parent/1": {
+   "pom": "KBRAgRJo5l2eJms8yJgpfiFOBPCXQNA4bO60qJI9Y78="
+  },
+  "net/java#jvnet-parent/3": {
+   "pom": "MPV4nvo53b+WCVqto/wSYMRWH68vcUaGcXyy3FBJR1o="
+  },
+  "net/java#jvnet-parent/5": {
+   "pom": "GvaZ+Nndq2f5oNIC+9eRXrA2Klpt/V/8VMr6NGXJywo="
+  },
+  "net/java/dev/javacc#javacc/4.0": {
+   "jar": "z7qy1qzbN2TivLXAhCpZ9YPLXoui61wTqNuYNoqtzC8=",
+   "pom": "EBLeGTH+yhXhvQEomKaJBOXTO7TD6IhY+oagD7ePUDg="
+  },
+  "org/abego/treelayout#org.abego.treelayout.core/1.0.3": {
+   "jar": "+l4xOVw5wufUasoPgfcgYJMWB7L6Qb02A46yy2+5MyY=",
+   "pom": "o7KyI3lDcDVeeSQzrwEvyZNmfAMxviusrYTbwJrOSgw="
+  },
+  "org/antlr#ST4/4.0.8": {
+   "jar": "WMqrxAyfdLC1mT/YaOD2SlDAdZCU5qJRqq+tmO38ejs=",
+   "pom": "PAiQ3scRdOs7o9QEyp40GQH/awQhgIsAcTsNuxMGwXw="
+  },
+  "org/antlr#antlr-master/3.5.2": {
+   "pom": "QtkaUx6lEA6wm1QaoALDuQjo8oK9c7bi9S83HvEzG9Y="
+  },
+  "org/antlr#antlr-runtime/3.5.2": {
+   "jar": "zj/I7LEPOemjzdy7LONQ0nLZzT0LHhjm/nPDuTichzQ=",
+   "pom": "RqnCIAu4sSvXEkqnpQl/9JCZkIMpyFGgTLIFFCCqfyU="
+  },
+  "org/antlr#antlr/3.5.2": {
+   "jar": "WsNsKs+woPPTfa/iC1tXDyZD4tAAxkjURQPCc4vmQ98=",
+   "pom": "Bl5egGYv64WHldPAH3cUJHvdMZRZcF7hOxpLGWj6IuQ="
+  },
+  "org/antlr#antlr4-master/4.7.1": {
+   "pom": "QSb2e/QT9si8wbGdh7mnJWdCz6ccJQxKmVMNrt6ghow="
+  },
+  "org/antlr#antlr4-runtime/4.7.1": {
+   "jar": "Q1FtGb6uNZCeBNBq9sDFjBe8lOAHDIXo3JkpymQNyR0=",
+   "pom": "zhOGobkOUSy3oli1Ih1C8RJh/9qaElkBzdhs3ypZ/5E="
+  },
+  "org/antlr#antlr4/4.7.1": {
+   "jar": "os3C8vjriTcogyVo3FTQgOtaFJXts7ZuUblxIqYKDYc=",
+   "pom": "k+AkX5wHQx6tBunpyPmO7IJUQb9PbtZr3aboypxoR5Y="
+  },
+  "org/glassfish#javax.json/1.0.4": {
+   "jar": "Dh3sQKHt6WWUElHtqWiu7gUsxPUDeLwxbMSOgVm9vrQ=",
+   "pom": "a6+Dg/+pi2bqls1b/B7H8teUY7uYrJgFKWSxIcIhLVQ="
+  },
+  "org/glassfish#json/1.0.4": {
+   "pom": "bXxoQjEV+SFxjZRPhZkktMaFIX7AOkn3BFWossqpcuY="
+  },
+  "org/hamcrest#hamcrest-core/1.3": {
+   "jar": "Zv3vkelzk0jfeglqo4SlaF9Oh1WEzOiThqekclHE2Ok=",
+   "pom": "/eOGp5BRc6GxA95quCBydYS1DQ4yKC4nl3h8IKZP+pM="
+  },
+  "org/hamcrest#hamcrest-parent/1.3": {
+   "pom": "bVNflO+2Y722gsnyelAzU5RogAlkK6epZ3UEvBvkEps="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/sonatype/oss#oss-parent/9": {
+   "pom": "+0AmX5glSCEv+C42LllzKyGH7G8NgBgohcFO8fmCgno="
+  }
+ }
+}
