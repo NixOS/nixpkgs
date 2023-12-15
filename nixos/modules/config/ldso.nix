@@ -4,11 +4,11 @@ let
   inherit (lib) last splitString mkOption types mdDoc optionals;
 
   libDir = pkgs.stdenv.hostPlatform.libDir;
-  ldsoBasename = last (splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker);
+  ldsoBasename = builtins.unsafeDiscardStringContext (last (splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker));
 
   pkgs32 = pkgs.pkgsi686Linux;
   libDir32 = pkgs32.stdenv.hostPlatform.libDir;
-  ldsoBasename32 = last (splitString "/" pkgs32.stdenv.cc.bintools.dynamicLinker);
+  ldsoBasename32 = builtins.unsafeDiscardStringContext (last (splitString "/" pkgs32.stdenv.cc.bintools.dynamicLinker));
 in {
   options = {
     environment.ldso = mkOption {
