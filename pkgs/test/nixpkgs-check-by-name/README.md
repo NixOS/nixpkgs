@@ -4,28 +4,14 @@ This directory implements a program to check the [validity](#validity-checks) of
 It is being used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
 This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 
-## API
+## Interface
 
-This API may be changed over time if the CI workflow making use of it is adjusted to deal with the change appropriately.
+The interface of the tool is shown with `--help`:
+```
+cargo run -- --help
+```
 
-- Command line: `nixpkgs-check-by-name [--base <BASE_NIXPKGS>] <NIXPKGS>`
-- Arguments:
-  - `<NIXPKGS>`:
-    The path to the Nixpkgs to check.
-    For PRs, this should be set to a checkout of the PR branch.
-  - `<BASE_NIXPKGS>`:
-    The path to the Nixpkgs to use as the [ratchet check](#ratchet-checks) base.
-    For PRs, this should be set to a checkout of the PRs base branch.
-
-    If not specified, no ratchet checks will be performed.
-    However, this flag will become required once CI uses it.
-- Exit code:
-  - `0`: If the [validation](#validity-checks) is successful
-  - `1`: If the [validation](#validity-checks) is not successful
-  - `2`: If an unexpected I/O error occurs
-- Standard error:
-  - Informative messages
-  - Detected problems if validation is not successful
+The interface may be changed over time only if the CI workflow making use of it is adjusted to deal with the change appropriately.
 
 ## Validity checks
 

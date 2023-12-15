@@ -17,8 +17,20 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 /// Program to check the validity of pkgs/by-name
+///
+/// This CLI interface may be changed over time if the CI workflow making use of
+/// it is adjusted to deal with the change appropriately.
+///
+/// Exit code:
+/// - `0`: If the validation is successful
+/// - `1`: If the validation is not successful
+/// - `2`: If an unexpected I/O error occurs
+///
+/// Standard error:
+/// - Informative messages
+/// - Detected problems if validation is not successful
 #[derive(Parser, Debug)]
-#[command(about)]
+#[command(about, verbatim_doc_comment)]
 pub struct Args {
     /// Path to the main Nixpkgs to check.
     /// For PRs, this should be set to a checkout of the PR branch.
