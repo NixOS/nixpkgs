@@ -25,7 +25,7 @@
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
 /lib/asserts.nix            @infinisil @Profpatsch
-/lib/path.*                 @infinisil @fricklerhandwerk
+/lib/path.*                 @infinisil
 /lib/fileset                @infinisil
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth
@@ -73,8 +73,8 @@
 # Contributor documentation
 /CONTRIBUTING.md @infinisil
 /.github/PULL_REQUEST_TEMPLATE.md @infinisil
-/doc/contributing/ @fricklerhandwerk @infinisil
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/doc/contributing/ @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @infinisil
 /lib/README.md @infinisil
 /doc/README.md @infinisil
 /nixos/README.md @infinisil

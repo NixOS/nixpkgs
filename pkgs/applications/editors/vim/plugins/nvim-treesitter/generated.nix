@@ -550,12 +550,12 @@
   };
   erlang = buildGrammar {
     language = "erlang";
-    version = "0.0.0+rev=5694277";
+    version = "0.0.0+rev=0821889";
     src = fetchFromGitHub {
       owner = "WhatsApp";
       repo = "tree-sitter-erlang";
-      rev = "56942778b5791d07949e6c7b6093e01aba5b7ab4";
-      hash = "sha256-0a36KKjacSbVb8zXaq2SHPw8njkZLb5rRWoaEUdsYyA=";
+      rev = "08218898824c68fc8439cba1540042081e2da18d";
+      hash = "sha256-0IFJFA2/eN72OjYFPPVhkYdMNKuTrhrXdlgUGjv00Y0=";
     };
     meta.homepage = "https://github.com/WhatsApp/tree-sitter-erlang";
   };
@@ -902,12 +902,12 @@
   };
   haskell = buildGrammar {
     language = "haskell";
-    version = "0.0.0+rev=d70b321";
+    version = "0.0.0+rev=23ad72f";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-haskell";
-      rev = "d70b321b8b702939d722c2c15f4c28d14e91a400";
-      hash = "sha256-CJ6xwEUhh/rGr07edmx99nY4eHdBdsysaOzmuKM6SDE=";
+      rev = "23ad72f4b755269004a0a3f3796192705313643d";
+      hash = "sha256-2MtxGMqxhKHuQQ8sME4QzVe1NxsMok6JZrg7Etgi1lg=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-haskell";
   };
@@ -1455,12 +1455,12 @@
   };
   nim = buildGrammar {
     language = "nim";
-    version = "0.0.0+rev=d41fd3e";
+    version = "0.0.0+rev=0fdb059";
     src = fetchFromGitHub {
       owner = "alaviss";
       repo = "tree-sitter-nim";
-      rev = "d41fd3e4c1f83a0e6429c2d035209e107e80e6f8";
-      hash = "sha256-2OqwU10JW7l87v2QXtBn5znP8Ptq9GZ/1PNAQOXJPVA=";
+      rev = "0fdb059ce7c1926a0287c3deb80e20186e4451d7";
+      hash = "sha256-dalcbpzdY0ZIEWNkcD5j/9Ifq/IyvGHu+SEMME6p2ws=";
     };
     meta.homepage = "https://github.com/alaviss/tree-sitter-nim";
   };
@@ -2558,12 +2558,12 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "0.0.0+rev=fdd1374";
+    version = "0.0.0+rev=f7c31c7";
     src = fetchFromGitHub {
       owner = "v-analyzer";
       repo = "v-analyzer";
-      rev = "fdd137445c50d73767548c1b2386e5f560d5d042";
-      hash = "sha256-LjO0gRuvu8i4JZ71KKJVdEb5xvE56JP+5wL9Hua/eRg=";
+      rev = "f7c31c7578ebd35b95cfa85c6461ed6480697a9a";
+      hash = "sha256-MmnV7k8xmPGKUoVwf66y5JI8IzHcC7n0fstOMbj3UG0=";
     };
     location = "tree_sitter_v";
     meta.homepage = "https://github.com/v-analyzer/v-analyzer";
@@ -2658,12 +2658,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=693ee4b";
+    version = "0.0.0+rev=698e645";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "693ee4b3a995a9c305479b32c10e0a87013ff125";
-      hash = "sha256-WgCeDShSDUJRSY3LcX8zT+JlJIxHwLhD7lKDIBLoIfc=";
+      rev = "698e645b30e871a58c7de68e0ecd6d2ebbdd0009";
+      hash = "sha256-7MlqVa0g/+RmSD9Aa7FW50icoQfv5Gj/3l2YMFDSU30=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;

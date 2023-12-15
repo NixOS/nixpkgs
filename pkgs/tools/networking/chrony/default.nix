@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
-    hash = "sha256-6vsH5tr5KxQiAPR4hW3+1u/J6i0Ubu3tXtywm5MScIg=";
+    hash = "sha256-Gf4dn0Zk1EWmmpbHHo/bYLzY3yTHPROG4CKH9zZq1CI=";
   };
 
   outputs = [ "out" "man" ];
