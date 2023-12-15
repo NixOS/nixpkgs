@@ -586,6 +586,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
+  guard-nvim = super.guard-nvim.overrideAttrs {
+    dependencies = with self; [ guard-collection ];
+  };
+
   harpoon = super.harpoon.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
