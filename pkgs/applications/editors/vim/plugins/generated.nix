@@ -13181,8 +13181,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "vim-lsp-settings";
-      rev = "6ed123f972bebf9515d0a4533fc860649ebe3bd1";
-      sha256 = "06911mrxdsis08s30h51cvwp92i38aajnwhqx42rgwzygh7wkxw2";
+      rev = "a0c5cf830a45795142b65ff38268265889757a00";
+      sha256 = "067qn02q7mazd9wngmxmb1kq1zs5ig0dsyxl4gicd6m41d5x6p4k";
     };
     meta.homepage = "https://github.com/mattn/vim-lsp-settings/";
   };
