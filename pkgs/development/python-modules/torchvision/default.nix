@@ -18,7 +18,7 @@ let
   inherit (cudaPackages) backendStdenv cudaVersion;
 
   pname = "torchvision";
-  version = "0.16.1";
+  version = "0.16.2";
   format = "setuptools";
 in
 buildPythonPackage {
@@ -28,7 +28,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TsYBDtedTQ3+F3LM4JwzkGH2XOr0WSp1Au5YoR07rSA=";
+    hash = "sha256-fSFoMZbF0bYqonvgoNAE8ZzwCsjhCdVo2BJ0pOC2zd0=";
   };
 
   nativeBuildInputs = [
