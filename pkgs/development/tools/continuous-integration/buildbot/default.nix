@@ -35,7 +35,7 @@ let
     inherit buildbot-pkg buildbot-worker buildbot-plugins;
   };
   buildbot-plugins = recurseIntoAttrs (callPackage ./plugins.nix {
-    inherit buildbot-pkg;
+    inherit buildbot buildbot-pkg;
   });
 in
 {
