@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.9.0";
+  version = "3.15.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "b2";
-    hash = "sha256-Z9LQapWl0zblcAyMOfKhn5/O1H6+tmgiPQfAB241jqU=";
+    hash = "sha256-10c2zddALy7+CGxhjUC6tMLQcZ3WmLeRY1bNKWunAys=";
   };
 
   postPatch = ''
@@ -30,11 +30,12 @@ python3Packages.buildPythonApplication rec {
     arrow
     b2sdk
     phx-class-registry
-    setuptools
     docutils
     rst2ansi
     tabulate
     tqdm
+    platformdirs
+    packaging
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -63,6 +64,7 @@ python3Packages.buildPythonApplication rec {
 
     # it's hard to make it work on nix
     "test/integration/test_autocomplete.py"
+    "test/unit/console_tool"
   ];
 
   postInstall = ''

@@ -1,6 +1,16 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, binaryornot
+, boolean-py
+, debian
+, jinja2
+, license-expression
+, pytestCheckHook
+}:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "reuse";
   version = "2.1.0";
   format = "pyproject";
@@ -12,11 +22,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-MEQiuBxe/ctHlAnmLhQY4QH62uAcHb7CGfZz+iZCRSk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     binaryornot
     boolean-py
     debian
@@ -24,12 +34,14 @@ python3Packages.buildPythonApplication rec {
     license-expression
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()
     "src/reuse"
   ];
+
+  pythonImportsCheck = [ "reuse" ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

@@ -18441,6 +18441,11 @@
     github = "NoneTirex";
     githubId = 26038207;
   };
+  tirimia = {
+    name = "Theodor-Alexandru Irimia";
+    github = "tirimia";
+    githubId = 11174371;
+  };
   titanous = {
     email = "jonathan@titanous.com";
     github = "titanous";
@@ -19423,6 +19428,12 @@
     github = "Vonfry";
     githubId = 3413119;
     name = "Vonfry";
+  };
+  vonixxx = {
+    email = "vonixxx@tuta.io";
+    github = "vonixxx";
+    githubId = 144771550;
+    name = "Luca Uricariu";
   };
   votava = {
     email = "votava@gmail.com";

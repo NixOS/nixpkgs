@@ -122,6 +122,8 @@ makeScopeWithSplicing' {
 
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
+      xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
+
       xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };

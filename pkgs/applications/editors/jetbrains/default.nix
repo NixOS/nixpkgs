@@ -129,7 +129,7 @@ rec {
     '';
   });
 
-  datagrip = mkJetBrainsProduct { pname = "datagrip"; };
+  datagrip = mkJetBrainsProduct { pname = "datagrip"; extraBuildInputs = [ stdenv.cc.cc ]; };
 
   dataspell = let
     libr = runCommand "libR" {} ''

@@ -218,6 +218,8 @@ self: super: with self; {
 
   aiogram = callPackage ../development/python-modules/aiogram { };
 
+  aiohappyeyeballs = callPackage ../development/python-modules/aiohappyeyeballs { };
+
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
@@ -1513,6 +1515,8 @@ self: super: with self; {
   bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
 
   bleak = callPackage ../development/python-modules/bleak { };
+
+  bleak-esphome = callPackage ../development/python-modules/bleak-esphome { };
 
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
 
@@ -4807,6 +4811,8 @@ self: super: with self; {
   gradio = callPackage ../development/python-modules/gradio { };
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
+
+  grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -12482,6 +12488,8 @@ self: super: with self; {
 
   returns = callPackage ../development/python-modules/returns { };
 
+  reuse = callPackage ../development/python-modules/reuse { };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
@@ -13017,6 +13025,8 @@ self: super: with self; {
   shap = callPackage ../development/python-modules/shap { };
 
   shapely = callPackage ../development/python-modules/shapely { };
+
+  shapely_1_8 = callPackage ../development/python-modules/shapely/1.8.nix { };
 
   shaperglot = callPackage ../development/python-modules/shaperglot { };
 
@@ -15510,6 +15520,8 @@ self: super: with self; {
   universal-pathlib = callPackage ../development/python-modules/universal-pathlib { };
 
   universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
+
+  unix-ar = callPackage ../development/python-modules/unix-ar { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
