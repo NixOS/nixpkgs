@@ -59,6 +59,12 @@ gccStdenv.mkDerivation {
            CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
            LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld
 
+    $CC || true
+    $CXX || true
+    $LINK || true
+    $CPP || true
+    $LD || true
+
     cat SimulIDE.pro
   '';
 
