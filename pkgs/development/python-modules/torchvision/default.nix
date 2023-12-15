@@ -8,18 +8,16 @@
 , pillow
 , pytest
 , scipy
-, symlinkJoin
 , torch
 , which
 }:
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv cudaVersion;
+  inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
   version = "0.16.2";
-  format = "setuptools";
 in
 buildPythonPackage {
   inherit pname version;
