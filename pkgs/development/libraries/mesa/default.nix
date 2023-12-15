@@ -62,7 +62,6 @@
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
-, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
 , jdupes
 , rust-bindgen
@@ -99,7 +98,7 @@ let
   haveAllVulkan = lib.elem "all" vulkanDrivers;
   haveZink = haveAllGallium || lib.elem "zink" galliumDrivers;
   haveDozen = haveAllGallium || (lib.elem "d3d12" galliumDrivers) || haveAllVulkan || (lib.elem "microsoft-experimental" vulkanDrivers);
-self = stdenv.mkDerivation {
+self = stdenv.mkDerivation (finalAttrs: {
   pname = "mesa";
   inherit version;
 
@@ -150,8 +149,7 @@ self = stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "drivers" ]
     ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl"
+    ++ lib.optionals stdenv.isLinux  [ "driversdev" "opencl" ]
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output
     # in case anything wants to use it at some point
@@ -212,14 +210,14 @@ self = stdenv.mkDerivation {
     "-Dgallium-va=disabled"
     "-Dgallium-xa=disabled"
     "-Dlmsensors=disabled"
-  ] ++ lib.optionals enableOpenCL [
+  ] ++ lib.optionals stdenv.isLinux [
+    "-Drust_std=2021"
+    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
     # Clover, old OpenCL frontend
     "-Dgallium-opencl=icd"
     "-Dopencl-spirv=true"
-
     # Rusticl, new OpenCL frontend
-    "-Dgallium-rusticl=true" "-Drust_std=2021"
-    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+    "-Dgallium-rusticl=true"
   ]  ++ lib.optionals (!withValgrind) [
     "-Dvalgrind=disabled"
   ] ++ lib.optional enablePatentEncumberedCodecs
@@ -234,21 +232,23 @@ self = stdenv.mkDerivation {
     zstd libunwind
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
+    ++ lib.optionals stdenv.isLinux [
+      libomxil-bellagio libva-minimal udev lm_sensors
+      llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator
+    ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
   depsBuildBuild = [ pkg-config ]
-    ++ lib.optional enableOpenCL buildPackages.stdenv.cc;
+    ++ lib.optional stdenv.isLinux buildPackages.stdenv.cc;
 
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optionals enableOpenCL [ rust-bindgen rustc ]
+  ] ++ lib.optionals stdenv.isLinux [ rust-bindgen rustc ]
     ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
@@ -287,7 +287,7 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
-  '' + lib.optionalString enableOpenCL ''
+  '' + lib.optionalString (lib.elem "opencl" finalAttrs.outputs) ''
     # Move OpenCL stuff
     mkdir -p $opencl/lib
     mv -t "$opencl/lib/"     \
@@ -351,7 +351,7 @@ self = stdenv.mkDerivation {
     ''}
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals stdenv.isLinux [
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
   ]);
@@ -390,6 +390,6 @@ self = stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
-};
+});
 
 in self
