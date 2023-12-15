@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "sha256": "14dkyqm04d4ix114jbcgbx10zvkv4qlx4n56chpqz0w1y7x8idpd",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.1/bookmarks-13.1.1.tar.gz",
-    "version": "13.1.1",
+    "sha256": "04yngkmsjq6zj5qih86ybfr2cybqsz3gb5dasm6yhmkvd1ar5s39",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.2/bookmarks-13.1.2.tar.gz",
+    "version": "13.1.2",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -30,9 +30,9 @@
     ]
   },
   "cookbook": {
-    "sha256": "07yj41khwhpsfjwfxgs6xyjhvvavmyby457fh68kx8npinl8n0x4",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.10.4/cookbook-0.10.4.tar.gz",
-    "version": "0.10.4",
+    "sha256": "06d1rhvcwxzi8hl99nz3hg32fznv0q5m06cwjy3gc81j53qz0ksc",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.10.5/cookbook-0.10.5.tar.gz",
+    "version": "0.10.5",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "maps": {
-    "sha256": "1gyxg5xp4mpdrw8630nqcf5yk8cs7a0kvfik2q01p05d533phc4d",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0/maps-1.2.0.tar.gz",
+    "sha256": "049hrp79fj1bp9nk9isjrk427k238974x7gsj68jplxfrgq3sdkz",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0-2-nightly/maps-1.2.0-2-nightly.tar.gz",
     "version": "1.2.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -180,9 +180,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "0lwyy1pnyfw464vab1v5k8q0rgarrj5w12cf1nsywjaafb8y1ym0",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.5/notify_push-v0.6.5.tar.gz",
-    "version": "0.6.5",
+    "sha256": "1by9qw9bsf48cyczhfxpz9ifrg2dayvcn26m309dicqgjqkz91hd",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.6/notify_push-v0.6.6.tar.gz",
+    "version": "0.6.6",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
