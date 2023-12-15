@@ -46,11 +46,13 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    # TODO This looks like it needs to be rebased (or is not needed anymore).
+    #
     # Fix missing pthread_compat.h, see https://github.com/intel/linux-sgx/pull/784
-    (fetchpatch {
-      url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
-      sha256 = "sha256-sHU++K7NJ+PdITx3y0PwstA9MVh10rj2vrLn01N9F4w=";
-    })
+    # (fetchpatch {
+    #   url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
+    #   sha256 = "sha256-sHU++K7NJ+PdITx3y0PwstA9MVh10rj2vrLn01N9F4w=";
+    # })
   ];
 
   postPatch = ''
@@ -123,7 +125,7 @@ stdenv.mkDerivation rec {
         lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u3.patch -o inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u7.patch -o inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
