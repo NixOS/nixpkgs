@@ -27,7 +27,7 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.22.100.3";
+  version = "2.12.100.3";
   # Version as used in the Git tag
   versionTag = "2.12";
 
