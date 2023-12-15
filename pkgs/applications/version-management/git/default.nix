@@ -315,11 +315,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace t/test-lib.sh \
       --replace "test_set_prereq POSIXPERM" ""
     # TODO: Investigate while these still fail (without POSIXPERM):
+    # Tested to fail: 2.43.0
     disable_test t0001-init 'shared overrides system'
+    # Tested to fail: 2.43.0
     disable_test t0001-init 'init honors global core.sharedRepository'
+    # Tested to fail: 2.43.0
     disable_test t1301-shared-repo
+    # Tested to fail: 2.43.0
     # git-completion.bash: line 405: compgen: command not found:
     disable_test t9902-completion 'option aliases are shown with GIT_COMPLETION_SHOW_ALL'
+    # Tested to fail: 2.43.0
+    disable_test t9902-completion "sourcing the completion script clears cached --options"
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -329,28 +335,12 @@ stdenv.mkDerivation (finalAttrs: {
       disable_test t9001-send-email
     ''}
 
-    # XXX: I failed to understand why this one fails.
-    # Could someone try to re-enable it on the next release ?
-    # Tested to fail: 2.18.0 and 2.19.0
-    disable_test t1700-split-index "null sha1"
-
-    # Tested to fail: 2.18.0
-    disable_test t9902-completion "sourcing the completion script clears cached --options"
-
     # Flaky tests:
-    disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
 
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
-
-    ${lib.optionalString (!perlSupport) ''
-      # request-pull is a Bash script that invokes Perl, so it is not available
-      # when NO_PERL=1, and the test should be skipped, but the test suite does
-      # not check for the Perl prerequisite.
-      disable_test t5150-request-pull
-    ''}
   '' + lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
