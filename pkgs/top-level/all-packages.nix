@@ -61,7 +61,7 @@ with pkgs;
   };
 
   stdenvNoLibs =
-    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isDarwin.useLLVM or false)
+    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.useLLVM or false)
     then
       # We cannot touch binutils or cc themselves, because that will cause
       # infinite recursion. So instead, we just choose a libc based on the
@@ -41444,7 +41444,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
 
-  wavm = callPackage ../development/interpreters/wavm { };
+  wavm = callPackage ../development/interpreters/wavm {
+    llvmPackages = llvmPackages_12;
+  };
 
   yabasic = callPackage ../development/interpreters/yabasic { };
 
