@@ -52,8 +52,24 @@ gccStdenv.mkDerivation {
       -e "s|QMAKE_CXX = .*$|QMAKE_CXX = ${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++|" \
       -e "s|QMAKE_LINK = .*$|QMAKE_LINK = ${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++|"
 
+    export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
+           CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \
+           LINK=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \
+           CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld
+
     cat SimulIDE.pro
   '';
+
+  makeFlags = [
+    "CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+    "CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
+    "LINK=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
+    "CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
+    "CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
+    "LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld"
+  ];
 
   preConfigure = ''
     cd build_XX
