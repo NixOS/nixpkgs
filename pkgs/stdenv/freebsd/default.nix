@@ -84,7 +84,7 @@ in
       "timeout" "touch" "tr" "true" "truncate"
       "tsort" "tty" "uname" "unexpand" "uniq"
       "unlink" "users" "vdir" "wc"
-      "who" "whoami" "yes"
+      "who" "whoami" "yes" "["
     ]; };
     diffutils = linkBS { name = "diffutils"; paths = map (str: "bin/" + str) [
       "diff" "cmp" "diff3" "sdiff"
@@ -224,7 +224,7 @@ in
           name = "freebsd-boot-1-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
-          bintools = prevStage.llvmPackages_16.bintools-unwrapped;
+          bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
@@ -237,6 +237,7 @@ in
         freebsd = super.freebsd.overrideScope (self: super: {
           libdl = prevStage.freebsd.libdl;
         });
+        clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -279,7 +280,8 @@ in
         inherit lib stdenvNoCC;
         name = "freebsd-cc";
         nixSupport = {
-          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "--push-state" "--as-needed" "-lgcc_s" "--pop-state"];
+          #cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "--push-state" "--as-needed" "-lgcc_s" "--pop-state"];
+          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];
         };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
@@ -293,16 +295,34 @@ in
           name = "freebsd-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
-          bintools = prevStage.llvmPackages_16.bintools-unwrapped;
+          bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
         };
       });
       overrides = self: super: {
-        #curl = prevStage.curl;
+        curl = prevStage.curl;
+        iconv = prevStage.iconv;
+        cacert = prevStage.cacert;
         #bash = prevStage.bash;
         inherit (prevStage) fetchurl;
+        clangStdenv = self.overrideCC self.stdenv (import ../../build-support/cc-wrapper ({
+          inherit lib stdenvNoCC;
+          name = "freebsd-cc-clang";
+          nixSupport = {
+            # NIGHTMARE NIGHTMARE NIGHTMARE
+            cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "-L${prevStage.freebsd.libc.libgcc}/lib"  "-L${lib.getLib prevStage.llvmPackages_16.compiler-rt}/lib"];
+          };
+          inherit (prevStage.freebsd) libc;
+          inherit (prevStage) gnugrep coreutils;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+          cc = prevStage.llvmPackages_16.clang-unwrapped;
+          isClang = true;
+          bintools = stdenv.cc.bintools;
+        }));
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

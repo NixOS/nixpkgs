@@ -1,6 +1,6 @@
-{ stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, ... }:
+{ clangStdenv, stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, ... }:
 lib.makeScope newScope (self: with self; {
-  inherit stdenv;
+  stdenv = if stdenv.cc.isClang then stdenv else clangStdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
@@ -8,6 +8,7 @@ lib.makeScope newScope (self: with self; {
   buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostVersion; });
   packages13 = self.overrideScope (_: _: { hostVersion = "freebsd13"; });
   packages14 = self.overrideScope (_: _: { hostVersion = "freebsd14"; });
+  packages15 = self.overrideScope (_: _: { hostVersion = "freebsd15"; });
 
   hostVersion = ''${self.stdenv.hostPlatform.parsed.kernel.name}${builtins.toString (self.stdenv.hostPlatform.parsed.kernel.version or "")}'';
   hostArchBsd = {
@@ -71,4 +72,5 @@ lib.makeScope newScope (self: with self; {
   libncurses-tinfo = callPackage ./libncurses-tinfo.nix {};
   libedit = callPackage ./libedit.nix {};
   libsm = callPackage ./libsm.nix {};
+  libdevstat = callPackage ./libdevstat.nix {};
 })
