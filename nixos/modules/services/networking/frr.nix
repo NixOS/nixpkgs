@@ -23,10 +23,9 @@ let
     "pbr"
     "bfd"
     "fabric"
-    "mgmt"
   ];
 
-  allServices = services ++ [ "zebra" ];
+  allServices = services ++ [ "zebra" "mgmt" ];
 
   isEnabled = service: cfg.${service}.enable;
 
@@ -137,6 +136,20 @@ in
             '';
           };
         };
+        mgmt = (serviceOptions "mgmt") // {
+          enable = mkOption {
+            type = types.bool;
+            default = isEnabled "static";
+            defaultText = lib.literalExpression "config.services.frr.static.enable";
+            description = ''
+              Whether to enable the Configuration management daemon.
+
+              The Configuration management daemon is automatically
+              enabled if needed, at the moment this is when staticd
+              is enabled.
+            '';
+          };
+        };
       };
     }
     { options.services.frr = (genAttrs services serviceOptions); }
@@ -164,7 +177,7 @@ in
 
     environment.etc = let
       mkEtcLink = service: {
-        name = "frr/${service}.conf";
+        name = "frr/${daemonName service}.conf";
         value.source = configFile service;
       };
     in
@@ -196,18 +209,18 @@ in
               unitConfig.Documentation = if service == "zebra" then "man:zebra(8)"
                 else "man:${daemon}(8) man:zebra(8)";
 
-              restartTriggers = [
+              restartTriggers = mkIf (service != "mgmt") [
                 (configFile service)
               ];
-              reloadIfChanged = true;
+              reloadIfChanged = (service != "mgmt");
 
               serviceConfig = {
                 PIDFile = "frr/${daemon}.pid";
-                ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
+                ExecStart = "${pkgs.frr}/libexec/frr/${daemon}"
                   + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
                   + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}"
                   + " " + (concatStringsSep " " scfg.extraOptions);
-                ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
+                ExecReload = mkIf (service != "mgmt") "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemon} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${daemon}.conf";
                 Restart = "on-abnormal";
               };
             });
