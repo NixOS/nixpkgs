@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
-  version = "${sgxVersion}_${openssl_3_0.version}";
+  version = "${version}_${openssl_3_0.version}";
 
   src = fetchFromGitHub {
     owner = "intel";
