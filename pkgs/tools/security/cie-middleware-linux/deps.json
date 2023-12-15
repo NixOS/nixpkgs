@@ -1,0 +1,449 @@
+{
+ "https://jcenter.bintray.com": {
+  "com/diffplug/durian#durian-collect/1.2.0": {
+   "jar": "sZTAuIAhzBFsIcHcdvScLB/hda9by3TIume527+aSMw=",
+   "pom": "i7diCGoKT9KmRzu/kFx0R2OvodWaVjD3O7BLeHLAn/M="
+  },
+  "com/diffplug/durian#durian-core/1.2.0": {
+   "jar": "F+0KrLOjwWMjMyFou96thpTzKACytH1p1KTEmxFNXa4=",
+   "pom": "hwMg6QdVNxsBeW/oG6Ul/R3ui3A0b1VFUe7dQonwtmI="
+  },
+  "com/diffplug/durian#durian-io/1.2.0": {
+   "jar": "CV/R3HeIjAc/C+OaAYFW7lJnInmLCd6eKF7yE14W6sQ=",
+   "pom": "NQkZQkMk4nUKPdwvobzmqQrIziklaYpgqbTR1uSSL/4="
+  },
+  "com/diffplug/durian#durian-swt.os/4.2.0": {
+   "jar": "8h5XK/n7tUmpmMt+L3m2uaOrliM3GsEwsSUJUj97dI8=",
+   "module": "S9OpnUAGnXD/3CiPsokUlAoDtNURHO1NnPohI8lOX+M=",
+   "pom": "5CTf5Z5I9R1LbVP2mXeaU6Ue8yTx/zxtZi791PYwSGI="
+  },
+  "com/diffplug/spotless#spotless-lib-extra/2.39.0": {
+   "jar": "/+NEZO04c32MmQ+Im51b87b+wvu+oAvUq92SjuNPUxY=",
+   "module": "gIGlra1VSfuO7dpQNZ8OzZXtcidVCqo8Sp5rVGeyQgA=",
+   "pom": "jvpeLkv3MyDNmE3hz1YOJtJfsb7jGJSZC0XVh/474SM="
+  },
+  "com/diffplug/spotless#spotless-lib/2.39.0": {
+   "jar": "VE3HWmmU24oQkEvHogFur3ELhNXzmPgOm128hiD6l0M=",
+   "module": "25ntBI/BbDmOyEiCh9IO8XHbnnDzGz7zMriZEIQYIuw=",
+   "pom": "6tEnA/x8IFtnv+pkuOJQvmJgUxmmxWR2rxjwA/c+JCw="
+  },
+  "com/googlecode/concurrent-trees#concurrent-trees/2.6.1": {
+   "jar": "BONySYTipcv1VgbPo3KlvT08XSohUzpwBOPN5Tl2H6U=",
+   "pom": "Q8K5sULnBV0fKlgn8QlEkl0idH2XVrMlDAeqtHU4qXE="
+  },
+  "com/googlecode/javaewah#JavaEWAH/1.1.13": {
+   "jar": "TA/aKx0xd1DX6jJONscLK8SDEMCqrme5jfCRXWltcRE=",
+   "pom": "lyWx/pxoENl3dQu4RBXqEILEtIjUqDn5cEu09ej8F/Q="
+  },
+  "com/squareup/okhttp3#okhttp/4.10.0": {
+   "jar": "dYDxT6FpEgbjcIGtP5IGOxYDsyjaC7MW8v7wLgVi5+w=",
+   "module": "bDBwggtZH17IwpSEl7Wmt0L0krcVvKz0t1EVs6j/qxU=",
+   "pom": "x/kgsofIOOHYHipj+Gd7svqZE3BYorEeZTWv3pyBoOU="
+  },
+  "com/squareup/okio#okio-jvm/3.0.0": {
+   "jar": "vmSgzB8o6pzVyXDdfnVXr3LICNc4xJWzl7+JfJkh6Qc=",
+   "module": "F/SNQXdb2E3qeOnf7Y37zGavgFZ6XJ7J2WCHheyCDN4=",
+   "pom": "sMtzRExjeVg7KlOiZIxI3kIOsfSRVmdTdNimdW7zovo="
+  },
+  "com/squareup/okio#okio/3.0.0": {
+   "module": "b546eXgx51xbVi2UbAdRg/myvoRnken4i95FSR2u2Yc=",
+   "pom": "lgrVNSNexh9VRtuBPQGVwTr4UjChLqvpmXUeilUNFU8="
+  },
+  "dev/equo/ide#solstice/1.3.1": {
+   "jar": "dl9eEMdIofpRy3tsyH8pgqs2txWX5p9wnZi/ETa1ME8=",
+   "module": "oEpRNV2jFNNKtpRZzJ1J8trBV3pd9Kc3Y5DXfOogItE=",
+   "pom": "ljw9pdrhspFNWcDbgXTt2LyqwwO0FMdp4WQsfYOMbPw="
+  },
+  "org/eclipse/jgit#org.eclipse.jgit-parent/6.5.0.202303070854-r": {
+   "pom": "1827Cta7XcZXZRPLDktD7dln+CYBf38vVVkjR30QhoU="
+  },
+  "org/eclipse/jgit#org.eclipse.jgit/6.5.0.202303070854-r": {
+   "jar": "m02ozeFlH6ep9NJCWF/pQ0PUAWXkwGrVpyIESiy+YlE=",
+   "pom": "El3k4la58yhoYEtasdiCnFiHVidJVJk/RDQ9kpHbz4w="
+  },
+  "org/eclipse/platform#org.eclipse.osgi/3.18.300": {
+   "jar": "urlD5Y7dFzCSOGctunpFrsni2svd24GKjPF3I+oT+iI=",
+   "pom": "4nl2N1mZxUJ/y8//PzvCD77a+tiqRRArN59cL5fI/rQ="
+  },
+  "org/jetbrains#annotations/13.0": {
+   "jar": "rOKhDcji1f00kl7KwD5JiLLA+FFlDJS4zvSbob0RFHg=",
+   "pom": "llrrK+3/NpgZvd4b96CzuJuCR91pyIuGN112Fju4w5c="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-common/1.6.20": {
+   "jar": "jaQKJSDTDcsQEhdv6T0k6C0Io+NGw34DQ7D7b2T2vgE=",
+   "pom": "PgTMk1HVzsQqRcBg+HM/bpTrx+NZExClGOBuiFB4mcg="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk7/1.5.31": {
+   "jar": "olv0c1POiZ2EPL3e5RbWIac0c+f7qX+NAwHntK7XwV8=",
+   "pom": "IxOEie4pOmgZcGiHd0X3AL+hGvmJGHvtPDB0zYwHl3g="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk8/1.5.31": {
+   "jar": "tUj3dnqs8CnSQX5HRAdCvW0+vt4ZtgOG4jVUzlxMX9w=",
+   "pom": "RREKqwB0eSuBWAewKy2vGNKzfodHrAaSqteg0C2ok98="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.6.20": {
+   "jar": "7rUcK2eyYjP9gdC8T4BE7ISXGIkJBXY87/2Eox4st5k=",
+   "pom": "oI6D3LDymFCYd94i1SZEZHbdsx6hx3Uw8sgfJNsWb5k="
+  },
+  "org/slf4j#slf4j-api/1.7.30": {
+   "pom": "fgdHdR6bZ+Gdy1IG8E6iLMA9JQxCJCZALq3QNRPywxQ="
+  },
+  "org/slf4j#slf4j-api/1.7.36": {
+   "jar": "0+9XXj5JeWeNwBvx3M5RAhSTtNEft/G+itmCh3wWocA=",
+   "pom": "+wRqnCKUN5KLsRwtJ8i113PriiXmDL0lPZhSEN7cJoQ="
+  },
+  "org/slf4j#slf4j-parent/1.7.30": {
+   "pom": "EWR5VuSKDFv7OsM/bafoPzQQAraFfv0zWlBbaHvjS3U="
+  },
+  "org/slf4j#slf4j-parent/1.7.36": {
+   "pom": "uziNN/vN083mTDzt4hg4aTIY3EUfBAQMXfNgp47X6BI="
+  },
+  "org/sonatype/oss#oss-parent/5": {
+   "pom": "FnjUEgpYXYpjATGu7ExSTZKDmFg7fqthbufVqH9SDT0="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/tukaani#xz/1.9": {
+   "jar": "IRswbPxE+Plt86Cj3a91uoxSie7XfWDXL4ibuFX1NeU=",
+   "pom": "CTvhsDMxvOKTLWglw36YJy12Ieap6fuTKJoAJRi43Vo="
+  }
+ },
+ "https://plugins.gradle.org/m2": {
+  "com/diffplug/durian#durian-collect/1.2.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/durian/durian-collect/1.2.0/durian-collect-1.2.0.jar",
+   "pom": "https://jcenter.bintray.com/com/diffplug/durian/durian-collect/1.2.0/durian-collect-1.2.0.pom"
+  },
+  "com/diffplug/durian#durian-core/1.2.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/durian/durian-core/1.2.0/durian-core-1.2.0.jar",
+   "pom": "https://jcenter.bintray.com/com/diffplug/durian/durian-core/1.2.0/durian-core-1.2.0.pom"
+  },
+  "com/diffplug/durian#durian-io/1.2.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/durian/durian-io/1.2.0/durian-io-1.2.0.jar",
+   "pom": "https://jcenter.bintray.com/com/diffplug/durian/durian-io/1.2.0/durian-io-1.2.0.pom"
+  },
+  "com/diffplug/durian#durian-swt.os/4.2.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/durian/durian-swt.os/4.2.0/durian-swt.os-4.2.0.jar",
+   "module": "https://jcenter.bintray.com/com/diffplug/durian/durian-swt.os/4.2.0/durian-swt.os-4.2.0.module",
+   "pom": "https://jcenter.bintray.com/com/diffplug/durian/durian-swt.os/4.2.0/durian-swt.os-4.2.0.pom"
+  },
+  "com/diffplug/spotless#com.diffplug.spotless.gradle.plugin/6.19.0": {
+   "pom": "+fXLUVV0V3JXL/2SmCpTbRK2paVrI00iMtrW6nu+3uc="
+  },
+  "com/diffplug/spotless#spotless-lib-extra/2.39.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib-extra/2.39.0/spotless-lib-extra-2.39.0.jar",
+   "module": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib-extra/2.39.0/spotless-lib-extra-2.39.0.module",
+   "pom": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib-extra/2.39.0/spotless-lib-extra-2.39.0.pom"
+  },
+  "com/diffplug/spotless#spotless-lib/2.39.0": {
+   "jar": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib/2.39.0/spotless-lib-2.39.0.jar",
+   "module": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib/2.39.0/spotless-lib-2.39.0.module",
+   "pom": "https://jcenter.bintray.com/com/diffplug/spotless/spotless-lib/2.39.0/spotless-lib-2.39.0.pom"
+  },
+  "com/diffplug/spotless#spotless-plugin-gradle/6.19.0": {
+   "jar": "o9v4azWm2ZrZkh7HSffIla363eBhBqB1PGKprPxzTMU=",
+   "module": "DcNpm13bfePuZcNfHUhwBZGLa0FpaPiULIKiFHcCn8g=",
+   "pom": "JRDlqNONzi7svv67CL8oAA30QNVPeecvL+INJaXuDVk="
+  },
+  "com/googlecode/concurrent-trees#concurrent-trees/2.6.1": {
+   "jar": "https://jcenter.bintray.com/com/googlecode/concurrent-trees/concurrent-trees/2.6.1/concurrent-trees-2.6.1.jar",
+   "pom": "https://jcenter.bintray.com/com/googlecode/concurrent-trees/concurrent-trees/2.6.1/concurrent-trees-2.6.1.pom"
+  },
+  "com/googlecode/javaewah#JavaEWAH/1.1.13": {
+   "jar": "https://jcenter.bintray.com/com/googlecode/javaewah/JavaEWAH/1.1.13/JavaEWAH-1.1.13.jar",
+   "pom": "https://jcenter.bintray.com/com/googlecode/javaewah/JavaEWAH/1.1.13/JavaEWAH-1.1.13.pom"
+  },
+  "com/squareup/okhttp3#okhttp/4.10.0": {
+   "jar": "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/4.10.0/okhttp-4.10.0.jar",
+   "module": "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/4.10.0/okhttp-4.10.0.module",
+   "pom": "https://jcenter.bintray.com/com/squareup/okhttp3/okhttp/4.10.0/okhttp-4.10.0.pom"
+  },
+  "com/squareup/okio#okio-jvm/3.0.0": {
+   "jar": "https://jcenter.bintray.com/com/squareup/okio/okio-jvm/3.0.0/okio-jvm-3.0.0.jar",
+   "module": "https://jcenter.bintray.com/com/squareup/okio/okio-jvm/3.0.0/okio-jvm-3.0.0.module",
+   "pom": "https://jcenter.bintray.com/com/squareup/okio/okio-jvm/3.0.0/okio-jvm-3.0.0.pom"
+  },
+  "com/squareup/okio#okio/3.0.0": {
+   "module": "https://jcenter.bintray.com/com/squareup/okio/okio/3.0.0/okio-3.0.0.module",
+   "pom": "https://jcenter.bintray.com/com/squareup/okio/okio/3.0.0/okio-3.0.0.pom"
+  },
+  "dev/equo/ide#solstice/1.3.1": {
+   "jar": "https://jcenter.bintray.com/dev/equo/ide/solstice/1.3.1/solstice-1.3.1.jar",
+   "module": "https://jcenter.bintray.com/dev/equo/ide/solstice/1.3.1/solstice-1.3.1.module",
+   "pom": "https://jcenter.bintray.com/dev/equo/ide/solstice/1.3.1/solstice-1.3.1.pom"
+  },
+  "org/eclipse/jgit#org.eclipse.jgit-parent/6.5.0.202303070854-r": {
+   "pom": "https://jcenter.bintray.com/org/eclipse/jgit/org.eclipse.jgit-parent/6.5.0.202303070854-r/org.eclipse.jgit-parent-6.5.0.202303070854-r.pom"
+  },
+  "org/eclipse/jgit#org.eclipse.jgit/6.5.0.202303070854-r": {
+   "jar": "https://jcenter.bintray.com/org/eclipse/jgit/org.eclipse.jgit/6.5.0.202303070854-r/org.eclipse.jgit-6.5.0.202303070854-r.jar",
+   "pom": "https://jcenter.bintray.com/org/eclipse/jgit/org.eclipse.jgit/6.5.0.202303070854-r/org.eclipse.jgit-6.5.0.202303070854-r.pom"
+  },
+  "org/eclipse/platform#org.eclipse.osgi/3.18.300": {
+   "jar": "https://jcenter.bintray.com/org/eclipse/platform/org.eclipse.osgi/3.18.300/org.eclipse.osgi-3.18.300.jar",
+   "pom": "https://jcenter.bintray.com/org/eclipse/platform/org.eclipse.osgi/3.18.300/org.eclipse.osgi-3.18.300.pom"
+  },
+  "org/jetbrains#annotations/13.0": {
+   "jar": "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0.jar",
+   "pom": "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0.pom"
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-common/1.6.20": {
+   "jar": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20/kotlin-stdlib-common-1.6.20.jar",
+   "pom": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20/kotlin-stdlib-common-1.6.20.pom"
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk7/1.5.31": {
+   "jar": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.31/kotlin-stdlib-jdk7-1.5.31.jar",
+   "pom": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.31/kotlin-stdlib-jdk7-1.5.31.pom"
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk8/1.5.31": {
+   "jar": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.31/kotlin-stdlib-jdk8-1.5.31.jar",
+   "pom": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.31/kotlin-stdlib-jdk8-1.5.31.pom"
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.6.20": {
+   "jar": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.6.20/kotlin-stdlib-1.6.20.jar",
+   "pom": "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.6.20/kotlin-stdlib-1.6.20.pom"
+  },
+  "org/slf4j#slf4j-api/1.7.30": {
+   "pom": "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.pom"
+  },
+  "org/slf4j#slf4j-api/1.7.36": {
+   "jar": "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+   "pom": "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom"
+  },
+  "org/slf4j#slf4j-parent/1.7.30": {
+   "pom": "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.30/slf4j-parent-1.7.30.pom"
+  },
+  "org/slf4j#slf4j-parent/1.7.36": {
+   "pom": "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom"
+  },
+  "org/sonatype/oss#oss-parent/5": {
+   "pom": "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/5/oss-parent-5.pom"
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+  },
+  "org/tukaani#xz/1.9": {
+   "jar": "https://jcenter.bintray.com/org/tukaani/xz/1.9/xz-1.9.jar",
+   "pom": "https://jcenter.bintray.com/org/tukaani/xz/1.9/xz-1.9.pom"
+  }
+ },
+ "https://repo.maven.apache.org/maven2": {
+  "com/conversantmedia#disruptor/1.2.21": {
+   "jar": "zlMF67WswjCUOSAHU432Pe2Oaw/cK76YG/dGSAqKUfc=",
+   "pom": "zzGuuq0GxieD87adt7SHauGLXZOsoEOuwBQ+tGB8kRU="
+  },
+  "com/dorkbox#Collections/1.4": {
+   "jar": "b3T+BmbzdqtKZrLbOw4iIv8NaetwW4gyFKpnzYW1mVA=",
+   "module": "BKPChy1aI2G2wSxQiIVla3iHqkppevT8mjXOq6P/a6U=",
+   "pom": "kxka3tBPVDdfDmiOqlwVqFHQauurzAZOW8xZ3KnqCtU="
+  },
+  "com/dorkbox#Desktop/1.0": {
+   "jar": "lrRNxKg5xnJmTIyM6dOnFYhSGkHD3gHKodqcz16r3yE=",
+   "module": "j39ppcb8RPGH8i/uLz1QEaEnn0ahThJsDeX8PPI+BWc=",
+   "pom": "5JNFkv4UtbXUc9kdPGzzpSrR0bkVeNtLD21xPZGGh+o="
+  },
+  "com/dorkbox#Executor/3.11": {
+   "jar": "NK25httoM8ObCjOEhuZ4j7HSOjcKlHDMI3BCfdLrn5A=",
+   "module": "5hOmSqwAynfF4oPxZdEOT+rpJllFLFDGlLNLNNryEjI=",
+   "pom": "c34hmRUiSFMPXNW4AyrUGARQXqyCtR/6Ku8l8wv7HSk="
+  },
+  "com/dorkbox#JNA/1.0": {
+   "jar": "Pq0BmdyOE7QTOP1Rcwx8WnaXx+cdtLmsRumkVNvTBsA=",
+   "module": "Cx18tluiPDhYpsBLxL5dJxG4a4dDzrJwZcpR7kx84lE=",
+   "pom": "5bzcCpLC4+5vz7KQ/wEJRP6utCf41uSBaRCPhI5iDW4="
+  },
+  "com/dorkbox#NetworkUtils/2.19.1": {
+   "jar": "k9vgn26rx0D6qXoUyvf1z7/KwqDtjlGsbCdBnod4yXE=",
+   "module": "4McLMq3XIicovWn3BrefxOtIE2Tad/V4wufnXxIZ4uI=",
+   "pom": "X/tgwW47daxSueYFHsVYkDPe6MKp5SiKldKi3oIh6nY="
+  },
+  "com/dorkbox#Notify/3.7": {
+   "jar": "hifOCopgpfA5iQc+Vf9dtfjHydqalaQdpLhpMKm3pFs=",
+   "pom": "PRkS2ee57Zdd0trsS7nikQ/HdPms0Yo8Rk9e0fM3mR8="
+  },
+  "com/dorkbox#OS/1.6": {
+   "jar": "QmterWKK1A3JGDQ3sYffUTNJQ99lIV4T0wM2VSAYGQs=",
+   "module": "gkdxTj77V84LuM8jRJ9W/JeNp3ZZlXyHKcWMlrfJNQw=",
+   "pom": "Wjl0OA8WbzIYDtu0k4KhPXYnssvY+lDEPTU3tkj+9+E="
+  },
+  "com/dorkbox#ObjectPool/4.3": {
+   "jar": "nc4+NO6I8nXeSTLClJE6NoTZi03Zct4kxO8j3oXgPOg=",
+   "module": "t0lhLwq/d3OgSMBQ02Kyz4FsdFgQOIQEH5B1pmnqn84=",
+   "pom": "gamh3DQzB3UA1bq0QPgm4A25KPETDVHbvkS1VTI17oE="
+  },
+  "com/dorkbox#ShellExecutor/1.1": {
+   "jar": "LKOzLAY4rDNM9wbEeOh24bed1s+s+Ei93XeoThoPiiE=",
+   "pom": "n/kcKqBX19hWxh9PrCQjZd064IW3eWVQ6DyzNox0Qlo="
+  },
+  "com/dorkbox#SystemTray/4.2.1": {
+   "jar": "Ox70moG8NjYjlTwb2nSvO3qghQzJMaRrHCoWnJUUFdA=",
+   "module": "ywyi2ImOhe2nwNw4uakVP7aJBNn/keH46T2Ab478AqU=",
+   "pom": "56Bu+zsRz3H7rzfqGLaXRiDzvqepRykx2HXu3q5No9E="
+  },
+  "com/dorkbox#TweenEngine/9.0": {
+   "jar": "raOKGPDtcfaNNBWMuSpEooBNqownh6Ah42iJIwqZMbU=",
+   "module": "2m+vau3LUaQfQGTT2i075JVVqTBjIS1c1lVqQ1AM7/Q=",
+   "pom": "RdXEh0DvAYNFSujkSuhvzKoDn3hPCyRwsjbQ4MAdJJU="
+  },
+  "com/dorkbox#Updates/1.1": {
+   "jar": "UaNUGusROytkitg33RCmG9Z0ayAzEEn5HD1AsLfrsC0=",
+   "module": "HL4a1Zro5dFVUgDzfO+8bFopykSJlVExjm3kuq+oSKQ=",
+   "pom": "ddRWknYRNnep+vapyezlajOostfjU7CguMGZhhnC/6M="
+  },
+  "com/dorkbox#Utilities/1.39": {
+   "jar": "jmbWGUpaLdPKbNVwj9+COU/yCH9ALewsfBvGls84oto=",
+   "module": "xhVFpEhxpJABaKDknSoWohCFwsAv6Cs/EUdKfSRPWhU=",
+   "pom": "qJ0pasY8qwkeKeHkOFiV+2q9r4cJGGl0Ls5ach6WjlA="
+  },
+  "com/fasterxml#oss-parent/49": {
+   "pom": "bfHMCoZSQhAIiUNBLJcbQqumidGwaNuf05Htmhk4cjU="
+  },
+  "com/fasterxml/uuid#java-uuid-generator/4.1.0": {
+   "jar": "u0s3BtLxXF5eYCPu0lG87hOPoVK+NUdJ9W/sAccmhnk=",
+   "pom": "5TZK+P0X73rgJVElx+Qy1w0YW/Uy6cLzOSWZSeendSQ="
+  },
+  "com/google/code/gson#gson-parent/2.10.1": {
+   "pom": "QkjgiCQmxhUYI4XWCGw+8yYudplXGJ4pMGKAuFSCuDM="
+  },
+  "com/google/code/gson#gson/2.10.1": {
+   "jar": "QkHBSncnw0/uplB+yAExij1KkPBw5FJWgQefuU7kxZM=",
+   "pom": "0rEVY09cCF20ucn/wmWOieIx/b++IkISGhzZXU2Ujdc="
+  },
+  "com/jgoodies#jgoodies-common/1.8.1": {
+   "jar": "3coQwW4dx6GzmcFFgPCq4jAUhR5X0iTLlsJg5tZJ0q0=",
+   "pom": "ia2b+Cr1wL1uSt8Vn2CBNhe4dtHL2hZ2pIlzv2QJIvI="
+  },
+  "com/jgoodies#jgoodies-forms/1.9.0": {
+   "jar": "dVx5UBq9gG9aqDJX3Iiyylkj5pZfPL/ocxFsfJdoIQo=",
+   "pom": "XPoeoCxNwZ0n3Vr8pRPynGerNE0aylU9jxbxW2mOT4U="
+  },
+  "commons-io#commons-io/2.13.0": {
+   "jar": "Zx6qOWiNrC/6pGRbPJmAri0OokceSual2hmc0VriNmY=",
+   "pom": "2z/tZMLhd06/1rGnSQN3MrFJuREd1+a5hfCN2lVHBDk="
+  },
+  "commons-logging#commons-logging/1.2": {
+   "jar": "2t3qHqC+D1aXirMAa4rJKDSv7vvZt+TmMW/KV98PpjY=",
+   "pom": "yRq1qlcNhvb9B8wVjsa8LFAIBAKXLukXn+JBAHOfuyA="
+  },
+  "net/java/dev/jna#jna-jpms/5.12.1": {
+   "jar": "Az6Kx6dCYkdIvyUWSPFQls9uFavgxMFfSnfKEIFqEyQ=",
+   "pom": "/oIEsE54gTuRM65GObdiwZauazmdQ9Z/olFXz7FSXS0="
+  },
+  "net/java/dev/jna#jna-platform-jpms/5.12.1": {
+   "jar": "1zvIB9SAk+9FzjVcZEb9/fO8DucEOysV+wM66hdhEQY=",
+   "pom": "CgHHSMhZdtcu2DfW/tp7Rk1DtjlV4JsYhH2FOPMmJc0="
+  },
+  "net/java/dev/jna#jna-platform/5.13.0": {
+   "jar": "R017iPbpcAm27B2YwwJN2VwjGHxl2r+8NTMbysPRc90=",
+   "pom": "Y7IMivBXyYGW+HieGiGm3d8Cqo84XmsEtLT58N8lcGY="
+  },
+  "net/java/dev/jna#jna/5.13.0": {
+   "jar": "ZtT4GaBipRodVie//CP6xV0Wd/Dgof66FEqr3WcKZLs=",
+   "pom": "9RXCV4F49FJH7Mp6nh2xCVMbHELyQk4lPO6w9rjUI3Q="
+  },
+  "org/apache#apache/13": {
+   "pom": "/1E9sDYf1BI3vvR4SWi8FarkeNTsCpSW+BEHLMrzhB0="
+  },
+  "org/apache#apache/19": {
+   "pom": "kfejMJbqabrCy69tAf65NMrAAsSNjIz6nCQLQPHsId8="
+  },
+  "org/apache#apache/29": {
+   "pom": "PkkDcXSCC70N9jQgqXclWIY5iVTCoGKR+mH3J6w1s3c="
+  },
+  "org/apache/commons#commons-parent/34": {
+   "pom": "Oi5p0G1kHR87KTEm3J4uTqZWO/jDbIfgq2+kKS0Et5w="
+  },
+  "org/apache/commons#commons-parent/58": {
+   "pom": "LUsS4YiZBjq9fHUni1+pejcp2Ah4zuy2pA2UbpwNVZA="
+  },
+  "org/apache/pdfbox#fontbox/2.0.28": {
+   "jar": "qRXk8B/1uCmpUjH2vv2SQBwxnAlmni1PoDNkQWVec5U=",
+   "pom": "6JVY6szNfO3NxKUmdtHGf5QKT0tOE/Z6s3l81o+147I="
+  },
+  "org/apache/pdfbox#pdfbox-parent/2.0.28": {
+   "pom": "SmFVc9ep+vF8/p/V/RKatepu8l7nKNfJQQksXxLIqQY="
+  },
+  "org/apache/pdfbox#pdfbox/2.0.28": {
+   "jar": "H3r4WHJl5BirqmCjetawnLU3VJw1/pDBxbTNcL+QPdM=",
+   "pom": "2zqjKVNC0iaw/Pmog/TNzvAJLlFiJn5rKLb7HsdACRs="
+  },
+  "org/javassist#javassist/3.29.2-GA": {
+   "jar": "qQ3bJRNd+eV+qb1OIk4hlVSSl1j5uumWXyn4HWCjKT8=",
+   "pom": "Ehu5fA3qc0LXSJInrCe/8J2hJ6TkS14Vy09YyeccbIk="
+  },
+  "org/jetbrains#annotations/23.0.0": {
+   "jar": "ew8ZckCCy/y8ZuWr6iubySzwih6hHhkZM+1DgB6zzQU=",
+   "pom": "yUkPZVEyMo3yz7z990P1P8ORbWwdEENxdabKbjpndxw="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-common/1.8.20": {
+   "jar": "+iAYirqo7PHQA16TqWmwcfEORaHIN4wxRSHq3nP3X9U=",
+   "pom": "YFWRuJs3ISfmspxpMl+i9qjEb0aMRdCUEOeOtZ/IChc="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk7/1.8.0": {
+   "pom": "36lkSmrluJjuR1ux9X6DC6H3cK7mycFfgRKqOBGAGEo="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk7/1.8.20": {
+   "jar": "rx7EDDuVGv3MDCoBc8e4F2PFKBwtW6+/CoVEokxdzAw=",
+   "pom": "NiLRBleM3cwKnsIPjOgV9/Sf9UL2QCKNIUH8r4BhawY="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk8/1.8.0": {
+   "pom": "K7bHVRuXx7oCn5hmWC56oZ1jq/1M1T2j/AxGLzq1/CY="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib-jdk8/1.8.20": {
+   "jar": "45i2eXdiJxi/GP+ZtznH2doGDzP7RYouJSAyIcFq8BA=",
+   "pom": "OkYiFKM26ZVod2lTGx43sMgdjhDJlJzV6nrh14A6AjI="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.6.10": {
+   "pom": "OwhwnqS642admim54AeoVQsQwVFsEKj22+n5SrgdxG0="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.8.0": {
+   "pom": "8ayQZVWo5TbRVjD9O/mA5RMHRiWyBbySmt/Vc00e+HI="
+  },
+  "org/jetbrains/kotlin#kotlin-stdlib/1.8.20": {
+   "jar": "Q5Vkexlh2ftzCjTo2+VsKTFXvAdZAEzKY9m17mZT5cc=",
+   "pom": "ycHvxLpLRsYy4qIeaTJYo+ztB+vqoAr008NG05kLIB4="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-bom/1.6.0": {
+   "pom": "2iMnJQ6r8q3rW6TQFaQ380R1EC0Vuj10SNpx38/Rlt4="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-bom/1.7.1": {
+   "pom": "uSWqmIxApceqDHeyE3P+sYw5QUkmvVHHbvRENPW66cI="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-core-jvm/1.7.1": {
+   "jar": "dJbP/dPrEBCazdocMhL2rHgVeJ4JOA3J4szexJbbo/w=",
+   "module": "2x/gEQ+oK1ZdMy050/PmLB3H62I4Mz47FeQ3f6VuOcs=",
+   "pom": "hcGdsQ28RIoEZjzftHgkPtoKjWsSfxCPGZVbFtSJs10="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-core/1.7.1": {
+   "module": "qcwMK+48b8S6jQ51Oj8+cOGB2l3zolie5U6SgHszrM8=",
+   "pom": "BGsBD8eg5D0r/HOp3nZ13lVBAGy86WFjEhdGA01p1yM="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-jdk8/1.6.0": {
+   "module": "qkK5DC+EYPBVGtzvItbv6L53uWZgdEkLfRXt13Zh67A=",
+   "pom": "CyBw4SPHzcJitQbOKtfn0J176m2rSsv9WNJ+cTFoSwA="
+  },
+  "org/jetbrains/kotlinx#kotlinx-coroutines-jdk8/1.7.1": {
+   "jar": "uW9xRbpptI9JQFNMuOGcfhWcRUQ+J8NoIWJhSLoXEPI=",
+   "module": "sJV+aTzxwefUrWJGqm4weV2/S/t1jB5LMv25wkQJuXM=",
+   "pom": "x3kWU2lOpaVLnN1HCAgtv7i9apeKX0IYSxFBz7SjDnU="
+  },
+  "org/junit#junit-bom/5.9.3": {
+   "module": "tAH9JZAeWCpSSqU0PEs54ovFbiSWHBBpvytLv87ka5M=",
+   "pom": "TQMpzZ5y8kIOXKFXJMv+b/puX9KIg2FRYnEZD9w0Ltc="
+  },
+  "org/slf4j#slf4j-api/2.0.7": {
+   "jar": "XWKYuToZBcMs2mR4gIrBTC1KR+kVNeU8Qff+64XZRvQ=",
+   "pom": "LUA8zw4KAtXBqGZ7DiozyN/GA4qyh7lnHdaBwgUmeYE="
+  },
+  "org/slf4j#slf4j-parent/2.0.7": {
+   "pom": "wYK7Ns068ck8FgPN/v54iRV9swuotYT0pEU1/NIuRec="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  },
+  "org/tukaani#xz/1.9": {
+   "jar": "IRswbPxE+Plt86Cj3a91uoxSie7XfWDXL4ibuFX1NeU=",
+   "pom": "CTvhsDMxvOKTLWglw36YJy12Ieap6fuTKJoAJRi43Vo="
+  }
+ }
+}
