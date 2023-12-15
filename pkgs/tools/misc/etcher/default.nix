@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, bash
-, util-linux
-, autoPatchelfHook
-, dpkg
-, makeWrapper
-, udev
-, electron
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  util-linux,
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  udev,
+  electron,
 }:
-
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.18.12";
+  version = "1.18.13";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
-    hash = "sha256-Ucs187xTpbRJ7P32hCl8cHPxO3HCs44ZneAas043FXk=";
+    hash = "sha512-84RlIwhcWLSE84JFvfUVINPdL3uVrfnySMmXGGeFe6P0/wRaFD5GNyPyLNV3PvUL7srzl9bHeFwaQBcP+uZwng==";
   };
 
   # sudo-prompt has hardcoded binary paths on Linux and we patch them here
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     homepage = "https://etcher.io/";
     license = licenses.asl20;
     mainProgram = pname;
-    maintainers = with maintainers; [ wegank ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [wegank];
+    platforms = ["x86_64-linux"];
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
   };
 }
