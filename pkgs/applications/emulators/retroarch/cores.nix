@@ -643,6 +643,7 @@ in
 
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
+    patches = [ ./patches/mupen64plus-larger_cart_rom.patch ];
     src = getCoreSrc "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
