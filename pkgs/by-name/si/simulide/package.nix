@@ -73,6 +73,7 @@ gccStdenv.mkDerivation {
 
   preConfigure = ''
     cd build_XX
+    export
   '';
 
   nativeBuildInputs = [
