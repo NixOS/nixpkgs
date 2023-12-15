@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, jdk, jre, gradle, bash, coreutils
-, substituteAll, nixosTests, perl, fetchpatch, writeText }:
+, substituteAll, nixosTests, fetchpatch  }:
 
 let
   version = "01497";
@@ -38,6 +38,11 @@ in stdenv.mkDerivation rec {
     rm gradle/verification-{keyring.keys,metadata.xml}
   '';
 
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
   nativeBuildInputs = [ gradle jdk ];
 
   wrapper = substituteAll {
@@ -45,60 +50,9 @@ in stdenv.mkDerivation rec {
     inherit bash coreutils jre seednodes;
   };
 
-  # https://github.com/freenet/fred/blob/next/build-offline.sh
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version patches;
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" ];
 
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon build
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/okio-jvm/okio/r)}" #e' \
-        | sh
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    # Downloaded jars differ by platform
-    outputHash = "sha256-CZf5M3lI7Lz9Pl8U/lNoQ6V6Jxbmkxau8L273XFFS2E=";
-    outputHashAlgo = "sha256";
-  };
-
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${deps}/'; metadataSources {mavenPom(); artifact()} }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${deps}/'; metadataSources {mavenPom(); artifact()} }
-        }
-      }
-    }
-
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${deps}/'; metadataSources {mavenPom(); artifact()} }
-        }
-      }
-    }
-  '';
-
-  buildPhase = ''
-    gradle jar -Dorg.gradle.java.home=${jdk} --offline --no-daemon --info --init-script $gradleInit
-  '';
+  gradleBuildTask = "jar";
 
   installPhase = ''
     runHook preInstall
@@ -108,11 +62,14 @@ in stdenv.mkDerivation rec {
     install -Dm555 ${wrapper} $out/bin/freenet
     substituteInPlace $out/bin/freenet \
       --subst-var-by outFreenet $out
-    ln -s ${deps} $out/deps
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) freenet; };
+  passthru = {
+    tests = { inherit (nixosTests) freenet; };
+
+    updateDeps = gradle.updateDeps { inherit pname; };
+  };
 
   meta = {
     description = "Decentralised and censorship-resistant network";
