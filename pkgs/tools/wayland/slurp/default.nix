@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurp";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "slurp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jUuY2wuN00libHDaJEmrvQAb1o989Ly3nLyKHV0jz8Q=";
+    hash = "sha256-2M8f3kN6tihwKlUCp2Qowv5xD6Ufb71AURXqwQShlXI=";
   };
 
   depsBuildBuild = [
