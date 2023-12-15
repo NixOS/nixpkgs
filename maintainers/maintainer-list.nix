@@ -19724,9 +19724,7 @@
     github = "spaghetus";
     githubId = 28763739;
     name = "Willow Carlson-Huber";
-    keys = [{
-      fingerprint = "FE21E0981CDFD50ADD086423C21A693BA4693A60";
-    }];
+    keys = [ { fingerprint = "FE21E0981CDFD50ADD086423C21A693BA4693A60"; } ];
   };
   willswats = {
     email = "williamstuwatson@gmail.com";
