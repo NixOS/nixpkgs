@@ -19,7 +19,7 @@ These checks are performed by this tool:
 
 ### File structure checks
 - `pkgs/by-name` must only contain subdirectories of the form `${shard}/${name}`, called _package directories_.
-- The `name`'s of package directories must be unique when lowercased
+- The `name`'s of package directories must be unique when lowercased.
 - `name` is a string only consisting of the ASCII characters `a-z`, `A-Z`, `0-9`, `-` or `_`.
 - `shard` is the lowercased first two letters of `name`, expressed in Nix: `shard = toLower (substring 0 2 name)`.
 - Each package directory must contain a `package.nix` file and may contain arbitrary other files.
@@ -28,8 +28,8 @@ These checks are performed by this tool:
 - Each package directory must not refer to files outside itself using symlinks or Nix path expressions.
 
 ### Nix evaluation checks
-- `pkgs.${name}` is defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
-- `pkgs.lib.isDerivation pkgs.${name}` is `true`.
+- For each package directory, the `pkgs.${name}` attribute must be defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
+- For each package directory, `pkgs.lib.isDerivation pkgs.${name}` must be `true`.
 
 ### Ratchet checks
 
@@ -41,7 +41,8 @@ Ratchets should be removed eventually once the pattern is not used anymore.
 
 The current ratchets are:
 
-- If `pkgs.${name}` is not auto-called from `pkgs/by-name`, the `args` in its `callPackage` must not be empty,
+- New manual definitions of `pkgs.${name}` (e.g. in `pkgs/top-level/all-packages.nix`) with `args = { }`
+  (see [nix evaluation checks](#nix-evaluation-checks)) must not be introduced.
 
 ## Development
 
