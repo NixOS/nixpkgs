@@ -4812,6 +4812,8 @@ self: super: with self; {
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
+  grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
@@ -12486,6 +12488,8 @@ self: super: with self; {
 
   returns = callPackage ../development/python-modules/returns { };
 
+  reuse = callPackage ../development/python-modules/reuse { };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
@@ -15516,6 +15520,8 @@ self: super: with self; {
   universal-pathlib = callPackage ../development/python-modules/universal-pathlib { };
 
   universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
+
+  unix-ar = callPackage ../development/python-modules/unix-ar { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
