@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
-  version = "0.25.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
     rev = "v${version}";
-    sha256 = "0f32jf2rds9543akysxinf3hsgzr0w880xwcrcm1r2r0nhp8b8s5";
+    hash = "sha256-PG//UOSPNTAW6Xs8rSWWmnoBAODHmh6Js/iOes/XSAs=";
   };
 
   disabled = !python3Packages.isPy3k;
@@ -21,7 +21,8 @@ python3Packages.buildPythonPackage rec {
     parse emoji puremagic yamale nbformat websockets pycron nbconvert
     aiohttp matrix-api-async aioredis aiosqlite arrow pyyaml motor regex
     mattermostdriver setuptools voluptuous ibm-watson tailer multidict
-    watchgod get-video-properties appdirs bitstring matrix-nio
+    watchgod get-video-properties appdirs bitstring matrix-nio wrapt
+    aiohttp-middlewares rich
   ] ++ matrix-nio.optional-dependencies.e2e;
 
   passthru.python = python3Packages.python;
