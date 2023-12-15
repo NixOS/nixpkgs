@@ -8,11 +8,12 @@
   dpkg,
   makeWrapper,
   udev,
-  electron,
+  electron_25,
 }:
 stdenv.mkDerivation rec {
   pname = "etcher";
   version = "1.18.13";
+  electron = electron_25;
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
