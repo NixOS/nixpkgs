@@ -13,7 +13,6 @@
 stdenv.mkDerivation rec {
   pname = "etcher";
   version = "1.18.13";
-  electron = electron_25;
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     cp -a usr/share/* $out/share
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_25}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app
 
     substituteInPlace $out/share/applications/balena-etcher.desktop \
