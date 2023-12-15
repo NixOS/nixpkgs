@@ -1,43 +1,29 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
-, fetchurl
 , lib
 , perl
 , sgx-sdk
 , which
+, openssl_3_0
 , debug ? false
 }:
 let
-  sgxVersion = sgx-sdk.versionTag;
-  opensslVersion = "1.1.1l";
+  version = "3.0_Rev2";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
-  version = "${sgxVersion}_${opensslVersion}";
+  version = "${sgxVersion}_${openssl_3_0.version}";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-sgx-ssl";
-    rev = "lin_${sgxVersion}_${opensslVersion}";
-    hash = "sha256-ibPXs90ni2fkxJ09fNO6wWVpfCFdko6MjBFkEsyIih8=";
+    rev = "3.0_Rev2";
+    hash = "sha256-dmLyaG6v+skjSa0KxLAfIfSBOxp9grrI7ds6WdGPe0I=";
   };
 
-  postUnpack =
-    let
-      opensslSourceArchive = fetchurl {
-        url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-        hash = "sha256-C3o+XlnDSCf+DDp0t+yLrvMCuY+oAIjX+RU6oW+na9E=";
-      };
-    in
-    ''
-      ln -s ${opensslSourceArchive} $sourceRoot/openssl_source/openssl-${opensslVersion}.tar.gz
-    '';
-
-  patches = [
-    # https://github.com/intel/intel-sgx-ssl/pull/111
-    ./intel-sgx-ssl-pr-111.patch
-  ];
+  postUnpack = ''
+    ln -s ${openssl_3_0.src} $sourceRoot/openssl_source/openssl-${openssl_3_0.version}.tar.gz
+  '';
 
   postPatch = ''
     patchShebangs Linux/build_openssl.sh
