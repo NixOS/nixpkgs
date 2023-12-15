@@ -75,9 +75,9 @@ rec {
 
   nomad_1_6 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.6.4";
-    sha256 = "sha256-tlbuxKCm7he1Tij4BYKGvv7a6LKiyWgs2PvbcWg/7A0=";
-    vendorHash = "sha256-PrQit4egSq/pkILb6M7A3gsiQvLPABhyLXWgv8GFz/Y=";
+    version = "1.6.5";
+    sha256 = "sha256-10s/yRWGoYTRbMytWShuTgYc1b388IID5doAvWXpyCU=";
+    vendorHash = "sha256-gd6a/CBJ+OOTNHEaRLoDky2f2cDCyW9wSZzD6K22voQ=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
