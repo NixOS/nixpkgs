@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchpatch, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
@@ -10,6 +10,16 @@ python3Packages.buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-PG//UOSPNTAW6Xs8rSWWmnoBAODHmh6Js/iOes/XSAs=";
   };
+
+  patches = [
+    # https://github.com/opsdroid/opsdroid/pull/2018
+    # This patch makes opsdroid much more usable on NixOS.
+    (fetchpatch {
+      name = "support-static-dependency-environment.patch";
+      url = "https://github.com/opsdroid/opsdroid/pull/2018/commits/802e7f3500b935bae21ee915c17efa6f512ad4f0.patch";
+      hash = "sha256-ahE0FVgwxIM3HmF2WFChmBeyuPbhUyYyD/YPfcMmu9k=";
+    })
+  ];
 
   disabled = !python3Packages.isPy3k;
 
