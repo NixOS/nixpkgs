@@ -1,12 +1,11 @@
 { lib, fetchFromGitHub, fetchpatch, buildDunePackage
-, angstrom, faraday, alcotest
+, angstrom, faraday, result, alcotest
 }:
 
 buildDunePackage rec {
   pname = "httpaf";
   version = "0.7.1";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -17,7 +16,7 @@ buildDunePackage rec {
   };
 
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ angstrom faraday ];
+  propagatedBuildInputs = [ angstrom faraday result ];
   doCheck = true;
 
   meta = {
