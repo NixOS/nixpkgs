@@ -51,37 +51,14 @@ in
     ]
   );
 
-  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (_: {
-    # Required by cmake's enable_language(CUDA) to build a test program
-    # When implementing cross-compilation support: this is
-    # final.pkgs.targetPackages.cudaPackages.cuda_cudart
-    env = {
-      # Given the multiple-outputs each CUDA redist has, we can specify the exact components we
-      # need from the package. CMake requires:
-      # - the cuda_runtime.h header, which is in the dev output
-      # - the dynamic library, which is in the lib output
-      # - the static library, which is in the static output
-      cudartInclude = "${final.cuda_cudart.dev}";
-      cudartLib = "${final.cuda_cudart.lib}";
-      cudartStatic = "${final.cuda_cudart.static}";
-    };
-
-    # Point NVCC at a compatible compiler
-
-    # Desiredata: whenever a package (e.g. magma) adds cuda_nvcc to
-    # nativeBuildInputs (offsets `(-1, 0)`), magma should also source the
-    # setupCudaHook, i.e. we want it the hook to be propagated into the
-    # same nativeBuildInputs.
-    #
-    # Logically, cuda_nvcc should include the hook in depsHostHostPropagated,
-    # so that the final offsets for the propagated hook would be `(-1, 0) +
-    # (0, 0) = (-1, 0)`.
-    #
-    # In practice, TargetTarget appears to work:
-    # https://gist.github.com/fd80ff142cd25e64603618a3700e7f82
-    depsTargetTargetPropagated = [
+  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs: {
+    propagatedBuildInputs = [
       final.setupCudaHook
     ];
+
+    meta = (oldAttrs.meta or { }) // {
+      mainProgram = "nvcc";
+    };
   });
 
   cuda_nvprof = prev.cuda_nvprof.overrideAttrs (oldAttrs: {

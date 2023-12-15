@@ -133,7 +133,9 @@ in buildPythonPackage rec {
     "out" # output standard python package
     "dev" # output libtorch headers
     "lib" # output libtorch libraries
+    "cxxdev" # propagated deps for the cmake consumers of torch
   ];
+  cudaPropagateToOutput = "cxxdev";
 
   src = fetchFromGitHub {
     owner = "pytorch";
@@ -334,7 +336,9 @@ in buildPythonPackage rec {
   buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
-      cuda_cudart # cuda_runtime.h and libraries
+      cuda_cudart.dev # cuda_runtime.h and libraries
+      cuda_cudart.lib
+      cuda_cudart.static
       cuda_cupti.dev # For kineto
       cuda_cupti.lib # For kineto
       cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
@@ -367,7 +371,10 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ]
+    ++ lib.optionals tritonSupport [ openai-triton ]
+    ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   propagatedBuildInputs = [
     cffi
@@ -387,8 +394,10 @@ in buildPythonPackage rec {
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
+  ] ++ lib.optionals tritonSupport [ openai-triton ];
+
+  propagatedCxxBuildInputs = [
   ]
-  ++ lib.optionals tritonSupport [ openai-triton ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -449,7 +458,10 @@ in buildPythonPackage rec {
       --replace "/build/source/torch/include" "$dev/include"
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = ''
+    mkdir -p "$cxxdev/nix-support"
+    printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
+  '' + lib.optionalString stdenv.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
         install_name_tool -id $lib/lib/$(basename $f) $f || true
     done
