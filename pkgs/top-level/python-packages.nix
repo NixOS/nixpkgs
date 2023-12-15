@@ -8592,7 +8592,7 @@ self: super: with self; {
 
   openai-triton = callPackage ../development/python-modules/openai-triton {
     llvm = pkgs.openai-triton-llvm;
-    cudaPackages = pkgs.cudaPackages_12_0;
+    cudaPackages = pkgs.cudaPackages_12_1;
   };
 
   openai-triton-cuda = self.openai-triton.override {
