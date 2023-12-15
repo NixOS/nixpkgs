@@ -10096,6 +10096,7 @@ with pkgs;
 
   matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {
     matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
+    nodejs = nodejs_18;
   };
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord {
