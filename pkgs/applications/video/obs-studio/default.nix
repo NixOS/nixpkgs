@@ -94,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/obsproject/obs-studio/commit/6e080a68067b27fe5463f0f4eee7df690451f3d7.patch";
       hash = "sha256-nbn/q3uszoHaDvaW8Et1MS1sgQzMsJRmjGSMHzUxV70=";
     })
+
+    # Fix libobs.pc for plugins on non-x86 systems
+    ./fix-arm64-cmake.patch
   ];
 
   nativeBuildInputs = [
