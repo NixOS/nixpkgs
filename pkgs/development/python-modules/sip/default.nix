@@ -2,22 +2,24 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , wheel
 , packaging
 , ply
 , toml
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.7";
+  version = "6.7.12";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3unAb6iubUQaQB+SKGf8YZbt2idO69n7/sVPB2nCqeI=";
+    hash = "sha256-COZvdCWS64GKyP2kFz4u1kyfLUC3C+4R2xxJkSfZhFA=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +27,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [ packaging ply toml ];
+  propagatedBuildInputs = [ packaging ply toml ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
   # There aren't tests
   doCheck = false;

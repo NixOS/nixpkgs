@@ -14,6 +14,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     };
     services.dae = {
       enable = true;
+      config = ''
+        global{}
+        routing{}
+      '';
     };
   };
 

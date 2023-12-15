@@ -4,7 +4,7 @@
 , yubikey-manager
 , fido2
 , mss
-, zxing_cpp
+, zxing-cpp
 , pillow
 , cryptography
 
@@ -43,7 +43,7 @@ buildPythonApplication {
     yubikey-manager
     fido2
     mss
-    zxing_cpp
+    zxing-cpp
     pillow
     cryptography
   ];

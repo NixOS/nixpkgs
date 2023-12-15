@@ -13,17 +13,18 @@ let
 
   lxd-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
   lxd-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-rootfs-squashfs = releases.lxdContainerImageSquashfs.${pkgs.stdenv.hostPlatform.system};
 
 in {
   name = "lxd-container";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
   };
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
-      diskSize = 4096;
+      diskSize = 6144;
 
       # Since we're testing `limits.cpu`, we've gotta have a known number of
       # cores to lean on
@@ -60,6 +61,16 @@ in {
 
     with subtest("Container can be managed"):
         machine.succeed("lxc launch nixos container")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
+        machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
+        machine.succeed("lxc delete -f container")
+
+    with subtest("Squashfs image is functional"):
+        machine.succeed(
+            "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs-squashfs} --alias nixos-squashfs"
+        )
+        machine.succeed("lxc launch nixos-squashfs container")
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
         machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")

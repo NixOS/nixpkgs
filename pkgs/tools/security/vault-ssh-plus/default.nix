@@ -8,16 +8,16 @@
 }:
 buildGoModule rec {
   pname = "vault-ssh-plus";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "isometry";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J2fb1sRjBxLegFVwyEIRVolaLnXvziPrlidd/n/+tU8=";
+    hash = "sha256-IRmFC5WsLmHfPjS/jW5V7dNF5rNvmsh3YKwW7rGII24=";
   };
 
-  vendorHash = "sha256-Casouw2fNg/hywx7A37VCVzQ8Gfnvf5qm6upOTUQZvA=";
+  vendorHash = "sha256-cuU7rEpJrwrbiXLajdv4h6GePbpZclweyB9qZ3SIjP0=";
 
   nativeBuildInputs = [ makeWrapper ];
 

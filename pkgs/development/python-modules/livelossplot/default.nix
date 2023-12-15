@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "livelossplot";
   version = "0.5.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

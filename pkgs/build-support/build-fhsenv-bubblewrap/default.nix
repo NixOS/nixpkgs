@@ -16,13 +16,15 @@
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
+, extraPreBwrapCmds ? ""
 , extraBwrapArgs ? []
-, unshareUser ? true
-, unshareIpc ? true
-, unsharePid ? true
+, unshareUser ? false
+, unshareIpc ? false
+, unsharePid ? false
 , unshareNet ? false
-, unshareUts ? true
-, unshareCgroup ? true
+, unshareUts ? false
+, unshareCgroup ? false
+, privateTmp ? false
 , dieWithParent ? true
 , ...
 } @ args:
@@ -31,15 +33,15 @@ assert (pname != null || version != null) -> (name == null && pname != null); # 
 
 with builtins;
 let
-  pname = if args.name != null then args.name else args.pname;
+  pname = if args ? name && args.name != null then args.name else args.pname;
   versionStr = lib.optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
   fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
-    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
     "pname" "version"
   ]);
 
@@ -116,7 +118,8 @@ let
 
   indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ignored=(/nix /dev /proc /etc)
+    ${extraPreBwrapCmds}
+    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
@@ -150,10 +153,8 @@ let
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
-      if [[ -L $i ]]; then
-        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
-      else
-        ro_mounts+=(--ro-bind-try "$i" "$i")
+      if [[ -e $i ]]; then
+        symlinks+=(--symlink "/.host-etc/''${i#/etc/}" "$i")
       fi
     done
 
@@ -192,6 +193,8 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
+      --ro-bind /etc /.host-etc
+      ${lib.optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -200,6 +203,7 @@ let
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
       --tmpfs ${glibc}/etc \
+      --tmpfs /etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
@@ -223,6 +227,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name {
+  inherit pname version;
   inherit meta;
 
   passthru = passthru // {

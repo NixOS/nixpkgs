@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 let
-  inherit (lib) mdDoc mkEnableOption mkPackageOptionMD optional optionalString;
+  inherit (lib) mdDoc mkEnableOption mkPackageOption optional optionalString;
   cfg = config.programs.skim;
 in
 {
@@ -8,7 +8,7 @@ in
     programs.skim = {
       fuzzyCompletion = mkEnableOption (mdDoc "fuzzy completion with skim");
       keybindings = mkEnableOption (mdDoc "skim keybindings");
-      package = mkPackageOptionMD pkgs "skim" {};
+      package = mkPackageOption pkgs "skim" {};
     };
   };
 

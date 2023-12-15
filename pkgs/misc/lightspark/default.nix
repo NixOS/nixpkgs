@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jchw ];
     platforms = platforms.linux;
+    mainProgram = "lightspark";
   };
 }

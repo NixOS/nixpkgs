@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kaniko";
-  version = "1.15.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "kaniko";
     rev = "v${version}";
-    hash = "sha256-PNAqdeB/ya3i1hRbagpfmpwS0tNRZbWBm9YIXME1HMc=";
+    hash = "sha256-XtEI+DJMbBRcvBqsbVCDhVZiXNKqNvmQAmTSLmWB5o4=";
   };
 
   vendorHash = null;

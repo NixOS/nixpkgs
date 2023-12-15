@@ -3,6 +3,7 @@
 , rustPlatform
 , stdenv
 , installShellFiles
+, perl
 , pkg-config
 , libiconv
 , openssl
@@ -15,20 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.38.1";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    hash = "sha256-3khMo5qMG0qonMnPvuErVYFohUrZLAkaxKZzkMHou8E=";
+    hash = "sha256-FSLbRfxSWY0a9H9iHT3oQ2SXwB70AwyH0Cm8sDZGaUk=";
   };
 
-  cargoHash = "sha256-d4UNkbp/ryN/VbK8VO8oYvZ1j6qHKeLRSDqgdT+zIeU=";
+  cargoHash = "sha256-a5dFtK5czOGqE6mKeeI0kkY2da1kS3IRZ1NTluZ9Syc=";
 
   nativeBuildInputs = [
     mandown
     installShellFiles
+    perl
     pkg-config
   ];
 

@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.eelco ];
+    mainProgram = "hello";
     platforms = platforms.all;
   };
 })

@@ -9,17 +9,18 @@
 , libXdmcp
 , qtbase
 , qt6
+, wayland
 }:
 
 mkDerivation rec {
   pname = "fcitx5-qt";
-  version = "5.1.0";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LWOELt1uo5TtM85ppxt6MK7fvUuocHkWXYjUE1yyOV4=";
+    sha256 = "sha256-qXQ5nvPV5YHD8MFfeqgF8kyk0zf28lWxM8SUo3T6TzA=";
   };
 
   preConfigure = ''
@@ -31,7 +32,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase}"
+    "-DCMAKE_PREFIX_PATH=${qt6.qtbase};${qt6.qtwayland}"
     "-DENABLE_QT4=0"
     "-DENABLE_QT6=1"
   ];
@@ -46,6 +47,7 @@ mkDerivation rec {
     qtx11extras
     libxcb
     libXdmcp
+    wayland
   ];
 
   meta = with lib; {

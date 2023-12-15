@@ -9,12 +9,7 @@ maturinBuildHook() {
 
     (
     set -x
-    env \
-      "CC_@rustBuildPlatform@=@ccForBuild@" \
-      "CXX_@rustBuildPlatform@=@cxxForBuild@" \
-      "CC_@rustTargetPlatform@=@ccForHost@" \
-      "CXX_@rustTargetPlatform@=@cxxForHost@" \
-      maturin build \
+    @setEnv@ maturin build \
         --jobs=$NIX_BUILD_CORES \
         --frozen \
         --target @rustTargetPlatformSpec@ \

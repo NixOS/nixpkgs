@@ -9,12 +9,12 @@
 stdenv.mkDerivation {
   pname = "pikchr";
   # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
-  version = "unstable-2022-12-07";
+  version = "unstable-2023-08-30";
 
   src = fetchfossil {
     url = "https://pikchr.org/home";
-    rev = "21ca6b843d65c404";
-    sha256 = "sha256-fp06GqpLa/szRCS54KJ+SkT602oWvK3KyDFFjTmpNfI=";
+    rev = "d6f80b1ab30654d5";
+    sha256 = "sha256-GEH1qFiMYmNFJnZzLG5rxpl+F7OSRMoVcdo94+mvrlY=";
   };
 
   # can't open generated html files
@@ -44,7 +44,6 @@ stdenv.mkDerivation {
   dontWrapTclBinaries = true;
 
   doCheck = true;
-  checkTarget = "test";
 
   meta = with lib; {
     description = "A PIC-like markup language for diagrams in technical documentation";

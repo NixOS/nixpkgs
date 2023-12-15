@@ -2,6 +2,7 @@
 # Please dont edit it manually, your changes might get overwritten!
 
 { fetchNuGet }: [
+  (fetchNuGet { pname = "Ace4896.DBus.Services.Secrets"; version = "1.1.0"; sha256 = "03rs3f71vgzk3pp0mx83rx6aqg2aq7xwk0p42mj5701m3592x49d"; })
   (fetchNuGet { pname = "Cake.Tool"; version = "3.1.0"; sha256 = "1kv9zz0qsx40wiygydw5z6vkj8hfayvgy9bsii2lamdas9z0vmbc"; })
   (fetchNuGet { pname = "Docnet.Core"; version = "2.3.1"; sha256 = "03b39x0vlymdknwgwhsmnpw4gj3njmbl9pd57ls3rhfn9r832d44"; })
   (fetchNuGet { pname = "FuzzySharp"; version = "2.0.2"; sha256 = "1xq3q4s9d5p1yn4j91a90hawk9wcrz1bl6zj9866y01yx9aamr8s"; })
@@ -31,13 +32,14 @@
   (fetchNuGet { pname = "LiveChartsCore"; version = "2.0.0-beta.910"; sha256 = "0yw54yd1kp4j8js1g405m4lvv84zx4zkx4m64iiqsc765a4alvvy"; })
   (fetchNuGet { pname = "LiveChartsCore.SkiaSharpView"; version = "2.0.0-beta.910"; sha256 = "1ifhvcsa0319mip98xbmlib3k7fkn24igfxxyfi2d31rajqv970r"; })
   (fetchNuGet { pname = "Markdig"; version = "0.31.0"; sha256 = "0iic44i47wp18jbbpl44iifhj2mfnil9gakkw3bzp7zif3rhl19m"; })
+  (fetchNuGet { pname = "Meziantou.Framework.Win32.CredentialManager"; version = "1.4.2"; sha256 = "0x7xlym8jsm0zgbb75ip74gnw3fssb30phc48xf35yx6i0sfb2dh"; })
   (fetchNuGet { pname = "Microsoft.Data.Sqlite.Core"; version = "7.0.5"; sha256 = "11gkdlf2apnzvwfd7bxdhjvb4qd0p2ridp4rrz44f7h76x1sb0gk"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "1.1.0"; sha256 = "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "5.0.0"; sha256 = "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Targets"; version = "5.0.0"; sha256 = "0z3qyv7qal5irvabc8lmkh58zsl42mrzd1i0sssvzhv4q4kl3cg6"; })
   (fetchNuGet { pname = "Microsoft.Win32.Primitives"; version = "4.3.0"; sha256 = "0j0c1wj4ndj21zsgivsc24whiya605603kxrbiw6wkfdync464wq"; })
   (fetchNuGet { pname = "NETStandard.Library"; version = "1.6.1"; sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8"; })
-  (fetchNuGet { pname = "Nickvision.Aura"; version = "2023.9.1"; sha256 = "sha256-+6CXO7K/liVUHFPwdBUEUi2r5d5+/cHfoiZ15xURBBg="; })
+  (fetchNuGet { pname = "Nickvision.Aura"; version = "2023.9.3"; sha256 = "0j3fqjl8nskqqwmkc41h3pgnvl63nq9w443b571j154xibly5iw7"; })
   (fetchNuGet { pname = "Nickvision.GirExt"; version = "2023.7.3"; sha256 = "1ahf4mld9khk2gaja30zfcjmhclz2l2nims0q4l7jk2nm9p7rzi9"; })
   (fetchNuGet { pname = "OfxSharp.NetStandard"; version = "1.0.0"; sha256 = "1v7yw2glyywb4s0y5fw306bzh2vw175bswrhi5crvd92wf93makj"; })
   (fetchNuGet { pname = "PdfSharpCore"; version = "1.3.56"; sha256 = "0a01b2a14gygh25rq3509rky85331l8808q052br2fzidhb2vc10"; })
@@ -93,6 +95,7 @@
   (fetchNuGet { pname = "System.IO.Compression.ZipFile"; version = "4.3.0"; sha256 = "1yxy5pq4dnsm9hlkg9ysh5f6bf3fahqqb6p8668ndy5c0lk7w2ar"; })
   (fetchNuGet { pname = "System.IO.FileSystem"; version = "4.3.0"; sha256 = "0z2dfrbra9i6y16mm9v1v6k47f0fm617vlb7s5iybjjsz6g1ilmw"; })
   (fetchNuGet { pname = "System.IO.FileSystem.Primitives"; version = "4.3.0"; sha256 = "0j6ndgglcf4brg2lz4wzsh1av1gh8xrzdsn9f0yznskhqn1xzj9c"; })
+  (fetchNuGet { pname = "System.IO.Pipelines"; version = "6.0.0"; sha256 = "08211lvckdsdbd67xz4f6cyk76cli565j0dby1grlc4k9bhwby65"; })
   (fetchNuGet { pname = "System.Linq"; version = "4.3.0"; sha256 = "1w0gmba695rbr80l1k2h4mrwzbzsyfl2z4klmpbsvsg5pm4a56s7"; })
   (fetchNuGet { pname = "System.Linq.Expressions"; version = "4.3.0"; sha256 = "0ky2nrcvh70rqq88m9a5yqabsl4fyd17bpr63iy2mbivjs2nyypv"; })
   (fetchNuGet { pname = "System.Memory"; version = "4.5.3"; sha256 = "0naqahm3wljxb5a911d37mwjqjdxv9l0b49p5dmfyijvni2ppy8a"; })
@@ -135,4 +138,5 @@
   (fetchNuGet { pname = "System.Xml.ReaderWriter"; version = "4.3.0"; sha256 = "0c47yllxifzmh8gq6rq6l36zzvw4kjvlszkqa9wq3fr59n0hl3s1"; })
   (fetchNuGet { pname = "System.Xml.XDocument"; version = "4.3.0"; sha256 = "08h8fm4l77n0nd4i4fk2386y809bfbwqb7ih9d7564ifcxr5ssxd"; })
   (fetchNuGet { pname = "Tmds.DBus"; version = "0.15.0"; sha256 = "1bz5j6wfp9hn4fg5vjxl6mr9lva4gx6zqncqyqxrcb8lw7hvhwc6"; })
+  (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; sha256 = "0d99kcs7r9cp6gpyc7z230czkkyx4164x86dhy0mca73f2ykc2g2"; })
 ]

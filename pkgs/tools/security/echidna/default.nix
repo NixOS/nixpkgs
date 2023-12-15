@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , haskellPackages
 , haskell
 , slither-analyzer
@@ -33,6 +34,15 @@ in mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-5d9ttPR3rRHywBeLM85EGCEZLNZNZzOAhIN6AJToJyI=";
   };
+
+  # Note: pending PR https://github.com/crytic/echidna/pull/1096
+  patches = [
+     (fetchpatch {
+       name = "brick-1.9-update";
+       url = "https://github.com/crytic/echidna/pull/1096/commits/36657d54943727e569691a6b3d85b83130480a2e.patch";
+       sha256 = "sha256-AOmB/fAZCF7ruXW1HusRe7wWWsLyMCWw+j3qIPARIAc=";
+     })
+  ];
 
   isLibrary = true;
   isExecutable = true;

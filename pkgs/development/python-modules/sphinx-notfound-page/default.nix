@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "sphinx-notfound-page";
-  version = "0.8.3";
-  format = "flit";
+  version = "1.0.0";
+  format = "pyproject";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-notfound-page";
     rev = version;
-    hash = "sha256-9iP6X2dqtMC3+CIrNI3fGDLL8xyXVAWNhN90DlMa9JU=";
+    hash = "sha256-tG71UuYbdlWNgq6Y5xRH3aWc9/eTr/RlsRNWSUjrbBE=";
   };
 
   nativeBuildInputs = [

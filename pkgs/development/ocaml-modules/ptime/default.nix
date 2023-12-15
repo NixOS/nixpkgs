@@ -7,6 +7,9 @@
 , topkg
 }:
 
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
+  "ptime is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation (finalAttrs: {
   version = "1.1.0";
   pname = "ocaml${ocaml.version}-ptime";

@@ -9,19 +9,18 @@
 , accelerate
 , bentoml
 , bitsandbytes
+, build
 , click
+, ctranslate2
 , datasets
 , docker
 , einops
-, fairscale
-, flax
+, ghapi
+, huggingface-hub
 , hypothesis
 , ipython
-, jax
-, jaxlib
 , jupyter
 , jupytext
-, keras
 , nbformat
 , notebook
 , openai
@@ -33,13 +32,12 @@
 , pytest-randomly
 , pytest-rerunfailures
 , pytest-xdist
-, ray
 , safetensors
+, scipy
 , sentencepiece
 , soundfile
 , syrupy
 , tabulate
-, tensorflow
 , tiktoken
 , transformers
 , openai-triton
@@ -49,7 +47,7 @@
 buildPythonPackage rec {
   inherit (openllm-core) src version;
   pname = "openllm";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -68,17 +66,23 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    accelerate
     bentoml
     bitsandbytes
+    build
     click
+    einops
+    ghapi
     openllm-client
+    openllm-core
     optimum
     safetensors
+    scipy
+    sentencepiece
     tabulate
     transformers
   ] ++ bentoml.optional-dependencies.io
   ++ tabulate.optional-dependencies.widechars
-  # ++ transformers.optional-dependencies.accelerate
   ++ transformers.optional-dependencies.tokenizers
   ++ transformers.optional-dependencies.torch;
 
@@ -88,31 +92,26 @@ buildPythonPackage rec {
       soundfile
       transformers
     ] ++ transformers.optional-dependencies.agents;
+    awq = [
+      # autoawq
+    ];
     baichuan = [
       # cpm-kernels
-      sentencepiece
     ];
     chatglm = [
       # cpm-kernels
-      sentencepiece
+    ];
+    ctranslate = [
+      ctranslate2
     ];
     falcon = [
-      einops
       xformers
     ];
     fine-tune = [
-      accelerate
-      bitsandbytes
       datasets
+      huggingface-hub
       peft
       # trl
-    ];
-    flan-t5 = [
-      flax
-      jax
-      jaxlib
-      keras
-      tensorflow
     ];
     ggml = [
       # ctransformers
@@ -121,27 +120,15 @@ buildPythonPackage rec {
       # auto-gptq
     ]; # ++ autogptq.optional-dependencies.triton;
     grpc = [
-    openllm-client
-    ] ++ openllm-client.optional-dependencies.grpc;
-    llama = [
-      fairscale
-      sentencepiece
-    ];
+      bentoml
+    ] ++ bentoml.optional-dependencies.grpc;
     mpt = [
-      einops
       openai-triton
     ];
     openai = [
       openai
       tiktoken
-    ];
-    opt = [
-      flax
-      jax
-      jaxlib
-      keras
-      tensorflow
-    ];
+    ] ++ openai.optional-dependencies.datalib;
     playground = [
       ipython
       jupyter
@@ -153,12 +140,12 @@ buildPythonPackage rec {
       bitsandbytes
     ];
     vllm = [
-      ray
       # vllm
     ];
-    all = with passthru.optional-dependencies; (
-      agents ++ baichuan ++ chatglm ++ falcon ++ fine-tune ++ flan-t5 ++ ggml ++ gptq ++ llama ++ mpt ++ openai ++ opt ++ playground ++ starcoder ++ vllm
+    full = with passthru.optional-dependencies; (
+      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt ++ openai ++ playground ++ starcoder ++ vllm
     );
+    all = passthru.optional-dependencies.full;
   };
 
   nativeCheckInputs = [
@@ -176,14 +163,19 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
     # skip GPUs test on CI
     export GITHUB_ACTIONS=1
+    # disable hypothesis' deadline
+    export CI=1
   '';
 
+  disabledTestPaths = [
+    # require network access
+    "tests/models"
+  ];
+
   disabledTests = [
-    # these tests access to huggingface.co
-    "test_opt_125m"
-    "test_opt_125m"
-    "test_flan_t5"
-    "test_flan_t5"
+    # incompatible with recent TypedDict
+    # https://github.com/bentoml/OpenLLM/blob/f3fd32d596253ae34c68e2e9655f19f40e05f666/openllm-python/tests/configuration_test.py#L18-L21
+    "test_missing_default"
   ];
 
   pythonImportsCheck = [ "openllm" ];

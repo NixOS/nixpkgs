@@ -23,10 +23,12 @@ in
       description = lib.mdDoc ''
         Username for connecting to Nextcloud.
         Note that this account needs to have admin privileges in Nextcloud.
+        Unused when using token authentication.
       '';
     };
     passwordFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       example = "/path/to/password-file";
       description = lib.mdDoc ''
         File containing the password for connecting to Nextcloud.
@@ -34,9 +36,9 @@ in
       '';
     };
     tokenFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       example = "/path/to/token-file";
-      default = "";
       description = lib.mdDoc ''
         File containing the token for connecting to Nextcloud.
         Make sure that this file is readable by the exporter user.
@@ -58,12 +60,13 @@ in
           --addr ${cfg.listenAddress}:${toString cfg.port} \
           --timeout ${cfg.timeout} \
           --server ${cfg.url} \
-          ${if cfg.tokenFile == "" then ''
+          ${if cfg.passwordFile != null then ''
             --username ${cfg.username} \
             --password ${escapeShellArg "@${cfg.passwordFile}"} \
-         '' else ''
+          '' else ''
             --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
-         ''} ${concatStringsSep " \\\n  " cfg.extraFlags}'';
+          ''} \
+          ${concatStringsSep " \\\n  " cfg.extraFlags}'';
     };
   };
 }

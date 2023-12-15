@@ -1,11 +1,12 @@
+use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
-use crate::utils::ErrorWriter;
+use crate::validation::{self, Validation::Success};
+use crate::Version;
 use std::path::Path;
 
 use anyhow::Context;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::io;
 use std::path::PathBuf;
 use std::process;
 use tempfile::NamedTempFile;
@@ -13,31 +14,54 @@ use tempfile::NamedTempFile;
 /// Attribute set of this structure is returned by eval.nix
 #[derive(Deserialize)]
 struct AttributeInfo {
-    call_package_path: Option<PathBuf>,
+    variant: AttributeVariant,
     is_derivation: bool,
 }
 
-const EXPR: &str = include_str!("eval.nix");
+#[derive(Deserialize)]
+enum AttributeVariant {
+    /// The attribute is auto-called as pkgs.callPackage using pkgs/by-name,
+    /// and it is not overridden by a definition in all-packages.nix
+    AutoCalled,
+    /// The attribute is defined as a pkgs.callPackage <path> <args>,
+    /// and overridden by all-packages.nix
+    CallPackage {
+        /// The <path> argument or None if it's not a path
+        path: Option<PathBuf>,
+        /// true if <args> is { }
+        empty_arg: bool,
+    },
+    /// The attribute is not defined as pkgs.callPackage
+    Other,
+}
 
 /// Check that the Nixpkgs attribute values corresponding to the packages in pkgs/by-name are
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
-pub fn check_values<W: io::Write>(
-    error_writer: &mut ErrorWriter<W>,
-    nixpkgs: &structure::Nixpkgs,
+pub fn check_values(
+    version: Version,
+    nixpkgs_path: &Path,
+    package_names: Vec<String>,
     eval_accessible_paths: Vec<&Path>,
-) -> anyhow::Result<()> {
+) -> validation::Result<()> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
-    serde_json::to_writer(&attrs_file, &nixpkgs.package_names).context(format!(
+    // We need to canonicalise this path because if it's a symlink (which can be the case on
+    // Darwin), Nix would need to read both the symlink and the target path, therefore need 2
+    // NIX_PATH entries for restrict-eval. But if we resolve the symlinks then only one predictable
+    // entry is needed.
+    let attrs_file_path = attrs_file.path().canonicalize()?;
+
+    serde_json::to_writer(&attrs_file, &package_names).context(format!(
         "Failed to serialise the package names to the temporary path {}",
-        attrs_file.path().display()
+        attrs_file_path.display()
     ))?;
 
+    let expr_path = std::env::var("NIX_CHECK_BY_NAME_EXPR_PATH")
+        .context("Could not get environment variable NIX_CHECK_BY_NAME_EXPR_PATH")?;
     // With restrict-eval, only paths in NIX_PATH can be accessed, so we explicitly specify the
     // ones needed needed
-
     let mut command = process::Command::new("nix-instantiate");
     command
         // Inherit stderr so that error messages always get shown
@@ -51,26 +75,26 @@ pub fn check_values<W: io::Write>(
             "--readonly-mode",
             "--restrict-eval",
             "--show-trace",
-            "--expr",
-            EXPR,
         ])
         // Pass the path to the attrs_file as an argument and add it to the NIX_PATH so it can be
         // accessed in restrict-eval mode
         .args(["--arg", "attrsPath"])
-        .arg(attrs_file.path())
+        .arg(&attrs_file_path)
         .arg("-I")
-        .arg(attrs_file.path())
+        .arg(&attrs_file_path)
         // Same for the nixpkgs to test
         .args(["--arg", "nixpkgsPath"])
-        .arg(&nixpkgs.path)
+        .arg(nixpkgs_path)
         .arg("-I")
-        .arg(&nixpkgs.path);
+        .arg(nixpkgs_path);
 
     // Also add extra paths that need to be accessible
     for path in eval_accessible_paths {
         command.arg("-I");
         command.arg(path);
     }
+    command.args(["-I", &expr_path]);
+    command.arg(expr_path);
 
     let result = command
         .output()
@@ -86,39 +110,54 @@ pub fn check_values<W: io::Write>(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    for package_name in &nixpkgs.package_names {
-        let relative_package_file = structure::Nixpkgs::relative_file_for_package(package_name);
-        let absolute_package_file = nixpkgs.path.join(&relative_package_file);
+    Ok(validation::sequence_(package_names.iter().map(
+        |package_name| {
+            let relative_package_file = structure::relative_file_for_package(package_name);
+            let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
-        if let Some(attribute_info) = actual_files.get(package_name) {
-            let is_expected_file =
-                if let Some(call_package_path) = &attribute_info.call_package_path {
-                    absolute_package_file == *call_package_path
-                } else {
-                    false
+            if let Some(attribute_info) = actual_files.get(package_name) {
+                let valid = match &attribute_info.variant {
+                    AttributeVariant::AutoCalled => true,
+                    AttributeVariant::CallPackage { path, empty_arg } => {
+                        let correct_file = if let Some(call_package_path) = path {
+                            absolute_package_file == *call_package_path
+                        } else {
+                            false
+                        };
+                        // Only check for the argument to be non-empty if the version is V1 or
+                        // higher
+                        let non_empty = if version >= Version::V1 {
+                            !empty_arg
+                        } else {
+                            true
+                        };
+                        correct_file && non_empty
+                    }
+                    AttributeVariant::Other => false,
                 };
 
-            if !is_expected_file {
-                error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute is not defined as `pkgs.callPackage {} {{ ... }}`.",
-                    relative_package_file.display()
-                ))?;
-                continue;
+                if !valid {
+                    NixpkgsProblem::WrongCallPackage {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into()
+                } else if !attribute_info.is_derivation {
+                    NixpkgsProblem::NonDerivation {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into()
+                } else {
+                    Success(())
+                }
+            } else {
+                NixpkgsProblem::UndefinedAttr {
+                    relative_package_file: relative_package_file.clone(),
+                    package_name: package_name.clone(),
+                }
+                .into()
             }
-
-            if !attribute_info.is_derivation {
-                error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute defined by {} is not a derivation",
-                    relative_package_file.display()
-                ))?;
-            }
-        } else {
-            error_writer.write(&format!(
-                "pkgs.{package_name}: This attribute is not defined but it should be defined automatically as {}",
-                relative_package_file.display()
-            ))?;
-            continue;
-        }
-    }
-    Ok(())
+        },
+    )))
 }

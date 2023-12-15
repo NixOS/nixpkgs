@@ -88,5 +88,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;
+    mainProgram = "retext";
   };
 }

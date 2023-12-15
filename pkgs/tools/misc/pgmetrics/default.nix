@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pgmetrics";
-  version = "1.15.2";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "rapidloop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WzyTLOJo/wTZA9glxO0ovcaADlHV+AKLChWSLJ+uvaQ=";
+    sha256 = "sha256-8pF3E0Zh/SsH6+5iXt1KFwud2ijoisYfcu+QHRM9x9s=";
   };
 
   vendorHash = "sha256-KIMnvGMIipuIFPTSeERtCfvlPuvHvEHdjBJ1TbT2d1s=";
@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "Collect and display information and stats from a running PostgreSQL server";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "pgmetrics";
   };
 }

@@ -19,6 +19,7 @@
 , libsecret
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, withScripts ? true
 }:
 
 let
@@ -124,9 +125,11 @@ let
   };
 
 in
-symlinkJoin {
-  name = "msmtp-${version}";
-  inherit version meta;
-  paths = [ binaries scripts ];
-  passthru = { inherit binaries scripts; };
-}
+if withScripts then
+  symlinkJoin
+  {
+    name = "msmtp-${version}";
+    inherit version meta;
+    paths = [ binaries scripts ];
+    passthru = { inherit binaries scripts; };
+  } else binaries

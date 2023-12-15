@@ -103,7 +103,7 @@ in
       '';
     };
 
-    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
+    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "flushing the entire ruleset on each reload");
 
     networking.nftables.extraDeletions = mkOption {
       type = types.lines;
@@ -248,7 +248,6 @@ in
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
-    networking.networkmanager.firewallBackend = mkDefault "nftables";
     # versionOlder for backportability, remove afterwards
     networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {

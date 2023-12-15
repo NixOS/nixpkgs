@@ -44,5 +44,8 @@ in {
   };
 
   # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ nicoo ];
+  };
 }

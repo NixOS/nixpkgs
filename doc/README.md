@@ -1,12 +1,17 @@
-# Contributing to the Nixpkgs manual
+# Contributing to the Nixpkgs reference manual
 
-This directory houses the sources files for the Nixpkgs manual.
+This directory houses the sources files for the Nixpkgs reference manual.
 
-You can find the [rendered documentation for Nixpkgs `unstable` on nixos.org](https://nixos.org/manual/nixpkgs/unstable/).
+Going forward, it should only contain [reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation.
+For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
 
-[Docs for Nixpkgs stable](https://nixos.org/manual/nixpkgs/stable/) are also available.
+For documentation only relevant for contributors, use Markdown files and code comments in the source code.
 
-If you're only getting started with Nix, go to [nixos.org/learn](https://nixos.org/learn).
+Rendered documentation:
+- [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
+- [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
+
+The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
 
 ## Contributing to this documentation
 
@@ -47,7 +52,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 ## Syntax {#sec-contributing-markup}
 ```
 
-> **Note**
+> [!Note]
 > NixOS option documentation does not support headings in general.
 
 #### Inline Anchors
@@ -113,3 +118,24 @@ pear
 watermelon
 :   green fruit with red flesh
 ```
+
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- If creating a commit purely for documentation changes, format the commit message in the following way:
+
+  ```
+  doc: (documentation summary)
+
+  (Motivation for change, relevant links, additional information.)
+  ```
+
+  Examples:
+
+  * doc: update the kernel config documentation to use `nix-shell`
+  * doc: add information about `nix-update-script`
+
+    Closes #216321.
+
+- If the commit contains more than just documentation changes, follow the commit message format relevant for the rest of the changes.

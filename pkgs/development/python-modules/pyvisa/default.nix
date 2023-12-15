@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pyvisa";
   version = "1.13.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

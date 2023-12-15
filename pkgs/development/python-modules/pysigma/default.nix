@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.10.5";
+  version = "0.10.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iiE6XHj5632sBlivUHz7HiNRjNpEh+OMqcJ65o2km6I=";
+    hash = "sha256-zKV2yDLhoRTvlDZ/bwEyJhtE6hx1IAgKNI37J31nQo8=";
   };
 
   pythonRelaxDeps = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # require network connection
+    # Tests require network connection
     "test_sigma_plugin_directory_default"
     "test_sigma_plugin_installation"
   ];

@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "code-maat";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchurl {
     url = "https://github.com/adamtornhill/code-maat/releases/download/v${finalAttrs.version}/code-maat-${finalAttrs.version}-standalone.jar";
-    hash = "sha256-cAaGX9BX27Z2GN583YmhagWsBIygVc0ZDkzbspM9OJw=";
+    hash = "sha256-QoeuIDSQGERFD3aVR7xEl6DaGm0cf6b63IWHBeZ0O18=";
   };
 
   dontUnpack = true;

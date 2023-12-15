@@ -27,14 +27,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.upower;
-        defaultText = literalExpression "pkgs.upower";
-        description = lib.mdDoc ''
-          Which upower package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "upower" { };
 
       enableWattsUpPro = mkOption {
         type = types.bool;

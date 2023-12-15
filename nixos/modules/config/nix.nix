@@ -109,13 +109,17 @@ let
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''
-        else ''
+        else
+        let
+          showCommand = if isNixAtLeast "2.20pre" then "config show" else "show-config";
+        in
+        ''
           echo "Validating generated nix.conf"
           ln -s $out ./nix.conf
           set -e
           set +o pipefail
           NIX_CONF_DIR=$PWD \
-            ${cfg.package}/bin/nix show-config ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
+            ${cfg.package}/bin/nix ${showCommand} ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
               ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
             |& sed -e 's/^warning:/error:/' \
             | (! grep '${if cfg.checkAllErrors then "^error:" else "^error: unknown setting"}')

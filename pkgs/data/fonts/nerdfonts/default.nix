@@ -37,7 +37,7 @@ let
   ) selectedFontsShas;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
   inherit srcs;
   pname = "nerdfonts";
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
-}
+})

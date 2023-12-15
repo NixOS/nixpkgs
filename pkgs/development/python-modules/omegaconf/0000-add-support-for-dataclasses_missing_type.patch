@@ -1,0 +1,21 @@
+diff --git a/omegaconf/omegaconf.py b/omegaconf/omegaconf.py
+index efde14a..a2a050e 100644
+--- a/omegaconf/omegaconf.py
++++ b/omegaconf/omegaconf.py
+@@ -7,6 +7,7 @@ import pathlib
+ import sys
+ import warnings
+ from collections import defaultdict
++from dataclasses import _MISSING_TYPE
+ from contextlib import contextmanager
+ from enum import Enum
+ from textwrap import dedent
+@@ -828,6 +829,8 @@ class OmegaConf:
+ 
+             if obj is _DEFAULT_MARKER_:
+                 obj = {}
++            if isinstance(obj, _MISSING_TYPE):
++                return OmegaConf.create({}, parent=parent, flags=flags)
+             if isinstance(obj, str):
+                 obj = yaml.load(obj, Loader=get_yaml_loader())
+                 if obj is None:

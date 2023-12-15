@@ -5,6 +5,11 @@
 , src
 , buildInputs ? [ ]
 , nativeBuildInputs ? [ ]
+, erlangCompilerOptions ? [ ]
+  # Deterministic Erlang builds remove full system paths from debug information
+  # among other things to keep builds more reproducible. See their docs for more:
+  # https://www.erlang.org/doc/man/compile
+, erlangDeterministicBuilds ? true
 , beamDeps ? [ ]
 , propagatedBuildInputs ? [ ]
 , postPatch ? ""
@@ -31,6 +36,13 @@ let
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+
+    ERL_COMPILER_OPTIONS =
+      let
+        options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+      in
+      "[${lib.concatStringsSep "," options}]";
+
     LC_ALL = "C.UTF-8";
 
     # add to ERL_LIBS so other modules can find at runtime.
@@ -87,6 +99,12 @@ let
         fi
       done
 
+      # Copy the source so it can be used by dependent packages. For example,
+      # phoenix applications need the source of phoenix and phoenix_html to
+      # build javascript and css assets.
+      mkdir -p $out/src
+      cp -r $src/* "$out/src"
+
       runHook postInstall
     '';
 
@@ -102,4 +120,3 @@ let
   });
 in
 lib.fix pkg
-

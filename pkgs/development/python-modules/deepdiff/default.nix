@@ -11,12 +11,13 @@
 , python-dateutil
 , pyyaml
 , toml
+, tomli-w
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.3.0";
+  version = "6.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-txZ1X1J8DwueDRpLP3OuRA+S9hc5G3YCmEG+AS6ZAkI=";
+    hash = "sha256-oO5+ZCDgqonxaHR95tSrPkZDar/fzr1FXtl6J2W3PeU=";
   };
 
   postPatch = ''
@@ -52,7 +53,14 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     python-dateutil
+    tomli-w
   ] ++ passthru.optional-dependencies.cli;
+
+  disabledTests = [
+    # not compatible with pydantic 2.x
+    "test_pydantic1"
+    "test_pydantic2"
+  ];
 
   pythonImportsCheck = [
     "deepdiff"

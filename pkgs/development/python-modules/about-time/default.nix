@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "about-time";
   version = "4.2.1";
+  format = "setuptools";
 
   # PyPi release does not contain test files, but the repo has no release tags,
   # so while having no tests is not ideal, follow the PyPi releases for now

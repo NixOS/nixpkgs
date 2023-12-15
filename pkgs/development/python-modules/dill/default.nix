@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
+, pythonOlder
 , setuptools
 
 # passthru tests
@@ -11,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
     rev = "refs/tags/dill-${version}";
-    hash = "sha256-lh1o/TqnqtYN9xTZom33y1/7ZhMEAFpheLdtalwgObQ=";
+    hash = "sha256-1cRGA5RuNjlpc3jq9SAsUYgmPauIV8zRF9SxOmveljI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
+    changelog = "https://github.com/uqfoundation/dill/releases/tag/dill-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tjni ];
   };

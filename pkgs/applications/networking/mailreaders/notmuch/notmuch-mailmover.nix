@@ -3,21 +3,32 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, installShellFiles
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b2Q1JcXIp56Niv5kdPgQSM91e8hPPdyhWIG4f7kQn78=";
+    hash = "sha256-12eDCqer13GJS0YjJDleJbkP4o7kZfof6HlLG06qZW0=";
   };
+
+  cargoHash = "sha256-B5VSkhY4nNXSG2SeCl22pSkl6SXEEoYj99wEsNhs/bQ=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ notmuch ];
 
-  cargoSha256 = "sha256-AW0mCdQN3WJhSErJ/MqnNIsRX+C6Pb/zHCQh7v/70MU=";
+  postInstall = ''
+    installManPage share/notmuch-mailmover.1
+    installShellCompletion --cmd notmuch-mailmover \
+      --bash share/notmuch-mailmover.bash \
+      --fish share/notmuch-mailmover.fish \
+      --zsh share/_notmuch-mailmover
+  '';
 
   meta = with lib; {
     description = "Application to assign notmuch tagged mails to IMAP folders";

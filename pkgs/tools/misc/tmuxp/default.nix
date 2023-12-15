@@ -38,5 +38,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "tmuxp";
   };
 }

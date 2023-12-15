@@ -104,5 +104,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ akechishiro ];
     platforms = platforms.linux;
+    mainProgram = "pitivi";
   };
 }

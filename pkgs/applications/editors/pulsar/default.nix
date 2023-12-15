@@ -1,44 +1,76 @@
 { lib
 , stdenv
 , git
-, runtimeShell
 , fetchurl
 , wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
 , glib
 , gtk3
-, atomEnv
+, mesa
+, nss
+, nspr
 , xorg
+, libdrm
+, libsecret
 , libxkbcommon
-, hunspell
+, pango
+, systemd
 , hunspellDicts
 , useHunspell ? true
 , languages ? [ "en_US" ]
 , withNemoAction ? true
 , makeDesktopItem
 , copyDesktopItems
-, makeWrapper
 , asar
 , python3
 }:
 
 let
   pname = "pulsar";
-  version = "1.108.0";
+  version = "1.109.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-9wxMKekowNkFX+m3h2ZeTXu/uMLyPi6IIbseJ16shG4=";
+    x86_64-linux.hash = "sha256-pIm3mI1YdfapxXgIciSHtI4LeqMw5RdYTnH+eHUQ4Yo=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-GdPnmhMZR3Y2WB2j98JEWomdKFZuTgxN8oga/tBwA4U=";
+    aarch64-linux.hash = "sha256-KIY/qzfl7CU0YwIgQlNHoAMhLfrTbQe7ZZvzdkUVw+M=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  additionalLibs = lib.makeLibraryPath [
+  newLibpath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    libsecret
+    mesa
+    nss
+    nspr
+    libdrm
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
     xorg.libxshmfence
     libxkbcommon
     xorg.libxkbfile
+    pango
     stdenv.cc.cc.lib
+    systemd
   ];
-  newLibpath = "${atomEnv.libPath}:${additionalLibs}";
 
   # Hunspell
   hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
@@ -177,5 +209,14 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ colamaroro ];
+    knownVulnerabilities = [
+      "CVE-2023-5217"
+      "CVE-2022-21718"
+      "CVE-2022-29247"
+      "CVE-2022-29257"
+      "CVE-2022-36077"
+      "CVE-2023-29198"
+      "CVE-2023-39956"
+    ];
   };
 }

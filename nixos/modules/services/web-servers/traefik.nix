@@ -126,12 +126,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      default = pkgs.traefik;
-      defaultText = literalExpression "pkgs.traefik";
-      type = types.package;
-      description = lib.mdDoc "Traefik package to use.";
-    };
+    package = mkPackageOption pkgs "traefik" { };
 
     environmentFiles = mkOption {
       default = [];

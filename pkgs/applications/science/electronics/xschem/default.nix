@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xschem";
-  version = "3.1.0";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "StefanSchippers";
     repo = "xschem";
     rev = version;
-    sha256 = "sha256-SHpESg5mn9lSDOURQusQUsug8Jqin/W5rqkVgmseSgA=";
+    sha256 = "sha256-1jP1SJeq23XNkOQgcl2X+rBrlka4a04irmfhoKRM1j4=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config ];

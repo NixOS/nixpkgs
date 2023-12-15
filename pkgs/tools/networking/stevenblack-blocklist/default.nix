@@ -15,6 +15,6 @@ fetchFromGitHub {
     description = "Unified hosts file with base extensions";
     homepage = "https://github.com/StevenBlack/hosts";
     license = licenses.mit;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

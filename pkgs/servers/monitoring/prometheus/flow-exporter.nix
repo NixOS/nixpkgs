@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";
   };
 
-  vendorSha256 = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
+  vendorHash = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
 
   meta = with lib; {
     description = "Export network flows from kafka to Prometheus";

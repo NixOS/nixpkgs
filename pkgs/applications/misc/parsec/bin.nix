@@ -24,11 +24,11 @@
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_86e";
+  version = "150_90c";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230531105208/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-wwBy86TdrHaH9ia40yh24yd5G84WTXREihR+9I6o6uU=";
+    url = "https://web.archive.org/web/20231028212419/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-rFSdl7BgnuJAj6w5in0/yszO8b5qcr9b+wjF1WkAU70=";
   };
 
   unpackPhase = ''
@@ -104,7 +104,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://parsecgaming.com/";
+    homepage = "https://parsec.app/";
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;

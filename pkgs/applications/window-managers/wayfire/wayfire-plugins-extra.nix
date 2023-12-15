@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -8,21 +9,31 @@
 , wf-config
 , gtkmm3
 , gtk-layer-shell
+, libevdev
+, libinput
 , libxkbcommon
 , xcbutilwm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hnsRwIrl0+pRKhRlrF/Wdlu6HkzLfYukGk4Hzx3wNeo=";
+    hash = "sha256-OVyP1AgZ1d9DXFkbHnROwtSQIquEX5ccVIkcmCdDZtA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "check-dependency-libevdev.patch";
+      url = "https://github.com/WayfireWM/wayfire-plugins-extra/commit/f3bbf1fcbafd28016e36be7a5043bd82574ac9e4.patch";
+      hash = "sha256-8X1lpf8H8NuA845cIslahKDQKW/IA/KiMExU4Snk72o=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace metadata/meson.build \
@@ -38,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     wayfire
     wf-config
+    libevdev
+    libinput
     libxkbcommon
     xcbutilwm
     gtkmm3

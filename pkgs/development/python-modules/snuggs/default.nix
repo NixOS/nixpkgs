@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "snuggs";
   version = "1.4.7";
+  format = "setuptools";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {

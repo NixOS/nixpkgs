@@ -14,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "amcrest";
-  version = "1.9.7";
-  disabled = pythonOlder "3.6";
+  version = "1.9.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tchellomello";
     repo = "python-amcrest";
-    rev = version;
-    hash = "sha256-An7MnGtZsmEZU/y6E0sivdexFD6HJRTB1juXqHfbDzE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-v0jWEZo06vltEq//suGrvJ/AeeDxUG5CCFhbf03q34w=";
   };
 
   propagatedBuildInputs = [
@@ -38,11 +40,14 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "amcrest" ];
+  pythonImportsCheck = [
+    "amcrest"
+  ];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";
     homepage = "https://github.com/tchellomello/python-amcrest";
+    changelog = "https://github.com/tchellomello/python-amcrest/releases/tag/${version}";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
   };

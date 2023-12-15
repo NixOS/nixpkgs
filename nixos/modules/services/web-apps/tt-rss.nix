@@ -430,7 +430,7 @@ let
           background processes while not running tt-rss, this method is generally
           viable to keep your feeds up to date.
           Still, there are more robust (and recommended) updating methods
-          available, you can read about them here: http://tt-rss.org/wiki/UpdatingFeeds
+          available, you can read about them here: <https://tt-rss.org/wiki/UpdatingFeeds>
         '';
       };
 
@@ -528,6 +528,15 @@ let
       {
         assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
         message = "Cannot set both password and passwordFile";
+      }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.name == cfg.user && cfg.database.user == cfg.user;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.tt-rss.database.createLocally` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
       }
     ];
 
@@ -632,8 +641,8 @@ let
       enable = mkDefault true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        { name = cfg.database.user;
+          ensureDBOwnership = true;
         }
       ];
     };

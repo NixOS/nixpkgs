@@ -181,5 +181,6 @@ buildPythonApplication rec {
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];
+    mainProgram = "pre-commit";
   };
 }

@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libpng, libjpeg
-, guiSupport ? false, libX11
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fftw
+, libpng
+, libjpeg
+, libwebp
+, openblas
+, guiSupport ? false
+, libX11
 
   # see http://dlib.net/compile.html
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
@@ -23,18 +33,26 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
-    "-DUSE_SSE4_INSTRUCTIONS=${if sse4Support then "yes" else "no"}"
-    "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
+    (lib.cmakeBool "USE_DLIB_USE_CUDA" cudaSupport)
+    (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
+    (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
+
+  buildInputs = [
+    fftw
+    libpng
+    libjpeg
+    libwebp
+    openblas
+  ] ++ lib.optional guiSupport libX11;
 
   meta = with lib; {
     description = "A general purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = licenses.boost;
-    maintainers = with maintainers; [ christopherpoole ma27 ];
+    maintainers = with maintainers; [ christopherpoole ];
     platforms = platforms.unix;
   };
 }

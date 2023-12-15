@@ -2,7 +2,7 @@
 
 [Subversion](https://subversion.apache.org/) is a centralized
 version-control system. It can use a [variety of
-protocols](http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.choosing)
+protocols](https://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.choosing)
 for communication between client and server.
 
 ## Subversion inside Apache HTTP {#module-services-subversion-apache-httpd}
@@ -14,7 +14,7 @@ for communication.
 
 For more information on the general setup, please refer to the [the
 appropriate section of the Subversion
-book](http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.httpd).
+book](https://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.httpd).
 
 To configure, include in `/etc/nixos/configuration.nix` code to activate
 Apache HTTP, setting [](#opt-services.httpd.adminAddr)

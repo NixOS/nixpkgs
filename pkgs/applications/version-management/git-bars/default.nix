@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication {
     description = "A utility for visualising git commit activity as bars on the terminal";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
+    mainProgram = "git-bars";
   };
 }

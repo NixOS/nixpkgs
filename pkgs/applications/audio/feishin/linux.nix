@@ -25,17 +25,17 @@ let
     comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     icon = "feishin";
     exec = "feishin %u";
-    categories = [ "Audio" ];
+    categories = [ "Audio" "AudioVideo" ];
     mimeTypes = [ "x-scheme-handler/feishin" ];
   };
 in
 
 stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version meta;
 
   src = fetchurl {
     url = "https://github.com/jeffvli/feishin/releases/download/v${version}/${appname}-${version}-linux-x64.tar.xz";
-    hash = "sha256-sl2zM24bb0yBTfCxtNGizp6Yu+L4nj/Uf669zylnPmE=";
+    hash = "sha256-uYswGxSXz2YddoFs5F7f+ywqAr7qXqp6WryQ7ENSawQ=";
   };
 
 

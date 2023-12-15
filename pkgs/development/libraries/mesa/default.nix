@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl, fetchpatch, buildPackages
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_16, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
@@ -64,10 +64,8 @@
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
-, libclc
 , jdupes
 , rustc
-, rust-bindgen
 , spirv-llvm-translator
 , zstd
 , directx-headers
@@ -86,8 +84,8 @@
 */
 
 let
-  version = "23.1.5";
-  hash = "sha256-PPiFdv3r8k/EBHBnk2ExyQy2VBwnNlmWt5tmHewfsVM=";
+  version = "23.1.9";
+  hash = "sha256-KVuifCgUbtCSFOjOea+hZZ7fnRQt7MPJH4BFUtZPdRA=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -95,13 +93,13 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
-  rust-bindgen' = rust-bindgen.override {
-    rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
-      clang = llvmPackages.clang;
+  rust-bindgen' = buildPackages.rust-bindgen.override {
+    rust-bindgen-unwrapped = buildPackages.rust-bindgen.unwrapped.override {
+      clang = buildPackages.llvmPackages_15.clang;
     };
   };
   spirv-llvm-translator' = spirv-llvm-translator.override {
@@ -135,6 +133,29 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/44734d1fe98ef47019fe2c56d867d1645c526e4e.diff";
+      hash = "sha256-ipaISEY5xcnGvrwFxNY80JVlYWddfiHofkYEBuPkyDY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/d2a46afbfc44121aa491a2b4d1a3249d26fc6a11.diff";
+      hash = "sha256-i00s9oUhZXXf/A4cHwWN6uRDP70cHjz+kgVpiDM/eMw=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/17cde1ee87cc0cbb896ca81949b8f192d5496271.diff";
+      hash = "sha256-ao2pWQwMBskOjWJsjWqwFYAeqpTWAyJbEtSryDO+xyo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/4489d737d5c12eb0a3441ed0b303f9f1100a7166.diff";
+      hash = "sha256-WxqwEngd79NHLedQOWMjjroaN0gr6Upd96uteSvr4Yw=";
+    })
+    # fixes a linking error
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/c8b64452c076c1768beb23280de25faf2bcbe2c8.diff";
+      hash = "sha256-mqivdzyoLtkfkAb+r57gjPwg8d7whgFAahiUhGVOOvo=";
+    })
   ];
 
   postPatch = ''
@@ -202,7 +223,17 @@ self = stdenv.mkDerivation {
     "-Dglvnd=true"
 
     # Enable RT for Intel hardware
-    "-Dintel-clc=enabled"
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
+    (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable features that are explicitly unsupported on the platform
+    "-Dgbm=disabled"
+    "-Dxlib-lease=disabled"
+    "-Degl=disabled"
+    "-Dgallium-vdpau=disabled"
+    "-Dgallium-va=disabled"
+    "-Dgallium-xa=disabled"
+    "-Dlmsensors=disabled"
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
     "-Dgallium-opencl=icd"
@@ -218,26 +249,29 @@ self = stdenv.mkDerivation {
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
-    expat llvmPackages.libllvm libglvnd xorgproto
+    expat glslang llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd libunwind
+    python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
+    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [ pkg-config ]
+    ++ lib.optional enableOpenCL buildPackages.stdenv.cc;
 
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optional haveWayland wayland-scanner;
+  ] ++ lib.optionals enableOpenCL [ rust-bindgen' rustc ]
+    ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
@@ -320,6 +354,9 @@ self = stdenv.mkDerivation {
       fi
     done
 
+    # Don't depend on build python
+    patchShebangs --host --update $out/bin/*
+
     # NAR doesn't support hard links, so convert them to symlinks to save space.
     jdupes --hard-links --link-soft --recurse "$drivers"
 
@@ -374,9 +411,6 @@ self = stdenv.mkDerivation {
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
-
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
-    broken = stdenv.isDarwin;
   };
 };
 

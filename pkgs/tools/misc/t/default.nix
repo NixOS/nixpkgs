@@ -13,5 +13,6 @@ bundlerApp {
     license     = licenses.asl20;
     maintainers = with maintainers; [ offline manveru nicknovitski ];
     platforms   = platforms.unix;
+    mainProgram = "t";
   };
 }

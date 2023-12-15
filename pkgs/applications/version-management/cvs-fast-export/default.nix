@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cvs-fast-export";
-  version = "1.61";
+  version = "1.62";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
-    sha256 = "sha256-4iH8VKxVliVZKwZ40rGMb3fH1nxTBdMT5IcBzdp1mjw=";
+    sha256 = "sha256-ix0fg2wn2yStrgEhAxsSXvLu+C7sb2V5oyVCfhAe/R8=";
   };
 
   strictDeps = true;
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       prefix="$out"
     )
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   postInstall = ''
     wrapProgram $out/bin/cvssync --prefix PATH : ${lib.makeBinPath [ rsync ]}

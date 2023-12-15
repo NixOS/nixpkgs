@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_proxy
+, zope-proxy
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-Fx7tyKIOw6isJxOaqQzyd/93dy6gMrVLaicBp5J7OsU=";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  propagatedBuildInputs = [ zope-proxy ];
 
   # ignore circular dependency on zope_schema
   preBuild = ''

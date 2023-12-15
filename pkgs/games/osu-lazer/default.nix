@@ -9,7 +9,6 @@
 , SDL2
 , lttng-ust
 , numactl
-, dotnetCorePackages
 , libglvnd
 , xorg
 , udev
@@ -17,13 +16,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2023.815.0";
+  version = "2023.1026.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-Lm/unDa1ADc2zprrgP/a2bOzHb02CwU9gcvhmTOXKIM=";
+    sha256 = "sha256-kbi4Um1MRctpwD7ndlcB+K7AxDbWHqAHmkJbEI0fNzI=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -84,7 +83,7 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica thiagokokada ];
+    maintainers = with maintainers; [ thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

@@ -85,6 +85,5 @@ buildPythonPackage rec {
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvl ];
   };
 }

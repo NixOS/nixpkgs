@@ -17,7 +17,7 @@ mkDerivation {
   cmakeFlags = [ "-DQT5BUILD=true" ];
 
   meta = {
-    homepage = "http://dfilemanager.sourceforge.net/";
+    homepage = "https://github.com/probonopd/dfilemanager";
     description = "File manager written in Qt/C++";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;

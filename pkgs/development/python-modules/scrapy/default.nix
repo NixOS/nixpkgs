@@ -14,6 +14,7 @@
 , lxml
 , packaging
 , parsel
+, pexpect
 , protego
 , pydispatcher
 , pyopenssl
@@ -31,16 +32,28 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.10.1";
+  version = "2.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-kdZ4dfu1N2B7B+MTY0RXGKNTK1RObitLr4oEKyGh0Q8=";
+    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
+
+  patches = [
+    # Fix compatiblity with Twisted>=23.8. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/scrapy/scrapy/commit/aa95ada42cdf570f840f55c463375f8a81b303f8.patch";
+      hash = "sha256-LuhA5BqtjSUgkotplvUCtvGNYOTrl0MJRCXiSBMDFzY=";
+      excludes = [
+        "tests/CrawlerProcess/sleeping.py"
+        "tests/test_crawler.py"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,6 +82,7 @@ buildPythonPackage rec {
     botocore
     glibcLocales
     jmespath
+    pexpect
     pytestCheckHook
     sybil
     testfixtures
@@ -101,6 +115,8 @@ buildPythonPackage rec {
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
     # Depends on uvloop
     "test_asyncio_enabled_reactor_different_loop"
     "test_asyncio_enabled_reactor_same_loop"
@@ -109,6 +125,8 @@ buildPythonPackage rec {
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"

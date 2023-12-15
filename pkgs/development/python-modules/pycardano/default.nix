@@ -3,6 +3,7 @@
 , fetchFromGitHub
 # Python deps
 , blockfrost-python
+, cachetools
 , cbor2
 , cose
 , ecpy
@@ -29,7 +30,7 @@ let
 
 in buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.9.0";
+  version = "0.10.0";
 
   format = "pyproject";
 
@@ -37,11 +38,12 @@ in buildPythonPackage rec {
     owner = "Python-Cardano";
     repo = "pycardano";
     rev = "v${version}";
-    hash = "sha256-KRlpGhEzABBh1YWCDcrpW4hyMOhEA1Rla9nh95qdVik=";
+    hash = "sha256-LP/W8IC2del476fGFq10VMWwMrbAoCCcZOngA8unBM0=";
   };
 
   propagatedBuildInputs = [
     blockfrost-python
+    cachetools
     cbor2
     cose_0_9_dev8
     ecpy

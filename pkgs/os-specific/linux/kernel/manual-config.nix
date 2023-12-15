@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 }:
 
@@ -117,11 +117,8 @@ let
           });
 
       postPatch = ''
-        sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
-
-        # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
-        # FIXME: remove when no longer needed
-        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
+        # Ensure that depmod gets resolved through PATH
+        sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
         # This way kernels can be bit-by-bit reproducible depending on settings
@@ -332,9 +329,6 @@ let
 
         # Delete empty directories
         find -empty -type d -delete
-
-        # Remove reference to kmod
-        sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
       '';
 
       requiredSystemFeatures = [ "big-parallel" ];
@@ -370,13 +364,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
       ++ optional  (lib.versionOlder version "5.8") libelf
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ++ optional  (lib.versionAtLeast version "6.6")  kmod
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

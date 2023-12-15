@@ -1,8 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitHub, avahi-compat, nodejs, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, avahi-compat, nodejs_18, python3 }:
 
 buildNpmPackage rec {
   pname = "fx-cast-bridge";
   version = "0.3.1";
+
+  nodejs = nodejs_18;
 
   src = fetchFromGitHub {
     owner = "hensm";
@@ -50,6 +52,7 @@ buildNpmPackage rec {
     description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill pedrohlc ];
+    maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "fx_cast_bridge";
   };
 }

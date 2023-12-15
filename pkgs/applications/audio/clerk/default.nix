@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "clerk";
-  version = "unstable-2023-01-14";
+  version = "unstable-2023-10-07";
 
   src = fetchFromGitHub {
     owner = "carnager";
     repo = "clerk";
-    rev = "90c0e702fc4f8b65f0ced7b8944c063629e3686d";
-    hash = "sha256-nkm1vJaWgN8gOkmAbsjPfstax8TwUSkEzYKJ1iEz1hM";
+    rev = "907138d8fc2b1709fb49d062d0b663a48eb210bd";
+    hash = "sha256-V2nDLq2ViC5Twve0EILBEYOdEavqgYB/TQq/T+ftfmk=";
   };
 
   postPatch = ''
@@ -77,5 +77,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ anderspapitto rewine ];
     mainProgram = "clerk";
+    platforms = platforms.linux;
   };
 }

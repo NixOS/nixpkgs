@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/chneukirchen/xe";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "xe";
   };
 }

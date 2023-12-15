@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-google-nest";
-  version = "5.1.1";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y3BOhorVkJ3rFPifNOopLMqk6y1fHX5vxHGiqWvWHhE=";
+    hash = "sha256-k7cOOyUqgh7Y/MIBgBTVgCZexXLVkvAaHz6irXGLdgA=";
   };
 
   propagatedBuildInputs = [

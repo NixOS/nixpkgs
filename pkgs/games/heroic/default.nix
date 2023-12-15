@@ -3,11 +3,12 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , python3
 , makeWrapper
 , electron
+, vulkan-helper
 , gogdl
 , legendary-gl
 , nile
@@ -16,23 +17,23 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.9.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-1FtAcp6cG2qRfWrAgCOQ87DzMvszqqhObfSzepezBGc=";
+    hash = "sha256-N+9wNlDARE1zdXW/vka6whFNu5CF240zCJ00EDT1cM0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-KEzTjtoBcHNJxC/7W/Bft75JZuZUSHieOOAwhbr5d3s=";
+    hash = "sha256-P7Mm9TMNjr2glLQppjJZRMeN9sYKyZWzRaerZIcY3Y8=";
   };
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     python3
     makeWrapper
@@ -46,12 +47,19 @@ in stdenv.mkDerivation rec {
     ./fix-non-steam-shortcuts.patch
   ];
 
+  postPatch = ''
+    # We are not packaging this as an Electron application bundle, so Electron
+    # reports to the application that is is not "packaged", which causes Heroic
+    # to take some incorrect codepaths meant for development environments.
+    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -86,7 +94,8 @@ in stdenv.mkDerivation rec {
     ln -s \
       "${gogdl}/bin/gogdl" \
       "${legendary-gl}/bin/legendary" \
-      "${nile}"/bin/nile \
+      "${nile}/bin/nile" \
+      "${lib.optionalString stdenv.isLinux "${vulkan-helper}/bin/vulkan-helper"}" \
       "$out/share/${appName}/build/bin/${binPlatform}"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \

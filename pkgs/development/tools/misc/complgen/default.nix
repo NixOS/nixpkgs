@@ -5,21 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "complgen";
-  version = "0.1.3";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
     rev = "v${version}";
-    hash = "sha256-YKJleWnUZodPuJcWX8w06PH6q1SzeUXL8AjYr9i7+sY=";
+    hash = "sha256-B7ydYz9nui3B/IC3obVTiJZvzTD/lCQyf+tREwFJERg=";
   };
 
-  cargoHash = "sha256-ytwhIcm4NeHDRzKNHaxo4ke+gridXKmiKHkPnACXV8o=";
-
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
+  cargoHash = "sha256-CXvaGrE4sQlc7K6FVQqGU8EKPfHr8EIV5YFq+VMoBWg=";
 
   meta = with lib; {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";

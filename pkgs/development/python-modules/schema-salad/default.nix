@@ -75,5 +75,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
+    # https://github.com/common-workflow-language/schema_salad/issues/721
+    broken = versionAtLeast mistune.version "2.1";
   };
 }

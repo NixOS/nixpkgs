@@ -26,17 +26,21 @@ assert (blas.isILP64 == lapack.isILP64 &&
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.6";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-HNc+xU7Gcv9BSpb2OgyG9tCbk/dfWw5Ix1c2gvFZklE=";
+    hash = "sha256-suma1iS9NdJwU/4EQl6qoFyD4bErLSkY+0yxgh3dHkw=";
   };
 
   postPatch = ''
     echo "${finalAttrs.version}" > IGRAPH_VERSION
+  ''
+  # https://github.com/igraph/igraph/issues/2340
+  + lib.optionalString stdenv.isDarwin ''
+    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -91,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
+
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
 
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";

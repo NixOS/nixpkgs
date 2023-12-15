@@ -101,12 +101,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.kubo;
-        defaultText = literalExpression "pkgs.kubo";
-        description = lib.mdDoc "Which Kubo package to use.";
-      };
+      package = mkPackageOption pkgs "kubo" { };
 
       user = mkOption {
         type = types.str;
@@ -203,10 +198,8 @@ in
               default = [
                 "/ip4/0.0.0.0/tcp/4001"
                 "/ip6/::/tcp/4001"
-                "/ip4/0.0.0.0/udp/4001/quic"
                 "/ip4/0.0.0.0/udp/4001/quic-v1"
                 "/ip4/0.0.0.0/udp/4001/quic-v1/webtransport"
-                "/ip6/::/udp/4001/quic"
                 "/ip6/::/udp/4001/quic-v1"
                 "/ip6/::/udp/4001/quic-v1/webtransport"
               ];

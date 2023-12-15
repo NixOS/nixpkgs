@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "1.3.5";
+  version = "1.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KzvJcBR6Bc+z6IAmJ0KR88aSQMjRx1UilS28oBv9nTE=";
+    hash = "sha256-Kl8NARHTzEZrh5I//TwmITKp+g44lk5D7vkKPM2ldFI=";
   };
 
   propagatedBuildInputs = [

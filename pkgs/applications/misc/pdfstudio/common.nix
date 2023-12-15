@@ -5,6 +5,7 @@
 , version
 , desktopName
 , longDescription
+, broken ? false
 , buildFHSEnv
 , extraBuildInputs ? [ ]
 , jdk
@@ -85,6 +86,7 @@ buildFHSEnv {
   '';
 
   meta = with lib; {
+    inherit broken;
     homepage = "https://www.qoppa.com/${pname}/";
     description = "An easy to use, full-featured PDF editing software";
     longDescription = longDescription;

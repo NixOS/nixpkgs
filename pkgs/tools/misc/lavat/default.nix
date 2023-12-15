@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     homepage = "https://github.com/AngelJumbo/lavat";
     platforms = platforms.all;
+    mainProgram = "lavat";
   };
 }

@@ -17,7 +17,7 @@ cargoBuildHook() {
     fi
 
     if [ "${cargoBuildType}" != "debug" ]; then
-        cargoBuildProfileFlag="--${cargoBuildType}"
+        cargoBuildProfileFlag="--profile ${cargoBuildType}"
     fi
 
     if [ -n "${cargoBuildNoDefaultFeatures-}" ]; then
@@ -30,13 +30,8 @@ cargoBuildHook() {
 
     (
     set -x
-    env \
-      "CC_@rustBuildPlatform@=@ccForBuild@" \
-      "CXX_@rustBuildPlatform@=@cxxForBuild@" \
-      "CC_@rustTargetPlatform@=@ccForHost@" \
-      "CXX_@rustTargetPlatform@=@cxxForHost@" \
-      cargo build -j $NIX_BUILD_CORES \
-        --target @rustTargetPlatformSpec@ \
+    @setEnv@ cargo build -j $NIX_BUILD_CORES \
+        --target @rustHostPlatformSpec@ \
         --frozen \
         ${cargoBuildProfileFlag} \
         ${cargoBuildNoDefaultFeaturesFlag} \

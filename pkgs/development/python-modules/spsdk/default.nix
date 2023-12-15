@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, dos2unix
 , pythonRelaxDepsHook
 , asn1crypto
 , astunparse
@@ -29,6 +28,8 @@
 , pyserial
 , ruamel-yaml
 , sly
+, spsdk
+, testers
 , typing-extensions
 , pytestCheckHook
 , voluptuous
@@ -37,6 +38,7 @@
 buildPythonPackage rec {
   pname = "spsdk";
   version = "1.11.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
@@ -80,6 +82,7 @@ buildPythonPackage rec {
     deepmerge
     fastjsonschema
     hexdump
+    importlib-metadata
     jinja2
     libusbsio
     oscrypto
@@ -94,7 +97,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    importlib-metadata
     pyftdi
     pytestCheckHook
     voluptuous
@@ -102,11 +104,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spsdk" ];
 
+  passthru.tests.version = testers.testVersion { package = spsdk; };
+
   meta = with lib; {
     changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
+    mainProgram = "spsdk";
   };
 }

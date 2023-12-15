@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , jdk
-, ant, cunit, ncurses
+, ant
+, cunit
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
@@ -12,18 +16,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-t16i1WqvDqr4J5sDldeUk6+DAyN/6oWGV6eME5yj+i4=";
   };
 
-  buildInputs = [ jdk ];
-  nativeBuildInputs = [ ant cunit ncurses ];
+  strictDeps = true;
+
+  buildInputs = [ cunit ncurses ];
+
+  nativeBuildInputs = [ ant jdk ];
+
+  postConfigure = ''
+    substituteInPlace default.properties \
+      --replace "javac.target.version=1.4" "javac.target.version=8"
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_HOME=${jdk}/lib/openjdk/
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
 
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
+    ant -f build.xml -Dbits=${if stdenv.isi686 then "32" else "64"}
 
     runHook postBuild
   '';
@@ -46,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.suhr ];
+    mainProgram = "wrapper";
   };
 }

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "aws-env";
-  version = "0.4";
+  version = "0.5";
   rev = "v${version}";
 
   goPackagePath = "github.com/Droplr/aws-env";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "Droplr";
     repo = pname;
     inherit rev;
-    sha256 = "0pw1qz1nn0ig90p8d8c1qcwsdz0m9w63ib07carhh86gw55425j7";
+    sha256 = "sha256-dzXgQW5noWT7u276tlwhvgvu2J8VYrOdW9vidZ3W3t0=";
   };
 
   goDeps = ./deps.nix;

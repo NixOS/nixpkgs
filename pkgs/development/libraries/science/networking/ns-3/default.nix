@@ -39,7 +39,7 @@
 , dia
 , tetex ? null
 , ghostscript ? null
-, texlive ? null
+, texliveMedium ? null
 
   # generates python bindings
 , pythonSupport ? true
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
     ++ lib.optionals enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texlive.combined.scheme-medium ]
+    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texliveMedium ]
     ++ [
     libxml2
     pythonEnv

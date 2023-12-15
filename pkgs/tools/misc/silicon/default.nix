@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Aloxaf";
     repo = "silicon";
     rev = "v${version}";
-    sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
+    hash = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
 
   patches = [
@@ -60,5 +60,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Aloxaf/silicon";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ evanjs _0x4A6F ];
+    mainProgram = "silicon";
   };
 }

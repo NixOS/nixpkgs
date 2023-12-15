@@ -22,6 +22,7 @@
 , openssl
 , portaudioSupport ? stdenv.isDarwin
 , portaudio
+, slimserver
 , AudioToolbox
 , AudioUnit
 , Carbon
@@ -95,12 +96,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit (slimserver) tests;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
+    mainProgram = binName;
     maintainers = with maintainers; [ adamcstephens ];
     platforms = if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
   };

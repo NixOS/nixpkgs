@@ -78,7 +78,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorSha256 = "sha256-5b1WRq3JndkOkKBhMzGZnSyBDY5Lk0UGe/WGHQJp0CQ=";
+  vendorHash = "sha256-5b1WRq3JndkOkKBhMzGZnSyBDY5Lk0UGe/WGHQJp0CQ=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";

@@ -47,14 +47,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.undervolt;
-      defaultText = literalExpression "pkgs.undervolt";
-      description = lib.mdDoc ''
-        undervolt derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "undervolt" { };
 
     coreOffset = mkOption {
       type = types.nullOr types.int;
@@ -159,7 +152,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
 

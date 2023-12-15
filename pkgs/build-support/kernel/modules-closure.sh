@@ -66,8 +66,8 @@ for module in $rootModules; do
     fi
 done
 
-mkdir -p $out/lib/firmware
-for module in $(cat closure); do
+cd "$firmware"
+for module in $(< ~-/closure); do
     # for builtin modules, modinfo will reply with a wrong output looking like:
     #   $ modinfo -F firmware unix
     #   name:           unix
@@ -78,16 +78,15 @@ for module in $(cat closure); do
     #
     # For now, the workaround is just to filter out the extraneous lines out
     # of its output.
-    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:'); do
-        mkdir -p "$out/lib/firmware/$(dirname "$i")"
+    modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:' | while read -r i; do
         echo "firmware for $module: $i"
         for name in "$i" "$i.xz" ""; do
             [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
-            if cp "$firmware/lib/firmware/$name" "$out/lib/firmware/$name" 2>/dev/null; then
+            if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
                 break
             fi
         done
-    done
+    done || :
 done
 
 # copy module ordering hints for depmod

@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.5.2"; #zen
+    version = "6.6.6"; #zen
     suffix = "zen1"; #zen
-    sha256 = "0rvf07i80cfrlpd7mfbba6dhzznh47zjw1pmiw04104z9lm84faq"; #zen
+    sha256 = "13lxj1841mykfmbd8pwshr8jjxpxw1d8dyzkzq4ks6nviivnqfsn"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.4.14"; #lqx
+    version = "6.6.6"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "1f85g081ijv2f1yclnhyci69ad8n1amcv9ccg3ma6mkf1n3qw6kk"; #lqx
+    sha256 = "0p3ilsikd0v2k6d40n5s3smipww817yw2y47ayi1xj8m44rlp8gg"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -74,10 +74,10 @@ let
       HZ = freeform "1000";
       HZ_1000 = yes;
     } // lib.optionalAttrs (isLqx) {
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
-      DEFAULT_TCP_CONG = freeform "bbr2";
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
+      DEFAULT_TCP_CONG = freeform "bbr";
 
       # PDS Process Scheduler
       SCHED_ALT = yes;
@@ -102,7 +102,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version + "/master";
-      maintainers = with lib.maintainers; [ thiagokokada ];
+      maintainers = with lib.maintainers; [ thiagokokada jerrysm64 ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
       broken = stdenv.isAarch64;

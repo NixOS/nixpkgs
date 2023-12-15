@@ -21,16 +21,16 @@
 let
   external = {
     avalon = fetchFromGitHub {
-      owner = "rohdebe1";
+      owner = "rdkit";
       repo = "ava-formake";
-      rev = "AvalonToolkit_2.0.4a";
-      hash = "sha256-ZyhrDBBv9XuXe1NY/Djiad86tGIJwCSTrxEMICHgSqk=";
+      rev = "AvalonToolkit_2.0.5-pre.3";
+      hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "v2022.09.1";
-      hash = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
+      rev = "v2023.03.1";
+      hash = "sha256-K9//cDN69U4sLETfIZq9NUaBE3RXOReH53qfiCzutqM=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
@@ -42,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.03.3";
+  version = "2023.09.1";
   format = "other";
 
   src =
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-5M7nDUWORbepDGaf2G6Cd79Hu0au3DNRc9KuONoCWK0=";
+      hash = "sha256-qaYD/46oCTnso1FbD08zr2JuatKmSSqNBhOYlfeIiAA=";
     };
 
   unpackPhase = ''

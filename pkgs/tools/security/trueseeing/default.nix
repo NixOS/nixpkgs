@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
   version = "2.1.7";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alterakey";

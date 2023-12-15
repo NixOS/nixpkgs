@@ -8,16 +8,9 @@ in {
 
   options = {
     services.surrealdb = {
-      enable = mkEnableOption (lib.mdDoc "A scalable, distributed, collaborative, document-graph database, for the realtime web ");
+      enable = mkEnableOption (lib.mdDoc "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web");
 
-      package = mkOption {
-        default = pkgs.surrealdb;
-        defaultText = literalExpression "pkgs.surrealdb";
-        type = types.package;
-        description = lib.mdDoc ''
-          Which surrealdb derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "surrealdb" { };
 
       dbPath = mkOption {
         type = types.str;

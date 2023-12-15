@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seasocks";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "mattgodbolt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b1KNHuS5ndkBWItKVTiJ//Y+uKi1PcUk9624IILOusQ=";
+    sha256 = "sha256-R1McxZm2qsUoggFGfL587g+8eQf7si56xVkR8B8nehQ=";
   };
 
   postPatch = ''

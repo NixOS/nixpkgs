@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, buildPackages
 , gnutls
 , guile
 , libtool
@@ -10,20 +11,30 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-gnutls";
-  version = "3.7.12";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
-    hash = "sha256-XTrxFXMJPeWfJYQVhy4sWxTMqd0lGosuwWQ9bpf+4zY=";
+    hash = "sha256-W0y5JgMgduw0a7XAvA0CMflo/g9WWRPMFpNLt5Ovsjk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
 
-  buildInputs = [
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = [
     gnutls
     guile
     libtool
     texinfo
+    pkg-config
+  ];
+
+  buildInputs = [
+    gnutls
+    guile
   ];
 
   configureFlags = [

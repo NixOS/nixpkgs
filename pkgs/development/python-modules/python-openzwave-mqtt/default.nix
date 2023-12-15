@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-openzwave-mqtt";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cgarwood";

@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , meson
 , ninja
@@ -18,23 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.6.2";
+  version = "1.6.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QQs3be7O2YNrV/SI+ABS/koU+J4HWxzszyjlH0kPn7k=";
+    sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://gitlab.gnome.org/GNOME/gssdp/-/merge_requests/11
-      name = "gi-docgen-as-native-dep.patch";
-      url = "https://gitlab.gnome.org/GNOME/gssdp/-/commit/db9d02c22005be7e5e81b43a3ab777250bd7b27b.diff";
-      hash = "sha256-Q2kwZlpNvSzIcMalrOm5lO5iFe+myS7J0S0vkcp10cw=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config

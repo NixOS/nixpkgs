@@ -15,13 +15,13 @@ index 1eb56c8..dca444e 100644
  install_data(test_data, install_dir: installed_test_bindir)
  
 diff --git a/meson_options.txt b/meson_options.txt
-index 068a03f..03f398a 100644
+index 5a96998..383aa6c 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -10,3 +10,6 @@ option('man',
- option('tests',
-        type: 'boolean', value: true,
-        description: 'Build the tests')
+@@ -13,3 +13,6 @@ option('tests',
+ option('nls',
+        type: 'feature', value: 'auto', yield: true,
+        description: 'Enable native language support (translations)')
 +option('installed_test_prefix',
 +       description: 'Prefix for installed tests',
 +       type: 'string')

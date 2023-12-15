@@ -104,11 +104,32 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-GqMgoi0tsP7zcCcPumhdsbvhPB6fgw1ufx6gHlc6iSc=";
     })
 
-    # https://github.com/sagemath/sage/pull/36006, positively reviewed
+    # https://github.com/sagemath/sage/pull/36006, landed in 10.2.beta2
     (fetchpatch {
       name = "gmp-6.3-upgrade.patch";
-      url = "https://github.com/sagemath/sage/commit/d88bc3815c0901bfdeaa3e4a31107c084199f614.diff";
-      sha256 = "sha256-dXaEwk2wXxmx02sCw4Vu9mF0ZrydhFD4LRwNAiQsPgM=";
+      url = "https://github.com/sagemath/sage/commit/5e841de46c3baa99cd1145b36ff9163e9340a55c.diff";
+      sha256 = "sha256-fJPDryLtGBQz9qHDiCkBwjiW2lN6v7HiHgxY7CTeHcs=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36279, landed in 10.2.beta4
+    (fetchpatch {
+       name = "matplotlib-3.8-upgrade.patch";
+       url = "https://github.com/sagemath/sage/commit/0fcf88935908440930c5f79202155aca4ad57518.diff";
+       sha256 = "sha256-mvqAHaTCXsxPv901L8HSTnrfghfXYdq0wfLoP/cYQZI=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35658, landed in 10.1.beta2
+    (fetchpatch {
+      name = "sphinx-7-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/cacd9a89b5c4fdcf84a8dd2b7d5bdc10cc78109a.diff";
+      sha256 = "sha256-qJvliTJjR3XBc5pH6Q0jtm8c4bhtZcTcF3O04Ro1uaU=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36296, landed in 10.2.beta4
+    (fetchpatch {
+      name = "duplicate-args-region_plot.patch";
+      url = "https://github.com/sagemath/sage/commit/461727b453712550a2c5dc0ae11933523255aaed.diff";
+      sha256 = "sha256-mC8084VQoUBk4hocALF+Y9Cwb38Zt360eldi/SSjna8=";
     })
   ];
 

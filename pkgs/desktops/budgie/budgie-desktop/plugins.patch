@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 48aeeb38..31e4c24b 100644
+index 6c6e473e..9b8fb73a 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -88,11 +88,6 @@ datadir = join_paths(prefix, get_option('datadir'))
@@ -43,7 +43,7 @@ index 48aeeb38..31e4c24b 100644
  with_bluetooth = get_option('with-bluetooth')
  if with_bluetooth == true
 diff --git a/src/config/budgie-config.c b/src/config/budgie-config.c
-index fc531f59..0a21b690 100644
+index 3ffe3632..da53e054 100644
 --- a/src/config/budgie-config.c
 +++ b/src/config/budgie-config.c
 @@ -11,7 +11,6 @@
@@ -51,14 +51,13 @@ index fc531f59..0a21b690 100644
  #ifndef CONFIG_H_INCLUDED
  #include "config.h"
 -#include <stdbool.h>
+ #include <stddef.h>
  
  /**
-  * All this is to keep Vala happy & configured..
-@@ -20,21 +19,6 @@ const char* BUDGIE_MODULE_DIRECTORY = MODULEDIR;
- const char* BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+@@ -22,20 +21,6 @@ const char* BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
  const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = RAVEN_PLUGIN_LIBDIR;
  const char* BUDGIE_RAVEN_PLUGIN_DATADIR = RAVEN_PLUGIN_DATADIR;
--
+ 
 -#ifdef HAS_SECONDARY_PLUGIN_DIRS
 -const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = true;
 -const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = MODULEDIR_SECONDARY;
@@ -68,28 +67,27 @@ index fc531f59..0a21b690 100644
 -#else
 -const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = false;
 -const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = NULL;
--const char* BUDGIE_MODULE_DATA_DIRECTORY = NULL;
--const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = NULL;
--const char* BUDGIE_RAVEN_PLUGIN_DATADIR = NULL;
+-const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY = NULL;
+-const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY = NULL;
+-const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = NULL;
 -#endif
 -
  const char* BUDGIE_DATADIR = DATADIR;
  const char* BUDGIE_VERSION = PACKAGE_VERSION;
  const char* BUDGIE_WEBSITE = PACKAGE_URL;
 diff --git a/src/config/budgie-config.h b/src/config/budgie-config.h
-index 720379a5..c5774820 100644
+index b7581203..11df4347 100644
 --- a/src/config/budgie-config.h
 +++ b/src/config/budgie-config.h
-@@ -12,8 +12,6 @@
+@@ -12,7 +12,6 @@
  #ifndef _BUDGIE_CONFIG_H_
  #define _BUDGIE_CONFIG_H_
  
 -#include <stdbool.h>
--
- /* i.e. /usr/lib/budgie-desktop */
- extern const char* BUDGIE_MODULE_DIRECTORY;
+ #include <stddef.h>
  
-@@ -26,12 +24,6 @@ extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR;
+ /* i.e. /usr/lib/budgie-desktop */
+@@ -27,12 +26,6 @@ extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR;
  /* i.e. /usr/share/budgie-desktop/raven-plugins */
  extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR;
  
@@ -129,7 +127,7 @@ index 5eb445d1..7d27e348 100644
      public extern const string DATADIR;
  
 diff --git a/src/panel/plugin_manager.vala b/src/panel/plugin_manager.vala
-index f4f2e4da..9d569bd1 100644
+index f4f2e4da..3dfee49a 100644
 --- a/src/panel/plugin_manager.vala
 +++ b/src/panel/plugin_manager.vala
 @@ -40,13 +40,26 @@ namespace Budgie {
@@ -146,16 +144,16 @@ index f4f2e4da..9d569bd1 100644
 +			} else {
 +				debug("BUDGIE_PLUGIN_LIBDIR is unset, defaulting to %s", Budgie.MODULE_DIRECTORY);
 +				libdir = Budgie.MODULE_DIRECTORY;
- 			}
- 
++ 			}
++
 +			var datadir = Environment.get_variable("BUDGIE_PLUGIN_DATADIR");
 +			if (datadir != null) {
 +				debug("BUDGIE_PLUGIN_DATADIR is set to %s", datadir);
 +			} else {
 +				debug("BUDGIE_PLUGIN_DATADIR is unset, defaulting to %s", Budgie.MODULE_DATA_DIRECTORY);
 +				datadir = Budgie.MODULE_DATA_DIRECTORY;
-+			}
-+
+ 			}
+ 
 +			engine.add_search_path(libdir, datadir);
 +
  			/* User path */
@@ -164,7 +162,7 @@ index f4f2e4da..9d569bd1 100644
  			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
  			engine.add_search_path(user_mod, hdata);
 diff --git a/src/raven/plugin_manager.vala b/src/raven/plugin_manager.vala
-index 01f32553..d671109a 100644
+index 01f32553..2826b7e5 100644
 --- a/src/raven/plugin_manager.vala
 +++ b/src/raven/plugin_manager.vala
 @@ -51,13 +51,26 @@ namespace Budgie {
@@ -181,16 +179,16 @@ index 01f32553..d671109a 100644
 +			} else {
 +				debug("RAVEN_PLUGIN_LIBDIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_LIBDIR);
 +				libdir = Budgie.RAVEN_PLUGIN_LIBDIR;
-+			}
-+
+ 			}
+ 
 +			var datadir = Environment.get_variable("RAVEN_PLUGIN_DATADIR");
 +			if (datadir != null) {
 +				debug("RAVEN_PLUGIN_DATADIR is set to %s", datadir);
 +			} else {
 +				debug("RAVEN_PLUGIN_DATADIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_DATADIR);
 +				datadir = Budgie.RAVEN_PLUGIN_DATADIR;
- 			}
- 
++ 			}
++
 +			engine.add_search_path(libdir, datadir);
 +
  			/* User path */

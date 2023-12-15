@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , buildPythonPackage
 , python
 , ndtypes
@@ -10,10 +11,22 @@
 
 buildPythonPackage {
   pname = "xnd";
+  format = "setuptools";
   disabled = isPy27;
   inherit (libxnd) version src meta;
 
   propagatedBuildInputs = [ ndtypes ];
+
+  buildInputs = [ libndtypes ];
+
+  patches = [
+    # python311 fixes which are on main. remove on update
+    (fetchpatch {
+      name = "python311.patch";
+      url = "https://github.com/xnd-project/xnd/commit/e1a06d9f6175f4f4e1da369b7e907ad6b2952c00.patch";
+      hash = "sha256-xzrap+FL5be13bVdsJ3zeV7t57ZC4iyhuZhuLsOzHyE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

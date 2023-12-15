@@ -22,7 +22,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
   version = "9.0.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";

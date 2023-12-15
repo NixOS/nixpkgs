@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = lib.platforms.linux;
+    mainProgram = "github-desktop";
   };
 })

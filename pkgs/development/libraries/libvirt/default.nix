@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.6.0";
+  version = "9.9.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dQr6bUaZOX1MN+MZxbsPqbv3bsyyWBM0SBYlSnV04K0=";
+    sha256 = "sha256-8Tmn99wDkRoA+pnOjeCzHoCeR3P3MwCA1kqY6SZpkqw=";
     fetchSubmodules = true;
   };
 
@@ -155,16 +155,12 @@ stdenv.mkDerivation rec {
       src/storage/storage_backend_disk.c \
       src/storage/storage_util.c
   '' + lib.optionalString isDarwin ''
-    sed -i '/qemucapabilitiestest/d' tests/meson.build
-    sed -i '/vircryptotest/d' tests/meson.build
-    sed -i '/domaincapstest/d' tests/meson.build
+    # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
+    # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
+    sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
-  '' + lib.optionalString (isDarwin && isx86_64) ''
-    sed -i '/qemucaps2xmltest/d' tests/meson.build
-    sed -i '/qemuhotplugtest/d' tests/meson.build
-    sed -i '/virnetdaemontest/d' tests/meson.build
   '';
 
   strictDeps = true;

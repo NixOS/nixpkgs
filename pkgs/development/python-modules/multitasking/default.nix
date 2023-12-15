@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "multitasking";
   version = "0.0.11";
+  format = "setuptools";
 
   # GitHub source releases aren't tagged
   src = fetchPypi {

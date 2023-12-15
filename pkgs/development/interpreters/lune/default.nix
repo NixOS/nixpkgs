@@ -8,22 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.7.4";
+  version = "0.7.11";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-um8XsXT0O+gTORrJAVlTku6YURh0wljLaQ7fueF+AoQ=";
+    hash = "sha256-5agoAXeO16/CihsgvUHt+pgA+/ph6PualTY6xqDQbeU=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rbx_binary-0.7.0" = "sha256-bwGCQMXN8VdycsyS7Om/9CKMkamAa0eBK2I2aPZ/sZs=";
-    };
-  };
+  cargoHash = "sha256-kPBPxlsicoFDyOsuJWhvQHDC2uwYQqpd7S+kQPRd8DY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,6 +26,22 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+  ];
+
+  checkFlags = [
+    # these all require internet access
+    "--skip=tests::net_request_codes"
+    "--skip=tests::net_request_compression"
+    "--skip=tests::net_request_methods"
+    "--skip=tests::net_request_query"
+    "--skip=tests::net_request_redirect"
+    "--skip=tests::net_socket_wss"
+    "--skip=tests::net_socket_wss_rw"
+    "--skip=tests::roblox_instance_custom_async"
+    "--skip=tests::serde_json_decode"
+
+    # this tries to use the root directory as the CWD
+    "--skip=tests::process_spawn_cwd"
   ];
 
   meta = with lib; {

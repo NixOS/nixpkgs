@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+    # For ws2_32, refered to by a `*.pc` file
+    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
   ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];

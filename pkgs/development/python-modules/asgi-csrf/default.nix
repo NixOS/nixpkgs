@@ -12,6 +12,7 @@
 
 buildPythonPackage rec {
   version = "0.9";
+  format = "setuptools";
   pname = "asgi-csrf";
   disabled = isPy27;
 

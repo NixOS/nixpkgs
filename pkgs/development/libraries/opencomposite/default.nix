@@ -15,19 +15,14 @@
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2023-07-02";
+  version = "unstable-2023-09-11";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "a59b16204a1ee61a59413667a516375071a113f0";
-    hash = "sha256-JSVd/+A/WldP+A2vOOG4lbwb4QCE/PymEm4VbjUxWrw=";
+    rev = "cca18158a4b6921df54e84a3b23ff459f76a2bde";
+    hash = "sha256-VREApt4juz283aJVLZoBbqg01PNs4XBxmpr/UIMlaK8=";
   };
-
-  patches = [
-    # Force OpenComposite to use our OpenXR and glm, instead of its Git submodules
-    ./cmake-use-find_package-where-needed.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,6 +36,11 @@ stdenv.mkDerivation {
     vulkan-headers
     vulkan-loader
     xorg.libX11
+  ];
+
+  cmakeFlags = [
+    "-DUSE_SYSTEM_OPENXR=ON"
+    "-DUSE_SYSTEM_GLM=ON"
   ];
 
   installPhase = ''

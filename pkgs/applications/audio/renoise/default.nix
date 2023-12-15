@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         }
         else
           releasePath
-    else throw "Platform is not supported. Use instalation native to your platform https://www.renoise.com/";
+    else throw "Platform is not supported. Use installation native to your platform https://www.renoise.com/";
 
   buildInputs = [ alsa-lib libjack2 libX11 libXcursor libXext libXrandr ];
 

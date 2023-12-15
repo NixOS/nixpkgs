@@ -12,7 +12,9 @@
 , python3
 , esbuild
 , nodejs
+, node-gyp
 , libsecret
+, libkrb5
 , xorg
 , ripgrep
 , AppKit
@@ -37,12 +39,12 @@ let
 
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.16.17";
+      version = "0.17.14";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+        hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -58,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.79.2";
+  version = "1.84.0";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-u5LuDcKTN4CEpRnFCeEbni6hiDDwTV9LUEmXaQYJvJw=";
+    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -87,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-P6mzeE3HnS/KoP7kCXJlDkFWkTKiGjJkOUXfGOru/xE=";
+    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
   };
 
   nativeBuildInputs = [
@@ -102,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
+    ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
     ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
@@ -140,8 +142,16 @@ stdenv.mkDerivation (finalAttrs: {
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodejs}"
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
+    # use updated node-gyp. fixes the following error on Darwin:
+    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
 
     runHook postConfigure
   '';

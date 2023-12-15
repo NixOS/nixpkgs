@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flamp";
-  version = "2.2.07";
+  version = "2.2.10";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/fldigi/flamp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BnKL1iwaw1iJC5qcGCvdMr461n0BSYxk61dbAnhpz2c=";
+    hash = "sha256-c0Q9QD3O8eQxRqaBhr79iuNVtWGC8kl+YWYS4xMgDN4=";
   };
 
   nativeBuildInputs = [

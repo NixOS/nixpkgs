@@ -61,7 +61,7 @@
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
-        if grep -Fw "${version}" - <<< "$output"; then
+        if grep -Fw -- "${version}" - <<< "$output"; then
           touch $out
         else
           echo "Version string '${version}' not found!" >&2

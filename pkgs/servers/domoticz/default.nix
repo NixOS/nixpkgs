@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_BUILTIN_MQTT=false"
     "-DUSE_BUILTIN_LUA=false"
     "-DUSE_BUILTIN_SQLITE=false"
@@ -87,5 +86,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
+    mainProgram = "domoticz";
   };
 }

@@ -1,17 +1,26 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
+{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten,
   gtest, lit, nodejs, filecheck
 }:
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "114";
+  version = "116";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-bzHNIQy0AN8mIFGG+638p/MBSqlkWuaOzKGSsMDAPH4=";
+    hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
   };
+
+  # Fix build with Node 20
+  # FIXME: remove for next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
+      hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake python3 ];
 

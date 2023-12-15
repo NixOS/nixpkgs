@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "websocket";
   namespace = "script.module.websocket";
-  version = "0.58.0+matrix.2";
+  version = "1.6.2";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-xyOlKAAvtucC/tTm027ifEgiry/9gQneAcIwOGxmTkg=";
+    sha256 = "sha256-vJGijCjIgLJAdJvl+hCAPtvq7fy2ksgjY90vjVyqDkI=";
   };
 
   propagatedBuildInputs = [

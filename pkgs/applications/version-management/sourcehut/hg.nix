@@ -3,48 +3,67 @@
 , buildGoModule
 , buildPythonPackage
 , srht
-, hglib
+, python-hglib
 , scmsrht
 , unidiff
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.31.3";
+  version = "0.32.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hg.sr.ht";
     rev = version;
-    sha256 = "4Qe08gqsSTMQVQBchFPEUXuxM8ZAAQGJT1EOcDjkZa0=";
+    sha256 = "mYkA44c9wy/Iy1h1lXkVpc9gN7rQXFm4T3YBlQ1Dj60=";
     vc = "hg";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api hgsrht-keys" ""
+
+    substituteInPlace hgsrht-shell \
+      --replace /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
   '';
 
   hgsrht-api = buildGoModule ({
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
+    vendorHash = "sha256-vuOYpnF3WjA6kOe9MVSuVMhJBQqCmIex+QUBJrP+VDs=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
     pname = "hgsrht-keys";
     modRoot = "hgsrht-keys";
-    vendorSha256 = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+    vendorHash = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+
+    postPatch = ''
+      substituteInPlace hgsrht-keys/main.go \
+        --replace /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
+    '';
   };
 
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    srht
-    hglib
+    python-hglib
     scmsrht
+    srht
     unidiff
   ];
 

@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools
+    setuptools-scm
     wheel
   ];
 
@@ -61,7 +62,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     mock
     pytestCheckHook
-    setuptools-scm
   ];
 
   preCheck = ''

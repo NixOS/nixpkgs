@@ -36,5 +36,6 @@ buildPythonApplication rec {
     description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];
+    mainProgram = "rednotebook";
   };
 }

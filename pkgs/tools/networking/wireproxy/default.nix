@@ -1,9 +1,11 @@
 { lib
-, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
+, testers
+, wireproxy
 }:
 
-buildGoModule rec {
+buildGo120Module rec {
   pname = "wireproxy";
   version = "1.0.6";
 
@@ -21,6 +23,12 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-LBLEb2oVi5ILNtoOtmJZ7NC7hMvLZcexYAxwmb4iUBo=";
+
+  passthru.tests.version = testers.testVersion {
+    package = wireproxy;
+    command = "wireproxy --version";
+    version = src.rev;
+  };
 
   meta = with lib; {
     description = "Wireguard client that exposes itself as a socks5 proxy";

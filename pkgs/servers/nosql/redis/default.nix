@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
+{ lib, stdenv, fetchurl, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
@@ -10,13 +10,13 @@
 , useSystemJemalloc ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "7.2.1";
+  version = "7.2.3";
 
   src = fetchurl {
-    url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-XHbZkKGxxflJvNHu2Q0Mik9wNpvb3LQCiMVh3fiJZ6Q=";
+    url = "https://download.redis.io/releases/redis-${finalAttrs.version}.tar.gz";
+    hash = "sha256-PisZbW603bnnQwiL/CkVzLtC1A9aij7djLaccW7DS+c=";
   };
 
   patches = lib.optionals useSystemJemalloc [
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.all;
-    changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
+    changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
     maintainers = with maintainers; [ berdario globin marsam ];
     mainProgram = "redis-cli";
   };
-}
+})

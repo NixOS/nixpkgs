@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "eufylife-ble-client";
-  version = "0.1.7";
+  version = "0.1.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "eufylife_ble_client";
     inherit version;
-    hash = "sha256-Vt9hHUVAM0d+BcotPUD9v8jXrcg7lEDVChLENUHd3rY=";
+    hash = "sha256-1pnT5B+m2/IDqHqOIZdDx8WwBdZpJe1Bj/HaxY+VW1Y=";
   };
 
   nativeBuildInputs = [

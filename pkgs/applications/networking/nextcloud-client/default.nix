@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
@@ -21,11 +21,12 @@
 , sphinx
 , sqlite
 , xdg-utils
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.9.4";
+  version = "3.11.0";
 
   outputs = [ "out" "dev" ];
 
@@ -33,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-h8lOstl085haesmCmzq2o0OlQrO5U/mfGngQunynIuQ=";
+    hash = "sha256-rqSnCIsXQDf3cNQn4ofjGQkCgwYGyDau/WWUPHziNp4=";
   };
 
   patches = [
@@ -55,6 +56,7 @@ mkDerivation rec {
     extra-cmake-modules
     librsvg
     sphinx
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -85,9 +87,6 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
-
-  # causes redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
 
   postBuild = ''
     make doc-man

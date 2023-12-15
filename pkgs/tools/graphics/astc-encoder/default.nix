@@ -29,19 +29,20 @@ with rec {
 
 stdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "4.5.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-pNoBOp//xa5F6/T1cwtdHsAWLZeIHgxZ7UKaB60fg4M=";
+    sha256 = "sha256-7/GBzqgXh8sU3Pl30eH9Mi24PPIqayQqNuhkMnn5Lq0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = isaFlags ++ [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DASTCENC_UNIVERSAL_BUILD=OFF"
   ];
 

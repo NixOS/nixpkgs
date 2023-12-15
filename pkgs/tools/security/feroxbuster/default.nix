@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2c+s5kCAYOKwl5eb1zY7xdl4pD6eAjiyRj6JFkA07M=";
+    hash = "sha256-AFh/IeB88NYPsyUqzaN92GoDbAgl+HG87cIy+Ni06Q8=";
   };
 
   # disable linker overrides on aarch64-linux
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoHash = "sha256-rPFj53KQkucz1/yAr6U2nk6gTdxcBxyRHVqGeawBYZU=";
+  cargoHash = "sha256-Fu3qw3qRK3TZlzK1WcmI/GQ5TM1j+gbGoedwp18SolY=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
+    mainProgram = "feroxbuster";
   };
 }
 

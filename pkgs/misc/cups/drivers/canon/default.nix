@@ -26,9 +26,9 @@
 
 let
   system =
-    if stdenv.targetPlatform.system == "x86_64-linux" then "intel"
-    else if stdenv.targetPlatform.system == "aarch64-linux" then "arm"
-    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.targetPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then "intel"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "arm"
+    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 

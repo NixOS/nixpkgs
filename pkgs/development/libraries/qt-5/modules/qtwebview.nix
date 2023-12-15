@@ -2,7 +2,7 @@
 
 qtModule {
   pname = "qtwebview";
-  qtInputs = [ qtdeclarative qtwebengine ];
+  propagatedBuildInputs = [ qtdeclarative qtwebengine ];
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
     WebKit

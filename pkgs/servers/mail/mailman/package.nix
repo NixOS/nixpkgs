@@ -2,7 +2,6 @@
 , fetchpatch
 , python3
 , fetchPypi
-, sphinx
 , postfix
 , lynx
 }:
@@ -30,13 +29,12 @@ buildPythonPackage rec {
     flufl_i18n
     flufl_lock
     gunicorn
-    importlib-resources
-    lazr_config
+    lazr-config
     passlib
     requests
     sqlalchemy
     zope-component
-    zope_configuration
+    zope-configuration
   ];
 
   checkInputs = [
@@ -51,6 +49,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch";
       sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/mailman/-/commit/5e4431af6bb7d672a7ed7e3329f8fac7812d47f8.patch";
+      excludes = [ ".gitlab-ci.yml" ];
+      hash = "sha256-y2AE9hU4Z1BpBlJywxMWiuRvltWkk+R9YgMkpemvlIo=";
     })
     ./log-stderr.patch
   ];
@@ -78,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ qyliss ma27 ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

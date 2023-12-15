@@ -1,35 +1,49 @@
 { lib
 , buildPythonPackage
-, python
 , fetchPypi
 , defusedxml
 , requests
 , packaging
 , requests-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.25";
+  version = "0.28";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-01TRYkXEWagFrSB7zvP6Bj4YvIFoaVkgrIm/gSWkILY=";
+    hash = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
   };
 
-  propagatedBuildInputs = [ defusedxml requests packaging ];
+  propagatedBuildInputs = [
+    defusedxml
+    requests
+    packaging
+  ];
 
-  checkInputs = [ requests-mock ];
+  nativeCheckInputs = [
+    requests-mock
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # Tests attempt to create some file artifacts and fails
+  doCheck = false;
 
-  doCheck = false; # it attempts to create some file artifacts and fails
+  pythonImportsCheck = [
+    "tableauserverclient"
+  ];
 
-  meta = {
-    description = "A Python module for working with the Tableau Server REST API.";
-    homepage = "https://pypi.org/project/tableauserverclient/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+  meta = with lib; {
+    description = "Module for working with the Tableau Server REST API";
+    homepage = "https://github.com/tableau/server-client-python";
+    changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

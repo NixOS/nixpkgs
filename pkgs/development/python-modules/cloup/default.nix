@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cloup";
-  version = "3.0.1";
+  version = "3.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4ItMwje7mlvY/4G6btSUmOIgDaw5InsWSOlXiCAo6ZM=";
+    hash = "sha256-5b13idF8DelxOaxeuK+ML42Wotg2PoQRIk32JaaFjSE=";
   };
 
   nativeBuildInputs = [

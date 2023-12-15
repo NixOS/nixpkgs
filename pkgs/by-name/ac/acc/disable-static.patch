@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3d9ad07..2f3b4b5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,26 +2,6 @@ cmake_minimum_required(VERSION 2.4)
+ 
+ project(acc)
+ 
+-if(MSVC)
+-	# Create list of _FLAGS variables
+-	foreach(FLAGS_SUFFIX "" _DEBUG _RELEASE _MINSIZEREL _RELWITHDEBINFO)
+-		set(FLAGS_VARIABLES ${FLAGS_VARIABLES} CMAKE_C_FLAGS${FLAGS_SUFFIX} CMAKE_CXX_FLAGS${FLAGS_SUFFIX})
+-	endforeach()
+-
+-	# Change compiler flags to use static runtime
+-	foreach(FLAGS_VARIABLE ${FLAGS_VARIABLES})
+-		if(${FLAGS_VARIABLE} MATCHES "/MD")
+-			string(REGEX REPLACE "/MD" "/MT" ${FLAGS_VARIABLE} "${${FLAGS_VARIABLE}}")
+-		endif()
+-	endforeach()
+-endif()
+-
+-if (NOT APPLE AND NOT MSVC)
+-	# use static runtimes on Linux and MinGW
+-	set(CMAKE_C_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES} -static -static-libgcc -static-libstdc++")
+-	set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -static -static-libgcc -static-libstdc++")
+-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
+-endif()
+ 
+ add_executable(acc
+ 	acc.c

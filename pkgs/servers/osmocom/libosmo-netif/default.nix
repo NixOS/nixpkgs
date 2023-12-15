@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmo-netif";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
     rev = version;
-    hash = "sha256-PhGi/6JVO8tXxzfGwEKUB/GdrgCJkqROo26TPU+O9Sg=";
+    hash = "sha256-NjclrjpgX2ZySxTTjdeiOTOXsOTESLmj2LY89goedKI=";
   };
 
   postPatch = ''

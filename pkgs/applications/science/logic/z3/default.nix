@@ -24,7 +24,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
     inherit version sha256 patches;
     src = fetchFromGitHub {
       owner = "Z3Prover";
-      repo = pname;
+      repo = "z3";
       rev = "${tag}-${version}";
       sha256 = sha256;
     };
@@ -47,7 +47,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 
     configurePhase = concatStringsSep " "
       (
-        [ "${python.pythonForBuild.interpreter} scripts/mk_make.py --prefix=$out" ]
+        [ "${python.pythonOnBuildForHost.interpreter} scripts/mk_make.py --prefix=$out" ]
           ++ optional javaBindings "--java"
           ++ optional ocamlBindings "--ml"
           ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"

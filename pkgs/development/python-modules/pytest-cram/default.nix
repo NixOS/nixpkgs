@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.2.2";
+  format = "setuptools";
   pname = "pytest-cram";
 
   nativeCheckInputs = [ pytest ];

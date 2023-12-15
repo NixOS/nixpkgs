@@ -3,39 +3,62 @@
 # - base (default): contains readline and i18n, regexp and syscalls modules
 #   by default
 # - full: contains base plus modules in withModules
-{ lib, stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf269
+, automake
+, libtool
+, libsigsegv
+, gettext
+, ncurses
+, pcre
+, zlib
+, readline
 , libffi
 , libffcall
+, libX11
+, libXau
+, libXt
+, libXpm
+, libXext
+, xorgproto
 , coreutils
 # build options
-, threadSupport ? stdenv.hostPlatform.isx86
-, x11Support ? stdenv.hostPlatform.isx86
+, threadSupport ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
+, x11Support ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
 , dllSupport ? true
 , withModules ? [
+    "asdf"
     "pcre"
     "rawsock"
   ]
-  ++ lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" "wildcard" ]
+  ++ lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" ]
   ++ lib.optional x11Support "clx/new-clx"
 }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
-stdenv.mkDerivation rec {
-  version = "2.49";
+let
+  ffcallAvailable = stdenv.isLinux && (libffcall != null);
+  # Some modules need autoreconf called in their directory.
+  shouldReconfModule = name: name != "asdf";
+in
+
+stdenv.mkDerivation {
+  version = "2.50pre20230112";
   pname = "clisp";
 
-  src = fetchurl {
-    url = "mirror://gnu/clisp/release/${version}/clisp-${version}.tar.bz2";
-    sha256 = "8132ff353afaa70e6b19367a25ae3d5a43627279c25647c220641fed00f8e890";
+  src = fetchFromGitLab {
+    owner = "gnu-clisp";
+    repo = "clisp";
+    rev = "bf72805c4dace982a6d3399ff4e7f7d5e77ab99a";
+    hash = "sha256-sQoN2FUg9BPaCgvCF91lFsU/zLja1NrgWsEIr2cPiqo=";
   };
 
-  inherit libsigsegv gettext coreutils;
-
-  ffcallAvailable = stdenv.isLinux && (libffcall != null);
-
+  strictDeps = true;
+  nativeBuildInputs = [ autoconf269 automake libtool ];
   buildInputs = [libsigsegv]
   ++ lib.optional (gettext != null) gettext
   ++ lib.optional (ncurses != null) ncurses
@@ -49,23 +72,31 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./bits_ipctypes_to_sys_ipc.patch # from Gentoo
-    # The cfree alias no longer exists since glibc 2.26
-    ./remove-cfree-binding.patch
+    ./gnulib_aarch64.patch
   ];
 
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
   # anything rememberable).
-  # Also remove reference to a type that disappeared from recent glibc
-  # (seems the correct thing to do, found no reference to any solution)
   postPatch = ''
     sed -e 's@9090@64237@g' -i tests/socket.tst
     sed -i 's@/bin/pwd@${coreutils}&@' src/clisp-link.in
+    sed -i 's@1\.16\.2@${automake.version}@' src/aclocal.m4
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
-
-    substituteInPlace modules/bindings/glibc/linux.lisp --replace "(def-c-type __swblk_t)" ""
   '';
+
+  preConfigure = lib.optionalString stdenv.isDarwin (''
+    (
+      cd src
+      autoreconf -f -i -I m4 -I glm4
+    )
+  '' + lib.concatMapStrings (x: ''
+    (
+      root="$PWD"
+      cd modules/${x}
+      autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
+    )
+  '') (builtins.filter shouldReconfModule withModules));
 
   configureFlags = [ "builddir" ]
   ++ lib.optional (!dllSupport) "--without-dynamic-modules"
@@ -74,35 +105,29 @@ stdenv.mkDerivation rec {
   ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
   ++ lib.optional ffcallAvailable "--with-ffcall"
   ++ lib.optional (!ffcallAvailable) "--without-ffcall"
-  ++ builtins.map (x: "--with-module=" + x) withModules
+  ++ builtins.map (x: " --with-module=" + x) withModules
   ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
+    sed -i -re '/ cfree /d' -i modules/bindings/glibc/linux.lisp
     cd builddir
   '';
 
-  # Fails to build in parallel due to missing gnulib header dependency used in charstrg.d:
-  #   ../src/charstrg.d:319:10: fatal error: uniwidth.h: No such file or directory
-  enableParallelBuilding = false;
+  doCheck = true;
 
   postInstall =
     lib.optionalString (withModules != [])
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
       + lib.concatMapStrings (x: " " + x) withModules);
 
-  env.NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
-
-  # TODO : make mod-check fails
-  doCheck = false;
+  env.NIX_CFLAGS_COMPILE = "-O0 -falign-functions=${if stdenv.is64bit then "8" else "4"}";
 
   meta = {
     description = "ANSI Common Lisp Implementation";
-    homepage = "http://clisp.cons.org";
+    homepage = "http://clisp.org";
     maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.unix;
-    # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
-    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

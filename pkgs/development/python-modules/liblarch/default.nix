@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   version = "3.2.0";
+  format = "setuptools";
   pname = "liblarch";
   disabled = pythonOlder "3.5.0";
 

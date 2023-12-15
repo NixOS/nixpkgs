@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.4.0";
+  version = "0.4.1";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "pwmt";
     repo = "girara";
     rev = version;
-    sha256 = "sha256-dzWdiFGJ45JcH+wNwq2P3NZeWwHXAvXR1eJC85mYy7M=";
+    sha256 = "sha256-47ff7NBunVvYlCEQN/LwTRG33aButisVvdwxlh28LUM=";
   };
 
   nativeBuildInputs = [

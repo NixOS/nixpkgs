@@ -15,20 +15,15 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "0.7.1";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "guillaumekln";
     repo = "faster-whisper";
-    rev = "v${version}";
-    hash = "sha256-NTk0S+dMChygnC7Wix62AFO4NNSPJuKXyqoEyWiQhII=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qcpPQv5WoUkT92/TZ+MMq452FgPNcm3ZZ+ZNc0btOGE=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "onnxruntime>=1.14,<2" "onnxruntime"
-  '';
 
   propagatedBuildInputs = [
     av
@@ -54,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/guillaumekln/faster-whisper/releases/tag/v${version}";
+    changelog = "https://github.com/guillaumekln/faster-whisper/releases/tag/${version}";
     description = "Faster Whisper transcription with CTranslate2";
     homepage = "https://github.com/guillaumekln/faster-whisper";
     license = licenses.mit;

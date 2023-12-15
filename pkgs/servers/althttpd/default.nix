@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "althttpd";
-  version = "unstable-2022-08-12";
+  version = "unstable-2023-08-12";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
-    rev = "823a1d985d4bacaa";
-    sha256 = "sha256-yfVsOfqtHw9ftnK5B4RWeRR/ygfsTEDm7fFSaVxsCas=";
+    rev = "c0bdc68e6c56ef25";
+    sha256 = "sha256-VoDR5MlVlvar9wYA0kUhvDQVjxDwsZlqrNR3u4Tqw5c=";
   };
 
   buildInputs = [ openssl ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+    mainProgram = "althttpd";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , openssl
 , stdenv
@@ -10,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.13.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-B53oTAgy+y+FWk7y+unJPt7Mc7m4nwnTX+5wqL6AX+4=";
+    hash = "sha256-q7/obBE16aKb8BHf5ycXSgXTMLWAFwxSnJ3qV35TdL8=";
   };
 
   cargoLock = {
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [
     openssl
@@ -40,6 +41,13 @@ rustPlatform.buildRustPackage rec {
     Libsystem
     SystemConfiguration
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rye \
+      --bash <($out/bin/rye self completion -s bash) \
+      --fish <($out/bin/rye self completion -s fish) \
+      --zsh <($out/bin/rye self completion -s zsh)
+  '';
 
   checkFlags = [
     "--skip=utils::test_is_inside_git_work_tree"

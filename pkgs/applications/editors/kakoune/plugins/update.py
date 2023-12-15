@@ -73,6 +73,9 @@ in lib.fix' (lib.extends overrides packages)
             )
         print(f"updated {outfile}")
 
+    def update(self, args):
+        pluginupdate.update_plugins(self, args)
+
 
 def main():
     editor = KakouneEditor("kakoune", ROOT, GET_PLUGINS)

@@ -1,28 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, pytest
+, pythonOlder
+, setuptools
 , pytestCheckHook
 , vcrpy
 , citeproc-py
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.9.2";
-  disabled = isPy27;
+  version = "0.9.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dg/Yfp5GzmyUMI6feAwgP+g22JYoQE+L9a+Wp0V77Rw=";
+    hash = "sha256-+DeOqQ0R+XUlkuSHySFj2oDZqf85mT64PAi/LtTso3I=";
   };
 
-  propagatedBuildInputs = [ citeproc-py requests six ];
+  nativeBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [ citeproc-py requests ];
 
-  nativeCheckInputs = [ pytest pytestCheckHook vcrpy ];
+  nativeCheckInputs = [ pytestCheckHook vcrpy ];
+  disabledTests = [ "test_import_doi" ];  # tries to access network
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -33,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/duecredit/duecredit";
     description = "Simple framework to embed references in code";
+    changelog = "https://github.com/duecredit/duecredit/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bcdarwin ];
   };

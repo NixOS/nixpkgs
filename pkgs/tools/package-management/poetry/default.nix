@@ -1,27 +1,24 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchPypi
-}:
+{ python3, fetchFromGitHub }:
 
 let
   python = python3.override {
-    packageOverrides = self: super: {
+    packageOverrides = self: super: rec {
       poetry = self.callPackage ./unwrapped.nix { };
 
-      # version overrides required by poetry and its plugins
-      deepdiff = super.deepdiff.overridePythonAttrs (old: rec {
-        doCheck = false;
-      });
+      # The versions of Poetry and poetry-core need to match exactly,
+      # and poetry-core in nixpkgs requires a staging cycle to be updated,
+      # so apply an override here.
+      #
+      # We keep the override around even when the versions match, as
+      # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.7.0";
+        version = "1.8.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = version;
-          hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
+          hash = "sha256-RnCJ67jaL2knwv+Uo7p0zOejHAT73f40weaJnfqOYoM=";
         };
-        patches = [ ];
       });
     } // (plugins self);
   };

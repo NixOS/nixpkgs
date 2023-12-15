@@ -1,22 +1,61 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+
+# build-system
+, setuptools
+, setuptools-lint
+, sphinx
+
+# dependencies
+, xlib
+, evdev
+, darwin
+, six
+
+ # tests
+, unittestCheckHook
+ }:
 
 buildPythonPackage rec {
   pname = "pynput";
   version = "1.7.6";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3a5726546da54116b687785d38b1db56997ce1d28e53e8d22fc656d8b92e533c";
+  src = fetchFromGitHub {
+    owner = "moses-palmer";
+    repo = "pynput";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gRq4LS9NvPL98N0Jk09Z0GfoHS09o3zM284BEWS+NW4=";
   };
 
-  nativeBuildInputs = [ sphinx ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'sphinx >=1.3.1'" ""
+  '';
 
-  propagatedBuildInputs = [ setuptools-lint xlib ]
-  ++ lib.optionals stdenv.isLinux [
-    evdev
+  nativeBuildInputs = [
+    setuptools
+    setuptools-lint
+    sphinx
   ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    six
+  ] ++ lib.optionals stdenv.isLinux [
+    evdev
+    xlib
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices
+    Quartz
+  ]);
+
+  doCheck = false; # requires running X server
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

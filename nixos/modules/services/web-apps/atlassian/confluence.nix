@@ -133,18 +133,14 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atlassian-confluence;
-        defaultText = literalExpression "pkgs.atlassian-confluence";
-        description = lib.mdDoc "Atlassian Confluence package to use.";
-      };
+      package = mkPackageOption pkgs "atlassian-confluence" { };
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.oraclejre8;
-        defaultText = literalExpression "pkgs.oraclejre8";
-        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+      jrePackage = mkPackageOption pkgs "oraclejre8" {
+        extraDescription = ''
+        ::: {.note }
+        Atlassian only supports the Oracle JRE (JRASERVER-46152).
+        :::
+        '';
       };
     };
   };

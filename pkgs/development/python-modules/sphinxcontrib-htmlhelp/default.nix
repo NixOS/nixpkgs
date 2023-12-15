@@ -1,26 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
-  version = "2.0.0";
-  disabled = isPy27;
+  version = "2.0.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f5f8bb2d0d629f398bf47d0d69c07bc13b65f75a81ad9e2f71a63d4b7a2f6db2";
+    pname = "sphinxcontrib_htmlhelp";
+    inherit version;
+    hash = "sha256-bCahGKBbdgAHOEKbckoFaNveW3I5GmiFd9oI8RiRCSo=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension which renders HTML help files";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-htmlhelp";
-    license = licenses.bsd0;
+    license = licenses.bsd2;
     maintainers = teams.sphinx.members;
   };
 }

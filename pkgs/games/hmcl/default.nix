@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A Minecraft Launcher which is multi-functional, cross-platform and popular";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rs0vere ];
+    maintainers = with maintainers; [ ];
     inherit (jre.meta) platforms;
   };
 })

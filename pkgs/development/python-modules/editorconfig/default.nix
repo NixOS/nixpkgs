@@ -15,6 +15,7 @@ in
 buildPythonPackage rec {
   pname = "editorconfig";
   version = "0.12.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "editorconfig";

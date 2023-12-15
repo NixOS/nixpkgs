@@ -11,10 +11,10 @@ Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 36ab0148b9..7d458d196d 100644
+index 9ef45f8e75..99b1ec2e36 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -1028,6 +1028,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -1053,6 +1053,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -24,7 +24,7 @@ index 36ab0148b9..7d458d196d 100644
          name = empty_to_null(name);
  
          context_read_etc_hostname(c);
-@@ -1091,6 +1094,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+@@ -1116,6 +1119,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -35,10 +35,10 @@ index 36ab0148b9..7d458d196d 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index 841e5e3e91..a21e34430b 100644
+index f544a73580..ce00c262cc 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
-@@ -264,6 +264,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+@@ -229,6 +229,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
  
          use_localegen = locale_gen_check_available();
  
@@ -48,7 +48,7 @@ index 841e5e3e91..a21e34430b 100644
          /* If single locale without variable name is provided, then we assume it is LANG=. */
          if (strv_length(l) == 1 && !strchr(l[0], '=')) {
                  if (!locale_is_valid(l[0]))
-@@ -382,6 +385,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+@@ -347,6 +350,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
          if (r < 0)
                  return bus_log_parse_error(r);
  
@@ -57,8 +57,8 @@ index 841e5e3e91..a21e34430b 100644
 +
          vc_context_empty_to_null(&in);
  
-         FOREACH_STRING(name, in.keymap ?: in.toggle, in.keymap ? in.toggle : NULL) {
-@@ -607,6 +613,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+         r = vc_context_verify_and_warn(&in, LOG_ERR, error);
+@@ -465,6 +471,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
          if (r < 0)
                  return bus_log_parse_error(r);
  
@@ -67,9 +67,9 @@ index 841e5e3e91..a21e34430b 100644
 +
          x11_context_empty_to_null(&in);
  
-         if (!x11_context_is_safe(&in))
+         r = x11_context_verify_and_warn(&in, LOG_ERR, error);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index ad483301ef..31ed86955b 100644
+index ad1d492d6b..331af34505 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -665,6 +665,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *

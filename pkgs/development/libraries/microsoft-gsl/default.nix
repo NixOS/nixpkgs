@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ gtest ];
 
+  # error: unsafe buffer access
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unsafe-buffer-usage";
+
   doCheck = true;
 
   meta = with lib; {

@@ -8,7 +8,7 @@
 , pkg-config
 , sphinx
 , systemd
-, waf
+, wafHook
 , websocketpp
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withWebSocket ? true
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config sphinx waf.hook ];
+  nativeBuildInputs = [ pkg-config sphinx wafHook ];
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [

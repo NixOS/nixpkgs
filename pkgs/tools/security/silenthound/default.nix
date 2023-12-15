@@ -39,5 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     # Unknown license, https://github.com/layer8secure/SilentHound/issues/1
     license = licenses.unfree;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "silenthound";
   };
 }

@@ -20,16 +20,11 @@ in {
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
         '');
 
-        package = mkOption {
+        package = mkPackageOption pkgs "jack2" {
+          example = "jack1";
+        } // {
           # until jack1 promiscuous mode is fixed
           internal = true;
-          type = types.package;
-          default = pkgs.jack2;
-          defaultText = literalExpression "pkgs.jack2";
-          example = literalExpression "pkgs.jack1";
-          description = lib.mdDoc ''
-            The JACK package to use.
-          '';
         };
 
         extraOptions = mkOption {
@@ -225,7 +220,7 @@ in {
         description = "JACK Audio system service user";
         isSystemUser = true;
       };
-      # http://jackaudio.org/faq/linux_rt_config.html
+      # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }

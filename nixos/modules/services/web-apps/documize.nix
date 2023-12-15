@@ -23,14 +23,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.documize-community;
-      defaultText = literalExpression "pkgs.documize-community";
-      description = lib.mdDoc ''
-        Which package to use for documize.
-      '';
-    };
+    package = mkPackageOption pkgs "documize-community" { };
 
     salt = mkOption {
       type = types.nullOr types.str;

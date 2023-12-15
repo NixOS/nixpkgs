@@ -13,6 +13,11 @@ let
   # default.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
                                         (stdenv.targetPlatform.config + "-");
+
+  # Bootstrap `fetchurl` needed to build SDK packages without causing an infinite recursion.
+  fetchurlBoot = import ../build-support/fetchurl/boot.nix {
+    inherit (stdenv) system;
+  };
 in
 
 makeScopeWithSplicing' {
@@ -32,10 +37,13 @@ makeScopeWithSplicing' {
   apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
     inherit (buildPackages.darwin) print-reexports;
     inherit (self) darwin-stubs;
+    fetchurl = fetchurlBoot;
   };
 
   # macOS 11.0 SDK
-  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
+  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 {
+    fetchurl = fetchurlBoot;
+  };
 
   # Pick an SDK
   apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
@@ -192,26 +200,29 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  # TODO: make swift-corefoundation build with apple_sdk_11_0.Libsystem
-  CF = if useAppleSDKLibs
-    then
-      # This attribute (CF) is included in extraBuildInputs in the stdenv. This
-      # is typically the open source project. When a project refers to
-      # "CoreFoundation" it has an extra setup hook to force impure system
-      # CoreFoundation into the link step.
-      #
-      # In this branch, we only have a single "CoreFoundation" to choose from.
-      # To be compatible with the existing convention, we define
-      # CoreFoundation with the setup hook, and CF as the same package but
-      # with the setup hook removed.
-      #
-      # This may seem unimportant, but without it packages (e.g., bacula) will
-      # fail with linker errors referring ___CFConstantStringClassReference.
-      # It's not clear to me why some packages need this extra setup.
-      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
-        setupHook = null;
-      })
-    else callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
+  # TODO: Remove the CF hook if a solution to the crashes is not found.
+  CF =
+    # CF used to refer to the open source version of CoreFoundation from the Swift
+    # project. As of macOS 14, the rpath-based approach allowing packages to choose
+    # which version to use no longer seems to work reliably. Sometimes they works,
+    # but sometimes they crash with the error (in the system crash logs):
+    # CF objects must have a non-zero isa.
+    # See https://developer.apple.com/forums/thread/739355 for more on that error.
+    #
+    # In this branch, we only have a single "CoreFoundation" to choose from.
+    # To be compatible with the existing convention, we define
+    # CoreFoundation with the setup hook, and CF as the same package but
+    # with the setup hook removed.
+    #
+    # This may seem unimportant, but without it packages (e.g., bacula) will
+    # fail with linker errors referring ___CFConstantStringClassReference.
+    # It's not clear to me why some packages need this extra setup.
+    lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
+      setupHook = null;
+    });
+
+  # Formerly the CF attribute. Use this is you need the open source release.
+  swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
@@ -233,14 +244,24 @@ impure-cmds // appleSourcePackages // chooseLibs // {
             ../../nixos/modules/profiles/macos-builder.nix
           ] ++ modules;
 
+          # If you need to override this, consider starting with the right Nixpkgs
+          # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.
+          # or if you're creating new wiring that's not `pkgs`-centric, perhaps use the
+          # macos-builder profile directly.
           virtualisation.host = { inherit pkgs; };
+
+          nixpkgs.hostPlatform = lib.mkDefault (toGuest stdenv.hostPlatform.system);
         };
 
-        system = toGuest stdenv.hostPlatform.system;
+        system = null;
       };
 
     in
       nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
+
+  linux-builder-x86_64 = self.linux-builder.override {
+    modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
+  };
 
 } // lib.optionalAttrs config.allowAliases {
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06

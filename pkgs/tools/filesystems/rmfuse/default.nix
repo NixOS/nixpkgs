@@ -45,5 +45,6 @@ python3.pkgs.buildPythonApplication rec {
       system.
     '';
     maintainers = with lib.maintainers; [ adisbladis ];
+    mainProgram = "rmfuse";
   };
 }

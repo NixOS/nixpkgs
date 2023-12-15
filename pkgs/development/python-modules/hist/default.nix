@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "hist";
-  version = "2.7.1";
+  version = "2.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/74xTCvQPDQrnxaNznFa2PNigesjFyoAlwiCqTRP6Yg=";
+    hash = "sha256-JrGrgQ2LECIttdFh1KyvZKqgT+a6rtKWbUHB2sVgHQY=";
   };
 
   buildInputs = [

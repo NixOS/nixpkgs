@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
+, bash
 , gnome
 , meson
 , python3
@@ -15,10 +17,18 @@ stdenv.mkDerivation rec {
     sha256 = "cFxtKfQRaim95ONs/BsEbJK274xtrk6uyFAYdH5tpao=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     python3
     ninja
+  ];
+
+  # for shebangs
+  buildInputs = [
+    python3
+    bash
   ];
 
   passthru = {

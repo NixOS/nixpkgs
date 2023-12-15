@@ -29,5 +29,6 @@ buildGoModule rec {
       "An extensive, fast, and accurate command-line image dithering tool";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ehmry ];
+    mainProgram = "didder";
   };
 }

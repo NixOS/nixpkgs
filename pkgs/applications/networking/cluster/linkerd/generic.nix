@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
-{ channel, version, sha256, vendorSha256 }:
+{ channel, version, sha256, vendorHash }:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
-  inherit version vendorSha256;
+  inherit version vendorHash;
 
   src = fetchFromGitHub {
     owner = "linkerd";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsv";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "uael";
     repo = "sv";
     rev = "v${version}";
-    sha256 = "sha256-icvGQi6FNSZXNGs2oLiUKu6rrVsWcXh1r91kycGjnwY=";
+    sha256 = "sha256-sc7WTRY8XTm5+J+zlS7tGa2f+2d7apj+XHyBafZXXeE=";
   };
 
   nativeBuildInputs = [ cmake ];

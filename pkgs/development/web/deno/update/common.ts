@@ -48,8 +48,8 @@ export const getLatestVersion = (owner: string, repo: string) =>
 export const genValueRegExp = (key: string, regex: RegExp) =>
   new RegExp(`(?<=${key} = ")(${regex.source}|)(?=")`);
 
-export const logger = (name: string) =>
-  (...a: any) => console.log(`[${name}]`, ...a);
+export const logger = (name: string) => (...a: any) =>
+  console.log(`[${name}]`, ...a);
 
 export const read = Deno.readTextFile;
 export const write = Deno.writeTextFile;

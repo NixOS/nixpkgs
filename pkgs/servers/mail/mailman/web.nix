@@ -1,4 +1,4 @@
-{ lib, python3, fetchPypi
+{ lib, python3, fetchPypi, fetchpatch
 , sassc, hyperkitty, postorius
 }:
 
@@ -13,6 +13,13 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-UWdqrcx529r6kwgf0YEHiDrpZlGoUBR6OdYtHMTPMGY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/mailman-web/-/commit/448bba249d39c09c0cef5e059415cc07a3ce569c.patch";
+      hash = "sha256-rs1vaV4YyLyJ0+EGY70CirvjArpGQr29DOTvgj68wgs=";
+    })
+  ];
 
   postPatch = ''
     # Django is depended on transitively by hyperkitty and postorius,

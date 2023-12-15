@@ -1,4 +1,5 @@
 { runCommandLocal
+, lib
 , git
 , clang-tools
 , makeHardcodeGsettingsPatch
@@ -10,13 +11,15 @@ let
       name,
       expected,
       src,
+      patches ? [ ],
       schemaIdToVariableMapping,
     }:
 
     let
-      patch = makeHardcodeGsettingsPatch {
+      patch = makeHardcodeGsettingsPatch ({
         inherit src schemaIdToVariableMapping;
-      };
+        inherit patches;
+      });
     in
     runCommandLocal
       "makeHardcodeGsettingsPatch-tests-${name}"
@@ -33,6 +36,9 @@ let
         cp -r --no-preserve=all "${expected}" src-expected
 
         pushd src
+        for patch in ${lib.escapeShellArgs (builtins.map (p: "${p}") patches)}; do
+            patch < "$patch"
+        done
         patch < "${patch}"
         popd
 
@@ -54,5 +60,18 @@ in
       "org.gnome.seahorse.nautilus.window" = "SEANAUT";
     };
     expected = ./fixtures/example-project-patched;
+  };
+
+  patches = mkTest {
+    name = "patches";
+    src = ./fixtures/example-project-wrapped-settings-constructor;
+    patches = [
+      # Avoid using wrapper function, which the generator cannot handle.
+      ./fixtures/example-project-wrapped-settings-constructor-resolve.patch
+    ];
+    schemaIdToVariableMapping = {
+      "org.gnome.evolution-data-server.addressbook" = "EDS";
+    };
+    expected = ./fixtures/example-project-wrapped-settings-constructor-patched;
   };
 }

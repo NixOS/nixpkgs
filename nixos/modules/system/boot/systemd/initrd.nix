@@ -57,7 +57,6 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
-    "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -129,15 +128,16 @@ in {
         stage 2 counterparts such as {option}`systemd.services`,
         except that `restartTriggers` and `reloadTriggers` are not
         supported.
-
-        Note: This is experimental. Some of the `boot.initrd` options
-        are not supported when this is enabled, and the options under
-        `boot.initrd.systemd` are subject to change.
       '';
     };
 
-    package = mkPackageOptionMD pkgs "systemd" {
-      default = "systemdStage1";
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = config.systemd.package;
+      defaultText = lib.literalExpression "config.systemd.package";
+      description = ''
+        The systemd package to use.
+      '';
     };
 
     extraConfig = mkOption {
@@ -344,17 +344,39 @@ in {
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
+    assertions = map (name: {
+      assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+      message = ''
+        systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+          convert it to analogous systemd units in 'boot.initrd.systemd'.
+
+            Definitions:
+        ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}") (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations}
+      '';
+    }) [
+      [ "preFailCommands" ]
+      [ "preDeviceCommands" ]
+      [ "preLVMCommands" ]
+      [ "postDeviceCommands" ]
+      [ "postResumeCommands" ]
+      [ "postMountCommands" ]
+      [ "extraUdevRulesCommands" ]
+      [ "extraUtilsCommands" ]
+      [ "extraUtilsCommandsTest" ]
+      [ "network" "postCommands" ]
+    ];
+
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
       # systemd needs this for some features
-      "autofs4"
+      "autofs"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
 
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
+      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";

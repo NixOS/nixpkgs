@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "s3backer";
   };
 }

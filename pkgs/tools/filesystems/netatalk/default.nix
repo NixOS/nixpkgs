@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "3.1.15";
+  version = "3.1.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-2NSlzA/Yaw2Q4BfWTB9GI+jNv72lcPxCOt4RUak9GfU=";
+    hash = "sha256-htIJ3Hd2pLoXhFFk0uN2pGnO43aiexiuMYmOP0ukFlU=";
   };
 
   patches = [

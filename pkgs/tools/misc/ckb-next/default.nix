@@ -1,17 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
+{ lib, wrapQtAppsHook, fetchFromGitHub, substituteAll, udev, stdenv
 , pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, withPulseaudio ? stdenv.isLinux, libpulseaudio
+, withPulseaudio ? stdenv.isLinux, libpulseaudio, quazip
 }:
 
-mkDerivation rec {
-  version = "0.5.0";
+stdenv.mkDerivation rec {
+  version = "0.6.0";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    sha256 = "sha256-yR1myagAqavAR/7lPdufcrJpPmXW7r4N4pxTMF6NbuE=";
+    hash = "sha256-G0cvET3wMIi4FlBmaTkdTyYtcdVGzK4X0C2HYZr43eg=";
   };
 
   buildInputs = [
@@ -22,9 +22,11 @@ mkDerivation rec {
     qttools
     qtx11extras
     libdbusmenu
+    quazip
   ] ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     pkg-config
     cmake
   ];

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
   version = "0.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";

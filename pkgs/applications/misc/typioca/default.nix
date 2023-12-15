@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "typioca";
-  version = "2.5.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
     rev = version;
-    hash = "sha256-u/vpS9BQxeKd8eaJicmn2wMk9EYjCO7LXdoshCBa4rw=";
+    hash = "sha256-cm6z7MVAbFxfkSTaCfh8wZhtgXdfVQopqEk+w+hPZpI=";
   };
 
-  vendorHash = "sha256-m6hPj1IZr+jEA/h2qbz03tuVq3aPEMmcnWiEC0LKtxI=";
+  vendorHash = "sha256-XiKn18WCbhVvsrIvTN/Yquj4mhq4n1X1jqdGUaMacV4=";
 
   ldflags = [
     "-s"

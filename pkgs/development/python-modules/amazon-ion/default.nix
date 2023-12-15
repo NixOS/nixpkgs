@@ -1,26 +1,29 @@
 { lib
 , buildPythonPackage
+, docopt
 , fetchFromGitHub
 , jsonconversion
-, six
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, six
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.9.3";
-  format = "setuptools";
+  version = "0.11.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  # test vectors require git submodule
   src = fetchFromGitHub {
-    owner = "amzn";
+    owner = "amazon-ion";
     repo = "ion-python";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
+    # Test vectors require git submodule
     fetchSubmodules = true;
-    hash = "sha256-FLwzHcge+vLcRY4gOzrxS3kWlprCkRXX5KeGOoTJDSw=";
+    hash = "sha256-0/+bX02qTbOydWDxex4OWL7woP7dW1yJZBmDZAivE7U=";
   };
 
   postPatch = ''
@@ -28,18 +31,29 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     jsonconversion
     six
   ];
 
   nativeCheckInputs = [
+    docopt
     pytestCheckHook
+    tabulate
   ];
 
   disabledTests = [
     # ValueError: Exceeds the limit (4300) for integer string conversion
     "test_roundtrips"
+  ];
+
+  disabledTestPaths = [
+    # Exclude benchmarks
+    "tests/test_benchmark_cli.py"
   ];
 
   pythonImportsCheck = [
@@ -48,7 +62,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of Amazon Ion";
-    homepage = "https://github.com/amzn/ion-python";
+    homepage = "https://github.com/amazon-ion/ion-python";
+    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode

@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, amoeba-data, alsa-lib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkg-config }:
+{ lib, stdenv, fetchurl, amoeba-data, alsa-lib, expat, freetype, gtk3, libvorbis, libGLU, xorg, pkg-config, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "amoeba";
   version = "1.1";
-  debver = "29.1";
+  debver = "31";
 
   srcs = [
     (fetchurl {
       url = "http://http.debian.net/debian/pool/contrib/a/amoeba/amoeba_${version}.orig.tar.gz";
-      sha256 = "1hyycw4r36ryka2gab9vzkgs8gq4gqhk08vn29cwak95w0rahgim";
+      hash = "sha256-NT6oMuAlTcVZEnYjMCF+BD+k3/w7LfWEmj6bkQln3sM=";
     })
     (fetchurl {
       url = "http://http.debian.net/debian/pool/contrib/a/amoeba/amoeba_${version}-${debver}.debian.tar.xz";
-      sha256 = "1xgi2sqzq97w6hd3dcyq6cka8xmp6nr25qymzhk52cwqh7qb75p3";
+      hash = "sha256-Ga/YeXbPXjkG/6qd9Z201d14Hlj/Je6DxgzeIQOqrWc=";
     })
   ];
   sourceRoot = "amoeba-1.1.orig";
@@ -22,17 +22,17 @@ stdenv.mkDerivation rec {
   '';
   postPatch = ''
     sed -i packer/pakfile.cpp -e 's|/usr/share/amoeba|${amoeba-data}/share/amoeba|'
-    sed -i main/linux-config/linux-config.cpp -e 's|libgdk-x11-2.0.so.0|${gtk2}/lib/&|'
-    sed -i main/linux-config/linux-config.cpp -e 's|libgtk-x11-2.0.so.0|${gtk2}/lib/&|'
+    sed -i main/linux-config/linux-config.cpp -e 's|libgdk-x11-2.0.so.0|${gtk3}/lib/&|'
+    sed -i main/linux-config/linux-config.cpp -e 's|libgtk-x11-2.0.so.0|${gtk3}/lib/&|'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib expat freetype gtk2 libvorbis libGLU xorg.libXxf86vm ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [ alsa-lib expat freetype gtk3 libvorbis libGLU xorg.libXxf86vm ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1/
+    mkdir -p $out/bin
     cp amoeba $out/bin/
-    cp ../debian/amoeba.1 $out/share/man/man1/
+    installManPage ../debian/amoeba.1
   '';
 
   meta = with lib; {

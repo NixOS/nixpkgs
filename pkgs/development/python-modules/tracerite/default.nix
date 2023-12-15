@@ -4,18 +4,21 @@
 , setuptools-scm
 , html5tagger
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
-    rev = "v${version}";
-    hash = "sha256-At8wVR3EcHEi051BBfjb+sOhs93GyzWlEAjtehTMeNU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -40,8 +43,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Tracebacks for Humans (in Jupyter notebooks";
+    description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
+    changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ];
   };

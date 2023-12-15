@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.paholg ];
+    mainProgram = "xflux";
   };
 }

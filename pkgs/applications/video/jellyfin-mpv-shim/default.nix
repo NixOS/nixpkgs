@@ -120,5 +120,6 @@ buildPythonApplication rec {
       unlicense
     ];
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "jellyfin-mpv-shim";
   };
 }

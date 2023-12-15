@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchNpmDeps
 , buildPythonPackage
+, nix-update-script
 
 # build-system
 , gettext
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.3.0";
+  version = "3.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     rev = "refs/tags/${version}";
-    hash = "sha256-ytQ4xxkBAC3amQbenD8RO5asrbfNAjOspWUY3c2hkig=";
+    hash = "sha256-D9IyuM+ZsvFZL0nhMt1VQ1DYcKg4CS8FPAgSWLtsXeE=";
   };
 
   postPatch = ''
@@ -39,7 +40,7 @@ buildPythonPackage rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-FLfMCn2jsLlTTsC+LRMX0dmVCCbNAr2pQUsSQRKgo6E=";
+    hash = "sha256-X3bJ6STFq6zGIzXHSd2C67d4kSOVJJR5aBSM3o5T850=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -66,6 +67,9 @@ buildPythonPackage rec {
     "--pyargs" "hijack"
     "-W" "ignore::DeprecationWarning"
   ];
+
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";

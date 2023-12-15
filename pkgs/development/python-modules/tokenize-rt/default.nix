@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "tokenize-rt";
   version = "4.2.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

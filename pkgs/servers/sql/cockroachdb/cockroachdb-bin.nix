@@ -6,7 +6,7 @@
 
 let
   version = "23.1.7";
-  name = "cockroachdb";
+  pname = "cockroachdb";
 
   # For several reasons building cockroach from source has become
   # nearly impossible. See https://github.com/NixOS/nixpkgs/pull/152626
@@ -28,9 +28,13 @@ let
 
 in
 buildFHSEnv {
-  inherit name;
+  inherit pname version;
 
   runScript = "${src}/cockroach";
+
+  extraInstallCommands = ''
+    cp -P $out/bin/cockroachdb $out/bin/cockroach
+  '';
 
   meta = with lib; {
     homepage = "https://www.cockroachlabs.com";

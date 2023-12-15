@@ -5,81 +5,131 @@ with lib;
 let
   cfg = config.services.sslh;
   user = "sslh";
-  configFile = pkgs.writeText "sslh.conf" ''
-    verbose: ${boolToString cfg.verbose};
-    foreground: true;
-    inetd: false;
-    numeric: false;
-    transparent: ${boolToString cfg.transparent};
-    timeout: "${toString cfg.timeout}";
 
-    listen:
-    (
-      ${
-        concatMapStringsSep ",\n"
-        (addr: ''{ host: "${addr}"; port: "${toString cfg.port}"; }'')
-        cfg.listenAddresses
-      }
-    );
-
-    ${cfg.appendConfig}
-  '';
-  defaultAppendConfig = ''
-    protocols:
-    (
-      { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-      { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
-      { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
-      { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-      { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
-      { name: "anyprot"; host: "localhost"; port: "443"; probe: "builtin"; }
-    );
-  '';
+  configFormat = pkgs.formats.libconfig {};
+  configFile = configFormat.generate "sslh.conf" cfg.settings;
 in
+
 {
   imports = [
     (mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
+    (mkRenamedOptionModule [ "services" "sslh" "timeout" ] [ "services" "sslh" "settings" "timeout" ])
+    (mkRenamedOptionModule [ "services" "sslh" "transparent" ] [ "services" "sslh" "settings" "transparent" ])
+    (mkRemovedOptionModule [ "services" "sslh" "appendConfig" ] "Use services.sslh.settings instead")
+    (mkChangedOptionModule [ "services" "sslh" "verbose" ] [ "services" "sslh" "settings" "verbose-connections" ]
+      (config: if config.services.sslh.verbose then 1 else 0))
   ];
 
-  options = {
-    services.sslh = {
-      enable = mkEnableOption (lib.mdDoc "sslh");
+  meta.buildDocsInSandbox = false;
 
-      verbose = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Verbose logs.";
-      };
+  options.services.sslh = {
+    enable = mkEnableOption (lib.mdDoc "sslh, protocol demultiplexer");
 
-      timeout = mkOption {
-        type = types.int;
-        default = 2;
-        description = lib.mdDoc "Timeout in seconds.";
-      };
+    method = mkOption {
+      type = types.enum [ "fork" "select" "ev" ];
+      default = "fork";
+      description = lib.mdDoc ''
+        The method to use for handling connections:
 
-      transparent = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Will the services behind sslh (Apache, sshd and so on) see the external IP and ports as if the external world connected directly to them";
-      };
+          - `fork` forks a new process for each incoming connection. It is
+          well-tested and very reliable, but incurs the overhead of many
+          processes.
 
-      listenAddresses = mkOption {
-        type = types.coercedTo types.str singleton (types.listOf types.str);
-        default = [ "0.0.0.0" "[::]" ];
-        description = lib.mdDoc "Listening addresses or hostnames.";
-      };
+          - `select` uses only one thread, which monitors all connections at once.
+          It has lower overhead per connection, but if it stops, you'll lose all
+          connections.
 
-      port = mkOption {
-        type = types.port;
-        default = 443;
-        description = lib.mdDoc "Listening port.";
-      };
+          - `ev` is implemented using libev, it's similar to `select` but
+            scales better to a large number of connections.
+      '';
+    };
 
-      appendConfig = mkOption {
-        type = types.str;
-        default = defaultAppendConfig;
-        description = lib.mdDoc "Verbatim configuration file.";
+    listenAddresses = mkOption {
+      type = with types; coercedTo str singleton (listOf str);
+      default = [ "0.0.0.0" "[::]" ];
+      description = lib.mdDoc "Listening addresses or hostnames.";
+    };
+
+    port = mkOption {
+      type = types.port;
+      default = 443;
+      description = lib.mdDoc "Listening port.";
+    };
+
+    settings = mkOption {
+      type = types.submodule {
+        freeformType = configFormat.type;
+
+        options.timeout = mkOption {
+          type = types.ints.unsigned;
+          default = 2;
+          description = lib.mdDoc "Timeout in seconds.";
+        };
+
+        options.transparent = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            Whether the services behind sslh (Apache, sshd and so on) will see the
+            external IP and ports as if the external world connected directly to
+            them.
+          '';
+        };
+
+        options.verbose-connections = mkOption {
+          type = types.ints.between 0 4;
+          default = 0;
+          description = lib.mdDoc ''
+            Where to log connections information. Possible values are:
+
+             0. don't log anything
+             1. write log to stdout
+             2. write log to syslog
+             3. write log to both stdout and syslog
+             4. write to a log file ({option}`sslh.settings.logfile`)
+          '';
+        };
+
+        options.numeric = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc ''
+            Whether to disable reverse DNS lookups, thus keeping IP
+            address literals in the log.
+          '';
+        };
+
+        options.protocols = mkOption {
+          type = types.listOf configFormat.type;
+          default = [
+            { name = "ssh";     host = "localhost"; port =  "22"; service= "ssh"; }
+            { name = "openvpn"; host = "localhost"; port = "1194"; }
+            { name = "xmpp";    host = "localhost"; port = "5222"; }
+            { name = "http";    host = "localhost"; port =   "80"; }
+            { name = "tls";     host = "localhost"; port =  "443"; }
+            { name = "anyprot"; host = "localhost"; port =  "443"; }
+          ];
+          description = lib.mdDoc ''
+            List of protocols sslh will probe for and redirect.
+            Each protocol entry consists of:
+
+              - `name`: name of the probe.
+
+              - `service`: libwrap service name (see {manpage}`hosts_access(5)`),
+
+              - `host`, `port`: where to connect when this probe succeeds,
+
+              - `log_level`: to log incoming connections,
+
+              - `transparent`: proxy this protocol transparently,
+
+              - etc.
+
+            See the documentation for all options, including probe-specific ones.
+          '';
+        };
       };
+      description = lib.mdDoc "sslh configuration. See {manpage}`sslh(8)` for available settings.";
     };
   };
 
@@ -96,20 +146,29 @@ in
           PermissionsStartOnly = true;
           Restart              = "always";
           RestartSec           = "1s";
-          ExecStart            = "${pkgs.sslh}/bin/sslh -F${configFile}";
+          ExecStart            = "${pkgs.sslh}/bin/sslh-${cfg.method} -F${configFile}";
           KillMode             = "process";
-          AmbientCapabilities  = "CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_SETGID CAP_SETUID";
+          AmbientCapabilities  = ["CAP_NET_BIND_SERVICE" "CAP_NET_ADMIN" "CAP_SETGID" "CAP_SETUID"];
           PrivateTmp           = true;
           PrivateDevices       = true;
           ProtectSystem        = "full";
           ProtectHome          = true;
         };
       };
+
+      services.sslh.settings = {
+        # Settings defined here are not supposed to be changed: doing so will
+        # break the module, as such you need `lib.mkForce` to override them.
+        foreground = true;
+        inetd = false;
+        listen = map (addr: { host = addr; port = toString cfg.port; }) cfg.listenAddresses;
+      };
+
     })
 
     # code from https://github.com/yrutschle/sslh#transparent-proxy-support
     # the only difference is using iptables mark 0x2 instead of 0x1 to avoid conflicts with nixos/nat module
-    (mkIf (cfg.enable && cfg.transparent) {
+    (mkIf (cfg.enable && cfg.settings.transparent) {
       # Set route_localnet = 1 on all interfaces so that ssl can use "localhost" as destination
       boot.kernel.sysctl."net.ipv4.conf.default.route_localnet" = 1;
       boot.kernel.sysctl."net.ipv4.conf.all.route_localnet"     = 1;

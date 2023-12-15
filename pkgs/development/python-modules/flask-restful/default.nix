@@ -48,6 +48,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Broke in flask 2.2 upgrade
     "test_exception_header_forwarded"
+    # Broke in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
   ];
 
   pythonImportsCheck = [

@@ -3,38 +3,31 @@
 , fetchFromGitHub
 , buildGoModule
 , pkg-config
-
-# libgit2 + dependencies
-, libgit2
-, http-parser
-, openssl
-, pcre
-, zlib
 }:
 
 let
-  version = "16.3.2";
+  version = "16.5.3";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
   commonOpts = {
     inherit version;
 
+    # nixpkgs-update: no auto update
     src = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-Q2wXoc4tLJvc0LwSct3cCswOqhUJSVVhoG/uFXeVOB4=";
+      hash = "sha256-lGwRGU24pyBypQRTvGRYaAmkVbPLaw+fSeAXJ1pyQaA=";
     };
 
-    vendorHash = "sha256-abyouKgn31yO3+oeowtxZcuvS6mazVM8zOMEFsyw4C0=";
+    vendorHash = "sha256-QLt/12P6OLpLqCINROLmzhoRpLGrB9WzME7FzhIcb0Q=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
-    tags = [ "static,system_libgit2" ];
+    tags = [ "static" ];
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libgit2 openssl zlib pcre http-parser ];
 
     doCheck = false;
   };
@@ -42,7 +35,7 @@ let
   auxBins = buildGoModule ({
     pname = "gitaly-aux";
 
-    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go" "cmd/gitaly-lfs-smudge" "cmd/gitaly-gpg" ];
+    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-lfs-smudge" "cmd/gitaly-gpg" ];
   } // commonOpts);
 in
 buildGoModule ({

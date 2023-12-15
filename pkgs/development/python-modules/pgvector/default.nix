@@ -4,6 +4,7 @@
 , django
 , fetchFromGitHub
 , numpy
+, peewee
 , postgresql
 , postgresqlTestHook
 , psycopg
@@ -12,11 +13,12 @@
 , pytestCheckHook
 , pythonOlder
 , sqlalchemy
+, sqlmodel
 }:
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.1";
+  version = "0.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Phe8iAdOCVp4wpLuLfO+fQMD1MOD47OEIQJ45rYQzug=";
+    hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     asyncpg
     django
+    peewee
     (postgresql.withPackages (p: with p; [ pgvector ]))
     postgresqlTestHook
     psycopg
@@ -42,6 +45,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     sqlalchemy
+    sqlmodel
   ];
 
   env = {

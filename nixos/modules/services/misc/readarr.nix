@@ -16,12 +16,7 @@ in
         description = lib.mdDoc "The directory where Readarr stores its data files.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.readarr;
-        defaultText = literalExpression "pkgs.readarr";
-        description = lib.mdDoc "The Readarr package to use";
-      };
+      package = mkPackageOption pkgs "readarr" { };
 
       openFirewall = mkOption {
         type = types.bool;

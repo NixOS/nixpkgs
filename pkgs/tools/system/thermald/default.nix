@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "thermald";
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , importlib-metadata
 , pytestCheckHook
 
@@ -15,12 +15,16 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.6";
+  version = "8.1.7";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SO6EmVGRlSegRb/jv3uqipWcQjE04aW5jAXCC6daHL0=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "click";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [

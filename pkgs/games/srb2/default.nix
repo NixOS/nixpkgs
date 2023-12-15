@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srb2";
-  version = "2.2.11";
+  version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "SRB2";
     rev = "SRB2_release_${finalAttrs.version}";
-    hash = "sha256-tyiXivJWjNnL+4YynUV6k6iaMs8o9HkHrp+qFj2+qvQ=";
+    hash = "sha256-OSkkjCz7ZW5+0vh6l7+TpnHLzXmd/5QvTidRQSHJYX8=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     src = fetchurl {
       url = "https://github.com/STJr/SRB2/releases/download/SRB2_release_${finalAttrs.version}/SRB2-v${lib.replaceStrings ["."] [""] finalAttrs.version}-Full.zip";
-      hash = "sha256-KsJIkCczD/HyIwEy5dI3zsHbWFCMBaCoCHizfupFoWM=";
+      hash = "sha256-g7kaNRE1tjcF5J2v+kTnrDzz4zs5f1b/NH67ce2ifUo=";
     };
 
     sourceRoot = ".";
@@ -77,8 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix unknown command "CPMAddPackage" by not using Ccache.cmake
+    # Make the build work without internet connectivity
+    # See: https://build.opensuse.org/request/show/1109889
     ./cmake.patch
+    ./thirdparty.patch
   ];
 
   desktopItems = [
@@ -111,5 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zeratax donovanglover ];
+    mainProgram = "srb2";
   };
 })

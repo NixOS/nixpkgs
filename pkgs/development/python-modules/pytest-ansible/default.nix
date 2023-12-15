@@ -1,10 +1,9 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
+{ lib
+, stdenv
 , ansible-core
+, buildPythonPackage
 , coreutils
-, coverage
+, fetchFromGitHub
 , pytest
 , pytestCheckHook
 , pythonOlder
@@ -15,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "3.2.1";
+  version = "4.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ansible";
-    repo = pname;
+    repo = "pytest-ansible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fSerRbd7QeEdTfyy2lVLq7FKHWWT0MlutonunHhM5M4=";
+    hash = "sha256-51DQ+NwD454XaYLuRxriuWRZ8uTSX3ZpadXdxs7FspQ=";
   };
 
   postPatch = ''
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
     pytestCheckHook
   ];
 
@@ -74,7 +72,10 @@ buildPythonPackage rec {
     "test_param_override_with_marker"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = [
+    # Test want s to execute pytest in a subprocess
+    "tests/integration/test_molecule.py"
+  ] ++ lib.optionals stdenv.isDarwin [
     # These tests fail in the Darwin sandbox
     "tests/test_adhoc.py"
     "tests/test_adhoc_result.py"
@@ -85,7 +86,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
+    description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
     license = licenses.mit;

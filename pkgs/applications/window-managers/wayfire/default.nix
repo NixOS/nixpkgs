@@ -8,8 +8,10 @@
 , wf-config
 , cairo
 , doctest
+, libGL
 , libdrm
 , libexecinfo
+, libevdev
 , libinput
 , libjpeg
 , libxkbcommon
@@ -18,19 +20,20 @@
 , wayland-scanner
 , wlroots
 , pango
+, nlohmann_json
 , xorg
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
+    hash = "sha256-YI8N1rY71b2ulv7tAdah7sibG4qq3kY0/hyS0cls5to=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wf-config
+    libGL
     libdrm
     libexecinfo
+    libevdev
     libinput
     libjpeg
     libxkbcommon
@@ -52,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     cairo
     pango
+    nlohmann_json
   ];
 
   propagatedBuildInputs = [

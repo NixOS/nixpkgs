@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.1.1";
+  version = "0.1.2";
 in buildGoModule {
   pname = "owncast";
   inherit version;
@@ -17,9 +17,9 @@ in buildGoModule {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    hash = "sha256-nBTuvVVnFlC75p8bRCN+lNl9fExBZrsLEesvXWwNlAQ=";
+    hash = "sha256-pPBY2PcXe3k9G6kjj/vF5VB6DEmiwKDUrK4VGR4xNzU=";
   };
-  vendorHash = "sha256-yjy5bDJjWk7UotBVqvVFiGx8mpfhpqMTxoQm/eWHcw4=";
+  vendorHash = "sha256-7HxiZh5X5AZVMiZT6B8DfOy6stJ3+dFEixwJYv5X0dY=";
 
   propagatedBuildInputs = [ ffmpeg ];
 
@@ -44,6 +44,7 @@ in buildGoModule {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ MayNiklas ];
+    mainProgram = "owncast";
   };
 
 }

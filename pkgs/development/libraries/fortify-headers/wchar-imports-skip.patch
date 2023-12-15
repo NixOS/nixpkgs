@@ -1,0 +1,41 @@
+wchar.h: only include other headers if _FORTIFY_SOURCE is enabled
+
+unexpectedly including other headers can cause problems with
+sensitive/brittle code, particularly with alternative compilers
+(clang) which are already operating on the margins of what's
+supported/expected by some projects.
+
+having a way to almost entirely short-circuit these headers (by
+disabling _FORTIFY_SOURCE) is therefore important.
+
+--- a/include/fortify/wchar.h
++++ b/include/fortify/wchar.h
+@@ -20,21 +20,23 @@
+ #if !defined(__cplusplus) && !defined(__clang__)
+ __extension__
+ #endif
+-#include_next <limits.h>
++#include_next <wchar.h>
++
++#if defined(_FORTIFY_SOURCE) && _FORTIFY_SOURCE > 0 && defined(__OPTIMIZE__) && __OPTIMIZE__ > 0
++
+ #if !defined(__cplusplus) && !defined(__clang__)
+ __extension__
+ #endif
+-#include_next <stdlib.h>
++#include_next <limits.h>
+ #if !defined(__cplusplus) && !defined(__clang__)
+ __extension__
+ #endif
+-#include_next <string.h>
++#include_next <stdlib.h>
+ #if !defined(__cplusplus) && !defined(__clang__)
+ __extension__
+ #endif
+-#include_next <wchar.h>
++#include_next <string.h>
+ 
+-#if defined(_FORTIFY_SOURCE) && _FORTIFY_SOURCE > 0 && defined(__OPTIMIZE__) && __OPTIMIZE__ > 0
+ #include "fortify-headers.h"
+ 
+ #ifdef __cplusplus

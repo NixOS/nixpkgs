@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
+    mainProgram = "wl-color-picker";
   };
 }

@@ -75,6 +75,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # remove after 0.18.4
+    "tests/test_signals.py"
+  ];
+
   meta = with lib; {
     description = "An async Python micro framework for building web applications";
     homepage = "https://github.com/pallets/quart/";

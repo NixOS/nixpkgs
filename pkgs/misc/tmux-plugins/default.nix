@@ -92,12 +92,12 @@ in rec {
 
   catppuccin = mkTmuxPlugin {
     pluginName = "catppuccin";
-    version = "unstable-2023-07-15";
+    version = "unstable-2023-08-21";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "e7b50832f9bc59b0b5ef5316ba2cd6f61e4e22fc";
-      hash = "sha256-9ZfUqEKEexSh06QyR5C+tYd4tNfBi3PsA+STzUv4+/s=";
+      rev = "7a284c98e5df4cc84a1a45ad633916f0b2b916b2";
+      hash = "sha256-jxcxW0gEfXaSt8VM3UIs0dKNKaHb8JSEQBBV3SVjW/A=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
@@ -580,12 +580,12 @@ in rec {
 
   tilish = mkTmuxPlugin {
     pluginName = "tilish";
-    version = "2020-08-12";
+    version = "unstable-2023-09-20";
     src = fetchFromGitHub {
       owner = "jabirali";
       repo = "tmux-tilish";
-      rev = "73d2404cdc0ef6bd7fbc8982edae0b0e2a4dd860";
-      sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
+      rev = "22f7920837d827dc6cb31143ea916afa677c24c1";
+      sha256 = "wP3c+p/DM6ve7GUhi0QEzggct7NS4XUa78sVQFSKrfo=";
     };
 
     meta = with lib; {
@@ -611,12 +611,12 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2023-07-06";
+    version = "unstable-2023-10-24";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "51081a2688579228d860b3cb410f4437e857fc6e";
-      sha256 = "sha256-qElRHAbnZ+qRasvkfo+lKNahRHklvLOH0BmbQ1oyN6A=";
+      rev = "d62b6865c0e7c956ad1f0396823a6f34cf7452a7";
+      hash = "sha256-hVkSQYvBXrkXbKc98V9hwwvFp6z7/mX1K4N3N9j4NN4=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'

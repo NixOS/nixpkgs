@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "click-repl";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "click-contrib";

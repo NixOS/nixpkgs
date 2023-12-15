@@ -8,12 +8,7 @@ in
 {
   options = {
     services.birdwatcher = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.birdwatcher;
-        defaultText = literalExpression "pkgs.birdwatcher";
-        description = lib.mdDoc "The Birdwatcher package to use.";
-      };
+      package = mkPackageOption pkgs "birdwatcher" { };
       enable = mkEnableOption (lib.mdDoc "Birdwatcher");
       flags = mkOption {
         default = [ ];

@@ -3,6 +3,7 @@
 , fetchpatch
 , fzf
 , lib
+, ocaml
 , openssl
 , zstd
 }:
@@ -264,6 +265,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];
     doCheck = false; # circular dependency with core_kernel
+    meta.broken = lib.versionAtLeast ocaml.version "5.1";
   };
 
   core_bench = janePackage {

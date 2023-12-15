@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , substituteAll
+, cudaSupport ? opencv.cudaSupport or false
 
 # build
 , addOpenGLRunpath
@@ -17,10 +18,12 @@
 # runtime
 , libusb1
 , libxml2
+, ocl-icd
 , opencv
 , protobuf
 , pugixml
 , tbb
+, cudaPackages
 }:
 
 let
@@ -68,6 +71,8 @@ stdenv.mkDerivation rec {
       setuptools
     ]))
     shellcheck
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   patches = [
@@ -118,6 +123,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_CPPLINT:BOOL=OFF"
     "-DBUILD_TESTING:BOOL=OFF"
     "-DENABLE_SAMPLES:BOOL=OFF"
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
@@ -129,10 +135,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libxml2
-    opencv
+    ocl-icd
+    opencv.cxxdev
     protobuf
     pugixml
     tbb
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   enableParallelBuilding = true;

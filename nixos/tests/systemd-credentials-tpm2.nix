@@ -1,13 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, system, ... }:
-
-let
-  tpmSocketPath = "/tmp/swtpm-sock";
-  tpmDeviceModels = {
-    x86_64-linux = "tpm-tis";
-    aarch64-linux = "tpm-tis-device";
-  };
-in
-
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 {
   name = "systemd-credentials-tpm2";
 
@@ -16,51 +7,11 @@ in
   };
 
   nodes.machine = { pkgs, ... }: {
-    virtualisation = {
-      qemu.options = [
-        "-chardev socket,id=chrtpm,path=${tpmSocketPath}"
-        "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
-        "-device ${tpmDeviceModels.${system}},tpmdev=tpm_dev_0"
-      ];
-    };
-
-    boot.initrd.availableKernelModules = [ "tpm_tis" ];
-
+    virtualisation.tpm.enable = true;
     environment.systemPackages = with pkgs; [ diffutils ];
   };
 
   testScript = ''
-    import subprocess
-    from tempfile import TemporaryDirectory
-
-    # From systemd-initrd-luks-tpm2.nix
-    class Tpm:
-        def __init__(self):
-            self.state_dir = TemporaryDirectory()
-            self.start()
-
-        def start(self):
-            self.proc = subprocess.Popen(["${pkgs.swtpm}/bin/swtpm",
-                "socket",
-                "--tpmstate", f"dir={self.state_dir.name}",
-                "--ctrl", "type=unixio,path=${tpmSocketPath}",
-                "--tpm2",
-                ])
-
-            # Check whether starting swtpm failed
-            try:
-                exit_code = self.proc.wait(timeout=0.2)
-                if exit_code is not None and exit_code != 0:
-                    raise Exception("failed to start swtpm")
-            except subprocess.TimeoutExpired:
-                pass
-
-        """Check whether the swtpm process exited due to an error"""
-        def check(self):
-            exit_code = self.proc.poll()
-            if exit_code is not None and exit_code != 0:
-                raise Exception("swtpm process died")
-
     CRED_NAME = "testkey"
     CRED_RAW_FILE = f"/root/{CRED_NAME}"
     CRED_FILE = f"/root/{CRED_NAME}.cred"
@@ -84,12 +35,6 @@ in
             raise Exception(f"systemd_run failed (status {status})")
 
         machine.log("systemd-run finished successfully")
-
-    tpm = Tpm()
-
-    @polling_condition
-    def swtpm_running():
-        tpm.check()
 
     machine.wait_for_unit("multi-user.target")
 

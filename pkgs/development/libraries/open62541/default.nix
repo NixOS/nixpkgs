@@ -5,8 +5,10 @@
 , cmake
 , pkg-config
 , check
+, libxcrypt
 , subunit
 , python3Packages
+, nix-update-script
 
 , withDoc ? false
 , graphviz-nox
@@ -31,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.3.7";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XmoLmBGTMA6cejLiNU8hAVnHd35eh6lTIu9csmiR+4U=";
+    hash = "sha256-FnLMR54xjIyYRqwCnvMJsNgsVwH7hVAixCNGhfIZPiw=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
     "-DUA_NAMESPACE_ZERO=FULL"
 
-    "-DUA_BUILD_UNIT_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DUA_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ]
   ++ lib.optional withExamples "-DUA_BUILD_EXAMPLES=ON"
   ++ lib.optional (withEncryption != false)
@@ -82,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     check
+    libxcrypt
     subunit
   ];
 
@@ -89,16 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preCheck = let
-    disabledTests =
-      lib.optionals withPubSub [
-        # "Cannot set socket option IP_ADD_MEMBERSHIP"
-        "pubsub_publish"
-        "check_pubsub_get_state"
-        "check_pubsub_publish_rt_levels"
-        "check_pubsub_subscribe_config_freeze"
-        "check_pubsub_subscribe_rt_levels"
-        "check_pubsub_multiple_subscribe_rt_levels"
-      ];
+    disabledTests = lib.optionals withPubSub [
+      # "Cannot set socket option IP_ADD_MEMBERSHIP"
+      "pubsub_publish"
+      "check_pubsub_get_state"
+      "check_pubsub_publish_rt_levels"
+      "check_pubsub_subscribe_config_freeze"
+      "check_pubsub_subscribe_rt_levels"
+      "check_pubsub_multiple_subscribe_rt_levels"
+    ];
     regex = "^(${builtins.concatStringsSep "|" disabledTests})\$";
   in lib.optionalString (disabledTests != []) ''
     checkFlagsArray+=(ARGS="-E ${lib.escapeRegex regex}")
@@ -126,6 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r bin/libopen62541*
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   passthru.tests = let
     open62541Full = encBackend: open62541.override {
       withDoc = true;
@@ -151,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       OPC UA-based communication into existing applications.
     '';
     homepage = "https://www.open62541.org";
+    changelog = "https://github.com/open62541/open62541/releases/tag/v${finalAttrs.version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ panicgh ];
     platforms = platforms.linux;

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mediawriter";
-  version = "5.0.7";
+  version = "5.0.8";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
     rev = "refs/tags/${version}";
-    hash = "sha256-dznvldk2FGCQGnVbo9tv+gH1cqRvoRqm/e+0MUVcI9I=";
+    hash = "sha256-6c2RXBIsJiW/xk+Q89RGibh6CIqIWHlBDBLb5o/mIGQ=";
   };
 
   nativeBuildInputs = [
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${version}";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mediawriter";
   };
 }

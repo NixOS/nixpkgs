@@ -1,58 +1,100 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, pkg-config
-, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
-, webuiSupport ? true # WebUI
-, trackerSearch ? true, python3 ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+
+, boost
+, cmake
+, Cocoa
+, libtorrent-rasterbar
+, ninja
+, qtbase
+, qtsvg
+, qttools
+, wrapGAppsHook
+, wrapQtAppsHook
+
+, guiSupport ? true
+, dbus
+, qtwayland
+
+, trackerSearch ? true
+, python3
+
+, webuiSupport ? true
 }:
 
-assert guiSupport -> (dbus != null);
-assert trackerSearch -> (python3 != null);
-
-mkDerivation rec {
-  pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "4.5.5";
+let
+  qtVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
+  pname = "qbittorrent"
+    + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
+    + lib.optionalString (!guiSupport) "-nox";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-rWv+KGw+3385GOKK4MvoSP0CepotUZELiDVFpyDf+9k=";
+    hash = "sha256-+leX0T+yJUG6F7WbHa3nCexQZmd7RRfK8Uc+suMJ+vI=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook
+    wrapQtAppsHook
+  ];
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    boost
+    libtorrent-rasterbar
+    qtbase
+    qtsvg
+    qttools
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals guiSupport [
+    dbus
+  ] ++ lib.optionals (guiSupport && stdenv.isLinux) [
+    qtwayland
+  ] ++ lib.optionals trackerSearch [
+    python3
+  ];
 
-  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
-    ++ lib.optional guiSupport dbus # D(esktop)-Bus depends on GUI support
-    ++ lib.optional trackerSearch python3;
+  cmakeFlags = lib.optionals (qtVersion == "6") [
+    "-DQT6=ON"
+  ] ++ lib.optionals (!guiSupport) [
+    "-DGUI=OFF"
+    "-DSYSTEMD=ON"
+    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!webuiSupport) [
+    "-DWEBUI=OFF"
+  ];
 
-  # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
-  QMAKE_LRELEASE = "lrelease";
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
+  ];
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}" ]
-    ++ lib.optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
-    ++ lib.optional (!webuiSupport) "--disable-webui"
-    ++ lib.optional debugSupport "--enable-debug";
-
-  qtWrapperArgs = lib.optional trackerSearch "--prefix PATH : ${lib.makeBinPath [ python3 ]}";
+  dontWrapGApps = true;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
+    APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
-    cp -R src/${pname}.app $out/Applications
-    makeWrapper $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
+    cp -R $APP_NAME.app $out/Applications
+    makeWrapper $out/{Applications/$APP_NAME.app/Contents/MacOS,bin}/$APP_NAME
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
     description = "Featureful free software BitTorrent client";
-    homepage    = "https://www.qbittorrent.org/";
-    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+    homepage = "https://www.qbittorrent.org";
+    changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Anton-Latukha kashw2 paveloom ];
   };
 }

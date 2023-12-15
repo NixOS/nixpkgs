@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.34.115";
-  x86_64-darwin-sha256 = "1l2swrjxm47xyb8skwzy7clmr3qdckx9xs1x204jbrz1xk7yd7l5";
+  x86_64-darwin-version = "4.35.126";
+  x86_64-darwin-sha256 = "1fmcvj4ryf9k82hbrkb4fl7iki6v80msgrwsc7l996wzkg5j771n";
 
-  x86_64-linux-version = "4.34.115";
-  x86_64-linux-sha256 = "0gyyjyvrvn13i5308fg34z6b3yzr7vmmh1148a9xh79ngq2pqv47";
+  x86_64-linux-version = "4.35.126";
+  x86_64-linux-sha256 = "0axwmhr8r8q3ih91zxwj3z64fnjy7w4mzmlyxcp2iws5gd541lcm";
 
-  aarch64-darwin-version = "4.34.115";
-  aarch64-darwin-sha256 = "09qcz57yxjfw8sdqbvmkd25hs4c7frmpf6v94hr4d1szy1rfv11k";
+  aarch64-darwin-version = "4.35.126";
+  aarch64-darwin-sha256 = "0g477a31sdyxmg66aklpw359k1kk7vrd96vgcy5lxsvwvihiinkz";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -84,7 +84,7 @@ let
     changelog = "https://slack.com/release-notes";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut maxeaubrey ];
+    maintainers = with maintainers; [ mmahut amaxine ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "slack";
   };

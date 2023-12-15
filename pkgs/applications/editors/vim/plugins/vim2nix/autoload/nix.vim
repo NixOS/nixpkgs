@@ -50,7 +50,7 @@ fun! nix#NixDerivation(opts, name, repository) abort
 
     let dependencies = nix#DependenciesFromCheckout(a:opts, a:name, a:repository, dir)
     return {'n_a_name': n_a_name, 'n_n_name': n_n_name, 'dependencies': dependencies, 'derivation': join([
-          \ '  '.n_a_name.' = buildVimPluginFrom2Nix {'.created_notice,
+          \ '  '.n_a_name.' = buildVimPlugin {'.created_notice,
           \ '    name = "'.n_n_name.'-'.date.'";',
           \ '    src = fetchgit {',
           \ '      url = "'. a:repository.url .'";',
@@ -74,7 +74,7 @@ fun! nix#NixDerivation(opts, name, repository) abort
 
     let dependencies = nix#DependenciesFromCheckout(a:opts, a:name, a:repository, dir)
     return {'n_a_name': n_a_name, 'n_n_name': n_n_name, 'dependencies': dependencies, 'derivation':  join([
-          \ '  '.n_a_name.' = buildVimPluginFrom2Nix {'.created_notice,
+          \ '  '.n_a_name.' = buildVimPlugin {'.created_notice,
           \ '    name = "'.n_n_name.'";',
           \ '    src = fetchhg {',
           \ '      url = "'. a:repository.url .'";',
@@ -99,7 +99,7 @@ fun! nix#NixDerivation(opts, name, repository) abort
     let dependencies = keys(get(addon_info, 'dependencies', {}))
 
     return {'n_a_name': n_a_name, 'n_n_name': n_n_name, 'dependencies': dependencies, 'derivation':  join([
-          \ '  '.n_a_name.' = buildVimPluginFrom2Nix {'.created_notice,
+          \ '  '.n_a_name.' = buildVimPlugin {'.created_notice,
           \ '    name = "'.n_n_name.'";',
           \ '    src = fetchurl {',
           \ '      url = "'. a:repository.url .'";',

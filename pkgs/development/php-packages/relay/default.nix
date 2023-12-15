@@ -3,64 +3,70 @@
 , fetchurl
 , php
 , openssl
-, openssl_1_1
+, hiredis
 , zstd
 , lz4
 , autoPatchelfHook
+, writeShellScript
+, curl
+, common-updater-scripts
 }:
 
 let
-  version = "0.6.3";
-  system = stdenv.hostPlatform.system;
-  phpVersion = lib.versions.majorMinor php.version;
-  variation = {
+  version = "0.6.8";
+  hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
-      hashes = {
-        "8.0" = "00a7pyf9na7hjifkmp2482c7sh086w72zniqgr4cz2rhz7hnqp7p";
-        "8.1" = "0mg6nsllycgjxxinn8s30y9sk06g40vk8blnpx0askjw5zdsf5y7";
-        "8.2" = "0qmcbrj6jaxczv25rdgfjrj9nwq4vb2faw7kzlyxrvvzb5pyn9dm";
-        "8.3" = "1hqjy5y4q3alxvrj7xksaf7vvmz8p51bgzxbvmzdx6jnl63dix33";
+      hash = {
+        "8.0" = "sha256-DDn5JcRux8DN1728cqMWL7eMwueiY+jO/+fw2+ND394=";
+        "8.1" = "sha256-4r954EKFUA45G55MpnnKcYONCNe45dIffiygs6r8OOI=";
+        "8.2" = "sha256-qB2IWSsyAKzbUxjt2nz5uLp7PkgPPna1mEBqvz8oTHc=";
+        "8.3" = "sha256-0s+4zNknH8lEfGS8oU3JjVEuX3mZEo9AULE0hlv11mQ=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
-      hashes = {
-        "8.0" = "19zzw4324z096b6bph1686r30i4i2kwmlmmcqmb33lqkr9b9n5ag";
-        "8.1" = "0j6wpwy8d67pqij4v8m2xwydfddzr7nn4c3lyrssp8llbn4ghwpn";
-        "8.2" = "1nbajvi5zk6z8qr32l86p65f1zxv12kald56pg8k7bj4axlj2pmy";
-        "8.3" = "1sn638g2636m6s3lv2cclza9lzmzgqxamcga7jz3ijhn2ja6znbv";
+      hash = {
+        "8.0" = "sha256-tLrampq1BBrhC+F/v2vcNBJp+16wzjHC8CGFKSswPUo=";
+        "8.1" = "sha256-DQG3maP9ImwSCTEmP152l5wr7A964lg9kNFAmVQhPqA=";
+        "8.2" = "sha256-3Ygb2J+MFL+H1zsepBaQKg/ybqgXVwFWt2QrNRctT8o=";
+        "8.3" = "sha256-MKpN09+Ai9NFARUEL+pkxQxbpRpFTx78als8ViXMdB8=";
       };
     };
     "x86_64-darwin" = {
       platform = "darwin-x86-64";
-      hashes = {
-        "8.0" = "13q6va9lxgfyx86xw20iqjz4s9r9xms74ywb2hgqrhs5mjnazzz4";
-        "8.1" = "1ncih5bf0jcylpl0nj8hi50kcwb4nl1g0ql359dgg9gp8s1b4hmw";
-        "8.2" = "150difm3vg0g2pl5hb5cci4jzybd7jcd7prjdv3rmwsi91gsydlv";
-        # 8.3 for this platform does not exist
+      hash = {
+        "8.0" = "sha256-jYnhJowVgryKSec+rOfyBiH2gZyasr1h1I+sjPiLods=";
+        "8.1" = "sha256-VKvVo6so0NOfiq7JjnanBEUDa1Iqmkn9egKnOJSCHTg=";
+        "8.2" = "sha256-WXWhSljy199UbZiEjfC50XvnKfVEU54lPa6e2+jCqiQ=";
+        "8.3" = "sha256-CrJoONSm0aXlBWjsRqAJC39qB4tHkMuLAvM5d847DsE=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
-      hashes = {
-        "8.0" = "1qvd5r591kp7qf9pkymz78s8llzs1vxjwqhwy9rvma21hh6gd8ld";
-        "8.1" = "0fm9ppgx7qaggid134qnl9jkq5h97dac2ax21f1f1d0k8f5blmc2";
-        "8.2" = "0g2yqwfrigf047dqkrvfcj318lvgp38zy522ry484mrgq7iqwvb8";
-        "8.3" = "06mi3yr7k1a9icdljzl76xvrw6xqnvwiavgzx2g487s097mycjp4";
+      hash = {
+        "8.0" = "sha256-kzPlotJWsUIhYUFUwcXEBGv5eNfCNLDNgrs+IqZPH5c=";
+        "8.1" = "sha256-QBnKHXBW2XpD4GvphzyMPiIrOfs9pzyG2Fv/VyV+h9k=";
+        "8.2" = "sha256-yk+dkULtWVIccKurBdT96HOPbW8Q9l44iYpAAcoZYog=";
+        "8.3" = "sha256-MpMupGFGxipghoA57EOytSsDsm9b25rc/VPIza+QMfM=";
       };
     };
-  }.${system} or (throw "Unsupported platform for relay: ${system}");
+  };
+
+  makeSource = { system, phpMajor }: fetchurl {
+    url = "https://builds.r2.relay.so/v${version}/relay-v${version}-php"
+      + phpMajor + "-" + hashes.${system}.platform + ".tar.gz";
+    sha256 = hashes.${system}.hash.${phpMajor} or (throw "Unsupported PHP version for relay ${phpMajor} on ${system}");
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit version;
   pname = "relay";
   extensionName = "relay";
 
-  src = fetchurl {
-    url = "https://builds.r2.relay.so/v${finalAttrs.version}/relay-v${finalAttrs.version}-php"
-      + phpVersion + "-" + variation.platform + ".tar.gz";
-    sha256 = variation.hashes.${phpVersion} or (throw "Unsupported PHP version for relay ${phpVersion} on ${system}");
+  src = makeSource {
+    system = stdenv.hostPlatform.system;
+    phpMajor = lib.versions.majorMinor php.version;
   };
   nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [
     autoPatchelfHook
@@ -79,13 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
   '' + (if stdenv.isDarwin then
     let
       args = lib.strings.concatMapStrings
-        (v: " -change /Users/administrator/dev/relay-dev/relay-deps/build/arm64/lib/${v.name}"
-          + " ${lib.strings.makeLibraryPath [ v.value ]}/${v.name}")
+        (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}")
         (with lib.attrsets; [
-          (nameValuePair "libssl.1.1.dylib" openssl_1_1)
-          (nameValuePair "libcrypto.1.1.dylib" openssl_1_1)
-          (nameValuePair "libzstd.1.dylib" zstd)
-          (nameValuePair "liblz4.1.dylib" lz4)
+          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
+          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+          (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
+          (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
+          (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
+          (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
         ]);
     in
     # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
@@ -100,6 +107,47 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = writeShellScript "update-${finalAttrs.pname}" ''
+      set -o errexit
+      export PATH="$PATH:${lib.makeBinPath [ curl common-updater-scripts ]}"
+      NEW_VERSION=$(curl --silent https://builds.r2.relay.so/meta/builds | tail -n1 | cut -c2-)
+
+      if [[ "${version}" = "$NEW_VERSION" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
+
+      for source in ${lib.concatStringsSep " " (builtins.attrNames finalAttrs.passthru.updateables)}; do
+        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "0" "sha256-${lib.fakeSha256}"
+        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "$NEW_VERSION"
+      done
+    '';
+
+    # All sources for updating by the update script.
+    updateables =
+      builtins.listToAttrs
+        # Collect all leaf attributes (containing hashes).
+        (lib.collect
+          (attrs: attrs ? name)
+          # create an attr containing
+          (lib.mapAttrsRecursive
+            (
+              path: _value:
+                lib.nameValuePair
+                  (builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path))
+                  (finalAttrs.finalPackage.overrideAttrs (attrs: {
+                    src = makeSource {
+                      system = builtins.head path;
+                      phpMajor = builtins.head (builtins.tail (builtins.tail path));
+                    };
+                  }))
+            )
+            (lib.filterAttrsRecursive (name: _value: name != "platform") hashes)
+          )
+        );
+  };
 
   meta = with lib; {
     description = "Next-generation Redis extension for PHP";

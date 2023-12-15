@@ -15,17 +15,18 @@
 , udev
 , hidapi
 , fftw
+, speexdsp
 }:
 
 mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DXer39+j8QaI1IAIcLhVzSVNyGvwoT93knRibpFsEeY=";
+    hash = "sha256-W/t9uYApt8j5UMjtVWhFtq+IHmu9vi6M92I8N4kRtEk=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +51,7 @@ mkDerivation rec {
     fftw
     libevdev
     udev
+    speexdsp
   ];
 
   meta = with lib; {

@@ -20,11 +20,12 @@
 
 buildPythonPackage rec {
   pname = "omrdatasettools";
-  version = "1.3.1";
+  version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cdq02jp8vh78yjq9bncjjl0pb554idrcxkd62rzwk4l6ss2fkw5";
+    sha256 = "sha256-kUUcbti29uDnSEvCubMAUnptlaZGpEsW2IBGSAGnGyQ=";
   };
 
   propagatedBuildInputs = [

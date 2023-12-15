@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-markdown-math";
   version = "0.8";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.96";
+  version = "4.96.2";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-KZpWknsus0d9qv08W9oCvGflxOWJinrq8nQIdSeM8aM=";
+    hash = "sha256-A44yfo0ek9AFusm7Bv0irsRNUCiTDW2+iBetRLv8HeY=";
   };
 
   enableParallelBuilding = true;

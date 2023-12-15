@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B+H3G4jVysqrzWIP+1hktSGnycZLizxhmBCO/lYIr0I=";
+    hash = "sha256-DSi6iS1ySdvGf6FxZpsDOAFpAKx/APcZjxA3Qy0gQBU=";
   };
 
-  cargoHash = "sha256-LFL2DVKu/UM7effikZN/IhSD6DrlwO+CF+S60PXULa0=";
+  cargoHash = "sha256-UzegSJGAOBUDN8WluN7fLWS7NfHhm9YY0Zuq6DCIqHo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,6 +39,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
+  ];
+
+  checkFlags = lib.optionals stdenv.isDarwin [
+    # time out on darwin
+    "--skip=interpreter::tests::centered_image_with_size_align_and_link"
+    "--skip=watcher::tests::the_gauntlet"
   ];
 
   postInstall = ''

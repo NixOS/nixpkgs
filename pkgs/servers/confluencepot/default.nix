@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-jIbL6prOUII8o9FghIYa80BytJ9SSuyj/TZmAxwAbJk=";
   };
 
-  vendorSha256 = "sha256-nzPHx+c369T4h9KETqMurxZK3LsJAhwBaunkcWIW3Ps=";
+  vendorHash = "sha256-nzPHx+c369T4h9KETqMurxZK3LsJAhwBaunkcWIW3Ps=";
 
   postPatch = ''
     substituteInPlace confluencePot.go \
@@ -40,5 +40,6 @@ buildGoModule rec {
     '';
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "confluencepot";
   };
 }

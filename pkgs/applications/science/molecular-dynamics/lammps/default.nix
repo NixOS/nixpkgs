@@ -43,16 +43,17 @@
 , extraBuildInputs ? []
 }:
 
-stdenv.mkDerivation rec {
-  # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "2Aug2023";
+stdenv.mkDerivation (finalAttrs: {
+  # LAMMPS has weird versioning convention. Updates should go smoothly with:
+  # nix-update --commit lammps --version-regex 'stable_(.*)'
+  version = "2Aug2023_update1";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
-    rev = "stable_${version}";
-    hash = "sha256-6T4YAa4iN3pJpODGPW+faR16xxyYYdkHLavtiPUbZ4o=";
+    rev = "stable_${finalAttrs.version}";
+    hash = "sha256-Zmn87a726qdidBfyvJlYleYv9jqyFAakxjGrg3lipc0=";
   };
   preConfigure = ''
     cd cmake
@@ -117,4 +118,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
     mainProgram = "lmp";
   };
-}
+})

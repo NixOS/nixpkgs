@@ -28,5 +28,6 @@ meta = with lib; {
     license = licenses.gpl2;
     maintainers = [ maintainers.rps ];
     platforms = platforms.linux;
+    mainProgram = "pdfsandwich";
   };
 }

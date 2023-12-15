@@ -31,12 +31,15 @@ with lib;
         options = {
           addr = mkOption {
             type = str;
-            description = lib.mdDoc "IP address.";
+            description = lib.mdDoc "Listen address.";
           };
           port = mkOption {
-            type = port;
-            description = lib.mdDoc "Port number.";
-            default = 80;
+            type = types.nullOr port;
+            description = lib.mdDoc ''
+              Port number to listen on.
+              If unset and the listen address is not a socket then nginx defaults to 80.
+            '';
+            default = null;
           };
           ssl = mkOption {
             type = bool;
@@ -60,6 +63,7 @@ with lib;
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
+        { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.
@@ -158,10 +162,11 @@ with lib;
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Whether to add a separate nginx server block that permanently redirects (301)
-        all plain HTTP traffic to HTTPS. This will set defaults for
-        `listen` to listen on all interfaces on the respective default
-        ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
+        Whether to add a separate nginx server block that redirects (defaults
+        to 301, configurable with `redirectCode`) all plain HTTP traffic to
+        HTTPS. This will set defaults for `listen` to listen on all interfaces
+        on the respective default ports (80, 443), where the non-SSL listens
+        are used for the redirect vhosts.
       '';
     };
 
@@ -303,8 +308,20 @@ with lib;
       default = null;
       example = "newserver.example.org";
       description = lib.mdDoc ''
-        If set, all requests for this host are redirected permanently to
-        the given hostname.
+        If set, all requests for this host are redirected (defaults to 301,
+        configurable with `redirectCode`) to the given hostname.
+      '';
+    };
+
+    redirectCode = mkOption {
+      type = types.ints.between 300 399;
+      default = 301;
+      example = 308;
+      description = lib.mdDoc ''
+        HTTP status used by `globalRedirect` and `forceSSL`. Possible usecases
+        include temporary (302, 307) redirects, keeping the request method and
+        body (307, 308), or explicitly resetting the method to GET (303).
+        See <https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections>.
       '';
     };
 

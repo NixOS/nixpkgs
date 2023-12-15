@@ -16,5 +16,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;
     maintainers = with maintainers; [ nrdxp ma27 figsoda ];
+    mainProgram = "eva";
   };
 }

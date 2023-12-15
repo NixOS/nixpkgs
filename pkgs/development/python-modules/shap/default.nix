@@ -31,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.42.1";
-  format = "pyproject";
+  version = "0.43.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ezq6WS6QnoM5uEfo2DgDAEo1HkQ1KjmfgIyVWh3RM94=";
+    hash = "sha256-ylkpXhaLXsQiu6YMC3pUtlicptQmtjITzW+ydinB4ls=";
   };
 
   nativeBuildInputs = [
@@ -124,9 +124,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # The same reason as above test_summary.py
-    "test_simple_bar_with_cohorts_dict"
-    "test_random_summary_violin_with_data2"
+    "test_random_force_plot_negative_sign"
+    "test_random_force_plot_positive_sign"
     "test_random_summary_layered_violin_with_data2"
+    "test_random_summary_violin_with_data2"
+    "test_simple_bar_with_cohorts_dict"
   ];
 
   pythonImportsCheck = [

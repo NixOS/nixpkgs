@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-TAgMA9IV3i8dpgOBDmnlt4iyGlmWN5Nj3BexXb5vzlc=";
   };
 
-  vendorSha256 = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
+  vendorHash = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
 
   postPatch = ''
     substituteInPlace proc/read_test.go --replace /bin/cat cat

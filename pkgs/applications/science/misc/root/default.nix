@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchurl
+, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -57,7 +58,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.28.06";
+  version = "6.28.10";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-rztnO5rKOTpcmuG/huqyZyqvGEG2WMXG56MKuTxYZTM=";
+    hash = "sha256-adb962B+ayC9AsdX+mIXAkwLYTLB6bHf9Nhdmiu35R4=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -193,6 +194,9 @@ stdenv.mkDerivation rec {
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
+
+  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
   # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.

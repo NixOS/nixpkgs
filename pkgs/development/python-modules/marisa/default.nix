@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   pname = "marisa";
+  format = "setuptools";
   inherit (marisa) src version;
 
   nativeBuildInputs = [ swig ];

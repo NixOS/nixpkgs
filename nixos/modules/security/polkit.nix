@@ -35,7 +35,7 @@ in
       description = lib.mdDoc
         ''
           Any polkit rules to be added to config (in JavaScript ;-). See:
-          http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
+          <https://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules>
         '';
     };
 
@@ -117,4 +117,3 @@ in
   };
 
 }
-

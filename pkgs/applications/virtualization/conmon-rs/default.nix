@@ -7,22 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conmon-rs";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RQ3cVM7aEuCCmOCr4UWkxBMr66tdYFl0nNO7tXY05vE=";
+    sha256 = "sha256-B8uloch+ucOLIIR64GE5Z8ahe2NLqPmDGcugQVSqpl4=";
   };
-
-  # Cargo.lock is out of date for this release.
-  cargoPatches = [ ./Cargo.lock.patch ];
 
   nativeBuildInputs = [ capnproto protobuf ];
   doCheck = false;
 
-  cargoHash = "sha256-BNowZkD+y1jh25EvfhQzvT5BZzrq46KBd69AJ//9enE=";
+  cargoHash = "sha256-hEhAnNppiyY6EcdHfri534ih8VUfpT7lO9L4mFJ6Caw=";
 
   meta = with lib; {
     description = "An OCI container runtime monitor written in Rust";

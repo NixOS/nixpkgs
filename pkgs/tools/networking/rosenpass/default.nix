@@ -1,85 +1,53 @@
 { lib
-, targetPlatform
 , fetchFromGitHub
+, nixosTests
 , rustPlatform
+, hostPlatform
+, installShellFiles
 , cmake
-, makeWrapper
-, pkg-config
-, removeReferencesTo
-, coreutils
-, findutils
-, gawk
-, wireguard-tools
-, bash
 , libsodium
+, pkg-config
 }:
-
-let
-  rpBinPath = lib.makeBinPath [
-    coreutils
-    findutils
-    gawk
-    wireguard-tools
-  ];
-in
 rustPlatform.buildRustPackage rec {
   pname = "rosenpass";
-  version = "0.2.0";
+  version = "0.2.1";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r7/3C5DzXP+9w4rp9XwbP+/NK1axIP6s3Iiio1xRMbk=";
+    hash = "sha256-t5AeJqeV16KCUoBm1GUzj/U6q382CRCR/XG6B2MiBU4=";
   };
 
-  cargoHash = "sha256-g2w3lZXQ3Kg3ydKdFs8P2lOPfIkfTbAF0MhxsJoX/E4=";
+  cargoHash = "sha256-caYJP3SNpZxtV9y3D62CuzJ5RjMoq98D9W0Fms5E3Nc=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate
-    makeWrapper # for the rp shellscript
-    pkg-config # let libsodium-sys-stable find libsodium
-    removeReferencesTo
+    pkg-config
     rustPlatform.bindgenHook # for C-bindings in the crypto libs
+    installShellFiles
   ];
 
-  buildInputs = [
-    bash # for patchShebangs to find it
-    libsodium
-  ];
-
-  # otherwise pkg-config tries to link non-existent dynamic libs during the build of liboqs
-  PKG_CONFIG_ALL_STATIC = true;
-
-  # liboqs requires quite a lot of stack memory, thus we adjust the default stack size picked for
-  # new threads (which is used by `cargo test`) to be _big enough_
-  RUST_MIN_STACK = 8 * 1024 * 1024; # 8 MiB
+  buildInputs = [ libsodium ];
 
   # nix defaults to building for aarch64 _without_ the armv8-a
   # crypto extensions, but liboqs depends on these
-  preBuild = lib.optionalString targetPlatform.isAarch
-    ''NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -march=armv8-a+crypto"'';
-
-  preInstall = ''
-    install -D rp $out/bin/rp
-    wrapProgram $out/bin/rp --prefix PATH : "${ rpBinPath }"
-    for file in doc/*.1
-    do
-      install -D $file $out/share/man/man1/''${file##*/}
-    done
+  preBuild = lib.optionalString hostPlatform.isAarch64 ''
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -march=armv8-a+crypto"
   '';
 
-  # nix propagates the *.dev outputs of buildInputs for static builds, but that is non-sense for an
-  # executables only package
-  postFixup = ''
-    find -type f -exec remove-references-to -t ${bash.dev} \
-      -t ${libsodium.dev} {} \;
+  postInstall = ''
+    installManPage doc/rosenpass.1
   '';
+
+  passthru.tests.rosenpass = nixosTests.rosenpass;
 
   meta = with lib; {
     description = "Build post-quantum-secure VPNs with WireGuard!";
     homepage = "https://rosenpass.eu/";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.all;
+    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+    mainProgram = "rosenpass";
   };
 }

@@ -1,25 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pdm-backend
+, hatchling
 , more-itertools
 , click
 }:
 
 buildPythonPackage rec {
   pname = "hyprshade";
-  version = "0.9.3";
+  version = "0.12.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "loqusion";
     repo = "hyprshade";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ou072V9nZUqf5DEolkMQy979SjaZs4iOuoszw50k4Y8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xcFX1YApwEN40jPgRT0H/7SiODxXGYVTPUkSZ8OFIWs=";
   };
 
   nativeBuildInputs = [
-    pdm-backend
+    hatchling
   ];
 
   propagatedBuildInputs = [ more-itertools click ];

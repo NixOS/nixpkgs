@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "markusressel";
     repo = pname;
     rev = version;
-    sha256 = "w2Qwu3ZmBkoA86xa7V6pnIBAbfG9mtkAHePkQjefRW8=";
+    hash = "sha256-w2Qwu3ZmBkoA86xa7V6pnIBAbfG9mtkAHePkQjefRW8=";
   };
 
-  vendorSha256 = "6OEdl7ie0dTjXrG//Fvcg4ZyTW/mhrUievDljY2zi/4=";
+  vendorHash = "sha256-6OEdl7ie0dTjXrG//Fvcg4ZyTW/mhrUievDljY2zi/4=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/md14454/gosensors/gosensors.go \

@@ -9,18 +9,19 @@
 , fastavro
 , importlib-metadata
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.21";
+  version = "4.32";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9hFDj0Cd/F1aChU6WFNJ9agLFpxxArWZTZmZ7PhECGY=";
+    hash = "sha256-OAd0e+mE8hHc6RHBM1vXE68qwrcPcpZ4OB5v9uRQ5oE=";
   };
 
   patches = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     fastavro
     importlib-metadata
     requests
+    urllib3
   ];
 
   # tests require CO_API_KEY

@@ -2,12 +2,11 @@
 , fetchFromGitHub
 , lib
 , esbuild
-, buildGoModule
 , buildWebExtension ? false
 }:
 let
-  version = "1.4.6";
-  gitHash = "9b987d1";
+  version = "1.6.4";
+  gitHash = "6bbf562";
 in
 buildNpmPackage rec {
   pname = "vencord";
@@ -17,32 +16,32 @@ buildNpmPackage rec {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-LVFCf2BdTdl4t+Fp2oM7jAskzGx/fhSr6tNcaZ1X8xA=";
+    hash = "sha256-JL6UwxI4lSkxWfrps1Z2Q97LrzU4Hp6zs8kK2MdqXs8=";
   };
 
-  ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.15.18";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
-  });
+  ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (final: _: {
+    version = "0.15.18";
+    src = fetchFromGitHub {
+      owner = "evanw";
+      repo = "esbuild";
+      rev = "v${final.version}";
+      hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
+    };
+    vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+  }));
 
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-GoVVOLg20oi0MJGLqevpiqHDM/7yaRJSQnM/tt+AkQ8=";
+  makeCacheWritable = true;
+  npmDepsHash = "sha256-nb72XkNlMRJL7BcTh3lf7s0jigRj5F5TeY9xuGAdVsk=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
   npmBuildFlags = [ "--" "--standalone" "--disable-updater" ];
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
+    chmod +w ./package-lock.json
   '';
 
   VENCORD_HASH = gitHash;
@@ -55,10 +54,12 @@ buildNpmPackage rec {
       cp -r dist/ $out
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
+    maintainers = with maintainers; [ FlafyDev fwam NotAShelf Scrumplex ];
   };
 }

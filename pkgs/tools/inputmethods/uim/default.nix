@@ -6,7 +6,9 @@
 , withGtk ? true
 , withGtk2 ? withGtk, gtk2 ? null
 , withGtk3 ? withGtk, gtk3 ? null
-, withQt ? true
+# Was never enabled in the history of this package and is not needed by any
+# dependent package, hence disabled to save up closure size.
+, withQt ? false
 , withQt5 ? withQt, qt5 ? null
 , withLibnotify ? true, libnotify ? null
 , withSqlite ? true, sqlite ? null
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
 
     ruby # used by sigscheme build to generate function tables
     librsvg # used by uim build to generate png pixmaps from svg
+  ] ++ lib.optionals withQt5 [
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -52,7 +56,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withAnthy anthy
   ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optionals withQt5 [ qt5.qtbase.bin qt5.qtbase.dev ]
+  ++ lib.optionals withQt5 [ qt5.qtbase qt5.qtx11extras ]
   ++ lib.optional withLibnotify libnotify
   ++ lib.optional withSqlite sqlite
   ++ lib.optionals withNetworking [

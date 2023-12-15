@@ -47,12 +47,12 @@ in
             description = lib.mdDoc "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = mkOption {
-            type = types.package;
-            default = pkgs.ArchiSteamFarm.ui;
-            defaultText = lib.literalExpression "pkgs.ArchiSteamFarm.ui";
-            description =
-              lib.mdDoc "Web-UI package to use. Contents must be in lib/dist.";
+          package = mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+            extraDescription = ''
+              ::: {.note}
+              Contents must be in lib/dist
+              :::
+            '';
           };
         };
       };
@@ -65,12 +65,13 @@ in
       description = lib.mdDoc "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ArchiSteamFarm;
-      defaultText = lib.literalExpression "pkgs.ArchiSteamFarm";
-      description =
-        lib.mdDoc "Package to use. Should always be the latest version, for security reasons, since this module uses very new features and to not get out of sync with the Steam API.";
+    package = mkPackageOption pkgs "ArchiSteamFarm" {
+      extraDescription = ''
+        ::: {.warning}
+        Should always be the latest version, for security reasons,
+        since this module uses very new features and to not get out of sync with the Steam API.
+        :::
+      '';
     };
 
     dataDir = mkOption {
@@ -187,29 +188,41 @@ in
             Group = "asf";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart = "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
+            ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
             Restart = "always";
 
-            # mostly copied from the default systemd service
-            PrivateTmp = true;
+            # copied from the default systemd service at
+            # https://github.com/JustArchiNET/ArchiSteamFarm/blob/main/ArchiSteamFarm/overlay/variant-base/linux/ArchiSteamFarm%40.service
+            CapabilityBoundingSet = "";
+            DevicePolicy = "closed";
             LockPersonality = true;
+            NoNewPrivileges = true;
             PrivateDevices = true;
             PrivateIPC = true;
             PrivateMounts = true;
+            PrivateTmp = true; # instead of rw /tmp
             PrivateUsers = true;
+            ProcSubset = "pid";
             ProtectClock = true;
             ProtectControlGroups = true;
+            ProtectHome = true;
             ProtectHostname = true;
             ProtectKernelLogs = true;
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
-            ProtectSystem = "full";
+            ProtectSystem = "strict";
             RemoveIPC = true;
-            RestrictAddressFamilies = "AF_INET AF_INET6";
+            RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            UMask = "0077";
+
+            # we luckily already have systemd v247+
+            SecureBits = "noroot-locked";
+            SystemCallFilter = [ "@system-service" "~@privileged" ];
           }
         ];
 

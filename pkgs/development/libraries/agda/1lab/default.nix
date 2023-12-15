@@ -2,14 +2,13 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2023-03-07";
+  version = "unstable-2023-10-11";
 
   src = fetchFromGitHub {
     owner = "plt-amy";
     repo = pname;
-    # Last commit that compiles with Agda 2.6.3
-    rev = "c6ee57a2da327def241324b4775ec2c67cdab2af";
-    hash = "sha256-zDqFaDZxAdFxYM6l2zc7ZTi4XwMThw1AQwHfvhOxzdg=";
+    rev = "c6e0c3c714486fd6c89ace31443428ba48871685";
+    hash = "sha256-PC75NtT0e99HVyFedox+6xz/CY2zP2g4Vzqruj5Bjhc=";
   };
 
   # We don't need anything in support; avoid installing LICENSE.agda

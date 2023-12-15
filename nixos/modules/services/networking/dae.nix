@@ -14,9 +14,10 @@ in
   options = {
     services.dae = with lib;{
       enable = mkEnableOption
-        (mdDoc "A Linux high-performance transparent proxy solution based on eBPF");
+        (mdDoc "dae, a Linux high-performance transparent proxy solution based on eBPF");
 
-      package = mkPackageOptionMD pkgs "dae" { };
+      package = mkPackageOption pkgs "dae" { };
+
 
       assets = mkOption {
         type = with types;(listOf path);
@@ -45,9 +46,9 @@ in
       openFirewall = mkOption {
         type = with types; submodule {
           options = {
-            enable = mkEnableOption "enable";
+            enable = mkEnableOption (mdDoc "opening {option}`port` in the firewall");
             port = mkOption {
-              type = types.int;
+              type = types.port;
               description = ''
                 Port to be opened. Consist with field `tproxy_port` in config file.
               '';
@@ -70,8 +71,8 @@ in
       };
 
       configFile = mkOption {
-        type = types.path;
-        default = "/etc/dae/config.dae";
+        type = with types; (nullOr path);
+        default = null;
         example = "/path/to/your/config.dae";
         description = mdDoc ''
           The path of dae config file, end with `.dae`.
@@ -79,12 +80,10 @@ in
       };
 
       config = mkOption {
-        type = types.str;
-        default = ''
-          global{}
-          routing{}
-        '';
+        type = with types; (nullOr str);
+        default = null;
         description = mdDoc ''
+          WARNING: This option will expose store your config unencrypted world-readable in the nix store.
           Config text for dae.
 
           See <https://github.com/daeuniverse/dae/blob/main/example.dae>.
@@ -92,7 +91,7 @@ in
       };
 
       disableTxChecksumIpGeneric =
-        mkEnableOption (mdDoc "See <https://github.com/daeuniverse/dae/issues/43>");
+        mkEnableOption "" // { description = mdDoc "See <https://github.com/daeuniverse/dae/issues/43>"; };
 
     };
   };
@@ -102,11 +101,6 @@ in
     {
       environment.systemPackages = [ cfg.package ];
       systemd.packages = [ cfg.package ];
-
-      environment.etc."dae/config.dae" = {
-        mode = "0400";
-        source = pkgs.writeText "config.dae" cfg.config;
-      };
 
       networking = lib.mkIf cfg.openFirewall.enable {
         firewall =
@@ -121,20 +115,27 @@ in
       systemd.services.dae =
         let
           daeBin = lib.getExe cfg.package;
-          TxChecksumIpGenericWorkaround = with lib;(getExe pkgs.writeShellApplication {
-            name = "disable-tx-checksum-ip-generic";
-            text = with pkgs; ''
-              iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
-              ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
-            '';
-          });
+
+          configPath =
+            if cfg.configFile != null
+            then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
+
+          TxChecksumIpGenericWorkaround = with lib;
+            (getExe pkgs.writeShellApplication {
+              name = "disable-tx-checksum-ip-generic";
+              text = with pkgs; ''
+                iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
+                ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
+              '';
+            });
         in
         {
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStartPre = [ "" "${daeBin} validate -c ${cfg.configFile}" ]
+            LoadCredential = [ "config.dae:${configPath}" ];
+            ExecStartPre = [ "" "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae" ]
               ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
-            ExecStart = [ "" "${daeBin} run --disable-timestamp -c ${cfg.configFile}" ];
+            ExecStart = [ "" "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae" ];
             Environment = "DAE_LOCATION_ASSET=${cfg.assetsPath}";
           };
         };
@@ -149,11 +150,19 @@ in
         }
 
         {
-          assertion = !((config.services.dae.config != "global{}\nrouting{}\n")
-            && (config.services.dae.configFile != "/etc/dae/config.dae"));
+          assertion = !((config.services.dae.config != null)
+            && (config.services.dae.configFile != null));
           message = ''
             Option `config` and `configFile` could not be set
             at the same time.
+          '';
+        }
+
+        {
+          assertion = !((config.services.dae.config == null)
+            && (config.services.dae.configFile == null));
+          message = ''
+            Either `config` or `configFile` should be set.
           '';
         }
       ];

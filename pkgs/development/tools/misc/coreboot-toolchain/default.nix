@@ -8,7 +8,7 @@ let
     , flex
     , getopt
     , git
-    , gnat11
+    , gnat
     , gcc
     , lib
     , perl
@@ -17,14 +17,14 @@ let
     , withAda ? true
     }:
 
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.21";
+      version = "4.22";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = "c1386ef6128922f49f93de5690ccd130a26eecf2";
-        hash = "sha256-tFGyI170vbhRgJZDix69DfOD5nIY8T4chSP+qTt3kC8=";
+        rev = finalAttrs.version;
+        hash = "sha256-OCEBt3YYyfXpnskFojBn/JoWTkNJ4XAI58BG4pyscGc=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
@@ -35,7 +35,7 @@ let
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex zlib (if withAda then gnat11 else gcc) ];
+      buildInputs = [ flex zlib (if withAda then gnat else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
@@ -66,7 +66,7 @@ let
         maintainers = with maintainers; [ felixsinger ];
         platforms = platforms.linux;
       };
-    }
+    })
   );
 in
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P6IYl6xcsqXw1ilt6HYw757FL2syy1XePBVGbPAlz6Q=";
+    hash = "sha256-C3LfrdXNs5AG9B2n2c39fTjv2gri910EYxApGWwtH90=";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wucke13 adamcstephens ];
+    maintainers = teams.lxc.members;
   };
 }

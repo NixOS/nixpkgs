@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 
-  vendorSha256 = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
+  vendorHash = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
 
   meta = with lib; {
     description = "Tools for browsing and manipulating docker registries";

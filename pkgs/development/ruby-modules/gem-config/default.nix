@@ -21,12 +21,12 @@
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
+, cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
@@ -76,7 +76,7 @@ in
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -232,6 +232,12 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
+  gdk3 = attrs: {
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf cairo ];
+  };
+
   gpgme = attrs: {
     buildInputs = [ gpgme ];
     nativeBuildInputs = [ pkg-config ];
@@ -320,6 +326,36 @@ in
     dontStrip = stdenv.isDarwin;
   };
 
+  gtk3 = attrs: {
+    nativeBuildInputs = [
+      binutils
+      pkg-config
+    ] ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [
+      atk
+      gdk-pixbuf
+      fribidi
+      gobject-introspection
+      gtk3
+      cairo
+      harfbuzz
+      libdatrie
+      libthai
+      pcre
+      pcre2
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+      xorg.libXtst
+      libxkbcommon
+      libepoxy
+    ];
+    dontStrip = stdenv.isDarwin;
+  };
+
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkg-config pcre2 ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -332,6 +368,13 @@ in
       substituteInPlace bin/gollum \
         --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
     '';
+  };
+
+  google-protobuf = attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "3.25.0") {
+    # Fails on 3.25.0 with:
+    #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    hardeningDisable = [ "format" ];
   };
 
   grpc = attrs: {
@@ -369,7 +412,12 @@ in
   };
 
   iconv = attrs: {
+    dontBuild = false;
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./iconv-fix-incompatible-function-pointer-conversions.patch
+    ];
   };
 
   idn-ruby = attrs: {
@@ -630,6 +678,9 @@ in
 
   re2 = attrs: {
     buildInputs = [ re2 ];
+    buildFlags = [
+      "--enable-system-libraries"
+    ];
   };
 
   rest-client = attrs: {

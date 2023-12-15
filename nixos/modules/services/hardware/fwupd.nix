@@ -94,14 +94,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.fwupd;
-        defaultText = literalExpression "pkgs.fwupd";
-        description = lib.mdDoc ''
-          Which fwupd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "fwupd" { };
 
       daemonSettings = mkOption {
         type = types.submodule {
@@ -181,7 +174,25 @@ in {
     # required to update the firmware of disks
     services.udisks2.enable = true;
 
-    systemd.packages = [ cfg.package ];
+    systemd = {
+      packages = [ cfg.package ];
+
+      # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
+      # instead and ensure we take ownership of /var/lib/fwupd
+      services.fwupd-refresh.serviceConfig = {
+        StateDirectory = "fwupd";
+        # Better for debugging, upstream sets stderr to null for some reason..
+        StandardError = "inherit";
+      };
+
+      timers.fwupd-refresh.wantedBy = [ "timers.target" ];
+    };
+
+    users.users.fwupd-refresh = {
+      isSystemUser = true;
+      group = "fwupd-refresh";
+    };
+    users.groups.fwupd-refresh = {};
 
     security.polkit.enable = true;
   };

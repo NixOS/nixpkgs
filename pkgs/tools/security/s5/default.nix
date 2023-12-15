@@ -8,8 +8,10 @@ buildGoModule rec {
     owner = "mvisonneau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "003l4v7d671rvw7q32fxhxv3qazw6v8v9ch7hmyy9lvwkc7x6dlm";
+    hash = "sha256-lTbTD5t80+R9hQeytNE2/Cs8dofdiYEP3zkc084mdAA=";
   };
+
+  vendorHash = "sha256-TrCIUeY0B+BsWNaUkDTEgrEaWfJKnID2mafj3ink+i8=";
 
   subPackages = [ "cmd/${pname}" ];
 
@@ -17,7 +19,6 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  vendorSha256 = "TrCIUeY0B+BsWNaUkDTEgrEaWfJKnID2mafj3ink+i8=";
   doCheck = true;
 
   meta = with lib; {

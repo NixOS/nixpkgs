@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/riscv-software-src/opensbi";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ius nickcao zhaofengli ];
-    platforms = [ "riscv64-linux" ];
+    platforms = [ "riscv64-linux" "riscv32-linux" ];
   };
 }

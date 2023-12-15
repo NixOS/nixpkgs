@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.9";
+  version = "5.4.10.1";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-V5Qgr8aH1H+ZoJ0IZ52HIDRZq+yIwHjLf3gU/ZhjjlY=";
+    hash = "sha256-x6FefOrUvpN/A4GXTd+3SGZEAQL6pXt83ufxRIY3Q9k=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       code will be abstracted away.
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
-    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
     platforms = platforms.unix;
     license = with licenses; [ bsd3 /* and */ bsd2 /* and */ licenses.boost ];
     maintainers = with maintainers; [ tnias vlaci ];

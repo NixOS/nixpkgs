@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "y-py";
-  version = "0.6.0";
+  version = "0.6.2";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "y_py";
     inherit version;
-    hash = "sha256-RoNhaffcKVffhRPP5LwgCRdbOkc+Ywr0IajnXuHEj5g=";
+    hash = "sha256-R1eoKlBAags6MzqgEiAZozG9bxbkn+1n3KQj+Siz/U0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-tpUDGBIHqXsKPsK+1h2sNuiV2I0pGVBokKh+hdFazRQ=";
+    hash = "sha256-RXwrDSPU0wiprsUJwoDzti14H/+bSwy4hK4tYhNVfYw=";
   };
 
   nativeBuildInputs = [

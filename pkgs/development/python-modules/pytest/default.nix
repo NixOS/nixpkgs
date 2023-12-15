@@ -3,10 +3,10 @@
 , callPackage
 , pythonOlder
 , fetchPypi
-, isPyPy
 , writeText
 
 # build
+, setuptools
 , setuptools-scm
 
 # propagates
@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.4.0";
-  format = "pyproject";
+  version = "7.4.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tL+MRb1Zk07YQAGtUeEbTuQNQKEinSx5+cWSsKP2vYo=";
+    hash = "sha256-2YnRNpgt5OOynavMg4rVgcZOjtUsEfvobd69naCBjNU=";
   };
 
   outputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "krakenex";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "veox";

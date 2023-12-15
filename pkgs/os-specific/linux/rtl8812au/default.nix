@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/morrownr/8812au-20210629";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hledger-utils";
-  version = "1.13.2";
+  version = "1.14.0";
 
   format = "pyproject";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "nobodyinperson";
     repo = "hledger-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E++gHvXspPodLW2hEESKjg+R5aV39UJpDP8JYQX9iBw=";
+    hash = "sha256-Qu4nUcAGTACmLhwc7fkLxITOyFnUHv85qMhtViFumVs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

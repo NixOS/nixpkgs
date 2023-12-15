@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ywWG/H2ilt36mjlDSgIzYpardCFXpmbLiml6wy47XuA=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   makeFlags = [ "BIN=$(out)/bin" "MAN=$(out)/share/man/man1" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];

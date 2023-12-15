@@ -1,7 +1,7 @@
-{ bctoolbox
+{ lib
+, bc-soci
 , belcard
 , belle-sip
-, belr
 , cmake
 , doxygen
 , fetchFromGitLab
@@ -10,9 +10,7 @@
 , lime
 , mediastreamer
 , python3
-, bc-soci
 , sqlite
-, lib
 , stdenv
 , xercesc
 , zxing-cpp
@@ -30,6 +28,12 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
+
+  patches = [
+    # zxing-cpp 2.0+ requires C++ 17
+    # Manual backport as upstream ran formatters in the meantime
+    ./backport-cpp17.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

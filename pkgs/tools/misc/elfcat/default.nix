@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
     description = "ELF visualizer, generates HTML files from ELF binaries.";
     homepage = "https://github.com/ruslashev/elfcat";
     license = licenses.zlib;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
+    mainProgram = "elfcat";
   };
 }

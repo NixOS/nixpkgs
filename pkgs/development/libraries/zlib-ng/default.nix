@@ -1,25 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, gtest
 , withZlibCompat ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.1.2";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    sha256 = "sha256-6IEH9IQsBiNwfAZAemmP0/p6CTOzxEKyekciuH6pLhw=";
+    hash = "sha256-EIAeRpmPFodbqQfMOFuGq7cZOnfR9xg8KN+5xa7e9J8=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/zlib-ng/zlib-ng/pull/1519.patch";
-      hash = "sha256-itobS8kJ2Hj3RfjslVkvEVdQ4t5eeIrsA9muRZt03pE=";
-    })
-  ];
 
   outputs = [ "out" "dev" "bin" ];
 

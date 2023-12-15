@@ -25,7 +25,7 @@ in
   options.services.opensearch = {
     enable = mkEnableOption (lib.mdDoc "OpenSearch");
 
-    package = lib.mkPackageOptionMD pkgs "OpenSearch" {
+    package = lib.mkPackageOption pkgs "OpenSearch" {
       default = [ "opensearch" ];
     };
 
@@ -70,6 +70,18 @@ in
           default = 9300;
           description = lib.mdDoc ''
             The port to listen on for transport traffic.
+          '';
+        };
+
+        options."plugins.security.disabled" = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = lib.mdDoc ''
+            Whether to enable the security plugin,
+            `plugins.security.ssl.transport.keystore_filepath` or
+            `plugins.security.ssl.transport.server.pemcert_filepath` and
+            `plugins.security.ssl.transport.client.pemcert_filepath`
+            must be set for this plugin to be enabled.
           '';
         };
       };
@@ -186,6 +198,13 @@ in
               shopt -s inherit_errexit
 
               # Install plugins
+
+              # remove plugins directory if it is empty.
+              if [[ -d ${cfg.dataDir}/plugins && -z "$(ls -A ${cfg.dataDir}/plugins)" ]]; then
+                rm -r "${cfg.dataDir}/plugins"
+              fi
+
+              ln -sfT "${cfg.package}/plugins" "${cfg.dataDir}/plugins"
               ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
               ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
 

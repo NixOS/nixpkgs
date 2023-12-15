@@ -1,17 +1,17 @@
-{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, testers, sq }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, sq }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "sq";
-  version = "0.42.0";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IL3041R35WL+sYCpTjfPXUpd7GTcQoaILYBufwH1WoE=";
+    hash = "sha256-TjJ3XDyHHZWMAYV5bJQffH4a9AheZWraov3d4HB/yno=";
   };
 
-  vendorHash = "sha256-ez5qhGgK0q3oDT0L0Fs+JKJjMbNoJukzCoir2a9ro48=";
+  vendorHash = "sha256-DIYSUIUHEiRv+pPZ2hE/2X4GmT3lvdWd/mkl1wbjID4=";
 
   proxyVendor = true;
 

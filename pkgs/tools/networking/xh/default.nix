@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.18.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-2qZ+FGc8Y8HLJaQluVv036NG77lvaqsc3I5cmkD+r/M=";
+    sha256 = "sha256-e3AGegW0V7JK6iLy0PaMwSeA9+2wSouzX5QIYUg8HCk=";
   };
 
-  cargoSha256 = "sha256-0lPEZ8Th3PAw6AEnb+ciKMhi5wysFCvYwiHd9/o8VVc=";
+  cargoSha256 = "sha256-JE8SKxc7fKlK637NCZnTKkbF4GNrrvJQ/2kGxK4WXpg=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 

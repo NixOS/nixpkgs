@@ -5,7 +5,7 @@
 , markupsafe
 , jinja2
 , pytestCheckHook
-, zope_deprecation
+, zope-deprecation
 , pyramid
 , pythonOlder
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     markupsafe
     jinja2
     pyramid
-    zope_deprecation
+    zope-deprecation
   ];
 
   nativeCheckInputs = [

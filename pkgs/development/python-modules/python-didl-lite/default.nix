@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "python-didl-lite";
   version = "1.3.2";
+  format = "setuptools";
   disabled = pythonOlder "3.5.3";
 
   src = fetchFromGitHub {

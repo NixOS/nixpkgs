@@ -3,38 +3,34 @@
 , hostPlatform
 , fetchurl
 , bash
-, gcc
-, glibc
-, binutils
-, linux-headers
+, tinycc
 , gnumake
 , gnugrep
 , gnused
 , gawk
 , gnutar
-, gzip
+, xz
 }:
 let
   pname = "findutils";
-  version = "4.4.2";
+  version = "4.9.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/findutils-${version}.tar.gz";
-    sha256 = "0amn0bbwqvsvvsh6drfwz20ydc2czk374lzw5kksbh6bf78k4ks3";
+    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
+    hash = "sha256-or+4wJ1DZ3DtxZ9Q+kg+eFsWGjt7nVR1c8sIBl/UYv4=";
   };
 in
 bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    gcc
-    binutils
+    tinycc.compiler
     gnumake
     gnused
     gnugrep
     gawk
     gnutar
-    gzip
+    xz
   ];
 
   passthru.tests.get-version = result:
@@ -52,21 +48,28 @@ bash.runCommand "${pname}-${version}" {
   };
 } ''
   # Unpack
-  tar xzf ${src}
+  cp ${src} findutils.tar.xz
+  unxz findutils.tar.xz
+  tar xf findutils.tar
+  rm findutils.tar
   cd findutils-${version}
 
+  # Patch
+  # configure fails to accurately detect PATH_MAX support
+  sed -i 's/chdir_long/chdir/' gl/lib/save-cwd.c
+
   # Configure
-  export C_INCLUDE_PATH="${glibc}/include:${linux-headers}/include"
-  export LIBRARY_PATH="${glibc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+  export CC="tcc -B ${tinycc.libs}/lib"
+  export AR="tcc -ar"
+  export LD=tcc
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config}
 
   # Build
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

@@ -16,12 +16,7 @@ in {
   options.services.flannel = {
     enable = mkEnableOption (lib.mdDoc "flannel");
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use for flannel";
-      type = types.package;
-      default = pkgs.flannel;
-      defaultText = literalExpression "pkgs.flannel";
-    };
+    package = mkPackageOption pkgs "flannel" { };
 
     publicIp = mkOption {
       description = lib.mdDoc ''

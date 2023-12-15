@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "ydict";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "ydict";
     rev = "v${version}";
-    sha256 = "sha256-qrGOrqI+PXsDNCmgcCPDNn6qUYu2emhYSkYsz4sj27M=";
+    sha256 = "sha256-FcrkfWE1m5OveK4YPgVmUbL/jkh2NEs9bfeCHm2H9P8=";
   };
 
-  vendorSha256 = "sha256-c5nQVQd4n978kFAAKcx5mX2Jz16ZOhS8iL/oxS1o5xs=";
+  vendorHash = "sha256-c5nQVQd4n978kFAAKcx5mX2Jz16ZOhS8iL/oxS1o5xs=";
 
   ldflags = [
     "-s"

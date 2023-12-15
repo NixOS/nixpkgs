@@ -1,4 +1,4 @@
-{ i3lock-color, lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ i3lock-color, lib, stdenv, fetchFromGitHub, fetchpatch, libGL }:
 
 i3lock-color.overrideAttrs (oldAttrs : rec {
   pname = "i3lock-blur";
@@ -20,6 +20,8 @@ i3lock-color.overrideAttrs (oldAttrs : rec {
       sha256 = "sha256-0hXUr+ZEB1tpI3xw80/hGzKyeGuna4CQmEvK6t0VBqU=";
     })
   ];
+
+  buildInputs = oldAttrs.buildInputs ++ [ libGL ];
 
   meta = with lib; {
     description = "An improved screenlocker based upon XCB and PAM with background blurring filter";

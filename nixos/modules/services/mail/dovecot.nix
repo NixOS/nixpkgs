@@ -302,7 +302,7 @@ in
 
     enablePAM = mkEnableOption (lib.mdDoc "creating a own Dovecot PAM service and configure PAM user logins") // { default = true; };
 
-    enableDHE = mkEnableOption (lib.mdDoc "enable ssl_dh and generation of primes for the key exchange") // { default = true; };
+    enableDHE = mkEnableOption (lib.mdDoc "ssl_dh and generation of primes for the key exchange") // { default = true; };
 
     sieveScripts = mkOption {
       type = types.attrsOf types.path;

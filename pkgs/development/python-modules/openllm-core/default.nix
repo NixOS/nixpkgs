@@ -4,10 +4,12 @@
 , pythonOlder
 , accelerate
 , attrs
-, bentoml
 , bitsandbytes
+, bentoml
 , cattrs
+, click-option-group
 , datasets
+, deepmerge
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
@@ -15,15 +17,14 @@
 , mypy-extensions
 , orjson
 , peft
-, ray
 , transformers
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.2.27";
-  format = "pyproject";
+  version = "0.4.22";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R69Qsx9360pJx+7oyhHdeAXUjTAdevPmaBl9gj+AA8U=";
+    hash = "sha256-Hgwc4rneY0d7KZHuBIWRpndLksts5DTvaYuwZOO4sdI=";
   };
 
   sourceRoot = "source/openllm-core";
@@ -44,8 +45,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    bentoml
     cattrs
+    # not listed in pyproject.toml, but required at runtime
+    click-option-group
+    deepmerge
     inflection
     mypy-extensions
     orjson
@@ -54,8 +57,10 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     vllm = [
-      ray
       # vllm
+    ];
+    bentoml = [
+      bentoml
     ];
     fine-tune = [
       accelerate
@@ -67,6 +72,7 @@ buildPythonPackage rec {
     ] ++ transformers.optional-dependencies.torch
       ++ transformers.optional-dependencies.tokenizers
       ++ transformers.optional-dependencies.accelerate;
+    full = with passthru.optional-dependencies; ( vllm ++ bentoml ++ fine-tune );
   };
 
   # there is no tests

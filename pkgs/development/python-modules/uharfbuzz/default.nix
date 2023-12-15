@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.37.0";
+  version = "0.37.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,9 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-CZp+/5fG5IBawnIZLeO9lXke8rodqRcSf+ofyF584mc=";
+    hash = "sha256-876gFYyMqeGYoXMdBguV6bi7DJKHJs9HNLw9xRu+Mxk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

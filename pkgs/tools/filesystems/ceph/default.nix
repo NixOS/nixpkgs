@@ -28,8 +28,10 @@
 , doxygen
 , gperf
 , graphviz
+, gnugrep
 , gtest
 , icu
+, kmod
 , libcap
 , libcap_ng
 , libnl
@@ -165,18 +167,6 @@ let
   # Watch out for python <> boost compatibility
   python = python310.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
-        version = "1.4.46";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-        disabledTestPaths = [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      };
     };
   };
 
@@ -306,10 +296,14 @@ in rec {
 
     pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
 
+    # replace /sbin and /bin based paths with direct nix store paths
+    # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
     preConfigure =''
-      substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
-      substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
-      substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
+      substituteInPlace src/common/module.c \
+        --replace "char command[128];" "char command[256];" \
+        --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
+        --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
+        --replace "/bin/grep" "${gnugrep}/bin/grep"
 
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others

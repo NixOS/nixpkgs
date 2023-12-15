@@ -4,6 +4,7 @@
   "date": "2023-02-08T15:20:29-08:00",
   "path": "/nix/store/62skx6k41f6k95qf32b7yjd9m516z3lk-tree-sitter-gdscript",
   "sha256": "0f4g5vnls2rkwnry47cvpmhsymf1s109sbzdf4x7h94k58f5ggw4",
+  "hash": "sha256-hL9XHCqTJHg6ce0vnUDQwVWvYb2bHeKz5TMLTe0ujzg=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

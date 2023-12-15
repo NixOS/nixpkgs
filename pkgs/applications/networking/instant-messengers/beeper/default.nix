@@ -1,11 +1,21 @@
-{ lib, fetchurl, mkDerivation, appimageTools, libsecret, makeWrapper }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, appimageTools
+, libsecret
+, makeWrapper
+, writeShellApplication
+, curl
+, yq
+, common-updater-scripts
+}:
 let
   pname = "beeper";
-  version = "3.71.16";
+  version = "3.90.11";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-${version}.AppImage";
-    hash = "sha256-Ho5zFmhNzkOmzo/btV+qZfP2GGx5XvV/1JncEKlH4vc=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.90.11-build-2312112f0wxx20y.AppImage";
+    hash = "sha256-ZYv0PUvZiw8pcszCVCd7mHE/+VHb+I25OPu5R7vI1j4=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -15,8 +25,8 @@ let
     inherit version pname src;
   };
 in
-mkDerivation rec {
-  inherit name pname;
+stdenvNoCC.mkDerivation rec {
+  inherit name pname version;
 
   src = appimage;
 
@@ -44,6 +54,20 @@ mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-beeper";
+      runtimeInputs = [ curl yq common-updater-scripts ];
+      text = ''
+        set -o errexit
+        latestLinux="$(curl -s https://download.todesktop.com/2003241lzgn20jd/latest-linux.yml)"
+        version="$(echo "$latestLinux" | yq -r .version)"
+        filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
+        update-source-version beeper "$version" "" "https://download.todesktop.com/2003241lzgn20jd/$filename" --source-key=src.src
+      '';
+    });
+  };
+
   meta = with lib; {
     description = "Universal chat app.";
     longDescription = ''
@@ -53,7 +77,7 @@ mkDerivation rec {
     '';
     homepage = "https://beeper.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll ];
+    maintainers = with maintainers; [ jshcmpbll mjm ];
     platforms = [ "x86_64-linux" ];
   };
 }

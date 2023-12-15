@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "1.2.0";
+  version = "1.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P00oxUz0oVQB969c/N2wpKLe09wtvQWPH4DH4EZUaxc=";
+    hash = "sha256-OEdMRg3KjUrXt/CgJgsUqa/sVFAE0JONNZg5MBKtxmY=";
   };
 
   nativeBuildInputs = [

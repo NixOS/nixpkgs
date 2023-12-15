@@ -102,7 +102,7 @@ buildPythonPackage rec {
     export PATH="${wxGTK}/bin:$PATH"
     export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
 
-    ${python.pythonForBuild.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
+    ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 
     runHook postBuild
   '';
@@ -111,7 +111,7 @@ buildPythonPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${python.pythonForBuild.interpreter} setup.py install --skip-build --prefix=$out
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --skip-build --prefix=$out
     wrapPythonPrograms
 
     runHook postInstall

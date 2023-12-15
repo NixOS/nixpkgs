@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "1.7.6";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-i7smd56rLbNY0qXysq818VYWYbjrnFbyIjQkIgf9aOs=";
+    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
   };
 
   nativeBuildInputs = [ cmake ]

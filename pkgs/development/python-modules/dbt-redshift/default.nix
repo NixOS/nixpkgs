@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.5.8";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-T7cNszIroOT8TNfOzZpdJDR1+5ybhkXvyvvM5zokVgo=";
+    hash = "sha256-wonwDrRvfX5/0yQXL05SDLutXFAAyLmhtpI0rm01AOg=";
   };
 
   nativeBuildInputs = [

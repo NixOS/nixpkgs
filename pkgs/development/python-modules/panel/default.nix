@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.2.2";
+  version = "1.2.3";
 
   format = "wheel";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-RMRjxcUp6MTs001wdNfC/e6diOcgtqrSaVIOSQfPgTs=";
+    hash = "sha256-CAW6z0phPohpFjv4D1DlmomDiv52vb5qBatWN/Mmg/c=";
   };
 
   nativeBuildInputs = [

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "RAxML${lib.optionalString useMpi "-mpi"}";
-  version = "8.2.12";
+  version = "8.2.13";
 
   src = fetchFromGitHub {
     owner = "stamatak";
     repo = "standard-RAxML";
     rev = "v${version}";
-    sha256 = "1jqjzhch0rips0vp04prvb8vmc20c5pdmsqn8knadcf91yy859fh";
+    sha256 = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
   };
 
   buildInputs = lib.optionals useMpi [ mpi ];

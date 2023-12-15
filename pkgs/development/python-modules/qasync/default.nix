@@ -3,22 +3,27 @@
 , fetchFromGitHub
 , pyqt5
 , pytestCheckHook
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "qasync";
-  version = "0.24.1";
+  version = "0.27.0";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "CabbageDevelopment";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DAzmobw+c29Pt/URGO3bWXHBxgu9bDHhdTUBE9QJDe4=";
+    hash = "sha256-kU8QgcBZSzQQO3V4zKaIBuodUCQS4CLHOH7qHYU8ja0=";
   };
 
   postPatch = ''
     rm qasync/_windows.py # Ignoring it is not taking effect and it will not be used on Linux
   '';
+
+  buildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ pyqt5 ];
 

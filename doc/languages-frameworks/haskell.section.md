@@ -177,7 +177,7 @@ exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
-It will simply take as input packages with names off the desired dependencies
+It will take as input packages with names off the desired dependencies
 and just check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
 
@@ -221,7 +221,7 @@ Sadly we currently don’t have tooling for this. For this you might be
 interested in the alternative [haskell.nix] framework, which, be warned, is
 completely incompatible with packages from `haskellPackages`.
 
-<!-- TODO(@maralorn) Link to package set generation docs in the contributers guide below. -->
+<!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
@@ -780,7 +780,7 @@ there instead.
 The top level `pkgs.haskell-language-server` attribute is just a convenience
 wrapper to make it possible to install HLS for multiple GHC versions at the
 same time. If you know, that you only use one GHC version, e.g., in a project
-specific `nix-shell` you can simply use
+specific `nix-shell` you can use
 `pkgs.haskellPackages.haskell-language-server` or
 `pkgs.haskell.packages.*.haskell-language-server` from the package set you use.
 
@@ -1029,7 +1029,7 @@ ugly, and we may want to deprecate them at some point. -->
 `disableCabalFlag flag drv`
 : Makes sure that the Cabal flag `flag` is disabled in Cabal's configure step.
 
-`appendBuildflags list drv`
+`appendBuildFlags list drv`
 : Adds the strings in `list` to the `buildFlags` argument for `drv`.
 
 <!-- TODO(@sternenseemann): removeConfigureFlag -->
@@ -1192,7 +1192,7 @@ with GHC), it is recommended to use overlays for Nixpkgs to change them.
 Since the interrelated parts, i.e. the package set and GHC, are connected
 via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
 their connection (or else we'd have to wire it up again manually). This is
-achieved by changing GHC and the package set in seperate overlays to prevent
+achieved by changing GHC and the package set in separate overlays to prevent
 the package set from pulling in GHC from `prev`.
 
 The result is two overlays like the ones shown below. Adjustable parts are

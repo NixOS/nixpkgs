@@ -27,13 +27,13 @@ lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-05-17";
+  version = "unstable-2023-11-22";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = version;
-    sha256 = "hymOqtwMk6Yja5le6ADZl04yjbOJjhairiH7a4m7gMk=";
+    rev = "429645480653e2e3b3d003d9afcebf075769db2b";
+    sha256 = "sha256-2MPAyod4kPlj/eJiYRsS3FJL0pUR+o9W4CSbI6M3350=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
 
     ${lib.optionalString wallpapers ''
       mkdir -p $out/share/backgrounds
-      cp -a wallpaper/Graphite-normal/*.png $out/share/backgrounds/
+      cp -a wallpaper/Graphite/*.png $out/share/backgrounds/
       ${lib.optionalString (builtins.elem "nord" tweaks) ''
         cp -a wallpaper/Graphite-nord/*.png $out/share/backgrounds/
       ''}

@@ -30,11 +30,9 @@ services.nextcloud = {
   package = pkgs.nextcloud25;
   hostName = "localhost";
   config.adminpassFile = "${pkgs.writeText "adminpass" "hunter2"}";
-  extraApps = with pkgs.nextcloud25Packages.apps; [
-    mail
-    calendar
-    contacts
-  ];
+  extraApps = with pkgs.nextcloud25Packages.apps; {
+    inherit mail calendar contact;
+  };
   extraAppsEnable = true;
 };
 ```

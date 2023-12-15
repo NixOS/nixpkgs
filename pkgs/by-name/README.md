@@ -3,6 +3,10 @@
 The structure of this directory maps almost directly to top-level package attributes.
 This is the recommended way to add new top-level packages to Nixpkgs [when possible](#limitations).
 
+Packages found in the named-based structure do not need to be explicitly added to the
+`top-level/all-packages.nix` file unless they require overriding the default value
+of an implicit attribute (see below).
+
 ## Example
 
 The top-level package `pkgs.some-package` may be declared by setting up this file structure:
@@ -72,6 +76,22 @@ libfoo = callPackage ../by-name/so/some-package/package.nix {
 };
 ```
 
+## Manual migration guidelines
+
+Most packages are still defined in `all-packages.nix` and the [category hierarchy](../README.md#category-hierarchy).
+Please hold off migrating your maintained packages to this directory.
+
+1. An automated migration for the majority of packages [is being worked on](https://github.com/NixOS/nixpkgs/pull/211832).
+   In order to save on contributor and reviewer time, packages should only be migrated manually afterwards if they couldn't be migrated automatically.
+
+1. Manual migrations should only be lightly encouraged if the relevant code is being worked on anyways.
+   For example with a package update or refactoring.
+
+1. Manual migrations should not remove definitions from `all-packages.nix` with custom arguments.
+   That is a backwards-incompatible change because it changes the `.override` interface.
+   Such packages may still be moved to `pkgs/by-name` however, while keeping the definition in `all-packages.nix`.
+   See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
+
 ## Limitations
 
 There's some limitations as to which packages can be defined using this structure:
@@ -79,7 +99,9 @@ There's some limitations as to which packages can be defined using this structur
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
 
-  Instead use the [category hierarchy](../README.md#category-hierarchy) for such attributes.
+  Instead:
+  - Either change the package definition to work with `pkgs.callPackage`.
+  - Or use the [category hierarchy](../README.md#category-hierarchy).
 
 - Only top-level packages.
   This excludes packages for other package sets like `pkgs.pythonPackages.*`.

@@ -6,11 +6,13 @@ let
   cfg = config.virtualisation.lxd;
   preseedFormat = pkgs.formats.yaml {};
 in {
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
   ];
-
-  ###### interface
 
   options = {
     virtualisation.lxd = {
@@ -145,9 +147,7 @@ in {
       };
 
       ui = {
-        enable = lib.mkEnableOption (lib.mdDoc ''
-          Enables the (experimental) LXD UI.
-        '');
+        enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
 
         package = lib.mkPackageOption pkgs.lxd-unwrapped "ui" { };
       };

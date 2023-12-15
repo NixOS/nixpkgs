@@ -1,13 +1,15 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_22 }:
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "0yr5k9s3r4yvcx85bzwn6y4m03964ljnmhz7nf068zj87m9q8rcc";
+    sha256 = "add96ad3509d4d5c6d8658b005dfd046963cd6bb0a4e1f3e88f726a86c05810f";
   };
+
+  passthru.tests = nixosTests.freetube;
 
   appimageContents = appimageTools.extractType2 {
     name = "${pname}-${version}";
@@ -35,9 +37,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # Electron version is set to 22 in order to match upstream
   postFixup = ''
-    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    platforms = [ "x86_64-linux" ];
+    inherit (electron.meta) platforms;
+    mainProgram = "freetube";
   };
 }

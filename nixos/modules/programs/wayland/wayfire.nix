@@ -6,9 +6,9 @@ in
   meta.maintainers = with lib.maintainers; [ rewine ];
 
   options.programs.wayfire = {
-    enable = lib.mkEnableOption (lib.mdDoc "Wayfire, a wayland compositor based on wlroots.");
+    enable = lib.mkEnableOption (lib.mdDoc "Wayfire, a wayland compositor based on wlroots");
 
-    package = lib.mkPackageOptionMD pkgs "wayfire" { };
+    package = lib.mkPackageOption pkgs "wayfire" { };
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;
@@ -43,6 +43,8 @@ in
     xdg.portal = {
       enable = lib.mkDefault true;
       wlr.enable = lib.mkDefault true;
+      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050914
+      config.wayfire.default = lib.mkDefault [ "wlr" "gtk" ];
     };
   };
 }

@@ -67,5 +67,6 @@ python3.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ expipiplus1 ];
+    mainProgram = "mautrix-signal";
   };
 }

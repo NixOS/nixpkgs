@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "liccheck";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "dhatim";
     repo = "python-license-check";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZgwHcZI0vsNYJWPkUnoBogVPPIuifAX9hu4fa1fHSz4=";
+    hash = "sha256-2WJw5TVMjOr+GX4YV0nssOtQeYvDHBLnlWquJQWPL9I=";
   };
 
   propagatedBuildInputs = [

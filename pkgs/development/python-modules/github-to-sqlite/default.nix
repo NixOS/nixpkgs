@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "github-to-sqlite";
   version = "2.8.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

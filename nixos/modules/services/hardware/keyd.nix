@@ -2,7 +2,6 @@
 with lib;
 let
   cfg = config.services.keyd;
-  settingsFormat = pkgs.formats.ini { };
 
   keyboardOptions = { ... }: {
     options = {
@@ -16,7 +15,7 @@ let
       };
 
       settings = mkOption {
-        type = settingsFormat.type;
+        type = (pkgs.formats.ini { }).type;
         default = { };
         example = {
           main = {
@@ -35,6 +34,20 @@ let
           Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
           Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
           See <https://github.com/rvaiya/keyd> how to configure.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          [control+shift]
+          h = left
+        '';
+        description = lib.mdDoc ''
+          Extra configuration that is appended to the end of the file.
+          **Do not** write `ids` section here, use a separate option for it.
+          You can use this option to define compound layers that must always be defined after the layer they are comprised.
         '';
       };
     };
@@ -85,15 +98,12 @@ in
     environment.etc = mapAttrs'
       (name: options:
         nameValuePair "keyd/${name}.conf" {
-          source = pkgs.runCommand "${name}.conf"
-            {
-              ids = ''
-                [ids]
-                ${concatStringsSep "\n" options.ids}
-              '';
-              passAsFile = [ "ids" ];
-            } ''
-            cat $idsPath <(echo) ${settingsFormat.generate "keyd-${name}.conf" options.settings} >$out
+          text = ''
+            [ids]
+            ${concatStringsSep "\n" options.ids}
+
+            ${generators.toINI {} options.settings}
+            ${options.extraConfig}
           '';
         })
       cfg.keyboards;

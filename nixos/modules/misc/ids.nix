@@ -69,7 +69,7 @@ in
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
-      # ddclient = 30; # software removed
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -86,7 +86,7 @@ in
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
-      prayer = 49;
+      # prayer = 49; # dropped in 23.11
       mpd = 50;
       clamav = 51;
       #fprot = 52; # unused
@@ -288,7 +288,7 @@ in
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs  = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -394,7 +394,7 @@ in
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      # ddclient = 30; # software removed
+      # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -411,7 +411,7 @@ in
       #rtkit = 45; # unused
       dovecot2 = 46;
       dovenull2 = 47;
-      prayer = 49;
+      # prayer = 49; # dropped in 23.11
       mpd = 50;
       clamav = 51;
       #fprot = 52; # unused
@@ -599,7 +599,7 @@ in
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14

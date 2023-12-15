@@ -1,31 +1,41 @@
 { lib
 , stdenv
 , cmake
+, eigen
 , fetchFromGitHub
+, fetchpatch
 , libcifpp
 , libmcfp
 , zlib
 }:
 let
   libcifpp' = libcifpp.overrideAttrs (oldAttrs: {
-    # dssp 4.3.1 requires specific version "5.1.0" of libcifpp
-    version = "5.1.0";
+    # dssp 4.4.3 requires specific version "5.2.0" of libcifpp
+    version = "5.2.0";
     src = fetchFromGitHub {
       inherit (oldAttrs.src) owner repo rev;
-      hash = "sha256-PUsi4T6huSqwaa6RnBP1Vj+0a1ePrvrHD0641Lkkc5s=";
+      hash = "sha256-Sj10j6HxUoUvQ66cd2B8CO7CVBRd7w9CTovxkwPDOvs=";
     };
+    patches = [
+      (fetchpatch {
+        # https://github.com/PDB-REDO/libcifpp/issues/51
+        name = "fix-build-on-darwin.patch";
+        url = "https://github.com/PDB-REDO/libcifpp/commit/641f06a7e7c0dc54af242b373820f2398f59e7ac.patch";
+        hash = "sha256-eWNfp9nA/+2J6xjZR6Tj+5OM3L5MxdfRi0nBzyaqvS0=";
+      })
+    ];
   });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dssp";
-  version = "4.4.2";
+  version = "4.4.5";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "dssp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Gic/rE/G24P5g4Uhf2lcvVa6i/4KGQzCpK4KlpjXcS0=";
+    hash = "sha256-X0aMWqoMhmQVRHWKVm2S6JAOYiBuBBMzMoivMdpNx0M=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    eigen
     libcifpp'
     libmcfp
     zlib

@@ -1,16 +1,21 @@
-{ lib, buildGoModule, fetchurl, nixosTests, openssl, pkg-config }:
+{ lib
+, buildGoModule
+, fetchurl
+, nixosTests
+, callPackage
+}:
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.22.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.24.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "14"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
 
-  # Kubo makes changes to it's source tarball that don't match the git source.
+  # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-TX5ZM8Kyj3LZ12Ro7MsHRd+P5XLk/mU7DUxZaopSEV0=";
+    hash = "sha256-stSjLvg8G1EiXon3Qby4wLgbhX7Aaj9pnxcvE32/42k=";
   };
 
   # tarball contains multiple files/directories
@@ -25,17 +30,20 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ipfs" ];
 
-  passthru.tests.kubo = nixosTests.kubo;
+  passthru.tests = {
+    inherit (nixosTests) kubo;
+    repoVersion = callPackage ./test-repoVersion.nix {};
+  };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
 
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
-      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
     substituteInPlace 'misc/systemd/ipfs-hardened.service' \
-      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
   '';
 
   postInstall = ''

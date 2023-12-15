@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, wrapGAppsHook
 , cairo
 , dbus
 , fontconfig
@@ -16,18 +17,19 @@
 , libglvnd
 , libuuid
 , libxcb
-, makeWrapper
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "0.7.3";
+  version = "1.0.7";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-xkGip3RN44SZhYbogxUabO2EDsrRUZAJ+qAOEGdBgQ4=";
+    hash = "sha256-WcAOGPWbY3sCcwmSHTjZvO3ASYYPv1T0iEA5C/VXL9I=";
   };
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   sourceRoot = ".";
 

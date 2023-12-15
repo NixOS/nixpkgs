@@ -23,9 +23,8 @@ with pkgs.lib;
 let tests = {
       alacritty.pkg = p: p.alacritty;
 
-      # times out after spending many hours
-      #contour.pkg = p: p.contour;
-      #contour.cmd = "contour $command";
+      contour.pkg = p: p.contour;
+      contour.cmd = "contour early-exit-threshold 0 execute $command";
 
       cool-retro-term.pkg = p: p.cool-retro-term;
       cool-retro-term.colourTest = false; # broken by gloss effect
@@ -76,6 +75,7 @@ let tests = {
 
       rio.pkg = p: p.rio;
       rio.cmd = "rio -e $command";
+      rio.colourTest = false; # the rendering is changing too much so colors change every release.
 
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";

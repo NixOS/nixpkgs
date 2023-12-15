@@ -257,6 +257,21 @@ let
       '';
     };
 
+    exportarr-sonarr = {
+      nodeName = "exportarr_sonarr";
+      exporterConfig = {
+        enable = true;
+        url = "http://127.0.0.1:8989";
+        # testing for real data is tricky, because the api key can not be preconfigured
+        apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
+        wait_for_open_port(9707)
+        succeed("curl -sSf 'http://localhost:9707/metrics")
+      '';
+    };
+
     fastly = {
       exporterConfig = {
         enable = true;
@@ -416,8 +431,8 @@ let
     };
 
     kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea-dhcp4/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea-dhcp6/dhcp6.sock";
     in
     {
       exporterConfig = {
@@ -471,7 +486,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -512,7 +527,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 
@@ -966,6 +981,36 @@ let
       '';
     };
 
+    pgbouncer = {
+      exporterConfig = {
+        enable = true;
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+      };
+
+      metricProvider = {
+        services.postgresql.enable = true;
+        services.pgbouncer = {
+          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+          ignoreStartupParameters = "extra_float_digits";
+          enable = true;
+          listenAddress = "*";
+          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
+          authType = "any";
+          maxClientConn = 99;
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("postgresql.service")
+        wait_for_unit("pgbouncer.service")
+        wait_for_unit("prometheus-pgbouncer-exporter.service")
+        wait_for_open_port(9127)
+        succeed("curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_up 1'")
+        succeed(
+            "curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_config_max_client_connections 99'"
+        )
+      '';
+    };
+
     php-fpm = {
       nodeName = "php_fpm";
       exporterConfig = {
@@ -1178,6 +1223,44 @@ let
       '';
     };
 
+    sabnzbd = {
+      exporterConfig = {
+        enable = true;
+        servers = [{
+          baseUrl = "http://localhost:8080";
+          apiKeyFile = "/var/sabnzbd-apikey";
+        }];
+      };
+
+      metricProvider = {
+        services.sabnzbd.enable = true;
+
+        # unrar is required for sabnzbd
+        nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "unrar" ];
+
+        # extract the generated api key before starting
+        systemd.services.sabnzbd-apikey = {
+          requires = [ "sabnzbd.service" ];
+          after = [ "sabnzbd.service" ];
+          requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+          before = [ "prometheus-sabnzbd-exporter.service" ];
+          script = ''
+            grep -Po '^api_key = \K.+' /var/lib/sabnzbd/sabnzbd.ini > /var/sabnzbd-apikey
+          '';
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("sabnzbd.service")
+        wait_for_unit("prometheus-sabnzbd-exporter.service")
+        wait_for_open_port(8080)
+        wait_for_open_port(9387)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9387/metrics' | grep 'sabnzbd_queue_size{sabnzbd_instance=\"http://localhost:8080\"} 0.0'"
+        )
+      '';
+    };
+
     scaphandre = {
       exporterConfig = {
         enable = true;
@@ -1250,12 +1333,12 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
             )
         )
       '';

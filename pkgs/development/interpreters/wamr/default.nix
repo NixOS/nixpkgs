@@ -6,18 +6,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     rev = "WAMR-${finalAttrs.version}";
-    hash = "sha256-bnia0ORC0YajO7I3XDMdpjlktDqOiXDlGcf12N1G+eg=";
+    hash = "sha256-h+IwCdufimmkVk2XUAFtDcV+5dJWohRc1kmh3zgDKIg=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  sourceRoot = "${finalAttrs.src.name}/product-mini/platforms/linux";
+  sourceRoot = let
+    platform = if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "darwin"
+      else throw "unsupported platform";
+  in "${finalAttrs.src.name}/product-mini/platforms/${platform}";
 
   meta = with lib; {
     description = "WebAssembly Micro Runtime";
@@ -25,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     mainProgram = "iwasm";
     maintainers = with maintainers; [ ereslibre ];
-    # TODO (ereslibre): this derivation should be improved to support
-    # more platforms.
-    broken = !stdenv.isLinux;
+    platforms = platforms.unix;
   };
 })

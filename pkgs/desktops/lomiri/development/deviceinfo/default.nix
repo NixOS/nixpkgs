@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deviceinfo";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/deviceinfo";
     rev = finalAttrs.version;
-    hash = "sha256-oKuX9JbYWIjroKgA2Y+/oqPkC26DPy3e6yHFU8mmbxQ=";
+    hash = "sha256-x0Xm4Z3hpvO5p/5JxMRloFqn58cRH2ak8rKtuxmmVVQ=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.doCheck)}"
+    "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.finalPackage.doCheck)}"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

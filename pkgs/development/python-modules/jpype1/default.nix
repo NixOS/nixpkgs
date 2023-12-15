@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "jpype1";
   version = "1.4.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, flit-core
 , watchdog
 , ephemeral-port-reserve
 , pytest-timeout
@@ -15,30 +16,37 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.3.7";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Werkzeug";
-    inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+    inherit pname version;
+    hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     markupsafe
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # watchdog requires macos-sdk 10.13+
-    watchdog
   ];
+
+  passthru.optional-dependencies = {
+    watchdog = lib.optionals (!stdenv.isDarwin) [
+      # watchdog requires macos-sdk 10.13[
+      watchdog
+    ];
+  };
 
   nativeCheckInputs = [
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"

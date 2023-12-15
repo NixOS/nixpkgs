@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "sane";
   version = "2.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

@@ -1,61 +1,69 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
-, luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, yaml-cpp, nlohmann_json, re2, zstd
+{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
+, luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
+, yaml-cpp, nlohmann_json, re2, zstd, uthash, fetchpatch, fetchurl
 }:
 
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "59fb313475b82f842e9e9bbc1e0e629428c0a4cf";
-  libsSha256 = "sha256-IjzLbCOpB6EgPDgkGIyg1dNxHfYgU10OLgXrDOPmoTs=";
+  libsRev = "0.13.1";
+  libsHash = "sha256-UNoXIkFr64Nr0XVAtV4+BMNpCk4w8Dn4waZek/ok4Uk=";
 
   # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
   valijson = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
     rev = "v0.6";
-    sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
+    hash = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
+  };
+
+  tinydir = fetchFromGitHub {
+    owner = "cxong";
+    repo = "tinydir";
+    rev = "1.2.5";
+    hash = "sha256-qQhvLzpCYMAafBNRWlY5yklHrILM8BYD+xxF0l17+do=";
   };
 
   # https://github.com/draios/sysdig/blob/0.31.5/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = libsRev;
-    sha256 = libsSha256;
+    rev = "6.0.1+driver";
+    hash = "sha256-e9TJl/IahrUc4Yq2/KssTz3IBjOZwXeLt1jOkZ94EiE=";
   };
 
+  # can be dropped in next release
+  uthashDevendorPatch = fetchpatch {
+    url = "https://github.com/falcosecurity/libs/commit/0d58f798ab72e21a16ee6965c775cba2932e5100.patch";
+    hash = "sha256-5Y79M9u5rXZiKllJcXzDDw/3JKt0k/CgvWx+MZepkpw=";
+  };
+
+  # https://github.com/falcosecurity/libs/blob/master/cmake/modules/b64.cmake
+  base64 = fetchurl {
+    url = "https://raw.githubusercontent.com/istio/proxy/1.18.2/extensions/common/wasm/base64.h";
+    hash = "sha256-WvHRHp5caMBDvH+2pMrU4ZptX6WvPcPaeVGtVBBCw64=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-qcJ9EcePrsKic+wgsck+pTrRdQic0xhzguH4EYVP0gk=";
+    hash = "sha256-G1yr1wHiaGvLMtBZgh4eoiRNJiH0cghHqWFOjKYXXsw=";
   };
-
-  patches = [
-    # https://github.com/draios/sysdig/pull/2024
-    (fetchpatch {
-      url = "https://github.com/draios/sysdig/commit/d9515aad2be660b2ba7ec8c0b4fb2467a10434af.patch";
-      sha256 = "sha256-3m+Rn8BZS8U8QTBDJ6x7kQbH6BE3HKgt1iNnRjPEr8k=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [
     luajit
     ncurses
-    libb64
     openssl
     curl
     jq
     gcc
     elfutils
     tbb
-    libb64
     re2
     protobuf
     grpc
@@ -63,6 +71,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     nlohmann_json
     zstd
+    uthash
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -72,14 +81,20 @@ stdenv.mkDerivation rec {
       owner = "falcosecurity";
       repo = "libs";
       rev = libsRev;
-      sha256 = libsSha256;
+      hash = libsHash;
     }} libs
     chmod -R +w libs
+    pushd libs
+    patch -p1 < ${uthashDevendorPatch}
+    popd
+
     cp -r ${driver} driver-src
     chmod -R +w driver-src
+    pushd driver-src
+    patch -p1 < ${uthashDevendorPatch}
+    popd
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
-      "-DVALIJSON_INCLUDE=${valijson}/include"
       "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
     )
   '';
@@ -90,7 +105,11 @@ stdenv.mkDerivation rec {
     "-DUSE_BUNDLED_B64=OFF"
     "-DUSE_BUNDLED_TBB=OFF"
     "-DUSE_BUNDLED_RE2=OFF"
+    "-DUSE_BUNDLED_JSONCPP=OFF"
     "-DCREATE_TEST_TARGETS=OFF"
+    "-DVALIJSON_INCLUDE=${valijson}/include"
+    "-DTINYDIR_INCLUDE=${tinydir}"
+    "-DUTHASH_INCLUDE=${uthash}/include"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   env.NIX_CFLAGS_COMPILE =
@@ -105,6 +124,7 @@ stdenv.mkDerivation rec {
       exit 1
     fi
     cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -lzstd -labsl_synchronization")
+    install -D ${base64} build/b64/base64.h
   '' + lib.optionalString (kernel != null) ''
     export INSTALL_MOD_PATH="$out"
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

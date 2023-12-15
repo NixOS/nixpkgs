@@ -8,7 +8,8 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2023.05.07";
+  version = "2023.07.22";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-certifi";
     rev = version;
-    hash = "sha256-KXm0CtuZJL9VgFeY+DV0rdjaKqPQCqcoGPCkeGieTX8=";
+    hash = "sha256-V3bptJDNMGXlCMg6GHj792IrjfsG9+F/UpQKxeM0QOc=";
   };
 
   patches = [

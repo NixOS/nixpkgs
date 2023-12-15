@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "0xsha";
     repo = "CloudBrute";
     rev = "v${version}";
-    sha256 = "05b9klddk8wvi78j47jyg9pix6qpxyr01l1m7k1j7598siazfv9g";
+    hash = "sha256-L233VdQolSPDPDXQALLvF5seb3peHiLRiZuj2RqdaRU=";
   };
 
-  vendorSha256 = "0f3n0wrmg9d2qyn8hlnhf9lsfqd9443myzr04p48v68m8n83j6a9";
+  vendorHash = "sha256-SRk5kEUVmY3IJSB/XwchqWGnaXLQUoisx6KlVzMHdjg=";
 
   meta = with lib; {
     description = "Cloud enumeration tool";

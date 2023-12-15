@@ -1,65 +1,71 @@
 { lib
 , buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
 , cached-property
 , click
+, fetchFromGitHub
 , packaging
-, pytest-cov
+, pydantic
 , pytest-timeout
+, pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.3.2";
+  version = "2.0.5";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sfoAS3QpD78we8HcXpxjSyEIN1xLRVLExaM3oXe6tLU=";
+    hash = "sha256-L/+6w5lLqHO5c9CThoUPOHXRPVxBlOWFDAmfoYxRw5g=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
   ];
 
   propagatedBuildInputs = [
-    attrs
     cached-property
-    click
     packaging
+    pydantic
   ];
 
+  passthru.optional-dependencies = {
+    cli = [
+      click
+    ];
+  };
+
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
     pytest-timeout
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "pythonfinder"
   ];
 
-  pytestFlagsArray = [
-    "--no-cov"
-  ];
-
   # these tests invoke git in a subprocess and
   # for some reason git can't be found even if included in nativeCheckInputs
-  disabledTests = [
-    "test_shims_are_kept"
-    "test_shims_are_removed"
-  ];
+  # disabledTests = [
+  #   "test_shims_are_kept"
+  #   "test_shims_are_removed"
+  # ];
 
   meta = with lib; {
+    description = "Cross platform search tool for finding Python";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
-    description = "Cross Platform Search Tool for Finding Pythons";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

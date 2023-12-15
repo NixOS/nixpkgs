@@ -1,0 +1,16 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "tempfile"
+      ],
+      "path": "/nix/store/d0x874ngf02b8fk1xralnvmij7xh0kjc-source",
+      "ref": "0.1.7",
+      "rev": "26e0239441755e5edcfd170e9aa566bb9c9eb6f3",
+      "sha256": "10d1g09q6p554pwr6a3b6ajnwqbphz3a4cwkfa05jbviflfyzjyk",
+      "srcDir": "",
+      "url": "https://github.com/OpenSystemsLab/tempfile.nim/archive/26e0239441755e5edcfd170e9aa566bb9c9eb6f3.tar.gz"
+    }
+  ]
+}

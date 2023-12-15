@@ -56,6 +56,15 @@ EXTRA_COMPONENT_DEPS = {
     ],
 }
 
+# Sometimes we have unstable versions for libraries that are not
+# well-maintained. This allows us to mark our weird version as newer
+# than a certain wanted version
+OUR_VERSION_IS_NEWER_THAN = {
+    "blinkstick": "1.2.0",
+    "gps3": "0.33.3",
+    "pybluez": "0.22",
+}
+
 
 
 def run_sync(cmd: List[str]) -> None:
@@ -226,7 +235,12 @@ def main() -> None:
                         Version.parse(our_version)
                     except InvalidVersion:
                         print(f"Attribute {attr_name} has invalid version specifier {our_version}", file=sys.stderr)
-                        attr_outdated = True
+
+                        # allow specifying that our unstable version is newer than some version
+                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(attr_name):
+                            attr_outdated = Version.parse(newer_than_version) < Version.parse(required_version)
+                        else:
+                            attr_outdated = True
                     else:
                         attr_outdated = Version.parse(our_version) < Version.parse(required_version)
                     finally:

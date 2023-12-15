@@ -13,6 +13,7 @@ buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
   version = "2.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,7 +43,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pari
-    python.pythonForBuild.pkgs.pip
+    python.pythonOnBuildForHost.pkgs.pip
   ];
 
   buildInputs = [

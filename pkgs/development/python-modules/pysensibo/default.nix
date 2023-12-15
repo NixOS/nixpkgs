@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.33";
+  version = "1.0.36";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A7IzAIV8dQVSmYTEp9yeySQ8eXnLFVkiuWFS3pe2YTA=";
+    hash = "sha256-lsHKwFzfkGWuUiZGkt9zwjNDDU7i6gcqcEsi5SQqsSQ=";
   };
 
   propagatedBuildInputs = [

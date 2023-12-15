@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lostutils/uq";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar matthiasbeyer ];
+    mainProgram = "uq";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , fetchzip
 , libXxf86vm
+, libGL
 , makeWrapper
 , openal
 , openjdk
@@ -13,15 +14,15 @@
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.96a-RC8";
+  version = "0.96a-RC10";
 
   src = fetchzip {
-    url = "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-${version}.zip";
-    sha256 = "sha256-RDXqFqiWpBG3kasofzbOl7Zp0a9LiMpJKsHcFaJtm2Y=";
+    url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
+    sha256 = "sha256-RBSnms+QlKgTOhm3t2hDfv7OcMrQCk1rfkz9GaM74WM=";
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-  buildInputs = [ xorg.libXxf86vm openal ];
+  buildInputs = [ xorg.libXxf86vm openal libGL ];
 
   dontBuild = true;
 
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     set -eou pipefail;
-    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-\K.*?(?=\.zip)" | head -1)
+    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
     update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
   '';
 }

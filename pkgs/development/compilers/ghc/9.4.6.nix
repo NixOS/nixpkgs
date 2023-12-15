@@ -17,7 +17,7 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
+              || stdenv.targetPlatform.isAarch64)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -197,6 +197,9 @@ stdenv.mkDerivation (rec {
       extraPrefix = "libraries/Cabal/";
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
+
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
 
     # Work around a type not being defined when including Rts.h in bytestring's cbits
     # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.

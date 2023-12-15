@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     "--without-zenmap"
   ];
 
+  postInstall = ''
+    install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
+  '';
+
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"

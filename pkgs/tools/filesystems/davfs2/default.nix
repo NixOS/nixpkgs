@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [ neon zlib ];
+  buildInputs = [
+    zlib
+  ];
 
   patches = [
     ./fix-sysconfdir.patch
@@ -36,7 +38,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--sysconfdir=/etc" ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-neon=${lib.getLib neon}"
+  ];
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/davfs2";

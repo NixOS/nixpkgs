@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vertical-canvas";
-  version = "1.2.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
     rev = version;
-    sha256 = "sha256-6I73YukhqOLsqVimTfVKYG6LzIYoJRnMaxkPhEAinfQ=";
+    sha256 = "sha256-gDM2S/ygN58iodfO5d34LYUclkzf+nAIBWp+wFeWWik=";
   };
 
   nativeBuildInputs = [ cmake ];

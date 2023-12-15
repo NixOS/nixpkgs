@@ -9,6 +9,7 @@
 
 buildPythonPackage rec {
   version = "2.0.1";
+  format = "setuptools";
   pname = "smartypants";
   disabled = isPyPy;
 

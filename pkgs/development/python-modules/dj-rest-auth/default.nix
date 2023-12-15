@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , django
 , django-allauth
 , djangorestframework
@@ -12,14 +13,23 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "4.0.1";
+  version = "5.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = "refs/tags/${version}";
-    hash = "sha256-+ladx0b/bvvUW8zLjtG8IiWWdfPTqqm/KYbEK9uiFaU=";
+    hash = "sha256-PTFUZ54vKlufKCQyJb+QB/+hI15r+Z0auTjnc38yMLg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/iMerica/dj-rest-auth/pull/561
+      url = "https://github.com/iMerica/dj-rest-auth/commit/be0cf53d94582183320b0994082f0a312c1066d9.patch";
+      hash = "sha256-BhZ7BWW8m609cVn1WCyPfpZq/706YVZAesrkcMKTD3A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

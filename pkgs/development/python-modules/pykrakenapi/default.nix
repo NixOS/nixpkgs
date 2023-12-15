@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pykrakenapi";
-  version = "0.3.1";
+  version = "0.3.2";
 
   disabled = pythonOlder "3.3";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dominiktraxl";
     repo = "pykrakenapi";
     rev = "v${version}";
-    hash = "sha256-gG0kbB3yaFU4DcBKupnBS7UFuU1hIMThdUHCuqufKzc=";
+    hash = "sha256-sMtNdXM+47iCnDgo33DCD1nx/I+jVX/oG/9aN80LfRg=";
   };
 
   propagatedBuildInputs = [

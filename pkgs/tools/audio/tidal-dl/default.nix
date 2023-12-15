@@ -21,5 +21,6 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.all;
+    mainProgram = "tidal-dl";
   };
 }

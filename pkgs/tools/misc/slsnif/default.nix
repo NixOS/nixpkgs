@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = "http://slsnif.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    mainProgram = "slsnif";
   };
 }

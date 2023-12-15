@@ -1,47 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , lxml
-, matplotlib
-, midiutil
 , numpy
 , pytestCheckHook
 , scikit-image
-, scikit-learn
 }:
 let
-  rev = "8d0ce91d831b0592c111ddb38fc9aa8eba130ed2";
+  version = "1.2";
 in
 buildPythonPackage {
   pname = "mung";
-  version = "unstable-2022-07-10";
+  inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMR-Research";
     repo = "mung";
-    inherit rev;
-    hash = "sha256-QzCkB9Wj4dTPuMCMweFw6IsSwBBzV0Nfx7+VX7Plnio=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NSKaJkJRevTy5gh6/ik8Qe46bOPdznsmXPgh7Xz7vXQ=";
   };
 
-  format = "setuptools";
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     lxml
     numpy
     scikit-image
-    scikit-learn
-    matplotlib
-    midiutil
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "mung"
+  ];
+
   meta = with lib; {
     description = "Music Notation Graph: a data model for optical music recognition";
     homepage = "https://github.com/OMR-Research/mung";
-    changelog = "https://github.com/OMR-Research/mung/blob/${rev}/CHANGES.md";
+    changelog = "https://github.com/OMR-Research/mung/blob/${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ piegames ];
   };

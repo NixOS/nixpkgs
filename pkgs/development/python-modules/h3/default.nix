@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "h3";
   version = "3.7.6";
+  format = "setuptools";
 
   # pypi version does not include tests
   src = fetchFromGitHub {

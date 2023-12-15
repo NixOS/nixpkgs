@@ -5,6 +5,7 @@
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
+    airzone_cloud = [ aioairzone ];
     alexa = [ av ];
     bluetooth = [ pyswitchbot ];
     bthome = [ xiaomi-ble ];
@@ -19,6 +20,7 @@ let
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ pychromecast ];
+    matrix = [ pydantic ];
     mopeka = [ pyswitchbot ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
@@ -46,6 +48,10 @@ let
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
+    ];
+    sma = [
+      # missing operating_status attribute in entity
+      "test_sensor_entities"
     ];
     vesync = [
       # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
@@ -126,6 +132,8 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
+        # pinned version incompatible with urllib3>=2.0
+        "telegram_bot"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

@@ -10,6 +10,7 @@
 
 let automat = buildPythonPackage rec {
   version = "22.10.0";
+  format = "setuptools";
   pname = "automat";
 
   src = fetchPypi {

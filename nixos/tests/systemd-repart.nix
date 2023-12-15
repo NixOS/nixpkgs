@@ -29,16 +29,6 @@ let
       "+32M",
     ])
 
-    # Fix the GPT table by moving the backup table to the end of the enlarged
-    # disk image. This is necessary because we increased the size of the disk
-    # before. The disk needs to be a raw disk because sgdisk can only run on
-    # raw images.
-    subprocess.run([
-      "${pkgs.gptfdisk}/bin/sgdisk",
-      "--move-second-header",
-      tmp_disk_image.name,
-    ])
-
     # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
     os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
   '';

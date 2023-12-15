@@ -4,6 +4,7 @@
   "date": "2022-05-16T16:12:37-04:00",
   "path": "/nix/store/1aj3kwndjrimfijq0fxx6khn5r6ics3a-tree-sitter-go-mod",
   "sha256": "1hblbi2bs4hlil703myqhvvq2y1x41rc3w903hg2bhbazh7x8yyf",
+  "hash": "sha256-znvUD/xqwSUeHCDxwXIgPXiB94bY1wEOjRQSvURcdME=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

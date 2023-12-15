@@ -10,7 +10,7 @@
   openssl,
   parted,
   procps, # for pidof,
-  python3,
+  python39, # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
   shadow, # for useradd, usermod
   util-linux, # for (u)mount, fdisk, sfdisk, mkswap
 }:
@@ -19,7 +19,7 @@ let
   inherit (lib) makeBinPath;
 
 in
-python3.pkgs.buildPythonPackage rec {
+python39.pkgs.buildPythonPackage rec {
   pname = "waagent";
   version = "2.8.0.11";
   src = fetchFromGitHub {
@@ -28,9 +28,14 @@ python3.pkgs.buildPythonPackage rec {
     rev = "04ded9f0b708cfaf4f9b68eead1aef4cc4f32eeb";
     sha256 = "0fvjanvsz1zyzhbjr2alq5fnld43mdd776r2qid5jy5glzv0xbhf";
   };
+  patches = [
+    # Suppress the following error when waagent try to configure sshd:
+    # Read-only file system: '/etc/ssh/sshd_config'
+    ./dont-configure-sshd.patch
+  ];
   doCheck = false;
 
-  buildInputs = with python3.pkgs; [ distro ];
+  buildInputs = with python39.pkgs; [ distro ];
   runtimeDeps = [
     findutils
     gnugrep

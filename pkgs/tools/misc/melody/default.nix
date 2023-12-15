@@ -17,5 +17,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/yoav-lavi/melody";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
+    mainProgram = "melody";
   };
 }

@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "opensc";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "sha256-Yo8dwk7+d6q+hi7DmJ0GJM6/pmiDOiyEm/tEBSbCU8k=";
+    sha256 = "sha256-1mm0b4AAtX0AgjShpU1FR6e7pUkea5TOJdIGkNQgjuE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-2977.patch";
-      url = "https://github.com/OpenSC/OpenSC/commit/81944d1529202bd28359bede57c0a15deb65ba8a.patch";
-      hash = "sha256-rCeYYKPtv3pii5zgDP5x9Kl2r98p3uxyBSCYlPJZR/s=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [

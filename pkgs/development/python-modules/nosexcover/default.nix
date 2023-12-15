@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "nosexcover";
   version = "1.0.11";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

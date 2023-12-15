@@ -3,18 +3,16 @@
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , freefont_ttf, makeFontsConf
 , makeWrapper, t1utils, boehmgc, rsync
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf fontinst;
-  }
+, texliveSmall, tex ? texliveSmall.withPackages (ps: with ps; [ lh metafont epsf fontinst ])
 }:
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
-  version = "2.24.2";
+  version = "2.24.3";
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-eUTmENe08d5Mccz+H73TIB9U+sVFYb3NBIkU+Nu2Ckg=";
+    sha256 = "sha256-3wBfdu969aTNdKEPjnEVJ4t/p58UAYk3tlwQlJjsRL4=";
   };
 
   postInstall = ''

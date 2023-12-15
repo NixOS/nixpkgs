@@ -14,7 +14,7 @@
 , linuxHeaders
 , nixosTests
 
-# v8 (upstream default), wavm, wamr, wasmtime, disabled
+  # v8 (upstream default), wavm, wamr, wasmtime, disabled
 , wasmRuntime ? "wamr"
 }:
 
@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.26.4";
-    rev = "cfa32deca25ac57c2bbecdad72807a9b13493fc1";
+    version = "1.27.1";
+    rev = "6b9db09c69965d5bfb37bdd29693f8b7f9e9e9ec";
   };
 in
 buildBazelPackage rec {
@@ -36,7 +36,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    hash = "sha256-j5QyqT+9tpChg5JxdSw21rtb9AI036vIiAmzCNzGWGc=";
+    hash = "sha256-eZ3UCVqQbtK2GbawUVef5+BMSQbqe+owtwH+b887mQE=";
 
     postFetch = ''
       chmod -R +w $out
@@ -59,6 +59,9 @@ buildBazelPackage rec {
 
     # use system Go, not bazel-fetched binary Go
     ./0002-nixpkgs-use-system-Go.patch
+
+    # use system C/C++ tools
+    ./0003-nixpkgs-use-system-C-C-toolchains.patch
   ];
 
   nativeBuildInputs = [
@@ -80,8 +83,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-KcTh6Fd1EUXcXByPSwMVy5J/6VSVGWBmHr8asS1/ffU=";
-      aarch64-linux = "sha256-v1T6/qfVapsNFQiB9vdZvxBZ3RoNO7MxgRh3s9dA+pQ=";
+      x86_64-linux = "sha256-OQ4vg4S3DpM+Zo+igncx3AXJnL8FkJbwh7KnBhbnCUM=";
+      aarch64-linux = "sha256-/X8i1vzQ4QvFxi1+5rc1/CGHmRhhu5F3X5A3PgbW+Mc=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -97,11 +100,14 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
@@ -130,7 +136,7 @@ buildBazelPackage rec {
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy

@@ -1,16 +1,20 @@
 diff --git a/bin/collector b/bin/collector
-index 4fec65e..e59eac7 100755
+index 6bd04a8caffb..119526fc6ea3 100644
 --- a/bin/collector
 +++ b/bin/collector
-@@ -3,8 +3,10 @@
+@@ -3,12 +3,14 @@
  
  Process.setproctitle("discourse prometheus-collector")
  
 +# We need the ABI version {MAJOR}.{MINOR}.0 here.
 +abi_version = ENV['GEM_PATH'].split("/")[-1]
- version = File.read(File.expand_path("../../prometheus_exporter_version", __FILE__)).strip
--spec_file = File.expand_path("../../gems/#{RUBY_VERSION}/specifications/prometheus_exporter-#{version}.gemspec", __FILE__)
-+spec_file = File.expand_path("../../gems/#{abi_version}/specifications/prometheus_exporter-#{version}.gemspec", __FILE__)
- 
- spec = Gem::Specification.load spec_file
- spec.activate
+ [
+   "webrick-#{ENV["WEBRICK_VERSION"]}",
+   "prometheus_exporter-#{ENV["PROMETHEUS_EXPORTER_VERSION"]}",
+ ].each do |spec_name|
+   spec_file =
+-    File.expand_path("../../gems/#{RUBY_VERSION}/specifications/#{spec_name}.gemspec", __FILE__)
++    File.expand_path("../../gems/#{abi_version}/specifications/#{spec_name}.gemspec", __FILE__)
+   spec = Gem::Specification.load(spec_file)
+   spec.activate
+ end

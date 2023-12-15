@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBRLCAD_ENABLE_STRICT=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   meta = with lib; {

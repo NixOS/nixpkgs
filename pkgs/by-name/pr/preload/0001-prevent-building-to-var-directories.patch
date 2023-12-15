@@ -1,0 +1,54 @@
+diff --git a/Makefile.in b/Makefile.in
+index e4072e4..4a6b069 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -327,23 +327,9 @@ installcheck-initdSCRIPTS: $(initd_SCRIPTS)
+ 	    else echo "$$f does not support $$opt" 1>&2; bad=1; fi; \
+ 	  done; \
+ 	done; rm -f c$${pid}_.???; exit $$bad
+-install-logDATA: $(log_DATA)
+-	@$(NORMAL_INSTALL)
+-	test -z "$(logdir)" || $(MKDIR_P) "$(DESTDIR)$(logdir)"
+-	@list='$(log_DATA)'; for p in $$list; do \
+-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+-	  f=$(am__strip_dir) \
+-	  echo " $(logDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(logdir)/$$f'"; \
+-	  $(logDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(logdir)/$$f"; \
+-	done
++install-logDATA: 
+ 
+ uninstall-logDATA:
+-	@$(NORMAL_UNINSTALL)
+-	@list='$(log_DATA)'; for p in $$list; do \
+-	  f=$(am__strip_dir) \
+-	  echo " rm -f '$(DESTDIR)$(logdir)/$$f'"; \
+-	  rm -f "$(DESTDIR)$(logdir)/$$f"; \
+-	done
+ install-logrotateDATA: $(logrotate_DATA)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(logrotatedir)" || $(MKDIR_P) "$(DESTDIR)$(logrotatedir)"
+@@ -361,23 +347,9 @@ uninstall-logrotateDATA:
+ 	  echo " rm -f '$(DESTDIR)$(logrotatedir)/$$f'"; \
+ 	  rm -f "$(DESTDIR)$(logrotatedir)/$$f"; \
+ 	done
+-install-pkglocalstateDATA: $(pkglocalstate_DATA)
+-	@$(NORMAL_INSTALL)
+-	test -z "$(pkglocalstatedir)" || $(MKDIR_P) "$(DESTDIR)$(pkglocalstatedir)"
+-	@list='$(pkglocalstate_DATA)'; for p in $$list; do \
+-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+-	  f=$(am__strip_dir) \
+-	  echo " $(pkglocalstateDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkglocalstatedir)/$$f'"; \
+-	  $(pkglocalstateDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkglocalstatedir)/$$f"; \
+-	done
++install-pkglocalstateDATA: 
+ 
+ uninstall-pkglocalstateDATA:
+-	@$(NORMAL_UNINSTALL)
+-	@list='$(pkglocalstate_DATA)'; for p in $$list; do \
+-	  f=$(am__strip_dir) \
+-	  echo " rm -f '$(DESTDIR)$(pkglocalstatedir)/$$f'"; \
+-	  rm -f "$(DESTDIR)$(pkglocalstatedir)/$$f"; \
+-	done
+ install-sysconfigDATA: $(sysconfig_DATA)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(sysconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(sysconfigdir)"

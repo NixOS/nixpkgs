@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl
-, pkg-config, buildPackages
-, CoreAudio, alsa-lib, libjack2, ncurses
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, memstreamHook
+, CoreAudio
+, libobjc
+, libjack2
+, ncurses
+, alsa-lib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
   };
 
-  patches = [ ./timidity-iA-Oj.patch ];
+  patches = [
+    ./timidity-iA-Oj.patch
+    # Fixes misdetection of features by clang 16. The configure script itself is patched because
+    # it is old and does not work nicely with autoreconfHook.
+    ./configure-compat.patch
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
   buildInputs = [
     libjack2
     ncurses
@@ -22,6 +36,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
+    libobjc
   ];
 
   configureFlags = [
@@ -36,6 +51,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "--enable-audio=darwin,jack"
     "lib_cv_va_val_copy=no"
+    "timidity_cv_ccoption_rdynamic=yes"
+    # These configure tests fail because of incompatible function pointer conversions.
+    "ac_cv_func_vprintf=yes"
+    "ac_cv_func_popen=yes"
+    "ac_cv_func_vsnprintf=yes"
+    "ac_cv_func_snprintf=yes"
+    "ac_cv_func_open_memstream=yes"
   ];
 
   makeFlags = [
@@ -58,6 +80,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/timidity/;
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
+    substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
   # This fixup step is unnecessary and fails on Darwin
@@ -69,5 +92,6 @@ stdenv.mkDerivation rec {
     description = "A software MIDI renderer";
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
+    mainProgram = "timidity";
   };
 }

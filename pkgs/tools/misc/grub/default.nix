@@ -61,7 +61,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-bQPQ65gAcuUQ8ELB2hKywuXZ0kdC2bBCsUII/b4FkvQ=";
+    outputHash = "sha256-XpQ4tu5eNRARdbg95LOjqp+2RCVRj1qZWe+Sc0O5zNg=";
   }
   ''
     mkdir -p po
@@ -90,6 +90,32 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ef7850c757fb3dd2462a512cfa0ff19c89fcc0b1";
       revert = true;
       hash = "sha256-p8Kcv9d7ri4eJU6Fgqyzdj0hV5MHSe50AF02FPDJx2Y=";
+    })
+
+    # Fixes for NTFS bugs (CVE-2023-4692 and CVE-2023-4693)
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=43651027d24e62a7a463254165e1e46e42aecdea";
+      hash = "sha256-/oudbfL8Ph7ZsgsFUI0YIddji+7okFRG12E/rDsgvNM=";
+    })
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=0ed2458cc4eff6d9a9199527e2a0b6d445802f94";
+      hash = "sha256-6EhLzVapN2n62Lgo+PnB4SRvDkYWFkrKNinCvArRUXk=";
+    })
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7e5f031a6a6a3decc2360a7b0c71abbe598e7354";
+      hash = "sha256-R2vmVGidm1ZFxopt/71y2816z2i/vvPrthZE52oc4CI=";
+    })
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7a5a116739fa6d8a625da7d6b9272c9a2462f967";
+      hash = "sha256-T1LglEcUl9GXQjJ6Y4fKuFyFAujNRbcAb9KoNkl6jXs=";
+    })
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=1fe82c41e070385e273d7bb1cfb482627a3c28e8";
+      hash = "sha256-x/V7bmRaNxo8NNOUwVti59n9ST/2yTJ/blWjk3omdqE=";
+    })
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=e58b870ff926415e23fc386af41ff81b2f588763";
+      hash = "sha256-a0faNQafL+uRIglnILkLj64ROWxqmczQTQSu3VdklSk=";
     })
   ];
 

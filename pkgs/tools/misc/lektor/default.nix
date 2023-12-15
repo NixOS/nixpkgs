@@ -1,13 +1,25 @@
 { lib
 , fetchFromGitHub
 , fetchNpmDeps
+, fetchPypi
 , nodejs
 , npmHooks
 , python3
 }:
 
 let
-  python = python3;
+  python = python3.override {
+    packageOverrides = self: super: {
+      mistune = super.mistune.overridePythonAttrs (old: rec {
+        version = "2.0.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
+    };
+  };
 in python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b8";

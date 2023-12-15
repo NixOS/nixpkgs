@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "4.8.0";
+  version = "4.8.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,9 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    # https://github.com/domainaware/checkdmarc/issues/102
-    rev = "d0364ceef3cfd41052273913369e3831cb6fe4fd";
-    hash = "sha256-OSljewDeyJtoxkCQjPU9wIsNhhxumHmeu9GHvRD4DRY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NNB5dYQzzdNapjP4mtpCW08BzfZ+FFRESUtpxCOzrdk=";
   };
 
   nativeBuildInputs = [

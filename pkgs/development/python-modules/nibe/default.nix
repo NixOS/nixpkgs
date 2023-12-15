@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.3.0";
-  format = "pyproject";
+  version = "2.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";
-    repo = pname;
+    repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-IrPEXrrnbxJcIuy+Xq4iVEEblJ85d7M99zGr1DDJS2M=";
+    hash = "sha256-qlGQtjRG92AhFY+sF3mB4ghIn4kydkbDOolLu9Qh0JM=";
   };
 
   nativeBuildInputs = [

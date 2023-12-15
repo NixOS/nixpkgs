@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
+    mainProgram = "dwl";
   };
 })
 # TODO: custom patches from upstream website

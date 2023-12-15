@@ -1,15 +1,24 @@
 { lib
-, arangodb
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, pyjwt
-, pytest
-, mock
+
+# build-system
+, setuptools
+, setuptools-scm
+
+# dependencies
+, urllib3
 , requests
 , requests-toolbelt
-, setuptools
+, pyjwt
+, importlib-metadata
+, packaging
+
+# tests
+, arangodb
+, mock
 }:
 
 let
@@ -23,8 +32,8 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "7.5.7";
-  format = "setuptools";
+  version = "7.8.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -32,14 +41,24 @@ buildPythonPackage rec {
     owner = "ArangoDB-Community";
     repo = "python-arango";
     rev = "refs/tags/${version}";
-    hash = "sha256-cd2xE5rYLl3NOv/DZjmHRPCe224k4XyPjo9aXV1ZhvU=";
+    hash = "sha256-lZ+9l1kPE/Piw1QLYW+qjFQmTtZd4m/kDOTOxkTsla0=";
   };
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
+    importlib-metadata
     requests
     requests-toolbelt
+    packaging
     pyjwt
     setuptools
+    urllib3
   ];
 
   nativeCheckInputs = [

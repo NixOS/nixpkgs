@@ -44,14 +44,22 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       };
       services.grafana = {
         enable = true;
-        security = {
-          adminUser = "admin";
-          adminPassword = "admin";
-        };
-        addr = "localhost";
-        port = 3000;
-        extraOptions = {
-          DATABASE_URL = "sqlite3:///var/lib/grafana/data/grafana.db?cache=private&mode=rwc&_journal_mode=WAL";
+        settings = {
+          security = {
+            admin_user = "admin";
+            admin_password = "admin";
+          };
+
+          server = {
+            http_addr = "localhost";
+            http_port = 3000;
+          };
+
+          database = {
+            type = "sqlite3";
+            path = "/var/lib/grafana/data/grafana.db";
+            wal = true;
+          };
         };
       };
       users.users.foo = {

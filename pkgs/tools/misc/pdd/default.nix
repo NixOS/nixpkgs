@@ -30,5 +30,6 @@ buildPythonApplication rec {
     '';
     maintainers = [ maintainers.infinisil ];
     license = licenses.gpl3;
+    mainProgram = "pdd";
   };
 }

@@ -6,6 +6,8 @@ let
   cfg = config.users.mysql;
 in
 {
+  meta.maintainers = [ maintainers.netali ];
+
   options = {
     users.mysql = {
       enable = mkEnableOption (lib.mdDoc "Authentication against a MySQL/MariaDB database");
@@ -358,7 +360,7 @@ in
       user = "root";
       group = "root";
       mode = "0600";
-      # password will be added from password file in activation script
+      # password will be added from password file in systemd oneshot
       text = ''
         users.host=${cfg.host}
         users.db_user=${cfg.user}
@@ -423,34 +425,45 @@ in
       mode = "0600";
       user = config.services.nscd.user;
       group = config.services.nscd.group;
-      # password will be added from password file in activation script
+      # password will be added from password file in systemd oneshot
       text = ''
         username ${cfg.user}
       '';
     };
 
-    # Activation script to append the password from the password file
-    # to the configuration files. It also fixes the owner of the
-    # libnss-mysql-root.cfg because it is changed to root after the
-    # password is appended.
-    system.activationScripts.mysql-auth-passwords = ''
-      if [[ -r ${cfg.passwordFile} ]]; then
-        org_umask=$(umask)
-        umask 0077
+    systemd.services.mysql-auth-pw-init = {
+      description = "Adds the mysql password to the mysql auth config files";
 
-        conf_nss="$(mktemp)"
-        cp /etc/libnss-mysql-root.cfg $conf_nss
-        printf 'password %s\n' "$(cat ${cfg.passwordFile})" >> $conf_nss
-        mv -fT "$conf_nss" /etc/libnss-mysql-root.cfg
-        chown ${config.services.nscd.user}:${config.services.nscd.group} /etc/libnss-mysql-root.cfg
+      before = [ "nscd.service" ];
+      wantedBy = [ "multi-user.target" ];
 
-        conf_pam="$(mktemp)"
-        cp /etc/security/pam_mysql.conf $conf_pam
-        printf 'users.db_passwd=%s\n' "$(cat ${cfg.passwordFile})" >> $conf_pam
-        mv -fT "$conf_pam" /etc/security/pam_mysql.conf
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        Group = "root";
+      };
 
-        umask $org_umask
-      fi
-    '';
+      restartTriggers = [
+        config.environment.etc."security/pam_mysql.conf".source
+        config.environment.etc."libnss-mysql.cfg".source
+        config.environment.etc."libnss-mysql-root.cfg".source
+      ];
+
+      script = ''
+        if [[ -r ${cfg.passwordFile} ]]; then
+          umask 0077
+          conf_nss="$(mktemp)"
+          cp /etc/libnss-mysql-root.cfg $conf_nss
+          printf 'password %s\n' "$(cat ${cfg.passwordFile})" >> $conf_nss
+          mv -fT "$conf_nss" /etc/libnss-mysql-root.cfg
+          chown ${config.services.nscd.user}:${config.services.nscd.group} /etc/libnss-mysql-root.cfg
+
+          conf_pam="$(mktemp)"
+          cp /etc/security/pam_mysql.conf $conf_pam
+          printf 'users.db_passwd=%s\n' "$(cat ${cfg.passwordFile})" >> $conf_pam
+          mv -fT "$conf_pam" /etc/security/pam_mysql.conf
+        fi
+      '';
+    };
   };
 }

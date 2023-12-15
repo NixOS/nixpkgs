@@ -1,0 +1,15 @@
+nixpkgs' post-installation fixup moves the pages to share/man.  Tell guilt-help so that it can find them.
+
+diff --git a/guilt-help b/guilt-help
+index 93442a3..b29e059 100755
+--- a/guilt-help
++++ b/guilt-help
+@@ -34,7 +34,7 @@ case $# in
+ 		;;
+ esac
+ 
+-MANDIR=`dirname $0`/../man
++MANDIR=`dirname $0`/../share/man
+ MANDIR=`(cd "$MANDIR"; pwd)`
+ exec man -M "$MANDIR" "$page"
+ 

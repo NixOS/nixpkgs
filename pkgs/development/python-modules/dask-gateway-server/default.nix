@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dask-gateway-server";
-  version = "2022.10.0";
+  version = "2023.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-gateway";
     rev = version;
-    hash = "sha256-8yyako49F3rK8oZFmpYOiLVg9K3YF76/XerapQx3uhc=";
+    hash = "sha256-hwNLcuFN6ItH5KhC2gDUsaZT7qTC48fPR/Qx6u8B1+M=";
   };
 
   sourceRoot = "${src.name}/${pname}";

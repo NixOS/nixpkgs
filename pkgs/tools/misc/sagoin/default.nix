@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "sagoin";
   };
 }

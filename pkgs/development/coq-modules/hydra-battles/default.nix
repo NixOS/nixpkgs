@@ -7,11 +7,12 @@
   release."0.4".sha256 = "1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
   release."0.5".sha256 = "121pcbn6v59l0c165ha9n00whbddpy11npx2y9cn7g879sfk2nqk";
   release."0.6".sha256 = "1dri4sisa7mhclf8w4kw7ixs5zxm8xyjr034r1377p96rdk3jj0j";
+  release."0.9".sha256 = "sha256-wlK+154owQD/03FB669KCjyQlL2YOXLCi0KLSo0DOwc=";
   releaseRev = (v: "v${v}");
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.13" "8.16"; out = "0.6"; }
+    { case = range "8.13" "8.16"; out = "0.9"; }
     { case = range "8.11" "8.12"; out = "0.4"; }
   ] null;
 

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, libiconv, texlive, xercesc }:
+{ fetchFromGitHub, lib, stdenv, libiconv, texliveFull, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "blahtexml";
@@ -11,9 +11,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile \
+      --replace "\$(CXX)" "\$(CXX) -std=c++98"
+  '';
+
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ texlive.combined.scheme-full ]; # scheme-full needed for ucs package
+  nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildFlags =

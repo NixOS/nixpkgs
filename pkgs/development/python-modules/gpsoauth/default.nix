@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "1.0.2";
+  format = "setuptools";
   pname = "gpsoauth";
 
   disabled = pythonOlder "3.8";

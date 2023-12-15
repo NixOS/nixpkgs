@@ -18,9 +18,12 @@
         pycharm-professional
         rider
         ruby-mine
+        rust-rover
         webstorm
       ];
       paths = builtins.concatStringsSep " " ides;
     in
     writeText "jb-ides" paths;
+
+    clion-with-vim = jetbrains.plugins.addPlugins jetbrains.clion [ "ideavim" ];
 }

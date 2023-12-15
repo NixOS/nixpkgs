@@ -11,6 +11,7 @@ let
     recursiveUpdate
     mdDoc
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     types
@@ -122,7 +123,7 @@ in
   options.services.cassandra = {
 
     enable = mkEnableOption (lib.mdDoc ''
-      Apache Cassandra – Scalable and highly available database.
+      Apache Cassandra – Scalable and highly available database
     '');
 
     clusterName = mkOption {
@@ -155,14 +156,8 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cassandra;
-      defaultText = literalExpression "pkgs.cassandra";
-      example = literalExpression "pkgs.cassandra_3_11";
-      description = mdDoc ''
-        The Apache Cassandra package to use.
-      '';
+    package = mkPackageOption pkgs "cassandra" {
+      example = "cassandra_3_11";
     };
 
     jvmOpts = mkOption {

@@ -6,7 +6,7 @@
 , fetchYarnDeps
 , nixosTests
 , brotli
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , jq
 , nodejs
 , which
@@ -45,18 +45,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-C9mBF+QymGXyBB3IFX6MNgsZpHk739qv1/DLuvzrTaU=";
+    hash = "sha256-8JzU0JVb+JQCNiro8hPHBwkofNTUy90YkSCzTOoB+/A=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-W+pX2XO27j6qAVxvo+Xf1h7g3V0LUMtwNf+meZmkgwE=";
+    hash = "sha256-pzXH6hdDf8O6Kr12Xw0jRcnPRD2TrDGdiEfxVr3KmwY=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -66,17 +66,17 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-TAv8QAAfT3q28jUo26h0uCGsoqBzAn8lybIaqNAApU8=";
+    hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
   };
 
-  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli prefetch-yarn-deps jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
     export HOME=$PWD
-    fixup_yarn_lock ~/yarn.lock
-    fixup_yarn_lock ~/server/tools/yarn.lock
-    fixup_yarn_lock ~/client/yarn.lock
+    fixup-yarn-lock ~/yarn.lock
+    fixup-yarn-lock ~/server/tools/yarn.lock
+    fixup-yarn-lock ~/client/yarn.lock
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools

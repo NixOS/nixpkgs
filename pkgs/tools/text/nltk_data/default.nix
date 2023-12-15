@@ -19,7 +19,7 @@ let
         repo = "nltk_data";
         rev = "5db857e6f7df11eabb5e5665836db9ec8df07e28";
         inherit hash;
-        sparseCheckout = [ "${location}/${pname}.zip" ];
+        sparseCheckout = [ "packages/${location}/${pname}.zip" ];
       };
     in
     stdenvNoCC.mkDerivation (base // {
@@ -29,8 +29,9 @@ let
         runHook preInstall
 
         mkdir -p $out
-        unzip ${src}/${location}/${pname}.zip
-        cp -R ${pname}/ $out/
+        unzip ${src}/packages/${location}/${pname}.zip
+        mkdir -p $out/${location}
+        cp -R ${pname}/ $out/${location}
 
         runHook postInstall
       '';
@@ -39,12 +40,17 @@ in
 lib.makeScope newScope (self: {
   punkt = makeNltkDataPackage ({
     pname = "punkt";
-    location = "packages/tokenizers";
+    location = "tokenizers";
     hash = "sha256-rMkgn3xzmSJNv8//kqbPF2Xq3Gf16lgA1Wx8FPYbaQo=";
   });
   averaged_perceptron_tagger = makeNltkDataPackage ({
     pname = "averaged_perceptron_tagger";
-    location = "packages/taggers";
+    location = "taggers";
     hash = "sha256-ilTs4HWPUoHxQb4kWEy3wJ6QsE/98+EQya44gtV2inw=";
+  });
+  stopwords = makeNltkDataPackage ({
+    pname = "stopwords";
+    location = "corpora";
+    hash = "sha256-Rj1jnt6IDEmBbSIHHueyEvPmdE4EZ6/bJ3qehniebbk=";
   });
 })

@@ -7,17 +7,18 @@
 , npmHooks
 , fetchFromGitHub
 , fetchNpmDeps
+, testers
+, mailpit
 }:
 
 let
-
-  version = "1.7.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-jT9QE0ikp9cJlT8qtfPPjKOUuqWyQk94D3UbkyaGXa8=";
+    hash = "sha256-+PtyoItn9Dwf7HU3OjzldqfYgdu0LatPmijXK3gAKYY=";
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -29,7 +30,13 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = "sha256-6VCs8125fTJkZW+eZgK56j7ccK8tcGhIXiq2HkYp4XM=";
+      hash = "sha256-zx6B6kDVdKJMQQPONC/KWRXK2i+4l5w9hzrAqatrKTE=";
+    };
+
+    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
+      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
+      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
     nativeBuildInputs = [ nodejs python3 libtool npmHooks.npmConfigHook ];
@@ -49,7 +56,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version;
 
-  vendorHash = "sha256-XBYIO7fdo5EahJB7EcAuY9SGKZb8dsvoJHp/D5LO5Qo=";
+  vendorHash = "sha256-UQms3YWXJRP1u1ERlsFNpo6ei86qaH6pgfvCLnB3AAk=";
 
   CGO_ENABLED = 0;
 
@@ -59,11 +66,17 @@ buildGoModule {
     cp -r ${ui} server/ui/dist
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = mailpit;
+    command = "mailpit version";
+  };
+
   meta = with lib; {
     description = "An email and SMTP testing tool with API for developers";
     homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
     maintainers = with maintainers; [ stephank ];
     license = licenses.mit;
+    mainProgram = "mailpit";
   };
 }

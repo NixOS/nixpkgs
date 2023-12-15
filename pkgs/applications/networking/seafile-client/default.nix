@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.3";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "sha256-zoo34mhNZTEwxjSy8XgmZfEjkujmWj34OtDJQSCb/zk=";
+    sha256 = "sha256-Qt4Y7s2BMwuKXTYjHAzK40HgAsxlk98af3irOXT4/Vs=";
   };
 
   nativeBuildInputs = [
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ schmittlauch greizgh ];
+    mainProgram = "seafile-applet";
   };
 }

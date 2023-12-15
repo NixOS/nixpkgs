@@ -13,14 +13,17 @@
 , pytestCheckHook
 , pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "w1thermsensor";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "2.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EcaEr4B8icbwZu2Ty3z8AAgglf74iZ5BLpLnSOZC2cE=";
+    hash = "sha256-n7wK4N1mzZtUxtYu17qyuI4UjJh/59UGD0dvkOgcInA=";
   };
 
   postPatch = ''
@@ -32,9 +35,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiofiles
     click
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiofiles
+    ];
+  };
 
   # Don't try to load the kernel module in tests.
   env.W1THERMSENSOR_NO_KERNEL_MODULE = 1;
@@ -45,11 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ];
-
-  # Tests for 2.0.0 currently fail on python3.11
-  # https://github.com/timofurrer/w1thermsensor/issues/116
-  doCheck = pythonOlder "3.11";
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "w1thermsensor"
@@ -63,6 +67,7 @@ buildPythonPackage rec {
       devices.
     '';
     homepage = "https://github.com/timofurrer/w1thermsensor";
+    changelog = "https://github.com/timofurrer/w1thermsensor/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ quentin ];
     platforms = platforms.all;

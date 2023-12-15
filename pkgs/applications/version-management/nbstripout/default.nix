@@ -46,5 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+    mainProgram = "nbstripout";
   };
 }

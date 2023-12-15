@@ -7,7 +7,7 @@
 , openssl
 , pkg-config
 , sphinx
-, waf
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkg-config sphinx waf.hook ];
+  nativeBuildInputs = [ pkg-config sphinx wafHook ];
   buildInputs = [ libpcap ndn-cxx openssl ];
 
   wafConfigureFlags = [

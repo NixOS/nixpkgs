@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "imbalanced-learn";
   version = "0.11.0";
+  format = "setuptools";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
   src = fetchPypi {

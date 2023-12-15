@@ -69,7 +69,7 @@ self: super: builtins.intersectAttrs super {
         -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
         -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
         -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
-        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://nixos.org/manual/nixpkgs/unstable/#haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
         bindist/wrapper.in > "$out/bin/haskell-language-server"
       ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
       chmod +x "$out/bin/haskell-language-server"
@@ -92,13 +92,6 @@ self: super: builtins.intersectAttrs super {
     # tests disabled because they require network
     doCheck = false;
   }) super.ghcide;
-
-  # Test suite needs executable
-  agda2lagda = overrideCabal (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/agda2lagda:$PATH"
-    '' + drv.preCheck or "";
-  }) super.agda2lagda;
 
   hiedb = overrideCabal (drv: {
     preCheck = ''
@@ -123,7 +116,6 @@ self: super: builtins.intersectAttrs super {
     hls-brittany-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
-    hls-cabal-plugin
     hls-overloaded-record-dot-plugin
   ;
 
@@ -134,6 +126,7 @@ self: super: builtins.intersectAttrs super {
     hls-gadt-plugin
 
     # https://github.com/haskell/haskell-language-server/pull/3431
+    hls-cabal-plugin
     hls-cabal-fmt-plugin
     hls-code-range-plugin
     hls-explicit-record-fields-plugin
@@ -184,6 +177,14 @@ self: super: builtins.intersectAttrs super {
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
+
+  # Test suite needs executable
+  agda2lagda = overrideCabal (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/agda2lagda:$PATH"
+    '' + drv.preCheck or "";
+  }) super.agda2lagda;
+
 
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
@@ -452,6 +453,8 @@ self: super: builtins.intersectAttrs super {
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
+  shellify = enableSeparateBinOutput super.shellify;
+
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
@@ -599,7 +602,17 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend pkgs.freeglut (appendPatch ./patches/GLUT.patch super.GLUT);
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+    pkg-configDepends = drv.pkg-configDepends or [] ++ [
+      pkgs.freeglut
+    ];
+    patches = drv.patches or [] ++ [
+      ./patches/GLUT.patch
+    ];
+    prePatch = drv.prePatch or "" + ''
+      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
+  }) super.GLUT;
 
   libsystemd-journal = doJailbreak (addExtraLibrary pkgs.systemd super.libsystemd-journal);
 
@@ -611,8 +624,6 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
   fsnotify = dontCheck super.fsnotify;
-
-  hidapi = addExtraLibrary pkgs.udev super.hidapi;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -1058,39 +1069,39 @@ self: super: builtins.intersectAttrs super {
   domaindriven-core = dontCheck super.domaindriven-core;
 
   cachix-api = overrideCabal (drv: {
-    version = "1.6";
+    version = "1.6.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.6";
-      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
+      rev = "v1.6.1";
+      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
     postPatch = ''
-      sed -i 's/1.5/1.6/' cachix-api.cabal
+      sed -i 's/1.6/1.6.1/' cachix-api.cabal
     '';
   }) super.cachix-api;
   cachix = overrideCabal (drv: {
-    version = "1.6";
+    version = "1.6.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.6";
-      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
+      rev = "v1.6.1";
+      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.5/1.6/' cachix.cabal
+      sed -i 's/1.6/1.6.1/' cachix.cabal
     '';
   }) (lib.pipe
         (super.cachix.override {
-          hnix-store-core = self.hnix-store-core_0_6_1_0;
+          hnix-store-core = self.hnix-store-core_0_7_0_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
          (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.ascii-progress)
+         (addBuildDepend self.immortal)
         ]
   );
 
@@ -1329,4 +1340,24 @@ self: super: builtins.intersectAttrs super {
       gi-webkit2
       gi-webkit2webextension
       ;
+
+  # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
+  # Also adds required test dependencies for checks to pass
+  mpi-hs =
+    let validMpi = [ "openmpi" "mpich" "mvapich" ];
+        mpiImpl = pkgs.mpi.pname;
+        disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
+     in lib.pipe
+          (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
+          ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
+            ++ disableUnused
+            ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
+          );
+  inherit (lib.mapAttrs (_: addTestToolDepends
+    [ pkgs.openssh pkgs.mpiCheckPhaseHook ]
+    ) super)
+    mpi-hs-store
+    mpi-hs-cereal
+    mpi-hs-binary
+    ;
 }

@@ -8,9 +8,10 @@
   owner = "math-comp";
 
   inherit version;
-  defaultVersion =  with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (isGe "8.16") (isGe "2.0.0") ];               out = "2.0.0"; }
-      { cases = [ (isGe "8.15") (range "1.15.0" "1.17.0") ];    out = "1.6.0"; }
+  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
+      { cases = [ (isGe "8.16") (isGe "2.1.0") ];               out = "2.1.0"; }
+      { cases = [ (isGe "8.16") "2.0.0" ];                      out = "2.0.0"; }
+      { cases = [ (isGe "8.15") (range "1.15.0" "1.18.0") ];    out = "1.6.0"; }
       { cases = [ (isGe "8.10") (range "1.13.0" "1.17.0") ];    out = "1.5.6"; }
       { cases = [ (range "8.10" "8.16") (range "1.12.0" "1.15.0") ]; out = "1.5.5"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
@@ -20,6 +21,7 @@
       { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
+    "2.1.0".sha256 = "sha256-QT91SBJ6DXhyg4j/okTvPP6yj2DnnPbnSlJ/p8pvZbY=";
     "2.0.0".sha256 = "sha256-2zWHzMBsO2j8EjN7CgCmKQcku9Be8aVlme0LD5p4ab8=";
     "1.6.0".sha256 = "sha256-lEM+sjqajIOm1c3lspHqcSIARgMR9RHbTQH4veHLJfU=";
     "1.5.6".sha256 = "sha256-cMixgc34T9Ic6v+tYmL49QUNpZpPV5ofaNuHqblX6oY=";

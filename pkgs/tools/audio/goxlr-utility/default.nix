@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "goxlr-utility";
-  version = "0.12.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
     rev = "v${version}";
-    hash = "sha256-vvaKCsqncRhag8IrS0AIfNqNHGU2WIvFaYISEVfUB2Y=";
+    hash = "sha256-QKL2iKfn05P20MwT+RAeVzUUyv6FWtxMWuBI+4MgXlQ=";
   };
 
-  cargoHash = "sha256-Z57H5YeVYqlOaLRLaizVw8xTLstdjyXutnN7OgaUYOE=";
+  cargoHash = "sha256-LVObMspxhZkK81BjolTZZwoeMunzVwdEWWJAt/aOjZA=";
 
   buildInputs = [
     libpulseaudio

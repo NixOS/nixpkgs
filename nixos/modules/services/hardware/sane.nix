@@ -114,14 +114,11 @@ in
       '';
     };
 
-    hardware.sane.drivers.scanSnap.package = mkOption {
-      type = types.package;
-      default = pkgs.sane-drivers.epjitsu;
-      defaultText = literalExpression "pkgs.sane-drivers.epjitsu";
-      description = lib.mdDoc ''
-        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+    hardware.sane.drivers.scanSnap.package = mkPackageOption pkgs [ "sane-drivers" "epjitsu" ] {
+      extraDescription = ''
+        Useful if you want to extract the driver files yourself.
 
-        The process is described in the `/etc/sane.d/epjitsu.conf` file in
+        The process is described in the {file}`/etc/sane.d/epjitsu.conf` file in
         the `sane-backends` package.
       '';
     };

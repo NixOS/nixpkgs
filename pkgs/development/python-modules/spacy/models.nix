@@ -75,7 +75,6 @@ let
         description = "Models for the spaCy NLP library";
         homepage = "https://github.com/explosion/spacy-models";
         license = licenses.${license};
-        maintainers = with maintainers; [ rvl ];
       };
     };
 

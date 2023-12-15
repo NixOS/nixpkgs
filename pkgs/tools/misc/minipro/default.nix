@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "An open source program for controlling the MiniPRO TL866xx series of chip programmers";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bmwalters ];
+    mainProgram = "minipro";
   };
 }

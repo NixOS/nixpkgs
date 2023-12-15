@@ -86,5 +86,6 @@ resholve.mkDerivation rec {
     maintainers = with maintainers; [ abathur utdemir ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "shunit2";
   };
 }

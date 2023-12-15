@@ -7,7 +7,7 @@ assert lib.elem stdenv.hostPlatform.system platforms;
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "111.3.447";
+  version = "185.4.6054";
 
   arch = {
     x86_64-linux = "x86_64";
@@ -84,7 +84,7 @@ buildFHSEnv {
     description = "Online stored folders (daemon version)";
     homepage    = "http://www.dropbox.com/";
     license     = licenses.unfree;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ eclairevoyant ttuegel ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
     mainProgram = "dropbox";
   };

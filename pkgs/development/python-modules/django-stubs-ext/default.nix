@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "4.2.2";
+  version = "4.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xp0cxG8cTDt4lLaFpQIsKbKjbHz7UuI3YurzV+v8LJg=";
+    hash = "sha256-jE0ftfaEGbOyR0xlloGhiYA+J9al5av1qg2ldgG1hjM=";
   };
 
   propagatedBuildInputs = [

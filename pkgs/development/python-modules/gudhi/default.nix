@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "gudhi";
   version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GUDHI";
@@ -38,7 +39,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_GUDHI_PYTHON=ON"
     "-DPython_ADDITIONAL_VERSIONS=3"
   ];

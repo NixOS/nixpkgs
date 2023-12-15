@@ -8,20 +8,20 @@
 , nixosTests
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-in buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2023.8.2";
+  version = "2023.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-v9ql01dwWf9kBxw75n9svQousrnbUi8NY1wkJx06teg=";
+    hash = "sha256-WYhLKV3j3Ktite5u1H4fSku38hCCrMzKoxtjq6aT9yo=";
   };
 
-  npmDepsHash = "sha256-RvkauNvt6MZxWMssEtaCjXP1z/3NsReywUgCefV/jjM=";
+  nodejs = nodejs_18;
+
+  npmDepsHash = "sha256-bnYpvHO9Pnob+MbrSshv03mSwXCADH/2xw33nLVKMdg=";
 
   nativeBuildInputs = [
     python3

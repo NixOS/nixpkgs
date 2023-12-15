@@ -2,14 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , click
+, setuptools
 , six
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "geomet";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -17,8 +18,12 @@ buildPythonPackage rec {
     owner = "geomet";
     repo = "geomet";
     rev = "refs/tags/${version}";
-    hash = "sha256-dN0d6wu5FqL/5FQrpQn+wlyEvp52pa5dkxLu3j3bxnw=";
+    hash = "sha256-YfI29925nffzRBMJb6Gm3muvlpwP3zSw2YJ2vWcf+Bo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     click

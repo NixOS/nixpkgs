@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "in-n-out";
-  version = "0.1.8";
+  version = "0.1.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "in_n_out";
     inherit version;
-    hash = "sha256-gWKvh4fmgutLNtBH+RQZnYDxEk46QUIM1T3mgOfQolQ=";
+    hash = "sha256-if65ROQg+vQtPCVCFFaBtNVxRDVZMsK4WWlfzcT5oto=";
   };
 
   nativeBuildInputs = [

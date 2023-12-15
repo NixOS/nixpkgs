@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "44.4";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "uR9E6abAQz6W2ZfzlVhSBtq6xiRzmTo8B1Uv5YiOWo0=";
+    sha256 = "50YhKNLfIySh10gGLEBCnNBQSvCeQHBnsz86nQxZyOE=";
   };
 
   nativeBuildInputs = [
@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ zhaofengli ]);
     platforms = platforms.unix;
+    mainProgram = "kgx";
   };
 }

@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "async-timeout";
-  version = "4.0.2";
+  version = "4.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IWPhZA3bUreoyA0KZ6CFh+XSRcycVTp0qEcFa8KXaxU=";
+    hash = "sha256-RkDZa+hNgtAu1Z6itxBaD3szq+hwNwPNCrC/h8QnUi8=";
   };
 
   propagatedBuildInputs = [

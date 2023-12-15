@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-ethereum/ethabi";
     maintainers = [ maintainers.dbrock ];
     license = licenses.asl20;
+    mainProgram = "ethabi";
   };
 }

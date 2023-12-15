@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
+  # Required to build tests, even if they aren't executed
+  buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ fmt ];
-  checkInputs = [ catch2_3 ];
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"

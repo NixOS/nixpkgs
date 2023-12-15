@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, bash
 , fetchFromGitHub
 , makeWrapper
 , meson
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ grim slurp ]}
+    wrapProgram $out/libexec/xdg-desktop-portal-wlr --prefix PATH ":" ${lib.makeBinPath [ bash grim slurp ]}
   '';
 
   meta = with lib; {

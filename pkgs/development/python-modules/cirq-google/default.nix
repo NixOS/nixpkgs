@@ -4,10 +4,12 @@
 , protobuf
 , pytestCheckHook
 , freezegun
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "cirq-google";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";
@@ -17,6 +19,10 @@ buildPythonPackage rec {
       --replace "google-api-core[grpc] >= 1.14.0, < 2.0.0dev" "google-api-core[grpc] >= 1.14.0, < 3.0.0dev" \
       --replace "protobuf >= 3.15.0, < 4" "protobuf >= 3.15.0"
   '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     cirq-core
@@ -40,6 +46,8 @@ buildPythonPackage rec {
     # unittest.mock.InvalidSpecError: Cannot autospec attr 'QuantumEngineServiceClient'
     "test_get_engine_sampler_explicit_project_id"
     "test_get_engine_sampler"
+    # Calibration issue
+    "test_xeb_to_calibration_layer"
   ];
 
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkg-config
-, waf, python3 }:
+, wafHook, python3 }:
 
 stdenv.mkDerivation  rec {
   pname = "ams-lv2";
@@ -12,8 +12,14 @@ stdenv.mkDerivation  rec {
     sha256 = "1lz2mvk4gqsyf92yxd3aaldx0d0qi28h4rnnvsaz4ls0ccqm80nk";
   };
 
-  nativeBuildInputs = [ pkg-config waf.hook python3 ];
+  nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ cairo fftw gtkmm2 lv2 lvtk ];
+
+  postPatch = ''
+    # U was removed in python 3.11 because it had no effect
+    substituteInPlace waflib/*.py \
+      --replace "m='rU" "m='r"
+  '';
 
   meta = with lib; {
     description = "An LV2 port of the internal modules found in Alsa Modular Synth";

@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "xcur2png";
   };
 }

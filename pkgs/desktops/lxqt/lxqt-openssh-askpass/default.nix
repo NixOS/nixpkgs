@@ -15,23 +15,23 @@
 
 mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "6S+x8Az9e7rZ8i5p6+F3PZjx7k8fJcM1b/55dJdkuOM=";
+    hash = "sha256-o/hJdaGtjcJiwjqfvfwfcOUv4YdAeeW+rCxsmZZdJQ0=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     kwindowsystem
@@ -47,5 +47,6 @@ mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;
+    mainProgram = "lxqt-openssh-askpass";
   };
 }

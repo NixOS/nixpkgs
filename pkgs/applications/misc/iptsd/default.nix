@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iVxxlblwrZ4SPbVR0kIG+ePExk4qT6gExgvHS1Ksp6A=";
+    hash = "sha256-qBABt0qEePGrZH4khnikvStrSi/OVmP3yVMJZbEd36M=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,11 @@ stdenv.mkDerivation rec {
     substituteInPlace etc/meson.build \
       --replace "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
       --replace "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
+    substituteInPlace etc/systemd/iptsd-find-service \
+      --replace "iptsd-find-hidraw" "$out/bin/iptsd-find-hidraw" \
+      --replace "systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
     substituteInPlace etc/udev/50-iptsd.rules.in \
-      --replace "/bin/systemd-escape" "${systemd}/bin/systemd-escape"
+      --replace "/bin/systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
   '';
 
   mesonFlags = [

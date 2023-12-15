@@ -2,21 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , testers
-, xq
+, xq-xml
 }:
 
 buildGoModule rec {
   pname = "xq";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "sibprogrammer";
     repo = "xq";
     rev = "v${version}";
-    hash = "sha256-Z14x1b25wKNm9fECkNqGJglK/Z8Xq8VHmYfp5aEvvMU=";
+    hash = "sha256-Zg1ARyDXklKBR5WhqRakWT/KcG5796h2MxsBjPCWSjs=";
   };
 
-  vendorHash = "sha256-CP4QsrTkFcOLDxnFc0apevXRmXHA9aJSU4AK9+TAxOU=";
+  vendorHash = "sha256-NNhndc604B0nGnToS7MtQzpn3t3xPl5DlkCafc/EyKE=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   passthru.tests = {
     version = testers.testVersion {
-      package = xq;
+      package = xq-xml;
     };
   };
 

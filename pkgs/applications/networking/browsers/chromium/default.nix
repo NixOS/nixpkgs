@@ -1,15 +1,16 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
 , buildPackages
-, llvmPackages_16
 , ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib, libkrb5
+, electron-source # for warnObsoleteVersionConditional
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
 , channel ? "stable"
+, upstream-info ? (import ./upstream-info.nix).${channel}
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -28,14 +29,12 @@ let
   llvmPackages_attrName = "llvmPackages_16";
   stdenv = pkgs.${llvmPackages_attrName}.stdenv;
 
-  upstream-info = (import ./upstream-info.nix).${channel};
-
   # Helper functions for changes that depend on specific versions:
   warnObsoleteVersionConditional = min-version: result:
-    let ungoogled-version = (import ./upstream-info.nix).ungoogled-chromium.version;
+    let min-supported-version = (lib.head (lib.attrValues electron-source)).unwrapped.info.chromium.version;
     in lib.warnIf
-         (lib.versionAtLeast ungoogled-version min-version)
-         "chromium: ungoogled version ${ungoogled-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
+         (lib.versionAtLeast min-supported-version min-version)
+         "chromium: min-supported-version ${min-supported-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
          result;
   chromiumVersionAtLeast = min-version:
     let result = lib.versionAtLeast upstream-info.version min-version;
@@ -57,7 +56,7 @@ let
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
-          inherit (upstream-info.deps.gn) url rev sha256;
+          inherit (upstream-info.deps.gn) url rev hash;
         };
       });
     });
@@ -80,12 +79,12 @@ let
   chromeSrc =
     let
       # Use the latest stable Chrome version if necessary:
-      version = if chromium.upstream-info.sha256bin64 != null
+      version = if chromium.upstream-info.hash_deb_amd64 != null
         then chromium.upstream-info.version
         else (import ./upstream-info.nix).stable.version;
-      sha256 = if chromium.upstream-info.sha256bin64 != null
-        then chromium.upstream-info.sha256bin64
-        else (import ./upstream-info.nix).stable.sha256bin64;
+      hash = if chromium.upstream-info.hash_deb_amd64 != null
+        then chromium.upstream-info.hash_deb_amd64
+        else (import ./upstream-info.nix).stable.hash_deb_amd64;
     in fetchurl {
       urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
         "https://dl.google.com/linux/chrome/deb/pool/main/g"
@@ -93,7 +92,7 @@ let
         "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
         "http://repo.fdzh.org/chrome/deb/pool/main/g"
       ];
-      inherit sha256;
+      inherit hash;
   };
 
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";

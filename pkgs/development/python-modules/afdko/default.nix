@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.9.3";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v0fIhf3P5Xjdn5/ryRNj0Q2YHAisMqi5RTmJQabaUO0=";
+    hash = "sha256-66faoWBuCW0lQZP8/mBJLT+ErRGBl396HdG1RfPOYcM=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,11 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
+    "-Wno-error=incompatible-function-pointer-types"
+    "-Wno-error=int-conversion"
+  ]);
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;

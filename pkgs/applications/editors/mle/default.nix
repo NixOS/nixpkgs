@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ adsr ];
+    mainProgram = "mle";
   };
 }

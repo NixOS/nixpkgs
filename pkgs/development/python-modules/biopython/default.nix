@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "biopython";
   version = "1.81";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

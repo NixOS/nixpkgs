@@ -6,8 +6,8 @@ let
   };
 in
 buildMongoDB {
-  version = "4.4.23";
-  sha256 = "sha256-3Jo5i2kA37FI3j9bj9MVPL9LU0E1bGhu3I6GhM6zqLY=";
+  version = "4.4.25";
+  sha256 = "sha256-oE5bs9M0E43e+8tmZaRkA/GtbKG5uZ+3Pf0sJiddTJk=";
   patches = [
     ./forget-build-dependencies-4-4.patch
     ./fix-build-with-boost-1.79-4_4.patch

@@ -200,6 +200,8 @@ in
         })
       ];
 
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
@@ -221,7 +223,7 @@ in
 
       # Default Fonts
       fonts.packages = with pkgs; [
-        source-code-pro # Default monospace font in 3.32
+        dejavu_fonts # Default monospace font in LMDE 6+
         ubuntu_font_family # required for default theme
       ];
     })

@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "coconut";
   version = "3.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "evhub";

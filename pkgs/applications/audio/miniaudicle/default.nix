@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , qmake
 , wrapQtAppsHook
-, qscintilla-qt6
+, qt6Packages
 , bison
 , flex
 , which
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libsndfile
-    qscintilla-qt6
+    qt6Packages.qscintilla
   ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
     ++ lib.optional (audioBackend == "jack")  libjack2;
 

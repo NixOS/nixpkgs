@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncnn";
-  version = "20220729";
+  version = "20231027";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hZVeW3svuVpwQhQz67uqTPZ7B9pisLCwHhXB2zMLygo=";
+    sha256 = "sha256-ak/5QTOptg5M2I+3olnrBK6JZ01haIE6oh+sagEboAc=";
   };
 
   patches = [
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Tencent/ncnn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tilcreator ];
+    platforms = platforms.all;
   };
 }

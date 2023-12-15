@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ _360ied ];
+    mainProgram = "ClassiCube";
   };
 }

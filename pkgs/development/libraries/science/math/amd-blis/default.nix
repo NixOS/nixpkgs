@@ -6,10 +6,10 @@
 # Enable BLAS interface with 64-bit integer width.
 , blas64 ? false
 
-# Target architecture. "amd64" compiles kernels for all Zen
+# Target architecture. "amdzen" compiles kernels for all Zen
 # generations. To build kernels for specific Zen generations,
-# use "zen", "zen2", or "zen3".
-, withArchitecture ? "amd64"
+# use "zen", "zen2", "zen3", or "zen4".
+, withArchitecture ? "amdzen"
 
 # Enable OpenMP-based threading.
 , withOpenMP ? true
@@ -18,15 +18,16 @@
 let
   threadingSuffix = lib.optionalString withOpenMP "-mt";
   blasIntSize = if blas64 then "64" else "32";
+
 in stdenv.mkDerivation rec {
   pname = "amd-blis";
-  version = "3.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
     rev = version;
-    hash = "sha256-bbbeo1yOKse9pzbsB6lQ7pULKdzu3G7zJzTUgPXiMZY=";
+    hash = "sha256-1vd4uBg/+Vufqsr+MnAWSUW/THkribHNSMeq1/is8K4=";
   };
 
   inherit blas64;
@@ -54,8 +55,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ln -s $out/lib/libblis${threadingSuffix}.so.3 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis${threadingSuffix}.so.3 $out/lib/libcblas.so.3
+    ls $out/lib
+    ln -s $out/lib/libblis${threadingSuffix}.so $out/lib/libblas.so.3
+    ln -s $out/lib/libblis${threadingSuffix}.so $out/lib/libcblas.so.3
     ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';

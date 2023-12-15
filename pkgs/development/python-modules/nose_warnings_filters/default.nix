@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "nose_warnings_filters";
   version = "0.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

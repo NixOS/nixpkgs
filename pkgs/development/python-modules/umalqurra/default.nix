@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "umalqurra";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

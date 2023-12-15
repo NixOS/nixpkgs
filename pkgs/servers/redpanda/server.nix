@@ -16,7 +16,7 @@
 , p11-kit
 , pkg-config
 , procps
-, protobuf3_21
+, protobuf_21
 , python3
 , snappy
 , src
@@ -100,7 +100,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
     dpdk
     hdr-histogram
     p11-kit
-    protobuf3_21
+    protobuf_21
     rapidjson
     seastar
     snappy
@@ -109,6 +109,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Kafka-compatible streaming platform.";
     license = licenses.bsl11;
     longDescription = ''

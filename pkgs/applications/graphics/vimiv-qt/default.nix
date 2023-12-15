@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vimiv-qt";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "karlch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pj3gak7nxkw9r9m71zsfvcaq8dk9crbk5rz4n7pravxkl5hs2bg";
+    sha256 = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
   };
 
   nativeBuildInputs = [ installShellFiles qt5.wrapQtAppsHook python3.pkgs.setuptools ];

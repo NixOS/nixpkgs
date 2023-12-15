@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ vel ];
+    mainProgram = "fetch-scm";
   };
 }

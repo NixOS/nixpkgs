@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "A Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ rvl mic92 hexa ];
+    maintainers = with maintainers; [ mic92 hexa ];
   };
 
 }

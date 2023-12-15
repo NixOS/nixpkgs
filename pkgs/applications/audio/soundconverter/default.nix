@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     python3Packages.gst-python
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     python3Packages.setuptools
     python3Packages.pygobject3
   ];

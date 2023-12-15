@@ -20,23 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-5RN2xaH591/83iNXRcW9i/TyU5ndPZq3P/BesHM9I6w=";
+    hash = "sha256-9m8GmVIZgHETkemzElXOfVxaZlzJwZaT2sJcTU7vZ2g=";
   };
 
-  cargoHash = "sha256-G4W3GeTWTuIZO1PupuZ0hACwhNoNBQhULyT9f6qVckg=";
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    # enable 'packaging' feature, which enables extra features such as support
-    # for watchman
-    "packaging"
-  ];
+  cargoHash = "sha256-g1gdFGj0nzczR2yyjCdjpCGtFlmX7yrdAQIa3sQRATg=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = true; # nextest is the upstream integration framework

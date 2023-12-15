@@ -4,13 +4,13 @@
 }:
 buildGoModule rec {
   pname = "litestream";
-  version = "0.3.11";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-03gGGx8RZEK2RrToN30gkIlHss/e3UcSi3AmMh9twDU=";
+    sha256 = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
   };
 
   ldflags = [

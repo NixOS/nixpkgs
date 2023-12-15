@@ -60,10 +60,8 @@ in {
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {
-        config = {
-          ROCKET_ADDRESS = "::1"; # default to localhost
-          ROCKET_PORT = 8222;
-        };
+        ROCKET_ADDRESS = "::1"; # default to localhost
+        ROCKET_PORT = 8222;
       };
       example = literalExpression ''
         {
@@ -158,12 +156,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.vaultwarden;
-      defaultText = literalExpression "pkgs.vaultwarden";
-      description = lib.mdDoc "Vaultwarden package to use.";
-    };
+    package = mkPackageOption pkgs "vaultwarden" { };
 
     webVaultPackage = mkOption {
       type = package;

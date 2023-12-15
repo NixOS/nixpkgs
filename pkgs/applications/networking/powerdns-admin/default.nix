@@ -19,6 +19,10 @@ let
     lima lxml passlib pyasn1 pytimeparse pyyaml jinja2 itsdangerous webcolors werkzeug zipp zxcvbn
   ];
 
+  all_patches = [
+    ./0001-Fix-flask-2.3-issue.patch
+  ];
+
   assets = mkYarnPackage {
     inherit src version;
     packageJSON = ./package.json;
@@ -35,9 +39,9 @@ let
     };
 
     nativeBuildInputs = pythonDeps;
-    patchPhase = ''
-      sed -i -r -e "s|'rcssmin',\s?'cssrewrite'|'rcssmin'|g" powerdnsadmin/assets.py
-    '';
+    patches = all_patches ++ [
+      ./0002-Remove-cssrewrite-filter.patch
+    ];
     buildPhase = ''
       # The build process expects the directory to be writable
       # with node_modules at a specific path
@@ -86,15 +90,15 @@ in stdenv.mkDerivation {
     exec python -m gunicorn.app.wsgiapp "powerdnsadmin:create_app()" "$@"
   '';
 
+  patches = all_patches ++ [
+    ./0003-Fix-flask-migrate-4.0-compatibility.patch
+    ./0004-Fix-flask-session-and-powerdns-admin-compatibility.patch
+    ./0005-Use-app-context-to-create-routes.patch
+    ./0006-Register-modules-before-starting.patch
+  ];
+
   postPatch = ''
     rm -r powerdnsadmin/static powerdnsadmin/assets.py
-    # flask-migrate 4.0 compatibility: https://github.com/PowerDNS-Admin/PowerDNS-Admin/issues/1376
-    substituteInPlace migrations/env.py --replace "render_as_batch=config.get_main_option('sqlalchemy.url').startswith('sqlite:')," ""
-    # flask-session and powerdns-admin both try to add sqlalchemy to flask.
-    # Reuse the database for flask-session
-    substituteInPlace powerdnsadmin/__init__.py --replace "sess = Session(app)" "app.config['SESSION_SQLALCHEMY'] = models.base.db; sess = Session(app)"
-    # Routes creates session database tables, so it needs a context
-    substituteInPlace powerdnsadmin/__init__.py --replace "routes.init_app(app)" "with app.app_context(): routes.init_app(app)"
   '';
 
   installPhase = ''

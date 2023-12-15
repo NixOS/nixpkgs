@@ -11,6 +11,7 @@
 , pyudev
 , setproctitle
 , wrapGAppsHook
+, notify2
 }:
 
 let
@@ -39,6 +40,7 @@ buildPythonPackage (common // {
     pygobject3
     pyudev
     setproctitle
+    notify2
   ];
 
   postInstall = ''

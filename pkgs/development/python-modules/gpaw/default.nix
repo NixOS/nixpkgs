@@ -74,13 +74,14 @@ let
 
 in buildPythonPackage rec {
   pname = "gpaw";
-  version = "22.8.0";
+  version = "23.9.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "gpaw";
     repo = pname;
     rev = version;
-    hash = "sha256-Kgf8yuGua7mcGP+jVVmbE8JCsbrfzewRTRt3ihq9YX4=";
+    hash = "sha256-9nnK4ksTFATO6HexnxfMiih/yoY/noyJZXZOaDG/2kc=";
   };
 
   # `inetutils` is required because importing `gpaw`, as part of

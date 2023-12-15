@@ -9,7 +9,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
-  inherit (stdenv.hostPlatform) isMusl isGnu;
+  inherit (stdenv.hostPlatform) isMusl;
 
   baseName = "compiler-rt";
 

@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ ];
+    mainProgram = "alttab";
   };
 }

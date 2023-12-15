@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "glab";
-  version = "1.31.0";
+  version = "1.35.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-K7yGRuIfYEqs4ziystxLMK+dYUZoyGlBJAmx2qmY08Q=";
+    hash = "sha256-4kd3+IdVZbWVGbY3B8V1F07k67BvKOCfom4ZukNxrRo=";
   };
 
-  vendorHash = "sha256-WfzN70HHLatBuV+GW2VC+5laR3rBfDOqPydyxMSmL3s=";
+  vendorHash = "sha256-x96ChhozvTrX0eBWt3peX8dpd4gyukJ28RkqcD2W/OM=";
 
   ldflags = [
     "-s"
@@ -29,6 +29,8 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    make manpage
+    installManPage share/man/man1/*
     installShellCompletion --cmd glab \
       --bash <($out/bin/glab completion -s bash) \
       --fish <($out/bin/glab completion -s fish) \
@@ -39,6 +41,8 @@ buildGoModule rec {
     description = "GitLab CLI tool bringing GitLab to your command line";
     license = licenses.mit;
     homepage = "https://gitlab.com/gitlab-org/cli";
+    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${version}";
     maintainers = with maintainers; [ freezeboy ];
+    mainProgram = "glab";
   };
 }

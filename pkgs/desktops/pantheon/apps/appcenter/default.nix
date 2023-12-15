@@ -11,12 +11,12 @@
 , json-glib
 , libgee
 , libhandy
-, libsoup
+, libportal-gtk3
+, libsoup_3
 , libxml2
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , polkit
 , wrapGAppsHook
@@ -24,13 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.3.0";
+  version = "7.4.0-unstable-2023-12-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-Lj3j812XaCIN+TFSDAvIgtl49n5jG4fVlAFvrWqngpM=";
+    # Add support for AppStream 1.0.
+    # https://github.com/elementary/appcenter/pull/2099
+    rev = "d93e135a0b0c9a6e0fbad18fe90d46425823a42c";
+    hash = "sha256-b7xux6MuvYZFxufQ5T7DoDNBlsJ/fDR0aUY2Hk/xJoY=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +40,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libportal-gtk3
+    libsoup_3
     libxml2
     polkit
   ];
@@ -64,11 +66,6 @@ stdenv.mkDerivation rec {
     "-Dpayments=false"
     "-Dcurated=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

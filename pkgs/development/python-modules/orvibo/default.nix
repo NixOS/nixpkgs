@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "orvibo";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "happyleavesaoc";

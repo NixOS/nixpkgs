@@ -154,5 +154,6 @@ with python.pkgs; buildPythonApplication rec {
     homepage = "https://baserow.io";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "baserow";
   };
 }

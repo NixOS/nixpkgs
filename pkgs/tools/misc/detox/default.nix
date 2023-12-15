@@ -1,25 +1,24 @@
-{lib, stdenv, fetchurl, flex}:
+{ lib, stdenv, fetchFromGitHub, flex, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "detox";
-  version = "1.2.0";
+  version = "1.4.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/detox/${version}/detox-${version}.tar.gz";
-    sha256 = "02cfkf3yhw64xg8mksln8w24gdwgm2x9g3vps7gn6jbjbfd8mh45";
+  src = fetchFromGitHub {
+    owner = "dharple";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-cTuK5EIimRVZ1nfuTa1ds6xrawYIAbwNNIkNONd9y4Q=";
   };
 
-  buildInputs = [flex];
+  nativeBuildInputs = [ flex autoreconfHook ];
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
-    install -m644 safe.tbl $out/share/detox/
-  '';
-
   meta = with lib; {
-    homepage = "https://detox.sourceforge.net/";
+    homepage = "https://github.com/dharple/detox";
     description = "Utility designed to clean up filenames";
+    changelog = "https://github.com/dharple/detox/blob/v${version}/CHANGELOG.md";
     longDescription = ''
       Detox is a utility designed to clean up filenames. It replaces
       difficult to work with characters, such as spaces, with standard
@@ -29,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "detox";
   };
 }

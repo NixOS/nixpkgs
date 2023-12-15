@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.58.0";
+  version = "1.59.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5gSKdY0XtsoXBSWOfuXZJtKWCpWuCLoJKd0jPlBazT0=";
+    hash = "sha256-VAPFpzjG7sS7QIDad+RQMS2s5BqG4pKsN8/QB7JlfU4=";
   };
 
   nativeBuildInputs = [

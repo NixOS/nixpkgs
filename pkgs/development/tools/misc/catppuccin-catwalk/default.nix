@@ -1,7 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, pkg-config
+, libwebp
 }:
 
 rustPlatform.buildRustPackage {
@@ -18,13 +21,22 @@ rustPlatform.buildRustPackage {
   buildAndTestSubdir = "catwalk";
   cargoHash = "sha256-KoxivYLzJEjWbxIkizrMpmVwUF7bfVxl13H774lzQRg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [ libwebp ];
 
   postInstall = ''
     installShellCompletion --cmd catwalk \
       --bash <("$out/bin/catwalk" completion bash) \
       --zsh <("$out/bin/catwalk" completion zsh) \
       --fish <("$out/bin/catwalk" completion fish)
+  '';
+
+  doInstallCheck = !stdenv.hostPlatform.isStatic &&
+    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    readelf -a $out/bin/catwalk | grep -F 'Shared library: [libwebp.so'
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

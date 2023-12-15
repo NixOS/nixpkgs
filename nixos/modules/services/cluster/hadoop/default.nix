@@ -67,16 +67,16 @@ with lib;
     mapredSiteDefault = mkOption {
       default = {
         "mapreduce.framework.name" = "yarn";
-        "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
-        "mapreduce.map.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
-        "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
+        "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
+        "mapreduce.map.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
+        "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
       };
       defaultText = literalExpression ''
         {
           "mapreduce.framework.name" = "yarn";
-          "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
-          "mapreduce.map.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
-          "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}";
+          "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}";
+          "mapreduce.map.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}";
+          "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}";
         }
       '';
       type = types.attrsOf types.anything;
@@ -154,13 +154,13 @@ with lib;
     };
 
     log4jProperties = mkOption {
-      default = "${cfg.package}/lib/${cfg.package.untarDir}/etc/hadoop/log4j.properties";
+      default = "${cfg.package}/etc/hadoop/log4j.properties";
       defaultText = literalExpression ''
-        "''${config.${opt.package}}/lib/''${config.${opt.package}.untarDir}/etc/hadoop/log4j.properties"
+        "''${config.${opt.package}}/etc/hadoop/log4j.properties"
       '';
       type = types.path;
       example = literalExpression ''
-        "''${pkgs.hadoop}/lib/''${pkgs.hadoop.untarDir}/etc/hadoop/log4j.properties";
+        "''${pkgs.hadoop}/etc/hadoop/log4j.properties";
       '';
       description = lib.mdDoc "log4j.properties file added to HADOOP_CONF_DIR";
     };
@@ -199,12 +199,7 @@ with lib;
 
     gatewayRole.enable = mkEnableOption (lib.mdDoc "gateway role for deploying hadoop configs");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.hadoop;
-      defaultText = literalExpression "pkgs.hadoop";
-      description = lib.mdDoc "";
-    };
+    package = mkPackageOption pkgs "hadoop" { };
   };
 
 

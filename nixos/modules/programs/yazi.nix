@@ -11,7 +11,7 @@ in
   options.programs.yazi = {
     enable = lib.mkEnableOption (lib.mdDoc "yazi terminal file manager");
 
-    package = lib.mkPackageOptionMD pkgs "yazi" { };
+    package = lib.mkPackageOption pkgs "yazi" { };
 
     settings = lib.mkOption {
       type = with lib.types; submodule {
@@ -45,5 +45,9 @@ in
         names);
     };
   };
-  meta.maintainers = with lib.maintainers; [ linsui ];
+  meta = {
+    maintainers = with lib.maintainers; [ linsui ];
+    # The version of the package is used in the doc.
+    buildDocsInSandbox = false;
+  };
 }

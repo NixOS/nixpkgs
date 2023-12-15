@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
-, linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
+, enableStatic ? with stdenv.hostPlatform; isStatic || isCygwin
+, enableShared ? true
 , autoreconfHook
 , testers
 }:
@@ -47,8 +48,12 @@ in {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
-  configureFlags =
-    lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
+  configureFlags = lib.concatLists [
+    (lib.optional enableStatic "--enable-static")
+    (lib.optional (!enableShared) "--disable-shared")
+  ];
+
+  dontDisableStatic = enableStatic;
 
   enableParallelBuilding = true;
 

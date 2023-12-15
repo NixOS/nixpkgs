@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "polaris-web";
-  version = "67";
+  version = "68";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
     rev = "build-${version}";
-    hash = "sha256-mhrgHNbqxLhhLWP4eu1A3ytrx9Q3X0EESL2LuTfgsBE=";
+    hash = "sha256-YvVNTqv/DQzRyMuDgDdtCyoQbt4EqVztGa0NO92pO/Q=";
   };
 
-  npmDepsHash = "sha256-lScXbxkJiRq5LLFkoz5oZsmKz8I/t1rZJVonfct9r+0=";
+  npmDepsHash = "sha256-c11CWJB76gX+Bxmqac3VxWjJxQVzYCaaf+pmQQpnOds=";
 
   env.CYPRESS_INSTALL_BINARY = "0";
 

@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost clingo re2c ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DASPCUD_GRINGO_PATH=${clingo}/bin/gringo"
     "-DASPCUD_CLASP_PATH=${clingo}/bin/clasp"
   ];

@@ -10,6 +10,7 @@
 , git
 , hyprland-protocols
 , jq
+, libGL
 , libdrm
 , libexecinfo
 , libinput
@@ -27,7 +28,6 @@
 , xcbutilwm
 , xwayland
 , debug ? false
-, enableNvidiaPatches ? false
 , enableXWayland ? true
 , legacyRenderer ? false
 , withSystemd ? true
@@ -35,35 +35,39 @@
   # deprecated flags
 , nvidiaPatches ? false
 , hidpiXWayland ? false
+, enableNvidiaPatches ? false
 }:
-assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been renamed `enableNvidiaPatches`";
+assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
+assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "unstable-2023-08-15";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
-    rev = "91e28bbe9df85e2e94fbcc0137106362aea14ab5";
-    hash = "sha256-1vLms49ZgDOC9y1uTjfph3WrUpatKRLnKAvFmSNre20=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-p7el5oQZPy9l1zyIrlHu6nA4BAu59eLoSqBjhkw2jaw=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
     "${finalAttrs.src}/nix/patches/meson-build.patch"
-    # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
-    # NOTE: revert back to the patch inside SRC on the next version bump
-    # "${finalAttrs.src}/nix/patches/portals.patch"
-    ./portals.patch
   ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
-    substituteInPlace meson.build \
-      --replace "@GIT_COMMIT_HASH@" '${finalAttrs.src.rev}' \
-      --replace "@GIT_DIRTY@" ""
+
+    # Generate version.h
+    cp src/version.h.in src/version.h
+    substituteInPlace src/version.h \
+      --replace "@HASH@" '${finalAttrs.src.rev}' \
+      --replace "@BRANCH@" "" \
+      --replace "@MESSAGE@" "" \
+      --replace "@TAG@" "" \
+      --replace "@DIRTY@" ""
   '';
 
   nativeBuildInputs = [
@@ -86,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprland-protocols
+      libGL
       libdrm
       libinput
       libxkbcommon
@@ -95,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       pango
       pciutils
-      (wlroots.override { inherit enableNvidiaPatches; })
+      wlroots
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]

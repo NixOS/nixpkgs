@@ -40,5 +40,6 @@ buildGoModule rec {
     homepage = "https://reproxy.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "reproxy";
   };
 }

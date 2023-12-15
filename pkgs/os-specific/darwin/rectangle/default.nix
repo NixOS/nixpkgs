@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rectangle";
-  version = "0.70";
+  version = "0.75";
 
   src = fetchurl {
     url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
-    hash = "sha256-YJYDzmFfLlXDupyEjoEAin5qynyLjXjuav1DSS/Q5zU=";
+    hash = "sha256-IjEqT1PHGohuQqgS+IzZKyLoIs0P0V7z42JzNUuzh84=";
   };
 
   sourceRoot = ".";
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://rectangleapp.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ Enzime Intuinewin ];
+    maintainers = with maintainers; [ Enzime Intuinewin wegank ];
     license = licenses.mit;
   };
 }

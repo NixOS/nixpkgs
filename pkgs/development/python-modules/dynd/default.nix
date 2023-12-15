@@ -1,23 +1,37 @@
 { lib
 , buildPythonPackage
-, isPyPy
-, isPy3k
 , cython
 , numpy
-, pkgs
+, libdynd
+, fetchpatch
+, cmake
+, fetchFromGitHub
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   version = "0.7.2";
+  format = "setuptools";
   pname = "dynd";
-  disabled = isPyPy || !isPy3k; # tests fail on python2, 2018-04-11
 
-  src = pkgs.fetchFromGitHub {
+  disabled = pythonAtLeast "3.11";
+
+  src = fetchFromGitHub {
     owner = "libdynd";
     repo = "dynd-python";
     rev = "v${version}";
     sha256 = "19igd6ibf9araqhq9bxmzbzdz05vp089zxvddkiik3b5gb7l17nh";
   };
+
+  patches = [
+    # Fix numpy compatibility
+    # https://github.com/libdynd/dynd-python/issues/746
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/numpy-compatibility.patch?h=python-dynd&id=e626acabd041069861311f314ac3dbe9e6fd24b7";
+      sha256 = "sha256-oA/3G8CGeDhiYXbNX+G6o3QSb7rkKItuCDCbnK3Rt10=";
+      name = "numpy-compatibility.patch";
+    })
+  ];
 
   # setup.py invokes git on build but we're fetching a tarball, so
   # can't retrieve git version. We hardcode:
@@ -28,12 +42,22 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  # Python 3 works but has a broken import test that I couldn't
-  # figure out.
-  doCheck = !isPy3k;
-  nativeBuildInputs = [ pkgs.cmake ];
-  buildInputs = [ pkgs.libdynd.dev cython ];
-  propagatedBuildInputs = [ numpy pkgs.libdynd ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    cython
+    libdynd.dev
+  ];
+
+  propagatedBuildInputs = [
+    libdynd
+    numpy
+  ];
+
+  #  ModuleNotFoundError: No module named 'dynd.config'
+  doCheck = false;
+
+  pythonImportsCheck = [ "dynd" ];
 
   meta = with lib; {
     homepage = "http://libdynd.org";

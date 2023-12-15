@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tbM2JWoub789s3YanT/lqCKl6JkY+FahSYb+lHvF7W8=";
   };
 
+  separateDebugInfo = true;
+
   cargoHash = "sha256-l2rWR9HAXTuNEarj2hWaZxpTdUNGoCnNfsZs8Y+of+s=";
 
   LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
@@ -23,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
     description = "vhost-user virtio-fs device backend written in Rust";
     maintainers = with maintainers; [ qyliss astro ];
+    mainProgram = "virtiofsd";
     platforms = platforms.linux;
     license = with licenses; [ asl20 /* and */ bsd3 ];
   };

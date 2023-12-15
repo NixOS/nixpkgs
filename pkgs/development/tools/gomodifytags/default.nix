@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1yhkn9mdvsn9i5v03c5smz32zlhkylnxhkcbjb7llafxzbhzgfm6";
   };
 
-  vendorSha256 = "sha256-8efqJfu+gtoFbhdlDZfb8NsXV9hBDI2pvAQNH18VVhU=";
+  vendorHash = "sha256-8efqJfu+gtoFbhdlDZfb8NsXV9hBDI2pvAQNH18VVhU=";
 
   meta = {
     description = "Go tool to modify struct field tags";

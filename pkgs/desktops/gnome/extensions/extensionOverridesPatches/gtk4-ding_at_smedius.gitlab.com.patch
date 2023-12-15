@@ -1,23 +1,3 @@
-diff --git a/app/createThumbnail.js b/app/createThumbnail.js
-index ebe5213..9f67873 100755
---- a/app/createThumbnail.js
-+++ b/app/createThumbnail.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/gjs
-+#!@gjs@/bin/gjs
- 
- /* DING: Desktop Icons New Generation for GNOME Shell
-  *
-diff --git a/app/ding.js b/app/ding.js
-index b200be4..3ce05ef 100755
---- a/app/ding.js
-+++ b/app/ding.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/env gjs
-+#!@gjs@/bin/gjs
- 
- /* DING: Desktop Icons New Generation for GNOME Shell
-  *
 diff --git a/app/fileItemMenu.js b/app/fileItemMenu.js
 index cadca48..9632ecc 100644
 --- a/app/fileItemMenu.js
@@ -61,49 +41,25 @@ index c89271c..29f0db8 100644
          if (!compressionSchema)
              this.nautilusCompression = null;
          else
-diff --git a/app/thumbnailapp.js b/app/thumbnailapp.js
-index b22bbe0..c5c7711 100755
---- a/app/thumbnailapp.js
-+++ b/app/thumbnailapp.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/env gjs
-+#!@gjs@/bin/gjs
+diff --git a/dingManager.js b/dingManager.js
+index b738b32..df186e5 100644
+--- a/dingManager.js
++++ b/dingManager.js
+@@ -397,7 +397,7 @@ const DingManager = class {
+     async _doKillAllOldDesktopProcesses() {
+         const procFolder = Gio.File.new_for_path('/proc');
+         const processes = await FileUtils.enumerateDir(procFolder);
+-        const thisPath = `gjs ${GLib.build_filenamev([
++        const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
+             this.path,
+             'app',
+             'ding.js',
+@@ -421,7 +421,7 @@ const DingManager = class {
+                 }
  
- /* DING: Desktop Icons New Generation for GNOME Shell
-  *
-diff --git a/extension.js b/extension.js
-index 2e5bcaa..4eaa108 100644
---- a/extension.js
-+++ b/extension.js
-@@ -373,7 +373,7 @@ function getDesktopGeometry() {
- async function doKillAllOldDesktopProcesses() {
-     const procFolder = Gio.File.new_for_path('/proc');
-     const processes = await FileUtils.enumerateDir(procFolder);
--    const thisPath = `gjs ${GLib.build_filenamev([
-+    const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
-         ExtensionUtils.getCurrentExtension().path,
-         'app',
-         'ding.js',
-@@ -397,7 +397,7 @@ async function doKillAllOldDesktopProcesses() {
-             }
- 
-             if (contents.startsWith(thisPath)) {
--                let proc = new Gio.Subprocess({ argv: ['/bin/kill', filename] });
-+                let proc = new Gio.Subprocess({ argv: ['@util_linux@/bin/kill', filename] });
-                 proc.init(null);
-                 print(`Killing old DING process ${filename}`);
-                 await proc.wait_async_promise(null);
-diff --git a/prefs.js b/prefs.js
-index 1ad0cad..d830f11 100644
---- a/prefs.js
-+++ b/prefs.js
-@@ -46,7 +46,8 @@ function fillPreferencesWindow(window) {
-     let schemaSource = GioSSS.get_default();
-     let schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
-     let gtkSettings = new Gio.Settings({ settings_schema: schemaGtk });
--    let schemaNautilus = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
-+    const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
-+    let schemaNautilus = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
-     let nautilusSettings;
-     if (!schemaNautilus)
-         nautilusSettings = null;
+                 if (contents.startsWith(thisPath)) {
+-                    let proc = new Gio.Subprocess({argv: ['/bin/kill', filename]});
++                    let proc = new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+                     proc.init(null);
+                     print(`Killing old DING process ${filename}`);
+                     await proc.wait_async_promise(null);

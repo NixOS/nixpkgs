@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "leather";
   version = "0.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

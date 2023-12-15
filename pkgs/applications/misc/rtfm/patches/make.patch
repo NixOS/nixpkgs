@@ -1,5 +1,5 @@
---- a/Makefile	2023-07-17 17:18:28.000000000 +0300
-+++ b/Makefile	2023-07-19 12:13:44.627168135 +0300
+--- a/Makefile	2023-12-07 23:37:38.984501858 +0300
++++ b/Makefile	2023-12-07 23:47:52.884456064 +0300
 @@ -4,8 +4,7 @@
  all: configure .WAIT rtfm docsets
  
@@ -10,16 +10,7 @@
  
  rtfm:
  	shards build --release -s rtfm
-@@ -29,13 +28,15 @@
- 	install -D -m644 data/io.github.hugopl.rtfm.gschema.xml $(DESTDIR)$(PREFIX)/share/glib-2.0/schemas/io.github.hugopl.rtfm.gschema.xml
- 	# docsets
- 	mkdir -p $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
--	cp -rv data/Crystal.docset $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
--	cp -rv data/Gtk4.docset $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
-+	cp -r data/Crystal.docset $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
-+	cp -r data/Gtk4.docset $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
- 	# License
- 	install -D -m0644 LICENSE $(DESTDIR)$(PREFIX)/share/licenses/rtfm/LICENSE
+@@ -36,6 +35,8 @@
  	# Changelog
  	install -D -m0644 CHANGELOG.md $(DESTDIR)$(PREFIX)/share/doc/rtfm/CHANGELOG.md
  	gzip -9fn $(DESTDIR)$(PREFIX)/share/doc/rtfm/CHANGELOG.md

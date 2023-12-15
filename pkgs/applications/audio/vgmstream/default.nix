@@ -1,21 +1,23 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , mpg123, ffmpeg, libvorbis, libao, jansson, speex
+, nix-update-script
 }:
-let
-  vgmstreamVersion = "r1702-5596-00bdb165b";
-in
+
 stdenv.mkDerivation rec {
   pname = "vgmstream";
-  version = "unstable-2022-02-21";
+  version = "1896";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
-    rev = "00bdb165ba6b55420bbd5b21f54c4f7a825d15a0";
-    sha256 = "18g1yqlnf48hi2xn2z2wajnjljpdbfdqmcmi7y8hi1r964ypmfcr";
+    rev = "refs/tags/r${version}";
+    sha256 = "sha256-1BWJgV631MxxzdUtK8f+XRb9cqfhjlwN2LgWI0VmIHE=";
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    attrPath = "vgmstream";
+    extraArgs = [ "--version-regex" "r(.*)" ];
+  };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -27,10 +29,6 @@ stdenv.mkDerivation rec {
     # It always tries to download it, no option to use the system one
     "-DUSE_CELT=OFF"
   ];
-
-  postConfigure = ''
-    echo "#define VGMSTREAM_VERSION \"${vgmstreamVersion}\"" > ../version.h
-  '';
 
   meta = with lib; {
     description = "A library for playback of various streamed audio formats used in video games";

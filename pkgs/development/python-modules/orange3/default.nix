@@ -44,8 +44,8 @@
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.35.0";
-    format = "pyproject";
+    version = "3.36.2";
+    format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
@@ -53,7 +53,7 @@ let
       owner = "biolab";
       repo = "orange3";
       rev = "refs/tags/${version}";
-      hash = "sha256-dj/Z4uOjA4nidd45dnHZDyHZP6Fy/MGC8asqOPV7U7A=";
+      hash = "sha256-v9lk5vGhBaR2PHZ+Jq0hy1WaCsbeLe+vZlTaHBkfacU=";
     };
 
     postPatch = ''

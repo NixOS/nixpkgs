@@ -3,12 +3,14 @@
 , version, buildPlatform, hostPlatform, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
+, langFortran
 , langJava ? false
 , langJit ? false
 , langGo
 , withoutTargetLibc
 , enableShared
 , enableMultilib
+, pkgsBuildTarget
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -25,6 +27,15 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
+''
+
+# For a cross-built native compiler, i.e. build!=(host==target), the
+# bundled libgfortran needs a gfortran which can run on the
+# buildPlatform and emit code for the targetPlatform.  The compiler
+# which is built alongside gfortran in this configuration doesn't
+# meet that need: it runs on the hostPlatform.
++ lib.optionalString (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform)) ''
+  export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
 ''
 
 # On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
@@ -105,10 +116,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
-# gcc->clang "cross"-compilation manages to evade it: there
+# gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc) ''
++ lib.optionalString (targetPlatform != hostPlatform &&
+                      withoutTargetLibc &&
+                      targetPlatform.config == hostPlatform.config) ''
   export inhibit_libc=true
 ''
 

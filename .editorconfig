@@ -90,6 +90,9 @@ insert_final_newline = unset
 indent_style = unset
 trim_trailing_whitespace = unset
 
+[pkgs/misc/documentation-highlighter/**]
+insert_final_newline = unset
+
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 

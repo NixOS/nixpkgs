@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ruffus";
   version = "2.8.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cgat-developers";

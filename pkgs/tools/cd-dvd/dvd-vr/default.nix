@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     description = "A utility to identify and optionally copy recordings from a DVD-VR format disc";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "dvd-vr";
   };
 }
 

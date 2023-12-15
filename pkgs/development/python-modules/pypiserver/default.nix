@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "1.5.2";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jub+iVL/YeGaG9Vzqyyfc4qFi0cR+7xrzuXNHL5W4p4=";
+    hash = "sha256-Eh/3URt7pcJhoDDLRP8iHyjlPsE5E9M/0Hixqi5YNdg=";
   };
 
   nativeBuildInputs = [

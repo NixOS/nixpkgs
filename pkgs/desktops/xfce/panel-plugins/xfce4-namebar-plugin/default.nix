@@ -1,5 +1,5 @@
 { lib, stdenv, pkg-config, fetchFromGitHub, python3, vala
-, gtk3, libwnck, libxfce4util, xfce4-panel, waf, xfce
+, gtk3, libwnck, libxfce4util, xfce4-panel, wafHook, xfce
 , gitUpdater
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aKrJzf9rwCyXAJsRIXdBzmJBASuXD5I5kZrp+atx4FA=";
   };
 
-  nativeBuildInputs = [ pkg-config vala waf.hook python3 ];
+  nativeBuildInputs = [ pkg-config vala wafHook python3 ];
   buildInputs = [ gtk3 libwnck libxfce4util xfce4-panel ];
 
   postPatch = ''

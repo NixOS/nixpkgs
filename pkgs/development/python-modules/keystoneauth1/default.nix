@@ -24,11 +24,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.1.2";
+  version = "5.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2fdIStX8mwu7fsw8vzeVoXBpT72EglEzHlS6SLvuzHI=";
+    hash = "sha256-AXwrm1mUU8kpQHUO27IPF2hxIbKJARS/nTbfFKBicRc=";
   };
 
   postPatch = ''
@@ -62,8 +63,11 @@ buildPythonPackage rec {
     testtools
   ];
 
+  # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
+  # https://bugs.launchpad.net/keystoneauth/+bug/2020112
   checkPhase = ''
-    stestr run
+    stestr run \
+      -E "keystoneauth1.tests.unit.test_betamax_fixture.TestBetamaxFixture.test_keystoneauth_betamax_fixture"
   '';
 
   pythonImportsCheck = [ "keystoneauth1" ];

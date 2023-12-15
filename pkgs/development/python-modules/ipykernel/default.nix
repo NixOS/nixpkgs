@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.21.2";
-  format = "pyproject";
+  version = "6.27.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bpITSE5M4fsUJn7kNeGPI8w6BjTmNbn7TtRne4Tg/fg=";
+    hash = "sha256-fV1ZS2aQZUtNKZ7bpehy3Be7c5ao0GCcl8t7ihxgXeY=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "IPython Kernel for Jupyter";
     homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ] ++ lib.teams.jupyter.members;
   };
 }

@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.8.1.1";
+  version = "0.8.1.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-WNLwO2w8FYy12BeqPuiS0wg3fUMwTxfrIF1QwcjE9yQ=";
+    hash = "sha256-qJTikc42sFUlb4g0sAEg6v9d4k1lhbn3MZPvghm56E8=";
   };
 
-  buildInputs = [ olm openssl qtbase qtmultimedia qtkeychain ];
-
   nativeBuildInputs = [ cmake ];
+
+  propagatedBuildInputs = [ qtbase qtkeychain olm openssl qtmultimedia ];
 
   cmakeFlags = [
     "-DQuotient_ENABLE_E2EE=ON"
@@ -28,9 +30,14 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  postInstall = ''
+    # causes cyclic dependency but is not used
+    rm $out/share/ndk-modules/Android.mk
+  '';
+
   meta = with lib; {
     description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
-    homepage = "https://matrix.org/docs/projects/sdk/quotient";
+    homepage = "https://quotient-im.github.io/libQuotient/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ colemickens matthiasbeyer ];
   };

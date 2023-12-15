@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "6.0.0";
+  version = "7.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gRyxQ6Upc1YBRhciVfyt0IGjv8K8ni4I1ODRS6o3tHA=";
+    hash = "sha256-HthWeFInolNEs7RNA773DJjhGvl1rfDhvhO8WwRwuuY=";
   };
 
   nativeBuildInputs = [

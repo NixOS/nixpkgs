@@ -1,18 +1,53 @@
-{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, freeglut
-, freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
-, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
-, libsepol, libsysprof-capture, libthai, libxkbcommon, lv2, pcre, pkg-config
-, python3, sqlite, stdenv }:
-
+{ alsa-lib
+, at-spi2-core
+, cmake
+, curl
+, dbus
+, libepoxy
+, fetchFromGitHub
+, freeglut
+, freetype
+, gtk3
+, lib
+, libGL
+, libXcursor
+, libXdmcp
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, libdatrie
+, libjack2
+, libpsl
+, libselinux
+, libsepol
+, libsysprof-capture
+, libthai
+, libuuid
+, libxkbcommon
+, lv2
+, pcre
+, pcre2
+, pkg-config
+, python3
+, sqlite
+, gcc11Stdenv
+, webkitgtk
+}:
+let
+  # JUCE version in submodules is incompatible with GCC12
+  # See here: https://forum.juce.com/t/build-fails-on-fedora-wrong-c-version/50902/2
+  stdenv = gcc11Stdenv;
+in
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";
-  version = "2.10.0";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
     rev = "v${version}";
-    sha256 = "sha256-iuT7OBRBtMkjcTHayCcne1mNqkcxzKnEYl62n65V7Z4=";
+    sha256 = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
 
@@ -41,36 +76,51 @@ stdenv.mkDerivation rec {
     libsepol
     libsysprof-capture
     libthai
+    libuuid
     libxkbcommon
     lv2
     pcre
+    pcre2
     python3
     sqlite
-    gcc-unwrapped
+    webkitgtk
   ];
 
+  # Link-time-optimization fails without these
   cmakeFlags = [
-    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
-    "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+    "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
+    "-DCMAKE_NM=${stdenv.cc.cc}/bin/gcc-nm"
   ];
+
+  cmakeBuildType = "Release";
 
   postPatch = "cd Plugin";
 
   installPhase = ''
-    mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin $out/share/doc/CHOWTapeModel/
-    cd CHOWTapeModel_artefacts/Release
-    cp libCHOWTapeModel_SharedCode.a  $out/lib
+    mkdir -p $out/lib/lv2 $out/lib/vst3 $out/lib/clap $out/bin $out/share/doc/CHOWTapeModel/
+    cd CHOWTapeModel_artefacts/${cmakeBuildType}
     cp -r LV2/CHOWTapeModel.lv2 $out/lib/lv2
     cp -r VST3/CHOWTapeModel.vst3 $out/lib/vst3
+    cp -r CLAP/CHOWTapeModel.clap $out/lib/clap
     cp Standalone/CHOWTapeModel  $out/bin
     cp ../../../../Manual/ChowTapeManual.pdf $out/share/doc/CHOWTapeModel/
   '';
 
+  # JUCE dlopens these, make sure they are in rpath
+  # Otherwise, segfault will happen
+  NIX_LDFLAGS = (toString [
+    "-lX11"
+    "-lXext"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+  ]);
+
   meta = with lib; {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
     description =
-      "Physical modelling signal processing for analog tape recording. LV2, VST3 and standalone";
+      "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

@@ -5,17 +5,21 @@
 , pythonOlder
 , aiofiles
 , aiohttp
+, backports-datetime-fromisoformat
+, click
 , click-log
 , emoji
 , glom
 , jinja2
 , pyyaml
+, freezegun
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dinghy";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,12 +27,18 @@ buildPythonPackage rec {
     owner = "nedbat";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xtcNcykfgcWvifso0xaeMT31+G5x4HCp+tLAIEEq4cw=";
+    hash = "sha256-0U08QHQuNm7qaxhU8sNxeN0fZ4S8N0RYRsWjFUqhZSU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
+    backports-datetime-fromisoformat
+    click
     click-log
     emoji
     glom
@@ -37,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytestCheckHook
   ];
 

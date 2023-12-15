@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "akku";
   };
 }

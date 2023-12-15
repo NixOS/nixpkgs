@@ -1,0 +1,15 @@
+diff --git a/llm/llama.go b/llm/llama.go
+index 0b460e9..b79e04a 100644
+--- a/llm/llama.go
++++ b/llm/llama.go
+@@ -299,10 +299,6 @@ func newLlama(model string, adapters []string, runners []ModelRunner, numLayers
+ 		params = append(params, "--n-gpu-layers", fmt.Sprintf("%d", numGPU))
+ 	}
+ 
+-	if opts.NumGQA > 0 {
+-		params = append(params, "--gqa", fmt.Sprintf("%d", opts.NumGQA))
+-	}
+-
+ 	if len(adapters) > 0 {
+ 		// TODO: applying multiple adapters is not supported by the llama.cpp server yet
+ 		params = append(params, "--lora", adapters[0])

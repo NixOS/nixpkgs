@@ -2,27 +2,25 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, installShellFiles
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "awsbck";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${version}";
-    hash = "sha256-MDlFCbBAvGovhCO5uxXRQhIN4Fw9wav0afIBNzz3Mow=";
+    hash = "sha256-qW8UY+klNqzDcfVVCW1O7EARFdgLmnf7g/WcYNfT1SI=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoHash = "sha256-T/xzhE1XXexyT5ktDxny68zaszEhqKfSmibjs6T2B2E=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "sha256-p7t/QtihdP6dyJ7tKpNkqcyYJvFJG8+fPqSGH7DNAtg=";
-
+  # tests run in CI on the source repo
   doCheck = false;
 
   meta = with lib; {
@@ -30,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/beeb/awsbck";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ beeb ];
+    mainProgram = "awsbck";
   };
 }

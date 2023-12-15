@@ -26,6 +26,8 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+  doCheck = pythonOlder "3.11"; # asynctest unsupported on python3.11
+
   nativeCheckInputs = [
     asynctest
     pytest-asyncio

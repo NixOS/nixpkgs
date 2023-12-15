@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdatovka";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${version}/libdatovka-v${version}.tar.gz";
-    sha256 = "sha256-aG7U8jP3pvOeFDetYVOx+cE78ys0uSkKNjSgB09ste8=";
+    sha256 = "sha256-cZG86chuh/2bW7kADbnhPhhMwe+Nm63uYy3LIjNrRqo=";
   };
 
   patches = [

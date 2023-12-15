@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, qtbase
-, qtquick1
+, fetchpatch
 , qmake
+, qtbase
 , qtmultimedia
 , utmp
 }:
@@ -13,39 +13,47 @@ stdenv.mkDerivation {
   version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
-    repo = "qmltermwidget";
     owner = "Swordfish90";
+    repo = "qmltermwidget";
     rev = "63228027e1f97c24abb907550b22ee91836929c5";
     hash = "sha256-aVaiRpkYvuyomdkQYAgjIfi6a3wG2a6hNH1CfkA2WKQ=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+  ];
 
   buildInputs = [
     qtbase
-    qtquick1
     qtmultimedia
   ] ++ lib.optional stdenv.isDarwin utmp;
 
   patches = [
+    # Changes required to make it compatible with lomiri-terminal-app
+    # QML-exposed colorscheme, scrollbar & clipboard functionality
+    # Remove when https://github.com/Swordfish90/qmltermwidget/pull/39 merged
+    (fetchpatch {
+      name = "0001-qmltermwidget-lomiri-submissions.patch";
+      url = "https://github.com/Swordfish90/qmltermwidget/compare/63228027e1f97c24abb907550b22ee91836929c5..ffc6b2b2a20ca785f93300eca93c25c4b74ece17.patch";
+      hash = "sha256-1GjC2mdfP3NpePDWZaT8zvIq3vwWIZs+iQ9o01iQtD4=";
+    })
+
     # Some files are copied twice to the output which makes the build fails
     ./do-not-copy-artifacts-twice.patch
   ];
 
   postPatch = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
+      --replace '$$[QT_INSTALL_QML]' '$$PREFIX/${qtbase.qtQmlPrefix}/'
   '';
-
-  installFlags = [ "INSTALL_ROOT=${placeholder "out"}" ];
 
   dontWrapQtApps = true;
 
   meta = {
     description = "A QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ skeidel ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 }

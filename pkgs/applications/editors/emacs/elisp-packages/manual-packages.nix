@@ -23,6 +23,8 @@ in
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
+  el-easydraw = callPackage ./manual-packages/el-easydraw { };
+
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
@@ -57,11 +59,15 @@ in
     inherit (pkgs) python3 git go gopls pyright;
   };
 
+  lspce = callPackage ./manual-packages/lspce { };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
 
   mu4e = callPackage ./manual-packages/mu4e { };
+
+  notdeft = callPackage ./manual-packages/notdeft { };
 
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
@@ -86,6 +92,8 @@ in
   voicemacs = callPackage ./manual-packages/voicemacs { };
 
   wat-mode = callPackage ./manual-packages/wat-mode { };
+
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 

@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   in ''
     # avoid git dependency
     cp ${printVersion} build-aux/git-version-gen
+    # failing to build otherwise since glibc-2.38
+    sed '1i#include <string.h>' -i programs/dwg2SVG.c
   '';
 
   preConfigure = lib.optionalString (stdenv.isDarwin && enablePython) ''

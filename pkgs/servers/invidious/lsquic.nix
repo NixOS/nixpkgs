@@ -57,7 +57,25 @@ let
     preBuild = preBuild + lib.optionalString stdenv.isLinux ''
       sed -e '/^build crypto\/fipsmodule\/CMakeFiles\/fipsmodule\.dir\/bcm\.c\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=stringop-overflow/' \
           -i build.ninja
-    '';
+    '' + lib.optionalString stdenv.cc.isGNU ''
+      # Silence warning that causes build failures with GCC.
+      sed -e '/^build ssl\/test\/CMakeFiles\/bssl_shim\.dir\/settings_writer\.cc\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=ignored-attributes/' \
+          -e '/^build ssl\/test\/CMakeFiles\/handshaker\.dir\/settings_writer\.cc\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=ignored-attributes/' \
+          -i build.ninja
+    '' + lib.optionalString stdenv.cc.isClang (
+      # Silence warnings that cause build failures with newer versions of clang.
+      let
+        clangVersion = lib.getVersion stdenv.cc;
+      in
+      lib.optionalString (lib.versionAtLeast clangVersion "13") ''
+        sed -e '/^build crypto\/CMakeFiles\/crypto\.dir\/x509\/t_x509\.c\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=unused-but-set-variable/' \
+            -e '/^build tool\/CMakeFiles\/bssl\.dir\/digest\.cc\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=unused-but-set-variable/' \
+            -i build.ninja
+      '' + lib.optionalString (lib.versionAtLeast clangVersion "16") ''
+        sed -e '/^build crypto\/CMakeFiles\/crypto\.dir\/trust_token\/trust_token\.c\.o:/,/^ *FLAGS =/ s/^ *FLAGS = -Werror/& -Wno-error=single-bit-bitfield-constant-conversion/' \
+            -i build.ninja
+      ''
+    );
   });
 in
 stdenv.mkDerivation rec {

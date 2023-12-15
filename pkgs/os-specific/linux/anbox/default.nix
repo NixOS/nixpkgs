@@ -154,9 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = { inherit (nixosTests) anbox; };
-
   passthru.image = callPackage ./postmarketos-image.nix { };
-  passthru.postmarketos-image = callPackage ./anbox-image.nix { };
 
   meta = with lib; {
     homepage = "https://anbox.io";

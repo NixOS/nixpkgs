@@ -26,12 +26,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.portunus;
-      defaultText = lib.literalExpression "pkgs.portunus";
-      description = lib.mdDoc "The Portunus package to use.";
-    };
+    package = mkPackageOption pkgs "portunus" { };
 
     seedPath = mkOption {
       type = types.nullOr types.path;

@@ -6,14 +6,15 @@
 
 buildPythonPackage rec {
   pname = "syncer";
-  version = "1.3.0";
+  version = "2.0.3";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miyakogi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13y8jllix1ipkcg9lxa4nxk8kj24vivxfizf4d02cdrha9dw500v";
+    sha256 = "sha256-3EYWy6LuZ/3i+9d0QaclCqWMMw5O3WzhTY3LUL5iMso=";
   };
 
   # Tests require an not maintained package (xfail)

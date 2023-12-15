@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     }; # like BSD/MIT, but Share-Alike'y; See README.
     maintainers = with maintainers; [ amiloradovsky ];
     platforms = platforms.all;
+    mainProgram = "evilwm";
   };
 }

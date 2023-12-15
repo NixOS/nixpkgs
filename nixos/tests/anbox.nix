@@ -16,10 +16,6 @@
 
     virtualisation.anbox.enable = true;
     boot.kernelPackages = pkgs.linuxPackages_5_15;
-
-    # The AArch64 anbox image will not start.
-    # Meanwhile the postmarketOS images work just fine.
-    virtualisation.anbox.image = pkgs.anbox.postmarketos-image;
     virtualisation.memorySize = 2500;
   };
 

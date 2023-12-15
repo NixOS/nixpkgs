@@ -23,6 +23,7 @@
 , monorepoSrc ? null
 , patches ? [ ]
 , enableManpages ? false
+, ...
 }:
 
 let
@@ -45,25 +46,21 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
-    ninja
-  ] ++ [
     python3
     which
     swig
     lit
     makeWrapper
-  ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     lua5_3
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx
     python3.pkgs.recommonmark
+  ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
+    ninja
   ];
 
   buildInputs = [
@@ -87,11 +84,13 @@ stdenv.mkDerivation (rec {
   #
   # See here for context:
   # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-  ++ lib.optional (
+  ++ lib.optional
+    (
       stdenv.targetPlatform.isDarwin
-      && !stdenv.targetPlatform.isAarch64
-      && (lib.versionAtLeast release_version "15")
-    ) (
+        && !stdenv.targetPlatform.isAarch64
+        && (lib.versionAtLeast release_version "15")
+    )
+    (
       runCommand "bsm-audit-session-header" { } ''
         install -Dm444 \
           "${lib.getDev darwin.apple_sdk.sdk}/include/bsm/audit_session.h" \
@@ -104,12 +103,14 @@ stdenv.mkDerivation (rec {
   cmakeFlags = [
     "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"
     "-DLLVM_ENABLE_RTTI=OFF"
-    "-DClang_DIR=${libclang.dev}/lib/cmake"
+    "-DClang_DIR=${lib.getDev libclang}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+  ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
+    "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"
   ] ++ lib.optionals enableManpages ([
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
@@ -127,28 +128,21 @@ stdenv.mkDerivation (rec {
   ];
 
   doCheck = false;
+  doInstallCheck = lib.versionOlder release_version "15";
 
   # TODO: cleanup with mass-rebuild
-  installCheckPhase =
-    if ((lib.versions.major release_version) == "14") then ''
-      if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
-          echo "ERROR: python files not installed where expected!";
-          return 1;
-      fi
-      if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
-          echo "ERROR: lua files not installed where expected!";
-          return 1;
-      fi
-    '' else if (((lib.versions.major release_version) == "15") || (lib.versions.major release_version) == "16") then ''
-      if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
-          return 1;
-      fi
-    '' else ''
-      if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
-          echo "ERROR: python files not installed where expected!";
-          return 1;
-      fi
-    '';
+  installCheckPhase = ''
+    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+        echo "ERROR: python files not installed where expected!";
+        return 1;
+    fi
+  '' # Something lua is built on older versions but this file doesn't exist.
+  + lib.optionalString (lib.versionAtLeast release_version "14") ''
+    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+        echo "ERROR: lua files not installed where expected!";
+        return 1;
+    fi
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
@@ -157,7 +151,7 @@ stdenv.mkDerivation (rec {
     # vscode:
     install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json
     mkdir -p $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
-    ln -s $out/bin/${if (lib.versionOlder release_version "12") then "llvm-vscode" else "lldb-vscode"} $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
+    ln -s $out/bin/*-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
   meta = llvm_meta // {
@@ -174,17 +168,15 @@ stdenv.mkDerivation (rec {
       (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
         || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
   };
-} // lib.optionalAttrs (lib.versionOlder release_version "15") {
-  doInstallCheck = true;
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
 
-  buildPhase =
-    if lib.versionOlder release_version "15" then ''
-      make ${if (lib.versionOlder release_version "12") then "docs-man" else "docs-lldb-man"}
-    '' else null;
+  buildPhase = lib.optionalString (lib.versionOlder release_version "15") ''
+    make ${if (lib.versionOlder release_version "12") then "docs-man" else "docs-lldb-man"}
+  '';
 
-  ninjaFlags = if lib.versionAtLeast release_version "15" then [ "docs-lldb-man" ] else null;
+
+  ninjaFlags = lib.optionals (lib.versionAtLeast release_version "15") [ "docs-lldb-man" ];
 
   propagatedBuildInputs = [ ];
 

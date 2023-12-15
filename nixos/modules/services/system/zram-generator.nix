@@ -11,7 +11,7 @@ in
   options.services.zram-generator = {
     enable = lib.mkEnableOption (lib.mdDoc "Systemd unit generator for zram devices");
 
-    package = lib.mkPackageOptionMD pkgs "zram-generator" { };
+    package = lib.mkPackageOption pkgs "zram-generator" { };
 
     settings = lib.mkOption {
       type = lib.types.submodule {

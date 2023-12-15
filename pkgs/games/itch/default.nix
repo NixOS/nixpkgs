@@ -3,7 +3,7 @@
 , fetchzip
 , fetchFromGitHub
 , butler
-, electron_11
+, electron
 , steam-run
 , makeWrapper
 , copyDesktopItems
@@ -11,12 +11,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
-  version = "25.6.2";
+  version = "26.1.2";
 
+  # TODO: Using kitch instead of itch, revert when possible
   src = fetchzip {
-    url = "https://broth.itch.ovh/${pname}/linux-amd64/${version}/itch.zip";
+    url = "https://broth.itch.ovh/k${pname}/linux-amd64/${version}/archive/default#.zip";
     stripRoot = false;
-    sha256 = "sha256-F/vaYBHCygseiKNMJ+jBy31YDIFqYToAETGUl/pkHII=";
+    sha256 = "sha256-thXe+glpltSiKNGIRgvOZQZPJWfDHWo3dLdziyp2BM4=";
   };
 
   itch-setup = fetchzip {
@@ -29,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
     fetchFromGitHub {
         owner = "itchio";
         repo = pname;
-        rev = "v25.6.1-canary"; # Use ${version} if possible
-        hash = "sha256-iBp7K7AW97SOlRa8N8TW2LcVtmUi9JU00fYUuPwKORc=";
+        rev = "v${version}-canary";
+        sha256 = "sha256-veZiKs9qHge+gCEpJ119bAT56ssXJAH3HBcYkEHqBFg=";
         sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 
@@ -53,6 +54,10 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    # TODO: Remove when the next stable Itch is stabilized
+    substituteInPlace ./resources/app/package.json \
+      --replace "kitch" "itch"
+
     mkdir -p $out/bin $out/share/${pname}/resources/app
     cp -r resources/app "$out/share/${pname}/resources/"
 
@@ -72,7 +77,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${steam-run}/bin/steam-run $out/bin/${pname} \
-      --add-flags ${electron_11}/bin/electron \
+      --add-flags ${electron}/bin/electron \
       --add-flags $out/share/${pname}/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}/bin/:${itch-setup}

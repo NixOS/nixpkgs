@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/snakedye/kile";
     license = licenses.mit;
     platforms = platforms.linux; # It's meant for river, a wayland compositor
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     mainProgram = "kile";
   };
 }

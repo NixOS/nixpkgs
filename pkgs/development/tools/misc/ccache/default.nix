@@ -86,11 +86,19 @@ stdenv.mkDerivation (finalAttrs: {
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];
-      buildCommand = ''
+      # Unwrapped clang does not have a targetPrefix because it is multi-target
+      # target is decided with argv0.
+      buildCommand = let
+        targetPrefix = if unwrappedCC.isClang or false
+          then
+            ""
+          else
+            (lib.optionalString (unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != "") "${unwrappedCC.targetConfig}-");
+      in ''
         mkdir -p $out/bin
 
         wrap() {
-          local cname="$1"
+          local cname="${targetPrefix}$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
               --run ${lib.escapeShellArg extraConfig} \
@@ -127,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
     license = licenses.gpl3Plus;
+    mainProgram = "ccache";
     maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };

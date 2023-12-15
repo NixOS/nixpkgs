@@ -25,14 +25,7 @@ in {
     services.pipewire = {
       enable = mkEnableOption (lib.mdDoc "pipewire service");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.pipewire;
-        defaultText = literalExpression "pkgs.pipewire";
-        description = lib.mdDoc ''
-          The pipewire derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "pipewire" { };
 
       socketActivation = mkOption {
         default = true;
@@ -115,8 +108,7 @@ in {
     environment.systemPackages = [ cfg.package ]
                                  ++ lib.optional cfg.jack.enable jack-libs;
 
-    systemd.packages = [ cfg.package ]
-                       ++ lib.optional cfg.pulse.enable cfg.package.pulse;
+    systemd.packages = [ cfg.package ];
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
@@ -130,9 +122,13 @@ in {
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
 
+    # Mask pw-pulse if it's not wanted
+    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
+    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable;
+
     systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
-    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
+    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
 
     services.udev.packages = [ cfg.package ];
 
@@ -140,14 +136,14 @@ in {
     environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
       text = ''
         pcm_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
+          libs.native = ${cfg.package}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
           ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
         }
         ctl_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
+          libs.native = ${cfg.package}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
           ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
         }
       '';
     };

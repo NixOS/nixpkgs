@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, fetchFromGitHub
 , mullvad
 }:
 buildGoModule {
@@ -13,7 +12,7 @@ buildGoModule {
 
   sourceRoot = "${mullvad.src.name}/wireguard/libwg";
 
-  vendorSha256 = "QNde5BqkSuqp3VJQOhn7aG6XknRDZQ62PE3WGhEJ5LU=";
+  vendorHash = "sha256-QNde5BqkSuqp3VJQOhn7aG6XknRDZQ62PE3WGhEJ5LU=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work

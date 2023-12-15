@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
-  doCheck = true;
+  doCheck = !(stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl);
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";

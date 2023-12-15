@@ -55,7 +55,7 @@ in {
   nodes = {
     docker = { ... }: {
       virtualisation = {
-        diskSize = 2048;
+        diskSize = 3072;
         docker.enable = true;
       };
     };

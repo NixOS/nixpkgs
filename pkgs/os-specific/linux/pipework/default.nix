@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/jpetazzo/pipework";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

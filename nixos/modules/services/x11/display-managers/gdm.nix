@@ -97,6 +97,19 @@ in
         type = types.bool;
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        example = ''
+          foo
+          bar
+          baz
+        '';
+        description = lib.mdDoc ''
+          Optional message to display on the login screen.
+        '';
+      };
+
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
@@ -237,6 +250,11 @@ in
         sleep-inactive-battery-type = "nothing";
         sleep-inactive-ac-timeout = lib.gvariant.mkInt32 0;
         sleep-inactive-battery-timeout = lib.gvariant.mkInt32 0;
+      };
+    }] ++ lib.optionals (cfg.gdm.banner != null) [{
+      settings."org/gnome/login-screen" = {
+        banner-message-enable = true;
+        banner-message-text = cfg.gdm.banner;
       };
     }] ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 

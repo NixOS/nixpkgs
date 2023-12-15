@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , intltool
@@ -27,23 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.8.2";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2zqlfoN4L+V237cQ3PVh49YaZfNKGiLqh2JIiGJE340=";
+    sha256 = "sha256-eSMPXBJ+VIMrIy86mMbRtZ28DvX7aCzLAAQ+RWqlCpc=";
   };
-
-  patches = [
-    # Fix build with meson 1.2, can be dropped on next bump
-    # https://github.com/linuxmint/xreader/issues/612
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xreader/commit/06b18a884c8cf3257ea1f053a82784da078999ed.patch";
-      sha256 = "sha256-+LXEW3OkfhkIcbxtvfQYjdaC18O8imOx22t91ad/XZw=";
-    })
-  ];
 
   nativeBuildInputs = [
     shared-mime-info

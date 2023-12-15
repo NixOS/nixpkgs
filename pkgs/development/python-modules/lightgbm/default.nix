@@ -2,33 +2,47 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+
+# build-system
 , cmake
+, ninja
+, pathspec
+, pyproject-metadata
+, scikit-build-core
+
+# dependencies
+, llvmPackages
 , numpy
 , scipy
 , scikit-learn
-, llvmPackages ? null
 , pythonOlder
-, python
+
+# optionals: gpu
+, boost
+, cudatoolkit
 , ocl-icd
 , opencl-headers
-, boost
 , gpuSupport ? stdenv.isLinux
 }:
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.3.5";
-  format = "setuptools";
+  version = "4.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ELj73PhR5PaKHwLzjZm9xEx8f7mxpi3PkkoNKf9zOVw=";
+    hash = "sha256-vuWd0mmpOwk/LGENSmaDp+qHxj0+o1xiISPOLAILKrw=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
+    pathspec
+    pyproject-metadata
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -37,6 +51,7 @@ buildPythonPackage rec {
     llvmPackages.openmp
   ]) ++ (lib.optionals gpuSupport [
     boost
+    cudatoolkit
     ocl-icd
     opencl-headers
   ]);
@@ -47,13 +62,7 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
-
-    runHook postBuild
-  '';
+  pypaBuildFlags = lib.optionalString gpuSupport "--config-setting=cmake.define.USE_CUDA=ON";
 
   postConfigure = ''
     export HOME=$(mktemp -d)

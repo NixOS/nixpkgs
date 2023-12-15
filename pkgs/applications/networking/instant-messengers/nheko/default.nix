@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     license = licenses.gpl3Plus;
+    mainProgram = "nheko";
     maintainers = with maintainers; [ ekleog fpletz ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
