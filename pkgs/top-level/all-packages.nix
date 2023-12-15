@@ -40442,8 +40442,6 @@ with pkgs;
 
   hjson = with python3Packages; toPythonApplication hjson;
 
-  hjson-go = callPackage ../development/tools/hjson-go { };
-
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
