@@ -65,6 +65,10 @@ gccStdenv.mkDerivation {
     $CPP || true
     $LD || true
 
+    export QMAKE_CC=$CC
+    export QMAKE_CXX=$CXX
+    export QMAKE_LINK=$LINK
+
     cat SimulIDE.pro
   '';
 
@@ -75,6 +79,9 @@ gccStdenv.mkDerivation {
     "CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
     "CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
     "LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld"
+    "QMAKE_CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+    "QMAKE_CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
+    "QMAKE_LINK=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
   ];
 
   preConfigure = ''
