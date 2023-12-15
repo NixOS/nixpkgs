@@ -31,12 +31,7 @@ pub struct Args {
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(
-        args.base.as_deref(),
-        &args.nixpkgs,
-        &vec![],
-        &mut io::stderr(),
-    ) {
+    match process(args.base.as_deref(), &args.nixpkgs, &[], &mut io::stderr()) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -69,10 +64,10 @@ fn main() -> ExitCode {
 pub fn process<W: io::Write>(
     base_nixpkgs: Option<&Path>,
     main_nixpkgs: &Path,
-    eval_accessible_paths: &Vec<&Path>,
+    eval_accessible_paths: &[&Path],
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
-    let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths)?;
+    let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths, error_writer)?;
     let check_result = main_result.result_map(|nixpkgs_version| {
         if let Some(base) = base_nixpkgs {
             check_nixpkgs(base, eval_accessible_paths, error_writer)?.result_map(
@@ -99,11 +94,17 @@ pub fn process<W: io::Write>(
     }
 }
 
-/// Checks whether the pkgs/by-name structure in Nixpkgs is valid,
-/// and returns to which degree it's valid for checks with increased strictness.
-pub fn check_nixpkgs(
+/// Checks whether the pkgs/by-name structure in Nixpkgs is valid.
+///
+/// This does not include checks that depend on the base version of Nixpkgs to compare against,
+/// which is used for checks that were only introduced later and increased strictness.
+///
+/// Instead a `version::Nixpkgs` is returned, whose `compare` method allows comparing the
+/// result of this function for the base Nixpkgs against the one for the main Nixpkgs.
+pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
-    eval_accessible_paths: &Vec<&Path>,
+    eval_accessible_paths: &[&Path],
+    error_writer: &mut W,
 ) -> validation::Result<version::Nixpkgs> {
     Ok({
         let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
@@ -112,10 +113,11 @@ pub fn check_nixpkgs(
         ))?;
 
         if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
-            eprintln!(
+            writeln!(
+                error_writer,
                 "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
                 utils::BASE_SUBPATH
-            );
+            )?;
             Success(version::Nixpkgs::default())
         } else {
             check_structure(&nixpkgs_path)?.result_map(|package_names|
@@ -224,7 +226,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(base_nixpkgs, &path, &vec![&extra_nix_path], &mut writer)
+            process(base_nixpkgs, &path, &[&extra_nix_path], &mut writer)
                 .context(format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

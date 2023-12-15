@@ -16,6 +16,8 @@ impl Nixpkgs {
     /// Compares two Nixpkgs versions against each other, returning validation errors only if the
     /// `from` version satisfied the stricter checks, while the `to` version doesn't satisfy them
     /// anymore.
+    /// This enables a gradual transition from weaker to stricter checks, by only allowing PRs to
+    /// increase strictness.
     pub fn compare(optional_from: Option<Self>, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,

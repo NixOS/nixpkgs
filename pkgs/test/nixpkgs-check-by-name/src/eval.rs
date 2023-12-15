@@ -41,7 +41,7 @@ enum AttributeVariant {
 pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
-    eval_accessible_paths: &Vec<&Path>,
+    eval_accessible_paths: &[&Path],
 ) -> validation::Result<version::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
@@ -110,11 +110,11 @@ pub fn check_values(
         ))?;
 
     Ok(
-        validation::sequence(package_names.iter().map(|package_name| {
-            let relative_package_file = structure::relative_file_for_package(package_name);
+        validation::sequence(package_names.into_iter().map(|package_name| {
+            let relative_package_file = structure::relative_file_for_package(&package_name);
             let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
-            if let Some(attribute_info) = actual_files.get(package_name) {
+            if let Some(attribute_info) = actual_files.get(&package_name) {
                 let check_result = if !attribute_info.is_derivation {
                     NixpkgsProblem::NonDerivation {
                         relative_package_file: relative_package_file.clone(),
