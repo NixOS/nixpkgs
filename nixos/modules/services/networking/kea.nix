@@ -255,6 +255,7 @@ in
       User = "kea";
       ConfigurationDirectory = "kea";
       RuntimeDirectory = "kea";
+      RuntimeDirectoryPreserve = true;
       StateDirectory = "kea";
       UMask = "0077";
     };
