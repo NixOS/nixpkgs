@@ -32660,6 +32660,7 @@ with pkgs;
   swaywsr = callPackage ../applications/window-managers/sway/wsr.nix { };
   sway-assign-cgroups = callPackage ../applications/window-managers/sway/assign-cgroups.nix { };
   sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
+  sway-audio-idle-inhibit = callPackage ../applications/misc/sway-audio-idle-inhibit { };
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
