@@ -113,4 +113,6 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+
+  __attrsFailEvaluation = true;
 }

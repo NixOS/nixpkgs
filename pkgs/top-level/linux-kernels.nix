@@ -398,7 +398,8 @@ in {
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
+    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }))
+    // { __attrsFailEvaluation = true; };
 
     nvidia_x11             = nvidiaPackages.stable;
     nvidia_x11_beta        = nvidiaPackages.beta;
@@ -589,6 +590,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
+    __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -606,6 +608,7 @@ in {
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
      linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
      linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
+     __attrsFailEvaluation = true;
   };
 
   rpiPackages = {
@@ -613,6 +616,7 @@ in {
     linux_rpi2 = packagesFor kernels.linux_rpi2;
     linux_rpi3 = packagesFor kernels.linux_rpi3;
     linux_rpi4 = packagesFor kernels.linux_rpi4;
+     __attrsFailEvaluation = true;
   };
 
   packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // {
@@ -641,6 +645,7 @@ in {
     linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
     linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
+    __recurseIntoDerivationForReleaseJobs = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
@@ -655,7 +660,7 @@ in {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;
-  };
+  } // { __attrsFailEvaluation = true; };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
 

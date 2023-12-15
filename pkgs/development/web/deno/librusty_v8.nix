@@ -10,11 +10,11 @@ let
   };
 in
 fetch_librusty_v8 {
-  version = "0.81.0";
+  version = "0.82.0";
   shas = {
-    x86_64-linux = "sha256-e77LYm/sus7EY4eiRuEp6G25djDaT4wSD4FBCxy4vcE=";
-    aarch64-linux = "sha256-wPfUcuT2Z2sy5nLf8xR3QjGQKk6OsM/45jnYv/Hw+Zs=";
-    x86_64-darwin = "sha256-UbnRiywM7b7q3rITZzNeWAuKU+HXXAqVapQ9j5ND6go=";
-    aarch64-darwin = "sha256-42d3VGBv5lW1InfzYfWr6Xj0GpyJ6GWswVNtUa8ID30=";
+    x86_64-linux = "sha256-2nWOAUuzc7tr0KieeugIqI3zaRruvnLWBPn+ZdHTXsM=";
+    aarch64-linux = "sha256-vlc60ZoFtT2Ugp0npT0dep6WWnEBAznR7dYFRaMNAKM=";
+    x86_64-darwin = "sha256-CqyG/JOJe5kWzFJnnkU2Lz4VS/unWe1iucFxm+1HGsU=";
+    aarch64-darwin = "sha256-ps19JZqCpO3pEAMQZOO+l/Iz7u0dIXLnpYIsnOyAxYk=";
   };
 }

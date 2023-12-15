@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "sha256": "14dkyqm04d4ix114jbcgbx10zvkv4qlx4n56chpqz0w1y7x8idpd",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.1/bookmarks-13.1.1.tar.gz",
-    "version": "13.1.1",
+    "sha256": "04yngkmsjq6zj5qih86ybfr2cybqsz3gb5dasm6yhmkvd1ar5s39",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.2/bookmarks-13.1.2.tar.gz",
+    "version": "13.1.2",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -30,9 +30,9 @@
     ]
   },
   "cookbook": {
-    "sha256": "07yj41khwhpsfjwfxgs6xyjhvvavmyby457fh68kx8npinl8n0x4",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.10.4/cookbook-0.10.4.tar.gz",
-    "version": "0.10.4",
+    "sha256": "06d1rhvcwxzi8hl99nz3hg32fznv0q5m06cwjy3gc81j53qz0ksc",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.10.5/cookbook-0.10.5.tar.gz",
+    "version": "0.10.5",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "0lwyy1pnyfw464vab1v5k8q0rgarrj5w12cf1nsywjaafb8y1ym0",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.5/notify_push-v0.6.5.tar.gz",
-    "version": "0.6.5",
+    "sha256": "1by9qw9bsf48cyczhfxpz9ifrg2dayvcn26m309dicqgjqkz91hd",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.6/notify_push-v0.6.6.tar.gz",
+    "version": "0.6.6",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -197,6 +197,16 @@
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
       "apache"
+    ]
+  },
+  "phonetrack": {
+    "sha256": "1p15vw7c5c1h08czyxi1r6svjd5hjmnc0i6is4vl3xq2kfjmcyyx",
+    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.7.6/phonetrack-0.7.6.tar.gz",
+    "version": "0.7.6",
+    "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n* Create a tracking session.\n* Give the logging link\\* to the mobile devices. Choose the [logging method](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#logging-methods) you prefer.\n* Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name. Setting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n* 📍 Display location history\n* ⛛ Filter points\n* ✎ Manually edit/add/delete points\n* ✎ Edit devices (rename, change colour/shape, move to another session)\n* ⛶ Define geofencing zones for devices\n* ⚇ Define proximity alerts for device pairs\n* 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n* 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n* 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n* 🗠 Display sessions statistics\n* 🔒 [Reserve a device name](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#device-name-reservation) to make sure only authorised user can log with this name\n* 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n* ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is tested on Nextcloud 17 with Firefox 57+ and Chromium.\n\nThis app is compatible with theming colours and accessibility themes !\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n* PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
+    "homepage": "https://github.com/julien-nc/phonetrack-oc",
+    "licenses": [
+      "agpl"
     ]
   },
   "polls": {

@@ -2,29 +2,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-json";
-  version = "unstable-2023-09-21";
+  version = "unstable-2023-03-13";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-json";
-    rev = "e24e5dceb8628ff569338e6c4fdba35a5017c5e2";
-    hash = "sha256-7QRieokqXarKwLfZynS8Rum9JV9hcxod00BWAUwwliM=";
+    rev = "88256102a9fec62d494628e32cb406574e49e5e1";
+    hash = "sha256-Sx+RBiLhR3ftP89AwinVlBg0u0HX4GVP7TLmuofgC9s=";
   };
 
   nativeBuildInputs = [ hare ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HARECACHE="$NIX_BUILD_TOP/.harecache"
-    export BINOUT="$NIX_BUILD_TOP/.bin"
-
-    makeFlagsArray+=(
-      PREFIX="${builtins.placeholder "out"}"
-    )
-
-    runHook postConfigure
-  '';
+  makeFlags = [
+    "HARECACHE=.harecache"
+    "PREFIX=${builtins.placeholder "out"}"
+  ];
 
   doCheck = true;
 

@@ -119,8 +119,6 @@ self: super: {
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
 
-  serialise = jailbreakForCurrentVersion super.serialise "0.2.6.0";
-
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
   #
