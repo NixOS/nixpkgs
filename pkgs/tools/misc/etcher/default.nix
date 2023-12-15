@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.18.13";
+  version = "1.18.13"; # 1.18.13 uses electron 25
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
