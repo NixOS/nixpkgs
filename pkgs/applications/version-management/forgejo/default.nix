@@ -24,7 +24,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-7ruJczJ2cE51UmoER8C3JsGm0p3RTwfqKx0eErB7LZs=";
+    npmDepsHash = "sha256-YZzVw+WWqTmJafqnZ5vrzb7P6V4DTMNQwW1/+wvZEM8=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.21.2-1";
+  version = "1.20.6-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-2dkl8QI82URhPV2f4cOUZfpAhlGwU197ZkLD9KitIiA=";
+    hash = "sha256-s+hYFpgQ6MJgQBRW3Ze7BIjvsc765D5sAcrtO/wmIgo=";
   };
 
-  vendorHash = "sha256-+/wOEF44dSqy7ZThZyd66xyI3wVnFwZbsAd4ujyVku8=";
+  vendorHash = "sha256-dgtZjsLBwblhdge3BvdbK/mN/TeZKps9K5dJbqomtjo=";
 
   subPackages = [ "." ];
 
