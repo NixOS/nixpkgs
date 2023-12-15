@@ -125,7 +125,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
@@ -143,7 +143,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-01+uqHvPbQVXKLohGWfsCsZOjb7xmfjBKkTGUGMEdAI=";
+    hash = "sha256-E/GQCRWBf3hYsDCCk0twaL9gkVOCEQeCvO3Va+jgIdE=";
   };
 
   patches = lib.optionals cudaSupport [
