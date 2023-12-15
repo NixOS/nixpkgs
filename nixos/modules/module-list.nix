@@ -1031,6 +1031,7 @@
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
   ./services/networking/openvpn.nix
+  ./services/networking/opsdroid.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
   ./services/networking/pdns-recursor.nix
