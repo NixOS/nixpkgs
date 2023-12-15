@@ -9028,6 +9028,8 @@ self: super: with self; {
 
   pdoc = callPackage ../development/python-modules/pdoc { };
 
+  pdoc-pyo3-sample-library = callPackage ../development/python-modules/pdoc-pyo3-sample-library { };
+
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
