@@ -6,4 +6,6 @@ let
 in
 {
   hare-json = callPackage ../development/hare-packages/hare-json { };
+
+  hare-compress = callPackage ../development/hare-third-party/hare-compress {};
 })

@@ -21,18 +21,26 @@ in
   options = {
 
     boot.kernel.sysctl = mkOption {
-      type = types.submodule {
+      type = let
+        highestValueType = types.ints.unsigned // {
+          merge = loc: defs:
+            foldl
+              (a: b: if b.value == null then null else lib.max a b.value)
+              0
+              (filterOverrides defs);
+        };
+      in types.submodule {
         freeformType = types.attrsOf sysctlOption;
         options."net.core.rmem_max" = mkOption {
-          type = types.nullOr types.ints.unsigned // {
-            merge = loc: defs:
-              foldl
-                (a: b: if b.value == null then null else lib.max a b.value)
-                0
-                (filterOverrides defs);
-          };
+          type = types.nullOr highestValueType;
           default = null;
           description = lib.mdDoc "The maximum socket receive buffer size. In case of conflicting values, the highest will be used.";
+        };
+
+        options."net.core.wmem_max" = mkOption {
+          type = types.nullOr highestValueType;
+          default = null;
+          description = lib.mdDoc "The maximum socket send buffer size. In case of conflicting values, the highest will be used.";
         };
       };
       default = {};
