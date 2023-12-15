@@ -1,0 +1,64 @@
+{
+ "https://repo.maven.apache.org/maven2": {
+  "com/frostwire#jlibtorrent/1.2.0.18-RC5": {
+   "jar": "XhOLD/H5gGgnRDvJy6A7AoJQD8FRVi+E0j9EALOZtOM=",
+   "pom": "YyC7evN8J31ynANqw5S2+kwhWgHopsy6QfPA8r5+Pt8="
+  },
+  "com/google/code/gson#gson-parent/2.8.4": {
+   "pom": "Po7S1ioabiIxEZ8Vu7vfuXqdZZvlKUHsuy3b47F1Wps="
+  },
+  "com/google/code/gson#gson/2.8.4": {
+   "jar": "U7xf52RNuQjmBx1si1kFmsrc5/wUIXkz1yUZlOhnMQQ=",
+   "pom": "ceZU0zHC2dMe+X1kKNGJopo8kfgaaYi6+W77JDqIMZQ="
+  },
+  "com/google/re2j#re2j/1.2": {
+   "jar": "6dxwX9TFcDRLVKcUay46gZzcJxopeT9KzBqTtWo4jlk=",
+   "pom": "eVlggzvZQ2cr9s9i1jPxpNPRHqeZIbslzgWDLn7TLCU="
+  },
+  "com/googlecode/gettext-commons#gettext-commons/0.9.8": {
+   "jar": "6Z24clcxfdFHZ2YfsNVdBcY7d3xfiSQ9xPoEc2zEjvA=",
+   "pom": "3rB6zPTuPZW/kxOiLRmulC83hovscVTzWl65hEoEs1w="
+  },
+  "com/h2database#h2/1.4.193": {
+   "jar": "sc80xkhxAUqnNYAoHMRk36ckUNiGDMB1L8F16H7dZUQ=",
+   "pom": "NIpMkTW/eez3nM7OZAnxZ5wKOAtVQI7IvDnYEYZIjlk="
+  },
+  "com/squareup/okhttp3#okhttp/3.10.0": {
+   "jar": "Sso+VSr7HOtH+JVmhfYpWiduSfoD+QZvi2voO+xW+2Y=",
+   "pom": "2U4zFua45JiX0Quzqg4ufQaTvlJqSqJlygeSvHfrwzM="
+  },
+  "com/squareup/okhttp3#parent/3.10.0": {
+   "pom": "LDXaZpbpBejBFsrvTWuSydYTBTLEl0rRtwzZ/njkJQ4="
+  },
+  "com/squareup/okio#okio-parent/1.14.0": {
+   "pom": "GNH2in19A7DpNcA64zXFGxXSukZklkuW4HVCrzkK7oU="
+  },
+  "com/squareup/okio#okio/1.14.0": {
+   "jar": "RjPDMfUGQuvnldwInWpZKK/0MHHJ0X54QKAJ7qL+laM=",
+   "pom": "CSITdVnLkfb+iOJkP02Yb1ZpE4g/moLvkeXQZ1Rm+B4="
+  },
+  "net/java#jvnet-parent/1": {
+   "pom": "KBRAgRJo5l2eJms8yJgpfiFOBPCXQNA4bO60qJI9Y78="
+  },
+  "net/jthink#jaudiotagger/2.2.5": {
+   "jar": "OJOHSKiAs242Vw83KWThzNWiJh86JUsi6UJFtPSNHFM=",
+   "pom": "FZ4b+3dvgutFZ1aaj1TCGgMI3sYIdkjk+wvcw402qPM="
+  },
+  "org/apache#apache/10": {
+   "pom": "gC/uznKFLa/L0KQlpgNnxyxcubbqWq5ZSBEoVpGJ2vk="
+  },
+  "org/apache/lucene#lucene-core/3.6.2": {
+   "jar": "zvRDa66FwxQXRDKE9zbjIVEc0WFSaBAzeKm/ALHfA20=",
+   "pom": "zoi2+PprKVCyg7EbufJOkQRhoAQWRKPrPYeELMeh55c="
+  },
+  "org/apache/lucene#lucene-parent/3.6.2": {
+   "pom": "amQV83hJatW0FPxVf01hDRFoyM8ZMXxGvKtC9t01g8I="
+  },
+  "org/apache/lucene#lucene-solr-grandparent/3.6.2": {
+   "pom": "qGW6ccTF8FUjBUIy3pfpYstvJfZ9mLOHmZc2QGaOdN4="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  }
+ }
+}
