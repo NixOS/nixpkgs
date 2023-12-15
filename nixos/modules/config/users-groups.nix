@@ -606,6 +606,13 @@ in {
           defaultText = literalExpression "config.users.users.\${name}.group";
           default = cfg.users.${name}.group;
         };
+        options.home = mkOption {
+          type = types.passwdEntry types.path;
+          description = ''
+            The user's home directory.
+          '';
+          default = "/var/empty";
+        };
         options.shell = mkOption {
           type = types.passwdEntry types.path;
           description = ''
@@ -758,9 +765,9 @@ in {
     boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
       contents = {
         "/etc/passwd".text = ''
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { uid, group, shell }: let
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { uid, group, home, shell }: let
             g = config.boot.initrd.systemd.groups.${group};
-          in "${n}:x:${toString uid}:${toString g.gid}::/var/empty:${shell}") config.boot.initrd.systemd.users)}
+          in "${n}:x:${toString uid}:${toString g.gid}::${home}:${shell}") config.boot.initrd.systemd.users)}
         '';
         "/etc/group".text = ''
           ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { gid }: "${n}:x:${toString gid}:") config.boot.initrd.systemd.groups)}
@@ -771,7 +778,10 @@ in {
       storePaths = [ "${pkgs.shadow}/bin/nologin" ];
 
       users = {
-        root = { shell = lib.mkDefault "/bin/bash"; };
+        root = {
+          home = "/root";
+          shell = lib.mkDefault "/bin/bash";
+        };
         nobody = {};
       };
 
