@@ -46,11 +46,13 @@ gccStdenv.mkDerivation {
       -e "s|^REV_NO = .*$|REV_NO = ${versionInfo.rev}|" \
       -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
 
-    # Remove hardcoded compiler for darwin
+    # Force darwin to use gcc
     sed -i SimulIDE.pro \
-      -e "/QMAKE_CC = .*$/d" \
-      -e "/QMAKE_CXX = .*$/d" \
-      -e "/QMAKE_LINK = .*$/d"
+      -e "s|QMAKE_CC = .*$|QMAKE_CC = ${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc|" \
+      -e "s|QMAKE_CXX = .*$|QMAKE_CXX = ${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++|" \
+      -e "s|QMAKE_LINK = .*$|QMAKE_LINK = ${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++|"
+
+    cat SimulIDE.pro
   '';
 
   preConfigure = ''
