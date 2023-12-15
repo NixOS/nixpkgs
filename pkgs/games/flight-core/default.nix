@@ -1,11 +1,11 @@
 { lib, fetchurl, appimageTools }:
 let
   pname = "flight-core";
-  version = "2.14.8";
+  version = "2.14.9";
   name = "${pname}_${version}";
   src = fetchurl {
     url = "https://github.com/R2NorthstarTools/FlightCore/releases/download/v${version}/${name}_amd64.AppImage";
-    hash = "sha256-8POfWOCisd6aURwup8uSFXZV6etV5eTMx0Iw748LQ4c=";
+    hash = "sha256-DoVvX8ayxUeDq9GpFXccVDEuq7DvblvPPyhLCzDqz1M=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in
