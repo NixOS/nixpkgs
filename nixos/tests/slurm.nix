@@ -10,12 +10,42 @@ let
           AccountingStorageType=accounting_storage/slurmdbd
         '';
       };
-      environment.systemPackages = [ mpitest ];
+      environment.systemPackages = [
+        cpi
+        mpitest
+      ];
       networking.firewall.enable = false;
       systemd.tmpfiles.rules = [
         "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
       ];
     };
+
+    cpi = pkgs.callPackage ({ stdenv, cmake, mpich, mpi }:
+    stdenv.mkDerivation {
+      pname = "${mpich.pname}-cpi";
+      inherit (mpich) version src;
+
+      cmakeListsTxt = ''
+          cmake_minimum_required(VERSION 3.17)
+          project(cpi LANGUAGES C)
+          find_package(MPI REQUIRED)
+          add_executable(cpi ./cpi.c)
+          target_link_libraries(cpi PRIVATE MPI::MPI_C)
+          install(TARGETS cpi)
+      '';
+      passAsFile = [ "cmakeListsTxt" ];
+      postPatch = ''
+        cd examples
+        cat $cmakeListsTxtPath > CMakeLists.txt
+      '';
+
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [ mpi ];
+
+      cmakeFlags = [(lib.cmakeFeature "CMAKE_C_FLAGS" "-fsanitize=address")];
+
+      meta.mainProgram = "cpi";
+    }) { };
 
     mpitest = let
       mpitestC = pkgs.writeText "mpitest.c" ''
@@ -164,5 +194,8 @@ in {
 
   with subtest("run_PMIx_mpitest"):
       submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
+
+  with subtest("run_PMIx_mpitest"):
+      submit.succeed("srun -N 3 --mpi=pmix cpi >&2")
   '';
 })
