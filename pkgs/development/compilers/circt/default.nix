@@ -67,6 +67,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   postInstall = ''
+    ln -s ${circt-llvm.dev}/include/* $out/include/
+
+    ln -s ${circt-llvm.lib}/lib/objects-Release $out/lib/llvm-objects-Release
+    shopt -s extglob
+    ln -s ${circt-llvm.lib}/lib/!(objects-Release) $out/lib/
+    shopt -u extglob
+
     moveToOutput lib "$lib"
   '';
 
