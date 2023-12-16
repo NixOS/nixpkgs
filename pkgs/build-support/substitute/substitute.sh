@@ -1,17 +1,18 @@
+source $NIX_ATTRS_SH_FILE
 source $stdenv/setup
 
 args=
 
-target=$out
+target="$out"
 if test -n "$dir"; then
-    target=$out/$dir/$name
-    mkdir -p $out/$dir
+    target="$out/$dir/$name"
+    mkdir -p "$out/$dir"
 fi
 
-substitute $src $target $replacements
+substitute "$src" "$target" "${replacements[@]}"
 
 if test -n "$isExecutable"; then
-    chmod +x $target
+    chmod +x "$target"
 fi
 
 eval "$postInstall"

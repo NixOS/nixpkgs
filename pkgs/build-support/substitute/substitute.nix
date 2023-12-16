@@ -11,4 +11,5 @@ stdenvNoCC.mkDerivation ({
   inherit (args) src;
   preferLocalBuild = true;
   allowSubstitutes = false;
+  __structuredAttrs = true;
 } // args // { replacements = args.replacements; })
