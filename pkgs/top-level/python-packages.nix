@@ -4813,6 +4813,8 @@ self: super: with self; {
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
+  gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
