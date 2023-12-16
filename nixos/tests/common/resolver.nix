@@ -34,7 +34,7 @@
       file = let
         addDot = zone: zone + lib.optionalString (!lib.hasSuffix "." zone) ".";
         mkNsdZoneNames = zones: map addDot (lib.attrNames zones);
-        mkBindZoneNames = zones: map (zone: addDot zone.name) zones;
+        mkBindZoneNames = zones: map addDot (lib.attrNames zones);
         getZones = cfg: mkNsdZoneNames cfg.services.nsd.zones
                      ++ mkBindZoneNames cfg.services.bind.zones;
 
