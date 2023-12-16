@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "hjson-go";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "hjson";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ox6/PY7Nx282bUekLoXezWfKDiDzCBUZMa5/nu2qG40=";
+    hash = "sha256-fonPxk/9ue8LzHTdKpuHJcucQoMl4P6gq+tbjS8Ui7Q=";
   };
 
   vendorHash = null;

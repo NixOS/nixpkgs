@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-toml";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BEkshlB1Zze4sVo5YDwpj6ENHFLHL4IFmOIYgrWz+gQ=";
+    sha256 = "sha256-SnSdVBIIir7QSexk//ozpxnbNr92KyWP2sSBg87jGcw=";
   };
 
   vendorHash = "sha256-XOcCsb3zUChiYLTfOCbRQF71E2khzSt/ApFI8NAS13U=";

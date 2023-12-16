@@ -361,6 +361,8 @@ in
         Group = cfg.group;
         StateDirectory = "";
         ReadWritePaths = optionals (!cfg.autoMount) [ "" cfg.dataDir ];
+        # Make sure the socket units are started before ipfs.service
+        Sockets = [ "ipfs-gateway.socket" "ipfs-api.socket" ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];

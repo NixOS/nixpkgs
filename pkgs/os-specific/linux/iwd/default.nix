@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    hash = "sha256-zePFmcQRFjcH6KToTpBFMQzGY+Eq7jijfn0R/MMKGrw=";
+    hash = "sha256-kE9GBVTKNpgEuE9jQ7k85OhEAN3VWgjmAgifvZfq46I=";
   };
 
   # Revert test that's broken on aarch64
