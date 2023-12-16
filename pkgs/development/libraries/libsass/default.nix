@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+
+# for passthru.tests
+, gtk3
+, gtk4
+, sassc
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsass";
@@ -29,6 +39,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests = {
+    inherit gtk3 gtk4 sassc;
+  };
 
   meta = with lib; {
     description = "A C/C++ implementation of a Sass compiler";
