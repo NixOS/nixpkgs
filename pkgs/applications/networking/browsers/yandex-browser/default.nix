@@ -54,15 +54,15 @@
 
 let
   version = {
-    corporate = "23.9.1.1016-1";
-    beta = "23.9.1.1028-1";
-    stable = "23.9.1.962-1";
+    corporate = "23.11.1.785-1";
+    beta = "23.11.1.675-1";
+    stable = "23.9.1.1077-1";
   }.${edition};
 
   hash = {
-    corporate = "sha256-A/MjphA6vefDzPmShpPbgjDTl4WnCiZWuHofy1Djrzc=";
-    beta = "sha256-vnz1weMwR3V/mBNzrJ0iqnA/aifYTCucW+9kyy/0SnA=";
-    stable = "sha256-VrDqFLvK7RdnV6Yt1DILu7mV1WFcilOH5+VKlCdpXjc=";
+    corporate = "sha256-9Z0bitl/WCZEyf32/ZXgEgkyCrvKPeK0SxzFVHZDhwA=";
+    beta = "sha256-WCPeZAjzvC36TQXREjbqoPjQMSWIuqyo6CTxwNg6LDA=";
+    stable = "sha256-1DOVe65CeAujKjnIu5T3X0NE2Q++w3n+PIWsGSQYptg=";
   }.${edition};
 
   app = {
@@ -71,7 +71,8 @@ let
     stable = "";
   }.${edition};
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "yandex-browser-${edition}";
   inherit version;
 
