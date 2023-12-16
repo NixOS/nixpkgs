@@ -1,15 +1,23 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, texlive, callPackage }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.203";
+  version = "2.204";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-RG12veiZXqjfK2gONmauhGReuLEkqxbQ4h4PEwaih/U=";
+    hash = "sha256-n0buIXc+xjUuUue2Fu1jnlTc74YvmrDKanfmWtM4bFs=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "tex" "texdoc" ];
+
+  patches = [ ./tex-font-path.patch ];
+
+  postPatch = ''
+    substituteInPlace TeX/Junicode.sty \
+      --replace '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -20,8 +28,24 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
 
+    install -Dm 444 -t $tex/tex/latex/Junicode TeX/Junicode.sty
+
+    install -Dm 444 -t $texdoc/doc/tex/latex/Junicode TeX/*.pdf
+
+    cat >$texdoc/doc/tex/latex/Junicode/nix-font-note.txt <<EOF
+    The style file is patched to refer directly to the corresponding
+    font files; thus, contrary to the documentation, the fonts
+    do *not* have to be installed globally.
+    EOF
+
     runHook postInstall
   '';
+
+  passthru = {
+    tlDeps = with texlive; [ xkeyval fontspec ];
+
+    tests = callPackage ./tests.nix { };
+  };
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";

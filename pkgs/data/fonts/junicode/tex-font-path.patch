@@ -1,0 +1,36 @@
+Upstream style file relies on font files being present on the system
+globally.  This is not quite how Nix usually does thing, so this patch
+changes the style file to instead look fonts up in hardcoded
+locations, which are later patched up to refer to the package outputs,
+thus ensuring the style always uses the fonts packaged with it.
+
+diff --git a/TeX/Junicode.sty b/TeX/Junicode.sty
+index f46b376..c73e6f8 100644
+--- a/TeX/Junicode.sty
++++ b/TeX/Junicode.sty
+@@ -136,8 +136,17 @@
+ \RequirePackage{fontspec}
+ \defaultfontfeatures{Ligatures=TeX, Extension=.\junicode@fonttype}
+ 
++\def\junicode@fonttype@otf{otf}
++
++\ifx\junicode@fonttype\junicode@fonttype@otf
++  \def\junicode@fontpath{@@@opentype_path@@@}
++\else
++  \def\junicode@fontpath{@@@truetype_path@@@}
++\fi
++
+ \setmainfont
+   [Renderer =          HarfBuzz,
++   Path =              \junicode@fontpath,
+    Numbers =           {\junicode@figurealign,\junicode@figurestyle},
+    SmallCapsFeatures = {Letters=SmallCaps},
+    UprightFont =       *-\junicode@regstylename,
+@@ -152,6 +161,7 @@
+ \newcommand{\junicode@newfont}[2]{
+     \newfontface#1{#2}[
+         Renderer =          HarfBuzz,
++        Path =              \junicode@fontpath,
+         Numbers =           {\junicode@figurealign,\junicode@figurestyle},
+         SmallCapsFeatures = {Letters=SmallCaps},
+     ]
