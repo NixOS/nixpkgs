@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "A web based code review and repository management for the git version control system";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ flokli jammerful zimbatm ];
+    maintainers = with maintainers; [ flokli zimbatm ];
     platforms = platforms.unix;
   };
 }
