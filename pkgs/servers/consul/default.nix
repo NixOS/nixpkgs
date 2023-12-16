@@ -40,7 +40,7 @@ buildGoModule rec {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mpl20;
+    license = licenses.bsl11;
     maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
     mainProgram = "consul";
   };
