@@ -11,6 +11,7 @@
 , toolz
 , typing-extensions
 , wrapt
+, attrs
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     toolz
     wrapt
+    attrs
   ];
 
   pythonImportsCheck = [
