@@ -62,7 +62,6 @@ stdenv.mkDerivation {
 
     $CC --version
     $CXX --version
-    g++ --version
     $LINK --version
     $CPP --version
     $LD --version
