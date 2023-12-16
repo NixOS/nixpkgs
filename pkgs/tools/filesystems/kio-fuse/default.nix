@@ -9,11 +9,11 @@
 
 mkDerivation rec {
   pname = "kio-fuse";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchgit {
     url = "https://invent.kde.org/system/kio-fuse.git";
-    sha256 = "sha256-LSFbFCaEPkQTk1Rg9xpueBOQpkbr/tgYxLD31F6i/qE=";
+    sha256 = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
     rev = "v${version}";
   };
 
