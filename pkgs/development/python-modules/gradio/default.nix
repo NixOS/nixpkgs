@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , pythonRelaxDepsHook
+, gradio
 
 # pyproject
 , hatchling
@@ -164,6 +165,22 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "gradio" ];
+
+  # Cyclic dependencies are fun!
+  # This is gradio without gradio-client and gradio-pdf
+  passthru = {
+    sans-reverse-dependencies = (gradio.override (old: {
+      gradio-client = null;
+    })).overridePythonAttrs (old: {
+      pname = old.pname + "-sans-client";
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pythonRelaxDepsHook ];
+      pythonRemoveDeps = (old.pythonRemoveDeps or []) ++ [ "gradio-client" ];
+      doInstallCheck = false;
+      doCheck = false;
+      pythonImportsCheck = null;
+      dontCheckRuntimeDeps = true;
+    });
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

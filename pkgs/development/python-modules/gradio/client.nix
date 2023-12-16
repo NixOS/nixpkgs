@@ -25,24 +25,6 @@
 , gradio
 }:
 
-let
-
-  # Cyclic dependencies are fun!
-  # This is gradio without gradio-client, only needed for checkPhase
-  gradio' = (gradio.override (old: {
-    gradio-client = null;
-  })).overridePythonAttrs (old: {
-    pname = old.pname + "-sans-client";
-    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pythonRelaxDepsHook ];
-    pythonRemoveDeps = (old.pythonRemoveDeps or []) ++ [ "gradio-client" ];
-    doInstallCheck = false;
-    doCheck = false;
-    pythonImportsCheck = null;
-    dontCheckRuntimeDeps = true;
-  });
-
-in
-
 buildPythonPackage rec {
   pname = "gradio-client";
   version = "0.7.3";
@@ -87,17 +69,16 @@ buildPythonPackage rec {
     websockets
   ];
 
-  nativeCheckInputs =[
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pydub
     rich
     tomlkit
-    gradio'
+    gradio.sans-reverse-dependencies
   ];
-  disallowedReferences = [
-    gradio' # ensuring we don't propagate this intermediate build
-  ];
+  # ensuring we don't propagate this intermediate build
+  disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
