@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
 , testers
+
+# for passthru.tests
+, gtk3
+, gtk4
+, sassc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    inherit gtk3 gtk4 sassc;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "A C/C++ implementation of a Sass compiler";
