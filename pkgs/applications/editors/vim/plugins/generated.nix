@@ -6599,18 +6599,6 @@ final: prev:
     meta.homepage = "https://github.com/tamago324/nlsp-settings.nvim/";
   };
 
-  nlua-nvim = buildVimPlugin {
-    pname = "nlua.nvim";
-    version = "2022-12-20";
-    src = fetchFromGitHub {
-      owner = "tjdevries";
-      repo = "nlua.nvim";
-      rev = "01aa428ff00605d52d0c0ece560f6a6d7971726b";
-      sha256 = "1v80qmhhqc1frpvnz42wa84qaz6xkasyrz59aisifp1vqcn01lgk";
-    };
-    meta.homepage = "https://github.com/tjdevries/nlua.nvim/";
-  };
-
   nnn-vim = buildVimPlugin {
     pname = "nnn.vim";
     version = "2023-05-23";
