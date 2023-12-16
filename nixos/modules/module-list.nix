@@ -278,6 +278,7 @@
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
+  ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
   ./programs/wshowkeys.nix

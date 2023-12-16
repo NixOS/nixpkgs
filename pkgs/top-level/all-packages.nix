@@ -2161,7 +2161,7 @@ with pkgs;
   vrrtest = callPackage ../tools/video/vrrtest { };
 
   winbox = callPackage ../tools/admin/winbox {
-    wine = wineWowPackages.staging;
+    wine = wineWowPackages.stable;
   };
 
   wtwitch = callPackage ../tools/video/wtwitch { };
@@ -9903,8 +9903,6 @@ with pkgs;
   kubeshark = callPackage ../applications/networking/cluster/kubeshark { };
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
-
-  kubo = callPackage ../applications/networking/kubo { };
 
   kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
   kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
@@ -40466,8 +40464,6 @@ with pkgs;
   };
 
   hjson = with python3Packages; toPythonApplication hjson;
-
-  hjson-go = callPackage ../development/tools/hjson-go { };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
