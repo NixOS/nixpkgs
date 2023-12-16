@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , gccStdenv # Darwin also needs gcc
 , fetchbzr
 , substituteAll
@@ -26,7 +27,7 @@ let
   versionInfo = if old then versionTable.old else versionTable.new;
 in
 
-gccStdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "simulide";
   version = "${versionInfo.version}-${versionInfo.release}";
 
