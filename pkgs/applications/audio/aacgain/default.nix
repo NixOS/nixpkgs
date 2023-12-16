@@ -5,7 +5,6 @@
 , autoconf
 , automake
 , libtool
-, faad2
 , mp4v2
 }:
 
@@ -17,11 +16,12 @@ stdenv.mkDerivation rec {
     owner = "dgilman";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9Y23Zh7q3oB4ha17Fpm1Hu2+wtQOA1llj6WDUAO2ARU=";
+    hash = "sha256-842+ueBSrTRs/e14d2LUd+uFi2qgJOYv+dswpC0lgIo=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
-    cp -R ${faad2.src}/* 3rdparty/faad2
+    rm -rf 3rdparty/mp4v2/*
     cp -R ${mp4v2.src}/* 3rdparty/mp4v2
     chmod -R +w 3rdparty
   '';
