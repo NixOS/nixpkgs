@@ -46,12 +46,6 @@ let
       hash = "sha256-M18y5JBPf3DR7SlJcCf82nG2MzwILg2w1AhJMzZXslg=";
     };
 
-    patches = [
-      # https://github.com/scikit-image/scikit-image/pull/7052
-      # prepare a patch file because the commit contains additional changes
-      ./suppress-deprecation-warning.patch
-    ];
-
     postPatch = ''
       patchShebangs skimage/_build_utils/{version,cythoner}.py
 
