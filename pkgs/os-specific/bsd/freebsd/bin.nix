@@ -1,9 +1,9 @@
-{ libc, mkDerivation, buildPackages, buildFreebsd, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, lib, stdenv, ...}:
+{ libc, mkDerivation, buildPackages, buildFreebsd, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, lib, stdenv, libkvm, ...}:
 mkDerivation {
   pname = "bins";
   path = "bin";
   extraPaths = [/*"sbin" "usr.bin" "usr.sbin"*/ "sys/conf" "sys/sys/param.h" "contrib/sendmail" "contrib/tcsh" "usr.bin/printf" "lib/libsm"];
-  buildInputs = [libjail libmd libnetbsd libcapsicum libcasper libelf libxo libncurses-tinfo libedit libc]; # ??? why libc
+  buildInputs = [libjail libmd libnetbsd libcapsicum libcasper libelf libxo libncurses-tinfo libedit libkvm];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
     buildFreebsd.bmakeMinimal  # TODO bmake??
@@ -22,9 +22,9 @@ mkDerivation {
   '';
 
   preBuild = lib.optionalString stdenv.cc.isClang ''
-    #export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST_DECLARED -D_SIZE_T -D_WCHAR_T"
+    #export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -D_WCHAR_T"
   '' + ''
-    export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE -D_WCHAR_T -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -DIUTF8=0x4000"
     make -C $BSDSRCDIR/lib/libsm $makeFlags
   '';
 

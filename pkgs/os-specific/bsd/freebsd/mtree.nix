@@ -14,6 +14,6 @@ mkDerivation {
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lmd -lnetbsd ${if compatIsNeeded then "-legacy" else ""} ${if stdenv.isFreeBSD then "-lutil" else ""}"
   '' + lib.optionalString stdenv.cc.isClang ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list"
   '';
 }

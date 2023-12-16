@@ -73,4 +73,5 @@ lib.makeScope newScope (self: with self; {
   libedit = callPackage ./libedit.nix {};
   libsm = callPackage ./libsm.nix {};
   libdevstat = callPackage ./libdevstat.nix {};
+  libexecinfo = callPackage ./libexecinfo.nix {};
 })

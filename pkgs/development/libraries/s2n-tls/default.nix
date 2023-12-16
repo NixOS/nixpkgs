@@ -4,6 +4,7 @@
 , cmake
 , openssl
 , nix
+, libexecinfo
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+  buildInputs = [ openssl ] # s2n-config has find_dependency(LibCrypto).
+  ++ lib.optionals (stdenv.hostPlatform.isFreeBSD) [libexecinfo]
+  ;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

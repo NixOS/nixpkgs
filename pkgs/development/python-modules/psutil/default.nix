@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ] ++ lib.optionals stdenv.isDarwin [
       IOKit
     ] ++ lib.optionals stdenv.isFreeBSD [
-      freebsd.libdevstat
+      freebsd.libdevstat freebsd.libkvm
     ];
 
   nativeCheckInputs = [

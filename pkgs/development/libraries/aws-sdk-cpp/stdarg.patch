@@ -1,0 +1,10 @@
+--- a/src/aws-cpp-sdk-core/include/aws/core/utils/logging/CRTLogSystem.h	2023-12-15 12:56:26.355017000 -0700
++++ b/src/aws-cpp-sdk-core/include/aws/core/utils/logging/CRTLogSystem.h	2023-12-15 12:56:44.747547000 -0700
+@@ -9,6 +9,7 @@
+ #include <aws/core/utils/logging/LogLevel.h>
+ #include <aws/common/logging.h>
+ 
++#include <cstdarg>
+ #include <atomic>
+ 
+ namespace Aws

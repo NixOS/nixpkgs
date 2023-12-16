@@ -3,6 +3,7 @@
 , aws-c-common
 , cmake
 , nix
+, libexecinfo
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     aws-c-common
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isFreeBSD) [ libexecinfo ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

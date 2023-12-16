@@ -305,24 +305,11 @@ in
         curl = prevStage.curl;
         iconv = prevStage.iconv;
         cacert = prevStage.cacert;
-        #bash = prevStage.bash;
         inherit (prevStage) fetchurl;
-        clangStdenv = self.overrideCC self.stdenv (import ../../build-support/cc-wrapper ({
-          inherit lib stdenvNoCC;
-          name = "freebsd-cc-clang";
-          nixSupport = {
-            # NIGHTMARE NIGHTMARE NIGHTMARE
-            cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "-L${prevStage.freebsd.libc.libgcc}/lib"  "-L${lib.getLib prevStage.llvmPackages_16.compiler-rt}/lib"];
-          };
-          inherit (prevStage.freebsd) libc;
-          inherit (prevStage) gnugrep coreutils;
-          propagateDoc = false;
-          nativeTools = false;
-          nativeLibc = false;
-          cc = prevStage.llvmPackages_16.clang-unwrapped;
-          isClang = true;
-          bintools = stdenv.cc.bintools;
-        }));
+        libcxxrt = self.callPackage ../../development/libraries/libcxxrt {
+          stdenv = self.clangStdenv;
+        };
+        clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

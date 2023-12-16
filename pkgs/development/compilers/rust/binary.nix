@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
+{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib, libcxxrt
 , autoPatchelfHook, gcc
 , version
 , src
@@ -36,6 +36,7 @@ rec {
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
       ++ lib.optionals (!stdenv.isDarwin) [ gcc.cc.lib zlib ]
+      ++ lib.optionals stdenv.isFreeBSD [ libcxxrt ]
       ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''

@@ -11,6 +11,7 @@
 , nix
 , arrow-cpp
 , aws-sdk-cpp
+, buildPackages
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -35,6 +36,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-IsPDQJo+TZ2noLefroiWl/Jx8fXmrmY73WHNRO41sik=";
   };
+
+  patches = [
+    ./stdarg.patch
+  ];
 
   postPatch = ''
     # Append the dev output to path hints in finding Aws.h to avoid
@@ -67,17 +72,21 @@ stdenv.mkDerivation rec {
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake curl ];
+  nativeBuildInputs = [ cmake curl buildPackages.openssl buildPackages.zlib ];
 
   buildInputs = [
     curl openssl zlib
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
-         [ CoreAudio AudioToolbox ];
+                         [ CoreAudio AudioToolbox ];
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];
+
+  # FreeBSD somehow doesn't make various libraries available at runtime even though it links fine.
+  # This can't be patchelfed because the build process creates binaries and then immediately runs them
+  "NIX_LDFLAGS_${buildPackages.stdenv.cc.suffixSalt}" = lib.optionalString stdenv.isFreeBSD " -rpath ${lib.getLib buildPackages.openssl}/lib -rpath ${lib.getLib buildPackages.zlib}/lib -rpath ${lib.getLib buildPackages.aws-crt-cpp}/lib -laws-crt-cpp";
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"

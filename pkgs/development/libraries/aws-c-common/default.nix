@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , nix
+, libexecinfo
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-xqNqyVtibR8oSMvl5RTU166FIxcbvGjZJOjJ9j6fU78=";
   };
+
+  propagatedBuildInputs = lib.optionals (stdenv.hostPlatform.isFreeBSD) [libexecinfo];
 
   nativeBuildInputs = [ cmake ];
 
