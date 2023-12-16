@@ -5305,8 +5305,6 @@ with pkgs;
 
   esptool = callPackage ../tools/misc/esptool { };
 
-  esptool_3 = callPackage ../tools/misc/esptool/3.nix { };
-
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
   ephemeralpg = callPackage ../development/tools/database/ephemeralpg { };
