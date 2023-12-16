@@ -121,17 +121,17 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+
+    # Backports to fix build
+    # FIXME: remove when applied upstream
+
     # Fix build on macOS
-    # Last two commits from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25992
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/c8b64452c076c1768beb23280de25faf2bcbe2c8.diff";
-      hash = "sha256-mqivdzyoLtkfkAb+r57gjPwg8d7whgFAahiUhGVOOvo=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/96d55d784cb4f047a4b58cd08330f42208641ea7.diff";
-      hash = "sha256-SkWdvqltfByFiKlhr9YILA6qWQxuyKz/YTanVp/NMzg=";
-    })
+    ./backports/0001-dri-added-build-dependencies-for-systems-using-non-s.patch
+    ./backports/0002-util-Update-util-libdrm.h-stubs-to-allow-loader.c-to.patch
+    ./backports/0003-glx-fix-automatic-zink-fallback-loading-between-hw-a.patch
+
+    # Fix build on i686
+    ./backports/0004-d3d12-Fix-AV1-video-encode-32-bits-build.patch
   ];
 
   postPatch = ''
