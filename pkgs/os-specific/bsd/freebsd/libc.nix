@@ -1,4 +1,4 @@
-{ mkDerivation, csu, include, buildPackages, buildFreebsd, lib, hostVersion, ... }:
+{ stdenv, mkDerivation, csu, include, buildPackages, buildFreebsd, lib, hostVersion, ... }:
 mkDerivation rec {
   isStatic = true;
   pname = "libc";
@@ -125,7 +125,8 @@ mkDerivation rec {
     find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
     popd
 
-    mkdir -p $libgcc/lib
+    #mkdir -p $libgcc/lib
+    libgcc="$out"
     $CC -nodefaultlibs -lgcc -shared -o $libgcc/lib/libgcc_s.so
     $AR r $libgcc/lib/libgcc_eh.a
 
@@ -158,19 +159,20 @@ mkDerivation rec {
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
 
-    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags
-    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install
-
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
     rm -f $out/libexec/ld-elf.so.1
     mv $out/bin/ld-elf.so.1 $out/libexec
+  '' + lib.optionalString (stdenv.buildPlatform.isFreeBSD) ''
+    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags
+    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install
   '';
+
 
   meta.platforms = lib.platforms.freebsd;
 
   # definitely a bad idea to enable stack protection on the stack protection initializers
   hardeningDisable = [ "stackprotector" ];
 
-  outputs = ["out" "libgcc"];
+  outputs = ["out"];
 }

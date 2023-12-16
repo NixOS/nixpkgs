@@ -235,9 +235,9 @@ in
         bash = prevStage.bash;
         gitMinimal = prevStage.gitMinimal;
         freebsd = super.freebsd.overrideScope (self: super: {
+          stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
           libdl = prevStage.freebsd.libdl;
         });
-        clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -310,6 +310,9 @@ in
           stdenv = self.clangStdenv;
         };
         clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
+        freebsd = super.freebsd.overrideScope (self: super: {
+          stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
+        });
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

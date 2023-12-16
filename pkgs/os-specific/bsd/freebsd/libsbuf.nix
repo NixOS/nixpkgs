@@ -1,7 +1,7 @@
 { mkDerivation, stdenv, lib, compatIfNeeded, ...}:
 mkDerivation {
-  path = "lib/libnv";
-  extraPaths = ["sys/contrib/libnv" "sys/sys"];
+  path = "lib/libsbuf";
+  extraPaths = ["sys/kern"];
   buildInputs = compatIfNeeded;
   MK_TESTS = "no";
   preBuild = lib.optionalString stdenv.isFreeBSD ''

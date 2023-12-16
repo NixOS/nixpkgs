@@ -1,6 +1,7 @@
-{ clangStdenv, stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, ... }:
+{ stdenv, llvmPackages, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
 lib.makeScope newScope (self: with self; {
-  stdenv = if stdenv.cc.isClang then stdenv else clangStdenv;
+  stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
+  #inherit stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
@@ -40,6 +41,13 @@ lib.makeScope newScope (self: with self; {
   boot-install = buildPackages.writeShellScriptBin "boot-install" (install-wrapper + ''
     ${xinstallBootstrap}/bin/xinstall "''${args[@]}"
   '');
+  xargs-j = substituteAll {
+    name = "xargs-j";
+    shell = runtimeShell;
+    src = ../xargs-j.sh;
+    dir = "bin";
+    isExecutable = true;
+  };
 
   # core c/c++ deps
   include = callPackage ./include.nix {};
@@ -48,6 +56,7 @@ lib.makeScope newScope (self: with self; {
   libcxx = callPackage ./libcxx.nix {};
   libcxxrt = callPackage ./libcxxrt.nix {};
 
+  # libs and bins
   bmake = callPackage ./bmake.nix {};
   install = callPackage ./install.nix {};
   mtree = callPackage ./mtree.nix {};
@@ -74,4 +83,11 @@ lib.makeScope newScope (self: with self; {
   libsm = callPackage ./libsm.nix {};
   libdevstat = callPackage ./libdevstat.nix {};
   libexecinfo = callPackage ./libexecinfo.nix {};
+  config = callPackage ./config.nix {};
+  libsbuf = callPackage ./libsbuf.nix {};
+  file2c = callPackage ./file2c.nix {};
+  bintrans = callPackage ./bintrans.nix {};
+
+  # kernel
+  sys = callPackage ./sys.nix {};
 })
