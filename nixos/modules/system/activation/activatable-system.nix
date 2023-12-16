@@ -13,6 +13,10 @@ let
     ;
 
   systemBuilderArgs = {
+    passAsFile = [
+      "activationScript"
+      "dryActivationScript"
+    ];
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
   };
@@ -54,8 +58,8 @@ in
   };
   config = {
     system.activatableSystemBuilderCommands = ''
-      echo "$activationScript" > $out/activate
-      echo "$dryActivationScript" > $out/dry-activate
+      mv "$activationScriptPath" $out/activate
+      mv "$dryActivationScriptPath" $out/dry-activate
       substituteInPlace $out/activate --subst-var-by out ''${!toplevelVar}
       substituteInPlace $out/dry-activate --subst-var-by out ''${!toplevelVar}
       chmod u+x $out/activate $out/dry-activate
