@@ -161,6 +161,14 @@ in
               '';
             };
 
+            ensurePasswordFile = mkOption {
+              type = types.nullOr types.path;
+              description = ''
+                Path to a file containing the password of the user.
+              '';
+              default = null;
+            };
+
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
@@ -597,12 +605,24 @@ in
                   clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
 
                   userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+
+                  ensureUserPasswords = lib.optionalString (user.ensurePasswordFile != null) ''
+                    $PSQL -tA <<'EOF'
+                      DO $$
+                      DECLARE password TEXT;
+                      BEGIN
+                        password := trim(both from replace(pg_read_file('${user.ensurePasswordFile}'), E'\n', '''));
+                        EXECUTE format('ALTER ROLE ${user.name} WITH PASSWORD '''%s''';', password);
+                      END $$;
+                    EOF
+                  '';
                 in ''
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
                   ${userPermissions}
                   ${userClauses}
 
                   ${dbOwnershipStmt}
+                  ${ensureUserPasswords}
                 ''
               )
               cfg.ensureUsers
