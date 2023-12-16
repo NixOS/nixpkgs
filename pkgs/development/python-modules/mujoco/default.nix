@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.0.1";
+  version = "3.1.0";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pftecOk4q19qKBHs9hBBVenI+SgJg9VT7vc6NKuiY0s=";
+    hash = "sha256-rZNVihIuvNJnQWqA5tV9DG5r3/LttWNW6fN2js+fDb8=";
   };
 
   nativeBuildInputs = [ cmake setuptools ];
@@ -36,13 +36,12 @@ buildPythonPackage rec {
 
   env.MUJOCO_PATH = "${mujoco}";
   env.MUJOCO_PLUGIN_PATH = "${mujoco}/lib";
-  env.MUJOCO_CMAKE_ARGS = "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON";
+  env.MUJOCO_CMAKE_ARGS = lib.concatStringsSep " " [
+    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
+    "-DMUJOCO_PYTHON_USE_SYSTEM_PYBIND11=ON"
+  ];
 
   preConfigure =
-    # Use system packages for pybind
-    ''
-      ${perl}/bin/perl -0777 -i -pe "s/(findorfetch\(.{3}USE_SYSTEM_PACKAGE.{3})(OFF)(.{3}PACKAGE_NAME.{3}pybind11.*\))/\1ON\3/gms" mujoco/CMakeLists.txt
-    '' +
     # Use non-system eigen3, lodepng, abseil: Remove mirror info and prefill
     # dependency directory. $build from setuptools.
     (let
