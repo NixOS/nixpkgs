@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonRelaxDepsHook
+, setuptools
 , click
 , prompt-toolkit
 , pygments
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
