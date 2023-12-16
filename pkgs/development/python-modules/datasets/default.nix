@@ -33,6 +33,12 @@ buildPythonPackage rec {
     hash = "sha256-Q8cSgupfj6xKD0bYgL6bvYBwdYDdNaiWEWWUrRvwc4g=";
   };
 
+  # remove pyarrow<14.0.1 vulnerability fix
+  postPatch = ''
+    substituteInPlace src/datasets/features/features.py \
+      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     dill
