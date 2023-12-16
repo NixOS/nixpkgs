@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    msgpack
   ];
 
   pytestFlagsArray = [
