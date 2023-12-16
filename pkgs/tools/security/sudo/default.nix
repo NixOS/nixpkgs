@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.15p3";
+  version = "1.9.15p4";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-eMh6HM7EL3oJUAL+KxR4pRBgNjWeNiuGdTSo4AVqBJQ=";
+    hash = "sha256-LiDsmGXu7qExbG9J7GrEZ4hptonU2QtEJDv0iH1t1TI=";
   };
 
   prePatch = ''
