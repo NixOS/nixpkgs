@@ -36,10 +36,8 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   postPatch = ''
-    for file in "pyproject.toml" "setup.py"; do
-      substituteInPlace $file \
-        --replace "setuptools_scm < 8.0.0" "setuptools_scm"
-    done
+    substituteInPlace pyproject.toml setup.py \
+      --replace "setuptools_scm < 8.0.0" "setuptools_scm"
   '';
 
   nativeBuildInputs = [
