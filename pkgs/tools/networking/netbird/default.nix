@@ -17,6 +17,7 @@
 , UserNotifications
 , WebKit
 , ui ? false
+, netbird-ui
 }:
 let
   modules =
@@ -30,16 +31,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.24.3";
+  version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-r/2P0QeILO0t5GIXD6yrqdUdOpPzNfBIniPhKdlJ+0g=";
+    hash = "sha256-m3LGxRUo1ModiSS1O1e5B513hRe42WuBo7GWYf/oaHA=";
   };
 
-  vendorHash = "sha256-FTr36gndWTrpEKo7KXdZJIR7aM0jrEOTFm1JlxokRaw=";
+  vendorHash = "sha256-lto71mayUJGDiKPSoKJD2DmIJikhv6sjEGsW4Ls1UUM=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -100,6 +101,7 @@ buildGoModule rec {
 
   passthru = {
     tests.netbird = nixosTests.netbird;
+    tests.netbird-ui = netbird-ui;
     updateScript = nix-update-script { };
   };
 
