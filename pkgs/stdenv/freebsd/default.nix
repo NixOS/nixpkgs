@@ -7,28 +7,28 @@ let inherit (localSystem) system;
   all-bootstrap-urls-table = {
     x86_64-freebsd14 = {
       bash = {
-        url = "http://192.168.1.9:8000/caddwlc57s8z6qmdimg0xiwmgkkl7r9f-x86_64-freebsd14-bash";
-        hash = "sha256-l0wIsbULNDR6yxGromq85Ulb4i5KH9g+2Fh1ZH4Obz4=";
+        url = "http://192.168.1.9:8000/rnn8891p9znlqngg5pz7xcq01v3ri569-x86_64-freebsd14-bash";
+        hash = "sha256-WEUA16H35gofjGLsbDrkVmVuZlhFoOwsOfOl8NbtCGs=";
       };
       mkdir = {
-        url = "http://192.168.1.9:8000/n8f9n9bi3bvjsvaf6936dasir87r15x0-x86_64-freebsd14-mkdir";
-        hash = "sha256-Wje9u9mz5kiTNSoPvmvgGwxQRgLnBM+26jPadbUTkpg=";
+        url = "http://192.168.1.9:8000/fsfj92mv4pbp4swdazv0g42wa92x2hnn-x86_64-freebsd14-mkdir";
+        hash = "sha256-rPNJ8R4EgyXsdsgxUKg05JbtoWrsd+3Txlhn2fiyan4=";
       };
       tar = {
-        url = "http://192.168.1.9:8000/s0b2xj587gakdiw2kph3kgpwwc0p3wl7-x86_64-freebsd14-tar";
-        hash = "sha256-jMb9QnDPCVjyDErTLrhZW9E2KsoS95gIWPvZum5Sy8E=";
+        url = "http://192.168.1.9:8000/xyaqziwgn4nwls0wa8zbp78ki26m13zp-x86_64-freebsd14-tar";
+        hash = "sha256-kWyWMNsfHR8bM74NXvhx5aJ8rS3mNSncOyBgqYK6GTY=";
       };
       unxz = {
-        url = "http://192.168.1.9:8000/80v8cjpy1b8wgliza5ynwygrgn64a452-x86_64-freebsd14-unxz";
-        hash = "sha256-yVPhB2tOwGP5aieKTJw+bXdNaM2ye8foo9SJkU3bgEY=";
+        url = "http://192.168.1.9:8000/zqzgi5w7rczwxaz04396wqkdvqm92vn3-x86_64-freebsd14-unxz";
+        hash = "sha256-GSwqOktp0RzYT6bWozpSXzKyV1+81jw2L6MpoAgn8TY=";
       };
       chmod = {
-        url = "http://192.168.1.9:8000/5f5kypi47g1bgm1w77akq9nmrm9wbw8j-x86_64-freebsd14-chmod";
-        hash = "sha256-01dHQyHH4xnnMTgKgYFN2ksgXhhnub6fBrgUFSYjRJ0=";
+        url = "http://192.168.1.9:8000/brc6y7zyxc1rl2lcr8j212ddya3rcmvg-x86_64-freebsd14-chmod";
+        hash = "sha256-iBdzCXKU+03MfOA75ASrXOD3arPtQnvKqsdCf32oKxk=";
       };
       bootstrapFiles = {
-        url = "http://192.168.1.9:8000/npna7h5bbgzamk2vp3fqpdnpspq1hgin-x86_64-freebsd14-bootstrap-files.tar.xz";
-        hash = "sha256-xgX5wVX6J+lSQiF12bxEggtvcTYAMIFPgeRtPzC0zKY=";
+        url = "http://192.168.1.9:8000/vla54lvfb5hjvmsnjbdvzbfr7r0aakg0-x86_64-freebsd14-bootstrap-files.tar.xz";
+        hash = "sha256-2RJsE4Sv7w/YgpUgAlc7j8KB2eE0RoJpTOeQ61FxUMI=";
       };
     };
   };
