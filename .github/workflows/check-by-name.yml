@@ -20,6 +20,9 @@ jobs:
     # The default of 6 hours is definitely too long
     timeout-minutes: 10
     steps:
+      # This step has to be in this file,
+      # because it's needed to determine which revision of the repository to fetch,
+      # and we can only use other files from the repository once it's fetched.
       - name: Resolving the merge commit
         env:
           GH_TOKEN: ${{ github.token }}
