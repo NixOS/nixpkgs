@@ -67,6 +67,7 @@ gccStdenv.mkDerivation {
 
     export QMAKE_CC=$CC
     export QMAKE_CXX=$CXX
+    export QMAKE_CONF_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++asd
     export QMAKE_LINK=$LINK
 
     cat SimulIDE.pro
@@ -75,6 +76,7 @@ gccStdenv.mkDerivation {
   makeFlags = [
     "CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
     "CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
+    "QMAKE_CONF_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++asd"
     "LINK=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++"
     "CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
     "CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp"
