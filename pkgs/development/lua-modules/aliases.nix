@@ -41,4 +41,5 @@ in
 mapAliases {
   lpty = throw "lpy was removed because broken and unmaintained "; # added 2023-10-14
   cyrussasl = throw "cyrussasl was removed because broken and unmaintained "; # added 2023-10-18
+  nlua-nvim = throw "nlua-nvim is deprecated, use neodev-nvim instead"; # added 2023-12-16
 }
