@@ -11,6 +11,7 @@
 , setuptools
 , tzlocal
 , vobject
+, xandikos
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    xandikos
   ];
 
   pythonImportsCheck = [ "caldav" ];
