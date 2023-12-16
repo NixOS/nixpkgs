@@ -1180,6 +1180,7 @@
   ./services/networking/squid.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/ssh/ssh3-server.nix
   ./services/networking/sslh.nix
   ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/strongswan.nix
