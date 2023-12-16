@@ -49,7 +49,6 @@ let
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
     systemd = config.systemd.package;
@@ -318,6 +317,11 @@ in
       # to the system closure, which defeats the purpose of the `system.checks`
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
+
+      # Define `passAsFile` here, rather than in the body of `baseSystem`, so
+      # that it can be augmented with "activationScript" and
+      # "dryActivationScript" in `./activatable-system.nix`.
+      passAsFile = [ "extraDependencies" ];
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
       inherit (config.system) forbiddenDependenciesRegex;
