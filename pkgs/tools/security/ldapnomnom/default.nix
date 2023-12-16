@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ldapnomnom";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-o29vcPKRX8TWRCpa20DVsh/4K7d3IbaLS3B+jJGBEmo=";
+    hash = "sha256-3s2mLNqnJ+wZ17gy8Yr2Ze0S62A1bmE91E2ciLNO14E=";
   };
 
   vendorHash = "sha256-3ucnLD+qhBSWY2wLtBcsOcuEf1woqHP17qQg7LlERA8=";
