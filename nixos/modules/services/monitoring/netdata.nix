@@ -208,7 +208,9 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = (with pkgs; [ curl gawk iproute2 which procps bash ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
-        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
+        ++ lib.optional config.virtualisation.libvirtd.enable config.virtualisation.libvirtd.package
+        ++ lib.optional config.virtualisation.docker.enable config.virtualisation.docker.package
+        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ];
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
         NETDATA_PIPENAME = "/run/netdata/ipc";
@@ -351,6 +353,8 @@ in {
       ${defaultUser} = {
         group = defaultUser;
         isSystemUser = true;
+        extraGroups = lib.optional config.virtualisation.docker.enable "docker"
+          ++ lib.optional config.virtualisation.podman.enable "podman";
       };
     };
 
