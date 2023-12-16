@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , jaxlib
 , jaxlib-bin
+, hypothesis
 , lapack
 , matplotlib
 , ml-dtypes
@@ -27,7 +28,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.21";
+  version = "0.4.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-CMsW/t4/itJxN4pST8EKkN0ooHWdjRnLs073FwbXRJM=";
+    hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   nativeCheckInputs = [
+    hypothesis
     jaxlib'
     matplotlib
     pytestCheckHook
