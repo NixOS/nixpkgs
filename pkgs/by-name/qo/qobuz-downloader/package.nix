@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "qobuz";
+  pname = "qobuz-downloader";
   version = "1.0.32"; # see usr/share/qobuz_downloader/data/flutter_assets/version.json
 
   src = requireFile {
