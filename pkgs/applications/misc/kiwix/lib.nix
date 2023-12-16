@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libkiwix";
-  version = "12.1.1";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hcwLxfn1fiUAiwsnIddv4HukvVrFePtx7sDQUD1lGUA=";
+    sha256 = "sha256-IdQYvQlA7Y0F0DctCQ3Fi817uWXalVrpQOxb2O7vMLU=";
   };
 
   nativeBuildInputs = [
