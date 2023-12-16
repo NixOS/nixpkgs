@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   inherit (nushell) version src;
   cargoHash = "sha256-NVdXbpmGBAcv47jbel2cccoe0m2FInSSOnMWofqtpiM=";
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.cc.isClang {
     LIBCLANG_PATH = "${libclang.lib}/lib";
   };
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];

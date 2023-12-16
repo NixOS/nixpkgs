@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   inherit (nushell) version src;
   cargoHash = "sha256-eGRaYbYB+zHT8rXm6aCrnPVgyDA8ltsg0GOYgghmov0=";
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.cc.isClang {
     LIBCLANG_PATH = "${libclang.lib}/lib";
   };
   nativeBuildInputs = [ pkg-config ];
