@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
         suite, as well as "bare" plain binary object files
       - block structure for label scoping
     '';
+    categories = with lib.categories; [ assembler ];
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = with lib.platforms; unix;
