@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libsodium }:
+{ lib, stdenv, fetchFromGitHub, libsodium, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "quicktun";
@@ -22,11 +22,13 @@ stdenv.mkDerivation {
     install -vD out/quicktun* -t $out/bin
   '';
 
+  passthru.tests.quicktun = nixosTests.quicktun;
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Very simple, yet secure VPN software";
     homepage = "http://wiki.ucis.nl/QuickTun";
-    maintainers = [ ];
+    maintainers = with maintainers; [ h7x4 ];
     platforms = platforms.unix;
     license = licenses.bsd2;
   };
