@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
+        version = "19.2.1";
+        src = fetchFromGitHub {
+          owner = "esphome";
+          repo = "aioesphomeapi";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
+        };
+      });
+
       # https://github.com/home-assistant/core/pull/101913
       aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
         version = "3.9.1";
