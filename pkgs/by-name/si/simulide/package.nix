@@ -60,11 +60,12 @@ stdenv.mkDerivation {
            CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
            LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld
 
-    $CC || true
-    $CXX || true
-    $LINK || true
-    $CPP || true
-    $LD || true
+    $CC --version
+    $CXX --version
+    g++ --version
+    $LINK --version
+    $CPP --version
+    $LD --version
 
     export QMAKE_CC=$CC
     export QMAKE_CXX=$CXX
