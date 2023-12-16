@@ -45,13 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # xandikos and radicale are only optional test dependencies, not available for python3
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace xandikos "" \
-      --replace radicale ""
-  '';
-
   pythonImportsCheck = [ "caldav" ];
 
   meta = with lib; {
