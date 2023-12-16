@@ -9,15 +9,14 @@
 
 buildGoModule rec {
   pname = "manifest-tool";
-  version = "2.0.6";
-  gitCommit = "2ed9312726765567a84f2acc44a0c8a6e50f4b7a";
+  version = "2.1.5";
   modRoot = "v2";
 
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
     rev = "v${version}";
-    sha256 = "sha256-oopk++IdNF6msxOszT0fKxQABgWKbaQZ2aNH9chqWU0=";
+    hash = "sha256-TCR8A35oETAZszrZFtNZulzCsh9UwGueTyHyYe+JQeI=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
@@ -30,7 +29,7 @@ buildGoModule rec {
   nativeBuildInputs = [ git ];
 
   preConfigure = ''
-    ldflags="-X main.gitCommit=$(cat .git-revision)"
+    ldflags="-X main.gitCommit=$(cat .git-revision) -X main.version=${version}"
   '';
 
   CGO_ENABLED = if stdenv.hostPlatform.isStatic then "0" else "1";
