@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.2.0";
+  version = "3.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UYW7yEAg4RJR1ERFDDS6s8OBr0XRTHTJLSuOF7FO6u4=";
+    hash = "sha256-dFnEgUmmB9P8bKownMp0NsTWPAeMmdKiaxII3O1gT6A=";
   };
 
   nativeBuildInputs = [

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "license-scanner";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "license-scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X7omSecbb85dtxPJtgdjLLgJQRJ7dh12DGwzIG0tYcE=";
+    hash = "sha256-2KUaVDAZxMwZ3AAMEUmRiuvenPSFliUp6rZCZrVTDps=";
   };
 
   vendorHash = "sha256-7xa2tdCDCXkOZCLL8YPtO7i1VqD61Mow7un0690I8mM=";

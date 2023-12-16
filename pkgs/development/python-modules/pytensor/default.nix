@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.18.2";
+  version = "2.18.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-uB5VT4wP08pOkHlxdPJTXK4j5ubmf+hk5oHYPM6diHM=";
+    hash = "sha256-j7SNXFiQUofP5NtggSOwLxXkg267yneqoWH2uoDZogs=";
   };
 
   postPatch = ''
