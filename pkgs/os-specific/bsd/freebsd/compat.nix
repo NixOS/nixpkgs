@@ -132,13 +132,9 @@ mkDerivation {
     "HOST_INCLUDE_ROOT=${lib.getDev stdenv.cc.libc}/include"
   ];
 
-  # TODO rhelmot clean up
   installPhase = ''
     mkdir -p $out/{0,1}-include $out/lib $out/share/man $out/bin $out/include
     cp --no-preserve=mode -r cross-build/include/common/* $out/0-include
-    echo awawawawawawawawa
-    pwd
-    ls
     cp libegacy.a $out/lib
     cp *.3.gz $out/share/man
     for grp in $(make $makeFlags -V INCSGROUPS); do
