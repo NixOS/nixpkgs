@@ -4,6 +4,7 @@
 , fasteners
 , fetchPypi
 , numcodecs
+, msgpack
 , numpy
 , pytestCheckHook
 , pythonOlder
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     numpy
     fasteners
     numcodecs
-  ];
+  ] ++ numcodecs.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook
