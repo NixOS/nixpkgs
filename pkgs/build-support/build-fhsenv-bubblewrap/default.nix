@@ -149,6 +149,13 @@ let
       done
     fi
 
+    # propagate /etc from the actual host if nested
+    if [[ -e /.host-etc ]]; then
+      ro_mounts+=(--ro-bind /.host-etc /.host-etc)
+    else
+      ro_mounts+=(--ro-bind /etc /.host-etc)
+    fi
+
     for i in ${lib.escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
@@ -193,7 +200,6 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      --ro-bind /etc /.host-etc
       ${lib.optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
