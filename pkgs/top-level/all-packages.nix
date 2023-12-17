@@ -5305,8 +5305,6 @@ with pkgs;
 
   esptool = callPackage ../tools/misc/esptool { };
 
-  esptool_3 = callPackage ../tools/misc/esptool/3.nix { };
-
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
   ephemeralpg = callPackage ../development/tools/database/ephemeralpg { };
@@ -27842,10 +27840,6 @@ with pkgs;
   firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
 
   fwts = callPackage ../os-specific/linux/fwts { };
-
-  gasket = callPackage ../os-specific/linux/gasket {
-    inherit (linuxPackages) kernel;
-  };
 
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
 
