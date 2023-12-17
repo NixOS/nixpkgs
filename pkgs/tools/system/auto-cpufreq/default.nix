@@ -1,4 +1,4 @@
-{ lib, pkgs, python3Packages, fetchFromGitHub, substituteAll }:
+{ lib, python3Packages, fetchFromGitHub, substituteAll, wrapGAppsHook, gobject-introspection, gtk3 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-164Gi1Oo9Tfd58aDq/3UjsWeS4rAZ39xCEhBgqv+GtI=";
   };
 
-  nativeBuildInputs = with pkgs; [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = with pkgs; [ gtk3 ];
 
