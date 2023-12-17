@@ -863,6 +863,8 @@ with pkgs;
 
   ollama = callPackage ../tools/misc/ollama {  };
 
+  ollama-webui = callPackage ../tools/misc/ollama-webui {  };
+
   ots = callPackage ../tools/security/ots {  };
 
   credential-detector = callPackage ../tools/security/credential-detector { };
