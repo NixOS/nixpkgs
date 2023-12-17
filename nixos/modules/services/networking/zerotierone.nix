@@ -30,17 +30,17 @@ in
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 	
   options.services.zerotierone.localConf = mkOption {
-			default = { };
-			description = mdDoc ''
-				Configuration to be written to the zerotier JSON-based local.conf.
-				The configuration will be symlinked to /var/lib/zerotier-one/local.conf at build time.
-				To understand the configuration format, refer to https://docs.zerotier.com/config/#local-configuration-options.
-			'';
-			example = {
-				settings.allowTcpFallbackRelay = false;
-			};
-			type = types.attrs;
-	};
+    default = { };
+    description = mdDoc ''
+      Configuration to be written to the zerotier JSON-based local.conf.
+      The configuration will be symlinked to /var/lib/zerotier-one/local.conf at build time.
+      To understand the configuration format, refer to https://docs.zerotier.com/config/#local-configuration-options.
+      '';
+    example = {
+      settings.allowTcpFallbackRelay = false;
+    };
+    type = types.attrs;
+  };
   
   config = mkIf cfg.enable {
     systemd.services.zerotierone = {
@@ -59,8 +59,9 @@ in
       '' + (concatMapStrings (netId: ''
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
       '') cfg.joinNetworks) + ''
-				ln -s ${conf} /var/lib/zerotier-one/local.conf
-			'';
+        ln -s ${conf} /var/lib/zerotier-one/local.conf
+      '';
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";
