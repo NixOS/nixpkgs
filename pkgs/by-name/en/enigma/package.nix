@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch, makeWrapper, pkg-config, gettext, imagemagick, curl, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, xercesc, xdg-utils, hicolor-icon-theme }:
 stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enigma";
   version = "1.30";
 
   src = fetchurl {
-    url = "https://github.com/Enigma-Game/Enigma/releases/download/${version}/Enigma-${version}-src.tar.gz";
-    sha256 = "rmS5H7wrEJcAcdDXjtW07enuOGjeLm6VaVRvxYQ3+K8=";
+    url = "https://github.com/Enigma-Game/Enigma/releases/download/${finalAttrs.version}/Enigma-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-rmS5H7wrEJcAcdDXjtW07enuOGjeLm6VaVRvxYQ3+K8=";
   };
 
   patches = [
@@ -44,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ iblech ];
     homepage = "https://www.nongnu.org/enigma/";
   };
-}
+})
