@@ -63,6 +63,7 @@ in
         Group = "munge";
         StateDirectory = "munge";
         StateDirectoryMode = "0711";
+        Restart = "on-failure";
         RuntimeDirectory = "munge";
       };
 
