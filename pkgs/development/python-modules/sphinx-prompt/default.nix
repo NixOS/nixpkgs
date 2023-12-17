@@ -55,6 +55,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # versions >=1.8.0 cannot be build from source
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "A sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
