@@ -9,7 +9,6 @@
 , yarn
 , prefetch-yarn-deps
 , nodejs
-, fetchpatch
 , server-mode ? true
 }:
 
@@ -60,7 +59,6 @@ pythonPackages.buildPythonApplication rec {
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
       --replace "code_snippets" ""
-    patchShebangs .
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
