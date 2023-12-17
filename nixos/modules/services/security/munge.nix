@@ -47,9 +47,11 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"
+        "time-sync.target"
       ];
       after = [
         "network-online.target"
+        "time-sync.target"
       ];
 
       path = [ pkgs.munge pkgs.coreutils ];
