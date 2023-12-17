@@ -45,7 +45,12 @@ in
 
     systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [
+        "network-online.target"
+      ];
+      after = [
+        "network-online.target"
+      ];
 
       path = [ pkgs.munge pkgs.coreutils ];
 
