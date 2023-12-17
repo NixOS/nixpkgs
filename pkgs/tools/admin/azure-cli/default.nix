@@ -1,11 +1,18 @@
 { lib
 , callPackage
+, callPackages
+, stdenvNoCC
+, fetchurl
 , fetchFromGitHub
 , installShellFiles
+, python3
 
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
 , withImmutableConfig ? true
+
+  # List of extensions/plugins to include.
+, withExtensions ? [ ]
 }:
 
 let
@@ -21,6 +28,49 @@ let
 
   # put packages that needs to be overridden in the py package scope
   py = callPackage ./python-packages.nix { inherit src version; };
+
+  # Builder for Azure CLI extensions. Extensions are Python wheels that
+  # outside of nix would be fetched by the CLI itself from various sources.
+  mkAzExtension =
+    { pname
+    , version
+    , url
+    , sha256
+    , description
+    }: python3.pkgs.buildPythonPackage {
+      inherit pname version;
+      format = "wheel";
+      src = fetchurl { inherit url sha256; };
+      meta = with lib; {
+        inherit description;
+        inherit (azure-cli.meta) platforms maintainers;
+        homepage = "https://github.com/Azure/azure-cli-extensions";
+        changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
+        license = lib.licenses.mit;
+        sourceProvenance = [ sourceTypes.fromSource ];
+      };
+    };
+
+  extensions = callPackages ./extensions-generated.nix { inherit mkAzExtension; };
+
+  extensionDir = stdenvNoCC.mkDerivation {
+    name = "azure-cli-extensions";
+    dontUnpack = true;
+    installPhase =
+      let
+        namePaths = map (p: "${p.pname},${p}/${python3.sitePackages}") withExtensions;
+      in
+      ''
+        for line in ${lib.concatStringsSep " " namePaths}; do
+          name=$(echo $line | cut -d',' -f1)
+          path=$(echo $line | cut -d',' -f2)
+          mkdir -p $out/$name
+          for f in $(ls $path); do
+            ln -s $path/$f $out/$name/$f
+          done
+        done
+      '';
+  };
 in
 
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -199,10 +249,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     wrapProgram $out/bin/az \
   '' + lib.optionalString withImmutableConfig ''
     --set AZURE_IMMUTABLE_DIR $out/etc/azure \
+  '' + lib.optionalString (withExtensions != [ ]) ''
+    --set AZURE_EXTENSION_DIR ${extensionDir} \
   '' + ''
     --set PYTHONPATH $PYTHONPATH
-  ''
-  ;
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -283,6 +334,10 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.storage.blob"
     "azure.storage.common"
   ];
+
+  passthru = {
+    inherit extensions;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";
