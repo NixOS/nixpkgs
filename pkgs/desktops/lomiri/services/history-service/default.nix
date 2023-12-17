@@ -49,7 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/history-service/-/commit/1370777952c6a2efb85f582ff8ba085c2c0e290a.patch";
       hash = "sha256-Z/dFrFo7WoPZlKto6wNGeWdopsi8iBjmd5ycbqMKgxo=";
     })
-    ./0001-Drop-deprecated-qt5_use_modules.patch
+
+    # Drop deprecated qt5_use_modules usage
+    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/36 merged & in release
+    (fetchpatch {
+      url = "https://gitlab.com/OPNA2608/history-service/-/commit/b36ab377aca93555b29d1471d6eaa706b5c843ca.patch";
+      hash = "sha256-mOpXqqd4JI7lHtcWDm9LGCrtB8ERge04jMpHIagDM2k=";
+    })
   ];
 
   postPatch = ''
@@ -100,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'LIB_INSTALL_DIR' 'CMAKE_INSTALL_FULL_LIBDIR' \
       --replace "\''${CMAKE_INSTALL_PREFIX}/\''${" "\''${" \
 
-  '' + (if finalAttrs.doCheck then ''
+  '' + (if finalAttrs.finalPackage.doCheck then ''
     # Tests launch these DBus services, fix paths related to them
 
     substituteInPlace tests/common/dbus-services/CMakeLists.txt \
