@@ -15052,6 +15052,8 @@ with pkgs;
 
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
+  xen-guest-agent = callPackage ../tools/virtualization/xen-guest-agent { };
+
   xflux = callPackage ../tools/misc/xflux { };
   xflux-gui = python3Packages.callPackage ../tools/misc/xflux/gui.nix { };
 
