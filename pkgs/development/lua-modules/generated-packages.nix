@@ -2724,6 +2724,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+nlua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "nlua";
+  version = "0.1.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nlua-0.1.0-1.rockspec";
+    sha256 = "14ynhy85m2prawym1ap1kplkbicafbczpggzgdnji00frwqa1zvv";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mfussenegger/nlua/archive/v0.1.0.zip";
+    sha256 = "1x3pbv5ngbk0sjgwfpjsv3x49wzq4x29d9rm0hgyyb2g2mwag3jc";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mfussenegger/nlua";
+    description = "Neovim as Lua interpreter";
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 nui-nvim = callPackage({ buildLuarocksPackage, fetchgit, fetchurl }:
 buildLuarocksPackage {
   pname = "nui.nvim";
