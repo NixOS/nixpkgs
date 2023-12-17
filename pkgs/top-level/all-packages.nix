@@ -3408,6 +3408,8 @@ with pkgs;
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
+  azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
+
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
   azure-static-sites-client = callPackage ../development/tools/azure-static-sites-client { };
