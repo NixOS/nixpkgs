@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.4.0-unstable-2023-12-04";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
