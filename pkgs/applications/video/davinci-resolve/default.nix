@@ -180,7 +180,6 @@ let
 in
 buildFHSEnv {
   inherit (davinci) pname version;
-  name = null;
 
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
