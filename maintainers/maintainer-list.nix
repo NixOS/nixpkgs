@@ -11299,6 +11299,12 @@
     githubId = 585424;
     name = "Massimo Gengarelli";
   };
+  matdibu = {
+    email = "contact@mateidibu.dev";
+    github = "matdibu";
+    githubId = 24750154;
+    name = "Matei Dibu";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
