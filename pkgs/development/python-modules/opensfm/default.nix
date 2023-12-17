@@ -67,6 +67,8 @@ buildPythonPackage rec {
     # where segfaults might be introduced in future
     echo 'feature_type: SIFT' >> data/berlin/config.yaml
     echo 'feature_type: HAHOG' >> data/lund/config.yaml
+
+    sed -i -e 's/^.*BuildDoc.*$//' setup.py
   '';
 
   nativeBuildInputs = [ cmake pkg-config sphinx ];
