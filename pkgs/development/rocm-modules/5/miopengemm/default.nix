@@ -43,6 +43,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "benchmark"
   ];
 
+  # Deprecated? https://github.com/ROCmSoftwarePlatform/MIOpenGEMM/issues/62
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpenGEMM";

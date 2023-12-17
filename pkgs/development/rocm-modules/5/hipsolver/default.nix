@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipSOLVER";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-5b6kPj9yvXvP7f7AyHDTYRoM/EhQZvwkVCfDflFJugc=";
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm SOLVER marshalling library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipSOLVER";
+    homepage = "https://github.com/ROCm/hipSOLVER";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;

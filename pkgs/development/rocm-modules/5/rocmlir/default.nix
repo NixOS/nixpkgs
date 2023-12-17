@@ -41,7 +41,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-vPi4UVljohVAfnwDVQqeOVaJPa6v8aV5uBOtqLddTtc=";
@@ -121,7 +121,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "MLIR-based convolution and GEMM kernel generator";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
+    homepage = "https://github.com/ROCm/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;

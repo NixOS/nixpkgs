@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocThrust";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-+bcHcA87IToTcII7N/hm81C/JiokJKj0M1yAph/x9Qc=";
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm parallel algorithm library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
+    homepage = "https://github.com/ROCm/rocThrust";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;

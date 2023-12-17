@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipBLAS";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-abaEZN82dsoEC5gIF3/6epRDVz5ItUo6CkZsybu/G+g=";
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm BLAS marshalling library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipBLAS";
+    homepage = "https://github.com/ROCm/hipBLAS";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;

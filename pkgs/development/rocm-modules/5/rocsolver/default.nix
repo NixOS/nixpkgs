@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-qxmjm4tgpCnfJ2SqUXndk6y0MsPJUKHvjv/3Uc0smr4=";
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm LAPACK implementation";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocSOLVER";
+    homepage = "https://github.com/ROCm/rocSOLVER";
     license = with licenses; [ bsd2 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
