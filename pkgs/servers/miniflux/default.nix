@@ -1,16 +1,13 @@
-{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
 
-let
+buildGoModule rec {
   pname = "miniflux";
   version = "2.0.51";
 
-in buildGo121Module {
-  inherit pname version;
-
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "miniflux";
     repo = "v2";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-gffiZOsHUYTDEjIdKUPyKbsdRKX890aG6GY72LYESkA=";
   };
 
