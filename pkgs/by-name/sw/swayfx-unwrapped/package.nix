@@ -1,7 +1,25 @@
-{ fetchFromGitHub, lib, sway-unwrapped }:
+{
+  lib,
+  fetchFromGitHub,
+  sway-unwrapped,
+  stdenv,
+  systemd,
+  # Used by the NixOS module:
+  isNixOS ? false,
+  enableXWayland ? true,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  trayEnabled ? systemdSupport,
+}:
 
-sway-unwrapped.overrideAttrs (oldAttrs: rec {
-  pname = "swayfx";
+(sway-unwrapped.override {
+  inherit
+    isNixOS
+    enableXWayland
+    systemdSupport
+    trayEnabled
+    ;
+}).overrideAttrs (oldAttrs: rec {
+  pname = "swayfx-unwrapped";
   version = "0.3.2";
 
   src = fetchFromGitHub {
@@ -22,7 +40,6 @@ sway-unwrapped.overrideAttrs (oldAttrs: rec {
     builtins.filter
       (patch: !builtins.elem (patch.name or null) removePatches)
       (oldAttrs.patches or [ ]);
-
 
   meta = with lib; {
     description = "Sway, but with eye candy!";
