@@ -15962,6 +15962,12 @@
     githubId = 141248;
     name = "Ramses";
   };
+  rvfg = {
+    email = "i@rvf6.com";
+    github = "duament";
+    githubId = 30264485;
+    name = "Rvfg";
+  };
   rvl = {
     email = "dev+nix@rodney.id.au";
     github = "rvl";
