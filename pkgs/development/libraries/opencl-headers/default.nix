@@ -2,6 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, hashcat
+, ocl-icd
+, tesseract
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests = {
+    inherit ocl-icd tesseract hashcat;
+  };
 
   meta = with lib; {
     description = "Khronos OpenCL headers version ${version}";
