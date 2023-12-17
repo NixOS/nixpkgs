@@ -4,9 +4,10 @@
       # Required
       name = "Your name";
 
-      # Optional, but at least one of email, matrix or githubId must be given
+      # Optional, but at least one of email, matrix, discourse or githubId must be given
       email = "address@example.org";
       matrix = "@user:example.org";
+      discourse = "DiscourseHandle";
       github = "GithubUsername";
       githubId = your-github-id;
 
@@ -22,6 +23,7 @@
     - `name` is a name that people would know and recognize you by,
     - `email` is your maintainer email address,
     - `matrix` is your Matrix user ID,
+    - `discourse` is your handle on https://discourse.nixos.org/
     - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
     - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
     - `keys` is a list of your PGP/GPG key fingerprints.
