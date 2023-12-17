@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkIf mkOption types mdDoc optionalString concatStrings concatStringsSep hasPrefix mapAttrsToList;
+  inherit (lib) mkIf mkOption types mdDoc optionalString concatStringsSep hasPrefix mapAttrsToList;
 
   cfg = config.networking.firewall;
 
@@ -10,10 +10,20 @@ let
     map (x: ''"${x}"'') cfg.trustedInterfaces
   );
 
+  writeElements = elements: optionalString (elements != "") "elements = { ${elements} }";
+
   portsToNftSet = ports: portRanges: concatStringsSep ", " (
     map (x: toString x) ports
     ++ map (x: "${toString x.from}-${toString x.to}") portRanges
   );
+
+  interfacePorts = builtins.concatStringsSep ", " (builtins.concatLists (mapAttrsToList
+  (interface: value:
+    map (port: "${interface} . tcp . ${toString port}") value.allowedTCPPorts
+    ++ map (range: "${interface} . tcp . ${toString range.from}-${toString range.to}") value.allowedTCPPortRanges
+    ++ map (port: "${interface} . udp . ${toString port}") value.allowedUDPPorts
+    ++ map (range: "${interface} . udp . ${toString range.from}-${toString range.to}") value.allowedUDPPortRanges
+  ) cfg.interfaces));
 
 in
 
@@ -72,6 +82,30 @@ in
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
+        set tcp-ports {
+          comment "Open TCP ports"
+          type inet_service
+          flags interval
+          auto-merge
+          ${writeElements (portsToNftSet cfg.allowedTCPPorts cfg.allowedTCPPortRanges)}
+        }
+
+        set udp-ports {
+          comment "Open UDP ports"
+          type inet_service
+          flags interval
+          auto-merge
+          ${writeElements (portsToNftSet cfg.allowedUDPPorts cfg.allowedUDPPortRanges)}
+        }
+
+        set interface-ports {
+          comment "Interface-specific open ports"
+          type ifname . inet_proto . inet_service
+          flags interval
+          auto-merge
+          ${writeElements interfacePorts}
+        }
+
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -120,17 +154,9 @@ in
 
         chain input-allow {
 
-          ${concatStrings (mapAttrsToList (iface: cfg:
-            let
-              ifaceExpr = optionalString (iface != "default") "iifname ${iface}";
-              tcpSet = portsToNftSet cfg.allowedTCPPorts cfg.allowedTCPPortRanges;
-              udpSet = portsToNftSet cfg.allowedUDPPorts cfg.allowedUDPPortRanges;
-            in
-            ''
-              ${optionalString (tcpSet != "") "${ifaceExpr} tcp dport { ${tcpSet} } accept"}
-              ${optionalString (udpSet != "") "${ifaceExpr} udp dport { ${udpSet} } accept"}
-            ''
-          ) cfg.allInterfaces)}
+          tcp dport @tcp-ports accept
+          udp dport @udp-ports accept
+          iifname . meta l4proto . th dport @interface-ports accept
 
           ${optionalString cfg.allowPing ''
             icmp type echo-request ${optionalString (cfg.pingLimit != null) "limit rate ${cfg.pingLimit}"} accept comment "allow ping"
