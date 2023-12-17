@@ -1,7 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , p7zip
 , cabextract
@@ -60,6 +60,8 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_ar"
   ];
 
   meta = with lib; {
