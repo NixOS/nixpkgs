@@ -18,6 +18,7 @@ let
     gmenuharness = callPackage ./development/gmenuharness { };
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
+    trust-store = callPackage ./development/trust-store { };
     u1db-qt = callPackage ./development/u1db-qt { };
 
     #### QML / QML-related
