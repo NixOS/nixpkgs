@@ -45,7 +45,7 @@ in {
         ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
         ProtectSystem = "strict";
-        ProtectHome = "read-only";
+        ProtectHome = "false";
         Restart = "on-failure";
       };
     };
