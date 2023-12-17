@@ -4,18 +4,22 @@ mkDerivation rec {
   pname = "fstl";
   version = "0.10.0";
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     mv fstl.app $out/Applications
+
+    runHook postInstall
   '';
 
   src = fetchFromGitHub {
     owner = "fstl-app";
     repo = "fstl";
     rev = "v" + version;
-    sha256 = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
+    hash = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
   };
 
   meta = with lib; {
