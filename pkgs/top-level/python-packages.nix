@@ -13108,6 +13108,8 @@ self: super: with self; {
 
   sigrok = callPackage ../development/python-modules/sigrok { };
 
+  sigstore = callPackage ../development/python-modules/sigstore { };
+
   sigstore-protobuf-specs = callPackage ../development/python-modules/sigstore-protobuf-specs { };
 
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
