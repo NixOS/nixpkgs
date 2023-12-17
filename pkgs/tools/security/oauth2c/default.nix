@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "oauth2c";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "cloudentity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iFYKAdoeCvyhAeZ5K3CHSsHG0Uq+Ok0C8ACe9RztDmY=";
+    hash = "sha256-4ZCb8BXrKGXJ8d06fxAuFkGRxcK7PwuPFuCBc9EIXZY=";
   };
 
   vendorHash = "sha256-olDtsLoslxOsbAq60RnLp9MGZOt17/BPo9E9SgWOqoQ=";
