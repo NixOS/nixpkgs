@@ -27,17 +27,3 @@ index de1cd6e..bb5700b 100644
      # TODO(crbug.com/1235145): Investigate why/if this should be needed.
      if (is_win) {
        cflags += [ "/clang:-ffp-contract=off" ]
-@@ -800,13 +782,6 @@ config("compiler") {
-       if (is_apple) {
-         ldflags += [ "-Wcrl,object_path_lto" ]
-       }
--      if (!is_chromeos) {
--        # TODO(https://crbug.com/972449): turn on for ChromeOS when that
--        # toolchain has this flag.
--        # We only use one version of LLVM within a build so there's no need to
--        # upgrade debug info, which can be expensive since it runs the verifier.
--        ldflags += [ "-Wl,-mllvm,-disable-auto-upgrade-debug-info" ]
--      }
-     }
- 
-     # TODO(https://crbug.com/1211155): investigate why this isn't effective on
