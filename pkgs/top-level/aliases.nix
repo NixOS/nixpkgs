@@ -1065,7 +1065,7 @@ mapAliases ({
   inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_16;
+  llvmPackages_latest = llvmPackages_17;
   llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_git.tools;

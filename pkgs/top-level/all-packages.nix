@@ -518,6 +518,8 @@ with pkgs;
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
+  cnquery = callPackage ../tools/security/cnquery { };
+
   cocogitto = callPackage ../development/tools/cocogitto {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -14102,6 +14104,8 @@ with pkgs;
   transifex-cli = callPackage ../applications/misc/transifex-cli { };
 
   translatelocally = callPackage ../applications/misc/translatelocally { };
+
+  translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
@@ -32966,6 +32970,8 @@ with pkgs;
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
+
+  jack-passthrough = callPackage ../applications/audio/jack-passthrough { };
 
   jack_rack = callPackage ../applications/audio/jack-rack { };
 

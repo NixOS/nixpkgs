@@ -5,10 +5,12 @@
 , lxml
 , pytestCheckHook
 , pythonOlder
+, python
 , pytz
 , recurring-ical-events
 , requests
 , setuptools
+, toPythonModule
 , tzlocal
 , vobject
 , xandikos
@@ -44,7 +46,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    xandikos
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 
   pythonImportsCheck = [ "caldav" ];
