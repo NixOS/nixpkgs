@@ -29,7 +29,7 @@ with python3Packages; buildPythonApplication rec {
       interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
     })
     (substituteAll {
-      src = ./use-local-spdx-license-list.patch;
+      src = ./use-local-spdx-license-list2.patch;
       spdx_license_list_data = spdx-license-list-data.json;
     })
     ./missing-udev-rules-nixos.patch

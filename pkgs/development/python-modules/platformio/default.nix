@@ -3,6 +3,7 @@
 , fetchPypi
 , git
 , spdx-license-list-data
+, substituteAll
 }:
 
 with python3.pkgs; buildPythonPackage rec {
@@ -15,21 +16,21 @@ with python3.pkgs; buildPythonPackage rec {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "sha256-nrJwyoiBbOgRC8ag1V7EdhWxf5mrRaPqZuvMfETYxwc=";
+    sha256 = "sha256-NR4UyAt8q5sUGtz1Sy6E8Of7y9WrH9xpcAWzLBeDQmo=";
   };
 
   # outputs = [ "out" ];
 
   patches = [
-    ../../embedded/platformio/fix-searchpath.patch
-    ./use-local-spdx-license-list.patch
+    # ../../embedded/platformio/fix-searchpath.patch
+    (substituteAll {
+      src = ../../embedded/platformio/use-local-spdx-license-list.patch;
+      spdx_license_list_data = spdx-license-list-data.json;
+    })
     ../../embedded/platformio/missing-udev-rules-nixos.patch
   ];
 
   postPatch = ''
-    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
-
     substituteInPlace setup.py \
       --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
       --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
