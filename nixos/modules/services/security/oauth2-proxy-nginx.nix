@@ -1,20 +1,19 @@
 { config, lib, ... }:
-with lib;
 let
   cfg = config.services.oauth2-proxy.nginx;
 in
 {
   options.services.oauth2-proxy.nginx = {
-    proxy = mkOption {
-      type = types.str;
+    proxy = lib.mkOption {
+      type = lib.types.str;
       default = config.services.oauth2-proxy.httpAddress;
-      defaultText = literalExpression "config.services.oauth2-proxy.httpAddress";
+      defaultText = lib.literalExpression "config.services.oauth2-proxy.httpAddress";
       description = lib.mdDoc ''
         The address of the reverse proxy endpoint for oauth2-proxy
       '';
     };
-    virtualHosts = mkOption {
-      type = types.listOf types.str;
+    virtualHosts = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [];
       description = lib.mdDoc ''
         A list of nginx virtual hosts to put behind the oauth2 proxy
@@ -23,12 +22,12 @@ in
   };
 
   config.services = {
-    oauth2-proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
+    oauth2-proxy = lib.mkIf (cfg.virtualHosts != [] && (lib.hasPrefix "127.0.0.1:" cfg.proxy)) {
       enable = true;
     };
 
-    nginx = mkIf config.services.oauth2-proxy.enable (mkMerge
-    ((optional (cfg.virtualHosts != []) {
+    nginx = lib.mkIf config.services.oauth2-proxy.enable (lib.mkMerge
+    ((lib.optional (cfg.virtualHosts != []) {
       recommendedProxySettings = true; # needed because duplicate headers
     }) ++ (map (vhost: {
       virtualHosts.${vhost} = {
