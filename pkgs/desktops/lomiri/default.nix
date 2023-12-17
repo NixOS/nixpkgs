@@ -28,6 +28,7 @@ let
     biometryd = callPackage ./services/biometryd { };
     hfd-service = callPackage ./services/hfd-service { };
     lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
+    mediascanner2 = callPackage ./services/mediascanner2 { };
   };
 in
   lib.makeScope libsForQt5.newScope packages
