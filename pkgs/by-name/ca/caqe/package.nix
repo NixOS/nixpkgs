@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nix-update-script
 , cmake
+, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
