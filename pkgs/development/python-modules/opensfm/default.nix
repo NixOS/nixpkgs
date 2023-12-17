@@ -87,7 +87,7 @@ buildPythonPackage rec {
     numpy
     scipy
     pyyaml
-    opencv4
+    opencv4.cxxdev
     networkx
     pillow
     matplotlib
