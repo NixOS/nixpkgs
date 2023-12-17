@@ -15,7 +15,7 @@
 , ninja
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "modem-manager-gui";
   version = "0.0.20";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "modem-manager-gui";
-    rev = "upstream%2F${version}";
+    rev = "upstream%2F${finalAttrs.version}";
     sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "modem-manager-gui";
   };
-}
+})
