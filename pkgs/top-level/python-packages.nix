@@ -12078,6 +12078,8 @@ self: super: with self; {
 
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
+  pyxel = callPackage ../development/python-modules/pyxel { };
+
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
