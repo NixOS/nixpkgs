@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, pkg-config, gettext, imagemagick, curl, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, xercesc, xdg-utils, hicolor-icon-theme }:
-stdenv.mkDerivation rec {
+{ lib,
+stdenv,
+fetchurl,
+fetchpatch,
+makeWrapper,
+pkg-config,
+gettext,
+imagemagick,
+curl,
+libpng,
+SDL2,
+SDL2_image,
+SDL2_mixer,
+SDL2_ttf,
+xercesc,
+xdg-utils,
+hicolor-icon-theme
+}:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "enigma";
   version = "1.30";
@@ -13,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     # fix format string security warning (turned into error)
     (fetchpatch {
       url = "https://github.com/Enigma-Game/Enigma/pull/70/commits/d25051eb6228c885e779a9674f8ee3979da30663.patch";
-      sha256 = "L5C4NCZDDUKji9Tg4geKaiw3CkSY6rCoawqGKqR4dFM=";
+      hash = "sha256-L5C4NCZDDUKji9Tg4geKaiw3CkSY6rCoawqGKqR4dFM=";
     })
   ];
 
