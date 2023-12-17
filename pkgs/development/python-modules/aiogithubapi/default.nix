@@ -9,6 +9,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, sigstore
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     backoff
+    sigstore
   ];
 
   nativeCheckInputs = [
