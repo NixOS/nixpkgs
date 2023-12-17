@@ -95,6 +95,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications $out/share/icons
     cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
     cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
+    mkdir -p $out/share/copyright/tribler
+    mv $out/LICENSE $out/share/copyright/tribler
   '';
 
   shellHook = ''

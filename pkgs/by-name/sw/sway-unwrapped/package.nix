@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
+, wlroots_0_16, wayland-protocols, libdrm
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
@@ -11,6 +11,9 @@
 , trayEnabled ? systemdSupport
 }:
 
+let
+  wlroots = wlroots_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
   version = "1.8.1";

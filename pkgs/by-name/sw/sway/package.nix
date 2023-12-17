@@ -31,8 +31,10 @@ let
        exec ${lib.optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${lib.getExe sway} "$@"
      fi
    '';
-in symlinkJoin {
-  name = "${sway.meta.mainProgram}-${sway.version}";
+in symlinkJoin rec {
+  pname = lib.replaceStrings ["-unwrapped"] [""] sway.pname;
+  inherit (sway) version;
+  name = "${pname}-${version}";
 
   paths = (optional withBaseWrapper baseWrapper)
     ++ [ sway ];
