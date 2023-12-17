@@ -120,6 +120,6 @@ in stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     # They are not making tags or releases, this may break other derivations in the future
     # Use version major instead of minor, 6.0 will HOPEFULLY have a release or tag
-    broken = versions.major finalAttrs.version != versions.major stdenv.cc.version;
+    broken = versions.major finalAttrs.version != versions.major stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

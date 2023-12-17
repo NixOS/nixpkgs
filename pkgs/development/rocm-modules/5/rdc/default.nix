@@ -119,7 +119,7 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version;
+    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version || versionAtLeast finalAttrs.version "6.0.0";
     broken = true; # Too many errors, unsure how to fix
   };
 })

@@ -95,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

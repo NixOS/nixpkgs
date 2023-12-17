@@ -131,6 +131,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version;
+    broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })
