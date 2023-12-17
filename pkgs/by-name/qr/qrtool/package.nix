@@ -4,6 +4,7 @@
 , rustPlatform
 , asciidoctor
 , installShellFiles
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/qrtool --generate-completion fish) \
       --zsh <($out/bin/qrtool --generate-completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
