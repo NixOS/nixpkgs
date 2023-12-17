@@ -2784,26 +2784,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-nvim-client = callPackage({ buildLuarocksPackage, coxpcall, fetchurl, lua, luaOlder, luv, mpack }:
-buildLuarocksPackage {
-  pname = "nvim-client";
-  version = "0.2.4-1";
-
-  src = fetchurl {
-    url    = "https://github.com/neovim/lua-client/archive/0.2.4-1.tar.gz";
-    sha256 = "0sk1lmj0r7pyj9k3p6n0wqjbd95br44ansz0ck3amp6ql8f9kprf";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ coxpcall lua luv mpack ];
-
-  meta = {
-    homepage = "https://github.com/neovim/lua-client";
-    description = "Lua client to Nvim";
-    license.fullName = "Apache";
-  };
-}) {};
-
 nvim-cmp = callPackage({ buildLuarocksPackage, fetchgit, lua, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "nvim-cmp";
