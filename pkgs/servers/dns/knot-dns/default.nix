@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CFLAGS = [ "-O2" "-DNDEBUG" ];
+  CFLAGS = [ "-O2" "-DNDEBUG" ]
+    # https://gitlab.nic.cz/knot/knot-dns/-/issues/909
+    ++ lib.optional stdenv.isDarwin "-D__APPLE_USE_RFC_3542";
 
   doCheck = true;
   checkFlags = [ "V=1" ]; # verbose output in case some test fails
