@@ -1,21 +1,20 @@
 { config, lib, ... }:
-with lib;
 let
   cfg = config.services.oauth2-proxy.nginx;
 in
 {
   options.services.oauth2-proxy.nginx = {
-    proxy = mkOption {
-      type = types.str;
+    proxy = lib.mkOption {
+      type = lib.types.str;
       default = config.services.oauth2-proxy.httpAddress;
-      defaultText = literalExpression "config.services.oauth2-proxy.httpAddress";
+      defaultText = lib.literalExpression "config.services.oauth2-proxy.httpAddress";
       description = ''
         The address of the reverse proxy endpoint for oauth2-proxy
       '';
     };
 
-    domain = mkOption {
-      type = types.str;
+    domain = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The domain under which the oauth2-proxy will be accesible and the path of cookies are set to.
         This setting must be set to ensure back-redirects are working properly
@@ -24,33 +23,33 @@ in
       '';
     };
 
-    virtualHosts = mkOption {
+    virtualHosts = lib.mkOption {
       type = let
-        vhostSubmodule = types.submodule {
+        vhostSubmodule = lib.types.submodule {
           options = {
-            allowed_groups = mkOption {
-              type = types.nullOr (types.listOf types.str);
+            allowed_groups = lib.mkOption {
+              type = lib.types.nullOr (lib.types.listOf lib.types.str);
               description = "List of groups to allow access to this vhost, or null to allow all.";
               default = null;
             };
-            allowed_emails = mkOption {
-              type = types.nullOr (types.listOf types.str);
+            allowed_emails = lib.mkOption {
+              type = lib.types.nullOr (lib.types.listOf lib.types.str);
               description = "List of emails to allow access to this vhost, or null to allow all.";
               default = null;
             };
-            allowed_email_domains = mkOption {
-              type = types.nullOr (types.listOf types.str);
+            allowed_email_domains = lib.mkOption {
+              type = lib.types.nullOr (lib.types.listOf lib.types.str);
               description = "List of email domains to allow access to this vhost, or null to allow all.";
               default = null;
             };
           };
         };
-        oldType = types.listOf types.str;
+        oldType = lib.types.listOf lib.types.str;
         convertFunc = x:
           lib.warn "services.oauth2-proxy.nginx.virtualHosts should be an attrset, found ${lib.generators.toPretty {} x}"
           lib.genAttrs x (_: {});
-        newType = types.attrsOf vhostSubmodule;
-      in types.coercedTo oldType convertFunc newType;
+        newType = lib.types.attrsOf vhostSubmodule;
+      in lib.types.coercedTo oldType convertFunc newType;
       default = {};
       example = {
         "protected.foo.com" = {
@@ -65,11 +64,11 @@ in
     };
   };
 
-  config.services.oauth2-proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
+  config.services.oauth2-proxy = lib.mkIf (cfg.virtualHosts != [] && (lib.hasPrefix "127.0.0.1:" cfg.proxy)) {
     enable = true;
   };
 
-  config.services.nginx = mkIf (cfg.virtualHosts != [] && config.services.oauth2-proxy.enable) (mkMerge ([
+  config.services.nginx = lib.mkIf (cfg.virtualHosts != [] && config.services.oauth2-proxy.enable) (lib.mkMerge ([
     {
       virtualHosts.${cfg.domain}.locations."/oauth2/" = {
         proxyPass = cfg.proxy;
@@ -79,7 +78,7 @@ in
         '';
       };
     }
-  ] ++ optional (cfg.virtualHosts != []) {
+  ] ++ lib.optional (cfg.virtualHosts != []) {
     recommendedProxySettings = true; # needed because duplicate headers
   } ++ (lib.mapAttrsToList (vhost: conf: {
     virtualHosts.${vhost} = {
