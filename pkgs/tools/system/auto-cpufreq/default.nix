@@ -1,21 +1,24 @@
 { lib, python3Packages, fetchFromGitHub, substituteAll, wrapGAppsHook, gobject-introspection, gtk3 }:
 
 python3Packages.buildPythonPackage rec {
+  # use pyproject.toml instead of setup.py
+  format = "pyproject";
+
   pname = "auto-cpufreq";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-164Gi1Oo9Tfd58aDq/3UjsWeS4rAZ39xCEhBgqv+GtI=";
+    hash = "sha256-cALWWcmT1fVOof4Kgsbs+TMKB2dBpUF5VpFU3JM20Uc=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
-  buildInputs = with pkgs; [ gtk3 ];
+  buildInputs = [ gtk3 python3Packages.poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [ setuptools-git-versioning click distro psutil pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [ setuptools click distro psutil pygobject3 poetry-dynamic-versioning];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];

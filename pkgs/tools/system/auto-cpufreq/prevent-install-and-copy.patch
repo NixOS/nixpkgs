@@ -113,11 +113,11 @@ index 99397a9..48a377a 100755
  
  def gov_check():
 
-diff --git a/bin/auto-cpufreq b/bin/auto-cpufreq
-index b89d925..b73974c 100755
---- a/bin/auto-cpufreq
-+++ b/bin/auto-cpufreq
-@@ -189,41 +189,9 @@
+diff --git a/auto_cpufreq/bin/auto_cpufreq.py b/auto_cpufreq/bin/auto_cpufreq.py
+index db2b84d..9c3caf3 100755
+--- a/auto_cpufreq/bin/auto_cpufreq.py
++++ b/auto_cpufreq/bin/auto_cpufreq.py
+@@ -189,41 +189,9 @@ def main(config, daemon, debug, update, install, remove, live, log, monitor, sta
              print("https://github.com/AdnanHodzic/auto-cpufreq/#donate")
              footer()
          elif install:
@@ -160,4 +160,5 @@ index b89d925..b73974c 100755
 +            print("remove is disabled in the nix package")
          elif update:
              root_check()
-             if os.getenv("PKG_MARKER") == "SNAP":
+             custom_dir = "/opt/auto-cpufreq/source"
+

@@ -1,21 +1,8 @@
-diff --git a/requirements.txt b/requirements.txt
-index f492cac..1cbad0d 100755
---- a/requirements.txt
-+++ b/requirements.txt
-@@ -2,5 +2,4 @@ setuptools
- psutil
- click
- distro
--requests
--PyGObject
-\ No newline at end of file
-+PyGObject
-
 diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
-index 99397a9..697fb68 100755
+index 0ef4315..fe9dc25 100755
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -18,7 +18,6 @@ from math import isclose
+@@ -19,7 +19,6 @@ from math import isclose
  from pathlib import Path
  from shutil import which
  from subprocess import getoutput, call, run, check_output, DEVNULL
@@ -24,11 +11,12 @@ index 99397a9..697fb68 100755
  
  # execution timestamp used in countdown func
 
-diff --git a/bin/auto-cpufreq b/bin/auto-cpufreq
-index 4e94e55..ee164b2 100755
---- a/bin/auto-cpufreq
-+++ b/bin/auto-cpufreq
-@@ -225,45 +225,7 @@ def main(config, daemon, debug, update, install, remove, live, log, monitor, sta
+
+diff --git a/auto_cpufreq/bin/auto_cpufreq.py b/auto_cpufreq/bin/auto_cpufreq.py
+index db2b84d..0425338 100755
+--- a/auto_cpufreq/bin/auto_cpufreq.py
++++ b/auto_cpufreq/bin/auto_cpufreq.py
+@@ -225,47 +225,7 @@ def main(config, daemon, debug, update, install, remove, live, log, monitor, sta
                  remove_daemon()
                  remove_complete_msg()
          elif update:
@@ -55,7 +43,9 @@ index 4e94e55..ee164b2 100755
 -            elif subprocess.run(["bash", "-c", "command -v pacman >/dev/null 2>&1"]).returncode == 0 and subprocess.run(["bash", "-c", "pacman -Q auto-cpufreq >/dev/null 2>&1"]).returncode == 0:
 -                print("Arch-based distribution with AUR support detected. Please refresh auto-cpufreq using your AUR helper.")
 -            else:
--                verify_update()
+-                is_new_update = check_for_update()
+-                if not is_new_update:
+-                    return
 -                ans = input("Do you want to update auto-cpufreq to the latest release? [Y/n]: ").strip().lower()
 -                if not os.path.exists(custom_dir):
 -                    os.makedirs(custom_dir)
@@ -71,7 +61,7 @@ index 4e94e55..ee164b2 100755
 -                    run(["auto-cpufreq", "--version"])
 -                else:
 -                    print("Aborted")
-+            print("Update is disabled in the Nix package")
++             print("Update is disabled in the Nix package")
  
- if __name__ == "__main__":
-     main()
+         elif completions:
+             if completions == "bash":
