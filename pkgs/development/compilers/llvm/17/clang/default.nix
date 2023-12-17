@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, cmake, ninja, libxml2, libllvm, version, python3
+, cmake, ninja, libxml2, libllvm, version, python3, perl
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -20,7 +20,7 @@ let
 
     sourceRoot = "${src.name}/${pname}";
 
-    nativeBuildInputs = [ cmake ninja python3 ]
+    nativeBuildInputs = [ cmake ninja python3 perl ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -91,6 +91,9 @@ let
 
       mkdir -p $dev/bin
       cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
+
+      # scan-build depends on c{cc,c++}-analyzer being in ../libexec
+      moveToOutput libexec "$out"
     '';
 
     passthru = {

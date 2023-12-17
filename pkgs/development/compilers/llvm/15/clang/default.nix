@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
+, substituteAll, cmake, ninja, libxml2, libllvm, version, python3, perl
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -24,7 +24,7 @@ let
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 libllvm ];
+    buildInputs = [ libxml2 libllvm perl ];
 
     cmakeFlags = [
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
@@ -92,6 +92,9 @@ let
 
       mkdir -p $dev/bin
       cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
+
+      # scan-build depends on c{cc,c++}-analyzer being in ../libexec
+      moveToOutput libexec "$out"
     '';
 
     passthru = {

@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3, perl
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -25,7 +25,7 @@ let
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 libllvm ];
+    buildInputs = [ libxml2 libllvm perl ];
 
     cmakeFlags = [
       "-DCLANGD_BUILD_XPC=OFF"
@@ -90,6 +90,9 @@ let
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
+
+      # scan-build depends on c{cc,c++}-analyzer being in ../libexec
+      moveToOutput libexec "$out"
     '';
 
     passthru = {
