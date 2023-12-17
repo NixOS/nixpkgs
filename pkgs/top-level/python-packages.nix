@@ -6810,6 +6810,8 @@ self: super: with self; {
     inherit (self) buildPythonPackage pythonOlder pythonAtLeast pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 
+  mayim = callPackage ../development/python-modules/mayim { };
+
   mbddns = callPackage ../development/python-modules/mbddns { };
 
   mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
