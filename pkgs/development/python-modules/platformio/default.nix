@@ -8,14 +8,14 @@
 with python3.pkgs; buildPythonPackage rec {
   pname = "platformio";
 
-  version = "6.1.7";
+  version = "6.1.11";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "sha256-nrJwyoiBbOgRC9ag1V7EdhWxf5mrRaPqZuvMfETYxwc=";
+    sha256 = "sha256-nrJwyoiBbOgRC8ag1V7EdhWxf5mrRaPqZuvMfETYxwc=";
   };
 
   # outputs = [ "out" ];
