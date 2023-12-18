@@ -65,6 +65,7 @@ in
         then
           rm ${localConfFilePath}
         elif [ -f "${localConfFilePath}" ]
+        then
           mv ${localConfFilePath} ${localConfFilePath}.bak
         fi
       '' + optionalString (cfg.localConf != null) ''
