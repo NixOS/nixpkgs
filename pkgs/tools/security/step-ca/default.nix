@@ -12,20 +12,24 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.25.0";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CO9Qjx4D6qNGjOdva88KRCJOQq85r5U5nwmXC1G94dY=";
+    hash = "sha256-cP3QypBNWGbr7R7lJLfaoBh6C37ubGuaxnxWlZ1Z000=";
   };
 
-  vendorHash = "sha256-Weq8sS+8gsfdoVSBDm8E2DCrngfNsolqQR2/yd9etPo=";
+  vendorHash = "sha256-AXMMpzXEhdKSGeVg/KK2NEgalxIXP6DUTcoxOQVqow4=";
 
-  ldflags = [ "-buildid=" ];
+  ldflags = [
+    "-buildid="
+  ];
 
-  nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
+  nativeBuildInputs = lib.optionals hsmSupport [
+    pkg-config
+  ];
 
   buildInputs =
     lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
@@ -43,9 +47,14 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/system systemd/step-ca.service
   '';
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
   # Tests need to run in a reproducible order, otherwise they run unreliably on
   # (at least) x86_64-linux.
   checkFlags = [ "-p 1" ];
