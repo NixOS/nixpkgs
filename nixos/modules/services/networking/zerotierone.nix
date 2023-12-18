@@ -28,7 +28,7 @@ in
   };
 
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
-	
+
   options.services.zerotierone.localConf = mkOption {
     default = { };
     description = mdDoc ''
@@ -41,7 +41,7 @@ in
     };
     type = types.attrs;
   };
-  
+
   config = mkIf cfg.enable {
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
