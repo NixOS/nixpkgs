@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  addOpenGLRunpath,
+  addDriverRunpath,
   autoPatchelfHook,
   buildPythonPackage,
   cudaPackages,
@@ -41,7 +41,7 @@ buildPythonPackage {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   dependencies = [

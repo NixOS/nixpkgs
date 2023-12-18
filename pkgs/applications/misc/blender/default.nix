@@ -5,7 +5,7 @@
   OpenAL,
   OpenGL,
   SDL,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alembic,
   blender,
   boost,
@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -323,7 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString cudaSupport ''
     for program in $out/bin/blender $out/bin/.blender-wrapped; do
       isELF "$program" || continue
-      addOpenGLRunpath "$program"
+      addDriverRunpath "$program"
     done
   ''
   + lib.optionalString stdenv.isDarwin ''
