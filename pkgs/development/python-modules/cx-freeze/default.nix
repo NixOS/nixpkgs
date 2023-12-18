@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.11";
+  version = "6.15.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_Freeze";
     inherit version;
-    hash = "sha256-xf5Ez5eC+qXAaMoc1d6RPv4PmY1ry82oQ9aGod+W7lY=";
+    hash = "sha256-Ak4OC94xD21daVdsbYSvFxO1YKJcccJ8xoCBk50cWww=";
   };
 
   nativeBuildInputs = [
