@@ -24,14 +24,14 @@ evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
 }
 
 reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only"
+    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -140,7 +140,7 @@ checkConfigOutput '^42$' config.value ./declare-either.nix ./define-value-int-po
 checkConfigOutput '^"24"$' config.value ./declare-either.nix ./define-value-string.nix
 # types.oneOf
 checkConfigOutput '^42$' config.value ./declare-oneOf.nix ./define-value-int-positive.nix
-checkConfigOutput '^\[ \]$' config.value ./declare-oneOf.nix ./define-value-list.nix
+checkConfigOutput '^\[\]$' config.value ./declare-oneOf.nix ./define-value-list.nix
 checkConfigOutput '^"24"$' config.value ./declare-oneOf.nix ./define-value-string.nix
 
 # Check mkForce without submodules.
@@ -320,7 +320,7 @@ checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-st
 # Shorthand modules interpret `meta` and `class` as config items
 checkConfigOutput '^true$' options._module.args.value.result ./freeform-attrsOf.nix ./define-freeform-keywords-shorthand.nix
 # No freeform assignments shouldn't make it error
-checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
+checkConfigOutput '^{}$' config ./freeform-attrsOf.nix
 # but only if the type matches
 checkConfigError 'A definition for option .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
 # and properties should be applied
@@ -358,19 +358,19 @@ checkConfigError 'The option .* has conflicting definitions' config.value ./type
 checkConfigOutput '^0$' config.value.int ./types-anything/equal-atoms.nix
 checkConfigOutput '^false$' config.value.bool ./types-anything/equal-atoms.nix
 checkConfigOutput '^""$' config.value.string ./types-anything/equal-atoms.nix
-checkConfigOutput '^/$' config.value.path ./types-anything/equal-atoms.nix
+checkConfigOutput '^"/[^"]+"$' config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput '^null$' config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput '^0.1$' config.value.float ./types-anything/equal-atoms.nix
 # Functions can't be merged together
 checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
-checkConfigOutput '^<LAMBDA>$' config.value.single-lambda ./types-anything/functions.nix
+checkConfigOutput '^true$' config.valueIsFunction.single-lambda ./types-anything/functions.nix
 checkConfigOutput '^null$' config.applied.merging-lambdas.x ./types-anything/functions.nix
 checkConfigOutput '^null$' config.applied.merging-lambdas.y ./types-anything/functions.nix
 # Check that all mk* modifiers are applied
 checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix
-checkConfigOutput '^{ }$' config.value.mkiftrue ./types-anything/mk-mods.nix
+checkConfigOutput '^{}$' config.value.mkiftrue ./types-anything/mk-mods.nix
 checkConfigOutput '^1$' config.value.mkdefault ./types-anything/mk-mods.nix
-checkConfigOutput '^{ }$' config.value.mkmerge ./types-anything/mk-mods.nix
+checkConfigOutput '^{}$' config.value.mkmerge ./types-anything/mk-mods.nix
 checkConfigOutput '^true$' config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput '^1$' config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput '^"baz"$' config.value.nested.bar.baz ./types-anything/mk-mods.nix
@@ -390,16 +390,16 @@ checkConfigOutput '^"a b y z"$' config.resultFooBar ./declare-variants.nix ./def
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
 
 ## emptyValue's
-checkConfigOutput "[ ]" config.list.a ./emptyValues.nix
-checkConfigOutput "{ }" config.attrs.a ./emptyValues.nix
+checkConfigOutput "\[\]" config.list.a ./emptyValues.nix
+checkConfigOutput "{}" config.attrs.a ./emptyValues.nix
 checkConfigOutput "null" config.null.a ./emptyValues.nix
-checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
+checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
 checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
 
 ## types.raw
-checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput '^true$' config.unprocessedNestingEvaluates.success ./raw.nix
 checkConfigOutput "10" config.processedToplevel ./raw.nix
 checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
 checkConfigOutput "bar" config.priorities ./raw.nix
@@ -433,13 +433,13 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
 # Class checks, evalModules
-checkConfigOutput '^{ }$' config.ok.config ./class-check.nix
+checkConfigOutput '^{}$' config.ok.config ./class-check.nix
 checkConfigOutput '"nixos"' config.ok.class ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
 checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
 
 # Class checks, submoduleWith
-checkConfigOutput '^{ }$' config.sub.nixosOk ./class-check.nix
+checkConfigOutput '^{}$' config.sub.nixosOk ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.sub.nixosFail.config ./class-check.nix
 
 # submoduleWith type merge with different class
