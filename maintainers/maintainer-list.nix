@@ -5383,6 +5383,13 @@
     githubId = 231483;
     name = "Jack Kelly";
   };
+  endle = {
+    email = "lizhenbo@yahoo.com";
+    github = "Endle";
+    githubId = 3221521;
+    name = "Zhenbo Li";
+    matrix = "@zhenbo:matrix.org";
+  };
   endocrimes = {
     email = "dani@builds.terrible.systems";
     github = "endocrimes";
