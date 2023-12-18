@@ -10,13 +10,13 @@ buildGoModule rec {
 
   # The first portion of this version string corresponds to a compatible DCGM
   # version.
-  version = "3.2.5-3.1.7"; # N.B: If you change this, update dcgm as well to the matching version.
+  version = "3.3.0-3.2.0"; # N.B: If you change this, update dcgm as well to the matching version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+Hviq+iu1LBcy2VwmCX5xOq1I/zevfydesVlrVorGOI=";
+    hash = "sha256-2Hqwtrep8b86WEC43vfDvKhg9A/hH2VruFp3jy6HNSk=";
   };
 
   # Upgrade to go 1.17 during the vendoring FOD build because it fails otherwise.
@@ -45,7 +45,7 @@ buildGoModule rec {
     cp vendor/go.mod go.mod
   '';
 
-  vendorHash = "sha256-Fjvx15e/psxoqoS6c6GhiQfe7g2aI40EmPR26xLhrzg=";
+  vendorHash = "sha256-cW0HtigsglUixO32lPe30G7x3k5zXvmDYLhUD/B9Xxg=";
 
   nativeBuildInputs = [
     cudaPackages.autoAddOpenGLRunpathHook
