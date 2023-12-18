@@ -22,12 +22,12 @@ let
 
         for font in {otf,supplementary-fonts,supplementary-files}/**/*.{o,t}tf; do
           echo $font
-          install -Dt "$fontsdir/otf" -m755 "$font"
+          install -Dt "$fontsdir/otf" -m644 "$font"
         done
 
         install -m755 -d "$fontsdir/svg"
         for font in svg/**.{svg,woff}; do
-          install -Dt "$fontsdir/svg" -m755 "$font"
+          install -Dt "$fontsdir/svg" -m644 "$font"
         done
       '';
 
