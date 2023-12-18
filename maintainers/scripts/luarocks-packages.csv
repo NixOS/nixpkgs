@@ -95,8 +95,8 @@ mediator_lua,,,,,,
 middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
+nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
-nvim-client,https://github.com/neovim/lua-client.git,,,,,
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,

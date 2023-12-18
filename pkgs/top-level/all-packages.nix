@@ -518,6 +518,8 @@ with pkgs;
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
+  cnquery = callPackage ../tools/security/cnquery { };
+
   cocogitto = callPackage ../development/tools/cocogitto {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4920,7 +4922,6 @@ with pkgs;
 
   contacts = callPackage ../tools/misc/contacts {
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
-    xcbuildHook = xcbuild6Hook;
   };
 
   colorls = callPackage ../tools/system/colorls { };
@@ -7298,9 +7299,7 @@ with pkgs;
 
   cringify = callPackage ../tools/text/cringify { };
 
-  cromfs = callPackage ../tools/archivers/cromfs {
-    stdenv = gcc10StdenvCompat;
-  };
+  cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
 
@@ -14103,6 +14102,8 @@ with pkgs;
 
   translatelocally = callPackage ../applications/misc/translatelocally { };
 
+  translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
+
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
@@ -15050,6 +15051,8 @@ with pkgs;
   xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
 
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
+
+  xen-guest-agent = callPackage ../tools/virtualization/xen-guest-agent { };
 
   xflux = callPackage ../tools/misc/xflux { };
   xflux-gui = python3Packages.callPackage ../tools/misc/xflux/gui.nix { };
@@ -18920,7 +18923,7 @@ with pkgs;
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_8) llvm libclang;
+    inherit (llvmPackages_16) llvm libclang;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -20385,17 +20388,10 @@ with pkgs;
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
   };
-  xcodebuild6 = xcodebuild.override { stdenv = llvmPackages_6.stdenv; };
   xcbuild = xcodebuild;
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
     propagatedBuildInputs = [ xcbuild ];
-  } ../development/tools/xcbuild/setup-hook.sh  ;
-
-  # xcbuild with llvm 6
-  xcbuild6Hook = makeSetupHook {
-    name = "xcbuild6-hook";
-    propagatedBuildInputs = [ xcodebuild6 ];
   } ../development/tools/xcbuild/setup-hook.sh  ;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
@@ -20977,7 +20973,7 @@ with pkgs;
 
   cutee = callPackage ../development/libraries/cutee { };
 
-  cxxtools = callPackage ../development/libraries/cxxtools { stdenv = gcc10StdenvCompat; };
+  cxxtools = callPackage ../development/libraries/cxxtools { };
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
@@ -25112,8 +25108,6 @@ with pkgs;
   social-engineer-toolkit = callPackage ../tools/security/social-engineer-toolkit { };
 
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
-
-  soco-cli = callPackage ../tools/audio/soco-cli { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -32646,32 +32640,11 @@ with pkgs;
     wlroots_0_16
     wlroots;
 
-  sway-unwrapped = callPackage ../applications/window-managers/sway {
-    wlroots = wlroots_0_16;
-  };
-  sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
-  swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
-  swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
-  swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
-  swayosd = callPackage ../applications/window-managers/sway/osd.nix { };
-  swayws = callPackage ../applications/window-managers/sway/ws.nix { };
-  swaywsr = callPackage ../applications/window-managers/sway/wsr.nix { };
-  sway-assign-cgroups = callPackage ../applications/window-managers/sway/assign-cgroups.nix { };
-  sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
-
-  swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
-
-  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
-
-  swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
-
-  swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
+  sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
   swaynotificationcenter = callPackage ../applications/misc/swaynotificationcenter { };
 
   swaynag-battery = callPackage ../applications/misc/swaynag-battery { };
-
-  swayest-workstyle = callPackage ../applications/window-managers/sway/swayest-workstyle { };
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
@@ -32966,6 +32939,8 @@ with pkgs;
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
+
+  jack-passthrough = callPackage ../applications/audio/jack-passthrough { };
 
   jack_rack = callPackage ../applications/audio/jack-rack { };
 
@@ -34694,7 +34669,7 @@ with pkgs;
 
   phantomsocks = callPackage ../tools/networking/phantomsocks { };
 
-  photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
+  photoqt = qt6Packages.callPackage ../applications/graphics/photoqt { };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
 
@@ -36028,6 +36003,12 @@ with pkgs;
   };
 
   tut = callPackage ../applications/misc/tut { };
+
+  tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
+    tuxclocker-plugins = tuxclocker-plugins-with-unfree;
+  };
+
+  tuxclocker-without-unfree = libsForQt5.callPackage ../applications/misc/tuxclocker { };
 
   tuxedo-rs = callPackage ../os-specific/linux/tuxedo-rs { };
 
@@ -39387,7 +39368,7 @@ with pkgs;
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
-  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { stdenv = gcc10StdenvCompat; };
+  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { };
 
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
     fftw = fftw;
