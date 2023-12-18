@@ -1,4 +1,5 @@
 { buildGoModule
+, buildPackages
 , fetchFromGitHub
 , fetchNpmDeps
 , lib
@@ -37,7 +38,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    buildPackages.makeWrapper
     nodejs
     npmHooks.npmConfigHook
     pkg-config
