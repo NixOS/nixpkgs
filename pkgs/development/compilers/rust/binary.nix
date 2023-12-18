@@ -27,6 +27,7 @@ rec {
 
     meta = with lib; {
       homepage = "http://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
@@ -71,6 +72,7 @@ rec {
 
     meta = with lib; {
       homepage = "http://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
