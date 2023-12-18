@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "aiovodafone";
   version = "0.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
