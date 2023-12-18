@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ config, lib, ... }:
 
 let
+
+  inherit (lib) mkIf mkOption types optionalString concatStrings concatStringsSep hasPrefix mapAttrsToList;
 
   cfg = config.networking.firewall;
 
