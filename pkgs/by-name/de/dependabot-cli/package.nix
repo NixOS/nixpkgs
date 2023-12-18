@@ -8,7 +8,7 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.39.0";
+  version = "1.41.0";
 in
 buildGoModule {
   inherit pname version;
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-QuhgFWF97B72KTX/QKSXNl/4RDAKUMDga7vLYiZw4SM=";
+    hash = "sha256-CnSDvLcLupWKBp1Wr6E9BScA8VsBlfmmfPwh8cyERZg=";
   };
 
-  vendorHash = "sha256-mNpNp/zeQGgcljj2VhGl4IN1HG1R8CJSTWKzrgC0z44=";
+  vendorHash = "sha256-vN5r1OtHT16LeJ6iPmHmXTx9Oo+WALhV4PWqzMiUwSA=";
 
   ldflags = [
     "-s"
