@@ -3,26 +3,18 @@
 , callPackage
 , lib
 , fetchurl
-, fetchpatch
-, fetchFromGitHub
-, runCommand
-, runCommandCC
 , makeWrapper
-, recurseIntoAttrs
-, newScope
 , writeTextFile
-, autoPatchelfHook
 , substituteAll
+, writeShellApplication
+, makeBinaryWrapper
   # this package (through the fixpoint glass)
 , bazel_self
   # native build inputs
 , runtimeShell
-, lr
-, xe
 , zip
 , unzip
 , bash
-, writeCBin
 , coreutils
 , which
 , gawk
@@ -36,9 +28,7 @@
 , file
 , installShellFiles
 , lndir
-  # updater
 , python3
-, writeScript
   # Apple dependencies
 , cctools
 , libcxx
@@ -50,12 +40,10 @@
   # Allow to independently override the jdks used to build and run respectively
 , buildJdk
 , runJdk
-  # Downstream packages for tests
-, bazel-watcher
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
-}@args:
+}:
 
 let
   version = "7.0.0";
@@ -130,6 +118,28 @@ let
     ];
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
+
+  bashWithDefaultShellUtilsSh = writeShellApplication {
+    name = "bash";
+    runtimeInputs = defaultShellUtils;
+    text = ''
+      if [[ "$PATH" == "/no-such-path" ]]; then
+        export PATH=${defaultShellPath}
+      fi
+      exec ${bash}/bin/bash "$@"
+    '';
+  };
+
+  # Script-based interpreters in shebangs aren't guaranteed to work,
+  # especially on MacOS. So let's produce a binary
+  bashWithDefaultShellUtils = stdenv.mkDerivation {
+    name = "bash";
+    src = bashWithDefaultShellUtilsSh;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      makeWrapper ${bashWithDefaultShellUtilsSh}/bin/bash $out/bin/bash
+    '';
+  };
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
@@ -319,10 +329,10 @@ stdenv.mkDerivation rec {
           # If you add more replacements here, you must change the grep above!
           # Only files containing /bin are taken into account.
           sedVerbose "$path" \
-            -e 's!/usr/local/bin/bash!${bash}/bin/bash!g' \
-            -e 's!/usr/bin/bash!${bash}/bin/bash!g' \
-            -e 's!/bin/bash!${bash}/bin/bash!g' \
-            -e 's!/usr/bin/env bash!${bash}/bin/bash!g' \
+            -e 's!/usr/local/bin/bash!${bashWithDefaultShellUtils}/bin/bash!g' \
+            -e 's!/usr/bin/bash!${bashWithDefaultShellUtils}/bin/bash!g' \
+            -e 's!/bin/bash!${bashWithDefaultShellUtils}/bin/bash!g' \
+            -e 's!/usr/bin/env bash!${bashWithDefaultShellUtils}/bin/bash!g' \
             -e 's!/usr/bin/env python2!${python3}/bin/python!g' \
             -e 's!/usr/bin/env python!${python3}/bin/python!g' \
             -e 's!/usr/bin/env!${coreutils}/bin/env!g' \
@@ -331,7 +341,7 @@ stdenv.mkDerivation rec {
 
         # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
         sedVerbose scripts/bootstrap/compile.sh \
-          -e 's!/bin/bash!${bash}/bin/bash!g' \
+          -e 's!/bin/bash!${bashWithDefaultShellUtils}/bin/bash!g' \
           -e 's!shasum -a 256!sha256sum!g'
 
         # Augment bundled repository_cache with our extra paths
@@ -402,7 +412,7 @@ stdenv.mkDerivation rec {
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  buildInputs = [ buildJdk ] ++ defaultShellUtils;
+  buildInputs = [ buildJdk bashWithDefaultShellUtils ] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
