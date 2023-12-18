@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, addOpenGLRunpath
+, addDriverRunpath
 , autoPatchelfHook
 , buildPythonPackage
 , cudaPackages
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   propagatedBuildInputs = [

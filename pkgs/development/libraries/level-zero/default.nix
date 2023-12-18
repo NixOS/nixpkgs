@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 }:
 
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-n1dcsI2sLeB68HpI5oQ5p3zdAcSvnSY+qpHL9vp6FOk=";
   };
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake addDriverRunpath ];
 
   postFixup = ''
-    addOpenGLRunpath $out/lib/libze_loader.so
+    addDriverRunpath $out/lib/libze_loader.so
   '';
 
   meta = with lib; {

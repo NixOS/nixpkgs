@@ -11,7 +11,7 @@
 , setuptools
 , cudaSupport ? config.cudaSupport or false
 , cudaPackages_11 ? {}
-, addOpenGLRunpath
+, addDriverRunpath
 # runtime dependencies
 , httpx
 , numpy
@@ -62,14 +62,14 @@ buildPythonPackage {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
       ${lib.optionalString cudaSupport ''
-        addOpenGLRunpath $1
+        addDriverRunpath $1
       ''}
     }
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   propagatedBuildInputs = [

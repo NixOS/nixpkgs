@@ -1,5 +1,5 @@
 { stdenv, bazel_5, buildBazelPackage, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath, fetchpatch, fetchzip, linkFarm
+, addDriverRunpath, fetchpatch, fetchzip, linkFarm
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
@@ -221,7 +221,7 @@ let
 
     nativeBuildInputs = [
       which pythonEnv cython perl protobuf-core protobuf-extra
-    ] ++ lib.optional cudaSupport addOpenGLRunpath;
+    ] ++ lib.optional cudaSupport addDriverRunpath;
 
     buildInputs = [
       jemalloc
@@ -470,7 +470,7 @@ let
 
       postFixup = lib.optionalString cudaSupport ''
         find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         done
       '';
 
@@ -554,11 +554,11 @@ in buildPythonPackage {
     tensorboard
   ];
 
-  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals cudaSupport [ addDriverRunpath ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
 
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done

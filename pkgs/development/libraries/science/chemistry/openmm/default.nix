@@ -14,7 +14,7 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudaPackages
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     swig
     doxygen
     python3Packages.python
-  ] ++ lib.optional enableCuda addOpenGLRunpath;
+  ] ++ lib.optional enableCuda addDriverRunpath;
 
   buildInputs = [ fftwSinglePrec ]
     ++ lib.optionals enableOpencl [ ocl-icd opencl-headers ]
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for lib in $out/lib/plugins/*CUDA.so $out/lib/plugins/*Cuda*.so; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 

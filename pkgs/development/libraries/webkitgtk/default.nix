@@ -61,7 +61,7 @@
 , substituteAll
 , glib
 , unifdef
-, addOpenGLRunpath
+, addDriverRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
 
     # Hardcode path to WPE backend

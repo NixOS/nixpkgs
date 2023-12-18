@@ -3,7 +3,7 @@
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
-, zlib, zstd, fftw, fftwFloat, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, zstd, fftw, fftwFloat, opensubdiv, freetype, jemalloc, ocl-icd, addDriverRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , hipSupport ? false, rocmPackages # comes with a significantly larger closure size
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   postFixup = lib.optionalString cudaSupport ''
     for program in $out/bin/blender $out/bin/.blender-wrapped; do
       isELF "$program" || continue
-      addOpenGLRunpath "$program"
+      addDriverRunpath "$program"
     done
   '';
 

@@ -78,7 +78,7 @@
 , mjpegtools
 , libGLU
 , libGL
-, addOpenGLRunpath
+, addDriverRunpath
 , gtk3
 , libintl
 , game-music-emu
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     # Add fallback paths for nvidia userspace libraries
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 

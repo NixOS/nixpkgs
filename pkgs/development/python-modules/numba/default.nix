@@ -16,7 +16,7 @@
 , config
 
 # CUDA-only dependencies:
-, addOpenGLRunpath ? null
+, addDriverRunpath ? null
 , cudaPackages ? {}
 
 # CUDA flags:
@@ -57,7 +57,7 @@ in buildPythonPackage rec {
   nativeBuildInputs = [
     numpy
   ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   propagatedBuildInputs = [
@@ -81,7 +81,7 @@ in buildPythonPackage rec {
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done
   '';

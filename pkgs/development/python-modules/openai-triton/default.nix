@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , setuptools
 , pytestCheckHook
 , pythonRelaxDepsHook
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     # but basically upstream contains [cc, ..., "-lcuda", ...]
     # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
     old = [ "-lcuda" ];
-    new = [ "-lcuda" "-L${addOpenGLRunpath.driverLink}" "-L${cudaPackages.cuda_cudart}/lib/stubs/" ];
+    new = [ "-lcuda" "-L${addDriverRunpath.driverLink}" "-L${cudaPackages.cuda_cudart}/lib/stubs/" ];
 
     quote = x: ''"${x}"'';
     oldStr = lib.concatMapStringsSep ", " quote old;
