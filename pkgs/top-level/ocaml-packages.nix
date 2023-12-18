@@ -1733,6 +1733,8 @@ let
 
     telegraml = callPackage ../development/ocaml-modules/telegraml { };
 
+    telemetry = callPackage ../development/ocaml-modules/telemetry { };
+
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
