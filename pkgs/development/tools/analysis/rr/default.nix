@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
   buildInputs = [
     libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
-    libpfm zlib python3Packages.python python3Packages.pexpect procps capnproto
   ];
   cmakeFlags = [
     "-Ddisable32bit=ON"

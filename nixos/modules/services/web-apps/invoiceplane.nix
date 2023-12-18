@@ -28,7 +28,19 @@ let
     REMOVE_INDEXPHP=true
   '';
 
-  extraConfig = hostName: cfg: pkgs.writeText "extraConfig.php" ''
+  mkPhpValue = v:
+    if isString v then escapeShellArg v
+    # NOTE: If any value contains a , (comma) this will not get escaped
+    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isInt v then toString v
+    else if isBool v then boolToString v
+    else abort "The Invoiceplane config value ${lib.generators.toPretty {} v} can not be encoded."
+  ;
+
+  extraConfig = hostName: cfg: let
+    settings = mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
+  in pkgs.writeText "extraConfig.php" ''
+    ${concatStringsSep "\n" settings}
     ${toString cfg.extraConfig}
   '';
 
@@ -182,11 +194,31 @@ let
             InvoicePlane configuration. Refer to
             <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details on supported values.
+
+            **Note**: Please pass structured settings via
+            `services.invoiceplane.sites.${name}.settings` instead, this option
+            will get deprecated in the future.
+          '';
+        };
+
+        settings = mkOption {
+          type = types.attrsOf types.anything;
+          default = {};
+          description = lib.mdDoc ''
+            Structural InvoicePlane configuration. Refer to
+            <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
+            for details and supported values.
+          '';
+          example = literalExpression ''
+            {
+              SETUP_COMPLETED = true;
+              DISABLE_SETUP = true;
+              IP_URL = "https://invoice.example.com";
+            }
           '';
         };
 
         cron = {
-
           enable = mkOption {
             type = types.bool;
             default = false;
@@ -197,12 +229,10 @@ let
               on how to configure it.
             '';
           };
-
           key = mkOption {
             type = types.str;
             description = lib.mdDoc "Cron key taken from the administration page.";
           };
-
         };
 
       };
@@ -239,8 +269,14 @@ in
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
 
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-      [{ assertion = cfg.database.createLocally -> cfg.database.user == user;
+    warnings = flatten (mapAttrsToList (hostName: cfg: [
+      (optional (cfg.extraConfig != null) ''
+        services.invoiceplane.sites."${hostName}".extraConfig will be deprecated in future releases, please use the settings option now.
+      '')
+    ]) eachSite);
+
+    assertions = flatten (mapAttrsToList (hostName: cfg: [
+      { assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;

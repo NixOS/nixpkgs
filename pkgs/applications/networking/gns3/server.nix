@@ -8,6 +8,8 @@
 , fetchFromGitHub
 , pkgsStatic
 , stdenv
+, testers
+, gns3-server
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -32,7 +34,6 @@ python3.pkgs.buildPythonApplication {
     aiohttp-cors
     async-generator
     distro
-    importlib-resources
     jinja2
     jsonschema
     multidict
@@ -45,6 +46,8 @@ python3.pkgs.buildPythonApplication {
     truststore
     yarl
     zipstream
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -72,6 +75,11 @@ python3.pkgs.buildPythonApplication {
     "--reruns 3"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = gns3-server;
+    command = "${lib.getExe gns3-server} --version";
+  };
+
   meta = with lib; {
     description = "Graphical Network Simulator 3 server (${channel} release)";
     longDescription = ''
@@ -84,5 +92,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ anthonyroussel ];
+    mainProgram = "gns3server";
   };
 }

@@ -14,8 +14,8 @@ stdenv.mkDerivation ( finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build.sh ${lib.optionalString stdenv.targetPlatform.isWindows "flavour=mingw64"}
-    ./build.sh -shared ${lib.optionalString stdenv.targetPlatform.isWindows "flavour=mingw64"}
+    ./build.sh ${lib.optionalString stdenv.hostPlatform.isWindows "flavour=mingw64"}
+    ./build.sh -shared ${lib.optionalString stdenv.hostPlatform.isWindows "flavour=mingw64"}
 
     runHook postBuild
   '';

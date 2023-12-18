@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-programoutput";
   version = "0.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sphinxcontrib.programoutput" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx extension to include program output";

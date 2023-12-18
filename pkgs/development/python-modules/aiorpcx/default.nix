@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "aiorpcx";
   version = "0.22.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

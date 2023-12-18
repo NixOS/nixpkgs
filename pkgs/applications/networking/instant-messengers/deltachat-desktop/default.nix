@@ -5,6 +5,7 @@
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, jq
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -15,17 +16,19 @@
 , sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.14.54";
+      version = "0.19.8";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
+        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -33,18 +36,26 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "unstable-2023-11-03";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "40152e9543eb773fc27e7a4f96ef1eecebe9310e";
-    hash = "sha256-9GPXFUCu9GKa/bJgO8CIPMLccI6WAJ6PhfoyJ6s/DHE=";
+    rev = "v${version}";
+    hash = "sha256-c8eK6YpxCP+Ga/VcqbbOUYuL1h4xspjglCZ1wiEAags=";
   };
 
-  npmDepsHash = "sha256-g3nkgqZNoq+xuwXbXLHEMVpHH6Sq3792xhITCx7WvOc=";
+  npmDepsHash = "sha256-7xMSsKESK9BqQrMvxceEhsETwDFue0/viCNULtzzwGo=";
+
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
 
   nativeBuildInputs = [
+    jq
     makeWrapper
     pkg-config
     python3
@@ -115,6 +126,12 @@ buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

@@ -32,6 +32,10 @@ buildFHSEnv {
 
   runScript = "${src}/cockroach";
 
+  extraInstallCommands = ''
+    cp -P $out/bin/cockroachdb $out/bin/cockroach
+  '';
+
   meta = with lib; {
     homepage = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";

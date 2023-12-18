@@ -171,4 +171,6 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  hspec-megaparsec = super.hspec-megaparsec_2_2_0;
 }

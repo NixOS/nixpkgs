@@ -4,7 +4,7 @@
 , fetchpatch
 , autoreconfHook
 , pkg-config
-, enableUdev ? stdenv.isLinux && !stdenv.targetPlatform.isStatic
+, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , udev
 , libobjc
 , IOKit
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   dontDisableStatic = withStatic;
+
+  # libusb-1.0.rc:11: fatal error: opening dependency file .deps/libusb-1.0.Tpo: No such file or directory
+  dontAddDisableDepTrack = stdenv.hostPlatform.isWindows;
 
   configureFlags =
     lib.optional (!enableUdev) "--disable-udev"

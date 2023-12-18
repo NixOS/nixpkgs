@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "stuffbin";
-  version = "1.1.0";
+  version = "1.2.0";
 
   vendorHash = null;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "knadh";
     repo = "stuffbin";
     rev = "v${version}";
-    sha256 = "sha256-M72xNh7bKUMLzA+M8bJB++kJ5KCrkboQm1v8BasP3Yo=";
+    sha256 = "sha256-roXjE0t4iwrL2y/G2oePYL2AbTwd9uzQPtgdY14WeZk=";
   };
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];

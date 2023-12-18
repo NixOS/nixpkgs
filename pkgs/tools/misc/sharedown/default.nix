@@ -114,7 +114,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
     ];
     platforms = platforms.unix;
-    # "Couldn't find any versions for \"node-gyp\" that matches \"latest\" in our cache (possible versions are \"\")
-    broken = true;
+    mainProgram = "Sharedown";
   };
 }

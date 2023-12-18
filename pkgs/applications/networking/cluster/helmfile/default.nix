@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.158.0";
+  version = "0.159.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-768rlhkh8scQbzLvWyjyQSba4zCY/ydYreve+HmcFgw=";
+    sha256 = "sha256-7RFDa8Yw2tPjVvJLVPb7VbDNhrHNxzqmE0uogm7X/HY=";
   };
 
-  vendorHash = "sha256-ip01Uj720Sa11ni+8//U1PkHgiY6ttftvMHdxZgfKLk=";
+  vendorHash = "sha256-kVr6h5u71RimRER6tNxZUewSqqjaAPptriD5bfsE85U=";
 
   doCheck = false;
 

@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "tig";
   };
 }

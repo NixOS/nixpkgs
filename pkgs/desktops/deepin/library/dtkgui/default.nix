@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , qttools
@@ -17,14 +18,25 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.10";
+  version = "5.6.17";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4NHt/hLtt99LhWvBX9e5ueB5G86SXx553G6fyHZBXcE=";
+    hash = "sha256-ssCVMFCE1vhucYMxXkEZV5YlFxT1JdYGqrzILhWX1XI=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+
+    (fetchpatch {
+      name = "fix_svg_with_filter_attribute_rendering_exception.patch";
+      url = "https://github.com/linuxdeepin/dtkgui/commit/f2c9327eb4989ab8ea96af7560c67d1cada794de.patch";
+      hash = "sha256-lfg09tgS4vPuYachRbHdaMYKWdZZ0lP0Hxakkr9JKGs=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -48,12 +60,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
+    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
   ];
 
   preConfigure = ''
@@ -61,6 +72,8 @@ stdenv.mkDerivation rec {
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
+
+  outputs = [ "out" "dev" "doc" ];
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

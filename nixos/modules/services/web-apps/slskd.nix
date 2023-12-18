@@ -8,7 +8,7 @@ in {
 
     rotateLogs = mkEnableOption "enable an unit and timer that will rotate logs in /var/slskd/logs";
 
-    package = mkPackageOptionMD pkgs "slskd" { };
+    package = mkPackageOption pkgs "slskd" { };
 
     nginx = mkOption {
       description = lib.mdDoc "options for nginx";

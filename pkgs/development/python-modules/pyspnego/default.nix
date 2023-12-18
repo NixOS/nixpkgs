@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pyspnego";
   version = "0.9.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

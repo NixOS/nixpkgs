@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "virt-top";
   };
 }

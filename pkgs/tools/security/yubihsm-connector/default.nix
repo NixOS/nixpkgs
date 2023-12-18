@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://developers.yubico.com/yubihsm-connector/";
     maintainers = with maintainers; [ matthewcroughan ];
     license = licenses.asl20;
+    mainProgram = "yubihsm-connector";
   };
 }

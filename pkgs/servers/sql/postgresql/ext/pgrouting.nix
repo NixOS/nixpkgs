@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pgrouting";
-  version = "3.5.1";
+  version = "3.6.1";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ postgresql boost ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "pgRouting";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-X7ZXGPUkhPDBB2QpUGfqDTgOairkYZF78Ol0XEAmxD8=";
+    hash   = "sha256-DyrBVGBLUkg0ODuHV3mCkyod2/hEtpZfLSvnrEQObaI=";
   };
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
     homepage    = "https://pgrouting.org/";
     changelog   = "https://github.com/pgRouting/pgrouting/releases/tag/v${version}";
-    maintainers = [ maintainers.steve-chavez ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ steve-chavez ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.gpl2Plus;
   };

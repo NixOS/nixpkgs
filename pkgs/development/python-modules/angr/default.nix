@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.76";
+  version = "9.2.79";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B3oYh0okbIeEvBjBHvY29QTqPyR2TTzLmz6fMsIRcs0=";
+    hash = "sha256-J5ZjJPX5bL3xuKB9dbSlEvHVQS4XnrQfpZ6IXy/1uMw=";
   };
 
   propagatedBuildInputs = [

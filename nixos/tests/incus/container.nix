@@ -14,7 +14,9 @@ in
 {
   name = "incus-container";
 
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   nodes.machine = { ... }: {
     virtualisation = {
@@ -73,5 +75,33 @@ in
         meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
         meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
         assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
+
+    with subtest("lxc-container generator configures plain container"):
+        machine.execute("incus delete --force container")
+        machine.succeed("incus launch nixos container")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
+
+        machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+
+    with subtest("lxc-container generator configures nested container"):
+        machine.execute("incus delete --force container")
+        machine.succeed("incus launch nixos container --config security.nesting=true")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
+
+        machine.fail("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+        target = machine.succeed("incus exec container readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
+        assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
+
+    with subtest("lxc-container generator configures privileged container"):
+        machine.execute("incus delete --force container")
+        machine.succeed("incus launch nixos container --config security.privileged=true")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
+        # give generator an extra second to run
+        machine.sleep(1)
+
+        machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
   '';
 })

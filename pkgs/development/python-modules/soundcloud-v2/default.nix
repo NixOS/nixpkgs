@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "soundcloud-v2";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

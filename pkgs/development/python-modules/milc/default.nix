@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "milc";
   version = "1.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "clueboard";

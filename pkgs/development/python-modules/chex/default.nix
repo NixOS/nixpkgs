@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.84";
+  version = "0.1.85";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = "chex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LsUMvSMVGjqZuFDcb+/61RtFxweeG6bSFzmJUUMv6rA=";
+    hash = "sha256-7k/+2dNNbPBXtbabuOEVpAI7T1SuM4JDf074dmTg/vs=";
   };
 
   propagatedBuildInputs = [

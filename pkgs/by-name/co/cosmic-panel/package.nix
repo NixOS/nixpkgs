@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage {
 
   justFlags = [
     "--set" "prefix" (placeholder "out")
-    "--set" "bin-src" "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-panel"
+    "--set" "bin-src" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
   ];
 
   # Force linking to libEGL, which is always dlopen()ed.
-  "CARGO_TARGET_${rust.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" =
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
     map (a: "-C link-arg=${a}") [
       "-Wl,--push-state,--no-as-needed"
       "-lEGL"

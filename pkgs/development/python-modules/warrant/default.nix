@@ -5,6 +5,7 @@
 buildPythonPackage {
   pname = "warrant";
   version = "0.6.1";
+  format = "setuptools";
 
   # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
   src = fetchFromGitHub {

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "rethinkdb";
   version = "2.4.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

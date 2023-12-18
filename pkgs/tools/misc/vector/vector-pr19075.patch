@@ -1,0 +1,23 @@
+From 14cd9c12416b5c9ada55ced51e8f92fdce56a4b1 Mon Sep 17 00:00:00 2001
+From: Aaron Andersen <aaron@fosslib.net>
+Date: Tue, 7 Nov 2023 09:05:26 -0500
+Subject: [PATCH] fix(config): rustc warnings
+
+---
+ src/convert_config.rs | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/convert_config.rs b/src/convert_config.rs
+index f0a900cf421a0..d81b998c5ee1f 100644
+--- a/src/convert_config.rs
++++ b/src/convert_config.rs
+@@ -157,8 +157,7 @@ fn walk_dir_and_convert(
+             let new_output_dir = if entry_path.is_dir() {
+                 let last_component = entry_path
+                     .file_name()
+-                    .unwrap_or_else(|| panic!("Failed to get file_name for {entry_path:?}"))
+-                    .clone();
++                    .unwrap_or_else(|| panic!("Failed to get file_name for {entry_path:?}"));
+                 let new_dir = output_dir.join(last_component);
+ 
+                 if !new_dir.exists() {

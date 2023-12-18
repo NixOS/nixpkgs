@@ -9,12 +9,13 @@
 , picobox
 , pyyaml
 , sphinx-mdinclude
-, sphinxcontrib_httpdomain
+, sphinxcontrib-httpdomain
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.8.3";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -29,12 +30,14 @@ buildPythonPackage rec {
     picobox
     pyyaml
     sphinx-mdinclude
-    sphinxcontrib_httpdomain
+    sphinxcontrib-httpdomain
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";

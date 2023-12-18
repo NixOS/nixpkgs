@@ -1,8 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
-, fetchpatch2
 , callPackage
 , pkg-config
 , cmake
@@ -28,7 +26,6 @@
 , libopus
 , alsa-lib
 , libpulseaudio
-, perlPackages
 , pipewire
 , range-v3
 , tl-expected
@@ -57,9 +54,11 @@
 , libpsl
 , brotli
 , microsoft-gsl
-, mm-common
 , rlottie
 , stdenv
+, darwin
+, lld
+, libicns
 , nix-update-script
 }:
 
@@ -72,48 +71,27 @@
 
 let
   tg_owt = callPackage ./tg_owt.nix {
+    inherit stdenv;
     abseil-cpp = abseil-cpp.override {
       cxxStandard = "20";
     };
   };
-  glibmm = glibmm_2_68.overrideAttrs (attrs: {
-    version = "2.78.0";
-    src = fetchurl {
-      url = "mirror://gnome/sources/glibmm/2.78/glibmm-2.78.0.tar.xz";
-      hash = "sha256-XS6HJWSZbwKgbYu6w2d+fDlK+LAN0VJq69R6+EKj71A=";
-    };
-    patches = [
-      # Revert "Glib, Gio: Add new API from glib 2.77.0"
-      (fetchpatch2 {
-        url = "https://github.com/GNOME/glibmm/commit/5b9032c0298cbb49c3ed90d5f71f2636751fa638.patch";
-        revert = true;
-        hash = "sha256-UzrzIOnXh9pxuTDQsp6mnunDNNtc86hE9tCe1NgKsyo=";
-      })
-    ];
-    mesonFlags = [
-      "-Dmaintainer-mode=true"
-      "-Dbuild-documentation=false"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      mm-common
-      perlPackages.perl
-      perlPackages.XMLParser
-    ];
-  });
+  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.11.6";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-GV5jaC1chm4cq097/aP18Z4QemTO4tt8SBrdxCQYaS8=";
+    hash = "sha256-jIOJ7iFF2SMZOBTVzc0ECEZrkXPY060jk3fxt7kIWSg=";
   };
 
   patches = [
+    ./macos.patch
     # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
@@ -123,7 +101,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
@@ -143,39 +121,45 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     python3
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
     wrapGAppsHook
-    wrapQtAppsHook
     extra-cmake-modules
+  ] ++ lib.optionals stdenv.isDarwin [
+    lld
   ];
 
   buildInputs = [
     qtbase
-    qtwayland
     qtsvg
     qtimageformats
-    gtk3
     boost
-    fmt
-    libdbusmenu
     lz4
     xxHash
     ffmpeg
     openalSoft
     minizip
     libopus
-    alsa-lib
-    libpulseaudio
-    pipewire
     range-v3
     tl-expected
-    hunspell
-    glibmm
-    webkitgtk_6_0
-    jemalloc
     rnnoise
     protobuf
     tg_owt
+    microsoft-gsl
+    rlottie
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
+    gtk3
+    fmt
+    libdbusmenu
+    alsa-lib
+    libpulseaudio
+    pipewire
+    hunspell
+    glibmm_2_68
+    webkitgtk_6_0
+    jemalloc
     # Transitive dependencies:
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
@@ -192,9 +176,44 @@ stdenv.mkDerivation rec {
     libsysprof-capture
     libpsl
     brotli
-    microsoft-gsl
-    rlottie
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+    Cocoa
+    CoreFoundation
+    CoreServices
+    CoreText
+    CoreGraphics
+    CoreMedia
+    OpenGL
+    AudioUnit
+    ApplicationServices
+    Foundation
+    AGL
+    Security
+    SystemConfiguration
+    Carbon
+    AudioToolbox
+    VideoToolbox
+    VideoDecodeAcceleration
+    AVFoundation
+    CoreAudio
+    CoreVideo
+    CoreMediaIO
+    QuartzCore
+    AppKit
+    CoreWLAN
+    WebKit
+    IOKit
+    GSS
+    MediaPlayer
+    IOSurface
+    Metal
+    NaturalLanguage
+    libicns
+  ]);
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
@@ -210,13 +229,21 @@ stdenv.mkDerivation rec {
     export GI_GIR_PATH="$XDG_DATA_DIRS"
   '';
 
-  postFixup = ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r ${mainProgram}.app $out/Applications
+    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/telegram-desktop \
+    wrapProgram $out/bin/${mainProgram} \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
   '';
 
   passthru = {
@@ -231,10 +258,10 @@ stdenv.mkDerivation rec {
       the MTProto secure protocol.
     '';
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
-    mainProgram = "telegram-desktop";
+    inherit mainProgram;
   };
 }

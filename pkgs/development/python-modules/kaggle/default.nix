@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "kaggle";
   version = "1.5.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

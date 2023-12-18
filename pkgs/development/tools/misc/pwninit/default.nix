@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , openssl
+, elfutils
+, makeBinaryWrapper
 , pkg-config
 , xz
 , Security
@@ -20,7 +22,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ openssl xz ] ++ lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
+  postInstall = ''
+    wrapProgram $out/bin/pwninit \
+      --prefix PATH : "${lib.getBin elfutils}/bin"
+  '';
   doCheck = false; # there are no tests to run
 
   cargoSha256 = "sha256-LPypmFeF9NZOX1ogpIqc++Pun7pInKzpxYiGUvSUcso=";

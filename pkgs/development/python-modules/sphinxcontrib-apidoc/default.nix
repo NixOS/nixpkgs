@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +25,8 @@ buildPythonPackage rec {
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx extension for running sphinx-apidoc on each build";

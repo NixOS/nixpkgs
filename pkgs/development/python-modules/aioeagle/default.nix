@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aioeagle";
   version = "1.1.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

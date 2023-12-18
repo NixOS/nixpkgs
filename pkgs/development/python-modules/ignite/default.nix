@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "ignite";
   version = "0.4.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";

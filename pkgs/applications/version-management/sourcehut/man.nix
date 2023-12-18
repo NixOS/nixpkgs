@@ -6,11 +6,17 @@
 , pygit2
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mansrht";
   version = "0.16.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -29,6 +35,11 @@ buildPythonPackage rec {
     modRoot = "api";
     vendorHash = "sha256-K5EmZ4U+xItTR85+SCwhwg5KUGLkKHo9Nr2pkvmJpfo=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht

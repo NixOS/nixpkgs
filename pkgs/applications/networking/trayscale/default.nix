@@ -50,5 +50,6 @@ buildGoModule rec {
     homepage = "https://github.com/DeedleFake/trayscale";
     license = licenses.mit;
     maintainers = with maintainers; [ k900 ];
+    mainProgram = "trayscale";
   };
 }

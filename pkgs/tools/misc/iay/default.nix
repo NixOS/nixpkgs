@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/aaqaishtyaq/iay";
     license = licenses.mit;
     maintainers = with maintainers; [ aaqaishtyaq omasanori ];
+    mainProgram = "iay";
   };
 }

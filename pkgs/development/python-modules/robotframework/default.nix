@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "robotframework";
   version = "6.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

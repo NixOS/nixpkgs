@@ -30,6 +30,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk3-x11 atk glib librsvg ];
 
+  postInstall = ''
+    install -Dm444 res/icons/tk.categulario.pizarra.svg $out/share/icons/hicolor/scalable/apps/pizarra.svg
+    install -Dm444 res/pizarra.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/pizarra.desktop \
+      --replace "TryExec=/usr/bin/" "TryExec=" \
+      --replace "Exec=/usr/bin/" "Exec=" \
+      --replace "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
+  '';
+
   meta = with lib; {
     description = "A simple blackboard written in GTK";
     longDescription = ''

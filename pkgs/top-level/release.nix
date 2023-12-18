@@ -34,13 +34,26 @@
       # and it will be too much painful for our users to recompile them
       # for no real reason.
       # Remove them for 23.11.
-      "nodejs-16.20.2"
       "openssl-1.1.1w"
     ];
   }; }
+
+  # This flag, if set to true, will inhibit the use of `mapTestOn`
+  # and `release-lib.packagePlatforms`.  Generally, it causes the
+  # resulting tree of attributes to *not* have a ".${system}"
+  # suffixed upon every job name like Hydra expects.
+  #
+  # This flag exists mainly for use by
+  # pkgs/top-level/release-attrnames-superset.nix; see that file for
+  # full details.  The exact behavior of this flag may change; it
+  # should be considered an internal implementation detail of
+  # pkgs/top-level/.
+  #
+, attrNamesOnly ? false
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+let release-lib = import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; }; in
+with release-lib;
 
 let
 
@@ -143,10 +156,12 @@ let
 
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
@@ -238,11 +253,23 @@ let
   # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
-  jobs = lib.attrsets.unionOfDisjoint
-    nonPackageJobs
-    (mapTestOn ((packagePlatforms pkgs) // {
+  jobs = let
+    packagePlatforms = if attrNamesOnly then lib.id else release-lib.packagePlatforms;
+    packageJobs = {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
+      # Build selected packages (HLS) for multiple Haskell compilers to rebuild
+      # the cache after a staging merge
+      haskell.packages = lib.genAttrs [
+        # TODO: share this list between release.nix and release-haskell.nix
+        "ghc90"
+        "ghc92"
+        "ghc94"
+        "ghc96"
+      ] (compilerName: {
+        inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+          haskell-language-server;
+      });
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
@@ -262,6 +289,14 @@ let
       darwin = packagePlatforms pkgs.darwin // {
         xcode = {};
       };
-    } ));
+    };
+    mapTestOn-packages =
+      if attrNamesOnly
+      then pkgs // packageJobs
+      else mapTestOn ((packagePlatforms pkgs) // packageJobs);
+  in
+    lib.attrsets.unionOfDisjoint
+      nonPackageJobs
+      mapTestOn-packages;
 
 in jobs

@@ -257,9 +257,7 @@ in {
       ensureUsers = [
         {
           name = "netbox";
-          ensurePermissions = {
-            "DATABASE netbox" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -319,7 +317,7 @@ in {
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
-            ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
+            ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
               --bind ${cfg.listenAddress}:${toString cfg.port} \
               --pythonpath ${pkg}/opt/netbox/netbox
           '';

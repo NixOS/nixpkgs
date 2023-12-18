@@ -3,10 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , Cocoa
-, CoreServices
 , Foundation
-, rust
-, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,12 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0D+aM/zap5UDQ+k9c/p+ZfN1OUjDzFRArvcmqEOcBbM=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa CoreServices Foundation libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Foundation Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)
   preCheck = ''
-    export PATH="$(pwd)/target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH"
+    export PATH="$(pwd)/target/${stdenv.hostPlatform.rust.rustcTarget}/release:$PATH"
   '';
 
   meta = with lib; {

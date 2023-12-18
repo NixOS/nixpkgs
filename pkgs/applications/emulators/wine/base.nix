@@ -37,8 +37,11 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
     # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
     # rebuild it with empty NIX_LDFLAGS.
-    rm loader/wine64-preloader
-    make loader/wine64-preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}=""
+    for preloader in wine-preloader wine64-preloader; do
+      rm loader/$preloader &> /dev/null \
+      && ( echo "Relinking loader/$preloader"; make loader/$preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}="" ) \
+      || echo "loader/$preloader not built, skipping relink."
+    done
   '';
 }) // rec {
   inherit version src;
@@ -109,7 +112,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       # uses property syntax in one place. The first patch is necessary only with older
       # versions of Wine. The second is needed on all versions of Wine.
       (lib.optional (lib.versionOlder version "8.12") ./darwin-metal-compat-pre8.12.patch)
-      ./darwin-metal-compat.patch
+      (lib.optional (lib.versionOlder version "8.18") ./darwin-metal-compat-pre8.18.patch)
+      (lib.optional (lib.versionAtLeast version "8.18") ./darwin-metal-compat.patch)
       # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
       ./darwin-qos.patch
     ]
@@ -203,6 +207,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       fromSource
       binaryNativeCode  # mono, gecko
     ];
+    broken = stdenv.isDarwin && !supportFlags.mingwSupport;
     description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];

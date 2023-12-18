@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "gudhi";
   version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GUDHI";

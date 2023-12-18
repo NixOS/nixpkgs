@@ -23,7 +23,6 @@
 , vte
 , wrapGAppsHook
 , xdg-utils
-, xprop
 }:
 let
   # Helper method to reduce redundancy
@@ -47,17 +46,11 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
-    # Requires gjs, zenity & vte via the typelib
     nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
     buildInputs = [ vte ];
-    postPatch = ''
-      for file in *.js com.github.amezin.ddterm; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-        substituteInPlace $file --replace "zenity" "${gnome.zenity}/bin/zenity"
-      done
-    '';
     postFixup = ''
-      wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/com.github.amezin.ddterm"
+      substituteInPlace "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm" --replace "gjs" "${gjs}/bin/gjs"
+      wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
   }))
 
@@ -101,6 +94,7 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
+    nativeBuildInputs = [ wrapGAppsHook ];
     patches = [
       (substituteAll {
         inherit gjs util-linux xdg-utils;
@@ -110,6 +104,10 @@ super: lib.trivial.pipe super [
         nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
     ];
+    postFixup = ''
+      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/ding.js"
+      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/createThumbnail.js"
+    '';
   }))
 
   (patchExtension "pano@elhan.io" (old: {
@@ -137,12 +135,6 @@ super: lib.trivial.pipe super [
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
-  }))
-
-  (patchExtension "unite@hardpixel.eu" (old: {
-    buildInputs = [ xprop ];
-
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
   (patchExtension "x11gestures@joseexposito.github.io" (old: {

@@ -7,7 +7,6 @@
 , pkgsLibpcap
 , pkg-about
 , setuptools
-, tox
 }:
 
 buildPythonPackage rec {
@@ -25,10 +24,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    tox
   ];
 
+  # tox is listed in build requirements but not actually used to build
+  # keeping it as a requirement breaks the build unnecessarily
   postPatch = ''
+    sed  -i "/requires/s/, 'tox>=3.25.1'//"  pyproject.toml
     cat <<EOF >src/libpcap/libpcap.cfg
     [libpcap]
     LIBPCAP = ${pkgsLibpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}
@@ -61,6 +62,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/karpierz/libpcap/";
     license = licenses.bsd3;
-    maintainers = [ teams.ororatech ];
+    maintainers = teams.ororatech.members;
   };
 }

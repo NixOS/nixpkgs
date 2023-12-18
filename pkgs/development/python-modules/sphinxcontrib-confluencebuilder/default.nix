@@ -37,6 +37,8 @@ buildPythonPackage rec {
     "sphinxcontrib.confluencebuilder"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Confluence builder for sphinx";
     homepage = "https://github.com/sphinx-contrib/confluencebuilder";

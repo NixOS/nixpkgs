@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchurl
 , glib
 , gnome-shell
 , gtk-engine-murrine
@@ -23,20 +22,20 @@
 let
 
   pname = "mojave-gtk-theme";
-  version = "2023-06-13";
+  version = "2023-08-04";
 
   main_src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
+    hash = "sha256-boS/GPjuJV5lZjyHW7tG74T6a3SASQVGnSz++5HkCuw=";
   };
 
   wallpapers_src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "0c4ae6ddff7e3fab4959469461c4d4042deb1b2f";
-    hash = "sha256-7LSZSsRt6zTVPLWzuBgwRC1q1MHp5pN/pMl3x2wR8Ow=";
+    rev = "1dc23c2b45d7e073e080cfb02f43aab0e59b6b2c";
+    hash = "sha256-nkw8gXYx8fN1yn0A5M2fWwOvfUQ6izynxRw5JA61InM=";
     name = "wallpapers";
   };
 
@@ -118,6 +117,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
       ${lib.optionalString (opacityVariants != []) "--opacity " + builtins.toString opacityVariants} \
       ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --icon nixos \
       --dest $out/share/themes
 
     ${lib.optionalString wallpapers ''

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build
 , cmake
@@ -22,19 +23,23 @@ let
     };
 
     patches = [
+      (fetchpatch {
+        url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
+        hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
+      })
       ./espeak-mbrola.patch
     ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "piper-phonemize";
-  version = "2023.11.6-1";
+  version = "2023.11.14-4";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
     rev = "refs/tags/${version}";
-    hash = "sha256-IRvuA03Z6r8Re/ocq2G/r28uwI9RU3xmmNI7S2G40rc=";
+    hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
   nativeBuildInputs = [

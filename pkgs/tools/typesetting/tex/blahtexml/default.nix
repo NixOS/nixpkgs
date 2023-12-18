@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile \
+      --replace "\$(CXX)" "\$(CXX) -std=c++98"
+  '';
+
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package

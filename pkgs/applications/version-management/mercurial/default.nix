@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.5.2";
+    version = "6.5.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-r8OdcGeXZZPIMyuOl6Eq/Tk7VQN8X7nDyrGkLHVg9go=";
+      sha256 = "sha256-LNyB+t4SnPVrEoQXUn8ZC6cv13ZWc5TOVO7XZOZn59U=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-dcyHmLkRadNK30Vv0XsCEaZGTIcF/L29lLe58ggB3Lg=";
+      sha256 = "sha256-ob81zMUY4AVNIbkFKyImnj7QhHTh7LVOCcGeZDtTAXc=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -94,6 +94,7 @@ let
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
+      mainProgram = "hg";
     };
   };
 

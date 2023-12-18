@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isStatic [ "fortify" ];
+
   installTargets = [ "install" ] ++ lib.optional withGUI "install-gui";
 
   enableParallelBuilding = true;
@@ -47,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "lshw";
   };
 }

@@ -11,20 +11,21 @@
 , lm_sensors
 , iw
 , iproute2
+, withICUCalendar ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.32.2";
+  version = "0.32.3";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CKL4XsOBo8y4k06t5E7k2HBmI4VABW4rxU6Bjl52fhs=";
+    hash = "sha256-CldVak1BQ4VhRt24hHdog5O3crkQBZBkRWNT7uYUw4Y=";
   };
 
-  cargoHash = "sha256-7v5813veJPP5NVe2gFZr+iXJmK+aLajSZuhEkgsMxuY=";
+  cargoHash = "sha256-gWBmzpgZcsO4u8kXSqtr4FIYvshXpxWbECg/tcyl9Ok=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     "notmuch"
     "maildir"
     "pulseaudio"
-  ];
+  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \

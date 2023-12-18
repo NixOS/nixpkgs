@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, ninja, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
 , desktopToDarwinBundle
 , glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
@@ -6,6 +6,7 @@
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
+, wayland
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withKf5Wallet ? stdenv.isLinux, libsForQt5
@@ -15,22 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.31";
+  version = "1.4.33";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
-    rev    = "v${finalAttrs.version}";
-    sha256 = "sha256-oEgpav4oQ9Sld9PY4TsutS5xEnhQgOHnpQhDesRFTeQ=";
+    rev    = "v.${finalAttrs.version}";
+    sha256 = "sha256-3HyG2PBnTq/fVsvWA81fQ2gCOoAxINWeUDwzKcOuECk=";
   };
-
-  patches = [
-    # https://gitlab.com/Remmina/Remmina/-/merge_requests/2525
-    (fetchpatch {
-      url = "https://gitlab.com/Remmina/Remmina/-/commit/2ce153411597035d0f3db5177d703541e09eaa06.patch";
-      hash = "sha256-RV/8Ze9aN4dW49Z+y3z0jFs4dyEWu7DK2FABtmse9Hc=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
@@ -46,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium
     harfbuzz python3
+    wayland
   ] ++ lib.optionals stdenv.isLinux [ libappindicator-gtk3 libdbusmenu-gtk3 webkitgtk_4_1 ]
     ++ lib.optionals withLibsecret [ libsecret ]
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
@@ -89,7 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";
-    maintainers = with maintainers; [ melsigl ryantm ];
+    mainProgram = "remmina";
+    maintainers = with maintainers; [ bbigras melsigl ryantm ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 })

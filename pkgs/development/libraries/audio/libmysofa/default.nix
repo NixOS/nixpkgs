@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmysofa";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
     rev = "v${version}";
-    sha256 = "sha256-QEfkeofsVxB9gyISL/P7bvnbcBuG7Q3A4UoAyQAXxgE=";
+    hash = "sha256-eXMGwa6lOtKoUCcHR9BM2S3NWAZkGyZzF3FAjYaWTvg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hoene/libmysofa";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

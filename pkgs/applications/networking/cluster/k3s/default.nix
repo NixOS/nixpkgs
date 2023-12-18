@@ -20,4 +20,9 @@ in
   k3s_1_27 = common ((import ./1_27/versions.nix) // {
     updateScript = [ ./update-script.sh "27" ];
   }) extraArgs;
+
+  # 1_28 can be built with the same builder as 1_26
+  k3s_1_28 = common ((import ./1_28/versions.nix) // {
+    updateScript = [ ./update-script.sh "28" ];
+  }) extraArgs;
 }

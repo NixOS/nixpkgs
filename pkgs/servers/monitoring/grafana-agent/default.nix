@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , grafana-agent
 , nixosTests
 , nodejs
@@ -14,21 +14,21 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.37.4";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-wR5Xexebe6LB15hKQwFtVjyTZPFmvuyozji9BmxuZ/g=";
+    hash = "sha256-caqJE92yEzqU/UQS7Cgxe+4+wGqBqPshhhPAyPP2WPQ=";
   };
 
-  vendorHash = "sha256-emtSRn/xT9RSEdGrkfaa+IuP5yF+tVLP1j+bzOoNHXg=";
+  vendorHash = "sha256-aN/vIBbezieMhWG/czwXxx+/M40mDySZmM8pxVVs3Vs=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/web/ui/yarn.lock";
-    hash = "sha256-sUFxuliLupGEJY1xFA2V4W2gwHxtUgst3Vrywh1owAo=";
+    hash = "sha256-rT0UCInISo/p60xzQC7wAJFuKFByIzhNf0RxFFJx+3k=";
   };
 
   ldflags = let
@@ -43,7 +43,7 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ fixup_yarn_lock nodejs yarn ];
+  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
 
   tags = [
     "builtinassets"
@@ -62,7 +62,7 @@ buildGoModule rec {
     export HOME="$TMPDIR"
 
     pushd web/ui
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

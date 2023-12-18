@@ -1,7 +1,6 @@
 { lib
 , importCargoLock
 , fetchCargoTarball
-, rust
 , stdenv
 , callPackage
 , cargoBuildHook
@@ -78,13 +77,13 @@ let
       sha256 = args.cargoSha256;
     } // depsExtraArgs);
 
-  target = rust.toRustTargetSpec stdenv.hostPlatform;
+  target = stdenv.hostPlatform.rust.rustcTargetSpec;
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
   sysroot = callPackage ./sysroot { } {
     inherit target;
-    shortTarget = rust.lib.toRustTargetSpecShort stdenv.hostPlatform;
+    shortTarget = stdenv.hostPlatform.rust.cargoShortTarget;
     RUSTFLAGS = args.RUSTFLAGS or "";
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
@@ -156,7 +155,8 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       # Platforms without host tools from
       # https://doc.rust-lang.org/nightly/rustc/platform-support.html
       "armv7a-darwin"
-      "armv5tel-linux" "armv7a-linux" "m68k-linux" "riscv32-linux"
+      "armv5tel-linux" "armv7a-linux" "m68k-linux" "mipsel-linux"
+      "mips64el-linux" "riscv32-linux"
       "armv6l-netbsd"
       "x86_64-redox"
       "wasm32-wasi"

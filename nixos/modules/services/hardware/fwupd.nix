@@ -94,14 +94,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.fwupd;
-        defaultText = literalExpression "pkgs.fwupd";
-        description = lib.mdDoc ''
-          Which fwupd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "fwupd" { };
 
       daemonSettings = mkOption {
         type = types.submodule {

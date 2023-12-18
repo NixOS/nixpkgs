@@ -15,17 +15,10 @@ let
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
-  openssl3Gem = fetchFromGitHub {
-    owner = "ruby";
-    repo = "openssl";
-    rev = "v3.0.2";
-    hash = "sha256-KhuKRP1JkMJv7CagGRQ0KKGOd5Oh0FP0fbj0VZ4utGo=";
-  };
-
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256, cargoSha256 ? null }: let
+  generic = { version, hash, cargoHash ? null }: let
     ver = version;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
@@ -72,7 +65,7 @@ let
 
         src = fetchurl {
           url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
-          inherit sha256;
+          inherit hash;
         };
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -118,7 +111,7 @@ let
             # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-              sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
+              hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
          ]
           ++ ops (!atLeast30 && rubygemsSupport) [
@@ -133,7 +126,7 @@ let
             # See https://github.com/ruby/ruby/pull/2930
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
-              sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
+              hash = "sha256-HqfaevMYuIVOsdEr+CnjnUqr2IrH5fkW2uKzzoqIMXM=";
             })
           ]
           ++ ops atLeast31 [
@@ -149,19 +142,13 @@ let
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
           inherit src;
           sourceRoot = "${pname}-${version}/${cargoRoot}";
-          sha256 = cargoSha256;
+          hash = cargoHash;
         } else null;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           cp -r ${rubygems}/test/rubygems $sourceRoot/test
-        '' + opString (ver.majMin == "3.0" && opensslSupport) ''
-          # Replace the Gem by a OpenSSL3-compatible one.
-          echo "Hotpatching the OpenSSL gem with a 3.x series for OpenSSL 3 support..."
-          cp -vr ${openssl3Gem}/ext/openssl $sourceRoot/ext/
-          cp -vr ${openssl3Gem}/lib/ $sourceRoot/ext/openssl/
-          cp -vr ${openssl3Gem}/{History.md,openssl.gemspec} $sourceRoot/ext/openssl/
         '';
 
         postPatch = ''
@@ -331,29 +318,24 @@ in {
 
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "8" "";
-    sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
-  };
-
-  ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "6" "";
-    sha256 = "sha256-bmy9SQAw15EMD/IO3vq0KU380QRvD49H94tZeYesaD4=";
+    hash = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
   };
 
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
-    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
+    hash = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
   };
 
   ruby_3_2 = generic {
     version = rubyVersion "3" "2" "2" "";
-    sha256 = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
-    cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
+    hash = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
+    cargoHash = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "preview2";
-    sha256 = "sha256-MM6LD+EbN7WsCI9aV2V0S5NerEW7ianjgXMVMxRPWZE=";
-    cargoSha256 = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
+    version = rubyVersion "3" "3" "0" "rc1";
+    hash = "sha256-xP+COVqQ73bH+Qa3aHAm4KuWsJTc86Uy2auXeEoHMiI=";
+    cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
 }

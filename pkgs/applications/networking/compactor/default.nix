@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
   };
 
+  patches = [
+    ./patches/add-a-space-after-type-in-check-response-opt-sh.patch
+  ];
+
   nativeBuildInputs = [
     asciidoctor
     autoreconfHook

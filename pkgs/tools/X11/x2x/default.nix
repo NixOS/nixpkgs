@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dottedmag/x2x";
     license = licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "x2x";
   };
 }

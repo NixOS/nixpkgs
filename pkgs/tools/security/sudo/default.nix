@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.15p2";
+  version = "1.9.15p4";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-GZwM2/p+/P/6nIhoSo4vsgamK3CjFlB+SpHInIc7vMg=";
+    hash = "sha256-LiDsmGXu7qExbG9J7GrEZ4hptonU2QtEJDv0iH1t1TI=";
   };
 
   prePatch = ''
@@ -71,9 +71,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) sudo; };
 
-  meta = {
+  meta = with lib; {
     description = "A command to run commands as root";
-
     longDescription =
       ''
         Sudo (su "do") allows a system administrator to delegate
@@ -81,13 +80,10 @@ stdenv.mkDerivation rec {
         to run some (or all) commands as root or another user while
         providing an audit trail of the commands and their arguments.
       '';
-
     homepage = "https://www.sudo.ws/";
-
-    license = "https://www.sudo.ws/sudo/license.html";
-
-    maintainers = with lib.maintainers; [ delroth ];
-
-    platforms = lib.platforms.linux;
+    # From https://www.sudo.ws/about/license/
+    license = with licenses; [ sudo bsd2 bsd3 zlib ];
+    maintainers = with maintainers; [ delroth ];
+    platforms = platforms.linux;
   };
 }

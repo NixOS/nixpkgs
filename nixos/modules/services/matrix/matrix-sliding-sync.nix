@@ -7,7 +7,7 @@ in
   options.services.matrix-synapse.sliding-sync = {
     enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
 
-    package = lib.mkPackageOptionMD pkgs "matrix-sliding-sync" { };
+    package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -74,9 +74,9 @@ in
     services.postgresql = lib.optionalAttrs cfg.createDatabase {
       enable = true;
       ensureDatabases = [ "matrix-sliding-sync" ];
-      ensureUsers = [ rec {
+      ensureUsers = [ {
         name = "matrix-sliding-sync";
-        ensurePermissions."DATABASE \"${name}\"" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       } ];
     };
 

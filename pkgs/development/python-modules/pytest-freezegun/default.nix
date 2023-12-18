@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-freezegun";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ktosiek";

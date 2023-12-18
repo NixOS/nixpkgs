@@ -13,12 +13,15 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , glibcLocales
 , libiconv
+, Cocoa
 , CoreFoundation
+, CoreGraphics
 , CoreServices
 , Security
+, WebKit
 
 , enableMinimal ? false
 }:
@@ -45,7 +48,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-NwOexCU+TdZAdruivqRuqhwt0veryeGykLdH6vth+p4=";
+    hash = "sha256-+LxvPJkyq/6gtcBQepZ5pVGXP1/h30zhCHVfUGPUzFE=";
   };
 
   addonsSrc = "${src}/addons";
@@ -53,7 +56,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-AlY7/cdGr4i87+wMhPBh/+LFDoF8aC23OLDEHu9lYqU=";
+    sha256 = "sha256-3JFrVk78EiNVLLXkCFbuRnXwYHNfVv1pBPBS1yCHtPU=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -63,7 +66,7 @@ let
     inherit version;
 
     nativeBuildInputs = [
-      fixup_yarn_lock
+      prefetch-yarn-deps
       nodejs
       yarn
     ];
@@ -72,10 +75,18 @@ let
       runHook preBuild
 
       export HOME=$(mktemp -d)
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
       patchShebangs node_modules
+
+      # TODO: build-tar.py tries to run 'yarn install'. We patched
+      # shebangs node_modules, so we don't want 'yarn install'
+      # changing files. We should disable the 'yarn install' in
+      # build-tar.py to be safe.
+      ${python3Packages.python}/bin/python3 build-tar.py \
+        --output isl-dist.tar.xz \
+        --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
 
       runHook postBuild
     '';
@@ -84,8 +95,7 @@ let
       runHook preInstall
 
       mkdir -p $out
-      cd isl
-      node release.js $out
+      install isl-dist.tar.xz $out/isl-dist.tar.xz
 
       runHook postInstall
     '';
@@ -103,14 +113,20 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-MKyj91z+hciJOg4Lhb6ik7zUgCwuHsX8N9HVSP2JkKE=";
-      "fb303_core-0.0.0" = "sha256-5AU54rpeDub2Iol56S4X+xfdU07zWAtOyCNRBZLzUZA=";
-      "fbthrift-0.0.1+unstable" = "sha256-n4ES6zRyTgsNxbrM4AUraJ6W4tLHiKdfSyL3Yd0ET34=";
-      "serde_bser-0.3.1" = "sha256-PkQx2/axT/7LQ4Mvfz1AYBWKXGvaTHkOP2jtljvuYxY=";
+      "cloned-0.1.0" = "sha256-dtAyQq6fgxvr1RXPQHGiCQesvitsKpVkis4c50uolLc=";
+      "fb303_core-0.0.0" = "sha256-j+4zPXxewRxJsPQaAfvcpSkGNKw3d+inVL45Ibo7Q4E=";
+      "fbthrift-0.0.1+unstable" = "sha256-fsIL07PFu645eJFttIJU4sRSjIVuA4BMJ6kYAA0BpwY=";
+      "serde_bser-0.3.1" = "sha256-h50EJL6twJwK90sBXu40Oap4SfiT4kQAK1+bA8XKdHw=";
     };
   };
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
+  '' + lib.optionalString (!enableMinimal) ''
+    # If asked, we optionally patch in a hardcoded path to the
+    # 'nodejs' package, so that 'sl web' always works. Without the
+    # patch, 'sl web' will still work if 'nodejs' is in $PATH.
+    substituteInPlace lib/config/loader/src/builtin_static/core.rs \
+      --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
   '';
 
   # Since the derivation builder doesn't have network access to remain pure,
@@ -122,23 +138,8 @@ python3Packages.buildPythonApplication {
     sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
   '';
 
-  # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
-  # package, so that the command can actually work. NOTES:
-  #
-  # 1) This applies on all systems (so no conditional a la postFixup)
-  # 2) This doesn't require any kind of fixup itself, so we leave it out
-  #    of postFixup for that reason, too
-  # 3) If asked, we optionally patch in a hardcoded path to the 'nodejs' package,
-  #    so that 'sl web' always works
-  # 4) 'sl web' will still work if 'nodejs' is in $PATH, just not OOTB
-  preFixup = ''
-    sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
-    chmod +w $sitepackages
-    cp -r ${isl} $sitepackages/edenscm-isl
-  '' + lib.optionalString (!enableMinimal) ''
-    chmod +w $sitepackages/edenscm-isl/run-isl
-    substituteInPlace $sitepackages/edenscm-isl/run-isl \
-      --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
+  postInstall = ''
+    install ${isl}/isl-dist.tar.xz $out/lib/isl-dist.tar.xz
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -159,9 +160,12 @@ python3Packages.buildPythonApplication {
   ] ++ lib.optionals stdenv.isDarwin [
     curl
     libiconv
+    Cocoa
     CoreFoundation
+    CoreGraphics
     CoreServices
     Security
+    WebKit
   ];
 
   HGNAME = "sl";
@@ -182,6 +186,9 @@ python3Packages.buildPythonApplication {
     $out/bin/sl version | grep -qw "$SAPLING_VERSION"
     echo "OK!"
   '';
+
+  # Expose isl to nix repl as sapling.isl.
+  passthru.isl = isl;
 
   meta = with lib; {
     description = "A Scalable, User-Friendly Source Control System";

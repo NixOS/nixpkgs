@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -40,6 +40,14 @@ let
       hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
     };
 
+    grub = fetchFromGitHub {
+      name = "grub";
+      owner = "catppuccin";
+      repo = "grub";
+      rev = "v1.0.0";
+      hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
+    };
+
     hyprland = fetchFromGitHub {
       name = "hyprland";
       owner = "catppuccin";
@@ -78,6 +86,14 @@ let
       repo = "plymouth";
       rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
       hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
+    };
+
+    qt5ct = fetchFromGitHub {
+      name = "qt5ct";
+      owner = "catppuccin";
+      repo = "qt5ct";
+      rev = "89ee948e72386b816c7dad72099855fb0d46d41e";
+      hash = "sha256-t/uyK0X7qt6qxrScmkTU2TvcVJH97hSQuF0yyvSO/qQ=";
     };
 
     refind = fetchFromGitHub {
@@ -140,6 +156,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bottom
     cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
 
+  '' + lib.optionalString (lib.elem "grub" themeList) ''
+    mkdir -p $out/grub
+    cp -r ${sources.grub}/src/catppuccin-${variant}-grub-theme/* "$out/grub/"
+
   '' + lib.optionalString (lib.elem "hyprland" themeList) ''
     mkdir -p $out/hyprland
     cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
@@ -161,6 +181,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+
+  '' + lib.optionalString (lib.elem "qt5ct" themeList) ''
+    mkdir -p $out/qt5ct
+    cp ${sources.qt5ct}/themes/Catppuccin-"$capitalizedVariant".conf $out/qt5ct/
 
   '' + lib.optionalString (lib.elem "rofi" themeList) ''
     mkdir -p $out/rofi

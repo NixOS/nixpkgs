@@ -1,48 +1,41 @@
-{ lib, fetchFromGitHub, installShellFiles, rustPlatform, rustfmt, xorg
-, pkg-config, llvmPackages, clang, protobuf, python3 }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.5.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rxl3ksjinw07q3p2vjqg80k3c6wx2q7pzpf2344zyfb4gkqzx1c";
+    hash = "sha256-NuljH6cqgdtTJDkNv4w44s1UM4/R1gmpVyWpCzCJ3DU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "x11-clipboard-0.6.0" = "sha256-dKx2kda5JC79juksP2qiO9yfeFCWymcYhGPSygQ0mrg=";
-    };
-  };
-
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  cargoHash = "sha256-5+qa9/QGZyZBaO2kbvpP7Ybs1EXIO1MlPFm0PDTNqCQ=";
 
   nativeBuildInputs = [
-    pkg-config
-
-    rustPlatform.bindgenHook
-
-    rustfmt
     protobuf
-
-    python3
-
     installShellFiles
   ];
-  buildInputs = [ xorg.libxcb ];
 
-  buildFeatures = [ "all" ];
+  checkFlags = [
+    # Some test cases interact with X11, skip them
+    "--skip=test_x11_clipboard"
+    "--skip=test_x11_primary"
+  ];
 
   postInstall = ''
-    installShellCompletion --bash completions/bash-completion/completions/*
-    installShellCompletion --fish completions/fish/completions/*
-    installShellCompletion --zsh  completions/zsh/site-functions/*
+    for cmd in clipcatd clipcatctl clipcat-menu clipcat-notify; do
+      installShellCompletion --cmd $cmd \
+        --bash <($out/bin/$cmd completions bash) \
+        --fish <($out/bin/$cmd completions fish) \
+        --zsh  <($out/bin/$cmd completions zsh)
+    done
   '';
 
   meta = with lib; {
@@ -51,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "clipcatd";
   };
 }

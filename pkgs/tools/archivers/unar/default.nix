@@ -50,15 +50,17 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ gnustep.make ] ++
     lib.optionals stdenv.isDarwin [ xcbuildHook ];
 
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  # xcbuild links with clang instead of clang++.
+  env = lib.optionalAttrs stdenv.isDarwin {
+    LD_FLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   xcbuildFlags = lib.optionals stdenv.isDarwin [
     "-target unar"
     "-target lsar"
     "-configuration Release"
-    "MACOSX_DEPLOYMENT_TARGET=10.12"
-    # Fix "ld: file not found: /nix/store/*-clang-7.1.0/lib/arc/libarclite_macosx." error
-    # Disabling ARC may leak memory, however since this program is generally not used for
-    # long periods of time, it shouldn't be an issue
-    "CLANG_LINK_OBJC_RUNTIME=NO"
+    "MACOSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   makefile = lib.optionalString (!stdenv.isDarwin) "Makefile.linux";

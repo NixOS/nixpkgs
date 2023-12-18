@@ -18,23 +18,23 @@
 let
   isQt6 = lib.versions.major qtbase.version == "6";
   pdfjs = let
-    version = "3.9.179";
+    version = "4.0.269";
   in
   fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-    hash = "sha256-QoJFb7MlZN6lDe2Yalsd10sseukL6+tNRi6JzLPVBYw=";
+    hash = "sha256-8gwJUxygcdvERDni/k6WIx3tzk7yb+qHZ4NsfkP0VDo=";
     stripRoot = false;
   };
 
-  pname = "qutebrowser";
-  version = "3.0.2";
+  version = "3.1.0";
 in
 
 python3.pkgs.buildPythonApplication {
-  inherit pname version;
+  pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
+  inherit version;
   src = fetchurl {
-    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
+    hash = "sha256-UA3MHMoI1rC4FPowbiII4lM1rL4OLPmZ+1GRbg9LLl8=";
   };
 
   # Needs tox
@@ -117,6 +117,7 @@ python3.pkgs.buildPythonApplication {
         --set-default QSG_RHI_BACKEND vulkan
       ''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
+      --set QTWEBENGINE_RESOURCES_PATH "${qtwebengine}/resources"
     )
   '';
 

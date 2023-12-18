@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "12.3.1";
+  version = "13.1.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    hash = "sha256-NP5ph598YSPbpzJJUR2r+EkqFmuItxgvOSDgDaN+Swg=";
+    hash = "sha256-fuzNsVYdnThMzd4tLN/sTbCBXg6qXKLDJRziOKyOBGg=";
   };
 
   # These get set at all-packages, keep onto them for child drvs
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake python3 bison jq ];
+
+  # Workaround missing atomic ops with gcc <13
+  env.LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools

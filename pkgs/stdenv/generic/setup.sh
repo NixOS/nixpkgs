@@ -16,28 +16,14 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-if [ -f .attrs.sh ]; then
+if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
-else
-    __structuredAttrs=
-fi
 
-if [ -n "$__structuredAttrs" ]; then
     for outputName in "${!outputs[@]}"; do
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-
-    # Before Nix 2.4, $NIX_ATTRS_*_FILE was named differently:
-    # https://github.com/NixOS/nix/commit/27ce722
-    if [[ -n "${ATTRS_JSON_FILE:-}" ]]; then
-        export NIX_ATTRS_JSON_FILE="$ATTRS_JSON_FILE"
-    fi
-
-    if [[ -n "${ATTRS_SH_FILE:-}" ]]; then
-        export NIX_ATTRS_SH_FILE="$ATTRS_SH_FILE"
-    fi
 
     # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
     # https://github.com/NixOS/nix/issues/6736; please keep around until the
@@ -49,6 +35,7 @@ if [ -n "$__structuredAttrs" ]; then
         export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
     fi
 else
+    __structuredAttrs=
     : "${outputs:=out}"
 fi
 
@@ -1273,6 +1260,10 @@ configurePhase() {
                 prependToVar configureFlags --disable-static
             fi
         fi
+
+        if [ -z "${dontPatchShebangsInConfigure:-}" ]; then
+            patchShebangs --build "$configureScript"
+        fi
     fi
 
     if [ -n "$configureScript" ]; then
@@ -1508,17 +1499,7 @@ distPhase() {
 
 showPhaseHeader() {
     local phase="$1"
-    case "$phase" in
-        unpackPhase) echo "unpacking sources";;
-        patchPhase) echo "patching sources";;
-        configurePhase) echo "configuring";;
-        buildPhase) echo "building";;
-        checkPhase) echo "running tests";;
-        installPhase) echo "installing";;
-        fixupPhase) echo "post-installation fixup";;
-        installCheckPhase) echo "running install tests";;
-        *) echo "$phase";;
-    esac
+    echo "Running phase: $phase"
 }
 
 
@@ -1536,6 +1517,44 @@ showPhaseFooter() {
     (( H > 0 )) && echo -n "$H hours "
     (( M > 0 )) && echo -n "$M minutes "
     echo "$S seconds"
+}
+
+
+runPhase() {
+    local curPhase="$*"
+    if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then return; fi
+    if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then return; fi
+    if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then return; fi
+    if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then return; fi
+    if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then return; fi
+    if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then return; fi
+    if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
+
+    if [[ -n $NIX_LOG_FD ]]; then
+        echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
+    fi
+
+    showPhaseHeader "$curPhase"
+    dumpVars
+
+    local startTime=$(date +"%s")
+
+    # Evaluate the variable named $curPhase if it exists, otherwise the
+    # function named $curPhase.
+    eval "${!curPhase:-$curPhase}"
+
+    local endTime=$(date +"%s")
+
+    showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
+    if [ "$curPhase" = unpackPhase ]; then
+        # make sure we can cd into the directory
+        [ -n "${sourceRoot:-}" ] && chmod +x "${sourceRoot}"
+
+        cd "${sourceRoot:-.}"
+    fi
 }
 
 
@@ -1565,39 +1584,7 @@ genericBuild() {
     # phase name is space-free, which it must be because it's the name
     # of either a shell variable or a shell function.
     for curPhase in ${phases[*]}; do
-        if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
-        if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
-        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
-        if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
-        if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
-        if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
-
-        if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
-        fi
-
-        showPhaseHeader "$curPhase"
-        dumpVars
-
-        local startTime=$(date +"%s")
-
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
-
-        local endTime=$(date +"%s")
-
-        showPhaseFooter "$curPhase" "$startTime" "$endTime"
-
-        if [ "$curPhase" = unpackPhase ]; then
-            # make sure we can cd into the directory
-            [ -n "${sourceRoot:-}" ] && chmod +x "${sourceRoot}"
-
-            cd "${sourceRoot:-.}"
-        fi
+        runPhase "$curPhase"
     done
 }
 

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
-  version = "0.38";
+  version = "0.38.2";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
-    sha256 = "sha256-oXkBrb5D9IGmv1PBWiogJovI3HrVzPaFoNF8FFbbr24=";
+    hash = "sha256-UoLr5HQrA+4A/Dq4NZaflNIpJ523IyESvcUAnYYelH4=";
   };
 
   nativeBuildInputs = [
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
     updateScript = gitUpdater {
       url = "https://git.notmuchmail.org/git/notmuch";
-      ignoredVersions = "_rc.*";
+      ignoredVersions = "_(rc|pre).*";
     };
   };
 
@@ -146,5 +146,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
+    mainProgram = "notmuch";
   };
 }

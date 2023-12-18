@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://review.spdk.io/gerrit/c/spdk/spdk/+/20394
     ./setuptools.patch
+    ./0001-fix-setuptools-installation.patch
   ];
 
   postPatch = ''
@@ -67,8 +68,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dpdk=${dpdk}"
-    "--pydir=${placeholder "out"}/${python3.sitePackages}"
+    "--pydir=${placeholder "out"}"
   ];
+
+  postCheck = ''
+    python3 -m spdk
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
   # otherwise does not find strncpy when compiling

@@ -23,13 +23,13 @@
 
 let
   pname = "devpod";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8ED74Cqq2fw+TpkJyipxlBpKq60ScZinlPj0hEX13/0=";
+    sha256 = "sha256-e9sa9LniG5fj3S+x9T91v6ILPI0CD2y3QnZxXcKy6Ik=";
   };
 
   meta = with lib; {

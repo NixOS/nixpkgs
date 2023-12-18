@@ -5,12 +5,17 @@
 , isPyPy
 , isPy311
 , python
+, pythonAtLeast
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "nose3";
   version = "1.3.8";
+  format = "setuptools";
+
+  # https://github.com/jayvdb/nose3/issues/5
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

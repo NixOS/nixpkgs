@@ -3,6 +3,7 @@
 , autoreconfHook
 , cg3
 , fetchFromGitHub
+, fetchpatch
 , hfst
 , hfst-ospell
 , icu
@@ -23,6 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-UoqdwNWCNOPX6u1YBlnXUcB/fmcvcy/HXbYciVrMBOY=";
   };
+
+  patches = [
+    # allow building with python311.
+    # patch is incorporated upstream and should be removed on the next update
+    (fetchpatch {
+      name = "python311.patch";
+      url = "https://github.com/flammie/omorfi/commit/9736452ae6624060dbea0876a722c3731e776357.patch";
+      hash = "sha256-Q4fi5HMmO0fq8YI833vgv2EYp//9Um/xFoRk28WrUMk=";
+    })
+  ];
 
   # Fix for omorfi-hyphenate.sh file not found error
   postInstall = ''

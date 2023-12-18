@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gptcache";
-  version = "0.1.42";
+  version = "0.1.43";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.1";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zilliztech";
     repo = "GPTCache";
     rev = "refs/tags/${version}";
-    hash = "sha256-rrPs5ZwBooltVcvrs4AHObx69xmZ8F+IP/lJGPVTNXY=";
+    hash = "sha256-EDsHzl55j4sehbKk0/be+WOl83f1/7zPLvPyzKnTBP4=";
   };
 
   propagatedBuildInputs = [

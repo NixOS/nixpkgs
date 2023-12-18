@@ -11,7 +11,7 @@ in
   options = {
     services.guacamole-client = {
       enable = lib.mkEnableOption (lib.mdDoc "Apache Guacamole Client (Tomcat)");
-      package = lib.mkPackageOptionMD pkgs "guacamole-client" { };
+      package = lib.mkPackageOption pkgs "guacamole-client" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {

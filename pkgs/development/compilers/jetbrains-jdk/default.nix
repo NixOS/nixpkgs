@@ -9,6 +9,7 @@
 , unzip
 , rsync
 , debugBuild ? false
+, withJcef ? true
 
 , libXdamage
 , libXxf86vm
@@ -27,6 +28,8 @@
 , udev
 }:
 
+assert debugBuild -> withJcef;
+
 let
   arch = {
     "aarch64-linux" = "aarch64";
@@ -35,37 +38,36 @@ let
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
 openjdk17.overrideAttrs (oldAttrs: rec {
-  pname = "jetbrains-jdk-jcef";
-  javaVersion = "17.0.7";
-  build = "829.16";
+  pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
+  javaVersion = "17.0.8";
+  build = "1000.8";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git reset --hard [revision]
-  # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jdk-" | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1
-  openjdkTag = "jdk-18+0";
+  # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
+  openjdkTag = "jbr-17.0.7+7";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-b3wW52knkYUeG8h4naTQLGUedhAMiPnUsn3zFAiJCwM=";
+    hash = "sha256-PXS8wRF37D9vzeC4CvmB3szFMbt+NRqhQqtPZcbeAO8=";
   };
 
   BOOT_JDK = openjdk17-bootstrap.home;
-  SOURCE_DATE_EPOCH = 1666098567;
+  # run `git log -1 --pretty=%ct` in jdk repo for new value on update
+  SOURCE_DATE_EPOCH = 1691119859;
 
-  patches = [];
+  patches = [ ];
 
-  # Configure is done in build phase
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    mkdir -p jcef_linux_${arch}/jmods
-    cp ${jetbrains.jcef}/* jcef_linux_${arch}/jmods
+    ${lib.optionalString withJcef "cp -r ${jetbrains.jcef} jcef_linux_${arch}"}
 
     sed \
         -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
@@ -79,64 +81,67 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else "jcef"}
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")}
 
     runHook postBuild
   '';
 
-  installPhase = let
-    buildType = if debugBuild then "fastdebug" else "release";
-    debugSuffix = lib.optionalString debugBuild "-fastdebug";
-    jcefSuffix = lib.optionalString (!debugBuild) "_jcef";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      buildType = if debugBuild then "fastdebug" else "release";
+      debugSuffix = if debugBuild then "-fastdebug" else "";
+      jcefSuffix = if debugBuild || !withJcef then "" else "_jcef";
+      jbrsdkDir = "jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build}";
+    in
+    ''
+      runHook preInstall
 
-    mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build}
-    rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
-    mv build/linux-${cpu}-server-${buildType}/images/jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build} build/linux-${cpu}-server-${buildType}/images/jdk
-  '' + oldAttrs.installPhase + "runHook postInstall";
+      mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir}
+      rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
+      mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
+    '' + oldAttrs.installPhase + "runHook postInstall";
 
-  postInstall = ''
+  postInstall = lib.optionalString withJcef ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
   '';
 
   dontStrip = debugBuild;
 
   postFixup = ''
-      # Build the set of output library directories to rpath against
-      LIBDIRS="${lib.makeLibraryPath [
-        libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
-        nss nspr libdrm mesa wayland udev
-      ]}"
-      for output in $outputs; do
-        if [ "$output" = debug ]; then continue; fi
-        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
+    # Build the set of output library directories to rpath against
+    LIBDIRS="${lib.makeLibraryPath [
+      libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
+      nss nspr libdrm mesa wayland udev
+    ]}"
+    for output in $outputs; do
+      if [ "$output" = debug ]; then continue; fi
+      LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
+    done
+    # Add the local library paths to remove dependencies on the bootstrap
+    for output in $outputs; do
+      if [ "$output" = debug ]; then continue; fi
+      OUTPUTDIR=$(eval echo \$$output)
+      BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
+      echo "$BINLIBS" | while read i; do
+        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+        patchelf --shrink-rpath "$i" || true
       done
-      # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
-        if [ "$output" = debug ]; then continue; fi
-        OUTPUTDIR=$(eval echo \$$output)
-        BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
-        echo "$BINLIBS" | while read i; do
-          patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
-          patchelf --shrink-rpath "$i" || true
-        done
-      done
-    '';
+    done
+  '';
 
   nativeBuildInputs = [ git autoconf unzip rsync ] ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";
     longDescription = ''
-     JetBrains Runtime is a runtime environment for running IntelliJ Platform
-     based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
-     based on OpenJDK project with some modifications. These modifications
-     include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
-     support, ligatures, some fixes for native crashes not presented in
-     official build, and other small enhancements.
-     JetBrains Runtime is not a certified build of OpenJDK. Please, use at
-     your own risk.
+      JetBrains Runtime is a runtime environment for running IntelliJ Platform
+      based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
+      based on OpenJDK project with some modifications. These modifications
+      include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
+      support, ligatures, some fixes for native crashes not presented in
+      official build, and other small enhancements.
+      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
+      your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk17.meta) license platforms mainProgram;

@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ kovirobi ];
     platforms = platforms.all;
+    mainProgram = "ddate";
   };
 }

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "oslo-serialization";
   version = "5.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.serialization";

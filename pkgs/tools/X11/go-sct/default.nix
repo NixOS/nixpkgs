@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "d4l3k";
     repo = "go-sct";
     rev = "4ae88a6bf50e0b917541ddbcec1ff10ab77a0b15";
-    sha256 = "sha256-/0ilM1g3CNaseqV9i+cKWyzxvWnj+TFqazt+aYDtNVs=";
+    hash = "sha256-/0ilM1g3CNaseqV9i+cKWyzxvWnj+TFqazt+aYDtNVs=";
   };
 
   postPatch = ''
@@ -27,6 +27,7 @@ buildGoModule rec {
     homepage = "https://github.com/d4l3k/go-sct";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
     mainProgram = "sct";
   };
 }

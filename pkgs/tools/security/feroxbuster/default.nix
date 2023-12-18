@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
+    mainProgram = "feroxbuster";
   };
 }
 

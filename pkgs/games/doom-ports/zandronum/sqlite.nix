@@ -8,8 +8,8 @@ stdenv.mkDerivation {
   version = "3.0";
 
   src = fetchurl {
-    url = "https://www.sqlite.org/2017/sqlite-autoconf-3180000.tar.gz";
-    hash = "sha256-N1dhJGOXbn0IxenwrzAhYT/CS7z+HFEZfWd2uezprFw=";
+    url = "https://www.sqlite.org/2021/sqlite-autoconf-3360000.tar.gz";
+    sha256 = "1qxwkfvd185dfcqbakrzikrsw6ffr5jp1gl3dch9dsdyjvmw745x";
   };
 
   buildPhase = ''

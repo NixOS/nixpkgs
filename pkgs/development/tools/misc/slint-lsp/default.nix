@@ -25,14 +25,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-ikOKpQHMLPCC2IfqWvW0I1auiCdyIZZMu6nMGle/bE0=";
+    sha256 = "sha256-zNTel91c1ECg4z7xIu37GcSWHTxTKtxpGjH3TpiFQ1k=";
   };
 
-  cargoHash = "sha256-tprtlG/M2ItE7Ay/9QWrZQHdVEPYD9hDJ+uPR8pq1Xk=";
+  cargoHash = "sha256-pT3z6t1W/DitH/GJJIJhQawslodKzIkCyO0yd9OlvAg=";
 
   nativeBuildInputs = [ cmake pkg-config fontconfig ];
   buildInputs = rpathLibs ++ [ xorg.libxcb.dev ]

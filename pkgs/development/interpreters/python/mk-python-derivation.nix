@@ -102,13 +102,14 @@
 
 , disabledTestPaths ? []
 
+# Allow passing in a custom stdenv to buildPython*
+, stdenv ? python.stdenv
+
 , ... } @ attrs:
 
 assert (pyproject != null) -> (format == null);
 
 let
-  inherit (python) stdenv;
-
   format' =
     if pyproject != null then
       if pyproject then
@@ -194,7 +195,7 @@ let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs"
+    "disabledTestPaths" "outputs" "stdenv"
   ]) // {
 
     name = namePrefix + name_;

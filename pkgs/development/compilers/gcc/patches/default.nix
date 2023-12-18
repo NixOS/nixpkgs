@@ -63,8 +63,8 @@ in
 ++ optionals (noSysDirs) (
   [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
   ({
-    "13" = [ ./13/no-sys-dirs-riscv.patch ];
-    "12" = [ ./no-sys-dirs-riscv.patch ];
+    "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
+    "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
     "11" = [ ./no-sys-dirs-riscv.patch ];
     "10" = [ ./no-sys-dirs-riscv.patch ];
     "9"  = [ ./no-sys-dirs-riscv-gcc9.patch ];
@@ -175,9 +175,6 @@ in
 
 ## gcc 11.0 and older ##############################################################################
 
-# https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
-++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
-
 # libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
 ++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
@@ -217,6 +214,11 @@ in
 # Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
 # which is not supported by the clang integrated assembler used by default on Darwin.
 ++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
+
+# Make avr-gcc8 build on aarch64-darwin
+# avr-gcc8 is maintained for the `qmk` package
+# https://github.com/osx-cross/homebrew-avr/blob/main/Formula/avr-gcc%408.rb#L69
+++ optional (is8 && targetPlatform.isAvr && hostPlatform.isDarwin && hostPlatform.isAarch64) ./8/avr-gcc-8-darwin.patch
 
 
 ## gcc 7.0 and older ##############################################################################
@@ -259,6 +261,9 @@ in
 # This patch can be dropped should darwin.cctools-llvm ever implement support.
 ++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
 
+# Building libstdc++ with flat namespaces results in trying to link CoreFoundation, which
+# defaults to the impure, system location and causes the build to fail.
+++ optional (is6 && hostPlatform.isDarwin) ./6/libstdc++-disable-flat_namespace.patch
 
 ## gcc 4.9 and older ##############################################################################
 

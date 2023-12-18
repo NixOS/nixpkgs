@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.24.0";
+  version = "1.24.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KsXsWGEUwD0UFRD7V4rfqEuRjyWeU/PmPdh8X6djhG0=";
+    hash = "sha256-P1Hj4HidTr4R29PwpAhT5xn6sTKDo6gL6M7AgunEU5k=";
   };
 
   propagatedBuildInputs = [

@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     platforms = builtins.attrNames srcjson.deb;
+    mainProgram = "standardnotes";
   };
 }

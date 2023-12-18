@@ -82,5 +82,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
+    mainProgram = "gkraken";
   };
 }

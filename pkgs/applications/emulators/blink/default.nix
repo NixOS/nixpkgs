@@ -19,6 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Do not include --enable-static and --disable-shared flags during static compilation
+  dontAddStaticConfigureFlags = true;
+
+  # Don't add --build and --host flags as they are not supported
+  configurePlatforms = lib.optionals stdenv.hostPlatform.isStatic [ ];
+
+  # ./configure script expects --static not standard --enable-static
+  configureFlags = lib.optional stdenv.hostPlatform.isStatic "--static";
+
   # 'make check' requires internet connection
   doCheck = true;
   checkTarget = "test";

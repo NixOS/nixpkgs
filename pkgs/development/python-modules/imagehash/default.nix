@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "imagehash";
   version = "4.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JohannesBuchner";

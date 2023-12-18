@@ -24,5 +24,6 @@ buildGoModule rec {
     changelog = "https://github.com/muesli/mastotool/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "mastotool";
   };
 }

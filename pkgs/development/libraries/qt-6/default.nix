@@ -1,6 +1,8 @@
 { newScope
 , lib
 , stdenv
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
 , fetchurl
 , fetchpatch
 , fetchpatch2
@@ -9,8 +11,10 @@
 , gst_all_1
 , libglvnd
 , darwin
+, overrideSDK
 , buildPackages
 , python3
+, config
 
   # options
 , developerBuild ? false
@@ -23,10 +27,11 @@ let
     mirror = "mirror://qt";
   };
 
-  addPackages = self: with self;
+  addPackages = self:
     let
       callPackage = self.newScope ({
-        inherit qtModule srcs python3;
+        inherit (self) qtModule;
+        inherit srcs python3;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
@@ -46,18 +51,27 @@ let
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
-          ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
-          ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0007-qtbase-find-tools-in-PATH.patch
-          ./patches/0008-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
-          ./patches/0009-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0010-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
-          ./patches/0011-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0004-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
+          ./patches/0005-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0006-qtbase-find-tools-in-PATH.patch
+          ./patches/0007-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0008-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          # Revert "macOS: Silence warning about supporting secure state restoration"
+          # fix build with macOS sdk < 12.0
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
+            revert = true;
+            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
-      full = env "qt-full-${qtbase.version}" ([
+      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}"
+      # `with self` is ok to use here because having these spliced is unnecessary
+      ( with self;[
         qt3d
         qt5compat
         qtcharts
@@ -95,7 +109,7 @@ let
         qtwebengine
         qtwebsockets
         qtwebview
-      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]);
+      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ])) { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -141,13 +155,18 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        qtModule = callPackage ({ qtModule }: qtModule.override {
+          stdenv = if stdenv.isDarwin
+            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+            else stdenv;
+        }) { };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };
@@ -157,26 +176,32 @@ let
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
       };
 
-      wrapQtAppsHook = makeSetupHook
+      wrapQtAppsHook = callPackage ({ makeBinaryWrapper }: makeSetupHook
         {
           name = "wrap-qt6-apps-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
-        } ./hooks/wrap-qt-apps-hook.sh;
+          propagatedBuildInputs = [ makeBinaryWrapper ];
+        } ./hooks/wrap-qt-apps-hook.sh) { };
 
-      qmake = makeSetupHook
+      qmake = callPackage ({ qtbase }: makeSetupHook
         {
           name = "qmake6-hook";
-          propagatedBuildInputs = [ self.qtbase.dev ];
+          propagatedBuildInputs = [ qtbase.dev ];
           substitutions = {
             inherit debug;
             fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
           };
-        } ./hooks/qmake-hook.sh;
+        } ./hooks/qmake-hook.sh) { };
+    } // lib.optionalAttrs config.allowAliases {
+      # Convert to a throw on 03-01-2023 and backport the change.
+      # Warnings show up in various cli tool outputs, throws do not.
+      # Remove completely before 24.05
+      overrideScope' = lib.warnIf (lib.isInOldestRelease 2311) "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
-  # TODO(@Artturin): convert to makeScopeWithSplicing'
-  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
-  baseScope = lib.makeScope newScope addPackages;
+  baseScope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "qt6";
+    f = addPackages;
+  };
 
   bootstrapScope = baseScope.overrideScope(final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };

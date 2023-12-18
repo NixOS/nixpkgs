@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ ryota-ka thehedgeh0g ];
     platforms = platforms.unix;
+    mainProgram = "yarn";
   };
 }

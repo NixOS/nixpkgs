@@ -76,13 +76,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.7.3";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+69mh1hKL1r7SNwDilaQz5UochMMWFG2lrBLYBF31JY=";
+    hash = "sha256-EQWAJZgufUC0FADuIotrGhP0Nf5qlgOwmiSlqLSv00A=";
   };
 
   nativeBuildInputs = [
@@ -221,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
+
+    # disable benchmarks
+    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests
@@ -236,6 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fixed and renamed in 3.8.0RC1
     # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
     "test_visoss_6"
+    # failing with PROJ 9.3.1
+    # https://github.com/OSGeo/gdal/issues/8908
+    "test_osr_esri_28"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

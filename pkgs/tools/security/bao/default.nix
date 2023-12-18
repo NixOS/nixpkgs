@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/oconnor663/bao";
     maintainers = with lib.maintainers; [ amarshall ];
     license = with lib.licenses; [ cc0 asl20 ];
+    mainProgram = "bao";
   };
 }

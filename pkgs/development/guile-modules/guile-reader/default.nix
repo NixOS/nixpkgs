@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  env.GUILE_SITE = "${guile-lib}/${guile.siteDir}";
+  env = {
+    GUILE_SITE = "${guile-lib}/${guile.siteDir}";
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 

@@ -16,6 +16,7 @@
 , geoclue2
 , wrapGAppsHook4
 , desktop-file-utils
+, libportal
 , libshumate
 , libsecret
 , libsoup_3
@@ -25,13 +26,13 @@
 , geocode-glib_2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "44.4";
+  version = "45.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-3admgmWnCVKWDElRnPv7+jV2gyb8W4CyYX8U/7LJuHM=";
+    url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6es3CnlxtPhC+qME0xpIXb2P+K7EKnZScvL8GnqAmPI=";
   };
 
   doCheck = true;
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     gjs
     gsettings-desktop-schemas
     gtk4
+    libportal
     libshumate
     libgweather
     libadwaita
@@ -82,8 +84,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-maps";
+      attrPath = "gnome.gnome-maps";
     };
   };
 
@@ -94,4 +96,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

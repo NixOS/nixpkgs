@@ -11,7 +11,7 @@
 , hdf5
 , boost
 , gflags
-, protobuf3_21
+, protobuf_21
 , config
 , ocl-icd
 , buildPackages
@@ -247,8 +247,10 @@ effectiveStdenv.mkDerivation {
 
   outputs = [
     "out"
+    "cxxdev"
     "package_tests"
   ];
+  cudaPropagateToOutput = "cxxdev";
 
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
@@ -298,7 +300,7 @@ effectiveStdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs = [ zlib pcre boost gflags protobuf3_21 ]
+  buildInputs = [ zlib pcre boost gflags protobuf_21 ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
@@ -328,20 +330,32 @@ effectiveStdenv.mkDerivation {
       bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
     ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
-    ++ lib.optionals enableCuda  (with cudaPackages; [
-      cuda_cudart
-      cuda_cccl # <thrust/*>
-      libnpp # npp.h
+    ++ lib.optionals enableCuda (with cudaPackages; [
+      cuda_cudart.lib
+      cuda_cudart.dev
+      cuda_cccl.dev # <thrust/*>
+      libnpp.dev # npp.h
+      libnpp.lib
+      libnpp.static
+      nvidia-optical-flow-sdk
     ] ++ lib.optionals enableCublas [
-      libcublas # cublas_v2.h
+      # May start using the default $out instead once
+      # https://github.com/NixOS/nixpkgs/issues/271792
+      # has been addressed
+      libcublas.static
+      libcublas.lib
+      libcublas.dev # cublas_v2.h
     ] ++ lib.optionals enableCudnn [
-      cudnn # cudnn.h
+      cudnn.dev # cudnn.h
+      cudnn.lib
+      cudnn.static
     ] ++ lib.optionals enableCufft [
-      libcufft # cufft.h
-  ]);
+      libcufft.dev # cufft.h
+      libcufft.lib
+      libcufft.static
+    ]);
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
-    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
+  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
@@ -362,7 +376,7 @@ effectiveStdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf3_21}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf_21}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=${printEnabled runAccuracyTests}"
@@ -458,6 +472,7 @@ effectiveStdenv.mkDerivation {
   postInstall = ''
     sed -i "s|{exec_prefix}/$out|{exec_prefix}|;s|{prefix}/$out|{prefix}|" \
       "$out/lib/pkgconfig/opencv4.pc"
+    mkdir $cxxdev
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''
@@ -476,6 +491,8 @@ effectiveStdenv.mkDerivation {
   '';
 
   passthru = {
+    cudaSupport = enableCuda;
+
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }

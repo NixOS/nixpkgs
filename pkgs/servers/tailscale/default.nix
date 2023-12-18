@@ -1,7 +1,7 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
 
 let
-  version = "1.52.1";
+  version = "1.56.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -11,9 +11,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-hscKV4jhJ+tqgTFuOEThABpu8iqK3+av7+DcuSmZwQ4=";
+    hash = "sha256-kMk5Q/KvNcsohHNLDMmpBm+gUxQEOeO8o/odukcJi0A=";
   };
-  vendorHash = "sha256-WGZkpffwe4I8FewdBHXGaLbKQP/kHr7UF2lCXBTcNb4=";
+  vendorHash = "sha256-bG/ydsJf2UncOcDo8/BXdvQJO3Mk0tl8JGje1b6kto4=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 

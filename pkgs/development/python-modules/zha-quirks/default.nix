@@ -2,25 +2,46 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.106";
-  format = "setuptools";
+  version = "0.0.107";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-+sL3AbjDg0Kl6eqMwVAN9W85QKJqFR1ANKz1E958KeA=";
+    hash = "sha256-JHf6PZDK7yjyHjjUhkNpqEINCaY916wX5rXaw1Fx1ro=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/zigpy/zha-device-handlers/pull/2787
+      name = "zigpy-0.60-compat.patch";
+      url = "https://github.com/zigpy/zha-device-handlers/commit/f497ccd2437ae9a24b9afdb84f11fc27a30df211.patch";
+      hash = "sha256-ICatiA0QRmfJ4Vf4LWyUJI5TLeWoikII49HSBir5WNI=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

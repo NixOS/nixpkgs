@@ -4,7 +4,6 @@
 , fetchpatch
 , qmake
 , qtbase
-, qtquick1
 , qtmultimedia
 , utmp
 }:
@@ -26,7 +25,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-    qtquick1
     qtmultimedia
   ] ++ lib.optional stdenv.isDarwin utmp;
 

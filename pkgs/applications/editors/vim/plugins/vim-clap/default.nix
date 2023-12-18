@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.46";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-KWBuoZ2GxjwIu7L1PPq/7u3iuYFp5QrlsleL2RQTdUE=";
+    hash = "sha256-CYv5AZsGvN2dtN7t58b50a8PH7804Lnm4d4wAX6Mm5Q=";
   };
 
   meta = with lib; {

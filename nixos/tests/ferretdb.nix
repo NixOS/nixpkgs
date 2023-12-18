@@ -39,7 +39,7 @@ with import ../lib/testing-python.nix { inherit system; };
             ensureDatabases = [ "ferretdb" ];
             ensureUsers = [{
               name = "ferretdb";
-              ensurePermissions."DATABASE ferretdb" = "ALL PRIVILEGES";
+              ensureDBOwnership = true;
             }];
           };
 

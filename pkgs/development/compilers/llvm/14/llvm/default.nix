@@ -25,7 +25,7 @@
 # broken for the armv7l builder
 , enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
-} @args:
+}:
 
 let
   inherit (lib) optional optionals optionalString;

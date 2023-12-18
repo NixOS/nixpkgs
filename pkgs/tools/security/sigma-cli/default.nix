@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.7.9";
-  format = "pyproject";
+  version = "0.7.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CWoVVvhprqBW4bmcAHtgJbbOPxGbBsikNu6bwyDdIcc=";
+    hash = "sha256-cNrI+YWwLK9sgvVYPOcTXW29omVRqnhh/458FuaoODo=";
   };
 
   postPatch = ''
@@ -55,6 +55,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_show_identifier"
     "test_plugin_show_nonexisting"
     "test_plugin_show_uuid"
+    # Tests compare STDOUT results
+    "test_check_valid"
+    "test_check_stdin"
+    "test_check_exclude"
   ];
 
   pythonImportsCheck = [

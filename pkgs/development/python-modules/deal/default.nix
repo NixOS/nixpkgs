@@ -77,13 +77,17 @@ buildPythonPackage rec {
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
     "test_scheme_errors_rewrite_message"
-    # broken since pytest > 7.1.3
-    "test_exception_hook"
+    # assert errors
+    "test_doctest"
+    "test_no_violations"
   ];
 
   disabledTestPaths = [
     # needs internet access
     "tests/test_runtime/test_offline.py"
+    # depends on typeguard <4.0.0 for tests, but >=4.0.0 seems fine for runtime
+    # https://github.com/life4/deal/blob/9be70fa1c5a0635880619b2cea83a9f6631eb236/pyproject.toml#L40
+    "tests/test_testing.py"
   ];
 
   pythonImportsCheck = [ "deal" ];

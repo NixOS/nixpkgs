@@ -11,7 +11,23 @@ import shutil
 import subprocess
 import sys
 import warnings
-from typing import NamedTuple
+import json
+from typing import NamedTuple, Dict, List
+from dataclasses import dataclass
+
+
+@dataclass
+class BootSpec:
+    init: str
+    initrd: str
+    initrdSecrets: str
+    kernel: str
+    kernelParams: List[str]
+    label: str
+    system: str
+    toplevel: str
+    specialisations: Dict[str, "BootSpec"]
+
 
 
 libc = ctypes.CDLL("libc.so.6")
@@ -71,12 +87,31 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 
-def profile_path(profile: str | None, generation: int, specialisation: str | None, name: str) -> str:
-    return os.path.realpath("%s/%s" % (system_dir(profile, generation, specialisation), name))
+def get_bootspec(profile: str | None, generation: int) -> BootSpec:
+    system_directory = system_dir(profile, generation, None)
+    boot_json_path = os.path.realpath("%s/%s" % (system_directory, "boot.json"))
+    if os.path.isfile(boot_json_path):
+        boot_json_f = open(boot_json_path, 'r')
+        bootspec_json = json.load(boot_json_f)
+    else:
+        boot_json_str = subprocess.check_output([
+        "@bootspecTools@/bin/synthesize",
+        "--version",
+        "1",
+        system_directory,
+        "/dev/stdout"],
+        universal_newlines=True)
+        bootspec_json = json.loads(boot_json_str)
+    return bootspec_from_json(bootspec_json)
+
+def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
+    specialisations = bootspec_json['org.nixos.specialisation.v1']
+    specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
+    return BootSpec(**bootspec_json['org.nixos.bootspec.v1'], specialisations=specialisations)
 
 
-def copy_from_profile(profile: str | None, generation: int, specialisation: str | None, name: str, dry_run: bool = False) -> str:
-    store_file_path = profile_path(profile, generation, specialisation, name)
+def copy_from_file(file: str, dry_run: bool = False) -> str:
+    store_file_path = os.path.realpath(file)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
@@ -84,40 +119,19 @@ def copy_from_profile(profile: str | None, generation: int, specialisation: str 
         copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
     return efi_file_path
 
-
-def describe_generation(profile: str | None, generation: int, specialisation: str | None) -> str:
-    try:
-        with open(profile_path(profile, generation, specialisation, "nixos-version")) as f:
-            nixos_version = f.read()
-    except IOError:
-        nixos_version = "Unknown"
-
-    kernel_dir = os.path.dirname(profile_path(profile, generation, specialisation, "kernel"))
-    module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
-    kernel_version = os.path.basename(module_dir)
-
-    build_time = int(os.path.getctime(system_dir(profile, generation, specialisation)))
-    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
-
-    description = "@distroName@ {}, Linux Kernel {}, Built on {}".format(
-        nixos_version, kernel_version, build_date
-    )
-
-    return description
-
-
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
-                machine_id: str, current: bool) -> None:
-    kernel = copy_from_profile(profile, generation, specialisation, "kernel")
-    initrd = copy_from_profile(profile, generation, specialisation, "initrd")
+                machine_id: str, bootspec: BootSpec, current: bool) -> None:
+    if specialisation:
+        bootspec = bootspec.specialisations[specialisation]
+    kernel = copy_from_file(bootspec.kernel)
+    initrd = copy_from_file(bootspec.initrd)
 
     title = "@distroName@{profile}{specialisation}".format(
         profile=" [" + profile + "]" if profile else "",
         specialisation=" (%s)" % specialisation if specialisation else "")
 
     try:
-        append_initrd_secrets = profile_path(profile, generation, specialisation, "append-initrd-secrets")
-        subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+        subprocess.check_call([bootspec.initrdSecrets, "@efiSysMountPoint@%s" % (initrd)])
     except FileNotFoundError:
         pass
     except subprocess.CalledProcessError:
@@ -132,17 +146,19 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
     entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
         generation_conf_filename(profile, generation, specialisation))
     tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "init=%s " % profile_path(profile, generation, specialisation, "init")
+    kernel_params = "init=%s " % bootspec.init
 
-    with open(profile_path(profile, generation, specialisation, "kernel-params")) as params_file:
-        kernel_params = kernel_params + params_file.read()
+    kernel_params = kernel_params + " ".join(bootspec.kernelParams)
+    build_time = int(os.path.getctime(system_dir(profile, generation, specialisation)))
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+
     with open(tmp_path, 'w') as f:
         f.write(BOOT_ENTRY.format(title=title,
                     generation=generation,
                     kernel=kernel,
                     initrd=initrd,
                     kernel_params=kernel_params,
-                    description=describe_generation(profile, generation, specialisation)))
+                    description=f"{bootspec.label}, built on {build_date}"))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
         f.flush()
@@ -173,21 +189,14 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     return configurations[-configurationLimit:]
 
 
-def get_specialisations(profile: str | None, generation: int, _: str | None) -> list[SystemIdentifier]:
-    specialisations_dir = os.path.join(
-            system_dir(profile, generation, None), "specialisation")
-    if not os.path.exists(specialisations_dir):
-        return []
-    return [SystemIdentifier(profile, generation, spec) for spec in os.listdir(specialisations_dir)]
-
-
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
     rex_profile = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
     rex_generation = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
-        known_paths.append(copy_from_profile(*gen, "kernel", True))
-        known_paths.append(copy_from_profile(*gen, "initrd", True))
+        bootspec = get_bootspec(gen.profile, gen.generation)
+        known_paths.append(copy_from_file(bootspec.kernel, True))
+        known_paths.append(copy_from_file(bootspec.initrd, True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         if rex_profile.match(path):
             prof = rex_profile.sub(r"\1", path)
@@ -268,7 +277,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
         if installed_version < available_version:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
+            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
     os.makedirs("@efiSysMountPoint@/efi/nixos", exist_ok=True)
     os.makedirs("@efiSysMountPoint@/loader/entries", exist_ok=True)
@@ -279,10 +288,11 @@ def install_bootloader(args: argparse.Namespace) -> None:
     remove_old_entries(gens)
     for gen in gens:
         try:
-            is_default = os.path.dirname(profile_path(*gen, "init")) == args.default_config
-            write_entry(*gen, machine_id, current=is_default)
-            for specialisation in get_specialisations(*gen):
-                write_entry(*specialisation, machine_id, current=is_default)
+            bootspec = get_bootspec(gen.profile, gen.generation)
+            is_default = os.path.dirname(bootspec.init) == args.default_config
+            write_entry(*gen, machine_id, bootspec, current=is_default)
+            for specialisation in bootspec.specialisations.keys():
+                write_entry(gen.profile, gen.generation, specialisation, machine_id, bootspec, current=is_default)
             if is_default:
                 write_loader_conf(*gen)
         except OSError as e:

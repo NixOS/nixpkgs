@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     rm dmd/compiler/test/runnable/gdb15729.sh
     rm dmd/compiler/test/runnable/gdb4149.d
     rm dmd/compiler/test/runnable/gdb4181.d
+    rm dmd/compiler/test/compilable/ddocYear.d
 
     # Disable tests that rely on objdump whitespace until fixed upstream:
     #   https://issues.dlang.org/show_bug.cgi?id=23317
@@ -103,12 +104,7 @@ stdenv.mkDerivation rec {
     rm dmd/compiler/test/compilable/cdcmp.d
   ''
 
-  + lib.optionalString (lib.versionOlder version "2.091.0") ''
-    # This one has tested against a hardcoded year, then against a current year on
-    # and off again. It just isn't worth it to patch all the historical versions
-    # of it, so just remove it until the most recent change.
-    rm dmd/compiler/test/compilable/ddocYear.d
-  '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
+  + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
     substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"

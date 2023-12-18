@@ -9,11 +9,17 @@
 , emailthreads
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "listssrht";
   version = "0.57.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -33,6 +39,11 @@ buildPythonPackage rec {
     substituteInPlace Makefile \
       --replace "all: api" ""
   '';
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht

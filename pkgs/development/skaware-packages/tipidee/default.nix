@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "tipidee";
-  version = "0.0.1.0";
-  sha256 = "sha256-rKi9IX9CcRhY4n44i2vDom9MIeuGxRAHF7u0C3nNvFU=";
+  version = "0.0.2.0";
+  sha256 = "5I+/gfvN8s4bf6Oi+5kzRndWeLV7movyRfznz0kNMoY=";
 
   description = "A HTTP 1.1 webserver, serving static files and CGI/NPH";
 

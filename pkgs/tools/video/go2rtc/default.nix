@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "go2rtc";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "go2rtc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h63Z6y0dMZQaNvnx3fzd/sA2K7cO5h6wHpMkbQVfHLA=";
+    hash = "sha256-knC8GWu8543QIvk2OKotTHB88qgSQpOI+58oHusgVKc=";
   };
 
-  vendorHash = "sha256-GRjadpgIryeMhWfmdzSWKH694cgDp9lfD0RRjuPrYqE=";
+  vendorHash = "sha256-+n0atALq5e2iEbEeJ1kefnKka7gTE0iFRSRnUCz4bh8=";
 
   buildFlagArrays = [
     "-trimpath"
@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/AlexxIT/go2rtc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "go2rtc";
   };
 }

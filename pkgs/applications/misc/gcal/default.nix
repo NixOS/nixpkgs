@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin gettext;

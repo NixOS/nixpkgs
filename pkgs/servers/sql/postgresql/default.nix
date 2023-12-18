@@ -296,6 +296,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
+      changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
@@ -345,45 +346,45 @@ let
 
   mkPackages = self: {
     postgresql_12 = self.callPackage generic {
-      version = "12.16";
+      version = "12.17";
       psqlSchema = "12";
-      hash = "sha256-xfH/96D5Ph7DdGQXsFlCkOzmF7SZXtlbjVJ68LoOOPM=";
+      hash = "sha256-k+jhsjmB1fA8bFdj93soGEwc5NtxlPpGbi7bZdnBxfY=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.12";
+      version = "13.13";
       psqlSchema = "13";
-      hash = "sha256-DaHtzuNRS3vHum268MAEmeisFZBmjoeJxQJTpiSfIYs=";
+      hash = "sha256-ivacJZkEeirSRlZ9aOxBMa7xFpVNjD5GnpeJCAs3pHQ=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.9";
+      version = "14.10";
       psqlSchema = "14";
-      hash = "sha256-sf47qbGn86ljfdFlbf2tKIkBYHP9TTXxO1AUPLu2qO8=";
+      hash = "sha256-yZQxxI6dRwsNCrlG6yFBo80ZEwwvtNxLMoSnd07Mg5k=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.4";
+      version = "15.5";
       psqlSchema = "15";
-      hash = "sha256-uuxaS9xENzNmU7bLXZ7Ym+W9XAxYuU4L7O4KmZ5jyPk=";
+      hash = "sha256-j1OqldeOuOglNupGtoGHeTtCu6O09lqjQvVAsjybEKY=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;
     };
 
     postgresql_16 = self.callPackage generic {
-      version = "16.0";
+      version = "16.1";
       psqlSchema = "16";
-      hash = "sha256-356CPrIjMEROHUjlLMZRNaZSpv2zzjJePwhUkzn1G5k=";
+      hash = "sha256-zjxNhdGbASH+DT+O8fpgH3GYnob4pm99w61UbdVWT+w=";
       this = self.postgresql_16;
       thisAttr = "postgresql_16";
       inherit self;

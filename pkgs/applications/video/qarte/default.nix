@@ -42,5 +42,6 @@ in mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.linux;
+    mainProgram = "qarte";
   };
 }

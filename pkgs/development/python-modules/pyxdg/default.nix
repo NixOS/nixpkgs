@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pyxdg";
   version = "0.28";
+  format = "setuptools";
 
   src =  fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

@@ -1,9 +1,11 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , version
 , suffix ? ""
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
 }:
 assert (hash == null) -> (src != null);
 let
@@ -27,6 +29,8 @@ in
 , callPackage
 , coreutils
 , curl
+, docbook_xsl_ns
+, docbook5
 , editline
 , flex
 , gnutar
@@ -37,6 +41,8 @@ in
 , libarchive
 , libcpuid
 , libsodium
+, libxml2
+, libxslt
 , lowdown
 , mdbook
 , mdbook-linkcheck
@@ -86,13 +92,17 @@ self = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals atLeast24 [
     autoconf-archive
     autoreconfHook
     bison
     flex
     jq
-  ] ++ lib.optionals (atLeast24 && enableDocumentation) [
+  ] ++ lib.optionals (enableDocumentation && !atLeast24) [
+    libxslt
+    libxml2
+    docbook_xsl_ns
+    docbook5
+  ] ++ lib.optionals (enableDocumentation && atLeast24) [
     (lib.getBin lowdown)
     mdbook
   ] ++ lib.optionals (atLeast213 && enableDocumentation) [
@@ -111,13 +121,12 @@ self = stdenv.mkDerivation {
     openssl
     sqlite
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ] ++ lib.optionals atLeast24 [
     gtest
     libarchive
     lowdown
-  ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ] ++ lib.optionals (stdenv.isx86_64) [
     libcpuid
   ] ++ lib.optionals atLeast214 [
     rapidcheck
@@ -131,13 +140,6 @@ self = stdenv.mkDerivation {
     boehmgc
   ] ++ lib.optionals (atLeast27) [
     nlohmann_json
-  ];
-
-  NIX_LDFLAGS = lib.optionals (!atLeast24) [
-    # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-    (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
-    # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-    (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
 
   postPatch = ''
@@ -180,11 +182,6 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals (!atLeast24) [
-    # option was removed in 2.4
-    "--disable-init-state"
-  ] ++ lib.optionals atLeast214 [
-    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
@@ -246,7 +243,7 @@ self = stdenv.mkDerivation {
     '';
     homepage = "https://nixos.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault artturin ];
+    inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";

@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.7.4";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-ANQbbKXA1G6O/qEK6frTp9J26nNM+NgVya6d6DsPrv4=";
+    hash = "sha256-I1WoEt824qk7vfaDHD1zIXo4/QbihK5hoR3GbjxiO90=";
   };
 
-  npmDepsHash = "sha256-sk1RqMX4aGJcjysN7udBSPnUvD1vLHdyZ88JQbReOqw=";
+  npmDepsHash = "sha256-tsAUPb7RFW7HSV1bS8ZBCL1xLEhvgvTZSDfS8DlcUgg=";
 
   preBuild = ''
     mkdir -p config
@@ -79,5 +79,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

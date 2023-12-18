@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , file
+, libGL
 , libjpeg
 , mesa
 , pango
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V5ulB9CkGh1ghiC4BKvRdoYKZzpaiOKzAOUmJIFkgM0=";
+    hash = "sha256-tcHtiyDtLky3lBk5cTmpHRSSbo1IjqOwf+q6Lofz5qM=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     file
+    libGL
     libjpeg
     mesa
     pango

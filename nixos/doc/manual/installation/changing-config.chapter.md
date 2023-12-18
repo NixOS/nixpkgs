@@ -55,6 +55,14 @@ which causes the new configuration (and previous ones created using
 This can be useful to separate test configurations from "stable"
 configurations.
 
+A repl, or read-eval-print loop, is also available. You can inspect your configuration and use the Nix language with
+
+```ShellSession
+# nixos-rebuild repl
+```
+
+Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl.html) to learn more.
+
 Finally, you can do
 
 ```ShellSession

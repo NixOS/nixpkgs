@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "aiozeroconf";
   version = "0.1.8";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -30,5 +30,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/flyingrub/scdl";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "scdl";
   };
 }

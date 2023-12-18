@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dit7ya figsoda ];
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
+    mainProgram = "boxxy";
   };
 }

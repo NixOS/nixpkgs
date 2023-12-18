@@ -1,17 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage
-, six, udev, pytest, mock, hypothesis, docutils
+{ lib
+, fetchPypi
+, buildPythonPackage
+, six
+, udev
+, pytest
+, mock
+, hypothesis
+, docutils
+, stdenvNoCC
 }:
 
 buildPythonPackage rec {
   pname = "pyudev";
   version = "0.24.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-deVNNyGPWsRbDaHw/ZzF5SajysPvHPrUEM96sziwFHE=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenvNoCC.isLinux ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
     '';
@@ -27,9 +36,10 @@ buildPythonPackage rec {
   # https://github.com/pyudev/pyudev/issues/187
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ frogamic ];
   };
 }

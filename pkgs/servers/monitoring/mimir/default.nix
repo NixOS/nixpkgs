@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.10.3";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    hash = "sha256-tVJcvxKcxhSeYyqBsBeG+OrWoD+hTDAoPuIXB72MMkY=";
+    hash = "sha256-+Xlejvdpum1UMUhELUzcF9bJOXx4tIkDA8wHrE88U5w=";
   };
 
   vendorHash = null;

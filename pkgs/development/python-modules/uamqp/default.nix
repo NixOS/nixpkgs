@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "uamqp";
   version = "1.6.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";
@@ -27,6 +28,9 @@ buildPythonPackage rec {
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     ./darwin-azure-c-shared-utility-corefoundation.patch
+  ] ++ [
+    # Fix incompatible function pointer conversion error with clang 16.
+    ./clang-fix-incompatible-function-pointer-conversion.patch
   ];
 
   postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''

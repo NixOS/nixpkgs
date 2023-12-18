@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "gps3";
   version = "unstable-2017-11-01";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wadda";

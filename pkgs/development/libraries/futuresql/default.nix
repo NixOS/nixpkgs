@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/futuresql/futuresql-${version}.tar.xz";
     hash = "sha256-5E7Y1alhizynuimD7ZxfdXLm4KWxmflIaINLccy+vUM=";
   };
 

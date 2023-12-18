@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
+    substituteInPlace GNUMakefile --replace "-flto=auto" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

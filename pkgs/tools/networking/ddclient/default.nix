@@ -5,7 +5,7 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.11.1";
+  version = "3.11.2";
 
   outputs = [ "out" ];
 
@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "sha256-OM+JW3HP0llzyJNqmP5PLZ30TOvC2nA1bWwOspTbZZM=";
+    sha256 = "sha256-d1G+AM28nBpMWh1QBjm78KKeOL5b5arxERYRCXohwBg=";
   };
 
   postPatch = ''

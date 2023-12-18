@@ -19,14 +19,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       authentication = ''
         host    all             all             localhost               trust
       '';
-      ensureUsers = [
-        {
-          name = "postgres";
-          ensurePermissions = {
-            "DATABASE \"postgres\"" = "ALL PRIVILEGES";
-          };
-        }
-      ];
     };
 
     services.pgadmin = {

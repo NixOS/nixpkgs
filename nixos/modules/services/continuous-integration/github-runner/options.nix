@@ -161,14 +161,7 @@ with lib;
     default = {};
   };
 
-  package = mkOption {
-    type = types.package;
-    description = lib.mdDoc ''
-      Which github-runner derivation to use.
-    '';
-    default = pkgs.github-runner;
-    defaultText = literalExpression "pkgs.github-runner";
-  };
+  package = mkPackageOption pkgs "github-runner" { };
 
   ephemeral = mkOption {
     type = types.bool;

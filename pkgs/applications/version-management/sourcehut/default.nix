@@ -1,4 +1,6 @@
-{ python3
+{ lib
+, stdenv
+, python3
 , callPackage
 , recurseIntoAttrs
 , nixosTests
@@ -35,7 +37,9 @@ let
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
         nativeCheckInputs = with super; [ pytestCheckHook mock ];
-        disabledTestPaths = [];
+        disabledTestPaths = []
+          # Disable incompatible tests on Darwin.
+          ++ lib.optionals stdenv.isDarwin [ "test/aaa_profiling" ];
       });
 
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {

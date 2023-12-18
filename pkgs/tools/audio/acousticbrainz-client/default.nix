@@ -37,5 +37,6 @@ python3Packages.buildPythonApplication rec {
     # essentia-extractor is only available for those platforms
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ ];
+    mainProgram = "abzsubmit";
   };
 }

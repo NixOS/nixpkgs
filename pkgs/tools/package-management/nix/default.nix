@@ -4,7 +4,6 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
 , fetchpatch2
 , runCommand
@@ -113,6 +112,13 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
+  patch-rapidcheck-shared = fetchpatch2 {
+    # https://github.com/NixOS/nix/pull/9431
+    name = "fix-missing-librapidcheck.patch";
+    url = "https://github.com/NixOS/nix/commit/46131567da96ffac298b9ec54016b37114b0dfd5.patch";
+    hash = "sha256-lShYxYKRDWwBqCysAFmFBudhhAL1eendWcL8sEFLCGg=";
+  };
+
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
   addTestsShallowly = tests: pkg: pkg // {
@@ -145,15 +151,13 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common rec {
-    version = "2.3.16";
-    src = fetchurl {
-      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
-      hash = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
-    };
+  nix_2_3 = (common {
+    version = "2.3.17";
+    hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
     ];
+    maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
 
   nix_2_10 = common {
@@ -196,26 +200,46 @@ in lib.makeExtensible (self: ({
   nix_2_14 = common {
     version = "2.14.1";
     hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_15 = common {
     version = "2.15.3";
     hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_16 = common {
     version = "2.16.2";
     hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_17 = common {
     version = "2.17.1";
     hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_18 = common {
     version = "2.18.1";
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
+  };
+
+  nix_2_19 = common {
+    version = "2.19.2";
+    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -237,7 +261,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_18;
+  unstable = self.nix_2_19;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 

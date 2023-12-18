@@ -1,8 +1,4 @@
-{ pname
-, dir
-, version
-, hash
-, stdenv
+{ stdenv
 , lib
 , fetchurl
 , autoPatchelfHook
@@ -15,6 +11,7 @@
 , at-spi2-atk
 , cairo
 , pango
+, pipewire
 , gdk-pixbuf
 , glib
 , freetype
@@ -50,8 +47,20 @@
 , wayland
 }:
 
-stdenv.mkDerivation rec {
-  inherit pname version; # Please backport all updates to the stable channel.
+{ pname
+, dir
+, version
+, hash
+, url
+}:
+
+let
+  inherit (stdenv) targetPlatform;
+  ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
+in stdenv.mkDerivation rec {
+  inherit pname version;
+
+  # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -60,8 +69,7 @@ stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/s/${pname}/${pname}_${version}_amd64.deb";
-    inherit hash;
+    inherit url hash;
   };
 
   nativeBuildInputs = [
@@ -150,9 +158,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
@@ -162,11 +169,14 @@ stdenv.mkDerivation rec {
       ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
 
     autoPatchelf --no-recurse -- "$out/lib/${dir}/"
-    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node"
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
   '';
 
-  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
-  passthru.tests.application-launch = nixosTests.signal-desktop;
+  passthru = {
+    # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+    tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     description = "Private, simple, and secure messenger";
@@ -177,8 +187,9 @@ stdenv.mkDerivation rec {
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mic92 equirosa urandom ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ mic92 equirosa urandom bkchr ];
+    mainProgram = pname;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

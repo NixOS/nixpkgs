@@ -165,12 +165,10 @@ All official `NixOS` project sources are maintained at the [NixOS organization](
 
 `Botnix` and `Botpkgs` are built and tested using [GitHub Actions](https://docs.github.com/en/actions).
 
-`Nixpkgs` and `NixOS` are built and tested using the `Nix`-based [Hydra](https://hydra.nixos.org/) CI/CD system.
-
-* [Nixpkgs builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Nixpkgs builds for NixOS 23.05](https://hydra.nixos.org/jobset/nixos/release-23.05)
-* [Nixpkgs tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Nixpkgs tests for NixOS 23.05](https://hydra.nixos.org/job/nixos/release-23.05/tested#tabs-constituents)
+* [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
+* [Continuous package builds for NixOS 23.11](https://hydra.nixos.org/jobset/nixos/release-23.11)
+* [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
+* [Tests for NixOS 23.11 release](https://hydra.nixos.org/job/nixos/release-23.11/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to the `Nixpkgs` [https://cache.nixos.org/](cache).
 When building and testing succeed, the `Nixpkgs` expressions are distributed via [Nix channels](https://nixos.org/manual/nix/stable/package-management/channels.html).

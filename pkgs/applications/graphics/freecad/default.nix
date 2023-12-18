@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-rwt81Z+Bp8uZlR4iuGQEDKBu/Dr9Rqg7d9SsCdofTUU=";
+    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
   };
 
   nativeBuildInputs = [

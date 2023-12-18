@@ -13,10 +13,7 @@
 , buildPackages
 }:
 
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.6.6";
 
@@ -47,11 +44,11 @@ in rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   postBuild =  ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   meta = with lib; {
@@ -66,5 +63,6 @@ in rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ ];
+    mainProgram = "rav1e";
   };
 }

@@ -24,6 +24,7 @@
 , pyramid
 , pyrsistent
 , pyspark
+, pysocks
 , pytest-forked
 , pytest-localserver
 , pytest-watch
@@ -40,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.33.1";
+  version = "1.37.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-a73SZssiS1i3pfble0dMw6st5Hq4AIdJA+dnT617kXg=";
+    hash = "sha256-y1fZe3ql8twSsTl24bP0fqA6myMv71I6IgzOVucbuvM=";
   };
 
   propagatedBuildInputs = [
@@ -120,6 +121,7 @@ buildPythonPackage rec {
     mock
     pure-eval
     pyrsistent
+    pysocks
     pytest-forked
     pytest-localserver
     pytest-watch

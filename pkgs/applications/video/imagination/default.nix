@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ austinbutler ];
     platforms = platforms.linux;
+    mainProgram = "imagination";
   };
 }

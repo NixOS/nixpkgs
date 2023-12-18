@@ -1,39 +1,39 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-sRAU9RJANz+Sov6oaoZasMoaqM+mIZSDbag92wXsVCI=";
+      hash_darwin = "sha256-ThsKOOLNcmFTUnLirSHea9wzw+FyC3v7I/5ghbz8GAg=";
       hash_darwin_aarch64 =
-        "sha256-U+PBsfpc7PNZYedHIdPnWXA9xKpRnon5vxgKKJr69ow=";
-      hash_linux = "sha256-2o6LAo2pEsCi1exPv1nEMk2Tklhh49UyWaYoyQ7Df/Y=";
-      version = "119.0.6045.105";
+        "sha256-UVBLCo8Lkbnt882PeTMnO8lxam42mIDkEN28Ps8E0a8=";
+      hash_linux = "sha256-X8bia1BaLQm5WKn5vdShpQ4A7sPNZ8lgmeXoYj2earc=";
+      version = "120.0.6099.71";
     };
     deps = {
       gn = {
-        hash = "sha256-4jWqtsOBh96xbYk1m06G9hj2eQwW6buUXsxWsa5W6/4=";
-        rev = "991530ce394efb58fcd848195469022fa17ae126";
+        hash = "sha256-dwluGOfq05swtBM5gg4a6gY3IpFHaKKkD0TV1XW7c7k=";
+        rev = "e4702d7409069c4f12d45ea7b7f0890717ca3f4b";
         url = "https://gn.googlesource.com/gn";
-        version = "2023-09-12";
+        version = "2023-10-23";
       };
     };
-    hash = "sha256-UR8EowMYZ668qQ/6C9C/M+0HSguyUGKVhY46FTG+ShA=";
-    hash_deb_amd64 = "sha256-PIBWkCwU/7N242wR/WmpJDDJKLDGk/sJxPxa05bOQSE=";
-    version = "119.0.6045.123";
+    hash = "sha256-Zbo8xvOfvJVkjdqBaApK6hekmuRKHuYWRBTZTpqcOSM=";
+    hash_deb_amd64 = "sha256-ScFJQB9fY1cWHtFO8GpQ8yuCLaO1AvyAV5lbnqSrPCs=";
+    version = "120.0.6099.109";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        hash = "sha256-4jWqtsOBh96xbYk1m06G9hj2eQwW6buUXsxWsa5W6/4=";
-        rev = "991530ce394efb58fcd848195469022fa17ae126";
+        hash = "sha256-dwluGOfq05swtBM5gg4a6gY3IpFHaKKkD0TV1XW7c7k=";
+        rev = "e4702d7409069c4f12d45ea7b7f0890717ca3f4b";
         url = "https://gn.googlesource.com/gn";
-        version = "2023-09-12";
+        version = "2023-10-23";
       };
       ungoogled-patches = {
-        hash = "sha256-4EbfM62KuG8nHrYWwp183V5G9ac7FICjpyJahnKbQjE=";
-        rev = "119.0.6045.123-1";
+        hash = "sha256-wiW1w+HVPpEjROuE3yhYuGiZSwI8z5+k1CFnVZ0HtME=";
+        rev = "120.0.6099.109-1";
       };
     };
-    hash = "sha256-UR8EowMYZ668qQ/6C9C/M+0HSguyUGKVhY46FTG+ShA=";
-    hash_deb_amd64 = "sha256-PIBWkCwU/7N242wR/WmpJDDJKLDGk/sJxPxa05bOQSE=";
-    version = "119.0.6045.123";
+    hash = "sha256-Zbo8xvOfvJVkjdqBaApK6hekmuRKHuYWRBTZTpqcOSM=";
+    hash_deb_amd64 = "sha256-ScFJQB9fY1cWHtFO8GpQ8yuCLaO1AvyAV5lbnqSrPCs=";
+    version = "120.0.6099.109";
   };
 }

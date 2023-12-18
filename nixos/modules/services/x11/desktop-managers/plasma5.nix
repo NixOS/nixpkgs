@@ -31,7 +31,7 @@ let
   inherit (lib)
     getBin optionalAttrs optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
+    mkDefault mkIf mkMerge mkOption mkPackageOption types;
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -108,7 +108,7 @@ in
         default = true;
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
+      notoPackage = mkPackageOption pkgs "Noto fonts" {
         default = [ "noto-fonts" ];
         example = "noto-fonts-lgc-plus";
       };
@@ -295,7 +295,7 @@ in
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
-        ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
+        ++ lib.optional config.services.samba.enable kdenetwork-filesharing
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet
         ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
@@ -338,6 +338,7 @@ in
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
+      programs.dconf.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.power-profiles-daemon.enable = mkDefault true;
@@ -372,6 +373,7 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = mkDefault [ plasma5.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
       # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;

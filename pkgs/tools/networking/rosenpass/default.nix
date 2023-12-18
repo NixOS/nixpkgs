@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nixosTests
 , rustPlatform
-, targetPlatform
+, hostPlatform
 , installShellFiles
 , cmake
 , libsodium
@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rosenpass";
-  version = "unstable-2023-09-28";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "b15f17133f8b5c3c5175b4cfd4fc10039a4e203f";
-    hash = "sha256-UXAkmt4VY0irLK2k4t6SW+SEodFE3CbX5cFbsPG0ZCo=";
+    rev = "v${version}";
+    hash = "sha256-t5AeJqeV16KCUoBm1GUzj/U6q382CRCR/XG6B2MiBU4=";
   };
 
-  cargoHash = "sha256-N1DQHkgKgkDQ6DbgQJlpZkZ7AMTqX3P8R/cWr14jK2I=";
+  cargoHash = "sha256-caYJP3SNpZxtV9y3D62CuzJ5RjMoq98D9W0Fms5E3Nc=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   # nix defaults to building for aarch64 _without_ the armv8-a
   # crypto extensions, but liboqs depends on these
-  preBuild = lib.optionalString targetPlatform.isAarch64 ''
+  preBuild = lib.optionalString hostPlatform.isAarch64 ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -march=armv8-a+crypto"
   '';
 

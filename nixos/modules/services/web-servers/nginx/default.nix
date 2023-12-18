@@ -377,7 +377,7 @@ let
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
             ${acmeLocation}
             location / {
-              return 301 https://$host$request_uri;
+              return ${toString vhost.redirectCode} https://$host$request_uri;
             }
           }
         ''}
@@ -396,7 +396,7 @@ let
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             location / {
-              return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
             }
           ''}
           ${optionalString hasSSL ''
@@ -449,7 +449,7 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
-      ${optionalString (config.return != null) "return ${config.return};"}
+      ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
       ${mkBasicAuth "sublocation" config}

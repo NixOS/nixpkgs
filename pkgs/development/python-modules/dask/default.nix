@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.10.1";
+  version = "2023.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-asD5oLd7XcZ8ZFSrsSCAKgZ3Gsqs6T77nb1qesamgUI=";
+    hash = "sha256-LMd55s8LT4m6Ym+LmXb4TKPnZ0jMkNBfcPJxmgruMDM=";
   };
 
   nativeBuildInputs = [
@@ -133,6 +133,10 @@ buildPythonPackage rec {
     "test_auto_blocksize_csv"
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
+    "test_foldby_tree_reduction"
+    "test_to_bag"
   ] ++ [
     # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
     "test_concat_categorical"

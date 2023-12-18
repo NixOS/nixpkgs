@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "betamax";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

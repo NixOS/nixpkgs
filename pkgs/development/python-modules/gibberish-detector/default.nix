@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "gibberish-detector";
   version = "0.1.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

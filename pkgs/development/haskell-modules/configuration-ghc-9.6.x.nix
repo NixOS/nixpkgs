@@ -67,14 +67,14 @@ self: super: {
 
   doctest = doDistribute super.doctest_0_22_2;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
-  some = doDistribute self.some_1_0_5;
+  some = doDistribute self.some_1_0_6;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
-  th-desugar = doDistribute self.th-desugar_1_15;
+  th-desugar = doDistribute self.th-desugar_1_16;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
   bifunctors = doDistribute self.bifunctors_5_6_1;
   base-compat = doDistribute self.base-compat_0_13_1;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_1;
-  fgl = doDistribute self.fgl_5_8_1_1;
+  fgl = doDistribute self.fgl_5_8_2_0;
 
   # Because we bumped the version of th-abstraction above.^
   aeson = doJailbreak super.aeson;
@@ -118,9 +118,6 @@ self: super: {
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
-
-  cborg-json = jailbreakForCurrentVersion super.cborg-json "0.2.5.0";
-  serialise = jailbreakForCurrentVersion super.serialise "0.2.6.0";
 
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
@@ -249,7 +246,9 @@ self: super: {
 
   # Fix ghc-9.6.x build errors.
   libmpd = appendPatch
-    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+    # https://github.com/vimus/libmpd-haskell/pull/138
+    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...5737096a339edc265a663f51ad9d29baee262694.patch";
+                       name = "vimus-libmpd-haskell-pull-138.patch";
                        sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
                      })
     super.libmpd;
@@ -259,8 +258,9 @@ self: super: {
     editedCabalFile = null;
     buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
     patches = [(pkgs.fetchpatch {
+      # https://github.com/jgoerzen/configfile/pull/12
       name = "ConfigFile-pr-12.patch";
-      url = "https://github.com/jgoerzen/configfile/pull/12.patch";
+      url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;

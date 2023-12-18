@@ -1,7 +1,7 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
+use crate::ratchet;
 use crate::structure;
 use crate::validation::{self, Validation::Success};
-use crate::Version;
 use std::path::Path;
 
 use anyhow::Context;
@@ -35,17 +35,14 @@ enum AttributeVariant {
     Other,
 }
 
-const EXPR: &str = include_str!("eval.nix");
-
 /// Check that the Nixpkgs attribute values corresponding to the packages in pkgs/by-name are
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values(
-    version: Version,
     nixpkgs_path: &Path,
     package_names: Vec<String>,
-    eval_accessible_paths: Vec<&Path>,
-) -> validation::Result<()> {
+    eval_accessible_paths: &[&Path],
+) -> validation::Result<ratchet::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
@@ -60,9 +57,10 @@ pub fn check_values(
         attrs_file_path.display()
     ))?;
 
+    let expr_path = std::env::var("NIX_CHECK_BY_NAME_EXPR_PATH")
+        .context("Could not get environment variable NIX_CHECK_BY_NAME_EXPR_PATH")?;
     // With restrict-eval, only paths in NIX_PATH can be accessed, so we explicitly specify the
     // ones needed needed
-
     let mut command = process::Command::new("nix-instantiate");
     command
         // Inherit stderr so that error messages always get shown
@@ -76,8 +74,6 @@ pub fn check_values(
             "--readonly-mode",
             "--restrict-eval",
             "--show-trace",
-            "--expr",
-            EXPR,
         ])
         // Pass the path to the attrs_file as an argument and add it to the NIX_PATH so it can be
         // accessed in restrict-eval mode
@@ -96,6 +92,8 @@ pub fn check_values(
         command.arg("-I");
         command.arg(path);
     }
+    command.args(["-I", &expr_path]);
+    command.arg(expr_path);
 
     let result = command
         .output()
@@ -111,39 +109,13 @@ pub fn check_values(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    Ok(validation::sequence_(package_names.iter().map(
-        |package_name| {
-            let relative_package_file = structure::relative_file_for_package(package_name);
+    Ok(
+        validation::sequence(package_names.into_iter().map(|package_name| {
+            let relative_package_file = structure::relative_file_for_package(&package_name);
             let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
-            if let Some(attribute_info) = actual_files.get(package_name) {
-                let valid = match &attribute_info.variant {
-                    AttributeVariant::AutoCalled => true,
-                    AttributeVariant::CallPackage { path, empty_arg } => {
-                        let correct_file = if let Some(call_package_path) = path {
-                            absolute_package_file == *call_package_path
-                        } else {
-                            false
-                        };
-                        // Only check for the argument to be non-empty if the version is V1 or
-                        // higher
-                        let non_empty = if version >= Version::V1 {
-                            !empty_arg
-                        } else {
-                            true
-                        };
-                        correct_file && non_empty
-                    }
-                    AttributeVariant::Other => false,
-                };
-
-                if !valid {
-                    NixpkgsProblem::WrongCallPackage {
-                        relative_package_file: relative_package_file.clone(),
-                        package_name: package_name.clone(),
-                    }
-                    .into()
-                } else if !attribute_info.is_derivation {
+            if let Some(attribute_info) = actual_files.get(&package_name) {
+                let check_result = if !attribute_info.is_derivation {
                     NixpkgsProblem::NonDerivation {
                         relative_package_file: relative_package_file.clone(),
                         package_name: package_name.clone(),
@@ -151,7 +123,44 @@ pub fn check_values(
                     .into()
                 } else {
                     Success(())
-                }
+                };
+
+                let check_result = check_result.and(match &attribute_info.variant {
+                    AttributeVariant::AutoCalled => Success(ratchet::Package {
+                        empty_non_auto_called: ratchet::EmptyNonAutoCalled::Valid,
+                    }),
+                    AttributeVariant::CallPackage { path, empty_arg } => {
+                        let correct_file = if let Some(call_package_path) = path {
+                            absolute_package_file == *call_package_path
+                        } else {
+                            false
+                        };
+
+                        if correct_file {
+                            Success(ratchet::Package {
+                                // Empty arguments for non-auto-called packages are not allowed anymore.
+                                empty_non_auto_called: if *empty_arg {
+                                    ratchet::EmptyNonAutoCalled::Invalid
+                                } else {
+                                    ratchet::EmptyNonAutoCalled::Valid
+                                },
+                            })
+                        } else {
+                            NixpkgsProblem::WrongCallPackage {
+                                relative_package_file: relative_package_file.clone(),
+                                package_name: package_name.clone(),
+                            }
+                            .into()
+                        }
+                    }
+                    AttributeVariant::Other => NixpkgsProblem::WrongCallPackage {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into(),
+                });
+
+                check_result.map(|value| (package_name.clone(), value))
             } else {
                 NixpkgsProblem::UndefinedAttr {
                     relative_package_file: relative_package_file.clone(),
@@ -159,6 +168,9 @@ pub fn check_values(
                 }
                 .into()
             }
-        },
-    )))
+        }))
+        .map(|elems| ratchet::Nixpkgs {
+            packages: elems.into_iter().collect(),
+        }),
+    )
 }

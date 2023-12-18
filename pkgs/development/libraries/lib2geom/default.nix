@@ -37,6 +37,17 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/inkscape/lib2geom/-/commit/23d9393af4bee17aeb66a3c13bdad5dbed982d08.patch";
       hash = "sha256-LAaGMIXpDI/Wzv5E2LasW1Y2/G4ukhuEzDmFu3AzZOA=";
     })
+
+    # Fix ellipses rendering near page corners.
+    # https://gitlab.com/inkscape/lib2geom/-/issues/66
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/lib2geom/-/commit/039ce8d4af23a0a2a9d48eb970b321d9795dcc08.patch";
+      hash = "sha256-JfgGrqBcYSYKcdl4Bt7vGZ4aTBPSHM6JjZ95IlzxPwI=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/lib2geom/-/commit/cf523857e48c87f9f6a09217bdf935fff457823d.patch";
+      hash = "sha256-BRg8ANHMSgoi6vt9PNbhwG1fRkzEPXb4gPTPO3sY0XE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -70,7 +81,13 @@ stdenv.mkDerivation rec {
         # Broken on all platforms, test just accidentally passes on some.
         # https://gitlab.com/inkscape/lib2geom/-/issues/63
         "elliptical-arc-test"
-      ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        # Fails due to rounding differences
+        # https://gitlab.com/inkscape/lib2geom/-/issues/70
+        "circle-test"
+      ]
+      ;
   in ''
     runHook preCheck
     ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'

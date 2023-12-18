@@ -14,8 +14,8 @@ let
     java = openjdk17_headless;
   });
 
-  dashed-icu-version = lib.concatStringsSep "-" (lib.splitString "." (lib.getVersion icu71));
-  underscored-icu-version = lib.concatStringsSep "_" (lib.splitString "." (lib.getVersion icu71));
+  dashed-icu-version = lib.concatStringsSep "-" (lib.splitVersion (lib.getVersion icu71));
+  underscored-icu-version = lib.concatStringsSep "_" (lib.splitVersion (lib.getVersion icu71));
   icu-data = fetchurl {
     url = "https://github.com/unicode-org/icu/releases/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip";
     hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";

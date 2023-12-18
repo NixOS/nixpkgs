@@ -1,5 +1,5 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , nodejs
@@ -10,18 +10,18 @@
 , runme
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "runme";
-  version = "1.7.8";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-ZM8gdZ26XAlC+j6U0+oQJIb+5gOGFUAYHPP82kA1ogU=";
+    hash = "sha256-l1ZTCLy9T+VrmFPzkjXCgIAFkotZ18BA8EYfM0HCCOA=";
   };
 
-  vendorHash = "sha256-nKH4hT0J9QfrDdvovu/XNxU4PtZYKkfqEBiCTNLWyRA=";
+  vendorHash = "sha256-vYSheywz9ZyQ0aNWFpUEn/hrrktKAhV+VLYv74k+/nM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,14 +44,12 @@ buildGo121Module rec {
     "-X=github.com/stateful/runme/internal/version.Commit=${src.rev}"
   ];
 
-  postPatch = ''
-    substituteInPlace testdata/script/basic.txtar \
-      --replace /bin/bash "${runtimeShell}"
-  '';
+  # tests fail to access /etc/bashrc on darwin
+  doCheck = !stdenv.isDarwin;
 
-  # version test assumes `ldflags` is unspecified
-  preCheck = ''
-    unset ldflags
+  postPatch = ''
+    substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
+      --replace /bin/bash "${runtimeShell}"
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

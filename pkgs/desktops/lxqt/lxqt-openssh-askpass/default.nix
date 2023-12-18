@@ -47,5 +47,6 @@ mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;
+    mainProgram = "lxqt-openssh-askpass";
   };
 }

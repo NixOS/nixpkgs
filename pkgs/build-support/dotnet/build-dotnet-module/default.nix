@@ -158,6 +158,22 @@ stdenvNoCC.mkDerivation (args // {
     dotnet-sdk
   ];
 
+  # Parse the version attr into a format acceptable for the Version msbuild property
+  # The actual version attr is saved in InformationalVersion, which accepts an arbitrary string
+  versionForDotnet = if !(lib.hasAttr "version" args) || args.version == null
+  then null else let
+    components = lib.pipe args.version [
+      lib.splitVersion
+      (lib.filter (x: (lib.strings.match "[0-9]+" x) != null))
+      (lib.filter (x: (lib.toIntBase10 x) < 65535)) # one version component in dotnet has to fit in 16 bits
+    ];
+  in if (lib.length components) == 0
+  then null
+  else lib.concatStringsSep "." ((lib.take 4 components)
+    ++ (if (lib.length components) < 4
+       then lib.replicate (4 - (lib.length components)) "0"
+       else [ ]));
+
   makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
     "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
@@ -172,7 +188,7 @@ stdenvNoCC.mkDerivation (args // {
 
   passthru = {
     inherit nuget-source;
-  } // lib.optionalAttrs (nugetDepsFile != null) {
+  } // lib.optionalAttrs (!lib.isDerivation nugetDeps) {
     fetch-deps =
       let
         flags = dotnetFlags ++ dotnetRestoreFlags;

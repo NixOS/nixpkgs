@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postPatch =  lib.optionalString (!finalAttrs.doCheck) ''
+  postPatch =  lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';

@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "bugwarrior";
   version = "1.8.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://github.com/ralphbean/bugwarrior";
+    homepage = "https://github.com/GothenburgBitFactory/bugwarrior";
     description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

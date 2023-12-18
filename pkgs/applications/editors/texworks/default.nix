@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;
+    mainProgram = "texworks";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, click
 , fetchFromGitHub
 , hatchling
 , pythonOlder
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "evohome-async";
-  version = "0.4.9";
+  version = "0.4.15";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "zxdavb";
     repo = "evohome-async";
     rev = "refs/tags/${version}";
-    hash = "sha256-4AhxvUkLiej7OSj9Y19tJnVCzNlC5PF6KB5zTHN8gLA=";
+    hash = "sha256-ulkLl3K62MFUzFWUdsog4Q+jJ9uZjxNvDQTaWDhkhjo=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    click
     voluptuous
   ];
 
@@ -42,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zxdavb/evohome-async";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "evo-client";
   };
 }

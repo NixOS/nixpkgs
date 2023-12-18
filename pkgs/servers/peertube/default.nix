@@ -6,7 +6,7 @@
 , fetchYarnDeps
 , nixosTests
 , brotli
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , jq
 , nodejs
 , which
@@ -69,14 +69,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
   };
 
-  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli prefetch-yarn-deps jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
     export HOME=$PWD
-    fixup_yarn_lock ~/yarn.lock
-    fixup_yarn_lock ~/server/tools/yarn.lock
-    fixup_yarn_lock ~/client/yarn.lock
+    fixup-yarn-lock ~/yarn.lock
+    fixup-yarn-lock ~/server/tools/yarn.lock
+    fixup-yarn-lock ~/client/yarn.lock
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools

@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/zmwangx/ets/";
     license = licenses.mit;
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "ets";
   };
 }

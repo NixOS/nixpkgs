@@ -15,12 +15,8 @@ with lib;
     services.xmrig = {
       enable = mkEnableOption (lib.mdDoc "XMRig Mining Software");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xmrig;
-        defaultText = literalExpression "pkgs.xmrig";
-        example = literalExpression "pkgs.xmrig-mo";
-        description = lib.mdDoc "XMRig package to use.";
+      package = mkPackageOption pkgs "xmrig" {
+        example = "xmrig-mo";
       };
 
       settings = mkOption {

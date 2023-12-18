@@ -198,6 +198,9 @@ stdenv.mkDerivation (rec {
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
 
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
+
     # Work around a type not being defined when including Rts.h in bytestring's cbits
     # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.
     ./9.4.6-bytestring-posix-source.patch

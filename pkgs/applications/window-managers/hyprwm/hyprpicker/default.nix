@@ -6,6 +6,7 @@
 , ninja
 , cairo
 , fribidi
+, libGL
 , libdatrie
 , libjpeg
 , libselinux
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fribidi
+    libGL
     libdatrie
     libjpeg
     libselinux

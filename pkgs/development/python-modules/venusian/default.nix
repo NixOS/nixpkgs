@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "venusian";
   version = "3.0.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

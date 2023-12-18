@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-beta.6";
+  version = "1.0.0-beta.7";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-1cIb4QsDYlOCGrQrLgEwIjjHZ3WwD2o0o0bF+OOqEtI=";
+    hash = "sha256-BXDz9po8i937/xYoIW4S/FddtcWxSmtRUWYIphgh060=";
   };
 
-  cargoHash = "sha256-mRi0NUETTdYE/oM+Jo7gW/zNby8dPAKl6XhzP0Qzsf0=";
+  cargoHash = "sha256-+KF1G4bDfcjHHzZR93lIR8muO6s3j5jDobr3A7Arr+Q=";
 
   doCheck = false;
   nativeBuildInputs = [ installShellFiles pkg-config ];
@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
+    mainProgram = "pijul";
   };
 }

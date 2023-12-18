@@ -38,20 +38,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.201.0";
+  version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    hash = "sha256-Do2JPNZtoi7zbUnJomQAZ8zR/WPB6+G051xZWmeUBP4=";
+    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
+
+  patches = [ ./proc_globdata.patch ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
-      --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
-      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
+      --subst-var out \
+      --subst-var-by python3 ${python3}
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
@@ -117,5 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "cudatext";
   };
 }

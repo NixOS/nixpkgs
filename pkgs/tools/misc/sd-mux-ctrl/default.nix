@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers =  with maintainers; [ sarcasticadmin ];
     platforms = platforms.unix;
+    mainProgram = "sd-mux-ctrl";
   };
 }

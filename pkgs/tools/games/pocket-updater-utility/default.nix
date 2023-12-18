@@ -6,18 +6,19 @@
 , dotnetCorePackages ? pkgs.dotnetCorePackages
 , openssl ? pkgs.openssl
 , zlib ? pkgs.zlib
-, targetPlatform ? pkgs.targetPlatform
+, hostPlatform ? stdenv.hostPlatform
+, nix-update-script ? stdenv.nix-update-script
 }:
 
 buildDotnetModule rec {
   pname = "pocket-updater-utility";
-  version = "2.31.0";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-z90YITAW2Nv+Mq2q56As4PoHqGPEnvDUPH73bhz/xnw=";
+    hash = "sha256-J9FYmoUNkMhLWsRCf64qBDAJaP8AIWGcuH0UjWx90ls=";
   };
 
   buildInputs = [
@@ -30,7 +31,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pocket_updater.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid targetPlatform.system}"
+      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
   '';
 
   projectFile = "pocket_updater.csproj";
@@ -47,6 +48,10 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mattpannella/pocket-updater-utility";

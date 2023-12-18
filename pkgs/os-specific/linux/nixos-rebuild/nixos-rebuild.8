@@ -10,7 +10,7 @@
 .Sh SYNOPSIS
 .Nm
 .Bro
-.Cm switch | boot | test | build | dry-build | dry-activate | edit | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | repl | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
 .Brc
 .br
 .Op Fl -upgrade | -upgrade-all
@@ -34,6 +34,7 @@
 .Op Fl -show-trace
 .Op Fl I Va NIX_PATH
 .Op Fl -verbose | v
+.Op Fl -accept-flake-config
 .Op Fl -impure
 .Op Fl -max-jobs | j Va number
 .Op Fl -keep-failed | K
@@ -143,6 +144,10 @@ Opens
 .Pa configuration.nix
 in the default editor.
 .
+.It Cm repl
+Opens the configuration in
+.Ic nix repl Ns .
+.
 .It Cm build-vm
 Build a script that starts a NixOS virtual machine with the desired
 configuration. It leaves a symlink
@@ -200,9 +205,7 @@ partition.
 .It Cm list-generations Op Fl -json
 List the available generations in a similar manner to the boot loader
 menu. It shows the generation number, build date and time, NixOS version,
-kernel version and the configuration revision. This is useful to get
-information e.g. for which generation to roll back to with
-.Ic nixos-rebuild switch Fl -generation Ar N
+kernel version and the configuration revision.
 There is also a json version of output available.
 .El
 .
@@ -393,6 +396,7 @@ accepts various Nix-related flags, including
 .Fl -max-jobs Ns ,
 .Fl j Ns ,
 .Fl I Ns ,
+.Fl -accept-flake-config Ns ,
 .Fl -show-trace Ns ,
 .Fl -keep-failed Ns ,
 .Fl -keep-going Ns ,

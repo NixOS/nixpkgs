@@ -1,14 +1,13 @@
 { lib
 , fetchFromGitHub
 , hostPlatform
-, targetPlatform
 , cargo
 , rustc
 , lld
 }:
 
 let
-  arch = targetPlatform.qemuArch;
+  arch = hostPlatform.qemuArch;
 
   target = ./. + "/${arch}-unknown-none.json";
 
@@ -68,5 +67,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
+    mainProgram = "hypervisor-fw";
   };
 }

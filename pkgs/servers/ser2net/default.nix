@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
+    mainProgram = "ser2net";
   };
 }

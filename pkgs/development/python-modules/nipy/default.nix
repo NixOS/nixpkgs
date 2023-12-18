@@ -14,6 +14,7 @@
 
 buildPythonPackage rec {
   version = "0.5.0";
+  format = "setuptools";
   pname = "nipy";
   disabled = pythonOlder "2.6";
 

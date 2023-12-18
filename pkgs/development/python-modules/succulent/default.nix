@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
-    rev = version;
-    hash = "sha256-fSsb2UQM69AAjJd/Rvzuok7jBeAa6udbB8FbuNP8Ztw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CGDgt6tv+KysrytJsgDKwf2yv6shXizvD67XsGBg+nI=";
   };
 
   pythonRelaxDeps = [

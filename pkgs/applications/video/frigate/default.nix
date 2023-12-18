@@ -5,7 +5,6 @@
 , fetchurl
 , fetchpatch
 , frigate
-, opencv4
 , nixosTests
 }:
 
@@ -26,28 +25,6 @@ let
 
   python = python3.override {
     packageOverrides = self: super: {
-      # https://github.com/blakeblackshear/frigate/blob/v0.12.0/requirements-wheels.txt#L7
-      opencv = super.toPythonModule ((opencv4.override {
-        enablePython = true;
-        pythonPackages = self;
-      }).overrideAttrs (oldAttrs: rec {
-        version = "4.5.5";
-        src = fetchFromGitHub {
-          owner = "opencv";
-          repo = "opencv";
-          rev = "refs/tags/${version}";
-          hash = "sha256-TJfzEAMh4JSshZ7oEZPgB59+NBACsj6Z5TCzVOBaEP4=";
-        };
-        contribSrc = fetchFromGitHub {
-          owner = "opencv";
-          repo = "opencv_contrib";
-          rev = "refs/tags/${version}";
-          hash = "sha256-skuH9GYg0mivGaJjxbggXk4x/0bbQISrAawA3ZUGfCk=";
-        };
-        postUnpack = ''
-          cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
-        '';
-      }));
     };
   };
 
@@ -129,7 +106,7 @@ python.pkgs.buildPythonApplication rec {
     imutils
     matplotlib
     numpy
-    opencv
+    opencv4
     openvino
     paho-mqtt
     peewee

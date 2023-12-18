@@ -10,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-monitor-ingestion";
-  version = "1.0.2";
+  version = "1.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  pyproject = true;
-
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-xNpYsD1bMIM0Bxy8KtR4rYy4tzfddtoPnEzHfO44At8=";
+    hash = "sha256-idAEqP+HaZs/0fzyBaqO8enTTySg88w3TSIUceiYdDs=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +38,11 @@ buildPythonPackage rec {
   # requires checkout from mono-repo and a mock account
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-ingestion_${version}/sdk/monitor/azure-monitor-ingestion/CHANGELOG.md";
     description = "Send custom logs to Azure Monitor using the Logs Ingestion API";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/monitor/azure-monitor-ingestion";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

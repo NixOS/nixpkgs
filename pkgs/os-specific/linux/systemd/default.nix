@@ -124,7 +124,7 @@
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
-, withSysusers ? false # conflicts with the NixOS user management
+, withSysusers ? true
 , withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
@@ -134,6 +134,8 @@
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
+  # build only libudev and libsystemd
+, buildLibsOnly ? false
 
   # name argument
 , pname ? "systemd"
@@ -142,6 +144,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
+, withLogTrace ? false
 }:
 
 assert withImportd -> withCompression;
@@ -157,7 +160,7 @@ assert !withPasswordQuality;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "254.3";
+  version = "254.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -174,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
+    hash = "sha256-Ku24ecDeQt0t7A8/adR3Jm47QZ19+wdMPyJRzCxU4uU=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -243,7 +246,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/ukify/ukify.py \
       --replace \
       "'readelf'" \
-      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -372,7 +378,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
   nativeBuildInputs =
     [
@@ -436,7 +442,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
-  #dontAddPrefix = true;
+  mesonBuildType = "release";
 
   mesonFlags = [
     "-Dversion-tag=${version}"
@@ -558,6 +564,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withKmod [
     "-Dkmod=true"
     "-Dkmod-path=${kmod}/bin/kmod"
+  ] ++ lib.optionals withLogTrace [
+    "-Dlog-trace=true"
   ];
   preConfigure =
     let
@@ -697,7 +705,9 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  postInstall = ''
+  mesonInstallTags = lib.optionals buildLibsOnly [ "devel" "libudev" "libsystemd" ];
+
+  postInstall = lib.optionalString (!buildLibsOnly) ''
     mkdir -p $out/example/systemd
     mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -715,8 +725,10 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
-  '' + lib.optionalString withKmod ''
+  '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
+  '' + lib.optionalString withSysusers ''
+    mv $out/lib/sysusers.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip

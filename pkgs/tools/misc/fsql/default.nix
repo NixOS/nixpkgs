@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/kshvmdn/fsql";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "fsql";
   };
 }

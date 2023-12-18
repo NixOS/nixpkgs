@@ -81,12 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # On Darwin the installer tries to symlink the help files into a system
-  # directory
-  patches = [ ./no_symbolic_links.patch ];
+  patches = lib.optionals stdenv.isDarwin [
+    # Fix conversion of const char* to unsigned int.
+    ./clang-integer-conversion.patch
+  ];
 
   # Correct mysql_config query
-  patchPhase = ''
+  postPatch = ''
       substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
@@ -151,5 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
     platforms = platforms.all;
+    mainProgram = "grass";
   };
 })

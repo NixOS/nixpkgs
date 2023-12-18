@@ -10,18 +10,19 @@
 , icoutils
 , xcbuild
 , protobuf
+, fetchurl
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.3.3";
+  version = "10.4";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-KDSiZ/JwAqX6Obg9UD8ZQut01l/eMXbioJy//GluXn0=";
+    hash = "sha256-g0JM6pm1vkCh9yBB5mfrOiNrImqoyWdQcEe2g+AO6LQ=";
   };
 
   gradle = gradle_7;
@@ -36,24 +37,6 @@ let
   };
 
   # postPatch scripts.
-  # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-  fixProtoc = ''
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf}/bin/protoc'
-  }
-}
-HERE
-    cat >>Ghidra/Debug/Debugger-isf/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf}/bin/protoc'
-  }
-}
-HERE
-  '';
-
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
     cat >>build.gradle <<HERE
@@ -85,7 +68,7 @@ HERE
     inherit version src;
 
     patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-    postPatch = fixProtoc + addResolveStep;
+    postPatch = addResolveStep;
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
@@ -116,13 +99,21 @@ in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
+    gradle unzip makeWrapper icoutils protobuf
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
 
-  patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-  postPatch = fixProtoc;
+  patches = [
+    ./0001-Use-protobuf-gradle-plugin.patch
+    # we use fetchurl since the fetchpatch normalization strips the whole diff
+    # https://github.com/NixOS/nixpkgs/issues/266556
+    (fetchurl {
+      name = "0002-remove-executable-bit.patch";
+      url = "https://github.com/NationalSecurityAgency/ghidra/commit/e2a945624b74e5d42dc85e9c1f992315dd154db1.diff";
+      sha256 = "07mjfl7hvag2akk65g4cknp330qlk07dgbmh20dyg9qxzmk91fyq";
+    })
+  ];
 
   buildPhase = ''
     export HOME="$NIX_BUILD_TOP/home"

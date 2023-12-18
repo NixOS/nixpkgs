@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , sphinx
+, sphinx-pytest
+, pytestCheckHook
 }:
 let
   pname = "sphinx-sitemap";
@@ -11,18 +14,25 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-mEvvBou9vCbPriCai2E5LpaBq8kZG0d80w2kBuOmDuU=";
+  src = fetchFromGitHub {
+    owner = "jdillard";
+    repo = "sphinx-sitemap";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-R8nAaEPd2vQs9Z0Fa5yvTP0KP3O+DnIJLPeISZ10Xtk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     sphinx
   ];
 
-  # Latest tests do not pass on Sphinx5, although it is supported
-  # Ref: https://github.com/jdillard/sphinx-sitemap/blob/ce244e9e1e05f09c566432f6a89bcd6f6ebe83bf/tox.ini#L18C25-L18C25
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    sphinx-pytest
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/v${version}";

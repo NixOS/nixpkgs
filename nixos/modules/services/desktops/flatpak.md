@@ -18,6 +18,7 @@ in other cases, you will need to add something like the following to your
 {file}`configuration.nix`:
 ```
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.config.common.default = "gtk";
 ```
 
 Then, you will need to add a repository, for example,

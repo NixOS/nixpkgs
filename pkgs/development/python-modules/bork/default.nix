@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 
 , build
 , coloredlogs
 , packaging
+, pip
 , toml
 , twine
 , wheel
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bork";
-  version = "7.0.0";
+  version = "7.0.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -21,13 +23,14 @@ buildPythonPackage rec {
     owner = "duckinator";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-frwkU2YesYK0RJNz9yqiXj1XeTZ8jg5oClri4hEYokg=";
+    hash = "sha256-sHCPT6nTenE6mbTifNPtg0OMNIJCs7LRcF8Xuk+MwLs=";
   };
 
   propagatedBuildInputs = [
     build
     coloredlogs
     packaging
+    pip
     toml
     twine
     wheel
@@ -37,6 +40,13 @@ buildPythonPackage rec {
     "bork"
     "bork.api"
     "bork.cli"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  pytestFlagsArray = [
+    "-m 'not network'"
   ];
 
   meta = with lib; {

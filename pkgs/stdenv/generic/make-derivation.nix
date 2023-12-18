@@ -427,6 +427,8 @@ else let
           "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
         ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
           "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
         ]);
 
       mesonFlags =
@@ -439,6 +441,7 @@ else let
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
+            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
             needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
 
             [host_machine]
@@ -449,6 +452,7 @@ else let
 
             [binaries]
             llvm-config = 'llvm-config-native'
+            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
           '';
           crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
         in crossFlags ++ mesonFlags;

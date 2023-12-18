@@ -28,6 +28,8 @@ buildPythonPackage rec {
     "sphinxcontrib.katex"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension using KaTeX to render math in HTML";
     homepage = "https://github.com/hagenw/sphinxcontrib-katex";

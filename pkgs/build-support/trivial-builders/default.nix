@@ -631,6 +631,19 @@ rec {
     let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
+  /*
+    Produce a derivation that links to the target derivation's `/bin`,
+    and *only* `/bin`.
+
+    This is useful when your favourite package doesn't have a separate
+    bin output and other contents of the package's output (e.g. setup
+    hooks) cause trouble when used in your environment.
+  */
+  onlyBin = drv: runCommand "${drv.name}-only-bin" {} ''
+    mkdir -p $out
+    ln -s ${lib.getBin drv}/bin $out/bin
+  '';
+
 
   # docs in doc/builders/special/makesetuphook.section.md
   makeSetupHook =

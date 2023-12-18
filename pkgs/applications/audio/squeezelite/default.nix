@@ -22,6 +22,7 @@
 , openssl
 , portaudioSupport ? stdenv.isDarwin
 , portaudio
+, slimserver
 , AudioToolbox
 , AudioUnit
 , Carbon
@@ -95,7 +96,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit (slimserver) tests;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Lightweight headless squeezebox client emulator";

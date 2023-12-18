@@ -20,5 +20,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.unix;
+    mainProgram = "gomp";
   };
 }

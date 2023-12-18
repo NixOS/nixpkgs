@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "minikerberos";
-  version = "0.4.2";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BECKWG5nxICOSfQJgXJqCki2gcv/ZRrDFo57nXHvhos=";
+    hash = "sha256-GweGHGxAOLZqOnVdzOtw0xuvsrKsaB1gf1xZ/WuFR7w=";
   };
 
   propagatedBuildInputs = [

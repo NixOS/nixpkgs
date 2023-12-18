@@ -15,7 +15,7 @@ let
     mdDoc
     mkEnableOption
     mkIf
-    mkPackageOptionMD
+    mkPackageOption
     mkRemovedOptionModule
     types
     ;
@@ -36,7 +36,7 @@ in
   options.services.wyoming.openwakeword = with types; {
     enable = mkEnableOption (mdDoc "Wyoming openWakeWord server");
 
-    package = mkPackageOptionMD pkgs "wyoming-openwakeword" { };
+    package = mkPackageOption pkgs "wyoming-openwakeword" { };
 
     uri = mkOption {
       type = strMatching "^(tcp|unix)://.*$";

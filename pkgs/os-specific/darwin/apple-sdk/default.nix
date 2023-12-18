@@ -1,9 +1,6 @@
-{ stdenv, fetchurl, libxml2, xar, cpio, pkgs, python3Minimal, pbzx, lib, darwin-stubs, print-reexports }:
+{ stdenv, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
-  xarMinimal = xar.override {
-    libxml2 = libxml2.override { pythonSupport = false; };
-  };
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
@@ -19,27 +16,23 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    nativeBuildInputs = [ xarMinimal cpio python3Minimal pbzx ];
+    nativeBuildInputs = [ cpio pbzx ];
 
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
-      xar -x -f $src
+      pbzx $src | cpio -idm
     '';
 
+    sourceRoot = ".";
+
     installPhase = ''
-      start="$(pwd)"
       mkdir -p $out
-      cd $out
-      pbzx -n $start/Payload | cpio -idm
 
-      mv usr/* .
-      rmdir usr
+      cp -R System/Library $out
+      cp -R usr/* $out
 
-      mv System/* .
-      rmdir System
-
-      pushd lib
+      pushd $out/lib
       cp ${darwin-stubs}/usr/lib/libcups*.tbd .
       ln -s libcups.2.tbd      libcups.tbd
       ln -s libcupscgi.1.tbd   libcupscgi.tbd

@@ -20,6 +20,13 @@ stdenv.mkDerivation {
     sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # There is not enough space in the load command to accomodate a full path to the store,
+    # so use `@executable_path` to specify a relative path to chicken’s lib folder.
+    sed -e '/POSTINSTALL_PROGRAM_FLAGS = /{s|$(LIBDIR)|@executable_path/../lib|}' \
+      -i Makefile.macosx
+  '';
+
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
@@ -31,7 +38,7 @@ stdenv.mkDerivation {
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
-    "POSTINSTALL_PROGRAM=install_name_tool"
+    "POSTINSTALL_PROGRAM=${stdenv.cc.targetPrefix}install_name_tool"
   ]);
 
   # We need a bootstrap-chicken to regenerate the c-files after

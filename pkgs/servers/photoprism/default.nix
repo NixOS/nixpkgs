@@ -83,5 +83,6 @@ stdenv.mkDerivation {
     inherit (libtensorflow.meta) platforms;
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ benesim ];
+    mainProgram = "photoprism";
   };
 }

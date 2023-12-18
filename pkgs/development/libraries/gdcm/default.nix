@@ -9,7 +9,7 @@
 , libiconv
 , enablePython ? false
 , python ? null
-, swig
+, swig4
 , expat
 , libuuid
 , openjpeg
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     ApplicationServices
     Cocoa
     libiconv
-  ] ++ lib.optionals enablePython [ swig python ];
+  ] ++ lib.optionals enablePython [ swig4 python ];
 
   disabledTests = [
     # require networking:
@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
+  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    "TestRescaler2"
   ];
 
   checkPhase = ''

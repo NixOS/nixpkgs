@@ -6,33 +6,29 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, requests
 , scipy
 , seaborn
-, requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "simpful";
-  version = "2.11.0";
-  format = "setuptools";
+  version = "2.11.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aresio";
-    repo = pname;
+    repo = "simpful";
     rev = "refs/tags/${version}";
-    hash = "sha256-1CU/Iz83CKRx7dsOTGfdJm98TUfc2kxCHKIEUXP36HQ=";
+    hash = "sha256-54WkKnPB3xA2CaOpmasqxgDoga3uAqoC1nOivytXmGY=";
   };
 
-  # patch dated use of private matplotlib interface
-  # https://github.com/aresio/simpful/issues/22
-  postPatch = ''
-    substituteInPlace simpful/simpful.py \
-      --replace \
-        "next(ax._get_lines.prop_cycler)['color']" \
-        "ax._get_lines.get_next_color()"
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -56,11 +52,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Library for fuzzy logic";
     homepage = "https://github.com/aresio/simpful";
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }

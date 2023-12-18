@@ -9,7 +9,7 @@
 # use ./update.sh to help with updating for each quarterly release
 #
 # then, to test:
-# for e in cpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
+# for e in cpp dsl modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
 
 let
   platform_major = "4";
@@ -45,6 +45,21 @@ in rec {
         hash = {
           x86_64 = "sha256-r9ZDt1D7Wt0Gp2JvW4Qwkw0Rj8F4IhUiNpVgm8FDdbY=";
           aarch64 = "sha256-fyIvDY9jQfLwwNL4iaLb80X2eWaYqkLqtMd09yOQGo4=";
+        }.${arch};
+      };
+  };
+
+  ### Eclipse DSL
+
+  eclipse-dsl = buildEclipse {
+    name = "eclipse-dsl-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Java and DSL Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-dsl-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-xdvEt26ovcT65Jy+ePEAHHMAyICBQwJser2uL9VrwrA=";
+          aarch64 = "sha256-GPgD29d81YFtHtqqb66io1BwbNuHTqVZYrY4Oh4MojQ=";
         }.${arch};
       };
   };
@@ -211,6 +226,6 @@ in rec {
 
   ### Plugins
 
-  plugins = callPackage ./plugins.nix { };
+  plugins = callPackage ./plugins.nix { } // { __attrsFailEvaluation = true; };
 
 }

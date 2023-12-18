@@ -130,7 +130,7 @@ in
     '';
   };
 
-  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
+  config = lib.mkMerge [ (lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
@@ -257,10 +257,13 @@ in
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
+  })
+
+  # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
+  ({
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
-
-  };
+  })];
 
 }

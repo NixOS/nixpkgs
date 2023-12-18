@@ -1,0 +1,11 @@
+diff -ur a/diskdev_cmds.xcodeproj/project.pbxproj b/diskdev_cmds.xcodeproj/project.pbxproj
+--- a/quota.tproj/quota.c	2021-10-06 01:13:40.000000000 -0400
++++ b/quota.tproj/quota.c	2023-10-27 08:24:05.960965958 -0400
+@@ -115,6 +115,7 @@
+ 
+ int
+ main(argc, argv)
++	int argc;
+ 	char *argv[];
+ {
+ 	int ngroups; 

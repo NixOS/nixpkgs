@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-gitlab-plugin";
   version = "0.1.4";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

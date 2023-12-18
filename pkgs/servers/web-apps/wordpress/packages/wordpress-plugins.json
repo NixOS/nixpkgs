@@ -21,6 +21,7 @@
 , "opengraph"
 , "simple-login-captcha"
 , "static-mail-sender-configurator"
+, "tc-custom-javascript"
 , "webp-converter-for-media"
 , "webp-express"
 , "wordpress-seo"

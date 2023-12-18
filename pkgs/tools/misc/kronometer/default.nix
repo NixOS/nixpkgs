@@ -18,6 +18,7 @@ mkDerivation rec {
     description = "A stopwatch application";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "kronometer";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kconfig kcrash kinit ];

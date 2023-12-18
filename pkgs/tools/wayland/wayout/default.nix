@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
+    mainProgram = "wayout";
   };
 
 }

@@ -6,6 +6,9 @@
 , cudaPackages
 , fetchurl
 , ffmpeg_4
+, ffmpeg_5
+, ffmpeg_6
+, sox
 , pythonAtLeast
 , pythonOlder
 , python
@@ -14,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.0.2";
+  version = "2.1.2";
   format = "wheel";
 
   src =
@@ -35,7 +38,11 @@ buildPythonPackage rec {
     # libnvToolsExt-$hash.so.1
     cuda_nvtx
 
-    ffmpeg_4.lib
+    # We need to patch the lib/_torchaudio_ffmpeg[4-6]
+    ffmpeg_4.dev
+    ffmpeg_5.dev
+    ffmpeg_6.dev
+    sox
   ];
 
   nativeBuildInputs = [

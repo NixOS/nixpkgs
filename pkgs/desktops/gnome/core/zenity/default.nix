@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, help2man
 , meson
 , ninja
 , pkg-config
@@ -13,16 +14,17 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "3.99.0";
+  version = "4.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "kOdDSnKLoD8fAkJIY8w5NV0kBxWNf5ZAPVHPVs8m7s8=";
+    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
+    sha256 = "C4yN7xjasFzEm9RkuQyn+UWuUv9eCSQtpwKhXZTT6N0=";
   };
 
   nativeBuildInputs = [
+    help2man
     meson
     ninja
     pkg-config
@@ -52,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gocardless-pro";
-  version = "1.48.0";
+  version = "1.49.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gocardless";
     repo = "gocardless-pro-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9229lwCtVu4Pfru6e9JdbP3KUUYojBLuNQ+volP6OX0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jhZfbJLf/gMXfErVbO2erBxgULmKyp1C0+t0k1d0o54=";
   };
 
   propagatedBuildInputs = [

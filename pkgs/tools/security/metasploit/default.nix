@@ -15,17 +15,22 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.3.42";
+  version = "6.3.47";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
-    rev = version;
-    sha256 = "sha256-6ddW6VlbWV71BERJISF67UPRcwLQY8Hpw4kf80lCNBE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-I1BpYCS2wLrvAKwqKn0QDOf0SvdsmT58OtiBDXwJkh8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    (python3.withPackages (ps: [ ps.requests ]))
+  ];
 
   dontPatchELF = true; # stay away from exploit executables
 

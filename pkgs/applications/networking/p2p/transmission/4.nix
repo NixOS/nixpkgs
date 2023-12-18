@@ -35,6 +35,7 @@
 , enableCli ? true
 , installLib ? false
 , apparmorRulesFromClosure
+, extraAppArmorPaths ? []
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -134,11 +135,13 @@ stdenv.mkDerivation (finalAttrs: {
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
 
-      r $out/share/transmission/web/**,
+      r $out/share/transmission/public_html/**,
+      ${lib.strings.concatMapStrings (x: "r ${x},\n") extraAppArmorPaths}
 
       include <local/bin.transmission-daemon>
     }
     EOF
+    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
   '';
 
   passthru.tests = {

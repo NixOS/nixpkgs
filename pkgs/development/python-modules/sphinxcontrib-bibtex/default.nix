@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
   version = "2.6.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -31,6 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sphinxcontrib.bibtex"
   ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "A Sphinx extension for BibTeX style citations";

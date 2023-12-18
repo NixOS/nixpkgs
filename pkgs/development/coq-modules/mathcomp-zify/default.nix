@@ -10,7 +10,7 @@ mkCoqDerivation rec {
   defaultVersion = with lib.versions;
      lib.switch [ coq.coq-version mathcomp-algebra.version ] [
        { cases = [ (range "8.16" "8.18") (isGe "2.0.0") ]; out = "1.5.0+2.0+8.16"; }
-       { cases = [ (range "8.13" "8.18") (range "1.12" "1.17.0") ]; out = "1.3.0+1.12+8.13"; }
+       { cases = [ (range "8.13" "8.18") (range "1.12" "1.18.0") ]; out = "1.3.0+1.12+8.13"; }
        { cases = [ (range "8.13" "8.16") (range "1.12" "1.17.0") ]; out = "1.1.0+1.12+8.13"; }
      ] null;
 

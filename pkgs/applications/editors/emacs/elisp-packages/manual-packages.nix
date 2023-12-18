@@ -23,6 +23,8 @@ in
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
+  el-easydraw = callPackage ./manual-packages/el-easydraw { };
+
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
@@ -91,6 +93,8 @@ in
 
   wat-mode = callPackage ./manual-packages/wat-mode { };
 
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
+
   yes-no = callPackage ./manual-packages/yes-no { };
 
   youtube-dl = callPackage ./manual-packages/youtube-dl { };
@@ -109,4 +113,6 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+
+  __attrsFailEvaluation = true;
 }

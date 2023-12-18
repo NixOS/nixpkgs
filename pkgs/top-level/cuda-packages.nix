@@ -1,75 +1,122 @@
-{ lib
-, pkgs
-, cudaVersion
+# Notes:
+#
+# Silvan (Tweag) covered some things on recursive attribute sets in the Nix Hour:
+# https://www.youtube.com/watch?v=BgnUFtd1Ivs
+#
+# I (@connorbaker) highly recommend watching it.
+#
+# Most helpful comment regarding recursive attribute sets:
+#
+# https://github.com/NixOS/nixpkgs/pull/256324#issuecomment-1749935979
+#
+# To summarize:
+#
+# - `prev` should only be used to access attributes which are going to be overriden.
+# - `final` should only be used to access `callPackage` to build new packages.
+# - Attribute names should be computable without relying on `final`.
+#   - Extensions should take arguments to build attribute names before relying on `final`.
+#
+# Silvan's recommendation then is to explicitly use `callPackage` to provide everything our extensions need
+# to compute the attribute names, without relying on `final`.
+#
+# I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
+{
+  callPackage,
+  cudaVersion,
+  lib,
+  newScope,
+  pkgs,
+  __attrsFailEvaluation ? true,
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    attrsets
+    customisation
+    fixedPoints
+    strings
+    versions
+    ;
+  # Backbone
+  gpus = builtins.import ../development/cuda-modules/gpus.nix;
+  nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
+  flags = callPackage ../development/cuda-modules/flags.nix {inherit cudaVersion gpus;};
+  passthruFunction =
+    final:
+    (
+      {
+        inherit cudaVersion lib pkgs;
+        inherit gpus nvccCompatibilities flags;
+        cudaMajorVersion = versions.major cudaVersion;
+        cudaMajorMinorVersion = versions.majorMinor cudaVersion;
 
-  scope = makeScope pkgs.newScope (final: {
-    # Here we put package set configuration and utility functions.
-    inherit cudaVersion;
-    cudaMajorVersion = versions.major final.cudaVersion;
-    cudaMajorMinorVersion = lib.versions.majorMinor final.cudaVersion;
-    inherit lib pkgs;
+        # Maintain a reference to the final cudaPackages.
+        # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
+        # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
+        # provide the `cudaPackages` from the final scope -- that is, the *current* scope.
+        cudaPackages = final;
 
-    addBuildInputs = drv: buildInputs: drv.overrideAttrs (oldAttrs: {
-      buildInputs = (oldAttrs.buildInputs or []) ++ buildInputs;
-    });
-  });
+        # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
+        cudaFlags = flags;
 
-  cutensorExtension = final: prev: let
-    ### CuTensor
+        # Exposed as cudaPackages.backendStdenv.
+        # This is what nvcc uses as a backend,
+        # and it has to be an officially supported one (e.g. gcc11 for cuda11).
+        #
+        # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
+        # when linked with other C++ libraries.
+        # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
+        # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
+        backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix {};
 
-    buildCuTensorPackage = final.callPackage ../development/libraries/science/math/cutensor/generic.nix;
+        # Loose packages
+        cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit {};
+        # SaxPy is only available after 11.4 because it requires redistributable versions of CUDA libraries.
+        saxpy = attrsets.optionalAttrs (strings.versionAtLeast cudaVersion "11.4") (
+          final.callPackage ../development/cuda-modules/saxpy {}
+        );
+      }
+      # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
+      # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
+      // attrsets.optionalAttrs (!flags.isJetsonBuild) {
+        nccl = final.callPackage ../development/cuda-modules/nccl {};
+        nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests {};
+      }
+    );
 
-    cuTensorVersions = {
-      "1.2.2.5" = {
-        hash = "sha256-lU7iK4DWuC/U3s1Ct/rq2Gr3w4F2U7RYYgpmF05bibY=";
-      };
-      "1.5.0.3" = {
-        hash = "sha256-T96+lPC6OTOkIs/z3QWg73oYVSyidN0SVkBWmT9VRx0=";
-      };
-    };
+  mkVersionedPackageName =
+    name: version:
+    strings.concatStringsSep "_" [
+      name
+      (strings.replaceStrings ["."] ["_"] (versions.majorMinor version))
+    ];
 
-    inherit (final) cudaMajorMinorVersion cudaMajorVersion;
+  composedExtension = fixedPoints.composeManyExtensions [
+    (import ../development/cuda-modules/setup-hooks/extension.nix)
+    (callPackage ../development/cuda-modules/cuda/extension.nix {inherit cudaVersion;})
+    (callPackage ../development/cuda-modules/cuda/overrides.nix {inherit cudaVersion;})
+    (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
+      inherit cudaVersion flags mkVersionedPackageName;
+      pname = "cudnn";
+      releasesModule = ../development/cuda-modules/cudnn/releases.nix;
+      shimsFn = ../development/cuda-modules/cudnn/shims.nix;
+      fixupFn = ../development/cuda-modules/cudnn/fixup.nix;
+    })
+    (callPackage ../development/cuda-modules/cutensor/extension.nix {
+      inherit cudaVersion flags mkVersionedPackageName;
+    })
+    (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
+      inherit cudaVersion flags mkVersionedPackageName;
+      pname = "tensorrt";
+      releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
+      shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
+      fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
+    })
+    (callPackage ../test/cuda/cuda-samples/extension.nix {inherit cudaVersion;})
+    (callPackage ../test/cuda/cuda-library-samples/extension.nix {})
+  ];
 
-    cutensor = buildCuTensorPackage rec {
-      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.5.0.3";
-      inherit (cuTensorVersions.${version}) hash;
-      # This can go into generic.nix
-      libPath = "lib/${if cudaMajorVersion == "10" then cudaMajorMinorVersion else cudaMajorVersion}";
-    };
-  in { inherit cutensor; };
-
-  extraPackagesExtension = final: prev: {
-
-    nccl = final.callPackage ../development/libraries/science/math/nccl { };
-
-    nccl-tests = final.callPackage ../development/libraries/science/math/nccl/tests.nix { };
-
-    autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
-      makeSetupHook {
-        name = "auto-add-opengl-runpath-hook";
-        propagatedBuildInputs = [
-          addOpenGLRunpath
-        ];
-      } ../development/compilers/cudatoolkit/auto-add-opengl-runpath-hook.sh
-    ) {};
-
-  };
-
-  composedExtension = composeManyExtensions ([
-    extraPackagesExtension
-    (import ../development/compilers/cudatoolkit/extension.nix)
-    (import ../development/compilers/cudatoolkit/redist/extension.nix)
-    (import ../development/compilers/cudatoolkit/redist/overrides.nix)
-    (import ../development/libraries/science/math/cudnn/extension.nix)
-    (import ../development/libraries/science/math/tensorrt/extension.nix)
-    (import ../test/cuda/cuda-samples/extension.nix)
-    (import ../test/cuda/cuda-library-samples/extension.nix)
-    cutensorExtension
-  ]);
-
-in (scope.overrideScope composedExtension)
+  cudaPackages = customisation.makeScope newScope (
+    fixedPoints.extends composedExtension passthruFunction
+  );
+in
+cudaPackages // { inherit __attrsFailEvaluation; }

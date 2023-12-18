@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tu-maurice ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "fishnet";
   };
 }

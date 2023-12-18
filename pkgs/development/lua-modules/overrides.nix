@@ -117,18 +117,22 @@ with prev;
       '';
   });
 
-  cyrussasl = prev.cyrussasl.overrideAttrs (drv: {
-    externalDeps = [
-      { name = "LIBSASL"; dep = cyrus_sasl; }
-    ];
-  });
-
   fennel = prev.fennel.overrideAttrs(oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
     ];
     postInstall = ''
       installManPage fennel.1
+    '';
+  });
+
+  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
+  # we have to invoke busted manually
+  fzy = prev.fzy.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = [ prev.busted ];
+    checkPhase = ''
+      busted test/test.lua
     '';
   });
 
@@ -322,7 +326,7 @@ with prev;
     externalDeps = [
       { name = "EVENT"; dep = libevent; }
     ];
-    disabled = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   luaexpat = prev.luaexpat.overrideAttrs (_: {
@@ -385,6 +389,11 @@ with prev;
       zziplib
     ];
   });
+
+  # lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
+  #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
+  #   meta.broken = true;
+  # });
 
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
@@ -502,7 +511,7 @@ with prev;
 
     postPatch = ''
       substituteInPlace magick/wand/lib.lua \
-        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
 
     # Requires ffi
@@ -525,8 +534,21 @@ with prev;
     '';
   });
 
-  readline = prev.readline.overrideAttrs (oa: {
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ readline.out ];
+  readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
+  buildLuarocksPackage ({
+    pname = "readline";
+    version = "3.2-0";
+    knownRockspec = (fetchurl {
+      url    = "mirror://luarocks/readline-3.2-0.rockspec";
+      sha256 = "1r0sgisxm4xd1r6i053iibxh30j7j3rcj4wwkd8rzkj8nln20z24";
+    }).outPath;
+    src = fetchurl {
+      # the rockspec url doesn't work because 'www.' is not covered by the certificate so
+      # I manually removed the 'www' prefix here
+      url    = "http://pjb.com.au/comp/lua/readline-3.2.tar.gz";
+      sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
+    };
+
     extraVariables = rec {
       READLINE_INCDIR = "${readline.dev}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
@@ -535,9 +557,19 @@ with prev;
       unzip "$curSrc"
       tar xf *.tar.gz
     '';
-    # Without this, source root is wrongly set to ./readline-2.6/doc
-    sourceRoot = "readline-${lib.versions.majorMinor oa.version}";
-  });
+
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+    propagatedBuildInputs = [ lua luaposix
+      readline.out
+    ];
+
+    meta = {
+      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      description = "Interface to the readline library";
+      license.fullName = "MIT/X11";
+    };
+  })) {};
+
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
 

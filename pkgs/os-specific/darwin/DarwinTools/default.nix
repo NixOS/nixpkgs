@@ -13,16 +13,16 @@ stdenv.mkDerivation rec {
     ./sw_vers-CFPriv.patch
   ];
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace gcc cc
-  '';
-
   configurePhase = ''
     export SRCROOT=.
     export SYMROOT=.
     export DSTROOT=$out
   '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
+  ];
 
   postInstall = ''
     mv $out/usr/* $out

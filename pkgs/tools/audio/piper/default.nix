@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
-  version = "2023.11.6-1";
+  version = "2023.11.14-2";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-9y7HuVgbI8if5XrgQGnEZV1lOw8oMXTFRUTvy/kTGfs=";
+    hash = "sha256-3ynWyNcdf1ffU3VoDqrEMrm5Jo5Zc5YJcVqwLreRCsI=";
   };
 
   nativeBuildInputs = [
@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "piper";
   };
 })

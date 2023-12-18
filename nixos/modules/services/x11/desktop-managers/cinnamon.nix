@@ -200,6 +200,8 @@ in
         })
       ];
 
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 

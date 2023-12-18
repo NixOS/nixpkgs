@@ -13,7 +13,7 @@ in {
     services.erigon = {
       enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
 
-      package = mkPackageOptionMD pkgs "erigon" { };
+      package = mkPackageOption pkgs "erigon" { };
 
       extraArgs = mkOption {
         type = types.listOf types.str;

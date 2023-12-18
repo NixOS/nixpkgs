@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.2.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-RAMQC9weEvTV44nAXjwMYv+4O5aSNNM5UOf/xBb4SBE=";
+    hash = "sha256-QQgwUXWro2CQjUsVuaZghNUPwSm1kNr5YgLL3SMgCPw=";
   };
 
-  cargoHash = "sha256-ZBedAIHwbRiR9i6w0CWIiE+OJvTkmxiEihn7zLAV/Dg=";
+  cargoHash = "sha256-DaKIzadivG6KGXUVP8LbHhjExY87xwsGESqiWANJxjw=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/uiua-lang/uiua/releases/tag/${src.rev}";
+    changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
     description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
@@ -58,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.uiua.org/";
     license = lib.licenses.mit;
     mainProgram = "uiua";
-    maintainers = with lib.maintainers; [ cafkafk tomasajt ];
+    maintainers = with lib.maintainers; [ cafkafk tomasajt defelo ];
   };
 }

@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "44.2";
+  version = "45.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = version;
-    hash = "sha256-TnyH2tIvzG1B2hbDPyFyaTArfuMJaP6GKw6yahwsQ1Q=";
+    hash = "sha256-2vNAppy8fYYcxH3ci4B6bUIl2sO5NC6yA13y9iU4V/A=";
   };
 
   patches = [
@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
+    mainProgram = "deja-dup";
   };
 }

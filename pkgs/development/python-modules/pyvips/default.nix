@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pyvips";
   version = "2.2.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   buildInputs = [ glib vips ];
 
   propagatedBuildInputs = [ cffi ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

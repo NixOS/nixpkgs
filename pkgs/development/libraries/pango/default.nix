@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.14";
+  version = "1.51.0";
 
   outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HWfyBb/DGMJ6Kc/ftoKFaN9WZ5XfDLUdIYnN5/LVgeg=";
+    sha256 = "dO/BCa5vkDu+avd+qirGCUuO4kWi4j8TKnqPCGLRqfU=";
   };
 
   depsBuildBuild = [
@@ -80,9 +80,6 @@ stdenv.mkDerivation rec {
   # it should be a build-time dep for build
   # TODO: send upstream
   postPatch = ''
-    substituteInPlace meson.build \
-      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
-
     substituteInPlace docs/meson.build \
       --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
@@ -97,7 +94,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
     };

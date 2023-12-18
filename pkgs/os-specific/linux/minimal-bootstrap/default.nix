@@ -163,7 +163,7 @@ lib.makeScope
 
     ln-boot = callPackage ./ln-boot { };
 
-    mes = lib.recurseIntoAttrs (callPackage ./mes { });
+    mes = callPackage ./mes { };
     mes-libc = callPackage ./mes/libc.nix { };
 
     musl11 = callPackage ./musl/1.1.nix {

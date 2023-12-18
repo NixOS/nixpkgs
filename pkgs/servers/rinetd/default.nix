@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/samhocevar/rinetd/blob/${src.rev}/CHANGES.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "rinetd";
   };
 }

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     maintainers = with maintainers; [ arturcygan bosu c0bw3b ];
     platforms   = platforms.linux;
+    mainProgram = "nsjail";
   };
 }

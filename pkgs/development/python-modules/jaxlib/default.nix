@@ -35,7 +35,6 @@
   # Runtime dependencies:
 , double-conversion
 , giflib
-, grpc
 , libjpeg_turbo
 , python
 , snappy
@@ -44,17 +43,17 @@
 , config
   # CUDA flags:
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackagesGoogle
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
-  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackagesGoogle) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.19";
+  version = "0.4.23";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -95,11 +94,11 @@ let
     "absl_py"
     "astor_archive"
     "astunparse_archive"
-    "boringssl"
     # Not packaged in nixpkgs
     # "com_github_googleapis_googleapis"
     # "com_github_googlecloudplatform_google_cloud_cpp"
-    "com_github_grpc_grpc"
+    # Issue with transitive dependencies after https://github.com/grpc/grpc/commit/f1d14f7f0b661bd200b7f269ef55dec870e7c108
+    # "com_github_grpc_grpc"
     # ERROR: /build/output/external/bazel_tools/tools/proto/BUILD:25:6: no such target '@com_google_protobuf//:cc_toolchain':
     # target 'cc_toolchain' not declared in package '' defined by /build/output/external/com_google_protobuf/BUILD.bazel
     # "com_google_protobuf"
@@ -137,8 +136,8 @@ let
 
   arch =
     # KeyError: ('Linux', 'arm64')
-    if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
-    else stdenv.targetPlatform.linuxArch;
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.hostPlatform.linuxArch;
 
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
@@ -151,7 +150,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-l5uLPqhg/hqtO9oJSaioow5cH/0jKHDVziGezkfnVcc=";
+      hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
     };
 
     nativeBuildInputs = [
@@ -170,7 +169,6 @@ let
       curl
       double-conversion
       giflib
-      grpc
       jsoncpp
       libjpeg_turbo
       numpy
@@ -220,7 +218,7 @@ let
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
       build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-    '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
+    '' + lib.optionalString (stdenv.hostPlatform.avxSupport && stdenv.hostPlatform.isUnix) ''
       build --config=avx_posix
     '' + lib.optionalString mklSupport ''
       build --config=mkl_open_source_only
@@ -264,10 +262,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-Hw4uFvltH7nlNN3qAEcQ+IR2FAOjRkvwyWA3rCPi7Vo=";
+        x86_64-linux = "sha256-q2wRaoCGnISEdtF6jDMk9Wccy/wTmLusVBI7dDATwi4=";
       } else {
-        x86_64-linux = "sha256-LEugnFwTV3EyeTZWgMvXzHbgeDPdmuT3daXCXJRMYVY=";
-        aarch64-linux = "sha256-59rv/3RjD8pnveBDZ33xZoNQxLmnhMocsKMgVfYoO70=";
+        x86_64-linux = "sha256-0cDJ27HCi3J5xeT6TkTtfUzF/yESBYmEVG1r14kPdRs=";
+        aarch64-linux = "sha256-WbaN8VYjeW0mDthmtoSTttqd4K/Z8dP5+VkTo10pLtU=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
@@ -293,25 +291,19 @@ let
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
           --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
-      '' + (if stdenv.cc.isGNU then ''
-        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-      '' else if stdenv.cc.isClang then ''
-        sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-      '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
+      '';
     };
 
     inherit meta;
   };
   platformTag =
-    if stdenv.targetPlatform.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
       "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
-    else throw "Unsupported target platform: ${stdenv.targetPlatform}";
+    else throw "Unsupported target platform: ${stdenv.hostPlatform}";
 
 in
 buildPythonPackage {
@@ -343,7 +335,6 @@ buildPythonPackage {
     double-conversion
     flatbuffers
     giflib
-    grpc
     jsoncpp
     libjpeg_turbo
     ml-dtypes

@@ -3,8 +3,7 @@
 , fetchurl
 , desktop-file-utils
 , gettext
-, gspell
-, gtkmm3
+, gtkmm4
 , itstool
 , libsecret
 , libuuid
@@ -13,22 +12,21 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "44.1";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-aWelUGgiMguuGcHrC8dFFmRPnp61TtwslCU+rhDHYE0=";
+    hash = "sha256-XRb9h9FA7HL7s1ewVp2u+4Io4HgUcBVG5r3mVyGTwko=";
   };
 
   buildInputs = [
-    gspell
-    gtkmm3
+    gtkmm4
     libsecret
     libuuid
     libxml2
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   passthru = {

@@ -27,5 +27,6 @@ appimageTools.wrapType2 rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zimbatm ];
     platforms = [ "i386-linux" "x86_64-linux" ];
+    mainProgram = "Sylk";
   };
 }
