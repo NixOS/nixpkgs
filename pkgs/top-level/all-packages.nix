@@ -14068,7 +14068,7 @@ with pkgs;
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
   trunk = callPackage ../development/tools/trunk {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
   trunk-io = callPackage ../development/tools/trunk-io { };
@@ -14346,8 +14346,6 @@ with pkgs;
   uriparser = callPackage ../development/libraries/uriparser { };
 
   urlscan = callPackage ../applications/misc/urlscan { };
-
-  urlview = callPackage ../applications/misc/urlview { };
 
   url-parser = callPackage ../tools/misc/url-parser { };
 
@@ -16525,16 +16523,16 @@ with pkgs;
 
   juniper = callPackage ../development/compilers/juniper { };
 
+  inherit (callPackage ../development/compilers/julia { })
+    julia_16-bin
+    julia_18-bin
+    julia_19-bin
+    julia_18
+    julia_19;
+
   julia-lts = julia_16-bin;
   julia-stable = julia_19;
   julia = julia-stable;
-
-  julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
-  julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
-  julia_19-bin = callPackage ../development/compilers/julia/1.9-bin.nix { };
-
-  julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
-  julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_19-bin;
@@ -20820,7 +20818,7 @@ with pkgs;
   # CGAL 5 has API changes
   cgal_4 = callPackage ../development/libraries/CGAL/4.nix { };
   cgal_5 = callPackage ../development/libraries/CGAL { };
-  cgal = cgal_4;
+  cgal = cgal_5;
 
   cgui = callPackage ../development/libraries/cgui { };
 
