@@ -1,11 +1,13 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i "python3 -I" -p "python3.withPackages(p: with p; [ aiohttp rich structlog ])"
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from enum import IntEnum
 from http import HTTPStatus
 from pathlib import Path
+from typing import Optional
 import asyncio, json, logging
 
 import aiohttp, structlog
@@ -24,7 +26,7 @@ EXPECTED_STATUS=frozenset((
     HTTPStatus.NOT_FOUND,
 ))
 
-async def check(session, manpage: str, url: str) -> HTTPStatus:
+async def check(session: aiohttp.ClientSession, manpage: str, url: str) -> HTTPStatus:
     with log_context(manpage=manpage, url=url):
         logger.debug("Checking")
         async with session.head(url) as resp:
@@ -41,12 +43,12 @@ async def check(session, manpage: str, url: str) -> HTTPStatus:
 
             return st
 
-async def main(urls_path):
+async def main(urls_path: Path) -> Mapping[HTTPStatus, int]:
     logger.info(f"Parsing {urls_path}")
     with urls_path.open() as urls_file:
         urls = json.load(urls_file)
 
-    count = defaultdict(lambda: 0)
+    count: defaultdict[HTTPStatus, int] = defaultdict(lambda: 0)
 
     logger.info(f"Checking URLs from {urls_path}")
     async with aiohttp.ClientSession() as session:
@@ -65,7 +67,7 @@ async def main(urls_path):
     return count
 
 
-def parse_args(args=None):
+def parse_args(args: Optional[Sequence[str]] = None) -> Namespace:
     parser = ArgumentParser(
         prog = 'check-manpage-urls',
         description = 'Check the validity of the manpage URLs linked in the nixpkgs manual',
