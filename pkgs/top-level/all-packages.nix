@@ -14347,8 +14347,6 @@ with pkgs;
 
   urlscan = callPackage ../applications/misc/urlscan { };
 
-  urlview = callPackage ../applications/misc/urlview { };
-
   url-parser = callPackage ../tools/misc/url-parser { };
 
   urn-timer = callPackage ../tools/misc/urn-timer { };
