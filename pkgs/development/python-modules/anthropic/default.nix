@@ -6,6 +6,7 @@
 , distro
 , dirty-equals
 , httpx
+, sniffio
 , pydantic
 , pytest-asyncio
 , respx
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.7.4";
+  version = "0.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iLHzoWgAMDZ0AJGVXw2Xnaby07FbhJqNGfW5bPNgfws=";
+    hash = "sha256-1mpNwZJbYdKVmUeUM+PBL6vPhwe8tr2SnAP/t/MMKpI=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     anyio
     distro
     httpx
+    sniffio
     pydantic
     tokenizers
     typing-extensions
