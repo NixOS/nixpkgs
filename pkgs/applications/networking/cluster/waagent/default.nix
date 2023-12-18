@@ -38,15 +38,30 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python.pkgs.distro ];
 
-  # The binary entrypoint and udev rules are placed to the wrong place.
+  # The udev rules are placed to the wrong place.
   # Move them to their default location.
+  # Keep $out/${python.sitePackages}/usr/sbin/waagent where it is.
+  # waagent re-executes itself in UpdateHandler.run_latest, even if autoupdate
+  # is disabled, manually spawning a python interprever with argv0.
+  # We can't use the default python program wrapping mechanism, as it uses
+  # wrapProgram which doesn't support --argv0.
+  # So instead we make our own wrapper in $out/bin/waagent, setting PATH and
+  # PYTHONPATH.
+  # PATH contains our PYTHON, and PYTHONPATH stays set, so this should somewhat
+  # still work.
   preFixup = ''
-    mv $out/${python.sitePackages}/usr/sbin $out/bin
-    rm $out/bin/waagent2.0
-    rmdir $out/${python.sitePackages}/usr
-
     mv $out/${python.sitePackages}/etc $out/
+
+    buildPythonPath
+
+    mkdir -p $out/bin
+    makeWrapper $out/${python.sitePackages}/usr/sbin/waagent $out/bin/waagent \
+      --set PYTHONPATH $PYTHONPATH \
+      --prefix PATH : $program_PATH \
+      --argv0 $out/${python.sitePackages}/usr/sbin/waagent
   '';
+
+  dontWrapPythonPrograms = false;
 
   meta = {
     description = "The Microsoft Azure Linux Agent (waagent)";
