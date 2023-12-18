@@ -42,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Make documentation building optional
     # Remove when version > 0.1.2
     (fetchpatch {
       name = "0001-lomiri-download-manager-Make-documentation-build-optional.patch";
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-UztcBAAFXDX2j0X5D3kMp9q0vFm3/PblUAKPJ5nZyiY=";
     })
 
-    # Make documentation building optional
     # Remove when version > 0.1.2
     (fetchpatch {
       name = "0002-lomiri-download-manager-Upgrade-C++-standard-to-C++17.patch";
@@ -58,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-iA1sZhHI8Osgo1ofL5RTqgVzUG32zx0dU/28qcEqmQc=";
     })
 
-    # Fix version identification, make -Werror & tests optional
     # Remove when version > 0.1.2
     (fetchpatch {
       name = "0003-lomiri-download-manager-Bump-version-make-Werror-and-tests-optional.patch";
@@ -66,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-0BrJSKCvUhITwfln05OrHgHEpldbgBoh4rivAvw+qrc=";
     })
 
-    # Use GNUInstallDirs variables for
     # Remove when version > 0.1.2
     (fetchpatch {
       name = "0004-lomiri-download-manager-Use-GNUInstallDirs-variables-for-more-install-destinations.patch";
@@ -76,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Patch cannot apply renames, only changes contents
+    # fetchpatch strips renames
     # Remove when version > 0.1.2
     for service in src/{uploads,downloads}/daemon/{lomiri-*-manager,lomiri-*-manager-systemd,com.lomiri.*}.service; do
       mv "$service" "$service".in
