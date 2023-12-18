@@ -1,8 +1,9 @@
-final: _: {
+{callPackage}:
+{
   # Internal hook, used by cudatoolkit and cuda redist packages
   # to accommodate automatic CUDAToolkit_ROOT construction
   markForCudatoolkitRootHook =
-    final.callPackage
+    callPackage
       (
         {makeSetupHook}:
         makeSetupHook {name = "mark-for-cudatoolkit-root-hook";} ./mark-for-cudatoolkit-root-hook.sh
@@ -11,7 +12,7 @@ final: _: {
 
   # Currently propagated by cuda_nvcc or cudatoolkit, rather than used directly
   setupCudaHook =
-    (final.callPackage
+    (callPackage
       (
         {makeSetupHook, backendStdenv}:
         makeSetupHook
@@ -33,7 +34,7 @@ final: _: {
     );
 
   autoAddOpenGLRunpathHook =
-    final.callPackage
+    callPackage
       (
         {addOpenGLRunpath, makeSetupHook}:
         makeSetupHook
@@ -51,17 +52,17 @@ final: _: {
   # it doesn't have any effect) and thus appear first. Meaning this hook must be
   # executed last.
   autoAddCudaCompatRunpathHook =
-    final.callPackage
+    callPackage
       (
-        {makeSetupHook, cuda_compat}:
+        {makeSetupHook, cuda_compat, flags}:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";
             substitutions = {
               # Hotfix Ofborg evaluation
-              libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;
+              libcudaPath = if flags.isJetsonBuild then "${cuda_compat}/compat" else null;
             };
-            meta.broken = !final.flags.isJetsonBuild;
+            meta.broken = !flags.isJetsonBuild;
           }
           ./auto-add-cuda-compat-runpath.sh
       )

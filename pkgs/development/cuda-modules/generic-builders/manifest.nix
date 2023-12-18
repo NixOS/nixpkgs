@@ -19,13 +19,14 @@
   # Also known as the Redistributable Name.
   # redistName : String,
   redistName,
+  # See ./modules/generic/manifests
+  # Expected to have the following attributes:
+  #   - feature
+  #   - redistrib
+  manifests,
   # If libPath is non-null, it must be a subdirectory of `lib`.
   # The contents of `libPath` will be moved to the root of `lib`.
   libPath ? null,
-  # See ./modules/generic/manifests/redistrib/release.nix
-  redistribRelease,
-  # See ./modules/generic/manifests/feature/release.nix
-  featureRelease,
 }:
 let
   inherit (lib)
@@ -39,6 +40,8 @@ let
     sourceTypes
     ;
 
+  redistribRelease = manifests.redistrib.${pname};
+  featureRelease = manifests.feature.${pname};
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
