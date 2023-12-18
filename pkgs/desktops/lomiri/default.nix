@@ -25,6 +25,7 @@ let
     lomiri-action-api = callPackage ./qml/lomiri-action-api { };
     lomiri-notifications = callPackage ./qml/lomiri-notifications { };
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
+    lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
     #### Services
