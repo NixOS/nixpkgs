@@ -32,6 +32,20 @@ final: _: {
       {}
     );
 
+  autoAddDriverRunpathHook =
+    final.callPackage
+      (
+        {addDriverRunpath, makeSetupHook}:
+        makeSetupHook
+          {
+            name = "auto-add-driver-runpath-hook";
+            propagatedBuildInputs = [addDriverRunpath];
+          }
+          ./auto-add-driver-runpath-hook.sh
+      )
+      {};
+
+  # Post 24.11 branch-off, this will throw an error as addOpenGLRunpath will throw one.
   autoAddOpenGLRunpathHook =
     final.callPackage
       (
