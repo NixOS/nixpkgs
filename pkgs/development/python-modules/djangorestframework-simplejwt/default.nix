@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
-  version = "5.3.0";
+  version = "5.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
     inherit version;
-    hash = "sha256-jkxd/KjRHAuKZt/YpOP8HGqn6hiNEJB/+RyUL0tS7WY=";
+    hash = "sha256-bEvTdTdEC8Q5Vk6/fWCF50xUEUhRlwc/UI69+jS8n64=";
   };
 
   nativeBuildInputs = [
