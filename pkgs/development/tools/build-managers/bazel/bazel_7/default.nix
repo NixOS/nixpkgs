@@ -153,7 +153,7 @@ let
   bazelRC = writeTextFile {
     name = "bazel-rc";
     text = ''
-      startup --server_javabase=${buildJdk}
+      startup --server_javabase=${runJdk}
 
       # Register nix-specific nonprebuilt java toolchains
       build --extra_toolchains=@bazel_tools//tools/jdk:all
