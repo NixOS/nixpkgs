@@ -4,6 +4,8 @@ with lib;
 
 let
   cfg = config.services.zerotierone;
+  conf = pkgs.writeText "zt-local.conf" (builtins.toJSON cfg.localConf);
+  localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
 {
   options.services.zerotierone.enable = mkEnableOption (lib.mdDoc "ZeroTierOne");
@@ -59,7 +61,11 @@ in
       '' + (concatMapStrings (netId: ''
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
       '') cfg.joinNetworks) + ''
-        ln -s ${conf} /var/lib/zerotier-one/local.conf
+        if [ -e "${localConfFilePath}" ]
+        then
+          rm ${localConfFilePath}
+        fi
+        ln -s ${conf} ${localConfFilePath}
       '';
 
       serviceConfig = {
