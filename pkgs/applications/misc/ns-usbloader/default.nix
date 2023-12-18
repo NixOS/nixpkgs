@@ -4,6 +4,8 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
+, wrapGAppsHook
+, gvfs
 , maven
 , jre
 }:
@@ -40,17 +42,24 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    wrapGAppsHook
+    gvfs
   ];
+
+  # Don't wrap binaries twice.
+  dontWrapGApps = true;
+
+  ### Issues:
+  # * Set us to only use software rendering with `-Dprism.order=sw`, had a hard time
+  #   getting `prism_es2` happy with NixOS's GL/GLES.
+  # * Currently, there's also a lot of `Failed to build parent project for org.openjfx:javafx-*`
+  #   at build, but jar runs fine when using `jreWithJavaFX`.
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/java
     install -Dm644 target/ns-usbloader-${version}.jar $out/share/java/ns-usbloader.jar
-
-    mkdir -p $out/bin
-    makeWrapper ${jreWithJavaFX}/bin/java $out/bin/ns-usbloader \
-      --append-flags "-jar $out/share/java/ns-usbloader.jar"
 
     mkdir -p $out/lib/udev/rules.d
     install -Dm644 ${./99-ns-usbloader.rules} $out/lib/udev/rules.d/99-ns-usbloader.rules
@@ -62,6 +71,13 @@ maven.buildMavenPackage rec {
     install -Dm644 target/classes/res/app_icon128x128.png $out/share/icons/hicolor/128x128/apps/ns-usbloader.png
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    mkdir -p $out/bin
+    makeWrapper ${jreWithJavaFX}/bin/java $out/bin/ns-usbloader \
+      --append-flags "-Dprism.order=sw -jar $out/share/java/ns-usbloader.jar" \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
