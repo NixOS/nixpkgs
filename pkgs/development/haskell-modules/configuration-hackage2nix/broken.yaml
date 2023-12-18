@@ -2496,7 +2496,6 @@ broken-packages:
   - hopencc # failure in job https://hydra.nixos.org/build/233192954 at 2023-09-02
   - hopencl # failure in job https://hydra.nixos.org/build/233249443 at 2023-09-02
   - HOpenCV # failure in job https://hydra.nixos.org/build/233255422 at 2023-09-02
-  - hopenpgp-tools # failure in job https://hydra.nixos.org/build/233259304 at 2023-09-02
   - hopfield # failure in job https://hydra.nixos.org/build/233598214 at 2023-09-02
   - hoppy-generator # failure in job https://hydra.nixos.org/build/233240608 at 2023-09-02
   - hops # failure in job https://hydra.nixos.org/build/233207172 at 2023-09-02

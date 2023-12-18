@@ -1252,6 +1252,10 @@ self: super: {
         }))
       ];
 
+  hopenpgp-tools = super.hopenpgp-tools.override {
+      optparse-applicative = self.optparse-applicative_0_18_1_0;
+  };
+
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
