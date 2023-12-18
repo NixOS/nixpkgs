@@ -16,21 +16,16 @@
 buildPythonPackage rec {
   pname = "aioambient";
   version = "2023.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioambient";
     rev = "refs/tags/${version}";
     hash = "sha256-O9MlXtX7UzFN1w/vxpcZ/nRPDFPK5wFKBl42rhaAu94=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = ">=11.0.1"' 'websockets = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
