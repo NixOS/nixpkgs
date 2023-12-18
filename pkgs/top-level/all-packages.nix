@@ -1763,6 +1763,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
