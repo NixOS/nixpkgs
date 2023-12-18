@@ -69,6 +69,7 @@ in
     };
 
     environment.systemPackages = [ cfg.package ];
+    environment.pathsToLink = [ "/share/openxr" ];
   };
 
   meta.maintainers = with lib.maintainers; [ Scrumplex ];
