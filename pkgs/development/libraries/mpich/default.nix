@@ -3,11 +3,20 @@
 # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
 # these libraries currently build so this argument is ignored on Darwin.
 , ch4backend
-# Process manager to build
-, withPm ? "hydra:gforker"
+# Process manager to build,
+# cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
+, withPm ? [ "hydra" "gforker" ]
 , pmix
-, pmixSupport ? true
+, pmixSupport ? false
 } :
+
+let
+  processManagers = if builtins.isList withPm then
+    withPm
+  else
+    builtins.filter builtins.isString (builtins.split ":" withPm);
+  withPm' = builtins.concatStringsSep ":" processManagers;
+in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
@@ -24,7 +33,7 @@ stdenv.mkDerivation  rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-pm=${withPm}"
+    "--with-pm=${withPm'}"
   ] ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
     "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
     "FCFLAGS=-fallow-argument-mismatch"
@@ -48,6 +57,9 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
+    # --with-pmix silently disables gforker
+    broken = ((builtins.elem "gforker" processManagers) && pmixSupport);
+
     description = "Implementation of the Message Passing Interface (MPI) standard";
 
     longDescription = ''
