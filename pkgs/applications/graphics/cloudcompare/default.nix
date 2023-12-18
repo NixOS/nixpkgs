@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , boost
-, cgal_5
+, cgal
 , eigen
 , flann
 , gdal
@@ -41,7 +41,7 @@ mkDerivation rec {
 
   buildInputs = [
     boost
-    cgal_5
+    cgal
     flann
     gdal
     gmp
