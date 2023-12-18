@@ -67,7 +67,7 @@ in
         elif [ -f "${localConfFilePath}" ]
           mv ${localConfFilePath} ${localConfFilePath}.bak
         fi
-      '' + optionalString (cfg.localConf != null) '' 
+      '' + optionalString (cfg.localConf != null) ''
         ln -s ${localConfFile} ${localConfFilePath}
       '';
 
