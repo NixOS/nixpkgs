@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       forward compatibility with software and freedom to use whatever distribution
       you’re more comfortable with
     '';
-    homepage = "https://distrobox.privatedns.org/";
+    homepage = "https://distrobox.it/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
