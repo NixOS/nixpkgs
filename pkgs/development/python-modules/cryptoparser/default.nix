@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "CryptoParser";
     inherit version;
-    hash = "sha256-E32fHcuICUMCH5NYT+oFYU7M73bvXb/g1UoJSChzOiA=";
+    hash = "sha256-Q05koDfVaVgiQYhULkwzl9uzUIumO8ZIGJPfxRBUsj0=";
   };
 
   nativeBuildInputs = [
