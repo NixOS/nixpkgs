@@ -142,7 +142,7 @@ let
             'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => [
               'bucket' => '${s3.bucket}',
-              'autocreate' => ${boolToString s3.autocreate},
+              'verify_bucket_exists' => ${boolToString s3.verify_bucket_exists},
               'key' => '${s3.key}',
               'secret' => nix_read_secret('${s3.secretFile}'),
               ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
@@ -276,6 +276,10 @@ in
     (mkRenamedOptionModule
       [ "services" "nextcloud" "extraOptions" ]
       [ "services" "nextcloud" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "objectstore" "s3" "autocreate" ]
+      [ "services" "nextcloud" "config" "objectstore" "s3" "verify_bucket_exists" ]
     )
   ];
 
@@ -568,10 +572,11 @@ in
               The name of the S3 bucket.
             '';
           };
-          autocreate = mkOption {
+          verify_bucket_exists = mkOption {
             type = types.bool;
+            default = true;
             description = ''
-              Create the objectstore if it does not exist.
+              Create the objectstore bucket if it does not exist.
             '';
           };
           key = mkOption {
