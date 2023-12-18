@@ -4,15 +4,28 @@
 , ...
 }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkPackageOption;
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption mkPackageOption types;
 
   cfg = config.services.monado;
+
 in
 {
   options.services.monado = {
     enable = mkEnableOption "Monado wrapper and user service";
 
     package = mkPackageOption pkgs "monado" { };
+
+    defaultRuntime = mkOption {
+      type = types.bool;
+      description = ''
+        Whether to enable Monado as the default OpenXR runtime on the system.
+
+        Note that applications can bypass this option by setting an active
+        runtime in a writable XDG_CONFIG_DIRS location like `~/.config`.
+      '';
+      default = false;
+      example = true;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -70,6 +83,10 @@ in
 
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/openxr" ];
+
+    environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
+      source = "${cfg.package}/share/openxr/1/openxr_monado.json";
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ Scrumplex ];
