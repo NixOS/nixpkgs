@@ -16,9 +16,9 @@
 buildPythonPackage rec {
   pname = "auth0-python";
   version = "4.7.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";
