@@ -244,11 +244,6 @@ stdenv.mkDerivation rec {
       strictActionEnvPatch = defaultShellPath;
     })
 
-    (substituteAll {
-      src = ./actions_path.patch;
-      actionsPathPatch = defaultShellPath;
-    })
-
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
     (substituteAll {
