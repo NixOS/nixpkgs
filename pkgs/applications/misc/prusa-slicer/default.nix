@@ -10,7 +10,7 @@
 , wrapGAppsHook
 , boost
 , cereal
-, cgal_5
+, cgal
 , curl
 , dbus
 , eigen
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     binutils
     boost
     cereal
-    cgal_5
+    cgal
     curl
     dbus
     eigen

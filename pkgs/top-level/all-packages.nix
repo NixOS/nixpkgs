@@ -20820,7 +20820,7 @@ with pkgs;
   # CGAL 5 has API changes
   cgal_4 = callPackage ../development/libraries/CGAL/4.nix { };
   cgal_5 = callPackage ../development/libraries/CGAL { };
-  cgal = cgal_4;
+  cgal = cgal_5;
 
   cgui = callPackage ../development/libraries/cgui { };
 
