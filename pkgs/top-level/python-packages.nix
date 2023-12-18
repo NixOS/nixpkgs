@@ -14130,6 +14130,8 @@ self: super: with self; {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
+  tensordict = callPackage ../development/python-modules/tensordict { };
+
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     inherit (pkgs.config) cudaSupport;
   };
