@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qkvr8uYI6+lbNsAPw2PAnPyWRQTE4AEHf3djBfSp3XU=";
+    hash = "sha256-gdu0Ror/epu6huTEpBrqHD62O9uaL6273pKnpqPKskc=";
   };
 
   nativeBuildInputs = [
