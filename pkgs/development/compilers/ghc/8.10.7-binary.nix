@@ -250,6 +250,7 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     # Note that musl bindists do not contain them,
