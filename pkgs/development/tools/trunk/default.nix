@@ -4,11 +4,10 @@ rustPlatform,
 fetchFromGitHub,
 pkg-config,
 openssl,
-libiconv,
 jq,
 moreutils,
 CoreServices,
-Security
+SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = if stdenv.isDarwin
-    then [ libiconv CoreServices Security ]
+    then [ CoreServices SystemConfiguration ]
     else [ openssl ];
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
