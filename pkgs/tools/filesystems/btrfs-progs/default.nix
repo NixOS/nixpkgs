@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
-, pkg-config, python3
+, buildPackages
+, pkg-config
 , zstd
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
   ] ++ [
-    (python3.withPackages (ps: with ps; [
+    (buildPackages.python3.withPackages (ps: with ps; [
       sphinx
       sphinx-rtd-theme
     ]))
