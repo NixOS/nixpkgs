@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
   version = "3.57.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
