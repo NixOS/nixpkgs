@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "censys";
   version = "2.2.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
