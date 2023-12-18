@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "collectd-exporter";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "collectd_exporter";
     rev = "v${version}";
-    sha256 = "0vb6vnd2j87iqxdl86j30dk65vrv4scprv200xb83203aprngqgh";
+    sha256 = "sha256-8oibunEHPtNdbhVgF3CL6D/xE7bR8hee6+D2IJMzaqY=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-fQO2fiotqv18xewXVyh6sA4zx5ZNUR6mCebYenryrKI=";
 
   ldflags = [ "-s" "-w" ];
 
