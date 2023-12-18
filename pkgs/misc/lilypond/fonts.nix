@@ -17,7 +17,11 @@ let
         local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
 
         install -m755 -d "$fontsdir/otf"
-        for font in {otf,supplementary-fonts}/**.{o,t}tf; do
+
+        shopt -s globstar
+
+        for font in {otf,supplementary-fonts,supplementary-files}/**/*.{o,t}tf; do
+          echo $font
           install -Dt "$fontsdir/otf" -m755 "$font"
         done
 
