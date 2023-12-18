@@ -32,6 +32,7 @@ let
     biometryd = callPackage ./services/biometryd { };
     hfd-service = callPackage ./services/hfd-service { };
     lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
+    lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
     mediascanner2 = callPackage ./services/mediascanner2 { };
   };
 in
