@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-doGgo9BHAStb3A7jfX+PB+vnarCMrsz8OSHOI8iNW8Y=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
   ];
 

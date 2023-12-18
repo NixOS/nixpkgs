@@ -6914,10 +6914,10 @@ self: super: with self; {
 
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
-  meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
-    (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
-      setupHook = null;
-    }));
+  meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overridePythonAttrs(_: {
+    # We do not want the setup hook in Python packages because the build is performed differently.
+    setupHook = null;
+  }));
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 

@@ -116,11 +116,11 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     py
     setuptools
@@ -172,7 +172,7 @@ following are specific to `buildPythonPackage`:
   variable in wrapped programs.
 * `pyproject`: Whether the pyproject format should be used. When set to `true`,
   `pypaBuildHook` will be used, and you can add the required build dependencies
-  from `build-system.requires` to `nativeBuildInputs`. Note that the pyproject
+  from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
   use the existing [hooks](#setup-hooks0 or provide your own logic to build the
@@ -206,15 +206,15 @@ build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
 because their behaviour is different:
 
-* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
-  as well as the items listed in `setup_requires`.
+* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables.
+* `build-system ? []`: Build-time only Python dependencies. Items listed in `build-system.requires`/`setup_requires`.
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
 * `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
   are added to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs) when [`doCheck = true`](#var-stdenv-doCheck). Items listed in
   `tests_require` go here.
-* `propagatedBuildInputs ? []`: Aside from propagating dependencies,
+* `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
 
@@ -299,12 +299,12 @@ python3Packages.buildPythonApplication rec {
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.setuptools
     python3Packages.wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.tornado
     python3Packages.python-daemon
   ];
@@ -463,11 +463,11 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
-  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+  (e.g. `setuptools` or `flit`) should still be added as `build-system`.
 - `pypaBuildHook` to build a wheel using
   [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
   PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
-  be added as `nativeBuildInput`.
+  be added as `build-system`.
 - `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
@@ -882,7 +882,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -942,7 +942,7 @@ with import <nixpkgs> {};
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
-      nativeBuildInputs = [
+      build-system = [
         python311.pkgs.setuptools
         python311.pkgs.wheel
       ];
@@ -978,13 +978,15 @@ that we introduced with the `let` expression.
 
 #### Handling dependencies {#handling-dependencies}
 
-Our example, `toolz`, does not have any dependencies on other Python packages or
-system libraries. According to the manual, [`buildPythonPackage`](#buildpythonpackage-function) uses the
-arguments [`buildInputs`](#var-stdenv-buildInputs) and [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs) to specify dependencies. If
-something is exclusively a build-time dependency, then the dependency should be
-included in [`buildInputs`](#var-stdenv-buildInputs), but if it is (also) a runtime dependency, then it
-should be added to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs). Test dependencies are considered
-build-time dependencies and passed to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
+Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
+[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+
+- `dependencies` - For Python runtime dependencies.
+- `build-system` - For Python build-time requirements.
+- [`buildInputs`](#var-stdenv-buildInputs) - For non-Python build-time requirements.
+- [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) - For test dependencies
+
+Dependencies can belong to multiple arguments, for example if something is both a build time requirement & a runtime dependency.
 
 The following example shows which arguments are given to [`buildPythonPackage`](#buildpythonpackage-function) in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -1014,12 +1016,12 @@ buildPythonPackage rec {
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     multipledispatch
     numpy
     python-dateutil
@@ -1042,7 +1044,7 @@ buildPythonPackage rec {
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
 `python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytest`.
 `pytest` is a test runner and is only used during the [`checkPhase`](#ssec-check-phase) and is
-therefore not added to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
+therefore not added to `dependencies`.
 
 In the previous case we had only dependencies on other Python packages to consider.
 Occasionally you have also system libraries to consider. E.g., `lxml` provides
@@ -1069,7 +1071,7 @@ buildPythonPackage rec {
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1126,7 +1128,7 @@ buildPythonPackage rec {
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1137,7 +1139,7 @@ buildPythonPackage rec {
     fftwLongDouble
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
@@ -1460,9 +1462,7 @@ mode is activated.
 
 In the following example, we create a simple environment that has a Python 3.11
 version of our package in it, as well as its dependencies and other packages we
-like to have in the environment, all specified with [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
-Indeed, we can just add any package we like to have in our environment to
-[`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
+like to have in the environment, all specified with `dependencies`.
 
 ```nix
 with import <nixpkgs> {};
@@ -1471,9 +1471,11 @@ with python311Packages;
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
-  propagatedBuildInputs = [
+  dependencies = [
     pytest
     numpy
+  ];
+  propagatedBuildInputs = [
     pkgs.libsndfile
   ];
 }
@@ -1520,7 +1522,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1904,8 +1906,8 @@ configure alternatives](#sec-overlays-alternatives-blas-lapack)".
 
 In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
-* `setup_requires` corresponds to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs)
-* `install_requires` corresponds to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs)
+* `setup_requires` corresponds to `build-system`
+* `install_requires` corresponds to `dependencies`
 * `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
 
 ### How to enable interpreter optimizations? {#optimizations}
@@ -1942,7 +1944,7 @@ passthru.optional-dependencies = {
 and letting the package requiring the extra add the list to its dependencies
 
 ```nix
-propagatedBuildInputs = [
+dependencies = [
   ...
 ] ++ dask.optional-dependencies.complete;
 ```

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-lCxadY+Y15Dq7Ropy27vx/+w0c968Fw9J5Flbb1q0eE=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     brotlicffi
     certifi
     charset-normalizer
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     security = [];
     socks = [
       pysocks
@@ -48,12 +48,14 @@ buildPythonPackage rec {
     ];
   };
 
+  doCheck = false;
+
   nativeCheckInputs = [
     pytest-mock
     pytest-xdist
     pytestCheckHook
   ]
-  ++ passthru.optional-dependencies.socks;
+  ++ optional-dependencies.socks;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin

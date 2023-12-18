@@ -19,7 +19,7 @@ buildPythonPackage rec {
     rm test-requirements.txt requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
     pbr
   ];
 

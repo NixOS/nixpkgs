@@ -31,9 +31,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  propagatedBuildInputs = [
-    meson
-    ninja
+  propagatedBuildInputs = [ meson ninja ];
+
+  dontUseMesonConfigure = true;
+
+  dependencies = [
     pyproject-metadata
     tomli
   ] ++ lib.optionals (pythonOlder "3.10") [

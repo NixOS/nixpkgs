@@ -42,10 +42,7 @@ let
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
-    namePrefix = "";        # Python applications should not have any prefix
-    toPythonModule = x: x;  # Application does not provide modules.
-  }));
+  buildPythonApplication = args: toPythonApplication (buildPythonPackage args);
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -63,26 +60,57 @@ let
 
   # Convert derivation to a Python module.
   toPythonModule = drv:
-    drv.overrideAttrs( oldAttrs: {
+    (drv.pythonPackage or drv).overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
+        requiredPythonModules = requiredPythonModules (drv.propagatedBuildInputs ++ (drv.passthru.dependencies or []));
       };
     });
 
   # Convert a Python library to an application.
-  toPythonApplication = drv:
-    drv.overrideAttrs( oldAttrs: {
-      passthru = (oldAttrs.passthru or {}) // {
-        # Remove Python prefix from name so we have a "normal" name.
-        # While the prefix shows up in the store path, it won't be
-        # used by `nix-env`.
-        name = removePythonPrefix oldAttrs.name;
-        pythonModule = false;
+  toPythonApplication = drv':
+    let
+      drv = drv'.overrideAttrs( oldAttrs: {
+        passthru = (oldAttrs.passthru or {}) // {
+          # Remove Python prefix from name so we have a "normal" name.
+          # While the prefix shows up in the store path, it won't be
+          # used by `nix-env`.
+          name = removePythonPrefix oldAttrs.name;
+          pythonModule = false;
+        };
+      });
+
+      outputs = drv.outputs or [ "out" ];
+    in stdenv.mkDerivation {
+      inherit (drv) name version;
+      inherit outputs;
+
+      nativeBuildInputs = [ python ];
+      buildInputs = requiredPythonModules [ drv' ];
+
+      dontUnpack = true;
+      dontConfigure = true;
+      dontBuild = true;
+
+      installPhase = ''
+        runHook preInstall
+        ${lib.concatStringsSep "\n" (map (output: "python3 ${./link.py} ${drv.${output}} \$${output}") outputs)}
+        runHook postInstall
+      '';
+
+      passthru = drv.passthru // {
+        pythonPackage = drv';
       };
-    });
+
+      inherit (drv) meta;
+    } // lib.optionalAttrs (drv ? pname) {
+      inherit (drv) pname;
+    } // lib.optionalAttrs (drv ? version) {
+      inherit (drv) version;
+    };
+
 
   disabled = drv: throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}";
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   # importlib-metadata could be added here if it wouldn't cause an infinite recursion
-  propagatedBuildInputs = [ setuptools ];
+  dependencies = [ setuptools ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures
   doCheck = false;

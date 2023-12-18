@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-vBww78/3vC3IA4Nh9Ne+rBo/CO9FggjP+TUUV2/ih9c=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo

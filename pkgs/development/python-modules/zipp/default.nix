@@ -19,7 +19,7 @@ let zipp = buildPythonPackage rec {
     hash = "sha256-68FZRqp4vWNFiZL8gew7b3sektUcNebeHDgE5zt5kUc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 

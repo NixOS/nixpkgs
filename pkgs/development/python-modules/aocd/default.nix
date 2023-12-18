@@ -35,7 +35,7 @@ buildPythonPackage rec {
     hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     requests
     termcolor
@@ -44,6 +44,10 @@ buildPythonPackage rec {
     tzlocal
     setuptools
     rich # for example parser aoce. must either be here or checkInputs
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   # Too many failing tests

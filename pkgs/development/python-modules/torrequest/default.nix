@@ -10,7 +10,7 @@ buildPythonPackage rec {
     hash = "sha256-N0XU6j/9qY16A0Njx4ets3qrd72rQAlKTZNzks1NroI=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pysocks requests stem
   ];
 
