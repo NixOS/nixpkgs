@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs, bash }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, pkgs
+, bash
+}:
 
 
 let
