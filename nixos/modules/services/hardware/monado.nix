@@ -25,6 +25,8 @@ in
       source = "${cfg.package}/bin/monado-service";
     };
 
+    services.udev.packages = with pkgs; [ xr-hardware ];
+
     systemd.user = {
       services.monado = {
         description = "Monado XR runtime service module";
