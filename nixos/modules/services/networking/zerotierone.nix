@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.zerotierone;
-  conf = pkgs.writeText "zt-local.conf" (builtins.toJSON cfg.localConf);
+  localConfFile = pkgs.writeText "zt-local.conf" (builtins.toJSON cfg.localConf);
   localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
 {
@@ -32,16 +32,16 @@ in
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 
   options.services.zerotierone.localConf = mkOption {
-    default = { };
+    default = null;
     description = mdDoc ''
-      Configuration to be written to the zerotier JSON-based local.conf.
-      The configuration will be symlinked to /var/lib/zerotier-one/local.conf at build time.
+      Optional configuration to be written to the Zerotier JSON-based local.conf.
+      If set, the configuration will be symlinked to `/var/lib/zerotier-one/local.conf` at build time.
       To understand the configuration format, refer to https://docs.zerotier.com/config/#local-configuration-options.
-      '';
+    '';
     example = {
       settings.allowTcpFallbackRelay = false;
     };
-    type = types.attrs;
+    type = types.nullOr types.attrs;
   };
 
   config = mkIf cfg.enable {
@@ -61,11 +61,14 @@ in
       '' + (concatMapStrings (netId: ''
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
       '') cfg.joinNetworks) + ''
-        if [ -e "${localConfFilePath}" ]
+        if [ -L "${localConfFilePath}" ]
         then
           rm ${localConfFilePath}
+        elif [ -f "${localConfFilePath}" ]
+          mv ${localConfFilePath} ${localConfFilePath}.bak
         fi
-        ln -s ${conf} ${localConfFilePath}
+      '' + optionalString (cfg.localConf != null) '' 
+        ln -s ${localConfFile} ${localConfFilePath}
       '';
 
       serviceConfig = {
