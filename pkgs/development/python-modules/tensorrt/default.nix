@@ -22,7 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     unzip
     autoPatchelfHook
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpathHook
   ];
 
   preUnpack = ''
