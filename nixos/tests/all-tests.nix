@@ -606,6 +606,7 @@ in {
   noto-fonts = handleTest ./noto-fonts.nix {};
   noto-fonts-cjk-qt-default-weight = handleTest ./noto-fonts-cjk-qt-default-weight.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
+  npmrc = handleTest ./npmrc.nix {};
   nscd = handleTest ./nscd.nix {};
   nsd = handleTest ./nsd.nix {};
   ntfy-sh = handleTest ./ntfy-sh.nix {};
