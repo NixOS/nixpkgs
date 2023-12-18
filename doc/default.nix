@@ -149,4 +149,26 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+
+  passthru.tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash
+    ({ name ? "manual_check-manpage-urls"
+     , script
+     , urlsFile
+     }: runCommand name {
+      nativeBuildInputs = [
+        cacert
+        (python3.withPackages (p: with p; [
+          aiohttp
+          rich
+          structlog
+        ]))
+      ];
+      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";  # Empty output
+    } ''
+      python3 ${script} ${urlsFile}
+      touch $out
+    '') {
+      script = ./tests/manpage-urls.py;
+      urlsFile = ./manpage-urls.json;
+    };
 }
