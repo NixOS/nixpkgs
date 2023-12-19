@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , bash-completion, perl, ncurses, zlib, sqlite, libffi
 , mcpp, cmake, bison, flex, doxygen, graphviz
-, makeWrapper, python3
+, makeWrapper, python3, callPackage
 }:
 
 
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" ];
+
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
     description = "A translator of declarative Datalog programs into the C++ language";
