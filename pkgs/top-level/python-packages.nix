@@ -1747,6 +1747,8 @@ self: super: with self; {
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
+  cached-ipaddress = callPackage ../development/python-modules/cached-ipaddress { };
+
   cached-property = callPackage ../development/python-modules/cached-property { };
 
   cachelib = callPackage ../development/python-modules/cachelib { };

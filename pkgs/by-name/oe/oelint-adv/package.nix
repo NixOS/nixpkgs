@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "3.26.4";
+  version = "3.26.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_adv";
-    hash = "sha256-Gb4BQl/CJDpvzvwBDFWYUGvMQBbZZSMCDQh4xbOzp6Y=";
+    hash = "sha256-+kmPV42y4Za/ZLXLCyt73E8Nxn0zBftTZT5JDsAQkEw=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
