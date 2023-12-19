@@ -63,6 +63,9 @@ buildPythonPackage rec {
     "test_multiple_messages_generators"
   ];
 
+  # newer version are packaged as aiomqtt
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Idomatic asyncio wrapper around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/asyncio-mqtt";
