@@ -3246,6 +3246,13 @@
     githubId = 4526429;
     name = "Philipp Dargel";
   };
+  chito = {
+    email = "iamchito@protonmail.com";
+    github = "chitochi";
+    githubId = 153365419;
+    matrix = "@chito:nichijou.dev";
+    name = "Chito";
+  };
   chivay = {
     email = "hubert.jasudowicz@gmail.com";
     github = "chivay";
