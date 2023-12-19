@@ -14,10 +14,10 @@
 
 let
   pname = "freeplane";
-  version = "1.11.4";
+  version = "1.11.8";
 
-  src_hash = "sha256-LuXvGNpnkinHuukZEYZjo5l7TiwumEFd2H06JcC9Qd8=";
-  deps_outputHash = "sha256-exiP37gFcJfxzcS2bNjVntb0Wthy8kPSgaHJF9cvmRU=";
+  src_hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
+  deps_outputHash = "sha256-2Zaw4FW12dThdr082dEB1EYkGwNiayz501wIPGXUfBw=";
 
   jdk = jdk17;
   gradle = gradle_7;
@@ -30,8 +30,8 @@ let
   };
 
   deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src;
+    pname = "${pname}-deps";
+    inherit src version;
 
     nativeBuildInputs = [
       jdk
@@ -49,13 +49,15 @@ let
       find ./caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
-    # com/squareup/okio/okio/2.10.0/okio-jvm-2.10.0.jar expected to exist under name okio-2.10.0.jar
-    while IFS="" read -r -d "" path; do
-      dir=''${path%/*}; file=''${path##*/}; dest=''${file//-jvm-/-}
-      [[ -e $dir/$dest ]] && continue
-      ln -s "$dir/$file" "$dir/$dest"
-    done < <(find "$out" -type f -name 'okio-jvm-*.jar' -print0)
+      # com/squareup/okio/okio/2.10.0/okio-jvm-2.10.0.jar expected to exist under name okio-2.10.0.jar
+      while IFS="" read -r -d "" path; do
+        dir=''${path%/*}; file=''${path##*/}; dest=''${file//-jvm-/-}
+        [[ -e $dir/$dest ]] && continue
+        ln -s "$dir/$file" "$dir/$dest"
+      done < <(find "$out" -type f -name 'okio-jvm-*.jar' -print0)
     '';
+    # otherwise the package with a namespace starting with info/... gets moved to share/info/...
+    forceShare = [ "dummy" ];
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -92,7 +94,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    mkdir -p -- ./freeplane/build
+    mkdir -p freeplane/build
 
     GRADLE_USER_HOME=$PWD \
       gradle -Dorg.gradle.java.home=${jdk} \
@@ -143,9 +145,7 @@ in stdenv.mkDerivation rec {
     description = "Mind-mapping software";
     homepage = "https://freeplane.org/";
     license = licenses.gpl2Plus;
-    # platforms = platforms.linux;
-    maintainers = with maintainers; [
-      chaduffy
-    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ chaduffy ];
   };
 }
