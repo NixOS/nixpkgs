@@ -138,6 +138,8 @@ stdenv.mkDerivation rec {
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://www.gnucash.org/";
     description = "Free software for double entry accounting";
