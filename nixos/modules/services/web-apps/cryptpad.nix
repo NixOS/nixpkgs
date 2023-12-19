@@ -21,16 +21,15 @@ in {
 
     package = lib.mkPackageOption pkgs "cryptpad" {};
 
-    nginx = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = mdDoc ''
-          Manage cryptpad's nginx configuration.
-          The virtual hostnames are derived from config.services.cryptpad.config.httpUnsafeOrigin and
-          config.services.cryptpad.config.httpSafeOrigin
-        '';
-      };
+    configureNginx = mkOption {
+      description = mdDoc ''
+        Configure Nginx as a reverse proxy for Cryptpad.
+        Note that this makes some assumptions on your setup, and sets settings that will
+        affect other virtualHosts running on your Nginx instance, if any.
+        Alternatively you can configure a reverse-proxy of your choice.
+      '';
+      type = types.bool;
+      default = false;
     };
 
     confinement = mkOption {
@@ -157,7 +156,7 @@ in {
         };
       };
     })
-    (mkIf cfg.nginx.enable {
+    (mkIf cfg.configureNginx {
       assertions = [
         { assertion = cfg.config.httpUnsafeOrigin != "";
           message = "services.cryptpad.config.httpUnsafeOrigin is required";
@@ -170,6 +169,9 @@ in {
         }
       ];
       services.nginx = {
+        enable = true;
+        recommendedTlsSettings = true;
+
         # FIXME: Check / compare this with [Nginx module configuration in nixpkgs](https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/services/web-servers/nginx/default.nix).
         # Find out why Cryptpad has this in their documetation. Does this decrease the security of a Cryptpad install
         # if not used?
