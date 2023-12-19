@@ -7332,6 +7332,7 @@ with pkgs;
 
   snooze = callPackage ../tools/system/snooze { };
 
+  # recurseIntoAttrs is applied inside cuda-packages.nix.
   inherit (callPackage ./cuda-packages.nix {})
     # CUDA Packages 10.x
     cudaPackages_10_0
@@ -7356,9 +7357,9 @@ with pkgs;
     cudaPackages_12_3
   ;
 
-  cudaPackages_10 = recurseIntoAttrs cudaPackages_10_2;
-  cudaPackages_11 = recurseIntoAttrs cudaPackages_11_8;
-  cudaPackages_12 = recurseIntoAttrs cudaPackages_12_0;
+  cudaPackages_10 = cudaPackages_10_2;
+  cudaPackages_11 = cudaPackages_11_8;
+  cudaPackages_12 = cudaPackages_12_0;
 
   # Use the older cudaPackages for tensorflow and jax, as determined by cudnn
   # compatibility: https://www.tensorflow.org/install/source#gpu

@@ -4,6 +4,7 @@
   cudaVersionAtLeast,
   cudaPackages,
   lib,
+  ...
 }:
 let
   inherit (lib) lists strings;

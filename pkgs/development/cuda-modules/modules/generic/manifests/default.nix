@@ -64,6 +64,52 @@ in
             { };
       };
     };
+    options = {
+      manifestPathParser = options.mkOption {
+        description = "Function to parse a manifest path into a manifest";
+        default = config.generic.manifests.utils.manifestPathToManifestMeta;
+        type = types.functionTo config.generic.manifests.types.manifestMeta;
+      };
+      manifestPaths = options.mkOption {
+        description = "List of paths to CUDA redistributable manifests";
+        type = types.listOf types.path;
+      };
+      manifestMetas = options.mkOption {
+        description = "List of meta information about CUDA redistributable manifests";
+        type = types.listOf config.generic.manifests.types.manifestMeta;
+      };
+      manifestMetasToManifests = options.mkOption {
+        description = "Function to convert a list of manifest metas to a list of manifests";
+        default = config.generic.manifests.utils.manifestMetasToManifests;
+        type = types.functionTo config.generic.manifests.types.manifests;
+      };
+      manifests = options.mkOption {
+        description = "Mapping of manifest version (major and minor) to feature and redistributable manifests";
+        type = config.generic.manifests.types.manifests;
+      };
+      generalFixupFn = options.mkOption {
+        description = ''
+          A general fixup applied to all redistributables's. Note that it requires `callPackage` to provide a
+          `manifests` argument.
+          NOTE: The value must be inspectable by `callPackage`. It seems that when functions are exposed via module
+          configurations, they do not preserve functionArgs, and so callPackage will fail because it cannot supply
+          arguments by default.
+        '';
+        default = _: {};
+        type = types.oneOf [types.path (types.functionTo types.attrs)];
+      };
+      indexedFixupFn = options.mkOption {
+        description = ''
+          Attribute set of functions where each key is the `pname` of a redistributable and each value is a
+          function to fixup the derivation's attributes after being callPackage'd
+          NOTE: The value must be inspectable by `callPackage`. It seems that when functions are exposed via module
+          configurations, they do not preserve functionArgs, and so callPackage will fail because it cannot supply
+          arguments by default.
+        '';
+        default = {};
+        type = types.oneOf [types.path types.attrs];
+      };
+    };
     types = options.mkOption {
       description = "A set of generic types.";
       type = types.attrsOf types.optionType;

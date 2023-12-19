@@ -38,19 +38,18 @@ let
     versions
     ;
 
-  inherit
-    (modules.evalModules {
-      modules = [
-        {
-          inherit (pkgs.config) cudaSupport;
-          cudaCapabilities = pkgs.config.cudaCapabilities or [ ];
-          cudaForwardCompat = pkgs.config.cudaForwardCompat or true;
-        }
-        ../development/cuda-modules/modules
-      ];
-    })
-    config
-    ;
+  # cuda-modules contains all the information we need to build our packages.
+  cuda-modules = modules.evalModules {
+    modules = [
+      {
+        inherit (pkgs.config) cudaSupport;
+        cudaCapabilities = pkgs.config.cudaCapabilities or [ ];
+        cudaForwardCompat = pkgs.config.cudaForwardCompat or true;
+      }
+      ../development/cuda-modules/modules
+    ];
+  };
+  config = attrsets.dontRecurseIntoAttrs cuda-modules.config;
 
   mkVersionedPackageName =
     name: version:
@@ -59,13 +58,10 @@ let
       (strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version))
     ];
 
+  # Create a fixed-point for makeScopeWithSplicing' parameterized by cudaVersion.
   makeCudaPackages =
-    cudaVersion: final:
+    cudaVersion:
     let
-      # NOTE: Use of `final.callPackage` for `callPackageOnAttrs` doesn't run the risk of infinite recursion,
-      # as the `final` argument is not used to compute the attribute names.
-      callPackageOnAttrs = attrsets.mapAttrs (_: value: final.callPackage value { });
-
       # Flags used to enable different features of cudaPackages -- we cannot use final.callPackage
       # because we use `flags` to determine the presence of certain packages, which would cause
       # infinite recursion.
@@ -87,17 +83,44 @@ let
       cudaVersionOlder = strings.versionOlder cudaVersion;
       # cudaVersionAtLeast : Version -> Boolean
       cudaVersionAtLeast = strings.versionAtLeast cudaVersion;
+    in
 
+    final:
+    let
+      # NOTE: Use of `final.callPackage` for `callPackageOnAttrs` doesn't run the risk of infinite recursion,
+      # as the `final` argument is not used to compute the attribute names.
+      callPackageOnAttrs = attrsets.mapAttrs (_: value: final.callPackage value { });
+
+      # Helper function to get the general fixup function for a redistributable package.
+      getGeneralFixupFn =
+        {
+          redistName,
+          args ? { },
+        }:
+        final.callPackage config.${redistName}.generalFixupFn args;
+
+      # Helper function to get the indexed fixup function for a redistributable package.
+      getIndexedFixupFn =
+        { redistName }:
+        trivial.pipe config.${redistName}.indexedFixupFn [
+          # If it's a path, we need to import it before passing it along.
+          # The default value is an empty attrset so we don't need to import it.
+          (iff: if builtins.isPath iff then builtins.import iff else iff)
+          callPackageOnAttrs
+        ];
+
+      # Helper function which wraps the generic manifest builder.
       genericManifestBuilderFn =
         {
           pname,
           redistName,
           manifests,
-          generalFixupFn ? { },
-          indexedFixupFn ? { },
+          generalFixupFn,
+          indexedFixupFn,
           libPath ? null,
         }:
         trivial.pipe ../development/cuda-modules/generic-builders/manifest.nix [
+          # Build the package
           (
             path:
             final.callPackage path {
@@ -109,10 +132,13 @@ let
                 ;
             }
           )
+          # General package fixup
           (drv: drv.overrideAttrs generalFixupFn)
-          (drv: drv.overrideAttrs (indexedFixupFn.${pname} or { }))
+          # Package-specific fixup if it exists
+          (drv: drv.overrideAttrs (attrsets.attrByPath [ pname ] { } indexedFixupFn))
         ];
 
+      # Helper function which wraps the generic multiplex builder.
       genericMultiplexBuilderFn =
         pname:
         (builtins.import ../development/cuda-modules/generic-builders/multiplex.nix {
@@ -166,17 +192,31 @@ let
     // (
       let
         redistName = "cuda";
-        inherit (config.${redistName}) fixupFns;
+
+        # Retrieve the manifests for our cudaVersion.
+        # We unconditionally access manifests.feature so we need to make sure it exists (even if it is empty).
+        # manifests :: { redistrib, feature }
         manifests =
-          let
-            default = {
+          attrsets.attrByPath
+            [
+              redistName
+              "manifests"
+              cudaVersion
+            ]
+            ({
               redistrib = { };
               feature = { };
-            };
-          in
-          config.${redistName}.manifests.${cudaVersion} or default;
-        generalFixupFn = final.callPackage fixupFns.generalFixupFn { inherit manifests; };
-        indexedFixupFn = callPackageOnAttrs (builtins.import fixupFns.indexedFixupFn);
+            })
+            config;
+
+        # Retrieve our fixup functions.
+        generalFixupFn = getGeneralFixupFn { 
+          inherit redistName;
+          args = {inherit manifests; };
+        };
+        indexedFixupFn = getIndexedFixupFn { inherit redistName; };
+
+        # Build a single redistributable package.
         buildRedistPackage =
           pname:
           genericManifestBuilderFn {
@@ -188,6 +228,9 @@ let
               indexedFixupFn
               ;
           };
+
+        # Map our buildRedistPackage function over all the packages in manifests.feature.
+        # This is an empty attrset if manifests.feature is empty, which is what we want.
         redistPackages = trivial.pipe manifests.feature [
           # Get all the package names
           builtins.attrNames
@@ -200,14 +243,11 @@ let
     # CuTensor
     // (
       let
-        # A release is supported if it has a libPath that matches our CUDA version for our platform.
-        # LibPath are not constant across the same release -- one platform may support fewer
-        # CUDA versions than another.
         # redistArch :: Optional String
         redistArch = flags.getRedistArch hostPlatform.system;
         redistName = "cutensor";
         pname = "libcutensor";
-        inherit (config.${redistName}) fixupFns;
+        
         # Our cudaVersion tells us which version of CUDA we're building against.
         # The subdirectories in lib/ tell us which versions of CUDA are supported.
         # Typically the names will look like this:
@@ -218,9 +258,10 @@ let
         # - 12
         # libPath :: String
         libPath = if cudaVersion == "10.2" then cudaVersion else cudaMajorVersion;
-        # Our build for cutensor is actually multiplexed -- we build a cutensor package for each
-        # version of CUDA that cutensor supports.
-        # We do this by filtering out the leaves of the manifest tree which don't contain the libPath we want.
+        
+        # Our build for cutensor is actually multiplexed -- we build a cutensor package for each version of CUDA that
+        # cutensor supports. Currently, we don't know ahead of time what the contents of the lib directory are for
+        # each package, so building these is best-effort.
         # manifests :: { ${version} = { redistrib, feature }; }
         manifests =
           attrsets.filterAttrs
@@ -242,7 +283,9 @@ let
             )
             config.${redistName}.manifests;
 
-        generalFixupFn = final.callPackage fixupFns.generalFixupFn { };
+        # Retrieve our fixup functions.
+        generalFixupFn = getGeneralFixupFn { inherit redistName; };
+        indexedFixupFn = getIndexedFixupFn { inherit redistName; };
 
         redistPackages =
           attrsets.mapAttrs'
@@ -254,6 +297,7 @@ let
                   pname
                   redistName
                   generalFixupFn
+                  indexedFixupFn
                   libPath
                   ;
               };
@@ -289,7 +333,7 @@ trivial.pipe config.versions [
     cudaVersion: {
       name = mkVersionedPackageName "cudaPackages" cudaVersion;
       value =
-        lib.recurseIntoAttrs (
+        attrsets.recurseIntoAttrs (
           makeScopeWithSplicing' {
             otherSplices = generateSplicesForMkScope "cudaPackages";
             f = makeCudaPackages cudaVersion;
@@ -300,6 +344,7 @@ trivial.pipe config.versions [
         };
     }
   ))
+  # Make sure not to recurse into config
   builtins.listToAttrs
 ]
 
