@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.cryptpad;
-  nginx = config.services.nginx;
 
   inherit (lib) mdDoc;
 
@@ -161,9 +160,6 @@ in {
     })
     (mkIf cfg.nginx.enable {
       assertions = [
-        { assertion = nginx.enable;
-          message = "nginx must be enabled";
-        }
         { assertion = lib.strings.hasPrefix "https://" cfg.config.httpUnsafeOrigin;
           message = "services.cryptpad.config.httpUnsafeOrigin must start with https://";
         }
