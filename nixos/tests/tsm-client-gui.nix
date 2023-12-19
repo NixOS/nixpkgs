@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.execute("DSM_LOG=/tmp dsmj -optfile=/dev/null >&2 &")
 
     # does it report the "TCP/IP connection failure" error code?
-    machine.wait_for_window("IBM Spectrum Protect")
+    machine.wait_for_window("IBM Storage Protect")
     machine.wait_for_text("ANS2610S")
     machine.send_key("esc")
 
