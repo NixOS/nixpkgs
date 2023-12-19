@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.3.2";
+  version = "1.4.0";
   format = "setuptools";
   disabled = pythonOlder "3.5.3";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "StevenLooman";
     repo = pname;
     rev = version;
-    hash = "sha256-laKmWGDEzlBVJCUSKxekjPEXVlAz4MIzM7dNJfta/ek=";
+    hash = "sha256-A+G97T/udyL/yRqykq1sEGDEI6ZwtDBc5xUNFiJp0UQ=";
   };
 
   propagatedBuildInputs = [
