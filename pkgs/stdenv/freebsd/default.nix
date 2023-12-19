@@ -282,6 +282,7 @@ in
         nixSupport = {
           #cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "--push-state" "--as-needed" "-lgcc_s" "--pop-state"];
           cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];
+          #libcxx-ldflags = ["-rpath" "${lib.getLib prevStage.llvmPackages_16.libcxxabi}/lib"];
         };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
@@ -299,6 +300,7 @@ in
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
+          buildPackages = prevStage.buildPackages;
         };
       });
       overrides = self: super: {
@@ -306,9 +308,11 @@ in
         iconv = prevStage.iconv;
         cacert = prevStage.cacert;
         inherit (prevStage) fetchurl;
-        libcxxrt = self.callPackage ../../development/libraries/libcxxrt {
-          stdenv = self.clangStdenv;
-        };
+        libcxxabi = self.llvmPackages_16.libcxxabi;
+        libcxx = self.llvmPackages_16.libcxx;
+        #libcxxrt = self.callPackage ../../development/libraries/libcxxrt {
+        #  stdenv = prevStage.
+        #};
         clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
         freebsd = super.freebsd.overrideScope (self: super: {
           stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;

@@ -82,6 +82,8 @@ lib.makeScope newScope (self: with self; {
   libedit = callPackage ./libedit.nix {};
   libsm = callPackage ./libsm.nix {};
   libdevstat = callPackage ./libdevstat.nix {};
+  libmemstat = callPackage ./libmemstat.nix {};
+  libprocstat = callPackage ./libprocstat.nix {};
   libexecinfo = callPackage ./libexecinfo.nix {};
   config = callPackage ./config.nix {};
   libsbuf = callPackage ./libsbuf.nix {};

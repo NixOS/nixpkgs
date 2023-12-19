@@ -99,6 +99,10 @@ stdenv.mkDerivation rec {
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
+  postInstall = lib.optionalString (!headersOnly && cxxabi.libName == "c++abi") ''
+    ln -s ${lib.getLib cxxabi}/lib/libc++abi.so $out/lib/libc++abi.so
+  '';
+
   passthru = {
     isLLVM = true;
     inherit cxxabi;

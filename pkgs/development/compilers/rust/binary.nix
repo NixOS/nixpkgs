@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib, libcxxrt
+{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib, freebsd
 , autoPatchelfHook, gcc
 , version
 , src
@@ -36,7 +36,8 @@ rec {
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
       ++ lib.optionals (!stdenv.isDarwin) [ gcc.cc.lib zlib ]
-      ++ lib.optionals stdenv.isFreeBSD [ libcxxrt ]
+      # the binaries seem to link against versioned symbols in libcxxrt that are only present when built from the freebsd source tree
+      ++ lib.optionals stdenv.isFreeBSD [ freebsd.libcxxrt ]
       ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''

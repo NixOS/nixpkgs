@@ -84,10 +84,6 @@ stdenv.mkDerivation rec {
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];
 
-  # FreeBSD somehow doesn't make various libraries available at runtime even though it links fine.
-  # This can't be patchelfed because the build process creates binaries and then immediately runs them
-  "NIX_LDFLAGS_${buildPackages.stdenv.cc.suffixSalt}" = lib.optionalString stdenv.isFreeBSD " -rpath ${lib.getLib buildPackages.openssl}/lib -rpath ${lib.getLib buildPackages.zlib}/lib -rpath ${lib.getLib buildPackages.aws-crt-cpp}/lib -laws-crt-cpp";
-
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"

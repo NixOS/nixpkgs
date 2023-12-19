@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     cp ../src/cxxabi.h $out/include
     cp lib/libcxxrt${stdenv.hostPlatform.extensions.library} $out/lib
     cp lib/libcxxrt${stdenv.hostPlatform.extensions.staticLibrary} $out/lib
+    ln -s $out/lib/libcxxrt${stdenv.hostPlatform.extensions.library} $out/lib/libcxxrt${stdenv.hostPlatform.extensions.library}.1
   '';
 
   passthru = {

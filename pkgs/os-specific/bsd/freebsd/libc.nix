@@ -46,12 +46,12 @@ mkDerivation rec {
     "sys/crypto/skein"
 
     # libgcc and friends
-    #"lib/libgcc_eh"
-    #"lib/libgcc_s"
-    #"contrib/llvm-project/compiler-rt"
-    #"contrib/llvm-project/libunwind"
+    "lib/libgcc_eh"
+    "lib/libgcc_s"
+    "lib/libcompiler_rt"
+    "contrib/llvm-project/libunwind"
+    "contrib/llvm-project/compiler-rt"
     #"contrib/llvm-project/libcxx"
-    #"lib/libcompiler_rt"
 
     # terminfo
     "lib/ncurses"
@@ -125,10 +125,17 @@ mkDerivation rec {
     find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
     popd
 
-    #mkdir -p $libgcc/lib
-    libgcc="$out"
-    $CC -nodefaultlibs -lgcc -shared -o $libgcc/lib/libgcc_s.so
-    $AR r $libgcc/lib/libgcc_eh.a
+    mkdir $BSDSRCDIR/lib/libcompiler_rt/i386
+    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags
+    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags
+    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags install
+
+    ln -s $BSDSRCDIR/lib/libc/libc.so.7 $BSDSRCDIR/lib/libc/libc.so  # not sure
+    mkdir $BSDSRCDIR/lib/libgcc_s/i386
+    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
+    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags install
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
