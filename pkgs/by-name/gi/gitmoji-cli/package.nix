@@ -6,6 +6,7 @@
 , nodejs
 , prefetch-yarn-deps
 , yarn
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Gitmoji client for using emojis on commit messages";
