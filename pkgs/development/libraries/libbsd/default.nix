@@ -59,6 +59,8 @@ stdenv.mkDerivation {
     homepage = "https://libbsd.freedesktop.org/";
     license = with licenses; [ beerware bsd2 bsd3 bsdOriginal isc mit ];
     platforms = platforms.unix;
+    # See architectures defined in src/local-elf.h.
+    badPlatforms = lib.platforms.microblaze;
     maintainers = with maintainers; [ matthewbauer ];
   };
 }
