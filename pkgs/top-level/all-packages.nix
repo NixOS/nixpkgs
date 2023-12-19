@@ -25539,8 +25539,6 @@ with pkgs;
 
   vrpn = callPackage ../development/libraries/vrpn { };
 
-  vsmtp = callPackage ../servers/mail/vsmtp { };
-
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
   vte = callPackage ../development/libraries/vte { };
@@ -38260,10 +38258,7 @@ with pkgs;
 
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
-  r2modman = callPackage ../games/r2modman {
-    # Electron 26 has regressions making applications unusable.
-    electron = electron_25;
-  };
+  r2modman = callPackage ../games/r2modman { };
 
   racer = callPackage ../games/racer { };
 
