@@ -2,18 +2,17 @@
 , buildGoModule
 , fetchFromGitHub
 , llama-cpp
-, stdenv
 }:
 
 buildGoModule rec {
   pname = "ollama";
-  version = "0.1.11";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-Jc6w+zQS/L3GKbfCaJO281LAgVdxNrseT0GX04N9MMY=";
+    hash = "sha256-eXukNn9Lu1hF19GEi7S7a96qktsjnmXCUp38gw+3MzY=";
   };
 
   patches = [
@@ -28,9 +27,10 @@ buildGoModule rec {
   postPatch = ''
     substituteInPlace llm/llama.go \
       --subst-var-by llamaCppServer "${llama-cpp}/bin/llama-cpp-server"
+    substituteInPlace server/routes_test.go --replace "0.0.0" "${version}"
   '';
 
-  vendorHash = "sha256-fuSHaDDpkuQThYVNoEjnHgWkgh/LFLNHNss5Gezlv5w=";
+  vendorHash = "sha256-yGdCsTJtvdwHw21v0Ot6I8gxtccAvNzZyRu1T0vaius=";
 
   ldflags = [
     "-s"
