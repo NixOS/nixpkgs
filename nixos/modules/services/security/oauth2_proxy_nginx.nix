@@ -28,7 +28,8 @@ in
       type = types.listOf types.str;
       default = [];
       description = ''
-        A list of nginx virtual hosts to put behind the oauth2 proxy
+        A list of nginx virtual hosts to put behind the oauth2 proxy.
+        You can exclude specific locations by setting `auth_request off;` in the locations extraConfig setting.
       '';
     };
   };
@@ -50,18 +51,27 @@ in
   ] ++ optional (cfg.virtualHosts != []) {
     recommendedProxySettings = true; # needed because duplicate headers
   } ++ (map (vhost: {
-    virtualHosts.${vhost}.locations = {
-      "/oauth2/auth" = {
-        proxyPass = cfg.proxy;
-        extraConfig = ''
-          proxy_set_header X-Scheme         $scheme;
-          # nginx auth_request includes headers but not body
-          proxy_set_header Content-Length   "";
-          proxy_pass_request_body           off;
-        '';
+    virtualHosts.${vhost} = {
+      locations = {
+        "/oauth2/auth" = {
+          proxyPass = cfg.proxy;
+          extraConfig = ''
+            auth_request off;
+            proxy_set_header X-Scheme         $scheme;
+            # nginx auth_request includes headers but not body
+            proxy_set_header Content-Length   "";
+            proxy_pass_request_body           off;
+          '';
+        };
+        "@redirectToAuth2ProxyLogin" = {
+          return = "307 https://${cfg.domain}/oauth2/start?rd=$scheme://$host$request_uri";
+          extraConfig = ''
+            auth_request off;
+          '';
+        };
       };
-      "@redirectToAuth2ProxyLogin".return = "307 https://${cfg.domain}/oauth2/start?rd=$scheme://$host$request_uri";
-      "/".extraConfig = ''
+
+      extraConfig = ''
         auth_request /oauth2/auth;
         error_page 401 = @redirectToAuth2ProxyLogin;
 
