@@ -113,6 +113,8 @@ with pkgs;
 
   install-shell-files = callPackage ./install-shell-files {};
 
+  checkpoint-build = callPackage ./checkpointBuild {};
+
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
