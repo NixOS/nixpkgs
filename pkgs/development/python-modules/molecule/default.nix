@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "6.0.2";
+  version = "6.0.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uRk1P3mXRt5gsWonV1YneD45wmj98vKqA3LwFix7VHg=";
+    hash = "sha256-0qiBBi/MXvHgjB5RJ8BDVNLJUXGVXicL2Cs/v+9y07A=";
   };
 
   nativeBuildInputs = [
