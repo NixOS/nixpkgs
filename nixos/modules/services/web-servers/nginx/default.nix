@@ -408,12 +408,6 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.quic && vhost.http3)
-            # Advertise that HTTP/3 is available
-          ''
-            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
-          ''}
-
           ${mkBasicAuth vhostName vhost}
 
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
