@@ -2,15 +2,14 @@
 , fetchPypi
 , python3
 }:
-
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "bloodhound-py";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit version;
     pname = "bloodhound";
-    hash = "sha256-SRP74I5euKJErnSkm6OSdAwznv/ZQeEtNG4XofnIEec=";
+    hash = "sha256-BryByUo9FCSrrJgXoXoVPBjpmh32I0xRoeKBsYj8nSE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -23,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Ingestor for BloodHound";
-    homepage = "https://github.com/fox-it/BloodHound.py";
+    description = "Python based ingestor for BloodHound, based on Impacket.";
+    homepage = "https://github.com/dirkjanm/BloodHound.py";
     license = licenses.mit;
     maintainers = with maintainers; [ exploitoverload ];
   };

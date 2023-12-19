@@ -1548,6 +1548,8 @@ self: super: with self; {
 
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
+  bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
+
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };

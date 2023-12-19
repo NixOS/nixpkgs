@@ -379,7 +379,7 @@ with pkgs;
 
   bloom = qt6Packages.callPackage ../development/tools/bloom { };
 
-  bloodhound-py = callPackage ../tools/security/bloodhound-py { };
+  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   bodyclose = callPackage ../development/tools/bodyclose { };
 
