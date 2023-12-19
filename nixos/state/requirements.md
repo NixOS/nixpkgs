@@ -1,5 +1,7 @@
 # State management in NixOS
 
+see also PR: https://github.com/NixOS/nixpkgs/pull/267365
+
 ## Motivating use cases
 
 There are various cases for the deployment descriptor to talk about
