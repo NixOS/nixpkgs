@@ -41,7 +41,7 @@ callPackage ../nginx/generic.nix args rec {
 
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.0-beta3 $out/bin/luajit-openresty
-    ln -s $out/nginx/sbin/nginx $out/bin/nginx
+    ln -s $out/nginx/bin/nginx $out/bin/nginx
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
   '';

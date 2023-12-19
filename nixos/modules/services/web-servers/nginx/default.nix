@@ -649,6 +649,8 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
+          Supported Nginx forks include `angie`, `openresty` and `tengine`.
+          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -1144,18 +1146,20 @@ in
       }
 
       {
-        assertion = cfg.package.pname != "nginxQuic" -> !(cfg.enableQuicBPF);
+        assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
         message = ''
           services.nginx.enableQuicBPF requires using nginxQuic package,
-          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
+          `services.nginx.package = pkgs.angieQuic;`.
         '';
       }
 
       {
-        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> all (host: !host.quic) (attrValues virtualHosts);
         message = ''
-          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
-          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
+          `services.nginx.package = pkgs.angieQuic;`.
         '';
       }
 

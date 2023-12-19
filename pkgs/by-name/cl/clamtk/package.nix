@@ -9,13 +9,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "clamtk";
-  version = "6.16";
+  version = "6.17";
 
   src = fetchFromGitHub {
     owner = "dave-theunsub";
     repo = "clamtk";
     rev = "v${version}";
-    hash = "sha256-o6OaXOXLykTUuF/taKnEhZRV04/3nlU5aNY05ANr1Ko=";
+    hash = "sha256-2tWVfRijf78OiKBpLUrZWFberIL8mjqtxvW/IjPn1IE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
