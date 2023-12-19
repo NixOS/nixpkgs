@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.10";
+  version = "6.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J9pIX0Y3znFjzeqxOoAxK5O30MG3db70pHYpoxELylE=";
+    hash = "sha256-ydBAe2TG8qBl0OuyksKzXAEFDMDcM3V0Yaqr3ExBhNU=";
   };
 
   propagatedBuildInputs = [
