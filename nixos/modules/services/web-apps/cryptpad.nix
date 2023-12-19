@@ -160,6 +160,9 @@ in {
     })
     (mkIf cfg.nginx.enable {
       assertions = [
+        { assertion = cfg.config.httpUnsafeOrigin != "";
+          message = "services.cryptpad.config.httpUnsafeOrigin is required";
+        }
         { assertion = lib.strings.hasPrefix "https://" cfg.config.httpUnsafeOrigin;
           message = "services.cryptpad.config.httpUnsafeOrigin must start with https://";
         }
