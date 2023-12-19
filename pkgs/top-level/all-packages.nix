@@ -500,6 +500,8 @@ with pkgs;
 
   circt = callPackage ../development/compilers/circt { };
 
+  circt-full = callPackage ../development/compilers/circt/circt-full.nix { };
+
   classicube = callPackage ../games/classicube { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
