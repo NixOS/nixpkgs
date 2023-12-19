@@ -33,3 +33,8 @@ update-git-commits.txt
 
 # JetBrains IDEA module declaration file
 /nixpkgs.iml
+
+# Botnix: omit packages not relevant to robotics
+pkgs/desktops/
+!pkgs/desktops/gnome
+pkgs/games/
