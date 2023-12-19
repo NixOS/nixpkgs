@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "format" "pic" "relro" "pie" ];
+  hardeningDisable = [ "format" "pic" "spectrev2" "relro" "pie" ];
 
   # Prevent kexec-tools from using uname to detect target, which is wrong in
   # cases like compiling for aarch32 on aarch64
