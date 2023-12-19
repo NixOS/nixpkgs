@@ -1,18 +1,21 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , callPackage
 , fetchFromGitHub
+
+, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
+
 , cmake
-, pkg-config
-, openscenegraph
 , curl
 , gdal
 , hdf5-cpp
 , LASzip
-, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
 , libe57format
 , libgeotiff
 , libtiff
 , libxml2
+, openscenegraph
+, pkg-config
 , postgresql
 , tiledb
 , xercesc
@@ -37,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    openscenegraph
     curl
     gdal
     hdf5-cpp
@@ -45,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgeotiff
     libtiff
     libxml2
+    openscenegraph
     postgresql
     tiledb
     xercesc
