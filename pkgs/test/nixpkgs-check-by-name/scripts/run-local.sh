@@ -63,4 +63,4 @@ echo >&2 -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
 cleanup_commands+=('rm "$tmp/tool"')
 
 echo >&2 "Running nixpkgs-check-by-name.."
-"$tmp/tool/bin/nixpkgs-check-by-name" "$tmp/merged"
+"$tmp/tool/bin/nixpkgs-check-by-name" --base "$tmp/base" "$tmp/merged"

@@ -87,7 +87,7 @@ jobs:
         run: pkgs/test/nixpkgs-check-by-name/scripts/fetch-tool.sh "$GITHUB_BASE_REF" result
       - name: Running nixpkgs-check-by-name
         run: |
-          if result/bin/nixpkgs-check-by-name .; then
+          if result/bin/nixpkgs-check-by-name --base "$base" .; then
             exit 0
           else
             exitCode=$?
