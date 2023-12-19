@@ -21,12 +21,7 @@ in {
   options.services.cryptpad = {
     enable = mkEnableOption (mdDoc "the Cryptpad service");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cryptpad;
-      defaultText = "pkgs.cryptpad";
-      description = mdDoc "Cryptpad package to use";
-    };
+    package = mkPackageOption pkgs "cryptpad" {};
 
     nginx = {
       enable = mkOption {
