@@ -424,7 +424,8 @@ pipe ((callFile ./common/builder.nix {}) ({
     hardeningUnsupportedFlags = optional is48 "stackprotector"
       ++ optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
-      ++ optionals (langFortran) [ "fortify" "format" ];
+      ++ optionals (langFortran) [ "fortify" "format" ]
+      ++ optional (!(targetPlatform.isx86_64 && atLeast8)) "spectrev2";
   };
 
   enableParallelBuilding = true;

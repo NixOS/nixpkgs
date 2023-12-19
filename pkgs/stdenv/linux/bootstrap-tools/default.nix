@@ -15,5 +15,5 @@ derivation ({
   langC = true;
   langCC = true;
   isGNU = true;
-  hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" "trivialautovarinit" ];
+  hardeningUnsupportedFlags = [ "fortify3" "spectrev2" "zerocallusedregs" "trivialautovarinit" ];
 } // extraAttrs)

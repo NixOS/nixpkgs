@@ -98,6 +98,7 @@ let
       ];
       hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
         lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ lib.optional (targetPlatform.isDarwin || !targetPlatform.isx86_64) "spectrev2"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
