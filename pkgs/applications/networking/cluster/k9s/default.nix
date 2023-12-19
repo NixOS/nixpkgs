@@ -20,7 +20,9 @@ buildGoModule rec {
 
   tags = [ "netgo" ];
 
-  vendorHash = "sha256-Wn/9vIyw99BudhhTnoN81Np70VInV6uo7Sru64nhPgk=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-9w44gpaB2C/F7hTImjdeabWVgTU5AA/7OSJmAqayrzU=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
