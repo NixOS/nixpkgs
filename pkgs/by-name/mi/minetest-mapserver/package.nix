@@ -23,6 +23,6 @@ buildGoModule rec {
     changelog = "https://github.com/${pname}/mapserver/releases/tag/v${version}";
     license = with licenses; [ mit cc-by-sa-30 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gm6k ];
   };
 }
