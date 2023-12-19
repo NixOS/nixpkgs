@@ -7,14 +7,16 @@ let
 
   inherit (lib) mdDoc;
 
-  # the config isn't json, but a js script which assigns a json value
-  conf_file = builtins.toFile "cryptpad_config.js" ''
+  # The Cryptpad configuration file isn't JSON, but a JavaScript source file that assigns a JSON value
+  # to a variable.
+  cryptpadConfigFile = builtins.toFile "cryptpad_config.js" ''
     module.exports = ${builtins.toJSON cfg.config}
   '';
 
   # Derive domain names for Nginx configuration from Cryptpad configuration
   mainDomain = lib.strings.removePrefix "https://" cfg.config.httpUnsafeOrigin;
   sandboxDomain = if isNull cfg.config.httpSafeOrigin then mainDomain else lib.strings.removePrefix "https://" cfg.config.httpSafeOrigin;
+
 in {
   options.services.cryptpad = {
     enable = mkEnableOption (mdDoc "the Cryptpad service");
@@ -42,6 +44,7 @@ in {
       type = types.bool;
       default = false;
       description = mdDoc ''
+        FIXME: Enables 'confinement' (explain what it does?)
         Enable the nixos systemd.services.cryptpad.confinement setting, including the necessary
         extra bind mounts.
       '';
@@ -49,13 +52,10 @@ in {
 
     config = mkOption {
       description = mdDoc ''
-        cryptpad backend settings.
-        Some of the settings here (like backend ports) will be re-used for nginx config default as well
-        See https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js for more extensive
-        comments and keys not described here
-        Note paths cannot be changed easily as they are also present indirectly in the nginx config
-        (for files that nginx serves directly)
-        Once setup, test your instance through `https://<domain>/checkup/`
+        Cryptpad configuration settings.
+        See https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js for a more extensive
+        reference documentation.
+        Test your deployed instance through `https://<domain>/checkup/`.
       '';
       type = types.submodule {
         freeformType = (pkgs.formats.json {}).type;
@@ -63,22 +63,23 @@ in {
           httpUnsafeOrigin = mkOption {
             type = types.str;
             example = "https://cryptpad.example.com";
-            description = mdDoc "Main cryptpad domain url";
+            default = "";
+            description = mdDoc "This is the URL that users will enter to load your instance";
           };
           httpSafeOrigin = mkOption {
             type = types.nullOr types.str;
-            example = "https://cryptpad-sandbox.example.com. Apparently optional but recommended.";
-            description = mdDoc "Cryptpad sandbox url";
+            example = "https://cryptpad-ui.example.com. Apparently optional but recommended.";
+            description = mdDoc "Cryptpad sandbox URL";
           };
           httpAddress = mkOption {
             type = types.str;
             default = "127.0.0.1";
-            description = mdDoc "Cryptpad listen address, also used in nginx to contact it";
+            description = mdDoc "Address on which the Node.js server should listen";
           };
           httpPort = mkOption {
             type = types.int;
             default = 3000;
-            description = mdDoc "Backend main port";
+            description = mdDoc "Port on which the Node.js server should listen";
           };
           maxWorkers = mkOption {
             type = types.nullOr types.int;
@@ -88,13 +89,18 @@ in {
           adminKeys = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = mdDoc "Admins allowed to admin panel. Keys can be found in the settings page of the user";
+            description = mdDoc "List of public signing keys of users that can access the admin panel";
             example = [ "[cryptpad-user1@my.awesome.website/YZgXQxKR0Rcb6r6CmxHPdAGLVludrAF2lEnkbx1vVOo=]" ];
           };
           logToStdout = mkOption {
             type = types.bool;
             default = true;
-            description = mdDoc "Whether to log to stdout (will go to systemd service). Level can be changed with logLevel.";
+            description = mdDoc "Controls whether log output should go to stdout of the systemd service";
+          };
+          logLevel = mkOption {
+            type = types.str;
+            default = "info";
+            description = mdDoc "Controls log level";
           };
           blockDailyCheck = mkOption {
             type = types.bool;
@@ -129,7 +135,7 @@ in {
         serviceConfig = {
           User = "cryptpad";
           Environment = [
-            "CRYPTPAD_CONFIG=${conf_file}"
+            "CRYPTPAD_CONFIG=${cryptpadConfigFile}"
             "HOME=%S/cryptpad"
           ];
           ExecStart = "${cfg.package}/bin/cryptpad";
@@ -143,7 +149,7 @@ in {
     (mkIf cfg.confinement {
       systemd.services.cryptpad = {
         serviceConfig.BindReadOnlyPaths = [
-          conf_file
+          cryptpadConfigFile
           # apparently needs proc for workers management
           "/proc"
           "/dev/urandom"
