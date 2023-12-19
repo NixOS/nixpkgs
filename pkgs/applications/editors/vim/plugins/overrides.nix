@@ -920,6 +920,10 @@ self: super: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   };
 
+  ollama-nvim = super.ollama-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   onehalf = super.onehalf.overrideAttrs {
     configurePhase = "cd vim";
   };
