@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --production install
 
     mkdir -p "$out/lib/node_modules/gitmoji-cli"
-    cp -r lib node_modules "$out/lib/node_modules/gitmoji-cli"
+    cp -r lib node_modules package.json "$out/lib/node_modules/gitmoji-cli"
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/gitmoji" \
       --add-flags "$out/lib/node_modules/gitmoji-cli/lib/cli.js"
