@@ -43,29 +43,17 @@ crudeUnquoteJSON() {
     cut -d \" -f2
 }
 
-prefixExpression() {
-    echo 'let
-      lib =
-        (import <nixpkgs/lib>)
-    '
-    if [[ "${1:-}" == "--simulate-pure-eval" ]]; then
-        echo '
-        .extend (final: prev: {
-          trivial = prev.trivial // {
-            inPureEvalMode = true;
-          };
-        })'
-    fi
-    echo '
-      ;
-      internal = import <nixpkgs/lib/fileset/internal.nix> {
-        inherit lib;
-      };
-    in
-    with lib;
-    with internal;
-    with lib.fileset;'
-}
+prefixExpression='
+  let
+    lib = import <nixpkgs/lib>;
+    internal = import <nixpkgs/lib/fileset/internal.nix> {
+      inherit lib;
+    };
+  in
+  with lib;
+  with internal;
+  with lib.fileset;
+'
 
 # Check that two nix expression successfully evaluate to the same value.
 # The expressions have `lib.fileset` in scope.
@@ -74,7 +62,7 @@ expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
     if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
-        --expr "$(prefixExpression) ($actualExpr)"); then
+        --expr "$prefixExpression ($actualExpr)"); then
         actualExitCode=$?
     else
         actualExitCode=$?
@@ -82,7 +70,7 @@ expectEqual() {
     actualStderr=$(< "$tmp"/actualStderr)
 
     if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
-        --expr "$(prefixExpression) ($expectedExpr)"); then
+        --expr "$prefixExpression ($expectedExpr)"); then
         expectedExitCode=$?
     else
         expectedExitCode=$?
@@ -110,7 +98,7 @@ expectEqual() {
 expectStorePath() {
     local expr=$1
     if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp"/stderr \
-        --expr "$(prefixExpression) ($expr)"); then
+        --expr "$prefixExpression ($expr)"); then
         cat "$tmp/stderr" >&2
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
@@ -123,16 +111,10 @@ expectStorePath() {
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
-    if [[ "$1" == "--simulate-pure-eval" ]]; then
-        maybePure="--simulate-pure-eval"
-        shift
-    else
-        maybePure=""
-    fi
     local expr=$1
     local expectedErrorRegex=$2
     if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
-        --expr "$(prefixExpression $maybePure) $expr"); then
+        --expr "$prefixExpression $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
     stderr=$(<"$tmp/stderr")
@@ -149,12 +131,12 @@ expectTrace() {
     local expectedTrace=$2
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
-        --expr "$(prefixExpression) trace ($expr)" || true
+        --expr "$prefixExpression trace ($expr)" || true
 
     actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
-        --expr "$(prefixExpression) traceVal ($expr)" || true
+        --expr "$prefixExpression traceVal ($expr)" || true
 
     actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
 
@@ -1331,7 +1313,7 @@ expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the 
 expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
 
 # recurseSubmodules = true is not supported on all Nix versions
-if [[ "$(nix-instantiate --eval --expr "$(prefixExpression) (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
+if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
     fetchGitSupportsSubmodules=1
 else
     fetchGitSupportsSubmodules=
