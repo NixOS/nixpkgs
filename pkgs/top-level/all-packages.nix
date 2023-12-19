@@ -15842,6 +15842,8 @@ with pkgs;
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
+  flutter-3_13_8 = flutterPackages.wrapFlutter flutterPackages.v3_13_8;
+  flutter-3_13_8-unwrapped = flutterPackages.v3_13_8;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;

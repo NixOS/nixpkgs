@@ -1,0 +1,64 @@
+diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
+index 2a47642..ee8f078 100644
+--- a/bin/internal/shared.sh
++++ b/bin/internal/shared.sh
+@@ -223,15 +223,6 @@ function shared::execute() {
+     >&2 echo "Error: Unable to find git in your PATH."
+     exit 1
+   fi
+-  # Test if the flutter directory is a git clone (otherwise git rev-parse HEAD
+-  # would fail)
+-  if [[ ! -e "$FLUTTER_ROOT/.git" ]]; then
+-    >&2 echo "Error: The Flutter directory is not a clone of the GitHub project."
+-    >&2 echo "       The flutter tool requires Git in order to operate properly;"
+-    >&2 echo "       to install Flutter, see the instructions at:"
+-    >&2 echo "       https://flutter.dev/get-started"
+-    exit 1
+-  fi
+ 
+   BIN_NAME="$(basename "$PROG_NAME")"
+ 
+@@ -251,7 +242,6 @@ function shared::execute() {
+   # and will corrupt each others' downloads.
+   #
+   # SHARED_NAME itself is prepared by the caller script.
+-  upgrade_flutter 7< "$SHARED_NAME"
+ 
+   case "$BIN_NAME" in
+     flutter*)
+diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
+index 13efbde879..467b3a7cbf 100644
+--- a/packages/flutter_tools/lib/src/cache.dart
++++ b/packages/flutter_tools/lib/src/cache.dart
+@@ -664,6 +664,7 @@ class Cache {
+ 
+   /// Update the cache to contain all `requiredArtifacts`.
+   Future<void> updateAll(Set<DevelopmentArtifact> requiredArtifacts, {bool offline = false}) async {
++    return;
+     if (!_lockEnabled) {
+       return;
+     }
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index 5d6d78639f..90a4dfa555 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -297,7 +297,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+           globals.flutterUsage.suppressAnalytics = true;
+         }
+ 
+-        globals.flutterVersion.ensureVersionFile();
+         final bool machineFlag = topLevelResults[FlutterGlobalOptions.kMachineFlag] as bool? ?? false;
+         final bool ci = await globals.botDetector.isRunningOnBot;
+         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
+@@ -306,11 +305,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults[FlutterGlobalOptions.kVersionCheckFlag] as bool? ?? false;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed(FlutterGlobalOptions.kVersionCheckFlag) && versionCheckFlag;
+ 
+-        if (topLevelResults.command?.name != 'upgrade' &&
+-            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
+-          await globals.flutterVersion.checkFlutterVersionFreshness();
+-        }
+-
+         // See if the user specified a specific device.
+         final String? specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+         if (specifiedDeviceId != null) {

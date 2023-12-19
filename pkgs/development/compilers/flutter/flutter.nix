@@ -31,6 +31,8 @@ let
 
       postPatch = ''
         patchShebangs --build ./bin/
+        # disable the auto update
+        substituteInPlace ./bin/internal/shared.sh --replace upgrade_flutter\ 7\<\ \"\$SHARED_NAME\" " "
       '';
 
       buildPhase = ''
