@@ -143,6 +143,10 @@ What could be done from `switch-boot` (e.g.)?
 - interactively guide the user through resolution choices for
   individual service migrations
   - or confirm actions before they are applied
+ 
+### `nixos-install` could just be a different set of state changes, implemented by a core module
+- let user set root password
+- initialize boot loader / firmware
 
 ### State management by reinforcing and generalizing the existing one (reifying)
 
