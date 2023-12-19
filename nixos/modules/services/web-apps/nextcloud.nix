@@ -1139,6 +1139,9 @@ in {
             try_files $uri /index.php$request_uri;
             expires 6M;
             access_log off;
+            location ~ \.mjs$ {
+              default_type text/javascript;
+            }
             location ~ \.wasm$ {
               default_type application/wasm;
             }

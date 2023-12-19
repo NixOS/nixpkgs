@@ -44,6 +44,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://opencyphal.org/";
     license = licenses.mit;
-    maintainers = [ teams.ororatech ];
+    maintainers = teams.ororatech.members;
   };
 }
