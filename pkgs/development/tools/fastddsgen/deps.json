@@ -1,0 +1,28 @@
+{
+ "https://repo.maven.apache.org/maven2/org": {
+  "apiguardian#apiguardian-api/1.1.0": {
+   "jar": "qarp/4rj4XoqGPeRdegrFiZ8JG+708qd+7spCwjc/dQ=",
+   "pom": "qUW5y1zZt3sscRhE5lnEPsBw71nZ9Qn6n0wYYbSGJxE="
+  },
+  "junit/jupiter#junit-jupiter-api/5.5.2": {
+   "jar": "JJov29OTGYfAKY0AygjtJISW4PwR4EY8CMT4LgzHmxw=",
+   "pom": "dqFdgNhYehpaOlsULSzrNzBPvZEZi6QlSG5X920IiGA="
+  },
+  "junit/jupiter#junit-jupiter-engine/5.5.2": {
+   "jar": "bXd9qYduLvegM26PCY+NdKWmT4EKo6Si9fO3Zs6Xg3s=",
+   "pom": "Ay/vTiVjCE05fq5IGjiAEPRDQBr2JSv9N312MH9vi/4="
+  },
+  "junit/platform#junit-platform-commons/1.5.2": {
+   "jar": "/ESv38DyDIXnGmbnlDKBrvO8Hg/WLS1po2y2kB5oLBA=",
+   "pom": "O9DU3tYyqK+MpYf7Z2QBnedxsda8uJrNViQ1oQCfqto="
+  },
+  "junit/platform#junit-platform-engine/1.5.2": {
+   "jar": "/yC6StjADvF7rvnFVRL5wC2aaHQPfxrAGppqoCOZMfg=",
+   "pom": "LUuVVVwh4IXrwd299C156x1VZA3Bk7G35hACQP0vGJ8="
+  },
+  "opentest4j#opentest4j/1.2.0": {
+   "jar": "WIEt5giY2Xb7ge87YtoFxmBMGP1KJJ9QRCgkefwoavI=",
+   "pom": "qW5nGBbB/4gDvex0ySQfAlvfsnfaXStO4CJmQFk2+ZQ="
+  }
+ }
+}

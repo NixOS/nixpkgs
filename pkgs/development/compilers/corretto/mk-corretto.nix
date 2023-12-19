@@ -42,32 +42,24 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
     done
   '';
 
+  # The Linux installer is placed at linux/universal/tar whereas the MacOS
+  # one is at mac/tar.
+  gradleBuildTask =
+    if stdenv.isDarwin then
+      ":installers:mac:tar:packageBuildResults"
+    else ":installers:linux:universal:tar:packageBuildResults";
 
-  buildPhase =
-    let
-      # The Linux installer is placed at linux/universal/tar whereas the MacOS
-      # one is at mac/tar.
-      task =
-        if stdenv.isDarwin then
-          ":installers:mac:tar:packageBuildResults"
-        else ":installers:linux:universal:tar:packageBuildResults";
-    in
-    ''
-      runHook preBuild
+  buildPhase = "gradleBuildPhase";
 
-      # Corretto's actual built is triggered via `gradle`.
-      gradle --console=plain --no-daemon ${task}
-
-      # Prepare for the installPhase so that it looks like if a normal
-      # OpenJDK had been built.
-      dir=build/jdkImageName/images
-      mkdir -p $dir
-      file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
-      tar -xzf $file -C $dir
-      mv $dir/amazon-corretto-* $dir/jdk
-
-      runHook postBuild
-    '';
+  postBuild = ''
+    # Prepare for the installPhase so that it looks like if a normal
+    # OpenJDK had been built.
+    dir=build/jdkImageName/images
+    mkdir -p $dir
+    file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
+    tar -xzf $file -C $dir
+    mv $dir/amazon-corretto-* $dir/jdk
+  '' + oldAttrs.postBuild or "";
 
   installPhase = oldAttrs.installPhase + ''
     # The installPhase will place everything in $out/lib/openjdk and

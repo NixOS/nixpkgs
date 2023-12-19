@@ -13,12 +13,7 @@ callPackage ./generic.nix rec {
     hash = "sha256-EfSByMceefUcnNmLSTnFNJs/iz1Q45X0BHHfj89d7PI=";
   };
 
-  postPatch = ''
-    substituteInPlace build.gradle \
-      --replace "gdxControllersVersion = '2.2.3-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
-  '';
-
-  depsHash = "sha256-MUUeWZUCVPakK1MJwn0lPnjAlLpPWB/J17Ad68XRcHg=";
+  depsPath = "deps-experienced.json";
 
   desktopName = "Experienced Pixel Dungeon";
 

@@ -13,7 +13,7 @@ callPackage ./generic.nix rec {
     hash = "sha256-3WKQCXFDyliObXaIRp3x0kRh3XeNd24SCoTgdFA8/rM=";
   };
 
-  depsHash = "sha256-yE6zuLnFLtNq76AhtyE+giGLF2vcCqF7sfIvcY8W6Lg=";
+  depsPath = "deps-rkpd2.json";
 
   desktopName = "Rat King Pixel Dungeon 2";
 

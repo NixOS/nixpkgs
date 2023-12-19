@@ -34,36 +34,6 @@ let
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];
 
-  # Fixed-output derivation that fetches the Java dependencies
-  javaDeps = stdenv.mkDerivation {
-    pname = "cie-java-deps";
-    inherit src version;
-
-    nativeBuildInputs = [ gradle ];
-
-    buildPhase = ''
-      # Run the fetchDeps task
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ls -l
-      gradle --no-daemon -b cie-java/build.gradle fetchDeps
-    '';
-
-    installPhase = ''
-      # Build a tree compatible with the maven repository format
-      pushd "$GRADLE_USER_HOME/caches/modules-2/files-2.1"
-      find -type f | awk -F/ -v OFS=/ -v out="$out" '{
-        infile = $0
-        gsub(/\./, "/", $2)
-        system("install -m644 -D "infile" "out"/"$2"/"$3"/"$4"/"$6)
-      }'
-      popd
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-jtaH8dBpnx8KMJe+jzJfkvcx1NO4nL5jsRO4+GI+d0c=";
-  };
-
 in
 
 stdenv.mkDerivation {
@@ -106,26 +76,42 @@ stdenv.mkDerivation {
   # libraries and the Java application builds.
   preConfigure = "pushd libs";
 
-  postBuild = ''
+  enableParallelBuilding = true;
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jre}"
+    "--build-file" "cie-java/build.gradle"
+  ];
+
+  gradleBuildTask = "standalone";
+
+  buildPhase = ''
+    runHook preBuild
+
+    ninjaBuildPhase
+    pushd ../..
+    gradleBuildPhase
     popd
 
-    # Use the packages in javaDeps for both plugins and dependencies
-    localRepo="maven { url uri('${javaDeps}') }"
-    sed -i cie-java/settings.gradle -e "1i \
-      pluginManagement { repositories { $localRepo } }"
-    substituteInPlace cie-java/build.gradle \
-      --replace 'mavenCentral()' "$localRepo"
+    runHook postBuild
+  '';
 
-    # Build the Java application
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle standalone \
-      --no-daemon \
-      --offline \
-      --parallel \
-      --info -Dorg.gradle.java.home=${jre} \
-      --build-file cie-java/build.gradle
+  doCheck = true;
 
-    pushd libs/build
+  checkPhase = ''
+    runHook preCheck
+
+    mesonCheckPhase
+    pushd ../..
+    gradleCheckPhase
+    popd
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -157,7 +143,10 @@ stdenv.mkDerivation {
     strip-nondeterminism "$out/share/cieid/cieid.jar"
   '';
 
-  passthru = { inherit javaDeps; };
+  passthru.updateDeps = gradle.updateDeps {
+    inherit pname;
+    preBuild = "cd ../..";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";

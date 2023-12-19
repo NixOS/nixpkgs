@@ -6,85 +6,57 @@
 }:
 
 let
+  pname = "openjfx-modular-sdk";
   major = "11";
   update = ".0.18";
   build = "1";
   repover = "${major}${update}+${build}";
-  gradle_ = (gradle_7.override {
-    java = openjdk11-bootstrap;
-  });
+  jdk = openjdk11-bootstrap;
+  gradle = gradle_7;
 
-  makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}-${build}";
+in stdenv.mkDerivation {
+  inherit pname;
+  version = "${major}${update}-${build}";
 
-    src = fetchFromGitHub {
-      owner = "openjdk";
-      repo = "jfx${major}u";
-      rev = repover;
-      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
-    };
-
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
-
-    dontUseCmakeConfigure = true;
-
-    postPatch = ''
-      substituteInPlace buildSrc/linux.gradle \
-        --replace ', "-Werror=implicit-function-declaration"' ""
-    '';
-
-    config = writeText "gradle.properties" (''
-      CONF = Release
-      JDK_HOME = ${openjdk11-bootstrap.home}
-    '' + args.gradleProperties or "");
-
-    buildPhase = ''
-      runHook preBuild
-
-      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ln -s $config gradle.properties
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
-
-      runHook postBuild
-    '';
-  } // args);
-
-  # Fake build to pre-download deps into fixed-output derivation.
-  # We run nearly full build because I see no other way to download everything that's needed.
-  # Anyone who knows a better way?
-  deps = makePackage {
-    pname = "openjfx-deps";
-
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME -type f -regex '.*/modules.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-      rm -rf $out/tmp
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-syceJMUEknBDCHK8eGs6rUU3IQn+HnQfURfCrDxYPa9=";
+  src = fetchFromGitHub {
+    owner = "openjdk";
+    repo = "jfx${major}u";
+    rev = repover;
+    sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
   };
 
-in makePackage {
-  pname = "openjfx-modular-sdk";
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+  nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
-  gradleProperties = ''
+  dontUseCmakeConfigure = true;
+
+  config = writeText "gradle.properties" ''
+    CONF = Release
+    JDK_HOME = ${jdk.home}
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
-  preBuild = ''
-    swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
-    substituteInPlace build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }' \
-      --replace 'name: SWT_FILE_NAME' "files('$swtJar')"
+  postPatch = ''
+    substituteInPlace buildSrc/linux.gradle \
+      --replace ', "-Werror=implicit-function-declaration"' ""
+
+    ln -s $config gradle.properties
   '';
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps${major}.json;
+  };
+
+  preBuild = ''
+    export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
+    export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
+  '';
+
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" ];
+
+  gradleBuildTask = "sdk";
 
   installPhase = ''
     cp -r build/modular-sdk $out
@@ -94,21 +66,28 @@ in makePackage {
 
   postFixup = ''
     # Remove references to bootstrap.
+    export openjdkOutPath='${jdk.outPath}'
     find "$out" -name \*.so | while read lib; do
-      new_refs="$(patchelf --print-rpath "$lib" | sed -E 's,:?${openjdk11-bootstrap}[^:]*,,')"
+      new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
-
     # Remove licenses, otherwise they may conflict with the ones included in the openjdk
     rm -rf $out/modules_legal/*
   '';
 
-  disallowedReferences = [ openjdk11-bootstrap ];
-
-  passthru.deps = deps;
+  disallowedReferences = [ jdk gradle.jdk ];
 
   # Uses a lot of RAM, OOMs otherwise
   requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru.updateDeps = gradle.updateDeps {
+    attrPath = "openjfx${major}.override { withWebKit = true; }";
+    depsPath = "deps${major}.json";
+    availablePackages = [
+      "pkg-config"
+      "glib" "gtk2" "gtk3" "xorg.libXtst"
+    ];
+  };
 
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";

@@ -99,6 +99,8 @@ rec {
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
+      passthru.jdk = defaultJava;
+
       meta = with lib; {
         inherit platforms;
         description = "Enterprise-grade build system";
@@ -147,4 +149,44 @@ rec {
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
+
+  wrapGradle = {
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook,
+    }:
+    gradle-unwrapped:
+    lib.makeOverridable (args:
+    let
+      gradle = gradle-unwrapped.override args;
+      build-support = ../../../../build-support/gradle;
+    in symlinkJoin {
+      name = "gradle-${gradle.version}";
+
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (substituteAll {
+              src = /${build-support}/setup-hook.sh;
+              # jdk used for keytool
+              inherit (gradle) jdk;
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
+
+      passthru = {
+        fetchDeps = import /${build-support}/fetch-deps.nix { inherit lib mitm-cache; };
+        updateDeps = callPackage /${build-support}/update-deps.nix { inherit gradle; };
+        inherit (gradle) jdk;
+      };
+
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or 0) + 1;
+      };
+    }) { };
 }
