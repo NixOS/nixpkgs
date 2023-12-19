@@ -120,7 +120,14 @@ in
       settings.unix_socket_permissions = "0770";
     };
 
+    services.openssh = {
+      enable = true;
+      settings.PasswordAuthentication = false;
+      settings.PermitRootLogin = "no";
+    };
+
     environment.systemPackages = with pkgs; [
+      git
       hut # For interacting with the Sourcehut APIs via CLI
       (callPackage ./srht-gen-oauth-tok.nix { }) # To automatically generate OAuth tokens
     ];
@@ -136,10 +143,17 @@ in
           access-token "OAUTH-TOKEN"
         }
       '';
+      sshConfig = pkgs.writeText "ssh-config" ''
+        Host git.${domain}
+             IdentityFile = ~/.ssh/id_rsa
+      '';
     in
     ''
       start_all()
       machine.wait_for_unit("multi-user.target")
+      # For some reason, OpenSSH fails to start on boot with code 226/NAMESPACE
+      machine.systemctl("start sshd.service")
+      machine.wait_for_unit("sshd.service")
 
       # Testing metasrht
       machine.wait_for_unit("metasrht-api.service")
@@ -151,7 +165,7 @@ in
 
       ## Create a test user for subsequent tests
       machine.succeed("echo ${userPass} | metasrht-manageuser -ps -e ${userName}@${domain}\
-                       -t active_free ${userName}");
+                       -t active_paying ${userName}");
 
       ## Obtain a OAuth token to be used for querying APIs directly
       (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
@@ -159,16 +173,31 @@ in
       machine.execute("mkdir -p ~/.config/hut/")
       machine.execute("sed s/OAUTH-TOKEN/" + token + "/ ${hutConfig} > ~/.config/hut/config")
 
-      # Testing buildsrht
-      machine.wait_for_unit("buildsrht.service")
-      machine.wait_for_open_port(5002)
-      machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
-      #machine.wait_for_unit("buildsrht-worker.service")
+      ## Set up the SSH key for Git
+      machine.execute("ssh-keygen -q -N \"\" -t rsa -f ~/.ssh/id_rsa")
+      machine.execute("cat ${sshConfig} > ~/.ssh/config")
+      machine.succeed("hut meta ssh-key create ~/.ssh/id_rsa.pub")
 
       # Testing gitsrht
       machine.wait_for_unit("gitsrht-api.service")
       machine.wait_for_unit("gitsrht.service")
       machine.wait_for_unit("gitsrht-webhooks.service")
       machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
+
+      ## Create a repo and push its contents to the instance
+      machine.execute("git init test && cd test")
+      machine.execute("echo \"Hello world!\" > test/hello.txt")
+      machine.execute("cd test && git add .")
+      machine.execute("cd test && git commit -m \"Initial commit\"")
+      machine.succeed("cd test && git remote add origin gitsrht@git.${domain}:~${userName}/test")
+      machine.execute("( echo -n 'git.${domain} '; cat /etc/ssh/ssh_host_ed25519_key.pub ) > ~/.ssh/known_hosts")
+      machine.succeed("hut git create test")
+      machine.succeed("cd test && git push --set-upstream origin master")
+
+      # Testing buildsrht
+      machine.wait_for_unit("buildsrht.service")
+      machine.wait_for_open_port(5002)
+      machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
+      #machine.wait_for_unit("buildsrht-worker.service")
     '';
 })
