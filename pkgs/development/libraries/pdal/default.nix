@@ -1,4 +1,5 @@
 { lib, stdenv
+, callPackage
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -19,14 +20,14 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
   version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JKwa89c05EfZ/FxOkj8lYmw0o2EgSqafRDIV2mTpZ5E=";
   };
 
@@ -102,9 +103,13 @@ stdenv.mkDerivation rec {
     runHook preCheck
     # tests are flaky and they seem to fail less often when they don't run in
     # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
+    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
     runHook postCheck
   '';
+
+  passthru.tests = {
+    pdal = callPackage ./tests.nix { pdal = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
@@ -113,4 +118,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.geospatial.members;
     platforms = platforms.all;
   };
-}
+})
