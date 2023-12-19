@@ -19969,7 +19969,7 @@ with pkgs;
 
   rye = darwin.apple_sdk_11_0.callPackage ../development/tools/rye {
     inherit (darwin.apple_sdk_11_0) Libsystem;
-    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices SystemConfiguration;
   };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
