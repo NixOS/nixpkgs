@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , lib
 , substituteAll
 , pam
@@ -214,6 +215,13 @@ in
     tar -xf ${srcs.translations}
   '';
 
+  patches = [
+    # Backport fix for tests broken by expired test certificates.
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=ececb678b8362e3be8e02768ddd5e4197d87dc2a";
+      hash = "sha256-TUfKlwNxUTOJ95VLqwVD+ez1xhu7bW6xZlgIaCyIiNg=";
+    })
+  ];
   ### QT/KDE
   #
   # configure.ac assumes that the first directory that contains headers and
