@@ -25,12 +25,15 @@ buildPythonPackage rec {
   # tests require docker
   doCheck = false;
 
-  pythonImportsCheck = [ "dockerspawner" ];
+  pythonImportsCheck = [
+    "dockerspawner"
+  ];
 
   meta = with lib; {
-    description = "Dockerspawner: A custom spawner for Jupyterhub";
-    homepage = "https://jupyter.org";
+    description = "A custom spawner for Jupyterhub";
+    homepage = "https://github.com/jupyterhub/dockerspawner";
+    changelog = "https://github.com/jupyterhub/dockerspawner/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
