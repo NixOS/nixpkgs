@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.cryptpad;
 
-  inherit (lib) mdDoc;
+  inherit (lib) strings mdDoc mkOption types mkIf mkMerge;
 
   # The Cryptpad configuration file isn't JSON, but a JavaScript source file that assigns a JSON value
   # to a variable.
@@ -14,14 +12,14 @@ let
   '';
 
   # Derive domain names for Nginx configuration from Cryptpad configuration
-  mainDomain = lib.strings.removePrefix "https://" cfg.config.httpUnsafeOrigin;
-  sandboxDomain = if isNull cfg.config.httpSafeOrigin then mainDomain else lib.strings.removePrefix "https://" cfg.config.httpSafeOrigin;
+  mainDomain = strings.removePrefix "https://" cfg.config.httpUnsafeOrigin;
+  sandboxDomain = if isNull cfg.config.httpSafeOrigin then mainDomain else strings.removePrefix "https://" cfg.config.httpSafeOrigin;
 
 in {
   options.services.cryptpad = {
-    enable = mkEnableOption (mdDoc "the Cryptpad service");
+    enable = lib.mkEnableOption "cryptpad";
 
-    package = mkPackageOption pkgs "cryptpad" {};
+    package = lib.mkPackageOption pkgs "cryptpad" {};
 
     nginx = {
       enable = mkOption {
@@ -164,10 +162,10 @@ in {
         { assertion = cfg.config.httpUnsafeOrigin != "";
           message = "services.cryptpad.config.httpUnsafeOrigin is required";
         }
-        { assertion = lib.strings.hasPrefix "https://" cfg.config.httpUnsafeOrigin;
+        { assertion = strings.hasPrefix "https://" cfg.config.httpUnsafeOrigin;
           message = "services.cryptpad.config.httpUnsafeOrigin must start with https://";
         }
-        { assertion = isNull cfg.config.httpSafeOrigin || lib.strings.hasPrefix "https://" cfg.config.httpSafeOrigin;
+        { assertion = isNull cfg.config.httpSafeOrigin || strings.hasPrefix "https://" cfg.config.httpSafeOrigin;
           message = "services.cryptpad.config.httpSafeOrigin must start with https:// (or be unset)";
         }
       ];
@@ -193,6 +191,8 @@ in {
           {
             "${mainDomain}" = {
               serverAliases = if isNull cfg.config.httpSafeOrigin then [ ] else [ sandboxDomain ];
+              # NOTE: I see no reason not to enable ACME and forcing SSL if you enable Nginx for
+              # Cryptpad, IMHO. Given the security context of Cryptpad, it should only ever be used with SSL.
               enableACME = true;
               forceSSL = true;
               locations."/" = {
