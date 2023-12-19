@@ -50,8 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "BigQuery Data Transfer API client library";
-    homepage = "https://github.com/googleapis/python-bigquery-datatransfer";
-    changelog = "https://github.com/googleapis/python-bigquery-datatransfer/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-datatransfer";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-datatransfer-v${version}/packages/google-cloud-bigquery-datatransfer/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
