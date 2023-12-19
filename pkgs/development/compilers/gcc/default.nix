@@ -411,7 +411,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     hardeningUnsupportedFlags = lib.optional is48 "stackprotector"
       ++ lib.optional (!atLeast11) "zerocallusedregs"
       ++ lib.optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
-      ++ lib.optionals (langFortran) [ "fortify" "format" ];
+      ++ lib.optionals (langFortran) [ "fortify" "format" ]
+      ++ lib.optional (!(targetPlatform.isx86_64 && atLeast8)) "spectrev2";
   };
 
   enableParallelBuilding = true;
