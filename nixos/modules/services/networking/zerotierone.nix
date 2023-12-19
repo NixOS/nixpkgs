@@ -60,7 +60,7 @@ in
         chown -R root:root /var/lib/zerotier-one
       '' + (concatMapStrings (netId: ''
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks) + ''
+      '') cfg.joinNetworks) + optionalString (cfg.localConf != null) ''
         if [ -L "${localConfFilePath}" ]
         then
           rm ${localConfFilePath}
@@ -68,7 +68,6 @@ in
         then
           mv ${localConfFilePath} ${localConfFilePath}.bak
         fi
-      '' + optionalString (cfg.localConf != null) ''
         ln -s ${localConfFile} ${localConfFilePath}
       '';
 
