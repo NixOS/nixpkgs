@@ -13,6 +13,7 @@
 , glm
 , gbenchmark
 , libcap
+, libavif
 , SDL2
 , pipewire
 , pixman
@@ -40,14 +41,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.13.19";
+  version = "3.14.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-WKQgVbuHvTbZnvTU5imV35AKZ4AF0EDsdESBZwVH7+M=";
+    hash = "sha256-lJt6JVolorQdrhumkW9yjyItxqpw6ZtEUbkjNqzHfb8=";
   };
 
   patches = [
@@ -109,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXres
     xorg.libXtst
     xorg.libXxf86vm
+    libavif
     libdrm
     libliftoff
     SDL2
