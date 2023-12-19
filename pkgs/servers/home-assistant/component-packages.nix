@@ -1040,13 +1040,14 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       dynalite-devices
+      dynalite-panel
       fnv-hash-fast
       home-assistant-frontend
       janus
       pillow
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: dynalite-panel
+    ];
     "eafm" = ps: with ps; [
       aioeafm
     ];
@@ -5713,6 +5714,7 @@
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
+    "dynalite"
     "eafm"
     "easyenergy"
     "ecobee"
