@@ -5,7 +5,7 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hare-ev";
   version = "unstable-2023-10-31";
 
