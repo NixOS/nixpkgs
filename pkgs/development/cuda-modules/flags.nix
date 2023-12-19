@@ -1,15 +1,9 @@
-# Type aliases
-# Gpu :: AttrSet
-#   - See the documentation in ./gpus.nix.
 {
-  config,
-  cudaCapabilities ? (config.cudaCapabilities or []),
-  cudaForwardCompat ? (config.cudaForwardCompat or true),
+  pkgs,
   lib,
+  config,
   cudaVersion,
   hostPlatform,
-  # gpus :: List Gpu
-  gpus,
 }:
 let
   inherit (lib)
@@ -19,23 +13,6 @@ let
     strings
     trivial
     ;
-
-  # Flags are determined based on your CUDA toolkit by default.  You may benefit
-  # from improved performance, reduced file size, or greater hardware support by
-  # passing a configuration based on your specific GPU environment.
-  #
-  # cudaCapabilities :: List Capability
-  # List of hardware generations to build.
-  # E.g. [ "8.0" ]
-  # Currently, the last item is considered the optional forward-compatibility arch,
-  # but this may change in the future.
-  #
-  # cudaForwardCompat :: Bool
-  # Whether to include the forward compatibility gencode (+PTX)
-  # to support future GPU generations.
-  # E.g. true
-  #
-  # Please see the accompanying documentation or https://github.com/NixOS/nixpkgs/pull/205351
 
   # isSupported :: Gpu -> Bool
   isSupported =
@@ -61,7 +38,7 @@ let
 
   # supportedGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version.
-  supportedGpus = builtins.filter isSupported gpus;
+  supportedGpus = builtins.filter isSupported config.gpus;
 
   # defaultGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version and we want to build for by default.
@@ -105,7 +82,7 @@ let
   # they must be in the user-specified cudaCapabilities.
   # NOTE: We don't need to worry about mixes of Jetson and non-Jetson devices here -- there's
   # sanity-checking for all that in below.
-  jetsonTargets = lists.intersectLists jetsonComputeCapabilities cudaCapabilities;
+  jetsonTargets = lists.intersectLists jetsonComputeCapabilities config.cudaCapabilities;
 
   # dropDot :: String -> String
   dropDot = ver: builtins.replaceStrings ["."] [""] ver;
@@ -236,7 +213,7 @@ let
             Exactly one of the following must be true:
             - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
             - No CUDA capabilities belong to Jetson devices.
-            See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
+            See cudaPackages.config.gpus for a list of architectures supported by this version of Nixpkgs.
           ''
           jetsonBuildSufficientCondition
         && jetsonBuildNecessaryCondition;
@@ -385,6 +362,6 @@ asserts.assertMsg
     ;
 }
 // formatCapabilities {
-  cudaCapabilities = if cudaCapabilities == [] then defaultCapabilities else cudaCapabilities;
-  enableForwardCompat = cudaForwardCompat;
+  cudaCapabilities = if config.cudaCapabilities == [] then defaultCapabilities else config.cudaCapabilities;
+  enableForwardCompat = config.cudaForwardCompat;
 }

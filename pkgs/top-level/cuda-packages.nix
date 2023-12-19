@@ -21,164 +21,36 @@
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
-  callPackage,
-  cudaVersion,
   lib,
   hostPlatform,
-  newScope,
   pkgs,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
   __attrsFailEvaluation ? true,
 }:
 let
   inherit (lib)
     attrsets
-    fixedPoints
+    lists
     modules
-    options
     strings
     trivial
-    types
     versions
     ;
-  # Utility function
-  # nullableOr : Optional a -> a -> a
-  nullableOr = nullable: default: if nullable != null then nullable else default;
 
-  evaluatedModules = modules.evalModules {
-    modules = [
-      {
-        options.cudaVersion = options.mkOption {
-          description = "The version of CUDA to use.";
-          type = types.str;
-        };
-        config = {
-          inherit cudaVersion;
-        };
-      }
-      ../development/cuda-modules/modules
-    ];
-  };
-
-  genericManifestBuilderFn =
-    {
-      callPackage,
-      pname,
-      redistName,
-      manifests,
-      libPath ? null,
-      overrideAttrsFns ? [ ],
-    }:
-    let
-      drv = callPackage ../development/cuda-modules/generic-builders/manifest.nix {
-        inherit
-          pname
-          redistName
-          manifests
-          libPath
-          ;
-      };
-    in
-    builtins.foldl' (drv: overrideAttrsFn: drv.overrideAttrs overrideAttrsFn) drv overrideAttrsFns;
-
-  # Backbone
-  gpus = builtins.import ../development/cuda-modules/gpus.nix;
-  nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
-  flags = callPackage ../development/cuda-modules/flags.nix { inherit cudaVersion gpus; };
-  passthruFunction =
-    (
-      final:
-      {
-        inherit cudaVersion lib pkgs;
-        inherit
-          gpus
-          nvccCompatibilities
-          flags
-          evaluatedModules
-          ;
-        cudaMajorVersion = versions.major cudaVersion;
-        cudaMajorMinorVersion = versions.majorMinor cudaVersion;
-        # cudaVersionOlder : Version -> Boolean
-        cudaVersionOlder = strings.versionOlder cudaVersion;
-        # cudaVersionAtLeast : Version -> Boolean
-        cudaVersionAtLeast = strings.versionAtLeast cudaVersion;
-
-        # Maintain a reference to the final cudaPackages.
-        # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
-        # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
-        # provide the `cudaPackages` from the final scope -- that is, the *current* scope.
-        cudaPackages = final;
-
-        # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
-        cudaFlags = flags;
-
-        # Exposed as cudaPackages.backendStdenv.
-        # This is what nvcc uses as a backend,
-        # and it has to be an officially supported one (e.g. gcc11 for cuda11).
-        #
-        # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
-        # when linked with other C++ libraries.
-        # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
-        # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-        backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix { };
-
-        # Loose packages
-        cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit { };
-        saxpy = final.callPackage ../development/cuda-modules/saxpy { };
-        nccl = final.callPackage ../development/cuda-modules/nccl { };
-        nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
-      }
-      # Setup hooks
-      // builtins.import ../development/cuda-modules/setup-hooks { inherit (final) callPackage; }
-      # Redistributable packages
-      // (
-        let
-          redistName = "cuda";
-          inherit (evaluatedModules.config.${redistName}) manifests;
-
-          # NOTE: The attribute values need to be callPackage'd before being used.
-          fixupFns = builtins.import ../development/cuda-modules/cuda/fixups.nix;
-          # NOTE: fixupFn is good to go as-is.
-          metaFixupFn = builtins.import ../development/cuda-modules/cuda/meta-fixup.nix {
-            inherit lib manifests nullableOr;
-          };
-
-          # Builder function which builds a single redist package for a given platform.
-          # buildRedistPackage : PackageName -> Derivation
-          buildRedistPackage =
-            pname:
-            genericManifestBuilderFn {
-              inherit (final) callPackage;
-              inherit manifests pname redistName;
-              overrideAttrsFns = [
-                metaFixupFn
-              ] ++ lib.optionals (builtins.hasAttr pname fixupFns) [ (final.callPackage fixupFns.${pname} { }) ];
-            };
-
-          redistPackages = trivial.pipe manifests.feature [
-            # Get all the package names
-            builtins.attrNames
-            # Build the redist packages
-            (trivial.flip attrsets.genAttrs buildRedistPackage)
-          ];
-        in
-        redistPackages
-      )
-      # CUDNN
-      // (builtins.import ../development/cuda-modules/generic-builders/multiplex.nix {
-        inherit (final) callPackage;
-        inherit
-          cudaVersion
-          flags
-          mkVersionedPackageName
-          hostPlatform
-          lib
-          evaluatedModules
-          ;
-        pname = "cudnn";
-        shimsFn = ../development/cuda-modules/cudnn/shims.nix;
-        fixupFn = ../development/cuda-modules/cudnn/fixup.nix;
-      })
-    );
+  inherit
+    (modules.evalModules {
+      modules = [
+        {
+          inherit (pkgs.config) cudaSupport;
+          cudaCapabilities = pkgs.config.cudaCapabilities or [ ];
+          cudaForwardCompat = pkgs.config.cudaForwardCompat or true;
+        }
+        ../development/cuda-modules/modules
+      ];
+    })
+    config
+    ;
 
   mkVersionedPackageName =
     name: version:
@@ -187,48 +59,254 @@ let
       (strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version))
     ];
 
-  composedExtension =
-    fixedPoints.composeManyExtensions
-      [
-        # (callPackage ../development/cuda-modules/cutensor/extension.nix {
-        #   inherit cudaVersion flags mkVersionedPackageName;
-        # })
-        # (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
-        #   inherit cudaVersion flags mkVersionedPackageName;
-        #   pname = "tensorrt";
-        #   releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
-        #   shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
-        #   fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
-        # })
-        # (callPackage ../test/cuda/cuda-samples/extension.nix { inherit cudaVersion; })
-        # (callPackage ../test/cuda/cuda-library-samples/extension.nix { })
-      ];
+  makeCudaPackages =
+    cudaVersion: final:
+    let
+      # NOTE: Use of `final.callPackage` for `callPackageOnAttrs` doesn't run the risk of infinite recursion,
+      # as the `final` argument is not used to compute the attribute names.
+      callPackageOnAttrs = attrsets.mapAttrs (_: value: final.callPackage value { });
 
-  # cudaPackages = customisation.makeScope newScope (
-  #   fixedPoints.extends composedExtension passthruFunction
-  # );
+      # Flags used to enable different features of cudaPackages -- we cannot use final.callPackage
+      # because we use `flags` to determine the presence of certain packages, which would cause
+      # infinite recursion.
+      flags = builtins.import ../development/cuda-modules/flags.nix {
+        inherit
+          pkgs
+          lib
+          config
+          cudaVersion
+          hostPlatform
+          ;
+      };
 
-  cudaPackages = pkgs.makeScopeWithSplicing' {
-    otherSplices = pkgs.generateSplicesForMkScope "cudaPackages";
-    f = fixedPoints.extends composedExtension passthruFunction;
-    # f = final: {
-    #   # Recursive reference to the initial cudaPackages' cudaVersion.
-    #   inherit (config.cudaPackages) cudaVersion;
-    #   gpus = builtins.import ../gpus.nix;
-    #   nvccCompatibilities = builtins.import ../nvcc-compatibilities.nix;
-    #   cudaMajorVersion = versions.major final.cudaVersion;
-    #   cudaMajorMinorVersion = versions.majorMinor final.cudaVersion;
-    #   # flags = final.callPackage ../flags.nix { };
-    #   # Exposed as cudaPackages.backendStdenv.
-    #   # This is what nvcc uses as a backend,
-    #   # and it has to be an officially supported one (e.g. gcc11 for cuda11).
-    #   #
-    #   # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
-    #   # when linked with other C++ libraries.
-    #   # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
-    #   # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-    #   backendStdenv = final.callPackage ../backend-stdenv.nix { };
-    # };
-  };
+      # Fixed-length cudaVersion strings
+      cudaMajorVersion = versions.major cudaVersion;
+      cudaMajorMinorVersion = versions.majorMinor cudaVersion;
+
+      # cudaVersionOlder : Version -> Boolean
+      cudaVersionOlder = strings.versionOlder cudaVersion;
+      # cudaVersionAtLeast : Version -> Boolean
+      cudaVersionAtLeast = strings.versionAtLeast cudaVersion;
+
+      genericManifestBuilderFn =
+        {
+          pname,
+          redistName,
+          manifests,
+          generalFixupFn ? { },
+          indexedFixupFn ? { },
+          libPath ? null,
+        }:
+        trivial.pipe ../development/cuda-modules/generic-builders/manifest.nix [
+          (
+            path:
+            final.callPackage path {
+              inherit
+                pname
+                redistName
+                manifests
+                libPath
+                ;
+            }
+          )
+          (drv: drv.overrideAttrs generalFixupFn)
+          (drv: drv.overrideAttrs (indexedFixupFn.${pname} or { }))
+        ];
+
+      genericMultiplexBuilderFn =
+        pname:
+        (builtins.import ../development/cuda-modules/generic-builders/multiplex.nix {
+          inherit (final) callPackage;
+          inherit
+            cudaVersion
+            mkVersionedPackageName
+            hostPlatform
+            lib
+            config
+            flags
+            pname
+            ;
+        });
+    in
+    # Basic things callPackage should have available
+    {
+      inherit lib pkgs;
+      inherit config cudaVersion flags;
+      inherit cudaVersionAtLeast cudaVersionOlder;
+      inherit cudaMajorVersion cudaMajorMinorVersion;
+
+      # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
+      cudaFlags = flags;
+
+      # Maintain a reference to the final cudaPackages.
+      # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
+      # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
+      # provide the `cudaPackages` from the final scope -- that is, the *current* scope.
+      cudaPackages = final;
+    }
+    # Loose packages
+    // {
+      cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit { };
+      saxpy = final.callPackage ../development/cuda-modules/saxpy { };
+      nccl = final.callPackage ../development/cuda-modules/nccl { };
+      nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
+      # Exposed as cudaPackages.backendStdenv.
+      # This is what nvcc uses as a backend,
+      # and it has to be an officially supported one (e.g. gcc11 for cuda11).
+      #
+      # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
+      # when linked with other C++ libraries.
+      # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
+      # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
+      backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix { };
+    }
+    # Setup hooks
+    // callPackageOnAttrs (builtins.import ../development/cuda-modules/setup-hooks)
+    # Redistributable packages
+    // (
+      let
+        redistName = "cuda";
+        inherit (config.${redistName}) fixupFns;
+        manifests =
+          let
+            default = {
+              redistrib = { };
+              feature = { };
+            };
+          in
+          config.${redistName}.manifests.${cudaVersion} or default;
+        generalFixupFn = final.callPackage fixupFns.generalFixupFn { inherit manifests; };
+        indexedFixupFn = callPackageOnAttrs (builtins.import fixupFns.indexedFixupFn);
+        buildRedistPackage =
+          pname:
+          genericManifestBuilderFn {
+            inherit
+              manifests
+              pname
+              redistName
+              generalFixupFn
+              indexedFixupFn
+              ;
+          };
+        redistPackages = trivial.pipe manifests.feature [
+          # Get all the package names
+          builtins.attrNames
+          # Build the redist packages
+          (trivial.flip attrsets.genAttrs buildRedistPackage)
+        ];
+      in
+      redistPackages
+    )
+    # CuTensor
+    // (
+      let
+        # A release is supported if it has a libPath that matches our CUDA version for our platform.
+        # LibPath are not constant across the same release -- one platform may support fewer
+        # CUDA versions than another.
+        # redistArch :: Optional String
+        redistArch = flags.getRedistArch hostPlatform.system;
+        redistName = "cutensor";
+        pname = "libcutensor";
+        inherit (config.${redistName}) fixupFns;
+        # Our cudaVersion tells us which version of CUDA we're building against.
+        # The subdirectories in lib/ tell us which versions of CUDA are supported.
+        # Typically the names will look like this:
+        #
+        # - 10.2
+        # - 11
+        # - 11.0
+        # - 12
+        # libPath :: String
+        libPath = if cudaVersion == "10.2" then cudaVersion else cudaMajorVersion;
+        # Our build for cutensor is actually multiplexed -- we build a cutensor package for each
+        # version of CUDA that cutensor supports.
+        # We do this by filtering out the leaves of the manifest tree which don't contain the libPath we want.
+        # manifests :: { ${version} = { redistrib, feature }; }
+        manifests =
+          attrsets.filterAttrs
+            (
+              _version: manifests:
+              lists.all trivial.id [
+                # Platform must be supported
+                (redistArch != null)
+                (
+                  attrsets.attrByPath
+                    [
+                      pname
+                      redistArch
+                    ]
+                    null
+                    manifests.feature != null
+                )
+              ]
+            )
+            config.${redistName}.manifests;
+
+        generalFixupFn = final.callPackage fixupFns.generalFixupFn { };
+
+        redistPackages =
+          attrsets.mapAttrs'
+            (version: manifests: {
+              name = mkVersionedPackageName pname version;
+              value = genericManifestBuilderFn {
+                inherit
+                  manifests
+                  pname
+                  redistName
+                  generalFixupFn
+                  libPath
+                  ;
+              };
+            })
+            manifests;
+      in
+      redistPackages
+      // attrsets.optionalAttrs (redistPackages != { }) {
+        ${pname} =
+          let
+            # Get the newest version in our pruned manifests.
+            nameOfNewest = trivial.pipe manifests [
+              # Get all the versions
+              builtins.attrNames
+              # Sort in descending order
+              (lists.sort (trivial.flip strings.versionOlder))
+              # Get the first element
+              builtins.head
+              # Get the name of the newest version
+              (mkVersionedPackageName pname)
+            ];
+          in
+          redistPackages.${nameOfNewest};
+      }
+    )
+    # CUDNN
+    // (genericMultiplexBuilderFn "cudnn")
+    # TensorRT
+    // (genericMultiplexBuilderFn "tensorrt");
 in
-cudaPackages // { inherit __attrsFailEvaluation; }
+trivial.pipe config.versions [
+  (builtins.map (
+    cudaVersion: {
+      name = mkVersionedPackageName "cudaPackages" cudaVersion;
+      value =
+        lib.recurseIntoAttrs (
+          makeScopeWithSplicing' {
+            otherSplices = generateSplicesForMkScope "cudaPackages";
+            f = makeCudaPackages cudaVersion;
+          }
+        )
+        // {
+          inherit __attrsFailEvaluation;
+        };
+    }
+  ))
+  builtins.listToAttrs
+]
+
+# TODO(@connorbaker): migrate tests away from extensions.
+#   composedExtension =
+#     fixedPoints.composeManyExtensions
+#       [
+#         # (callPackage ../test/cuda/cuda-samples/extension.nix { inherit cudaVersion; })
+#         # (callPackage ../test/cuda/cuda-library-samples/extension.nix { })
+#       ];

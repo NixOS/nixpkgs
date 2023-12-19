@@ -1,10 +1,5 @@
 # A function which when callPackage'd returns a function to be given to overrideAttrs.
-{
-  lib,
-  manifests,
-  nullableOr,
-  ...
-}:
+{ lib, manifests, ... }:
 prevAttrs:
 prevAttrs
 // {
@@ -12,8 +7,12 @@ prevAttrs
   meta = prevAttrs.meta // {
     license = lib.licenses.nvidiaCudaRedist // {
       url =
+        let
+          default = "${prevAttrs.pname}/LICENSE.txt";
+          nullableDesired = manifests.redistrib.${prevAttrs.pname}.license_path;
+        in
         "https://developer.download.nvidia.com/compute/cuda/redist/"
-        + nullableOr "${prevAttrs.pname}/LICENSE.txt" manifests.redistrib.${prevAttrs.pname}.license_path;
+        + (if nullableDesired != null then nullableDesired else default);
     };
   };
 }

@@ -1,6 +1,6 @@
 {
+  config,
   lib,
-  nvccCompatibilities,
   cudaVersion,
   buildPackages,
   overrideCC,
@@ -8,7 +8,7 @@
   wrapCCWith,
 }:
 let
-  gccMajorVersion = nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
+  gccMajorVersion = config.nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
   # We use buildPackages (= pkgsBuildHost) because we look for a gcc that
   # runs on our build platform, and that produces executables for the host
   # platform (= platform on which we deploy and run the downstream packages).
