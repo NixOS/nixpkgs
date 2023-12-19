@@ -26,7 +26,7 @@ let
         done
 
         install -m755 -d "$fontsdir/svg"
-        for font in svg/**.{svg,woff}; do
+        for font in {svg,woff}/**.{svg,woff}; do
           install -Dt "$fontsdir/svg" -m644 "$font"
         done
       '';
