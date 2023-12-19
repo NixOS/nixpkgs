@@ -22,6 +22,7 @@
 , qtbase
 , qtdeclarative
 , qtwayland
+, runtimeShell
 , sqlite
 , systemd
 , wrapQtAppsHook
@@ -123,11 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     guiExec=$(grep 'Exec=' $out/share/applications/lomiri-url-dispatcher-gui.desktop | cut -d'=' -f2-)
 
     cat <<EOF >$guiScript
-    #!/bin/sh
+    #!${runtimeShell}
     $guiExec
     EOF
     chmod +x $guiScript
-    sed -i $out/share/applications/lomiri-url-dispatcher-gui.desktop -e "s@Exec=$guiExec@Exec=$guiScript@"
+    substituteInPlace $out/share/applications/lomiri-url-dispatcher-gui.desktop \
+      --replace "Exec=$guiExec" "Exec=$guiScript"
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
