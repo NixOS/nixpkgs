@@ -19,17 +19,18 @@
 , moltenvk
 , AppKit
 , Cocoa
+, volk
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.268.0";
+  version = "1.3.274";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
+    rev = "v${version}";
+    hash = "sha256-J08hpV7xN1cMWfhBvuByiSnS+bS8T2gmB1fDg0hi3wI=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     glslang
     vulkan-headers
     vulkan-loader
+    volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
@@ -73,7 +75,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "${buildPackages.wayland-scanner}/bin/wayland-scanner";
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
@@ -97,9 +99,9 @@ stdenv.mkDerivation rec {
       development by enabling developers to verify their applications correct
       use of the Vulkan API.
     '';
-    homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }
