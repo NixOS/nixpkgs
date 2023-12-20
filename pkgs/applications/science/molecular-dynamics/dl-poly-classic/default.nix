@@ -20,6 +20,9 @@ stdenv.mkDerivation {
     cp -v ../build/MakePAR Makefile
   '';
 
+  # https://gitlab.com/DL_POLY_Classic/dl_poly/-/blob/master/README
+  env.NIX_CFLAGS_COMPILE = "-fallow-argument-mismatch";
+
   buildPhase = ''
     make dlpoly
   '';
@@ -33,7 +36,7 @@ stdenv.mkDerivation {
     homepage = "https://www.ccp5.ac.uk/DL_POLY_C";
     description = "DL_POLY Classic is a general purpose molecular dynamics simulation package";
     license = licenses.bsdOriginal;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.costrouc ];
   };
 }

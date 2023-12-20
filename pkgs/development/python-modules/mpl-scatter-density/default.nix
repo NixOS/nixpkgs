@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
   version = "0.7";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

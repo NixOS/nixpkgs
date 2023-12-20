@@ -163,12 +163,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
     homepage = "https://proxysql.com/";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ ajs124 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ gpl3Only ];
+    maintainers = teams.helsinki-systems.members;
+    platforms = platforms.unix;
   };
 })

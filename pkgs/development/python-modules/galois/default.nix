@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Lt55HUTBmrg0IX9oWUdh5zyxccViKq0X+9bhDEgUZjQ=";
+    hash = "sha256-dWYnD+Byh0orRg20/nhu8ILooFBeHysxQ403boDVqYk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

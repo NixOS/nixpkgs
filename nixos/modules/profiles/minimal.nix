@@ -21,6 +21,8 @@ with lib;
   # Perl is a default package.
   environment.defaultPackages = mkDefault [ ];
 
+  environment.stub-ld.enable = false;
+
   # The lessopen package pulls in Perl.
   programs.less.lessopen = mkDefault null;
 

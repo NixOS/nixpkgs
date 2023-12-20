@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mercantile";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapbox";

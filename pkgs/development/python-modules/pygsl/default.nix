@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pygsl";
   version = "2.3.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

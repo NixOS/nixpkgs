@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "opcua-widgets";
   version = "0.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";

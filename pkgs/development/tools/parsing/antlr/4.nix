@@ -15,7 +15,8 @@ let
   mkAntlr = {
     version, sourceSha256, jarSha256,
     extraCppBuildInputs ? [],
-    extraCppCmakeFlags ? []
+    extraCppCmakeFlags ? [],
+    extraPatches ? [ ]
   }: rec {
     source = fetchFromGitHub {
       owner = "antlr";
@@ -81,7 +82,8 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
-        sourceRoot = "${source.name}/runtime/Cpp";
+
+        patches = extraPatches;
 
         outputs = [ "out" "dev" "doc" ];
 
@@ -89,6 +91,8 @@ let
         buildInputs =
           lib.optional stdenv.isDarwin CoreFoundation ++
           extraCppBuildInputs;
+
+        cmakeDir = "../runtime/Cpp";
 
         cmakeFlags = extraCppCmakeFlags;
 
@@ -162,6 +166,12 @@ in {
     jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
     extraCppBuildInputs = [ utf8cpp ]
       ++ lib.optional stdenv.isLinux libuuid;
+    extraCppCmakeFlags = [
+      "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
+    ];
+    extraPatches = [
+      ./utf8cpp.patch
+    ];
   }).antlr;
 
   antlr4_8 = (mkAntlr {

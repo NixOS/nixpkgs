@@ -18,7 +18,7 @@ let
     in
     if cfg.extraPlugins == []
       then base
-      else base.withPackages (_: cfg.extraPlugins);
+      else base.withPackages cfg.extraPlugins;
 
   toStr = value:
     if true == value then "yes"
@@ -391,12 +391,11 @@ in
       };
 
       extraPlugins = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        example = literalExpression "with pkgs.postgresql_15.pkgs; [ postgis pg_repack ]";
+        type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
+        default = _: [];
+        example = literalExpression "ps: with ps; [ postgis pg_repack ]";
         description = lib.mdDoc ''
-          List of PostgreSQL plugins. PostgreSQL version for each plugin should
-          match version for `services.postgresql.package` value.
+          List of PostgreSQL plugins.
         '';
       };
 
@@ -405,7 +404,7 @@ in
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <https://www.postgresql.org/docs/15/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
           for an overview of `postgresql.conf`.
 
           ::: {.note}

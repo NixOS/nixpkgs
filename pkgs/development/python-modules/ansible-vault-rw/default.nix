@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ansible-vault-rw";
   version = "2.1.0";
+  format = "setuptools";
   src = fetchPypi {
     pname = "ansible-vault";
     inherit version;

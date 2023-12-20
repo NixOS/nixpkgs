@@ -1,0 +1,25 @@
+{
+  "name": "zigbee2mqtt-networkmap",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "vue": "^2.7.15"
+  },
+  "devDependencies": {
+    "@material/mwc-button": "^0.27.0",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "@babel/core": "^7.0.0",
+    "@babel/eslint-parser": "^7.0.0",
+    "eslint": "^8.42.0",
+    "eslint-plugin-vue": "^9.14.1",
+    "lodash.isequal": "^4.5.0",
+    "vue-d3-network": "^0.1.28"
+  }
+}

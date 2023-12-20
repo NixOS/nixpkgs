@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "strategies";
   version = "0.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

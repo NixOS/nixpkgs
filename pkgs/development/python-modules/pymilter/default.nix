@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pymilter";
   version = "1.0.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sdgathman";

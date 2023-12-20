@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "markuppy";
   version = "1.14";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "MarkupPy";

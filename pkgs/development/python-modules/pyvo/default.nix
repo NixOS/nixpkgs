@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "pyvo";
   version = "1.4.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 

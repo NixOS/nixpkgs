@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
   version = "2.13.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.4";
 

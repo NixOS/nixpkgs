@@ -101,4 +101,6 @@ in
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
   } // packagesAliases;
+
+  __attrsFailEvaluation = true;
 }

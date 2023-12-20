@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "zope-hookable";
   version = "5.4";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.hookable";

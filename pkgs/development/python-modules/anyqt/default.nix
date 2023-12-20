@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "anyqt";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ales-erjavec";

@@ -11,17 +11,18 @@
 , hamlib
 , qtkeychain
 , pkg-config
+, cups
 }:
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.29.2";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     rev = "v${version}";
-    hash = "sha256-g7WgFQPMOaD+3YllZqpykslmPYT/jNVK7/1xaPdbti4=";
+    hash = "sha256-WgLUIWggUKHPjVa6brkJzeRMZli/qhfu4jatf+JYIRU=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +36,9 @@ stdenv.mkDerivation rec {
     qtwebchannel
     hamlib
     qtkeychain
-  ];
+  ] ++ (lib.optionals stdenv.isDarwin [
+    cups
+  ]);
 
   nativeBuildInputs = [
     wrapQtAppsHook

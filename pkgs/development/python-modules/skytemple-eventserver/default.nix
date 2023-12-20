@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "skytemple-eventserver";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

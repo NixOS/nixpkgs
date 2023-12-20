@@ -25,6 +25,7 @@ in
 buildPythonPackage rec {
   pname = "ctap-keyring-device";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;

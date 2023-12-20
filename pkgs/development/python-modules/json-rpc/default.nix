@@ -5,6 +5,7 @@ let
 in buildPythonPackage rec {
   pname = "json-rpc";
   version = "1.15.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

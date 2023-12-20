@@ -281,7 +281,7 @@ in let
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
     # non-cross build in cross builds.
-    libclc = callPackage ./libclc {
+    libclc = callPackage ../common/libclc.nix {
       inherit buildLlvmTools;
     };
   });

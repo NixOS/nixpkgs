@@ -17,10 +17,10 @@ Ideally we would like to use `-fmacro-prefix-map=` feature of `gcc` as:
   -fmacro-prefix-map=/nix/store/$hash1-nlohmann-json-ver=/nix/store/eeee.eee-nlohmann-json-ver
   -fmacro-prefix-map=/nix/...
 
-In practice it quickly exhausts argument lengtth limit due to `gcc`
+In practice it quickly exhausts argument length limit due to `gcc`
 deficiency: https://gcc.gnu.org/PR111527
 
-Until it;s fixed let's hardcode header mangling if $NIX_STORE variable
+Until it's fixed let's hardcode header mangling if $NIX_STORE variable
 is present in the environment.
 
 Tested as:

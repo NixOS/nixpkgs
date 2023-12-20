@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, geos
+, geos_3_11
 , pytestCheckHook
 , cython
 , numpy
@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pygeos";
   version = "0.14";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    geos # for geos-config
+    geos_3_11 # for geos-config
     cython
   ];
 

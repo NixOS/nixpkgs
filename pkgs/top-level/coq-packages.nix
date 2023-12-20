@@ -8,7 +8,7 @@ let
   mkCoqPackages' = self: coq:
     let callPackage = self.callPackage; in {
       inherit coq lib;
-      coqPackages = self;
+      coqPackages = self // { coqPackages = self.coqPackages // { recurseForDerivations = false; }; };
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix
         {inherit lib stdenv fetchzip; };
@@ -189,22 +189,26 @@ in rec {
   coq_8_16 = mkCoq "8.16";
   coq_8_17 = mkCoq "8.17";
   coq_8_18 = mkCoq "8.18";
+  coq_8_19 = mkCoq "8.19";
 
-  coqPackages_8_5 = mkCoqPackages coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coq_8_6;
-  coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages_8_10 = mkCoqPackages coq_8_10;
-  coqPackages_8_11 = mkCoqPackages coq_8_11;
-  coqPackages_8_12 = mkCoqPackages coq_8_12;
-  coqPackages_8_13 = mkCoqPackages coq_8_13;
-  coqPackages_8_14 = mkCoqPackages coq_8_14;
-  coqPackages_8_15 = mkCoqPackages coq_8_15;
-  coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages_8_17 = mkCoqPackages coq_8_17;
-  coqPackages_8_18 = mkCoqPackages coq_8_18;
-  coqPackages = recurseIntoAttrs coqPackages_8_18;
+  coqPackages_8_5 = mkCoqPackages coq_8_5 // { __attrsFailEvaluation = true; };
+  coqPackages_8_6 = mkCoqPackages coq_8_6 // { __attrsFailEvaluation = true; };
+  coqPackages_8_7 = mkCoqPackages coq_8_7 // { __attrsFailEvaluation = true; };
+  coqPackages_8_8 = mkCoqPackages coq_8_8 // { __attrsFailEvaluation = true; };
+  coqPackages_8_9 = mkCoqPackages coq_8_9 // { __attrsFailEvaluation = true; };
+  coqPackages_8_10 = mkCoqPackages coq_8_10 // { __attrsFailEvaluation = true; };
+  coqPackages_8_11 = mkCoqPackages coq_8_11 // { __attrsFailEvaluation = true; };
+  coqPackages_8_12 = mkCoqPackages coq_8_12 // { __attrsFailEvaluation = true; };
+  coqPackages_8_13 = mkCoqPackages coq_8_13 // { __attrsFailEvaluation = true; };
+  coqPackages_8_14 = mkCoqPackages coq_8_14 // { __attrsFailEvaluation = true; };
+  coqPackages_8_15 = mkCoqPackages coq_8_15 // { __attrsFailEvaluation = true; };
+  coqPackages_8_16 = mkCoqPackages coq_8_16 // { __attrsFailEvaluation = true; };
+  coqPackages_8_17 = mkCoqPackages coq_8_17 // { __attrsFailEvaluation = true; };
+  coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
+  coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
+  coqPackages =
+    let cp = recurseIntoAttrs coqPackages_8_18;
+    in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };
   coq = coqPackages.coq;
 
 }

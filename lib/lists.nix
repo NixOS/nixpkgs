@@ -4,6 +4,7 @@ let
   inherit (lib.strings) toInt;
   inherit (lib.trivial) compare min id;
   inherit (lib.attrsets) mapAttrs;
+  inherit (lib.lists) sort;
 in
 rec {
 
@@ -591,9 +592,15 @@ rec {
      the second argument.  The returned list is sorted in an increasing
      order.  The implementation does a quick-sort.
 
+     See also [`sortOn`](#function-library-lib.lists.sortOn), which applies the
+     default comparison on a function-derived property, and may be more efficient.
+
      Example:
-       sort (a: b: a < b) [ 5 3 7 ]
+       sort (p: q: p < q) [ 5 3 7 ]
        => [ 3 5 7 ]
+
+     Type:
+       sort :: (a -> a -> Bool) -> [a] -> [a]
   */
   sort = builtins.sort or (
     strictLess: list:
@@ -611,6 +618,42 @@ rec {
     in
       if len < 2 then list
       else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
+
+  /*
+    Sort a list based on the default comparison of a derived property `b`.
+
+    The items are returned in `b`-increasing order.
+
+    **Performance**:
+
+    The passed function `f` is only evaluated once per item,
+    unlike an unprepared [`sort`](#function-library-lib.lists.sort) using
+    `f p < f q`.
+
+    **Laws**:
+    ```nix
+    sortOn f == sort (p: q: f p < f q)
+    ```
+
+    Example:
+      sortOn stringLength [ "aa" "b" "cccc" ]
+      => [ "b" "aa" "cccc" ]
+
+    Type:
+      sortOn :: (a -> b) -> [a] -> [a], for comparable b
+  */
+  sortOn = f: list:
+    let
+      # Heterogenous list as pair may be ugly, but requires minimal allocations.
+      pairs = map (x: [(f x) x]) list;
+    in
+      map
+        (x: builtins.elemAt x 1)
+        (sort
+          # Compare the first element of the pairs
+          # Do not factor out the `<`, to avoid calls in hot code; duplicate instead.
+          (a: b: head a < head b)
+          pairs);
 
   /* Compare two lists element-by-element.
 

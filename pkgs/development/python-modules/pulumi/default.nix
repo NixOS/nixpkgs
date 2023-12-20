@@ -15,6 +15,7 @@ buildPythonPackage rec {
   inherit (pulumi) version src;
 
   pname = "pulumi";
+  format = "setuptools";
 
   disabled = isPy27;
 

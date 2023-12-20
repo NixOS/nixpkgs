@@ -35,6 +35,7 @@ let
       domain = cfg.hostName;
       muc = "conference.${cfg.hostName}";
       focus = "focus.${cfg.hostName}";
+      jigasi = "jigasi.${cfg.hostName}";
     };
     bosh = "//${cfg.hostName}/http-bind";
     websocket = "wss://${cfg.hostName}/xmpp-websocket";
@@ -145,6 +146,16 @@ in
       '';
     };
 
+    jigasi.enable = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Whether to enable jigasi instance and configure it to connect to Prosody.
+
+        Additional configuration is possible with <option>services.jigasi</option>.
+      '';
+    };
+
     nginx.enable = mkOption {
       type = bool;
       default = true;
@@ -224,7 +235,7 @@ in
           roomDefaultPublicJids = true;
           extraConfig = ''
             storage = "memory"
-            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
+            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}", "jigasi@auth.${cfg.hostName}" }
           '';
           #-- muc_room_cache_size = 1000
         }
@@ -262,6 +273,9 @@ in
         (mkAfter ''
           Component "focus.${cfg.hostName}" "client_proxy"
             target_address = "focus@auth.${cfg.hostName}"
+
+          Component "jigasi.${cfg.hostName}" "client_proxy"
+            target_address = "jigasi@auth.${cfg.hostName}"
 
           Component "speakerstats.${cfg.hostName}" "speakerstats_component"
             muc_component = "conference.${cfg.hostName}"
@@ -356,7 +370,10 @@ in
         ${config.services.prosody.package}/bin/prosodyctl mod_roster_command subscribe focus.${cfg.hostName} focus@auth.${cfg.hostName}
         ${config.services.prosody.package}/bin/prosodyctl register jibri auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-auth-secret)"
         ${config.services.prosody.package}/bin/prosodyctl register recorder recorder.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"
+      '' + optionalString cfg.jigasi.enable ''
+        ${config.services.prosody.package}/bin/prosodyctl register jigasi auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jigasi-user-secret)"
       '';
+
       serviceConfig = {
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
@@ -371,13 +388,13 @@ in
 
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service");
+      before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service") ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
       };
 
       script = let
-        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optionals cfg.jigasi.enable [ "jigasi-user-secret" "jigasi-component-secret" ]) ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
       in
       ''
         cd /var/lib/jitsi-meet
@@ -391,6 +408,7 @@ in
 
         # for easy access in prosody
         echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
+        echo "JIGASI_COMPONENT_SECRET=$(cat jigasi-component-secret)" >> secrets-env
         chown root:jitsi-meet secrets-env
         chmod 640 secrets-env
       ''
@@ -590,6 +608,20 @@ in
         usageTimeout = "0";
         disableCertificateVerification = true;
         stripFromRoomDomain = "conference.";
+      };
+    };
+
+    services.jigasi = mkIf cfg.jigasi.enable {
+      enable = true;
+      xmppHost = "localhost";
+      xmppDomain = cfg.hostName;
+      userDomain = "auth.${cfg.hostName}";
+      userName = "jigasi";
+      userPasswordFile = "/var/lib/jitsi-meet/jigasi-user-secret";
+      componentPasswordFile = "/var/lib/jitsi-meet/jigasi-component-secret";
+      bridgeMuc = "jigasibrewery@internal.${cfg.hostName}";
+      config = {
+        "org.jitsi.jigasi.ALWAYS_TRUST_MODE_ENABLED" = "true";
       };
     };
   };

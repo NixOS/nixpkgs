@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
   version = "0.18.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

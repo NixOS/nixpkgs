@@ -153,5 +153,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
+    mainProgram = "gscan2pdf";
   };
 }

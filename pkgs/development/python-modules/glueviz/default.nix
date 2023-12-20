@@ -30,6 +30,7 @@
 buildPythonPackage rec {
   pname = "glueviz";
   version = "1.16.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

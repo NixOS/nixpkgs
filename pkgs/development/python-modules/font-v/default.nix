@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "font-v";
   version = "2.1.0";
+  format = "setuptools";
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {

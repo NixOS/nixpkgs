@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -38,8 +39,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # See https://github.com/linuxmint/cinnamon-screensaver/issues/446#issuecomment-1819580053
-    ./fix-broken-theming-with-pygobject-3-46.patch
+    # Fix broken theming with pygobject >= 3.46.0
+    # https://github.com/linuxmint/cinnamon-screensaver/issues/446
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon-screensaver/commit/37ab8ed18f35591f2bd99043f12c06d98b4527db.patch";
+      hash = "sha256-4YSithosyTLy8OFu6DEhLT4c+EGEg84EenTKAiBiWo4=";
+    })
   ];
 
   nativeBuildInputs = [

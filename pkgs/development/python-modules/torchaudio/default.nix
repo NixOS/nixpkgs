@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.1.1";
+  version = "2.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5UlnOGXXFu1p9M5B+Ixc9DW5hLZ1nskv81Y+McbWu6Q=";
+    hash = "sha256-kSBDQtOi0ZEnIg801kTtvqBAEbzaUNhWG/9jot2O3o4=";
   };
 
   patches = [
@@ -60,17 +61,7 @@ buildPythonPackage rec {
     ffmpeg-full
     pybind11
     sox
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.libcurand.dev
-    cudaPackages.libcurand.lib
-    cudaPackages.cuda_cudart # cuda_runtime.h and libraries
-    cudaPackages.cuda_cccl.dev # <thrust/*>
-    cudaPackages.cuda_nvtx.dev
-    cudaPackages.cuda_nvtx.lib # -llibNVToolsExt
-    cudaPackages.libcublas.dev
-    cudaPackages.libcublas.lib
-    cudaPackages.libcufft.dev
-    cudaPackages.libcufft.lib
+    torch.cxxdev
   ];
 
   propagatedBuildInputs = [

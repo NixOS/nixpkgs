@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pytun";
   version = "2.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     rev = "v${version}";

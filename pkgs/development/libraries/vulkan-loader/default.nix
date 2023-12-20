@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ vulkan-headers ]
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libxcb libXrandr wayland ];
+    ++ lib.optionals stdenv.isLinux [ libX11 libxcb libXrandr wayland ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include" ]
     ++ lib.optional stdenv.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "LunarG Vulkan loader";
     homepage    = "https://www.lunarg.com";
-    platforms   = platforms.unix;
+    platforms   = platforms.unix ++ platforms.windows;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
     broken = (version != vulkan-headers.version);

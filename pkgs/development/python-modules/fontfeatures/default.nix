@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "fontfeatures";
   version = "1.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "fontFeatures";

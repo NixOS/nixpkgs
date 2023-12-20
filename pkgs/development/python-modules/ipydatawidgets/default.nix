@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "ipydatawidgets";
   version = "4.3.5";
+  format = "setuptools";
 
   disabled = isPy27;
 

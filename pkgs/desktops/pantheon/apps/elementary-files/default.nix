@@ -14,7 +14,6 @@
 , libhandy
 , granite
 , pango
-, elementary-dock
 , bamf
 , sqlite
 , zeitgeist
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.5.2";
+  version = "6.5.3";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-YwXyqZ0exwQ3Qx+VWWyTTmhqCVr6be8tqzS1k3Luo8o=";
+    sha256 = "sha256-geJLHRo1Bd2oFT+UtirHj9FVSFTFMK/v/5h+NF9woFo=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
-    elementary-dock
     glib
     granite
     gtk3

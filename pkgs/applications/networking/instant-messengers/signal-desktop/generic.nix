@@ -1,12 +1,4 @@
-{ pname
-, dir
-, version
-, version-aarch64 ? ""
-, hash
-, hash-aarch64 ? ""
-, url
-, url-aarch64 ? ""
-, stdenv
+{ stdenv
 , lib
 , fetchurl
 , autoPatchelfHook
@@ -55,13 +47,18 @@
 , wayland
 }:
 
+{ pname
+, dir
+, version
+, hash
+, url
+}:
+
 let
   inherit (stdenv) targetPlatform;
   ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
-  final-version = if targetPlatform.isAarch64 then version-aarch64 else version;
 in stdenv.mkDerivation rec {
-  inherit pname;
-  version = final-version;
+  inherit pname version;
 
   # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
@@ -72,8 +69,7 @@ in stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
-    url = if targetPlatform.isAarch64 then url-aarch64 else url;
-    hash = if targetPlatform.isAarch64 then hash-aarch64 else hash;
+    inherit url hash;
   };
 
   nativeBuildInputs = [
@@ -163,8 +159,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
-      # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
@@ -177,8 +172,11 @@ in stdenv.mkDerivation rec {
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
   '';
 
-  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
-  passthru.tests.application-launch = nixosTests.signal-desktop;
+  passthru = {
+    # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+    tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     description = "Private, simple, and secure messenger";
@@ -187,11 +185,11 @@ in stdenv.mkDerivation rec {
       "Signal Android" or "Signal iOS" app.
     '';
     homepage = "https://signal.org/";
-    changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${final-version}";
+    changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mic92 equirosa urandom bkchr ];
     mainProgram = pname;
-    platforms = if builtins.stringLength version-aarch64 > 0 then [ "x86_64-linux" "aarch64-linux" ] else [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

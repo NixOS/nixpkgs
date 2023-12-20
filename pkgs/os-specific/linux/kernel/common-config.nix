@@ -678,23 +678,23 @@ let
       VBOXGUEST = option no;
       DRM_VBOXVIDEO = option no;
 
-      XEN                         = option yes;
-      XEN_DOM0                    = option yes;
-      PCI_XEN                     = option yes;
-      HVC_XEN                     = option yes;
-      HVC_XEN_FRONTEND            = option yes;
-      XEN_SYS_HYPERVISOR          = option yes;
-      SWIOTLB_XEN                 = option yes;
-      XEN_BACKEND                 = option yes;
-      XEN_BALLOON                 = option yes;
-      XEN_BALLOON_MEMORY_HOTPLUG  = option yes;
-      XEN_EFI                     = option yes;
-      XEN_HAVE_PVMMU              = option yes;
-      XEN_MCE_LOG                 = option yes;
-      XEN_PVH                     = option yes;
-      XEN_PVHVM                   = option yes;
-      XEN_SAVE_RESTORE            = option yes;
-      XEN_SELFBALLOONING          = whenOlder "5.3" yes;
+      XEN                         = mkIf stdenv.is64bit (option yes);
+      XEN_DOM0                    = mkIf stdenv.is64bit (option yes);
+      PCI_XEN                     = mkIf stdenv.is64bit (option yes);
+      HVC_XEN                     = mkIf stdenv.is64bit (option yes);
+      HVC_XEN_FRONTEND            = mkIf stdenv.is64bit (option yes);
+      XEN_SYS_HYPERVISOR          = mkIf stdenv.is64bit (option yes);
+      SWIOTLB_XEN                 = mkIf stdenv.is64bit (option yes);
+      XEN_BACKEND                 = mkIf stdenv.is64bit (option yes);
+      XEN_BALLOON                 = mkIf stdenv.is64bit (option yes);
+      XEN_BALLOON_MEMORY_HOTPLUG  = mkIf stdenv.is64bit (option yes);
+      XEN_EFI                     = mkIf stdenv.is64bit (option yes);
+      XEN_HAVE_PVMMU              = mkIf stdenv.is64bit (option yes);
+      XEN_MCE_LOG                 = mkIf stdenv.is64bit (option yes);
+      XEN_PVH                     = mkIf stdenv.is64bit (option yes);
+      XEN_PVHVM                   = mkIf stdenv.is64bit (option yes);
+      XEN_SAVE_RESTORE            = mkIf stdenv.is64bit (option yes);
+      XEN_SELFBALLOONING          = mkIf stdenv.is64bit (whenOlder "5.3" yes);
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;

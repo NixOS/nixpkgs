@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "tailer";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "six8";

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pinboard";
   version = "2.1.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lionheart";

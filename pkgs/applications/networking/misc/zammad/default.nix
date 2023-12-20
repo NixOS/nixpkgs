@@ -24,7 +24,7 @@
 
 let
   pname = "zammad";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = applyPatches {
 
@@ -101,7 +101,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-PVQ2L+Io6Ct9UHvfoQmxV01ECG8fj0+xKwpMfAvD7q0=";
+      hash = "sha256-u72ZTpcUvFa1gaWi4lzTQa+JsI85jU4n8r1JhqFnCj4=";
     };
 
     yarnPreBuild = ''

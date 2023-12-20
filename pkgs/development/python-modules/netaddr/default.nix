@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "netaddr";
   version = "0.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

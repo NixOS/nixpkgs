@@ -559,6 +559,15 @@ in {
         '';
       };
 
+      databaseDir = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          The directory containing the database and logs.
+        '';
+        default = cfg.configDir;
+        defaultText = literalExpression "config.${opt.configDir}";
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -660,7 +669,7 @@ in {
               -no-browser \
               -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
               -config=${cfg.configDir} \
-              -data=${cfg.dataDir} \
+              -data=${cfg.databaseDir} \
               ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;

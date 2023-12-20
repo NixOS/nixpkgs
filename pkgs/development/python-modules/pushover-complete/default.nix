@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pushover-complete";
   version = "1.1.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "cld2-cffi";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +22,5 @@ buildPythonPackage rec {
     description = "CFFI bindings around Google Chromium's embedded compact language detection library (CLD2)";
     homepage = "https://github.com/GregBowyer/cld2-cffi";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
   };
 }

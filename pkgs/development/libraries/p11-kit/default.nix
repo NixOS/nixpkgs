@@ -16,13 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.25.0";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    hash = "sha256-paLiRYgYshuedgDgW2nEsv4/Loq6qFyQMjfBJwqtHzw=";
+    hash = "sha256-zIbkw0pwt4TdyjncnSDeTN6Gsx7cc+x7Un4rnagZxQk=";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "bin" "dev" ];

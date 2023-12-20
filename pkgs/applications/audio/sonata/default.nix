@@ -72,6 +72,5 @@ in buildPythonApplication rec {
     homepage = "https://www.nongnu.org/sonata/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.rvl ];
   };
 }

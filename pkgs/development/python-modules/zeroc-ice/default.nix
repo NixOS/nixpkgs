@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "zeroc-ice";
   version = "3.7.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;

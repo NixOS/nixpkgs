@@ -14,6 +14,7 @@
 
 buildPythonPackage rec {
   version = "6.1.2";
+  format = "setuptools";
   pname = "robotframework-seleniumlibrary";
 
   # no tests included in PyPI tarball

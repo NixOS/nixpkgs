@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "lima";
   version = "0.5";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

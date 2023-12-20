@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pygame-gui";
   version = "069";
+  format = "setuptools";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {

@@ -31,6 +31,8 @@ let
   rlinkLibs = if stdenv.isDarwin then [
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
     fontconfig
@@ -49,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.28";
+  version = "0.0.33";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-OkJYGX/yWOUb4cDwacDgDRgzc/fkAnNcCzUrHimiVgM=";
+    hash = "sha256-/SpSOcxuEL2vsqbZAqbjTgnLhcyr0/ckfvcI1nwkWFg=";
   };
 
-  cargoHash = "sha256-vcIv3EGM8LEdg//FM/d+gDLLQFWukEE1/wfLVTXqN9w=";
+  cargoHash = "sha256-hXO/hdHmYjbwR3Ae5VV/HB1SVp/jhY05fIxi04n7X/Y=";
 
   nativeBuildInputs = [
     ncurses
@@ -112,7 +114,7 @@ rustPlatform.buildRustPackage rec {
     description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ otavio oluceps ];
+    maintainers = with lib.maintainers; [ tornax otavio oluceps ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
     mainProgram = "rio";

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rs897wp08z4hd904bjb5sl4lb8qxj82x5ayklr28bhg9pd5gbra";
   };
 
+  env.CXXFLAGS = "-std=c++98";
+
   preInstall = "mkdir -pv $out/bin";
   postInstall = "chmod -v +w $out/bin/mkcue";
 

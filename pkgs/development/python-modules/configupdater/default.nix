@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "configupdater";
   version = "3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

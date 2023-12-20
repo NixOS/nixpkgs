@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "gdata";
   version = "2.0.18";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gdata-python-client/${pname}-${version}.tar.gz";

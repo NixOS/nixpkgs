@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "rbtools";
   version = "1.0.2";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

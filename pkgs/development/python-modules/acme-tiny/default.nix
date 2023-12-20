@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "5.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

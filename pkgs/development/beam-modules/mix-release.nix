@@ -8,6 +8,8 @@
 , rebar3
 , fetchMixDeps
 , findutils
+, ripgrep
+, bbe
 , makeWrapper
 , coreutils
 , gnused
@@ -25,6 +27,17 @@
 , mixEnv ? "prod"
 , compileFlags ? [ ]
 
+  # Options to be passed to the Erlang compiler. As documented in the reference
+  # manual, these must be valid Erlang terms. They will be turned into an
+  # erlang list and set as the ERL_COMPILER_OPTIONS environment variable.
+  # See https://www.erlang.org/doc/man/compile
+, erlangCompilerOptions ? [ ]
+
+  # Deterministic Erlang builds remove full system paths from debug information
+  # among other things to keep builds more reproducible. See their docs for more:
+  # https://www.erlang.org/doc/man/compile
+, erlangDeterministicBuilds ? true
+
   # Mix dependencies provided as a fixed output derivation
 , mixFodDeps ? null
 
@@ -36,6 +49,7 @@
 , mixNixDeps ? { }
 
 , elixir ? inputs.elixir
+, erlang ? inputs.erlang
 , hex ? inputs.hex.override { inherit elixir; }
 
   # Remove releases/COOKIE
@@ -63,7 +77,7 @@
 }@attrs:
 let
   # Remove non standard attributes that cannot be coerced to strings
-  overridable = builtins.removeAttrs attrs [ "compileFlags" "mixNixDeps" ];
+  overridable = builtins.removeAttrs attrs [ "compileFlags" "erlangCompilerOptions" "mixNixDeps" ];
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 assert stripDebug -> !enableDebugInfo;
@@ -75,7 +89,7 @@ stdenv.mkDerivation (overridable // {
     # Mix deps
     (builtins.attrValues mixNixDeps) ++
     # other compile-time deps
-    [ findutils makeWrapper ];
+    [ findutils ripgrep bbe makeWrapper ];
 
   buildInputs = buildInputs;
 
@@ -88,6 +102,12 @@ stdenv.mkDerivation (overridable // {
   # some older dependencies still use rebar.
   MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
+
+  ERL_COMPILER_OPTIONS =
+    let
+      options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+    in
+    "[${lib.concatStringsSep "," options}]";
 
   LC_ALL = "C.UTF-8";
 
@@ -161,10 +181,10 @@ stdenv.mkDerivation (overridable // {
   '';
 
   postFixup = ''
-    # Remove files for Microsoft Windows
+    echo "removing files for Microsoft Windows"
     rm -f "$out"/bin/*.bat
 
-    # Wrap programs in $out/bin with their runtime deps
+    echo "wrapping programs in $out/bin with their runtime deps"
     for f in $(find $out/bin/ -type f -executable); do
       wrapProgram "$f" \
         --prefix PATH : ${lib.makeBinPath [
@@ -176,34 +196,41 @@ stdenv.mkDerivation (overridable // {
     done
   '' + lib.optionalString removeCookie ''
     if [ -e $out/releases/COOKIE ]; then
+      echo "removing $out/releases/COOKIE"
       rm $out/releases/COOKIE
+    fi
+  '' + ''
+    if [ -e $out/erts-* ]; then
+      # ERTS is included in the release, then erlang is not required as a runtime dependency.
+      # But, erlang is still referenced in some places. To removed references to erlang,
+      # following steps are required.
+
+      # 1. remove references to erlang from plain text files
+      for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
+        echo "removing references to erlang in $file"
+        substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
+      done
+
+      # 2. remove references to erlang from .beam files
+      #
+      # No need to do anything, because it has been handled by "deterministic" option specified
+      # by ERL_COMPILER_OPTIONS.
+
+      # 3. remove references to erlang from normal binary files
+      for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches --binary --iglob '!*.beam'); do
+        echo "removing references to erlang in $file"
+        # use bbe to substitute strings in binary files, because using substituteInPlace
+        # on binaries will raise errors
+        bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
+        rm -f "$file"
+        mv "$file".tmp "$file"
+      done
+
+      # References to erlang should be removed from output after above processing.
     fi
   '' + lib.optionalString stripDebug ''
     # Strip debug symbols to avoid hardreferences to "foreign" closures actually
     # not needed at runtime, while at the same time reduce size of BEAM files.
     erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
   '';
-
-  # TODO: remove erlang references in resulting derivation
-  #
-  # # Step 1 - investigate why the resulting derivation still has references to erlang.
-  #
-  # The reason is that the generated binaries contains erlang reference. Here's a repo to
-  # demonstrate the problem - <https://github.com/plastic-gun/nix-mix-release-unwanted-references>.
-  #
-  #
-  # # Step 2 - remove erlang references from the binaries
-  #
-  # As said in above repo, it's hard to remove erlang references from `.beam` binaries.
-  #
-  # We need more experienced developers to resolve this issue.
-  #
-  #
-  # # Tips
-  #
-  # When resolving this issue, it is convenient to fail the build when erlang is referenced,
-  # which can be achieved by using:
-  #
-  #   disallowedReferences = [ erlang ];
-  #
 })

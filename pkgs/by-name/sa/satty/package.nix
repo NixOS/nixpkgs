@@ -9,31 +9,22 @@
 , gtk4
 , libadwaita
 , pango
-, fetchpatch
 , copyDesktopItems
 }:
 
 rustPlatform.buildRustPackage rec {
 
   pname = "satty";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
     rev = "v${version}";
-    hash = "sha256-x2ljheG7ZqaeiPersC/e8Er2jvk5TJs65Y3N1GjTiNU=";
+    hash = "sha256-w2kosnPDWUZqp6iyj6ypAGRlmYSby+9B6epsAkFK6eY=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "fix-Cargo.lock";
-      url = "https://github.com/gabm/Satty/commit/39be6ddce264552df971e949a6a3175b102530b2.patch";
-      hash = "sha256-GUHupZE1A7AmXvZ8WvRzBkQyH7qlMTetBjHuakfIZ7w=";
-    })
-  ];
-
-  cargoHash = "sha256-0GsbWd/gpKZm7nNXkuJhB02YKUj3XCrSfpRA9KBXydU=";
+  cargoHash = "sha256-XeuzoHXSiKtA9ofCBOMHnKKzcmur+/TS96DnzIfpqUA=";
 
   nativeBuildInputs = [
     copyDesktopItems

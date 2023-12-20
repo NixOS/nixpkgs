@@ -4,27 +4,14 @@ This directory implements a program to check the [validity](#validity-checks) of
 It is being used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
 This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 
-## API
+## Interface
 
-This API may be changed over time if the CI workflow making use of it is adjusted to deal with the change appropriately.
+The interface of the tool is shown with `--help`:
+```
+cargo run -- --help
+```
 
-- Command line: `nixpkgs-check-by-name <NIXPKGS>`
-- Arguments:
-  - `<NIXPKGS>`: The path to the Nixpkgs to check
-  - `--version <VERSION>`: The version of the checks to perform.
-
-    Possible values:
-    - `v0` (default)
-    - `v1`
-
-    See [validation](#validity-checks) for the differences.
-- Exit code:
-  - `0`: If the [validation](#validity-checks) is successful
-  - `1`: If the [validation](#validity-checks) is not successful
-  - `2`: If an unexpected I/O error occurs
-- Standard error:
-  - Informative messages
-  - Detected problems if validation is not successful
+The interface may be changed over time only if the CI workflow making use of it is adjusted to deal with the change appropriately.
 
 ## Validity checks
 
@@ -32,7 +19,7 @@ These checks are performed by this tool:
 
 ### File structure checks
 - `pkgs/by-name` must only contain subdirectories of the form `${shard}/${name}`, called _package directories_.
-- The `name`'s of package directories must be unique when lowercased
+- The `name`'s of package directories must be unique when lowercased.
 - `name` is a string only consisting of the ASCII characters `a-z`, `A-Z`, `0-9`, `-` or `_`.
 - `shard` is the lowercased first two letters of `name`, expressed in Nix: `shard = toLower (substring 0 2 name)`.
 - Each package directory must contain a `package.nix` file and may contain arbitrary other files.
@@ -41,9 +28,21 @@ These checks are performed by this tool:
 - Each package directory must not refer to files outside itself using symlinks or Nix path expressions.
 
 ### Nix evaluation checks
-- `pkgs.${name}` is defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
-  - **Only after --version v1**: If `pkgs.${name}` is not auto-called from `pkgs/by-name`, `args` must not be empty
-- `pkgs.lib.isDerivation pkgs.${name}` is `true`.
+- For each package directory, the `pkgs.${name}` attribute must be defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
+- For each package directory, `pkgs.lib.isDerivation pkgs.${name}` must be `true`.
+
+### Ratchet checks
+
+Furthermore, this tool implements certain [ratchet](https://qntm.org/ratchet) checks.
+This allows gradually phasing out deprecated patterns without breaking the base branch or having to migrate it all at once.
+It works by not allowing new instances of the pattern to be introduced, but allowing already existing instances.
+The existing instances are coming from `<BASE_NIXPKGS>`, which is then checked against `<NIXPKGS>` for new instances.
+Ratchets should be removed eventually once the pattern is not used anymore.
+
+The current ratchets are:
+
+- New manual definitions of `pkgs.${name}` (e.g. in `pkgs/top-level/all-packages.nix`) with `args = { }`
+  (see [nix evaluation checks](#nix-evaluation-checks)) must not be introduced.
 
 ## Development
 
@@ -85,6 +84,10 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
   ```
   allowing the simulation of package overrides to the real [`pkgs/top-level/all-packages.nix`](../../top-level/all-packages.nix`).
   The default is an empty overlay.
+
+- `base` (optional):
+  Contains another subdirectory imitating Nixpkgs with potentially any of the above structures.
+  This is used for [ratchet checks](#ratchet-checks).
 
 - `expected` (optional):
   A file containing the expected standard output.

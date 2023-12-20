@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

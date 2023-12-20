@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "skidl";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";

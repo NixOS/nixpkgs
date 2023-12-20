@@ -2,21 +2,18 @@
 
 buildLua {
   pname = "mpv-thumbfast";
-  version = "unstable-2023-06-04";
+  version = "unstable-2023-12-08";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "4241c7daa444d3859b51b65a39d30e922adb87e9";
-    hash = "sha256-7EnFJVjEzqhWXAvhzURoOp/kad6WzwyidWxug6u8lVw=";
+    rev = "03e93feee5a85bf7c65db953ada41b4826e9f905";
+    hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
   };
 
-  postPatch = ''
-    substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getExe mpv-unwrapped}"'
-  '';
-
-  scriptPath = "thumbfast.lua";
+  passthru.extraWrapperArgs = [
+    "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"
+  ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";

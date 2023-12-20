@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.8.3";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

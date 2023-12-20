@@ -4,22 +4,14 @@
 , fetchFromGitHub
 , setuptools
 , wheel
-, black
 , cloudpathlib
 , confection
-, isort
-, mypy
 , packaging
-, pre-commit
 , pydantic
-, pytest
 , requests
-, ruff
 , smart-open
 , srsly
 , typer
-, types-requests
-, types-setuptools
 , wasabi
 , pytestCheckHook
 }:
@@ -44,22 +36,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    black
     cloudpathlib
     confection
-    isort
-    mypy
     packaging
-    pre-commit
     pydantic
-    pytest
     requests
-    ruff
     smart-open
     srsly
     typer
-    types-requests
-    types-setuptools
     wasabi
   ];
 

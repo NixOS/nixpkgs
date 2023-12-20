@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pytest-lazy-fixture";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

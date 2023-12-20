@@ -23,7 +23,7 @@ in
 with self; {
 
   inherit perl;
-  perlPackages = self;
+  perlPackages = self // { perlPackages = self.perlPackages // { __attrsFailEvaluation = true; }; };
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
@@ -1294,16 +1294,17 @@ with self; {
 
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
-    version = "1.01";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/Audio-Scan-1.01.tar.gz";
-      hash = "sha256-gxJyAnHHrdxLvuwzEs3divS5kKxjYgSllsB5M61sY0o=";
+        url = "https://github.com/Logitech/slimserver-vendor/raw/public/8.3/CPAN/Audio-Scan-1.05.tar.gz";
+        hash = "sha256-9YXC8GHPRWKlV8emmTke7RB0HhiCbALmZQqtQFLcBi4=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
-      description = "Fast C metadata and tag reader for all common audio file formats";
+      description = "Fast C metadata and tag reader for all common audio file formats, slimserver fork";
+      homepage = "https://github.com/Logitech/slimserver-vendor";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -3293,6 +3294,32 @@ with self; {
     meta = {
       description = "A series of charting modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ChipcardPCSC = buildPerlPackage {
+    pname = "Chipcard-PCSC";
+    version = "1.4.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WH/WHOM/Chipcard-PCSC-v1.4.16.tar.gz";
+      hash = "sha256-O14p1jRDXxQm7Nzfebo1G04mWPNsPCK+N7HTHjbKj6k=";
+    };
+    buildInputs = [ pkgs.pcsclite ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    env.NIX_CFLAGS_COMPILE = toString ([
+      "-I${pkgs.pcsclite.dev}/include/PCSC"
+    ] ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-int"
+      "-Wno-error=int-conversion"
+    ]);
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
+    # tests fail; look unfinished
+    doCheck = false;
+    meta = {
+      description = "Communicate with a smart card using PC/SC";
+      homepage = "https://pcsc-perl.apdu.fr/";
+      license = with lib.licenses; [ gpl2Plus ];
+      maintainers = with maintainers; [ abbradar anthonyroussel ];
     };
   };
 
@@ -20198,27 +20225,6 @@ with self; {
     };
   };
 
-  pcscperl = buildPerlPackage {
-    pname = "pcsc-perl";
-    version = "1.4.14";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WH/WHOM/pcsc-perl-1.4.14.tar.bz2";
-      hash = "sha256-JyK35VQ+T687oexrKaff7G2Svh7ewJ0KMZGZLU2Ixp0=";
-    };
-    buildInputs = [ pkgs.pcsclite ];
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
-    # tests fail; look unfinished
-    doCheck = false;
-    meta = {
-      description = "Communicate with a smart card using PC/SC";
-      homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-perl/";
-      license = with lib.licenses; [ gpl2Plus ];
-      maintainers = with maintainers; [ abbradar ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.pcscperl.x86_64-darwin
-    };
-  };
-
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
     version = "2.045";
@@ -23884,12 +23890,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "9.7.0";
+    version = "9.8.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-tXXB6Gj27oFZv9WD4dXWdY55jDDLrGYbud4qoyjNe5A=";
+      hash = "sha256-xLrqD1fFbDYS4HH85vYCeaKZeNwXQpjPXfGpJCFumg8=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -29327,4 +29333,5 @@ with self; {
   version = self.Version;
 
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
+  pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pygti";
   version = "0.9.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

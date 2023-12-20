@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       {
         services.postgresql = {
           enable = true;
-          extraPlugins = with config.services.postgresql.package.pkgs; [
+          extraPlugins = ps: with ps; [
             tsja
           ];
         };

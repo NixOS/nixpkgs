@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "py-sonic";
   version = "1.0.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

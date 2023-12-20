@@ -227,10 +227,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   # 2. The contrib extensions available
   # 3. The core extensions
   extensions =
-  # Contrib conditional extensions
-   lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
-    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-  } //
   # Contrib extensions
   {
     amqp = callPackage ../development/php-packages/amqp { };
@@ -238,6 +234,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     apcu = callPackage ../development/php-packages/apcu { };
 
     ast = callPackage ../development/php-packages/ast { };
+
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
@@ -478,6 +476,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             lib.optional
               (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
               valgrind.dev;
+          configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
           zendExtension = true;
           postPatch = lib.optionalString stdenv.isDarwin ''
             # Tests are flaky on darwin

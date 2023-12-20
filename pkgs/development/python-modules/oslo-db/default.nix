@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "oslo-db";
   version = "14.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.db";

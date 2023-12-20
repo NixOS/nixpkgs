@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.3.1";
+  version = "3.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u2ZyK9ZKvNdqarBqZCPWdLy3Kfm6ORBWl375Lzg6rbg=";
+    hash = "sha256-ZU5KH2ikkVRL2PfFqwLrhTHfZ8X0MJ1SU70gQET4obM=";
   };
 
   # snowflake-connector-python requires arrow 10.0.1, which we don't have in

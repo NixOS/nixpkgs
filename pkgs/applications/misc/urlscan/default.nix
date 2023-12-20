@@ -39,5 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dpaetzel ];
+    mainProgram = "urlscan";
   };
 }

@@ -29,6 +29,7 @@
 buildPythonPackage rec {
   pname = "pelican";
   version = "4.8.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

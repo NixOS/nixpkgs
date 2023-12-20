@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       wrapQtApp $out/XyGrib/XyGrib
       mkdir -p $out/bin
       ln -s $out/XyGrib/XyGrib $out/bin/xygrib
+      install -Dm444 $src/debian/xygrib.png -t $out/share/icons/hicolor/32x32/apps
+      install -Dm444 $src/debian/xygrib.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/xygrib.desktop \
+        --replace 'Exec=XyGrib' 'Exec=xygrib'
     '';
 
   meta = with lib; {

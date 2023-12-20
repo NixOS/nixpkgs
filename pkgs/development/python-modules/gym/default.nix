@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "gym";
   version = "0.26.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "git-annex-remote-rclone";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
     rev = "v${version}";
-    sha256 = "sha256-H2C4zjM+kbC9qPl1F+bSnepuqANjZd1sz6XxOTkVVkU=";
+    sha256 = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

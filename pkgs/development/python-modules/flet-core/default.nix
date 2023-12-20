@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "flet-core";
-  version = "0.10.1";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "flet_core";
     inherit version;
-    hash = "sha256-YLtHnKBlXkUJJkQzxnDkfl6+gSGm05GXYPGEU3XO/jI=";
+    hash = "sha256-nmQHWyLlyo6CVzn+dlTSnA10XRoSFBLEeYdcWpfoGBo=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     description = "The library is the foundation of Flet framework and is not intended to be used directly";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;

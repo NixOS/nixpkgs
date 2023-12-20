@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "markdownify";
   version = "0.11.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

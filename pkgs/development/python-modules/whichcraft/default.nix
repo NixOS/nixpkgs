@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "whichcraft";
   version = "0.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

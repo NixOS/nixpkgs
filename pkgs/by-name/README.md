@@ -99,7 +99,9 @@ There's some limitations as to which packages can be defined using this structur
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
 
-  Instead use the [category hierarchy](../README.md#category-hierarchy) for such attributes.
+  Instead:
+  - Either change the package definition to work with `pkgs.callPackage`.
+  - Or use the [category hierarchy](../README.md#category-hierarchy).
 
 - Only top-level packages.
   This excludes packages for other package sets like `pkgs.pythonPackages.*`.

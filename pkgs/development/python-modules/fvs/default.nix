@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "fvs";
   version = "0.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "routeros-api";
   version = "0.17.0";
+  format = "setuptools";
 
   # N.B. The version published on PyPI is missing tests.
   src = fetchFromGitHub {

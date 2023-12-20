@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "wavefile";
   version = "1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "vokimon";

@@ -64,8 +64,10 @@ in
     };
 
     systemd.services.iwd = {
+      path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
   };
 

@@ -4,11 +4,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "commit-mono";
-  version = "1.141";
+  version = "1.142";
 
   src = fetchzip {
     url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/v${version}/CommitMono-${version}.zip";
-    hash = "sha256-ErC4ZM17rYq+5FRW9m9nIbQOjQGTCCoNhXHxb7Swd84=";
+    hash = "sha256-ZOEo+uD1Vug+F38/eXD6xG1netEIAYn25bPBZ1H7aEE=";
     stripRoot = false;
   };
 

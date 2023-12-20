@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "celery-redbeat";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sibson";

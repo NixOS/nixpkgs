@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "argparse-dataclass";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mivade";

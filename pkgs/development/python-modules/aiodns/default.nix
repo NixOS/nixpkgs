@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "aiodns";
   version = "3.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

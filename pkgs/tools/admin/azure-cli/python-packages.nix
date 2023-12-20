@@ -106,7 +106,6 @@ let
       azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "30.3.0" "tar.gz" "sha256-5Sl4Y0D4YqpqIYp61qW+trn7VYM8XKoIUcwzFNBJO2M=";
       azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "10.1.0" "zip" "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "10.1.0" "zip" "sha256-VrX9YfYNvlA8+eNqHCp35BAeQZzQKakZs7ZZKwT8oYc=";
-      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "27.0.0" "tar.gz" "sha256-IdGo2A65YiMJJ8S18Ji+FfnnylNhs8vFOQpfA91wgNM=";
       azure-mgmt-core = overrideAzureMgmtPackage super.azure-mgmt-core "1.3.2" "zip" "sha256-B/Sv6COlXXBLBI1h7f3BMYwFHtWfJEAyEmNQvpXp1QE=";
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.3.0" "tar.gz" "sha256-02DisUN2/auBDhPgE9aUvEvYwoQUQC4NYGD/PQZOl/Y=";
       azure-mgmt-databoxedge = overrideAzureMgmtPackage super.azure-mgmt-databoxedge "1.0.0" "zip" "sha256-BAkAYrwejwDC9FMVo7zrD7OzR57BR01xuINC4TSZsIc=";
@@ -164,8 +163,10 @@ let
       azure-mgmt-iotcentral = overrideAzureMgmtPackage super.azure-mgmt-iotcentral "10.0.0b1" "zip"
         "sha256-1CiZuTXYhIb74eGQZUJHHzovYNnnVd3Ydu1UCy2Bu00=";
 
-      azure-mgmt-kusto = overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"
-        "sha256-nri3eB/UQQ7p4gfNDDmDuvnlhBS1tKGISdCYVuNrrN4=";
+      azure-mgmt-kusto = (overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"
+        "sha256-nri3eB/UQQ7p4gfNDDmDuvnlhBS1tKGISdCYVuNrrN4=").overridePythonAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest self.msrestazure ];
+      });
 
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
         "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=r";

@@ -11,6 +11,7 @@ assert pariSupport -> pari != null;
 buildPythonPackage rec {
   pname = "cysignals";
   version = "1.11.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

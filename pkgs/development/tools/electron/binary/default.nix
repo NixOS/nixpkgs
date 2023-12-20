@@ -175,4 +175,13 @@ rec {
     aarch64-darwin = "2fc319c53f6dc61e2e424d46712caead7022b5124c9674f3b15b45c556dd0623";
     headers = "1pb8xhaarkmgss00ap4jbf693i03z4mwh5ilpkz6dsg1b9fka84q";
   };
+
+  electron_28-bin = mkElectron "28.0.0" {
+    armv7l-linux = "e41686b6ce7be7efb74d1f3fb4c912be31506b51770ceffa4e66b94164dac5b8";
+    aarch64-linux = "32f9f7592359cf8b341946b41d758466533bd7a2bc0dc316072a3a1af4b92d84";
+    x86_64-linux = "d66b6774b886bd57519d49b9eb8e6e745b523519414a8819f67aa19f76e2b53c";
+    x86_64-darwin = "a5fdc70519b2c17a708920af2b998fc067ff0a18ba9f97d690cfab6bac23bd7a";
+    aarch64-darwin = "d64947fee370a3b111f170399969977959848f2a2f544a1ae5dc081fc2df75cf";
+    headers = "1lrwc03ffrf4bi2faampkx7yg0iqsrcp86znp9fw6ajwdwgqsc81";
+  };
 }

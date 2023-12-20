@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pylibdmtx";
   version = "0.1.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";

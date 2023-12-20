@@ -121,6 +121,7 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-faster-whisper-${server}" {
+        inherit (options) enable;
         description = "Wyoming faster-whisper server instance ${server}";
         after = [
           "network-online.target"

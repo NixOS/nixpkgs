@@ -51,6 +51,7 @@ let
 in buildPythonPackage rec {
   pname = "theano";
   version = "1.0.5";
+  format = "setuptools";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 

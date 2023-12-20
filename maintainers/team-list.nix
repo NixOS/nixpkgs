@@ -290,6 +290,7 @@ with lib.maintainers; {
     members = [
       theuni
       dpausp
+      frlan
       leona
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
@@ -402,6 +403,16 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  helsinki-systems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      ajs124
+      das_j
+    ];
+    scope = "Group registration for packages maintained by Helsinki Systems";
+    shortName = "Helsinki Systems employees";
+  };
+
   home-assistant = {
     members = [
       fab
@@ -429,6 +440,7 @@ with lib.maintainers; {
       cleeyv
       ryantm
       lassulus
+      yayayayaka
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";

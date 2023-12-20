@@ -48,6 +48,9 @@ in {
 
         # To make a river session available if a display manager like SDDM is enabled:
         services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
+
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
+        xdg.portal.config.river.default = mkDefault [ "wlr" "gtk" ];
       }
       (import ./wayland-session.nix { inherit lib pkgs; })
     ]);

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "libsass";
   version = "0.22.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sass";

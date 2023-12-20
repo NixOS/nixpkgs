@@ -22,11 +22,15 @@ let
     optionals
     remove
     unknownModule
+    isAttrs
+    isString
   ;
 
   inherit (lib.lists)
     any
     toList
+    isList
+    elem
   ;
 
   # If we're in hydra, we can dispense with the more verbose error
@@ -59,11 +63,15 @@ let
   hasLicense = attrs:
     attrs ? meta.license;
 
-  hasAllowlistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && any (l: builtins.elem l allowlist) (toList attrs.meta.license);
+  hasListedLicense = assert areLicenseListsValid; list: attrs:
+    length list > 0 && hasLicense attrs && (
+      if isList attrs.meta.license then any (l: elem l list) attrs.meta.license
+      else elem attrs.meta.license list
+    );
 
-  hasBlocklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && any (l: builtins.elem l blocklist) (toList attrs.meta.license);
+  hasAllowlistedLicense = attrs: hasListedLicense allowlist attrs;
+
+  hasBlocklistedLicense = attrs: hasListedLicense blocklist attrs;
 
   allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -71,11 +79,16 @@ let
   allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree = licenses: any (l: !l.free or true) licenses;
+  isUnfree = licenses:
+    if isAttrs licenses then !licenses.free or true
+    # TODO: Returning false in the case of a string is a bug that should be fixed.
+    # In a previous implementation of this function the function body
+    # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
+    # which always evaluates to `!true` for strings.
+    else if isString licenses then false
+    else lib.lists.any (l: !l.free or true) licenses;
 
-  hasUnfreeLicense = attrs:
-    hasLicense attrs &&
-    isUnfree (toList attrs.meta.license);
+  hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
   hasNoMaintainers = attrs:
     attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
@@ -479,16 +492,21 @@ let
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
-    in validity // {
+      inherit (validity) valid;
+  in validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =
-        {
-          no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          yes = true;
-        }.${validity.valid};
-
+        (
+          if valid == "yes" then true
+          else if valid == "no" then (
+            handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else if valid == "warn" then (
+            handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else throw "Unknown validitiy: '${valid}'"
+        );
   };
 
 in { inherit assertValidity commonMeta; }

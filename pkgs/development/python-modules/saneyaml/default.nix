@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "saneyaml";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

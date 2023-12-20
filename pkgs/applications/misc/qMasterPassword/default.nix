@@ -3,27 +3,35 @@
 , fetchFromGitHub
 , libX11
 , libXtst
-, qmake
+, cmake
 , qtbase
 , qttools
+, qtwayland
 , openssl
 , libscrypt
 , wrapQtAppsHook
+, testers
+, qMasterPassword
+, x11Support ? true
+, waylandSupport ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "qMasterPassword";
-  version = "1.2.4";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "bkueng";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VQ1ZkXaZ5sUbtWa/GreTr5uXvnZ2Go6owJ2ZBK25zns=";
+    hash = "sha256-4qxPjrf6r2S0l/hcs6bqfJm56jdDz+0a0xEkqGBYGBs=";
   };
 
-  buildInputs = [ qtbase libX11 libXtst openssl libscrypt ];
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  buildInputs = [ qtbase qtwayland openssl libscrypt ] ++ lib.optionals x11Support [ libX11 libXtst ];
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  cmakeFlags = lib.optionals waylandSupport [
+    "-DDISABLE_FILL_FORM_SHORTCUTS=1"
+  ];
 
   # Upstream install is mostly defunct. It hardcodes target.path and doesn't
   # install anything but the binary.
@@ -34,16 +42,21 @@ stdenv.mkDerivation rec {
   '' else ''
     mkdir -p $out/bin
     mkdir -p $out/share/{applications,doc/qMasterPassword,icons/qmasterpassword,icons/hicolor/512x512/apps,qMasterPassword/translations}
-    mv qMasterPassword $out/bin
-    mv data/qMasterPassword.desktop $out/share/applications
-    mv LICENSE README.md $out/share/doc/qMasterPassword
-    mv data/icons/app_icon.png $out/share/icons/hicolor/512x512/apps/qmasterpassword.png
-    mv data/icons/* $out/share/icons/qmasterpassword
-    lrelease ./data/translations/translation_de.ts
-    lrelease ./data/translations/translation_pl.ts
-    mv ./data/translations/translation_de.qm $out/share/qMasterPassword/translations/translation_de.qm
-    mv ./data/translations/translation_pl.qm $out/share/qMasterPassword/translations/translation_pl.qm
+    cp qMasterPassword $out/bin
+    cp $src/data/qMasterPassword.desktop $out/share/applications
+    cp $src/LICENSE $src/README.md $out/share/doc/qMasterPassword
+    cp $src/data/icons/app_icon.png $out/share/icons/hicolor/512x512/apps/qmasterpassword.png
+    cp $src/data/icons/* $out/share/icons/qmasterpassword
+    cp ./translations/translation_de.qm $out/share/qMasterPassword/translations/translation_de.qm
+    cp ./translations/translation_pl.qm $out/share/qMasterPassword/translations/translation_pl.qm
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = qMasterPassword;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Stateless Master Password Manager";

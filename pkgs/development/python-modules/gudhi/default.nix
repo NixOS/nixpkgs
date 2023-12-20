@@ -5,7 +5,7 @@
 , boost
 , eigen
 , gmp
-, cgal_5  # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
+, cgal  # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
 , mpfr
 , tbb
 , numpy
@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "gudhi";
   version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GUDHI";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   patches = [ ./remove_explicit_PYTHONPATH.patch ];
 
   nativeBuildInputs = [ cmake numpy cython pybind11 matplotlib ];
-  buildInputs = [ boost eigen gmp cgal_5 mpfr ]
+  buildInputs = [ boost eigen gmp cgal mpfr ]
     ++ lib.optionals enableTBB [ tbb ];
   propagatedBuildInputs = [ numpy scipy ];
   nativeCheckInputs = [ pytest ];

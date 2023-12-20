@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "taxi";
   version = "6.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sephii";

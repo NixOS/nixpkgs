@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "3.3.1";
+  format = "setuptools";
   pname = "sshpubkeys";
 
   src = fetchFromGitHub {

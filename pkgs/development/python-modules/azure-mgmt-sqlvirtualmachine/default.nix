@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "0.5.0";
+  format = "setuptools";
   pname = "azure-mgmt-sqlvirtualmachine";
   disabled = isPy27;
 

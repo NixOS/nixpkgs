@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "property-manager";
   version = "3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";

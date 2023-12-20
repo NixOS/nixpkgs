@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ponywhoosh";
   version = "1.7.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "mlxtend";
   version = "0.22.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "3.3.0";
+  format = "setuptools";
   pname = "xxhash";
 
   src = fetchPypi {

@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "gssapi";
   version = "1.8.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

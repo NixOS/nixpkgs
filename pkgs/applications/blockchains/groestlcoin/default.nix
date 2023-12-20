@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+, installShellFiles
 , util-linux
 , hexdump
 , autoSignDarwinBinariesHook
@@ -32,16 +33,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "25.0";
+  version = "26.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "03w5n3qjha63mgj7zk8q17x5j63la3i4li7bf5i1yw59ijqpmnqg";
+    sha256 = "00qvaf53jszsk1rr029zmq60v8w0r92192ab65k2krkmh7ybla9l";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ]
+  nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ util-linux ]
     ++ lib.optionals stdenv.isDarwin [ hexdump ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
@@ -51,10 +52,24 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withWallet [ db53 sqlite ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
-  postInstall = lib.optionalString withGui ''
+  postInstall = ''
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoind.bash
+    installShellCompletion --bash contrib/completions/bash/groestlcoin-tx.bash
+
+    for file in contrib/completions/fish/groestlcoin-*.fish; do
+      installShellCompletion --fish $file
+    done
+  '' + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
+
     install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
     substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
     install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
+  '';
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.13
   '';
 
   configureFlags = [

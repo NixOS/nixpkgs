@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "duet";
   version = "0.2.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";

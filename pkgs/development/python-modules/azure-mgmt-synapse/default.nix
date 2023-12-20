@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
   version = "2.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3";
 
   src = fetchPypi {

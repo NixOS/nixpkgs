@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "rustworkx";
   version = "0.13.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Qiskit";

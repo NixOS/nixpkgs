@@ -14,7 +14,7 @@
 , levmar
 , qhull
 , cmake
-, cgal_5
+, cgal
 , boost179
 , mpfr
 , xercesc
@@ -45,7 +45,7 @@ mkDerivation rec {
     gmp
     levmar
     qhull
-    cgal_5
+    cgal
     boost179
     mpfr
     xercesc

@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "astropy-healpix";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

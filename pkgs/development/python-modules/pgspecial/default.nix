@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pgspecial";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

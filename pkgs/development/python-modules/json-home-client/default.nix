@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "json-home-client";
   version = "1.1.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

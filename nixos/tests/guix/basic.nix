@@ -11,7 +11,10 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
 
   nodes.machine = { config, ... }: {
     environment.etc."guix/scripts".source = ./scripts;
-    services.guix.enable = true;
+    services.guix = {
+      enable = true;
+      gc.enable = true;
+    };
   };
 
   testScript = ''
@@ -19,6 +22,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
 
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("guix-daemon.service")
+    machine.succeed("systemctl start guix-gc.service")
 
     # Can't do much here since the environment has restricted network access.
     with subtest("Guix basic package management"):

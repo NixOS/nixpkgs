@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "emulated-roku";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mindigmarton";

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "nengo";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nengo";

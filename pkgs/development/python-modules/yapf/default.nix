@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "yapf";
   version = "0.40.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

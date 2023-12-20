@@ -12,6 +12,7 @@ buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
   version = "3.1";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {

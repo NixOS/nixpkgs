@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "gpxpy";
   version = "1.5.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

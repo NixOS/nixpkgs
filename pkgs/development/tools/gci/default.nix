@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "gci";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "daixiang0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1JYmnMXm2ywGZAVhcfzvF1I1h0pBvijbeVmqKzgiz8U=";
+    sha256 = "sha256-75ye/624fDcWCn+H0gAYHRPcVUh+JJm3vU6T4w1T0jM=";
   };
 
   vendorHash = "sha256-bPRcOvwbWEpcJUlIqQNeoYME4ky0YE5LlyWhSTWCIHQ=";

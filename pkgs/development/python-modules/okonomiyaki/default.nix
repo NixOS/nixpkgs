@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "okonomiyaki";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "enthought";

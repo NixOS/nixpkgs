@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "ots-python";
   version = "9.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "opentype-sanitizer";

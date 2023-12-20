@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pytabix";
   version = "0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

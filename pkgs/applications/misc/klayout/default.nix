@@ -43,6 +43,9 @@ mkDerivation rec {
   postBuild = ''
     mkdir $out/bin
     mv $out/lib/klayout $out/bin/
+
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];

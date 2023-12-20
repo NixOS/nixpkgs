@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "lizard";
   version = "1.17.10";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

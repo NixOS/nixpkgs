@@ -3788,7 +3788,6 @@ broken-packages:
   - nix-freeze-tree # failure in job https://hydra.nixos.org/build/233234834 at 2023-09-02
   - nixfromnpm # failure in job https://hydra.nixos.org/build/233239168 at 2023-09-02
   - nixpkgs-update # failure in job https://hydra.nixos.org/build/233196708 at 2023-09-02
-  - nix-serve-ng # failure in job https://hydra.nixos.org/build/233214170 at 2023-09-02
   - nix-tools # failure in job https://hydra.nixos.org/build/233662959 at 2023-09-02
   - nlp-scores # failure in job https://hydra.nixos.org/build/233232770 at 2023-09-02
   - NMap # failure in job https://hydra.nixos.org/build/233246148 at 2023-09-02

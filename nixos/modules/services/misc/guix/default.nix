@@ -265,7 +265,7 @@ in
         linkProfileToPath = acc: profile: location: let
           guixProfile = "${cfg.stateDir}/guix/profiles/per-user/\${USER}/${profile}";
           in acc + ''
-            [ -d "${guixProfile}" ] && ln -sf "${guixProfile}" "${location}"
+            [ -d "${guixProfile}" ] && [ -L "${location}" ] || ln -sf "${guixProfile}" "${location}"
           '';
 
         activationScript = lib.foldlAttrs linkProfileToPath "" guixUserProfiles;
@@ -373,7 +373,6 @@ in
         serviceConfig = {
           Type = "oneshot";
 
-          MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateNetworks = true;
           ProtectControlGroups = true;

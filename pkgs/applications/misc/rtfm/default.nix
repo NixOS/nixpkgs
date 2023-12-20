@@ -18,14 +18,14 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "rtfm";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
     rev = "v${version}";
     name = "rtfm";
-    hash = "sha256-SmQq3hG94oV346dHtqTHC0xE4cWB3rspD3XXu+mSI8Q=";
+    hash = "sha256-ulv5US5EBBb0rK/Qaw8ZpHI4QwEQGlzscmAoe17946k=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ crystal.buildCrystalPackage rec {
     wrapGAppsHook4
     gobject-introspection
     gi-crystal
-    ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     webkitgtk_6_0

@@ -1,38 +1,38 @@
 {
     "testing": {
-        "version": "6.7-rc4",
-        "hash": "sha256:1igynlm5pv62brfkyjh6w8lzvmmy8c3g8phrn5wgdyy8svc48r8h"
+        "version": "6.7-rc6",
+        "hash": "sha256:164jik11lv35jxfbci3vdb413qi241w51jrisilvfqy8ap0ccs4k"
     },
     "6.5": {
         "version": "6.5.13",
         "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.65",
-        "hash": "sha256:02mj394ina3npp6qqinc4pc6afp5pg1rlbjc90g4p902d29jjwj0"
+        "version": "6.1.68",
+        "hash": "sha256:1qc4cwqlfni9i6mzh6arghdsd842hp9lb7s832dxw1p261mg4prn"
     },
     "5.15": {
-        "version": "5.15.141",
-        "hash": "sha256:1yicgvq413801qrfzr0rdzwgg45dszrvfd6y9dmrhak9bk36lvck"
+        "version": "5.15.143",
+        "hash": "sha256:00lyv7zsj97mkg9i7dkb1a6km22mnr0qr687d9zz4ckjq1pb2sq9"
     },
     "5.10": {
-        "version": "5.10.202",
-        "hash": "sha256:12zs2bz2plps6xp80sdg36zkyr00rf5l5c85jl4dd7b9klly04ij"
+        "version": "5.10.204",
+        "hash": "sha256:1vnamiyr378q52xgkg7kvpx80zck729dim77vp06a3q6n580g5gz"
     },
     "5.4": {
-        "version": "5.4.262",
-        "hash": "sha256:1p34x33gkvpv26zcrpx1i6dr7dknyxj8gnp6caqb8sj58h3slgkx"
+        "version": "5.4.264",
+        "hash": "sha256:1c5n47dq9khb15hz24a000k3hj913vv1dda6famnm8wpjbfr176k"
     },
     "4.19": {
-        "version": "4.19.300",
-        "hash": "sha256:0ilksl94gjpc4pzc90swfawsl8lvibpq14nkaxzl0831i219ahd8"
+        "version": "4.19.302",
+        "hash": "sha256:1kkkpm34p5rq0iijzrzwaq0cb62w543argargw5p1wzg8803rlsk"
     },
     "4.14": {
-        "version": "4.14.331",
-        "hash": "sha256:03sk82dgvccv70i3hy8gf2hw0n4m305f7rxjw93p7jnjrbpdrp1r"
+        "version": "4.14.333",
+        "hash": "sha256:0j5nrankrhi56qzmyjg1pznqx1zgk5f7cfa154smjbn3zlm7lcv6"
     },
     "6.6": {
-        "version": "6.6.4",
-        "hash": "sha256:0i9ym5nqf704iz5674k66kn9a5hkm0y0sdhqy5c6v39xr5h9dr29"
+        "version": "6.6.7",
+        "hash": "sha256:0hfqdyxl4nqmm4pspfm1ang8616dbsaj0d968c0186ch0738xrhc"
     }
 }

@@ -13,6 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       nix.settings.sandbox = false;
       nix.settings.substituters = []; # don't try to access cache.nixos.org
 
+      virtualisation.memorySize = 2048;
       virtualisation.writableStore = true;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.

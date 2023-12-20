@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "aafigure";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

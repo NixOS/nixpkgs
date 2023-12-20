@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname   = "lzstring";
   version = "1.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

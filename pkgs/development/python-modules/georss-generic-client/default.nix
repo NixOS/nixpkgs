@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "georss-generic-client";
   version = "0.7";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

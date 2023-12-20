@@ -33,6 +33,7 @@
 buildPythonPackage rec {
   pname = "qtile";
   version = "0.23.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "qtile";

@@ -18,11 +18,11 @@
 
 buildGoModule rec {
   pname = "lxd-unwrapped";
-  version = "5.19";
+  version = "5.20";
 
   src = fetchurl {
     url = "https://github.com/canonical/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz";
-    hash = "sha256-Ttw3Hox+GfoI8dE2KpZ2HUTblOPFBUs63IBRI18lAiM=";
+    hash = "sha256-L5WLdX9M3mTQ81eNoL2p7lllo6cOwJVu3fgofRKQFn8=";
   };
 
   vendorHash = null;
@@ -86,7 +86,7 @@ buildGoModule rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://ubuntu.com/lxd";
     changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 agpl3 ];
     maintainers = teams.lxc.members;
     platforms = platforms.linux;
   };

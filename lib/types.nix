@@ -67,6 +67,7 @@ let
     ;
   outer_types =
 rec {
+  __attrsFailEvaluation = true;
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
@@ -273,6 +274,22 @@ rec {
       descriptionClass = "noun";
       check = isBool;
       merge = mergeEqualOption;
+    };
+
+    boolByOr = mkOptionType {
+      name = "boolByOr";
+      description = "boolean (merged using or)";
+      descriptionClass = "noun";
+      check = isBool;
+      merge = loc: defs:
+        foldl'
+          (result: def:
+            # Under the assumption that .check always runs before merge, we can assume that all defs.*.value
+            # have been forced, and therefore we assume we don't introduce order-dependent strictness here
+            result || def.value
+          )
+          false
+          defs;
     };
 
     int = mkOptionType {

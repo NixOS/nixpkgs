@@ -196,7 +196,7 @@ in
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig = {
-              Type = "simple";
+              Type = "notify";
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
               UMask = "0027";

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "fn";
   version = "0.4.3";
+  format = "setuptools";
 
   # Python 3.11 changed the API of the `inspect` module and fn was never
   # updated to adapt; last commit was in 2014.

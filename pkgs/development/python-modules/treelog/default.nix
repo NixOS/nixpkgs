@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "treelog";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

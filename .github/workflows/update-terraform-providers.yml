@@ -60,7 +60,7 @@ jobs:
 
             Check that all providers build with:
             ```
-            @ofborg build terraform.full
+            @ofborg build opentofu.full
             ```
             If there is more than ten commits in the PR `ofborg` won't build it automatically and you will need to use the above command.
           branch: terraform-providers-update

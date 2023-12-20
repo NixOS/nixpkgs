@@ -29,6 +29,7 @@
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "unstable-2020-09-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapnik";

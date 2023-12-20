@@ -18,6 +18,7 @@
 # runtime
 , libusb1
 , libxml2
+, ocl-icd
 , opencv
 , protobuf
 , pugixml
@@ -122,6 +123,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_CPPLINT:BOOL=OFF"
     "-DBUILD_TESTING:BOOL=OFF"
     "-DENABLE_SAMPLES:BOOL=OFF"
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
@@ -133,7 +135,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libxml2
-    opencv
+    ocl-icd
+    opencv.cxxdev
     protobuf
     pugixml
     tbb

@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "i-pi";
   version = "2.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "i-pi";

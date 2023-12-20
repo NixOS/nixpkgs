@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "scp";
   version = "0.14.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
