@@ -468,8 +468,8 @@ in {
           mkdir -p "${cfg.configDir}/custom_components"
 
           # remove components symlinked in from below the /nix/store
-          components="$(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l)"
-          for component in "$components"; do
+          readarray -d "" components < <(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l -print0)
+          for component in "''${components[@]}"; do
             if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
               rm "$component"
             fi
