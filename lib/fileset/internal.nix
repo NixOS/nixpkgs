@@ -317,7 +317,7 @@ rec {
 
       # If all subtrees are fully excluded or empty directories, return null.
       # This takes advantage of the fact that empty directories can be represented as excluded directories
-      else if all (value: isNull value || value == "emptyDir") subtreeValues then
+      else if all (value: value == null || value == "emptyDir") subtreeValues then
         null
 
       # Mix of included and excluded entries

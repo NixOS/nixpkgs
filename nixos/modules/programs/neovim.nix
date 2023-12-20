@@ -160,7 +160,7 @@ in
           (value // {
             target = "xdg/nvim/${value.target}";
           })
-          (optionals (isNull value.source) [ "source" ]);
+          (optionals (value.source == null) [ "source" ]);
       })
       cfg.runtime));
 

@@ -97,7 +97,7 @@ buildDotnetModule rec {
                 'true'
   '';
 
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = glibcLocales == null;
   LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
