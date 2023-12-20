@@ -14,7 +14,6 @@
 , glib
 , gdk-pixbuf
 , gobject-introspection
-, gtk2
 , gtk3
 , gtk4
 , gtk-doc
@@ -103,6 +102,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
@@ -144,7 +144,6 @@ stdenv.mkDerivation rec {
     dconf
     gdk-pixbuf
     python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
     gtk3
     gtk4
     isocodes
