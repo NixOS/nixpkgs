@@ -62,8 +62,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "5175a927a41acfd9a21d9fdecb705ea3292109f2";
-    hash = "sha256-c1fFcN6KAfxXv8bv4WnIqQKg1wcNP2AywhEmIbyzaBA=";
+    rev = "872b53e3d39a43c543498f437587fd7fb7fdca59";
+    hash = "sha256-ghRz4Frd+I9ShRNNOE/kdk9KjRCj0Z1mPnThueriiUY=";
   };
 
   # Ideally, rev should match the rstudio release name.
