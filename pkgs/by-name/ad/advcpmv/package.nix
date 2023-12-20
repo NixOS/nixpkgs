@@ -6,7 +6,7 @@ let
   advcpmv-data = {
     pname = "advcpmv";
     patch-version = "0.9";
-    coreutils-version = "9.3";
+    coreutils-version = "9.4";
     version = "${advcpmv-data.patch-version}-${advcpmv-data.coreutils-version}";
     src = fetchFromGitHub {
       owner = "jarun";
