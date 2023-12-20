@@ -7,15 +7,15 @@
 , libtool
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aacgain";
-  version = "2.0.0";
+  version = "2.0.0-unstable-2022-07-12";
 
   src = fetchFromGitHub {
     owner = "dgilman";
-    repo = pname;
-    rev = version;
-    hash = "sha256-842+ueBSrTRs/e14d2LUd+uFi2qgJOYv+dswpC0lgIo=";
+    repo = "aacgain";
+    rev = "9f9ae95a20197d1072994dbd89672bba2904bdb5";
+    hash = "sha256-WqL9rKY4lQD7wQSZizoM3sHNzLIG0E9xZtjw8y7fgmE=";
     fetchSubmodules = true;
   };
 
