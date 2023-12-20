@@ -58,15 +58,18 @@ index 033d605..f1ee63d 100644
 -      value="c:\rstudio-tools\dependencies\common\node\${node.version}\node_modules\yarn\bin\yarn.cmd"
 -      file="c:\rstudio-tools\dependencies\common\node\${node.version}\node_modules\yarn\bin\yarn.cmd"/>
 +   <property name="node.bin" value="@node@/bin/node"/>
- 
+
     <property name="panmirror.dir" value="./lib/quarto/apps/panmirror"/>
     <property name="panmirror.build.dir" value="./www/js/panmirror"/>
-@@ -126,21 +104,11 @@
-       file="c:\rstudio-tools\src\gwt\lib\quarto\apps\panmirror"/>
- 
-    <target name="panmirror" description="Compile panmirror library">
+@@ -133,28 +111,11 @@
+             <isset property="panmirror.minify" />
+          </not>
+       </condition>
+-
 -      <echo message="yarn location: ${yarn.bin}"/>
 -      <echo message="panmirror location: ${panmirror.dir}"/>
+-      <echo message="panmirror minify: ${panmirror.minify}"/>
+-
        <mkdir dir="${panmirror.build.dir}"/>
 -      <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
 -         <arg value="install"/>
@@ -75,14 +78,19 @@ index 033d605..f1ee63d 100644
 -      </exec>
 -      <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
 -         <arg value="build"/>
+-         <arg value="--minify"/>
+-         <arg value="${panmirror.minify}"/>
+-         <arg value="--sourcemap"/>
+-         <arg value="true"/>
 -         <env key="PANMIRROR_OUTDIR" value="dist-rstudio"/>
-+      <exec executable="${node.bin}" dir="${panmirror.dir}" spawn="${panmirror.spawn}">
-+         <arg value="fuse"/>
-+         <arg value="${panmirror.target}"/>
++     <exec executable="${node.bin}" dir="${panmirror.dir}" spawn="${panmirror.spawn}">
++          <arg value="fuse"/>
++          <arg value="${panmirror.target}"/>
        </exec>
 -      <copy todir="${panmirror.build.dir}">
 -         <fileset dir="${panmirror.dir}/dist-rstudio"/>
 -      </copy>
     </target>
- 
+
     <target name="javac" description="Compile java source">
+    
