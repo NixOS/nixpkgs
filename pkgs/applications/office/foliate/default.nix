@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "foliate";
-  version = "3.0.1";
+  version = "4";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = pname;
     rev = version;
-    hash = "sha256-ksjd/H62c9dhoOXQtrKqexAjLMGd/adP/fL78fYRi/Y=";
+    hash = "sha256-b02th6kZMvwKIJgk08FsUa7kAQKUuTKRyWUZ6pofUnU=";
     fetchSubmodules = true;
   };
 
