@@ -9,6 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NzYWHkHiaTMk3rOMJs/cPv5iCdY0ukJY2xzs/2pa1GE=";
   };
 
+  # FIXME: temporarily not applied on *-darwin to avoid rebuild of stdenv
+  patches = lib.optionals (!stdenv.isDarwin) [
+    # fetchpatch cannot be used due to infinite recursion
+    # https://github.com/libssh2/libssh2/commit/d34d9258b8420b19ec3f97b4cc5bf7aa7d98e35a
+    ./CVE-2023-48795.patch
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
