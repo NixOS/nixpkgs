@@ -14,6 +14,12 @@
 , zope_event
 , zope_interface
 , pythonOlder
+
+# for passthru.tests
+, dulwich
+, gunicorn
+, opentracing
+, pika
 }:
 
 buildPythonPackage rec {
@@ -29,6 +35,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    ./22.10.2-CVE-2023-41419.patch
     # Replace deprecated pkg_resources with importlib-metadata
     (fetchpatch {
       url = "https://github.com/gevent/gevent/commit/bd96d8e14dc99f757de22ab4bb98439f912dab1e.patch";
@@ -64,6 +71,14 @@ buildPythonPackage rec {
     "gevent"
     "gevent.events"
   ];
+
+  passthru.tests = {
+    inherit
+      dulwich
+      gunicorn
+      opentracing
+      pika;
+  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
   meta = with lib; {
     description = "Coroutine-based networking library";
