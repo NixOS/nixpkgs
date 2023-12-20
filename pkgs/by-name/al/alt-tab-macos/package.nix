@@ -1,29 +1,20 @@
 { lib
-, stdenvNoCC
-, fetchurl
-, unzip
+, fetchzip
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+fetchzip rec {
   pname = "alt-tab-macos";
   version = "6.61.0";
 
-  src = fetchurl {
-    url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${finalAttrs.version}/AltTab-${finalAttrs.version}.zip";
-    hash = "sha256-crmeYVeSmu5avNSd3dCbEeGnuqonh1HC5NnEOz8OB2U=";
-  };
+  url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${version}/AltTab-${version}.zip";
+  hash = "sha256-rPp3kCdfzm7WcVogPtaYy/ArGqRbYEEHB2bSgwQ4vp0=";
 
-  sourceRoot = ".";
+  stripRoot = false;
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
-
-    runHook postInstall
+  postFetch = ''
+    shopt -s extglob
+    mkdir $out/Applications
+    mv $out/!(Applications) $out/Applications
   '';
 
   meta = with lib; {
@@ -34,4 +25,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ emilytrau Enzime ];
     platforms = platforms.darwin;
   };
-})
+}
