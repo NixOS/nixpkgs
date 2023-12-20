@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E materus ];
+    maintainers = with maintainers; [ jb55 MP2E materus fpletz ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";
