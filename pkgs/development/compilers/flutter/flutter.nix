@@ -11,6 +11,7 @@
 , darwin
 , git
 , which
+, jq
 }:
 
 let
@@ -27,7 +28,7 @@ let
       inherit src patches version;
 
       buildInputs = [ git ];
-      nativeBuildInputs = [ makeWrapper ]
+      nativeBuildInputs = [ makeWrapper jq ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
       preConfigure = ''
@@ -67,6 +68,19 @@ let
         ln -s '${tools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 
         echo -n "${version}" > version
+        cat <<EOF > bin/cache/flutter.version.json
+        {
+          "devToolsVersion": "$(cat "${dart}/bin/resources/devtools/version.json" | jq -r .version)",
+          "flutterVersion": "${version}",
+          "frameworkVersion": "${version}",
+          "channel": "stable",
+          "repositoryUrl": "https://github.com/flutter/flutter.git",
+          "frameworkRevision": "nixpkgs000000000000000000000000000000000",
+          "frameworkCommitDate": "1970-01-01 00:00:00",
+          "engineRevision": "${engineVersion}",
+          "dartSdkVersion": "${dart.version}"
+        }
+        EOF
       '';
 
       installPhase = ''
