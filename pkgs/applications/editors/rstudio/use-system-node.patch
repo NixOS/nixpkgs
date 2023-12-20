@@ -32,7 +32,7 @@ index 033d605..f1ee63d 100644
 +++ b/src/gwt/build.xml
 @@ -87,29 +87,7 @@
     <!-- ensure version matches RSTUDIO_NODE_VERSION -->
-    <property name="node.version" value="16.14.0"/>
+    <property name="node.version" value="18.18.2"/>
     <property name="node.dir" value="../../dependencies/common/node/${node.version}"/>
 -   <!-- use yarn from system but will prefer yarn from dependencies if available -->
 -   <condition property="yarn.bin" value="yarn">
