@@ -1074,6 +1074,8 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    minttea = callPackage ../development/ocaml-modules/minttea { };
+
     mirage = callPackage ../development/ocaml-modules/mirage { };
 
     mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
