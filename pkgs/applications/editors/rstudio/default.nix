@@ -93,7 +93,7 @@ in
     ];
 
     buildInputs = [
-      boost
+      boost183
       zlib
       openssl
       R
