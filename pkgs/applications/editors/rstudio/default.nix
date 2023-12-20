@@ -43,15 +43,15 @@ let
   version =
   "${RSTUDIO_VERSION_MAJOR}.${RSTUDIO_VERSION_MINOR}.${RSTUDIO_VERSION_PATCH}${RSTUDIO_VERSION_SUFFIX}";
   RSTUDIO_VERSION_MAJOR  = "2023";
-  RSTUDIO_VERSION_MINOR  = "09";
+  RSTUDIO_VERSION_MINOR  = "12";
   RSTUDIO_VERSION_PATCH  = "0";
-  RSTUDIO_VERSION_SUFFIX = "+463";
+  RSTUDIO_VERSION_SUFFIX = "+369";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    hash = "sha256-FwNuU2rbE3GEhuwphvZISUMhvSZJ6FjjaZ1oQ9F8NWc=";
+    hash = "";
   };
 
   mathJaxSrc = fetchurl {
