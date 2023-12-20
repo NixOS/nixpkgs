@@ -12,14 +12,16 @@
 , pythonOlder
 , requests
 , selenium
+, setuptools
 , setuptools-scm
+, wheel
 , xyzservices
 }:
 
 buildPythonPackage rec {
   pname = "folium";
   version = "0.15.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -33,7 +35,9 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
