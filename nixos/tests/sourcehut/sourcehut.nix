@@ -14,7 +14,7 @@ in
 {
   name = "sourcehut";
 
-  meta.maintainers = [ pkgs.lib.maintainers.tomberek ];
+  meta.maintainers = with pkgs.lib.maintainers; [ tomberek nessdoor ];
 
   nodes.machine = { config, pkgs, nodes, ... }: {
     # buildsrht needs space
