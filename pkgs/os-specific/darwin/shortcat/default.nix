@@ -1,21 +1,18 @@
-{ lib, stdenv, fetchurl, unzip, ... }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   pname = "shortcat";
   version = "0.11.0";
 
-  src = fetchurl {
-    url = "https://files.shortcat.app/releases/v${version}/Shortcat.zip";
-    sha256 = "sha256-P8NQy9odWOD8wRHBTmaNH7OCXXvgQsMiI169KfsAABU=";
-  };
+  url = "https://files.shortcat.app/releases/v${version}/Shortcat.zip";
+  hash = "sha256-lEX+6/2EHKWf4GdsZj6vLRGAxbJUAuge8zCPSc/13rQ=";
 
-  sourceRoot = "Shortcat.app";
+  stripRoot = false;
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/Applications/Shortcat.app
-    cp -R . $out/Applications/Shortcat.app
+  postFetch = ''
+    shopt -s extglob
+    mkdir $out/Applications
+    mv $out/!(Applications) $out/Applications
   '';
 
   meta = with lib; {
