@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , curl, openssl, zlib, zstd
 , libiconv
 , version, hash, ...
@@ -13,8 +13,10 @@ in stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
-  src = fetchurl {
-    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
+  src = fetchFromGitHub {
+    owner = "mariadb-corporation";
+    repo = "mariadb-connector-c";
+    rev = "v${version}";
     inherit hash;
   };
 

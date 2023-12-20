@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
+  # `autogen.sh` runs `configure`, and expects that any flags needed
+  # by `configure` (like `--host`) are passed to `autogen.sh`.
+  configureScript = "./autogen.sh";
+
   nativeCheckInputs = [ python3 ];
   doCheck = true;
 

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "ubus";
-  version = "unstable-2023-11-14";
+  version = "unstable-2023-11-28";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ubus.git";
-    rev = "b3e8c4ef07ebb6f0f34a5c1f0dc1539068363619";
-    hash = "sha256-H/QrLMhdEC1LnSxHpp/90OdKbfHRqLVWUnzyQlsVO8c=";
+    rev = "f84eb5998c6ea2d34989ca2d3254e56c66139313";
+    hash = "sha256-5pIovqIeJczWAA9KQPKFnTnGRrIZVdSNdxBR8AEFtO4=";
   };
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" ];

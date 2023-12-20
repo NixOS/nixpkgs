@@ -2,7 +2,6 @@
 , fetchurl
 , pkg-config
 , glib
-, gobject-introspection
 , gtk3
 , libgee
 , gettext
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     meson
     ninja
     pkg-config

@@ -1,6 +1,6 @@
 import ./generic.nix {
   version = "4.4.4";
-  sha256 = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
+  hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
   extraPatches = [
     {
       name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";

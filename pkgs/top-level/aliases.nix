@@ -273,6 +273,7 @@ mapAliases ({
   fractal-next = fractal; # added 2023-11-25
   framework-system-tools = framework-tool; # added 2023-12-09
   fuse2fs = if stdenv.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
+  futuresql = libsForQt5.futuresql; # added 2023-11-11
   fx_cast_bridge = fx-cast-bridge; # added 2023-07-26
 
   fcitx = throw "fcitx is deprecated, please use fcitx5 instead."; # Added 2023-03-13
@@ -475,6 +476,7 @@ mapAliases ({
   liblastfm = libsForQt5.liblastfm; # Added 2020-06-14
   libmongo-client = throw "'libmongo-client' has been removed, upstream gone"; # Added 2023-06-22
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
+  libquotient = libsForQt5.libquotient; # Added 2023-11-11
   libraw_unstable = throw "'libraw_unstable' has been removed, please use libraw"; # Added 2023-01-30
   librdf = lrdf; # Added 2020-03-22
   libressl_3_5 = throw "'libressl_3_5' has reached end-of-life "; # Added 2023-05-07
@@ -840,6 +842,7 @@ mapAliases ({
   rtsp-simple-server = throw "rtsp-simple-server is rebranded as mediamtx, including default config path update"; # Added 2023-04-11
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
+  rustc-wasm32 = rustc; # Added 2023-12-01
   rxvt_unicode = rxvt-unicode-unwrapped; # Added 2020-02-02
   rxvt_unicode-with-plugins = rxvt-unicode; # Added 2020-02-02
 

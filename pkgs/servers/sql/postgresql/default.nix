@@ -5,6 +5,7 @@ let
       { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
+      , linux-pam
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -63,6 +64,7 @@ let
       ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
+      ++ lib.optionals stdenv'.isLinux [ linux-pam ]
       ++ lib.optionals (!stdenv'.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [
@@ -96,7 +98,8 @@ let
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv'.hostPlatform.isRiscV [ "--disable-spinlocks" ]
-      ++ lib.optionals jitSupport [ "--with-llvm" ];
+      ++ lib.optionals jitSupport [ "--with-llvm" ]
+      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 
     patches = [
       (if atLeast "16" then ./patches/disable-normalize_exec_path.patch

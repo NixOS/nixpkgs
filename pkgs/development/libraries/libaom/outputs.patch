@@ -43,7 +43,7 @@ index e8fff2e77..b8a73aad4 100644
 -                  "CMAKE_INSTALL_LIBDIR" "CMAKE_PROJECT_NAME"
 +                  "CMAKE_INSTALL_BINDIR" "CMAKE_INSTALL_FULL_INCLUDEDIR"
 +                  "CMAKE_INSTALL_FULL_LIBDIR" "CMAKE_PROJECT_NAME"
-                   "CONFIG_MULTITHREAD" "HAVE_PTHREAD_H")
+                   "CONFIG_MULTITHREAD")
  
  foreach(arg ${REQUIRED_ARGS})
 @@ -35,15 +35,15 @@ else()

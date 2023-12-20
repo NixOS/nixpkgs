@@ -117,7 +117,6 @@ stdenv.mkDerivation rec {
     "-DJPEGXL_FORCE_NEON=ON"
   ];
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
 
   # FIXME x86_64-darwin:

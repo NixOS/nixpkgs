@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.3.7";
+  version = "2.3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g=";
+    hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
   };
 
   nativeBuildInputs = [

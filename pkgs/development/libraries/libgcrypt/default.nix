@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
   '';
 
+  enableParallelBuilding = true;
+
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelChecking = true;
 
   passthru.tests = {
     inherit gnupg libotr rsyslog;

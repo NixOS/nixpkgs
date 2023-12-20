@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2023-11-03";
+  version = "unstable-2023-11-28";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "f7d1569113110ea8df071d2ea64fd17aaf5b42c9";
-    hash = "sha256-W0+QXI0gJ4WwrlRMPAJOChvilZ4zlAf4kXrfgBAkQAE=";
+    rev = "e80dc00ee90c29ef56ae28f414b0e5bb361206e7";
+    hash = "sha256-R4Yz4C63LQTNBKyNyiLMQHfc5KJBPFldP1trmtEBb9U=";
   };
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" (if with_lua then "-DLUAPATH=${placeholder "out"}/lib/lua" else "-DBUILD_LUA=OFF") ];

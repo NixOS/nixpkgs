@@ -1,4 +1,5 @@
-{ stdenv
+{ # stdenv FIXME: Try changing back to this with a new ROCm release https://github.com/NixOS/nixpkgs/issues/271943
+  gcc12Stdenv
 , callPackage
 , rocmUpdateScript
 , wrapBintoolsWith
@@ -12,18 +13,18 @@
 let
   ## Stage 1 ##
   # Projects
-  llvm = callPackage ./stage-1/llvm.nix { inherit rocmUpdateScript; };
-  clang-unwrapped = callPackage ./stage-1/clang-unwrapped.nix { inherit rocmUpdateScript llvm; };
-  lld = callPackage ./stage-1/lld.nix { inherit rocmUpdateScript llvm; };
+  llvm = callPackage ./stage-1/llvm.nix { inherit rocmUpdateScript; stdenv = gcc12Stdenv; };
+  clang-unwrapped = callPackage ./stage-1/clang-unwrapped.nix { inherit rocmUpdateScript llvm; stdenv = gcc12Stdenv; };
+  lld = callPackage ./stage-1/lld.nix { inherit rocmUpdateScript llvm; stdenv = gcc12Stdenv; };
 
   # Runtimes
-  runtimes = callPackage ./stage-1/runtimes.nix { inherit rocmUpdateScript llvm; };
+  runtimes = callPackage ./stage-1/runtimes.nix { inherit rocmUpdateScript llvm; stdenv = gcc12Stdenv; };
 
   ## Stage 2 ##
   # Helpers
   bintools-unwrapped = callPackage ./stage-2/bintools-unwrapped.nix { inherit llvm lld; };
   bintools = wrapBintoolsWith { bintools = bintools-unwrapped; };
-  rStdenv = callPackage ./stage-2/rstdenv.nix { inherit llvm clang-unwrapped lld runtimes bintools; };
+  rStdenv = callPackage ./stage-2/rstdenv.nix { inherit llvm clang-unwrapped lld runtimes bintools; stdenv = gcc12Stdenv; };
 in rec {
   inherit
   llvm
@@ -40,8 +41,8 @@ in rec {
 
   ## Stage 3 ##
   # Helpers
-  clang = callPackage ./stage-3/clang.nix { inherit llvm lld clang-unwrapped bintools libc libunwind libcxxabi libcxx compiler-rt; };
-  rocmClangStdenv = overrideCC stdenv clang;
+  clang = callPackage ./stage-3/clang.nix { inherit llvm lld clang-unwrapped bintools libc libunwind libcxxabi libcxx compiler-rt; stdenv = gcc12Stdenv; };
+  rocmClangStdenv = overrideCC gcc12Stdenv clang;
 
   # Projects
   clang-tools-extra = callPackage ./stage-3/clang-tools-extra.nix { inherit rocmUpdateScript llvm clang-unwrapped; stdenv = rocmClangStdenv; };

@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
   };
 
-  # Fix build with Node 20
   # FIXME: remove for next release
   patches = [
     (fetchpatch {
+      name = "nodejs-20.patch";
       url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
       hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
     })

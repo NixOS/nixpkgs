@@ -34,7 +34,7 @@ in
 let
 libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.11.5";
+  version = "2.12.3";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,7 +43,7 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "NyeweMNg7Gn6hp3hS9b3XX7o02mHsHHmko1HIKKN86Y=";
+    hash = "sha256-jI8QkjQKif8yvEStXJaTr/m8ino+FhuyOWZuXRWsmqo=";
   };
 
   strictDeps = true;

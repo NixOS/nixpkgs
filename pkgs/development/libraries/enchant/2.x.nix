@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , aspell
 , groff
 , pkg-config
@@ -14,22 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.6.2";
+  version = "2.6.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-ZoanKOVudg+N7gmiLw+1O0bunb59ZM+eW7NaZYv/fh0=";
+    hash = "sha256-wcVxnypZfOPgbJOM+5n7aX2gk96nuFfMAE3B3PG7oYI=";
   };
-
-  patches = [
-    # fix build with clang 16
-    (fetchpatch {
-      url = "https://github.com/AbiWord/enchant/commit/f71eb22e4af7f9917011807a41cf295d3ce0ccbc.patch";
-      hash = "sha256-9WWvpU3HKzPlxNBYQAKPppW6G3kOIC2A+MqX5eheBDA=";
-    })
-  ];
 
   nativeBuildInputs = [
     groff

@@ -65,6 +65,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
+  RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
@@ -99,6 +101,10 @@ in stdenv.mkDerivation (finalAttrs: {
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
       stdenv.targetPlatform.rust.rustcTargetSpec
+
+    # Other targets that don't need any extra dependencies to build.
+    ] ++ optionals (!fastCross) [
+      "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs

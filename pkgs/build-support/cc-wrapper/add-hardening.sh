@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
+  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
