@@ -268,7 +268,7 @@ in
         linkProfile = profile: location: let
           userProfile = guixProfile profile;
         in ''
-          [ -d "${userProfile}" ] && [ -L "${location}" ] || ln -sf "${userProfile}" "${location}"
+          [ -d "${userProfile}" ] && ln -sfn "${userProfile}" "${location}"
         '';
         linkProfileToPath = acc: profile: location: let
           in acc + (linkProfile profile location);
