@@ -75,7 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ misterio77 ];
+    maintainers = with lib.maintainers; [ misterio77 nevivurn ];
     mainProgram = "kavita";
   };
 })
