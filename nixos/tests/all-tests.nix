@@ -406,7 +406,7 @@ in {
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
   influxdb = handleTest ./influxdb.nix {};
   influxdb2 = handleTest ./influxdb2.nix {};
-  initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
+  initrd-network-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {};
   initrdNetwork = handleTest ./initrd-network.nix {};
@@ -830,7 +830,7 @@ in {
   systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix {};
   systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix {};
   systemd-initrd-networkd-ssh = handleTest ./systemd-initrd-networkd-ssh.nix {};
-  systemd-initrd-networkd-openvpn = handleTest ./initrd-network-openvpn { systemdStage1 = true; };
+  systemd-initrd-networkd-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-vlan = handleTest ./systemd-initrd-vlan.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};

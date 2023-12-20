@@ -14,6 +14,7 @@
 , update-systemd-resolved
 , pkcs11Support ? false
 , pkcs11helper
+, nixosTests
 }:
 
 let
@@ -75,9 +76,14 @@ let
 
 in
 {
-  openvpn = generic {
+  openvpn = (generic {
     version = "2.6.8";
     sha256 = "sha256-Xt4VZcim2IAQD38jUxen7p7qg9UFLbVUfxOp52r3gF0=";
     extraBuildInputs = [ openssl ];
-  };
+  }).overrideAttrs
+    (_: {
+      passthru.tests = {
+        inherit (nixosTests) initrd-network-openvpn systemd-initrd-networkd-openvpn;
+      };
+    });
 }
