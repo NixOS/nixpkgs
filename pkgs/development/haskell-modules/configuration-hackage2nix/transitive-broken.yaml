@@ -3114,7 +3114,6 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
- - postgrest
  - postmark
  - potoki
  - potoki-cereal

@@ -889,7 +889,6 @@ broken-packages:
   - config-parser # failure in job https://hydra.nixos.org/build/233206136 at 2023-09-02
   - Configurable # failure in job https://hydra.nixos.org/build/233200781 at 2023-09-02
   - configuration # failure in job https://hydra.nixos.org/build/233195399 at 2023-09-02
-  - configurator-pg # failure in job https://hydra.nixos.org/build/233219556 at 2023-09-02
   - config-value-getopt # failure in job https://hydra.nixos.org/build/233204566 at 2023-09-02
   - confsolve # failure in job https://hydra.nixos.org/build/233194913 at 2023-09-02
   - congruence-relation # failure in job https://hydra.nixos.org/build/233222125 at 2023-09-02
@@ -1749,7 +1748,6 @@ broken-packages:
   - future # failure in job https://hydra.nixos.org/build/233224844 at 2023-09-02
   - futures # failure in job https://hydra.nixos.org/build/233230206 at 2023-09-02
   - fuzzyfind # failure in job https://hydra.nixos.org/build/233206269 at 2023-09-02
-  - fuzzyset # failure in job https://hydra.nixos.org/build/233231726 at 2023-09-02
   - fuzzy-timings # failure in job https://hydra.nixos.org/build/233235765 at 2023-09-02
   - fvars # failure in job https://hydra.nixos.org/build/234461649 at 2023-09-13
   - fwgl # failure in job https://hydra.nixos.org/build/233246210 at 2023-09-02
