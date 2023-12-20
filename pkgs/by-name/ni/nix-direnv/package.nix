@@ -1,30 +1,59 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix
-}:
-stdenv.mkDerivation (finalAttrs:{
+{ resholve, lib, coreutils, direnv, nix, fetchFromGitHub }:
+
+# resholve does not yet support `finalAttrs` call pattern hence `rec`
+# https://github.com/abathur/resholve/issues/107
+resholve.mkDerivation rec {
   pname = "nix-direnv";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = finalAttrs.version;
-    hash = "sha256-bfcQYZViFuo7WsEl47pM7Iclg/paf+cLciX9NgaG01U=";
+    rev = version;
+    hash = "sha256-dwSICqFshBI9/4u40fkEqOuhTndnAx/w88zsnIzEcBk=";
   };
 
-  # Substitute instead of wrapping because the resulting file is
-  # getting sourced, not executed:
+  # skip min version checks which are redundant when built with nix
   postPatch = ''
-    sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
+    sed -i 1iNIX_DIRENV_SKIP_VERSION_CHECK=1 direnvrc
   '';
 
   installPhase = ''
     runHook preInstall
-    install -m500 -D direnvrc $out/share/nix-direnv/direnvrc
+    install -m400 -D direnvrc $out/share/nix-direnv/direnvrc
     runHook postInstall
   '';
+
+  solutions = {
+    default = {
+      scripts = [ "share/nix-direnv/direnvrc" ];
+      interpreter = "none";
+      inputs = [ coreutils nix ];
+      fake = {
+        builtin = [
+          "PATH_add"
+          "direnv_layout_dir"
+          "has"
+          "log_error"
+          "log_status"
+          "watch_file"
+        ];
+        function = [
+          # not really a function - this is in an else branch for macOS/homebrew that
+          # cannot be reached when built with nix
+          "shasum"
+        ];
+      };
+      keep = {
+        "$cmd" = true;
+        "$direnv" = true;
+      };
+      execer = [
+        "cannot:${direnv}/bin/direnv"
+        "cannot:${nix}/bin/nix"
+      ];
+    };
+  };
 
   meta = {
     description = "A fast, persistent use_nix implementation for direnv";
@@ -33,4 +62,4 @@ stdenv.mkDerivation (finalAttrs:{
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mic92 bbenne10 ];
   };
-})
+}
