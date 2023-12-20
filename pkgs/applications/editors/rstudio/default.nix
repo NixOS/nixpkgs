@@ -7,7 +7,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , cmake
-, boost
+, boost183
 , zlib
 , openssl
 , R
