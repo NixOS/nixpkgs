@@ -42,6 +42,9 @@ let
   cuda-modules = modules.evalModules {
     modules = [
       {
+        # Apply any user-specified overrides.
+        imports = pkgs.config.extraCudaModules or [ ];
+
         inherit (pkgs.config) cudaSupport;
         cudaCapabilities = pkgs.config.cudaCapabilities or [ ];
         cudaForwardCompat = pkgs.config.cudaForwardCompat or true;
@@ -91,53 +94,152 @@ let
       # as the `final` argument is not used to compute the attribute names.
       callPackageOnAttrs = attrsets.mapAttrs (_: value: final.callPackage value { });
 
-      # Helper function to get the general fixup function for a redistributable package.
-      getGeneralFixupFn =
-        {
-          redistName,
-          args ? { },
-        }:
-        final.callPackage config.${redistName}.generalFixupFn args;
-
-      # Helper function to get the indexed fixup function for a redistributable package.
-      getIndexedFixupFn =
-        { redistName }:
-        trivial.pipe config.${redistName}.indexedFixupFn [
-          # If it's a path, we need to import it before passing it along.
-          # The default value is an empty attrset so we don't need to import it.
-          (iff: if builtins.isPath iff then builtins.import iff else iff)
-          callPackageOnAttrs
-        ];
-
       # Helper function which wraps the generic manifest builder.
+      # Manifests have the shape { ${version} = { redistrib, feature }; }
+      # This builder will create an attribute set containing packages from each pair of redistributable and feature
+      # manifests for a given redistName.
+      #
+      # If `version` is non-null, only the package set for that version will be returned. No suffix will be appended.
+      #
+      # Otherwise, package sets for each version will be suffixed with the version and unioned with each other and the
+      # package set from the newest version of the manifest, which will not be suffixed.
+      # This means that packages from the newest manifest are available both with and without a suffix, while packages
+      # from older manifests are only available with a suffix.
       genericManifestBuilderFn =
         {
-          pname,
           redistName,
-          manifests,
-          generalFixupFn,
-          indexedFixupFn,
-          libPath ? null,
+          useLibPath,
+          # If version is specified, only build the redistributable package for that version.
+          version ? null,
         }:
-        trivial.pipe ../development/cuda-modules/generic-builders/manifest.nix [
-          # Build the package
-          (
-            path:
-            final.callPackage path {
-              inherit
-                pname
-                redistName
-                manifests
-                libPath
-                ;
-            }
-          )
-          # General package fixup
-          (drv: drv.overrideAttrs generalFixupFn)
-          # Package-specific fixup if it exists
-          (drv: drv.overrideAttrs (attrsets.attrByPath [ pname ] { } indexedFixupFn))
-        ];
+        let
+          # TODO(@connorbaker): Update the modules so it's named versionedManifests.
+          # Retrieve all versions of the manifests available for our redistName.
+          # versionedManifests :: { ${version} = { redistrib, feature }; }
+          versionedManifests =
+            let
+              allVersionedManifests =
+                attrsets.attrByPath
+                  [
+                    redistName
+                    "manifests"
+                  ]
+                  { }
+                  config;
+            in
+            if version != null then
+              # If version is specified, only build the redistributable package for that version.
+              # If we're specifying the version explicitly, it is assumed that it exists.
+              # It will be bother the only and the nested manifest.
+              { "${version}" = allVersionedManifests.${version}; }
+            else
+              allVersionedManifests;
 
+          # Our cudaVersion tells us which version of CUDA we're building against.
+          # The subdirectories in lib/ tell us which versions of CUDA are supported.
+          # Typically the names will look like this:
+          #
+          # - 10.2
+          # - 11
+          # - 11.0
+          # - 12
+          #
+          # Not every package uses this layout, but we can precompute it here.
+          # libPath :: String
+          libPath =
+            if useLibPath then if cudaVersion == "10.2" then cudaVersion else cudaMajorVersion else null;
+
+          # Build a redistributable package given the version and corresponding manifest.
+          buildPackageSetFromVersionedManifest =
+            let
+              # Retrieve our fixup functions which do not rely on the version of the manifest being processed.
+              indexedFixupFn = trivial.pipe config.${redistName}.indexedFixupFn [
+                # If it's a path, we need to import it before passing it along.
+                # The default value is an empty attrset so we don't need to import it.
+                (maybePath: if builtins.isPath maybePath then builtins.import maybePath else maybePath)
+                # Use callPackage on the values in the attrset.
+                callPackageOnAttrs
+              ];
+            in
+            # version :: String
+            version:
+            let
+              # Retrieve our indexedFixupFn, which does not rely on the version of the manifest being processed.
+              generalFixupFn = final.callPackage config.${redistName}.generalFixupFn {
+                inherit redistName version;
+              };
+            in
+            # manifests :: { redistrib, feature }
+            manifests:
+
+            # Map over the attribute names of the feature manifest, which contain only package names.
+            attrsets.genAttrs (builtins.attrNames manifests.feature) (
+              # pname :: String
+              pname:
+              trivial.pipe pname [
+                # Build the package
+                (
+                  pname:
+                  final.callPackage ../development/cuda-modules/generic-builders/manifest.nix {
+                    inherit
+                      pname
+                      redistName
+                      manifests
+                      libPath
+                      ;
+                  }
+                )
+                # General package fixup
+                (drv: drv.overrideAttrs generalFixupFn)
+                # Package-specific fixup if it exists
+                (drv: drv.overrideAttrs (attrsets.attrByPath [ pname ] { } indexedFixupFn))
+              ]
+            );
+
+          # For each version in our manifests, build a package set.
+          # Do not rename packages yet; that's handled later.
+          versionedPackageSets = attrsets.mapAttrs buildPackageSetFromVersionedManifest versionedManifests;
+
+          # Fold over any remaining package sets and append a suffix to the package names.
+          flattenedVersionedSuffixedPackageSets =
+            attrsets.concatMapAttrs
+              (
+                # version :: String
+                version:
+                # packages :: { ${pname} = drv; }
+                packages:
+                attrsets.mapAttrs'
+                  (pname: drv: {
+                    name = mkVersionedPackageName pname version;
+                    value = drv;
+                  })
+                  packages
+              )
+              versionedPackageSets;
+        in
+        trivial.throwIf (versionedPackageSets == { })
+          ''
+            No manifests found for ${redistName}.
+            Please check that there are in fact manifest files present and that there are not filtered out by a version
+            check or (within the module evaluation) by an incorrect manifest filename (which would case the regex to
+            fail to match).
+          ''
+          (
+            let
+              # Since versionedPackageSets is non-empty, we can safely assume that newestToOldestVersion is non-empty.
+              newestToOldestVersion = lists.sort (trivial.flip strings.versionOlder) (
+                builtins.attrNames versionedManifests
+              );
+              newestVersion = builtins.head newestToOldestVersion;
+              newestPackageSet = versionedPackageSets.${newestVersion};
+            in
+            if version != null then
+              # If version is non-null, just return the newest package set.
+              newestPackageSet
+            else
+              # Otherwise, return the flattened package set unioned with the default package set (the newest).
+              newestPackageSet // flattenedVersionedSuffixedPackageSets
+          );
       # Helper function which wraps the generic multiplex builder.
       genericMultiplexBuilderFn =
         pname:
@@ -189,144 +291,23 @@ let
     # Setup hooks
     // callPackageOnAttrs (builtins.import ../development/cuda-modules/setup-hooks)
     # Redistributable packages
-    // (
-      let
-        redistName = "cuda";
-
-        # Retrieve the manifests for our cudaVersion.
-        # We unconditionally access manifests.feature so we need to make sure it exists (even if it is empty).
-        # manifests :: { redistrib, feature }
-        manifests =
-          attrsets.attrByPath
-            [
-              redistName
-              "manifests"
-              cudaVersion
-            ]
-            ({
-              redistrib = { };
-              feature = { };
-            })
-            config;
-
-        # Retrieve our fixup functions.
-        generalFixupFn = getGeneralFixupFn { 
-          inherit redistName;
-          args = {inherit manifests; };
-        };
-        indexedFixupFn = getIndexedFixupFn { inherit redistName; };
-
-        # Build a single redistributable package.
-        buildRedistPackage =
-          pname:
-          genericManifestBuilderFn {
-            inherit
-              manifests
-              pname
-              redistName
-              generalFixupFn
-              indexedFixupFn
-              ;
-          };
-
-        # Map our buildRedistPackage function over all the packages in manifests.feature.
-        # This is an empty attrset if manifests.feature is empty, which is what we want.
-        redistPackages = trivial.pipe manifests.feature [
-          # Get all the package names
-          builtins.attrNames
-          # Build the redist packages
-          (trivial.flip attrsets.genAttrs buildRedistPackage)
-        ];
-      in
-      redistPackages
-    )
+    // genericManifestBuilderFn {
+      redistName = "cuda";
+      useLibPath = false;
+      version = cudaVersion;
+    }
     # CuTensor
-    // (
-      let
-        # redistArch :: Optional String
-        redistArch = flags.getRedistArch hostPlatform.system;
-        redistName = "cutensor";
-        pname = "libcutensor";
-        
-        # Our cudaVersion tells us which version of CUDA we're building against.
-        # The subdirectories in lib/ tell us which versions of CUDA are supported.
-        # Typically the names will look like this:
-        #
-        # - 10.2
-        # - 11
-        # - 11.0
-        # - 12
-        # libPath :: String
-        libPath = if cudaVersion == "10.2" then cudaVersion else cudaMajorVersion;
-        
-        # Our build for cutensor is actually multiplexed -- we build a cutensor package for each version of CUDA that
-        # cutensor supports. Currently, we don't know ahead of time what the contents of the lib directory are for
-        # each package, so building these is best-effort.
-        # manifests :: { ${version} = { redistrib, feature }; }
-        manifests =
-          attrsets.filterAttrs
-            (
-              _version: manifests:
-              lists.all trivial.id [
-                # Platform must be supported
-                (redistArch != null)
-                (
-                  attrsets.attrByPath
-                    [
-                      pname
-                      redistArch
-                    ]
-                    null
-                    manifests.feature != null
-                )
-              ]
-            )
-            config.${redistName}.manifests;
-
-        # Retrieve our fixup functions.
-        generalFixupFn = getGeneralFixupFn { inherit redistName; };
-        indexedFixupFn = getIndexedFixupFn { inherit redistName; };
-
-        redistPackages =
-          attrsets.mapAttrs'
-            (version: manifests: {
-              name = mkVersionedPackageName pname version;
-              value = genericManifestBuilderFn {
-                inherit
-                  manifests
-                  pname
-                  redistName
-                  generalFixupFn
-                  indexedFixupFn
-                  libPath
-                  ;
-              };
-            })
-            manifests;
-      in
-      redistPackages
-      // attrsets.optionalAttrs (redistPackages != { }) {
-        ${pname} =
-          let
-            # Get the newest version in our pruned manifests.
-            nameOfNewest = trivial.pipe manifests [
-              # Get all the versions
-              builtins.attrNames
-              # Sort in descending order
-              (lists.sort (trivial.flip strings.versionOlder))
-              # Get the first element
-              builtins.head
-              # Get the name of the newest version
-              (mkVersionedPackageName pname)
-            ];
-          in
-          redistPackages.${nameOfNewest};
-      }
-    )
+    # Our build for cutensor is actually multiplexed -- we build a cutensor package for each version of CUDA that
+    # cutensor supports. Currently, we don't know ahead of time what the contents of the lib directory are for
+    # each package, so building these is best-effort.
+    // genericManifestBuilderFn {
+      redistName = "cutensor";
+      useLibPath = true;
+    }
     # CUDNN
-    // (genericMultiplexBuilderFn "cudnn")
+    // genericMultiplexBuilderFn "cudnn"
     # TensorRT
-    // (genericMultiplexBuilderFn "tensorrt");
+    // genericMultiplexBuilderFn "tensorrt";
 in
 trivial.pipe config.versions [
   (builtins.map (

@@ -95,7 +95,7 @@ in
           configurations, they do not preserve functionArgs, and so callPackage will fail because it cannot supply
           arguments by default.
         '';
-        default = _: {};
+        default = {}: {};
         type = types.oneOf [types.path (types.functionTo types.attrs)];
       };
       indexedFixupFn = options.mkOption {
