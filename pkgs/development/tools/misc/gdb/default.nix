@@ -6,7 +6,7 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, libiconv
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, pythonSupport ? !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
 , hostCpuOnly ? false
@@ -18,12 +18,17 @@
    targetPackages.stdenv.cc.cc.lib
   ]
 , writeScript
+, pkgsBuildBuild
 }:
 
 let
   basename = "gdb";
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
                  "${stdenv.targetPlatform.config}-";
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  pythonQemu = writeScript "python" ''
+    exec ${pkgsBuildBuild.qemu}/bin/qemu-${stdenv.hostPlatform.qemuArch} ${python3}/bin/python $@
+  '';
 in
 
 assert pythonSupport -> python3 != null;
@@ -112,6 +117,7 @@ stdenv.mkDerivation rec {
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
+    ++ lib.optional (isCross && pythonSupport) "--with-python=${pythonQemu}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
