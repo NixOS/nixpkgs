@@ -2055,4 +2055,37 @@ runTests {
     expr = meta.platformMatch { } "x86_64-linux";
     expected = false;
   };
+
+  testPackagesFromDirectoryRecursive = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
+  # Check that `packagesFromDirectoryRecursive` can process a directory with a
+  # top-level `package.nix` file into a single package.
+  testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory/c;
+    };
+    expected = "c";
+  };
 }
