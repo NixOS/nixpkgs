@@ -5,7 +5,7 @@
 # Remove gcc and python references
 , removeReferencesTo
 , pkg-config
-, volk
+, libvolk
 , cppunit
 , orc
 , boost
@@ -59,7 +59,7 @@ let
         orc
       ];
       runtime = [
-        volk
+        libvolk
         boost
         spdlog
         mpir
@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must
     inherit
       boost
-      volk
+      libvolk
     ;
     # Used by many gnuradio modules, the same attribute is present in
     # previous gnuradio versions where there it's log4cpp.
