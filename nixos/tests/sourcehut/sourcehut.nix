@@ -189,10 +189,15 @@ in
       machine.execute("echo \"Hello world!\" > test/hello.txt")
       machine.execute("cd test && git add .")
       machine.execute("cd test && git commit -m \"Initial commit\"")
+      machine.execute("cd test && git tag v0.1")
       machine.succeed("cd test && git remote add origin gitsrht@git.${domain}:~${userName}/test")
       machine.execute("( echo -n 'git.${domain} '; cat /etc/ssh/ssh_host_ed25519_key.pub ) > ~/.ssh/known_hosts")
       machine.succeed("hut git create test")
-      machine.succeed("cd test && git push --set-upstream origin master")
+      machine.succeed("cd test && git push --tags --set-upstream origin master")
+
+      ## Verify that the repo can be downloaded as a compressed tar archive
+      machine.succeed("curl https://git.${domain}/~${userName}/test/archive/v0.1.tar.gz | tar -xz")
+      machine.succeed("diff test-v0.1/hello.txt test/hello.txt")
 
       # Testing buildsrht
       machine.wait_for_unit("buildsrht.service")
