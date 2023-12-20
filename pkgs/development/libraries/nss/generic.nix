@@ -1,4 +1,4 @@
-{ version, hash, github ? false }:
+{ version, hash }:
 { lib
 , stdenv
 , fetchFromGitHub
