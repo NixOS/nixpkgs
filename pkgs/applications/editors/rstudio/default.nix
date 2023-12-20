@@ -51,7 +51,7 @@ let
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    hash = "";
+    hash = "sha256-dJBnUsGUshzPwl9Ns8lTdIiQGjeLExAywUuTpBNSKEM=";
   };
 
   mathJaxSrc = fetchurl {
