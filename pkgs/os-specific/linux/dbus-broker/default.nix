@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-broker";
-  version = "34";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "bus1";
     repo = "dbus-broker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rbTvJGWTfUQkCbqLmifM/JgwXTjzcpDeUWlEQCsWFog=";
+    hash = "sha256-Qwi9X5jXHiQ3TOWefzv/p7x8/JkQW1QgdYji5SpLej0=";
   };
 
   patches = [
