@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.6.4";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +20,8 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BMwi3a7CPq58G30XlkJdSfSP6oc6u2AuSPAwEExI9zM=";
+    hash = "sha256-jplcKVXWogSrYRGch0qypWGNzO9HErR5B9S1iT4eFcM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \

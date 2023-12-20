@@ -31,8 +31,6 @@ buildPythonPackage rec {
       --replace '/usr/bin/env' '${coreutils}/bin/env'
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm

@@ -2,13 +2,14 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "pyngrok";
   version = "7.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-RNi0ivQKsLb/JD9+vdJYGf5HDC6BmeNdseR2OU8v1uY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml

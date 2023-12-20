@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -47,10 +47,14 @@ buildPythonPackage rec {
     "aspectlib.test"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     process-tests
     pytestCheckHook
     tornado
+  ];
+
+  pytestFlagsArray = [
+    "-W ignore::DeprecationWarning"
   ];
 
   __darwinAllowLocalNetworking = true;

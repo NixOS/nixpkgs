@@ -16,6 +16,9 @@ self: super: with self; {
     build = toPythonModule (callPackage ../development/python-modules/bootstrap/build {
       inherit (bootstrap) flit-core installer;
     });
+    packaging = toPythonModule (callPackage ../development/python-modules/bootstrap/packaging {
+      inherit (bootstrap) flit-core installer;
+    });
   };
 
   setuptools = callPackage ../development/python-modules/setuptools { };
@@ -797,6 +800,8 @@ self: super: with self; {
   astropy-healpix = callPackage ../development/python-modules/astropy-healpix { };
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
+
+  astropy-iers-data = callPackage ../development/python-modules/astropy-iers-data { };
 
   astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
 
@@ -2530,13 +2535,13 @@ self: super: with self; {
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
-  cython = callPackage ../development/python-modules/Cython { };
+  cython = callPackage ../development/python-modules/cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.3";
+    version = "3.0.6";
     src = old.src.override {
       inherit version;
-      hash = "sha256-MnMJMBsB9ynxc6lFEcsigMh7oDyJ7UKOiPkT93gkUDA=";
+      hash = "sha256-OZ0YVnLGZ7Juq73KQgyYVkWDeYrzvEdnCooJ6fGd1mA=";
     };
     patches = [ ];
   });
@@ -2685,7 +2690,7 @@ self: super: with self; {
 
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
-  dbus-python = callPackage ../development/python-modules/dbus {
+  dbus-python = callPackage ../development/python-modules/dbus-python {
     inherit (pkgs) dbus;
   };
 
@@ -4816,6 +4821,8 @@ self: super: with self; {
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
+  gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
+
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
@@ -5870,6 +5877,8 @@ self: super: with self; {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
@@ -6684,6 +6693,8 @@ self: super: with self; {
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
+  regress = callPackage ../development/python-modules/regress { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   makefun = callPackage ../development/python-modules/makefun { };
@@ -7052,7 +7063,7 @@ self: super: with self; {
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
-  mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
+  mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
   mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
@@ -8850,6 +8861,8 @@ self: super: with self; {
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
+  paginate = callPackage ../development/python-modules/paginate { };
+
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
   palace = callPackage ../development/python-modules/palace { };
@@ -9062,7 +9075,10 @@ self: super: with self; {
 
   pem = callPackage ../development/python-modules/pem { };
 
-  pendulum = callPackage ../development/python-modules/pendulum { };
+  pendulum = if pythonAtLeast "3.12" then
+    callPackage ../development/python-modules/pendulum/3.nix { }
+  else
+    callPackage ../development/python-modules/pendulum { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
@@ -10173,6 +10189,8 @@ self: super: with self; {
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
+
+  pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
@@ -13089,6 +13107,8 @@ self: super: with self; {
   signedjson = callPackage ../development/python-modules/signedjson { };
 
   sigrok = callPackage ../development/python-modules/sigrok { };
+
+  sigstore = callPackage ../development/python-modules/sigstore { };
 
   sigstore-protobuf-specs = callPackage ../development/python-modules/sigstore-protobuf-specs { };
 

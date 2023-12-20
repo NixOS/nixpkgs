@@ -4,7 +4,7 @@
 , buildPythonPackage
 , pythonOlder
   # Mitmproxy requirements
-, aioquic
+, aioquic-mitmproxy
 , asgiref
 , blinker
 , brotli
@@ -29,7 +29,7 @@
 , setuptools
 , sortedcontainers
 , tornado
-, urwid
+, urwid-mitmproxy
 , wsproto
 , zstandard
   # Additional check requirements
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    aioquic
+    aioquic-mitmproxy
     asgiref
     blinker
     brotli
@@ -81,7 +81,7 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid
+    urwid-mitmproxy
     wsproto
     zstandard
   ] ++ lib.optionals stdenv.isDarwin [

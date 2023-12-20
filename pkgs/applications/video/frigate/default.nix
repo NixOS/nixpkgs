@@ -25,6 +25,12 @@ let
 
   python = python3.override {
     packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+
+      versioningit = super.versioningit.overridePythonAttrs {
+        # checkPhase requires pydantic>=2
+        doCheck = false;
+      };
     };
   };
 

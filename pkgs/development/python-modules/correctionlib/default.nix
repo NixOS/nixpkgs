@@ -47,8 +47,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     awkward
     pytestCheckHook
@@ -64,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

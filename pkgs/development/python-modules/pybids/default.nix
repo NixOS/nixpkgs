@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, fetchpatch
+, setuptools
 , formulaic
 , click
 , num2words
@@ -9,7 +9,6 @@
 , scipy
 , pandas
 , nibabel
-, patsy
 , bids-validator
 , sqlalchemy
 , pytestCheckHook
@@ -18,35 +17,43 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.16.3";
-  format = "setuptools";
   pname = "pybids";
+  version = "0.16.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EOJ5NQyNFMpgLA1EaaXkv3/zk+hkPIMaVGrnNba4LMM=";
+    hash = "sha256-pahl8wi6Sf8AuVqkvi7H90ViHr+9utb14ZVmKK3rFm4=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
 
   pythonRelaxDeps = [ "sqlalchemy" ];
 
   propagatedBuildInputs = [
+    bids-validator
     click
     formulaic
+    nibabel
     num2words
     numpy
-    scipy
     pandas
-    nibabel
-    patsy
-    bids-validator
+    scipy
     sqlalchemy
-    versioneer
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "bids" ];
+  pythonImportsCheck = [
+    "bids"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   disabledTests = [
     # looks for missing data:
     "test_config_filename"

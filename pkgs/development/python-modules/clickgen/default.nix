@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, attrs
 , pillow
 , toml
 , numpy
@@ -25,9 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-mSaltlX2eNRLJ09zN5Tim8mW8mnjPi10W4QIEpiBQvI=";
   };
 
-  propagatedBuildInputs = [ pillow toml numpy pyyaml ];
+  propagatedBuildInputs = [
+    attrs
+    numpy
+    pillow
+    pyyaml
+    toml
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   postInstall = ''
     # Copying scripts directory needed by clickgen script at $out/bin/

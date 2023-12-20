@@ -57,6 +57,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # on a 200ms deadline
+    "test_points"
+  ];
+
   pythonImportsCheck = [ "broadbean" ];
 
   meta = {

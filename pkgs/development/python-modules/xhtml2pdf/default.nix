@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.11";
+  version = "0.2.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/HCw+O8bidtE5nDdO+cLS54m64dlJL+9Gjcye5gM+w=";
+    hash = "sha256-K7gsTLYcXmKmEQzOXrJ2kvvLzKaDkZ/NRLRc0USii5M=";
   };
 
   propagatedBuildInputs = [

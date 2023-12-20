@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     typing-extensions
   ];
 

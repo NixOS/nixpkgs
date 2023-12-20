@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , hatchling
 , pydantic
 , python-dotenv
@@ -11,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pydantic-settings";
-  version = "2.0.3";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-settings";
     rev = "v${version}";
-    hash = "sha256-3V6daCibvVr8RKo2o+vHC++QgIYKAOyRg11ATrCzM5Y=";
+    hash = "sha256-hU7u/AzaqCHKSUDHybsgXTW8IWi9hzBttPYDmMqdZbI=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +39,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-examples
     pytest-mock
+  ];
+
+  disabledTests = [
+    # expected to fail
+    "test_docs_examples[docs/index.md:212-246]"
   ];
 
   preCheck = ''

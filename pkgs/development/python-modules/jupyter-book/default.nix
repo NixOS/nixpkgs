@@ -65,7 +65,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docutils"
-    "sphinx-design"
+    "myst-nb"
+    "sphinx"
+    "sphinx-thebe"
+    "sphinxcontrib-bibtex"
   ];
 
   pythonImportsCheck = [

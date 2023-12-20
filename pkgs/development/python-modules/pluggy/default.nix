@@ -24,8 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   # To prevent infinite recursion with pytest
   doCheck = false;
   passthru.tests = {

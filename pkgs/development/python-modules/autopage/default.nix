@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "autopage";
-  version = "0.5.1";
+  version = "0.5.2";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ab4+5hu3FOkJD8xcEPTPVGw5YzHGIMauUKIyGyjtMZk=";
+    hash = "sha256-gmmW10xaqfS2kWGVVHMSrGOEusOBC4UXBj8pMkgle3I=";
   };
 
   nativeBuildInputs = [

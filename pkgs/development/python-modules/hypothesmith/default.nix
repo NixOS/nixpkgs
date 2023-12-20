@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Uj2gTAY7hzko1sKO8WUGz2S/MXdwOYN+F+a73G4szNs=";
+    hash = "sha256-h5kXemST6DLIF0aEKoaGdSs7G7lTDW6DK64XWEENrzo=";
   };
 
   patches = [

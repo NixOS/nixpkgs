@@ -11,15 +11,15 @@
 , pytest-mock
 , pythonOlder
 , requests
+, setuptools
 , setuptools-scm
-, tqdm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
   version = "1.29.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,6 +29,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

@@ -1,21 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TJDDvvr4jmErcfSzmve8vviXes+oVc7JVyJaj79QQAc=";
+    hash = "sha256-sVeR6+pDIhhUOhcC12rkXS/5X/mU5SAUuGhqadrXcv0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -3,6 +3,8 @@
 , fetchPypi
 , pythonOlder
 , pythonRelaxDepsHook
+, writeShellScriptBin
+, gradio
 
 # pyproject
 , hatchling
@@ -31,15 +33,16 @@
 , python-multipart
 , pydub
 , pyyaml
-, requests
 , semantic-version
 , typing-extensions
 , uvicorn
-, websockets
+, typer
+, tomlkit
 
 # check
 , pytestCheckHook
 , boto3
+, gradio-pdf
 , ffmpeg
 , ipython
 , pytest-asyncio
@@ -53,22 +56,29 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "3.44.3";
+  version = "4.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  # We use the Pypi release, as it provides prebuilt webui assets,
-  # and has more frequent releases compared to github tags
+  # We use the Pypi release, since it provides prebuilt webui assets,
+  # and upstream has stopped tagging releases since 3.41.0
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3mXs9PwlzUo89VosBWtnsOzDQf/T22Yv7s5j6OLLp3M=";
+    hash = "sha256-KosxlmU5pYvuy5zysscuWM25IGXin7RLGEM9V2xPQrU=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
   postPatch = ''
     sed -ie "s/ #.*$//g" requirements*.txt
+
+    # they bundle deps?
+    rm -rf venv/
   '';
+
+  pythonRelaxDeps = [
+    "tomlkit"
+  ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -99,16 +109,17 @@ buildPythonPackage rec {
     python-multipart
     pydub
     pyyaml
-    requests
     semantic-version
     typing-extensions
     uvicorn
-    websockets
-  ];
+    typer
+    tomlkit
+  ] ++ typer.passthru.optional-dependencies.all;
 
   nativeCheckInputs = [
     pytestCheckHook
     boto3
+    gradio-pdf
     ffmpeg
     ipython
     pytest-asyncio
@@ -119,7 +130,10 @@ buildPythonPackage rec {
     tqdm
     transformers
     vega-datasets
-  ];
+
+    # mock npm to make `shutil.which("npm")` pass
+    (writeShellScriptBin "npm" "false")
+  ] ++ pydantic.passthru.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
@@ -148,12 +162,14 @@ buildPythonPackage rec {
     "test_shapley_text"
   ];
   disabledTestPaths = [
+    # 100% touches network
+    "test/test_networking.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
   ];
   pytestFlagsArray = [
     "-x"  # abort on first failure
-    #"-m" "not flaky" # doesn't work, even when advertised
+    "-m 'not flaky'"
     #"-W" "ignore" # uncomment for debugging help
   ];
 
@@ -164,6 +180,23 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "gradio" ];
+
+  # Cyclic dependencies are fun!
+  # This is gradio without gradio-client and gradio-pdf
+  passthru = {
+    sans-reverse-dependencies = (gradio.override (old: {
+      gradio-client = null;
+      gradio-pdf = null;
+    })).overridePythonAttrs (old: {
+      pname = old.pname + "-sans-client";
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pythonRelaxDepsHook ];
+      pythonRemoveDeps = (old.pythonRemoveDeps or []) ++ [ "gradio-client" ];
+      doInstallCheck = false;
+      doCheck = false;
+      pythonImportsCheck = null;
+      dontCheckRuntimeDeps = true;
+    });
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";
