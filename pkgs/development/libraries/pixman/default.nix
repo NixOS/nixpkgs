@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
   '';
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   postInstall = glib.flattenInclude;
