@@ -1,26 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, nixosTests, ... }:
+{ lib, fetchzip, nixosTests, ... }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   pname = "vikunja-frontend";
   version = "0.22.0";
 
-  src = fetchurl {
-    url = "https://dl.vikunja.io/frontend/${pname}-${version}.zip";
-    hash = "sha256-LYU1IGAhSZOwMI44HW5IfcBKs9RkU/IXGVgPGDKnKAs=";
-  };
+  url = "https://dl.vikunja.io/frontend/${pname}-${version}.zip";
+  hash = "sha256-mMfK+58nN014ta09/mTbz/6BgQIBj6DqJSPaRtGZ3A8=";
 
-  nativeBuildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/
-    cp -r * $out/
-
-    runHook postInstall
-  '';
+  stripRoot = false;
 
   passthru.tests.vikunja = nixosTests.vikunja;
 
