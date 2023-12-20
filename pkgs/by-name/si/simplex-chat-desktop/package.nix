@@ -5,7 +5,7 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "5.3.1";
+  version = "5.4.1";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
