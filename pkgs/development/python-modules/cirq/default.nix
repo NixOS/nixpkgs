@@ -26,7 +26,9 @@ buildPythonPackage rec {
     cirq-web
   ];
 
-  # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
+  # cirq's importlib hook doesn't work here
+  # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
