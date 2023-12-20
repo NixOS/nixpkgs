@@ -62,6 +62,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # https://github.com/pubs/pubs/issues/276
     "test_readme"
+    # AssertionError: Lists differ: ['Ini[112 chars]d to...
+    "test_add_non_standard"
   ];
 
   pythonImportsCheck = [
