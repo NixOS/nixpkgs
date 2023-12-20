@@ -15,7 +15,6 @@ let
   inherit (lib)
     attrsets
     lists
-    modules
     strings
     ;
   cfg = config.${pname};
@@ -37,6 +36,7 @@ let
     && strings.versionAtLeast package.maxCudaVersion cudaVersion;
 
   # Get all of the packages for our given platform.
+  # redistArch :: Optional String
   redistArch = flags.getRedistArch hostPlatform.system;
 
   # All the supported packages we can build for our platform.
