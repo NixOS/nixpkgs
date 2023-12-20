@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , mock
 , pytestCheckHook
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-gHdK7LAklFgnWreD9TCT++dXlf8rMhjSLOP/8KEsTaY=";
   };
+
+  patches = [
+    # https://github.com/simplistix/testfixtures/pull/188
+    (fetchpatch {
+      name = "python3.12-compatibility.patch";
+      url = "https://github.com/simplistix/testfixtures/commit/2b80b195e30e12c739dc4f98e9de17dec8f3558a.patch";
+      hash = "sha256-LrC0uI4k3F6ZGTqbKi319tRbVk5557xbyzQN36Y1160=";
+     })
+  ];
 
   nativeCheckInputs = [
     mock
