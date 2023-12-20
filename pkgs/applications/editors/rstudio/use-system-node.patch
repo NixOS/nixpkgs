@@ -6,7 +6,7 @@ index d18362b..98cdd4c 100644
  external-pandoc-path=${RSTUDIO_DEPENDENCIES_PANDOC_DIR}
  external-quarto-path=${RSTUDIO_DEPENDENCIES_QUARTO_DIR}
  external-libclang-path=${RSTUDIO_DEPENDENCIES_DIR}/common/libclang
--external-node-path=${RSTUDIO_DEPENDENCIES_DIR}/common/node/16.14.0/bin/node
+-external-node-path=${RSTUDIO_DEPENDENCIES_DIR}/common/node/18.18.2/bin/node
 +external-node-path=@node@/bin/node
  
  # enable copilot
