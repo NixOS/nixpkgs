@@ -1783,6 +1783,8 @@ let
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
+    tty = callPackage ../development/ocaml-modules/tty { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
