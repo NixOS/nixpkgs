@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "6.0.8";
+  version = "6.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-7XvS5HviK9XRsxTGnreYX9IQxxGWk7x7MHtcsHCz1rc=";
+    hash = "sha256-ompsCTPmmF7S0UHNNU0YDQiTdvcFglpEoS4o+XMZ7jg=";
   };
 
   postPatch = ''
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       deepin-system-monitor-main/process/priority_controller.cpp \
       deepin-system-monitor-main/service/service_manager.cpp \
       deepin-system-monitor-main/translations/policy/com.deepin.pkexec.deepin-system-monitor.policy \
-        --replace "/usr/bin/kill" "${util-linux}/bin/kill" \
-        --replace "/usr/bin/renice" "${util-linux}/bin/renice" \
+        --replace "/usr/bin/kill" "${lib.getBin util-linux}/bin/kill" \
+        --replace "/usr/bin/renice" "${lib.getBin util-linux}/bin/renice" \
         --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl'
 
     substituteInPlace deepin-system-monitor-main/{service/service_manager.cpp,process/{priority_controller.cpp,process_controller.cpp}} \
