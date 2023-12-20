@@ -68,7 +68,7 @@ in buildGoModule rec {
 
   preFixup = ''
     mkdir -p $out/lib
-    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/php.ini"
+    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/frankenphp.ini"
 
     wrapProgram $out/bin/frankenphp --set-default PHP_INI_SCAN_DIR $out/lib
   '';
