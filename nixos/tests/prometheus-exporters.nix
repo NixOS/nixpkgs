@@ -806,6 +806,7 @@ let
     nginx = {
       exporterConfig = {
         enable = true;
+        constLabels = [ "foo=bar" ];
       };
       metricProvider = {
         services.nginx = {
@@ -818,7 +819,7 @@ let
         wait_for_unit("nginx.service")
         wait_for_unit("prometheus-nginx-exporter.service")
         wait_for_open_port(9113)
-        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up 1'")
+        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up{foo=\"bar\"} 1'")
       '';
     };
 
