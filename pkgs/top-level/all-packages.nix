@@ -27104,8 +27104,6 @@ with pkgs;
 
   ops = callPackage ../applications/virtualization/ops { };
 
-  seabios = callPackage ../applications/virtualization/seabios { };
-
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
   patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
