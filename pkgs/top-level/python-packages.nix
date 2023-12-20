@@ -14457,6 +14457,8 @@ self: super: with self; {
 
   translationstring = callPackage ../development/python-modules/translationstring { };
 
+  translitcodec = callPackage ../development/python-modules/translitcodec { };
+
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
   transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
