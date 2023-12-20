@@ -155,54 +155,52 @@ in
       machine.systemctl("start sshd.service")
       machine.wait_for_unit("sshd.service")
 
-      # Testing metasrht
-      machine.wait_for_unit("metasrht-api.service")
-      machine.wait_for_unit("metasrht.service")
-      machine.wait_for_unit("metasrht-webhooks.service")
-      machine.wait_for_open_port(5000)
-      machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
-      machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
+      with subtest("Check whether meta comes up"):
+           machine.wait_for_unit("metasrht-api.service")
+           machine.wait_for_unit("metasrht.service")
+           machine.wait_for_unit("metasrht-webhooks.service")
+           machine.wait_for_open_port(5000)
+           machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
+           machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
 
-      ## Create a test user for subsequent tests
-      machine.succeed("echo ${userPass} | metasrht-manageuser -ps -e ${userName}@${domain}\
-                       -t active_paying ${userName}");
+      with subtest("Create a new user account and OAuth access key"):
+           machine.succeed("echo ${userPass} | metasrht-manageuser -ps -e ${userName}@${domain}\
+                            -t active_paying ${userName}");
+           (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
+           token = token.strip().replace("/", r"\\/") # Escape slashes in token before passing it to sed
+           machine.execute("mkdir -p ~/.config/hut/")
+           machine.execute("sed s/OAUTH-TOKEN/" + token + "/ ${hutConfig} > ~/.config/hut/config")
 
-      ## Obtain a OAuth token to be used for querying APIs directly
-      (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
-      token = token.strip().replace("/", r"\\/") # Escape slashes in token before passing it to sed
-      machine.execute("mkdir -p ~/.config/hut/")
-      machine.execute("sed s/OAUTH-TOKEN/" + token + "/ ${hutConfig} > ~/.config/hut/config")
+      with subtest("Check whether git comes up"):
+           machine.wait_for_unit("gitsrht-api.service")
+           machine.wait_for_unit("gitsrht.service")
+           machine.wait_for_unit("gitsrht-webhooks.service")
+           machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
 
-      ## Set up the SSH key for Git
-      machine.execute("ssh-keygen -q -N \"\" -t rsa -f ~/.ssh/id_rsa")
-      machine.execute("cat ${sshConfig} > ~/.ssh/config")
-      machine.succeed("hut meta ssh-key create ~/.ssh/id_rsa.pub")
+      with subtest("Add an SSH key for Git access"):
+           machine.execute("ssh-keygen -q -N \"\" -t rsa -f ~/.ssh/id_rsa")
+           machine.execute("cat ${sshConfig} > ~/.ssh/config")
+           machine.succeed("hut meta ssh-key create ~/.ssh/id_rsa.pub")
 
-      # Testing gitsrht
-      machine.wait_for_unit("gitsrht-api.service")
-      machine.wait_for_unit("gitsrht.service")
-      machine.wait_for_unit("gitsrht-webhooks.service")
-      machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
+      with subtest("Create a new repo and push contents to it"):
+           machine.execute("git init test")
+           machine.execute("echo \"Hello world!\" > test/hello.txt")
+           machine.execute("cd test && git add .")
+           machine.execute("cd test && git commit -m \"Initial commit\"")
+           machine.execute("cd test && git tag v0.1")
+           machine.succeed("cd test && git remote add origin gitsrht@git.${domain}:~${userName}/test")
+           machine.execute("( echo -n 'git.${domain} '; cat /etc/ssh/ssh_host_ed25519_key.pub ) > ~/.ssh/known_hosts")
+           machine.succeed("hut git create test")
+           machine.succeed("cd test && git push --tags --set-upstream origin master")
 
-      ## Create a repo and push its contents to the instance
-      machine.execute("git init test && cd test")
-      machine.execute("echo \"Hello world!\" > test/hello.txt")
-      machine.execute("cd test && git add .")
-      machine.execute("cd test && git commit -m \"Initial commit\"")
-      machine.execute("cd test && git tag v0.1")
-      machine.succeed("cd test && git remote add origin gitsrht@git.${domain}:~${userName}/test")
-      machine.execute("( echo -n 'git.${domain} '; cat /etc/ssh/ssh_host_ed25519_key.pub ) > ~/.ssh/known_hosts")
-      machine.succeed("hut git create test")
-      machine.succeed("cd test && git push --tags --set-upstream origin master")
+      with subtest("Verify that the repo is downloadable and its contents match the original"):
+           machine.succeed("curl https://git.${domain}/~${userName}/test/archive/v0.1.tar.gz | tar -xz")
+           machine.succeed("diff test-v0.1/hello.txt test/hello.txt")
 
-      ## Verify that the repo can be downloaded as a compressed tar archive
-      machine.succeed("curl https://git.${domain}/~${userName}/test/archive/v0.1.tar.gz | tar -xz")
-      machine.succeed("diff test-v0.1/hello.txt test/hello.txt")
-
-      # Testing buildsrht
-      machine.wait_for_unit("buildsrht.service")
-      machine.wait_for_open_port(5002)
-      machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
-      #machine.wait_for_unit("buildsrht-worker.service")
+      with subtest("Check whether builds comes up"):
+           machine.wait_for_unit("buildsrht.service")
+           machine.wait_for_open_port(5002)
+           machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
+           #machine.wait_for_unit("buildsrht-worker.service")
     '';
 })
