@@ -1,5 +1,6 @@
 # State management in NixOS
 
+- see also latest version of this document (if you come from discourse): https://github.com/bendlas/nixpkgs/blob/nixos-state-management/nixos/state/requirements.md
 - see also PR: https://github.com/NixOS/nixpkgs/pull/267365
 - see also Discourse: https://discourse.nixos.org/t/what-about-state-management/37082
 
