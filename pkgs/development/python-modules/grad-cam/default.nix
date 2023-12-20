@@ -7,6 +7,7 @@
 , opencv4
 , pillow
 , scikit-learn
+, setuptools
 , torch
 , torchvision
 , ttach
@@ -16,8 +17,9 @@
 buildPythonPackage rec {
   pname = "grad-cam";
   version = "1.5.0";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,8 +27,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "opencv-python" "opencv"
+    substituteInPlace requirements.txt\
+      --replace "opencv-python" "opencv"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     matplotlib
