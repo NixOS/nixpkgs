@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , setuptools
 , pytestCheckHook
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-NbvrlapBALGbUyBqdqDcDG/igDf/xqxC35DzVUrbHlo=";
   };
+
+  patches = [
+    # https://github.com/jensengroup/propka/pull/171
+    (fetchpatch {
+      name = "python312-compatibility.patch";
+      url = "https://github.com/jensengroup/propka/commit/1c8885d4003e5fd8a2921909268001b197066beb.patch";
+      hash = "sha256-fB2WKVHoIgqDA/EYt7369HrIDCEJ1rmKP2tmxAdhCRs=";
+    })
+  ];
 
   propagatedBuildInputs = [
     setuptools
