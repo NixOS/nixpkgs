@@ -16977,6 +16977,12 @@
     githubId = 8017899;
     name = "Sivaram Balakrishnan";
   };
+  sixstring982 = {
+    email = "sixstring982@gmail.com";
+    github = "sixstring982";
+    githubId = 1328977;
+    name = "Trent Small";
+  };
   sjagoe = {
     email = "simon@simonjagoe.com";
     github = "sjagoe";
