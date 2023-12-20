@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3
 , version
 , hash
@@ -94,6 +93,7 @@
       passthru = {
         # PYTHONPATH of all dependencies used by the package
         pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+        gunicorn = python3.pkgs.gunicorn;
         inherit tests;
       };
 
