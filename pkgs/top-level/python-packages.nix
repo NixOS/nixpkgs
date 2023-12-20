@@ -554,6 +554,8 @@ self: super: with self; {
 
   anonip = callPackage ../development/python-modules/anonip { };
 
+  anova-wifi = callPackage ../development/python-modules/anova-wifi { };
+
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
   ansi2image = callPackage ../development/python-modules/ansi2image { };
@@ -1746,6 +1748,8 @@ self: super: with self; {
   bz2file = callPackage ../development/python-modules/bz2file { };
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
+
+  cached-ipaddress = callPackage ../development/python-modules/cached-ipaddress { };
 
   cached-property = callPackage ../development/python-modules/cached-property { };
 
@@ -5344,6 +5348,8 @@ self: super: with self; {
   ical = callPackage ../development/python-modules/ical { };
 
   icalendar = callPackage ../development/python-modules/icalendar { };
+
+  icalevents = callPackage ../development/python-modules/icalevents { };
 
   icecream = callPackage ../development/python-modules/icecream { };
 

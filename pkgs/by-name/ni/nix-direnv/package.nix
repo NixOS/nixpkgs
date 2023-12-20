@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs:{
   pname = "nix-direnv";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = finalAttrs.version;
-    hash = "sha256-UmCNAejZwss5a/YDP4HrbQaLHc5BypQDUkQrh/QoEhg=";
+    hash = "sha256-bfcQYZViFuo7WsEl47pM7Iclg/paf+cLciX9NgaG01U=";
   };
 
   # Substitute instead of wrapping because the resulting file is

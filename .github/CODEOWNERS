@@ -80,6 +80,7 @@
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
 /maintainers/README.md @infinisil
+/maintainers/* @piegamesde @Janik-Haag
 
 # User-facing development documentation
 /doc/development.md @infinisil
