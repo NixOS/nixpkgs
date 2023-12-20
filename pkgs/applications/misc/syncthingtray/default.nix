@@ -19,6 +19,7 @@
 , iconv
 , cppunit
 , syncthing
+, xdg-utils
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -94,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
     ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
   ;
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/syncthingtray";

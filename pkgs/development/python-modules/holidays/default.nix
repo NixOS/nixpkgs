@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.37";
+  version = "0.39";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "dr-prodigy";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3IhyHLwTPLTcyZY/9dZFmIr7Ael8I3mZrXhqYaULwY8=";
+    hash = "sha256-PsrdR4voEAiEhgoeR03Xp/tacqtcEt1FhO4kfMYkSos=";
   };
 
   nativeBuildInputs = [
