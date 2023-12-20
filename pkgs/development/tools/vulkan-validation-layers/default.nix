@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.268.0";
+  version = "1.3.274";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-DwkSUclStYKe54tC1H3jMv1KOSScgqf25tR5ajQZ6os=";
+    rev = "v${version}";
+    hash = "sha256-kH/swMpPsNht46j5LfvtKrkFZAs6H32KhFzPUGfwE5k=";
   };
 
   nativeBuildInputs = [
