@@ -1,4 +1,5 @@
 { lib
+, coreutils
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -106,7 +107,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace scripts/create_bundle.sh --replace target/mac/ $out/Applications/
+    substituteInPlace scripts/create_bundle.sh \
+      --replace target/mac/ $out/Applications/ \
+      --replace /bin/echo ${coreutils}/bin/echo
     patchShebangs scripts/create_bundle.sh
     substituteInPlace espanso/src/res/macos/Info.plist \
       --replace "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
