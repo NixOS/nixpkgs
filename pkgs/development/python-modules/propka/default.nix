@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "propka";
   version = "3.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     setuptools
   ];
 
