@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.5.10";
+  version = "0.5.13";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JVeI7TlJjbKCa+gGmjylbNiEhX3qmpbLXiH3VpFqgXc=";
+    hash = "sha256-LoppJHzX0dOpHnwMCyS1ACdIO4cqwb370ksvsXDFHzQ=";
   };
 
   propagatedBuildInputs = [
