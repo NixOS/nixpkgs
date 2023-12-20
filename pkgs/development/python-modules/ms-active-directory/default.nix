@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ms-active-directory";
-  version = "1.12.1";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zorn96";
     repo = "ms_active_directory";
-    rev = "v${version}";
-    hash = "sha256-mErQib8xTgo29iPAtiLnhxLXyFboAzyEW9A/QMseM6k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+wfhtEGuC1R5jbEnWm4mDHIR096KKEcG/K8SuItwjGk=";
   };
 
   propagatedBuildInputs = [
