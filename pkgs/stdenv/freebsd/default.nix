@@ -311,9 +311,6 @@ in
         inherit (prevStage) fetchurl;
         libcxxabi = self.llvmPackages_16.libcxxabi;
         libcxx = self.llvmPackages_16.libcxx;
-        #libcxxrt = self.callPackage ../../development/libraries/libcxxrt {
-        #  stdenv = prevStage.
-        #};
         clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
         freebsd = super.freebsd.overrideScope (self: super: {
           stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;

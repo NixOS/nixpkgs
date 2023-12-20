@@ -330,11 +330,12 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
-    + optionalString stdenv.targetPlatform.isFreeBSD ''
-      echo "-rpath ${libc_lib}/lib" >> $out/nix-support/libc-ldflags
-      # TODO is this the right place to put this flag?
-      echo "--allow-shlib-undefined" >> $out/nix-support/libc-ldflags
-    ''
+    # TODO(@rhelmot) is this actually necessary?
+    #+ optionalString (stdenv.targetPlatform.isFreeBSD) ''
+    #  echo "-rpath ${libc_lib}/lib" >> $out/nix-support/libc-ldflags
+    #  # TODO is this the right place to put this flag?
+    #  echo "--allow-shlib-undefined" >> $out/nix-support/libc-ldflags
+    #''
 
     ##
     ## GNU specific extra strip flags

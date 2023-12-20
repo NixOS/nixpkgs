@@ -99,8 +99,11 @@ stdenv.mkDerivation rec {
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
+  # (at least) on freebsd, libc++.so is a linker script that includes -lc++abi.
+  # ld-wrapper can't detect this and add the c++abi rpath, so we link it in.
   postInstall = lib.optionalString (!headersOnly && cxxabi.libName == "c++abi") ''
     ln -s ${lib.getLib cxxabi}/lib/libc++abi.so $out/lib/libc++abi.so
+    ln -s ${lib.getLib cxxabi}/lib/libc++abi.so.1 $out/lib/libc++abi.so.1
   '';
 
   passthru = {
