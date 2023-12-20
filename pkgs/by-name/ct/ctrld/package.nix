@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -23,8 +24,10 @@ buildGoModule rec {
     "-X=main.commit=${src.rev}"
   ];
 
-  # Tests need internet
+  # Requires network
   doCheck = false;
+
+  passthru.tests = nixosTests.ctrld;
 
   meta = with lib; {
     description = "A highly configurable, multi-protocol DNS forwarding proxy";
