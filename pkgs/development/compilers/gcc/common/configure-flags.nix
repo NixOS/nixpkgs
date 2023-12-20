@@ -156,6 +156,7 @@ let
       "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
+      "--enable-libstdcxx-time"
       "--enable-languages=${
         lib.concatStringsSep ","
           (  lib.optional langC        "c"
