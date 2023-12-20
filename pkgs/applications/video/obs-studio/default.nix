@@ -55,16 +55,16 @@
 
 let
   inherit (lib) optional optionals;
-
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
   version = "30.0.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
-    repo = "obs-studio";
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     sha256 = "sha256-8pX1kqibrtDIaE1+/Pey1A5bu6MwFTXLrBOah4rsF+4=";
     fetchSubmodules = true;
   };
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DOBS_VERSION_OVERRIDE=${version}"
+    "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
     "-DBUILD_BROWSER=ON"
@@ -181,4 +181,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";
   };
-}
+})
