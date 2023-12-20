@@ -6,6 +6,7 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, setuptools
 , sybil
 , twisted
 , zope-component
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "testfixtures";
   version = "7.2.2";
-  format = "setuptools";
+  pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
   # Any attempt by non-standard pip workflows to comment on issues will
@@ -36,6 +37,10 @@ buildPythonPackage rec {
       url = "https://github.com/simplistix/testfixtures/commit/2b80b195e30e12c739dc4f98e9de17dec8f3558a.patch";
       hash = "sha256-LrC0uI4k3F6ZGTqbKi319tRbVk5557xbyzQN36Y1160=";
      })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   nativeCheckInputs = [
