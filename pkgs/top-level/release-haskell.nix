@@ -415,7 +415,7 @@ let
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
-      # Use integer-simple to avoid GMP linking problems (LGPL)
+      # Use native-bignum to avoid GMP linking problems (LGPL)
       pkgsStatic =
         removePlatforms
           [
@@ -437,8 +437,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc928 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
+            haskell.packages.native-bignum.ghc948 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc948)
                 hello
                 lens
                 random
@@ -671,8 +671,8 @@ let
           ];
         };
         constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
         ];
       };
     }
