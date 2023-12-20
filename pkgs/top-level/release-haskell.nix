@@ -448,6 +448,15 @@ let
                 xhtml # isn't bundled for cross
               ;
             };
+
+            haskell.packages.native-bignum.ghc981 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc981)
+                hello
+                random
+                QuickCheck
+                terminfo # isn't bundled for cross
+                ;
+            };
           };
 
       pkgsCross.ghcjs =
@@ -673,6 +682,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc981
         ];
       };
     }

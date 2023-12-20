@@ -507,6 +507,10 @@ stdenv.mkDerivation ({
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
+
+    # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+    # so haddock isn't available for GHC cross-compilers. Can we fix that?
+    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
   };
 
   meta = {
