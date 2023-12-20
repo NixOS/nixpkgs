@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "justnimbus";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "kvanzuijlen";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-arUdjZiEJx0L1YcCNxqlE4ItoTEzd/TYVgqDPIqomMg=";
+    hash = "sha256-JO8T0JItkkNHxlnDKOO8kM9KSzT7QML4sszPymgXSBA=";
   };
 
   nativeBuildInputs = [
