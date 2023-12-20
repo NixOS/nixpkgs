@@ -5,7 +5,7 @@ mkCoqDerivation rec {
   owner = "coq-ext-lib";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.11" "8.18"; out = "0.12.0"; }
+    { case = range "8.11" "8.19"; out = "0.12.0"; }
     { case = range "8.8" "8.16"; out = "0.11.6"; }
     { case = range "8.8" "8.14"; out = "0.11.4"; }
     { case = range "8.8" "8.13"; out = "0.11.3"; }

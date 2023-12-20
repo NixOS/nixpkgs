@@ -30,37 +30,48 @@ meta.pkgConfigModules = [ "libfoo" ];
 
 ## `testVersion` {#tester-testVersion}
 
-Checks the command output contains the specified version
+Checks that the output from running a command contains the specified version string in it as a whole word.
 
-Although simplistic, this test assures that the main program
-can run. While there's no substitute for a real test case,
-it does catch dynamic linking errors and such. It also provides
-some protection against accidentally building the wrong version,
-for example when using an 'old' hash in a fixed-output derivation.
+Although simplistic, this test assures that the main program can run.
+While there's no substitute for a real test case, it does catch dynamic linking errors and such.
+It also provides some protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
 
-Examples:
+By default, the command to be run will be inferred from the given `package` attribute:
+it will check `meta.mainProgram` first, and fall back to `pname` or `name`.
+The default argument to the command is `--version`, and the version to be checked will be inferred from the given `package` attribute as well.
+
+:::{.example #ex-testversion-hello}
+
+# Check a program version using all the default values
+
+This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
 passthru.tests.version = testers.testVersion { package = hello; };
+```
+
+:::
+
+:::{.example #ex-testversion-different-commandversion}
+
+# Check the program version using a specified command and expected version string
+
+This example will run the command `leetcode -V`, and then check that `leetcode 0.4.2` is in the output of the command as a whole word (separated by whitespaces).
+This means that an output like "leetcode 0.4.21" would fail the tests, and an output like "You're running leetcode 0.4.2" would pass the tests.
+
+A common usage of the `version` attribute is to specify `version = "v${version}"`.
+
+```nix
+version = "0.4.2";
 
 passthru.tests.version = testers.testVersion {
-  package = seaweedfs;
-  command = "weed version";
-};
-
-passthru.tests.version = testers.testVersion {
-  package = key;
-  command = "KeY --help";
-  # Wrong '2.5' version in the code. Drop on next version.
-  version = "2.5";
-};
-
-passthru.tests.version = testers.testVersion {
-  package = ghr;
-  # The output needs to contain the 'version' string without any prefix or suffix.
-  version = "v${version}";
+  package = leetcode-cli;
+  command = "leetcode -V";
+  version = "leetcode ${version}";
 };
 ```
+
+:::
 
 ## `testBuildFailure` {#tester-testBuildFailure}
 

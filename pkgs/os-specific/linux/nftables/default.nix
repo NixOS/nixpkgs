@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ajs124 ];
+    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
     mainProgram = "nft";
   };
 }

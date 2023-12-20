@@ -204,6 +204,6 @@ stdenv.mkDerivation {
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ fpletz ajs124 raitobezarius ];
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
   };
 }
