@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.4.8";
+  version = "1.5.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BNcwDaEEmRsEoJ4nvvGfjZ9LdG0eRqZCFuY5/Gmp5N4=";
+    hash = "sha256-aw7Z/6/AMKH2PVBcOr8HxsmRDa6c3v8Xd4xa8HTiFGA=";
   };
 
   postPatch = ''
