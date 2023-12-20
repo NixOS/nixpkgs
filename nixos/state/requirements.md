@@ -1,7 +1,7 @@
 # State management in NixOS
 
-see also PR: https://github.com/NixOS/nixpkgs/pull/267365
-see also Discourse: https://discourse.nixos.org/t/what-about-state-management/37082
+- see also PR: https://github.com/NixOS/nixpkgs/pull/267365
+- see also Discourse: https://discourse.nixos.org/t/what-about-state-management/37082
 
 ## Motivating use cases
 
