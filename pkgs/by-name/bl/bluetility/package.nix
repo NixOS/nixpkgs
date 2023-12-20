@@ -1,29 +1,20 @@
 { lib
-, stdenvNoCC
-, fetchurl
-, unzip
+, fetchzip
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+fetchzip rec {
   pname = "bluetility";
   version = "1.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/jnross/Bluetility/releases/download/${finalAttrs.version}/Bluetility.app.zip";
-    hash = "sha256-Batnv06nXXxvUz+DlrH1MpeL4f5kNSPDH6Iqd/UiFbw=";
-  };
+  url = "https://github.com/jnross/Bluetility/releases/download/${version}/Bluetility.app.zip";
+  hash = "sha256-QNZR2yYIHMlD71tA1iPCh0EsaRKvZCR+f6/ZxUMRhN8=";
 
-  dontUnpack = true;
+  stripRoot = false;
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/Applications
-    unzip -d $out/Applications $src
-
-    runHook postInstall
+  postFetch = ''
+    shopt -s extglob
+    mkdir $out/Applications
+    mv $out/!(Applications) $out/Applications
   '';
 
   meta = with lib; {
@@ -34,4 +25,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ emilytrau Enzime ];
     platforms = platforms.darwin;
   };
-})
+}
