@@ -67,7 +67,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) kavita; };
+  passthru = {
+    tests = { inherit (nixosTests) kavita; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "A fast, feature rich, cross platform reading server";
