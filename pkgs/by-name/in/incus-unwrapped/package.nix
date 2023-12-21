@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oPBrIN4XUc9GnBszEWAAnEcNahV4hfB48XSKvkpq5Kk=";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
-  vendorHash = "sha256-TwrHWjBd6Hn7CQMxFhHobopeefCvYeDz8fAPYmTKV9M=";
+  vendorHash = "sha256-YfUvkN1qUS3FFKb1wysg40WcJA8fT9SGDChSdT+xnkc=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
