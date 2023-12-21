@@ -1,0 +1,28 @@
+diff --git a/Makefile.in b/Makefile.in
+index 55ab82a1..326abe2a 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -96,7 +96,7 @@ install_smltojs_basislibs:
+ 	$(MKDIR) $(LIBDIR)/basis
+ 	$(INSTALLDATA) -p js/basis/*.{sml,sig,mlb} $(LIBDIR)/basis
+ 	$(MKDIR) $(LIBDIR)/basis/MLB/Js/
+-	$(INSTALLDATA) -p js/basis/MLB/Js/*.{d,eb,eb1,lnk,js} $(LIBDIR)/basis/MLB/Js
++	$(INSTALLDATA) -p js/basis/MLB/Js/*.{d,eb,eb1,lnk,js,df} $(LIBDIR)/basis/MLB/Js
+ 
+ .PHONY: install_mlkit_basislibs
+ install_mlkit_basislibs:
+@@ -110,10 +110,10 @@ install_mlkit_basislibs:
+ 	$(MKDIR) $(LIBDIR)/basis/io/MLB/RI_GC
+ 	$(MKDIR) $(LIBDIR)/basis/io/MLB/RI_GC_PROF
+ 	$(MKDIR) $(LIBDIR)/basis/io/MLB/RI_PROF
+-	$(INSTALLDATA) -p basis/MLB/RI/*.{d,eb,eb1,lnk,o} $(LIBDIR)/basis/MLB/RI
+-	$(INSTALLDATA) -p basis/MLB/RI_GC/*.{d,eb,eb1,lnk,o} $(LIBDIR)/basis/MLB/RI_GC
+-	$(INSTALLDATA) -p basis/MLB/RI_PROF/*.{d,eb,eb1,lnk,o,rev} $(LIBDIR)/basis/MLB/RI_PROF
+-	$(INSTALLDATA) -p basis/MLB/RI_GC_PROF/*.{d,eb,eb1,lnk,o,rev} $(LIBDIR)/basis/MLB/RI_GC_PROF
++	$(INSTALLDATA) -p basis/MLB/RI/*.{d,eb,eb1,lnk,o,df} $(LIBDIR)/basis/MLB/RI
++	$(INSTALLDATA) -p basis/MLB/RI_GC/*.{d,eb,eb1,lnk,o,df} $(LIBDIR)/basis/MLB/RI_GC
++	$(INSTALLDATA) -p basis/MLB/RI_PROF/*.{d,eb,eb1,lnk,o,rev,df} $(LIBDIR)/basis/MLB/RI_PROF
++	$(INSTALLDATA) -p basis/MLB/RI_GC_PROF/*.{d,eb,eb1,lnk,o,rev,df} $(LIBDIR)/basis/MLB/RI_GC_PROF
+ 	$(INSTALLDATA) -p basis/io/MLB/RI/*.{d,eb,eb1,lnk,o} $(LIBDIR)/basis/io/MLB/RI
+ 	$(INSTALLDATA) -p basis/io/MLB/RI_GC/*.{d,eb,eb1,lnk,o} $(LIBDIR)/basis/io/MLB/RI_GC
+ 	$(INSTALLDATA) -p basis/io/MLB/RI_PROF/*.{d,eb,eb1,lnk,o,rev} $(LIBDIR)/basis/io/MLB/RI_PROF

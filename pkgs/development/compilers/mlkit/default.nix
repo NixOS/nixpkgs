@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "mlkit" "mlkit_libs" ];
 
+  checkPhase = ''
+    touch empty.sml
+    mlkit -o empty empty.sml
+    ./empty
+  '';
+
+  patches = [ ./install-df.patch ];
+
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";
