@@ -27104,8 +27104,6 @@ with pkgs;
 
   ops = callPackage ../applications/virtualization/ops { };
 
-  seabios = callPackage ../applications/virtualization/seabios { };
-
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
   patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
@@ -39524,6 +39522,7 @@ with pkgs;
     coqPackages_8_16 coq_8_16
     coqPackages_8_17 coq_8_17
     coqPackages_8_18 coq_8_18
+    coqPackages_8_19 coq_8_19
     coqPackages      coq
   ;
 

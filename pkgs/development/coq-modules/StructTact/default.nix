@@ -5,7 +5,7 @@ mkCoqDerivation {
   owner = "uwplse";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.9" "8.18"; out = "20230107"; }
+    { case = range "8.9" "8.19"; out = "20230107"; }
     { case = range "8.6" "8.16"; out = "20210328"; }
     { case = range "8.5" "8.13"; out = "20181102"; }
   ] null;
