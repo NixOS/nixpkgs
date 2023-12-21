@@ -1,0 +1,13 @@
+diff --git a/pkcs11_compat.h b/pkcs11_compat.h
+index 485c4e0..638eae7 100644
+--- a/pkcs11_compat.h
++++ b/pkcs11_compat.h
+@@ -9,7 +9,7 @@
+ #define __PKCS11_COMPAT_H__
+ 
+ #include <stdbool.h>
+-#include <pkcs11.h>
++#include <p11-kit/pkcs11.h>
+ 
+ #ifndef CK_NULL_PTR
+ #define CK_NULL_PTR NULL
