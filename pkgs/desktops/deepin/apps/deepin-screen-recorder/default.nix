@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , qmake
 , pkg-config
 , qttools
@@ -27,16 +28,23 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-screen-recorder";
-  version = "unstable-2023-07-10";
+  version = "unstable-2023-12-18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = "e8ee1e8330e2f3923e22acc952a0bd01bee94ad1";
-    hash = "sha256-QHV3hSALXI4e31YBDXRSRgT8b/J8gwm024bzlPWu2FA=";
+    rev = "f284ff1b6105e2e8d4629090c16939eec29652e1";
+    hash = "sha256-kXB7Oo2cVfwmb5Iaq5DF6yhLfWLkJXUb3yMHyFvCQ6A=";
   };
 
-  patches = [ ./dont_use_libPath.diff ];
+  patches = [
+    ./dont_use_libPath.diff
+    (fetchpatch {
+      name = "fix-crash-on-ffmpeg-6.patch";
+      url = "https://github.com/linuxdeepin/deepin-screen-recorder/commit/25fce179a5502c33f61f6ea9791d0f5d5c57a699.diff";
+      hash = "sha256-g+uGCxo4Z6Gaj46AKNLz6znPBJejLTmJyEceJU023JU=";
+    })
+  ];
 
   postPatch = ''
     (
