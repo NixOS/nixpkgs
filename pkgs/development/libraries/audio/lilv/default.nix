@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsndfile serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 
-  mesonFlags = [ "-Ddocs=disabled" ];
+  mesonFlags = [
+    "-Ddocs=disabled"
+    # Tests require building a shared library.
+    (lib.mesonEnable "tests" (!stdenv.hostPlatform.isStatic))
+  ];
 
   passthru = {
     tests = {
