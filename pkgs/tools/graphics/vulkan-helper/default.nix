@@ -22,6 +22,12 @@ rustPlatform.buildRustPackage rec {
     addOpenGLRunpath
   ];
 
+  patches = [
+    # Can be removed as soon as this PR is merged:
+    # https://github.com/imLinguin/vulkan-helper-rs/pull/3
+    ./fix-aarch64-build.patch
+  ];
+
   postFixup = ''
     patchelf --add-rpath ${vulkan-loader}/lib $out/bin/vulkan-helper
     addOpenGLRunpath $out/bin/vulkan-helper

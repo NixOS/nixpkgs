@@ -1,0 +1,48 @@
+From 577400410cb7da220ab2e91c3a5ba861ccf2feca Mon Sep 17 00:00:00 2001
+From: Manuel Frischknecht <manuel.frischknecht@gmail.com>
+Date: Thu, 21 Dec 2023 22:14:09 +0000
+Subject: [PATCH] Fix build on aarch64
+
+`ash::vk::ApplicationInfo` [1] actually uses `*const c_char` as a type
+for its string fields, and the underlying type of `libc::c_char` varies on
+different architectures.
+
+Because of this, the application currently builds fine on x64 (where
+`c_char` is `i8`) but fails on aarch64 (where `c_char` is `u8` instead).
+
+[1]: https://docs.rs/ash/latest/ash/vk/struct.ApplicationInfo.html
+---
+ src/main.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/main.rs b/src/main.rs
+index a26ddef..59bb38e 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,7 +1,7 @@
+ use ash::{vk, Entry};
+ use clap::{Parser, Subcommand};
+ use serde::{Deserialize, Serialize};
+-use libc::{c_void, dlopen, dlinfo, RTLD_NOW, RTLD_DI_LINKMAP, dlerror, dlclose};
++use libc::{c_void, c_char, dlopen, dlinfo, RTLD_NOW, RTLD_DI_LINKMAP, dlerror, dlclose};
+ use std::ffi::{CString, CStr};
+ use std::ptr::null_mut;
+ use std::mem::transmute;
+@@ -19,7 +19,7 @@ struct Device {
+ #[repr(C)]
+ struct LinkMap {
+     l_addr: *mut c_void,
+-    l_name: *mut i8,
++    l_name: *mut c_char,
+     l_ld: *mut c_void,
+     l_next: *mut LinkMap,
+     l_prev: *mut LinkMap,
+@@ -42,7 +42,7 @@ fn get_physical_versions() -> Vec<Device> {
+     let entry = unsafe { Entry::load() }.expect("Failed to load vulkan");
+ 
+     let app_info = vk::ApplicationInfo {
+-        p_application_name: APP_NAME.as_ptr() as *const i8,
++        p_application_name: APP_NAME.as_ptr() as *const c_char,
+         application_version: vk::make_api_version(0, 1, 0, 0),
+         api_version: vk::make_api_version(0, 1, 3, 0),
+         ..Default::default()
