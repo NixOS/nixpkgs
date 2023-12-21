@@ -2000,6 +2000,8 @@ self: super: with self; {
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
 
+  cherrypy-cors = callPackage ../development/python-modules/cherrypy-cors { };
+
   chess = callPackage ../development/python-modules/chess { };
 
   chevron = callPackage ../development/python-modules/chevron { };

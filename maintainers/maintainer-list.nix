@@ -9045,6 +9045,12 @@
     githubId = 752510;
     name = "Martin Potier";
   };
+  jpts = {
+    email = "james+nixpkgs@cleverley-prance.uk";
+    github = "jpts";
+    githubId = 5352661;
+    name = "James Cleverley-Prance";
+  };
   jqqqqqqqqqq = {
     email = "jqqqqqqqqqq@gmail.com";
     github = "jqqqqqqqqqq";
