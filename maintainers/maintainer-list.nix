@@ -4240,6 +4240,12 @@
       fingerprint = "B26F 9AD8 DA20 3392 EF87  C61A BB99 9F83 D9A1 9A36";
     }];
   };
+  dblsaiko = {
+    email = "me@dblsaiko.net";
+    github = "2xsaiko";
+    githubId = 3987560;
+    name = "Marco Rebhan";
+  };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
     github = "dbohdan";
@@ -6773,6 +6779,10 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  gm6k = {
+    email = "nix@quidecco.pl";
+    name = "Isidor Zeuner";
+  };
   gmemstr = {
     email = "git@gmem.ca";
     github = "gmemstr";
@@ -9040,6 +9050,12 @@
     github = "jpotier";
     githubId = 752510;
     name = "Martin Potier";
+  };
+  jpts = {
+    email = "james+nixpkgs@cleverley-prance.uk";
+    github = "jpts";
+    githubId = 5352661;
+    name = "James Cleverley-Prance";
   };
   jqqqqqqqqqq = {
     email = "jqqqqqqqqqq@gmail.com";

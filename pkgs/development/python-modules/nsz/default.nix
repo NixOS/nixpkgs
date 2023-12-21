@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nsz";
-  version = "4.5.0";
+  version = "4.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nicoboss";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/46qOQEuzSBmnFG0XW4z71HAHpuyqhia29KQkUlDsgg=";
+    hash = "sha256-2Df+xvfDHtZt3XW4ShKZFsjsFigW+3Avz8uStVtC1i4=";
   };
 
   propagatedBuildInputs = [
