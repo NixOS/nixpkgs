@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this is a header-only library, so we don't need to build it
   # we need `cmake` only to run tests
-  nativeBuildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
+  nativeCheckInputs = [
     cmake
     python
   ];
