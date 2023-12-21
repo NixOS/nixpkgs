@@ -50,8 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
-    changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
