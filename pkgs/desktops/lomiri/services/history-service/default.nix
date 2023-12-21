@@ -56,6 +56,27 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/OPNA2608/history-service/-/commit/b36ab377aca93555b29d1471d6eaa706b5c843ca.patch";
       hash = "sha256-mOpXqqd4JI7lHtcWDm9LGCrtB8ERge04jMpHIagDM2k=";
     })
+
+    # Add more / correct existing GNUInstallDirs usage
+    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/37 merged & in release
+    (fetchpatch {
+      url = "https://gitlab.com/OPNA2608/history-service/-/commit/bb4dbdd16e80dcd286d8edfb86b08f0b61bc7fec.patch";
+      hash = "sha256-C/XaygI663yaU06klQD9g0NnbqYxHSmzdbrRxcfiJkk=";
+    })
+
+    # Correct version information
+    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/38 merged & in release
+    (fetchpatch {
+      url = "https://gitlab.com/OPNA2608/history-service/-/commit/30d9fbee203205ec1ea8fd19c9b6eb54c080a9e2.patch";
+      hash = "sha256-vSZ1ii5Yhw7pB+Pd1pjWnW7JsQxKnn+LeuBKo6qZjQs=";
+    })
+
+    # Make tests optional
+    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/39 merged & in release
+    (fetchpatch {
+      url = "https://gitlab.com/OPNA2608/history-service/-/commit/cb5c80cffc35611657244e15a7eb10edcd598ccd.patch";
+      hash = "sha256-MFHGu4OMScdThq9htUgFMpezP7Ym6YTIZUHWol20wqw=";
+    })
   ];
 
   postPatch = ''
@@ -87,27 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Uses pkg_get_variable, cannot substitute prefix with that
     substituteInPlace daemon/CMakeLists.txt \
-      --replace 'DESTINATION ''${SYSTEMD_USER_UNIT_DIR}' 'DESTINATION "${placeholder "out"}/lib/systemd/user"'
+      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
 
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
     substituteInPlace CMakeLists.txt \
       --replace "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
-
-    # Bad path concatenation
-    substituteInPlace config.h.in \
-      --replace '@CMAKE_INSTALL_PREFIX@/@HISTORY_PLUGIN_PATH@' '@HISTORY_PLUGIN_PATH@'
-
-    # Honour GNUInstallDirs
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'INCLUDE_INSTALL_DIR include' 'INCLUDE_INSTALL_DIR ''${CMAKE_INSTALL_FULL_INCLUDEDIR}'
-
-    # Fix concatenations & variable references
-    substituteInPlace src/history-service.pc.in \
-      --replace 'LIB_INSTALL_DIR' 'CMAKE_INSTALL_FULL_LIBDIR' \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/\''${" "\''${"
-  '' + (if finalAttrs.finalPackage.doCheck then ''
+  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Tests launch these DBus services, fix paths related to them
-
     substituteInPlace tests/common/dbus-services/CMakeLists.txt \
       ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
       ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
@@ -116,9 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/modules/GenerateTest.cmake \
       --replace '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
       --replace '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
-  '' else ''
-    sed -i CMakeLists.txt -e '/add_subdirectory(tests)/d'
-  '');
+  '';
 
   strictDeps = true;
 
@@ -149,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Many deprecation warnings with Qt 5.15
-    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_WERROR" false)
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
       # DaemonTest is flaky
       # https://gitlab.com/ubports/development/core/history-service/-/issues/13
