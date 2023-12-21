@@ -7859,6 +7859,12 @@
     githubId = 36667224;
     name = "Yingchi Long";
   };
+  incrediblelaser = {
+    email = "gereon.schomber@gmail.com";
+    github = "IncredibleLaser";
+    githubId = 45564436;
+    name = "Gereon Schomber";
+  };
   indexyz = {
     email = "indexyz@pm.me";
     github = "5aaee9";
