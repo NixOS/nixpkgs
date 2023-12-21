@@ -114,7 +114,8 @@ in
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/opensearch";
-      apply = converge (removeSuffix "/");
+      # Remove all trailing `/`s
+      apply = str: head (builtins.split "/+$" str);
       description = lib.mdDoc ''
         Data directory for OpenSearch. If you change this, you need to
         manually create the directory. You also need to create the
