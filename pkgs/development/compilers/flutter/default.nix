@@ -53,7 +53,7 @@ let
         buildFlutterApplication = callPackage ../../../build-support/flutter {
           # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
           flutter = (wrapFlutter (mkCustomFlutter args)).override {
-            supportedTargetPlatforms = [ "universal" "linux" ];
+            supportedTargetFlutterPlatforms = [ "universal" "linux" ];
           };
         };
       };

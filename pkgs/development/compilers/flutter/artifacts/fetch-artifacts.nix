@@ -4,13 +4,13 @@
 , cacert
 , unzip
 
-, platform
+, flutterPlatform
 , flutter
 , hash
 }:
 
 let
-  platforms = [
+  flutterPlatforms = [
     "android"
     "ios"
     "web"
@@ -24,10 +24,10 @@ let
   flutter' = flutter.override {
     # Use a version of Flutter with just enough capabilities to download
     # artifacts.
-    supportedTargetPlatforms = [ ];
+    supportedTargetFlutterPlatforms = [ ];
   };
 in
-runCommand "flutter-artifacts-${platform}"
+runCommand "flutter-artifacts-${flutterPlatform}"
 {
   nativeBuildInputs = [ xorg.lndir flutter' unzip ];
 
@@ -38,7 +38,7 @@ runCommand "flutter-artifacts-${platform}"
   outputHashAlgo = "sha256";
 
   passthru = {
-    inherit platform;
+    inherit flutterPlatform;
   };
 } ''
   export FLUTTER_ROOT="$NIX_BUILD_TOP"
@@ -46,7 +46,7 @@ runCommand "flutter-artifacts-${platform}"
   rm -rf "$FLUTTER_ROOT/bin/cache"
   mkdir "$FLUTTER_ROOT/bin/cache"
 
-  HOME="$(mktemp -d)" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
+  HOME="$(mktemp -d)" flutter precache -v '--${flutterPlatform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove flutterPlatform flutterPlatforms))}
   rm -rf "$FLUTTER_ROOT/bin/cache/lockfile"
   find "$FLUTTER_ROOT" -type l -lname '${flutter'}/*' -delete
 
