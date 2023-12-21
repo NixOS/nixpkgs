@@ -30139,6 +30139,8 @@ with pkgs;
 
   template-glib = callPackage ../development/libraries/template-glib { };
 
+  templ = callPackage ../development/tools/templ { };
+
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
   tenderness = callPackage ../data/fonts/tenderness { };
