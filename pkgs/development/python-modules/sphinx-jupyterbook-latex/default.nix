@@ -1,11 +1,17 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , flit-core
 , packaging
 , sphinx
+, click
+, myst-parser
+, pytest-regressions
 , pytestCheckHook
+, sphinx-external-toc
+, sphinxcontrib-bibtex
+, texsoup
 }:
 
 buildPythonPackage rec {
@@ -15,10 +21,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sphinx_jupyterbook_latex";
-    hash = "sha256-9UxmdME/Fhb5qTRD6YubU1P5/dqOObbsVSzPCz5f+2I=";
+  src = fetchFromGitHub {
+    owner = "executablebooks";
+    repo = "sphinx-jupyterbook-latex";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +38,16 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
+
+  nativeCheckInputs = [
+    click
+    myst-parser
+    pytest-regressions
+    pytestCheckHook
+    sphinx-external-toc
+    sphinxcontrib-bibtex
+    texsoup
+  ];
 
   meta = with lib; {
     description = "Latex specific features for jupyter book";
