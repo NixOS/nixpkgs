@@ -10,6 +10,8 @@ let packages = self:
       inherit plugins themes languages;
     };
 
+    thirdparty = callPackage ./thirdparty.nix {};
+
   in {
     # Create a generic WordPress package. Most arguments are just passed
     # to `mkDerivation`. The version is automatically filtered for weird characters.
@@ -66,7 +68,9 @@ let packages = self:
     # Fetch a package from the official wordpress.org SVN.
     # The data supplied is the data straight from the go tool.
     fetchWordpress = self.callPackage ({ fetchsvn }: type: data: fetchsvn {
-      inherit (data) rev sha256;
+      inherit (data) rev;
+      hash = data.hash or data.sha256;
+
       url = if type == "plugin" || type == "theme" then
         "https://" + type + "s.svn.wordpress.org/" + data.path
       else if type == "language" then
@@ -79,7 +83,8 @@ let packages = self:
         throw "fetchWordpress: invalid package type ${type}";
     }) {};
 
-  } // lib.mapAttrs (type: pkgs: lib.makeExtensible (_: lib.mapAttrs (pname: data: self.mkOfficialWordpressDerivation { type = lib.removeSuffix "s" type; inherit pname data; }) pkgs)) generatedJson;
+  } // lib.mapAttrs (type: pkgs: lib.makeExtensible (_: lib.mapAttrs (pname: data:
+    self.mkOfficialWordpressDerivation { type = lib.removeSuffix "s" type; inherit pname data; }) pkgs)) (lib.recursiveUpdate generatedJson thirdparty);
 
 # This creates an extensible scope.
-in lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (selfWP: superWP: {})) (callPackage ./thirdparty.nix {})
+in (lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (selfWP: superWP: {})
