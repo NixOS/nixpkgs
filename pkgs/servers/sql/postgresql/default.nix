@@ -14,7 +14,12 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, hash, psqlSchema
+      , pname ? "postgresql"
+      , version, hash ? lib.fakeHash, psqlSchema
+      , pgSource ? fetchurl {
+        url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
+        inherit hash;
+      }
 
       # for tests
       , testers, nixosTests, thisAttr
@@ -23,6 +28,11 @@ let
       , jitSupport ? false
       , nukeReferences, patchelf, llvmPackages
       , makeRustPlatform, buildPgxExtension, cargo, rustc
+
+      # Neon
+      , isNeon ? false
+      , perl, docbook_xml_dtd_45, docbook_xsl, libxslt
+      , bison, flex
 
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
@@ -34,16 +44,11 @@ let
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
 
-    pname = "postgresql";
-
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
     inherit pname version;
 
-    src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-      inherit hash;
-    };
+    src = pgSource;
 
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
@@ -69,6 +74,7 @@ let
       makeWrapper
       pkg-config
     ]
+      ++ lib.optionals isNeon [ perl bison flex (lib.getBin libxslt) ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
 
     enableParallelBuilding = !stdenv'.isDarwin;
@@ -170,6 +176,14 @@ let
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+    '' + lib.optionalString isNeon ''
+        # Fix schema lookups
+        substituteInPlace doc/src/sgml/{standalone-install.xml,postgres.sgml,standalone-profile.xsl} \
+          --replace http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
+          ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
+        substituteInPlace doc/src/sgml/{stylesheet-text.xsl,stylesheet-man.xsl,stylesheet-fo.xsl,stylesheet.xsl,stylesheet-html-common.xsl,stylesheet-html-nochunk.xsl} \
+          --replace http://docbook.sourceforge.net/release/xsl/current/ \
+          ${docbook_xsl}/xml/xsl/docbook/
     '';
 
     postInstall =
@@ -294,10 +308,11 @@ let
 
     meta = with lib; {
       homepage    = "https://www.postgresql.org";
-      description = "A powerful, open source object-relational database system";
+      description = "A powerful, open source object-relational database system"
+        + lib.optionalString isNeon ", neondb fork";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
+      maintainers = with maintainers; if !isNeon then [ thoughtpolice danbst globin marsam ivan ma27 ] else [ lach ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 
@@ -387,6 +402,22 @@ let
       hash = "sha256-zjxNhdGbASH+DT+O8fpgH3GYnob4pm99w61UbdVWT+w=";
       this = self.postgresql_16;
       thisAttr = "postgresql_16";
+      inherit self;
+    };
+
+    postgresql_16_neon = self.callPackage generic {
+      version = "16.1-neon";
+      psqlSchema = "16";
+      pgSource = self.fetchFromGitHub {
+        owner = "neondatabase";
+        repo = "postgres";
+        # TODO: Auto-update script should look this from neon/vendor/revisions.json
+        rev = "863b71572bc441581efb3bbee2ad18af037be1bb";
+        hash = "sha256-Ms3YD3NS0+llNzgynwnKyF/R7rbmUQG/ixbbVswvVFA=";
+      };
+      this = self.postgresql_16_neon;
+      thisAttr = "postgresql_16_neon";
+      isNeon = true;
       inherit self;
     };
   };
