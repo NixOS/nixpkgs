@@ -14114,7 +14114,7 @@ with pkgs;
 
   traceroute = callPackage ../tools/networking/traceroute { };
 
-  tracebox = callPackage ../tools/networking/tracebox { stdenv = gcc10StdenvCompat; };
+  tracebox = callPackage ../tools/networking/tracebox { };
 
   tracee = callPackage ../tools/security/tracee {
     clang = clang_14;
