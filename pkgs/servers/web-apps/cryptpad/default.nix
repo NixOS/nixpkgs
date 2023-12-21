@@ -1,17 +1,27 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nodejs, nixosTests }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs
+, nixosTests
+}:
 
 buildNpmPackage rec {
   pname = "cryptpad";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "cryptpad";
-    repo = pname;
+    repo = "cryptpad";
     rev = version;
-    hash = "sha256-bFFtWRb9VbSQZ3zPmFRGHqenFLeTPmvgk8t+u+/u5eA=";
+    hash = "sha256-A3tkXt4eAeg1lobCliGd2PghpkFG5CNYWnquGESx/zo=";
   };
 
-  npmDepsHash = "sha256-x9XZjMntVI0wf55SRHL63YLo5knvNhbKTu3kNzGNrU4=";
+  npmDepsHash = "sha256-tQUsI5Oz3rkAlxJ1LpolJNqZfKUGKUYSgtuCTzHRcW4=";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   # cryptpad build tries to write in cache dir
   makeCacheWritable = true;
@@ -26,6 +36,8 @@ buildNpmPackage rec {
   # just cp...
   dontNpmInstall = true;
   installPhase = ''
+    runHook preInstall
+
     out_cryptpad="$out/lib/node_modules/cryptpad"
 
     mkdir -p "$out_cryptpad"
@@ -42,7 +54,7 @@ buildNpmPackage rec {
     # instead.
     # Note 'customize' is meant to be overridable, so only overwrite it if it
     # was a symlink.
-    makeWrapper ${nodejs}/bin/node $out/bin/cryptpad \
+    makeWrapper ${lib.getExe nodejs} $out/bin/cryptpad \
       --add-flags "$out_cryptpad/server.js" \
       --run "for d in customize.dist lib www; do ln -sf $out_cryptpad/\$d .; done" \
       --run "if ! [ -e customize ] || [ -L customize ]; then ln -sf $out_cryptpad/customize .; fi"
@@ -50,14 +62,17 @@ buildNpmPackage rec {
     # It also somehow expects node_modules to be available through www/components,
     # so we make that one link.
     ln -s ../node_modules "$out_cryptpad/www/components"
+
+    runHook postInstall
   '';
 
   passthru.tests.cryptpad = nixosTests.cryptpad;
 
-  meta = with lib; {
+  meta = {
     description = "Collaborative office suite, end-to-end encrypted and open-source.";
     homepage = "https://cryptpad.org/";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ martinetd ];
+    license = lib.licenses.agpl3Only;
+    mainProgram = "cryptpad";
+    maintainers = with lib.maintainers; [ martinetd ];
   };
 }
