@@ -83,4 +83,8 @@ in {
       etc."krb5.conf".source = format.generate "krb5.conf" cfg.settings;
     };
   };
+
+  meta.maintainers = builtins.attrValues {
+    inherit (lib.maintainers) dblsaiko;
+  };
 }

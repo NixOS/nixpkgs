@@ -1,5 +1,6 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-mit";
+
   nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
@@ -40,4 +41,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "echo alice_pw | sudo -u alice kinit",
     )
   '';
+
+  meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
 })

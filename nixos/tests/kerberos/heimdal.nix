@@ -1,5 +1,6 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-heimdal";
+
   nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
@@ -41,4 +42,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "kinit -kt alice.keytab alice",
     )
   '';
+
+  meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
 })

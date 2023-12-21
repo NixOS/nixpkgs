@@ -130,4 +130,6 @@ in
           expected = ["alice", "users"]
           assert ids == expected, f"ids incorrect: got {ids} expected {expected}"
     '';
+
+  meta.maintainers = [ lib.maintainers.dblsaiko ];
 })
