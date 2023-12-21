@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchDartDeps, writeText, symlinkJoin, dartHooks, makeWrapper, dart, cacert, nodejs, darwin, jq }:
+{ lib, stdenv, callPackage, fetchDartDeps, runCommand, symlinkJoin, writeText, dartHooks, makeWrapper, dart, cacert, nodejs, darwin, jq }:
 
 { sdkSetupScript ? ""
 , pubGetScript ? "dart pub get"
@@ -37,13 +37,15 @@
 let
   dartDeps = (fetchDartDeps.override {
     dart = symlinkJoin {
-      name = "dart-fod";
-      paths = [ dart ];
-      nativeBuildInputs = [ makeWrapper ];
-      postBuild = ''
-        wrapProgram "$out/bin/dart" \
-          --add-flags "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
-      '';
+      name = "dart-sdk-fod";
+      paths = [
+        (runCommand "dart-fod" { nativeBuildInputs = [ makeWrapper ]; } ''
+          mkdir -p "$out/bin"
+          makeWrapper "${dart}/bin/dart" "$out/bin/dart" \
+            --add-flags "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
+        '')
+        dart
+      ];
     };
   }) {
     buildDrvArgs = args;
