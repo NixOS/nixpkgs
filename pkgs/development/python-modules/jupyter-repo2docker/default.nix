@@ -65,7 +65,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
-    license = licenses.bsdOriginal;
+    changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.rev}/docs/source/changelog.md";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }
