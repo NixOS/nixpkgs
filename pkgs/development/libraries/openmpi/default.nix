@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   buildInputs = [ zlib libevent hwloc ]
-    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
+    ++ lib.optionals stdenv.isLinux [ numactl pmix ucx ucc ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
@@ -80,8 +80,11 @@ stdenv.mkDerivation rec {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudaPackages.cuda_cudart}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
-    ;
+    ++ lib.optionals fabricSupport [
+      "--with-psm2=${lib.getDev libpsm2}"
+      "--with-libfabric=${lib.getDev libfabric}"
+      "--with-libfabric-libdir=${lib.getLib libfabric}/lib"
+    ];
 
   enableParallelBuilding = true;
 
