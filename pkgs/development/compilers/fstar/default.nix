@@ -1,7 +1,17 @@
-{ lib, stdenv, writeScript, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles, removeReferencesTo }:
+{ callPackage
+, fetchFromGitHub
+, installShellFiles
+, lib
+, makeWrapper
+, ocamlPackages
+, removeReferencesTo
+, stdenv
+, writeScript
+, z3
+}:
 
-stdenv.mkDerivation rec {
-  pname = "fstar";
+let
+
   version = "2023.09.03";
 
   src = fetchFromGitHub {
@@ -11,66 +21,52 @@ stdenv.mkDerivation rec {
     hash = "sha256-ymoP5DvaLdrdwJcnhZnLEvwNxUFzhkICajPyK4lvacc=";
   };
 
-  strictDeps = true;
+  fstarDune = ocamlPackages.callPackage ./dune.nix { inherit version src; };
+
+  fstarLib = callPackage ./ulib.nix { inherit version src fstarDune z3; };
+
+in
+
+stdenv.mkDerivation {
+  pname = "fstar";
+  inherit version src;
 
   nativeBuildInputs = [
-    z3
-    makeWrapper
     installShellFiles
+    makeWrapper
     removeReferencesTo
-  ] ++ (with ocamlPackages; [
-    ocaml
-    dune_3
-    findlib
-    ocamlbuild
-    menhir
-  ]);
-
-  buildInputs = with ocamlPackages; [
-    batteries
-    zarith
-    stdint
-    yojson
-    fileutils
-    memtrace
-    menhirLib
-    pprint
-    sedlex
-    ppxlib
-    ppx_deriving
-    ppx_deriving_yojson
-    process
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  dontBuild = true;
 
-  enableParallelBuilding = true;
+  installPhase = ''
+    mkdir $out
 
-  postPatch = ''
-    patchShebangs ulib/install-ulib.sh
-  '';
+    CP="cp -r --no-preserve=mode"
+    $CP ${fstarDune}/* $out
+    $CP ${fstarLib}/* $out
 
-  preInstall = ''
-    mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
-  '';
-  postInstall = ''
-    # Remove build artifacts
-    find $out -name _build -type d | xargs -I{} rm -rf "{}"
+    PREFIX=$out make -C src/ocaml-output install-sides
+
+    chmod +x $out/bin/fstar.exe
+    wrapProgram $out/bin/fstar.exe --prefix PATH ":" ${z3}/bin
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
-    wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
+    substituteInPlace $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstar/dune-package \
+      --replace ${fstarDune} $out
+
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish
     installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
   '';
 
   passthru.updateScript = writeScript "update-fstar" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p git gnugrep common-updater-scripts
-      set -eu -o pipefail
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git gnugrep common-updater-scripts
+    set -eu -o pipefail
 
-      version="$(git ls-remote --tags git@github.com:FStarLang/FStar.git | grep -Po 'v\K\d{4}\.\d{2}\.\d{2}' | sort | tail -n1)"
-      update-source-version fstar "$version"
+    version="$(git ls-remote --tags git@github.com:FStarLang/FStar.git | grep -Po 'v\K\d{4}\.\d{2}\.\d{2}' | sort | tail -n1)"
+    update-source-version fstar "$version"
   '';
 
   meta = with lib; {
