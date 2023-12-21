@@ -5,6 +5,7 @@
 , unzip
 
 , flutterPlatform
+, systemPlatform
 , flutter
 , hash
 }:
@@ -25,9 +26,16 @@ let
     # Use a version of Flutter with just enough capabilities to download
     # artifacts.
     supportedTargetFlutterPlatforms = [ ];
+
+    # Modify flutter-tool's system platform in order to get the desired platform's hashes.
+    flutter = flutter.unwrapped.override {
+      flutterTools = flutter.unwrapped.tools.override {
+        inherit systemPlatform;
+      };
+    };
   };
 in
-runCommand "flutter-artifacts-${flutterPlatform}"
+runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
 {
   nativeBuildInputs = [ xorg.lndir flutter' unzip ];
 

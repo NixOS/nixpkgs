@@ -50,6 +50,7 @@ let
     (callPackage ./artifacts/prepare-artifacts.nix {
       src = callPackage ./artifacts/fetch-artifacts.nix {
         inherit flutterPlatform;
+        systemPlatform = stdenv.hostPlatform.system;
         flutter = callPackage ./wrapper.nix { inherit flutter; };
         hash = artifactHashes.${flutterPlatform}.${stdenv.hostPlatform.system} or "";
       };
