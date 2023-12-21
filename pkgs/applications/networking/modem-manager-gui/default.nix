@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "modem-manager-gui";
-    rev = "upstream%2F${finalAttrs.version}";
-    sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
+    rev = "upstream/${finalAttrs.version}";
     hash = "sha256-+VXqfA7TUUemY+DWeRHupWb8weJTeiSMZu+orlcmXd4=";
   };
 
