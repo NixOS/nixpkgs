@@ -9341,6 +9341,8 @@ self: super: with self; {
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
+  pycrdt = callPackage ../development/python-modules/pycrdt { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
