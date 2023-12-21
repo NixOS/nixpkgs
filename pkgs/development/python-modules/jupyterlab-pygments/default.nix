@@ -9,14 +9,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_pygments";
+  pname = "jupyterlab-pygments";
   version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyterlab_pygments";
+    inherit version;
     hash = "sha256-chrKTZApJSsRz6nRheW1r01Udyu4By+bcDb0FwBU010=";
   };
 
