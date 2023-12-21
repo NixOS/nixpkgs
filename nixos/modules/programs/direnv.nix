@@ -49,7 +49,14 @@ in {
           default = true;
         };
 
-      package = lib.mkPackageOption pkgs "nix-direnv" {};
+      package = lib.mkOption {
+        default = pkgs.nix-direnv.override { nix = config.nix.package; };
+        defaultText = "pkgs.nix-direnv";
+        type = lib.types.package;
+        description = lib.mdDoc ''
+          The nix-direnv package to use
+        '';
+      };
     };
   };
 
