@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2023.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -27,12 +27,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      'certifi = ">=2023.07.22"' \
-      'certifi = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
