@@ -27,19 +27,22 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = with ocamlPackages; [
-    batteries
-    zarith
-    stdint
-    yojson
     fileutils
     memtrace
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
+    batteries
     menhirLib
     pprint
-    sedlex
-    ppxlib
     ppx_deriving
     ppx_deriving_yojson
+    ppxlib
     process
+    sedlex
+    stdint
+    yojson
+    zarith
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -51,7 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
+    mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
+    ln -s $out/lib/fstar $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstar
   '';
   postInstall = ''
     # Remove build artifacts
