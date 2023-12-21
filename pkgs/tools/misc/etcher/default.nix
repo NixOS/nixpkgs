@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , bash
+, asar
 , autoPatchelfHook
 , dpkg
 , makeWrapper
@@ -11,22 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.18.13";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
-    hash = "sha256-1lfm8RdmDJixx4i0ru8Isd9sHrpU6t6lZFKP9tPN5ig=";
+    hash = "sha256-twxBZfzDlvJ8Vmn4bbxWBc3gB03Do7Cvw3ownl0rxtY=";
   };
 
-  # sudo-prompt has hardcoded binary paths on Linux and we patch them here
-  # along with some other paths
-  postPatch = ''
-    substituteInPlace opt/balenaEtcher/resources/app/generated/gui.js \
-      --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
-      --replace '/bin/bash' '${bash}/bin/bash'
-  '';
-
   nativeBuildInputs = [
+    asar
     autoPatchelfHook
     dpkg
     makeWrapper
@@ -47,13 +41,22 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/${pname}
 
     cp -a usr/share/* $out/share
-    cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
+    cp -a usr/lib/balena-etcher/{locales,resources} $out/share/${pname}
+
+    asar extract $out/share/${pname}/resources/app.asar app
+
+    substituteInPlace app/.webpack/renderer/main_window/index.js \
+      --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
+      --replace '/bin/bash' '${bash}/bin/bash' \
+      --replace 'process.resourcesPath' "'$out/share/${pname}/resources'"
+
+    substituteInPlace app/.webpack/main/index.js \
+      --replace 'process.resourcesPath' "'$out/share/${pname}/resources'"
+
+    asar pack --unpack='{*.node,*.ftz,rect-overlay}' app $out/share/${pname}/resources/app.asar
 
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app
-
-    substituteInPlace $out/share/applications/balena-etcher.desktop \
-      --replace /opt/balenaEtcher/balena-etcher ${pname}
+      --add-flags $out/share/${pname}/resources/app.asar
 
     runHook postInstall
   '';
