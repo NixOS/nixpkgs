@@ -1,0 +1,204 @@
+From 83d8aa249fb4cd221aa7dbb75403553d5c96e04b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 14 Dec 2023 14:54:51 +0100
+Subject: [PATCH 3/3] rutabaga_gfx: fix stale cross-domain keymap resources
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+when running vulkaninfo and other apps it seems that this resource
+is requested multiple times and it fails after the first time.
+After this patch vulkaninfo no longer produces any qemu errors.
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ rutabaga_gfx/src/cross_domain/mod.rs | 155 ++++++++++++---------------
+ 1 file changed, 68 insertions(+), 87 deletions(-)
+
+diff --git a/rutabaga_gfx/src/cross_domain/mod.rs b/rutabaga_gfx/src/cross_domain/mod.rs
+index 260c1b6b7..2a1fb00e3 100644
+--- a/rutabaga_gfx/src/cross_domain/mod.rs
++++ b/rutabaga_gfx/src/cross_domain/mod.rs
+@@ -69,7 +69,7 @@ pub enum CrossDomainToken {
+ 
+ pub(crate) enum CrossDomainItem {
+     ImageRequirements(ImageMemoryRequirements),
+-    WaylandKeymap(SafeDescriptor),
++    WaylandKeymap(Arc<RutabagaHandle>),
+     #[allow(dead_code)] // `WaylandReadPipe` is never constructed on Windows.
+     WaylandReadPipe(File),
+     WaylandWritePipe(File),
+@@ -340,7 +340,10 @@ fn handle_fence(
+                             *identifier = match *identifier_type {
+                                 CROSS_DOMAIN_ID_TYPE_VIRTGPU_BLOB => add_item(
+                                     &self.item_state,
+-                                    CrossDomainItem::WaylandKeymap(file.into()),
++                                    CrossDomainItem::WaylandKeymap(Arc::new(RutabagaHandle {
++                                        os_handle: file.into(),
++                                        handle_type: RUTABAGA_MEM_HANDLE_TYPE_SHM,
++                                    })),
+                                 ),
+                                 CROSS_DOMAIN_ID_TYPE_WRITE_PIPE => add_item(
+                                     &self.item_state,
+@@ -670,95 +673,73 @@ fn context_create_blob(
+     ) -> RutabagaResult<RutabagaResource> {
+         let item_id = resource_create_blob.blob_id as u32;
+ 
+-        // We don't want to remove requirements blobs, since they can be used for subsequent
+-        // allocations.  We do want to remove Wayland keymaps, since they are mapped the guest
+-        // and then never used again.  The current protocol encodes this as divisiblity by 2.
+-        if item_id % 2 == 0 {
+-            let items = self.item_state.lock().unwrap();
+-            let item = items
+-                .table
+-                .get(&item_id)
+-                .ok_or(RutabagaError::InvalidCrossDomainItemId)?;
+-
+-            match item {
+-                CrossDomainItem::ImageRequirements(reqs) => {
+-                    if reqs.size != resource_create_blob.size {
+-                        return Err(RutabagaError::SpecViolation("blob size mismatch"));
+-                    }
+-
+-                    // Strictly speaking, it's against the virtio-gpu spec to allocate memory in the context
+-                    // create blob function, which says "the actual allocation is done via
+-                    // VIRTIO_GPU_CMD_SUBMIT_3D."  However, atomic resource creation is easiest for the
+-                    // cross-domain use case, so whatever.
+-                    let hnd = match handle_opt {
+-                        Some(handle) => handle,
+-                        None => self.gralloc.lock().unwrap().allocate_memory(*reqs)?,
+-                    };
+-
+-                    let info_3d = Resource3DInfo {
+-                        width: reqs.info.width,
+-                        height: reqs.info.height,
+-                        drm_fourcc: reqs.info.drm_format.into(),
+-                        strides: reqs.strides,
+-                        offsets: reqs.offsets,
+-                        modifier: reqs.modifier,
+-                        guest_cpu_mappable: (resource_create_blob.blob_flags
+-                            & RUTABAGA_BLOB_FLAG_USE_MAPPABLE)
+-                            != 0,
+-                    };
++        let items = self.item_state.lock().unwrap();
++        let item = items
++            .table
++            .get(&item_id)
++            .ok_or(RutabagaError::InvalidCrossDomainItemId)?;
+ 
+-                    Ok(RutabagaResource {
+-                        resource_id,
+-                        handle: Some(Arc::new(hnd)),
+-                        blob: true,
+-                        blob_mem: resource_create_blob.blob_mem,
+-                        blob_flags: resource_create_blob.blob_flags,
+-                        map_info: Some(reqs.map_info | RUTABAGA_MAP_ACCESS_RW),
+-                        info_2d: None,
+-                        info_3d: Some(info_3d),
+-                        vulkan_info: reqs.vulkan_info,
+-                        backing_iovecs: None,
+-                        component_mask: 1 << (RutabagaComponentType::CrossDomain as u8),
+-                        size: resource_create_blob.size,
+-                        mapping: None,
+-                    })
+-                }
+-                _ => Err(RutabagaError::InvalidCrossDomainItemType),
++        match item {
++            CrossDomainItem::WaylandKeymap(handle) => {
++                Ok(RutabagaResource {
++                    resource_id,
++                    handle: Some(Arc::clone(handle)),
++                    blob: true,
++                    blob_mem: resource_create_blob.blob_mem,
++                    blob_flags: resource_create_blob.blob_flags,
++                    map_info: Some(RUTABAGA_MAP_CACHE_CACHED | RUTABAGA_MAP_ACCESS_READ),
++                    info_2d: None,
++                    info_3d: None,
++                    vulkan_info: None,
++                    backing_iovecs: None,
++                    component_mask: 1 << (RutabagaComponentType::CrossDomain as u8),
++                    size: resource_create_blob.size,
++                    mapping: None,
++                })
+             }
+-        } else {
+-            let item = self
+-                .item_state
+-                .lock()
+-                .unwrap()
+-                .table
+-                .remove(&item_id)
+-                .ok_or(RutabagaError::InvalidCrossDomainItemId)?;
+-
+-            match item {
+-                CrossDomainItem::WaylandKeymap(descriptor) => {
+-                    let hnd = RutabagaHandle {
+-                        os_handle: descriptor,
+-                        handle_type: RUTABAGA_MEM_HANDLE_TYPE_SHM,
+-                    };
+-
+-                    Ok(RutabagaResource {
+-                        resource_id,
+-                        handle: Some(Arc::new(hnd)),
+-                        blob: true,
+-                        blob_mem: resource_create_blob.blob_mem,
+-                        blob_flags: resource_create_blob.blob_flags,
+-                        map_info: Some(RUTABAGA_MAP_CACHE_CACHED | RUTABAGA_MAP_ACCESS_READ),
+-                        info_2d: None,
+-                        info_3d: None,
+-                        vulkan_info: None,
+-                        backing_iovecs: None,
+-                        component_mask: 1 << (RutabagaComponentType::CrossDomain as u8),
+-                        size: resource_create_blob.size,
+-                        mapping: None,
+-                    })
++            CrossDomainItem::ImageRequirements(reqs) => {
++                if reqs.size != resource_create_blob.size {
++                    return Err(RutabagaError::SpecViolation("blob size mismatch"));
+                 }
+-                _ => Err(RutabagaError::InvalidCrossDomainItemType),
++
++                // Strictly speaking, it's against the virtio-gpu spec to allocate memory in the context
++                // create blob function, which says "the actual allocation is done via
++                // VIRTIO_GPU_CMD_SUBMIT_3D."  However, atomic resource creation is easiest for the
++                // cross-domain use case, so whatever.
++                let hnd = match handle_opt {
++                    Some(handle) => handle,
++                    None => self.gralloc.lock().unwrap().allocate_memory(*reqs)?,
++                };
++
++                let info_3d = Resource3DInfo {
++                    width: reqs.info.width,
++                    height: reqs.info.height,
++                    drm_fourcc: reqs.info.drm_format.into(),
++                    strides: reqs.strides,
++                    offsets: reqs.offsets,
++                    modifier: reqs.modifier,
++                    guest_cpu_mappable: (resource_create_blob.blob_flags
++                        & RUTABAGA_BLOB_FLAG_USE_MAPPABLE)
++                        != 0,
++                };
++
++                Ok(RutabagaResource {
++                    resource_id,
++                    handle: Some(Arc::new(hnd)),
++                    blob: true,
++                    blob_mem: resource_create_blob.blob_mem,
++                    blob_flags: resource_create_blob.blob_flags,
++                    map_info: Some(reqs.map_info | RUTABAGA_MAP_ACCESS_RW),
++                    info_2d: None,
++                    info_3d: Some(info_3d),
++                    vulkan_info: reqs.vulkan_info,
++                    backing_iovecs: None,
++                    component_mask: 1 << (RutabagaComponentType::CrossDomain as u8),
++                    size: resource_create_blob.size,
++                    mapping: None,
++                })
+             }
++            id => Err(RutabagaError::InvalidCrossDomainItemType),
+         }
+     }
+ 
+-- 
+2.42.0
+

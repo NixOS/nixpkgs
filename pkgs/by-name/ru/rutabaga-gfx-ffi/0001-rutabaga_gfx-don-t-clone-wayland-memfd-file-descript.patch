@@ -1,0 +1,68 @@
+From 4cbcc9a9dab2a88d864e19000fdffd7623540002 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 7 Dec 2023 17:09:28 +0100
+Subject: [PATCH 1/3] rutabaga_gfx: don't clone wayland memfd file descriptor
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After cloning these file descriptor mmap will fail on the new file descriptor.
+This results in mmap errors.
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ rutabaga_gfx/src/rutabaga_core.rs                        | 3 +--
+ rutabaga_gfx/src/rutabaga_os/memory_mapping.rs           | 2 +-
+ rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/rutabaga_gfx/src/rutabaga_core.rs b/rutabaga_gfx/src/rutabaga_core.rs
+index 740f840fd..8361ec067 100644
+--- a/rutabaga_gfx/src/rutabaga_core.rs
++++ b/rutabaga_gfx/src/rutabaga_core.rs
+@@ -757,7 +757,6 @@ pub fn map(&mut self, resource_id: u32) -> RutabagaResult<RutabagaMapping> {
+                         ));
+                     }
+ 
+-                    let clone = handle.try_clone()?;
+                     let resource_size: usize = resource.size.try_into()?;
+                     let map_info = resource
+                         .map_info
+@@ -765,7 +764,7 @@ pub fn map(&mut self, resource_id: u32) -> RutabagaResult<RutabagaMapping> {
+ 
+                     // Creating the mapping closes the cloned descriptor.
+                     let mapping = MemoryMapping::from_safe_descriptor(
+-                        clone.os_handle,
++                        &handle.os_handle,
+                         resource_size,
+                         map_info,
+                     )?;
+diff --git a/rutabaga_gfx/src/rutabaga_os/memory_mapping.rs b/rutabaga_gfx/src/rutabaga_os/memory_mapping.rs
+index d15fe81bd..885c6c9d8 100644
+--- a/rutabaga_gfx/src/rutabaga_os/memory_mapping.rs
++++ b/rutabaga_gfx/src/rutabaga_os/memory_mapping.rs
+@@ -13,7 +13,7 @@ pub struct MemoryMapping {
+ 
+ impl MemoryMapping {
+     pub fn from_safe_descriptor(
+-        descriptor: SafeDescriptor,
++        descriptor: &SafeDescriptor,
+         size: usize,
+         map_info: u32,
+     ) -> RutabagaResult<MemoryMapping> {
+diff --git a/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs b/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
+index 7eeb33f40..6d9f19124 100644
+--- a/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
++++ b/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
+@@ -39,7 +39,7 @@ fn drop(&mut self) {
+ 
+ impl MemoryMapping {
+     pub fn from_safe_descriptor(
+-        descriptor: SafeDescriptor,
++        descriptor: &SafeDescriptor,
+         size: usize,
+         map_info: u32,
+     ) -> RutabagaResult<MemoryMapping> {
+-- 
+2.42.0
+
