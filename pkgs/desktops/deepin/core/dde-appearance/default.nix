@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-appearance";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-7oRbydLXw8yRzi9L1GH/q0cjMY/DLyWbj4RUSyNpVNM=";
+    hash = "sha256-x503HhaF+cH+/KLve/aKp5H5TldOWg74gzCOPkp4I00=";
   };
 
   patches = [
