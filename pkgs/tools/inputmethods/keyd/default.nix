@@ -37,7 +37,7 @@ let
       install -Dm555 -t $out/bin scripts/${pname}
     '';
 
-    meta.mainProgram = pname;
+    meta.mainProgram = "keyd-application-mapper";
   };
 
 in
