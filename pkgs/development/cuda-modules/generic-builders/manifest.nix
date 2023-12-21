@@ -94,7 +94,12 @@ backendStdenv.mkDerivation (
     # Traversed in the order of the outputs speficied in outputs;
     # entries are skipped if they don't exist in outputs.
     outputToPatterns = {
-      bin = ["bin"];
+      bin = [ "bin" ];
+      dev = [
+        "share/pkg-config"
+        "**/*.pc"
+        "**/*.cmake"
+      ];
       lib = [
         "lib"
         "lib64"
@@ -115,6 +120,22 @@ backendStdenv.mkDerivation (
       }";
       inherit (redistribRelease.${redistArch}) sha256;
     };
+
+    postPatch = ''
+      if [[ -d pkg-config ]] ; then
+        mkdir -p share/pkg-config
+        mv pkg-config/* share/pkg-config/
+        rmdir pkg-config
+      fi
+
+      for pc in share/pkg-config/*.pc ; do
+        sed -i \
+          -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
+          -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
+          -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
+          "$pc"
+      done
+    '';
 
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
@@ -196,6 +217,20 @@ backendStdenv.mkDerivation (
       + ''
         runHook postInstall
       '';
+
+    doInstallCheck = true;
+    allowFHSReferences = false;
+    postInstallCheck = ''
+      echo "Executing postInstallCheck"
+
+      if [[ -z "''${allowFHSReferences-}" ]] ; then
+        mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "''${!o}"; done)
+        if grep --max-count=5 --recursive --exclude=LICENSE /usr/ "''${outputPaths[@]}" ; then
+          echo "Detected references to /usr" >&2
+          exit 1
+        fi
+      fi
+    '';
 
     # libcuda needs to be resolved during runtime
     # NOTE: Due to the use of __structuredAttrs, we can't use a list for autoPatchelfIgnoreMissingDeps, since it

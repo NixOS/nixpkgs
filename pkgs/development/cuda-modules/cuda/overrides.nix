@@ -115,7 +115,10 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           moveToOutput "nvvm" "''${!outputBin}"
         '';
 
-      meta = (oldAttrs.meta or {}) // {
+      # The nvcc and cicc binaries contain hard-coded references to /usr
+      allowFHSReferences = true;
+
+      meta = (oldAttrs.meta or { }) // {
         mainProgram = "nvcc";
       };
     }
