@@ -11750,6 +11750,8 @@ with pkgs;
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
+  ovn-lts = callPackage ../by-name/ov/ovn/lts.nix { };
+
   optifinePackages = callPackage ../tools/games/minecraft/optifine { };
 
   optifine = optifinePackages.optifine-latest;
