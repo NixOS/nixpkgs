@@ -10,16 +10,18 @@
 , pkgs-docker
 , python-json-logger
 , pythonOlder
+, requests
 , ruamel-yaml
 , semver
+, setuptools
 , toml
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2022.10.0";
-  format = "setuptools";
+  version = "2023.06.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -27,8 +29,12 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "repo2docker";
     rev = "refs/tags/${version}";
-    hash = "sha256-n1Yhl3QC1YqdsCl6pI5NjzTiSEs6NrGq9jwT0uyS/p0=";
+    hash = "sha256-egSQ8PXH9PxVpkZfaWfU2ZjRNW67x6FzIy+LQR5BdNE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     chardet
@@ -39,6 +45,7 @@ buildPythonPackage rec {
     jinja2
     pkgs-docker
     python-json-logger
+    requests
     ruamel-yaml
     semver
     toml
