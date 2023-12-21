@@ -431,7 +431,7 @@ in {
             ]}
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          filteredConfig = lib.filterAttrsRecursiveBottomUp (_: v: ! elem v [ {} null ]) cfg.config;
           snipeITEnv = pkgs.writeText "snipeIT.env" (snipeITEnvVars filteredConfig);
         in ''
           # error handling

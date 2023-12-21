@@ -405,7 +405,7 @@ in {
           replace-secret ${escapeShellArgs [(builtins.hashString "sha256" file) file "${cfg.dataDir}/.env"]}
         '';
         secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [{} null])) cfg.config;
+        filteredConfig = lib.filterAttrsRecursiveBottomUp (_: v: ! elem v [{} null]) cfg.config;
         monicaEnv = pkgs.writeText "monica.env" (monicaEnvVars filteredConfig);
       in ''
         # error handling

@@ -462,7 +462,7 @@ in
       };
 
       isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-      filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [{ } null])) cfg.settings;
+      filteredConfig = lib.filterAttrsRecursiveBottomUp (_: v: ! elem v [{ } null]) cfg.settings;
       confFile = pkgs.writeText "keycloak.conf" (keycloakConfig filteredConfig);
       keycloakBuild = cfg.package.override {
         inherit confFile;

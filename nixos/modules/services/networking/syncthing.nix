@@ -8,7 +8,7 @@ let
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
   settingsFormat = pkgs.formats.json { };
-  cleanedConfig = converge (filterAttrsRecursive (_: v: v != null && v != {})) cfg.settings;
+  cleanedConfig = filterAttrsRecursiveBottomUp (_: v: v != null && v != {}) cfg.settings;
 
   isUnixGui = (builtins.substring 0 1 cfg.guiAddress) == "/";
 
