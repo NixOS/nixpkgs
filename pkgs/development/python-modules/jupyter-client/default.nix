@@ -12,12 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_client";
+  pname = "jupyter-client";
   version = "8.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyter_client";
+    inherit version;
     hash = "sha256-BkIkS7g7R2SuYNB+AQ4V8OLSdexOkYqPe4D7vvPKYMc=";
   };
 
@@ -35,12 +36,17 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  pythonImportsCheck = [
+    "jupyter_client"
+  ];
+
   # Circular dependency with ipykernel
   doCheck = false;
 
   meta = {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/jupyter_client";
+    changelog = "https://github.com/jupyter/jupyter_client/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
