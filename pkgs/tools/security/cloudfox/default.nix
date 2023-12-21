@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cloudfox";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "BishopFox";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-r9YIJ+PRUA1stKTL39+/T+m1WMkocpjfzG8Y9knnFU4=";
+    hash = "sha256-V6zYEH2LACBcMY0ox8ZgqJGFLWFgCNR4l9Uo+hMgseE=";
   };
 
-  vendorHash = "sha256-nSisRurpareGI4EHENayMhsYOKL1hE1wVw2Ueiqii4U=";
+  vendorHash = "sha256-PZW1rNX8TLW0SZ9A2eF5N12J9BPWgRZJeGIb042Tinc=";
 
   # Some tests are failing because of wrong filename/path
   doCheck = false;
