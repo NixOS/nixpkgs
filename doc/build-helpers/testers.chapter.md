@@ -91,7 +91,7 @@ This returns a derivation with an override on the builder, with the following ef
  - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
  - Save the build log to `$out/testBuildFailure.log` (same)
 
-While `testBuildFailure` is designed to keep changes to the original builder's environment to a minimum, some small changes are inevitable.
+While `testBuildFailure` is designed to keep changes to the original builder's environment to a minimum, some small changes are inevitable:
 
  - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
  - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
