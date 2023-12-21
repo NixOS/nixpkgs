@@ -2,30 +2,33 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, flit-core
+, packaging
 , sphinx
-, importlib-resources
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
-  version = "0.5.2";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
     pname = "sphinx_jupyterbook_latex";
-    hash = "sha256-2h060Cj1XdvxC5Ewu58k/GDK+2ccvTnf2VU3qvyQly4=";
+    hash = "sha256-9UxmdME/Fhb5qTRD6YubU1P5/dqOObbsVSzPCz5f+2I=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "sphinx>=4,<5.1" "sphinx"
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ sphinx ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  propagatedBuildInputs = [
+    packaging
+    sphinx
+  ];
 
   pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
 
