@@ -878,8 +878,8 @@ runTests {
       expected = foldl' mergeAttrs { } list;
     };
 
-  testFilterAttrsRecursiveExample = {
-    expr = attrsets.filterAttrsRecursive (n: v: v != null && v != {}) {
+  testFilterAttrsRecursiveTopDownExample = {
+    expr = attrsets.filterAttrsRecursiveTopDown (n: v: v != null && v != {}) {
       foo = null;
       bar = {
         baz = null;
@@ -896,8 +896,8 @@ runTests {
     };
   };
 
-  testFilterAttrsRecursiveLazy = testingDeepEval (
-    attrsets.filterAttrsRecursive (n: v: v.keep or true) {
+  testFilterAttrsRecursiveTopDownLazy = testingDeepEval (
+    attrsets.filterAttrsRecursiveTopDown (n: v: v.keep or true) {
       foo = {
         keep = false;
         error = throw "This should not be evaluated";

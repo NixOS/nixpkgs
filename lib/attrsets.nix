@@ -420,15 +420,20 @@ rec {
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
   /*
+    An alias for [`filterAttrsRecursiveTopDown`](#function-library-lib.attrsets.filterAttrsRecursiveTopDown).
+  */
+  filterAttrsRecursive = filterAttrsRecursiveTopDown;
+
+  /*
     Filter an attribute set recursively by removing all attributes for which the given predicate returns `false`.
 
     More precisely, for each attribute:
     - Only include the attribute if the predicate returns `true` for this attribute.
     - If the attribute is included and its value is an attribute set itself,
-      replace it with the result of calling `filterAttrsRecursive` on it.
+      replace it with the result of calling `filterAttrsRecursiveTopDown` on it.
 
     Example:
-      filterAttrsRecursive (n: v: v != null && v != {}) {
+      filterAttrsRecursiveTopDown (n: v: v != null && v != {}) {
         foo = null;
         bar = {
           baz = null;
@@ -445,9 +450,9 @@ rec {
       }
 
     Type:
-      filterAttrsRecursive :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+      filterAttrsRecursiveTopDown :: (String -> Any -> Bool) -> AttrSet -> AttrSet
   */
-  filterAttrsRecursive =
+  filterAttrsRecursiveTopDown =
     # Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
     pred:
     # The attribute set to filter
@@ -457,7 +462,7 @@ rec {
         let v = set.${name}; in
         if pred name v then [
           (nameValuePair name (
-            if isAttrs v then filterAttrsRecursive pred v
+            if isAttrs v then filterAttrsRecursiveTopDown pred v
             else v
           ))
         ] else []
