@@ -2722,6 +2722,12 @@
     githubId = 53131727;
     name = "Bryan Albuquerque";
   };
+  bryango = {
+    name = "Bryan Lai";
+    email = "bryanlais@gmail.com";
+    github = "bryango";
+    githubId = 26322692;
+  };
   bryanhonof = {
     name = "Bryan Honof";
     email = "bryanhonof@gmail.com";

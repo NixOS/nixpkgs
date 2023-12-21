@@ -6710,6 +6710,8 @@ with pkgs;
 
   biber = callPackage ../tools/typesetting/biber { };
 
+  biber-for-tectonic = callPackage ../tools/typesetting/tectonic/biber.nix { };
+
   biber-ms = callPackage ../tools/typesetting/biber-ms { };
 
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
@@ -25334,7 +25336,9 @@ with pkgs;
 
   tecla = callPackage ../development/libraries/tecla { };
 
-  tectonic = callPackage ../tools/typesetting/tectonic {
+  tectonic = callPackage ../tools/typesetting/tectonic/wrapper.nix { };
+
+  tectonic-unwrapped = callPackage ../tools/typesetting/tectonic {
     harfbuzz = harfbuzzFull;
   };
 
