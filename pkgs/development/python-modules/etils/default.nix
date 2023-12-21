@@ -29,9 +29,9 @@
 buildPythonPackage rec {
   pname = "etils";
   version = "1.6.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
-    description = "Collection of eclectic utils for python";
+    description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];
