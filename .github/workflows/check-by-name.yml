@@ -91,6 +91,6 @@ jobs:
             exit 0
           else
             exitCode=$?
-            echo "To run locally: ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            echo "To run locally: ./maintainers/scripts/check-by-name.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
             exit "$exitCode"
           fi
