@@ -85,6 +85,6 @@ in {
   };
 
   meta.maintainers = builtins.attrValues {
-    inherit (lib.maintainers) dblsaiko;
+    inherit (lib.maintainers) dblsaiko h7x4;
   };
 }
