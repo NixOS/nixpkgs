@@ -2,6 +2,7 @@
 , botocore
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , pythonOlder
 , stdenv
@@ -9,17 +10,19 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = pname;
-    rev = version;
-    hash = "sha256-sdoPjkZHN5wVCK9V6V+fkGvQvEQo2ABy2lqefEKfg6o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NdPvNvUTcWwcmoBJjWbj2wBiM1E3JKSpklCyllEqUH4=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ botocore ];
 
@@ -37,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3transfer" ];
 
   passthru.optional-dependencies = {
-    crt = [ botocore.optional-dependencies.crt ];
+    crt = botocore.optional-dependencies.crt;
   };
 
   meta = with lib; {
