@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableLibpulseaudio libpulseaudio
     ++ lib.optional stdenv.isDarwin CoreAudio;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Sample Rate Converter for audio";
     homepage = "https://sox.sourceforge.net/";
