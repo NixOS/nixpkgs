@@ -9,20 +9,20 @@
 There are various cases for the deployment descriptor to talk about
 the state of one of its instances at a given point in time:
 
-### Instance needs to move along with environment updates
+### Instance wants to move along with environment updates
 e.g.
 - Schema update for new database version
 - Restore state from backup location
 - Apply novelty in dependency order
 - Generate secrets for new services
 
-### Update process needs to include a check whether new version will apply to current state
+### Update process wants to predict how new version will apply to current state
 e.g.
 - database folder version <= database service version
 - username <-> uid assignment in new version matches /etc/passwd
 - running kernel supports required features (in case of switch)
 
-### Update process needs to offer resolution steps for errors and warnings
+### Update process wants to offer resolution steps in case of errors and warnings
 e.g.
 - data format from compatibility check
 - with executable resolution steps
