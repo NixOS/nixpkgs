@@ -13590,8 +13590,6 @@ with pkgs;
 
   svu = callPackage ../tools/misc/svu { };
 
-  ssb = callPackage ../tools/security/ssb { };
-
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
