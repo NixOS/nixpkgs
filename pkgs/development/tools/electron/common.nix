@@ -183,7 +183,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   passthru = {
     inherit info;
     headers = stdenv.mkDerivation rec {
-      name = "node-v${info.node}-headers.tar.xz";
+      name = "node-v${info.node}-headers.tar.gz";
       nativeBuildInputs = [ python3 ];
       src = fetchdep info.deps."src/third_party/electron_node";
       buildPhase = ''
