@@ -19,6 +19,9 @@
 , rLibrary ? false
 }:
 
+assert rLibrary -> !pythonSupport;
+assert pythonSupport -> !rLibrary;
+
 stdenv.mkDerivation (finalAttrs: rec {
   pnameBase = "catboost";
   pname = lib.optionalString rLibrary "r-" + finalAttrs.pnameBase;
