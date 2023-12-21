@@ -1,0 +1,45 @@
+Patch the gradle calls within flutter android code to explicitly 
+set --project-cache-dir from FLUTTER_GRADLE_PROJECT_CACHE
+
+otherwise gradle build will attempt to write to the sdk directory.
+
+diff --git a/packages/flutter_tools/lib/src/android/gradle.dart b/packages/flutter_tools/lib/src/android/gradle.dart
+index 6d1e3e7345..8ef5c630c8 100644
+--- a/packages/flutter_tools/lib/src/android/gradle.dart
++++ b/packages/flutter_tools/lib/src/android/gradle.dart
+@@ -181,9 +181,11 @@ class AndroidGradleBuilder implements AndroidBuilder {
+        _usage = usage,
+        _gradleUtils = gradleUtils,
+        _androidStudio = androidStudio,
++       _flutterProjectCacheDir = platform.environment["FLUTTER_GRADLE_PROJECT_CACHE"] ?? "${platform.environment["HOME"]}/.gradle_android_cache",
+        _fileSystemUtils = FileSystemUtils(fileSystem: fileSystem, platform: platform),
+        _processUtils = ProcessUtils(logger: logger, processManager: processManager);
+ 
++  final String _flutterProjectCacheDir;
+   final Java? _java;
+   final Logger _logger;
+   final ProcessUtils _processUtils;
+@@ -283,6 +285,7 @@ class AndroidGradleBuilder implements AndroidBuilder {
+     );
+     final List<String> command = <String>[
+       _gradleUtils.getExecutable(project),
++      '--project-cache-dir=${_flutterProjectCacheDir}',
+       ...options, // suppresses gradle output.
+       taskName,
+     ];
+@@ -358,6 +361,7 @@ class AndroidGradleBuilder implements AndroidBuilder {
+       // This does more than get gradlewrapper. It creates the file, ensures it
+       // exists and verifies the file is executable.
+       _gradleUtils.getExecutable(project),
++      '--project-cache-dir=${_flutterProjectCacheDir}',
+     ];
+ 
+     // All automatically created files should exist.
+@@ -683,6 +687,7 @@ class AndroidGradleBuilder implements AndroidBuilder {
+     );
+     final List<String> command = <String>[
+       _gradleUtils.getExecutable(project),
++      '--project-cache-dir=${_flutterProjectCacheDir}',
+       '-I=$initScript',
+       '-Pflutter-root=$flutterRoot',
+       '-Poutput-dir=${outputDirectory.path}',
