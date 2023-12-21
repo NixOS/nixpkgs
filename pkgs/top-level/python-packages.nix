@@ -13278,6 +13278,8 @@ self: super: with self; {
 
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
 
+  snakemake-interface-executor-plugins = callPackage ../development/python-modules/snakemake-interface-executor-plugins { };
+
   snakebite = callPackage ../development/python-modules/snakebite { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
