@@ -104,8 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix concatenations & variable references
     substituteInPlace src/history-service.pc.in \
       --replace 'LIB_INSTALL_DIR' 'CMAKE_INSTALL_FULL_LIBDIR' \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/\''${" "\''${" \
-
+      --replace "\''${CMAKE_INSTALL_PREFIX}/\''${" "\''${"
   '' + (if finalAttrs.finalPackage.doCheck then ''
     # Tests launch these DBus services, fix paths related to them
 
@@ -151,6 +150,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Many deprecation warnings with Qt 5.15
     "-DENABLE_WERROR=OFF"
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
+      # DaemonTest is flaky
+      # https://gitlab.com/ubports/development/core/history-service/-/issues/13
+      "-E" "^DaemonTest"
+    ]))
   ];
 
   preBuild = ''
