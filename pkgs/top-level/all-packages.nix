@@ -29395,9 +29395,9 @@ with pkgs;
 
   open-sans = callPackage ../data/fonts/open-sans { };
 
-  openmoji-color = callPackage ../data/fonts/openmoji { variant = "color"; };
+  openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = ["glyf_colr_0"]; };
 
-  openmoji-black = callPackage ../data/fonts/openmoji { variant = "black"; };
+  openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = ["glyf"]; };
 
   openzone-cursors = callPackage ../data/themes/openzone { };
 
