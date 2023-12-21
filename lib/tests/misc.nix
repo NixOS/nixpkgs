@@ -909,6 +909,29 @@ runTests {
     }
   );
 
+  testFilterAttrsRecursiveBottomUpExample = {
+    expr = attrsets.filterAttrsRecursiveBottomUp (n: v: v != null && v != {}) {
+      foo = null;
+      bar = {
+        baz = null;
+        qux = {
+          quux = null;
+          corge = { };
+        };
+      };
+    };
+    expected = { };
+  };
+
+  testFilterAttrsRecursiveBottomUpStrict = testingDeepThrow (
+    attrsets.filterAttrsRecursiveBottomUp (n: v: v.keep or true) {
+      foo = {
+        keep = false;
+        error = throw "This should be evaluated";
+      };
+    }
+  );
+
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {

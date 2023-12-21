@@ -432,6 +432,10 @@ rec {
     - If the attribute is included and its value is an attribute set itself,
       replace it with the result of calling `filterAttrsRecursiveTopDown` on it.
 
+    Compared to [`filterAttrsRecursiveBottomUp`](#function-library-lib.attrsets.filterAttrsRecursiveBottomUp):
+    - This function allows the predicate to stop the recursion based on the value.
+    - The result of this function can have attribute paths that don't satisfy the predicate.
+
     Example:
       filterAttrsRecursiveTopDown (n: v: v != null && v != {}) {
         foo = null;
@@ -467,6 +471,59 @@ rec {
           ))
         ] else []
       ) (attrNames set)
+    );
+
+  /*
+    Filter an attribute set recursively by removing all attributes for which the given predicate returns `false`.
+
+    More precisely, for each attribute:
+    - If the attribute value is an attribute set itself,
+      replace it with the result of calling `filterAttrsRecursiveTopDown` on it.
+    - Only include the attribute if the predicate returns `true` for this attribute
+      with the potentially replaced attribute value of the previous step.
+
+    Compared to [`filterAttrsRecursiveTopDown`](#function-library-lib.attrsets.filterAttrsRecursiveTopDown):
+    - This function makes all attribute paths of the result satisfy the predicate.
+    - This function doesn't allow the predicate to stop the recursion based on the value.
+
+    Example:
+      filterAttrsRecursiveBottomUp (n: v: v != null && v != {}) {
+        foo = null;
+        bar = {
+          baz = null;
+          qux = {
+            quux = null;
+            corge = { };
+          };
+        };
+      }
+      => { }
+
+    Type:
+      filterAttrsRecursiveBottomUp :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+  */
+  filterAttrsRecursiveBottomUp =
+    # Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
+    pred:
+    # The attribute set to filter.
+    attrs:
+    listToAttrs (
+      concatMap (name:
+        let
+          value = attrs.${name};
+          newValue =
+            if isAttrs value then
+              filterAttrsRecursiveBottomUp pred value
+            else
+              value;
+        in
+        if pred name newValue then
+          [
+            (nameValuePair name newValue)
+          ]
+        else
+          [ ]
+      ) (attrNames attrs)
     );
 
    /*
