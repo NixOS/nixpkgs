@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texliveSmall, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, bash
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 , enableMemoryProfiling ? false
@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     pango pcre2 perl readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
     bison imake which blas lapack curl tcl tk jdk tzdata
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+
+  prePatch = ''
+    substituteInPlace src/unix/sys-unix.c --replace "/bin/sh" "${lib.makeBinPath [ bash ]}/bash"
+  '';
 
   patches = [
     ./no-usr-local-search-paths.patch
