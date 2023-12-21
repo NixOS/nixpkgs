@@ -6,6 +6,7 @@
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !toolsOnly
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !toolsOnly, numactl
+, rutabagaSupport ? stdenv.isLinux && !nixosTestRunner && !toolsOnly, rutabaga-gfx-ffi
 , seccompSupport ? stdenv.isLinux && !toolsOnly, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !toolsOnly
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libpulseaudio
@@ -89,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
     ++ lib.optionals vncSupport [ libjpeg libpng ]
+    ++ lib.optionals rutabagaSupport [ rutabaga-gfx-ffi ]
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
