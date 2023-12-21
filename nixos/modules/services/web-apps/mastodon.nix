@@ -711,31 +711,28 @@ in {
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
       script = lib.optionalString (!databaseActuallyCreateLocally) ''
         umask 077
-
-        export PGPASSFILE
-        PGPASSFILE=$(mktemp)
-        cat > $PGPASSFILE <<EOF
-        ${cfg.database.host}:${toString cfg.database.port}:${cfg.database.name}:${cfg.database.user}:$(cat ${cfg.database.passwordFile})
-        EOF
-
+        export PGPASSWORD="$(cat '${cfg.database.passwordFile}')"
       '' + ''
-        if [ `psql ${cfg.database.name} -c \
+        if [ `psql -c \
                 "select count(*) from pg_class c \
                 join pg_namespace s on s.oid = c.relnamespace \
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
                 and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
+          echo "Seeding database"
           SAFETY_ASSURED=1 rails db:schema:load
           rails db:seed
         else
+          echo "Migrating database (this might be a noop)"
           rails db:migrate
         fi
       '' +  lib.optionalString (!databaseActuallyCreateLocally) ''
-        rm $PGPASSFILE
-        unset PGPASSFILE
+        unset PGPASSWORD
       '';
       path = [ cfg.package pkgs.postgresql ];
       environment = env // lib.optionalAttrs (!databaseActuallyCreateLocally) {
         PGHOST = cfg.database.host;
+        PGPORT = toString cfg.database.port;
+        PGDATABASE = cfg.database.name;
         PGUSER = cfg.database.user;
       };
       serviceConfig = {
