@@ -118,7 +118,17 @@ stdenv.mkDerivation rec {
     rm $sgxPswDir/{cleanup.sh,startup.sh}
     rm -r $sgxPswDir/scripts
 
+    # Move aesmd binaries/libraries/enclaves
     mv $sgxPswDir/aesm/ $out/
+
+    # We absolutely MUST avoid stripping or patching these ".signed.so" SGX
+    # enclaves. Stripping would change each enclave measurement (hash of the
+    # binary).
+    #
+    # We're going to temporarily move these enclave libs to another directory
+    # until after stripping/patching in the fixupPhase.
+    mkdir $TMPDIR/enclaves
+    mv $out/aesm/*.signed.so* $TMPDIR/enclaves
 
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
@@ -130,34 +140,22 @@ stdenv.mkDerivation rec {
   '';
 
   stripDebugList = [
-    # Only strip the host libraries. If we don't strip, we accidentally pull in
-    # `gcc`...
-    #
-    # We need to avoid stripping the enclave ".signed.so" files, since that
-    # would modify the enclave measurement (hash).
-    #
-    # TODO(phlip9): put the enclave libraries in a separate directory or tell
-    # strip to ignore all "*.signed.so".
-    "aesm/aesm_service"
-    "aesm/libCppMicroServices.so.4.0.0"
-    "aesm/libdcap_quoteprov.so"
-    "aesm/libipc.so"
-    "aesm/liboal.so"
-    "aesm/libsgx_default_qcnl_wrapper.so"
-    "aesm/libsgx_pce_logic.so.1"
-    "aesm/libsgx_qe3_logic.so.1"
-    "aesm/liburts_internal.so"
-    "aesm/libutils.so"
-
-    "aesm/bundles"
     "lib"
     "bin"
+    # Also strip binaries/libs in the `aesm` directory
+    "aesm"
   ];
 
-  # Most—if not all—of those fixups are not relevant for NixOS as we have our own
-  # NixOS module which is based on those files without relying on them. Still, it
-  # is helpful to have properly patched versions for non-NixOS distributions.
   postFixup = ''
+    # Move the SGX enclaves back after everything else has been stripped.
+    mv $TMPDIR/enclaves/*.signed.so* $out/aesm/
+    rmdir $TMPDIR/enclaves
+
+    # Fixup the aesmd systemd service
+    #
+    # Most—if not all—of those fixups are not relevant for NixOS as we have our own
+    # NixOS module which is based on those files without relying on them. Still, it
+    # is helpful to have properly patched versions for non-NixOS distributions.
     echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
       --replace '@aesm_folder@' \
