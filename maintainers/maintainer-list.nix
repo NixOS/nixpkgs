@@ -7738,6 +7738,12 @@
     githubId = 25505957;
     name = "Ilian";
   };
+  iliana = {
+    email = "iliana@buttslol.net";
+    github = "iliana";
+    githubId = 52814;
+    name = "iliana etaoin";
+  };
   iliayar = {
     email = "iliayar3@gmail.com";
     github = "iliayar";
