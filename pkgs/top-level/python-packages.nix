@@ -13276,6 +13276,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
+
   snakebite = callPackage ../development/python-modules/snakebite { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
