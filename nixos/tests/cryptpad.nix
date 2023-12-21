@@ -13,7 +13,7 @@ let
   machine_config = {
     services.cryptpad = {
       enable = true;
-      config = {
+      settings = {
         httpUnsafeOrigin = "https://cryptpad.localhost";
         httpSafeOrigin = "https://cryptpad-sandbox.localhost";
       };

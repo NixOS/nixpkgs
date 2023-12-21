@@ -8,12 +8,12 @@ let
   # The Cryptpad configuration file isn't JSON, but a JavaScript source file that assigns a JSON value
   # to a variable.
   cryptpadConfigFile = builtins.toFile "cryptpad_config.js" ''
-    module.exports = ${builtins.toJSON cfg.config}
+    module.exports = ${builtins.toJSON cfg.settings}
   '';
 
   # Derive domain names for Nginx configuration from Cryptpad configuration
-  mainDomain = strings.removePrefix "https://" cfg.config.httpUnsafeOrigin;
-  sandboxDomain = if isNull cfg.config.httpSafeOrigin then mainDomain else strings.removePrefix "https://" cfg.config.httpSafeOrigin;
+  mainDomain = strings.removePrefix "https://" cfg.settings.httpUnsafeOrigin;
+  sandboxDomain = if isNull cfg.settings.httpSafeOrigin then mainDomain else strings.removePrefix "https://" cfg.settings.httpSafeOrigin;
 
 in {
   options.services.cryptpad = {
@@ -42,7 +42,7 @@ in {
       '';
     };
 
-    config = mkOption {
+    settings = mkOption {
       description = mdDoc ''
         Cryptpad configuration settings.
         See https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js for a more extensive
@@ -130,7 +130,7 @@ in {
             "CRYPTPAD_CONFIG=${cryptpadConfigFile}"
             "HOME=%S/cryptpad"
           ];
-          ExecStart = "${cfg.package}/bin/cryptpad";
+          ExecStart = lib.getExe cfg.package;
           PrivateTmp = true;
           Restart = "always";
           StateDirectory = "cryptpad";
@@ -145,7 +145,7 @@ in {
           # apparently needs proc for workers management
           "/proc"
           "/dev/urandom"
-        ] ++ (if ! cfg.config.blockDailyCheck then [
+        ] ++ (if ! cfg.settings.blockDailyCheck then [
           "/etc/resolv.conf"
           "/etc/hosts"
         ] else []);
@@ -158,14 +158,14 @@ in {
     })
     (mkIf cfg.configureNginx {
       assertions = [
-        { assertion = cfg.config.httpUnsafeOrigin != "";
-          message = "services.cryptpad.config.httpUnsafeOrigin is required";
+        { assertion = cfg.settings.httpUnsafeOrigin != "";
+          message = "services.cryptpad.settings.httpUnsafeOrigin is required";
         }
-        { assertion = strings.hasPrefix "https://" cfg.config.httpUnsafeOrigin;
-          message = "services.cryptpad.config.httpUnsafeOrigin must start with https://";
+        { assertion = strings.hasPrefix "https://" cfg.settings.httpUnsafeOrigin;
+          message = "services.cryptpad.settings.httpUnsafeOrigin must start with https://";
         }
-        { assertion = isNull cfg.config.httpSafeOrigin || strings.hasPrefix "https://" cfg.config.httpSafeOrigin;
-          message = "services.cryptpad.config.httpSafeOrigin must start with https:// (or be unset)";
+        { assertion = isNull cfg.settings.httpSafeOrigin || strings.hasPrefix "https://" cfg.settings.httpSafeOrigin;
+          message = "services.cryptpad.settings.httpSafeOrigin must start with https:// (or be unset)";
         }
       ];
       services.nginx = {
@@ -192,13 +192,13 @@ in {
         virtualHosts = mkMerge [
           {
             "${mainDomain}" = {
-              serverAliases = if isNull cfg.config.httpSafeOrigin then [ ] else [ sandboxDomain ];
+              serverAliases = if isNull cfg.settings.httpSafeOrigin then [ ] else [ sandboxDomain ];
               # NOTE: I see no reason not to enable ACME and forcing SSL if you enable Nginx for
               # Cryptpad, IMHO. Given the security context of Cryptpad, it should only ever be used with SSL.
               enableACME = true;
               forceSSL = true;
               locations."/" = {
-                proxyPass = "http://${cfg.config.httpAddress}:${builtins.toString cfg.config.httpPort}";
+                proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.httpPort}";
                 proxyWebsockets = true;
                 extraConfig = ''
                   client_max_body_size 150m;
