@@ -21,7 +21,7 @@ excluded_list=$(realpath "${2:-/dev/null}")
 export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }' | sed 's|api/v2$|api/v3/index.json|')
 
 declare -A base_addresses
 
@@ -34,9 +34,14 @@ done
 echo "{ fetchNuGet }: ["
 
 cd "$pkgs"
+numPackages=$(ls | wc -l)
+i=1
 for package in *; do
+  echo "Package $package ($i / $numPackages)" >&2
+  i=$((i+1))
   cd "$package"
   for version in *; do
+    echo "  version $version" >&2
     id=$(xq -r .package.metadata.id "$version/$package".nuspec)
 
     if grep -qxF "$id.$version.nupkg" "$excluded_list"; then

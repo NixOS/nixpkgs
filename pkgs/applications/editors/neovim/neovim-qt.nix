@@ -40,5 +40,6 @@ mkDerivation rec {
     mainProgram = "nvim-qt";
     maintainers = with maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
+    mainProgram = "nvim-qt";
   };
 }
