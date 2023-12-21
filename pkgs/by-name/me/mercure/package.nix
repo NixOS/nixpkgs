@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "mercure";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
     rev = "v${version}";
-    hash = "sha256-sGMjb7Ilm+RqR6bRGLAYB/nciE5oHeitDllr4H11uHU=";
+    hash = "sha256-3ar8LoIBwxBovyL9TUCHV13A9IvGp77wt7tNFvE3eEs=";
   };
 
   sourceRoot = "source/caddy";
 
-  vendorHash = "sha256-v0YKlkflo7eKXh38uqsnxZlLr3+fFl8EMeUsf8UMU48=";
+  vendorHash = "sha256-pN0FnRy1d+iDpFImCQMWRzs6uG8qgAYY1AREMrCsNfQ=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
