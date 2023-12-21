@@ -48,6 +48,8 @@
     flutter config --enable-linux-desktop >/dev/null
   '';
 
+  inherit pubGetScript;
+
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook ];
   buildInputs = (args.buildInputs or [ ]) ++ [ glib ];
 

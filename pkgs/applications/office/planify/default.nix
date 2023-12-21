@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-YF4un5j7zv0ishcgt00XDGy0AhR/bo6HJj04t0qfxwU=";
+    hash = "sha256-i+Up92Gl3FjgQ4GpcZruvYD//TPNWktSuWXGgDTwbWw=";
   };
 
   nativeBuildInputs = [
