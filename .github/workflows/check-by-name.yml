@@ -1,5 +1,7 @@
 # Checks pkgs/by-name (see pkgs/by-name/README.md)
 # using the nixpkgs-check-by-name tool (see pkgs/test/nixpkgs-check-by-name)
+#
+# When you make changes to this workflow, also update pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh adequately
 name: Check pkgs/by-name
 
 # The pre-built tool is fetched from a channel,
@@ -21,6 +23,9 @@ jobs:
     # The default of 6 hours is definitely too long
     timeout-minutes: 10
     steps:
+      # This step has to be in this file,
+      # because it's needed to determine which revision of the repository to fetch,
+      # and we can only use other files from the repository once it's fetched.
       - name: Resolving the merge commit
         env:
           GH_TOKEN: ${{ github.token }}
@@ -80,124 +85,20 @@ jobs:
           ref: ${{ env.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
-      - name: Determining PR git hashes
+      - name: Checking out base branch
         run: |
-          # For pull_request_target this is the same as $GITHUB_SHA
-          echo "baseSha=$(git rev-parse HEAD^1)" >> "$GITHUB_ENV"
-
-          echo "headSha=$(git rev-parse HEAD^2)" >> "$GITHUB_ENV"
+          base=$(mktemp -d)
+          git worktree add "$base" "$(git rev-parse HEAD^1)"
+          echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
-      - name: Determining channel to use for dependencies
-        run: |
-          echo "Determining the preferred channel to use for PR base branch $GITHUB_BASE_REF"
-          if [[ "$GITHUB_BASE_REF" =~ ^(release|staging|staging-next)-([0-9][0-9]\.[0-9][0-9])$ ]]; then
-              # Use the release channel for all PRs to release-XX.YY, staging-XX.YY and staging-next-XX.YY
-              channel=nixos-${BASH_REMATCH[2]}
-              echo "PR is for a release branch, preferred channel is $channel"
-          else
-              # Use the nixos-unstable channel for all other PRs
-              channel=nixos-unstable
-              echo "PR is for a non-release branch, preferred channel is $channel"
-          fi
-          # Check that the channel exists. It doesn't exist for fresh release branches
-          if ! curl -fSs "https://channels.nixos.org/$channel"; then
-            # Fall back to nixos-unstable, makes sense for fresh release branches
-            echo "Preferred channel $channel could not be fetched, falling back to nixos-unstable"
-            channel=nixos-unstable
-          fi
-          echo "channel=$channel" >> "$GITHUB_ENV"
-      - name: Fetching latest version of channel
-        run: |
-          echo "Fetching latest version of channel $channel"
-          # This is probably the easiest way to get Nix to output the path to a downloaded channel!
-          nixpkgs=$(nix-instantiate --find-file nixpkgs -I nixpkgs=channel:"$channel")
-          # This file only exists in channels
-          rev=$(<"$nixpkgs"/.git-revision)
-          echo "Channel $channel is at revision $rev"
-          echo "nixpkgs=$nixpkgs" >> "$GITHUB_ENV"
-          echo "rev=$rev" >> "$GITHUB_ENV"
-      - name: Fetching pre-built nixpkgs-check-by-name from the channel
-        run: |
-          echo "Fetching pre-built nixpkgs-check-by-name from channel $channel at revision $rev"
-          # Passing --max-jobs 0 makes sure that we won't build anything
-          nix-build "$nixpkgs" -A tests.nixpkgs-check-by-name --max-jobs 0
+      - name: Fetching the tool
+        run: pkgs/test/nixpkgs-check-by-name/scripts/fetch-tool.sh "$GITHUB_BASE_REF" result
       - name: Running nixpkgs-check-by-name
         run: |
-          echo "Checking whether the check succeeds on the base branch $GITHUB_BASE_REF"
-          git checkout -q "$baseSha"
-          if baseOutput=$(result/bin/nixpkgs-check-by-name . 2>&1); then
-            baseSuccess=1
+          if result/bin/nixpkgs-check-by-name --base "$base" .; then
+            exit 0
           else
-            baseSuccess=
+            exitCode=$?
+            echo "To run locally: ./maintainers/scripts/check-by-name.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            exit "$exitCode"
           fi
-          printf "%s\n" "$baseOutput"
-
-          echo "Checking whether the check would succeed after merging this pull request"
-          git checkout -q "$mergedSha"
-          if mergedOutput=$(result/bin/nixpkgs-check-by-name . 2>&1); then
-            mergedSuccess=1
-            exitCode=0
-          else
-            mergedSuccess=
-            exitCode=1
-          fi
-          printf "%s\n" "$mergedOutput"
-
-          resultToEmoji() {
-            if [[ -n "$1" ]]; then
-              echo ":heavy_check_mark:"
-            else
-              echo ":x:"
-            fi
-          }
-
-          # Print a markdown summary in GitHub actions
-          {
-            echo "| Nixpkgs version | Check result |"
-            echo "| --- | --- |"
-            echo "| Latest base commit | $(resultToEmoji "$baseSuccess") |"
-            echo "| After merging this PR | $(resultToEmoji "$mergedSuccess") |"
-            echo ""
-
-            if [[ -n "$baseSuccess" ]]; then
-              if [[ -n "$mergedSuccess" ]]; then
-                echo "The check succeeds on both the base branch and after merging this PR"
-              else
-                echo "The check succeeds on the base branch, but would fail after merging this PR:"
-                echo "\`\`\`"
-                echo "$mergedOutput"
-                echo "\`\`\`"
-                echo ""
-              fi
-            else
-              if [[ -n "$mergedSuccess" ]]; then
-                echo "The check fails on the base branch, but this PR fixes it, nicely done!"
-              else
-                echo "The check fails on both the base branch and after merging this PR, unknown if only this PRs changes would satisfy the check, the base branch needs to be fixed first."
-                echo ""
-                echo "Failure on the base branch:"
-                echo "\`\`\`"
-                echo "$baseOutput"
-                echo "\`\`\`"
-                echo ""
-                echo "Failure after merging this PR:"
-                echo "\`\`\`"
-                echo "$mergedOutput"
-                echo "\`\`\`"
-                echo ""
-              fi
-            fi
-
-            echo "### Details"
-            echo "- nixpkgs-check-by-name tool:"
-            echo "  - Channel: $channel"
-            echo "  - Nixpkgs commit: [$rev](https://github.com/${GITHUB_REPOSITORY}/commit/$rev)"
-            echo "  - Store path: \`$(realpath result)\`"
-            echo "- Tested Nixpkgs:"
-            echo "  - Base branch: $GITHUB_BASE_REF"
-            echo "  - Latest base branch commit: [$baseSha](https://github.com/${GITHUB_REPOSITORY}/commit/$baseSha)"
-            echo "  - Latest PR commit: [$headSha](https://github.com/${GITHUB_REPOSITORY}/commit/$headSha)"
-            echo "  - Merge commit: [$mergedSha](https://github.com/${GITHUB_REPOSITORY}/commit/$mergedSha)"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          exit "$exitCode"
