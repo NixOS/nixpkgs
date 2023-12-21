@@ -47,7 +47,7 @@ runCommand "flutter-artifacts-${platform}"
   mkdir "$FLUTTER_ROOT/bin/cache"
 
   HOME="$(mktemp -d)" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
-  rm -r "$FLUTTER_ROOT/bin/cache/lockfile"
+  rm -rf "$FLUTTER_ROOT/bin/cache/lockfile"
   find "$FLUTTER_ROOT" -type l -lname '${flutter'}/*' -delete
 
   cp -r bin/cache "$out"
