@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , buildPythonApplication
 , click
-, pydantic
+, pydantic_1
 , toml
 , watchdog
 , pytestCheckHook
@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     click
-    pydantic
+    pydantic_1
     toml
     watchdog
   ];

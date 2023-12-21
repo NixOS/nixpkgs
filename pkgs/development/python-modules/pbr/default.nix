@@ -7,16 +7,17 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "5.11.1";
-  format = "setuptools";
+  version = "6.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rvxRZ1sLUz1Wu1/RyMbAUi/jGJZnmILhxMY9XkoPzLM=";
+    hash = "sha256-0TdxIqWgDi+UDuSCmZUY7+FtdF1COmcMJ3c9+8PJp9k=";
   };
 
-  # importlib-metadata could be added here if it wouldn't cause an infinite recursion
-  propagatedBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures
   doCheck = false;

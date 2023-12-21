@@ -42,6 +42,11 @@ buildPythonPackage rec {
     pytest-httpx
   ];
 
+  disabledTests = [
+    # should fail, but times out
+    "test__query_rmv_api_fail"
+  ];
+
   patches = [
     # Can be removed with next release, https://github.com/cgtobi/PyRMVtransport/pull/55
     (fetchpatch {

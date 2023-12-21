@@ -1,18 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "confight";
   version = "2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-iodoexnh9tG4dgkjDXCUzWRFDhRlJ3HRgaNhxG2lwPY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     toml

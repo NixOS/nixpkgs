@@ -31,8 +31,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   doCheck = false;
 
   dontWrapGApps = true;

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xxAJmZSCNaOK5+VV/hmapmwlPcOEsSX12FRzv4Hq46M=";
+    hash = "sha256-lLHdXVMIsxONW5M8OitV5taSfRoiYy5Qn86p3dD35IY=";
   };
 
   nativeBuildInputs = [

@@ -53,8 +53,6 @@ buildPythonPackage rec {
       --replace "--cov pylsp --cov test" ""
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "autopep8"
     "flake8"

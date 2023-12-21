@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.6.0";
+  version = "3.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+YJQGPQm2FGOPhNzlXX2GM+ad4QdipJhwViOKGHtqBk=";
+    hash = "sha256-DBFDAKNrD93MRXjoM8dIJQ/HJ9Aj8oMJuPVQxTrKYfI=";
   };
 
   patches = [

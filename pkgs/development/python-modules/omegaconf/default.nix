@@ -1,6 +1,7 @@
 { lib
 , antlr4
 , antlr4-python3-runtime
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    attrs
     pydevd
     pytest-mock
     pytestCheckHook

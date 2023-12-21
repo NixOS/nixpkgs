@@ -24,6 +24,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://errors.pydantic.dev/2.5/v/string_too_short
+    "inflect.engine.compare"
+  ];
+
   pythonImportsCheck = [ "inflect" ];
 
   meta = with lib; {

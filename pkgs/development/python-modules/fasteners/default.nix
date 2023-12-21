@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fasteners";
-  version = "0.18";
+  version = "0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "harlowja";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FGcGGRfObOqXuURyEuNt/KDn51POpdNPUJJKtMcLJNI=";
+    hash = "sha256-XFa1ItFqkSYE940p/imWFp5e9gS6n+D1uM6Cj+Vzmmg=";
   };
 
   nativeBuildInputs = [

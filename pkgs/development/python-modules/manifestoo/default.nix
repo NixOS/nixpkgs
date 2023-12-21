@@ -38,8 +38,6 @@ buildPythonPackage rec {
   ++ typer.passthru.optional-dependencies.all
   ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

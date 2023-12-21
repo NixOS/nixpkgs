@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-aVnXCrTh+0Ip+FgYWN7hLw8N3iQCmXSywhReD5RTUfI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     sed -i '/pytest-cov/d' setup.py
   '';

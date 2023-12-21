@@ -1,20 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, stdenv
+
+# build-system
+, setuptools
+
+# dependencies
 , attrs
-, sortedcontainers
-, async-generator
 , exceptiongroup
 , idna
 , outcome
+, sniffio
+, sortedcontainers
+
+# tests
+, astor
+, coreutils
+, jedi
+, pyopenssl
 , pytestCheckHook
 , pytest-trio
-, pyopenssl
 , trustme
-, sniffio
-, stdenv
-, jedi
-, astor
 , yapf
-, coreutils
 }:
 
 let
@@ -28,22 +37,26 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.22.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "0.23.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OIfPGMi8yJRDNCAwVGg4jax2ky6WaK+hxJqjgGtqzLM=";
+    hash = "sha256-FviffcyPe53N7B/Nhj4MA5r20PmiL439Vvdddexz/Ug=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
-    sortedcontainers
-    async-generator
     idna
     outcome
     sniffio
+    sortedcontainers
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
   ];
@@ -79,6 +92,11 @@ buildPythonPackage rec {
     "fallback_when_no_hook_claims_it"
     # requires mypy
     "test_static_tool_sees_class_members"
+  ];
+
+  disabledTestPaths = [
+    # linters
+    "trio/_tests/tools/test_gen_exports.py"
   ];
 
   pytestFlagsArray = [
