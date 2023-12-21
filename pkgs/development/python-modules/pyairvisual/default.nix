@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2023.11.0";
+  version = "2023.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "pyairvisual";
     rev = "refs/tags/${version}";
-    hash = "sha256-69lLw+ZYQ4hfD6xsfq1DVTWCnbp7e+qexuW3osDUejg=";
+    hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
 
   postPatch = ''
