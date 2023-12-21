@@ -14,6 +14,7 @@ e.g.
 - Schema update for new database version
 - Restore state from backup location
 - Apply novelty in dependency order
+- Generate secrets for new services
 
 ### Update process needs to include a check whether new version will apply to current state
 e.g.
