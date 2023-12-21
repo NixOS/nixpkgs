@@ -25,6 +25,7 @@ let
     expected = true;
   };
   testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
+  testingDeepEval = expr: testingEval (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -876,6 +877,37 @@ runTests {
       expr = attrsets.mergeAttrsList list;
       expected = foldl' mergeAttrs { } list;
     };
+
+  testFilterAttrsRecursiveExample = {
+    expr = attrsets.filterAttrsRecursive (n: v: v != null && v != {}) {
+      foo = null;
+      bar = {
+        baz = null;
+        qux = {
+          quux = null;
+          corge = { };
+        };
+      };
+    };
+    expected = {
+      bar = {
+        qux = { };
+      };
+    };
+  };
+
+  testFilterAttrsRecursiveLazy = testingDeepEval (
+    attrsets.filterAttrsRecursive (n: v: v.keep or true) {
+      foo = {
+        keep = false;
+        error = throw "This should not be evaluated";
+      };
+      bar.baz = {
+        keep = false;
+        error = throw "This should not be evaluated";
+      };
+    }
+  );
 
   # code from the example
   testRecursiveUpdateUntil = {

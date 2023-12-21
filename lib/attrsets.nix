@@ -419,16 +419,33 @@ rec {
     set:
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
+  /*
+    Filter an attribute set recursively by removing all attributes for which the given predicate returns `false`.
 
-  /* Filter an attribute set recursively by removing all attributes for
-     which the given predicate return false.
+    More precisely, for each attribute:
+    - Only include the attribute if the predicate returns `true` for this attribute.
+    - If the attribute is included and its value is an attribute set itself,
+      replace it with the result of calling `filterAttrsRecursive` on it.
 
-     Example:
-       filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
-       => { foo = {}; }
+    Example:
+      filterAttrsRecursive (n: v: v != null && v != {}) {
+        foo = null;
+        bar = {
+          baz = null;
+          qux = {
+            quux = null;
+            corge = { };
+          };
+        };
+      }
+      => {
+        bar = {
+          qux = { };
+        };
+      }
 
-     Type:
-       filterAttrsRecursive :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+    Type:
+      filterAttrsRecursive :: (String -> Any -> Bool) -> AttrSet -> AttrSet
   */
   filterAttrsRecursive =
     # Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
