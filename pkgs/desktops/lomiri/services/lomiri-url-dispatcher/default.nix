@@ -116,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   preFixup = ''
+    substituteInPlace $out/bin/lomiri-url-dispatcher-dump \
+      --replace '/bin/sh' '${runtimeShell}'
+
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
 
@@ -128,8 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
     $guiExec
     EOF
     chmod +x $guiScript
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
+
     substituteInPlace $out/share/applications/lomiri-url-dispatcher-gui.desktop \
-      --replace "Exec=$guiExec" "Exec=$guiScript"
+      --replace "Exec=$guiExec" "Exec=$(basename $guiScript)" \
+      --replace "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
