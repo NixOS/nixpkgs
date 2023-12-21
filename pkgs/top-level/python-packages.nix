@@ -13276,6 +13276,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake-executor-plugin-cluster-generic = callPackage ../development/python-modules/snakemake-executor-plugin-cluster-generic { };
+
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
 
   snakemake-interface-executor-plugins = callPackage ../development/python-modules/snakemake-interface-executor-plugins { };
