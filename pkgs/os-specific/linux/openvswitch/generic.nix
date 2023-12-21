@@ -96,6 +96,8 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = ''
+    export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
+
     patchShebangs tests/
   '';
 
