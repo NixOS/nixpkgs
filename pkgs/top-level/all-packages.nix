@@ -26672,8 +26672,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit;
   }) mpd mpd-small mpdWithFeatures;
 
-  libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
-
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
   mtprotoproxy = python3.pkgs.callPackage ../servers/mtprotoproxy { };
