@@ -19,7 +19,7 @@
 , AGL
 , OpenGL
 , config
-, withCuda ? config.cudaSupport, cudaPackages
+, cudaSupport ? config.cudaSupport, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cmake
     wrapQtAppsHook
   ]
-  ++ lib.optionals withCuda [ cudaPackages.cuda_nvcc ];
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
+  ] ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";
