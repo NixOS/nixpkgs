@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvidia-texture-tools";
-  version = "unstable-2020-12-21";
+  version = "2.1.2-unstable-2020-12-21";
 
   src = fetchFromGitHub {
     owner = "castano";
     repo = "nvidia-texture-tools";
     rev = "aeddd65f81d36d8cb7b169b469ef25156666077e";
-    sha256 = "sha256-BYNm8CxPQbfmnnzNmOQ2Dc8HSyO8mkqzYsBZ5T80398=";
+    hash = "sha256-BYNm8CxPQbfmnnzNmOQ2Dc8HSyO8mkqzYsBZ5T80398=";
   };
-
-  nativeBuildInputs = [ cmake ];
-
-  outputs = [ "out" "dev" "lib" ];
 
   postPatch = ''
     # Make a recently added pure virtual function just virtual,
@@ -25,8 +25,14 @@ stdenv.mkDerivation rec {
     sed -i '/libsquish/d;/CMP_Core/d' extern/CMakeLists.txt
   '';
 
+  outputs = [ "out" "dev" "lib" ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
   cmakeFlags = [
-    "-DNVTT_SHARED=TRUE"
+    (lib.cmakeBool "NVTT_SHARED" true)
   ];
 
   postInstall = ''
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A set of cuda-enabled texture tools and compressors";
     homepage = "https://github.com/castano/nvidia-texture-tools";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }
