@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2023.10.0";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "simplisafe-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-U3SbaR8PTTvoAMu65+LAHSwTmR7iwqiidbefW8bNSCo=";
+    hash = "sha256-Nr4HvjIOLk/WMKCjj/ZX67OBSImRhs9SfZtLjFs81Sk=";
   };
 
 
