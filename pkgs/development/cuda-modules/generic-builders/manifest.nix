@@ -19,13 +19,14 @@
   # Also known as the Redistributable Name.
   # redistName : String,
   redistName,
+  # See ./modules/generic/manifests
+  # Expected to have the following attributes:
+  #   - feature
+  #   - redistrib
+  manifests,
   # If libPath is non-null, it must be a subdirectory of `lib`.
   # The contents of `libPath` will be moved to the root of `lib`.
   libPath ? null,
-  # See ./modules/generic/manifests/redistrib/release.nix
-  redistribRelease,
-  # See ./modules/generic/manifests/feature/release.nix
-  featureRelease,
 }:
 let
   inherit (lib)
@@ -39,9 +40,12 @@ let
     sourceTypes
     ;
 
+  redistribRelease = manifests.redistrib.${pname};
+  featureRelease = manifests.feature.${pname};
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
+  # redistArch :: Optional String
   redistArch = flags.getRedistArch hostPlatform.system;
 in
 backendStdenv.mkDerivation (
@@ -62,7 +66,8 @@ backendStdenv.mkDerivation (
     strictDeps = true;
 
     # NOTE: Outputs are evaluated jointly with meta, so in the case that this is an unsupported platform,
-    # we still need to provide a list of outputs.
+    # we still need to provide a list of outputs. The top-level binding is wrapped in `lists.optionals`
+    # to avoid evaluating attrByPath with a potentially null redistArch.
     outputs =
       let
         # Checks whether the redistributable provides an output.
@@ -87,7 +92,7 @@ backendStdenv.mkDerivation (
           "python"
         ];
         # The out output is special -- it's the default output and we always include it.
-        outputs = ["out"] ++ additionalOutputs;
+        outputs = ["out"] ++ lists.optionals (redistArch != null) additionalOutputs;
       in
       outputs;
 
@@ -107,14 +112,26 @@ backendStdenv.mkDerivation (
     # Useful for introspecting why something went wrong.
     # Maps descriptions of why the derivation would be marked broken to
     # booleans indicating whether that description is true.
-    brokenConditions = {};
-
-    src = fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${
-        redistribRelease.${redistArch}.relative_path
-      }";
-      inherit (redistribRelease.${redistArch}) sha256;
+    brokenConditions = {
+      # Using an unrecognized redistArch
+      "Unrecognized NixOS platform ${hostPlatform.system}" = redistArch == null;
+      # Trying to build for a platform that doesn't have a redistributable
+      "Unsupported NixOS platform (or configuration) ${hostPlatform.system}" = finalAttrs.src == null;
     };
+
+    src = trivial.pipe redistArch [
+      # If redistArch is null, return null. Otherwise, get the redistributable for that architecture, returning null
+      # if it doesn't exist.
+      (trivial.mapNullable (redistArch: redistribRelease.${redistArch} or null))
+      # If the release is non-null, fetch the source.
+      (trivial.mapNullable (
+        { relative_path, sha256, ... }:
+        fetchurl {
+          url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+          inherit sha256;
+        }
+      ))
+    ];
 
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
@@ -243,16 +260,14 @@ backendStdenv.mkDerivation (
     meta = {
       description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
       sourceProvenance = [sourceTypes.binaryNativeCode];
-      platforms =
-        lists.concatMap
-          (
-            redistArch:
-            let
-              nixSystem = builtins.tryEval (flags.getNixSystem redistArch);
-            in
-            if nixSystem.success then [nixSystem.value] else []
-          )
-          supportedRedistArchs;
+      platforms = trivial.pipe supportedRedistArchs [
+        # Map each redist arch to the equivalent nix system or null if there is no equivalent.
+        (trivial.flip attrsets.genAttrs flags.getNixSystem)
+        # Filter out entries which do not have a corresponding nix system
+        (attrsets.filterAttrs (_: value: value != null))
+        # Get the remaining nix systems
+        attrsets.attrValues
+      ];
       broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
       license = licenses.unfree;
       maintainers = teams.cuda.members;

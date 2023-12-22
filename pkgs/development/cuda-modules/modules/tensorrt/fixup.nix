@@ -1,7 +1,7 @@
 {
   cudaVersion,
-  final,
   hostPlatform,
+  cudaPackages,
   lib,
   mkVersionedPackageName,
   package,
@@ -11,11 +11,18 @@
 }:
 let
   inherit (lib)
+    attrsets
+    lists
     maintainers
     meta
     strings
     versions
     ;
+  # targetArch :: Optional String
+  targetArch = attrsets.attrByPath [ hostPlatform.system ] null {
+    x86_64-linux = "x86_64-linux-gnu";
+    aarch64-linux = "aarch64-linux-gnu";
+  };
 in
 finalAttrs: prevAttrs: {
   # Useful for inspecting why something went wrong.
@@ -58,20 +65,11 @@ finalAttrs: prevAttrs: {
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [finalAttrs.passthru.cudnn.lib];
+  buildInputs = prevAttrs.buildInputs ++ [ finalAttrs.passthru.cudnn.lib ];
 
   preInstall =
-    let
-      targetArch =
-        if hostPlatform.isx86_64 then
-          "x86_64-linux-gnu"
-        else if hostPlatform.isAarch64 then
-          "aarch64-linux-gnu"
-        else
-          throw "Unsupported architecture";
-    in
     (prevAttrs.preInstall or "")
-    + ''
+    + strings.optionalString (targetArch != null) ''
       # Replace symlinks to bin and lib with the actual directories from targets.
       for dir in bin lib; do
         rm "$dir"
@@ -101,13 +99,19 @@ finalAttrs: prevAttrs: {
     cudnn =
       let
         desiredName = mkVersionedPackageName "cudnn" package.cudnnVersion;
-        desiredIsAvailable = final ? desiredName;
+        desiredIsAvailable = cudaPackages ? desiredName;
       in
-      if package.cudnnVersion == null || !desiredIsAvailable then final.cudnn else final.${desiredName};
+      if package.cudnnVersion == null || !desiredIsAvailable then
+        cudaPackages.cudnn
+      else
+        cudaPackages.${desiredName};
   };
 
   meta = prevAttrs.meta // {
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
+    maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
+    badPlatforms =
+      (prevAttrs.meta.badPlatforms or [ ])
+      ++ lists.optionals (targetArch == null) [ hostPlatform.system ];
   };
 }

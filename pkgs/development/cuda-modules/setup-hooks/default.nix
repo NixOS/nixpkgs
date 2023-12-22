@@ -1,0 +1,58 @@
+{
+  # Internal hook, used by cudatoolkit and cuda redist packages
+  # to accommodate automatic CUDAToolkit_ROOT construction
+  markForCudatoolkitRootHook =
+    { makeSetupHook }:
+    makeSetupHook { name = "mark-for-cudatoolkit-root-hook"; } ./mark-for-cudatoolkit-root-hook.sh;
+
+  # Currently propagated by cuda_nvcc or cudatoolkit, rather than used directly
+  setupCudaHook =
+    { makeSetupHook, backendStdenv }:
+    makeSetupHook
+      {
+        name = "setup-cuda-hook";
+
+        substitutions.setupCudaHook = placeholder "out";
+
+        # Point NVCC at a compatible compiler
+        substitutions.ccRoot = "${backendStdenv.cc}";
+
+        # Required in addition to ccRoot as otherwise bin/gcc is looked up
+        # when building CMakeCUDACompilerId.cu
+        substitutions.ccFullPath = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
+      }
+      ./setup-cuda-hook.sh;
+
+  autoAddOpenGLRunpathHook =
+    { addOpenGLRunpath, makeSetupHook }:
+    makeSetupHook
+      {
+        name = "auto-add-opengl-runpath-hook";
+        propagatedBuildInputs = [ addOpenGLRunpath ];
+      }
+      ./auto-add-opengl-runpath-hook.sh;
+
+  # autoAddCudaCompatRunpathHook hook must be added AFTER `setupCudaHook`. Both
+  # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
+  # patched elf files, but `cuda_compat` path must take precedence (otherwise,
+  # it doesn't have any effect) and thus appear first. Meaning this hook must be
+  # executed last.
+  autoAddCudaCompatRunpathHook =
+    {
+      makeSetupHook,
+      cudaPackages,
+      flags,
+      hostPlatform,
+      lib,
+    }:
+    let
+      isOkay = flags.isJetsonBuild && cudaPackages ? cuda_compat;
+    in
+    makeSetupHook
+      {
+        name = "auto-add-cuda-compat-runpath-hook";
+        substitutions.libcudaPath = if isOkay then "${cudaPackages.cuda_compat}/compat" else null;
+        meta.badPlatforms = if isOkay then [] else [ hostPlatform.system ];
+      }
+      ./auto-add-cuda-compat-runpath.sh;
+}

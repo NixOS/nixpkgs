@@ -1,15 +1,9 @@
-# Type aliases
-# Gpu :: AttrSet
-#   - See the documentation in ./gpus.nix.
 {
-  config,
-  cudaCapabilities ? (config.cudaCapabilities or []),
-  cudaForwardCompat ? (config.cudaForwardCompat or true),
+  pkgs,
   lib,
+  config,
   cudaVersion,
   hostPlatform,
-  # gpus :: List Gpu
-  gpus,
 }:
 let
   inherit (lib)
@@ -19,23 +13,6 @@ let
     strings
     trivial
     ;
-
-  # Flags are determined based on your CUDA toolkit by default.  You may benefit
-  # from improved performance, reduced file size, or greater hardware support by
-  # passing a configuration based on your specific GPU environment.
-  #
-  # cudaCapabilities :: List Capability
-  # List of hardware generations to build.
-  # E.g. [ "8.0" ]
-  # Currently, the last item is considered the optional forward-compatibility arch,
-  # but this may change in the future.
-  #
-  # cudaForwardCompat :: Bool
-  # Whether to include the forward compatibility gencode (+PTX)
-  # to support future GPU generations.
-  # E.g. true
-  #
-  # Please see the accompanying documentation or https://github.com/NixOS/nixpkgs/pull/205351
 
   # isSupported :: Gpu -> Bool
   isSupported =
@@ -61,7 +38,7 @@ let
 
   # supportedGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version.
-  supportedGpus = builtins.filter isSupported gpus;
+  supportedGpus = builtins.filter isSupported config.gpus;
 
   # defaultGpus :: List Gpu
   # GPUs which are supported by the provided CUDA version and we want to build for by default.
@@ -105,7 +82,7 @@ let
   # they must be in the user-specified cudaCapabilities.
   # NOTE: We don't need to worry about mixes of Jetson and non-Jetson devices here -- there's
   # sanity-checking for all that in below.
-  jetsonTargets = lists.intersectLists jetsonComputeCapabilities cudaCapabilities;
+  jetsonTargets = lists.intersectLists jetsonComputeCapabilities config.cudaCapabilities;
 
   # dropDot :: String -> String
   dropDot = ver: builtins.replaceStrings ["."] [""] ver;
@@ -126,44 +103,28 @@ let
       "-gencode=arch=compute_${dropDot computeCapability},code=${feat}_${dropDot computeCapability}"
     );
 
-  # Maps Nix system to NVIDIA redist arch.
-  # NOTE: We swap out the default `linux-sbsa` redist (for server-grade ARM chips) with the
-  # `linux-aarch64` redist (which is for Jetson devices) if we're building any Jetson devices.
-  # Since both are based on aarch64, we can only have one or the other, otherwise there's an
-  # ambiguity as to which should be used.
-  # getRedistArch :: String -> String
-  getRedistArch =
-    nixSystem:
-    if nixSystem == "aarch64-linux" then
-      if jetsonTargets != [] then "linux-aarch64" else "linux-sbsa"
-    else if nixSystem == "x86_64-linux" then
-      "linux-x86_64"
-    else if nixSystem == "ppc64le-linux" then
-      "linux-ppc64le"
-    else if nixSystem == "x86_64-windows" then
-      "windows-x86_64"
-    else
-      builtins.throw "Unsupported Nix system: ${nixSystem}";
+  # NOTE: This function *will* be called by unsupported systems because `cudaPackages` is part of
+  # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
+  # systems gracefully.
+  # getRedistArch :: String -> Optional String
+  getRedistArch = nixSystem: attrsets.attrByPath [ nixSystem ] null {
+    aarch64-linux = if jetsonTargets != [] then "linux-aarch64" else "linux-sbsa";
+    x86_64-linux = "linux-x86_64";
+    ppc64le-linux = "linux-ppc64le";
+    x86_64-windows = "windows-x86_64";
+  };
 
-  # Maps NVIDIA redist arch to Nix system.
-  # It is imperative that we include the boolean condition based on jetsonTargets to ensure
-  # we don't advertise availability of packages only available on server-grade ARM
-  # as being available for the Jetson, since both `linux-sbsa` and `linux-aarch64` are
-  # mapped to the Nix system `aarch64-linux`.
-  getNixSystem =
-    redistArch:
-    if redistArch == "linux-sbsa" && jetsonTargets == [] then
-      "aarch64-linux"
-    else if redistArch == "linux-aarch64" && jetsonTargets != [] then
-      "aarch64-linux"
-    else if redistArch == "linux-x86_64" then
-      "x86_64-linux"
-    else if redistArch == "linux-ppc64le" then
-      "ppc64le-linux"
-    else if redistArch == "windows-x86_64" then
-      "x86_64-windows"
-    else
-      builtins.throw "Unsupported NVIDIA redist arch: ${redistArch}";
+  # NOTE: This function *will* be called by unsupported systems because `cudaPackages` is part of
+  # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
+  # systems gracefully.
+  # getNixSystem :: String -> Optional String
+  getNixSystem = redistArch: attrsets.attrByPath [ redistArch ] null {
+    linux-sbsa = "aarch64-linux";
+    linux-aarch64 = "aarch64-linux";
+    linux-x86_64 = "x86_64-linux";
+    linux-ppc64le = "ppc64le-linux";
+    windows-x86_64 = "x86_64-windows";
+  };
 
   formatCapabilities =
     {
@@ -236,7 +197,7 @@ let
             Exactly one of the following must be true:
             - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
             - No CUDA capabilities belong to Jetson devices.
-            See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
+            See cudaPackages.config.gpus for a list of architectures supported by this version of Nixpkgs.
           ''
           jetsonBuildSufficientCondition
         && jetsonBuildNecessaryCondition;
@@ -385,6 +346,6 @@ asserts.assertMsg
     ;
 }
 // formatCapabilities {
-  cudaCapabilities = if cudaCapabilities == [] then defaultCapabilities else cudaCapabilities;
-  enableForwardCompat = cudaForwardCompat;
+  cudaCapabilities = if config.cudaCapabilities == [] then defaultCapabilities else config.cudaCapabilities;
+  enableForwardCompat = config.cudaForwardCompat;
 }

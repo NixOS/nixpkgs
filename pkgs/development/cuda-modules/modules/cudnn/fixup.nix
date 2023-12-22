@@ -1,7 +1,7 @@
 {
   cudaVersion,
   fetchurl,
-  final,
+  cudaPackages,
   lib,
   package,
   patchelf,
@@ -35,8 +35,8 @@ finalAttrs: prevAttrs: {
   buildInputs =
     prevAttrs.buildInputs
     ++ [zlib]
-    ++ lists.optionals finalAttrs.passthru.useCudatoolkitRunfile [final.cudatoolkit]
-    ++ lists.optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [final.libcublas.lib];
+    ++ lists.optionals finalAttrs.passthru.useCudatoolkitRunfile [cudaPackages.cudatoolkit]
+    ++ lists.optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [cudaPackages.libcublas.lib];
 
   # Tell autoPatchelf about runtime dependencies.
   # NOTE: Versions from CUDNN releases have four components.
