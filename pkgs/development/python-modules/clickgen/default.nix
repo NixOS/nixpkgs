@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "2.1.9";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ful1e5";
     repo = "clickgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mSaltlX2eNRLJ09zN5Tim8mW8mnjPi10W4QIEpiBQvI=";
+    hash = "sha256-mae/bO6aAMyYw42FYNlLMWm/ZC92LDgWVSSRKGR0tFM=";
   };
 
   propagatedBuildInputs = [ pillow toml numpy pyyaml ];
