@@ -3093,6 +3093,8 @@ self: super: with self; {
 
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
 
+  django-mdeditor = callPackage ../development/python-modules/django-mdeditor { };
+
   django-mptt = callPackage ../development/python-modules/django-mptt { };
 
   django-mysql = callPackage ../development/python-modules/django-mysql { };
