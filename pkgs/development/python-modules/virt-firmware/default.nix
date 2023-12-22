@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "23.10";
+  version = "23.11";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-orTIduS4KVH4nTSRcOnn2+Tqeyd4OMnnN2+AK5p1xtM=";
+    hash = "sha256-9HA87J01M9VGCHdcmdlA50AikXG8vYHDw/5ig8h9YXc=";
   };
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
