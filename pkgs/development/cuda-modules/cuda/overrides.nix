@@ -1,4 +1,4 @@
-{cudaVersion, lib}:
+{cudaVersion, lib, addDriverRunpath}:
 let
   inherit (lib) attrsets lists strings;
   # cudaVersionOlder : Version -> Boolean
@@ -41,6 +41,20 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   libcusparse = addBuildInputs prev.libcusparse (
     lists.optionals (cudaVersionAtLeast "12.0") [final.libnvjitlink.lib]
   );
+
+  cuda_cudart = prev.cuda_cudart.overrideAttrs (
+    prevAttrs: {
+
+      # The libcuda stub's pkg-config doesn't follow the general pattern:
+      postPatch = prevAttrs.postPatch or "" + ''
+        while IFS= read -r -d $'\0' path ; do
+          sed -i \
+            -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
+            -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
+            "$path"
+        done < <(find -iname 'cuda-*.pc' -print0)
+      '';
+    });
 
   cuda_compat = prev.cuda_compat.overrideAttrs (
     prevAttrs: {
