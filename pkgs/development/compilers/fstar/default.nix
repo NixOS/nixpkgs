@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     removeReferencesTo
   ];
 
-  propagatedBuildInputs = fstarDune.buildInputs;
+  inherit (fstarDune) propagatedBuildInputs;
 
   dontBuild = true;
 

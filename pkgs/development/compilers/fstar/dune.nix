@@ -32,8 +32,11 @@ buildDunePackage {
   ];
 
   buildInputs = [
-    batteries
     memtrace
+  ];
+
+  propagatedBuildInputs = [
+    batteries
     menhirLib
     pprint
     ppx_deriving
