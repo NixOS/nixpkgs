@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";
     inherit version;
-    hash = "sha256-Zpe2n131afnq4IhQEEZtquvSEkkjv/uznXt2tQhGfZA=";
+    hash = "sha256-q3+GwMVWMRu4eWwbdXcbPQzpBhBXcZEMFTpbEO+teLk=";
   };
 
   nativeBuildInputs = [
