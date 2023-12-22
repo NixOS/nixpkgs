@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "composable_kernel";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-Z9X+S2SijGJ8bhr9ghkkWicBUzLzs9fxPpqZxX6BBM4=";
@@ -79,10 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
-    homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
+    homepage = "https://github.com/ROCm/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

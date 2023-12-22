@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "half";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-82It+/wm8+umBdQYn7lz/fS69h+f0mzwPdGxoJNYUq0=";
@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C++ library for half precision floating point arithmetics";
-    homepage = "https://github.com/ROCmSoftwarePlatform/half";
+    homepage = "https://github.com/ROCm/half";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.unix;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })
