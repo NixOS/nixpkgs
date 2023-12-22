@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     tqdm
     platformdirs
     packaging
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
