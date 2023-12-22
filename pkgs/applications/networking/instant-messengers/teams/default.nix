@@ -26,37 +26,33 @@ let
   };
 
   appName = "Teams.app";
-
-  darwin = stdenv.mkDerivation {
-    inherit pname meta;
-    version = versions.darwin;
-
-    src = fetchurl {
-      url = "https://statics.teams.cdn.office.net/production-osx/${versions.darwin}/Teams_osx.pkg";
-      hash = hashes.darwin;
-    };
-
-    nativeBuildInputs = [ xar cpio makeWrapper ];
-
-    unpackPhase = ''
-      xar -xf $src
-      zcat < Teams_osx_app.pkg/Payload | cpio -i
-    '';
-
-    sourceRoot = "Microsoft\ Teams.app";
-    dontPatch = true;
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/{Applications/${appName},bin}
-      cp -R . $out/Applications/${appName}
-      makeWrapper $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
-      runHook postInstall
-    '';
-  };
 in
-if stdenv.isDarwin
-then darwin
-else throw "Teams app for Linux has been removed as it is unmaintained by upstream. (2023-09-29)"
+stdenv.mkDerivation {
+  inherit pname meta;
+  version = versions.darwin;
+
+  src = fetchurl {
+    url = "https://statics.teams.cdn.office.net/production-osx/${versions.darwin}/Teams_osx.pkg";
+    hash = hashes.darwin;
+  };
+
+  nativeBuildInputs = [ xar cpio makeWrapper ];
+
+  unpackPhase = ''
+    xar -xf $src
+    zcat < Teams_osx_app.pkg/Payload | cpio -i
+  '';
+
+  sourceRoot = "Microsoft\ Teams.app";
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/{Applications/${appName},bin}
+    cp -R . $out/Applications/${appName}
+    makeWrapper $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
+    runHook postInstall
+  '';
+}
