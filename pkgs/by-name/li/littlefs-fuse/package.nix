@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "littlefs-fuse";
-  version = "2.7.3";
+  version = "2.7.4";
   src = fetchFromGitHub {
     owner = "littlefs-project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8TrCAByblff2Vkk0MvnIYyAMoFW3s3fm3rLXrEjWoys=";
+    hash = "sha256-S4yLe6xugr/cQOmf4vS09ebCqFuDPCXySJKACr0AUDU=";
   };
   buildInputs = [ fuse ];
   installPhase = ''
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     description = "A FUSE wrapper that puts the littlefs in user-space";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ehmry ];
+    mainProgram = "littlefs-fuse";
     inherit (fuse.meta) platforms;
   };
 }
