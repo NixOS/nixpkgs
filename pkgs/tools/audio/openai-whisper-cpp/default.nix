@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     WHISPER_COREML_ALLOW_FALLBACK = "1";
   };
 
-  makeFlags = [ "main" "stream" ];
+  makeFlags = [ "main" "stream" "command" ];
 
   installPhase = ''
     runHook preInstall
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ./main $out/bin/whisper-cpp
     cp ./stream $out/bin/whisper-cpp-stream
+    cp ./command $out/bin/whisper-cpp-command
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 
