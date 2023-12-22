@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-black";
-  version = "1.3.0";
+  version = "2.0.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = "python-lsp-black";
     rev = "refs/tags/v${version}";
-    hash = "sha256-16HjNB0VfrXLyVa+u5HaFNjq/ER2yXIWokMFsPgejr8=";
+    hash = "sha256-nV6mePSWzfPW2RwXg/mxgzfT9wD95mmTuPnPEro1kEY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
