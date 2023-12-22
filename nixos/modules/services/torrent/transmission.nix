@@ -314,6 +314,9 @@ in
         BindPaths =
           [ "${cfg.home}/${settingsDir}"
             cfg.settings.download-dir
+            # Transmission may need to read in the host's /run (eg. /run/systemd/resolve)
+            # or write in its private /run (eg. /run/host).
+            "/run"
           ] ++
           optional cfg.settings.incomplete-dir-enabled
             cfg.settings.incomplete-dir ++
@@ -324,7 +327,6 @@ in
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
           "/etc"
-          "/run"
           ] ++
           optional (cfg.settings.script-torrent-done-enabled &&
                     cfg.settings.script-torrent-done-filename != null)
@@ -349,10 +351,10 @@ in
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
-        PrivateMounts = true;
+        PrivateMounts = mkDefault true;
         PrivateNetwork = mkDefault false;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = mkDefault true;
         ProtectClock = true;
         ProtectControlGroups = true;
         # ProtectHome=true would not allow BindPaths= to work across /home,

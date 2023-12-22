@@ -13583,8 +13583,6 @@ with pkgs;
 
   supertag = callPackage ../tools/filesystems/supertag { };
 
-  supertux-editor = callPackage ../applications/editors/supertux-editor { };
-
   svgbob = callPackage ../tools/graphics/svgbob { };
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
@@ -14983,6 +14981,10 @@ with pkgs;
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
+
+  wio = callPackage ../by-name/wi/wio/package.nix {
+    wlroots = wlroots_0_17;
+  };
 
   wiiuse = callPackage ../development/libraries/wiiuse {
     inherit (darwin) libobjc;
@@ -27456,8 +27458,6 @@ with pkgs;
 
   tailscale = callPackage ../servers/tailscale { };
 
-  tailscale-nginx-auth = callPackage ../by-name/ta/tailscale-nginx-auth/package.nix { };
-
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
   tailspin = callPackage ../tools/misc/tailspin { };
@@ -31313,7 +31313,7 @@ with pkgs;
   dyff = callPackage ../development/tools/dyff { };
 
   dwl = callPackage ../applications/window-managers/dwl {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   dwm = callPackage ../applications/window-managers/dwm {
@@ -32681,6 +32681,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_15
     wlroots_0_16
+    wlroots_0_17
     wlroots;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
@@ -32780,7 +32781,7 @@ with pkgs;
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
   waybox = callPackage ../by-name/wa/waybox/package.nix {
-    wlroots = wlroots_0_15;
+    wlroots = wlroots_0_17;
   };
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };

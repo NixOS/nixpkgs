@@ -22,6 +22,10 @@
 , pkg-config
 }:
 
+assert lib.assertMsg
+  (lib.count lib.id [openclSupport openblasSupport rocmSupport] == 1)
+  "llama-cpp: exactly one  of openclSupport, openblasSupport and rocmSupport should be enabled";
+
 let
   cudatoolkit_joined = symlinkJoin {
     name = "${cudaPackages.cudatoolkit.name}-merged";
