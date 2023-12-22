@@ -317,20 +317,23 @@ rec {
   cmdline-tools-package = check-version packages "cmdline-tools" cmdLineToolsVersion;
 
   # This derivation deploys the tools package and symlinks all the desired
-  # plugins that we want to use. If the license isn't accepted, prints all the licenses
-  # requested and throws.
-  androidsdk = if !licenseAccepted then throw ''
-    ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
+  # plugins that we want to use.
+  androidsdk = callPackage ./cmdline-tools.nix {
+    licenseCheck =
+      # If the license isn't accepted, prints all the licenses requested and throws.
+      if !licenseAccepted then throw ''
+        ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
 
-    You must accept the following licenses:
-    ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
+        You must accept the following licenses:
+        ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-    a)
-      by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-    b)
-      by an environment variable for a single invocation of the nix tools.
-        $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
-  '' else callPackage ./cmdline-tools.nix {
+        a)
+          by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+        b)
+          by an environment variable for a single invocation of the nix tools.
+            $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
+      '' else true;
+
     inherit deployAndroidPackage os;
 
     package = cmdline-tools-package;
