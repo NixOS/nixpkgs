@@ -6,9 +6,12 @@
 , nixosTests
 }:
 
-buildNpmPackage rec {
-  pname = "cryptpad";
+let
   version = "5.6.0";
+in
+buildNpmPackage {
+  inherit version;
+  pname = "cryptpad";
 
   src = fetchFromGitHub {
     owner = "cryptpad";

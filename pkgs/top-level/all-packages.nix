@@ -20508,8 +20508,6 @@ with pkgs;
 
   crossguid = callPackage ../development/libraries/crossguid { };
 
-  cryptpad = callPackage ../servers/web-apps/cryptpad { };
-
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
