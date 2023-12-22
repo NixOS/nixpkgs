@@ -73,17 +73,37 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
       # Cf. https://web.archive.org/web/20230308044351/https://arcb.csc.ncsu.edu/~mueller/cluster/nvidia/2.0/nvcc_2.0.pdf
 
+      # We set all variables with the lowest priority (=+), but we do force
+      # nvcc to use the fixed backend toolchain. Cf. comments in
+      # backend-stdenv.nix
+
       postPatch =
         (oldAttrs.postPatch or "")
         + ''
           substituteInPlace bin/nvcc.profile \
             --replace \
               '$(TOP)/lib' \
-              "''${!outputLib}/lib"
+              "''${!outputLib}/lib" \
+            --replace \
+              '$(TOP)/$(_NVVM_BRANCH_)' \
+              "''${!outputBin}/nvvm" \
+            --replace \
+              '$(TOP)/$(_TARGET_DIR_)/include' \
+              "''${!outputDev}/include"
 
           cat << EOF >> bin/nvcc.profile
-          LIBRARIES +=  "-L''${!outputBin}/nvvm/lib" "-L$static/lib" "-L${final.cuda_cudart.lib}/lib" "-L${final.cuda_cudart.lib}/lib/stubs"
-          INCLUDES += "-I''${!outputDev}/include" "-I''${!outputBin}/nvvm/include" "-I${final.cuda_cudart.dev}/include"
+
+          # Fix a compatible backend compiler
+          PATH += ${lib.getBin final.backendStdenv.cc}/bin:
+          LIBRARIES += "-L${lib.getLib final.backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
+
+          # Expose the split-out nvvm
+          LIBRARIES =+ -L''${!outputBin}/nvvm/lib
+          INCLUDES =+ -I''${!outputBin}/nvvm/include
+
+          # Expose cudart and the libcuda stubs
+          LIBRARIES =+ -L$static/lib" "-L${final.cuda_cudart.lib}/lib -L${final.cuda_cudart.lib}/lib/stubs
+          INCLUDES =+ -I${final.cuda_cudart.dev}/include
           EOF
         '';
 
