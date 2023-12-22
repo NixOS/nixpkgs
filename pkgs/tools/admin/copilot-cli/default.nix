@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=${version}"
+    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=v${version}"
     "-X github.com/aws/copilot-cli/internal/pkg/cli.binaryS3BucketPath=https://ecs-cli-v2-release.s3.amazonaws.com"
   ];
 
@@ -35,6 +35,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = copilot-cli;
     command = "copilot version";
+    version = "v${version}";
   };
 
   meta = with lib; {
