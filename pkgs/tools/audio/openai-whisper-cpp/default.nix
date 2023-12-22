@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "whisper-cpp";
-  version = "1.4.2";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${version}" ;
-    hash = "sha256-Qea9zGLJ41D+l8h1Sg/KJI6Ou02jtbRIxYPGoabM8nY=";
+    hash = "sha256-7pJbROifDajBJUE07Nz8tARB901fWCB+TS4okcnEsvc=";
   };
 
   # The upstream download script tries to download the models to the
