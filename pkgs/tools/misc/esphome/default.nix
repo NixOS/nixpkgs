@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.11.6";
+  version = "2023.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9LqZlhCt+7p6tnSHFhbnUzkEOJQDsg/Pd/hgd/Il0ZQ=";
+    hash = "sha256-ajpYwquVyznIngZKcWxI9Pyiqf4VYcWtGFRZSpi6+3I=";
   };
 
   nativeBuildInputs = with python.pkgs; [
