@@ -40748,11 +40748,6 @@ with pkgs;
 
   nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
-  nix-repl = throw (
-    "nix-repl has been removed because it's not maintained anymore, " +
-    "use `nix repl` instead. Also see https://github.com/NixOS/nixpkgs/pull/44903"
-  );
-
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
