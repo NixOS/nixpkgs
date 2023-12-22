@@ -5,12 +5,6 @@
 # This can be fixed by setting a different WM name:
 # http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
 
-if !licenseAccepted then throw ''
-    You have to accept the neoload EULA at
-    https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
-    by setting nixpkgs config option 'neoload.accept_license = true';
-  ''
-else assert licenseAccepted;
 
 # the installer is very picky and demands 1.7.0.07
 let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
@@ -30,7 +24,17 @@ let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
       sys.symlinkDir=INSTALLDIR/bin
     ''; };
 
-in stdenv.mkDerivation rec {
+in
+# This will check the license only when evaluating drvPath or outPath
+lib.extendDerivation (
+  if !licenseAccepted then throw ''
+      You have to accept the neoload EULA at
+      https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
+      by setting nixpkgs config option 'neoload.accept_license = true';
+    ''
+  else true
+) {}
+(stdenv.mkDerivation rec {
   pname = "neoload";
   version = "4.1.4";
 
@@ -94,4 +98,4 @@ in stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
-}
+})
