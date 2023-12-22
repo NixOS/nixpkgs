@@ -27430,8 +27430,6 @@ with pkgs;
 
   tailscale = callPackage ../servers/tailscale { };
 
-  tailscale-nginx-auth = callPackage ../by-name/ta/tailscale-nginx-auth/package.nix { };
-
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
   tailspin = callPackage ../tools/misc/tailspin { };
