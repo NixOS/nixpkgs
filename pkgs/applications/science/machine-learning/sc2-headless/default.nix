@@ -6,14 +6,18 @@
 , licenseAccepted ? config.sc2-headless.accept_license or false
 }:
 
-if !licenseAccepted then throw ''
-    You must accept the Blizzard® Starcraft® II AI and Machine Learning License at
-    https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html
-    by setting nixpkgs config option 'sc2-headless.accept_license = true;'
-  ''
-else assert licenseAccepted;
 let maps = callPackage ./maps.nix {};
-in stdenv.mkDerivation rec {
+in
+# This will check the license only when evaluating drvPath or outPath
+lib.extendDerivation (
+  if !licenseAccepted then throw ''
+      You must accept the Blizzard® Starcraft® II AI and Machine Learning License at
+      https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html
+      by setting nixpkgs config option 'sc2-headless.accept_license = true;'
+    ''
+  else true
+) {}
+(stdenv.mkDerivation rec {
   version = "4.7.1";
   pname = "sc2-headless";
 
@@ -59,4 +63,4 @@ in stdenv.mkDerivation rec {
     };
     maintainers = with lib.maintainers; [ ];
   };
-}
+})
