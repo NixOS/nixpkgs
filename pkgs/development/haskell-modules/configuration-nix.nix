@@ -394,7 +394,6 @@ self: super: builtins.intersectAttrs super {
   socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
-  warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
@@ -413,6 +412,9 @@ self: super: builtins.intersectAttrs super {
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
+
+  # The curl executable is required for withApplication tests.
+  warp = addTestToolDepend pkgs.curl super.warp;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
