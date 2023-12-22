@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , hwdata
-, gtk2
+, gtk3
 , pkg-config
 , gettext
 , sqlite # compile GUI
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ hwdata ]
-    ++ lib.optionals withGUI [ gtk2 sqlite ];
+    ++ lib.optionals withGUI [ gtk3 sqlite ];
 
   makeFlags = [
     "PREFIX=$(out)"
