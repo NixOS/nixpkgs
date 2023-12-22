@@ -8,10 +8,11 @@
 , libadwaita
 , libsoup_3
 , glib-networking
+, nix-update-script
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.4.0";
+  version = "2.5.1";
   format = "other";
 
   sourceRoot = "source/source";
@@ -19,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-BIaBysqkNfRk7N4dzyjnN+ha2WkppkwFDSj4AAcp9UI=";
+    hash = "sha256-kBFznJcH6UOlzgUnhPSOUBxqqsHzIEpirN63gRYC/u0=";
   };
 
   pythonPath = with python3Packages; [
@@ -56,6 +57,8 @@ python3Packages.buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://gitlab.com/zehkira/monophony";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.7.1";
+  version = "1.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ewels";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rWVJEuJx5nDUg6RvhubHu9U2Glilrkugjg28SpFIZys=";
+    hash = "sha256-uPEPYQIoLdjUJZlcg/0jenzIz464nwGi5KfOOyIQ/3I=";
   };
 
   propagatedBuildInputs = [
