@@ -31,7 +31,10 @@ buildNpmPackage rec {
     cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
 
     mkdir $out/bin
-    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js $out/bin/redocly-cli --set REDOCLY_TELEMETRY off
+    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
+      $out/bin/redocly-cli \
+      --set-default REDOCLY_TELEMETRY off \
+      --set-default CI true # Silence update messages
   '';
 
   installCheckPhase = ''
