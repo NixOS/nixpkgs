@@ -3019,6 +3019,8 @@ self: super: with self; {
 
   django-csp = callPackage ../development/python-modules/django-csp { };
 
+  django-currentuser = callPackage ../development/python-modules/django-currentuser { };
+
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
