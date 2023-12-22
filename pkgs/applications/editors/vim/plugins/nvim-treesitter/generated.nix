@@ -737,12 +737,12 @@
   };
   gleam = buildGrammar {
     language = "gleam";
-    version = "0.0.0+rev=c9c7f0f";
+    version = "0.0.0+rev=2b49c49";
     src = fetchFromGitHub {
       owner = "gleam-lang";
       repo = "tree-sitter-gleam";
-      rev = "c9c7f0f01749d301b54e96ed8e0c47c7c415a196";
-      hash = "sha256-j7onMy986PeJNy9x8GUkg8Be22bGYoZs53sToLWc/eI=";
+      rev = "2b49c49ef632928b5c52bb0a7269ff797d5d1414";
+      hash = "sha256-zFdyUqbJn7ighjXH+9EO+0Cf2Oj8ON8IYUZCIQUQ5dA=";
     };
     meta.homepage = "https://github.com/gleam-lang/tree-sitter-gleam";
   };
@@ -2243,12 +2243,12 @@
   };
   styled = buildGrammar {
     language = "styled";
-    version = "0.0.0+rev=e51e673";
+    version = "0.0.0+rev=5e52758";
     src = fetchFromGitHub {
       owner = "mskelton";
       repo = "tree-sitter-styled";
-      rev = "e51e673efc860373167680b4bcbf418a11e4ed26";
-      hash = "sha256-s9omwcuIAXgpwWTpyRpessA5fOeWqRqTctBKr3rUeNc=";
+      rev = "5e52758b32e02adca16bb93f95b3f9c050c72b56";
+      hash = "sha256-3x/ZKVYyWuLGkgdm9HutI16m8xpJKSMOZHY48WqH9b0=";
     };
     meta.homepage = "https://github.com/mskelton/tree-sitter-styled";
   };
@@ -2569,12 +2569,12 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "0.0.0+rev=eced04c";
+    version = "0.0.0+rev=f0336bb";
     src = fetchFromGitHub {
       owner = "v-analyzer";
       repo = "v-analyzer";
-      rev = "eced04c473f3bcb49f9c8ac91744451a9ab40310";
-      hash = "sha256-fT/jqaKwUP7KWT+RT9V23HAL0Ol7mr/8NWNbYtSFhBI=";
+      rev = "f0336bb8847393ba4d5905a94642acf0dc3d5ebd";
+      hash = "sha256-0hC9xb1rOtUb47gzCdzvCxAz54d9RZ4UMfb2PFOM6ZE=";
     };
     location = "tree_sitter_v";
     meta.homepage = "https://github.com/v-analyzer/v-analyzer";
@@ -2669,12 +2669,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=b5fa0cb";
+    version = "0.0.0+rev=e6e06a0";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "b5fa0cb75ee96d3ff19df59085d508240f5b0fd5";
-      hash = "sha256-SqPw0LxxJiarYR3YIPKxAuFGWJw6dUwSVFbey3z2OAA=";
+      rev = "e6e06a05eeb894001d3c24e1db72f5cd2f35bdae";
+      hash = "sha256-/a1cXTwEyHTv0mzXvZIvD0V9HBL8NyeMMWI1O+Fp5Fs=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;

@@ -22,13 +22,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-kE9GBVTKNpgEuE9jQ7k85OhEAN3VWgjmAgifvZfq46I=";
   };
 
-  # Revert test that's broken on aarch64
-  # FIXME: fix this properly
   patches = [
+    # Fix unit/test-dpp on aarch64.
     (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=aabedeeb6c20c0c053f11ef53413d542442a8f62";
-      revert = true;
-      hash = "sha256-hO4KzdLzW6Tn/4NNJEQO2OvgjSPVl46cwwZfv53R84U=";
+      name = "size_t-vararg.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=688d27700833258a139a6fbd5661334bd2c9fa98";
+      hash = "sha256-g3gG1c25o6ODFfHL4a0HcnNJBBOKRbdo+ZuVbzoxCLs=";
     })
   ];
 

@@ -1,4 +1,5 @@
 # Testers {#chap-testers}
+
 This chapter describes several testing builders which are available in the `testers` namespace.
 
 ## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
@@ -6,19 +7,11 @@ This chapter describes several testing builders which are available in the `test
 <!-- Old anchor name so links still work -->
 []{#tester-hasPkgConfigModule}
 Checks whether a package exposes a given list of `pkg-config` modules.
-If the `moduleNames` argument is omitted, `hasPkgConfigModules` will
-use `meta.pkgConfigModules`.
+If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.pkgConfigModules`.
 
-Example:
+:::{.example #ex-haspkgconfigmodules-defaultvalues}
 
-```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModules {
-  package = finalAttrs.finalPackage;
-  moduleNames = [ "libfoo" ];
-};
-```
-
-If the package in question has `meta.pkgConfigModules` set, it is even simpler:
+# Check that `pkg-config` modules are exposed using default values
 
 ```nix
 passthru.tests.pkg-config = testers.hasPkgConfigModules {
@@ -27,6 +20,21 @@ passthru.tests.pkg-config = testers.hasPkgConfigModules {
 
 meta.pkgConfigModules = [ "libfoo" ];
 ```
+
+:::
+
+:::{.example #ex-haspkgconfigmodules-explicitmodules}
+
+# Check that `pkg-config` modules are exposed using explicit module names
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModules {
+  package = finalAttrs.finalPackage;
+  moduleNames = [ "libfoo" ];
+};
+```
+
+:::
 
 ## `testVersion` {#tester-testVersion}
 
@@ -83,7 +91,18 @@ This returns a derivation with an override on the builder, with the following ef
  - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
  - Save the build log to `$out/testBuildFailure.log` (same)
 
-Example:
+While `testBuildFailure` is designed to keep changes to the original builder's environment to a minimum, some small changes are inevitable:
+
+ - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
+ - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
+ - One or two extra processes are present in the sandbox during the original builder's execution.
+ - The derivation and output hashes are different, but not unusual.
+ - The derivation includes a dependency on `buildPackages.bash` and `expect-failure.sh`, which is built to include a transitive dependency on `buildPackages.coreutils` and possibly more.
+   These are not added to `PATH` or any other environment variable, so they should be hard to observe.
+
+:::{.example #ex-testBuildFailure-showingenvironmentchanges}
+
+# Check that a build fails, and verify the changes made during build
 
 ```nix
 runCommand "example" {
@@ -100,24 +119,15 @@ runCommand "example" {
 '';
 ```
 
-While `testBuildFailure` is designed to keep changes to the original builder's
-environment to a minimum, some small changes are inevitable.
-
- - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
- - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
- - One or two extra processes are present in the sandbox during the original
-   builder's execution.
- - The derivation and output hashes are different, but not unusual.
- - The derivation includes a dependency on `buildPackages.bash` and
-   `expect-failure.sh`, which is built to include a transitive dependency on
-   `buildPackages.coreutils` and possibly more. These are not added to `PATH`
-   or any other environment variable, so they should be hard to observe.
+:::
 
 ## `testEqualContents` {#tester-equalContents}
 
 Check that two paths have the same contents.
 
-Example:
+:::{.example #ex-testEqualContents-toyexample}
+
+# Check that two paths have the same contents
 
 ```nix
 testers.testEqualContents {
@@ -137,17 +147,20 @@ testers.testEqualContents {
 }
 ```
 
+:::
+
 ## `testEqualDerivation` {#tester-testEqualDerivation}
 
 Checks that two packages produce the exact same build instructions.
 
-This can be used to make sure that a certain difference of configuration,
-such as the presence of an overlay does not cause a cache miss.
+This can be used to make sure that a certain difference of configuration, such as the presence of an overlay does not cause a cache miss.
 
 When the derivations are equal, the return value is an empty file.
 Otherwise, the build log explains the difference via `nix-diff`.
 
-Example:
+:::{.example #ex-testEqualDerivation-hello}
+
+# Check that two packages produce the same derivation
 
 ```nix
 testers.testEqualDerivation
@@ -156,29 +169,28 @@ testers.testEqualDerivation
   (hello.overrideAttrs(o: { doCheck = true; }))
 ```
 
+:::
+
 ## `invalidateFetcherByDrvHash` {#tester-invalidateFetcherByDrvHash}
 
 Use the derivation hash to invalidate the output via name, for testing.
 
 Type: `(a@{ name, ... } -> Derivation) -> a -> Derivation`
 
-Normally, fixed output derivations can and should be cached by their output
-hash only, but for testing we want to re-fetch everytime the fetcher changes.
+Normally, fixed output derivations can and should be cached by their output hash only, but for testing we want to re-fetch everytime the fetcher changes.
 
-Changes to the fetcher become apparent in the drvPath, which is a hash of
-how to fetch, rather than a fixed store path.
-By inserting this hash into the name, we can make sure to re-run the fetcher
-every time the fetcher changes.
+Changes to the fetcher become apparent in the drvPath, which is a hash of how to fetch, rather than a fixed store path.
+By inserting this hash into the name, we can make sure to re-run the fetcher every time the fetcher changes.
 
-This relies on the assumption that Nix isn't clever enough to reuse its
-database of local store contents to optimize fetching.
+This relies on the assumption that Nix isn't clever enough to reuse its database of local store contents to optimize fetching.
 
-You might notice that the "salted" name derives from the normal invocation,
-not the final derivation. `invalidateFetcherByDrvHash` has to invoke the fetcher
-function twice: once to get a derivation hash, and again to produce the final
-fixed output derivation.
+You might notice that the "salted" name derives from the normal invocation, not the final derivation.
+`invalidateFetcherByDrvHash` has to invoke the fetcher function twice:
+once to get a derivation hash, and again to produce the final fixed output derivation.
 
-Example:
+:::{.example #ex-invalidateFetcherByDrvHash-nix}
+
+# Prevent nix from reusing the output of a fetcher
 
 ```nix
 tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
@@ -189,13 +201,17 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
 };
 ```
 
+:::
+
 ## `runNixOSTest` {#tester-runNixOSTest}
 
 A helper function that behaves exactly like the NixOS `runTest`, except it also assigns this Nixpkgs package set as the `pkgs` of the test and makes the `nixpkgs.*` options read-only.
 
 If your test is part of the Nixpkgs repository, or if you need a more general entrypoint, see ["Calling a test" in the NixOS manual](https://nixos.org/manual/nixos/stable/index.html#sec-calling-nixos-tests).
 
-Example:
+:::{.example #ex-runNixOSTest-hello}
+
+# Run a NixOS test using `runNixOSTest`
 
 ```nix
 pkgs.testers.runNixOSTest ({ lib, ... }: {
@@ -209,19 +225,17 @@ pkgs.testers.runNixOSTest ({ lib, ... }: {
 })
 ```
 
+:::
+
 ## `nixosTest` {#tester-nixosTest}
 
 Run a NixOS VM network test using this evaluation of Nixpkgs.
 
 NOTE: This function is primarily for external use. NixOS itself uses `make-test-python.nix` directly. Packages defined in Nixpkgs [reuse NixOS tests via `nixosTests`, plural](#ssec-nixos-tests-linking).
 
-It is mostly equivalent to the function `import ./make-test-python.nix` from the
-[NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests),
-except that the current application of Nixpkgs (`pkgs`) will be used, instead of
-letting NixOS invoke Nixpkgs anew.
+It is mostly equivalent to the function `import ./make-test-python.nix` from the [NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests), except that the current application of Nixpkgs (`pkgs`) will be used, instead of letting NixOS invoke Nixpkgs anew.
 
-If a test machine needs to set NixOS options under `nixpkgs`, it must set only the
-`nixpkgs.pkgs` option.
+If a test machine needs to set NixOS options under `nixpkgs`, it must set only the `nixpkgs.pkgs` option.
 
 ### Parameter {#tester-nixosTest-parameter}
 

@@ -2722,6 +2722,12 @@
     githubId = 53131727;
     name = "Bryan Albuquerque";
   };
+  bryango = {
+    name = "Bryan Lai";
+    email = "bryanlais@gmail.com";
+    github = "bryango";
+    githubId = 26322692;
+  };
   bryanhonof = {
     name = "Bryan Honof";
     email = "bryanhonof@gmail.com";
@@ -4239,6 +4245,12 @@
     keys = [{
       fingerprint = "B26F 9AD8 DA20 3392 EF87  C61A BB99 9F83 D9A1 9A36";
     }];
+  };
+  dblsaiko = {
+    email = "me@dblsaiko.net";
+    github = "2xsaiko";
+    githubId = 3987560;
+    name = "Marco Rebhan";
   };
   dbohdan = {
     email = "dbohdan@dbohdan.com";
@@ -9044,6 +9056,12 @@
     github = "jpotier";
     githubId = 752510;
     name = "Martin Potier";
+  };
+  jpts = {
+    email = "james+nixpkgs@cleverley-prance.uk";
+    github = "jpts";
+    githubId = 5352661;
+    name = "James Cleverley-Prance";
   };
   jqqqqqqqqqq = {
     email = "jqqqqqqqqqq@gmail.com";

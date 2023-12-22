@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "2.0.0";
+  version = "2.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "rokam";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-S92PybN+pReI9WtJr9as95uceicsSMadMQfh9JxsE8U=";
+    hash = "sha256-rqxpHnKHS5rgQ6iH5NSL2F71EnpOBxpICUk74YwtEDc=";
   };
 
   propagatedBuildInputs = [

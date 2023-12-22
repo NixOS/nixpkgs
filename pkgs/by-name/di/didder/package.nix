@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "didder";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "makew0rld";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S1j2TdV0XCrSc7Ua+SdY3JJoWgnFuAMGhUinTKO2Xh4=";
+    hash = "sha256-wYAudEyOLxbNfk4M720absGkuWXcaBPyBAcmBNBaaWU=";
   };
 
-  vendorHash = "sha256-TEp1YrQquqdEMVvZaNsEB1H/DZsTYmRL257RjQF2JqM=";
+  vendorHash = "sha256-UD90N3nE3H9GSdVhGt1zfCk8BhPaToKGu4i0zP0Lb3Q=";
 
   nativeBuildInputs = [ pandoc ];
 

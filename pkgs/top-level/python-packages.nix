@@ -2000,6 +2000,8 @@ self: super: with self; {
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
 
+  cherrypy-cors = callPackage ../development/python-modules/cherrypy-cors { };
+
   chess = callPackage ../development/python-modules/chess { };
 
   chevron = callPackage ../development/python-modules/chevron { };
@@ -4754,6 +4756,8 @@ self: super: with self; {
   google-search-results = callPackage ../development/python-modules/google-search-results { };
 
   googletrans = callPackage ../development/python-modules/googletrans { };
+
+  gotailwind = callPackage ../development/python-modules/gotailwind { };
 
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
 
@@ -14452,6 +14456,8 @@ self: super: with self; {
   translatepy = callPackage ../development/python-modules/translatepy { };
 
   translationstring = callPackage ../development/python-modules/translationstring { };
+
+  translitcodec = callPackage ../development/python-modules/translitcodec { };
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
