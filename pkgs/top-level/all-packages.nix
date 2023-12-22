@@ -37033,12 +37033,6 @@ with pkgs;
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
-  chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
-  chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
-  chia-plotter = throw "chia-plotter has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
   clboss = callPackage ../applications/blockchains/clboss { };
 
   clightning = callPackage ../applications/blockchains/clightning { };
