@@ -9,6 +9,21 @@ with lib;
 let
   libDir = "/var/lib/bacula";
 
+  yes_no = bool: if bool then "yes" else "no";
+  tls_conf = tls_cfg: optionalString tls_cfg.enable (
+    concatStringsSep
+      "\n"
+      (
+      [''TLS Enable = yes;'']
+      ++ optional (tls_cfg.require != null) ''TLS Require = ${yes_no tls_cfg.require};''
+      ++ optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
+      ++ [''TLS Key = "${tls_cfg.key}";'']
+      ++ optional (tls_cfg.verifyPeer != null) ''TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};''
+      ++ optional (tls_cfg.allowedCN != [ ]) ''TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};''
+      ++ optional (tls_cfg.caCertificateFile != null) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
+      )
+  );
+
   fd_cfg = config.services.bacula-fd;
   fd_conf = pkgs.writeText "bacula-fd.conf"
     ''
@@ -18,6 +33,7 @@ let
         WorkingDirectory = ${libDir};
         Pid Directory = /run;
         ${fd_cfg.extraClientConfig}
+        ${tls_conf fd_cfg.tls}
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
@@ -25,6 +41,7 @@ let
         Name = "${name}";
         Password = ${value.password};
         Monitor = ${value.monitor};
+        ${tls_conf value.tls}
       }
       '') fd_cfg.director)}
 
@@ -44,6 +61,7 @@ let
         WorkingDirectory = ${libDir};
         Pid Directory = /run;
         ${sd_cfg.extraStorageConfig}
+        ${tls_conf sd_cfg.tls}
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
@@ -70,6 +88,7 @@ let
         Name = "${name}";
         Password = ${value.password};
         Monitor = ${value.monitor};
+        ${tls_conf value.tls}
       }
       '') sd_cfg.director)}
 
@@ -90,6 +109,7 @@ let
       Working Directory = ${libDir};
       Pid Directory = /run/;
       QueryFile = ${pkgs.bacula}/etc/query.sql;
+      ${tls_conf dir_cfg.tls}
       ${dir_cfg.extraDirectorConfig}
     }
 
@@ -108,7 +128,93 @@ let
     ${dir_cfg.extraConfig}
     '';
 
-  directorOptions = {...}:
+  linkOption = name: destination: "[${name}](#opt-${builtins.replaceStrings [ "<" ">"] ["_" "_"] destination})";
+  tlsLink = destination: submodulePath: linkOption "${submodulePath}.${destination}" "${submodulePath}.${destination}";
+
+  tlsOptions = submodulePath: {...}:
+  {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mdDoc ''
+          Specifies if TLS should be enabled.
+          If this set to `false` TLS will be completely disabled, even if ${tlsLink "tls.require" submodulePath} is true.
+        '';
+      };
+      require = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = mdDoc ''
+          Require TLS or TLS-PSK encryption.
+          This directive is ignored unless one of ${tlsLink "tls.enable" submodulePath} is true or TLS PSK Enable is set to `yes`.
+          If TLS is not required while TLS or TLS-PSK are enabled, then the Bacula component
+          will connect with other components either with or without TLS or TLS-PSK
+
+          If ${tlsLink "tls.enable" submodulePath} or TLS-PSK is enabled and TLS is required, then the Bacula
+          component will refuse any connection request that does not use TLS.
+        '';
+      };
+      certificate = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = mdDoc ''
+          The full path and filename of a PEM encoded TLS certificate.
+          It will be used as either a client or server certificate,
+          depending on the connection direction.
+          This directive is required in a server context, but it may
+          not be specified in a client context if ${tlsLink "tls.verifyPeer" submodulePath} is
+          `false` in the corresponding server context.
+        '';
+      };
+      key = mkOption {
+        type = types.path;
+        description = mdDoc ''
+          The path of a PEM encoded TLS private key.
+          It must correspond to the TLS certificate.
+        '';
+      };
+      verifyPeer = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = mdDoc ''
+          Verify peer certificate.
+          Instructs server to request and verify the client's X.509 certificate.
+          Any client certificate signed by a known-CA will be accepted.
+          Additionally, the client's X509 certificate Common Name must meet the value of the Address directive.
+          If ${tlsLink "tls.allowedCN" submodulePath} is used,
+          the client's x509 certificate Common Name must also correspond to
+          one of the CN specified in the ${tlsLink "tls.allowedCN" submodulePath} directive.
+          This directive is valid only for a server and not in client context.
+
+          Standard from Bacula is `true`.
+         '';
+      };
+      allowedCN = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = mdDoc ''
+          Common name attribute of allowed peer certificates.
+          This directive is valid for a server and in a client context.
+          If this directive is specified, the peer certificate will be verified against this list.
+          In the case this directive is configured on a server side, the allowed
+          CN list will not be checked if ${tlsLink "tls.verifyPeer" submodulePath} is false.
+        '';
+      };
+      caCertificateFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = mdDoc ''
+        The path specifying a PEM encoded TLS CA certificate(s).
+        Multiple certificates are permitted in the file.
+        One of TLS CA Certificate File or TLS CA Certificate Dir are required in a server context, unless
+        ${tlsLink "tls.verifyPeer" submodulePath} is false, and are always required in a client context.
+        '';
+      };
+    };
+  };
+
+  directorOptions = submodulePath:{...}:
   {
     options = {
       password = mkOption {
@@ -144,6 +250,13 @@ let
           Please note that if this director is being used by a Monitor, we
           highly recommend to set this directive to yes to avoid serious
           security problems.
+        '';
+      };
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "${submodulePath}.director.<name>");
+        description = mdDoc ''
+          TLS Options for the Director in this Configuration.
         '';
       };
     };
@@ -327,8 +440,18 @@ in {
         description = lib.mdDoc ''
           This option defines director resources in Bacula File Daemon.
         '';
-        type = with types; attrsOf (submodule directorOptions);
+        type = with types; attrsOf (submodule (directorOptions "services.bacula-fd"));
       };
+
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-fd");
+        default = { };
+        description = mdDoc ''
+          TLS Options for the File Daemon.
+          Important notice: The Backup won't get encrypted.
+        '';
+       };
 
       extraClientConfig = mkOption {
         default = "";
@@ -386,7 +509,7 @@ in {
         description = lib.mdDoc ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
-        type = with types; attrsOf (submodule directorOptions);
+        type = with types; attrsOf (submodule (directorOptions "services.bacula-sd"));
       };
 
       device = mkOption {
@@ -427,6 +550,14 @@ in {
           console = all
         '';
       };
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-sd");
+        default = { };
+        description = mdDoc ''
+          TLS Options for the Storage Daemon.
+          Important notice the Backup won't get encrypted.
+        '';
+       };
 
     };
 
@@ -503,6 +634,15 @@ in {
           TODO
         '';
       };
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-dir");
+        default = { };
+        description = mdDoc ''
+          TLS Options for the Director.
+          Important notice: The Backup won't get encrypted.
+        '';
+       };
     };
   };
 
