@@ -10,13 +10,13 @@ python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.12.5a0";
+  version = "0.12.8a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "sha256-e27DBzing38llFxPIsMGkZJXp2q7jjFlQdtfsqLXNHw=";
+    sha256 = "sha256-vfmuA6DqWvAygcS6N+qX1h+Ag+P4eOwm41DhAFZR3r8=";
   };
 
   propagatedBuildInputs = with python3Packages; [
