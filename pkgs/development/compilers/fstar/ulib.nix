@@ -1,4 +1,4 @@
-{ fstarDune
+{ fstar-dune
 , src
 , stdenv
 , version
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     mkdir -p bin
-    cp ${fstarDune}/bin/fstar.exe bin
+    cp ${fstar-dune}/bin/fstar.exe bin
     patchShebangs ulib/install-ulib.sh
     cd ulib
   '';

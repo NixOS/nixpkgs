@@ -21,9 +21,9 @@ let
     hash = "sha256-ymoP5DvaLdrdwJcnhZnLEvwNxUFzhkICajPyK4lvacc=";
   };
 
-  fstarDune = ocamlPackages.callPackage ./dune.nix { inherit version src; };
+  fstar-dune = ocamlPackages.callPackage ./dune.nix { inherit version src; };
 
-  fstarLib = callPackage ./ulib.nix { inherit version src fstarDune z3; };
+  fstar-ulib = callPackage ./ulib.nix { inherit version src fstar-dune z3; };
 
 in
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     removeReferencesTo
   ];
 
-  inherit (fstarDune) propagatedBuildInputs;
+  inherit (fstar-dune) propagatedBuildInputs;
 
   dontBuild = true;
 
@@ -45,8 +45,8 @@ stdenv.mkDerivation {
     mkdir $out
 
     CP="cp -r --no-preserve=mode"
-    $CP ${fstarDune}/* $out
-    $CP ${fstarLib}/* $out
+    $CP ${fstar-dune}/* $out
+    $CP ${fstar-ulib}/* $out
 
     PREFIX=$out make -C src/ocaml-output install-sides
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
     substituteInPlace $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstar/dune-package \
-      --replace ${fstarDune} $out
+      --replace ${fstar-dune} $out
 
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish
