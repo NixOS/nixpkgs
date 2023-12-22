@@ -13,7 +13,8 @@ let
 
   # Derive domain names for Nginx configuration from Cryptpad configuration
   mainDomain = strings.removePrefix "https://" cfg.settings.httpUnsafeOrigin;
-  sandboxDomain = if isNull cfg.settings.httpSafeOrigin then mainDomain else strings.removePrefix "https://" cfg.settings.httpSafeOrigin;
+  sandboxDomain = if cfg.settings.httpSafeOrigin == null then mainDomain
+    else strings.removePrefix "https://" cfg.settings.httpSafeOrigin;
 
 in {
   options.services.cryptpad = {
@@ -164,7 +165,7 @@ in {
         { assertion = strings.hasPrefix "https://" cfg.settings.httpUnsafeOrigin;
           message = "services.cryptpad.settings.httpUnsafeOrigin must start with https://";
         }
-        { assertion = isNull cfg.settings.httpSafeOrigin || strings.hasPrefix "https://" cfg.settings.httpSafeOrigin;
+        { assertion = cfg.settings.httpSafeOrigin == null || strings.hasPrefix "https://" cfg.settings.httpSafeOrigin;
           message = "services.cryptpad.settings.httpSafeOrigin must start with https:// (or be unset)";
         }
       ];
@@ -192,7 +193,7 @@ in {
         virtualHosts = mkMerge [
           {
             "${mainDomain}" = {
-              serverAliases = if isNull cfg.settings.httpSafeOrigin then [ ] else [ sandboxDomain ];
+              serverAliases = lib.optionals (cfg.settings.httpSafeOrigin != null) [ sandboxDomain ];
               # NOTE: I see no reason not to enable ACME and forcing SSL if you enable Nginx for
               # Cryptpad, IMHO. Given the security context of Cryptpad, it should only ever be used with SSL.
               enableACME = true;
