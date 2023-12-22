@@ -8,6 +8,7 @@
 , libadwaita
 , libsoup_3
 , glib-networking
+, nix-update-script
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
@@ -56,6 +57,8 @@ python3Packages.buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://gitlab.com/zehkira/monophony";
