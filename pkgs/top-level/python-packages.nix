@@ -1764,8 +1764,6 @@ self: super: with self; {
 
   cachey = callPackage ../development/python-modules/cachey { };
 
-  cacheyou = callPackage ../development/python-modules/cacheyou { };
-
   cachier = callPackage ../development/python-modules/cachier { };
 
   cachy = callPackage ../development/python-modules/cachy { };
