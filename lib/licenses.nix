@@ -1034,6 +1034,12 @@ in mkLicense lset) ({
     url = "https://qwt.sourceforge.io/qwtlicense.html";
   };
 
+  rsal2 = {
+    fullName = "Redis Source Available License 2.0";
+    url = "https://redis.com/legal/rsalv2-agreement";
+    free = false;
+  };
+
   ruby = {
     spdxId = "Ruby";
     fullName = "Ruby License";
