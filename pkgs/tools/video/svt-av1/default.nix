@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tZ5HwTKM7uJ4QGUYc4tDD0xbv/9aU/rQjCHWu9QAb9s=";
+    hash = "sha256-JV65VuEPJBrADsGviBnE6EgZmbqJ4Z4qli6cAfUMmkw=";
   };
 
   nativeBuildInputs = [
