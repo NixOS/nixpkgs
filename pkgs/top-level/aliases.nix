@@ -632,6 +632,18 @@ mapAliases ({
 
   net_snmp = throw "'net_snmp' has been renamed to/replaced by 'net-snmp'"; # Converted to throw 2023-09-10
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
+  nextcloud25 = throw ''
+    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud26;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
+    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2023-10-13
+  nextcloud25Packages = throw "Nextcloud25 is EOL!"; # Added 2023-10-13
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
   nitrokey-udev-rules = libnitrokey; # Added 2023-03-25

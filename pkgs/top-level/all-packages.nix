@@ -11226,9 +11226,8 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud25 nextcloud26 nextcloud27 nextcloud28;
+    nextcloud26 nextcloud27 nextcloud28;
 
-  nextcloud25Packages = throw "Nextcloud25 is EOL!";
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/26.json;
   };
