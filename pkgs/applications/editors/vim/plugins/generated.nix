@@ -4031,6 +4031,30 @@ final: prev:
     meta.homepage = "https://github.com/ellisonleao/gruvbox.nvim/";
   };
 
+  guard-collection = buildVimPlugin {
+    pname = "guard-collection";
+    version = "2023-11-13";
+    src = fetchFromGitHub {
+      owner = "nvimdev";
+      repo = "guard-collection";
+      rev = "13e00d19f418d68977c6bc803f0d23d09dce580d";
+      sha256 = "1zhq99hf722m5m842ghadj9akmb0y1sqkpmbhhk15jynnvv16ab6";
+    };
+    meta.homepage = "https://github.com/nvimdev/guard-collection/";
+  };
+
+  guard-nvim = buildVimPlugin {
+    pname = "guard.nvim";
+    version = "2023-11-27";
+    src = fetchFromGitHub {
+      owner = "nvimdev";
+      repo = "guard.nvim";
+      rev = "394317c25a6b0f0e064aebcfcf902e46fb0a04ba";
+      sha256 = "sha256-Yva/mSn5RdvHLK5cVGHUCEHRauYrwy7wR2uDzyBM9sw=";
+    };
+    meta.homepage = "https://github.com/nvimdev/guard.nvim/";
+  };
+
   guess-indent-nvim = buildVimPlugin {
     pname = "guess-indent.nvim";
     version = "2023-04-03";

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.10.4";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dTVQTxzgjHAUuoWA2+asMI5g2fIWvHEl46bdTIAxAvg=";
+    hash = "sha256-gt3Za6ZtJa4hwqeiIrixSIbM0LZYKqegeCxdUhXhs/E=";
   };
 
   nativeBuildInputs = [ nasm ];
