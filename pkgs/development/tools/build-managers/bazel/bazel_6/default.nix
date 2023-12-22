@@ -605,7 +605,10 @@ stdenv.mkDerivation rec {
     ${python3}/bin/python3 ./bazel_src/scripts/generate_fish_completion.py \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.fish
-
+  '' +
+  # disable execlog parser on darwin, since it fails to build
+  # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
+  lib.optionalString (!stdenv.isDarwin) ''
     # need to change directory for bazel to find the workspace
     cd ./bazel_src
     # build execlog tooling
@@ -629,6 +632,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
+  '' +
+  # disable execlog parser on darwin, since it fails to build
+  # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
+  (lib.optionalString (!stdenv.isDarwin) ''
     mkdir $out/share
     cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
     cat <<EOF > $out/bin/bazel-execlog
@@ -636,7 +643,7 @@ stdenv.mkDerivation rec {
     ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
     EOF
     chmod +x $out/bin/bazel-execlog
-
+  '') + ''
     # shell completion files
     installShellCompletion --bash \
       --name bazel.bash \
