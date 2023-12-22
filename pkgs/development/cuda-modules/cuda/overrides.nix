@@ -64,6 +64,15 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
       outputs = oldAttrs.outputs ++ [ "lib" ];
 
+      # Patch the nvcc.profile.
+      # Syntax:
+      # - `=` for assignment,
+      # - `?=` for conditional assignment,
+      # - `+=` to "prepend",
+      # - `=+` to "append".
+
+      # Cf. https://web.archive.org/web/20230308044351/https://arcb.csc.ncsu.edu/~mueller/cluster/nvidia/2.0/nvcc_2.0.pdf
+
       postPatch =
         (oldAttrs.postPatch or "")
         + ''
