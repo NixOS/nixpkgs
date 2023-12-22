@@ -1,30 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{ fetchFromGitHub
+, fixDarwinDylibNames
+, lib
 , meson
 , ninja
-, fixDarwinDylibNames
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmpdclient";
   version = "2.21";
 
   src = fetchFromGitHub {
-    owner  = "MusicPlayerDaemon";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-U9K/4uivK5lx/7mG71umKGzP/KWgnexooF7weGu4B78=";
+    owner = "MusicPlayerDaemon";
+    repo = "libmpdclient";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U9K/4uivK5lx/7mG71umKGzP/KWgnexooF7weGu4B78=";
   };
 
-  nativeBuildInputs = [ meson ninja ]
-  ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    meson
+    ninja
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ehmry AndersonTorres ];
-    platforms = platforms.unix;
+    changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ AndersonTorres ehmry ];
+    platforms = lib.platforms.unix;
   };
-}
+})
