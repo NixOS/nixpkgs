@@ -8254,10 +8254,7 @@ self: super: with self; {
 
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
-  nftables = toPythonModule (pkgs.nftables.override {
-    python3 = python;
-    withPython = true;
-  });
+  nftables = callPackage ../os-specific/linux/nftables/python.nix { nftables = pkgs.nftables; };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
