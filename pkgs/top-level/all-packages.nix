@@ -13578,8 +13578,6 @@ with pkgs;
 
   supertag = callPackage ../tools/filesystems/supertag { };
 
-  supertux-editor = callPackage ../applications/editors/supertux-editor { };
-
   svgbob = callPackage ../tools/graphics/svgbob { };
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
