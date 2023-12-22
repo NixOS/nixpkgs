@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     removeReferencesTo
   ];
 
+  propagatedBuildInputs = fstarDune.buildInputs;
+
   dontBuild = true;
 
   installPhase = ''
