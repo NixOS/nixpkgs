@@ -41065,6 +41065,9 @@ with pkgs;
   mfcl2740dwcupswrapper = callPackage ../misc/cups/drivers/mfcl2740dwcupswrapper { };
   mfcl2740dwlpr = callPackage ../misc/cups/drivers/mfcl2740dwlpr { };
 
+  mfcj1205wlpr = (callPackage ../misc/cups/drivers/brother/mfcj1205w { }).driver;
+  mfcj1205wcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcj1205w { }).cupswrapper;
+
   # This driver is only available as a 32 bit proprietary binary driver
   mfcl3770cdwlpr = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).driver;
   mfcl3770cdwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw { }).cupswrapper;

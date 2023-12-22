@@ -16273,6 +16273,12 @@
     githubId = 1153271;
     name = "Sander van der Burg";
   };
+  saoriyuko = {
+    email = "saori.yuko@protonmail.ch";
+    github = "saori-yuko";
+    githubId = 102890314;
+    name = "Saori Yuko";
+  };
   sarcasticadmin = {
     email = "rob@sarcasticadmin.com";
     github = "sarcasticadmin";
