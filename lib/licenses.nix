@@ -104,6 +104,7 @@ in mkLicense lset) ({
   };
 
   arphicpl = {
+    spdxId = "Arphic-1999";
     fullName = "Arphic Public License";
     url = "https://www.freedesktop.org/wiki/Arphic_Public_License/";
   };
@@ -236,6 +237,7 @@ in mkLicense lset) ({
   };
 
   cal10 = {
+    spdxId = "CAL-1.0";
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";
   };
@@ -429,6 +431,7 @@ in mkLicense lset) ({
   };
 
   elastic20 = {
+    spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
     url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
@@ -598,6 +601,7 @@ in mkLicense lset) ({
 
   # Intel's license, seems free
   iasl = {
+    spdxId = "Intel-ACPI";
     fullName = "iASL";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
@@ -609,7 +613,7 @@ in mkLicense lset) ({
 
   imagemagick = {
     fullName = "ImageMagick License";
-    spdxId = "imagemagick";
+    spdxId = "ImageMagick";
   };
 
   imlib2 = {
@@ -803,6 +807,7 @@ in mkLicense lset) ({
   };
 
   miros = {
+    spdxId = "MirOS";
     fullName = "MirOS License";
     url = "https://opensource.org/licenses/MirOS";
   };
@@ -1138,6 +1143,7 @@ in mkLicense lset) ({
   };
 
   upl = {
+    spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
     url = "https://oss.oracle.com/licenses/upl/";
   };
@@ -1194,6 +1200,7 @@ in mkLicense lset) ({
   };
 
   xfig = {
+    spdxId = "Xfig";
     fullName = "xfig";
     url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
