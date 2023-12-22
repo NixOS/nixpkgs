@@ -1,8 +1,10 @@
 { lib, stdenv, fetchurl, unzip, file, licenseFile ? null, optgamsFile ? null}:
 
-assert licenseFile != null;
-
-stdenv.mkDerivation rec {
+# This will check the license only when evaluating drvPath or outPath
+lib.extendDerivation (
+  assert licenseFile != null; true
+) {}
+(stdenv.mkDerivation rec {
   version = "25.0.2";
   pname = "gams";
   src = fetchurl {
@@ -48,5 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.Scriptkiddi ];
     platforms = platforms.linux;
   };
-}
-
+})
