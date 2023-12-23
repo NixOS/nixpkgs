@@ -1,4 +1,4 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
+{ lib, clangStdenv, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
 , oath-toolkit
 , gnustep-make
@@ -17,7 +17,7 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-b6BZZ61wY0Akt1Q6+Bq6JXAx/67MwBNbzHr3sB0NuRg=";
   };
 
-  nativeBuildInputs = [ gnustep-make makeWrapper python3 pkg-config ];
+  nativeBuildInputs = [ makeWrapper python3 pkg-config ];
   buildInputs = [ gnustep-base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
     ++ lib.optional enableActiveSync libwbxml;
 

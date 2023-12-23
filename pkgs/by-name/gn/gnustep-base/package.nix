@@ -34,7 +34,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
   outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config gnustep-make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGNUstepAppsHook ];
+  propagatedNativeBuildInputs = [
+    gnustep-make
+  ];
   propagatedBuildInputs = [
     aspell audiofile
     cups

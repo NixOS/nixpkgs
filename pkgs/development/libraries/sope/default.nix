@@ -23,7 +23,6 @@ clangStdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gnustep-make ];
   buildInputs = [ gnustep-base libxml2 openssl ]
     ++ lib.optional (openldap != null) openldap
     ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]

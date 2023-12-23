@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , installShellFiles
 , gnustep-base
-, gnustep-make
 , bzip2
 , zlib
 , icu
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isDarwin [ Foundation AppKit ];
 
   nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.isLinux [ gnustep-make ] ++
     lib.optionals stdenv.isDarwin [ xcbuildHook ];
 
   # Work around https://github.com/NixOS/nixpkgs/issues/166205.
