@@ -21,15 +21,6 @@ mkDerivation rec {
     inherit hash;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "krita-opencolorio-2.3-compat.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/520c633c2c868f2236d8e56eefecdcb6e3ebd840.patch";
-      hash = "sha256-eXsgBN8OnKjZOQsOxViPypts6CVh3L+IYKMB/mDUcfQ=";
-      includes = [ "plugins/dockers/lut/ocio_display_filter_vfx2021.cpp" ];
-    })
-  ];
-
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip makeWrapper ];
 
   buildInputs = [

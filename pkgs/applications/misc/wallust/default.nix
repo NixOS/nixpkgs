@@ -4,7 +4,7 @@
 , nix-update-script
 }:
 let
-  version = "2.7.1";
+  version = "2.8.0";
 in
 rustPlatform.buildRustPackage {
   pname = "wallust";
@@ -15,10 +15,14 @@ rustPlatform.buildRustPackage {
     owner = "explosion-mental";
     repo = "wallust";
     rev = version;
-    hash = "sha256-WhL2HWM1onRrCqWJPLnAVMd/f/xfLrK3mU8jFSLFjAM=";
+    hash = "sha256-qX+pU/ovRV7dA35qSA724vV9azz7dMbEyMVBzqS47Ps=";
   };
 
-  cargoSha256 = "sha256-pR2vdqMGJZ6zvXwwKUIPjb/lWzVgYqQ7C7/sk/+usc4=";
+  cargoHash = "sha256-PAO7qxaKrRKYoC5RElNCylqRzOgvzPyxb6tTzW4jNi4=";
+
+  # temporarily skip tests for args due to a string formatting conflict
+  # https://codeberg.org/explosion-mental/wallust/issues/30
+  cargoTestFlags = [ "--test config" "--test cache" "--test template" ];
 
   passthru.updateScript = nix-update-script { };
 
