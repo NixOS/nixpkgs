@@ -78,7 +78,13 @@ let
   mkName = name: "kanata-${name}";
 
   mkDevices = devices:
-    optionalString ((length devices) > 0) "linux-dev ${concatStringsSep ":" devices}";
+    let
+      devicesString = pipe devices [
+        (map (device: "\"" + device + "\""))
+        (concatStringsSep " ")
+      ];
+    in
+    optionalString ((length devices) > 0) "linux-dev (${devicesString})";
 
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
