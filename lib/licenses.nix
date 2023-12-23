@@ -1212,6 +1212,11 @@ in mkLicense lset) ({
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
+
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
 } // {
   # TODO: remove legacy aliases
   agpl3 = {
