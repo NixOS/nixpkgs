@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "door-knocker";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tytan652";
     repo = "door-knocker";
     rev = finalAttrs.version;
-    hash = "sha256-cJmb/T156K+nISPQImBFkF3OMg/gPpgz0jGVM7gCbP8=";
+    hash = "sha256-9kCEPo+rlR344uPGhuWxGq6dAPgyCFEQ1XPGkLfp/bA=";
   };
 
   nativeBuildInputs = [
@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.linux;
+    mainProgram = "door-knocker";
   };
 })
