@@ -39,6 +39,11 @@ rustPlatform.buildRustPackage rec {
 
   LIBPG_QUERY_PATH = libpg_query;
 
+  checkFlags = [
+    # depends on the PostgreSQL version
+    "--skip=parse::tests::test_parse_sql_query_json"
+  ];
+
   meta = with lib; {
     description = "Linter for PostgreSQL, focused on migrations";
     homepage = "https://squawkhq.com/";
