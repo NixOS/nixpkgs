@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cups, busybox }:
+{ lib, stdenv, fetchurl, cups, rpm, cpio }:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
-  nativeBuildInputs = [ busybox ];
+  nativeBuildInputs = [ rpm cpio ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
