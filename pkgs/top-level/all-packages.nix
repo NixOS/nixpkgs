@@ -620,7 +620,9 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
-  dnf4 =  with python3Packages; toPythonApplication dnf4;
+  dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
+
+  dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
