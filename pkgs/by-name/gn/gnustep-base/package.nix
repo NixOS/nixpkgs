@@ -43,9 +43,12 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    gnustep-make
     pkg-config
     wrapGNUstepAppsHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    gnustep-make
   ];
 
   propagatedBuildInputs = [

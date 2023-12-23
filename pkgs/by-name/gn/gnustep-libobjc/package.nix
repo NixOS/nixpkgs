@@ -19,6 +19,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ robin-map ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
