@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iputils";
-  version = "20221126";
+  version = "20231222";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-XVoQhdjBmEK8TbCpaKLjebPw7ZT8iEvyLJDTCkzezeE=";
+    hash = "sha256-/blxT6k79fgbxX8qCQuJMf7zDPwMjJUt7FCscaMXx6U=";
   };
 
   outputs = [ "out" "apparmor" ];
