@@ -1198,6 +1198,11 @@ in mkLicense lset) ({
     url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
+  xinetd = {
+    spdxId = "xinetd";
+    fullName = "xinetd License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
