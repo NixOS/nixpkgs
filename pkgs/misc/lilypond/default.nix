@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile_2_2
+{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , freefont_ttf, makeFontsConf
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
   buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile_2_2 dblatex tex zip netpbm
+    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
       python3 gettext perl fontconfig freetype pango
       fontforge help2man groff t1utils boehmgc rsync
     ];
