@@ -1,7 +1,10 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, libxml2, openssl
-, openldap, mariadb, libmysqlclient, postgresql }:
+{ lib, clangStdenv, fetchFromGitHub, fetchpatch, libxml2, openssl
+, openldap, mariadb, libmysqlclient, postgresql
+, gnustep-make
+, gnustep-base
+}:
 
-gnustep.stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "sope";
   version = "5.11.2";
 
@@ -12,8 +15,8 @@ gnustep.stdenv.mkDerivation rec {
     hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
   };
 
-  nativeBuildInputs = [ gnustep.make ];
-  buildInputs = [ gnustep.base libxml2 openssl ]
+  nativeBuildInputs = [ gnustep-make ];
+  buildInputs = [ gnustep-base libxml2 openssl ]
     ++ lib.optional (openldap != null) openldap
     ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
     ++ lib.optional (postgresql != null) postgresql;
@@ -24,7 +27,7 @@ gnustep.stdenv.mkDerivation rec {
   # installed to in the install phase. We move them over after the installation.
   preConfigure = ''
     mkdir -p /build/Makefiles
-    ln -s ${gnustep.make}/share/GNUstep/Makefiles/* /build/Makefiles
+    ln -s ${gnustep-make}/share/GNUstep/Makefiles/* /build/Makefiles
     cat <<EOF > /build/GNUstep.conf
     GNUSTEP_MAKEFILES=/build/Makefiles
     EOF

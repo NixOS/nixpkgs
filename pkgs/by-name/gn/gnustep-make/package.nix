@@ -1,11 +1,11 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchurl
 , which
-, libobjc
+, gnustep-libobjc
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make";
   version = "2.9.2";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
   ];
 
-  buildInputs = [ libobjc ];
+  buildInputs = [ gnustep-libobjc ];
 
   propagatedBuildInputs = [ which ];
 

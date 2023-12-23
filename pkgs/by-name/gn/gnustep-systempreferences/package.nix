@@ -1,14 +1,14 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchurl
-, make
+, gnustep-make
+, gnustep-back
+, gnustep-base
+, gnustep-gui
 , wrapGNUstepAppsHook
-, back
-, base
-, gui
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "system-preferences";
   version = "1.2.0";
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1fg7c3ihfgvl6n21rd17fs9ivx3l8ps874m80vz86n1callgs339";
   };
 
-  nativeBuildInputs = [ make wrapGNUstepAppsHook ];
-  buildInputs = [ back base gui ];
+  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
+  buildInputs = [ gnustep-back gnustep-base gnustep-gui ];
 
   meta = {
     description = "Settings manager for the GNUstep environment and its applications";
