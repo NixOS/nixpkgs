@@ -5,9 +5,7 @@
   cairo,
   fontconfig,
   freetype,
-  gnustep-base,
   gnustep-gui,
-  gnustep-make,
   libXft,
   libXmu,
   pkg-config,
@@ -24,7 +22,6 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    gnustep-make
     pkg-config
     wrapGNUstepAppsHook
   ];
@@ -33,11 +30,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     cairo
     fontconfig
     freetype
-    gnustep-base
-    gnustep-gui
     libXft
     libXmu
   ];
+
+  propagatedBuildInputs = [ gnustep-gui ];
 
   meta = {
     description = "Generic backend for GNUstep";

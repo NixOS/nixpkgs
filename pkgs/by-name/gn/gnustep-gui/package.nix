@@ -3,7 +3,6 @@
   clangStdenv,
   fetchzip,
   gnustep-base,
-  gnustep-make,
   wrapGNUstepAppsHook,
 }:
 
@@ -16,12 +15,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-+4XEJ6PKpantbIbyNroFMaNBTFffkuW/ajSocGQO9Mo=";
   };
 
-  nativeBuildInputs = [
-    gnustep-make
-    wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
-  buildInputs = [ gnustep-base ];
+  propagatedBuildInputs = [ gnustep-base ];
 
   patches = [
     ./fixup-all.patch

@@ -1,9 +1,7 @@
 { lib
 , clangStdenv
 , fetchurl
-, gnustep-make
-, gnustep-base
-, gnustep-gui
+, gnustep-back
 , wrapGNUstepAppsHook
 }:
 
@@ -19,13 +17,11 @@ clangStdenv.mkDerivation rec {
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
 
   nativeBuildInputs = [
-    gnustep-make
     wrapGNUstepAppsHook
   ];
 
   buildInputs = [
-    gnustep-base
-    gnustep-gui
+    gnustep-back
   ];
 
   # Fix the Exec and Icon paths in the .desktop file, and save the file in the
