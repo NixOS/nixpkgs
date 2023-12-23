@@ -2807,4 +2807,34 @@ self: super: {
     ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
   });
 
+  inherit
+    (let
+      unbreakRepa = packageName: drv: lib.pipe drv [
+        # 2023-12-23: Apply build fixes for ghc >=9.4
+        (appendPatches (lib.optionals (lib.versionAtLeast self.ghc.version "9.4") (repaPatches.${packageName} or [])))
+        # 2023-12-23: jailbreak for base <4.17, vector <0.13
+        doJailbreak
+      ];
+      # https://github.com/haskell-repa/repa/pull/27
+      repaPatches = lib.mapAttrs (relative: hash: lib.singleton (pkgs.fetchpatch {
+        name = "repa-pr-27.patch";
+        url = "https://github.com/haskell-repa/repa/pull/27/commits/40cb2866bb4da51a8cac5e3792984744a64b016e.patch";
+        inherit relative hash;
+     })) {
+        repa = "sha256-bcSnzvCJmmSBts9UQHA2dYL0Q+wXN9Fbz5LfkrmhCo8=";
+        repa-io = "sha256-KsIN7NPWCyTpVzhR+xaBKGl8vC6rYH94llvlTawSxFk=";
+        repa-examples = "sha256-//2JG1CW1h2sKS2BSJadVAujSE3v1TfS0F8zgcNkPI8=";
+        repa-algorithms = "sha256-z/a7DpT3xJrIsif4cbciYcTSjapAtCoNNVX7PrZtc4I=";
+      };
+    in
+      lib.mapAttrs unbreakRepa super)
+    repa
+    repa-io
+    repa-examples
+    repa-algorithms
+    # The following packages aren't fixed yet, sorry:
+    #   repa-array, repa-convert, repa-eval, repa-flow,
+    #   repa-query, repa-scalar, repa-store, repa-stream
+  ;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
