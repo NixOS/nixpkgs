@@ -2723,12 +2723,12 @@ self: super: {
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 ])
     doJailbreak
     (overrideSrc rec {
-      version = "11.2.2";
+      version = "12.0.2";
       src = pkgs.fetchFromGitHub {
         owner = "PostgREST";
         repo = "postgrest";
         rev = "v${version}";
-        hash = "sha256-6Nv0NSAiNUSg2T/cmWs7zGSInLSmF0WDA3E/KxlA7O8=";
+        hash = "sha256-fpGeL8R6hziEtIgHUMfWLF7JAjo3FDYQw3xPSeQH+to=";
       };
     })
   ];
