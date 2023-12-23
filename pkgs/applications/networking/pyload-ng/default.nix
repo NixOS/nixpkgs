@@ -10,6 +10,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-1lPIKkZESonDaVCnac0iUu/gCqXVDBhNZrk5S0eC6F0=";
   };
 
+  patches = [
+    # Makes it possible to change the default username/password in the module
+    ./declarative-default-user.patch
+  ];
+
   postPatch = ''
     # relax version bounds
     sed -i 's/\([A-z0-9]*\)~=.*$/\1/' setup.cfg
