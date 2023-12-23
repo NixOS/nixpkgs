@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "listen1";
@@ -28,6 +28,6 @@ appimageTools.wrapType2 {
     maintainers = with maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "Listen1";
+    mainProgram = "listen1";
   };
 }
