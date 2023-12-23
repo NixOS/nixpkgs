@@ -85,7 +85,7 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-  version = "0.82.0";
+  version = "0.83.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -96,10 +96,10 @@ stdenv.mkDerivation {
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
       hash = {
-        "sdk-ia32" = "sha256-aIRnZDslOhoD5F0coX43VNFWGEImPU5oq9Roc4jYfsY=";
-        "sdk-x64" = "sha256-rKbnNAq9AVjSUjTipYze2VHiVi0RnZZsdQj1725DPd0=";
-        "ia32" = "sha256-pA53+A+EtS7m6026jPlC3vFxb2iheS4peDJFNkQAf/s=";
-        "x64" = "sha256-hRih8o8hBbYBEes3Z62PSMIC720SLRa3t2rL/5LaJAE=";
+        "sdk-ia32" = "sha256-Sps0XFOnnJIkDRPI+PJSjseF8cyaYvXXs4ZeVI8mcm8=";
+        "sdk-x64" = "sha256-qsNPfmDQK/BZzMTlX9MDaV7KZsU32YQ1B/Qh/EHIZrQ=";
+        "ia32" = "sha256-99+EU4Kg8lH8facRmIl2SV3GyWUw46rGYpso5QSP//k=";
+        "x64" = "sha256-y0oBVvVguRDe391EsQs6qYqkTRPzUfm50m6NDOZh+7o=";
       }."${flavor + bits}";
     };
 
