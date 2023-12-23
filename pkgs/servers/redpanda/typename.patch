@@ -1,0 +1,22 @@
+diff --git a/src/v/utils/stable_iterator_adaptor.h b/src/v/utils/stable_iterator_adaptor.h
+index 424bcb82fd..d28bc5b66e 100644
+--- a/src/v/utils/stable_iterator_adaptor.h
++++ b/src/v/utils/stable_iterator_adaptor.h
+@@ -73,7 +73,7 @@ private:
+         }
+     }
+ 
+-    void advance(base::difference_type diff) {
++    void advance(typename base::difference_type diff) {
+         validate_revision();
+         std::advance(this->base_reference(), diff);
+     }
+@@ -83,7 +83,7 @@ private:
+         this->base_reference()++;
+     }
+ 
+-    base::reference dereference() const {
++    typename base::reference dereference() const {
+         validate_revision();
+         return *(this->base_reference());
+     }

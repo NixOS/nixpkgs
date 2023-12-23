@@ -7,7 +7,7 @@
 , stdenv
 }:
 let
-  version = "23.2.14";
+  version = "23.2.17";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";

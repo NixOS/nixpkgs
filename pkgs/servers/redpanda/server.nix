@@ -1,5 +1,7 @@
-{ abseil-cpp_202206
+{ stdenv
+, abseil-cpp_202206
 , avro-cpp
+, boost
 , callPackage
 , ccache
 , cmake
@@ -10,14 +12,16 @@
 , dpdk
 , git
 , lib
-, llvmPackages_14
-, llvm_14
+, libpthreadstubs
+, llvmPackages_15
+, libxml2
 , ninja
 , p11-kit
 , pkg-config
 , procps
 , protobuf_21
 , python3
+, re2
 , snappy
 , src
 , unzip
@@ -38,8 +42,12 @@ let
     ps.jsonschema
   ]);
   rapidjson = callPackage ./rapidjson.nix { };
+  boost' = boost.override {
+    enablePython = true;
+    python = python3.withPackages pythonPackages;
+  };
 in
-llvmPackages_14.stdenv.mkDerivation rec {
+llvmPackages_15.stdenv.mkDerivation rec {
   inherit pname version src;
 
   preConfigure = ''
@@ -49,6 +57,8 @@ llvmPackages_14.stdenv.mkDerivation rec {
   '';
   patches = [
     ./redpanda.patch
+    ./typename.patch
+    ./missing_includes.patch
   ];
   postPatch = ''
     # Fix 'error: use of undeclared identifier 'roaring'; did you mean 'Roaring
@@ -73,7 +83,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
     cmake
     curl
     git
-    llvm_14
+    llvmPackages_15.llvm
     ninja
     pkg-config
     procps
@@ -88,20 +98,39 @@ llvmPackages_14.stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DGIT_VER=${version}"
     "-DGIT_CLEAN_DIRTY=\"\""
+
+    # fixing 'no member named nullopt in namespace std'
+    # "-DCMAKE_CXX_FLAGS=-std=c++20"
+    # "-DBASE_CXX_FLAG_LIST=-stdlib=libc++"
+    # "-DCMAKE_EXE_LINKER_FLAGS='-lpthread -lc++ -lc++abi' "
   ];
+  # preConfigure = ''
+    # not sure how to give this argument multiple flags in `cmakeFlags`
+    # cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-Wl,-lpthread -Wl,-lc++ -Wl,-lc++abi")
+  # '';
+
+
+  # SEE: https://github.com/NixOS/nixpkgs/issues/12857
+  # NIX_LDFLAGS="-lpthread -L${libpthreadstubs}/lib";
 
   buildInputs = [
+    # boost
+    # libpthreadstubs
     abseil-cpp_202206
     avro-cpp
     base64
+    # boost'
+    # boost.dev
     crc32c
     croaring
     ctre
     dpdk
     hdr-histogram
+    libxml2
     p11-kit
     protobuf_21
     rapidjson
+    re2
     seastar
     snappy
     xxHash
@@ -109,9 +138,9 @@ llvmPackages_14.stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = true;
+    # broken = true;
     description = "Kafka-compatible streaming platform.";
-    license = licenses.bsl11;
+    license = licenses.gpl3;
     longDescription = ''
       Redpanda is a Kafka-compatible streaming data platform that is
       proven to be 10x faster and 6x lower in total costs. It is also JVM-free,
