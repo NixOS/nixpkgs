@@ -375,10 +375,11 @@ let
             ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+
             location / {
               return ${toString vhost.redirectCode} https://$host$request_uri;
             }
+            ${acmeLocation}
           }
         ''}
 
@@ -391,13 +392,6 @@ let
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
-          ''}
-          ${acmeLocation}
-          ${optionalString (vhost.root != null) "root ${vhost.root};"}
-          ${optionalString (vhost.globalRedirect != null) ''
-            location / {
-              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
-            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -421,6 +415,14 @@ let
 
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString (vhost.root != null) "root ${vhost.root};"}
+
+          ${optionalString (vhost.globalRedirect != null) ''
+            location / {
+              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
+          ''}
+          ${acmeLocation}
           ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
