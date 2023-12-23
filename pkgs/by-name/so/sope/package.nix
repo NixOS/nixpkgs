@@ -15,7 +15,6 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
   };
 
-  nativeBuildInputs = [ gnustep-make ];
   buildInputs = [ gnustep-base libxml2 openssl ]
     ++ lib.optional (openldap != null) openldap
     ++ lib.optionals (mariadb != null) [ libmysqlclient mariadb ]
