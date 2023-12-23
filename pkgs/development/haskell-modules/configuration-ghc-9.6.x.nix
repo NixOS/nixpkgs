@@ -196,4 +196,8 @@ self: super: {
   # for these sorts of situations even on 9.2 and 9.4).
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
   tls = if pkgs.stdenv.hostPlatform.isAarch64 then self.forceLlvmCodegenBackend super.tls else super.tls;
+
+  # 2023-12-23: It needs this to build under ghc-9.6.3.
+  #   A factor of 100 is insufficent, 200 seems seems to work.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 }
