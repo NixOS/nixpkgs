@@ -148,7 +148,6 @@ let
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
-          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = ''
