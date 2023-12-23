@@ -3,9 +3,6 @@
   clangStdenv,
   fetchzip,
   gnustep-back,
-  gnustep-base,
-  gnustep-gui,
-  gnustep-make,
   wrapGNUstepAppsHook,
 }:
 
@@ -18,16 +15,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-B7NNRA3qA2PFbb03m58EBBONuIciLf6eU+YSR0qvaCo=";
   };
 
-  nativeBuildInputs = [
-    gnustep-make
-    wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
-  buildInputs = [
-    gnustep-back
-    gnustep-base
-    gnustep-gui
-  ];
+  buildInputs = [ gnustep-back ];
 
   meta = {
     description = "Graphical Object Relationship Modeller is an easy-to-use interface designer for GNUstep";

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , installShellFiles
 , gnustep-base
-, gnustep-make
 , bzip2
 , zlib
 , icu
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.hostPlatform.isDarwin [ Foundation AppKit ];
 
   nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ gnustep-make ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
   xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [

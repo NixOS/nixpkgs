@@ -5,9 +5,6 @@
   gdb,
   gnumake,
   gnustep-back,
-  gnustep-base,
-  gnustep-gui,
-  gnustep-make,
   gorm,
   wrapGNUstepAppsHook,
 }:
@@ -23,10 +20,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uXT2UUvMZNc6Fqi2BUXQimbZk8b3IqXzB+A2btBOmms=";
   };
 
-  nativeBuildInputs = [
-    gnustep-make
-    wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
   # NOTE: need a patch for ProjectCenter to help it locate some necessary tools:
   # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
@@ -35,8 +29,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     gdb
     gnumake
     gnustep-back
-    gnustep-base
-    gnustep-gui
     gorm
   ];
 

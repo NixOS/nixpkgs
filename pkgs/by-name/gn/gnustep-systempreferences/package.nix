@@ -3,9 +3,6 @@
   clangStdenv,
   fetchurl,
   gnustep-back,
-  gnustep-base,
-  gnustep-gui,
-  gnustep-make,
   wrapGNUstepAppsHook,
 }:
 
@@ -18,16 +15,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     sha256 = "1fg7c3ihfgvl6n21rd17fs9ivx3l8ps874m80vz86n1callgs339";
   };
 
-  nativeBuildInputs = [
-    gnustep-make
-    wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
-  buildInputs = [
-    gnustep-back
-    gnustep-base
-    gnustep-gui
-  ];
+  buildInputs = [ gnustep-back ];
 
   meta = {
     description = "Settings manager for the GNUstep environment and its applications";
