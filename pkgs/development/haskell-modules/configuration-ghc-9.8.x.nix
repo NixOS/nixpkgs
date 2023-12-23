@@ -64,8 +64,11 @@ self: super: {
     hls-stylish-haskell-plugin = null;
   };
 
-  # Version upgrades
-  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
+  #
+  # Version deviations from Stackage LTS
+  #
+
+  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;  # allows template-haskell-2.21
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_1_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_0;
   ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
@@ -75,18 +78,39 @@ self: super: {
   ormolu = doDistribute self.ormolu_0_7_3_0;
   fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
 
+
+  #
   # Jailbreaks
-  commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
-  ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
-  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
-  newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
-  hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
-  hw-fingertree = doJailbreak super.hw-fingertree; # deepseq <1.5, doctest < 0.22, hedgehog < 1.4
+  #
+
   # Too strict bound on base, believe it or not.
   # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
 
+  inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
+    active  # base <4.19
+    blaze-svg  # base <4.19
+    bmp  # bytestring <0.12
+    commutative-semigroups  # base < 4.19
+    diagrams-lib  # base <4.19, text <2.1
+    diagrams-postscript  # base <4.19, bytestring <0.12
+    diagrams-svg  # base <4.19, text <2.1
+    free  # Because we bumped the version of th-abstraction above.^
+    ghc-trace-events  # text < 2.1, bytestring < 0.12, base < 4.19
+    hw-fingertree  # deepseq <1.5, doctest < 0.22, hedgehog < 1.4
+    hw-prim  # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
+    newtype-generics  # base < 4.19
+    primitive-unlifted  # bytestring < 0.12
+    semigroupoids  # base <4.18
+    stack  # yaml >=0.10.4.0 && <0.11  https://github.com/commercialhaskell/stack/issues/4485
+    statestack  # base <4.19
+    svg-builder   # base <4.19, bytestring <0.12, text <2.1
+  ;
+
+  #
   # Test suite issues
+  #
+
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   # https://github.com/wz1000/HieDb/issues/64
@@ -95,4 +119,11 @@ self: super: {
       "--match" "!/hiedb/Command line/point-info/correctly prints type signatures/"
     ];
   }) super.hiedb;
+
+  #
+  # Build fixes
+  #
+
+  # 2023-12-23: Avoid "Simplifier ticks exhausted" error under ghc-9.8.1.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 }
