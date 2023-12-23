@@ -20,6 +20,7 @@
 , "merge-minify-refresh"
 , "opengraph"
 , "simple-login-captcha"
+, "simple-mastodon-verification"
 , "static-mail-sender-configurator"
 , "tc-custom-javascript"
 , "webp-converter-for-media"
