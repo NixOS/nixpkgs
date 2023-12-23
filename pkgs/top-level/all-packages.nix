@@ -24008,6 +24008,8 @@ with pkgs;
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
 
+  mdk-sdk = callPackage ../development/libraries/mdk-sdk { };
+
   mdslides = callPackage ../tools/misc/mdslides { };
 
   micropython = callPackage ../development/interpreters/micropython { };
