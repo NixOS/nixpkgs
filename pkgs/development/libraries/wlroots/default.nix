@@ -128,19 +128,12 @@ rec {
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.0";
-    hash = "sha256-VUrnSG4UAAH0cBy15lG0w8RernwegD6lkOdLvWU3a4c=";
+    version = "0.17.1";
+    hash = "sha256-Z0gWM7AQqJOSr2maUtjdgk/MF6pyeyFMMTaivgt+RMI=";
     extraBuildInputs = [
       hwdata
       libliftoff
       libdisplay-info
-    ];
-    patches = [
-      (fetchpatch {
-        name = "tinywl-fix-wlroots-dependency-constraint-in-Makefile.patch";
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/fe53ec693789afb44c899cad8c2df70c8f9f9023.patch";
-        hash = "sha256-wU62hXgmsAyT5j/bWeCFBkvM9cYjUntdCycQt5HAhb8=";
-      })
     ];
   };
 
