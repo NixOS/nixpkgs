@@ -1,14 +1,14 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchzip
-, base
-, back
-, make
+, gnustep-base
+, gnustep-back
+, gnustep-make
+, gnustep-gui
 , wrapGNUstepAppsHook
-, gui
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gorm";
   version = "1.3.1";
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-W+NgbvLjt1PpDiauhzWFaU1/CUhmDACQz+GoyRUyWB8=";
   };
 
-  nativeBuildInputs = [ make wrapGNUstepAppsHook ];
-  buildInputs = [ base back gui ];
+  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
+  buildInputs = [ gnustep-base gnustep-back gnustep-gui ];
 
   meta = {
     description = "Graphical Object Relationship Modeller is an easy-to-use interface designer for GNUstep";

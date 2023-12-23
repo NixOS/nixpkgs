@@ -1,8 +1,8 @@
 { lib
-, stdenv
+, clangStdenv
 , aspell
 , audiofile
-, make
+, gnustep-make
 , wrapGNUstepAppsHook
 , cups
 , fetchzip
@@ -18,7 +18,7 @@
 , libxml2
 , libxslt
 , libiconv
-, libobjc
+, gnustep-libobjc
 , libgcrypt
 , icu
 , pkg-config
@@ -26,7 +26,7 @@
 , libiberty
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base";
   version = "1.29.0";
   src = fetchzip {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
   outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [ pkg-config gnustep-make wrapGNUstepAppsHook ];
   propagatedBuildInputs = [
     aspell audiofile
     cups
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi binutils-unwrapped
     libjpeg libtiff libpng giflib
     libxml2 libxslt libiconv
-    libobjc libgcrypt
+    gnustep-libobjc libgcrypt
     icu
     portaudio
     libiberty

@@ -4,7 +4,7 @@
 , autoPatchelfHook
 , wrapQtAppsHook
 , gmpxx
-, gnustep
+, gnustep-libobjc
 , libbsd
 , libffi_3_3
 , ncurses6
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnustep.libobjc
+    gnustep-libobjc
     libbsd
     libffi_3_3
     ncurses6
