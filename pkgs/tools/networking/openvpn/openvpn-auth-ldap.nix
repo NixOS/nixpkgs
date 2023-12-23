@@ -4,7 +4,9 @@
   fetchFromGitHub,
   fetchpatch2,
   autoreconfHook,
-  gnustep,
+  gnustep-make,
+  gnustep-base,
+  gnustep-libobjc,
   re2c,
   openldap,
   openssl,
@@ -40,9 +42,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    gnustep.base
-    gnustep.libobjc
-    gnustep.make
+    gnustep-libobjc
+    gnustep-make
+    gnustep-base
     re2c
   ];
 

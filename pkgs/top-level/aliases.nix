@@ -527,6 +527,7 @@ mapAliases {
   gnuradio3_8 = throw "gnuradio3_8 has been removed because it was too old and incompatible with a not EOL swig"; # Added 2024-11-18
   gnuradio3_8Minimal = throw "gnuradio3_8Minimal has been removed because it was too old and incompatible with a not EOL swig"; # Added 2024-11-18
   gnuradio3_8Packages = throw "gnuradio3_8Minimal has been removed because it was too old and incompatible with a not EOL swig"; # Added 2024-11-18
+  gnustep = throw "The gnustep scope has been replaced with top-level packages: gnustep-back, -base, -gui, -libobjc, -make, -systempreferences; gorm, gworkspace, projectcenter."; # Added 2025-01-25
   gn1924 = throw "gn1924 has been removed because it was broken and no longer used by envoy."; # Added 2024-11-03
   gobby5 = throw "'gobby5' has been renamed to/replaced by 'gobby'"; # Converted to throw 2024-10-17
   gradle_6 = throw "Gradle 6 has been removed, as it is end-of-life (https://endoflife.date/gradle) and has many vulnerabilities that are not resolved until Gradle 7."; # Added 2024-10-30

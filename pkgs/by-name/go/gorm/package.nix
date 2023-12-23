@@ -1,15 +1,15 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchzip,
-  base,
-  back,
-  make,
+  gnustep-back,
+  gnustep-base,
+  gnustep-gui,
+  gnustep-make,
   wrapGNUstepAppsHook,
-  gui,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gorm";
   version = "1.4.0";
 
@@ -19,13 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    make
+    gnustep-make
     wrapGNUstepAppsHook
   ];
+
   buildInputs = [
-    base
-    back
-    gui
+    gnustep-back
+    gnustep-base
+    gnustep-gui
   ];
 
   meta = {
@@ -35,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "Gorm";
     maintainers = with lib.maintainers; [
       ashalkhakov
-      matthewbauer
       dblsaiko
+      matthewbauer
     ];
     platforms = lib.platforms.linux;
   };

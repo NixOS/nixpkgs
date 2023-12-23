@@ -1,15 +1,15 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchurl,
-  make,
+  gnustep-back,
+  gnustep-base,
+  gnustep-gui,
+  gnustep-make,
   wrapGNUstepAppsHook,
-  back,
-  base,
-  gui,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "system-preferences";
   version = "1.2.0";
 
@@ -19,13 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    make
+    gnustep-make
     wrapGNUstepAppsHook
   ];
+
   buildInputs = [
-    back
-    base
-    gui
+    gnustep-back
+    gnustep-base
+    gnustep-gui
   ];
 
   meta = {
@@ -35,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "SystemPreferences";
     maintainers = with lib.maintainers; [
       ashalkhakov
-      matthewbauer
       dblsaiko
+      matthewbauer
     ];
     platforms = lib.platforms.linux;
   };

@@ -2,7 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
-, gnustep
+, gnustep-base
+, gnustep-make
 , bzip2
 , zlib
 , icu
@@ -54,11 +55,11 @@ stdenv.mkDerivation rec {
     '');
 
   buildInputs = [ bzip2 icu openssl wavpack zlib ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.base ] ++
+    lib.optionals stdenv.hostPlatform.isLinux [ gnustep-base ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ Foundation AppKit ];
 
   nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.make ] ++
+    lib.optionals stdenv.hostPlatform.isLinux [ gnustep-make ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
   xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
