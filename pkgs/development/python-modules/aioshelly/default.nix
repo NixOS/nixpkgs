@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "6.1.0";
+  version = "7.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LkcUcGx31GwrbmBWCyEuD5x9yzeszUHBCYSBgTzgz9A=";
+    hash = "sha256-+sE/nppRu6XTvXzWlXc+4clLOI/KvVdfRDl9FUhy8fg=";
   };
 
   propagatedBuildInputs = [
