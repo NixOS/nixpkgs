@@ -67,7 +67,7 @@ in stdenv.mkDerivation (finalAttrs: {
   patches = extraPatches;
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-0+lJnDiMntxCYbZBCSWvHOcKXexFfEzRfb49QbfOmK8=";
@@ -158,10 +158,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
-    homepage = "https://github.com/RadeonOpenCompute/llvm-project";
+    homepage = "https://github.com/ROCm/llvm-project";
     license = with licenses; [ ncsa ] ++ extraLicenses;
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = isBroken;
+    broken = isBroken || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

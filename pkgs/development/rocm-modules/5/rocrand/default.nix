@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocRAND";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-VrpiHlZZQH+IOoaEDuDOfRgnMiqm1bpRIuNyrPz2SGY=";
@@ -79,10 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Generate pseudo-random and quasi-random numbers";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocRAND";
+    homepage = "https://github.com/ROCm/rocRAND";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })
