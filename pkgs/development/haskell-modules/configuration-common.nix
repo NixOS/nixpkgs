@@ -2714,14 +2714,14 @@ self: super: {
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
-  # 2023-12-20: Needs newer postgrest package and extra dependencies
-  # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
-  # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
+  # 2023-12-20: Needs newer hasql-pool package and extra dependencies
   postgrest = lib.pipe (super.postgrest.overrideScope (lself: lsuper: {
     hasql-pool = lself.hasql-pool_0_10;
   })) [
-    (addBuildDepends [ self.extra self.fuzzyset_0_2_4 ])
+    (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
+    # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
     doJailbreak
+    # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
     (overrideSrc rec {
       version = "12.0.2";
       src = pkgs.fetchFromGitHub {
