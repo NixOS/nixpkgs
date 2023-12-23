@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Famous german card game";
     platforms = platforms.unix;
-    license = licenses.free;
+    license = licenses.xskat;
     longDescription = "Play the german card game Skat against the AI or over IRC.";
     homepage = "https://web.archive.org/web/20221003060115/https://www.xskat.de/xskat.html";
   };
