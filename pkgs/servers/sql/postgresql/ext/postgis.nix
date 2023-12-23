@@ -5,7 +5,7 @@
 , postgresql
 , geos
 , proj
-, gdal
+, gdalMinimal
 , json_c
 , pkg-config
 , file
@@ -14,6 +14,10 @@
 , pcre2
 , nixosTests
 }:
+
+let
+  gdal = gdalMinimal;
+in
 stdenv.mkDerivation rec {
   pname = "postgis";
   version = "3.4.1";
