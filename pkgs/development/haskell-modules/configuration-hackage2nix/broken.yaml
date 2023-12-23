@@ -4655,7 +4655,6 @@ broken-packages:
   - reorderable # failure in job https://hydra.nixos.org/build/233256477 at 2023-09-02
   - reorder-expression # failure in job https://hydra.nixos.org/build/233215573 at 2023-09-02
   - repa-eval # failure in job https://hydra.nixos.org/build/233259486 at 2023-09-02
-  - repa # failure in job https://hydra.nixos.org/build/233219888 at 2023-09-02
   - repa-scalar # failure in job https://hydra.nixos.org/build/233213694 at 2023-09-02
   - repa-series # failure in job https://hydra.nixos.org/build/233200085 at 2023-09-02
   - ReplaceUmlaut # failure in job https://hydra.nixos.org/build/233228662 at 2023-09-02
