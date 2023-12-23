@@ -44,7 +44,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
       sha256 = "17z0wbqdd6fspbj43yq8biff6wfggk74xgnaf1xx6ynsp1i74is5";
     };
 
-    patches = [ ./package-build-dont-use-mtime.patch ];
+    patches = [ ./package-build-dont-use-mtime.patch ./package-build-lm-package-requires.patch ];
 
     dontConfigure = true;
     dontBuild = true;
