@@ -56,6 +56,6 @@ buildGoModule rec {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu techknowlogick ];
+    maintainers = with maintainers; [ nickhu techknowlogick kashw2 ];
   };
 }
