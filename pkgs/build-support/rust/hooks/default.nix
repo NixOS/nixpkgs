@@ -2,7 +2,6 @@
 , callPackage
 , cargo
 , cargo-nextest
-, clang
 , lib
 , makeSetupHook
 , maturin
@@ -89,7 +88,7 @@
       };
     } ./maturin-build-hook.sh) {};
 
-    bindgenHook = callPackage ({}: makeSetupHook {
+    bindgenHook = callPackage ({ clang }: makeSetupHook {
       name = "rust-bindgen-hook";
       substitutions = {
         libclang = clang.cc.lib;
