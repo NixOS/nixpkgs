@@ -14,6 +14,7 @@
 , wlr-protocols
 , pulseaudio
 , config
+, nixosTests
 }:
 
 stdenv.mkDerivation {
@@ -56,7 +57,10 @@ stdenv.mkDerivation {
     installManPage drawterm.1
   '';
 
-  passthru.updateScript = unstableGitUpdater { shallowClone = false; };
+  passthru = {
+    updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = nixosTests.drawterm;
+  };
 
   meta = with lib; {
     description = "Connect to Plan 9 CPU servers from other operating systems.";
