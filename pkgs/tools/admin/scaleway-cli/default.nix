@@ -42,6 +42,16 @@ buildGoModule rec {
       --replace "TestSdkStandardErrors" "SkipSdkStandardErrors"
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/scw --help
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
