@@ -266,7 +266,7 @@ self: super: {
   }) super.ConfigFile;
 
   # The curl executable is required for withApplication tests.
-  warp_3_3_29 = addTestToolDepend pkgs.curl super.warp_3_3_29;
+  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
