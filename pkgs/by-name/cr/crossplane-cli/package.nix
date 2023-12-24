@@ -2,17 +2,19 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
+, testers
+, crossplane-cli
 }:
 
 buildGoModule rec {
   pname = "crossplane-cli";
-  version = "1.14.3";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
     rev = "v${version}";
-    hash = "sha256-rxN0Zi1UgQjDOkY2OJlG6826ARBzlEObJk4nDEc9784=";
+    hash = "sha256-P7zfkrE+r/pQEEu0GK7v+bJ4ONeejZLXq2sYmU/V110=";
   };
 
   vendorHash = "sha256-vkXvnEstD/czBDxmI96TIQB/L4jxhMwIS1XpHqVtxqY=";
@@ -28,6 +30,12 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/crank $out/bin/crossplane
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = crossplane-cli;
+    command = "crossplane --version";
+    version = "v${version}";
+  };
 
   passthru.updateScript = nix-update-script { };
 
