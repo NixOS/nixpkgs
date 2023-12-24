@@ -89,21 +89,6 @@ let
       ${cfg.extraConfig}
     '';
 
-  exitHook = pkgs.writeText "dhcpcd.exit-hook"
-    ''
-      if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  We need to restart it to make sure that it
-          # will actually do something: if ntpd cannot resolve the
-          # server hostnames in its config file, then it will never do
-          # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation. This also
-          # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service ntpd-rs.service || true
-      fi
-
-      ${cfg.runHook}
-    '';
-
 in
 
 {
@@ -216,8 +201,6 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = [ exitHook ];
-
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
         # dhcpcd.  So do a "systemctl restart" instead.
@@ -244,8 +227,6 @@ in
     users.groups.dhcpcd = {};
 
     environment.systemPackages = [ dhcpcd ];
-
-    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
