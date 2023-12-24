@@ -438,6 +438,9 @@ in
               (optional (service.reloadIfChanged && service.reloadTriggers != [])
                 "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
+              (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
+                "Service '${name}.service' is using the deprecated target network-interfaces.target, which will be removed with the 24.04 release. Using network.target is recommended instead."
+              )
             ]
         )
         cfg.services
