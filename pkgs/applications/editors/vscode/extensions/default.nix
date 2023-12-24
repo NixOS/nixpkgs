@@ -2750,7 +2750,7 @@ let
           # Please update the corresponding binary (typst-lsp) when updating
           # this extension.
           version = "0.12.0";
-          sha256 = "sha256-5DwpgDstKJXo9jEWORXKr3B6Hnd/YOktiaJL2RFWCSA=";
+          sha256 = "sha256-9v6zJyeUBj0TOpK2otLqZ0ksjmzExKTJYRF+9akvuuo=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -3557,8 +3557,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.26";
-          sha256 = "sha256-EKWThidMgbd+a4Vw4SQo988ggVbCTnCakohvq3/mZQ0=";
+          version = "0.0.27";
+          sha256 = "sha256-wEY1FZjgiQJ7VrJGZX0SgZqz/14v//jxgrqdafLjIfM=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

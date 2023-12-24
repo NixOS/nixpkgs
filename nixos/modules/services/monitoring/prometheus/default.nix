@@ -1435,6 +1435,10 @@ let
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote write endpoint.
       '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote write request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
+      '';
       write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of remote write relabel configurations.
       '';
@@ -1529,6 +1533,10 @@ let
       '';
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote read endpoint.
+      '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote read request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
       '';
       read_recent = mkOpt types.bool ''
         Whether reads should be made for queries for time ranges that

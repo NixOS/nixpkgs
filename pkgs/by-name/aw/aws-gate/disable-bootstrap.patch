@@ -1,0 +1,51 @@
+diff --git a/aws_gate/cli.py b/aws_gate/cli.py
+index ac37c2f..9743415 100644
+--- a/aws_gate/cli.py
++++ b/aws_gate/cli.py
+@@ -7,7 +7,6 @@ from marshmallow import ValidationError
+ from yaml.scanner import ScannerError
+
+ from aws_gate import __version__, __description__
+-from aws_gate.bootstrap import bootstrap
+ from aws_gate.config import load_config_from_files
+ from aws_gate.constants import (
+     SUPPORTED_KEY_TYPES,
+@@ -59,10 +58,14 @@ def get_argument_parser(*args, **kwargs):
+
+     # 'bootstrap' subcommand
+     bootstrap_parser = subparsers.add_parser(
+-        "bootstrap", help="Download and install session-manager-plugin"
++        "bootstrap",
++        help="Download and install session-manager-plugin (disabled by nix)",
+     )
+     bootstrap_parser.add_argument(
+-        "-f", "--force", action="store_true", help="Forces bootstrap operation"
++        "-f",
++        "--force",
++        action="store_true",
++        help="Forces bootstrap operation (disabled by nix)",
+     )
+
+     # 'exec' subcommand
+@@ -268,7 +271,9 @@ def main(args=None, argument_parser=None):
+     logger.debug('Using AWS profile "%s" in region "%s"', profile, region)
+
+     if args.subcommand == "bootstrap":
+-        bootstrap(force=args.force)
++        print(
++            f"The SSM Plugin will not be downloaded as aws-gate was installed from nixpkgs and the plugin comes pre-bundled. The '--force' flag will not override this behavior."
++        )
+     elif args.subcommand == "exec":
+         exec(
+             config=config,
+diff --git a/requirements/requirements.txt b/requirements/requirements.txt
+index 50b203e..8c3496f 100644
+--- a/requirements/requirements.txt
++++ b/requirements/requirements.txt
+@@ -3,5 +3,4 @@ cryptography==39.0.2
+ marshmallow==3.19.0
+ packaging==23.0
+ PyYAML>=5.1,<6.1
+-requests==2.28.2
+ unix-ar==0.2.1
+ wrapt==1.15.0

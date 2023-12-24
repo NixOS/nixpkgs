@@ -37,9 +37,23 @@
       "openssl-1.1.1w"
     ];
   }; }
+
+  # This flag, if set to true, will inhibit the use of `mapTestOn`
+  # and `release-lib.packagePlatforms`.  Generally, it causes the
+  # resulting tree of attributes to *not* have a ".${system}"
+  # suffixed upon every job name like Hydra expects.
+  #
+  # This flag exists mainly for use by
+  # pkgs/top-level/release-attrnames-superset.nix; see that file for
+  # full details.  The exact behavior of this flag may change; it
+  # should be considered an internal implementation detail of
+  # pkgs/top-level/.
+  #
+, attrNamesOnly ? false
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+let release-lib = import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; }; in
+with release-lib;
 
 let
 
@@ -239,9 +253,9 @@ let
   # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
-  jobs = lib.attrsets.unionOfDisjoint
-    nonPackageJobs
-    (mapTestOn ((packagePlatforms pkgs) // {
+  jobs = let
+    packagePlatforms = if attrNamesOnly then lib.id else release-lib.packagePlatforms;
+    packageJobs = {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       # Build selected packages (HLS) for multiple Haskell compilers to rebuild
@@ -275,6 +289,14 @@ let
       darwin = packagePlatforms pkgs.darwin // {
         xcode = {};
       };
-    } ));
+    };
+    mapTestOn-packages =
+      if attrNamesOnly
+      then pkgs // packageJobs
+      else mapTestOn ((packagePlatforms pkgs) // packageJobs);
+  in
+    lib.attrsets.unionOfDisjoint
+      nonPackageJobs
+      mapTestOn-packages;
 
 in jobs

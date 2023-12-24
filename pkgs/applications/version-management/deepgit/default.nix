@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deepgit";
-  version = "4.3.1";
+  version = "4.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${lib.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    hash = "sha256-Ovd9MjgpMJvNySW/FPXYVtpLoCSQP1W1nlcNkgI7sgA=";
+    hash = "sha256-ILqwXDyW7/hZzoSxxaxv4bF5xsB/JFaOBYAJFb7xmdk=";
   };
 
   nativeBuildInputs = [

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "neosay";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "donuts-are-good";
     repo = "neosay";
     rev = "v${version}";
-    hash = "sha256-Uwz6Y26AtzWXLFgJY0WVD0HBb+vbMeeMKt8gCk6viec=";
+    hash = "sha256-2tFjvAobDpBh1h0ejdtqxDsC+AqyneN+xNssOJNfEbk=";
   };
 
   vendorHash = "sha256-w0aZnel5Obq73UXcG9wmO9t/7qQTE8ru656u349cvzQ=";

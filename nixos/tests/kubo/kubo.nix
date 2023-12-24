@@ -46,6 +46,13 @@
             f"ipfs --api /unix/run/ipfs.sock cat /ipfs/{ipfs_hash.strip()} | grep fnord2"
         )
 
+    machine.stop_job("ipfs")
+
+    with subtest("Socket activation for the Gateway"):
+        machine.succeed(
+            f"curl 'http://127.0.0.1:8080/ipfs/{ipfs_hash.strip()}' | grep fnord2"
+        )
+
     with subtest("Setting dataDir works properly with the hardened systemd unit"):
         machine.succeed("test -e /mnt/ipfs/config")
         machine.succeed("test ! -e /var/lib/ipfs/")

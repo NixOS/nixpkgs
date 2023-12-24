@@ -1,21 +1,19 @@
-{ lib, fetchurl, buildDunePackage, cmdliner
+{ lib, buildDunePackage, cmdliner
+, functoria-runtime
 , rresult, astring, fmt, logs, bos, fpath, emile, uri
+, alcotest
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname   = "functoria";
-  version = "4.3.6";
+  inherit (functoria-runtime) version src;
 
   minimalOCamlVersion = "4.08";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
-    hash = "sha256-i/5sZHfxECoKYMdGje+U21GWxJ6dDZreVcQGtbuo4SE=";
-  };
-
   propagatedBuildInputs = [ cmdliner rresult astring fmt logs bos fpath emile uri ];
 
-  doCheck = false;
+  doCheck = true;
+  checkInputs = [ alcotest functoria-runtime ];
 
   meta = with lib; {
     description = "A DSL to organize functor applications";

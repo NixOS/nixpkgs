@@ -117,6 +117,11 @@ rustPlatform.buildRustPackage rec {
       --replace '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   # Some tests require networking
   doCheck = false;
 

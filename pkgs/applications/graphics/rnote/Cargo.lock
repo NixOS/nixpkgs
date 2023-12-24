@@ -3414,7 +3414,7 @@ dependencies = [
 
 [[package]]
 name = "rnote"
-version = "0.9.3"
+version = "0.9.4"
 dependencies = [
  "anyhow",
  "base64",
@@ -3462,7 +3462,7 @@ dependencies = [
 
 [[package]]
 name = "rnote-cli"
-version = "0.9.3"
+version = "0.9.4"
 dependencies = [
  "anyhow",
  "atty",
@@ -3480,9 +3480,10 @@ dependencies = [
 
 [[package]]
 name = "rnote-compose"
-version = "0.9.3"
+version = "0.9.4"
 dependencies = [
  "anyhow",
+ "approx",
  "base64",
  "clap",
  "ink-stroke-modeler-rs",
@@ -3508,7 +3509,7 @@ dependencies = [
 
 [[package]]
 name = "rnote-engine"
-version = "0.9.3"
+version = "0.9.4"
 dependencies = [
  "anyhow",
  "approx",

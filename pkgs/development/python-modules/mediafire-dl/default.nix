@@ -23,7 +23,7 @@ buildPythonPackage {
     tqdm
   ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "mediafire_dl"
   ];
 

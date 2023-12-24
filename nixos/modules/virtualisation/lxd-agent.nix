@@ -63,6 +63,7 @@ in {
       preStart = preStartScript;
 
       # avoid killing nixos-rebuild switch when executed through lxc exec
+      restartIfChanged = false;
       stopIfChanged = false;
 
       unitConfig = {

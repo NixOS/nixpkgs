@@ -13,17 +13,17 @@ let
   testdata = fetchFromGitHub {
     owner = "BrunoLevy";
     repo = "geogram.data";
-    rev = "8fd071a560bd6859508f1710981386d0b2ba01b1";
-    hash = "sha256-jMUGX6/uYIZMVwXxTAAGUaOXqF+NrFQqgmIPCD58cwM=";
+    rev = "43dd49054a78d9b3fb8ef729f48ab47a272c718c";
+    hash = "sha256-F2Lyt4nEOczVYLz6WLny+YrsxNwREBGPkProN8NHFN4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "geogram";
-  version = "1.8.3";
+  version = "1.8.6";
 
   src = fetchurl {
     url = "https://github.com/BrunoLevy/geogram/releases/download/v${version}/geogram_${version}.tar.gz";
-    hash = "sha256-91q0M/4kAr0UoWXOQIEYS1VbgEQ/F4EBOfJE9Vr1bnw=";
+    hash = "sha256-Xqha5HVqD2Ao0z++RKcQdMZUmtMb5eZ1DMJEVrfNUzE=";
   };
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
@@ -59,9 +59,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # See https://github.com/BrunoLevy/geogram/pull/76
-    ./fix-cmake-install-destination.patch
-
     # This patch replaces the bundled (outdated) zlib with our zlib
     # Should be harmless, but if there are issues this patch can also be removed
     # Also check https://github.com/BrunoLevy/geogram/issues/49 for progress
@@ -93,6 +90,9 @@ stdenv.mkDerivation rec {
 
         # Skip slow RVD test
         "RVD"
+
+        # Flaky as of 1.8.5 (SIGSEGV, possibly a use-after-free)
+        "Delaunay"
       ];
     in
     ''

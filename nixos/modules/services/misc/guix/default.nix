@@ -373,7 +373,6 @@ in
         serviceConfig = {
           Type = "oneshot";
 
-          MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateNetworks = true;
           ProtectControlGroups = true;

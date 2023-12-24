@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.47";
+  version = "3.1.50";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-cRNkQ+7vUqJLNlf5dieeDcyT1jlBUeVxO8avoUvOPHI=";
+    hash = "sha256-iFZF+DxGaq279QPPugoLhYmoXmyLPkmn1x4rBCkdW+I=";
     rev = version;
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
-      resourceDir = "${llvmEnv}/lib/clang/16/";
+      resourceDir = "${llvmEnv}/lib/clang/17/";
     })
   ];
 
@@ -51,11 +51,12 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
+    # emscripten 3.1.50 requires LLVM tip-of-tree instead of LLVM 17
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 18/EXPECTED_LLVM_VERSION = 17.0/g" tools/shared.py
+
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
-    # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
@@ -108,7 +109,11 @@ stdenv.mkDerivation rec {
         # TODO: get library cache to build with both enabled and function exported
         $out/bin/emcc $LTO $BIND test.c
         $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
-        $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
+        # starting with emscripten 3.1.48+,
+        # to use pthreads, _emscripten_check_mailbox must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/20604)
+        # TODO: get library cache to build with pthreads at all
+        # $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
       done
     done
     popd
@@ -133,7 +138,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer raitobezarius ];
+    maintainers = with maintainers; [ qknight matthewbauer raitobezarius willcohen ];
     license = licenses.ncsa;
   };
 }

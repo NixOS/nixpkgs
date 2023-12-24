@@ -2,41 +2,32 @@
 , fetchFromGitHub
 , rustPlatform
 , protobuf
-, xvfb-run
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BpJI6IseQpAHrdZ+rbh9Ar8HhAVD6grdM2tpviKd51c=";
+    hash = "sha256-NuljH6cqgdtTJDkNv4w44s1UM4/R1gmpVyWpCzCJ3DU=";
   };
 
-  cargoHash = "sha256-BcqrQ4oUZazTSVtaAPgNKmLxhBbxR+sfpFFD1WiYP40=";
+  cargoHash = "sha256-5+qa9/QGZyZBaO2kbvpP7Ybs1EXIO1MlPFm0PDTNqCQ=";
 
   nativeBuildInputs = [
     protobuf
     installShellFiles
   ];
 
-  nativeCheckInputs = [
-    xvfb-run
+  checkFlags = [
+    # Some test cases interact with X11, skip them
+    "--skip=test_x11_clipboard"
+    "--skip=test_x11_primary"
   ];
-
-  useNextest = true;
-
-  # cargo-nextest help us retry the failed test cases
-  NEXTEST_RETRIES = 5;
-
-  # Some test cases interact with X11, we use xvfb-run here
-  checkPhase = ''
-    xvfb-run --auto-servernum cargo nextest run --release --workspace --no-fail-fast --no-capture
-  '';
 
   postInstall = ''
     for cmd in clipcatd clipcatctl clipcat-menu clipcat-notify; do

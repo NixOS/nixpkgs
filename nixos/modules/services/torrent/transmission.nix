@@ -434,7 +434,7 @@ in
       # at least up to the values hardcoded here:
       (mkIf cfg.settings.utp-enabled {
         "net.core.rmem_max" = mkDefault 4194304; # 4MB
-        "net.core.wmem_max" = mkDefault "1048576"; # 1MB
+        "net.core.wmem_max" = mkDefault 1048576; # 1MB
       })
       (mkIf cfg.performanceNetParameters {
         # Increase the number of available source (local) TCP and UDP ports to 49151.

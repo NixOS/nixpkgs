@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
+    mainProgram = "unison";
   };
 })

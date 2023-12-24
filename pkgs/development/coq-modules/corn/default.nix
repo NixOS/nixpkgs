@@ -17,7 +17,6 @@ mkCoqDerivation rec {
     "8.18.0".sha256 = "sha256-ow3mfarZ1PvBGf5WLnI8LdF3E+8A6fN7cOcXHrZJLo0=";
   };
 
-  preConfigure = "patchShebangs ./configure.sh";
   configureScript = "./configure.sh";
   dontAddPrefix = true;
 

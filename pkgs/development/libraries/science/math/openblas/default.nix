@@ -141,7 +141,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.24";
+  version = "0.3.25";
 
   outputs = [ "out" "dev" ];
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-IuXhrZRB3o7kbnivv/6En/aAeF2F18sQw9pKs1WEJc4=";
+    hash = "sha256-eY/R7gLDOls3csuwZkUS+x+v3GeL3dCsOD+4STxDpCg=";
   };
 
   postPatch = ''

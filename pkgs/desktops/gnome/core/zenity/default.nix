@@ -14,13 +14,13 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "3.99.2";
+  version = "4.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "oZR4kGuYi082fl6mOlkh5PmMuCVbugXrXK2LWhikFo8=";
+    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
+    sha256 = "C4yN7xjasFzEm9RkuQyn+UWuUv9eCSQtpwKhXZTT6N0=";
   };
 
   nativeBuildInputs = [
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

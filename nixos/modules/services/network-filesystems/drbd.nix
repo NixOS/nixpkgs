@@ -55,8 +55,8 @@ let cfg = config.services.drbd; in
       wants = [ "systemd-udev.settle.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.drbd}/sbin/drbdadm up all";
-        ExecStop = "${pkgs.drbd}/sbin/drbdadm down all";
+        ExecStart = "${pkgs.drbd}/bin/drbdadm up all";
+        ExecStop = "${pkgs.drbd}/bin/drbdadm down all";
       };
     };
   };

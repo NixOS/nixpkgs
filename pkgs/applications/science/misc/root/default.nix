@@ -58,7 +58,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.28.08";
+  version = "6.30.02";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-o+ZLTAH4fNm75X5h75a0FibkmwRGCVBw1B2b+6NSaGI=";
+    hash = "sha256-eWWkVtGtHuDV/kdpv1qP7Cka9oTtk9sPMICpw2JDUYM=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -110,14 +110,25 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
+
+    # Fix for builtin_llvm=OFF
+    # https://github.com/root-project/root/pull/14238
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/1477d3adebf27a19f3a8b85f21c27a0a5649c7ff.diff";
+      hash = "sha256-g+FqXBTWXA7t7F/rMarnmOK2014oCNnNJbHhjH+Tvjw=";
+    })
   ];
 
   preConfigure = ''
-    rm -rf builtins/*
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
-    substituteInPlace interpreter/llvm/src/tools/clang/tools/driver/CMakeLists.txt \
+    substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
@@ -132,8 +143,8 @@ stdenv.mkDerivation rec {
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
-    substituteInPlace core/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks" ""
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks " ""
   '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
@@ -147,7 +158,7 @@ stdenv.mkDerivation rec {
     "-Dbuiltin_freetype=OFF"
     "-Dbuiltin_gtest=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=OFF"
+    "-Dbuiltin_openui5=ON"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
@@ -176,12 +187,13 @@ stdenv.mkDerivation rec {
     "-Dpythia6=OFF"
     "-Dpythia8=OFF"
     "-Drfio=OFF"
-    "-Droot7=OFF"
+    "-Droot7=ON"
     "-Dsqlite=OFF"
     "-Dssl=ON"
     "-Dtmva=ON"
+    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
-    "-Dwebgui=OFF"
+    "-Dwebgui=ON"
     "-Dxml=ON"
     "-Dxrootd=ON"
   ]

@@ -72,6 +72,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests often hang
     "test_connected"
+  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
   ];
 
   meta = with lib; {

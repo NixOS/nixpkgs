@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "github-to-sqlite";
-  version = "2.8.3";
+  version = "2.9";
   format = "setuptools";
   disabled = !isPy3k;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dogsheep";
     repo = pname;
     rev = version;
-    hash = "sha256-4wkwtcChcR7XH421wa3dGdIPhwgeaTFk247zIRX98xo=";
+    hash = "sha256-KwLaaZxBBzRhiBv4p8Imb5XI1hyka9rmr/rxA6wDc7Q=";
   };
 
   propagatedBuildInputs = [

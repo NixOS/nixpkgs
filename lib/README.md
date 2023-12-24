@@ -42,7 +42,7 @@ Reference documentation for library functions is written above each function as 
 These comments are processed using [nixdoc](https://github.com/nix-community/nixdoc) and [rendered in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-functions).
 The nixdoc README describes the [comment format](https://github.com/nix-community/nixdoc#comment-format).
 
-See the [chapter on contributing to the Nixpkgs manual](https://nixos.org/manual/nixpkgs/#chap-contributing) for how to build the manual.
+See [doc/README.md](../doc/README.md) for how to build the manual.
 
 ## Running tests
 

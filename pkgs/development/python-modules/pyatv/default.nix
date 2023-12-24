@@ -92,7 +92,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = [
+    # https://github.com/postlund/pyatv/issues/2307
+    "test_zeroconf_service_published"
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
     "test_stream_retransmission"
   ];

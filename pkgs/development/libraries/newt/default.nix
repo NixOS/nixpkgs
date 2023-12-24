@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "newt";
-  version = "0.52.23";
+  version = "0.52.24";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yqNykHsU7Oz+KY8NUSpi9B0zspBhAkSliu0Hu8WtoSo=";
+    sha256 = "sha256-Xe1+Ih+F9kJSHEmxgmyN4ZhFqjcrr11jClF3S1RPvbs=";
   };
 
   postPatch = ''
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://pagure.io/newt";
     description = "Library for color text mode, widget based user interfaces";
-
+    homepage = "https://pagure.io/newt";
+    changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.viric ];
+    maintainers = with maintainers; [ viric ];
   };
 }

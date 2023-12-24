@@ -1,6 +1,7 @@
 {
   # General callPackage-supplied arguments
   autoAddOpenGLRunpathHook,
+  autoAddCudaCompatRunpathHook,
   autoPatchelfHook,
   backendStdenv,
   fetchurl,
@@ -126,6 +127,14 @@ backendStdenv.mkDerivation (
       # Check e.g. with `patchelf --print-rpath path/to/my/binary
       autoAddOpenGLRunpathHook
       markForCudatoolkitRootHook
+    ]
+    # autoAddCudaCompatRunpathHook depends on cuda_compat and would cause
+    # infinite recursion if applied to `cuda_compat` itself (beside the fact
+    # that it doesn't make sense in the first place)
+    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+      # autoAddCudaCompatRunpathHook must appear AFTER autoAddOpenGLRunpathHook.
+      # See its documentation in ./setup-hooks/extension.nix.
+      autoAddCudaCompatRunpathHook
     ];
 
     buildInputs =
@@ -161,13 +170,15 @@ backendStdenv.mkDerivation (
       ''
       # Handle the existence of libPath, which requires us to re-arrange the lib directory
       + strings.optionalString (libPath != null) ''
-        if [[ ! -d "${libPath}" ]] ; then
-          echo "${finalAttrs.pname}: ${libPath} does not exist, only found:" >&2
-          find "$(dirname ${libPath})"/ -maxdepth 1 >&2
+        full_lib_path="lib/${libPath}"
+        if [[ ! -d "$full_lib_path" ]] ; then
+          echo "${finalAttrs.pname}: '$full_lib_path' does not exist, only found:" >&2
+          find lib/ -mindepth 1 -maxdepth 1 >&2
           echo "This release might not support your CUDA version" >&2
           exit 1
         fi
-        mv "lib/${libPath}" lib_new
+        echo "Making libPath '$full_lib_path' the root of lib" >&2
+        mv "$full_lib_path" lib_new
         rm -r lib
         mv lib_new lib
       ''
@@ -178,6 +189,9 @@ backendStdenv.mkDerivation (
       ''
       # Move the outputs into their respective outputs.
       + strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)
+      # Add a newline to the end of the installPhase, so that the post-install hook doesn't
+      # get concatenated with the last moveToOutput command.
+      + "\n"
       # Post-install hook
       + ''
         runHook postInstall

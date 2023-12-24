@@ -3,6 +3,7 @@
 , fetchPypi
 , setuptools
 , cryptography
+, pytestCheckHook
 , pefile
 }:
 
@@ -10,13 +11,25 @@ buildPythonPackage rec {
   pname = "virt-firmware";
   version = "23.10";
 
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2b4c876e4b82951f89d349170e9e7dbe4ea7b277838c9e7376f802b9a75c6d3";
+    hash = "sha256-orTIduS4KVH4nTSRcOnn2+Tqeyd4OMnnN2+AK5p1xtM=";
   };
 
-  propagatedBuildInputs = [
+  pythonImportsCheck = [ "virt.firmware.efi" ];
+
+  nativeBuildInputs = [
     setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  pytestFlagsArray = ["tests/tests.py"];
+
+  propagatedBuildInputs = [
     cryptography
     pefile
   ];

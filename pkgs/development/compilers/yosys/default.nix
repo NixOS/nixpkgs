@@ -88,7 +88,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
-  buildInputs = [
+  propagatedBuildInputs = [
     tcl
     readline
     libffi

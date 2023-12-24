@@ -12,6 +12,7 @@
 , pipewire
 , libpulseaudio
 , libicns
+, libnotify
 , jq
 , moreutils
 , cacert
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       # this is mainly required for venmic
       libPath = lib.makeLibraryPath [
         libpulseaudio
+        libnotify
         pipewire
         gcc13Stdenv.cc.cc.lib
       ];

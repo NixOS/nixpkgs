@@ -2,16 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rqbit";
-  version = "3.2.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-c0JYFr2yy1lcaJ+xOZnFsGzPVGPoFgCiFTGDlDaHdZk=";
+    hash = "sha256-sZb3DYk2gycANRZGtSQAo3G+fo7dxGF48PwC8kJOfio=";
   };
 
-  cargoHash = "sha256-VnkAokOC5xSqO7MVASssKs0EqQ+re5EsEar4eLspTSA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "network-interface-1.1.1" = "sha256-9fWdR5nr73oFP9FzHhDsbA4ifQf3LkzBygspxI9/ufs=";
+    };
+  };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
@@ -23,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
+    changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];
     mainProgram = "rqbit";

@@ -477,6 +477,13 @@ let
 
         ox-rss = buildWithGit super.ox-rss;
 
+        python-isort = super.python-isort.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace python-isort.el \
+              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+          '';
+        });
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -728,4 +735,5 @@ let
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-generateMelpa { }
+(generateMelpa { })
+// { __attrsFailEvaluation = true; }

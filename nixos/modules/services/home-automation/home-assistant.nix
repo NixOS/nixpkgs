@@ -75,7 +75,7 @@ let
   # Create parts of the lovelace config that reference lovelave modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or card.pname + ".js"}?${card.version}";
+      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
@@ -157,7 +157,7 @@ in {
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [
-          prometheus-sensor
+          prometheus_sensor
         ];
       '';
       description = lib.mdDoc ''
@@ -523,7 +523,6 @@ in {
           "bluetooth_tracker"
           "bthome"
           "default_config"
-          "eq3btsmart"
           "eufylife_ble"
           "esphome"
           "fjaraskupan"
