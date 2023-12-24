@@ -190,7 +190,7 @@ in
       '';
 
       # tell mandoc the paths containing man pages
-      profileRelativeSessionVariables."MANPATH" = map (path: "/${path}") cfg.manPath;
+      profileRelativeSessionVariables."MANPATH" = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path) cfg.manPath;
     };
   };
 }
