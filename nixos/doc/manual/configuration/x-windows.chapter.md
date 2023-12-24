@@ -66,7 +66,7 @@ On 64-bit systems, if you want OpenGL for 32-bit programs such as in
 Wine, you should also set the following:
 
 ```nix
-hardware.opengl.driSupport32Bit = true;
+hardware.impure-drivers.opengl.driSupport32Bit = true;
 ```
 
 ## Auto-login {#sec-x11-auto-login}

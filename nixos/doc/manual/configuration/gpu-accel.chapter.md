@@ -30,7 +30,7 @@ $ export \
 ```
 
 The second mechanism is to add the OpenCL driver package to
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.impure-drivers.packages).
 This links the ICD file under `/run/opengl-driver`, where it will be visible
 to the ICD loader.
 
@@ -51,11 +51,11 @@ Platform Vendor      Advanced Micro Devices, Inc.
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
 supported through the rocmPackages.clr.icd package. Adding this package to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.impure-drivers.packages)
 enables OpenCL support:
 
 ```nix
-hardware.opengl.extraPackages = [
+hardware.impure-drivers.packages = [
   rocmPackages.clr.icd
 ];
 ```
@@ -71,12 +71,12 @@ proprietary Intel OpenCL runtime, in the intel-ocl package, is an
 alternative for Gen7 GPUs.
 
 The intel-compute-runtime, beignet, or intel-ocl package can be added to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.impure-drivers.packages)
 to enable OpenCL support. For example, for Gen8 and later GPUs, the following
 configuration can be used:
 
 ```nix
-hardware.opengl.extraPackages = [
+hardware.impure-drivers.packages = [
   intel-compute-runtime
 ];
 ```
@@ -88,7 +88,7 @@ compute API for GPUs. It is used directly by games or indirectly though
 compatibility layers like
 [DXVK](https://github.com/doitsujin/dxvk/wiki).
 
-By default, if [](#opt-hardware.opengl.driSupport)
+By default, if [](#opt-hardware.impure-drivers.opengl.driSupport)
 is enabled, mesa is installed and provides Vulkan for supported hardware.
 
 Similar to OpenCL, Vulkan drivers are loaded through the *Installable
@@ -108,7 +108,7 @@ $ export \
 ```
 
 The second mechanism is to add the Vulkan driver package to
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.impure-drivers.packages).
 This links the ICD file under `/run/opengl-driver`, where it will be
 visible to the ICD loader.
 
@@ -138,7 +138,7 @@ Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
 supported through either radv, which is part of mesa, or the amdvlk
 package. Adding the amdvlk package to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.impure-drivers.packages)
 makes amdvlk the default driver and hides radv and lavapipe from the device list.
 A specific driver can be forced as follows:
 
@@ -167,7 +167,7 @@ graphics hardware acceleration capabilities for video processing.
 
 VA-API drivers are loaded by `libva`. The version in nixpkgs is built to search
 the opengl driver path, so drivers can be installed in
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.impure-drivers.packages).
 
 VA-API can be tested using:
 
