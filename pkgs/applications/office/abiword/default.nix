@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , gtk3
 , fribidi
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
     hash = "sha256-ElckfplwUI1tFFbT4zDNGQnEtCsl4PChvDJSbW86IbQ=";
   };
+
+  patches = [
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/AbiWord/-/commit/2a06be6a10a0718f8a3d8e00c317f5042c99a467.patch";
+      hash = "sha256-vfh81tGXe9dgnjcAtoWHOK8CtW7MZ75FFjnfKTkiKkk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

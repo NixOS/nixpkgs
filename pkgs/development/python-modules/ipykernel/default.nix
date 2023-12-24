@@ -1,14 +1,21 @@
 { lib
+, stdenv
 , buildPythonPackage
 , callPackage
 , fetchPypi
 , hatchling
 , pythonOlder
+, appnope
 , comm
+, debugpy
 , ipython
 , jupyter-client
+, jupyter-core
+, matplotlib-inline
+, nest-asyncio
 , packaging
 , psutil
+, pyzmq
 , tornado
 , traitlets
 }:
@@ -36,12 +43,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     comm
+    debugpy
     ipython
     jupyter-client
+    jupyter-core
+    matplotlib-inline
+    nest-asyncio
     packaging
     psutil
+    pyzmq
     tornado
     traitlets
+  ] ++ lib.optionals stdenv.isDarwin [
+    appnope
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
