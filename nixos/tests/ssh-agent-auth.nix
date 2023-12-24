@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     name = "ssh-agent-auth";
     meta.maintainers = with lib.maintainers; [ nicoo ];
 
-    nodes.sudoVM = { lib, ... }: {
+    nodes = let nodeConfig = n: { ... }: {
       users.users = {
         admin = {
           isNormalUser = true;
@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       };
 
       security.pam.enableSSHAgentAuth = true;
-      security.sudo = {
+      security.${lib.replaceStrings [ "_" ] [ "-" ] n} = {
         enable = true;
         wheelNeedsPassword = true;  # We are checking `pam_ssh_agent_auth(8)` works for a sudoer
       };
@@ -24,6 +24,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       # Necessary for pam_ssh_agent_auth  >_>'
       services.openssh.enable = true;
     };
+    in lib.genAttrs [ "sudo" "sudo_rs" ] nodeConfig;
 
     testScript = let
       privateKeyPath = "/home/admin/.ssh/id_ecdsa";
@@ -36,13 +37,15 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         ${lib.getExe pkgs.faketty} sudo -u foo -- id -un
       '';
     in ''
-      sudoVM.copy_from_host("${snakeOilPrivateKey}", "${privateKeyPath}")
-      sudoVM.succeed("chmod -R 0700 /home/admin")
-      sudoVM.succeed("chown -R admin:users /home/admin")
+      for vm in (sudo, sudo_rs):
+        sudo_impl = vm.name.replace("_", "-")
+        with subtest(f"wheel user can auth with ssh-agent for {sudo_impl}"):
+            vm.copy_from_host("${snakeOilPrivateKey}", "${privateKeyPath}")
+            vm.succeed("chmod -R 0700 /home/admin")
+            vm.succeed("chown -R admin:users /home/admin")
 
-      with subtest("sudoer can auth through pam_ssh_agent_auth(8)"):
-          # Run `userScript` in an environment with an SSH-agent available
-          assert sudoVM.succeed("sudo -u admin -- ssh-agent ${userScript} 2>&1").strip() == "foo"
+            # Run `userScript` in an environment with an SSH-agent available
+            assert vm.succeed("sudo -u admin -- ssh-agent ${userScript} 2>&1").strip() == "foo"
     '';
   }
 )
