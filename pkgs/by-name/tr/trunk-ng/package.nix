@@ -1,26 +1,26 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config
-, openssl, libiconv, CoreServices, Security }:
+, openssl, libiconv, CoreServices, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk-ng";
-  version = "0.17.11";
+  version = "0.17.16";
 
   src = fetchFromGitHub {
     owner = "ctron";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-ZaSWfuz0w9bkilpDv4EAt6gn6ZdKOLTYJlJMQqtZAwY=";
+    hash = "sha256-SnE0z9Wa4gtX/ts0vG9pYnnxumILHTSV9/tVYkCHFck=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = if stdenv.isDarwin
-    then [ libiconv CoreServices Security ]
+    then [ libiconv CoreServices Security SystemConfiguration ]
     else [ openssl ];
 
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-O3e8v0r76VeMYODah2RYTmwr9WNAX+HPhYVmDuP2gfg=";
+  cargoHash = "sha256-AivISmT/r8xa/vSXUN8sU7z67t1hcyMQM+t6oXmIOhU=";
 
   meta = with lib; {
     homepage = "https://github.com/ctron/trunk";
