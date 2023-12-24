@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gomods";
-    repo = pname;
+    repo = "athens";
     rev = "v${version}";
     hash = "sha256-27BBPDK5lGwEFsgLf+/lE9CM8g1AbGUgM1iOL7XZqsU=";
   };
@@ -19,7 +19,6 @@ buildGoModule rec {
 
   CGO_ENABLED = "0";
   ldflags = [ "-s" "-w" "-buildid=" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
-  flags = [ "-trimpath" ];
 
   subPackages = [ "cmd/proxy" ];
 
