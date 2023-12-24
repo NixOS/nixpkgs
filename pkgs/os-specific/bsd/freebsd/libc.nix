@@ -57,6 +57,8 @@ mkDerivation rec {
     "lib/ncurses"
     "contrib/ncurses"
     "lib/Makefile.inc"
+  ] ++ lib.optionals (stdenv.hostPlatform.isx86_32) [
+    "lib/libssp_nonshared"
   ];
 
   patches = [
@@ -114,6 +116,11 @@ mkDerivation rec {
 
   NO_FSCHG = "yes";
 
+  preBuild = lib.optionalString (stdenv.hostPlatform.isx86_32) ''
+    make -C $BSDSRCDIR/lib/libssp_nonshared $makeFlags
+    make -C $BSDSRCDIR/lib/libssp_nonshared $makeFlags install
+  '';
+
   postInstall = ''
     pushd ${include}
     find . -type d -exec mkdir -p $out/\{} \;
@@ -166,10 +173,17 @@ mkDerivation rec {
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
 
+  '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
+    $CC -c $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.c -o $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.o
+    ORIG_NIX_LDFLAGS="$NIX_LDFLAGS"
+    NIX_LDFLAGS+=" $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.o"
+  '' + ''
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
     rm -f $out/libexec/ld-elf.so.1
     mv $out/bin/ld-elf.so.1 $out/libexec
+  '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
+    NIX_LDFLAGS="$ORIG_NIX_LDFLAGS"
   '' + lib.optionalString (stdenv.buildPlatform.isFreeBSD) ''
     make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags
     make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install

@@ -1,6 +1,6 @@
 {mkDerivation, buildPackages, buildFreebsd, hostArchBsd, patchesRoot, ... }:
 mkDerivation (let
-    cfg = "MINIMAL";
+    cfg = "GENERIC";
   in rec {
     path = "sys";
     extraPaths = ["include"];
@@ -35,6 +35,10 @@ mkDerivation (let
     CWARNEXTRA = "-Wno-error=shift-negative-value -Wno-address-of-packed-member";
 
     MK_CTF = "no";
+    hardeningDisable = [
+      "pic"  # generates relocations the linker can't handle
+      "stackprotector"  # generates stack protection for the function generating the stack canary
+    ];
 
     KODIR = "${builtins.placeholder "out"}/kernel";
     KMODDIR = "${builtins.placeholder "out"}/kernel";

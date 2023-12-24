@@ -1,0 +1,10 @@
+--- a/stand/defs.mk	2023-12-21 23:12:57.029641477 -0800
++++ b/stand/defs.mk	2023-12-21 23:13:37.089943579 -0800
+@@ -132,6 +132,7 @@
+ # and activate it when DO32 is explicitly defined to be 1.
+ .if ${MACHINE_ARCH} == "amd64" && ${DO32:U0} == 1
+ CFLAGS+=	-m32
++LDFLAGS+=	-L${LIBS32}
+ # LD_FLAGS is passed directly to ${LD}, not via ${CC}:
+ LD_FLAGS+=	-m elf_i386_fbsd
+ AFLAGS+=	--32

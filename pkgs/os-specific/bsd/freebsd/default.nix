@@ -1,7 +1,7 @@
-{ stdenv, llvmPackages, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
+{ stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
 lib.makeScope newScope (self: with self; {
-  stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
-  #inherit stdenv;
+  inherit stdenv;
+  #stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
@@ -89,7 +89,16 @@ lib.makeScope newScope (self: with self; {
   libsbuf = callPackage ./libsbuf.nix {};
   file2c = callPackage ./file2c.nix {};
   bintrans = callPackage ./bintrans.nix {};
+  vtfontcvt = callPackage ./vtfontcvt.nix {};
+  btxld = callPackage ./btxld.nix {};
+  mkimg = callPackage ./mkimg.nix {};
+  makefs = callPackage ./makefs.nix {};
+  librt = callPackage ./librt.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
+
+  # bootloader
+  stand = callPackage ./stand.nix {};
+  stand-efi = callPackage ./stand-efi.nix {};
 })

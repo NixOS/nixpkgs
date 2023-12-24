@@ -102,6 +102,8 @@ stdenv.mkDerivation {
     # disable an optimized implementation of asan checks that fails on bsd/gcc and compiles incorrectly on bsd/clang
     # See: https://github.com/llvm/llvm-project/issues/57086
     ./asan-offset.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    ./freebsd-i386.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

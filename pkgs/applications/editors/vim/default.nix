@@ -19,7 +19,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [ ncurses bash gawk ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ]
+  ;
 
   strictDeps = true;
 
@@ -31,12 +32,12 @@ stdenv.mkDerivation {
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"
     "vim_cv_tgetent=zero" # it does on native anyway
-    "vim_cv_timer_create=yes"
     "vim_cv_tty_group=tty"
     "vim_cv_tty_mode=0660"
     "vim_cv_getcwd_broken=no"
     "vim_cv_stat_ignores_slash=yes"
     "vim_cv_memmove_handles_overlap=yes"
+    "vim_cv_timer_create=${if stdenv.hostPlatform.isFreeBSD then "no" else "yes"}"
   ];
 
   # which.sh is used to for vim's own shebang patching, so make it find

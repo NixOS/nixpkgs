@@ -1,6 +1,8 @@
-{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, ... }:
+{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, patchesRoot, ... }:
 mkDerivation {
   path = "contrib/bmake";
+  extraPaths = [ "share/mk" ]
+    ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "tools/build/mk";
 
   buildInputs = [];
   nativeBuildInputs = [ bsdSetupHook freebsdSetupHook ];
@@ -8,6 +10,10 @@ mkDerivation {
   skipIncludesPhase = true;
 
   makeFlags = [];
+
+  patches = [
+    /${patchesRoot}/bmake-no-compiler-rt.patch
+  ];
 
   postPatch = ''
     patchShebangs configure
@@ -84,7 +90,4 @@ mkDerivation {
       substituteInPlace "$out/share/mk/$m" --replace '../../../share/mk' '../mk.orig'
     done
   '';
-
-  extraPaths = [ "share/mk" ]
-    ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "tools/build/mk";
 }

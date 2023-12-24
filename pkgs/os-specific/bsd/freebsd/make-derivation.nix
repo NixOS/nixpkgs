@@ -1,4 +1,4 @@
-{ lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, overrideCC, ... }:
+{ lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, ... }:
 lib.makeOverridable (attrs: let
   #crossLibcStdenv' = crossLibcStdenv // {
   #  cc = crossLibcStdenv.cc.override {
