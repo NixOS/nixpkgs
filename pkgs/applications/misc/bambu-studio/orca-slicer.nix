@@ -10,7 +10,7 @@ let
     src = fetchFromGitHub {
       owner = "SoftFever";
       repo = "OrcaSlicer";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-3aIVi7Wsit4vpFrGdqe7DUEC6HieWAXCdAADVtB5HKc=";
     };
 
