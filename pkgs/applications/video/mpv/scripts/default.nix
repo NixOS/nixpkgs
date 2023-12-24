@@ -14,8 +14,8 @@ let
     scriptPath = "share/mpv/scripts/${scriptName}";
     fullScriptPath = "${drv}/${scriptPath}";
 
-  in drv.override { passthru.tests = unionOfDisjoints [
-    (drv.passthru.tests or {})
+  in drv.overrideAttrs (old: { passthru = (old.passthru or {}) // { tests = unionOfDisjoints [
+    (old.passthru.tests or {})
 
     {
       scriptName-is-valid = runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid" {
@@ -53,7 +53,7 @@ let
         fi
       '';
     })
-  ]; };
+  ]; }; });
 in
 
 lib.recurseIntoAttrs
