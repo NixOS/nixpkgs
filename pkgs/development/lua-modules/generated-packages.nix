@@ -623,6 +623,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+image-nvim = callPackage(
+{ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder, magick }:
+buildLuarocksPackage {
+  pname = "image.nvim";
+  version = "1.2.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/image.nvim-1.2.0-1.rockspec";
+    sha256 = "0732fk2p2v9f72689jms4pdjsx9m7vdi1ib65jfz7q4lv9pdx508";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/3rd/image.nvim/archive/v1.2.0.zip";
+    sha256 = "1v4db60yykjajabmf12zjcg47bb814scjrig0wvn4yc11isinymg";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua magick ];
+
+  meta = {
+    homepage = "https://github.com/3rd/image.nvim";
+    description = "🖼️ Bringing images to Neovim.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 inspect = callPackage({ buildLuarocksPackage, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "inspect";
