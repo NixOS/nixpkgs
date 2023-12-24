@@ -1,0 +1,23 @@
+diff --git a/sync_music/replaygain.py b/sync_music/replaygain.py
+index 4ea2662..5dc021d 100644
+--- a/sync_music/replaygain.py
++++ b/sync_music/replaygain.py
+@@ -62,8 +62,16 @@ class ReplayGain:
+         tag_type = "album" if album_gain else "track"
+         try:
+             if isinstance(in_file, mutagen.mp3.MP3):
+-                gain = in_file.tags[f"TXXX:replaygain_{tag_type}_gain"].text[0]
+-                peak = in_file.tags[f"TXXX:replaygain_{tag_type}_peak"].text[0]
++                gain_tag = f"TXXX:replaygain_{tag_type}_gain"
++                peak_tag = f"TXXX:replaygain_{tag_type}_peak"
++                if gain_tag in in_file.tags:
++                    gain = in_file.tags[gain_tag].text[0]
++                else:
++                    gain = in_file.tags[gain_tag.upper()].text[0]
++                if peak_tag in in_file.tags:
++                    peak = in_file.tags[peak_tag].text[0]
++                else:
++                    peak = in_file.tags[peak_tag.upper()].text[0]
+             elif isinstance(in_file, (mutagen.flac.FLAC, mutagen.oggvorbis.OggVorbis)):
+                 gain = in_file.tags[f"replaygain_{tag_type}_gain"][0]
+                 peak = in_file.tags[f"replaygain_{tag_type}_peak"][0]
