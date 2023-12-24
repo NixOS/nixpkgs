@@ -178,7 +178,11 @@ let
 
     buildPhase = ''
       runHook preBuild
-      dart pub deps --json | jq .packages > $out
+      if [ -e ${dart}/bin/flutter ]; then
+        flutter pub deps --json | jq .packages > $out
+      else
+        dart pub deps --json | jq .packages > $out
+      fi
       runHook postBuild
     '';
 
