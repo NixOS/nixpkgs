@@ -219,7 +219,7 @@ let
       isJetsonBuild =
         let
           requestedJetsonDevices =
-            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap})
+            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap} or false)
               cudaCapabilities;
           requestedNonJetsonDevices =
             lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))
