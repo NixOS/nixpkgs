@@ -5,20 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-eJO+1fCNzqjTdGrPlhIrHc3UimkJOydRqTq49IN+Iwo=";
+    sha256 = "sha256-GjNZ7ouKgpcb1+nuq+Q/WM5rSkeT2F+xb5exAOTt7po=";
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lsp-plugins/lsp-dsp-lib/commit/58c3f985f009c84347fa91236f164a9e47aafa93.patch";
-      stripLen = 1;
-      extraPrefix = "modules/lsp-dsp-lib/";
-      hash = "sha256-pCLucLijXOgp69xNjSRCRxgVoQziT0YiHLnQGbkefqE=";
-    })
-  ];
 
   outputs = [ "out" "dev" "doc" ];
 
