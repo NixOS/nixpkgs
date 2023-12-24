@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dmsr7whxcxwnlvl1x4s3bqr5cr6q5ssb28vqi67w5hj4sshisry";
   };
 
+  patches = [ ./hostlist.patch ];
+
   buildPhase = ''
       gcc -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" \
           -g -o slurm-spank-x11 slurm-spank-x11.c
