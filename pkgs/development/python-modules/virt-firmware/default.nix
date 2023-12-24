@@ -30,6 +30,7 @@ buildPythonPackage rec {
   pytestFlagsArray = ["tests/tests.py"];
 
   propagatedBuildInputs = [
+    setuptools
     cryptography
     pefile
   ];
