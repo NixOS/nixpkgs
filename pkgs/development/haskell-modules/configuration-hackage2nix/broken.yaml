@@ -829,7 +829,6 @@ broken-packages:
   - commodities # failure in job https://hydra.nixos.org/build/233239851 at 2023-09-02
   - Compactable # failure in job https://hydra.nixos.org/build/233227285 at 2023-09-02
   - compactable # failure in job https://hydra.nixos.org/build/233228106 at 2023-09-02
-  - compact # failure in job https://hydra.nixos.org/build/233203421 at 2023-09-02
   - compact-list # failure in job https://hydra.nixos.org/build/233241961 at 2023-09-02
   - compact-map # failure in job https://hydra.nixos.org/build/233201665 at 2023-09-02
   - compact-sequences # failure in job https://hydra.nixos.org/build/233208553 at 2023-09-02
