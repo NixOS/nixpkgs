@@ -21,7 +21,7 @@ buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
     hash = "sha256-1cuPFEBUoqEQ5mcr1RLksV1bG42YecGSuXI1Ne+3C48=";
   };
 
