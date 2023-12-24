@@ -11,7 +11,7 @@
   mpfr,
   pcre2,
   pkg-config,
-  python3,
+  python3Packages,
   stdenv,
 }:
 
@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     libxslt
     pkg-config
-    python3
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
   ];
 
   buildInputs = [
@@ -51,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  postInstall = ''
+    substituteInPlace $out/${python3Packages.python.sitePackages}/bytesize/bytesize.py \
+      --replace-fail 'CDLL("libbytesize.so.1")' "CDLL('$out/lib/libbytesize.so.1')"
+  '';
+
+  pythonImportsCheck = [ "bytesize" ];
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
