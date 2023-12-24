@@ -41,6 +41,27 @@ in
         '';
       };
 
+      cachePath = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = cfg.manPath;
+        defaultText = lib.literalExpression "config.documentation.man.mandoc.manPath";
+        example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
+        description = ''
+          Change the paths where mandoc {manpage}`makewhatis(8)`generates the
+          manual page index caches. {option}`documentation.man.generateCaches`
+          should be enabled to allow cache generation. This list should only
+          include the paths to manpages installed in the system configuration,
+          i. e. /run/current-system/sw/share/man. {manpage}`makewhatis(8)`
+          creates a database in each directory using the files
+          `mansection/[arch/]title.section` and `catsection/[arch/]title.0`
+          in it. If a directory contains no manual pages, no database is
+          created in that directory.
+          This option only needs to be set manually if extra paths should be
+          indexed or {option}`documentation.man.manPath` contains paths that
+          can't be indexed.
+        '';
+      };
+
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.mandoc;
@@ -178,12 +199,7 @@ in
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
-        for man_path in ${
-          lib.concatMapStringsSep " " (path:
-            "$out/" + lib.escapeShellArg path
-            ) cfg.manPath} ${lib.concatMapStringsSep " " (path:
-            lib.escapeShellArg path) cfg.settings.manpath
-          }
+        for man_path in ${lib.concatMapStringsSep " " (path: "$out/" + lib.escapeShellArg path) cfg.cachePath}
         do
           [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
         done
