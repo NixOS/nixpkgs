@@ -8,6 +8,7 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
+, autoAddDriverRunpathHook
 
 , rocmSupport ? config.rocmSupport
 , rocmPackages ? { }
@@ -48,7 +49,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optionals blasSupport [ pkg-config ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
 
-    cudaPackages.autoAddDriverRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = lib.optionals effectiveStdenv.isDarwin

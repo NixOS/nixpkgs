@@ -42,6 +42,7 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+, autoAddDriverRunpathHook
 }:
 stdenv.mkDerivation rec {
   pname = "sunshine";
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddDriverRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = [

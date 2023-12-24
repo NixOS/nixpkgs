@@ -51,6 +51,10 @@ let
         cudaOlder = strings.versionOlder cudaVersion;
         cudaAtLeast = strings.versionAtLeast cudaVersion;
 
+        # autoAddDriverRunpathHook and autoAddOpenGLRunpathHook are in top-level now.
+        # But lets provide compatibility for existing pacakges here
+        inherit (pkgs) autoAddDriverRunpathHook autoAddOpenGLRunpathHook;
+
         # Maintain a reference to the final cudaPackages.
         # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
         # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
