@@ -70,7 +70,7 @@ in
         ''}
 
         ln -fs "${configFile}" config.json
-        rm frontend; ln -fs "${cfg.package.src}/frontend" frontend
+        rm frontend || ln -fs "${cfg.package.src}/frontend" frontend
         exec ${cfg.package}/bin/matrix-synapse-diskspace-janitor
       '';
 
