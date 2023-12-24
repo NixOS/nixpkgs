@@ -6,6 +6,9 @@ let
 
   cfg = config.hardware.impure-drivers;
 
+  impurePath = pkgs.addDriverRunpath.driverLink;
+  impurePath32 = pkgs.pkgsi686Linux.addDriverRunpath.driverLink;
+
   kernelPackages = config.boot.kernelPackages;
 
   videoDrivers = config.services.xserver.videoDrivers;
@@ -163,19 +166,19 @@ in
     ];
 
     systemd.tmpfiles.rules = [
-      "L+ /run/opengl-driver - - - - ${package}"
+      "L+ ${impurePath} - - - - ${package}"
       (
         if pkgs.stdenv.isi686 then
-          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+          "L+ ${impurePath32} - - - - ${impurePath}"
         else if cfg.opengl.driSupport32Bit then
-          "L+ /run/opengl-driver-32 - - - - ${package32}"
+          "L+ ${impurePath32} - - - - ${package32}"
         else
-          "r /run/opengl-driver-32"
+          "r ${impurePath32}"
       )
     ];
 
     environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
-      ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
+      ([ "${impurePath}/lib" ] ++ optionals cfg.driSupport32Bit ["${impurePath32}/lib"]);
 
     hardware.impure-drivers.opengl.package = mkDefault pkgs.mesa.drivers;
     hardware.impure-drivers.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa.drivers;
