@@ -41,12 +41,12 @@ let
   # This becomes the main config file for Prometheus
   promConfig = {
     global = filterValidPrometheus cfg.globalConfig;
-    rule_files = map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
-      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
-    ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
+    rule_files = optionals (!(cfg.enableAgentMode)) (map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
+      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
+    ]));
     alerting = {
       inherit (cfg) alertmanagers;
     };
@@ -62,15 +62,20 @@ let
     promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${
       if cfg.enableReload
       then "/etc/prometheus/prometheus.yaml"
       else prometheusYml
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
-    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-  ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
+  ] ++ (
+    if (cfg.enableAgentMode) then [
+      "--enable-feature=agent"
+    ] else [
+       "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity }"
+       "--storage.tsdb.path=${workingDir}/data/"
+    ])
+    ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
     ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
@@ -1618,6 +1623,8 @@ in
         loading the new configuration.
       '';
     };
+
+    enableAgentMode = mkEnableOption (lib.mdDoc "agent mode");
 
     configText = mkOption {
       type = types.nullOr types.lines;
