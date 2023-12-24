@@ -46,18 +46,7 @@ final: _: {
       {};
 
   # Post 24.11 branch-off, this will throw an error as addOpenGLRunpath will throw one.
-  autoAddOpenGLRunpathHook =
-    final.callPackage
-      (
-        {addOpenGLRunpath, makeSetupHook}:
-        makeSetupHook
-          {
-            name = "auto-add-opengl-runpath-hook";
-            propagatedBuildInputs = [addOpenGLRunpath];
-          }
-          ./auto-add-opengl-runpath-hook.sh
-      )
-      {};
+  autoAddOpenGLRunpathHook = final.lib.warn "autoAddOpenGLRunpathHook has been deprecated in favor of autoAddDriverRunpathHook" final.autoAddDriverRunpathHook;
 
   # autoAddCudaCompatRunpathHook hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
