@@ -11,10 +11,10 @@ index b612e6e..371f966 100644
              "serial": 0,
              "flags": [],
              "name": "Background_Uris",
-diff --git a/src/service/dbus/deepinwmfaker.cpp b/src/service/dbus/deepinwmfaker.cpp
+diff --git a/fakewm/dbus/deepinwmfaker.cpp b/fakewm/dbus/deepinwmfaker.cpp
 index 5d455fa..40ec608 100644
---- a/src/service/dbus/deepinwmfaker.cpp
-+++ b/src/service/dbus/deepinwmfaker.cpp
+--- a/fakewm/dbus/deepinwmfaker.cpp
++++ b/fakewm/dbus/deepinwmfaker.cpp
 @@ -54,13 +54,13 @@ Q_GLOBAL_STATIC_WITH_ARGS(QGSettings, _gsettings_dde_zone, ("com.deepin.dde.zone
  
  #define KWinDBusCompositorInterface "org.kde.kwin.Compositing"
