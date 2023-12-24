@@ -5,15 +5,18 @@
 , openssl
 , pkg-config
 , Security
-}:
+}: let
 
-rustPlatform.buildRustPackage rec {
-  pname = "tmux-sessionizer";
+  name = "tmux-sessionizer";
   version = "0.3.0";
+
+in rustPlatform.buildRustPackage {
+  pname = name;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
-    repo = pname;
+    repo = name;
     rev = "v${version}";
     hash = "sha256-ZascTDIV9MqPPtK0CHSXUW5gIk/zjRhUB0xATcu7ICM=";
   };
