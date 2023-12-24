@@ -1,9 +1,6 @@
 { lib, fetchFromGitHub, makeDesktopItem, bambu-studio }:
 let
-
-
-  orca-slicer = bambu-studio.overrideAttrs (finalAttrs: previousAttrs: rec {
-
+  orca-slicer = bambu-studio.overrideAttrs (finalAttrs: previousAttrs: {
     version = "1.8.1";
     pname = "orca-slicer";
 
