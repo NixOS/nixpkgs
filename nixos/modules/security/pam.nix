@@ -1456,6 +1456,13 @@ in
           `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
         '';
       }
+      {
+        assertion = config.security.pam.enableSSHAgentAuth -> config.services.openssh.authorizedKeysFiles != [];
+        message = ''
+          `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
+          Did you forget to set `services.openssh.enable` ?
+        '';
+      }
     ];
 
     environment.systemPackages =
