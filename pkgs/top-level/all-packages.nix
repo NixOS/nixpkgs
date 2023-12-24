@@ -5748,6 +5748,8 @@ with pkgs;
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
+  hyprsome = callPackage ../applications/window-managers/hyprwm/hyprsome { };
+
   hysteria = callPackage ../tools/networking/hysteria { };
 
   hyx = callPackage ../tools/text/hyx { };
