@@ -661,7 +661,7 @@ in
                     || dmConf.lightdm.enable);
       in mkIf (noDmUsed) (mkDefault false);
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.impure-drivers.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
@@ -759,8 +759,8 @@ in
         restartIfChanged = false;
 
         environment =
-          optionalAttrs config.hardware.opengl.setLdLibraryPath
-            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
+          optionalAttrs config.impure-drivers.setLdLibraryPath
+            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addDriverRunpath.driverLink ]; }
           // cfg.displayManager.job.environment;
 
         preStart =
