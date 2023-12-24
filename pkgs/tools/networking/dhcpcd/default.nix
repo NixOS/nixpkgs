@@ -6,7 +6,6 @@
 , runtimeShellPackage
 , runtimeShell
 , nixosTests
-, enablePrivSep ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,17 +32,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ]
-  ++ (
-    if ! enablePrivSep
-    then [ "--disable-privsep" ]
-    else [
-      "--enable-privsep"
-      # dhcpcd disables privsep if it can't find the default user,
-      # so we explicitly specify a user.
-      "--privsepuser=dhcpcd"
-    ]
-  );
+    "--disable-privsep"
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -54,9 +44,8 @@ stdenv.mkDerivation rec {
   # Check that the udev plugin got built.
   postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
-  passthru = {
-    inherit enablePrivSep;
-    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  passthru.tests = {
+    inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
   };
 
   meta = with lib; {
