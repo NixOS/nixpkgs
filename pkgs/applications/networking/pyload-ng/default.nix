@@ -13,6 +13,9 @@ python3.pkgs.buildPythonApplication rec {
   patches = [
     # Makes it possible to change the default username/password in the module
     ./declarative-default-user.patch
+    # Makes it possible to change the configuration through environment variables
+    # in the NixOS module (aimed mostly at listen address/port)
+    ./declarative-env-config.patch
   ];
 
   postPatch = ''
