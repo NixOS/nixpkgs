@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unl0kr";
-  version = "2.0.0";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "unl0kr";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-KPP4Ol1GCAWqdQYlNtKQD/jx8A/xuHdvKjcocPMqWa0=";
+    hash = "sha256-Q7Omunv7stL9zKDrdDRGc2wrh0wNUdrroAAwk/RPXfE=";
   };
 
   nativeBuildInputs = [
