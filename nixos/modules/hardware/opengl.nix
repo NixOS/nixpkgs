@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.hardware.opengl;
+  cfg = config.hardware.impure-drivers;
 
   kernelPackages = config.boot.kernelPackages;
 
@@ -12,12 +12,12 @@ let
 
   package = pkgs.buildEnv {
     name = "opengl-drivers";
-    paths = [ cfg.package ] ++ cfg.extraPackages;
+    paths = cfg.packages;
   };
 
   package32 = pkgs.buildEnv {
     name = "opengl-drivers-32bit";
-    paths = [ cfg.package32 ] ++ cfg.extraPackages32;
+    paths = cfg.packages32;
   };
 
 in
@@ -25,14 +25,66 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "impure-drivers" "packages" ])
     (mkRemovedOptionModule [ "hardware" "opengl" "s3tcSupport" ] "S3TC support is now always enabled in Mesa.")
+
+    # The old option `hardware.opengl.enable` corresponds to `hardware.impure-drivers.opengl.enable` (defaults to `true`).
+    # However, in order support the transition of the systems that have been setting `hardware.opengl.enable`,
+    # we need to translate it into `hardware.impure-drivers.enable` (defaults to `false`)
+    (mkRenamedOptionModule [ "hardware" "opengl" "enable" ] [ "hardware" "impure-drivers" "enable" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "extraPackages32" ] [ "hardware" "impure-drivers" "packages32" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "extraPackages" ] [ "hardware" "impure-drivers" "packages" ])
+
+    # Since we've treated `hardware.opengl.enable` specially, we cannot just use
+    # `(mkRenamedOptionModule [ "hardware" "opengl" ] [ "hardware" "impure-drivers" "opengl" ])`.
+    (mkRenamedOptionModule [ "hardware" "opengl" "driSupport32Bit" ] [ "hardware" "impure-drivers" "opengl" "driSupport32Bit" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "driSupport" ] [ "hardware" "impure-drivers" "opengl" "driSupport" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "package32" ] [ "hardware" "impure-drivers" "opengl" "package32" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "package" ] [ "hardware" "impure-drivers" "opengl" "package" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "setLdLibraryPath" ] [ "hardware" "impure-drivers" "setLdLibraryPath" ])
   ];
 
   options = {
 
-    hardware.opengl = {
-      enable = mkOption {
+    hardware.impure-drivers = {
+
+      enable = mkEnableOption (lib.mdDoc ''
+        Deploy user-space drivers in the impure location expected by Nixpkgs.
+        This may be necessary to use graphical (OpenGL, Vulkan) or
+        hardware-acclerated (CUDA) applications from Nixpkgs.
+
+        ::: {.note}
+        In the current implementation, this will create a directory at
+        `/run/opengl-driver/lib` (`pkgs.addDriverRunpath.driverLink`),
+        populated with symlinks to the enabled driver libraries.
+        :::
+      '');
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver config.hardware.nvidia.package ]";
+        description = lib.mdDoc ''
+          Packages to deploy in the user-space drivers' impure location.
+          This can be used to add e.g. OpenCL, VA-API/VDPAU, or CUDA drivers.
+
+          ::: {.note}
+          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
+          :::
+        '';
+      };
+
+      packages32 = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
+        description = lib.mdDoc ''
+          Packages to deploy in the 32-bit user-space drivers' impure location.
+          Used when {option}`driSupport32Bit` is set. Cf. the documentation for [](#opt-hardware.impure-drivers.packages).
+        '';
+      };
+
+      opengl.enable = mkOption {
         description = lib.mdDoc ''
           Whether to enable OpenGL drivers. This is needed to enable
           OpenGL support in X11 systems, as well as for Wayland compositors
@@ -43,10 +95,10 @@ in
           programs.sway.enable.
         '';
         type = types.bool;
-        default = false;
+        default = true;
       };
 
-      driSupport = mkOption {
+      opengl.driSupport = mkOption {
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
@@ -55,7 +107,7 @@ in
         '';
       };
 
-      driSupport32Bit = mkOption {
+      opengl.driSupport32Bit = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
@@ -66,7 +118,7 @@ in
         '';
       };
 
-      package = mkOption {
+      opengl.package = mkOption {
         type = types.package;
         internal = true;
         description = lib.mdDoc ''
@@ -74,41 +126,13 @@ in
         '';
       };
 
-      package32 = mkOption {
+      opengl.package32 = mkOption {
         type = types.package;
         internal = true;
         description = lib.mdDoc ''
           The package that provides the 32-bit OpenGL implementation on
           64-bit systems. Used when {option}`driSupport32Bit` is
           set.
-        '';
-      };
-
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        example = literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver ]";
-        description = lib.mdDoc ''
-          Additional packages to add to OpenGL drivers.
-          This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
-
-          ::: {.note}
-          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
-          :::
-        '';
-      };
-
-      extraPackages32 = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
-        description = lib.mdDoc ''
-          Additional packages to add to 32-bit OpenGL drivers on 64-bit systems.
-          Used when {option}`driSupport32Bit` is set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
-
-          ::: {.note}
-          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
-          :::
         '';
       };
 
@@ -129,11 +153,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
+    assertions = mkIf cfg.opengl.enable [
+      { assertion = cfg.opengl.driSupport32Bit -> pkgs.stdenv.isx86_64;
         message = "Option driSupport32Bit only makes sense on a 64-bit system.";
       }
-      { assertion = cfg.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
+      { assertion = cfg.opengl.driSupport32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
         message = "Option driSupport32Bit requires a kernel that supports 32bit emulation";
       }
     ];
@@ -143,7 +167,7 @@ in
       (
         if pkgs.stdenv.isi686 then
           "L+ /run/opengl-driver-32 - - - - opengl-driver"
-        else if cfg.driSupport32Bit then
+        else if cfg.opengl.driSupport32Bit then
           "L+ /run/opengl-driver-32 - - - - ${package32}"
         else
           "r /run/opengl-driver-32"
@@ -153,8 +177,11 @@ in
     environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
       ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
 
-    hardware.opengl.package = mkDefault pkgs.mesa.drivers;
-    hardware.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+    hardware.impure-drivers.opengl.package = mkDefault pkgs.mesa.drivers;
+    hardware.impure-drivers.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+
+    hardware.impure-drivers.packages = mkIf cfg.opengl.enable [ cfg.opengl.package ];
+    hardware.impure-drivers.packages32 = mkIf cfg.opengl.enable [ cfg.opengl.package32 ];
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };
