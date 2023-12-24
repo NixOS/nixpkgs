@@ -1,26 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
+, hatch-vcs
 , pytest
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
   version = "0.9.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pytest_repeat";
+    inherit version;
     hash = "sha256-/9ODbfzWe7JwvsZIszDiC+N9KWZEjEFIxAktHoq6gYU=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   buildInputs = [
