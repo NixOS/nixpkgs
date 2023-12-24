@@ -57,6 +57,8 @@
 , xxd
 , zathura
 , zsh
+, # codeium-nvim dependencies
+  codeium
 , # command-t dependencies
   getconf
 , ruby
@@ -311,6 +313,19 @@
     pname = "coc-nginx";
     inherit (nodePackages."@yaegassy/coc-nginx") version meta;
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
+  };
+
+  codeium-nvim = super.codeium-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
+    buildPhase = ''
+      cat << EOF > lua/codeium/installation_defaults.lua
+      return {
+        tools = {
+          language_server = "${codeium}/bin/codeium_language_server"
+        };
+      };
+      EOF
+    '';
   };
 
   command-t = super.command-t.overrideAttrs {
