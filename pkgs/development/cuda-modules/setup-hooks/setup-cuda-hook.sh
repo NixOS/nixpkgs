@@ -93,26 +93,6 @@ setupCUDAToolkitCompilers() {
     if [[ -z "${dontCompressFatbin-}" ]]; then
         export NVCC_PREPEND_FLAGS+=" -Xfatbin=-compress-all"
     fi
-
-    # CMake's enable_language(CUDA) runs a compiler test and it doesn't account for
-    # CUDAToolkit_ROOT. We have to help it locate libcudart
-    if [[ -z "${nvccDontPrependCudartFlags-}" ]] ; then
-        if [[ ! -v cudaOutputToPath["cuda_cudart-out"] ]] ; then
-            echo "setupCUDAToolkitCompilers: missing cudaPackages.cuda_cudart. This may become an an error in the future" >&2
-            # exit 1
-        fi
-        for pkg in "${!cudaOutputToPath[@]}" ; do
-            [[ ! "$pkg" = cuda_cudart* ]] && continue
-
-            local path="${cudaOutputToPath[$pkg]}"
-            if [[ -d "$path/include" ]] ; then
-                export NVCC_PREPEND_FLAGS+=" -I$path/include"
-            fi
-            if [[ -d "$path/lib" ]] ; then
-                export NVCC_PREPEND_FLAGS+=" -L$path/lib"
-            fi
-        done
-    fi
 }
 preConfigureHooks+=(setupCUDAToolkitCompilers)
 

@@ -779,6 +779,19 @@ in
             ExecStart = "${pkgs.postfix}/bin/postfix start";
             ExecStop = "${pkgs.postfix}/bin/postfix stop";
             ExecReload = "${pkgs.postfix}/bin/postfix reload";
+
+            # Hardening
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectSystem = "full";
+            CapabilityBoundingSet = [ "~CAP_NET_ADMIN CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_MODULE" ];
+            MemoryDenyWriteExecute = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
           };
         };
 

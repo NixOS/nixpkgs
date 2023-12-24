@@ -3,30 +3,28 @@
 , fetchurl
 , pkg-config
 , gnome
-, gtk3
-, wrapGAppsHook
+, gtk4
+, wrapGAppsHook4
 , librsvg
 , gsound
-, clutter-gtk
 , gettext
 , itstool
 , vala
 , libxml2
 , libgee
-, libgnome-games-support
+, libgnome-games-support_2_0
 , meson
 , ninja
 , desktop-file-utils
-, hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-nibbles";
-  version = "3.38.3";
+  version = "4.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l1/eHYPHsVs5Lqx6NZFhKQ/IrrdgXBHnHO4MPDJrXmE=";
+    url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor finalAttrs.version}/gnome-nibbles-${finalAttrs.version}.tar.xz";
+    sha256 = "xrG89vesx0RQAmveV7OONcJJ08K3xC2c/hH4YvPW12I=";
   };
 
   nativeBuildInputs = [
@@ -34,22 +32,19 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
     itstool
     libxml2
     desktop-file-utils
-    hicolor-icon-theme
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     librsvg
     gsound
-    clutter-gtk
-    gnome.adwaita-icon-theme
     libgee
-    libgnome-games-support
+    libgnome-games-support_2_0
   ];
 
   passthru = {
@@ -62,8 +57,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Guide a worm around a maze";
     homepage = "https://wiki.gnome.org/Apps/Nibbles";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})
