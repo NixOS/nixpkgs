@@ -1,8 +1,6 @@
 #!/bin/sh
 
-tupConfigurePhase() {
-    runHook preConfigure
-
+tupConfigure() {
     echo -n CONFIG_TUP_ARCH= >> tup.config
     case "$system" in
     "i686-*")      echo i386 >> tup.config;;
@@ -20,7 +18,11 @@ tupConfigurePhase() {
 
     tup init
     tup generate --verbose tupBuild.sh
+}
 
+tupConfigurePhase() {
+    runHook preConfigure
+    tupConfigure
     runHook postConfigure
 }
 
@@ -28,14 +30,15 @@ if [ -z "${dontUseTupConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=tupConfigurePhase
 fi
 
-
-tupBuildPhase() {
-    runHook preBuild
-
+tupBuild() {
     pushd .
     ./tupBuild.sh
     popd
+}
 
+tupBuildPhase() {
+    runHook preBuild
+    tupBuild
     runHook postBuild
 }
 
