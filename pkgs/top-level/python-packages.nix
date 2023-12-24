@@ -3083,6 +3083,8 @@ self: super: with self; {
 
   django-markup = callPackage ../development/python-modules/django-markup { };
 
+  django-markdownx = callPackage ../development/python-modules/django-markdownx { };
+
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
