@@ -352,10 +352,11 @@ let
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
-        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null))
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
+        ''
           location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
