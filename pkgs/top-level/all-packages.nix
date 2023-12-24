@@ -4050,8 +4050,8 @@ with pkgs;
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   livebook = callPackage ../servers/web-apps/livebook {
-    elixir = elixir_1_15;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_15; });
+    elixir = elixir_1_16;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_16; });
   };
 
   lsix = callPackage ../tools/graphics/lsix { };
