@@ -12,17 +12,12 @@
 (setq large-file-warning-threshold nil)
 
 (defun melpa2nix-build-package-1 (rcp version commit)
-  (let ((source-dir (package-recipe--working-tree rcp)))
-    (unwind-protect
-        (let ((files (package-build-expand-files-spec rcp t)))
-          (cond
-           ((= (length files) 1)
-            (package-build--build-single-file-package
-             rcp version commit files source-dir))
-           ((> (length files) 1)
-            (package-build--build-multi-file-package
-             rcp version commit files source-dir))
-           (t (error "Unable to find files matching recipe patterns")))))))
+  (oset rcp version version)
+  (oset rcp commit commit)
+  (oset rcp time 0)
+  (let ((package-build-checkout-function #'ignore)
+        (package-build-cleanup-function #'ignore))
+    (package-build--package rcp)))
 
 (defun melpa2nix-build-package ()
   (if (not noninteractive)
