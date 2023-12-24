@@ -1711,6 +1711,8 @@ self: super: with self; {
 
   blis = callPackage ../development/python-modules/blis { };
 
+  blivet = callPackage ../development/python-modules/blivet { };
+
   blobfile = callPackage ../development/python-modules/blobfile { };
 
   blockchain = callPackage ../development/python-modules/blockchain { };
