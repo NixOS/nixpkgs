@@ -1,4 +1,4 @@
-{ lib, fetchPypi, python3 }:
+{ lib, fetchPypi, nixosTests, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.5.0b3.dev75";
@@ -43,14 +43,20 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
-    plugins = with python3.pkgs; [
-      beautifulsoup4 # for some plugins
-      colorlog # colorful console logging
-      pillow # for some CAPTCHA plugin
-      send2trash # send some files to trash instead of deleting them
-      slixmpp # XMPP plugin
-    ];
+  passthru = {
+    optional-dependencies = {
+      plugins = with python3.pkgs; [
+        beautifulsoup4 # for some plugins
+        colorlog # colorful console logging
+        pillow # for some CAPTCHA plugin
+        send2trash # send some files to trash instead of deleting them
+        slixmpp # XMPP plugin
+      ];
+    };
+
+    tests = {
+      inherit (nixosTests) pyload;
+    };
   };
 
   meta = with lib; {
