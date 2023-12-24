@@ -1124,13 +1124,13 @@
     "vendorHash": "sha256-iNBM4Y24vDGPKyb5cppSogk145F0/pAFmOzEeiWgfLI="
   },
   "tailscale": {
-    "hash": "sha256-GOeuTjF+nwasO2Fel8FbDvZeTLaz+/HlcZnySxxS2d8=",
+    "hash": "sha256-1OSGJham+oJLQUcSm+Iea9SDM5VhOcE7Bz+ZgxM4Lww=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.13.11",
+    "rev": "v0.13.13",
     "spdx": "MIT",
-    "vendorHash": "sha256-wbSQkw2k/LtbWOcMd8ZnHzzI01H45J18sevQU9Xur2Q="
+    "vendorHash": "sha256-w0S9ACnDNZsEvYEkS2Q/8I2doM3AmgpzmgRXgA7CaTw="
   },
   "talos": {
     "hash": "sha256-aP5hiR+b31+QjVWvNPxYkzijTUnFGpgR3f5XuN1Pzx8=",
