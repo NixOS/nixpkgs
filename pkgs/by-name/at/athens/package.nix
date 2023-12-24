@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, testers
+, athens
 }:
 buildGoModule rec {
   pname = "athens";
@@ -24,6 +26,12 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/proxy $out/bin/athens
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = athens;
+    };
+  };
 
   meta = with lib; {
     description = "A Go module datastore and proxy";
