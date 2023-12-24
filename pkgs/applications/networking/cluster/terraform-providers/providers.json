@@ -1233,13 +1233,13 @@
     "vendorHash": "sha256-5rRWlInDRj7hw4GZqTxfH7Y8tyTvzJgBWA1I5j0EyaI="
   },
   "vcd": {
-    "hash": "sha256-ltdkB9PqmuCs5daRjcThVhy1wIoDW21yBiwtRo/pMss=",
+    "hash": "sha256-TP9COMofx4c2GZ0dQkfopn4iq8ddfV3WwuNjTu6yQnU=",
     "homepage": "https://registry.terraform.io/providers/vmware/vcd",
     "owner": "vmware",
     "repo": "terraform-provider-vcd",
-    "rev": "v3.10.0",
+    "rev": "v3.11.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-p/wTnEr/+qe8S83x6EtfsnIMVUF1VWZVHOq0vLDbh60="
+    "vendorHash": "sha256-IqmmlLr+bwfSRJtKbK/fiBdbf2vX61+6h6rZizD1vw8="
   },
   "venafi": {
     "hash": "sha256-OQNeDmsXC1Fr9bTZ07HELZznU9n4ttSkFbNOC6ooxnk=",
