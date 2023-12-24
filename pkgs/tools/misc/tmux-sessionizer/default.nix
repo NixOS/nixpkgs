@@ -5,6 +5,8 @@
 , openssl
 , pkg-config
 , Security
+, testers
+, tmux-sessionizer
 }: let
 
   name = "tmux-sessionizer";
@@ -22,6 +24,10 @@ in rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-lZi72OJ+AnnLxf/zxwAERfy1oW8dE8bGF8hFwwrUXqE=";
+
+  passthru.tests.version = testers.testVersion {
+    package = tmux-sessionizer;
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
