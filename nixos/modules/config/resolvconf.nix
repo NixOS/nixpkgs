@@ -136,6 +136,8 @@ in
     }
 
     (mkIf cfg.enable {
+      users.groups.resolvconf = {};
+
       networking.resolvconf.package = pkgs.openresolv;
 
       environment.systemPackages = [ cfg.package ];
@@ -147,12 +149,13 @@ in
         wants = [ "network-pre.target" ];
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
+        serviceConfig.RemainAfterExit = true;
 
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${cfg.package}/bin/resolvconf -u";
-          RemainAfterExit = true;
-        };
+        script = ''
+          ${lib.getExe cfg.package} -u
+          chgrp -R resolvconf /etc/resolv.conf /run/resolvconf
+          chmod -R g=u /etc/resolv.conf /run/resolvconf
+        '';
       };
 
     })
