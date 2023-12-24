@@ -3088,6 +3088,8 @@ self: super: with self; {
 
   django-markup = callPackage ../development/python-modules/django-markup { };
 
+  django-markdownx = callPackage ../development/python-modules/django-markdownx { };
+
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
@@ -9361,6 +9363,10 @@ self: super: with self; {
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
+  pycrdt = callPackage ../development/python-modules/pycrdt { };
+
+  pycrdt-websocket = callPackage ../development/python-modules/pycrdt-websocket { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
@@ -14126,6 +14132,8 @@ self: super: with self; {
   testcontainers = callPackage ../development/python-modules/testcontainers { };
 
   testfixtures = callPackage ../development/python-modules/testfixtures { };
+
+  texsoup = callPackage ../development/python-modules/texsoup { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
 
