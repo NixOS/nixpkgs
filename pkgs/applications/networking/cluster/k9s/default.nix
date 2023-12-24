@@ -51,7 +51,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
+    changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "k9s";
     maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
   };
 }
