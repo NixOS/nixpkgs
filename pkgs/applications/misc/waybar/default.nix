@@ -180,7 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "waybar";
     maintainers = with lib.maintainers; [
       FlorianFranzen
-      jtbx
       lovesegfault
       minijackson
       rodrgz
