@@ -14,15 +14,15 @@ let
     repo = "bitbox-wallet-app";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Ct5qg/jRN/CwlRNZQNvoMM3yn1KycJZn/FsYwjrN2Os=";
+    hash = "sha256-kvkfz9zwleZNB+leefx+cciJCPkFSSRDxBNRKNqeODc=";
   };
-  version = "4.39.0";
+  version = "4.40.0";
   web = buildNpmPackage {
     pname = "bitbox-web";
     inherit version;
     inherit src;
     sourceRoot = "source/frontends/web";
-    npmDepsHash = "sha256-5EgTWQRpBp34u6fWSmrPLoVbF/L1+p+sVO050YyexbU=";
+    npmDepsHash = "sha256-bnMmeSX8UZpndHK0NMLQhX1GSunO0JSyZdUTfG+rSpY=";
     installPhase = "cp -r build $out";
   };
 in
