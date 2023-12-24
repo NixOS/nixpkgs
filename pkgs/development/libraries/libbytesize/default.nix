@@ -12,6 +12,7 @@
 , pcre2
 , pkg-config
 , python3
+, runCommand
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,6 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  postInstall = ''
+    substituteInPlace $out/${python3.sitePackages}/bytesize/bytesize.py \
+      --replace 'CDLL("libbytesize.so.1")' "CDLL('$out/lib/libbytesize.so.1')"
+  '';
+
+  passthru.tests = {
+    python = runCommand "${finalAttrs.pname}-test-python" {} ''
+      ${python3.withPackages (ps: [ ps.bytesize ])}/bin/python -c 'import bytesize'
+      touch $out
+    '';
+  };
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
