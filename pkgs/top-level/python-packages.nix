@@ -2378,6 +2378,8 @@ self: super: with self; {
 
   cppy = callPackage ../development/python-modules/cppy { };
 
+  cpufeature = callPackage ../development/python-modules/cpufeature { };
+
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
   cram = callPackage ../development/python-modules/cram { };
@@ -3258,6 +3260,8 @@ self: super: with self; {
   };
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
+
+  dnf-plugins-core = callPackage ../development/python-modules/dnf-plugins-core { };
 
   dnf4 = callPackage ../development/python-modules/dnf4 { };
 

@@ -1,27 +1,27 @@
 { lib
 , rustPlatform
+, darwin
 , fetchCrate
 , pkg-config
 , openssl
 , stdenv
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "star-history";
-  version = "1.0.15";
+  version = "1.0.16";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-9/r01j/47rbgmXQy9qVOeY1E3LDMe9A/1SOB2l9zpJU=";
+    sha256 = "sha256-ChUZf8aohDOmNKPgn9+i0NNZ4rKJsXQPK6IMqWf0NQc=";
   };
 
-  cargoSha256 = "sha256-kUpGBtgircX8/fACed4WO7rHTCah+3BFuQQV/A5pivg=";
+  cargoHash = "sha256-RsBWmEe4D+m3hxE1ryQ5aZb2uDax519qjQoIK7xStPw=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {
