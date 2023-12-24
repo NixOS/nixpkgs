@@ -1875,6 +1875,8 @@ self: super: with self; {
 
   bytecode = callPackage ../development/python-modules/bytecode { };
 
+  bytesize = toPythonModule (pkgs.libbytesize.override { python3 = python; });
+
   bytewax = callPackage ../development/python-modules/bytewax { };
 
   bz2file = callPackage ../development/python-modules/bz2file { };
