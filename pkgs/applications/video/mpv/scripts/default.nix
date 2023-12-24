@@ -1,11 +1,63 @@
 { lib
 , callPackage
 , config
+, runCommand
 }:
 
-let buildLua = callPackage ./buildLua.nix { };
-in lib.recurseIntoAttrs
-  ({
+let
+  buildLua = callPackage ./buildLua.nix { };
+
+  unionOfDisjoints = lib.fold lib.attrsets.unionOfDisjoint {};
+
+  addTests = name: drv: let
+    inherit (drv) scriptName;
+    scriptPath = "share/mpv/scripts/${scriptName}";
+    fullScriptPath = "${drv}/${scriptPath}";
+
+  in drv.overrideAttrs (old: { passthru = (old.passthru or {}) // { tests = unionOfDisjoints [
+    (old.passthru.tests or {})
+
+    {
+      scriptName-is-valid = runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid" {
+        meta.maintainers = with lib.maintainers; [ nicoo ];
+        preferLocalBuild = true;
+      } ''
+        if [ -e "${fullScriptPath}" ]; then
+          touch $out
+        else
+          echo "mpvScripts.\"${name}\" does not contain a script named \"${scriptName}\"" >&2
+          exit 1
+        fi
+      '';
+    }
+
+    # can't check whether `fullScriptPath` is a directory, in pure-evaluation mode
+    (with lib; optionalAttrs (! any (s: hasSuffix s drv.passthru.scriptName) [ ".js" ".lua" ".so" ]) {
+      single-main-in-script-dir = runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir" {
+        meta.maintainers = with lib.maintainers; [ nicoo ];
+        preferLocalBuild = true;
+      } ''
+        die() {
+          echo "$@" >&2
+          exit 1
+        }
+
+        cd "${drv}/${scriptPath}"  # so the glob expands to filenames only
+        mains=( main.* )
+        if [ "''${#mains[*]}" -eq 1 ]; then
+          touch $out
+        elif [ "''${#mains[*]}" -eq 0 ]; then
+          die "'${scriptPath}' contains no 'main.*' file"
+        else
+          die "'${scriptPath}' contains multiple 'main.*' files:" "''${mains[*]}"
+        fi
+      '';
+    })
+  ]; }; });
+in
+
+lib.recurseIntoAttrs
+  (lib.mapAttrs addTests ({
     acompressor = callPackage ./acompressor.nix { inherit buildLua; };
     autocrop = callPackage ./autocrop.nix { };
     autodeint = callPackage ./autodeint.nix { };
@@ -29,7 +81,7 @@ in lib.recurseIntoAttrs
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
   }
-  // (callPackage ./occivink.nix { inherit buildLua; }))
+  // (callPackage ./occivink.nix { inherit buildLua; })))
   // lib.optionalAttrs config.allowAliases {
   youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
 }
