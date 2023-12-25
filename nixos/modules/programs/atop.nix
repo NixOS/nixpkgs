@@ -137,6 +137,7 @@ in
                 atop.preStart = ''
                   set -e -u
                   shopt -s nullglob
+                  rm -f "$LOGPATH"/atop_*.new
                   for logfile in "$LOGPATH"/atop_*
                   do
                     ${atop}/bin/atopconvert "$logfile" "$logfile".new
@@ -144,9 +145,9 @@ in
                     # false positives for atop-rotate.service
                     if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
                     then
-                      ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
+                      mv -v -f "$logfile".new "$logfile"
                     else
-                      ${pkgs.coreutils}/bin/rm -f "$logfile".new
+                      rm -f "$logfile".new
                     fi
                   done
                 '';
