@@ -66,6 +66,8 @@ python3Packages.buildPythonApplication {
     perl
     zlib
     avahi
+  ] ++ lib.optionals withQt5 [
+    qt5.qtwayland
   ];
 
   nativeBuildInputs = [
