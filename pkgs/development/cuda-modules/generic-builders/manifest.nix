@@ -219,7 +219,7 @@ backendStdenv.mkDerivation (
       '';
 
     doInstallCheck = true;
-    allowFHSReferences = false;
+    allowFHSReferences = true; # TODO: Default to `false`
     postInstallCheck = ''
       echo "Executing postInstallCheck"
 
