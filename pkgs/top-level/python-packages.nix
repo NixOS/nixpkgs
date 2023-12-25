@@ -1605,6 +1605,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  borb = callPackage ../development/python-modules/borb { };
+
   bork = callPackage ../development/python-modules/bork { };
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
