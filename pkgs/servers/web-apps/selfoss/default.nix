@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jtojnar regnat ];
+    maintainers = with maintainers; [ regnat ];
     platforms = platforms.all;
   };
 }
