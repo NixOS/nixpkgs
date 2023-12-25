@@ -18,6 +18,8 @@ let
         inherit hash;
       };
 
+      outputs = [ "out" "dev" ];
+
       nativeBuildInputs = [ cmake ];
 
       cmakeFlags = [
