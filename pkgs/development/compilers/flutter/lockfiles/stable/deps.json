@@ -47,6 +47,10 @@
       "convert",
       "async",
       "unified_analytics",
+      "cli_config",
+      "graphs",
+      "native_assets_builder",
+      "native_assets_cli",
       "test_api",
       "test_core",
       "vm_service",
@@ -82,6 +86,7 @@
       "term_glyph",
       "typed_data",
       "watcher",
+      "yaml_edit",
       "collection",
       "file_testing",
       "pubspec_parse",
@@ -93,7 +98,7 @@
   },
   {
     "name": "test",
-    "version": "1.24.3",
+    "version": "1.24.6",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -105,6 +110,7 @@
       "http_multi_server",
       "io",
       "js",
+      "matcher",
       "node_preamble",
       "package_config",
       "path",
@@ -116,51 +122,24 @@
       "source_span",
       "stack_trace",
       "stream_channel",
+      "test_api",
+      "test_core",
       "typed_data",
       "web_socket_channel",
       "webkit_inspection_protocol",
-      "yaml",
-      "test_api",
-      "test_core",
-      "matcher"
+      "yaml"
     ]
   },
   {
-    "name": "matcher",
-    "version": "0.12.16",
+    "name": "yaml",
+    "version": "3.1.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
-      "async",
-      "meta",
-      "stack_trace",
-      "term_glyph",
-      "test_api"
-    ]
-  },
-  {
-    "name": "test_api",
-    "version": "0.6.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "async",
-      "boolean_selector",
       "collection",
-      "meta",
       "source_span",
-      "stack_trace",
-      "stream_channel",
-      "string_scanner",
-      "term_glyph"
+      "string_scanner"
     ]
-  },
-  {
-    "name": "term_glyph",
-    "version": "1.2.1",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": []
   },
   {
     "name": "string_scanner",
@@ -183,6 +162,13 @@
     ]
   },
   {
+    "name": "term_glyph",
+    "version": "1.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
     "name": "path",
     "version": "1.8.3",
     "kind": "direct",
@@ -191,14 +177,41 @@
   },
   {
     "name": "collection",
-    "version": "1.17.2",
+    "version": "1.18.0",
     "kind": "dev",
     "source": "hosted",
     "dependencies": []
   },
   {
+    "name": "webkit_inspection_protocol",
+    "version": "1.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "logging"
+    ]
+  },
+  {
+    "name": "logging",
+    "version": "1.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "web_socket_channel",
+    "version": "2.4.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "crypto",
+      "stream_channel"
+    ]
+  },
+  {
     "name": "stream_channel",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -217,39 +230,38 @@
   },
   {
     "name": "meta",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
   },
   {
-    "name": "stack_trace",
-    "version": "1.11.0",
+    "name": "crypto",
+    "version": "3.0.3",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
-      "path"
+      "typed_data"
     ]
   },
   {
-    "name": "boolean_selector",
-    "version": "2.1.1",
+    "name": "typed_data",
+    "version": "1.3.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
-      "source_span",
-      "string_scanner"
+      "collection"
     ]
   },
   {
     "name": "test_core",
-    "version": "0.5.3",
+    "version": "0.5.6",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "analyzer",
-      "async",
       "args",
+      "async",
       "boolean_selector",
       "collection",
       "coverage",
@@ -265,28 +277,53 @@
       "source_span",
       "stack_trace",
       "stream_channel",
+      "test_api",
       "vm_service",
-      "yaml",
-      "test_api"
-    ]
-  },
-  {
-    "name": "yaml",
-    "version": "3.1.2",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "collection",
-      "source_span",
-      "string_scanner"
+      "yaml"
     ]
   },
   {
     "name": "vm_service",
-    "version": "11.7.1",
+    "version": "11.10.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
+  },
+  {
+    "name": "test_api",
+    "version": "0.6.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span",
+      "string_scanner"
+    ]
   },
   {
     "name": "source_maps",
@@ -387,13 +424,6 @@
     ]
   },
   {
-    "name": "logging",
-    "version": "1.2.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
     "name": "args",
     "version": "2.4.2",
     "kind": "direct",
@@ -402,7 +432,7 @@
   },
   {
     "name": "analyzer",
-    "version": "5.13.0",
+    "version": "6.2.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -441,24 +471,6 @@
     ]
   },
   {
-    "name": "crypto",
-    "version": "3.0.3",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "typed_data"
-    ]
-  },
-  {
-    "name": "typed_data",
-    "version": "1.3.2",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "collection"
-    ]
-  },
-  {
     "name": "convert",
     "version": "3.1.1",
     "kind": "direct",
@@ -469,31 +481,11 @@
   },
   {
     "name": "_fe_analyzer_shared",
-    "version": "61.0.0",
+    "version": "64.0.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "meta"
-    ]
-  },
-  {
-    "name": "webkit_inspection_protocol",
-    "version": "1.2.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "logging"
-    ]
-  },
-  {
-    "name": "web_socket_channel",
-    "version": "2.4.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "async",
-      "crypto",
-      "stream_channel"
     ]
   },
   {
@@ -572,6 +564,19 @@
     "dependencies": []
   },
   {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
     "name": "js",
     "version": "0.6.7",
     "kind": "direct",
@@ -632,6 +637,18 @@
     ]
   },
   {
+    "name": "yaml_edit",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
     "name": "sync_http",
     "version": "0.3.1",
     "kind": "direct",
@@ -677,14 +694,14 @@
   },
   {
     "name": "platform",
-    "version": "3.1.0",
+    "version": "3.1.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "petitparser",
-    "version": "5.4.0",
+    "version": "6.0.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -710,15 +727,18 @@
   },
   {
     "name": "devtools_shared",
-    "version": "2.24.0",
+    "version": "2.26.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
+      "collection",
       "path",
       "shelf",
       "usage",
       "vm_service",
-      "webkit_inspection_protocol"
+      "webkit_inspection_protocol",
+      "yaml",
+      "yaml_edit"
     ]
   },
   {
@@ -733,7 +753,7 @@
   },
   {
     "name": "dds_service_extensions",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -744,7 +764,7 @@
   },
   {
     "name": "dap",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -767,7 +787,7 @@
   },
   {
     "name": "built_value",
-    "version": "8.6.1",
+    "version": "8.6.3",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -786,14 +806,59 @@
   },
   {
     "name": "standard_message_codec",
-    "version": "0.0.1+3",
+    "version": "0.0.1+4",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
   },
   {
+    "name": "native_assets_cli",
+    "version": "0.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "cli_config",
+      "collection",
+      "crypto",
+      "pub_semver",
+      "yaml",
+      "yaml_edit"
+    ]
+  },
+  {
+    "name": "cli_config",
+    "version": "0.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "yaml"
+    ]
+  },
+  {
+    "name": "native_assets_builder",
+    "version": "0.2.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "graphs",
+      "logging",
+      "native_assets_cli",
+      "package_config"
+    ]
+  },
+  {
+    "name": "graphs",
+    "version": "2.3.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
     "name": "unified_analytics",
-    "version": "2.0.0",
+    "version": "4.0.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -848,7 +913,7 @@
   },
   {
     "name": "xml",
-    "version": "6.3.0",
+    "version": "6.4.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -899,7 +964,7 @@
   },
   {
     "name": "multicast_dns",
-    "version": "0.3.2+3",
+    "version": "0.3.2+4",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -936,7 +1001,7 @@
   },
   {
     "name": "dwds",
-    "version": "19.0.1+1",
+    "version": "21.0.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -971,7 +1036,7 @@
   },
   {
     "name": "dds",
-    "version": "2.9.0+hotfix",
+    "version": "2.9.5",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -985,6 +1050,7 @@
       "http_multi_server",
       "json_rpc_2",
       "meta",
+      "mime",
       "path",
       "shelf_proxy",
       "shelf_static",
