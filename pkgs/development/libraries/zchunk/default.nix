@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-wmbnkxJHFyqntULxzXF16lt+TfwywLdZamQXvcfSFVM=";
+    hash = "sha256-GiZM8Jh+v0US8xr90rySY0Ud3eAAl8UqLi162zDR3qw=";
   };
 
   nativeBuildInputs = [
