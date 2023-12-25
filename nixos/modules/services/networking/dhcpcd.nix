@@ -13,6 +13,8 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
+  useResolvConf = config.networking.resolvconf.enable;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -213,18 +215,47 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd/pid";
+            DynamicUser = true;
+            SupplementaryGroups = optional useResolvConf "resolvconf";
+            User = "dhcpcd";
+            Group = "dhcpcd";
+            StateDirectory = "dhcpcd";
             RuntimeDirectory = "dhcpcd";
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
+            AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
+              ++ optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            DeviceAllow = "";
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = false;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectSystem = "strict";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_PACKET" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallFilter = [
+              "@system-service"
+              "~@aio" "~@chown" "~@keyring" "~@memlock"
+              "~@resources" "~@setuid" "~@timer"
+            ];
+            SystemCallArchitectures = "native";
           };
       };
-
-    users.users.dhcpcd = {
-      isSystemUser = true;
-      group = "dhcpcd";
-    };
-    users.groups.dhcpcd = {};
 
     environment.systemPackages = [ dhcpcd ];
 
