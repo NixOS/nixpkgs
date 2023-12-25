@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-privsep"
+    "--dbdir=/var/lib/dhcpcd"
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  # Hack to make installation succeed.  dhcpcd will still use /var/db
+  # Hack to make installation succeed.  dhcpcd will still use /var/lib
   # at runtime.
   installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 

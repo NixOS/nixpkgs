@@ -221,6 +221,16 @@ in
             Group = "dhcpcd";
             StateDirectory = "dhcpcd";
             RuntimeDirectory = "dhcpcd";
+
+            ExecStartPre = "+${pkgs.writeShellScript "migrate-dhcpcd" ''
+              # migrate from old database directory
+              if test -d /var/db/dhcpcd; then
+                mv /var/db/dhcpcd/* -t /var/lib/dhcpcd
+                rmdir /var/db/dhcpcd
+                chown -R dhcpcd:dhcpcd /var/lib/dhcpcd
+              fi
+            ''}";
+
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
