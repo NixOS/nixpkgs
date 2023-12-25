@@ -143,7 +143,7 @@ let
     else if nixSystem == "x86_64-windows" then
       "windows-x86_64"
     else
-      builtins.throw "Unsupported Nix system: ${nixSystem}";
+      "Unsupported Nix system: ${nixSystem}";
 
   # Maps NVIDIA redist arch to Nix system.
   # It is imperative that we include the boolean condition based on jetsonTargets to ensure
