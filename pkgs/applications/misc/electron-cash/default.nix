@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.10";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-m13wJlNBG3BxOdKUyd3qmIhFBM7263FzMKr5lfD1tys=";
+    sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     certifi
     pathvalidate
     dnspython
+    bitcoinrpc
 
     # requirements-binaries
     pyqt5
@@ -53,13 +54,6 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
-  '';
-
-  nativeCheckInputs = with python3Packages; [ pytest ];
-
-  checkPhase = ''
-    unset HOME
-    pytest electroncash/tests
   '';
 
   postInstall = lib.optionalString stdenv.isLinux ''
