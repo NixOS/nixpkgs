@@ -15153,6 +15153,12 @@
     githubId = 39039420;
     name = "Quinn Dougherty";
   };
+  quintasan = {
+    email = "michal.zajac@gmail.com";
+    name = "Michał Zając";
+    github = "Quintasan";
+    githubId = 6539261;
+  };
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
