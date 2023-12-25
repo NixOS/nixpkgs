@@ -28660,7 +28660,7 @@ with pkgs;
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
-  procps = if stdenv.isLinux
+  procps = if (stdenv.isLinux || stdenv.isFreeBSD)
     then callPackage ../os-specific/linux/procps-ng { }
     else unixtools.procps;
 
