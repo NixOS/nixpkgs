@@ -2,13 +2,13 @@
 
 let
   pname = "anytype";
-  version = "0.36.0";
+  version = "0.37.0";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-Efoqy/izULDgd2Dc3ktVZNj9/U0vCtENm0NLr5VKQpQ=";
+    sha256 = "sha256-Z46GTcJoaqvjVuxUP+OuxD32KM0NQISWMlv3uco5r6g=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in
@@ -26,8 +26,10 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype.png \
-      $out/share/icons/hicolor/512x512/apps/anytype.png
+    for size in 16 32 64 128 256 512 1024; do
+      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/anytype.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/anytype.png
+    done
   '';
 
   meta = with lib; {
