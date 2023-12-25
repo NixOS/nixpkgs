@@ -58,6 +58,8 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.lxml
     python3.pkgs.cssselect
     python3.pkgs.numpy
+
+    python3.pkgs.pygobject3
   ];
 
   # strictDeps do not play nicely with introspection setup hooks.
