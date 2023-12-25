@@ -218,7 +218,7 @@ The upgrade process is:
   5. After the upgrade it's advisable to analyze the new cluster.
 
        - For PostgreSQL ≥ 14, use the `vacuumdb` command printed by the upgrades script.
-       - For PostgreSQL < 14, run (as `su -l postgres` in the [](#opt-services.postgresql.dataDir), in this example {file}`/var/lib/postgresql/13`):
+       - For PostgreSQL < 14, run (as `su -l postgres` in the `services.postgresql.dataDir`, in this example `/var/lib/postgresql/13`):
 
          ```
          $ ./analyze_new_cluster.sh
