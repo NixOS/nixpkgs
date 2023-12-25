@@ -2,6 +2,7 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, withFilters ? false
 }:
 
 let
@@ -29,6 +30,7 @@ let
         "-DENABLE_COVERAGE=OFF"
         "-DENABLE_FORMAT=OFF"
         "-DENABLE_LINTING=OFF"
+        (lib.cmakeBool "BUILD_FILTERS" withFilters)
       ];
 
       meta = with lib; {
