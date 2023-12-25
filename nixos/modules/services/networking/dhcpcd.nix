@@ -10,6 +10,8 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || lib.any (i: i.useDHCP == true) interfaces);
 
+  useResolvConf = config.networking.resolvconf.enable;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -162,6 +164,19 @@ in
       description = ''
          Shell code that will be run after all other hooks. See
          `man dhcpcd-run-hooks` for details on what is possible.
+
+         ::: {.note}
+         To use sudo or similar tools in your script you may have to set:
+
+             systemd.services.dhcpcd.serviceConfig.NoNewPrivileges = false;
+
+         In addition, as most of the filesystem is inaccessible to dhcpcd
+         by default, you may want to define some exceptions, e.g.
+
+             systemd.services.dhcpcd.serviceConfig.ReadOnlyPaths = [
+               "/run/user/1000/bus"  # to send desktop notifications
+             ];
+         :::
       '';
     };
 
@@ -212,13 +227,50 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd/pid";
+            SupplementaryGroups = lib.optional useResolvConf "resolvconf";
+            User = "dhcpcd";
+            Group = "dhcpcd";
+            StateDirectory = "dhcpcd";
             RuntimeDirectory = "dhcpcd";
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${lib.optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
+            AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
+              ++ lib.optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            DeviceAllow = "";
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            NoNewPrivileges = lib.mkDefault true;  # may be disabled for sudo in runHook
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = false;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = "tmpfs";  # allow exceptions to be added to ReadOnlyPaths, etc.
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectSystem = "strict";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_PACKET" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallFilter = [
+              "@system-service"
+              "~@aio" "~@chown" "~@keyring" "~@memlock"
+            ];
+            SystemCallArchitectures = "native";
           };
       };
 
+    # Note: the service could run with `DynamicUser`, however that makes
+    # impossible (for no good reason, see systemd issue #20495) to disable
+    # `NoNewPrivileges` or `ProtectHome`, which users may want to in order
+    # to run certain scripts in `networking.dhcpcd.runHook`.
     users.users.dhcpcd = {
       isSystemUser = true;
       group = "dhcpcd";
