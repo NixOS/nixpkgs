@@ -47,15 +47,25 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       allowFHSReferences = false;
 
       # The libcuda stub's pkg-config doesn't follow the general pattern:
-      postPatch = prevAttrs.postPatch or "" + ''
-        while IFS= read -r -d $'\0' path ; do
-          sed -i \
-            -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
-            -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
-            "$path"
-        done < <(find -iname 'cuda-*.pc' -print0)
-      '';
-    });
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          while IFS= read -r -d $'\0' path ; do
+            sed -i \
+              -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
+              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
+              "$path"
+          done < <(find -iname 'cuda-*.pc' -print0)
+        ''
+        + ''
+          # Namelink may not be enough, add a soname.
+          # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/25536
+          if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]] ; then
+            ln -s libcuda.so lib/stubs/libcuda.so.1
+          fi
+        '';
+    }
+  );
 
   cuda_compat = prev.cuda_compat.overrideAttrs (
     prevAttrs: {
