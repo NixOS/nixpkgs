@@ -17,6 +17,8 @@ let
       )
       output
   );
+
+  makeLeadingSlashes = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path);
 in
 {
   meta.maintainers = [ lib.maintainers.sternenseemann ];
@@ -29,6 +31,7 @@ in
         type = with lib.types; listOf str;
         default = [ "share/man" ];
         example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
+        apply = makeLeadingSlashes;
         description = ''
           Change the paths included in the MANPATH environment variable,
           i. e. the directories where {manpage}`man(1)`
@@ -46,6 +49,7 @@ in
         default = cfg.manPath;
         defaultText = lib.literalExpression "config.documentation.man.mandoc.manPath";
         example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
+        apply = makeLeadingSlashes;
         description = ''
           Change the paths where mandoc {manpage}`makewhatis(8)`generates the
           manual page index caches. {option}`documentation.man.generateCaches`
@@ -199,14 +203,14 @@ in
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
-        for man_path in ${lib.concatMapStringsSep " " (path: "$out/" + lib.escapeShellArg path) cfg.cachePath}
+        for man_path in ${lib.concatMapStringsSep " " (path: "$out" + lib.escapeShellArg path) cfg.cachePath}
         do
           [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
         done
       '';
 
       # tell mandoc the paths containing man pages
-      profileRelativeSessionVariables."MANPATH" = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path) cfg.manPath;
+      profileRelativeSessionVariables."MANPATH" = lib.mkIf (cfg.manPath != [ ]) cfg.manPath;
     };
   };
 }
