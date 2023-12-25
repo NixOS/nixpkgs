@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.16.0";
+  version = "1.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "glue-viz";
     repo = "glue";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jjDa0DxB5AJm+x8P7FiH2kqhhc/bbzjzvdC9INs69Ro=";
+    sha256 = "sha256-nr84GJAGnpKzjZEFNsQujPysSQENwGxdNfPIYUCJkK4=";
   };
 
   buildInputs = [ pyqt-builder ];
