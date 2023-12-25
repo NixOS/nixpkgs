@@ -71,9 +71,9 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
+      homepage = "https://doc.rust-lang.org/cargo/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "A safe, concurrent, practical language";
+      description = "The Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
