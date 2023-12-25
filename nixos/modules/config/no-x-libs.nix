@@ -71,7 +71,7 @@ with lib;
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {
-        qtbase = super'.qtbase.override { withGtk3 = false; };
+        qtbase = super'.qtbase.override { withGtk3 = false; withQttranslation = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11
