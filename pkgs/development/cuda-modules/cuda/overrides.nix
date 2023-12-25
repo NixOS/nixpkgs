@@ -44,6 +44,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
   cuda_cudart = prev.cuda_cudart.overrideAttrs (
     prevAttrs: {
+      allowFHSReferences = false;
 
       # The libcuda stub's pkg-config doesn't follow the general pattern:
       postPatch = prevAttrs.postPatch or "" + ''
