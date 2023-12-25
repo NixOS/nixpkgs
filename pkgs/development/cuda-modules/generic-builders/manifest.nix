@@ -117,10 +117,14 @@ backendStdenv.mkDerivation (
     brokenConditions = {};
 
     src = fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${
-        redistribRelease.${redistArch}.relative_path
-      }";
-      inherit (redistribRelease.${redistArch}) sha256;
+      url =
+        if (builtins.hasAttr redistArch redistribRelease) then
+          "https://developer.download.nvidia.com/compute/${redistName}/redist/${
+            redistribRelease.${redistArch}.relative_path
+          }"
+        else
+          "cannot-construct-an-url-for-the-${redistArch}-platform";
+      sha256 = redistribRelease.${redistArch}.sha256 or lib.fakeHash;
     };
 
     postPatch = ''
