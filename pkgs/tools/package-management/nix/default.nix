@@ -8,7 +8,6 @@
 , fetchpatch2
 , runCommand
 , Security
-, pin-to-gcc12-if-gcc13
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -152,16 +151,14 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = pin-to-gcc12-if-gcc13 ((common {
+  nix_2_3 = (common {
     version = "2.3.17";
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override {
-    boehmgc = boehmgc-nix_2_3;
-  });
+  }).override { boehmgc = boehmgc-nix_2_3; };
 
   nix_2_10 = common {
     version = "2.10.3";
