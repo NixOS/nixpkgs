@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , buildPythonPackage
 , cpufeature
@@ -34,9 +35,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    cpufeature
     zlib-ng
-  ];
+  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform cpufeature) cpufeature;
 
   nativeCheckInputs = [
     pytestCheckHook
