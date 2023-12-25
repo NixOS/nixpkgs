@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildNpmPackage
+, overrideSDK
 , fetchFromGitHub
 , testers
 , balena-cli
@@ -10,7 +11,12 @@
 , darwin
 }:
 
-buildNpmPackage rec {
+let
+  # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' = buildNpmPackage.override {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in buildNpmPackage' rec {
   pname = "balena-cli";
   version = "17.4.9";
 
