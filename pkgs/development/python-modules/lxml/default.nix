@@ -8,15 +8,21 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.9.3-3";
+  version = "4.9.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/lxml-${version}";
-    hash = "sha256-Vrizi+6jUUEx7qODU4PAH5ZmvBIyT9H18+QpYB0m1f4=";
+    hash = "sha256-qS20wb83eFapiPZe25BViHpYkjgvnCIZpiYkPNIPHZg=";
   };
+
+  patches = [
+    # fix compile error with libxml 2.12
+    # backport of: https://github.com/lxml/lxml/commit/b0861bea17769584a85f57eb00235ce0ca9811af
+    ./libxml-2.12.patch
+  ];
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
   nativeBuildInputs = [ libxml2.dev libxslt.dev cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
