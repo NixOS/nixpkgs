@@ -14,24 +14,12 @@ in
 
     networking.domain = domain;
     networking.extraHosts = ''
-      ${config.networking.primaryIPAddress} builds.${domain}
       ${config.networking.primaryIPAddress} git.${domain}
       ${config.networking.primaryIPAddress} meta.${domain}
     '';
 
     services.sourcehut = {
-      builds = {
-        enable = true;
-        # FIXME: see why it does not seem to activate fully.
-        #enableWorker = true;
-        images = { };
-      };
       git.enable = true;
-
-      settings."builds.sr.ht" = {
-        oauth-client-secret = pkgs.writeText "buildsrht-oauth-client-secret" "2260e9c4d9b8dcedcef642860e0504bc";
-        oauth-client-id = "299db9f9c2013170";
-      };
       settings."git.sr.ht" = {
         oauth-client-secret = pkgs.writeText "gitsrht-oauth-client-secret" "3597288dc2c716e567db5384f493b09d";
         oauth-client-id = "d07cb713d920702e";
@@ -106,11 +94,5 @@ in
       with subtest("Verify that the repo is downloadable and its contents match the original"):
            machine.succeed("curl https://git.${domain}/~${userName}/test/archive/v0.1.tar.gz | tar -xz")
            machine.succeed("diff test-v0.1/hello.txt test/hello.txt")
-
-      with subtest("Check whether builds comes up"):
-           machine.wait_for_unit("buildsrht.service")
-           machine.wait_for_open_port(5002)
-           machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
-           #machine.wait_for_unit("buildsrht-worker.service")
     '';
 })
