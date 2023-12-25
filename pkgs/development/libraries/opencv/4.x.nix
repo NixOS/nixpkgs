@@ -474,7 +474,8 @@ effectiveStdenv.mkDerivation {
       "$out/lib/pkgconfig/opencv4.pc"
     mkdir "$cxxdev"
   ''
-  # Temporary fix for https://github.com/NixOS/nixpkgs/issues/276691
+  # fix deps not progagating from opencv4.cxxdev if cuda is disabled
+  # see https://github.com/NixOS/nixpkgs/issues/276691
   + lib.optionalString (!enableCuda) ''
     mkdir -p "$cxxdev/nix-support"
     echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
