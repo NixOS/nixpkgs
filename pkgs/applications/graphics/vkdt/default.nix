@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Au0S+9Y+H0FuoHZacnN4azQFQB0tarT2bHNsLxujfLw=";
+    sha256 = "sha256-Sk/K+EWvJBkwwD5R1gH9ZQHetojrJTTJrKW9Dvr+lHA=";
   };
 
   strictDeps = true;
