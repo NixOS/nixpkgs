@@ -26,7 +26,7 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
+      homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
