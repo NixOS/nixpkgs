@@ -472,7 +472,12 @@ effectiveStdenv.mkDerivation {
   postInstall = ''
     sed -i "s|{exec_prefix}/$out|{exec_prefix}|;s|{prefix}/$out|{prefix}|" \
       "$out/lib/pkgconfig/opencv4.pc"
-    mkdir $cxxdev
+    mkdir "$cxxdev"
+  ''
+  # Temporary fix for https://github.com/NixOS/nixpkgs/issues/276691
+  + lib.optionalString (!enableCuda) ''
+    mkdir -p "$cxxdev/nix-support"
+    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''
