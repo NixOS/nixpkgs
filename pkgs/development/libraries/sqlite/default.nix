@@ -7,8 +7,6 @@
 , interactive ? false
 # TODO: can be removed since 3.36 since it is the default now.
 , enableDeserialize ? false
-
-, gitUpdater
 }:
 
 let
@@ -17,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.43.2";
+  version = "3.41.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-bUIrb2LE3iyoDWGGDjo/tpNVTS91uxqsp0PMxNb2CfA=";
+    hash = "sha256-6YwQDdHaTjD6Rgdh2rfAuRpQt4XhZ/jFesxGUU+ulJk=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -89,18 +87,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails to link against tcl
 
-  passthru = {
-    tests = {
-      inherit (python3Packages) sqlalchemy;
-      inherit sqldiff sqlite-analyzer tracker;
-    };
-
-    updateScript = gitUpdater {
-      # No nicer place to look for patest version.
-      url = "https://github.com/sqlite/sqlite.git";
-      # Expect tags like "version-3.43.0".
-      rev-prefix = "version-";
-    };
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+    inherit sqldiff sqlite-analyzer tracker;
   };
 
   meta = with lib; {
@@ -112,6 +101,5 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlite3";
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
-    pkgConfigModules = [ "sqlite3" ];
   };
 }
