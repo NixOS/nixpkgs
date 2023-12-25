@@ -102,6 +102,12 @@ in
       apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = lib.mdDoc "Configure nginx as a reverse proxy for roundcube.";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -142,7 +148,7 @@ in
       ${cfg.extraConfig}
     '';
 
-    services.nginx = {
+    services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       virtualHosts = {
         ${cfg.hostName} = {
