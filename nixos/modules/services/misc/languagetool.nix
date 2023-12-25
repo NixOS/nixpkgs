@@ -82,6 +82,7 @@ in
         RestrictNamespaces = [ "" ];
         SystemCallFilter = [ "@system-service" "~ @privileged" ];
         ProtectHome = "yes";
+        Restart = "on-failure";
         ExecStart = ''
           ${cfg.jrePackage}/bin/java \
             -cp ${cfg.package}/share/languagetool-server.jar \
