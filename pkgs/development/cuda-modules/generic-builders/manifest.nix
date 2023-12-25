@@ -77,7 +77,7 @@ backendStdenv.mkDerivation (
             false
             featureRelease;
         # Order is important here so we use a list.
-        additionalOutputs = builtins.filter hasOutput [
+        possibleOutputs = [
           "bin"
           "lib"
           "static"
@@ -86,8 +86,10 @@ backendStdenv.mkDerivation (
           "sample"
           "python"
         ];
+        additionalOutputs =
+          if redistArch == "unsupported" then possibleOutputs else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
-        outputs = ["out"] ++ additionalOutputs;
+        outputs = [ "out" ] ++ additionalOutputs;
       in
       outputs;
 
@@ -283,9 +285,9 @@ backendStdenv.mkDerivation (
           (
             redistArch:
             let
-              nixSystem = builtins.tryEval (flags.getNixSystem redistArch);
+              nixSystem = flags.getNixSystem redistArch;
             in
-            if nixSystem.success then [nixSystem.value] else []
+            lists.optionals (!(strings.hasPrefix "unsupported-" nixSystem)) [ nixSystem ]
           )
           supportedRedistArchs;
       broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
