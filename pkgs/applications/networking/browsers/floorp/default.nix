@@ -7,19 +7,19 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.6.0";
+  packageVersion = "11.7.1";
   applicationName = "Floorp";
   binaryName = "floorp";
 
   # Must match the contents of `browser/config/version.txt` in the source tree
-  version = "155.5.0";
+  version = "115.6.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-5OQZckST6l9OZ7jnj52nuALCWiH1hVdDoDHSpqwUUfA=";
+    hash = "sha256-1GxWqibUR10gz0TjQuCtFntlxoNkq4CY5Yt/4FcIDDQ=";
   };
 
   extraConfigureFlags = [
