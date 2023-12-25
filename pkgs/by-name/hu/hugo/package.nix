@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gohugoio";
-    repo = pname;
+    repo = "hugo";
     rev = "refs/tags/v${version}";
     hash = "sha256-XNOp0k2t5Tv4HKKz3ZqL/sAdiYedOACaZ/1T7t7/Q1A=";
   };
@@ -48,10 +48,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/gohugoio/hugo/releases/tag/v${version}";
     description = "A fast and modern static website engine";
     homepage = "https://gohugo.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ schneefux Br1ght0ne Frostman ];
+    license = lib.licenses.asl20;
+    mainProgram = "hugo";
+    maintainers = with lib.maintainers; [ schneefux Br1ght0ne Frostman ];
   };
 }

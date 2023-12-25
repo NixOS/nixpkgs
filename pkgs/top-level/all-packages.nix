@@ -32483,8 +32483,6 @@ with pkgs;
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
-  hugo = callPackage ../applications/misc/hugo { };
-
   ghosttohugo = callPackage ../applications/misc/ghosttohugo {};
 
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
