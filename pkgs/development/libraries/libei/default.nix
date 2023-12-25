@@ -11,7 +11,6 @@
 , protobuf
 , protobufc
 , python3
-, python3Packages
 , systemd
 }:
 let
@@ -42,19 +41,18 @@ stdenv.mkDerivation rec {
     systemd
   ];
   nativeBuildInputs = [
-    attr
     meson
     ninja
     pkg-config
-    python3
-  ] ++
-  (with python3Packages; [
-    jinja2
-    pytest
-    python-dbusmock
-    strenum
-    structlog
-  ]);
+    (python3.withPackages(ps: with ps; [
+      attrs
+      jinja2
+      pytest
+      python-dbusmock
+      strenum
+      structlog
+    ]))
+  ];
 
   postPatch = ''
     ln -s "${munit}" ./subprojects/munit
