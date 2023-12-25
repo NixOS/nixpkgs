@@ -74,6 +74,7 @@ let
     getent = {
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
+      freebsd = pkgs.freebsd.getent;
       darwin = pkgs.netbsd.getent;
     };
     getopt = {

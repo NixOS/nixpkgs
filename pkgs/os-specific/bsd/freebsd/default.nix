@@ -65,6 +65,7 @@ lib.makeScope newScope (self: with self; {
   tsort = callPackage ./tsort.nix {};
   lorder = callPackage ./lorder.nix {};
   rpcgen = callPackage ./rpcgen.nix {};
+  getent = callPackage ./getent.nix {};
   gencat = callPackage ./gencat.nix {};
   cp = callPackage ./cp.nix {};
   bin = callPackage ./bin.nix {};
