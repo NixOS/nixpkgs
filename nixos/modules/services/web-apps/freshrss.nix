@@ -294,7 +294,6 @@ in
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
-        wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
           DATA_PATH = cfg.dataDir;
