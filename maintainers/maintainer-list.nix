@@ -4180,6 +4180,15 @@
     githubId = 118536343;
     name = "David Hamelin";
   };
+  david-r-cox = {
+    email = "david@integrated-reasoning.com";
+    github = "david-r-cox";
+    githubId = 4259949;
+    name = "David Cox";
+    keys = [{
+      fingerprint = "0056 A3F6 9918 1E0D 8FF0  BCDE 65BB 07FA A4D9 4634";
+    }];
+  };
   davidrusu = {
     email = "davidrusu.me@gmail.com";
     github = "davidrusu";
