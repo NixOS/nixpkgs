@@ -87,7 +87,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (
     oldAttrs: {
 
-      outputs = oldAttrs.outputs ++ [ "lib" ];
+      outputs = oldAttrs.outputs ++ lists.optionals (!(builtins.elem "lib" oldAttrs.outputs)) [ "lib" ];
 
       # Patch the nvcc.profile.
       # Syntax:
