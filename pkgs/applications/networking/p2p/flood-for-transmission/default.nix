@@ -1,3 +1,4 @@
+# To use this package, use: `services.transmission.webHome = pkgs.flood-for-transmission;`
 { lib
 , buildNpmPackage
 , fetchFromGitHub
