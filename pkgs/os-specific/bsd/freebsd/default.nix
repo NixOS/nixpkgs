@@ -96,6 +96,7 @@ lib.makeScope newScope (self: with self; {
   makefs = callPackage ./makefs.nix {};
   librt = callPackage ./librt.nix {};
   init = callPackage ./init.nix {};
+  rc = callPackage ./rc.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
