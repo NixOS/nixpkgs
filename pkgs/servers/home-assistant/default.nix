@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python311
 , substituteAll
 , ffmpeg-headless
@@ -30,6 +31,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.9";
+        src = fetchFromGitHub {
+          owner = "Noltari";
+          repo = "aioairzone";
+          rev = "refs/tags/${version}";
+          hash = "sha256-0nbH0pnTYRuSOkzG5Yn/fJmRKtXBMd6ti6Z+AW72j3Q=";
+        };
+      });
+
       aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
         version = "19.2.1";
         src = fetchFromGitHub {
@@ -40,16 +51,46 @@ let
         };
       });
 
-      # https://github.com/home-assistant/core/pull/101913
-      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.9.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-j8Sah6wmnUUp2kWHHi/7aHTod3nD0OLM2BPAiZIhI50=";
+      aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
+        version = "22.10.1";
+        src = fetchFromGitHub {
+          owner = "ludeeus";
+          repo = "aiogithubapi";
+          rev = "refs/tags/${version}";
+          hash = "sha256-ceBuqaMqqL6qwN52765MG4sLt+08hx2G9rUVNC7x6ik=";
         };
-        patches = [];
-        doCheck = false;
+        propagatedBuildInputs = with self; [
+          aiohttp
+          async-timeout
+          backoff
+        ];
+      });
+
+      aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.05.5";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aionotion";
+          rev = "refs/tags/${version}";
+          hash = "sha256-/2sF8m5R8YXkP89bi5zR3h13r5LrFOl1OsixAcX0D4o=";
+        };
+        patches = [
+          (fetchpatch {
+            # clean up build dependencies; https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83
+            url = "https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83.patch";
+            hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+          })
+        ];
+      });
+
+      aiopvapi = super.aiopvapi.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.4";
+        src = fetchFromGitHub {
+          owner = "sander76";
+          repo = "aio-powerview-api";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
+        };
       });
 
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
@@ -60,14 +101,19 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace \
+            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
+            '"poetry-core"'
+        '';
       });
 
-      aioresponses = super.aioresponses.overridePythonAttrs (oldAttrs: rec {
-        pname = "aioresponses";
-        version = "0.7.6";
+      amberelectric = super.amberelectric.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.4";
         src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-5SWJnTxRm6mzP0RxrgA+jnV+Gp23WjqQA57wbT2V9Dk=";
         };
       });
 
@@ -123,6 +169,7 @@ let
           aenum
           aiohttp
           pydantic
+          requests
         ];
         doCheck = false; # requires asynctest, which does not work on python 3.11
       });
@@ -143,6 +190,16 @@ let
           repo = "justnimbus";
           rev = "refs/tags/${version}";
           hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
+        };
+      });
+
+      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.0";
+        src = fetchFromGitHub {
+          owner = "py-mine";
+          repo = "mcstatus";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-1jPIsFEJ17kjtCBiX4IvSf2FxYw9DkH3MrrJ85N71tc=";
         };
       });
 
@@ -168,6 +225,32 @@ let
         doCheck = false; # no tests
       });
 
+      openai = super.openai.overridePythonAttrs (oldAttrs: rec {
+        version = "0.28.1";
+        src = fetchFromGitHub {
+          owner = "openai";
+          repo = "openai-python";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
+        };
+        nativeBuildInputs = with self; [
+          setuptools
+        ];
+        propagatedBuildInputs = with self; [
+          aiohttp
+          requests
+          tqdm
+        ];
+        disabledTestPaths = [
+          # Requires a real API key
+          "openai/tests/test_endpoints.py"
+          "openai/tests/asyncio/test_endpoints.py"
+          # openai: command not found
+          "openai/tests/test_file_cli.py"
+          "openai/tests/test_long_examples_validator.py"
+        ];
+      });
+
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -186,15 +269,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
-        version = "5.9.6";
-        src = fetchPypi {
-          pname = "psutil";
-          inherit version;
-          hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
         };
       });
 
@@ -228,6 +302,16 @@ let
         };
       });
 
+      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
+        version = "7.6.0";
+        src = fetchFromGitHub {
+          owner = "jabesq";
+          repo = "pyatmo";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-rAmSxayXljOJchiMtSOgnotzQmapK2n86HwNi9HJX68=";
+        };
+      });
+
       pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.18";
         src = fetchFromGitHub {
@@ -250,6 +334,16 @@ let
         };
       });
 
+      pydrawise = super.pydrawise.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.11.0";
+        src = fetchFromGitHub {
+          owner = "dknowles2";
+          repo = "pydrawise";
+          rev = "refs/tags/${version}";
+          hash = "sha256-gKOyTvdETGzKlpU67UKaHYTIvnAX9znHIynP3BiVbt4=";
+        };
+      });
+
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -257,6 +351,22 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
         };
+      });
+
+      pyprusalink = super.pyprusalink.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "home-assistant-libs";
+          repo = "pyprusalink";
+          rev = "refs/tags/${version}";
+          hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
+        };
+        patches = [
+          (fetchpatch {
+            url = "https://github.com/home-assistant-libs/pyprusalink/commit/bc3a2f4a00979e7daaf783cdc1f1862087e8d4df.patch";
+            hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
+          })
+        ];
       });
 
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
@@ -295,6 +405,26 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
+        };
+      });
+
+      screenlogicpy = super.screenlogicpy.overridePythonAttrs (oldAttrs: rec {
+        version = "0.9.4";
+        src = fetchFromGitHub {
+          owner = "dieselrabbit";
+          repo = "screenlogicpy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-OdAhA+vzIrUnE8Xdv52x7ij0LJKyxawaSY4QORP1TUg=";
+        };
+      });
+
+      tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.19";
+        src = fetchFromGitHub {
+          owner = "jrester";
+          repo = "tesla_powerwall";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ClrMgPAMBtDMfD6hCJIN1u4mp75QW+c3re28v3FreQg=";
         };
       });
 
