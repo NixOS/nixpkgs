@@ -11,7 +11,7 @@
 , enableCuda ? config.cudaSupport
 # type of GPU architecture
 , nvidiaArch ? "sm_60"
-, cudatoolkit
+, cudaPackages
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -43,10 +43,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [ autoreconfHook perl ]
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [ mpi blas lapack scalapack ]
-    ++ lib.optional enableCuda cudatoolkit;
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+    ];
 
   preConfigure = ''
     export FC="mpifort"
