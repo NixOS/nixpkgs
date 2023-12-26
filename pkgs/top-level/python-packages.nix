@@ -3429,6 +3429,8 @@ self: super: with self; {
 
   dugong = callPackage ../development/python-modules/dugong { };
 
+  dukpy = callPackage ../development/python-modules/dukpy { };
+
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) gnupg;
   };
@@ -3953,6 +3955,8 @@ self: super: with self; {
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
+
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
@@ -5716,6 +5720,8 @@ self: super: with self; {
   javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
   javaproperties = callPackage ../development/python-modules/javaproperties { };
+
+  javascripthon = callPackage ../development/python-modules/javascripthon { };
 
   jax = callPackage ../development/python-modules/jax { };
 
@@ -9840,7 +9846,11 @@ self: super: with self; {
 
   psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
 
+  psychopy = callPackage ../development/python-modules/psychopy { };
+
   psychrolib = callPackage ../development/python-modules/psychrolib { };
+
+  psychtoolbox = callPackage ../development/python-modules/psychtoolbox { };
 
   psycopg = callPackage ../development/python-modules/psycopg { };
 
@@ -10868,6 +10878,8 @@ self: super: with self; {
   });
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
+
+  pyparallel = callPackage ../development/python-modules/pyparallel { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
 

@@ -6308,6 +6308,8 @@ with pkgs;
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  psychopy = with python3Packages; toPythonApplication psychopy;
+
   pscale = callPackage ../development/tools/pscale { };
 
   pulsarctl = callPackage ../tools/admin/pulsarctl { };
