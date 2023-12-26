@@ -268,13 +268,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 
-# Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @adisbladis
-/nixos/modules/virtualisation/cri-o.nix      @adisbladis
-/nixos/modules/virtualisation/podman         @adisbladis
-/nixos/tests/cri-o.nix                       @adisbladis
-/nixos/tests/podman                          @adisbladis
-
 # Docker tools
 /pkgs/build-support/docker                   @roberth
 /nixos/tests/docker-tools*                   @roberth
