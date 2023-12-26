@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, testers
+, distribution
 }:
 
 buildGoModule rec {
@@ -37,6 +39,13 @@ buildGoModule rec {
     # TestInMemoryDriverSuite: timeout after 10 minutes, looks like a deadlock.
     "-skip=^TestHTTPChecker$|^TestInMemoryDriverSuite$"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = distribution;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Toolkit to pack, ship, store, and deliver container content";
