@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "bluesabre";
     repo = "mugshot";
     rev = "mugshot-${version}";
-    sha256 = "sha256-RjD7IUBHqmB4DJ1abATYDPZLIHVwiXblWvWcq6xjhQk=";
+    hash = "sha256-RjD7IUBHqmB4DJ1abATYDPZLIHVwiXblWvWcq6xjhQk=";
   };
 
   nativeBuildInputs = [
