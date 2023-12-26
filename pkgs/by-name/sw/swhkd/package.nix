@@ -1,27 +1,27 @@
 { lib
 , pkgs
-, stdenv
 , fetchFromGitHub
 , rustPlatform
+, pkg-config
 }:
 let
-  name = "swhkd";
-  version = "30f25b5bf99df5f16d91b51a7bd397c1de075085";
-  buildInputs = with pkgs; [ systemd ];
-  nativeBuildInputs = with pkgs; [ pkg-config ];
 in
 rustPlatform.buildRustPackage rec {
-  inherit name buildInputs nativeBuildInputs;
+  pname = "swhkd";
+  version = "unstable-2023-10-16";
   src = fetchFromGitHub {
     owner = "waycrate";
-    repo = name;
-    rev = version;
+    repo = "swhkd";
+    rev = "30f25b5bf99df5f16d91b51a7bd397c1de075085";
     hash = "sha256-K05v2xw7G/ZJsf62g696TOSZHMAOWf24sT9JcvvBNx0=";
   };
-  cargoHash = "sha256-E5AE18CfeX1HI/FbGDFoUDsPyG/CpJrD+8Ky7c+EQUw=";
+  cargoHash = "sha256-mHLrjNVgB5Fxo1Iv4VuHd7ZWQBIiCQK7A+BOfrYdR54=";
+  buildInputs = with pkgs; [ systemd ];
+  nativeBuildInputs = with pkgs; [ pkg-config ];
   meta = {
-    description = "Sxhkd clone for Wayland (works on TTY and X11 too)";
+    description = "A hotkey daemon for Wayland, X11 and TTY";
     homepage = "https://github.com/waycrate/swhkd";
+    changelog = "https://github.com/waycrate/swhkd/blob/main/CHANGELOG.md";
     license = lib.licenses.bsd2;
     mainProgram = "swhkd";
   };
