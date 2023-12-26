@@ -105,7 +105,6 @@ self: super: {
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
-  mod = super.mod_0_1_2_2;
   path-io = doJailbreak super.path-io;
 
 
