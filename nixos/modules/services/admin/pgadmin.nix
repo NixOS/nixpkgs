@@ -3,7 +3,6 @@
 with lib;
 
 let
-  pkg = pkgs.pgadmin4;
   cfg = config.services.pgadmin;
 
   _base = with types; [ int bool str ];
@@ -35,6 +34,8 @@ in
       type = types.port;
       default = 5050;
     };
+
+    package = mkPackageOptionMD pkgs "pgadmin4" { };
 
     initialEmail = mkOption {
       description = lib.mdDoc "Initial email for the pgAdmin account";
@@ -150,7 +151,7 @@ in
           echo "$PW"
           # Retype password:
           echo "$PW"
-        ) | ${pkg}/bin/pgadmin4-setup
+        ) | ${cfg.package}/bin/pgadmin4-setup
       '';
 
       restartTriggers = [
@@ -162,7 +163,7 @@ in
         DynamicUser = true;
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
-        ExecStart = "${pkg}/bin/pgadmin4";
+        ExecStart = "${cfg.package}/bin/pgadmin4";
       };
     };
 
