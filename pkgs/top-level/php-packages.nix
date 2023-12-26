@@ -612,18 +612,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
           patches = lib.optionals (stdenv.isi686 && stdenv.isLinux) [
             ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch
-          ] ++ lib.optionals (!(lib.versionAtLeast php.version "8.3")) [
-            # Fix failing "sqlite3_defensive.phpt" test caused by
-            # sqlite-3.44.0 compatibility:
-            #   https://github.com/NixOS/nixpkgs/pull/264927#issuecomment-1830827387
-            # The patch is already backported to php-8.3.0. Older versions are pending
-            # the backport.
-            (fetchpatch {
-              name = "sqlite-3.44.0.patch";
-              url = "https://github.com/php/php-src/commit/2a4775d6a73e9f6d4fc8e7df6f052aa18790a8e9.patch";
-              hash = "sha256-2VNfURGZmIEXtoLxOLX5wec9mqNGEWPY3ofCMw4E7S0=";
-              excludes = [ "NEWS" ];
-            })
           ];
         }
         { name = "sysvmsg"; }
