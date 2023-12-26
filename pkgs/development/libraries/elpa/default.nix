@@ -19,13 +19,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2023.05.001";
+  version = "2023.11.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-7GS+XWUigQ1gGjuOajFyDjw+tK8zpDTYpkVw125kYrY=";
+    sha256 = "sha256-tXvRl85nvbbiRRJOn9q4mz/a3dvTTYEu5JDVdH7npBA=";
   };
 
   patches = [
