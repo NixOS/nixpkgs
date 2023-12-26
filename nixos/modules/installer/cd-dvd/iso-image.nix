@@ -4,10 +4,8 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  sysroot = "/sysroot";
+  inherit (lib) optionalString concatStringsSep optional boolToString types mkOption mkImageMediaOverride optionals stringLength optionalAttrs mkEnableOption literalExpression;
   /**
    * Given a list of `options`, concats the result of mapping each options
    * to a menuentry for use in grub.
@@ -37,28 +35,6 @@ let
       options
     )
   ;
-
-  signFile = file: let
-    name = baseNameOf file;
-    signDrv = pkgs.runCommand "${name}-signed" { nativeBuildInputs = [ pkgs.buildPackages.sbsigntool ]; } ''
-      mkdir -p $out
-      sbsign \
-        --cert ${config.secureboot.signingCertificate} \
-        --output $out/${name} \
-        ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
-        ${file}
-    '';
-    # TODO: validate that the signed thing is the same as the original
-    verifyDrv = pkgs.runCommand "${name}-signed-verified" {
-      nativeBuildInputs = [ pkgs.buildPackages.sbsigntool ];
-      passthru.unsigned = file;
-    } ''
-      sbverify --cert ${config.secureboot.signingCertificate} ${signDrv}/${name}
-      mkdir -p $out
-      cp -L ${signDrv}/${name} $out/
-    '';
-  in "${verifyDrv}/${name}";
-  maybeSignFile = file: if config.secureboot.signingCertificate == null then file else signFile file;
 
   /**
    * Builds the default options.
@@ -191,23 +167,6 @@ let
     else
       "# No refind for ${targetArch}"
   ;
-
-  uki = pkgs.runCommand "uki" {} ''
-    mkdir $out
-    hash=$(sha256sum ${config.system.build.squashfsStore} | cut -d ' ' -f 1)
-    args=(
-      build
-      --output $out/uki.efi
-      --linux ${config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile}
-      --initrd ${config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile}
-      --cmdline init=${config.system.build.toplevel}/init\ ${escapeShellArg (toString config.boot.kernelParams)}\ store_squashfs_hash=$hash
-      --os-release ${config.system.build.etc}/os-release
-      --stub ${pkgs.systemd}/lib/systemd/boot/efi/linuxx64.efi.stub
-      --sbat ${config.secureboot.sbat}
-    )
-    ${pkgs.buildPackages.ukify}/lib/systemd/ukify "''${args[@]}"
-  '';
-
 
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
@@ -347,7 +306,7 @@ let
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
-      --sbat=${config.secureboot.sbat} \
+      ${optionalString (config.boot.secureboot.sbat != null) "--sbat=${config.boot.secureboot.sbat}"} \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
       -o $out/grub.efi \
       -p /EFI/boot \
@@ -368,19 +327,10 @@ let
     # Add a marker so GRUB can find the filesystem.
     touch $out/EFI/nixos-installer-image
 
-
-    bootefi_path=$out/EFI/boot/boot${targetArch}.efi
-
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
-    ${if (config.secureboot.signingCertificate == null) then ''
-      cp ${grubImage}/grub.efi $out/EFI/boot/boot${targetArch}.efi
-    '' else ''
-      cp ${signFile "${grubImage}/grub.efi"} $out/EFI/boot/grub${targetArch}.efi
-      cp ${config.secureboot.shim} $bootefi_path
-    ''}
-
-    cp ${maybeSignFile "${uki}/uki.efi"} $out/EFI/boot/uki.efi
+    cp ${config.isoImage.efiBootImage} $out/EFI/boot/boot${targetArch}.efi
+    cp ${config.boot.secureboot.signFile "${grubImage}/grub.efi"} $out/EFI/boot/grub${targetArch}.efi
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -419,10 +369,6 @@ let
     # Menu entries
     #
 
-    # TODO: get rid of this and make all the entries use the UKI with optional aux binaries for commandline extensions
-    menuentry "Secure Boot" {
-      chainloader /EFI/boot/uki.efi
-    }
     ${buildMenuGrub2}
     submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
       ${grubMenuCfg}
@@ -777,46 +723,14 @@ in
       '';
     };
 
-    secureboot.signingCertificate = mkOption {
-      default = null;
-      type = types.nullOr types.pathInStore;
-      description = lib.mdDoc ''
-        Certificate file to use for signing EFI binaries for Secure Boot.
-
-        For official NixOS installer images, this will be the NixOS
-        vendor certificate.
-
-        This should usually correspond to a Machine Owner Key (MOK)
-        enrolled on the machine being booted.
-      '';
-    };
-
-    secureboot.privateKeyFile = mkOption {
-      default = null;
-      type = types.nullOr types.pathInStore;
-      description = lib.mdDoc ''
-        Private key file to use for signing EFI binaries for Secure Boot.
-
-        This is insecure (leaks the private key to the world-readable
-        Nix store) and should only be used for testing!
-      '';
-    };
-
-    secureboot.shim = mkOption {
+    isoImage.efiBootImage = mkOption {
       type = types.pathInStore;
-      description = ''
-        Path to a signed shim binary.
-
-        For most use cases, this should be the one signed with the
-        official NixOS keys, which will allow booting on systems with
-        Secure Boot enabled and only Microsoft keys trusted.
-      '';
-    };
-
-    secureboot.sbat = mkOption {
-      type = types.pathInStore;
-      description = ''
-        Path to an SBAT CSV file which will be embedded in the signed GRUB binary.
+      internal = true;
+      default = "${grubImage}/grub.efi";
+      description = lib.mdDoc ''
+        The EFI image to boot.
+        The default is the GRUB image bundled with the config, but this may be overridden.
+        This is used to enable Secure Boot via shim.
       '';
     };
 
@@ -842,7 +756,7 @@ in
     # image) to make this a live CD.
     "/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
-        device = "${sysroot}/iso/nix-store.squashfs";
+        device = "/iso/nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
@@ -857,14 +771,14 @@ in
       { fsType = "overlay";
         device = "overlay";
         options = [
-          "lowerdir=${sysroot}/nix/.ro-store"
-          "upperdir=${sysroot}/nix/.rw-store/store"
-          "workdir=${sysroot}/nix/.rw-store/work"
+          "lowerdir=/nix/.ro-store"
+          "upperdir=/nix/.rw-store/store"
+          "workdir=/nix/.rw-store/work"
         ];
         depends = [
-          "${sysroot}/nix/.ro-store"
-          "${sysroot}/nix/.rw-store/store"
-          "${sysroot}/nix/.rw-store/work"
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
         ];
       };
   };
@@ -935,7 +849,7 @@ in
     # store on the CD.
     isoImage.contents =
       [
-        { source = maybeSignFile (config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile);
+        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
           target = "/boot/" + config.system.boot.loader.kernelFile;
         }
         { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
@@ -1001,62 +915,6 @@ in
       efiBootable = true;
       efiBootImage = "boot/efi.img";
     });
-
-    boot.initrd.systemd.enable = true;
-
-    boot.initrd.systemd.mounts = [
-      {
-        where = "/sysroot";
-        what = "tmpfs";
-        mountConfig = {
-          Type = "tmpfs";
-          Options = ["mode=0755"];
-        };
-      }
-    ];
-    boot.initrd.systemd.services.verify-squashfs = {
-      requiredBy = ["sysroot-nix-.ro\\x2dstore.mount"];
-      before = ["sysroot-nix-.ro\\x2dstore.mount"];
-      requires = ["sysroot-iso.mount"];
-      after = ["sysroot-iso.mount"];
-      unitConfig.DefaultDependencies = false;
-      serviceConfig = {
-        Type = "oneshot";
-        StandardOutput = "kmsg+console";
-        RemainAfterExit = true;
-      };
-      script = ''
-        set -x
-        </proc/cmdline readarray -d ' ' params
-        for param in "''${params[@]}"; do
-          [[ $param = store_squashfs_hash=* ]] || continue
-          hash="''${param#store_squashfs_hash=}"
-          hash="''${hash%$'\n'}"
-        done
-        if [[ -z "$hash" ]]; then
-          echo "Could not find expected Nix store squashfs hash on command line."
-          false
-        fi
-        sha256sum -c <<EOF
-        $hash ${config.fileSystems."/nix/.ro-store".device}
-        EOF
-      '';
-    };
-    # overlayfs requires the mutable directories, but
-    # won't create them by itself.
-    boot.initrd.systemd.services.mkdir-rw-store = {
-      description = "Store Overlay Mutable Directories";
-      wantedBy = [ "sysroot-nix-store.mount" ];
-      before = [ "sysroot-nix-store.mount" ];
-      unitConfig.RequiresMountsFor = "/sysroot/nix/.rw-store";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-      script = ''
-        mkdir -p /sysroot/nix/.rw-store/{work,store}
-      '';
-    };
 
     boot.postBootCommands =
       ''
