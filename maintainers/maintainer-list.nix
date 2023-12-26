@@ -2623,6 +2623,12 @@
       fingerprint = "F549 3B7F 9372 5578 FDD3  D0B8 A1BC 8428 323E CFE8";
     }];
   };
+  br337 = {
+    email = "brian.porumb@proton.me";
+    github = "br337";
+    githubId = 49288125;
+    name = "Brian Porumb";
+  };
   bradediger = {
     email = "brad@bradediger.com";
     github = "bradediger";
