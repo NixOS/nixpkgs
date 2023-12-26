@@ -289,6 +289,11 @@ final: prev: {
     '';
   };
 
+  readability-extractor = prev.readability-extractor.override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.pango ];
+  };
+
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };

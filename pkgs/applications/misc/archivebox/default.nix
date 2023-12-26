@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , fetchPypi
+, nodePackages
 , curl
 , wget
 , ripgrep
@@ -68,7 +69,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ curl wget ripgrep nodejs ]}"
+    "--prefix PATH : ${lib.makeBinPath [ curl wget ripgrep nodejs nodePackages.readability-extractor ]}"
   ];
 
   format = "pyproject";
