@@ -711,6 +711,15 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  al3xtjames = {
+    email = "nix@alextjam.es";
+    github = "al3xtjames";
+    githubId = 5672538;
+    name = "Alex James";
+    keys = [{
+      fingerprint = "F354 FFAB EA89 A49D 33ED  2590 4729 B829 AC5F CC72";
+    }];
+  };
   alanpearce = {
     email = "alan@alanpearce.eu";
     github = "alanpearce";
