@@ -17,20 +17,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = pname;
     rev = "tauri-v${version}";
-    hash = "sha256-HdA7c64ru21DvjhIswRW6r+EH3uYj4ipWzBcfVcc644=";
+    hash = "sha256-1rhdvTjA53Zxx3qm/Im2uQBWbYU/HlPPUQ3txq0uLps=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-hmig/QKzdt/rIl4gggTygwZ6rEmekw0OlppN6pXvvmw=";
+  cargoHash = "sha256-CHX4fesnqxoeplqXGFrn4RSfGdrkhKNANvXIwMkWXDs=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
