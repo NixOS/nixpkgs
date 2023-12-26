@@ -4,7 +4,7 @@
 , nix-update-script
 }:
 let
-  version = "2.8.0";
+  version = "2.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "wallust";
@@ -15,14 +15,10 @@ rustPlatform.buildRustPackage {
     owner = "explosion-mental";
     repo = "wallust";
     rev = version;
-    hash = "sha256-qX+pU/ovRV7dA35qSA724vV9azz7dMbEyMVBzqS47Ps=";
+    hash = "sha256-AuZRt02bFr7GzI7qe4giGgjlXK/WX+gmF4+QwD0ChXk=";
   };
 
-  cargoHash = "sha256-PAO7qxaKrRKYoC5RElNCylqRzOgvzPyxb6tTzW4jNi4=";
-
-  # temporarily skip tests for args due to a string formatting conflict
-  # https://codeberg.org/explosion-mental/wallust/issues/30
-  cargoTestFlags = [ "--test config" "--test cache" "--test template" ];
+  cargoHash = "sha256-O9w18ae83mgF3zjk0WUMeu16Ap7CF2ubuPnOqeCt4Nw=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -32,7 +28,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza iynaix ];
     downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
-    platforms = lib.platforms.unix;
     mainProgram = "wallust";
   };
 }
