@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
+    "-DINSTALL_LICENSE=OFF"
   ];
 
   # Work around https://github.com/NixOS/nixpkgs/issues/166205.
