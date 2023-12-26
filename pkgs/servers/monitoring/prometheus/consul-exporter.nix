@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "consul_exporter";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "consul_exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y3H4lFRoOLs8BBWUqfQOl9ny7HoRGqKIiq/ONcnzMW0=";
+    hash = "sha256-3aPLpTV+xuotpBYmRDfU3ewRRlmf7VUdh/u9/SLQDeE=";
   };
 
-  vendorHash = "sha256-V3IWhVm47Uwgk3Mcu4JcYYGAdCrHDhkXYXCTXQr1BDE=";
+  vendorHash = "sha256-fsST29HGwJVLVSoAr8tNukW81iJtpb/oypwp5cH7oLQ=";
 
   ldflags = [
     "-s"
