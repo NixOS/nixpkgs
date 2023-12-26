@@ -2,6 +2,10 @@
 , python3
 , fetchFromGitHub
 , fetchPypi
+, curl
+, wget
+, ripgrep
+, nodejs
 }:
 
 let
@@ -34,6 +38,7 @@ let
           rev = "e43f383dae3a35237e42f6acfe1207a8e7e7bdf5";
           hash = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
         };
+        disabledTests = [ "test_should_highlight_bash_syntax_without_name" ];
       });
     };
   };
@@ -41,25 +46,32 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "archivebox";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zHty7lTra6yab9d0q3EqsPG3F+lrnZL6PjQAbL1A2NY=";
+    sha256 = "sha256-IBKYp6AKQTC6LiCS2KLGFy51/U18R+eYhbRdhrq8/pw=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    requests
-    mypy-extensions
+    croniter
+    dateparser
     django
     django-extensions
-    dateparser
-    youtube-dl
-    python-crontab
-    croniter
-    w3lib
     ipython
+    mypy-extensions
+    pdm-backend
+    python-crontab
+    requests
+    w3lib
+    yt-dlp
   ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ curl wget ripgrep nodejs ]}"
+  ];
+
+  format = "pyproject";
 
   meta = with lib; {
     description = "Open source self-hosted web archiving";
