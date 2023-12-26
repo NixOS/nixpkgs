@@ -241,7 +241,7 @@ in
 
     boot.loader.grub.enable = false;
 
-    fileSystems = {
+    fileSystems = mkImageMediaOverride {
       "/" = mkImageMediaOverride
         {
           fsType = "tmpfs";
