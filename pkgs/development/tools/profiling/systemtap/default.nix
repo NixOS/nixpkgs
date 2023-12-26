@@ -22,6 +22,16 @@ let
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
 
+  ## symlink farm for --sysroot flag
+  sysroot = runCommand "systemtap-sysroot-${kernel.version}" {
+    modulePath = "lib/modules/${kernel.version}";
+  } ''
+    mkdir -p $out/$modulePath $out/boot
+    cp -s ${kernel.dev}/vmlinux $out
+    cp -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
+    cp -Rs ${kernel.dev}/$modulePath/* ${kernel}/$modulePath/* $out/$modulePath
+  '';
+
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in runCommand "systemtap-${kernel.version}-${version}" {
@@ -40,7 +50,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   done
   rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
-    --add-flags "-r ${kernel.dev}" \
+    --add-flags "--sysroot ${sysroot}" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}
