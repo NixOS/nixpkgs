@@ -48,6 +48,8 @@ let
     (lib.genAttrs (builtins.attrValues dependencyTypes) (dependencyType: [ ]))
     pubspecLock.packages;
 
+  # fetchTarball fails with "tarball contains an unexpected number of top-level files". This is a workaround.
+  # https://discourse.nixos.org/t/fetchtarball-with-multiple-top-level-directories-fails/20556
   mkHostedDependencySource = name: details:
     let
       archive = fetchurl {
