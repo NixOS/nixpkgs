@@ -35,27 +35,17 @@ let
             assert "println works\n" == output, "println works\n != " + output
       '';
   }) args);
+
+  ## TODO shared infra with ../kernel-generic.nix
   kernels = {
     inherit (pkgs.linuxKernel.vanillaPackages)
-      linux_6_1;
+      linux_6_1 linux_6_6
+    ;
+    inherit (pkgs.linuxKernel.packages)
+      linux_rt_6_1 linux_6_1_hardened
+      linux_libre linux_testing
+    ;
   };
-  # kernels = pkgs.linuxKernel.vanillaPackages // {
-  #   inherit (pkgs.linuxKernel.packages)
-  #     linux_4_19_hardened
-  #     linux_5_4_hardened
-  #     linux_5_10_hardened
-  #     linux_5_15_hardened
-  #     linux_6_1_hardened
-  #     linux_6_5_hardened
-  #     linux_6_6_hardened
-  #     linux_rt_5_4
-  #     linux_rt_5_10
-  #     linux_rt_5_15
-  #     linux_rt_6_1
-  #     linux_libre
-
-  #     linux_testing;
-  # };
 
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
   passthru = {
