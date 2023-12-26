@@ -6,6 +6,14 @@
 with pkgs.lib;
 
 let
+  stapScript = pkgs.writeText "test.stp" ''
+    probe begin {
+      println("println works")
+      exit()
+    }
+  '';
+
+  ## TODO shared infra with ../kernel-generic.nix
   testsForLinuxPackages = linuxPackages: (import ./make-test-python.nix ({ pkgs, ... }: {
     name = "kernel-${linuxPackages.kernel.version}";
     meta = with pkgs.lib.maintainers; {
@@ -20,13 +28,11 @@ let
 
     testScript =
       ''
-        print("SYSTEMTAP TESTS for ${linuxPackages.kernel.modDirVersion}")
-        machine.succeed("stap ${pkgs.writeText "test.stp" ''
-          probe begin {
-            println("hello world\n")
-            exit()
-          }
-        ''}")
+        with subtest("Capture stap ouput"):
+            output = machine.succeed("stap ${stapScript} 2>&1")
+
+        with subtest("Ensure that expected output from stap script is there"):
+            assert "println works\n" == output, "println works\n != " + output
       '';
   }) args);
   kernels = {
