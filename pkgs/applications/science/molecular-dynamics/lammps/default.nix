@@ -108,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
       '';
-    homepage = "https://lammps.sandia.gov";
-    license = licenses.gpl2Plus;
+    homepage = "https://www.lammps.org";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     # compiling lammps with 64 bit support blas and lapack might cause runtime
     # segfaults. In anycase both blas and lapack should have the same #bits

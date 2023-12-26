@@ -105,6 +105,8 @@ with lib;
       ];
 
     boot.swraid.enable = true;
+    # remove warning about unset mail
+    boot.swraid.mdadmConf = "PROGRAM ${pkgs.coreutils}/bin/true";
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the

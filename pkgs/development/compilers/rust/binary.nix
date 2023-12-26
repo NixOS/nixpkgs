@@ -26,7 +26,8 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
+      homepage = "https://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
@@ -70,8 +71,9 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://doc.rust-lang.org/cargo/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "The Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
