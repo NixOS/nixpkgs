@@ -16,7 +16,7 @@
 , ...
 }@args:
 
-# This is a fixed-output derivation and setup hook that can be used to fetch dependencies for Dart projects.
+# This is a derivation and setup hook that can be used to fetch dependencies for Dart projects.
 # It is designed to be placed in the nativeBuildInputs of a derivation that builds a Dart package.
 # Providing the buildDrvArgs argument is highly recommended.
 let
