@@ -355,6 +355,13 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
       }
+    )
+    ++ (lib.optional (stdenv.isDarwin && lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+      { # this can be removed post 6.1
+        name = "fix_build_failure_due_to_PropertyKey_EncoderID";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
+        hash = "sha256-Ittka0mId1N/BwJ0FQ0ygpTSS6Y11u2SjWDpbGN+KXo=";
+      }
     ));
 
   configurePlatforms = [];
