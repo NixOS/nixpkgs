@@ -69,7 +69,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ curl wget ripgrep nodejs nodePackages.readability-extractor ]}"
+    "--prefix PATH : ${lib.makeBinPath [ curl wget ripgrep nodejs nodePackages.readability-extractor nodePackages.postlight-parser ]}"
   ];
 
   format = "pyproject";
