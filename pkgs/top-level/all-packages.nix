@@ -1090,8 +1090,6 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
-  pacproxy = callPackage ../tools/networking/pacproxy { };
-
   pacup = callPackage ../tools/package-management/pacup { };
 
   patcher9x = callPackage ../development/tools/patcher9x { };
