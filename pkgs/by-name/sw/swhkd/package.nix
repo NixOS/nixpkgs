@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/waycrate/swhkd/blob/main/CHANGELOG.md";
     license = lib.licenses.bsd2;
     mainProgram = "swhkd";
+    maintainers = with lib.maintainers; [ ivandimitrov8080 ];
   };
 }
