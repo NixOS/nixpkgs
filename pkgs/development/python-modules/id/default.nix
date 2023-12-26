@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "id";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "di";
     repo = "id";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T3p13EnXU1Efysnu1RQw5st1BgHyZNdrKtkzQSguRtM=";
+    hash = "sha256-njX4kL8pCv6+SyYUtmzUh/BWWsaueKO+IiJ96sAXMVo=";
   };
 
   nativeBuildInputs = [

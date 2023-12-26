@@ -174,8 +174,12 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
+
+    runHook postInstall
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -187,10 +191,14 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       nativeBuildInputs = [ python3 ];
       src = fetchdep info.deps."src/third_party/electron_node";
       buildPhase = ''
+        runHook preBuild
         make tar-headers
+        runHook postBuild
       '';
       installPhase = ''
+        runHook preInstall
         mv ${name} $out
+        runHook postInstall
       '';
     };
   };

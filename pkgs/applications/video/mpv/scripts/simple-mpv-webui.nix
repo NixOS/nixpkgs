@@ -13,7 +13,7 @@ buildLua rec {
   };
 
   scriptPath = ".";
-  passthru.scriptName = "webui.lua";
+  passthru.scriptName = "webui";
 
   meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";

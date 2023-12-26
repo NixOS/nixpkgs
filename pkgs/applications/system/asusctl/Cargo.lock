@@ -199,7 +199,7 @@ checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
 name = "asusctl"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "asusd",
  "cargo-husky",
@@ -218,7 +218,7 @@ dependencies = [
 
 [[package]]
 name = "asusd"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "async-trait",
  "cargo-husky",
@@ -237,12 +237,13 @@ dependencies = [
  "serde_derive",
  "systemd-zbus",
  "tokio",
+ "udev",
  "zbus",
 ]
 
 [[package]]
 name = "asusd-user"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "config-traits",
@@ -845,7 +846,7 @@ dependencies = [
 
 [[package]]
 name = "config-traits"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "log",
@@ -898,7 +899,7 @@ dependencies = [
 
 [[package]]
 name = "cpuctl"
-version = "5.0.0"
+version = "5.0.2"
 
 [[package]]
 name = "cpufeatures"
@@ -1025,7 +1026,7 @@ dependencies = [
 
 [[package]]
 name = "dmi_id"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "log",
  "udev",
@@ -2845,7 +2846,7 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "rog-control-center"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "asusd",
  "cargo-husky",
@@ -2878,7 +2879,7 @@ dependencies = [
 
 [[package]]
 name = "rog_anime"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "dmi_id",
@@ -2895,7 +2896,7 @@ dependencies = [
 
 [[package]]
 name = "rog_aura"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "dmi_id",
@@ -2909,7 +2910,7 @@ dependencies = [
 
 [[package]]
 name = "rog_dbus"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "asusd",
  "cargo-husky",
@@ -2922,7 +2923,7 @@ dependencies = [
 
 [[package]]
 name = "rog_platform"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "concat-idents",
@@ -2939,7 +2940,7 @@ dependencies = [
 
 [[package]]
 name = "rog_profiles"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "cargo-husky",
  "log",
@@ -2953,7 +2954,7 @@ dependencies = [
 
 [[package]]
 name = "rog_simulators"
-version = "5.0.0"
+version = "5.0.2"
 dependencies = [
  "glam",
  "log",

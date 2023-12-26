@@ -40,6 +40,6 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ eclairevoyant ];
     platforms = lib.platforms.all;
-    mainProgram = pname;
+    mainProgram = "asciinema";
   };
 }

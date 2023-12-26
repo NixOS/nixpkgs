@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rke2";
-  version = "1.28.3+rke2r1";
+  version = "1.29.0+rke2r1";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0a659XE/Pg8g5Ui3ugUQeFnXJiWqkPbvhtdpLp4/5i8=";
+    hash = "sha256-E59GUcbnbvsGZYn87RGNrGTVUsydKsjL+C5h15q74p0=";
   };
 
-  vendorHash = "sha256-Kexu3l4iV8bIIFFae0KVypy2bTKwtl5ibEDQ7YP0JK0=";
+  vendorHash = "sha256-Og0CqxNnhRN6PdggneGK05uprZ2D7lux/snXcArIm8Q=";
 
   postPatch = ''
     # Patch the build scripts so they work in the Nix build environment.

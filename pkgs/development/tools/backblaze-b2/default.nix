@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchPypi, installShellFiles }:
+{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     tqdm
     platformdirs
     packaging
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -74,6 +75,15 @@ python3Packages.buildPythonApplication rec {
       --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2) \
       --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2)
   '';
+
+  passthru.tests.version = (testers.testVersion {
+    package = backblaze-b2;
+    command = "backblaze-b2 version --short";
+  }).overrideAttrs (old: {
+    # workaround the error: Permission denied: '/homeless-shelter'
+    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+    HOME = "$(mktemp -d)";
+  });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onetun";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "aramperes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-svf30eFldfbhi8L44linHccGApYFuEWZOjzyqM+tjw4=";
+    sha256 = "sha256-NH3K/EGFtBcTAxGntneV86zd8eWSV4fFxvr76xtE/mw=";
   };
 
-  cargoHash = "sha256-KcixaVNZEpGeMg/sh3dua3D7vqzlBvf+Zh3MKk6LJac=";
+  cargoHash = "sha256-ZpgcFzQLiOWyhjSI+WcLa0UFUw8zQWfqJkrVVpIexgM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security

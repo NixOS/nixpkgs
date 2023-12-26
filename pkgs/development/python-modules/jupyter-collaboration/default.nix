@@ -5,29 +5,29 @@
 , hatch-jupyter-builder
 , hatch-nodejs-version
 , hatchling
-, pythonRelaxDepsHook
+, jsonschema
 , jupyter-events
 , jupyter-server
 , jupyter-server-fileid
 , jupyter-ydoc
 , jupyterlab
-, ypy-websocket
-, pytest-asyncio
+, pycrdt-websocket
 , pytest-jupyter
 , pytestCheckHook
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-qhcCPAgHlBwt+Lt8NdDa+ZPhNNotCvNtz9WQx6OHvOc=";
+    hash = "sha256-7tIdCXcEXwdPgO5HxnjAlPGcgVZ2AtUKethYqxiplY8=";
   };
 
   postPatch = ''
@@ -39,25 +39,21 @@ buildPythonPackage rec {
     hatch-nodejs-version
     hatchling
     jupyterlab
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "ypy-websocket"
   ];
 
   propagatedBuildInputs = [
+    jsonschema
     jupyter-events
     jupyter-server
     jupyter-server-fileid
     jupyter-ydoc
-    ypy-websocket
+    pycrdt-websocket
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytest-jupyter
     pytestCheckHook
+    websockets
   ];
 
   pythonImportsCheck = [
@@ -71,6 +67,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TEMP
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "JupyterLab Extension enabling Real-Time Collaboration";

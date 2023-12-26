@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "dockerspawner";
-  version = "12.1.0";
+  version = "13.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3894ed8a9157f8ac8f42e0130f43932490ac5d1e89e6f295b1252f08c00ba36b";
+    sha256 = "sha256-POlTZ9luS9wQ/vt9w8VMfTEqGzg/DhfB45ePfvnyito=";
   };
 
   propagatedBuildInputs = [
@@ -25,12 +25,15 @@ buildPythonPackage rec {
   # tests require docker
   doCheck = false;
 
-  pythonImportsCheck = [ "dockerspawner" ];
+  pythonImportsCheck = [
+    "dockerspawner"
+  ];
 
   meta = with lib; {
-    description = "Dockerspawner: A custom spawner for Jupyterhub";
-    homepage = "https://jupyter.org";
+    description = "A custom spawner for Jupyterhub";
+    homepage = "https://github.com/jupyterhub/dockerspawner";
+    changelog = "https://github.com/jupyterhub/dockerspawner/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
