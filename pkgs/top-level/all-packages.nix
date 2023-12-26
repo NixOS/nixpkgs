@@ -15805,10 +15805,9 @@ with pkgs;
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
-  flutterPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/flutter { });
-  flutter-unwrapped = flutterPackages.stable;
-  flutter = flutterPackages.wrapFlutter flutter-unwrapped;
+  flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutter = flutterPackages.stable;
+  flutter313 = flutterPackages.v3_13;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;

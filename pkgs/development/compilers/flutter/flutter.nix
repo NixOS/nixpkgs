@@ -4,6 +4,7 @@
 , dart
 , src
 , pubspecLock
+, artifactHashes ? null
 , lib
 , stdenv
 , callPackage
@@ -119,7 +120,7 @@ let
       '';
 
       passthru = {
-        inherit dart engineVersion;
+        inherit dart engineVersion artifactHashes;
         tools = flutterTools;
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files

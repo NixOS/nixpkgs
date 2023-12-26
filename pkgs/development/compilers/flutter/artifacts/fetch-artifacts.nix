@@ -1,3 +1,8 @@
+# Schema:
+# ${flutterVersion}.${targetPlatform}.${hostPlatform}
+#
+# aarch64-darwin as a host is not yet supported.
+# https://github.com/flutter/flutter/issues/60118
 { lib
 , runCommand
 , xorg
