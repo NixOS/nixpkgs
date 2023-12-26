@@ -258,6 +258,7 @@ in
             # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
+            requiredBy = mkIf sw.randomEncryption.enable [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
               ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
