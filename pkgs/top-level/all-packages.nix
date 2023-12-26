@@ -28471,8 +28471,6 @@ with pkgs;
 
   govers = callPackage ../development/tools/govers { };
 
-  govendor = callPackage ../development/tools/govendor { };
-
   goverview = callPackage ../tools/security/goverview { };
 
   go-tools = callPackage ../development/tools/go-tools { };
