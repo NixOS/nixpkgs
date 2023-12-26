@@ -36,7 +36,6 @@
 , importlib-resources
 , packaging
 , unidiff
-, pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
 , callPackage
@@ -71,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.10.0";
+    version = "3.10.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Jlppe6LgDQKQgywINkOX9zKWTomzIz28M5scrj3H94Y=";
+      hash = "sha256-/J4jWoIZEObSZKw04Ib6h4AvJtfNwzwozRu+gFek1Dk=";
     };
 
     propagatedBuildInputs = [
@@ -119,10 +118,7 @@ let
       git
       openssh
       glibcLocales
-      pythonRelaxDepsHook
     ];
-
-    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which
