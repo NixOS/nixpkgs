@@ -1,5 +1,4 @@
 { lib
-, buildGoPackage
 , fetchFromGitHub
 , buildGoModule
 , sqlite
