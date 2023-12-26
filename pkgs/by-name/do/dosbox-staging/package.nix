@@ -7,6 +7,7 @@
 , SDL2_net
 , alsa-lib
 , copyDesktopItems
+, darwin
 , fluidsynth
 , glib
 , gtest
@@ -88,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    AudioUnit
+    Carbon
+    Cocoa
+  ]);
 
   desktopItems = [
     (makeDesktopItem {
