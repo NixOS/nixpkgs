@@ -69,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    alsa-lib
     fluidsynth
     glib
     iir1
@@ -87,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
     SDL2_net
     speexdsp
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
   desktopItems = [
