@@ -23,13 +23,10 @@ let
   };
 
   ## symlink farm for --sysroot flag
-  sysroot = runCommand "systemtap-sysroot-${kernel.version}" {
-    modulePath = "lib/modules/${kernel.version}";
-  } ''
-    mkdir -p $out/$modulePath $out/boot
-    cp -s ${kernel.dev}/vmlinux $out
-    cp -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
-    cp -Rs ${kernel.dev}/$modulePath/* ${kernel}/$modulePath/* $out/$modulePath
+  sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
+    mkdir -p $out/boot
+    ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
+    ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
   '';
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
