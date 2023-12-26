@@ -4376,6 +4376,12 @@
     githubId = 47436522;
     name = "deliciouslytyped";
   };
+  delliottxyz = {
+    name = "Darragh Elliott";
+    email = "me@delliott.xyz";
+    github = "delliottxyz";
+    githubId = 150736012;
+  };
   delroth = {
     email = "delroth@gmail.com";
     github = "delroth";
