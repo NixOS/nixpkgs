@@ -168,5 +168,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     maintainers = with maintainers; [ zhaofengli ];
     mainProgram = "bambu-studio";
+    platforms = platforms.linux;
   };
 }
