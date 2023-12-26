@@ -2,6 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , python3Packages
+, nix-update-script
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,6 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://nomfoundation.org/nom-tools/Nom-Font";
