@@ -19,7 +19,6 @@
 , customSourceBuilders ? { }
 
 , sdkSetupScript ? ""
-, pubGetScript ? "dart pub get"
 , extraPackageConfigSetup ? ""
 
   # Output type to produce. Can be any kind supported by dart
@@ -76,7 +75,7 @@ let
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
   baseDerivation = stdenv.mkDerivation (finalAttrs: (builtins.removeAttrs args [ "gitHashes" "sdkSourceBuilders" "pubspecLock" ]) // {
-    inherit pubspecLockFile packageConfig sdkSetupScript pubGetScript
+    inherit pubspecLockFile packageConfig sdkSetupScript
       dartCompileCommand dartOutputType dartRuntimeCommand dartCompileFlags
       dartJitFlags;
 
@@ -115,7 +114,6 @@ let
 
     passthru = {
       pubspecLock = pubspecLockData;
-      generatePubspecLock = generators.generatePubspecLock { inherit pubGetScript; };
     } // (args.passthru or { });
 
     meta = (args.meta or { }) // { platforms = args.meta.platforms or dart.meta.platforms; };
