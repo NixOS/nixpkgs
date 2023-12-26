@@ -74,7 +74,7 @@ let
 
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
-  baseDerivation = stdenv.mkDerivation (finalAttrs: (builtins.removeAttrs args [ "gitHashes" "sdkSourceBuilders" "pubspecLock" ]) // {
+  baseDerivation = stdenv.mkDerivation (finalAttrs: (builtins.removeAttrs args [ "gitHashes" "sdkSourceBuilders" "pubspecLock" "customSourceBuilders" ]) // {
     inherit pubspecLockFile packageConfig sdkSetupScript
       dartCompileCommand dartOutputType dartRuntimeCommand dartCompileFlags
       dartJitFlags;
