@@ -370,6 +370,7 @@
   ./services/backup/borgbackup.nix
   ./services/backup/borgmatic.nix
   ./services/backup/btrbk.nix
+  ./services/backup/bupstash.nix
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
   ./services/backup/mysql-backup.nix
