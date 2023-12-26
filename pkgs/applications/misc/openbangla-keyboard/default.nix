@@ -11,6 +11,7 @@
 , ibus
 , qtbase
 , zstd
+, fetchpatch
 , withFcitx5Support ? false
 , withIbusSupport ? false
 }:
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-4CR4lgHB51UvS/RLc0AEfIKJ7dyTCOfDrQdGLf9de8E=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # prevents runtime crash when fcitx5-based IM attempts to look in /usr
+    (fetchpatch {
+      name = "use-CMAKE_INSTALL_PREFIX-for-loading-data.patch";
+      url = "https://github.com/OpenBangla/OpenBangla-Keyboard/commit/f402472780c29eaa6b4cc841a70289adf171462b.diff";
+      hash = "sha256-YahvtyOxe8F40Wfe+31C6fdmm197QN26/Q67oinOplk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,13 +75,7 @@ stdenv.mkDerivation rec {
   cargoRoot = "src/engine/riti";
   postPatch = ''
     cp ${./Cargo.lock} ${cargoRoot}/Cargo.lock
-
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr" "$out"
-
-    substituteInPlace src/shared/FileSystem.cpp \
-      --replace "/usr" "$out"
-  '';
+ '';
 
   meta = {
     isIbusEngine = withIbusSupport;
