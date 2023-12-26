@@ -353,6 +353,7 @@ in
       ];
       serviceConfig = {
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
+        Restart = "on-failure";
 
         User = "frigate";
         Group = "frigate";
