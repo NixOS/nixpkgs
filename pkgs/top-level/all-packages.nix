@@ -16502,7 +16502,8 @@ with pkgs;
     julia_19-bin
     julia_110-bin
     julia_18
-    julia_19;
+    julia_19
+    julia_110;
 
   julia-lts = julia_16-bin;
   julia-stable = julia_19;
