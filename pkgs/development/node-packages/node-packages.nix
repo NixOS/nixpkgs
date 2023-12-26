@@ -7186,6 +7186,15 @@ let
         sha512 = "iA7+tyVqfrATAIsIRWQG+a7ZLLD0VaOCKV2Wd/v4mqIU3J9c4jx9p7S0nw1XH3gJCKNBOOwACOPYYSUu9pgT+w==";
       };
     };
+    "@mozilla/readability-0.4.4" = {
+      name = "_at_mozilla_slash_readability";
+      packageName = "@mozilla/readability";
+      version = "0.4.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@mozilla/readability/-/readability-0.4.4.tgz";
+        sha512 = "MCgZyANpJ6msfvVMi6+A0UAsvZj//4OHREYUB9f2087uXHVoU+H+SWhuihvb1beKpM323bReQPRio0WNk2+V6g==";
+      };
+    };
     "@msgpack/msgpack-2.8.0" = {
       name = "_at_msgpack_slash_msgpack";
       packageName = "@msgpack/msgpack";
@@ -13846,6 +13855,15 @@ let
         sha512 = "ZQl7LOWaF5ePqqcX4hLuv/bLXYQNfNWw2c0/yX/TsPRKamzHcTGQnlCjHT3TsmkOUVEPS3crCxiPfdzE/Trlhg==";
       };
     };
+    "acorn-globals-7.0.1" = {
+      name = "acorn-globals";
+      packageName = "acorn-globals";
+      version = "7.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/acorn-globals/-/acorn-globals-7.0.1.tgz";
+        sha512 = "umOSDSDrfHbTNPuNpC2NSnnA3LUrqpevPb4T9jRx4MagXNS0rs+gwiTcAvqCRmsD6utzsrzNt+ebm00SNWiC3Q==";
+      };
+    };
     "acorn-import-assertions-1.9.0" = {
       name = "acorn-import-assertions";
       packageName = "acorn-import-assertions";
@@ -13934,6 +13952,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.3.0.tgz";
         sha512 = "FS7hV565M5l1R08MXqo8odwMTB02C2UqzB17RVgu9EyuYFBqJZ3/ZY97sQD5FewVu1UyDFc1yztUDrAwT0EypA==";
+      };
+    };
+    "acorn-walk-8.3.1" = {
+      name = "acorn-walk";
+      packageName = "acorn-walk";
+      version = "8.3.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.3.1.tgz";
+        sha512 = "TgUZgYvqZprrl7YldZNoa9OciCAyZR+Ejm9eXzKCmjsF5IKp/wgQ7Z/ZpjpGTIUPwrHQIcYeI8qDh4PsEwxMbw==";
       };
     };
     "add-stream-1.0.0" = {
@@ -23790,6 +23817,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/domino/-/domino-2.1.6.tgz";
         sha512 = "3VdM/SXBZX2omc9JF9nOPCtDaYQ67BGp5CoLpIQlO2KCAPETs8TcDHacF26jXadGbvUteZzRTeos2fhID5+ucQ==";
+      };
+    };
+    "dompurify-2.4.7" = {
+      name = "dompurify";
+      packageName = "dompurify";
+      version = "2.4.7";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/dompurify/-/dompurify-2.4.7.tgz";
+        sha512 = "kxxKlPEDa6Nc5WJi+qRgPbOAbgTpSULL+vI3NUXsZMlkJxTqYI9wg5ZTay2sFrdZRWHPWNi+EdAhcJf81WtoMQ==";
       };
     };
     "dompurify-3.0.6" = {
@@ -34288,6 +34324,15 @@ let
         sha512 = "u9Smc2G1USStM+s/x1ru5Sxrl6mPYCbByG1U/hUmqaVsm4tbNyS7CicOSRyuGQYZhTu0h84qkZZQ/I+dzizSVw==";
       };
     };
+    "jsdom-21.1.2" = {
+      name = "jsdom";
+      packageName = "jsdom";
+      version = "21.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/jsdom/-/jsdom-21.1.2.tgz";
+        sha512 = "sCpFmK2jv+1sjff4u7fzft+pUh2KSUbUrEHYHyfSIbGTIcmnjyp83qg6qLwdJ/I3LpTXx33ACxeRL7Lsyc6lGQ==";
+      };
+    };
     "jsdom-22.1.0" = {
       name = "jsdom";
       packageName = "jsdom";
@@ -41200,6 +41245,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.7.0.tgz";
         sha512 = "PbZERfeFdrHQOOXiAKOY0VPbykZy90ndPKk0d+CFDegTKmWp1VgOTz2xACVbr1BjCWxrQp68CXtvNsveFhqDJg==";
+      };
+    };
+    "node-gyp-build-4.7.1" = {
+      name = "node-gyp-build";
+      packageName = "node-gyp-build";
+      version = "4.7.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.7.1.tgz";
+        sha512 = "wTSrZ+8lsRRa3I3H8Xr65dLWSgCvY2l4AOnaeKdPA9TB/WYMPaTcrzf3rXvFoVvjKNVnu0CcWSx54qq9GKRUYg==";
       };
     };
     "node-gyp-build-optional-packages-5.0.3" = {
@@ -59660,6 +59714,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ws/-/ws-8.14.2.tgz";
         sha512 = "wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==";
+      };
+    };
+    "ws-8.15.1" = {
+      name = "ws";
+      packageName = "ws";
+      version = "8.15.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ws/-/ws-8.15.1.tgz";
+        sha512 = "W5OZiCjXEmk0yZ66ZN82beM5Sz7l7coYxpRkzS+p9PP+ToQry8szKh+61eNktr7EA9DOwvFGhfC605jDHbP6QQ==";
       };
     };
     "ws-8.5.0" = {
@@ -91075,6 +91138,156 @@ in
     meta = {
       description = "Type checker for the Python language";
       homepage = "https://github.com/Microsoft/pyright#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  readability-extractor = nodeEnv.buildNodePackage {
+    name = "readability-extractor";
+    packageName = "readability-extractor";
+    version = "0.0.6";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/readability-extractor/-/readability-extractor-0.0.6.tgz";
+      sha512 = "JJNUfhxI6OH9ZH8tfHK/hvC8M17S0F6f58yU6904gOJIvAi+287nBA3W/H+6DvhbCw7WJTKKlF2IxMfUKrqh+g==";
+    };
+    dependencies = [
+      sources."@mapbox/node-pre-gyp-1.0.11"
+      sources."@mozilla/readability-0.4.4"
+      sources."@tootallnate/once-2.0.0"
+      sources."abab-2.0.6"
+      sources."abbrev-1.1.1"
+      sources."acorn-8.11.2"
+      sources."acorn-globals-7.0.1"
+      sources."acorn-walk-8.3.1"
+      sources."agent-base-6.0.2"
+      sources."ansi-regex-5.0.1"
+      sources."aproba-2.0.0"
+      sources."are-we-there-yet-2.0.0"
+      sources."asynckit-0.4.0"
+      sources."balanced-match-1.0.2"
+      sources."brace-expansion-1.1.11"
+      sources."bufferutil-4.0.8"
+      sources."canvas-2.11.2"
+      sources."chownr-2.0.0"
+      sources."color-support-1.1.3"
+      sources."combined-stream-1.0.8"
+      sources."concat-map-0.0.1"
+      sources."console-control-strings-1.1.0"
+      sources."cssstyle-3.0.0"
+      sources."data-urls-4.0.0"
+      sources."debug-4.3.4"
+      sources."decimal.js-10.4.3"
+      sources."decompress-response-4.2.1"
+      sources."delayed-stream-1.0.0"
+      sources."delegates-1.0.0"
+      sources."detect-libc-2.0.2"
+      sources."domexception-4.0.0"
+      sources."dompurify-2.4.7"
+      sources."emoji-regex-8.0.0"
+      sources."encoding-0.1.13"
+      sources."entities-4.5.0"
+      sources."escodegen-2.1.0"
+      sources."esprima-4.0.1"
+      sources."estraverse-5.3.0"
+      sources."esutils-2.0.3"
+      sources."form-data-4.0.0"
+      (sources."fs-minipass-2.1.0" // {
+        dependencies = [
+          sources."minipass-3.3.6"
+        ];
+      })
+      sources."fs.realpath-1.0.0"
+      sources."gauge-3.0.2"
+      sources."glob-7.2.3"
+      sources."has-unicode-2.0.1"
+      sources."html-encoding-sniffer-3.0.0"
+      sources."http-proxy-agent-5.0.0"
+      sources."https-proxy-agent-5.0.1"
+      sources."iconv-lite-0.6.3"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.4"
+      sources."is-fullwidth-code-point-3.0.0"
+      sources."is-potential-custom-element-name-1.0.1"
+      sources."jsdom-21.1.2"
+      sources."lru-cache-6.0.0"
+      (sources."make-dir-3.1.0" // {
+        dependencies = [
+          sources."semver-6.3.1"
+        ];
+      })
+      sources."mime-db-1.52.0"
+      sources."mime-types-2.1.35"
+      sources."mimic-response-2.1.0"
+      sources."minimatch-3.1.2"
+      sources."minipass-5.0.0"
+      (sources."minizlib-2.1.2" // {
+        dependencies = [
+          sources."minipass-3.3.6"
+        ];
+      })
+      sources."mkdirp-1.0.4"
+      sources."ms-2.1.2"
+      sources."nan-2.18.0"
+      (sources."node-fetch-2.7.0" // {
+        dependencies = [
+          sources."tr46-0.0.3"
+          sources."webidl-conversions-3.0.1"
+          sources."whatwg-url-5.0.0"
+        ];
+      })
+      sources."node-gyp-build-4.7.1"
+      sources."nopt-5.0.0"
+      sources."npmlog-5.0.1"
+      sources."nwsapi-2.2.7"
+      sources."object-assign-4.1.1"
+      sources."once-1.4.0"
+      sources."parse5-7.1.2"
+      sources."path-is-absolute-1.0.1"
+      sources."psl-1.9.0"
+      sources."punycode-2.3.1"
+      sources."querystringify-2.2.0"
+      sources."readable-stream-3.6.2"
+      sources."requires-port-1.0.0"
+      sources."rimraf-3.0.2"
+      sources."rrweb-cssom-0.6.0"
+      sources."safe-buffer-5.2.1"
+      sources."safer-buffer-2.1.2"
+      sources."saxes-6.0.0"
+      sources."semver-7.5.4"
+      sources."set-blocking-2.0.0"
+      sources."signal-exit-3.0.7"
+      sources."simple-concat-1.0.1"
+      sources."simple-get-3.1.1"
+      sources."source-map-0.6.1"
+      sources."string-width-4.2.3"
+      sources."string_decoder-1.3.0"
+      sources."strip-ansi-6.0.1"
+      sources."symbol-tree-3.2.4"
+      sources."tar-6.2.0"
+      sources."tough-cookie-4.1.3"
+      sources."tr46-4.1.1"
+      sources."universalify-0.2.0"
+      sources."url-parse-1.5.10"
+      sources."utf-8-validate-6.0.3"
+      sources."util-deprecate-1.0.2"
+      sources."w3c-xmlserializer-4.0.0"
+      sources."webidl-conversions-7.0.0"
+      sources."whatwg-encoding-2.0.0"
+      sources."whatwg-mimetype-3.0.0"
+      sources."whatwg-url-12.0.1"
+      sources."wide-align-1.1.5"
+      sources."wrappy-1.0.2"
+      sources."ws-8.15.1"
+      sources."xml-name-validator-4.0.0"
+      sources."xmlchars-2.2.0"
+      sources."yallist-4.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Javascript wrapper around Mozilla Readability for ArchiveBox to call as a oneshot CLI to extract article text";
+      homepage = "https://github.com/ArchiveBox/readability-extractor";
       license = "MIT";
     };
     production = true;
