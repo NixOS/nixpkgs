@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, nix-update-script
 , testers
 , distribution
 }:
@@ -45,6 +46,7 @@ buildGoModule rec {
       package = distribution;
       version = "v${version}";
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
