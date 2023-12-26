@@ -2,10 +2,10 @@
 
 let
   pname = "buttercup-desktop";
-  version = "2.24.3";
+  version = "2.24.4";
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
-    sha256 = "sha256-ZSKsxlxP2jNUxEeF2Lfuj2yW0KqHozjPoioq4t0uzfo=";
+    sha256 = "sha256-c5MLj/1OSjGsySCENeJqEhubxl2y7uDhnOBAtLGy92I=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
