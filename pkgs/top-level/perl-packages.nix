@@ -14853,10 +14853,10 @@ with self; {
 
   MacPasteboard = buildPerlPackage {
     pname = "Mac-Pasteboard";
-    version = "0.103";
+    version = "0.104";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.103.tar.gz";
-      hash = "sha256-L16N0tsNZEVVhITKbULYOcWpfuiqGyUOaU1n1bf2Y0w=";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.104.tar.gz";
+      hash = "sha256-xVpEMRiL7EhzISp8MI+DX9Hw47oZWBcwN7Xi0BAPykA=";
     };
     buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = {
