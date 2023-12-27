@@ -20259,10 +20259,10 @@ with self; {
 
   PDL = buildPerlPackage rec {
     pname = "PDL";
-    version = "2.025";
+    version = "2.084";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.025.tar.gz";
-      hash = "sha256-G1oWfq0ndy2V2tJ/jrfQlRnSkVbu1TxvwUQVGUtaitY=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.084.tar.gz";
+      hash = "sha256-liVkOfOiUB/6k7PMfIytv5Gqv2y1+HRiSReDNlYAZGg=";
     };
     patchPhase = ''
       substituteInPlace perldl.conf \
