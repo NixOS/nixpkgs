@@ -84,13 +84,15 @@ let
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
   };
 
-  aliases = lib.optionalAttrs config.allowAliases {
+  aliases = {
     youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
   };
 in
 
 with lib; pipe scope [
   (makeScope newScope)
-  (attrsets.unionOfDisjoint aliases)
+  (self:
+    assert builtins.intersectAttrs self aliases == {};
+    self // optionalAttrs config.allowAliases aliases)
   recurseIntoAttrs
 ]
