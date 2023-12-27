@@ -415,7 +415,7 @@ in stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   configureFlags = [
-    (lib.optionalString (!withHelp) "--without-help")
+    (lib.withFeature withHelp "help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"
