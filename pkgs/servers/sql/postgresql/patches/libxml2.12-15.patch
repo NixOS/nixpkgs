@@ -1,0 +1,22 @@
+diff --git a/src/backend/utils/adt/xml.c b/src/backend/utils/adt/xml.c
+index 6411f56b998..0eb39fcfc26 100644
+--- a/src/backend/utils/adt/xml.c
++++ b/src/backend/utils/adt/xml.c
+@@ -119,7 +119,7 @@ struct PgXmlErrorContext
+ 
+ static xmlParserInputPtr xmlPgEntityLoader(const char *URL, const char *ID,
+ 										   xmlParserCtxtPtr ctxt);
+-static void xml_errorHandler(void *data, xmlErrorPtr error);
++static void xml_errorHandler(void *data, const xmlError *error);
+ static void xml_ereport_by_code(int level, int sqlcode,
+ 								const char *msg, int errcode);
+ static void chopStringInfoNewlines(StringInfo str);
+@@ -1749,7 +1749,7 @@ xml_ereport(PgXmlErrorContext *errcxt, int level, int sqlcode, const char *msg)
+  * Error handler for libxml errors and warnings
+  */
+ static void
+-xml_errorHandler(void *data, xmlErrorPtr error)
++xml_errorHandler(void *data, const xmlError *error)
+ {
+ 	PgXmlErrorContext *xmlerrcxt = (PgXmlErrorContext *) data;
+ 	xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) error->ctxt;
