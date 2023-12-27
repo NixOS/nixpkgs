@@ -25,6 +25,7 @@
 , rustlsSupport ? false, rustls-ffi
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
+, ipv6Support ? true
 
 # for passthru.tests
 , coeurl
@@ -133,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
-    ];
+    ] ++ lib.optionals ipv6Support [ "--enable-ipv6" ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
