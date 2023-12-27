@@ -17,7 +17,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-KPBKUjCxva11w/E+Qhlx+1vikpCL7Hr9MiKenYHEVSU=";
 
   # web-ext defaults to development builds:
-  #   https://github.com/mozilla/web-ext/blob/master/CONTRIBUTING.md#build-web-ext
+  # https://github.com/mozilla/web-ext/blob/master/CONTRIBUTING.md#build-web-ext
   # Install dependencies with NODE_ENV=dev but build with NODE_ENV=production
   preBuild = ''
     export NODE_ENV=production
