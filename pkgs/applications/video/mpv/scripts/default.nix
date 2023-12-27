@@ -54,10 +54,9 @@ let
         '';
       })
     ]; }; });
-in
 
-lib.recurseIntoAttrs (lib.makeScope newScope (self:
-  let inherit (self) callPackage;
+  scope = self: let
+    inherit (self) callPackage;
   in lib.mapAttrs addTests {
     inherit (callPackage ./mpv.nix { })
       acompressor autocrop autodeint autoload;
@@ -83,7 +82,15 @@ lib.recurseIntoAttrs (lib.makeScope newScope (self:
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
-  }
-  // lib.optionalAttrs config.allowAliases {
-  youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
-  }))
+  };
+
+  aliases = lib.optionalAttrs config.allowAliases {
+    youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
+  };
+in
+
+with lib; pipe scope [
+  (makeScope newScope)
+  (attrsets.unionOfDisjoint aliases)
+  recurseIntoAttrs
+]
