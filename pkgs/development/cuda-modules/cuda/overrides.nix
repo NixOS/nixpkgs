@@ -1,4 +1,4 @@
-{cudaVersion, lib}:
+{cudaVersion, lib, addDriverRunpath}:
 let
   inherit (lib) attrsets lists strings;
   # cudaVersionOlder : Version -> Boolean
@@ -42,6 +42,31 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
     lists.optionals (cudaVersionAtLeast "12.0") [final.libnvjitlink.lib]
   );
 
+  cuda_cudart = prev.cuda_cudart.overrideAttrs (
+    prevAttrs: {
+      allowFHSReferences = false;
+
+      # The libcuda stub's pkg-config doesn't follow the general pattern:
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          while IFS= read -r -d $'\0' path ; do
+            sed -i \
+              -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
+              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
+              "$path"
+          done < <(find -iname 'cuda-*.pc' -print0)
+        ''
+        + ''
+          # Namelink may not be enough, add a soname.
+          # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/25536
+          if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]] ; then
+            ln -s libcuda.so lib/stubs/libcuda.so.1
+          fi
+        '';
+    }
+  );
+
   cuda_compat = prev.cuda_compat.overrideAttrs (
     prevAttrs: {
       env.autoPatchelfIgnoreMissingDeps =
@@ -61,9 +86,64 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (
     oldAttrs: {
-      propagatedBuildInputs = [final.setupCudaHook];
 
-      meta = (oldAttrs.meta or {}) // {
+      outputs = oldAttrs.outputs ++ lists.optionals (!(builtins.elem "lib" oldAttrs.outputs)) [ "lib" ];
+
+      # Patch the nvcc.profile.
+      # Syntax:
+      # - `=` for assignment,
+      # - `?=` for conditional assignment,
+      # - `+=` to "prepend",
+      # - `=+` to "append".
+
+      # Cf. https://web.archive.org/web/20230308044351/https://arcb.csc.ncsu.edu/~mueller/cluster/nvidia/2.0/nvcc_2.0.pdf
+
+      # We set all variables with the lowest priority (=+), but we do force
+      # nvcc to use the fixed backend toolchain. Cf. comments in
+      # backend-stdenv.nix
+
+      postPatch =
+        (oldAttrs.postPatch or "")
+        + ''
+          substituteInPlace bin/nvcc.profile \
+            --replace \
+              '$(TOP)/lib' \
+              "''${!outputLib}/lib" \
+            --replace \
+              '$(TOP)/$(_NVVM_BRANCH_)' \
+              "''${!outputBin}/nvvm" \
+            --replace \
+              '$(TOP)/$(_TARGET_DIR_)/include' \
+              "''${!outputDev}/include"
+
+          cat << EOF >> bin/nvcc.profile
+
+          # Fix a compatible backend compiler
+          PATH += ${lib.getBin final.backendStdenv.cc}/bin:
+          LIBRARIES += "-L${lib.getLib final.backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
+
+          # Expose the split-out nvvm
+          LIBRARIES =+ -L''${!outputBin}/nvvm/lib
+          INCLUDES =+ -I''${!outputBin}/nvvm/include
+
+          # Expose cudart and the libcuda stubs
+          LIBRARIES =+ -L$static/lib" "-L${final.cuda_cudart.lib}/lib -L${final.cuda_cudart.lib}/lib/stubs
+          INCLUDES =+ -I${final.cuda_cudart.dev}/include
+          EOF
+        '';
+
+      propagatedBuildInputs = [ final.setupCudaHook ];
+
+      postInstall =
+        (oldAttrs.postInstall or "")
+        + ''
+          moveToOutput "nvvm" "''${!outputBin}"
+        '';
+
+      # The nvcc and cicc binaries contain hard-coded references to /usr
+      allowFHSReferences = true;
+
+      meta = (oldAttrs.meta or { }) // {
         mainProgram = "nvcc";
       };
     }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "moar";
-  version = "1.18.5";
+  version = "1.18.6";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3s95PjuHIQ0qeTtVOXqsrWFrCeuUUaaA9Lgab4ATetg=";
+    hash = "sha256-QQapWDTJkP0YuyNR8J1N2IEETG1BfkdWv40SPD/JKYg=";
   };
 
   vendorHash = "sha256-x6BeU6JDayCOi8T8+NvXZe59QmTaO9RAYwSiFlDPL/c=";

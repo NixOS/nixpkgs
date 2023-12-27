@@ -8,13 +8,13 @@ let config-module = "github.com/f1bonacc1/process-compose/src/config";
 in
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.77.4";
+  version = "0.77.6";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uouF43SokBD+LCMqSDWJ3pj2LznfJYJoUkoTQ1TyYyI=";
+    hash = "sha256-sTRKk74R60TPuYtAvmc1o0YA934SZx39DrjyGkc0smc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

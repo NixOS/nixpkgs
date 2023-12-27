@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "GPUOpen-ProfessionalCompute-Libraries";
+    owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-jmOgwESNALQt7ctmUY9JHgKq47tCwsW1ybynkX9236U=";
@@ -136,10 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Set of comprehensive computer vision and machine intelligence libraries, utilities, and applications";
-    homepage = "https://github.com/GPUOpen-ProfessionalCompute-Libraries/MIVisionX";
+    homepage = "https://github.com/ROCm/MIVisionX";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

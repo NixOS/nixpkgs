@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "fabricmanager";
   version = fmver;
   src = fetchurl {
-    url = "https://developer.download.nvidia.com/compute/cuda/redist/fabricmanager/" +
+    url = "https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/" +
           "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
     inherit sha256;
   };

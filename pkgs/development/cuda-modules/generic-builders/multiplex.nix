@@ -59,9 +59,12 @@ let
   # - Releases: ../modules/${pname}/releases/releases.nix
   # - Package: ../modules/${pname}/releases/package.nix
 
+  # FIXME: do this at the module system level
+  propagatePlatforms = lib.mapAttrs (platform: subset: map (r: r // { inherit platform; }) subset);
+
   # All releases across all platforms
   # See ../modules/${pname}/releases/releases.nix
-  allReleases = evaluatedModules.config.${pname}.releases;
+  releaseSets = propagatePlatforms evaluatedModules.config.${pname}.releases;
 
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
@@ -72,20 +75,22 @@ let
   # isSupported :: Package -> Bool
   isSupported =
     package:
-    strings.versionAtLeast cudaVersion package.minCudaVersion
+    !(strings.hasPrefix "unsupported" package.platform)
+    && strings.versionAtLeast cudaVersion package.minCudaVersion
     && strings.versionAtLeast package.maxCudaVersion cudaVersion;
 
   # Get all of the packages for our given platform.
   redistArch = flags.getRedistArch hostPlatform.system;
 
+  allReleases = builtins.concatMap (xs: xs) (builtins.attrValues releaseSets);
+
   # All the supported packages we can build for our platform.
-  # supportedPackages :: List (AttrSet Packages)
-  supportedPackages = builtins.filter isSupported (allReleases.${redistArch} or []);
+  # perSystemReleases :: List Package
+  perSystemReleases = releaseSets.${redistArch} or [ ];
 
-  # newestToOldestSupportedPackage :: List (AttrSet Packages)
-  newestToOldestSupportedPackage = lists.reverseList supportedPackages;
-
-  nameOfNewest = computeName (builtins.head newestToOldestSupportedPackage);
+  preferable =
+    p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
+  newest = builtins.head (builtins.sort preferable allReleases);
 
   # A function which takes the `final` overlay and the `package` being built and returns
   # a function to be consumed via `overrideAttrs`.
@@ -120,11 +125,9 @@ let
         attrsets.nameValuePair name fixedDrv;
 
       # versionedDerivations :: AttrSet Derivation
-      versionedDerivations = builtins.listToAttrs (lists.map buildPackage newestToOldestSupportedPackage);
+      versionedDerivations = builtins.listToAttrs (lists.map buildPackage perSystemReleases);
 
-      defaultDerivation = attrsets.optionalAttrs (versionedDerivations != {}) {
-        ${pname} = versionedDerivations.${nameOfNewest};
-      };
+      defaultDerivation = { ${pname} = (buildPackage newest).value; };
     in
     versionedDerivations // defaultDerivation;
 in

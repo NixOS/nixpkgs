@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "5.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-ZdPSUXchQ19awvlNFVih38p6AU7KQ2RttUnm8zQnTWs=";
+    hash = "sha256-0+HCqp/mn+O6Cnbmma7iw5EFBbLozvnkqGA378oj0G8=";
   };
 
   cargoHash = "";

@@ -195,7 +195,7 @@ let
       buildPlatformLlvmStdenv.cc
       pkg-config
       libuuid
-      libpng # needed for "host/generate_colors_info"
+      (libpng.override { apngSupport = false; }) # needed for "host/generate_colors_info"
     ]
     # When cross-compiling, chromium builds a huge proportion of its
     # components for both the `buildPlatform` (which it calls

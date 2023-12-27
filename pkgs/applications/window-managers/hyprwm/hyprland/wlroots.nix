@@ -1,12 +1,9 @@
 { fetchFromGitLab
 , wlroots
-, libdisplay-info
-, libliftoff
-, hwdata
 }:
 wlroots.overrideAttrs
   (old: {
-    version = "0.17.0-dev";
+    version = "0.18.0-dev";
 
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
@@ -16,11 +13,7 @@ wlroots.overrideAttrs
       hash = "sha256-7kvyoA91etzVEl9mkA/EJfB6z/PltxX7Xc4gcr7/xlo=";
     };
 
-    pname = "${old.pname}-hyprland";
+    patches = [ ]; # don't inherit old.patches
 
-    buildInputs = old.buildInputs ++ [
-      hwdata
-      libdisplay-info
-      libliftoff
-    ];
+    pname = "${old.pname}-hyprland";
   })

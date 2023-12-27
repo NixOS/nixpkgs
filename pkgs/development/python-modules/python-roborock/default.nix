@@ -19,8 +19,8 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.36.2";
-  format = "pyproject";
+  version = "0.38.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FyoYAXWdNANxZJ9EKyfRrywKPJmSyt8QRPBlrk9jRIw=";
+    hash = "sha256-jYESUMhLb5oiM3PWIIIU4dn/waGUnCAaXe0URnIq0C8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry-core==1.7.0" "poetry-core"
+      --replace "poetry-core==1.7.1" "poetry-core"
   '';
 
   pythonRelaxDeps = [

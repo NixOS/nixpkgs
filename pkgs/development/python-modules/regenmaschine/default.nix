@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2023.11.0";
+  version = "2023.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "regenmaschine";
     rev = "refs/tags/${version}";
-    hash = "sha256-FRfw3B2zHEspKf1LENrB3Ayu6/t3hyS8sjuwoBC5Lfk=";
+    hash = "sha256-9VBqLmbWJCrfDw9T1qmE9KkdlS+MDnvoG8O9dPCuJDs=";
   };
 
   nativeBuildInputs = [

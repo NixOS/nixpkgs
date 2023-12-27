@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = lib.teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
 })

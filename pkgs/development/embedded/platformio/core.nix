@@ -2,6 +2,7 @@
 , python3Packages
 , fetchFromGitHub
 , fetchpatch
+, installShellFiles
 , git
 , spdx-license-list-data
 , substituteAll
@@ -43,6 +44,7 @@ with python3Packages; buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
+    installShellFiles
     pythonRelaxDepsHook
     setuptools
   ];
@@ -88,6 +90,16 @@ with python3Packages; buildPythonApplication rec {
   postInstall = ''
     mkdir -p $udev/lib/udev/rules.d
     cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+
+    installShellCompletion --cmd platformio \
+      --bash <(_PLATFORMIO_COMPLETE=bash_source $out/bin/platformio) \
+      --zsh <(_PLATFORMIO_COMPLETE=zsh_source $out/bin/platformio) \
+      --fish <(_PLATFORMIO_COMPLETE=fish_source $out/bin/platformio)
+
+    installShellCompletion --cmd pio \
+      --bash <(_PIO_COMPLETE=bash_source $out/bin/pio) \
+      --zsh <(_PIO_COMPLETE=zsh_source $out/bin/pio) \
+      --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
   '';
 
   disabledTestPaths = [
@@ -186,5 +198,6 @@ with python3Packages; buildPythonApplication rec {
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
+    mainProgram = "platformio";
   };
 }

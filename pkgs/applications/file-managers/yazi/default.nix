@@ -74,5 +74,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sxyazi/yazi";
     license = licenses.mit;
     maintainers = with maintainers; [ xyenon matthiasbeyer ];
+    mainProgram = "yazi";
   };
 }

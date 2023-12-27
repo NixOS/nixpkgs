@@ -48,7 +48,12 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm555 share/applications/com.rtosta.zapzap.desktop -t $out/share/applications/
-    install -Dm555 share/icons/com.rtosta.zapzap.svg -t $out/share/icons/hicolor/scalable/
+    install -Dm555 share/icons/com.rtosta.zapzap.svg -t $out/share/icons/hicolor/scalable/apps/
+  '';
+
+  dontWrapQtApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   # has no tests

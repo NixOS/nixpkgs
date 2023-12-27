@@ -105,6 +105,8 @@
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # can't find gnu/stubs-32.h
+    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -151,7 +153,7 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 # passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.

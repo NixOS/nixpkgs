@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "domain-exporter";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "domain_exporter";
     rev = "v${version}";
-    hash = "sha256-qZle54BxKdPuVFNEGmXBNU93yF/MESUnW1a24BRxlZ8=";
+    hash = "sha256-tdAU4BY2jT3l/VMIthrJOPhPYi9UMYD7ZUVhwbO1oUA=";
   };
 
-  vendorHash = "sha256-UO4fCJD3PldU2wQ9264OLKHP10c0pKPsOc/8gP5ddW4=";
+  vendorHash = "sha256-6C1LfWF4tjCGW3iiEhD+qBJ+CjAv4A9KYKH/owTAYJ8=";
 
   doCheck = false; # needs internet connection
 

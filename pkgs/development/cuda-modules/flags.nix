@@ -143,7 +143,7 @@ let
     else if nixSystem == "x86_64-windows" then
       "windows-x86_64"
     else
-      builtins.throw "Unsupported Nix system: ${nixSystem}";
+      "unsupported";
 
   # Maps NVIDIA redist arch to Nix system.
   # It is imperative that we include the boolean condition based on jetsonTargets to ensure
@@ -163,7 +163,7 @@ let
     else if redistArch == "windows-x86_64" then
       "x86_64-windows"
     else
-      builtins.throw "Unsupported NVIDIA redist arch: ${redistArch}";
+      "unsupported-${redistArch}";
 
   formatCapabilities =
     {
@@ -175,9 +175,10 @@ let
 
       # archNames :: List String
       # E.g. [ "Turing" "Ampere" ]
+      #
+      # Unknown architectures are rendered as sm_XX gencode flags.
       archNames = lists.unique (
-        lists.map (cap: cudaComputeCapabilityToName.${cap} or (throw "missing cuda compute capability"))
-          cudaCapabilities
+        lists.map (cap: cudaComputeCapabilityToName.${cap} or "sm_${dropDot cap}") cudaCapabilities
       );
 
       # realArches :: List String
@@ -219,7 +220,7 @@ let
       isJetsonBuild =
         let
           requestedJetsonDevices =
-            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap})
+            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap} or false)
               cudaCapabilities;
           requestedNonJetsonDevices =
             lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))

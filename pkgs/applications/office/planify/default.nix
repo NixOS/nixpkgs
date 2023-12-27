@@ -16,6 +16,7 @@
 , libgee
 , libical
 , libportal-gtk4
+, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.2.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-tcQNnfM690Je8sF19OSZ4GnXkhsSSrNHZ5EDXmMOW9Q=";
+    hash = "sha256-i+Up92Gl3FjgQ4GpcZruvYD//TPNWktSuWXGgDTwbWw=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     libgee
     libical
     libportal-gtk4
+    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0

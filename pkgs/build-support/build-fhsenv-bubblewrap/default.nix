@@ -187,6 +187,12 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
+    ${lib.optionalString privateTmp ''
+    # sddm places XAUTHORITY in /tmp
+    if [[ "$XAUTHORITY" == /tmp/* ]]; then
+      x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
+    fi''}
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev

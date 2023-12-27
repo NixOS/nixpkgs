@@ -44,6 +44,7 @@ with lib;
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
+      intel-vaapi-driver = super.intel-vaapi-driver.override { enableGui = false; };
       libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
       libva = super.libva-minimal;
@@ -72,7 +73,7 @@ with lib;
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {
-        qtbase = super'.qtbase.override { withGtk3 = false; };
+        qtbase = super'.qtbase.override { withGtk3 = false; withQttranslation = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11

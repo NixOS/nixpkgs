@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "minidump";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PPvvvHz3WA67Vn2P7MIY+ChkjXrCOuTgj0KXr4B2mZ0=";
+    hash = "sha256-R+tza5C/2egkajScmilp/8qowoSklYVfEB+f0KMNBqQ=";
   };
 
   nativeBuildInputs = [

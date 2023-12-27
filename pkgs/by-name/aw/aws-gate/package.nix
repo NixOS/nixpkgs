@@ -50,6 +50,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ tirimia ];
     platforms = with platforms; linux ++ darwin;
-    mainProgram = pname;
+    mainProgram = "aws-gate";
   };
 }

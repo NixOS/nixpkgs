@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A portable and modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/freeswitch/spandsp";
     platforms = with lib.platforms; unix;
-    maintainers = with lib.maintainers; [ ajs124 misuzu ];
+    maintainers = with lib.maintainers; [ misuzu ];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
   };

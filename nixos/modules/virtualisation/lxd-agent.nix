@@ -58,11 +58,14 @@ in {
     systemd.services.lxd-agent = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
+      before = [ "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       path = [ pkgs.kmod pkgs.util-linux ];
 
       preStart = preStartScript;
 
       # avoid killing nixos-rebuild switch when executed through lxc exec
+      restartIfChanged = false;
       stopIfChanged = false;
 
       unitConfig = {

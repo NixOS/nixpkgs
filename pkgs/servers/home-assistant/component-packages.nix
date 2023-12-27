@@ -169,7 +169,8 @@
       anel-pwrctrl-homeassistant
     ];
     "anova" = ps: with ps; [
-    ]; # missing inputs: anova-wifi
+      anova-wifi
+    ];
     "anthemav" = ps: with ps; [
       anthemav
     ];
