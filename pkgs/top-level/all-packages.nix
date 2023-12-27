@@ -4471,8 +4471,6 @@ with pkgs;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
-  bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
-
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
 
   bmon = callPackage ../tools/misc/bmon { };
