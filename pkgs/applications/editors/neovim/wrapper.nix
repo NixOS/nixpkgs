@@ -32,12 +32,22 @@ let
     # set to false if you want to control where to save the generated config
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
-    , neovimRcContent ? ""
+    # vimL code that should be sourced as part of the generated init.lua file
+    , neovimRcContent ? null
+    # lua code to put into the generated init.lua file
+    , luaRcContent ? ""
     # entry to load in packpath
     , packpathDirs
     , ...
   }:
+
   let
+
+    rcContent = ''
+      ${luaRcContent}
+    '' + lib.optionalString (!isNull neovimRcContent) ''
+      vim.cmd.source "${writeText "init.vim" neovimRcContent}"
+    '';
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
@@ -66,7 +76,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
       ++ commonWrapperArgs
       ;
 
@@ -84,6 +94,7 @@ let
       inherit python3Env rubyEnv;
       withRuby = rubyEnv != null;
       inherit wrapperArgs;
+      luaRcContent = rcContent;
 
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
