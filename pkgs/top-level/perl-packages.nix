@@ -12478,10 +12478,10 @@ with self; {
 
   Imager = buildPerlPackage {
     pname = "Imager";
-    version = "1.020";
+    version = "1.022";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.020.tar.gz";
-      hash = "sha256-1vEMzP3kCd5l7DE3Pyy38kuW0d1Pc+45tsZnuODUhCk=";
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.022.tar.gz";
+      hash = "sha256-3nYdmIDy4fd894yx92xNhbk093nvjVWUft0POrDlkEY=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
     makeMakerFlags = [ "--incpath ${pkgs.libjpeg.dev}/include" "--libpath ${pkgs.libjpeg.out}/lib" "--incpath" "${pkgs.libpng.dev}/include" "--libpath" "${pkgs.libpng.out}/lib" ];
