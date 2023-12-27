@@ -4,7 +4,8 @@
 }:
 let
   cdefs_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
+    url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?h=3.8-stable";
+    name = "sys-cdefs.h";
     sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
   };
   queue_h = fetchurl {
@@ -12,7 +13,8 @@ let
     sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
   };
   tree_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
+    url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-tree.h?h=3.8-stable";
+    name = "sys-tree.h";
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
