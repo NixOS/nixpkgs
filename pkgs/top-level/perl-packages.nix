@@ -8007,10 +8007,10 @@ with self; {
 
   DistZilla = buildPerlPackage {
     pname = "Dist-Zilla";
-    version = "6.030";
+    version = "6.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.030.tar.gz";
-      hash = "sha256-xAa75oCelO23DKlDJMMBQz1sij375wsC3xLh3/LzsTA=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.031.tar.gz";
+      hash = "sha256-8p+NBsGCtreQDFXZKT8/mWjbJ8UkDoKh9CtWSrrUrZk=";
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
     propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
