@@ -19,33 +19,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.70";
+  version = "5.71";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-N+Ny6RaVXhRMuIL4iOS+QImPEK47fCE93N1V7pwAkng=";
+    hash = "sha256-uCjUGMk87R9Vthb7VILPAVN0QL+zT72hpWTz7OlHNdg=";
   };
-
-  patches = [
-    # replace use of a non-standard symbol to fix build with musl libc
-    # (pkgsMusl.bluez)
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
-      hash = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
-    })
-    # Fix device pairing regression
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=3a9c637010f8dc1ba3e8382abe01065761d4f5bb";
-      hash = "sha256-UUmYMHnxYrw663nEEC2mv3zj5e0omkLNejmmPUtgS3c=";
-    })
-    # https://github.com/skysafe/reblog/tree/main/cve-2023-45866
-    (fetchpatch {
-      name = "CVE-2023-45866.patch";
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/profiles/input?id=25a471a83e02e1effb15d5a488b3f0085eaeb675";
-      hash = "sha256-IuPQ18yN0EO/PkqdT/JETyOxdZCKewBiDjGN4CG2GLo=";
-    })
-  ];
 
   buildInputs = [
     alsa-lib
