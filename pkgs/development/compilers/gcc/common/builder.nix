@@ -290,7 +290,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   # HACK: this is an extremely scorched-earth solution to a very strange problem
   # references to the previous gcc seem to be retained in ALL shared objects
   # not sure why this rpath is being included
-  + lib.optionalString (stdenv.isFreeBSD && /* TODO(@rhelmot) */ (stdenv.name == "stdenv-freebsd" || stdenv.name == "stdenv-freebsd-boot-1")) ''
+  + lib.optionalString (stdenv.isFreeBSD) ''
     PARENT_CC_HASH="$(echo "${lib.getLib stdenv.cc.cc}" | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")"
     sed -i -e "s|$PARENT_CC_HASH|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" $(find ''${!outputLib} -type f)
   '';
