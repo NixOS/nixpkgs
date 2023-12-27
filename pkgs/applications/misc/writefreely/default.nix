@@ -23,6 +23,6 @@ buildGoModule rec {
     description = "Build a digital writing community";
     homepage = "https://github.com/writefreely/writefreely";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ soopyc ];
   };
 }
