@@ -28772,10 +28772,10 @@ with self; {
 
   XMLRSS = buildPerlModule {
     pname = "XML-RSS";
-    version = "1.62";
+    version = "1.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.62.tar.gz";
-      hash = "sha256-0ycGNELH/3FDmTqgwtFv3lEhSRyXFmHrbLcA0uBDi04=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.63.tar.gz";
+      hash = "sha256-vAEKSv321breOXdNwzjrmCuVMZ2z6t0bPXm0HsHJ3OE=";
     };
     propagatedBuildInputs = [ DateTimeFormatMail DateTimeFormatW3CDTF XMLParser ];
     meta = {
