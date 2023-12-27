@@ -60,9 +60,57 @@ This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr
 
 ## `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin` {#trivial-builder-writeText}
 
-These functions write `text` to the Nix store. This is useful for creating scripts from Nix expressions. `writeTextFile` takes an attribute set and expects two arguments, `name` and `text`. `name` corresponds to the name used in the Nix store path. `text` will be the contents of the file. You can also set `executable` to true to make this file have the executable bit set.
+These functions create derivations that write text to a file in the Nix store, which is useful for creating scripts from Nix expressions.
 
-Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
+`writeTextFile` takes an attribute set of the form:
+
+```nix
+{
+  # The name of the resulting derivation
+  name = "my-cool-script";
+
+  # The contents of the file
+  text = ''
+    #!/bin/sh
+    echo "This is my cool script!"
+  '';
+
+  # (Optional) Whether the resulting file should have the execute permission.
+  # Defaults to false.
+  executable = true;
+
+  # (Optional) Path of the resulting file relative to the derivation output.
+  # Defaults to "", which will write the file directly to the derivation's output path.
+  # Any parent directories will be created automatically.
+  destination = "some/subpath/my-cool-script";
+
+  # (Optional) Commands to run after generating the file, e.g. lints.
+  # Defaults to "";
+  checkPhase = ''
+    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
+  '';
+
+  # (Optional) Additional metadata for the derivation.
+  # Defaults to {}.
+  meta = {
+    license = pkgs.lib.licenses.cc0;
+  };
+
+  # (Optional) Whether to allow substituting from a binary cache.
+  # Defaults to false, as the operation is assumed to be faster performed locally.
+  # You may want to set this to true if the checking step is expensive.
+  allowSubstitutes = true;
+
+  # (Optional) Whether to prefer building locally, even if faster remote builders are available.
+  # Defaults to true for similar reasons.
+  preferLocalBuild = false;
+}
+```
+
+Note that the output of `writeText` is a derivation, which will coerce to the store path of its output,
+which will not match the path of the actual file if `destination` is set.
+
+Many more functions wrap `writeTextFile`, including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`.
 
 Here are a few examples:
 ```nix
