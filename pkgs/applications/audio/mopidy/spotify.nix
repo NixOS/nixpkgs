@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "unstable-2023-11-01";
+  version = "unstable-2023-12-20";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    rev = "48faaaa2642647b0152231798b46ccd9631694f5";
-    hash = "sha256-RwkUdcbDU7/ndVnPteG/iXB2dloljvCHQlvPk4tacuA=";
+    rev = "2d26b54900bc1fdb974f571036f7101f6e6a3846";
+    hash = "sha256-T5lWgjDhYCUe/mWAM1SFHzWbxyJ7US1fn0sPTVi/s2s=";
   };
 
   propagatedBuildInputs = [
