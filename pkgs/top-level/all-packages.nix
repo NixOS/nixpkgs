@@ -4473,8 +4473,6 @@ with pkgs;
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
-  bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
-
   bmon = callPackage ../tools/misc/bmon { };
 
   boca = callPackage ../development/libraries/boca { };
