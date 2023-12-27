@@ -27700,13 +27700,12 @@ with pkgs;
 
   blktrace = callPackage ../os-specific/linux/blktrace { };
 
-  bluez5 = callPackage ../os-specific/linux/bluez { };
-
-  bluez5-experimental = callPackage ../os-specific/linux/bluez {
+  bluez-experimental = bluez.override {
     withExperimental = true;
   };
 
-  bluez = bluez5;
+  bluez5 = bluez;
+  bluez5-experimental = bluez-experimental;
 
   bolt = callPackage ../os-specific/linux/bolt { };
 
