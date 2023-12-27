@@ -26435,10 +26435,10 @@ with self; {
 
   TextCSV_XS = buildPerlPackage {
     pname = "Text-CSV_XS";
-    version = "1.52";
+    version = "1.53";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.52.tgz";
-      hash = "sha256-5BWqcFut+Es1ncTA8MmC8b9whIHaoUdW8xNufInA5B0=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.53.tgz";
+      hash = "sha256-ujIxYQ/HVaaeFOtKPG2MzkbMT9MoU3d6bJzkhaiHi0I=";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";
