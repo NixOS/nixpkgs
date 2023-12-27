@@ -31118,10 +31118,6 @@ with pkgs;
   docker-machine-hyperkit = callPackage ../applications/networking/cluster/docker-machine/hyperkit.nix { };
   docker-machine-kvm = callPackage ../applications/networking/cluster/docker-machine/kvm.nix { };
   docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
-  docker-machine-xhyve = callPackage ../applications/networking/cluster/docker-machine/xhyve.nix {
-    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
-    inherit (darwin) cctools;
-  };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
 
