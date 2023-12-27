@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/flatpak/xdg-dbus-proxy";
     license = lib.licenses.lgpl21Plus;
     mainProgram = "xdg-dbus-proxy";
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

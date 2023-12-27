@@ -61,14 +61,14 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
-/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
-/maintainers/scripts/doc @jtojnar @ryantm
+/maintainers/scripts/db-to-md.sh @ryantm
+/maintainers/scripts/doc @ryantm
 
 # Contributor documentation
 /CONTRIBUTING.md @infinisil
 /.github/PULL_REQUEST_TEMPLATE.md @infinisil
 /doc/contributing/ @fricklerhandwerk @infinisil
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @fricklerhandwerk @infinisil
 /lib/README.md @infinisil
 /doc/README.md @infinisil
 /nixos/README.md @infinisil
@@ -102,13 +102,6 @@
 # Images and installer media
 /nixos/modules/installer/cd-dvd/            @samueldr
 /nixos/modules/installer/sd-card/           @samueldr
-
-# Updaters
-## update.nix
-/maintainers/scripts/update.nix   @jtojnar
-/maintainers/scripts/update.py    @jtojnar
-## common-updater-scripts
-/pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	              @FRidh
@@ -254,9 +247,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/build-support/php                                     @drupol @etu
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @aanderse @drupol @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @adisbladis
@@ -279,9 +272,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
 
 # GNOME
-/pkgs/desktops/gnome                              @jtojnar
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
-/pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
