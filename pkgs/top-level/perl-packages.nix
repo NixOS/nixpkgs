@@ -13051,10 +13051,10 @@ with self; {
 
   IOTty = buildPerlPackage {
     pname = "IO-Tty";
-    version = "1.17";
+    version = "1.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.17.tar.gz";
-      hash = "sha256-pfGoMCC8W13WwbVw9Ix1RuCo9/rBCgaHQLA5Ja2eFOg=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.18.tar.gz";
+      hash = "sha256-sORbGG5MpUY2sfFREewP7oa5k+I9tSmqy0dZ35Rnkv8=";
     };
     patches = [ ../development/perl-modules/IO-Tty-fix-makefile.patch ];
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
