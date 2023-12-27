@@ -94,6 +94,7 @@ let
       inherit python3Env rubyEnv;
       withRuby = rubyEnv != null;
       inherit wrapperArgs;
+      luaRcContent = rcContent;
 
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
