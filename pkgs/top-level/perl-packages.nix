@@ -9939,10 +9939,10 @@ with self; {
 
   FileLoadLines = buildPerlPackage {
     pname = "File-LoadLines";
-    version = "1.021";
+    version = "1.043";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.021.tar.gz";
-      hash = "sha256-mOQS98aSYRNPNLh4W926sxVrj0UlU9u1tWytaDuG//A=";
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.043.tar.gz";
+      hash = "sha256-yDof39CLo3AsYTHma2Qe8TpcqNe9pw8XX8ayMo+SSgo=";
     };
     buildInputs = [ TestException ];
     meta = {
