@@ -266,9 +266,12 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
 
-  xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
+  xp-pentablet-unwrapped = callPackage ../os-specific/linux/xp-pen-drivers { };
+  xp-pentablet = callPackage ../os-specific/linux/xp-pen-drivers/fhsenv.nix {};
 
-  xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
+  # See https://github.com/NixOS/nixpkgs/issues/213263
+  xp-pen-deco-01-v2-driver = pkgs.xp-pentablet;
+  xp-pen-g430-driver = pkgs.xp-pentablet;
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {

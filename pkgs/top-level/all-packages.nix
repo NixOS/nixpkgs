@@ -41830,9 +41830,12 @@ with pkgs;
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare { };
 
-  xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
+  xp-pentablet-unwrapped = libsForQt5.xp-pentablet-unwrapped;
+  xp-pentablet = libsForQt5.xp-pentablet;
 
-  xp-pen-g430-driver = libsForQt5.xp-pen-g430-driver;
+  xp-pen-deco-01-v2-driver = xp-pentablet;
+
+  xp-pen-g430-driver = xp-pentablet;
 
   new-session-manager = callPackage ../applications/audio/new-session-manager { };
 
