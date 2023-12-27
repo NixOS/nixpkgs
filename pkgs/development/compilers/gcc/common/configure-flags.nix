@@ -156,7 +156,6 @@ let
 
       (lib.enableFeature enableLTO "lto")
       "--disable-libstdcxx-pch"
-      "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
@@ -175,6 +174,12 @@ let
           )
       }"
     ]
+    ++ (if stdenv.hostPlatform.isFreeBSD then [
+      # break the gcc -> libintl -> gcc cycle
+      "--with-included-gettext"
+    ] else [
+      "--without-included-gettext"
+    ])
 
     ++ (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]

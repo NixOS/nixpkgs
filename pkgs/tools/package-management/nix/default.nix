@@ -237,6 +237,9 @@ in lib.makeExtensible (self: ({
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
     patches = [
       patch-rapidcheck-shared
+    ] ++ lib.optionals aws-sdk-cpp.stdenv.hostPlatform.isFreeBSD [
+      ./patches/FreeBSD-tests-restricted.sh.patch
+      ./patches/FreeBSD-configure.ac.patch
     ];
   };
 

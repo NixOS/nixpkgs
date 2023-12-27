@@ -14,6 +14,7 @@
 , rustc
 , libiconv
 , windows
+, freebsd
 }:
 
 { name ? "${args.pname}-${args.version}"
@@ -127,7 +128,9 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   buildInputs = buildInputs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD (with freebsd; [ libexecinfo libkvm libmemstat libprocstat libdevstat ])
+  ;
 
   patches = cargoPatches ++ patches;
 

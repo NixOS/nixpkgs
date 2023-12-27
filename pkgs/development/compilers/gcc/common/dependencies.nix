@@ -46,8 +46,8 @@ in
   nativeBuildInputs = [
     texinfo
     which
-    gettext
   ]
+  ++ optionals (!stdenv.hostPlatform.isFreeBSD) [ gettext ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals javaAwtGtk [ pkg-config ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]

@@ -71,8 +71,6 @@ rustPlatform.buildRustPackage.override {
   ];
   buildInputs = [ file curl python3 openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ]
-    # TODO(@rhelmot) should these be made propagated build inputs? what about libcxx?
-    ++ lib.optionals stdenv.isFreeBSD (with freebsd; [ libexecinfo libkvm libmemstat libprocstat libdevstat ])
   ;
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that

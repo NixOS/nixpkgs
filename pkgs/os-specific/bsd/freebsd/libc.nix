@@ -189,6 +189,11 @@ mkDerivation rec {
     make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install
   '';
 
+  # libc should not be allowed to refer to anything other than itself
+  postFixup = ''
+    find $out -type f | xargs -n1 ${buildPackages.patchelf}/bin/patchelf --shrink-rpath --allowed-rpath-prefixes $out || true
+  '';
+
 
   meta.platforms = lib.platforms.freebsd;
 
