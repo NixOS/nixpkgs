@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     rev = "v${version}";
-    sha256 = "sha256-LI9XWqi3ihcmUBjScQVQbn30e5eLaCYwkmnbj7Y8kuU=";
+    sha256 = "sha256-HfmMZVlsdg9hTWGUihl6OlQAp/n1XRvPLfAKJ8as8Ew=";
   };
 
-  cargoSha256 = "sha256-AM89yYeEsYOcHtbSiQgz5qVQhFvDibVxA0ACaE8Gw2Y=";
+  cargoSha256 = "sha256-oUxxuBqec4aI2h8BAn1WSA44UU7f5APkv0DIwuSun0M=";
 
   doCheck = true;
   nativeCheckInputs = [ nix graphviz ];
@@ -33,6 +33,11 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   meta = with lib; {
     description = "A tool to determine which gc-roots take space in your nix store";
