@@ -7153,11 +7153,11 @@ with self; {
 
   DBDmysql = buildPerlPackage {
     pname = "DBD-mysql";
-    version = "4.050";
+    version = "5.003";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-4.050.tar.gz";
-      hash = "sha256-T0hUH/FaCnQF92rcEPgWJ8M5lvv1bJXCbAlERMCSjXg=";
+      url = "mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-5.003.tar.gz";
+      hash = "sha256-IVVEQ9YOKUzArACtrvU8y33lXU+uZqODcqWt8KDx7do=";
     };
 
     buildInputs = [ pkgs.libmysqlclient DevelChecklib TestDeep TestDistManifest TestPod ];
