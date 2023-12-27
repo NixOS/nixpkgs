@@ -6,6 +6,7 @@
 , ninja
 , vala
 , glib
+, glib-networking
 , itstool
 , wrapGAppsHook
 , desktop-file-utils
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libsoup
+    # libsoup requirement for TLS streams
+    glib-networking
     json-glib
     geoclue2
     geocode-glib
@@ -52,8 +55,8 @@ stdenv.mkDerivation rec {
     pantheon.granite
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
   ];
 
