@@ -20,8 +20,6 @@ buildDunePackage {
   pname = "fstar";
   inherit version src;
 
-  duneVersion = "3";
-
   postPatch = ''
     patchShebangs ocaml/fstar-lib/make_fstar_version.sh
     cd ocaml
