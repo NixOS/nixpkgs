@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "irc";
-  version = "20.3.0";
+  version = "20.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JFteqYqwAlZnYx53alXjGRfmDvcIxgEC8hmLyfURMjY=";
+    hash = "sha256-gGuDr4lNixIe0eFIZqkGQBKFiN5swElcTsssXsJyKAs=";
   };
 
   nativeBuildInputs = [
