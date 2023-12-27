@@ -18619,10 +18619,10 @@ with self; {
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.40";
+    version = "1.42";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.40.tar.gz";
-      hash = "sha256-IJu9QN6NSMG9eq3kjaI3/gpJn4nSebqi4amb1eySLdw=";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.42.tar.gz";
+      hash = "sha256-SN6k1Xsl3v9VkOGPOYo0pSJWy58Mv0t6mtLsb7UYLL4=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = [ "--noonline-tests" ];
