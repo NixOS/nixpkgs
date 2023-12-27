@@ -26407,10 +26407,10 @@ with self; {
 
   TextCSV = buildPerlPackage {
     pname = "Text-CSV";
-    version = "2.03";
+    version = "2.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.03.tar.gz";
-      hash = "sha256-SLvOnyNJNaiFlWGOBN0UFigkbWUPKnJgJN8cE34LZfs=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.04.tar.gz";
+      hash = "sha256-T4ASLk6gsFB5ytST44ZWQDDxjI17H5r1Yd+GmFplP+M=";
     };
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
