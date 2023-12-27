@@ -1,26 +1,44 @@
-{ lib, stdenv, autoreconfHook, readline
-, fetchFromGitHub, glib, pkg-config }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, glib
+, pkg-config
+, readline
+, unstableGitUpdater
+}:
 
-stdenv.mkDerivation rec {
-  version = "unstable-2020-10-24";
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-tools";
+  version = "unstable-2020-10-25";
 
   src = fetchFromGitHub {
     owner = "khvzak";
     repo = "bluez-tools";
     rev = "f65321736475429316f07ee94ec0deac8e46ec4a";
-    sha256 = "0xk39lz3hm8lcnb5fdbfz4ldbbq8gswg95vilzdwxzrglcr6xnqq";
+    hash = "sha256-GNtuMqMv/87bp3GX9Lh+CK/VKPluNVeWZRRVOD5NY3Y=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ readline glib ];
+  buildInputs = [
+    glib
+    readline
+  ];
 
-  meta = with lib; {
-    description = "Command line bluetooth manager for Bluez5";
-    license = licenses.gpl2;
-    maintainers = [ ];
-    platforms = platforms.unix;
+  strictDeps = true;
+
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
+    homepage = "https://github.com/khvzak/bluez-tools";
+    description = "A set of tools to manage bluetooth devices for linux";
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "bt-agent";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-
-}
+})
