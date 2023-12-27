@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "0.6.6";
+  version = "1.0.1";
 
   format = "pyproject";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "matthewwardrop";
     repo = "formulaic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-82+j3JAkjltXuzRhdvO4hoesSTWlNCY6w2mn6TsZqGM=";
+    hash = "sha256-qivWv1LtFkW55tVKD/Zjd8Q5gVbxhDpZ0inkV6NR7bA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
