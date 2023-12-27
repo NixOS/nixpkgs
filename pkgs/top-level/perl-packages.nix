@@ -23559,10 +23559,10 @@ with self; {
 
   SubOverride = buildPerlPackage {
     pname = "Sub-Override";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OV/OVID/Sub-Override-0.09.tar.gz";
-      hash = "sha256-k5pnwfcplo4MyBt0lY23UOG9t8AgvuGiYzMvQiwuJbU=";
+      url = "mirror://cpan/authors/id/O/OV/OVID/Sub-Override-0.10.tar.gz";
+      hash = "sha256-bY3Mc1Ra1UcHhy8z4brkrn/8W/kM4jwQAamzaGFXq0c=";
     };
     buildInputs = [ TestFatal ];
     meta = {
