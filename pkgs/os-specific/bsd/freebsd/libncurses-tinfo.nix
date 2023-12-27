@@ -1,9 +1,16 @@
-{ mkDerivation, lib, stdenv, ...}:
+{ mkDerivation, pkgsBuildBuild, patchesRoot, ...}:
 mkDerivation {
   path = "lib/ncurses/tinfo";
   extraPaths = ["lib/ncurses" "contrib/ncurses" "lib/Makefile.inc"];
+  patches = /${patchesRoot}/tinfo-host-cc.patch;
+  CC_HOST = "${pkgsBuildBuild.clang}/bin/clang";
   MK_TESTS = "no";
-  preBuild = lib.optionalString stdenv.cc.isClang ''
+  preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -D_WCHAR_T"
+    make $makeFlags "CFLAGS=-D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -I$BSDSRCDIR/contrib/ncurses/ncurses -I$BSDSRCDIR/contrib/ncurses/include -I." ncurses_dll.h make_hash make_keys
   '';
+
+  #makeFlags = [
+  #  "STRIP=-s" # flag to install, not command
+  #] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
 }
