@@ -3041,8 +3041,6 @@ with pkgs;
     fox = fox_1_6;
   };
 
-  xplr = callPackage ../applications/file-managers/xplr { };
-
   xplorer = callPackage ../applications/file-managers/xplorer { };
 
   johnny-reborn-engine = callPackage ../applications/misc/johnny-reborn { };
@@ -5598,8 +5596,6 @@ with pkgs;
   glpaper = callPackage ../development/tools/glpaper { };
 
   gllvm = callPackage ../development/tools/gllvm { };
-
-  glide = callPackage ../development/tools/glide { };
 
   globalarrays = callPackage ../development/libraries/globalarrays { };
 
@@ -25990,8 +25986,6 @@ with pkgs;
     go = buildPackages.go_1_21;
   };
 
-  go2nix = callPackage ../development/tools/go2nix { };
-
   leaps = callPackage ../development/tools/leaps { };
 
   ### DEVELOPMENT / JAVA MODULES
@@ -30477,8 +30471,6 @@ with pkgs;
   };
 
   anytone-emu = callPackage ../applications/radio/anytone-emu { };
-
-  anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
 
