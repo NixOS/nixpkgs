@@ -9953,10 +9953,10 @@ with self; {
 
   FileMimeInfo = buildPerlPackage {
     pname = "File-MimeInfo";
-    version = "0.33";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.33.tar.gz";
-      hash = "sha256-9r6ms4kGITJeycJ5KvruiOlIoK4dEIcvpyxxELPhscQ=";
+      url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.34.tar.gz";
+      hash = "sha256-i/GcY1zD9dKkncCUZUvB0KrYB5mMvsUtZdCv9q0LISU=";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
     buildInputs = [ FileBaseDir FileDesktopEntry EncodeLocale ];
