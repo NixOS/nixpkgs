@@ -16025,7 +16025,7 @@
   };
   running-grass = {
     name = "Leo Liu";
-    email = "467195537@qq.com";
+    email = "hi@grass.show";
     github = "running-grass";
     githubId = 17241154;
     keys = [{
