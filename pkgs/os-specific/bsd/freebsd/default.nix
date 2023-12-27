@@ -69,6 +69,7 @@ lib.makeScope newScope (self: with self; {
   gencat = callPackage ./gencat.nix {};
   cp = callPackage ./cp.nix {};
   bin = callPackage ./bin.nix {};
+  less = callPackage ./less.nix {};
   libkvm = callPackage ./libkvm.nix {};
   libdl = callPackage ./libdl.nix {};
   libelf = callPackage ./libelf.nix {};
