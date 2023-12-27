@@ -20243,10 +20243,10 @@ with self; {
 
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
-    version = "3.025";
+    version = "3.026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.025.tar.gz";
-      hash = "sha256-qb6076DsKXWpFFzvBSEYsgmPRtnBUQ3WV4agPQ2j49U=";
+      url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.026.tar.gz";
+      hash = "sha256-2f8AA7QHDujEvm9Pq6I6ErDAN3gofF0i8jzZOEvf6JA=";
     };
     nativeCheckInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
