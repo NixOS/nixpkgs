@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     rev = "libtraceevent-${version}";
-    sha256 = "sha256-poF+Cqcdj0KIgEJWW7XDAlRLz2/Egi948s1M24ETvBo=";
+    sha256 = "sha256-l1x9tiHKhfdetlnn9S/EfpcHDzZqiTOrdFhHQtOC6Do=";
   };
 
   postPatch = ''

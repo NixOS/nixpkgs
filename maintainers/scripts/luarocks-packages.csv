@@ -21,6 +21,7 @@ fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
+image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,
 ldbus,,,http://luarocks.org/dev,,,
