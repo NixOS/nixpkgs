@@ -19396,10 +19396,10 @@ with self; {
 
   NumberPhone = buildPerlPackage {
     pname = "Number-Phone";
-    version = "4.0000";
+    version = "4.0001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-4.0000.tar.gz";
-      hash = "sha256-H0mX/oMJSrDNgUDwvn/cHz+JGQKareajOYH4fLBIZjQ=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-4.0001.tar.gz";
+      hash = "sha256-Tse1taOUleDFPhMoxX2OP2r+Ac1zqqwDJ+oFKTreBps=";
     };
     buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestWarnings ];
     propagatedBuildInputs = [ DataDumperConcise DataCompactReadonly DevelCheckOS DevelDeprecationsEnvironmental FileFindRule FileShareDir ];
