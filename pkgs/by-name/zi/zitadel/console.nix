@@ -14,7 +14,7 @@ let
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-NmlKjKWxmqatyR6OitlQ7bfl6U6PS6KWqTALwX42HS4=";
+    hash = "sha256-+uHQNP9ZZB3tRZOrl8xwZql/L9EG9oNQICX/CVeawe4=";
   };
 in
 mkYarnPackage rec {
