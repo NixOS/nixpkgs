@@ -29,13 +29,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.11.17-17";
+  version = "2023.12.20-4";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-3oGcupO49+ZXyW+ii4T+wov4qweDnLO+VkXSAIh7qJ4=";
+    hash = "sha256-9yQMBP5Jta6P/FmYL6Ek3MzU1DKtVEwlwYAkNxC5pn4=";
     fetchSubmodules = true;
   };
 
