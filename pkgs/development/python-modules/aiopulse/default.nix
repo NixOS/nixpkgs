@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.4";
+  version = "0.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JbdJbkzd55KeM3Sf1ExvMuHRKNu5VAvGG4y+wkMS0Wo=";
+    hash = "sha256-yrltqnePNnNwsVGkfXgtrtL/FuazRvmoVL4L0H4j4Bg=";
   };
 
   propagatedBuildInputs = [
