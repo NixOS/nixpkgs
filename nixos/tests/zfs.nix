@@ -19,7 +19,7 @@ let
     makeTest {
       name = "zfs-" + name;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis elvishjerricco ];
+        maintainers = [ elvishjerricco ];
       };
 
       nodes.machine = { config, pkgs, lib, ... }:
