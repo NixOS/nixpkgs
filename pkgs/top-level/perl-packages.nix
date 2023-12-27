@@ -8876,10 +8876,10 @@ with self; {
 
   ENVUtil = buildPerlPackage {
     pname = "ENV-Util";
-    version = "0.03";
+    version = "0.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GARU/ENV-Util-0.03.tar.gz";
-      hash = "sha256-B1574ehSxD6wiGYvr978FS9O9WyEPB4F2QDaGQb3P60=";
+      url = "mirror://cpan/authors/id/G/GA/GARU/ENV-Util-0.04.tar.gz";
+      hash = "sha256-juQ5ezdjQdgZHBCl1FayBK4o1yIoq4D/fVeLB4oSrmg=";
     };
     meta = {
       description = "Parse prefixed environment variables and dotnev (.env) files into Perl";
