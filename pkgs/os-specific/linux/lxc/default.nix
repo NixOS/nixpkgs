@@ -89,14 +89,12 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
-    license = lib.licenses.lgpl21Plus;
+    license = lib.licenses.gpl2;
 
     longDescription = ''
-      LXC is the userspace control package for Linux Containers, a
-      lightweight virtual system mechanism sometimes described as
-      "chroot on steroids". LXC builds up from chroot to implement
-      complete virtual systems, adding resource management and isolation
-      mechanisms to Linux’s existing process management infrastructure.
+      LXC containers are often considered as something in the middle between a chroot and a
+      full fledged virtual machine. The goal of LXC is to create an environment as close as
+      possible to a standard Linux installation but without the need for a separate kernel.
     '';
 
     platforms = lib.platforms.linux;
