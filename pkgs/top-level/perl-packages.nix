@@ -22845,10 +22845,10 @@ with self; {
 
   SQLTranslator = buildPerlPackage {
     pname = "SQL-Translator";
-    version = "1.63";
+    version = "1.64";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VE/VEESH/SQL-Translator-1.63.tar.gz";
-      hash = "sha256-WIWwTJNJi+MqGX3JcjlHUdXeYJNBiTqWZW3oikJgMTM=";
+      url = "mirror://cpan/authors/id/V/VE/VEESH/SQL-Translator-1.64.tar.gz";
+      hash = "sha256-6BDUJvjmrB1aDLqmgg9Vb+cW2X7jWpNnZyg1Tfvz08c=";
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
     propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny GraphViz GD ];
