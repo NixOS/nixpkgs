@@ -28981,10 +28981,10 @@ with self; {
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.38";
+    version = "0.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.38.tar.gz";
-      hash = "sha256-JQDEeGnPXKjGHdI8Z7rav2a48e+14nkgdlfBzmk+IR4=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.39.tar.gz";
+      hash = "sha256-tOd1vsyKXZtSy11Wm50yMO6kUcE0c1hF53+J+mpsI9g=";
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
