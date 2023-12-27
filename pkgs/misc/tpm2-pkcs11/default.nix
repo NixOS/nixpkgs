@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = lib.optionals (!fapiSupport) [
-    # Note: this will be renamed to with-fapi in next release.
-    "--enable-fapi=no"
+    "--with-fapi=no"
   ];
 
   nativeBuildInputs = [
