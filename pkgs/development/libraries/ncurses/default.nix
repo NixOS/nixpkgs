@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
+    # https://github.com/ThomasDickey/ncurses-snapshots/archive/refs/tags/v6_3_20220507.tar.gz
+    # has the same source code, but the archive differs. Since we're using
+    # fetchurl, we use archive.org here, keeping the hash and avoiding rebuilds
+    url = "https://web.archive.org/web/20230313165752/https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
     sha256 = "02y4n4my5qqhw3fdhdjv1zc9xpyglzlzmzjwq2zcwbwv738255ja";
   };
 
