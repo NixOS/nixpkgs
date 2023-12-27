@@ -9464,10 +9464,10 @@ with self; {
 
   FFICStat = buildPerlPackage {
     pname = "FFI-C-Stat";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
-      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.03.tar.gz";
+      hash = "sha256-YOjveCyLs0cFXJ49ov1BTzX2EP5P77eNBzncyiQoQx4=";
     };
     buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
     propagatedBuildInputs = [ FFIPlatypus RefUtil ];
