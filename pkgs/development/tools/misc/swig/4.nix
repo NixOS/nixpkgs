@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "swig";
-  version = "4.0.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
-    rev = "rel-${version}";
-    sha256 = "12vlps766xvwck8q0i280s8yx21qm2dxl34710ybpmz3c1cfdjsc";
+    rev = "v${version}";
+    hash = "sha256-iJWHi5IVYS5zYRID3I9SMsYm5NB//EUyki83VRjwZ8o=";
   };
 
-  PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
+  PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
   nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ pcre ];
+  buildInputs = [ pcre2 ];
 
   configureFlags = [ "--without-tcl" ];
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
+    description = "Interface compiler that connects C/C++ code to higher-level languages";
     homepage = "https://swig.org/";
-    # Different types of licenses available: http://www.swig.org/Release/LICENSE .
+    # Different types of licenses available: https://www.swig.org/Release/LICENSE .
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = with platforms; linux ++ darwin;
