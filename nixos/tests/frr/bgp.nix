@@ -3,33 +3,32 @@
 # Network topology:
 #   [ client ]--net1--[ router1 ]--net2--[ router2 ]--net3--[ server ]
 #
-# All interfaces are in OSPF Area 0.
 
-import ./make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, ... }:
   let
 
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
 
-    ospfConf1 = ''
-      router ospf
-        network 192.168.0.0/16 area 0
+    bgpConf1 = neigh: ''
+      router bgp 10
+        redistribute kernel
+        redistribute connected
+        neighbor ${neigh} remote-as 20
     '';
 
-    ospfConf2 = ''
-      interface eth2
-        ip ospf hello-interval 1
-        ip ospf dead-interval 5
-      !
-      router ospf
-        network 192.168.0.0/16 area 0
+    bgpConf2 = neigh: ''
+      router bgp 20
+        redistribute kernel
+        redistribute connected
+        neighbor ${neigh} remote-as 10
     '';
 
   in
     {
-      name = "frr";
+      name = "frr-bgp";
 
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ hexa ];
+        maintainers = [ thillux ];
       };
 
       nodes = {
@@ -42,30 +41,26 @@ import ./make-test-python.nix ({ pkgs, ... }:
           };
 
         router1 =
-          { ... }:
+          { nodes, ... }:
           {
             virtualisation.vlans = [ 1 2 ];
             boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-            networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p ospfigp -j ACCEPT";
-            services.frr.ospf = {
+            networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p tcp --dport 179 -j ACCEPT";
+            services.frr.bgp = {
               enable = true;
-              config = ospfConf1;
-            };
-
-            specialisation.ospf.configuration = {
-              services.frr.ospf.config = ospfConf2;
+              config = (bgpConf1 (ifAddr nodes.router2 "eth2"));
             };
           };
 
         router2 =
-          { ... }:
+          { nodes, ... }:
           {
             virtualisation.vlans = [ 3 2 ];
             boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-            networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p ospfigp -j ACCEPT";
-            services.frr.ospf = {
+            networking.firewall.extraCommands = "iptables -A nixos-fw -i eth2 -p tcp --dport 179 -j ACCEPT";
+            services.frr.bgp = {
               enable = true;
-              config = ospfConf2;
+              config = (bgpConf2 (ifAddr nodes.router1 "eth2"));
             };
           };
 
@@ -86,17 +81,15 @@ import ./make-test-python.nix ({ pkgs, ... }:
           for machine in client, router1, router2, server:
               machine.wait_for_unit("network.target")
 
-          with subtest("Wait for Zebra and OSPFD"):
+          with subtest("Wait for Zebra and BGPD"):
               for gw in router1, router2:
                   gw.wait_for_unit("zebra")
-                  gw.wait_for_unit("ospfd")
+                  gw.wait_for_unit("bgpd")
 
-          router1.succeed("${nodes.router1.config.system.build.toplevel}/specialisation/ospf/bin/switch-to-configuration test >&2")
-
-          with subtest("Wait for OSPF to form adjacencies"):
+          with subtest("Wait for BGP to form adjacencies"):
               for gw in router1, router2:
-                  gw.wait_until_succeeds("vtysh -c 'show ip ospf neighbor' | grep Full")
-                  gw.wait_until_succeeds("vtysh -c 'show ip route' | grep '^O>'")
+                  gw.wait_until_succeeds("vtysh -c 'show bgp neighbors' | grep 'established 1'")
+                  gw.wait_until_succeeds("vtysh -c 'show ip route' | grep '^B>'")
 
           with subtest("Test ICMP"):
               client.wait_until_succeeds("ping -c 3 server >&2")

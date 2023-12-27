@@ -30,10 +30,10 @@ import ../make-test-python.nix ({ pkgs, ... }:
 
   in
     {
-      name = "frr";
+      name = "frr-ospf";
 
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ hexa ];
+        maintainers = [ hexa thillux ];
       };
 
       nodes = {
