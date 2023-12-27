@@ -251,6 +251,20 @@ in
           For instance, SSH sessions may time out more easily.
         '';
       };
+
+      webHome = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "pkgs.flood-for-transmission";
+        description = lib.mdDoc ''
+          If not `null`, sets the value of the `TRANSMISSION_WEB_HOME`
+          environment variable used by the service. Useful for overriding
+          the web interface files, without overriding the transmission
+          package and thus requiring rebuilding it locally. Use this if
+          you want to use an alternative web interface, such as
+          `pkgs.flood-for-transmission`.
+        '';
+      };
     };
   };
 
@@ -280,6 +294,7 @@ in
       requires = optional apparmor.enable "apparmor.service";
       wantedBy = [ "multi-user.target" ];
       environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
+      environment.TRANSMISSION_WEB_HOME = lib.optionalString (cfg.webHome != null) cfg.webHome;
 
       serviceConfig = {
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
@@ -491,6 +506,10 @@ in
         # FIXME: to be tested as I'm not sure it works well with NoNewPrivileges=
         # https://gitlab.com/apparmor/apparmor/-/wikis/AppArmorStacking#seccomp-and-no_new_privs
         px ${cfg.settings.script-torrent-done-filename} -> &@{dirs},
+      ''}
+
+      ${optionalString (cfg.webHome != null) ''
+        r ${cfg.webHome}/**,
       ''}
     '';
   };
