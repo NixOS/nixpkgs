@@ -26218,6 +26218,8 @@ with pkgs;
 
   dspam = callPackage ../servers/mail/dspam { };
 
+  edfbrowser = qt5.callPackage ../applications/misc/edfbrowser { };
+
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = pin-to-gcc12-if-gcc13 (callPackage ../servers/http/envoy {
