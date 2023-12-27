@@ -1,52 +1,49 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
+{ lib
+, stdenv
 , alsa-lib
 , dbus
+, docutils
 , ell
+, enableExperimental ? false
+, fetchpatch
+, fetchurl
 , glib
 , json_c
 , libical
-, docutils
 , pkg-config
 , python3
 , readline
 , systemdMinimal
 , udev
-, withExperimental ? false
-}: let
-  pythonPath = with python3.pkgs; [
-    dbus-python
-    pygobject3
-    recursivePthLoader
-  ];
-in stdenv.mkDerivation rec {
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
   version = "5.70";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N+Ny6RaVXhRMuIL4iOS+QImPEK47fCE93N1V7pwAkng=";
+    url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
+    hash = "sha256-N+Ny6RaVXhRMuIL4iOS+QImPEK47fCE93N1V7pwAkng=";
   };
 
   patches = [
-    # replace use of a non-standard symbol to fix build with musl libc (pkgsMusl.bluez)
+    # replace use of a non-standard symbol to fix build with musl libc
+    # (pkgsMusl.bluez)
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
-      sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
+      hash = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
     })
     # Fix device pairing regression
     # FIXME: remove in next release
     (fetchpatch {
-      url = "https://github.com/bluez/bluez/commit/3a9c637010f8dc1ba3e8382abe01065761d4f5bb.patch";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=3a9c637010f8dc1ba3e8382abe01065761d4f5bb";
       hash = "sha256-UUmYMHnxYrw663nEEC2mv3zj5e0omkLNejmmPUtgS3c=";
     })
-    # CVE-2023-45866 / https://github.com/skysafe/reblog/tree/main/cve-2023-45866
+    # https://github.com/skysafe/reblog/tree/main/cve-2023-45866
     (fetchpatch {
       name = "CVE-2023-45866.patch";
       url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/profiles/input?id=25a471a83e02e1effb15d5a488b3f0085eaeb675";
-      sha256 = "sha256-IuPQ18yN0EO/PkqdT/JETyOxdZCKewBiDjGN4CG2GLo=";
+      hash = "sha256-IuPQ18yN0EO/PkqdT/JETyOxdZCKewBiDjGN4CG2GLo=";
     })
   ];
 
@@ -74,64 +71,79 @@ in stdenv.mkDerivation rec {
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
-    # Disable some tests:
-    # - test-mesh-crypto depends on the following kernel settings:
-    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
-    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
+  '' +
+  # Disable some tests:
+  # - test-mesh-crypto depends on the following kernel settings:
+  #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+  ''
+    if [[ ! -f unit/test-mesh-crypto.c ]]; then
+      echo "unit/test-mesh-crypto.c no longer exists"
+      false
+    fi
     echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
   '';
 
   configureFlags = [
     "--localstatedir=/var"
-    "--enable-library"
-    "--enable-cups"
-    "--enable-pie"
-    "--enable-external-ell"
-    "--with-dbusconfdir=${placeholder "out"}/share"
-    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
-    "--with-udevdir=${placeholder "out"}/lib/udev"
-    "--enable-health"
-    "--enable-mesh"
-    "--enable-midi"
-    "--enable-nfc"
-    "--enable-sixaxis"
-    "--enable-btpclient"
-    "--enable-hid2hci"
-    "--enable-logger"
-
-    # To provide ciptool, sdptool, and rfcomm (unmaintained)
+    (lib.enableFeature enableExperimental "experimental")
+    (lib.enableFeature true "btpclient")
+    (lib.enableFeature true "cups")
+    (lib.enableFeature true "external-ell")
+    (lib.enableFeature true "health")
+    (lib.enableFeature true "hid2hci")
+    (lib.enableFeature true "library")
+    (lib.enableFeature true "logger")
+    (lib.enableFeature true "mesh")
+    (lib.enableFeature true "midi")
+    (lib.enableFeature true "nfc")
+    (lib.enableFeature true "pie")
+    (lib.enableFeature true "sixaxis")
+    # Set "deprecated" to provide ciptool, sdptool, and rfcomm (unmaintained);
     # superseded by new D-Bus APIs
-    "--enable-deprecated"
-  ] ++ lib.optional withExperimental "--enable-experimental";
+    (lib.enableFeature true "deprecated")
+    (lib.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share")
+    (lib.withFeatureAs true "dbussessionbusdir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.withFeatureAs true "dbussystembusdir" "${placeholder "out"}/share/dbus-1/system-services")
+    (lib.withFeatureAs true "systemdsystemunitdir" "${placeholder "out"}/etc/systemd/system")
+    (lib.withFeatureAs true "systemduserunitdir" "${placeholder "out"}/etc/systemd/user")
+    (lib.withFeatureAs true "udevdir" "${placeholder "out"}/lib/udev")
+  ];
 
+  makeFlags = [
+    "rulesdir=${placeholder "out"}/lib/udev/rules.d"
+  ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
-
-  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
+  installFlags = [
+    "statedir=$(TMPDIR)/var/lib/bluetooth"
+  ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = ''
+  postInstall = let
+    pythonPath = with python3.pkgs; [
+      dbus-python
+      pygobject3
+      recursivePthLoader
+    ];
+  in
+  ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
-    for a in \
+    for t in \
+            list-devices \
+            monitor-bluetooth \
             simple-agent \
             test-adapter \
             test-device \
             test-thermometer \
-            list-devices \
-            monitor-bluetooth \
             ; do
-      ln -s ../test/$a $test/bin/bluez-$a
+      ln -s ../test/$t $test/bin/bluez-$t
     done
     popd
     wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
-  '' + ''
+
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -146,7 +158,7 @@ in stdenv.mkDerivation rec {
     ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
 
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
-    for files in `find tools/ -type f -perm -755`; do
+    for files in $(find tools/ -type f -perm -755); do
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
@@ -155,10 +167,13 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "Bluetooth support for Linux";
-    homepage = "http://www.bluez.org/";
-    license = with licenses; [ gpl2 lgpl21 ];
-    platforms = platforms.linux;
+  meta = {
+    homepage = "https://www.bluez.org/";
+    description = "Official Linux Bluetooth protocol stack";
+    changelog = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=${finalAttrs.version}";
+    license = with lib.licenses; [ bsd2 gpl2Plus lgpl21Plus mit ];
+    mainProgram = "btinfo";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
