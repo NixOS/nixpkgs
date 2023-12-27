@@ -4961,10 +4961,10 @@ with self; {
 
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
-    version = "2.33";
+    version = "3.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-2.33.tar.gz";
-      hash = "sha256-anDeIbbMfysQAGfo4Yjblm6agAG122+pdufLWylK5kU=";
+      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-3.04.tar.gz";
+      hash = "sha256-QCbFfQ2/ZJbA1WGibxYbdj07jt81ETnAc0kuIbX7zgc=";
     };
     meta = {
       description = "Encrypt Data with Cipher Block Chaining Mode";
