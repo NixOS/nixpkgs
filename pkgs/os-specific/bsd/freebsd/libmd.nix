@@ -1,8 +1,8 @@
-{ lib, stdenv, mkDerivation, bmakeMinimal, freebsdSetupHook, bsdSetupHook, ...}:
+{ lib, stdenv, mkDerivation, freebsdSetupHook, bsdSetupHook, buildFreebsd, ...}:
 mkDerivation {
   path = "lib/libmd";
   extraPaths = ["sys/sys/md5.h" "sys/crypto/sha2" "sys/crypto/skein"];
-  nativeBuildInputs = [bmakeMinimal bsdSetupHook freebsdSetupHook];
+  nativeBuildInputs = [buildFreebsd.bmakeMinimal bsdSetupHook freebsdSetupHook];
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command
