@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         enableUserService = true;
         port = 20123;
         environmentFile = pkgs.writeText "livebook.env" ''
-          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         '';
         options = {
           cookie = "chocolate chip";
