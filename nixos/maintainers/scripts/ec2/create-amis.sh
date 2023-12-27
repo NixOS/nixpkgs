@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p awscli -p jq -p qemu -i bash
+#!nix-shell -p awscli -p jq -i bash
 # shellcheck shell=bash
 #
 # Future Deprecation?

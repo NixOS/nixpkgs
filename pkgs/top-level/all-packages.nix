@@ -124,6 +124,8 @@ with pkgs;
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
 
+  create-nixos-amis = callPackage ../../nixos/maintainers/scripts/ec2/create-amis.nix { };
+
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
   vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
