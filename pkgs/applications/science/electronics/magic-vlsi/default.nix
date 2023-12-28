@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.453";
+  version = "8.3.454";
 
   src = fetchurl {
     url    = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
-    sha256 = "sha256-1G8vm9AGboIElufXUIa9ZABaHVjx4UiBNA0ZTYeuVtU=";
+    sha256 = "sha256-nHZJ2L54J2x+H7S29TeGPInTgjEhRFv3h2ki0ccGYB0=";
   };
 
   nativeBuildInputs = [ python3 ];
