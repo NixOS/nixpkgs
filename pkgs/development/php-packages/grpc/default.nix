@@ -1,18 +1,24 @@
 { buildPecl
-, zlib
+, pkg-config
 , lib
+, grpc
 }:
 
 buildPecl {
   pname = "grpc";
-  version = "1.56.0";
+  inherit (grpc) version src;
 
-  sha256 = "sha256-uzxYMUzExMBDtwv3FipOuuUHg0v1wqAUtn69jXAQnf4=";
+  sourceRoot = "${grpc.src.name}/src/php/ext/grpc";
+
+  patches = [
+    ./use-pkgconfig.patch # https://github.com/grpc/grpc/pull/35404
+    ./skip-darwin-test.patch # https://github.com/grpc/grpc/pull/35403
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ grpc ];
 
   doCheck = true;
-  checkTarget = "test";
-
-  nativeBuildInputs = [ zlib ];
 
   meta = {
     description = "A high performance, open source, general RPC framework that puts mobile and HTTP/2 first.";
