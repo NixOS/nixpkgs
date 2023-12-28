@@ -6,6 +6,7 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@microsoft/rush"
+, "@postlight/parser"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
