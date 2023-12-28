@@ -1605,6 +1605,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  borb = callPackage ../development/python-modules/borb { };
+
   bork = callPackage ../development/python-modules/bork { };
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
@@ -3471,6 +3473,8 @@ self: super: with self; {
 
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
+  dynalite-panel = callPackage ../development/python-modules/dynalite-panel { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   e3-core = callPackage ../development/python-modules/e3-core { };
@@ -3833,6 +3837,8 @@ self: super: with self; {
 
   face-recognition = callPackage ../development/python-modules/face-recognition { };
 
+  facenet-pytorch = callPackage ../development/python-modules/facenet-pytorch { };
+
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
   factory-boy = callPackage ../development/python-modules/factory-boy { };
@@ -3953,6 +3959,8 @@ self: super: with self; {
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
+
+  fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 

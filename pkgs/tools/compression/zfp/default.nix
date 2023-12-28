@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zfp";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "zfp";
     rev = version;
-    sha256 = "sha256-E2LI1rWo1HO5O/sxPHAmLDs3Z5xouzlgMj11rQFPNYQ=";
+    sha256 = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
   };
 
   nativeBuildInputs = [ cmake ];

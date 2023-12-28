@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ut";
-  version = "2.0.0";
+  version = "2.0.1";
 
   cmakeFlags = [
     "-DBOOST_UT_ALLOW_CPM_USE=OFF"
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "boost-ext";
     repo = "ut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nMRhVtbnORMnZxIdrv6pvfj8/fv/buh4Y7mz0cr4p+E=";
+    hash = "sha256-4OZvDcUtw6x/E9yLRQukfn6PskxtVBrsLPP48yo/lN0=";
   };
 
   nativeBuildInputs = [

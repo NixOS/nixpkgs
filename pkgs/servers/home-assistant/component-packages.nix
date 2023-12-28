@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.12.3";
+  version = "2023.12.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1041,13 +1041,14 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       dynalite-devices
+      dynalite-panel
       fnv-hash-fast
       home-assistant-frontend
       janus
       pillow
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: dynalite-panel
+    ];
     "eafm" = ps: with ps; [
       aioeafm
     ];
@@ -5602,6 +5603,7 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+    "anova"
     "anthemav"
     "apache_kafka"
     "apcupsd"
@@ -5714,6 +5716,7 @@
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
+    "dynalite"
     "eafm"
     "easyenergy"
     "ecobee"

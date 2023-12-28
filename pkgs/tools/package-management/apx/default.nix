@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-spxZgc1krs8AhOhAZmqGj/yiXzMUefcFFKg/xFpdWj8=";
+    hash = "sha256-TXGfJHe4dOOpP7iJFbjL5WnqcxHeOn5naKjnBQ3c5dE=";
   };
 
   vendorHash = null;

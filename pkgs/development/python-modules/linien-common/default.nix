@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "linien-common";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linien-org";
     repo = "linien";
-    rev = "v${version}";
-    hash = "sha256-BMYFi1HsNKWHmYdrnX/mAehke7UxQZlruFmpaAvxWvQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZgAp1SEiHijyjK74VZyRLYY3Hzfc3BQ6cnoO3hZzvbE=";
   };
 
   sourceRoot = "source/linien-common";

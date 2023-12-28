@@ -24,8 +24,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share
-    cp assets/desktop/xplr.desktop $out/share
+    mkdir -p $out/share/applications
+    cp assets/desktop/xplr.desktop $out/share/applications
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp assets/icon/xplr.svg $out/share/icons/hicolor/scalable/apps

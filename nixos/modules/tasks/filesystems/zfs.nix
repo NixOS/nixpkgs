@@ -130,7 +130,8 @@ let
         "systemd-ask-password-console.service"
       ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
-      before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "shutdown.target" "zfs-import.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };

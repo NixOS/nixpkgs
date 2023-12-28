@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/williambailey/pacproxy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ terlar ];
+    mainProgram = "pacproxy";
   };
 }

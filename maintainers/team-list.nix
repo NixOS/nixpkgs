@@ -767,7 +767,6 @@ with lib.maintainers; {
 
   podman = {
     members = [
-      adisbladis
       saschagrunert
       vdemeester
     ];

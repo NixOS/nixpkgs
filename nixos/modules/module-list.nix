@@ -620,6 +620,7 @@
   ./services/mail/public-inbox.nix
   ./services/mail/roundcube.nix
   ./services/mail/rspamd.nix
+  ./services/mail/rspamd-trainer.nix
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix

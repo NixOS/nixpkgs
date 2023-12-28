@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , makeFontsConf
 , nix-update-script
 , autoreconfHook
@@ -26,6 +27,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
   };
+
+  patches = [
+    # Pull autoconf-2.72 compatibility fix:
+    #   https://github.com/libsidplayfp/libsidplayfp/pull/103
+    (fetchpatch {
+      name = "autoconf-2.72";
+      url = "https://github.com/libsidplayfp/libsidplayfp/commit/b8fff55f6aaa005a3899b59e70cd8730f962641b.patch";
+      hash = "sha256-5Hk202IuHUBow7HnnPr2/ieWFjKDuHLQjQ9mJUML9q8=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .

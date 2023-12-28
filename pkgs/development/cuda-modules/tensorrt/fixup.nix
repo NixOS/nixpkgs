@@ -16,6 +16,13 @@ let
     strings
     versions
     ;
+  targetArch =
+    if hostPlatform.isx86_64 then
+      "x86_64-linux-gnu"
+    else if hostPlatform.isAarch64 then
+      "aarch64-linux-gnu"
+    else
+      "unsupported";
 in
 finalAttrs: prevAttrs: {
   # Useful for inspecting why something went wrong.
@@ -58,18 +65,9 @@ finalAttrs: prevAttrs: {
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [finalAttrs.passthru.cudnn.lib];
+  buildInputs = prevAttrs.buildInputs ++ [ finalAttrs.passthru.cudnn.lib ];
 
   preInstall =
-    let
-      targetArch =
-        if hostPlatform.isx86_64 then
-          "x86_64-linux-gnu"
-        else if hostPlatform.isAarch64 then
-          "aarch64-linux-gnu"
-        else
-          throw "Unsupported architecture";
-    in
     (prevAttrs.preInstall or "")
     + ''
       # Replace symlinks to bin and lib with the actual directories from targets.
@@ -107,6 +105,9 @@ finalAttrs: prevAttrs: {
   };
 
   meta = prevAttrs.meta // {
+    badPlatforms =
+      prevAttrs.meta.badPlatforms or [ ]
+      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
   };

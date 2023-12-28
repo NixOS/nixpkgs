@@ -7,18 +7,17 @@
 , meson
 , ninja
 , pkg-config
-, python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , evolution-data-server
 , feedbackd
 , glibmm
 , libsecret
 , gnome-desktop
 , gspell
-, gtk3
+, gtk4
 , json-glib
 , libgcrypt
-, libhandy
+, libadwaita
 , libphonenumber
 , modemmanager
 , olm
@@ -30,20 +29,16 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = "chatty";
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "Chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-zsZDpncnoj+0klJ2/220gY93c7mD0wIvQaP3QF8F3zQ=";
+    hash = "sha256-jyG6kubXTyHUw2F+MfjJiQ0us4PrbavF5PJS5Pg46Mw=";
   };
-
-  postPatch = ''
-    patchShebangs build-aux/meson
-  '';
 
   nativeBuildInputs = [
     appstream-glib
@@ -52,8 +47,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -63,10 +57,10 @@ stdenv.mkDerivation rec {
     libsecret
     gnome-desktop
     gspell
-    gtk3
+    gtk4
     json-glib
     libgcrypt
-    libhandy
+    libadwaita
     libphonenumber
     modemmanager
     olm
@@ -84,8 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
-    homepage = "https://source.puri.sm/Librem5/chatty";
-    changelog = "https://source.puri.sm/Librem5/chatty/-/blob/${src.rev}/NEWS";
+    homepage = "https://gitlab.gnome.org/World/Chatty";
+    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${src.rev}/NEWS";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda tomfitzhenry ];
     platforms = platforms.linux;

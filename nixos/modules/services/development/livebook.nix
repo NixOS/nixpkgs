@@ -12,6 +12,8 @@ in
     # future, this can be changed to a system service.
     enableUserService = mkEnableOption "a user service for Livebook";
 
+    package = mkPackageOption pkgs "livebook" { };
+
     environmentFile = mkOption {
       type = types.path;
       description = lib.mdDoc ''
@@ -63,6 +65,15 @@ in
         }
       '';
     };
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      description = lib.mdDoc ''
+        Extra packages to make available to the Livebook service.
+      '';
+      example = literalExpression "with pkgs; [ gcc gnumake ]";
+    };
   };
 
   config = mkIf cfg.enableUserService {
@@ -79,9 +90,9 @@ in
               sname = cfg.erlang_node_short_name;
             } // cfg.options);
           in
-          "${pkgs.livebook}/bin/livebook server ${args}";
+            "${cfg.package}/bin/livebook server ${args}";
       };
-      path = [ pkgs.bash ];
+      path = [ pkgs.bash ] ++ cfg.extraPackages;
       wantedBy = [ "default.target" ];
     };
   };

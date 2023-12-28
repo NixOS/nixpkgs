@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGoPackage
 , fetchFromGitHub
 , installShellFiles
 , pkgsBuildBuild

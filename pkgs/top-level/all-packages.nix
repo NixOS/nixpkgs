@@ -1090,8 +1090,6 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
-  pacproxy = callPackage ../tools/networking/pacproxy { };
-
   pacup = callPackage ../tools/package-management/pacup { };
 
   patcher9x = callPackage ../development/tools/patcher9x { };
@@ -3043,8 +3041,6 @@ with pkgs;
     fox = fox_1_6;
   };
 
-  xplr = callPackage ../applications/file-managers/xplr { };
-
   xplorer = callPackage ../applications/file-managers/xplorer { };
 
   johnny-reborn-engine = callPackage ../applications/misc/johnny-reborn { };
@@ -3866,6 +3862,8 @@ with pkgs;
 
   flood = callPackage ../applications/networking/p2p/flood { };
 
+  flood-for-transmission = callPackage ../applications/networking/p2p/flood-for-transmission { };
+
   font-config-info = callPackage ../tools/misc/font-config-info { };
 
   foxdot = with python3Packages; toPythonApplication foxdot;
@@ -4050,8 +4048,8 @@ with pkgs;
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   livebook = callPackage ../servers/web-apps/livebook {
-    elixir = elixir_1_15;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_15; });
+    elixir = elixir_1_16;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_16; });
   };
 
   lsix = callPackage ../tools/graphics/lsix { };
@@ -5598,8 +5596,6 @@ with pkgs;
   glpaper = callPackage ../development/tools/glpaper { };
 
   gllvm = callPackage ../development/tools/gllvm { };
-
-  glide = callPackage ../development/tools/glide { };
 
   globalarrays = callPackage ../development/libraries/globalarrays { };
 
@@ -13589,8 +13585,6 @@ with pkgs;
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   svu = callPackage ../tools/misc/svu { };
-
-  ssb = callPackage ../tools/security/ssb { };
 
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
@@ -22429,7 +22423,7 @@ with pkgs;
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
 
   libao = callPackage ../development/libraries/libao {
-    usePulseAudio = config.pulseaudio or stdenv.isLinux;
+    usePulseAudio = config.pulseaudio or (lib.meta.availableOn stdenv.hostPlatform libpulseaudio);
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
@@ -25964,8 +25958,6 @@ with pkgs;
     go = buildPackages.go_1_21;
   };
 
-  go2nix = callPackage ../development/tools/go2nix { };
-
   leaps = callPackage ../development/tools/leaps { };
 
   ### DEVELOPMENT / JAVA MODULES
@@ -28061,9 +28053,7 @@ with pkgs;
 
   libdatachannel = callPackage ../development/libraries/libdatachannel { };
 
-  libkrun = callPackage ../development/libraries/libkrun {
-    inherit (darwin.apple_sdk.frameworks) Hypervisor;
-  };
+  libkrun = callPackage ../development/libraries/libkrun { };
 
   libkrun-sev = libkrun.override { sevVariant = true; };
 
@@ -28399,8 +28389,6 @@ with pkgs;
 
   delve = callPackage ../development/tools/delve { };
 
-  dep = callPackage ../development/tools/dep { };
-
   dep2nix = callPackage ../development/tools/dep2nix { };
 
   easyjson = callPackage ../development/tools/easyjson { };
@@ -28472,8 +28460,6 @@ with pkgs;
   gotraceui = callPackage ../development/tools/gotraceui { };
 
   govers = callPackage ../development/tools/govers { };
-
-  govendor = callPackage ../development/tools/govendor { };
 
   goverview = callPackage ../tools/security/goverview { };
 
@@ -28667,8 +28653,6 @@ with pkgs;
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi { };
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
-
-  raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom { };
 
   raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix { };
 
@@ -30459,8 +30443,6 @@ with pkgs;
   };
 
   anytone-emu = callPackage ../applications/radio/anytone-emu { };
-
-  anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
 
@@ -35465,6 +35447,8 @@ with pkgs;
     };
   };
 
+  orca-slicer = callPackage ../applications/misc/bambu-studio/orca-slicer.nix {};
+
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
@@ -37925,6 +37909,7 @@ with pkgs;
 
   katagoWithCuda = katago.override {
     backend = "cuda";
+    cudaPackages = cudaPackages_12;
   };
 
   katagoCPU = katago.override {
@@ -37933,6 +37918,7 @@ with pkgs;
 
   katagoTensorRT = katago.override {
     backend = "tensorrt";
+    cudaPackages = cudaPackages_12;
   };
 
   klavaro = callPackage ../games/klavaro { };
@@ -41952,7 +41938,6 @@ with pkgs;
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
-    fmt = fmt_9;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
@@ -41985,7 +41970,7 @@ with pkgs;
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   psftools = callPackage ../os-specific/linux/psftools { };
