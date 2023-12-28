@@ -6,15 +6,13 @@
 , recurseIntoAttrs
 , runCommandCC
 , stdenv
-, fetchurl
   # inputs
 , Foundation
 , bazel_self
 , lr
 , xe
-, bazel-watcher
 , lockfile
-, repoCache
+, ...
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin;
@@ -133,7 +131,7 @@ let
         inherit Foundation;
         inherit bazel;
         distDir = testsDistDir;
-        extraBazelArgs = "";
+        extraBazelArgs = "--noenable_bzlmod";
         repoCache = testsRepoCache;
       };
     in
@@ -146,10 +144,10 @@ let
         };
       }) // {
         bashTools = callBazelTest ../bash-tools-test.nix { };
-        cpp = callBazelTest ./cpp-test.nix { };
-        java = callBazelTest ../java-test.nix {
-          extraBazelArgs = "--noenable_bzlmod";
+        cpp = callBazelTest ./cpp-test.nix {
+          extraBazelArgs = "";
         };
+        java = callBazelTest ./java-test.nix { };
         pythonBinPath = callBazelTest ../python-bin-path-test.nix { };
         protobuf = callBazelTest ./protobuf-test.nix { };
       }
