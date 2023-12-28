@@ -16,16 +16,16 @@
 , graphviz
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
+    hash = "sha256-1e1QDSJ8CjLU794saba2auCKko7p2ylrdI0JWhh8Kco=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     "--with-gcrypt"
     "--with-exsid"
   ]
-  ++ lib.optional doCheck "--enable-tests";
+  ++ lib.optional finalAttrs.finalPackage.doCheck "--enable-tests";
 
   FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
 
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ramkromberg OPNA2608 ];
     platforms = platforms.all;
   };
-}
+})
