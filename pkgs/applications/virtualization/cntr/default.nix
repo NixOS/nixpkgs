@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "sha256-eDozoYN2iOFUY/w7Gjki4nnASyZo4V/YGPjdX2xjNGY=";
+    sha256 = "sha256-spa4qPEhpNSZIk16jeH9YEr4g9JcVmpetHz72A/ZAPY=";
   };
 
-  cargoHash = "sha256-UZrVZBdaiIrMajePKWXDZI+Z+nXTGadNKmoa3gdfzp4=";
+  cargoHash = "sha256-YN8EtUXKtT8Xc0RnW7QqL+awyWy5xFKWhYMxgYG28I4=";
 
   passthru.tests = nixosTests.cntr;
 
