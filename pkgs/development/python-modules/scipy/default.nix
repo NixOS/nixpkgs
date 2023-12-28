@@ -123,6 +123,9 @@ in buildPythonPackage {
     "hyp2f1_test_case47"
     "hyp2f1_test_case3"
     "test_uint64_max"
+  ] ++ lib.optionals stdenv.isi686 [
+    "test_basic"          # see https://github.com/scipy/scipy/issues/12931
+    "test_x0_equals_Mb"   # see https://github.com/scipy/scipy/issues/17912
   ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
