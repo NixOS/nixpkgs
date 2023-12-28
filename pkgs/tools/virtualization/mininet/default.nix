@@ -1,11 +1,38 @@
 { stdenv, lib, fetchFromGitHub
+, runCommand
 , which
 , python3
 , help2man
+, makeWrapper
+, ethtool
+, inetutils
+, iperf
+, iproute2
+, nettools
+, socat
 }:
 
 let
   pyEnv = python3.withPackages(ps: [ ps.setuptools ]);
+
+  telnet = runCommand "inetutils-telnet"
+    { }
+    ''
+      mkdir -p "$out/bin"
+      ln -s "${inetutils}"/bin/telnet "$out/bin"
+    '';
+
+  generatedPath = lib.makeSearchPath "bin" [
+    iperf
+    ethtool
+    iproute2
+    socat
+    # mn errors out without a telnet binary
+    # pkgs.inetutils brings an undesired ifconfig into PATH see #43105
+    nettools
+    telnet
+  ];
+
 in
 stdenv.mkDerivation rec {
   pname = "mininet";
@@ -24,7 +51,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   pythonPath = [ python3.pkgs.setuptools ];
-  nativeBuildInputs = [ help2man ];
+  nativeBuildInputs = [ help2man makeWrapper python3.pkgs.wrapPython ];
 
   propagatedBuildInputs = [ python3 which ];
 
@@ -33,7 +60,18 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out $py
     # without --root, install fails
-    ${pyEnv.interpreter} setup.py install --root="/" --prefix=$py
+    "${pyEnv.interpreter}" setup.py install \
+      --root="/" \
+      --prefix="$py" \
+      --install-scripts="$out/bin"
+  '';
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/bin" "$py $pythonPath"
+    wrapProgram "$out/bin/mnexec" \
+      --prefix PATH : "${generatedPath}"
+    wrapProgram "$out/bin/mn" \
+      --prefix PATH : "${generatedPath}"
   '';
 
   doCheck = false;
