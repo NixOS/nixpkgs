@@ -74,8 +74,8 @@ in
         Which pinentry interface to use. If not null, the path to the
         pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
         If not set at all, it'll pick an appropriate flavor depending on the
-        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
-        4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce,
+        gnome3 on all other systems with X enabled, curses otherwise).
       '';
     };
 
