@@ -146,7 +146,25 @@ in
   };
 
   testScript = ''
+  from sys import stderr
+
   start_all()
+
+  # The automatic startup of munge, slurmd, slurmctld, and slurmdbd is mostly
+  # broken. E.g. slurmctld errors out if it can't reach slurmdbd immediately,
+  # etc. They appear to work in practice because they are restarted by systemd.
+  #
+  # We'll fix this in the later commits
+  with subtest("Demonstrate broken startup"):
+      try:
+        # Fails with `unit "slurmd.service" is inactive and there are no pending jobs'
+        submit.wait_for_unit("slurmd.service")
+      except Exception as e:
+        print(e, file=stderr)
+      else:
+        raise RuntimeError("slurmd.service no longer fails to start")
+
+      submit.fail("srun -N 3 --mpi=pmix mpitest | grep size=3")
 
   # Make sure DBD is up after DB initialzation
   with subtest("can_start_slurmdbd"):
