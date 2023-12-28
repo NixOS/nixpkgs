@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+({ lib, pkgs, ... }:
 let
     slurmconfig = {
       services.slurm = {

@@ -780,9 +780,9 @@ in {
   simple = handleTest ./simple.nix {};
   sing-box = handleTest ./sing-box.nix {};
   slimserver = handleTest ./slimserver.nix {};
-  slurm = handleTest ./slurm.nix {};
-  snmpd = handleTest ./snmpd.nix {};
+  slurm = runTest ./slurm/test.nix;
   smokeping = handleTest ./smokeping.nix {};
+  snmpd = handleTest ./snmpd.nix {};
   snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   snipe-it = runTest ./web-apps/snipe-it.nix;
