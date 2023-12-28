@@ -2364,8 +2364,6 @@ self: super: with self; {
 
   cot = callPackage ../development/python-modules/cot { };
 
-  covCore = callPackage ../development/python-modules/cov-core { };
-
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
@@ -8359,8 +8357,6 @@ self: super: with self; {
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose3 = callPackage ../development/python-modules/nose3 { };
-
-  nose-cov = callPackage ../development/python-modules/nose-cov { };
 
   nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 

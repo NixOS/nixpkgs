@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
-, pytest-xdist, covCore, glibcLocales }:
+, pytest-xdist, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "dyn";
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     pytest-cov
     mock
     pytest-xdist
-    covCore
   ];
   # Disable checks because they are not stateless and require internet access.
   doCheck = false;

@@ -86,6 +86,8 @@ mapAliases ({
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
+  cov-core = throw "cov-core was removed because it is outdated";
+  covCore = throw "covCore was removed because it is outdated";
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cx_Freeze = cx-freeze; # added 2023-08-02
@@ -254,6 +256,7 @@ mapAliases ({
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
+  nose-cov = throw "nose-cov has been removed because it was outdated"; # added 2023-12-10
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
   notifymuch = throw "notifymuch has been promoted to a top-level attribute"; # added 2022-10-02
