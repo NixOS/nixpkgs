@@ -80,6 +80,48 @@ in
               )
               { };
         };
+        cpi.package = mkOption {
+          type = types.package;
+          default =
+            pkgs.callPackage
+              (
+                {
+                  stdenv,
+                  cmake,
+                  mpi,
+                  mpich,
+                }:
+                stdenv.mkDerivation {
+
+                  pname = "${mpich.pname}-cpi";
+                  inherit (mpich) version src;
+
+                  cmakeListsTxt = ''
+                    cmake_minimum_required(VERSION 3.17)
+                    project(cpi LANGUAGES C)
+                    find_package(MPI REQUIRED)
+
+                    add_executable(cpi ./cpi.c)
+                    add_executable(cpi-asan ./cpi.c)
+
+                    target_link_libraries(cpi PRIVATE MPI::MPI_C)
+                    target_link_libraries(cpi-asan PRIVATE MPI::MPI_C -fsanitize=address)
+                    install(TARGETS cpi cpi-asan)
+                  '';
+                  passAsFile = [ "cmakeListsTxt" ];
+                  postPatch = ''
+                    cd examples
+                    cat $cmakeListsTxtPath > CMakeLists.txt
+                  '';
+
+                  nativeBuildInputs = [ cmake ];
+                  buildInputs = [ mpi ];
+
+                  meta.mainProgram = "cpi";
+                }
+              )
+              { };
+        };
       };
       config = mkMerge [
         {
@@ -129,7 +171,10 @@ in
             };
           };
 
-          environment.systemPackages = [ nodeCfg.mpitest.package ];
+          environment.systemPackages = [
+            nodeCfg.mpitest.package
+            nodeCfg.cpi.package
+          ];
           networking.firewall.enable = false;
           systemd.tmpfiles.rules = [
             "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
@@ -200,7 +245,15 @@ in
           control.succeed("sleep 5")
           control.succeed("sacct | grep hostname")
 
-  with subtest("run_PMIx_mpitest"):
+  with subtest("Test PMIx (verifies the ranks and world size, but performs no actual communication)"):
       submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
+
+  # Another failure case to be fixed
+  with subtest("Demonstrate that cpi breaks with address sanitizers"):
+      submit.fail("srun -N 3 --mpi=pmix cpi-asan")
+
+  # Works without asan though
+  with subtest("Run the cpi example from mpich (test communication)"):
+      submit.succeed("srun -N 3 --mpi=pmix cpi")
   '';
 }
