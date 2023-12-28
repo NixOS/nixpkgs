@@ -27,7 +27,7 @@ buildGoModule {
    # https://github.com/mullvad/mullvadvpn-app/pull/5621
    (fetchpatch {
      url = "https://github.com/mullvad/mullvadvpn-app/commit/5dff68ac9c8ec26f1a39a7f44e3b684bb0833bf1.patch";
-     sha256 = "sha256-bUcDVmrrDblK7OJvHqf627vzVwmmvO2EL+sioAnZGbk=";
+     hash = "sha256-bUcDVmrrDblK7OJvHqf627vzVwmmvO2EL+sioAnZGbk=";
      relative = "wireguard/libwg";
    })
  ];
