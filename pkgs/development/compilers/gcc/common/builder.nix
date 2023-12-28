@@ -231,7 +231,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
 
     # Runtime libraries should need no runtime dependencies on $out
     OUT_HASH="$(echo $out | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")"
-    sed -i -e "s|$OUT_HASH|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" $(find ''${!outputLib} -type f)
+    sed -i -e "s|$OUT_HASH|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" $(find ''${!outputLib} -type f)${lib.optionalString stdenv.targetPlatform.isMusl " || true" /* TODO @rhelmot @artemist remove this next time there's a mass rebuild */}
 
     if [ -n "$enableMultilib" ]; then
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
