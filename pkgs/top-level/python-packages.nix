@@ -1456,6 +1456,8 @@ self: super: with self; {
 
   binary = callPackage ../development/python-modules/binary { };
 
+  binary2strings = callPackage ../development/python-modules/binary2strings { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   bincopy = callPackage ../development/python-modules/bincopy { };
