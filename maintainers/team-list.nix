@@ -524,7 +524,6 @@ with lib.maintainers; {
       dtzWill
       ericson2314
       lovek323
-      primeos
       qyliss
       raitobezarius
       rrbutani
