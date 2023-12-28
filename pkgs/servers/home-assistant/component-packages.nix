@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.12.3";
+  version = "2023.12.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -5603,6 +5603,7 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+    "anova"
     "anthemav"
     "apache_kafka"
     "apcupsd"
