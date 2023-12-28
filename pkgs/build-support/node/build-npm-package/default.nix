@@ -6,6 +6,14 @@
 , darwin
 } @ topLevelArgs:
 
+let
+  # .override {} negates splicing, so we need to use buildPackages explicitly
+  npmHooks' = buildPackages.npmHooks.override {
+    inherit nodejs;
+  };
+
+in
+
 { name ? "${args.pname}-${args.version}"
 , src ? null
 , srcs ? null
@@ -53,13 +61,15 @@
 } @ args:
 
 let
-  # .override {} negates splicing, so we need to use buildPackages explicitly
-  npmHooks = buildPackages.npmHooks.override {
-    inherit nodejs;
-  };
+  # Use precomputed npmHooks if nodejs is not overriden
+  npmHooks =
+    if nodejs != topLevelArgs.nodejs then buildPackages.npmHooks.override { inherit nodejs; }
+    else npmHooks';
 
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
+
 in
+
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
