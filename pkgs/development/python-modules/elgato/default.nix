@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "5.1.1";
+  version = "5.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-elgato";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g0po3BtY2uiOmuyWVA+o08c3I86SE4zmvo1ps8HpNNw=";
+    hash = "sha256-NAU4tr0oaAPPrOUZYl9WoGOM68MlrBqGewHBIiIv2XY=";
   };
 
   postPatch = ''
