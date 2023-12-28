@@ -336,3 +336,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
+
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
