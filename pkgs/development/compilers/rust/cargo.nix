@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage.override {
 
   passthru = {
     rustc = rustc;
-    inherit (rustc) tests;
+    inherit (rustc.unwrapped) tests;
   };
 
   # Upstream rustc still assumes that musl = static[1].  The fix for
