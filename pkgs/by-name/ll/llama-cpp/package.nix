@@ -17,7 +17,7 @@
 , openclSupport ? false
 , clblast
 
-, openblasSupport ? true
+, openblasSupport ? !rocmSupport
 , openblas
 , pkg-config
 }:
