@@ -19,9 +19,9 @@ let
       [Startup]
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
-      battery_notifier = ${toPyBoolStr cfg.mouseBatteryNotifier}
-      battery_notifier_freq = ${builtins.toString cfg.mouseBatteryNotifierFrequency}
-      battery_notifier_percent = ${builtins.toString cfg.mouseBatteryNotifierPercentage}
+      battery_notifier = ${toPyBoolStr (cfg.mouseBatteryNotifier || cfg.batteryNotifier.enable)}
+      battery_notifier_freq = ${builtins.toString cfg.batteryNotifier.frequency}
+      battery_notifier_percent = ${builtins.toString cfg.batteryNotifier.percentage}
 
       [Statistics]
       key_statistics = ${toPyBoolStr cfg.keyStatistics}
@@ -88,22 +88,39 @@ in
         '';
       };
 
-      mouseBatteryNotifierFrequency = mkOption {
-        type = types.int;
-        default = 600;
+      batteryNotifier = mkOption {
         description = lib.mdDoc ''
-          How often battery notifications should be shown (in seconds).
-          A value of 0 disables notifications.
+          Settings for device battery notifications.
         '';
-      };
+        default = {};
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Mouse battery notifier.
+              '';
+            };
+            frequency = mkOption {
+              type = types.int;
+              default = 600;
+              description = lib.mdDoc ''
+                How often battery notifications should be shown (in seconds).
+                A value of 0 disables notifications.
+              '';
+            };
 
-      mouseBatteryNotifierPercentage = mkOption {
-        type = types.int;
-        default = 33;
-        description = lib.mdDoc ''
-          At what battery percentage the device should reach before
-          sending notifications.
-        '';
+            percentage = mkOption {
+              type = types.int;
+              default = 33;
+              description = lib.mdDoc ''
+                At what battery percentage the device should reach before
+                sending notifications.
+              '';
+            };
+          };
+        };
       };
 
       keyStatistics = mkOption {
@@ -127,6 +144,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = flatten [
+      (optional cfg.mouseBatteryNotifier ''
+        The option openrazer.mouseBatteryNotifier is deprecated.
+        Please use openrazer.batteryNotifier instead to enable and configure battery notifications.
+      '')
+    ];
+
     boot.extraModulePackages = [ kernelPackages.openrazer ];
     boot.kernelModules = drivers;
 
