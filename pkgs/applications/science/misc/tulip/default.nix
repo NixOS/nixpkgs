@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tulip";
-  version = "5.7.2";
+  version = "5.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/auber/tulip-${version}_src.tar.gz";
-    hash = "sha256-b+XFCS6Ks+EpwxgYFzWdRomfCpHXmZHXnrQM+ZSLN/0=";
+    hash = "sha256-arpC+FsDYGMf47phtSzyjjvDg/UYZS+akOe5CYfajdU=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ]
