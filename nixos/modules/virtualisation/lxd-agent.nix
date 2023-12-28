@@ -56,7 +56,13 @@ in {
     systemd.services.lxd-agent = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.kmod pkgs.util-linux ];
+      path = [
+        pkgs.kmod
+        pkgs.util-linux
+
+        # allow `incus exec` to find system binaries
+        "/run/current-system/sw"
+      ];
 
       preStart = preStartScript;
 
