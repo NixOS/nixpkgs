@@ -7,8 +7,8 @@
 let
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
-  # Haskell packages that require ghc 8.10
-  hs810Pkgs = self: pkgs.haskell.packages.ghc810.override {
+  # Haskell packages that require ghc 9.2
+  hs96Pkgs = self: pkgs.haskell.packages.ghc92.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
@@ -20,7 +20,6 @@ let
           registryDat = ./registry.dat;
         };
         buildTools = drv.buildTools or [] ++ [ makeWrapper ];
-        jailbreak = true;
         postInstall = ''
           wrapProgram $out/bin/elm \
             --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
@@ -32,6 +31,17 @@ let
         maintainers = with maintainers; [ domenkozar turbomack ];
       }) (self.callPackage ./packages/elm.nix { });
 
+      inherit fetchElmDeps;
+      elmVersion = elmPkgs.elm.version;
+    };
+    in {
+      inherit elmPkgs;
+    };
+  };
+
+  hs810Pkgs = self: pkgs.haskell.packages.ghc810.override {
+    overrides = self: super: with pkgs.haskell.lib.compose; with lib;
+    let elmPkgs = {
       elmi-to-json = justStaticExecutables (overrideCabal (drv: {
         prePatch = ''
           substituteInPlace package.yaml --replace "- -Werror" ""
@@ -49,18 +59,15 @@ let
         prePatch = ''
           sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
         '';
-        jailbreak = true;
         # Tests are failing because of missing instances for Eq and Show type classes
         doCheck = false;
+        jailbreak = true;
 
         description = "Instrument Elm code as a preprocessing step for elm-coverage";
         homepage = "https://github.com/zwilias/elm-instrument";
         license = licenses.bsd3;
         maintainers = [ maintainers.turbomack ];
       }) (self.callPackage ./packages/elm-instrument.nix {}));
-
-      inherit fetchElmDeps;
-      elmVersion = elmPkgs.elm.version;
     };
     in elmPkgs // {
       inherit elmPkgs;
@@ -82,7 +89,7 @@ let
   # Haskell packages that require ghc 9.2
   hs92Pkgs = self: pkgs.haskell.packages.ghc92.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
-    let elmPkgs = rec {
+    let elmPkgs = {
       /*
       The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
       `package/nix/build.sh`
@@ -131,7 +138,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
         `patchNpmElm` function also defined in `packages/lib.nix`.
   */
   elmLib = let
-    hsElmPkgs = hs810Pkgs self;
+    hsElmPkgs = hs96Pkgs self;
   in import ./packages/lib.nix {
     inherit lib;
     inherit (pkgs) writeScriptBin stdenv;
@@ -143,7 +150,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
   elm-test = callPackage ./packages/elm-test.nix { };
-} // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
+} // (hs96Pkgs self).elmPkgs // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
   elm-verify-examples = let
     patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
     meta = with lib; nodePkgs.elm-verify-examples.meta // {
