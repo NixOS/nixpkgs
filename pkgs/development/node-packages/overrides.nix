@@ -250,10 +250,6 @@ final: prev: {
     };
   });
 
-  postlight-parser = prev."@postlight/parser".override {
-    name = "postlight-parser";
-  };
-
   # To update prisma, please first update prisma-engines to the latest
   # version. Then change the correct hash to this package. The PR should hold
   # two commits: one for the engines and the other one for the node package.
@@ -291,11 +287,6 @@ final: prev: {
         pkgs.purescript
       ]}
     '';
-  };
-
-  readability-extractor = prev.readability-extractor.override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.pango ];
   };
 
   rush = prev."@microsoft/rush".override {
