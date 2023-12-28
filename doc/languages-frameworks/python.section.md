@@ -2061,7 +2061,7 @@ and create update commits, and supports the `fetchPypi`, `fetchurl` and
 hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 
 Updating packages in bulk leads to lots of breakages, which is why a
-stabilization period on the `python-unstable` branch is required.
+stabilization period on the `python-updates` branch is required.
 
 If a package is fragile and often breaks during these bulks updates, it
 may be reasonable to set `passthru.skipBulkUpdate = true` in the
