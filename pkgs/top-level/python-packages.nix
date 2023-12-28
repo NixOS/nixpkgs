@@ -10602,6 +10602,8 @@ self: super: with self; {
     inherit (pkgs) libusb1;
   };
 
+  pylibjpeg = callPackage ../development/python-modules/pylibjpeg { };
+
   pylibjpeg-libjpeg = callPackage ../development/python-modules/pylibjpeg-libjpeg { };
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
