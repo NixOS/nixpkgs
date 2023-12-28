@@ -11,7 +11,9 @@ lib.makeScope newScope (self: with self; {
   packages14 = self.overrideScope (_: _: { hostVersion = "freebsd14"; });
   packages15 = self.overrideScope (_: _: { hostVersion = "freebsd15"; });
 
-  hostVersion = ''${self.stdenv.hostPlatform.parsed.kernel.name}${builtins.toString (self.stdenv.hostPlatform.parsed.kernel.version or "")}'';
+  hostVersion = if self.stdenv.hostPlatform.isFreeBSD
+    then ''${self.stdenv.hostPlatform.parsed.kernel.name}${builtins.toString (self.stdenv.hostPlatform.parsed.kernel.version or "")}''
+    else throw "The freebsd packages must be parameterized by a specific FreeBSD version when not building for FreeBSD. Do you want freebsd.packages14 or perhaps pkgsCross.x86_64-freebsd14.freebsd?";
   hostArchBsd = {
     x86_64 = "amd64";
     aarch64 = "arm64";
