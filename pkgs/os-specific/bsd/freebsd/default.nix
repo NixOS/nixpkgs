@@ -1,6 +1,5 @@
 { stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
-lib.makeScope newScope (self: with self; {
-  inherit stdenv;
+lib.makeScope newScope (self: with self; { inherit stdenv;
   #stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
@@ -100,6 +99,24 @@ lib.makeScope newScope (self: with self; {
   librt = callPackage ./librt.nix {};
   init = callPackage ./init.nix {};
   rc = callPackage ./rc.nix {};
+  mount = callPackage ./mount.nix {};
+  fsck = callPackage ./fsck.nix {};
+  nscd = callPackage ./nscd.nix {};
+  sysctl = callPackage ./sysctl.nix {};
+  protect = callPackage ./protect.nix {};
+  id = callPackage ./id.nix {};
+  stat = callPackage ./stat.nix {};
+  rcorder = callPackage ./rcorder.nix {};
+  getty = callPackage ./getty.nix {};
+  login = callPackage ./login.nix {};
+  libpam = callPackage ./libpam.nix {};
+  tacplus = callPackage ./tacplus.nix {};
+  libradius = callPackage ./libradius.nix {};
+  libtacplus = callPackage ./libtacplus.nix {};
+  libypclnt = callPackage ./libypclnt.nix {};
+  libssh = callPackage ./libssh.nix {};
+  libbsm = callPackage ./libbsm.nix {};
+  cap_mkdb = callPackage ./cap_mkdb.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};

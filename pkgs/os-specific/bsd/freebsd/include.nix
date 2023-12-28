@@ -30,6 +30,7 @@ mkDerivation {
       sed -i -E \
         -e 's_/usr/include_''${INCSDIR0}_' \
         {} \;
+    sed -E -i -e "/_PATH_LOGIN/d" $BSDSRCDIR/include/paths.h
   '';
 
   makeFlags = [
