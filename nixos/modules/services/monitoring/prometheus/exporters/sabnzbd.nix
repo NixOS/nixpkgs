@@ -19,7 +19,11 @@ in
           };
           apiKeyFile = mkOption {
             type = types.str;
-            description = "File containing the API key.";
+            description = ''
+              The path to a file containing the API key.
+              The file is securely passed to the service by leveraging systemd credentials.
+              No special permissions need to be set on this file.
+            '';
             example = "/run/secrets/sabnzbd_apikey";
           };
         };
@@ -30,18 +34,24 @@ in
   serviceOpts =
     let
       servers = lib.zipAttrs cfg.servers;
-      apiKeys = lib.concatStringsSep "," (builtins.map (file: "$(cat ${file})") servers.apiKeyFile);
+      credentials = lib.imap0 (i: v: { name = "apikey-${toString i}"; path = v; }) servers.apiKeyFile;
     in
     {
+      serviceConfig.LoadCredential = builtins.map ({ name, path }: "${name}:${path}") credentials;
+
       environment = {
         METRICS_PORT = toString cfg.port;
         METRICS_ADDR = cfg.listenAddress;
         SABNZBD_BASEURLS = lib.concatStringsSep "," servers.baseUrl;
       };
 
-      script = ''
-        export SABNZBD_APIKEYS="${apiKeys}"
-        exec ${lib.getExe pkgs.prometheus-sabnzbd-exporter}
-      '';
+      script =
+        let
+          apiKeys = lib.concatStringsSep "," (builtins.map (cred: "$(< $CREDENTIALS_DIRECTORY/${cred.name})") credentials);
+        in
+        ''
+          export SABNZBD_APIKEYS="${apiKeys}"
+          exec ${lib.getExe pkgs.prometheus-sabnzbd-exporter}
+        '';
     };
 }
