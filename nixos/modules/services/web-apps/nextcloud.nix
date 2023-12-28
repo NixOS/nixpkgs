@@ -23,6 +23,43 @@ let
     catch_workers_output = "yes";
   };
 
+  appStores = {
+    # default apps bundled with pkgs.nextcloudXX, e.g. files, contacts
+    apps = {
+      enabled = true;
+      writable = false;
+    };
+    # apps installed via cfg.extraApps
+    nix-apps = {
+      enabled = cfg.extraApps != { };
+      linkTarget = pkgs.linkFarm "nix-apps"
+        (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps);
+      writable = false;
+    };
+    # apps installed via the app store.
+    store-apps = {
+      enabled = cfg.appstoreEnable == null || cfg.appstoreEnable;
+      linkTarget = "${cfg.home}/store-apps";
+      writable = true;
+    };
+  };
+
+  webroot = pkgs.runCommand
+    "${cfg.package.name or "nextcloud"}-with-apps"
+    { }
+    ''
+      mkdir $out
+      ln -sfv "${cfg.package}"/* "$out"
+      ${concatStrings
+        (mapAttrsToList (name: store: optionalString (store.enabled && store?linkTarget) ''
+          if [ -e "$out"/${name} ]; then
+            echo "Didn't expect ${name} already in $out!"
+            exit 1
+          fi
+          ln -sfTv ${store.linkTarget} "$out"/${name}
+        '') appStores)}
+    '';
+
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -45,7 +82,7 @@ let
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
-    cd ${cfg.package}
+    cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
       sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
@@ -766,7 +803,7 @@ in {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as
         # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
         # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
-        phpfpm-nextcloud.restartTriggers = [ cfg.package ];
+        phpfpm-nextcloud.restartTriggers = [ webroot ];
 
         nextcloud-setup = let
           c = cfg.config;
@@ -800,6 +837,10 @@ in {
 
           nextcloudGreaterOrEqualThan = req: versionAtLeast cfg.package.version req;
 
+          mkAppStoreConfig = name: { enabled, writable, ... }: optionalString enabled ''
+            [ 'path' => '${webroot}/${name}', 'url' => '/${name}', 'writable' => ${boolToString writable} ],
+          '';
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
@@ -828,9 +869,7 @@ in {
             }
             $CONFIG = [
               'apps_paths' => [
-                ${optionalString (cfg.extraApps != { }) "[ 'path' => '${cfg.home}/nix-apps', 'url' => '/nix-apps', 'writable' => false ],"}
-                [ 'path' => '${cfg.home}/apps', 'url' => '/apps', 'writable' => false ],
-                [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
+                ${concatStrings (mapAttrsToList mkAppStoreConfig appStores)}
               ],
               ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
               'datadirectory' => '${datadir}/data',
@@ -935,17 +974,16 @@ in {
               exit 1
             fi
 
-            ln -sf ${cfg.package}/apps ${cfg.home}/
-
-            # Install extra apps
-            ln -sfT \
-              ${pkgs.linkFarm "nix-apps"
-                (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps)} \
-              ${cfg.home}/nix-apps
+            ${concatMapStrings (name: ''
+              if [ -d "${cfg.home}"/${name} ]; then
+                echo "Cleaning up ${name}; these are now bundled in the webroot store-path!"
+                rm -r "${cfg.home}"/${name}
+              fi
+            '') [ "nix-apps" "apps" ]}
 
             # create nextcloud directories.
             # if the directories exist already with wrong permissions, we fix that
-            for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps ${cfg.home}/nix-apps; do
+            for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps; do
               if [ ! -e $dir ]; then
                 install -o nextcloud -g nextcloud -d $dir
               elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
@@ -982,7 +1020,7 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${webroot}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           after = [ "nextcloud-setup.service" ];
@@ -1058,7 +1096,7 @@ in {
       services.nginx.enable = mkDefault true;
 
       services.nginx.virtualHosts.${cfg.hostName} = {
-        root = cfg.package;
+        root = webroot;
         locations = {
           "= /robots.txt" = {
             priority = 100;
@@ -1074,14 +1112,6 @@ in {
                 return 302 /remote.php/webdav/$is_args$args;
               }
             '';
-          };
-          "~ ^/store-apps" = {
-            priority = 201;
-            extraConfig = "root ${cfg.home};";
-          };
-          "~ ^/nix-apps" = {
-            priority = 201;
-            extraConfig = "root ${cfg.home};";
           };
           "^~ /.well-known" = {
             priority = 210;
