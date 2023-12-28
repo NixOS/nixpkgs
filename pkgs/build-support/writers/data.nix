@@ -5,7 +5,7 @@ let
   inherit (lib)
     last
     optionalString
-    types
+    isPath
     ;
 in
 rec {
@@ -24,7 +24,7 @@ rec {
   #   myConfig = writeJSON "config.json" { hello = "world"; }
   #
   makeDataWriter = lib.warn "pkgs.writers.makeDataWriter is deprecated. Use pkgs.writeTextFile." ({ input ? lib.id, output ? "cp $inputPath $out" }: nameOrPath: data:
-    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+    assert isPath nameOrPath || builtins.match "[0-9A-Za-z._][0-9A-Za-z._-]*" nameOrPath != null;
     let
       name = last (builtins.split "/" nameOrPath);
     in
@@ -35,7 +35,7 @@ rec {
       } ''
       ${output}
 
-      ${optionalString (types.path.check nameOrPath) ''
+      ${optionalString (isPath nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
         mv tmp $out/${nameOrPath}

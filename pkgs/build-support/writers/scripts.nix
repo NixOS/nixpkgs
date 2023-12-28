@@ -1,5 +1,6 @@
 { pkgs, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
 let
+  inherit (builtins) match;
   inherit (lib)
     concatMapStringsSep
     elem
@@ -8,7 +9,9 @@ let
     optionalString
     stringLength
     strings
-    types
+    isPath
+    isString
+    head
     ;
 in
 rec {
@@ -19,8 +22,8 @@ rec {
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
-    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.str.check content);
+    assert (isPath nameOrPath || match "[0-9A-Za-z._][0-9A-Za-z._-]*" nameOrPath != null);
+    assert (isPath content || isString content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
@@ -30,7 +33,7 @@ rec {
         meta.mainProgram = name;
       }
       // (
-        if (types.str.check content) then {
+        if (isString content) then {
           inherit content interpreter;
           passAsFile = [ "content" ];
         } else {
@@ -69,7 +72,7 @@ rec {
         ${check} $out
       ''}
       chmod +x $out
-      ${optionalString (types.path.check nameOrPath) ''
+      ${optionalString (isPath nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
         mv tmp $out/${nameOrPath}
@@ -82,12 +85,12 @@ rec {
   # Examples:
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
   makeBinWriter = { compileScript, strip ? true }: nameOrPath: content:
-    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.str.check content);
+    assert (isPath nameOrPath || match "[0-9A-Za-z._][0-9A-Za-z._-]*" nameOrPath != null);
+    assert (isPath content || isString content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name ((if (types.str.check content) then {
+    pkgs.runCommand name ((if (isString content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {
@@ -102,7 +105,7 @@ rec {
       # mach-o executables from the get-go, but need to be corrected somehow
       # which is done by fixupPhase.
       ${lib.optionalString pkgs.stdenvNoCC.hostPlatform.isDarwin "fixupPhase"}
-      ${optionalString (types.path.check nameOrPath) ''
+      ${optionalString (isPath nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
         mv tmp $out/${nameOrPath}
