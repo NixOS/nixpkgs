@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "github-copilot-intellij-agent";
-  version = "1.2.18.2908";
+  version = "1.4.5.4049";
 
   src = fetchurl {
     name = "${pname}-${version}-plugin.zip";
-    url = "https://plugins.jetbrains.com/plugin/download?updateId=373346";
-    hash = "sha256-ErSj4ckPSaEkOeGTRS27yFKDlj2iZfoPdjbZleSIL1s=";
+    url = "https://plugins.jetbrains.com/plugin/download?updateId=454005";
+    hash = "sha256-ibu3OcmtyLHuumhJQ6QipsNEIdEhvLUS7sb3xmnaR0U=";
   };
 
   nativeBuildInputs = [ unzip ];

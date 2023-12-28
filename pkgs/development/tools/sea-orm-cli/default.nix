@@ -8,11 +8,11 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sea-orm-cli";
-  version = "0.12.2";
+  version = "0.12.10";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-mg0PkWxlfwo4eAtbU1ZOphEUBB1P6VsSpODyJZhvwQs=";
+    hash = "sha256-BVQbzP/+TJFqhnBeerYiLMpJJ8q9x582DR5X10K027U=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
-  cargoHash = "sha256-6LXJtY844CyR6H0/IkEJrpSj4UNWcpO/XoTzUthcTUc=";
+  cargoHash = "sha256-qCcWReo72eHN9MoTVAmSHYVhpqw0kZ9VU/plYRcirVA=";
 
   meta = with lib; {
     homepage = "https://sea-ql.org/SeaORM";

@@ -210,6 +210,7 @@ in {
     enableSystemdStage1 = true;
   };
 
+  installerBoot = (import ./installer.nix { }).separateBootZfs;
   installer = (import ./installer.nix { }).zfsroot;
 
   expand-partitions = makeTest {
