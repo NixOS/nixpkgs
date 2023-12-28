@@ -1,131 +1,151 @@
-({ lib, pkgs, ... }:
+{ config, lib, ... }:
 let
-    slurmconfig = {
-      services.slurm = {
-        controlMachine = "control";
-        nodeName = [ "node[1-3] CPUs=1 State=UNKNOWN" ];
-        partitionName = [ "debug Nodes=node[1-3] Default=YES MaxTime=INFINITE State=UP" ];
-        extraConfig = ''
-          AccountingStorageHost=dbd
-          AccountingStorageType=accounting_storage/slurmdbd
-        '';
-      };
-      environment.systemPackages = [ mpitest ];
-      networking.firewall.enable = false;
-      systemd.tmpfiles.rules = [
-        "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
-      ];
-    };
+  testCfg = config.slurmTest;
 
-    mpitest = let
-      mpitestC = pkgs.writeText "mpitest.c" ''
-        #include <stdio.h>
-        #include <stdlib.h>
-        #include <mpi.h>
-
-        int
-        main (int argc, char *argv[])
-        {
-          int rank, size, length;
-          char name[512];
-
-          MPI_Init (&argc, &argv);
-          MPI_Comm_rank (MPI_COMM_WORLD, &rank);
-          MPI_Comm_size (MPI_COMM_WORLD, &size);
-          MPI_Get_processor_name (name, &length);
-
-          if ( rank == 0 ) printf("size=%d\n", size);
-
-          printf ("%s: hello world from process %d of %d\n", name, rank, size);
-
-          MPI_Finalize ();
-
-          return EXIT_SUCCESS;
-        }
-      '';
-    in pkgs.runCommand "mpitest" {} ''
-      mkdir -p $out/bin
-      ${pkgs.openmpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
-    '';
-in {
+  inherit (builtins) elem;
+  inherit (lib)
+    mkOption
+    mkMerge
+    mkIf
+    types
+    ;
+in
+{
   name = "slurm";
 
   meta.maintainers = [ lib.maintainers.markuskowa ];
 
-  nodes =
+  imports = [
+    {
+      options.slurmTest = {
+        nComputeNodes = mkOption {
+          type = types.int;
+          description = "Number of compute nodes to create for the default slurm partition";
+        };
+        firstNodeId = mkOption {
+          type = types.int;
+          internal = true;
+          default = 1;
+        };
+        lastNodeId = mkOption {
+          type = types.int;
+          internal = true;
+          default = testCfg.firstNodeId + testCfg.nComputeNodes - 1;
+        };
+        nodeIdsRange = mkOption {
+          type = types.str;
+          internal = true;
+          default = "${toString testCfg.firstNodeId}-${toString testCfg.lastNodeId}";
+        };
+      };
+      config.nodes =
+        let
+          nodeNames = (map (n: "node${toString n}") (lib.range testCfg.firstNodeId testCfg.lastNodeId));
+        in
+        lib.genAttrs nodeNames (_: { slurmTestNode.roles = [ "compute" ]; });
+    }
+  ];
+
+  defaults =
+    { config, pkgs, ... }:
     let
-    computeNode =
-      { ...}:
-      {
-        imports = [ slurmconfig ];
-        # TODO slurmd port and slurmctld port should be configurations and
-        # automatically allowed by the  firewall.
-        services.slurm = {
-          client.enable = true;
+      nodeCfg = config.slurmTestNode;
+    in
+    {
+      options.slurmTestNode = {
+        roles = mkOption {
+          type = types.listOf (
+            types.enum [
+              "slurmctld"
+              "dbd"
+              "login"
+              "compute"
+            ]
+          );
+        };
+
+        # NOTE: Using `callPackage` from the node's `pkgs` so that
+        # `nixpkgs.overlays` are respected in case the test is re-used in
+        # passthru tests or outside Nixpkgs
+        mpitest.package = mkOption {
+          type = types.package;
+          default =
+            pkgs.callPackage
+              (
+                { runCommand, mpi }:
+                runCommand "mpitest" { nativeBuildInputs = [ mpi ]; } ''
+                  mkdir -p $out/bin
+                  mpicc ${./mpitest.c} -o $out/bin/mpitest
+                ''
+              )
+              { };
         };
       };
-    in {
+      config = mkMerge [
+        {
+          services.slurm.client.enable = elem "compute" nodeCfg.roles;
+          services.slurm.server.enable = elem "slurmctld" nodeCfg.roles;
+          services.slurm.enableStools = elem "login" nodeCfg.roles;
 
-    control =
-      { ...}:
-      {
-        imports = [ slurmconfig ];
-        services.slurm = {
-          server.enable = true;
-        };
-      };
+          services.slurm.dbdserver.enable = elem "dbd" nodeCfg.roles;
+          services.mysql.enable = elem "dbd" nodeCfg.roles;
+        }
+        {
+          services.slurm = {
 
-    submit =
-      { ...}:
-      {
-        imports = [ slurmconfig ];
-        services.slurm = {
-          enableStools = true;
-        };
-      };
+            controlMachine = "control";
+            nodeName = [ "node[${testCfg.nodeIdsRange}] CPUs=1 State=UNKNOWN" ];
+            partitionName = [
+              "debug Nodes=node[${testCfg.nodeIdsRange}] Default=YES MaxTime=INFINITE State=UP"
+            ];
+            extraConfig = ''
+              AccountingStorageHost=dbd
+              AccountingStorageType=accounting_storage/slurmdbd
+            '';
 
-    dbd =
-      { pkgs, ... } :
-      let
-        passFile = pkgs.writeText "dbdpassword" "password123";
-      in {
-        networking.firewall.enable = false;
-        systemd.tmpfiles.rules = [
-          "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
-        ];
-        services.slurm.dbdserver = {
-          enable = true;
-          storagePassFile = "${passFile}";
-        };
-        services.mysql = {
-          enable = true;
-          package = pkgs.mariadb;
-          initialScript = pkgs.writeText "mysql-init.sql" ''
-            CREATE USER 'slurm'@'localhost' IDENTIFIED BY 'password123';
-            GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'localhost';
-          '';
-          ensureDatabases = [ "slurm_acct_db" ];
-          ensureUsers = [{
-            ensurePermissions = { "slurm_acct_db.*" = "ALL PRIVILEGES"; };
-            name = "slurm";
-          }];
-          settings.mysqld = {
-            # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
-            innodb_buffer_pool_size="1024M";
-            innodb_log_file_size="64M";
-            innodb_lock_wait_timeout=900;
+            dbdserver.storagePassFile = "${pkgs.writeText "dbdpassword" "password123"}";
           };
-        };
-      };
 
-    node1 = computeNode;
-    node2 = computeNode;
-    node3 = computeNode;
+          services.mysql = {
+            package = pkgs.mariadb;
+            initialScript = pkgs.writeText "mysql-init.sql" ''
+              CREATE USER 'slurm'@'localhost' IDENTIFIED BY 'password123';
+              GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'localhost';
+            '';
+            ensureDatabases = [ "slurm_acct_db" ];
+            ensureUsers = [
+              {
+                ensurePermissions = {
+                  "slurm_acct_db.*" = "ALL PRIVILEGES";
+                };
+                name = "slurm";
+              }
+            ];
+            settings.mysqld = {
+              # recommendations from: https://slurm.schedmd.com/accounting.html#mysql-configuration
+              innodb_buffer_pool_size = "1024M";
+              innodb_log_file_size = "64M";
+              innodb_lock_wait_timeout = 900;
+            };
+          };
+
+          environment.systemPackages = [ nodeCfg.mpitest.package ];
+          networking.firewall.enable = false;
+          systemd.tmpfiles.rules = [
+            "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
+          ];
+        }
+      ];
+    };
+
+  slurmTest.nComputeNodes = 3;
+  nodes = {
+    control.slurmTestNode.roles = [ "slurmctld" ];
+    submit.slurmTestNode.roles = [ "login" ];
+    dbd.slurmTestNode.roles = [ "dbd" ];
   };
 
-
-  testScript =
-  ''
+  testScript = ''
   start_all()
 
   # Make sure DBD is up after DB initialzation
@@ -165,4 +185,4 @@ in {
   with subtest("run_PMIx_mpitest"):
       submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
   '';
-})
+}
