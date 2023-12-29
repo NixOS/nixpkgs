@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     "-DCONF_DIR=etc"
     "-DBUILD_LIBS=1"
     "-DWITH_PENTAX=off"
+    "-DWITH_AHP_XC=off"
   ];
 
   postPatch = ''

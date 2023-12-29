@@ -2,7 +2,7 @@
 , libgpg-error, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
 , withLibsecret ? true, libsecret
-, enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
+, enabledFlavors ? [ "curses" "tty" "emacs" ]
   ++ lib.optionals stdenv.isLinux [ "gnome3" ]
   ++ lib.optionals (!stdenv.isDarwin) [ "qt" ]
 }:

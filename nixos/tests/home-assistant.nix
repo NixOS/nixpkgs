@@ -182,7 +182,7 @@ in {
         hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'We found a custom integration prometheus_sensor which has not been tested by Home Assistant'")
 
     with subtest("Check that lovelace modules are referenced and fetchable"):
-        hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
+        hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
         hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
 
     with subtest("Check that optional dependencies are in the PYTHONPATH"):

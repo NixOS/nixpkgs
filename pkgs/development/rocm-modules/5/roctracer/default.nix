@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "roctracer";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-P6QYyAjMRwFFWKF8AhbrYGe+mYVJXdbBW1or6vcobYU=";
@@ -94,10 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tracer callback/activity library";
-    homepage = "https://github.com/ROCm-Developer-Tools/roctracer";
+    homepage = "https://github.com/ROCm/roctracer";
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version;
+    broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

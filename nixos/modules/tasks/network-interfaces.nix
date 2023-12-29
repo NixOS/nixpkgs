@@ -1396,6 +1396,8 @@ in
       "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # allow all users to do ICMP echo requests (ping)
+      "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (forEach interfaces
@@ -1408,9 +1410,11 @@ in
 
     systemd.services.domainname = lib.mkIf (cfg.domain != null) {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
+      serviceConfig.Type = "oneshot";
     };
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };

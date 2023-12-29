@@ -7,6 +7,7 @@
 , shared-mime-info
 , gtk3
 , wrapGAppsHook
+, libarchive
 , libxml2
 , xapp
 , meson
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.8.4";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eSMPXBJ+VIMrIy86mMbRtZ28DvX7aCzLAAQ+RWqlCpc=";
+    sha256 = "sha256-sADdslxDtI+zV8DLnczlzNtB9W+BhMP8vb5riSnPYaw=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     gtk3
     xapp
     cairo
+    libarchive
     libxml2
     libsecret
     poppler

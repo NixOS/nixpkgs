@@ -1,20 +1,20 @@
 { lib, stdenv, fetchFromGitHub, addOpenGLRunpath, cudatoolkit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "unstable-2021-04-29";
+  version = "unstable-2023-11-10";
 
   src = fetchFromGitHub {
     owner = "wilicc";
     repo = "gpu-burn";
-    rev = "1e9a84f4bec3b0835c00daace45d79ed6c488edb";
-    sha256 = "sha256-x+kta81Z08PsBgbf+fzRTXhNXUPBd5w8bST/T5nNiQA=";
+    rev = "b99aedce3e020d2ca419832ee27b7f29dfa6373e";
+    sha256 = "sha256-cLO0GXvujZ+g64j+OY31n43MsVER3ljo8Qrt+EzSKjc=";
   };
 
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
-      --replace "const char *kernelFile = \"compare.ptx\";" \
-                "const char *kernelFile = \"$out/share/compare.ptx\";"
+      --replace "#define COMPARE_KERNEL \"compare.ptx\"" \
+                "#define COMPARE_KERNEL \"$out/share/compare.ptx\""
   '';
 
   buildInputs = [ cudatoolkit ];

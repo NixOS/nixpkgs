@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "2.1.0";
+  version = "3.0.0";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "xyz2tex";
     repo = "svg2tikz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v8+0h90uJlkI5eJcwCG55nxPz8n2aJXwP8Ocp48cl9M=";
+    hash = "sha256-YnWkj4xvjGzpKQv+H+spage+dy+fC9fJkqsOaQ6C1Ho=";
   };
 
   nativeBuildInputs = [

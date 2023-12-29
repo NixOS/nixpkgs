@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isStatic [ "fortify" ];
+
   installTargets = [ "install" ] ++ lib.optional withGUI "install-gui";
 
   enableParallelBuilding = true;

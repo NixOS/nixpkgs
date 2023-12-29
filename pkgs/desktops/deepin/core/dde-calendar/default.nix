@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-calendar";
-  version = "5.11.0";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-AgomXDydGHzfybE3r4IW94zIWKtwURmLW68MwqjLBWE=";
+    hash = "sha256-EQcB+a0dK2c6NdvGFbyp65a8nN2PmOpZLWx61UDOTJg=";
   };
 
   patches = [

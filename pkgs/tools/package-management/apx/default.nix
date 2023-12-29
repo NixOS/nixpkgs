@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3CelqEntpfld0n+Ewg7NCkowVjgCf5b6StfSkYbgV5k=";
+    hash = "sha256-TXGfJHe4dOOpP7iJFbjL5WnqcxHeOn5naKjnBQ3c5dE=";
   };
 
   vendorHash = null;
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace config/apx.json \
-      --replace "/usr/share/apx/distrobox" "${distrobox}/bin/distrobox" \
+      --replace "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
       --replace "/usr/share/apx" "$out/bin/apx"
     substituteInPlace settings/config.go \
       --replace "/usr/share/apx/" "$out/share/apx/"

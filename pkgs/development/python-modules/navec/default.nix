@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook gensim ];
   # TODO: remove when gensim usage will be fixed in `navec`.
   disabledTests = [ "test_gensim" ];
-  pythonImportCheck = [ "navec" ];
+  pythonImportsCheck = [ "navec" ];
 
   meta = with lib; {
     description = "Compact high quality word embeddings for Russian language";

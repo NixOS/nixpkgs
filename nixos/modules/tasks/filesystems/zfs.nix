@@ -130,7 +130,8 @@ let
         "systemd-ask-password-console.service"
       ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
-      before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "shutdown.target" "zfs-import.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -508,9 +509,15 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption (lib.mdDoc "ZED's ability to send emails") // {
-        default = cfgZfs.package.enableMail;
-        defaultText = literalExpression "config.${optZfs.package}.enableMail";
+      enableMail = mkOption {
+        type = types.bool;
+        default = config.services.mail.sendmailSetuidWrapper != null;
+        defaultText = literalExpression ''
+          config.services.mail.sendmailSetuidWrapper != null
+        '';
+        description = mdDoc ''
+          Whether to enable ZED's ability to send emails.
+        '';
       };
 
       settings = mkOption {
@@ -549,14 +556,6 @@ in
         {
           assertion = cfgZfs.modulePackage.version == cfgZfs.package.version;
           message = "The kernel module and the userspace tooling versions are not matching, this is an unsupported usecase.";
-        }
-        {
-          assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
-          message = ''
-            To allow ZED to send emails, ZFS needs to be configured to enable
-            this. To do so, one must override the `zfs` package and set
-            `enableMail` to true.
-          '';
         }
         {
           assertion = config.networking.hostId != null;
@@ -671,7 +670,13 @@ in
       };
 
       services.zfs.zed.settings = {
-        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault "${pkgs.mailutils}/bin/mail");
+        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault (
+          config.security.wrapperDir + "/" +
+          config.services.mail.sendmailSetuidWrapper.program
+        ));
+        # subject in header for sendmail
+        ZED_EMAIL_OPTS = mkIf cfgZED.enableMail (mkDefault "@ADDRESS@");
+
         PATH = lib.makeBinPath [
           cfgZfs.package
           pkgs.coreutils

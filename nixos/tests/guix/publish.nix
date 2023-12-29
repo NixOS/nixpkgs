@@ -16,7 +16,7 @@ in {
       # substitute server which requires Avahi.
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish = {
           enable = true;
           userServices = true;

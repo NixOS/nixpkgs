@@ -66,6 +66,8 @@ python3Packages.buildPythonApplication {
     perl
     zlib
     avahi
+  ] ++ lib.optionals withQt5 [
+    qt5.qtwayland
   ];
 
   nativeBuildInputs = [
@@ -237,6 +239,8 @@ python3Packages.buildPythonApplication {
   # 1. Calling patchPythonProgram on the original script in $out/share/hplip
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
+  # We also avoid double wrapping in case we add qt5 support
+  dontWrapQtApps = true;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
@@ -246,7 +250,7 @@ python3Packages.buildPythonApplication {
       echo "patching \`$py'..."
       patchPythonScript "$py"
       echo "wrapping \`$bin'..."
-      makeWrapper "$py" "$bin" \
+      ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
           $makeWrapperArgs
@@ -264,10 +268,6 @@ python3Packages.buildPythonApplication {
       --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
-  '' + lib.optionalString withQt5 ''
-    for f in $out/bin/hp-*;do
-      wrapQtApp $f
-    done
   '';
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.

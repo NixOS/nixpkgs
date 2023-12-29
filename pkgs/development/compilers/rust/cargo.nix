@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage.override {
   cargo-auditable = cargo-auditable.bootstrap;
 } ({
   pname = "cargo";
-  inherit (rustc) version src;
+  inherit (rustc.unwrapped) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage.override {
 
   passthru = {
     rustc = rustc;
-    inherit (rustc) tests;
+    inherit (rustc.unwrapped) tests;
   };
 
   # Upstream rustc still assumes that musl = static[1].  The fix for

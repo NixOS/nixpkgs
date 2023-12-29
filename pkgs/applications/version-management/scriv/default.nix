@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vdGtdJGkaUzH2JoxuFsfM57OodlxbEHuLl81giKUn6U=";
+    hash = "sha256-+OTWFDnHCF2bxQU8f7DfULYG1cA9tOZCsNRPdKobns8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     click-log
     jinja2
+    markdown-it-py
     requests
   ] ++ lib.optionals (python3.pythonOlder "3.11") [
     tomli

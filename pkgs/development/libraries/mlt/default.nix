@@ -24,6 +24,7 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
+, glib
 , ladspa-sdk
 , ladspaPlugins
 , enablePython ? false
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ] ++ lib.optionals enableJackrack [
+    glib
     ladspa-sdk
     ladspaPlugins
   ] ++ lib.optionals enableQt [

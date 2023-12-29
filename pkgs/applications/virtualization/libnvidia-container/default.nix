@@ -3,7 +3,7 @@
 , addOpenGLRunpath
 , fetchFromGitHub
 , pkg-config
-, libelf
+, elfutils
 , libcap
 , libseccomp
 , rpcsvc-proto
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];
 
-  buildInputs = [ libelf libcap libseccomp libtirpc ];
+  buildInputs = [ elfutils libcap libseccomp libtirpc ];
 
   makeFlags = [
     "WITH_LIBELF=yes"

@@ -1,6 +1,5 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , isPyPy
 , python
@@ -14,28 +13,25 @@
 , zope_event
 , zope_interface
 , pythonOlder
+
+# for passthru.tests
+, dulwich
+, gunicorn
+, opentracing
+, pika
 }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "22.10.2";
+  version = "23.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HKAdoXbuN7NSeicC99QNvJ/7jPx75aA7+k+e7EXlXEY=";
+    hash = "sha256-csACI1OQ1G+Uk4qWkg2IVtT/2d32KjA6DXwRiJQJfjQ=";
   };
-
-  patches = [
-    # Replace deprecated pkg_resources with importlib-metadata
-    (fetchpatch {
-      url = "https://github.com/gevent/gevent/commit/bd96d8e14dc99f757de22ab4bb98439f912dab1e.patch";
-      hash = "sha256-Y+cxIScuEgAVYmmxBJ8OI+JuJ4G+iiROTcRdWglo3l0=";
-      includes = [ "src/gevent/events.py" ];
-    })
-  ];
 
   nativeBuildInputs = [
     cython_3
@@ -64,6 +60,14 @@ buildPythonPackage rec {
     "gevent"
     "gevent.events"
   ];
+
+  passthru.tests = {
+    inherit
+      dulwich
+      gunicorn
+      opentracing
+      pika;
+  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
   meta = with lib; {
     description = "Coroutine-based networking library";

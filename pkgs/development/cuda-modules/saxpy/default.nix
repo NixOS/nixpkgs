@@ -14,6 +14,7 @@ let
     cudaVersion
     flags
     libcublas
+    setupCudaHook
     ;
 in
 backendStdenv.mkDerivation {

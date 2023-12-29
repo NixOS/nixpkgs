@@ -120,7 +120,8 @@ let
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe getExe';
-    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
+    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
+      packagesFromDirectoryRecursive;
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext

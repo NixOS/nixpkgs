@@ -146,5 +146,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
+    mainProgram = "notmuch";
   };
 }

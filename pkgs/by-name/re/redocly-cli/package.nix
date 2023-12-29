@@ -21,6 +21,10 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  postBuild = ''
+    npm --prefix packages/cli run copy-assets
+  '';
+
   postInstall = ''
     rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core}
     cp -R packages/cli $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli

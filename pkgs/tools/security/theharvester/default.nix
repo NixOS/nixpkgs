@@ -5,15 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.4.4";
-  format = "setuptools";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-L0WbPZE2alregOvWc+0nuMvsD17ayCw3JtahGhf4B1o=";
+    hash = "sha256-tnCiI4bte2RSWSkEL2rwFz6WFjfRMMFiEBOvv3QMyos=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns

@@ -7,22 +7,22 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2023.1130.0";
+  version = "2023.1229.0";
 
   src = {
     aarch64-darwin = fetchzip {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-      hash = "sha256-7lQVc517QEtQDdSF5FxR+kgw1TVpr8H3whzURelABIY=";
+      hash = "sha256-aZp8pVeCxmaAyWYnBg7w8sPMXy+L2UGRk3NvG/VsxYI=";
       stripRoot = false;
     };
     x86_64-darwin = fetchzip {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-      hash = "sha256-BOpW8QP4TLKzdTDnjjT/t4k+3Q2w2MWA0IDnXH+/mBU=";
+      hash = "sha256-Xle/WcWg+lYA+DxQmE4Kzn1pJTa+HrM13utXqdK8ZZY=";
       stripRoot = false;
     };
     x86_64-linux = fetchurl {
       url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-      hash = "sha256-dQuyKjCZaIl3uaI81qRMt5NzBxfmyROVbJrVAqzuZxg=";
+      hash = "sha256-lRdRPwa6xix5Nvt3szPeposmqU8D826iFmE6S1uPBF8=";
     };
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
@@ -35,7 +35,7 @@ let
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ delan spacefault stepbrobd ];
+    maintainers = with lib.maintainers; [ delan gepbird spacefault stepbrobd ];
     mainProgram = "osu!";
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
   };

@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "gentools"
   ];
 

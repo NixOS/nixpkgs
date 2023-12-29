@@ -29,8 +29,6 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  preConfigure = "patchShebangs ./configure.sh";
-
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
   dontAddStaticConfigureFlags = true;

@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,8 +46,8 @@ message(STATUS "APFEL: APFEL_DOWNLOAD_PDFS=${APFEL_DOWNLOAD_PDFS}")
+ # CONFIG SCRIPT ========================================================
+ set(prefix ${CMAKE_INSTALL_PREFIX})
+ set(exec_prefix "${prefix}")
+-set(includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+-set(libdir "${prefix}/${CMAKE_INSTALL_LIBDIR}")
++set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
++set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+ set(PACKAGE_VERSION "${apfel_VERSION}")
+ configure_file("${PROJECT_SOURCE_DIR}/bin/apfel-config.in" "${PROJECT_BINARY_DIR}/bin/apfel-config")
+ configure_file("${PROJECT_SOURCE_DIR}/bin/apfel.in" "${PROJECT_BINARY_DIR}/bin/apfel")

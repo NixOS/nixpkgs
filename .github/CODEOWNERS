@@ -25,7 +25,7 @@
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
 /lib/asserts.nix            @infinisil @Profpatsch
-/lib/path.*                 @infinisil @fricklerhandwerk
+/lib/path.*                 @infinisil
 /lib/fileset                @infinisil
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth
@@ -73,13 +73,14 @@
 # Contributor documentation
 /CONTRIBUTING.md @infinisil
 /.github/PULL_REQUEST_TEMPLATE.md @infinisil
-/doc/contributing/ @fricklerhandwerk @infinisil
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/doc/contributing/ @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @infinisil
 /lib/README.md @infinisil
 /doc/README.md @infinisil
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
 /maintainers/README.md @infinisil
+/maintainers/* @piegamesde @Janik-Haag
 
 # User-facing development documentation
 /doc/development.md @infinisil
@@ -266,13 +267,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-
-# Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @adisbladis
-/nixos/modules/virtualisation/cri-o.nix      @adisbladis
-/nixos/modules/virtualisation/podman         @adisbladis
-/nixos/tests/cri-o.nix                       @adisbladis
-/nixos/tests/podman                          @adisbladis
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth

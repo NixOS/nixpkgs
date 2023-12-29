@@ -119,6 +119,16 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+    meta.maintainers = with lib.maintainers; [ andersk ];
+  }))
+
   (patchExtension "tophat@fflewddur.github.io" (old: {
     patches = [
       (substituteAll {

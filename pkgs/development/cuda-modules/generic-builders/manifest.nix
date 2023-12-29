@@ -1,6 +1,7 @@
 {
   # General callPackage-supplied arguments
   autoAddOpenGLRunpathHook,
+  autoAddCudaCompatRunpathHook,
   autoPatchelfHook,
   backendStdenv,
   fetchurl,
@@ -76,7 +77,7 @@ backendStdenv.mkDerivation (
             false
             featureRelease;
         # Order is important here so we use a list.
-        additionalOutputs = builtins.filter hasOutput [
+        possibleOutputs = [
           "bin"
           "lib"
           "static"
@@ -85,15 +86,22 @@ backendStdenv.mkDerivation (
           "sample"
           "python"
         ];
+        additionalOutputs =
+          if redistArch == "unsupported" then possibleOutputs else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
-        outputs = ["out"] ++ additionalOutputs;
+        outputs = [ "out" ] ++ additionalOutputs;
       in
       outputs;
 
     # Traversed in the order of the outputs speficied in outputs;
     # entries are skipped if they don't exist in outputs.
     outputToPatterns = {
-      bin = ["bin"];
+      bin = [ "bin" ];
+      dev = [
+        "share/pkg-config"
+        "**/*.pc"
+        "**/*.cmake"
+      ];
       lib = [
         "lib"
         "lib64"
@@ -109,11 +117,31 @@ backendStdenv.mkDerivation (
     brokenConditions = {};
 
     src = fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${
-        redistribRelease.${redistArch}.relative_path
-      }";
-      inherit (redistribRelease.${redistArch}) sha256;
+      url =
+        if (builtins.hasAttr redistArch redistribRelease) then
+          "https://developer.download.nvidia.com/compute/${redistName}/redist/${
+            redistribRelease.${redistArch}.relative_path
+          }"
+        else
+          "cannot-construct-an-url-for-the-${redistArch}-platform";
+      sha256 = redistribRelease.${redistArch}.sha256 or lib.fakeHash;
     };
+
+    postPatch = ''
+      if [[ -d pkg-config ]] ; then
+        mkdir -p share/pkg-config
+        mv pkg-config/* share/pkg-config/
+        rmdir pkg-config
+      fi
+
+      for pc in share/pkg-config/*.pc ; do
+        sed -i \
+          -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
+          -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
+          -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
+          "$pc"
+      done
+    '';
 
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
@@ -126,6 +154,14 @@ backendStdenv.mkDerivation (
       # Check e.g. with `patchelf --print-rpath path/to/my/binary
       autoAddOpenGLRunpathHook
       markForCudatoolkitRootHook
+    ]
+    # autoAddCudaCompatRunpathHook depends on cuda_compat and would cause
+    # infinite recursion if applied to `cuda_compat` itself (beside the fact
+    # that it doesn't make sense in the first place)
+    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+      # autoAddCudaCompatRunpathHook must appear AFTER autoAddOpenGLRunpathHook.
+      # See its documentation in ./setup-hooks/extension.nix.
+      autoAddCudaCompatRunpathHook
     ];
 
     buildInputs =
@@ -161,13 +197,15 @@ backendStdenv.mkDerivation (
       ''
       # Handle the existence of libPath, which requires us to re-arrange the lib directory
       + strings.optionalString (libPath != null) ''
-        if [[ ! -d "${libPath}" ]] ; then
-          echo "${finalAttrs.pname}: ${libPath} does not exist, only found:" >&2
-          find "$(dirname ${libPath})"/ -maxdepth 1 >&2
+        full_lib_path="lib/${libPath}"
+        if [[ ! -d "$full_lib_path" ]] ; then
+          echo "${finalAttrs.pname}: '$full_lib_path' does not exist, only found:" >&2
+          find lib/ -mindepth 1 -maxdepth 1 >&2
           echo "This release might not support your CUDA version" >&2
           exit 1
         fi
-        mv "lib/${libPath}" lib_new
+        echo "Making libPath '$full_lib_path' the root of lib" >&2
+        mv "$full_lib_path" lib_new
         rm -r lib
         mv lib_new lib
       ''
@@ -178,10 +216,27 @@ backendStdenv.mkDerivation (
       ''
       # Move the outputs into their respective outputs.
       + strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)
+      # Add a newline to the end of the installPhase, so that the post-install hook doesn't
+      # get concatenated with the last moveToOutput command.
+      + "\n"
       # Post-install hook
       + ''
         runHook postInstall
       '';
+
+    doInstallCheck = true;
+    allowFHSReferences = true; # TODO: Default to `false`
+    postInstallCheck = ''
+      echo "Executing postInstallCheck"
+
+      if [[ -z "''${allowFHSReferences-}" ]] ; then
+        mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "''${!o}"; done)
+        if grep --max-count=5 --recursive --exclude=LICENSE /usr/ "''${outputPaths[@]}" ; then
+          echo "Detected references to /usr" >&2
+          exit 1
+        fi
+      fi
+    '';
 
     # libcuda needs to be resolved during runtime
     # NOTE: Due to the use of __structuredAttrs, we can't use a list for autoPatchelfIgnoreMissingDeps, since it
@@ -234,9 +289,9 @@ backendStdenv.mkDerivation (
           (
             redistArch:
             let
-              nixSystem = builtins.tryEval (flags.getNixSystem redistArch);
+              nixSystem = flags.getNixSystem redistArch;
             in
-            if nixSystem.success then [nixSystem.value] else []
+            lists.optionals (!(strings.hasPrefix "unsupported-" nixSystem)) [ nixSystem ]
           )
           supportedRedistArchs;
       broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);

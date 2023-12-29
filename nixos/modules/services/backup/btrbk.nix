@@ -6,12 +6,15 @@ let
     concatMapStringsSep
     concatStringsSep
     filterAttrs
+    flatten
+    getAttr
     isAttrs
     literalExpression
     mapAttrs'
     mapAttrsToList
     mkIf
     mkOption
+    optional
     optionalString
     sortOn
     types
@@ -84,6 +87,18 @@ let
     '';
   };
 
+  streamCompressMap = {
+    gzip = pkgs.gzip;
+    pigz = pkgs.pigz;
+    bzip2 = pkgs.bzip2;
+    pbzip2 = pkgs.pbzip2;
+    bzip3 = pkgs.bzip3;
+    xz = pkgs.xz;
+    lzo = pkgs.lzo;
+    lz4 = pkgs.lz4;
+    zstd = pkgs.zstd;
+  };
+
   cfg = config.services.btrbk;
   sshEnabled = cfg.sshAccess != [ ];
   serviceEnabled = cfg.instances != { };
@@ -94,7 +109,14 @@ in
   options = {
     services.btrbk = {
       extraPackages = mkOption {
-        description = lib.mdDoc "Extra packages for btrbk, like compression utilities for `stream_compress`";
+        description = lib.mdDoc ''
+          Extra packages for btrbk, like compression utilities for `stream_compress`.
+
+          **Note**: This option will get deprecated in future releases.
+          Required compression programs will get automatically provided to btrbk
+          depending on configured compression method in
+          `services.btrbk.instances.<name>.settings` option.
+        '';
         type = types.listOf types.package;
         default = [ ];
         example = literalExpression "[ pkgs.xz ]";
@@ -124,7 +146,19 @@ in
                   '';
                 };
                 settings = mkOption {
-                  type = let t = types.attrsOf (types.either types.str (t // { description = "instances of this type recursively"; })); in t;
+                  type = types.submodule {
+                    freeformType = let t = types.attrsOf (types.either types.str (t // { description = "instances of this type recursively"; })); in t;
+                    options = {
+                      stream_compress = mkOption {
+                        description = lib.mdDoc ''
+                          Compress the btrfs send stream before transferring it from/to remote locations using a
+                          compression command.
+                        '';
+                        type = types.enum ["gzip" "pigz" "bzip2" "pbzip2" "bzip3" "xz" "lzo" "lz4" "zstd" "no"];
+                        default = "no";
+                      };
+                    };
+                  };
                   default = { };
                   example = {
                     snapshot_preserve_min = "2d";
@@ -169,6 +203,11 @@ in
 
   };
   config = mkIf (sshEnabled || serviceEnabled) {
+
+    warnings = optional (cfg.extraPackages != []) ''
+      extraPackages option will be deprecated in future releases. Programs required for compression are now automatically selected depending on services.btrbk.instances.<name>.settings.stream_compress option.
+    '';
+
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
 
     security.sudo.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
@@ -232,12 +271,15 @@ in
       cfg.instances;
     systemd.services = mapAttrs'
       (
-        name: _: {
+        name: instance: {
           name = "btrbk-${name}";
           value = {
             description = "Takes BTRFS snapshots and maintains retention policies.";
             unitConfig.Documentation = "man:btrbk(1)";
-            path = [ "/run/wrappers" ] ++ cfg.extraPackages;
+            path = [ "/run/wrappers" ]
+              ++ cfg.extraPackages
+              ++ optional (instance.settings.stream_compress != "no")
+                (getAttr instance.settings.stream_compress streamCompressMap);
             serviceConfig = {
               User = "btrbk";
               Group = "btrbk";

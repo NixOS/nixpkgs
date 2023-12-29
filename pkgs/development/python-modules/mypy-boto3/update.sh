@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-version="1.33.0"
+version="1.34.0"
 
 nix-update python311Packages.botocore-stubs --commit --build
 
@@ -142,7 +142,7 @@ packages=(
   mypy-boto3-frauddetector
   mypy-boto3-fsx
   mypy-boto3-gamelift
-  mypy-boto3-gamesparks
+#  mypy-boto3-gamesparks
   mypy-boto3-glacier
   mypy-boto3-globalaccelerator
   mypy-boto3-glue
@@ -212,7 +212,7 @@ packages=(
   mypy-boto3-lookoutvision
   mypy-boto3-m2
   mypy-boto3-machinelearning
-  mypy-boto3-macie
+  #mypy-boto3-macie
   mypy-boto3-macie2
   mypy-boto3-managedblockchain
   mypy-boto3-managedblockchain-query
@@ -376,9 +376,11 @@ for package in "${packages[@]}"; do
   awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
     $1 == package {
       $5 = "\"" new_version "\"";
-      $6 = "\"" new_sha256 "\"";
+      $6 = "\"" new_sha256 "\";";
     }
     {print}
   ' $source_file
 
 done
+
+nixpkgs-fmt $source_file

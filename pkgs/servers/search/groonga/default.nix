@@ -1,5 +1,5 @@
-{ lib, stdenv, cmake, fetchurl, kytea, mecab, pkg-config, rapidjson, testers, xxHash, zstd, postgresqlPackages
-, suggestSupport ? false, zeromq, libevent, msgpack, openssl
+{ lib, stdenv, cmake, fetchurl, kytea, msgpack-c, mecab, pkg-config, rapidjson, testers, xxHash, zstd, postgresqlPackages
+, suggestSupport ? false, zeromq, libevent, openssl
 , lz4Support  ? false, lz4
 , zlibSupport ? true, zlib
 }:
@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     mecab
     kytea
+    msgpack-c
   ] ++ lib.optionals lz4Support [
     lz4
   ] ++ lib.optional zlibSupport [
@@ -36,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals suggestSupport [
     zeromq
     libevent
-    msgpack
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";

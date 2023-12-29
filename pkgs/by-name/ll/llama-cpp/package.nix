@@ -17,10 +17,14 @@
 , openclSupport ? false
 , clblast
 
-, openblasSupport ? true
+, openblasSupport ? !rocmSupport
 , openblas
 , pkg-config
 }:
+
+assert lib.assertMsg
+  (lib.count lib.id [openclSupport openblasSupport rocmSupport] == 1)
+  "llama-cpp: exactly one  of openclSupport, openblasSupport and rocmSupport should be enabled";
 
 let
   cudatoolkit_joined = symlinkJoin {
@@ -38,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1573";
+  version = "1710";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-FEH0SI87qtezc++TAR38wfldx6/1GknuTBWGn+UyFPI=";
+    hash = "sha256-fbzHjaL+qAE9HdtBVxboo8T2/KCdS5O1RkTQvDwD/xs=";
   };
 
   patches = [

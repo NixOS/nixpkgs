@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , libxml2
 , libpeas
 , glib
@@ -27,6 +28,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-IpUBB7Viwc/nRfwzFllRiWoOmUxRZzS2BcxyM7W3oHI=";
   };
+
+  patches = [
+    # Fix missing include for libxml2 2.12
+    # https://github.com/linuxmint/xed/pull/611
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xed/commit/28cb2e8136c1bfe90faf5f2341bde66156990778.patch";
+      hash = "sha256-AqIb7Jj19SF3tIriPwn1JeB7niCmPbBsLE4ch2AX7fk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

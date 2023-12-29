@@ -90,8 +90,10 @@ in
     };
 
     package = lib.mkPackageOption pkgs "systemd-repart" {
-      default = "systemd";
-      example = "pkgs.systemdMinimal.override { withCryptsetup = true; }";
+      # We use buildPackages so that repart images are built with the build
+      # platform's systemd, allowing for cross-compiled systems to work.
+      default = [ "buildPackages" "systemd" ];
+      example = "pkgs.buildPackages.systemdMinimal.override { withCryptsetup = true; }";
     };
 
     partitions = lib.mkOption {
@@ -131,21 +133,9 @@ in
 
     system.build.image =
       let
-        fileSystemToolMapping = with pkgs; {
-          "vfat" = [ dosfstools mtools ];
-          "ext4" = [ e2fsprogs.bin ];
-          "squashfs" = [ squashfsTools ];
-          "erofs" = [ erofs-utils ];
-          "btrfs" = [ btrfs-progs ];
-          "xfs" = [ xfsprogs ];
-        };
-
         fileSystems = lib.filter
           (f: f != null)
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
-
-        fileSystemTools = builtins.concatMap (f: fileSystemToolMapping."${f}") fileSystems;
-
 
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
@@ -157,22 +147,7 @@ in
             { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
         );
 
-
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
-
-
-        amendRepartDefinitions = pkgs.runCommand "amend-repart-definitions.py"
-          {
-            nativeBuildInputs = with pkgs; [ black ruff mypy ];
-            buildInputs = [ pkgs.python3 ];
-          } ''
-          install ${./amend-repart-definitions.py} $out
-          patchShebangs --host $out
-
-          black --check --diff $out
-          ruff --line-length 88 $out
-          mypy --strict $out
-        '';
 
         format = pkgs.formats.ini { };
 
@@ -183,30 +158,11 @@ in
 
         partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
       in
-      pkgs.runCommand cfg.name
-        {
-          nativeBuildInputs = [
-            cfg.package
-            pkgs.fakeroot
-            pkgs.util-linux
-          ] ++ fileSystemTools;
-        } ''
-        amendedRepartDefinitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
-
-        mkdir -p $out
-        cd $out
-
-        unshare --map-root-user fakeroot systemd-repart \
-          --dry-run=no \
-          --empty=create \
-          --size=auto \
-          --seed="${cfg.seed}" \
-          --definitions="$amendedRepartDefinitions" \
-          --split="${lib.boolToString cfg.split}" \
-          --json=pretty \
-          image.raw \
-          | tee repart-output.json
-      '';
+      pkgs.callPackage ./repart-image.nix {
+        systemd = cfg.package;
+        inherit (cfg) name split seed;
+        inherit fileSystems definitionsDirectory partitions;
+      };
 
     meta.maintainers = with lib.maintainers; [ nikstur ];
 

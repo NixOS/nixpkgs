@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ twz123 ];
-    mainProgram = pname;
+    mainProgram = "yx";
   };
 }

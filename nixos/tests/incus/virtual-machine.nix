@@ -53,5 +53,8 @@ in
 
     with subtest("lxd-agent is started"):
         machine.succeed("incus exec ${instance-name} systemctl is-active lxd-agent")
+
+    with subtest("lxd-agent has a valid path"):
+        machine.succeed("incus exec ${instance-name} -- bash -c 'true'")
   '';
 })

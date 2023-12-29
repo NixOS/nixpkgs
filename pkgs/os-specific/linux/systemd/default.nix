@@ -105,6 +105,8 @@
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # can't find gnu/stubs-32.h
+    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -151,7 +153,7 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 # passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
@@ -160,7 +162,7 @@ assert !withPasswordQuality;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "254.3";
+  version = "254.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -177,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
+    hash = "sha256-Ku24ecDeQt0t7A8/adR3Jm47QZ19+wdMPyJRzCxU4uU=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -205,14 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-
-    # Fix for `RuntimeError: ELF .dynamic section is missing.`
-    # https://github.com/systemd/systemd/issues/29381
-    # https://github.com/systemd/systemd/pull/29392
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/cecbb162a3134b43d2ca160e13198c73ff34c3ef.patch";
-      hash = "sha256-hWpUosTDA18mYm5nIb9KnjwOlnzbEHgzha/WpyHoC54=";
-    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -254,7 +248,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/ukify/ukify.py \
       --replace \
       "'readelf'" \
-      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that

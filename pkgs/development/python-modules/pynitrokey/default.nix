@@ -30,7 +30,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.4.43";
+  version = "0.4.44";
   mainProgram = "nitropy";
 in
 
@@ -40,7 +40,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dYOdokqALDg4Xn7N6Yd0skM/tit+j5+xY73sm9k76hE=";
+    hash = "sha256-SWLxiUAE8AVa+EYjOk0kzOcW65TJbvUe627VmJY7nFY=";
   };
 
   propagatedBuildInputs = [

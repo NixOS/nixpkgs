@@ -100,6 +100,10 @@ stdenv.mkDerivation {
      them, it undoes the --set-rpath.  this prevents that. */
   dontPatchELF = true;
 
+  # fortify hardening makes the filter crash
+  # https://github.com/NixOS/nixpkgs/issues/276125
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = "Canon InkJet printer drivers for the iP5400, MP520, MP210, MP140, iP3500, and MP610 series.  (MP520 drivers also work for MX700.)";
     homepage = "http://support-asia.canon-asia.com/content/EN/0100084101.html";

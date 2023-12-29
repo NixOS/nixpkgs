@@ -228,14 +228,8 @@ in
         description = "Guix daemon socket";
         before = [ "multi-user.target" ];
         listenStreams = [ "${cfg.stateDir}/guix/daemon-socket/socket" ];
-        unitConfig = {
-          RequiresMountsFor = [
-            cfg.storeDir
-            cfg.stateDir
-          ];
-          ConditionPathIsReadWrite = "${cfg.stateDir}/guix/daemon-socket";
-        };
-        wantedBy = [ "socket.target" ];
+        unitConfig.RequiresMountsFor = [ cfg.storeDir cfg.stateDir ];
+        wantedBy = [ "sockets.target" ];
       };
 
       systemd.mounts = [{
@@ -373,7 +367,6 @@ in
         serviceConfig = {
           Type = "oneshot";
 
-          MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateNetworks = true;
           ProtectControlGroups = true;

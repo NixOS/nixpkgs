@@ -29,7 +29,7 @@ let
     cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.13";
+  version = "1.14";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.8";
 
@@ -39,7 +39,7 @@ in buildPythonPackage rec {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lWF/INhgeFQoPAhyL655UCcVamFELra29R6JPJSAmMg=";
+    hash = "sha256-fCC6jYUIB89HlEnbsmL0MeCBOO4NAZtePuPgZKYxoM8=";
   };
 
   setupPyBuildFlags = [

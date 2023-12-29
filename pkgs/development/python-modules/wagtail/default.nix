@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "5.1.3";
+  version = "5.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RfrHlOTCDH51sBgGnX+XYfJfqjYZ7zDfJAE8okq/mnQ=";
+    hash = "sha256-SOTCm3Kw5T60ejF41rDyxpmqKE0/Oiq/0vBPV49EtVo=";
   };
 
   postPatch = ''

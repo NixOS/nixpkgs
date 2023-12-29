@@ -1,5 +1,5 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
-, csmSupport ? false, seabios ? null
+, csmSupport ? false, seabios
 , fdSize2MB ? csmSupport
 , fdSize4MB ? false
 , secureBoot ? false
@@ -11,8 +11,6 @@
 # doing.
 , sourceDebug ? false
 }:
-
-assert csmSupport -> seabios != null;
 
 let
 
@@ -68,7 +66,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   env.PYTHON_COMMAND = "python3";
 
   postPatch = lib.optionalString csmSupport ''
-    cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
+    cp ${seabios}/share/seabios/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
 
   postFixup = (

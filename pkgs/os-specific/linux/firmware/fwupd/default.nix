@@ -22,7 +22,6 @@
 , valgrind
 , meson
 , libuuid
-, colord
 , ninja
 , gnutls
 , protobufc
@@ -184,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     elfutils
     libgudev
-    colord
     libjcat
     libuuid
     json-glib

@@ -75,7 +75,7 @@ let
   # Create parts of the lovelace config that reference lovelave modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or card.pname + ".js"}?${card.version}";
+      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
@@ -157,7 +157,7 @@ in {
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [
-          prometheus-sensor
+          prometheus_sensor
         ];
       '';
       description = lib.mdDoc ''
@@ -468,8 +468,8 @@ in {
           mkdir -p "${cfg.configDir}/custom_components"
 
           # remove components symlinked in from below the /nix/store
-          components="$(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l)"
-          for component in "$components"; do
+          readarray -d "" components < <(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l -print0)
+          for component in "''${components[@]}"; do
             if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
               rm "$component"
             fi
@@ -523,7 +523,6 @@ in {
           "bluetooth_tracker"
           "bthome"
           "default_config"
-          "eq3btsmart"
           "eufylife_ble"
           "esphome"
           "fjaraskupan"

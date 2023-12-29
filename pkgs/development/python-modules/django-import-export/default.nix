@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "3.3.3";
+  version = "3.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "django-import-export";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pV8esZBK1ne2Cl0NBejEi2wLu7HbqTnKG16MU/gl4Ig=";
+    hash = "sha256-bYb000KRnvuMSMTTicqrJ+0zU/XguQFcLATqxUvc5V0=";
   };
 
   propagatedBuildInputs = [

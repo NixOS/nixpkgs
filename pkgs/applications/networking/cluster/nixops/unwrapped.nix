@@ -58,7 +58,7 @@ buildPythonApplication rec {
     description = "A tool for deploying to NixOS machines in a network or cloud";
     homepage = "https://github.com/NixOS/nixops";
     license = licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ adisbladis aminechikhaoui roberth ];
+    maintainers = with lib.maintainers; [ aminechikhaoui roberth ];
     platforms = lib.platforms.unix;
     mainProgram = "nixops";
   };

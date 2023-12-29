@@ -1,38 +1,38 @@
 {
     "testing": {
-        "version": "6.7-rc4",
-        "hash": "sha256:1igynlm5pv62brfkyjh6w8lzvmmy8c3g8phrn5wgdyy8svc48r8h"
+        "version": "6.7-rc7",
+        "hash": "sha256:1w1np05mqyviykj0gyx6z2l9ql4f909dy0ximh0gkcpkgy6zz9qc"
     },
     "6.5": {
         "version": "6.5.13",
         "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.66",
-        "hash": "sha256:030sxwzqlf9jg57j1hvd46ffkc9yfplbk3b81faycfa2dk6n57j1"
+        "version": "6.1.69",
+        "hash": "sha256:0hdm28k49kmy9r96hckps0bvvaq9m06l72n8ih305rccs6a2cgby"
     },
     "5.15": {
-        "version": "5.15.142",
-        "hash": "sha256:0xjn16b02f8d6c0m8vrbmk85kdyfy8m46s80rnkb0nnwfx9cjxld"
+        "version": "5.15.145",
+        "hash": "sha256:086nssif66s86wkixz4yb7xilz1k49g32l0ib28r8fjzc23rv95j"
     },
     "5.10": {
-        "version": "5.10.203",
-        "hash": "sha256:0xr8p7kfr1v3s41fv55ph0l8d9s2p146dl2fh3r2y09lrvwwxssn"
+        "version": "5.10.205",
+        "hash": "sha256:0qw8g0h4k0b4dyvspbj51cwr68ihwjzsi2b2261ipy3l1nl1fln5"
     },
     "5.4": {
-        "version": "5.4.263",
-        "hash": "sha256:1y1mfwjsilrx8x8jnjlyh8r9zlygjjqdf7pay92jv2qijjddpl2h"
+        "version": "5.4.265",
+        "hash": "sha256:05cvvwjiznn7hfd02qklklalg0chahvh5v18w64lcva6kzj9kbjd"
     },
     "4.19": {
-        "version": "4.19.301",
-        "hash": "sha256:1fr05fl8fyyjgsqj8fppd5v378d7sazvpqlq4sl875851fd9nmb2"
+        "version": "4.19.303",
+        "hash": "sha256:0dlbl47xs7z4yf9cxbxqzd7zs1f9070jr6ck231wgppa6lwwwb82"
     },
     "4.14": {
-        "version": "4.14.332",
-        "hash": "sha256:1f4q0acbp917myjmgiy4haxp78yak5h1rj5g937r6mkykwb6nb14"
+        "version": "4.14.334",
+        "hash": "sha256:0iaaqdkszmfarvjfszc9rf7y9zsv3w82934xmvmzmsbiz86547ca"
     },
     "6.6": {
-        "version": "6.6.5",
-        "hash": "sha256:17miac3h4kvj4yyf042qsmpsivpq243db5v0ay6233d6aic7k4kw"
+        "version": "6.6.8",
+        "hash": "sha256:05i4ayj9wyjkd1s8ixx7bxwcyagqyx8rhj1zvbc3cjqyw4sc8djh"
     }
 }

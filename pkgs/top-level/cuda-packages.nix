@@ -26,6 +26,7 @@
   lib,
   newScope,
   pkgs,
+  __attrsFailEvaluation ? true,
 }:
 let
   inherit (lib)
@@ -118,4 +119,4 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages
+cudaPackages // { inherit __attrsFailEvaluation; }

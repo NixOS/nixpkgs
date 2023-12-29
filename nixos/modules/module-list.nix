@@ -12,6 +12,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/ldso.nix
   ./config/locale.nix
   ./config/malloc.nix
   ./config/mysql.nix
@@ -28,6 +29,7 @@
   ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/stevenblack.nix
+  ./config/stub-ld.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix
@@ -276,6 +278,7 @@
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
+  ./programs/winbox.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
   ./programs/wshowkeys.nix
@@ -341,6 +344,7 @@
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
+  ./services/audio/mympd.nix
   ./services/audio/navidrome.nix
   ./services/audio/networkaudiod.nix
   ./services/audio/roon-bridge.nix
@@ -364,6 +368,7 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/postgresql-wal-receiver.nix
+  ./services/backup/snapraid.nix
   ./services/backup/restic-rest-server.nix
   ./services/backup/restic.nix
   ./services/backup/rsnapshot.nix
@@ -615,6 +620,7 @@
   ./services/mail/public-inbox.nix
   ./services/mail/roundcube.nix
   ./services/mail/rspamd.nix
+  ./services/mail/rspamd-trainer.nix
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
@@ -766,6 +772,7 @@
   ./services/misc/tautulli.nix
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix
+  ./services/misc/tuxclocker.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
@@ -941,6 +948,7 @@
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
+  ./services/networking/gns3-server.nix
   ./services/networking/gnunet.nix
   ./services/networking/go-autoconfig.nix
   ./services/networking/go-neb.nix
@@ -1254,6 +1262,7 @@
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
+  ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
@@ -1507,7 +1516,6 @@
   ./tasks/network-interfaces.nix
   ./tasks/powertop.nix
   ./tasks/scsi-link-power-management.nix
-  ./tasks/snapraid.nix
   ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix

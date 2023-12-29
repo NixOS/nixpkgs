@@ -5,7 +5,20 @@
 , fetchpatch
 }:
 let
-  python = python3;
+  python = python3.override {
+    packageOverrides = self: super: {
+      validators = super.validators.overridePythonAttrs (_: rec {
+        version = "0.20.0";
+        src = fetchFromGitHub {
+          owner = "python-validators";
+          repo = "validators";
+          rev = version;
+          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
+        };
+        propagatedBuildInputs = [ super.decorator super.six ];
+      });
+    };
+  };
 
   common = callPackage ./common.nix { };
 

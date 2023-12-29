@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_25
+, electron_27
 , fetchFromGitHub
 , fetchpatch2
 , glib
@@ -25,16 +25,16 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_25;
+  electron = electron_27;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.10.1";
+  version = "2023.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
+    hash = "sha256-WYhLKV3j3Ktite5u1H4fSku38hCCrMzKoxtjq6aT9yo=";
   };
 
   patches = [
@@ -43,20 +43,22 @@ in buildNpmPackage rec {
       url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
       hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
     })
+    # Workaround Electron 25 EOL and 26 has https://github.com/bitwarden/clients/issues/6560
+    ./electron-27.patch
   ];
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
+  npmDepsHash = "sha256-QwG+D0M94HN1AyQlmzKeScZyksiUr5A9igEaox9DYN4=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit patches src;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
+    hash = "sha256-pCy3hGhI3mXm4uTOaFMykOzJqK2PC0t0hE8MrJKtA/k=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

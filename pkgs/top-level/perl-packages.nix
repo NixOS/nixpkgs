@@ -23,7 +23,7 @@ in
 with self; {
 
   inherit perl;
-  perlPackages = self;
+  perlPackages = self // { perlPackages = self.perlPackages // { __attrsFailEvaluation = true; }; };
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
@@ -1294,16 +1294,17 @@ with self; {
 
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
-    version = "1.01";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/Audio-Scan-1.01.tar.gz";
-      hash = "sha256-gxJyAnHHrdxLvuwzEs3divS5kKxjYgSllsB5M61sY0o=";
+        url = "https://github.com/Logitech/slimserver-vendor/raw/public/8.3/CPAN/Audio-Scan-1.05.tar.gz";
+        hash = "sha256-9YXC8GHPRWKlV8emmTke7RB0HhiCbALmZQqtQFLcBi4=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
-      description = "Fast C metadata and tag reader for all common audio file formats";
+      description = "Fast C metadata and tag reader for all common audio file formats, slimserver fork";
+      homepage = "https://github.com/Logitech/slimserver-vendor";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -22692,10 +22693,10 @@ with self; {
 
   SpreadsheetParseExcel = buildPerlPackage {
     pname = "Spreadsheet-ParseExcel";
-    version = "0.65";
+    version = "0.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOUGW/Spreadsheet-ParseExcel-0.65.tar.gz";
-      hash = "sha256-bsTLQpvVjYFkD+EhFvQ1xG9R/xBAxo8JzIt2gcFnW+w=";
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Spreadsheet-ParseExcel-0.66.tar.gz";
+      hash = "sha256-v9dqz7qYhgHcBRvac7S7JfaDmgBt2WC2p0AcJJJF9ls=";
     };
     propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOStringy OLEStorage_Lite ];
     meta = {
@@ -23889,12 +23890,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "9.7.0";
+    version = "9.8.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-tXXB6Gj27oFZv9WD4dXWdY55jDDLrGYbud4qoyjNe5A=";
+      hash = "sha256-xLrqD1fFbDYS4HH85vYCeaKZeNwXQpjPXfGpJCFumg8=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

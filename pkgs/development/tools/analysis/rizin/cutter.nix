@@ -11,6 +11,7 @@
 # Qt
 , qt5compat
 , qtbase
+, qtwayland
 , qtsvg
 , qttools
 , qtwebengine
@@ -61,6 +62,8 @@ let cutter = stdenv.mkDerivation rec {
     qttools
     qtwebengine
     rizin
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   cmakeFlags = [

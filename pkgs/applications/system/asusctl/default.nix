@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, e2fsprogs
 , systemd
 , coreutils
 , pkg-config
@@ -9,17 +8,18 @@
 , fontconfig
 , gtk3
 , libappindicator
+, libGL
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.7.2";
+  version = "5.0.6";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-q4V0Cn6kZeyIMGxu/blVi/Ot8LIcv+GlZhpkTQNTjRU=";
+    hash = "sha256-xeskbfpznXki+MnPt+Tli7+DYprRnpZaNb/O5mdnZy0=";
   };
 
   cargoHash = "";
@@ -44,8 +44,6 @@ rustPlatform.buildRustPackage rec {
       substituteInPlace $file --replace /usr/share $out/share
     done
 
-    substituteInPlace asusd/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
-
     substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \
       --replace /usr/bin/asusd $out/bin/asusd \
@@ -67,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf --add-rpath "${libappindicator}/lib" "$out/bin/rog-control-center"
+    patchelf --add-rpath "${libappindicator}/lib:${libGL}/lib" "$out/bin/rog-control-center"
   '';
 
   meta = with lib; {

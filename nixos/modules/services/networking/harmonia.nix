@@ -55,6 +55,7 @@ in
         ExecStart = lib.getExe cfg.package;
         User = "harmonia";
         Group = "harmonia";
+        Restart = "on-failure";
         PrivateUsers = true;
         DeviceAllow = [ "" ];
         UMask = "0066";

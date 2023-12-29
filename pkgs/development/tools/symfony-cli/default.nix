@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.7.5";
-  vendorHash = "sha256-2+Q93tm3ooOd/m6aUWAwFGh5CzARPNISNx0Tcrjc7NY=";
+  version = "5.7.7";
+  vendorHash = "sha256-R0/zJlK9T0iAfquROOWraoBHzd//rIIXNIps3GvGRvA=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    hash = "sha256-Zz2akBfrhuC2lOZdvpjDFwlxWd4NUhfoAPkoLpFLzwk=";
+    hash = "sha256-ZoBMOArpsmUniVc7cqbB4UZZ6ujnVfHqRos0Mcr+E4Q=";
   };
 
   ldflags = [

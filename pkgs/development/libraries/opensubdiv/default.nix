@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optional cudaSupport [
     cudaPackages.cuda_nvcc
   ];
   buildInputs =

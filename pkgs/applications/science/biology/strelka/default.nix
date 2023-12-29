@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, zlib, python2}:
+{lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, zlib, python2}:
 
 stdenv.mkDerivation rec {
   pname = "strelka";
@@ -11,8 +11,28 @@ stdenv.mkDerivation rec {
     sha256 = "1nykbmim1124xh22nrhrsn8xgjb3s2y7akrdapn9sl1gdych4ppf";
   };
 
+  patches = [
+    # Pull pending fix for gcc-12:
+    #   https://github.com/Illumina/strelka/pull/204
+    (fetchpatch {
+      name = "limits.patch";
+      url = "https://github.com/Illumina/strelka/commit/98272cd345c6e4c672e6a5b7721204fcac0502d6.patch";
+      hash = "sha256-psBiuN32nvwZ+QX51JQjIdRhEE3k7PfwbkD10ckqvZk=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace src/cmake/boost.cmake \
+      --replace "1.58.0" "${boost.version}" \
+      --replace "Boost_USE_STATIC_LIBS ON" "Boost_USE_STATIC_LIBS OFF"
+  '';
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 ];
+  buildInputs = [ boost zlib python2 ];
+
+  cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=14"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=maybe-uninitialized"
@@ -37,7 +57,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/strelka";
     maintainers = with maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 
 }

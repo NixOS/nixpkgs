@@ -19,6 +19,7 @@
 , iconv
 , cppunit
 , syncthing
+, xdg-utils
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -33,14 +34,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.9";
+  version = "1.4.11";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I9+q9GQ1QMbo7BdVG159iRYbDvRyfXmwBIW5AeJ3sC4=";
+    sha256 = "sha256-wzIIiVo6EmfQAyaIVsVsT4lfm0ThhGBgETV0036Pgvo=";
   };
 
   buildInputs = [
@@ -94,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
     ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
   ;
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/syncthingtray";

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "whisper-cpp";
-  version = "1.4.2";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${version}" ;
-    hash = "sha256-Qea9zGLJ41D+l8h1Sg/KJI6Ou02jtbRIxYPGoabM8nY=";
+    hash = "sha256-7pJbROifDajBJUE07Nz8tARB901fWCB+TS4okcnEsvc=";
   };
 
   # The upstream download script tries to download the models to the
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     WHISPER_COREML_ALLOW_FALLBACK = "1";
   };
 
-  makeFlags = [ "main" "stream" ];
+  makeFlags = [ "main" "stream" "command" ];
 
   installPhase = ''
     runHook preInstall
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ./main $out/bin/whisper-cpp
     cp ./stream $out/bin/whisper-cpp-stream
+    cp ./command $out/bin/whisper-cpp-command
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 

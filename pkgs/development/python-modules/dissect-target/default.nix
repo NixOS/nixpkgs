@@ -39,8 +39,8 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.13";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-4dtKAFhxaS8PRoeLY6ZYrE/4P1pbcii1gWQ9RRVOBzs=";
+    hash = "sha256-vp1upVwohMXFKxlHy5lWmigdq9MUk1UknSsPpCXt50s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -123,7 +123,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests are using Windows paths
-    "tests/test_plugins_browsers.py"
+    "tests/plugins/apps/browser/test_browser.py"
   ];
 
   meta = with lib; {

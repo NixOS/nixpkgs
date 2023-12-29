@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.27.7";
+  version = "3.27.8";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-CPcaEGA2vwUfaSdg75VYwFd8Qqw56Wugl+dmK9QVjY4=";
+    hash = "sha256-/s4kVj9peHD7uYLqi/F0gsnV+FXYyb8LgkY9dsno0Mw=";
   };
 
   patches = [
@@ -160,6 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
   ];
+
+  # `pkgsCross.musl64.cmake.override { stdenv = pkgsCross.musl64.llvmPackages_16.libcxxStdenv; }`
+  # fails with `The C++ compiler does not support C++11 (e.g.  std::unique_ptr).`
+  # The cause is a compiler warning `warning: argument unused during compilation: '-pie' [-Wunused-command-line-argument]`
+  # interfering with the feature check.
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
 
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

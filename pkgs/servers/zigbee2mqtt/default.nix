@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, python3
+, nodejs_18
 , nixosTests
 , nix-update-script
 }:
@@ -19,9 +19,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-MXTKZNERxryt7L42dHxKx7XfXByNQ67oU+4FKTd0u4U=";
 
-  nativeBuildInputs = [
-    python3
-  ];
+  nodejs = nodejs_18;
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };

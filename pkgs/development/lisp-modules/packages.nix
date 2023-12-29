@@ -224,21 +224,21 @@ let
     version = "0.5.4";
 
     src = pkgs.fetchgit {
-      url = "https://notabug.org/cage/cl-colors2";
-      rev = "refs/tags/v0.5.4";
+      url = "https://codeberg.org/cage/cl-colors2";
+      rev = "v0.5.4";
       sha256 = "sha256-JbT1BKjaXDwdlzHLPjX1eg0RMIOT86R17SPgbe2h+tA=";
     };
   };
 
-  prompter = build-asdf-system {
+  prompter = build-asdf-system rec {
     pname = "prompter";
-    version = "0.1.0";
+    version = "0.1.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "prompter";
-      rev = "0.1.0";
-      sha256 = "sha256-Duv7L2lMjr3VXsoujQDOMNHCbdUDX4RWoncVm9LDCZE=";
+      rev = version;
+      sha256 = "sha256-A9gIUBj0oUDFGR5aqHz+tdNR6t03LPMrx0n9qM3ACwE=";
     };
 
     lispLibs = [
@@ -256,67 +256,55 @@ let
 
   };
 
-  nasdf = build-asdf-system {
-    pname = "nasdf";
-    version = "20230911-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "ntemplate";
-      rev = "ab7a018f3a67a999c72710644b10b4545130c139";
-      sha256 = "sha256-fXGh0h6CXLoBgK1jRxkSNyQVAY1gvi4iyHQBuzueR5Y=";
-    };
-  };
-
-  njson = build-asdf-system {
+  njson = build-asdf-system rec {
     pname = "njson";
-    version = "1.1.0";
+    version = "1.2.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "njson";
-      rev = "1.1.0";
-      sha256 = "sha256-hVo5++QCns7Mv3zATpAP3EVz1pbj+jbQmzSLqs6hqQo=";
+      rev = version;
+      sha256 = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
     };
-    lispLibs = [ self.nasdf super.cl-json super.com_dot_inuoe_dot_jzon];
+    lispLibs = [ super.cl-json super.com_dot_inuoe_dot_jzon];
     systems = [ "njson" "njson/cl-json" "njson/jzon"];
   };
 
-  nsymbols = build-asdf-system {
+  nsymbols = build-asdf-system rec {
     pname = "nsymbols";
-    version = "0.3.1";
+    version = "0.3.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nsymbols";
-      rev = "0.3.1";
-      sha256 = "sha256-KcrE06bG5Khp5/807wb/TbPG3nWTlNWHrDpmK6bm7ZM=";
+      rev = version;
+      sha256 = "sha256-psk29WEA7Hxgp29oUniBNvI+lyZfMkdpa5A7okc6kKs=";
     };
     lispLibs = [ super.closer-mop ];
     systems = [ "nsymbols" "nsymbols/star" ];
 
   };
 
-  nclasses = build-asdf-system {
+  nclasses = build-asdf-system rec {
     pname = "nclasses";
-    version = "0.6.0";
+    version = "0.6.1";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nclasses";
-      rev = "0.6.0";
-      sha256 = "sha256-JupP+TIxavUoyOPnp57FqpEjWfgKspdFoSRnV2rk5U4=";
+      rev = version;
+      sha256 = "sha256-foXmaLxMYMFieB2Yd2iPsU4EX5kLXq7kyElqGZ47OgI=";
     };
-    lispLibs = [ self.nasdf super.moptilities ];
+    lispLibs = [ super.moptilities ];
   };
 
-  nfiles = build-asdf-system {
+  nfiles = build-asdf-system rec {
     pname = "nfiles";
-    version = "20230705-git";
+    version = "1.1.4";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nfiles";
-      rev = "3626e8d512a84efc12479ceb3969d194511757f7";
-      sha256 = "sha256-MoJdbTOVfw2rJk4cf/rEnR55BxdXkoqqu9Txd/R9OYQ=";
+      rev = version;
+      sha256 = "sha256-4rhpBErQgZHcwZRblxgiYaUmKalvllSbJjnRteDVH6k=";
     };
     lispLibs = [
-      self.nasdf
       self.nclasses
       super.quri
       super.alexandria
@@ -328,26 +316,26 @@ let
     ];
   };
 
-  nhooks = build-asdf-system {
+  nhooks = build-asdf-system rec {
     pname = "nhooks";
-    version = "1.2.1";
+    version = "1.2.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nhooks";
-      rev = "1.2.1";
-      hash = "sha256-D61QHxHTceIu5mCGKf3hy53niQMfs0idEYQK1ZYn1YM=";
+      rev = version;
+      hash = "sha256-6A3fsemsv2KbTmdGMQeL9iHFUBHc4kK6CRNVyc91LdU=";
     };
     lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
   };
 
   nkeymaps = build-asdf-system rec {
     pname = "nkeymaps";
-    version = "1.1.0";
+    version = "1.1.1";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nkeymaps";
       rev = version;
-      hash = "sha256-ewMu2IgEzCYY72vG91IA7l8X78Ph6jpQvbKeOFZdAyM=";
+      hash = "sha256-/t85Yh4EvnSyIM6xeDBLmfVz3wddmavInXzeYafNMJ0=";
     };
     lispLibs = with self; [ alexandria fset trivial-package-local-nicknames
                             str ];
@@ -356,18 +344,17 @@ let
 
   history-tree = build-asdf-system rec {
     pname = "history-tree";
-    version = "0.1.1";
+    version = "0.1.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "history-tree";
       rev = version;
-      hash = "sha256-lOORalyTybdut/If+dBXS4PlZt2AnZrEI/qjQWS03pk=";
+      hash = "sha256-wpVONvShNnvrPOlbNoX/t9sYiwxnIKnnJaJyALEyeNg=";
     };
     lispLibs = with self; [
       alexandria
       cl-custom-hash-table
       local-time
-      nasdf
       nclasses
       trivial-package-local-nicknames
     ];
@@ -375,7 +362,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.9.0";
+    version = "3.10.0";
 
     lispLibs = (with super; [
       alexandria
@@ -413,7 +400,6 @@ let
       plump
       clss
       spinneret
-      slynk
       trivia
       trivial-features
       trivial-garbage
@@ -429,8 +415,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "snmsts";
           repo = "trivial-clipboard";
-          rev = "6ddf8d5dff8f5c2102af7cd1a1751cbe6408377b";
-          sha256 = "sha256-n15IuTkqAAh2c1OfNbZfCAQJbH//QXeH0Bl1/5OpFRM=";
+          rev = "f7b2c96fea00ca06a83f20b00b7b1971e76e03e7";
+          sha256 = "sha256-U6Y9BiM2P1t9P8fdX8WIRQPRWl2v2ZQuKdP1IUqvOAk=";
         };}))
       (cl-gobject-introspection.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
@@ -447,26 +433,45 @@ let
           sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
         };
       }))
+      (slynk.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "joaotavora";
+          repo = "sly";
+          rev = "9c43bf65b967e12cef1996f1af5f0671d8aecbf4";
+          hash = "sha256-YlHZ/7VwvHe2PBPRshN+Gr3WuGK9MpkOJprP6QXI3pY=";
+        };
+        systems = [ "slynk" "slynk/arglists" "slynk/fancy-inspector"
+                    "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
+                    "slynk/profiler" "slynk/stickers" "slynk/indentation"
+                    "slynk/retro" ];
+      }))
     ]) ++ (with self; [
       history-tree
       nhooks
       nkeymaps
-      nasdf
       prompter
       cl-colors2_0_5_4
       njson
       nsymbols
       nclasses
       nfiles
-      swank
       cl-containers
+      (swank.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "slime";
+          repo = "slime";
+          rev = "735258a26bb97e85d25f39e4bef83c1f80c12f5d";
+          hash = "sha256-vMMer6qLJDKTwNE3unsOQezujISqFtn2AYl8cxsJvrc=";
+        };
+        systems = [ "swank" "swank/exts" ];
+      }))
     ]);
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.9.0";
-      sha256 = "sha256-bZoAE0FErgXPylOzh6AfMq3befms9dHms8+slbYdctk=";
+      rev = "3.10.0";
+      sha256 = "sha256-yEa5Lx1egkg9Jh3EQfvaBQicm31uxIq/3s2NOQUC4uc=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -486,8 +491,14 @@ let
     # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
     patches = [ ./patches/nyxt-remove-build-operation.patch ];
 
+    NASDF_USE_LOGICAL_PATHS = true;
+
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
       (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
+      (require :uiop)
+      (let ((pwd (uiop:ensure-directory-pathname (uiop/os:getcwd))))
+        (asdf:load-asd (uiop:merge-pathnames* "libraries/nasdf/nasdf.asd" pwd))
+        (asdf:load-asd (uiop:merge-pathnames* "nyxt.asd" pwd)))
       ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:operare :program-op instead
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';

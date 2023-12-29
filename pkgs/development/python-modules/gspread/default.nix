@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "5.12.1";
+  version = "5.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "burnash";
     repo = "gspread";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cuSR5QWURHSL1o2R4rc/m3KETz3X+78TC8LuuzZghbs=";
+    hash = "sha256-NmIWGHS40VOUL3IGSR/SW9inbSQFv+2UDgo1FZWROHI=";
   };
 
   nativeBuildInputs = [

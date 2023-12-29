@@ -35,6 +35,7 @@ let
     lib.trivial.pipe extensions [
       (map (extension: lib.nameValuePair extension.extensionUuid extension))
       builtins.listToAttrs
+      (attrs: attrs // { __attrsFailEvaluation = true; })
     ];
 
   # Map the list of extensions to an attrset based on the pname as key, which is more human readable than the UUID
@@ -66,6 +67,7 @@ in rec {
 
   # Keep the last three versions in here
   gnomeExtensions = lib.trivial.pipe (gnome43Extensions // gnome44Extensions // gnome45Extensions) [
+    (v: builtins.removeAttrs v [ "__attrsFailEvaluation" ])
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
@@ -88,4 +90,5 @@ in rec {
     # Make the set "public"
     lib.recurseIntoAttrs
   ];
+
 }

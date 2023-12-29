@@ -132,7 +132,6 @@ Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build
 
 ```nix
   ldflags = [
-    "-s" "-w"
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];

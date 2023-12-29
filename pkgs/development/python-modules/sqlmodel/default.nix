@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dirty-equals
 , fastapi
 , fetchFromGitHub
 , poetry-core
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.12";
+  version = "0.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "sqlmodel";
     rev = "refs/tags/${version}";
-    hash = "sha256-ER8NGDcCCCXT8lsm8fgJUaLyjdf5v2/UdrBw5T9EeXQ=";
+    hash = "sha256-EEOS7c0ospo7qjqPQkKwYXeVmBR5DueONzmjspV6w7w=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    dirty-equals
     fastapi
     pytest-asyncio
     pytestCheckHook
@@ -45,7 +47,8 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Coverage
-    "tests/test_tutorial/test_create_db_and_table/test_tutorial001.py"
+    "docs_src/tutorial/"
+    "tests/test_tutorial/"
   ];
 
   meta = with lib; {

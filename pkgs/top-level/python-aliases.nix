@@ -76,6 +76,7 @@ mapAliases ({
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
+  cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   cchardet = faust-cchardet; # added 2023-03-02
   class-registry = phx-class-registry; # added 2021-10-05
@@ -312,6 +313,7 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pymyq = python-myq; # added 2023-10-20
+  python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyramid_beaker = pyramid-beaker; # added 2023-08-23
   pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
@@ -464,6 +466,7 @@ mapAliases ({
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19
+  z3 = z3-solver; # added 2023-12-03
   zake = throw "zake has been removed because it is abandoned"; # added 2023-06-20
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";

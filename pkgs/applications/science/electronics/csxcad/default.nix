@@ -4,7 +4,7 @@
 , fparser
 , tinyxml
 , hdf5
-, cgal_5
+, cgal
 , vtk
 , boost
 , gmp
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [./searchPath.patch ];
 
   buildInputs = [
-    cgal_5
+    cgal
     boost
     gmp
     mpfr

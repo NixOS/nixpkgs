@@ -258,7 +258,8 @@ in
             # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
-            before = [ "${realDevice'}.swap" ];
+            before = [ "${realDevice'}.swap" "shutdown.target"];
+            conflicts = [ "shutdown.target" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
               ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 

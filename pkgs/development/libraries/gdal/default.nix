@@ -76,13 +76,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EQWAJZgufUC0FADuIotrGhP0Nf5qlgOwmiSlqLSv00A=";
+    hash = "sha256-R21zRjEvJO+97yXJDvzDJryQ7ps9uEN62DZ0GCxdoFk=";
   };
 
   nativeBuildInputs = [
@@ -239,6 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fixed and renamed in 3.8.0RC1
     # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
     "test_visoss_6"
+    # failing with PROJ 9.3.1
+    # https://github.com/OSGeo/gdal/issues/8908
+    "test_osr_esri_28"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

@@ -5,12 +5,14 @@
 , meson
 , ninja
 , wrapGAppsHook4
+, gst_all_1
 , libadwaita
 , libxml2
 , desktop-file-utils
 , pkg-config
 , libportal-gtk4
 , blueprint-compiler
+, appstream-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -32,13 +34,17 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook4
+    appstream-glib
   ];
 
   buildInputs = [
     libadwaita
     libxml2
     libportal-gtk4
-  ];
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
   meta = with lib; {
     description = "Get what motivates you done, without losing concentration";

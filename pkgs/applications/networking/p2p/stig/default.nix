@@ -1,25 +1,25 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, python3Packages
+, python310Packages
 , testers
 , stig
 }:
 
-python3Packages.buildPythonApplication rec {
+python310Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.12.5a0";
+  version = "0.12.8a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "sha256-e27DBzing38llFxPIsMGkZJXp2q7jjFlQdtfsqLXNHw=";
+    sha256 = "sha256-vfmuA6DqWvAygcS6N+qX1h+Ag+P4eOwm41DhAFZR3r8=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python310Packages; [
     urwid
     urwidtrees
     aiohttp
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python310Packages; [
     asynctest
     pytestCheckHook
   ];
@@ -41,16 +41,15 @@ python3Packages.buildPythonApplication rec {
     export LC_ALL=C
   '';
 
-  pytestFlagsArray = [
-    "tests"
-    # TestScrollBarWithScrollable.test_wrapping_bug fails
-    "--deselect=tests/tui_test/scroll_test.py::TestScrollBarWithScrollable::test_wrapping_bug"
-    # https://github.com/rndusr/stig/issues/214
-    "--deselect=tests/completion_test/classes_test.py::TestCandidates::test_candidates_are_sorted_case_insensitively"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second"
-    "--deselect=tests/client_test/aiotransmission_test/api_torrent_test.py"
-    "--deselect=tests/client_test/aiotransmission_test/rpc_test.py"
+  disabledTestPaths = [
+    # Almost all tests fail in this file, it is reported upstream in:
+    # https://github.com/rndusr/stig/issues/214 , and upstream fails to
+    # reproduce the issue unfortunately.
+    "tests/client_test/aiotransmission_test/api_settings_test.py"
+  ];
+  disabledTests = [
+    # Another failure with similar circumstances to the above
+    "test_candidates_are_sorted_case_insensitively"
   ];
 
   passthru.tests = testers.testVersion {

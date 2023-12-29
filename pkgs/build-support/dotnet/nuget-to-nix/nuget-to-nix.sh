@@ -37,7 +37,7 @@ cd "$pkgs"
 for package in *; do
   cd "$package"
   for version in *; do
-    id=$(xq -r .package.metadata.id "$version/$package".nuspec)
+    id=$(xq -r .package.metadata.id "$version"/*.nuspec)
 
     if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
       continue

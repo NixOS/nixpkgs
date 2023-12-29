@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchurl
-, buildPackages, pkgsHostHost
-, pkg-config, which, makeWrapper
-, zlib, bzip2, brotli, libpng, gnumake, glib
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkgsHostHost
+, pkg-config
+, which
+, makeWrapper
+, zlib
+, bzip2
+, brotli
+, libpng
+, gnumake
+, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
   useEncumberedCode ? true
 
-# for passthru.tests
+  # for passthru.tests
 , cairo
 , fontforge
 , ghostscript
@@ -65,9 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = glib.flattenInclude
     # pkgsCross.mingwW64.pkg-config doesn't build
     # makeWrapper doesn't cross-compile to windows #120726
-    + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
+    + ''
     substituteInPlace $dev/bin/freetype-config \
       --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+  '' + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"

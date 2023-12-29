@@ -15,35 +15,33 @@
 }:
 
 let
-  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.12" else "4.7";
+  # Each releases of Merlin support a limited range of versions of OCaml.
+  merlinVersions = {
+    "4.12.0" = "4.7-412";
+    "4.12.1" = "4.7-412";
+    "4.13.0" = "4.7-413";
+    "4.13.1" = "4.7-413";
+    "4.14.0" = "4.13-414";
+    "4.14.1" = "4.13-414";
+    "5.0.0" = "4.12-500";
+    "5.1.0" = "4.13-501";
+    "5.1.1" = "4.13.1-501";
+  };
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
     "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
-    "4.8-414" = "sha256-HMXWhcVOXW058y143rNBcfEOmjt2tZJXcXKHmKZ5i68=";
-    "4.8-500" = "sha256-n5NHKuo0/lZmfe7WskqnW3xm1S0PmXKSS93BDKrpjCI=";
-    "4.9-414" = "sha256-4j/EeBNZEmn/nSfIIJiOUgpmLIndCvfqZSshUXSZy/0=";
-    "4.9-500" = "sha256-uQfGazoxTxclHSiTfjji+tKJv8MKqRdHMPD/xfMZlSY=";
-    "4.10-414" = "sha256-/a1OqASISpb06eh2gsam1rE3wovM4CT8ybPV86XwR2c=";
-    "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
-    "4.12-414" = "sha256-tgMUT4KyFeJubYVY1Sdv9ZvPB1JwcqEGcCuwuMqXHRQ=";
     "4.12-500" = "sha256-j49R7KVzNKlXDL7WibTHxPG4VSOVv0uaz5/yMZZjkH8=";
-    "4.12-501" = "sha256-zMwzI1SXQDWQ9PaKL4o3J6JlRjmEs7lkXrwauy+QiMA=";
+    "4.13-414" = "sha256-AlzxqTuh5AkW9dnPIv51abv7r0A/VOS3JOT5IHix2wM=";
+    "4.13-501" = "sha256-G/VrI+qBVj2wxuB2qE9P1M73IvDmqmTrBFAA6mp+NRE=";
+    "4.13.1-501" = "sha256-NVfgX3DFsQghApEgWilCgr5O2WSkwKtenZZFSJ1wwa0=";
   };
 
-  ocamlVersionShorthand =
-    let
-      v = lib.splitVersion ocaml.version;
-      major = builtins.elemAt v 0;
-      minor = builtins.elemAt v 1;
-      minor_prefix = if builtins.stringLength minor < 2 then "0" else "";
-    in "${toString major}${minor_prefix}${toString minor}";
-
-  version = "${merlinVersion}-${ocamlVersionShorthand}";
+  version = lib.getAttr ocaml.version merlinVersions;
 in
 
-if !lib.hasAttr version hashes
-then builtins.throw "merlin ${merlinVersion} is not available for OCaml ${ocaml.version}"
+if !lib.hasAttr ocaml.version merlinVersions
+then builtins.throw "merlin is not available for OCaml ${ocaml.version}"
 else
 
 buildDunePackage {

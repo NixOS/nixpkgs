@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.4.2";
+  version = "1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zv4piGWs/XJbxfGHUHctfxuImbjluxd1chUgvtV9lcs=";
+    hash = "sha256-heTWWyxmRaDlI9NHzZab5OLOBIbVdb45v67Rq5ckzc8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -1,20 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, mbelib, serialdv
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, mbelib
+, serialdv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsdcc";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "dsdcc";
-    rev = "v${version}";
-    sha256 = "sha256-EsjmU0LQOXnOoTFrnn63hAbvqbE6NVlSQTngot5Zuf4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DMCk29O2Lmt2tjo6j5e4ZdZeDL3ZFUh66Sm6TGrIaeU=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ mbelib serialdv ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    mbelib
+    serialdv
+  ];
 
   cmakeFlags = [
     "-DUSE_MBELIB=ON"
@@ -25,11 +37,12 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital Speech Decoder (DSD) rewritten as a C++ library";
     homepage = "https://github.com/f4exb/dsdcc";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    mainProgram = "dsdccx";
+    maintainers = with lib.maintainers; [ alexwinter ];
+    platforms = lib.platforms.unix;
   };
-}
+})

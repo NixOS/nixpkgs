@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
         (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}")
         (with lib.attrsets; [
           (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" openssl)
+          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
           (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
           (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
           (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)

@@ -81,6 +81,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ccForTarget  = ccPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
     cxxForTarget  = cxxPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
   in [
+    "--sysconfdir=${placeholder "out"}/etc"
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
@@ -153,9 +154,9 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
-    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
-    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
-    ln -s ${rustc}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
+    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
+    ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
     python ./x.py --keep-stage=0 --stage=1 build library/std
@@ -168,23 +169,15 @@ in stdenv.mkDerivation (finalAttrs: {
 
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
-    makeWrapper ${rustc}/bin/rustc $out/bin/rustc --add-flags "--sysroot $out"
-    makeWrapper ${rustc}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
-    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+    ln -s ${rustc.unwrapped}/bin/rustc $out/bin
+    makeWrapper ${rustc.unwrapped}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
     lndir ${rustc.man} $man
 
     runHook postInstall
   '' else null;
-
-  # The bootstrap.py will generated a Makefile that then executes the build.
-  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
-  # to the bootstrap builder.
-  postConfigure = ''
-    substituteInPlace Makefile \
-      --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
-  '';
 
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;

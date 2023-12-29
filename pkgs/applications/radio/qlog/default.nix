@@ -16,21 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.29.2";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     rev = "v${version}";
-    hash = "sha256-g7WgFQPMOaD+3YllZqpykslmPYT/jNVK7/1xaPdbti4=";
+    hash = "sha256-WgLUIWggUKHPjVa6brkJzeRMZli/qhfu4jatf+JYIRU=";
     fetchSubmodules = true;
   };
 
   env.NIX_LDFLAGS = "-lhamlib";
-
-  patches = [
-    ./mac.patch
-  ];
 
   buildInputs = [
     qtbase

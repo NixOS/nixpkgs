@@ -23,12 +23,13 @@ in
     };
 
     services.resolved.fallbackDns = mkOption {
-      default = [ ];
+      default = null;
       example = [ "8.8.8.8" "2001:4860:4860::8844" ];
-      type = types.listOf types.str;
+      type = types.nullOr (types.listOf types.str);
       description = lib.mdDoc ''
         A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
-        If this option is empty, a compiled-in list of DNS servers is used instead.
+        If this option is null, a compiled-in list of DNS servers is used instead.
+        Setting this option to an empty list will override the built-in list to an empty list, disabling fallback.
       '';
     };
 
@@ -134,7 +135,7 @@ in
         [Resolve]
         ${optionalString (config.networking.nameservers != [])
           "DNS=${concatStringsSep " " config.networking.nameservers}"}
-        ${optionalString (cfg.fallbackDns != [])
+        ${optionalString (cfg.fallbackDns != null)
           "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
         ${optionalString (cfg.domains != [])
           "Domains=${concatStringsSep " " cfg.domains}"}

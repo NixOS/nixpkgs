@@ -15,7 +15,7 @@
 , freetype
 , libass
 , libpthreadstubs
-, nv-codec-headers
+, nv-codec-headers-11
 , lua
 , libuchardet
 , libiconv
@@ -198,7 +198,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]
-    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
+    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers-11 ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
     ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];

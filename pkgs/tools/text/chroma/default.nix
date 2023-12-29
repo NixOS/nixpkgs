@@ -33,5 +33,6 @@ buildGoModule rec {
     description = "A general purpose syntax highlighter in pure Go";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "chroma";
   };
 }

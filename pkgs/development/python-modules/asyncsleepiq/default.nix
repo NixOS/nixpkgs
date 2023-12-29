@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.3.7";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nKXZXOpwVN8Xe1vwwPGPucvyffiIQ8I4D+0A3qGco5w=";
+    hash = "sha256-H5Zg1I7+/vG5U9Tnr/qXVg/tTPMtuCWQGfEgug9ehEM=";
   };
 
   propagatedBuildInputs = [

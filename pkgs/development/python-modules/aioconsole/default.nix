@@ -4,6 +4,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 # This package provides a binary "apython" which sometimes invokes
@@ -16,17 +17,21 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.6.2";
-  format = "setuptools";
+  version = "0.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
-    repo = pname;
+    repo = "aioconsole";
     rev = "refs/tags/v${version}";
-    hash = "sha256-axUJLh7yg2A+HB0fxBueuNT/rohHVq6svQUZvR2LKzo=";
+    hash = "sha256-SKJLc1Tauwpmh2xtFFyHqKRaaQAK99SpbbGLFmAbKcQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -53,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous console and interfaces for asyncio";
     homepage = "https://github.com/vxgmichel/aioconsole";
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ catern ];
   };

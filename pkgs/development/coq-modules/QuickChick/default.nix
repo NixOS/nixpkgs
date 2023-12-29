@@ -6,6 +6,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   owner = "QuickChick";
   inherit version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
+      { cases = [ (range "8.15" "8.18") pred.true  ]; out = "2.0.1"; }
       { cases = [ (range "8.13" "8.17") pred.true  ]; out = "1.6.5"; }
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
@@ -17,6 +18,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
       { cases = [ "8.6"  pred.true  ];  out = "20171102"; }
       { cases = [ "8.5"  pred.true  ];  out = "20170512"; }
     ] null;
+  release."2.0.1".sha256    = "sha256-gJc+9Or6tbqE00920Il4pnEvokRoiADX6CxP/Q0QZaY=";
   release."1.6.5".sha256    = "sha256-rcFyRDH8UbB9KVk10P5qjtPkWs04p78VNHkCq4mXr3U=";
   release."1.6.4".sha256    = "sha256-C1060wPSU33yZAFLxGmZlAMXASnx98qz3oSLO8DO+mM=";
   release."1.6.2".sha256    = "0g5q9zw3xd4zndihq96nxkq4w3dh05418wzlwdk1nnn3b6vbx6z0";

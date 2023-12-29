@@ -23,13 +23,13 @@ with lib.strings;
 
 let
 
-  version = "2.59.6";
+  version = "2.69.3";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-m6dimBxI9C3KDhUxbJAn2Pf9z+LRahjrzD34W/bf1XA=";
+    sha256 = "sha256-V2oDP17omIU9Waz5zrOyEHnWrVIfdDRM4KxHb01eyd8=";
     fetchSubmodules = true;
   };
 
@@ -61,16 +61,6 @@ let
         libtasn1
         p11-kit
         ncurses_static
-      ];
-
-      patches = [
-        # make preset management thread safe
-        # needed for magnetophonDSP.VoiceOfFaust
-        # see: https://github.com/grame-cncm/faust/issues/899
-        (fetchpatch {
-          url = "https://github.com/grame-cncm/faust/commit/a1c3a515abbcafea0a6e4e2ec7ecb0f092de5349.patch";
-          hash = "sha256-1Ndm+CgxvGEbS6TKGggeu9hW7N3pC+d1kluT2vhGzL8=";
-        })
       ];
 
       passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };

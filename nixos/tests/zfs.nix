@@ -19,7 +19,7 @@ let
     makeTest {
       name = "zfs-" + name;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis elvishjerricco ];
+        maintainers = [ elvishjerricco ];
       };
 
       nodes.machine = { config, pkgs, lib, ... }:
@@ -210,6 +210,7 @@ in {
     enableSystemdStage1 = true;
   };
 
+  installerBoot = (import ./installer.nix { }).separateBootZfs;
   installer = (import ./installer.nix { }).zfsroot;
 
   expand-partitions = makeTest {

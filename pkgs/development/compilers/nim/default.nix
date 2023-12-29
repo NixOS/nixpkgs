@@ -76,12 +76,12 @@ in {
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "2.0.0";
+    version = "2.0.2";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-vWEB2EADb7eOk6ad9s8/n9DCHNdUtpX/hKO0rdjtCvc=";
+      hash = "sha256-ZPUdO/Vt6dDueeLKapzpRFSvmmOhQaaWnOjFmmC4LM8=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -161,10 +161,10 @@ in {
   });
 
   nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
-    version = "1.6.14";
+    version = "1.6.18";
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
+      hash = "sha256-UCQaxyIpG6ljdT8EWqo1h7c8GqKK4pxXPBWluKYCoss=";
     };
 
     patches = [

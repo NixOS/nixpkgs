@@ -35,6 +35,7 @@ in {
         else package-darwin;
     in {
       inherit package-linux package-darwin;
+      __attrsFailEvaluation = true;
 
       jdk-hotspot = callPackage package.jdk-hotspot {};
       jre-hotspot = callPackage package.jre-hotspot {};

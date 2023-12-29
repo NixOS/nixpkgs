@@ -80,7 +80,7 @@ backendStdenv.mkDerivation rec {
     ]
     ++ lib.optionals (lib.versionOlder version "11") [libsForQt5.wrapQtAppsHook]
     ++ lib.optionals (lib.versionAtLeast version "11.8") [qt6Packages.wrapQtAppsHook];
-  depsTargetTargetPropagated = [setupCudaHook];
+  propagatedBuildInputs = [setupCudaHook];
   buildInputs =
     lib.optionals (lib.versionOlder version "11") [
       libsForQt5.qt5.qtwebengine
@@ -258,12 +258,27 @@ backendStdenv.mkDerivation rec {
         rm $out/host-linux-x64/libstdc++.so*
       ''}
         ${
-          lib.optionalString (lib.versionAtLeast version "11.8")
+          lib.optionalString (lib.versionAtLeast version "11.8" && lib.versionOlder version "12")
             # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
             # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
             # TODO: don't copy, come up with a symlink-based "merge"
             ''
               rsync ${lib.getLib qt6Packages.qtimageformats}/lib/qt-6/plugins/ $out/host-linux-x64/Plugins/ -aP
+            ''
+        }
+        ${
+          lib.optionalString (lib.versionAtLeast version "12")
+            # Use Qt plugins built by Nix.
+            ''
+              for qtlib in $out/host-linux-x64/Plugins/*/libq*.so; do
+                qtdir=$(basename $(dirname $qtlib))
+                filename=$(basename $qtlib)
+                for qtpkgdir in ${lib.concatMapStringsSep " " (x: qt6Packages.${x}) ["qtbase" "qtimageformats" "qtsvg" "qtwayland"]}; do
+                  if [ -e $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename ]; then
+                    ln -snf $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename $qtlib
+                  fi
+                done
+              done
             ''
         }
 
@@ -336,6 +351,20 @@ backendStdenv.mkDerivation rec {
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done
+    ${
+      lib.optionalString (lib.versionAtLeast version "12")
+        # Check we don't have any lurking vendored qt libraries that weren't
+        # replaced during installPhase
+        ''
+          qtlibfiles=$(find $out -name "libq*.so" -type f)
+          if [ ! -z "$qtlibfiles" ]; then
+            echo "Found unexpected vendored Qt library files in $out" >&2
+            echo $qtlibfiles >&2
+            echo "These should be replaced with symlinks in installPhase" >&2
+            exit 1
+          fi
+        ''
+    }
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so

@@ -10,12 +10,16 @@
 , sphinx
 }:
 
+let
+  pyMajor = lib.versions.major python.version;
+in
+
 buildPythonPackage rec {
   pname = "dnf4";
   version = "4.18.2";
   format = "other";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "py" ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -36,7 +40,8 @@ buildPythonPackage rec {
     substituteInPlace etc/tmpfiles.d/CMakeLists.txt \
       --replace "DESTINATION /usr/lib/tmpfiles.d" "DESTINATION $out/usr/lib/tmpfiles.d"
     substituteInPlace dnf/const.py.in \
-      --replace "/etc" "$out/etc"
+      --replace "/etc" "$out/etc" \
+      --replace "/var/tmp" "/tmp"
     substituteInPlace doc/CMakeLists.txt \
       --replace 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
   '';
@@ -54,8 +59,10 @@ buildPythonPackage rec {
   ];
 
   cmakeFlags = [
-    "-DPYTHON_DESIRED=${lib.head (lib.splitString ["."] python.version)}"
+    "-DPYTHON_DESIRED=${pyMajor}"
   ];
+
+  dontWrapPythonPrograms = true;
 
   postBuild = ''
     make doc-man
@@ -63,12 +70,21 @@ buildPythonPackage rec {
 
   postInstall = ''
     # See https://github.com/rpm-software-management/dnf/blob/41a287e2bd60b4d1100c329a274776ff32ba8740/dnf.spec#L218-L220
-    ln -s dnf-3 $out/bin/dnf
-    ln -s dnf-3 $out/bin/dnf4
-    mv $out/bin/dnf-automatic-3 $out/bin/dnf-automatic
+    ln -s dnf-${pyMajor} $out/bin/dnf
+    ln -s dnf-${pyMajor} $out/bin/dnf4
+    mv $out/bin/dnf-automatic-${pyMajor} $out/bin/dnf-automatic
+
     # See https://github.com/rpm-software-management/dnf/blob/41a287e2bd60b4d1100c329a274776ff32ba8740/dnf.spec#L231-L232
     ln -s $out/etc/dnf/dnf.conf $out/etc/yum.conf
-    ln -s dnf-3 $out/bin/yum
+    ln -s dnf-${pyMajor} $out/bin/yum
+
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/etc/bash_completion.d/dnf $out/share/bash-completion/completions/dnf
+    rm -r $out/etc/bash_completion.d
+  '';
+
+  postFixup = ''
+    moveToOutput "lib/${python.libPrefix}" "$py"
   '';
 
   meta = with lib; {

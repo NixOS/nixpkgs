@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.2.44";
+  version = "0.3.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-5r5XRb/RWHv0Am58VPOxe+QSKn2QT4JZYp5LjTh20KM=";
+    hash = "sha256-1wNoMVfouuPRGFGB6XIhgeeWgknxMctrBl5Vfco6qug=";
   };
 
-  cargoHash = "sha256-p+7CWvspYk1LRO2s8Sstlven/2edNe+JYFQHaDFlGkM=";
+  cargoHash = "sha256-OJGqIo6mYqXjmQb/2CVVTskecYZretw+K46Fvbu/PcQ=";
 
   nativeBuildInputs = [
     pkg-config

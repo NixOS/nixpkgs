@@ -63,14 +63,11 @@ in
 
     machine.send_key("tab")
     machine.send_key("tab")
-    machine.send_key("tab")
-    machine.send_key("tab")
-    machine.send_key("right")
-    machine.send_key("right")
     machine.send_key("ret")
 
-    machine.sleep(1)
+    machine.sleep(2)
 
+    machine.send_key("tab")
     # Type the beginning of https://de.wikipedia.org/wiki/Alle_meine_Entchen
     machine.send_chars("cdef6gg5aaaa7g")
     machine.sleep(1)

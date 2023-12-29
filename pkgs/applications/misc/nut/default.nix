@@ -18,6 +18,7 @@
 , substituteAll
 , systemd
 , udev
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # This patch injects a default value for NUT_CONFPATH into the nutshutdown script
+    # since the way we build the package results in the binaries being hardcoded to check
+    # $out/etc/ups.conf instead of /etc/nut/ups.conf (where the module places the file).
+    # We also cannot use `--sysconfdir=/etc/nut` since that results in the install phase
+    # trying to install directly into /etc/nut which predictably fails
+    ./nutshutdown-conf-default.patch
+
     (substituteAll {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
@@ -63,16 +71,23 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
+      --replace /bin/sed "${gnused}/bin/sed" \
       --replace /bin/sleep "${coreutils}/bin/sleep" \
       --replace /bin/systemctl "${systemd}/bin/systemctl"
 
     for file in system/{nut-monitor.service,nut-driver-enumerator.service,nut-server.service,nut-driver@.service} system-shutdown/nutshutdown; do
-    substituteInPlace $out/lib/systemd/$file \
-      --replace "$out/etc/nut.conf" "/etc/nut.conf"
+      substituteInPlace $out/lib/systemd/$file \
+        --replace "$out/etc/nut.conf" "/etc/nut/nut.conf"
     done
+
+    substituteInPlace $out/lib/systemd/system/nut-driver-enumerator.path \
+      --replace "$out/etc/ups.conf" "/etc/nut/ups.conf"
 
     # we don't need init.d scripts
     rm -r $out/share/solaris-init
+
+    # Suspicious/overly broad rule, remove it until we know better
+    rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
   meta = with lib; {
