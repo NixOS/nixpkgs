@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtaudio";
-  version = "5.2.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
     rev = version;
-    sha256 = "0xvahlfj3ysgsjsp53q81hayzw7f99n1g214gh7dwdr52kv2l987";
+    hash = "sha256-Acsxbnl+V+Y4mKC1gD11n0m03E96HMK+oEY/YV7rlIY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
