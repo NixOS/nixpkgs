@@ -1,0 +1,91 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -698,6 +698,7 @@
+         HEADERS_DESTINATION   "${GDCM_INSTALL_INCLUDE_DIR}/vtk${vtk_version_suffix}"
+         CMAKE_DESTINATION     "${GDCM_INSTALL_PACKAGE_DIR}"
+         LICENSE_DESTINATION   "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
++        SPDX_DESTINATION      "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+         HIERARCHY_DESTINATION "${GDCM_INSTALL_LIB_DIR}/vtk${vtk_version_suffix}/hierarchy/vtkgdcm"
+         LIBRARY_NAME_SUFFIX   "${vtkgdcm_library_suffix}"
+         VERSION               "${GDCM_VERSION}"
+
+
+--- a/Utilities/VTK/vtkImageColorViewer.h
++++ b/Utilities/VTK/vtkImageColorViewer.h
+@@ -199,22 +199,6 @@
+   virtual int GetOffScreenRendering();
+   vtkBooleanMacro(OffScreenRendering,int);
+ 
+-  // Description:
+-  // @deprecated Replaced by vtkImageColorViewer::GetSliceMin() as of VTK 5.0.
+-  VTK_LEGACY(int GetWholeZMin());
+-
+-  // Description:
+-  // @deprecated Replaced by vtkImageColorViewer::GetSliceMax() as of VTK 5.0.
+-  VTK_LEGACY(int GetWholeZMax());
+-
+-  // Description:
+-  // @deprecated Replaced by vtkImageColorViewer::GetSlice() as of VTK 5.0.
+-  VTK_LEGACY(int GetZSlice());
+-
+-  // Description:
+-  // @deprecated Replaced by vtkImageColorViewer::SetSlice() as of VTK 5.0.
+-  VTK_LEGACY(void SetZSlice(int));
+-
+ protected:
+   vtkImageColorViewer();
+   ~vtkImageColorViewer();
+
+
+
+--- a/Utilities/VTK/vtkImageColorViewer.cxx
++++ b/Utilities/VTK/vtkImageColorViewer.cxx
+@@ -919,34 +919,6 @@
+ }
+ 
+ //----------------------------------------------------------------------------
+-#ifndef VTK_LEGACY_REMOVE
+-int vtkImageColorViewer::GetWholeZMin()
+-{
+-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetWholeZMin, "VTK 5.0",
+-                           vtkImageColorViewer::GetSliceMin);
+-  return this->GetSliceMin();
+-}
+-int vtkImageColorViewer::GetWholeZMax()
+-{
+-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetWholeZMax, "VTK 5.0",
+-                           vtkImageColorViewer::GetSliceMax);
+-  return this->GetSliceMax();
+-}
+-int vtkImageColorViewer::GetZSlice()
+-{
+-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetZSlice, "VTK 5.0",
+-                           vtkImageColorViewer::GetSlice);
+-  return this->GetSlice();
+-}
+-void vtkImageColorViewer::SetZSlice(int s)
+-{
+-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::SetZSlice, "VTK 5.0",
+-                           vtkImageColorViewer::SetSlice);
+-  this->SetSlice(s);
+-}
+-#endif
+-
+-//----------------------------------------------------------------------------
+ void vtkImageColorViewer::PrintSelf(ostream& os, vtkIndent indent)
+ {
+   this->Superclass::PrintSelf(os, indent);
+
+
+
+--- a/Utilities/VTK/vtkGDCMTesting.cxx
++++ b/Utilities/VTK/vtkGDCMTesting.cxx
+@@ -14,7 +14,6 @@
+ #include "vtkGDCMTesting.h"
+ 
+ #include "vtkObjectFactory.h"
+-#include "vtkToolkits.h"
+ #include "gdcmTesting.h"
+ #include "gdcmFilename.h"
+ 
+
