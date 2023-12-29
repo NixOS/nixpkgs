@@ -655,7 +655,7 @@ let
             config_file = "/etc/security/pam_mysql.conf";
           }; }
           { name = "ssh_agent_auth"; enable = config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
-            file = lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles;
+            file = lib.concatStringsSep ":" config.security.pam.sshAgentAuth.authorizedKeysFiles;
           }; }
           (let p11 = config.security.pam.p11; in { name = "p11"; enable = cfg.p11Auth; control = p11.control; modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so"; args = [
             "${pkgs.opensc}/lib/opensc-pkcs11.so"
@@ -1031,6 +1031,29 @@ in
         authenticating using a signature performed by the ssh-agent.
         This allows using SSH keys exclusively, instead of passwords, for instance on remote machines
       '';
+
+      authorizedKeysFiles = mkOption {
+        type = with types; listOf str;
+        description = ''
+          A list of paths to files in OpenSSH's `authorized_keys` format, containing
+          the keys that will be trusted by the `pam_ssh_agent_auth` module.
+
+          The following patterns are expanded when interpreting the path:
+          - `%f` and `%H` respectively expand to the fully-qualified and short hostname ;
+          - `%u` expands to the username ;
+          - `~` or `%h` expands to the user's home directory.
+
+          ::: {.note}
+          Specifying user-writeable files here result in an insecure configuration:  a malicious process
+          can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+
+          See [issue #31611](https://github.com/NixOS/nixpkgs/issues/31611)
+          :::
+        '';
+        example = [ "/etc/ssh/authorized_keys.d/%u" ];
+        default = config.services.openssh.authorizedKeysFiles;
+        defaultText = literalExpression "config.services.openssh.authorizedKeysFiles";
+      };
     };
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
