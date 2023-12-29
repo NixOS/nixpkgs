@@ -5,15 +5,15 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-tOLnve5XBc3TtSgucPIddBHD0YJhsRpRduXsKrtJ/eQ=";
+    hash = "sha256-bmOWOFqyvOvSrNTbwLqo0WMq4IAZxZ0YYaWCdCrpziU=";
   };
 
   postPatch = ''
@@ -24,7 +24,12 @@ python3.pkgs.buildPythonPackage rec {
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
+    binary2strings
     halo
     networkx
     pefile
@@ -45,6 +50,10 @@ python3.pkgs.buildPythonPackage rec {
   postInstall = ''
     mkdir -p $out/share/flare-floss/
     cp -r floss/sigs $out/share/flare-floss/
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
