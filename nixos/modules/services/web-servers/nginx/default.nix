@@ -353,16 +353,25 @@ let
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
         acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+          # See https://gist.github.com/mingderwang/bdf30ead416c9dc0b29710f864c88517 for source of this block
+          # Hide /acme-challenge subdirectory and return 404 on all requests.
+          # It is somewhat more secure than letting Nginx return 403.
+          # Ending slash is important!
+          location = /.well-known/acme-challenge/ {
+            return 404;
+          }
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
           location ^~ /.well-known/acme-challenge/ {
+            default_type "text/plain";
+            auth_basic off;
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
-            auth_basic off;
           }
           ${optionalString (vhost.acmeFallbackHost != null) ''
             location @acme-fallback {
+              default_type "text/plain";
               auth_basic off;
               proxy_pass http://${vhost.acmeFallbackHost};
             }
