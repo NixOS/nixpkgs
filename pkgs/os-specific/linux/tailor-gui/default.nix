@@ -46,6 +46,11 @@ stdenv.mkDerivation {
     gtk4
   ];
 
+  postFixup = ''
+    wrapProgram $out/bin/tailor_gui \
+      --set GDK_BACKEND "x11"
+  '';
+
   meta = with lib; {
     description = "Rust GUI for interacting with hardware from TUXEDO Computers";
     longDescription = ''
