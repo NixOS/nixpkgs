@@ -78,6 +78,28 @@
     };
   };
 
+  react-console-view = buildPythonPackage rec {
+    pname = "buildbot-react-console-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-U0j/ovoP3A83BzQWF4dtwisJxs00mZz0yyT12mlxfGo=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Console View Plugin (React)";
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
   waterfall-view = buildPythonPackage rec {
     pname = "buildbot-waterfall-view";
     inherit (buildbot-pkg) version;
