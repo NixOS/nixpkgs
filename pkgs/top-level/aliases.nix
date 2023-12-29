@@ -1052,8 +1052,10 @@ mapAliases ({
   yacc = bison; # moved from top-level 2021-03-14
   yafaray-core = libyafaray; # Added 2022-09-23
   yarn2nix-moretea-openssl_1_1 = throw "'yarn2nix-moretea-openssl_1_1' has been removed."; # Added 2023-02-04
-  yuzu-ea = yuzu-early-access; # Added 2022-08-18
-  yuzu = yuzu-mainline; # Added 2021-01-25
+  yuzu-ea = yuzuPackages.early-access; # Added 2022-08-18
+  yuzu-early-access = yuzuPackages.early-access; # Added 2023-12-29
+  yuzu = yuzuPackages.mainline; # Added 2021-01-25
+  yuzu-mainline = yuzuPackages.mainline; # Added 2023-12-29
 
   ### Z ###
 
