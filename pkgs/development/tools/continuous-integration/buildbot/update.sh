@@ -12,5 +12,6 @@ nix-update --version=skip buildbot-plugins.react-console-view
 nix-update --version=skip buildbot-plugins.waterfall-view
 nix-update --version=skip buildbot-plugins.react-waterfall-view
 nix-update --version=skip buildbot-plugins.grid-view
+nix-update --version=skip buildbot-plugins.react-grid-view
 nix-update --version=skip buildbot-plugins.wsgi-dashboards
 nix-update --version=skip buildbot-plugins.badges

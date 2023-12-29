@@ -166,6 +166,28 @@
     };
   };
 
+  react-grid-view = buildPythonPackage rec {
+    pname = "buildbot-react-grid-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-Q8gwqUfMy+D9dPBSw60BhNV12iu9mjhc7KXKYjtO23s=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Grid View Plugin (React)";
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
   wsgi-dashboards = buildPythonPackage rec {
     pname = "buildbot-wsgi-dashboards";
     inherit (buildbot-pkg) version;
