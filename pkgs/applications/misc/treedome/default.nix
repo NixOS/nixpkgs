@@ -2,7 +2,7 @@
 , cargo-tauri
 , cmake
 , dbus
-, fetchFromGitLab
+, fetchFromGitea
 , fetchYarnDeps
 , freetype
 , gsettings-desktop-schemas
@@ -19,14 +19,14 @@
 
 let
   pname = "treedome";
-  version = "0.3.2";
+  version = "0.3.3";
 
-  src = fetchFromGitLab {
-    owner = "treedome";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "solver-orgz";
     repo = "treedome";
-    rev = version;
-    sha256 = "sha256-0f32xa5s43s3amna0l9aiwcjr98679hkrsb7fxg3s1n9hr8vdz4z";
-    fetchSubmodules = true;
+    rev = "${version}";
+    hash = lib.fakeSha256;
   };
 
   frontend-build = mkYarnPackage {
@@ -59,9 +59,6 @@ in
 rustPlatform.buildRustPackage {
   inherit version pname src;
   sourceRoot = "src-tauri";
-
-  # essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
-  WEBKIT_DISABLE_COMPOSITING_MODE = 1;
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -104,8 +101,14 @@ rustPlatform.buildRustPackage {
     runHook postInstall
   '';
 
+  # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
+  postInstall = ''
+    wrapProgram "$out/bin/treedome" \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+  '';
+
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown.";
+    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown";
     homepage = "https://gitlab.com/treedome/treedome";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
