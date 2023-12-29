@@ -15,7 +15,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         foo.isNormalUser = true;
       };
 
-      security.pam.sshAgentAuth.enable = true;
+      security.pam.sshAgentAuth = {
+        # Must be specified, as nixpkgs CI expects everything to eval without warning
+        authorizedKeysFiles = [ "/etc/ssh/authorized_keys.d/%u" ];
+        enable = true;
+      };
       security.${lib.replaceStrings [ "_" ] [ "-" ] n} = {
         enable = true;
         wheelNeedsPassword = true;  # We are checking `pam_ssh_agent_auth(8)` works for a sudoer
