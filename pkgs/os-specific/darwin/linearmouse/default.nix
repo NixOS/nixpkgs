@@ -10,6 +10,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = "LinearMouse.app";
 
+  # `undmg` doesn't support unpacking APFS dmgs, so we use some of the macOS built-ins to do it for us.
   # https://discourse.nixos.org/t/help-with-error-only-hfs-file-systems-are-supported-on-ventura/25873
   unpackCmd = ''
     echo "File to unpack: $curSrc"
@@ -40,10 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The mouse and trackpad utility for Mac.";
+    description = "The mouse and trackpad utility for Mac";
     homepage = "https://github.com/linearmouse/linearmouse";
     license = lib.licenses.mit;
-    mainProgram = "linearmouse";
+    mainProgram = "LinearMouse";
     maintainers = [];
     platforms = lib.platforms.darwin;
   };
