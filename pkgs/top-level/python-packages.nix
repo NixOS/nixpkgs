@@ -7176,6 +7176,8 @@ self: super: with self; {
 
   mongoquery = callPackage ../development/python-modules/mongoquery { };
 
+  monitorcontrol = callPackage ../development/python-modules/monitorcontrol { };
+
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
   monosat = pkgs.monosat.python {
