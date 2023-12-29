@@ -16335,5 +16335,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  palette-nvim = buildVimPlugin {
+    pname = "palette-nvim";
+    version = "2023-10-02";
+    src = fetchFromGitHub {
+      owner = "roobert";
+      repo = "palette.nvim";
+      rev = "a808c190a4f74f73782302152ebf323660d8db5f";
+      sha256 = "sha256-gCyDl+2fDa5CPpibxQnp+pJSkyRl0r03Sh3+IXIoQIQ=";
+    };
+    meta.homepage = "https://github.com/roobert/palette.nvim/";
+  };
+
 
 }
