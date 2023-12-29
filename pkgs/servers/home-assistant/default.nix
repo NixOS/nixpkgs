@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.1";
+        src = fetchFromGitHub {
+          owner = "CorantGmbH";
+          repo = "aioairq";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-SRsDSHTZkkygaQZjHENKNLx3ZWMi/PubS1m/MonEKNk=";
+        };
+      });
+
       aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
         version = "19.2.1";
         src = fetchFromGitHub {
@@ -50,6 +60,16 @@ let
         };
         patches = [];
         doCheck = false;
+      });
+
+      aiohttp-zlib-ng = super.aiohttp-zlib-ng.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.1";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "aiohttp-zlib-ng";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-dTNwt4eX6ZQ8ySK2/9ziVbc3KFg2aL/EsiBWaJRC4x8=";
+        };
       });
 
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
@@ -168,6 +188,32 @@ let
         doCheck = false; # no tests
       });
 
+      openai = super.openai.overridePythonAttrs (oldAttrs: rec {
+        version = "0.28.1";
+        src = fetchFromGitHub {
+          owner = "openai";
+          repo = "openai-python";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
+        };
+        nativeBuildInputs = with self; [
+          setuptools
+        ];
+        propagatedBuildInputs = with self; [
+          aiohttp
+          requests
+          tqdm
+        ];
+        disabledTestPaths = [
+          # Requires a real API key
+          "openai/tests/test_endpoints.py"
+          "openai/tests/asyncio/test_endpoints.py"
+          # openai: command not found
+          "openai/tests/test_file_cli.py"
+          "openai/tests/test_long_examples_validator.py"
+        ];
+      });
+
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -235,6 +281,16 @@ let
           repo = "pydexcom";
           rev = "refs/tags/${version}";
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
+        };
+      });
+
+      pydrawise = super.pydrawise.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.11.0";
+        src = fetchFromGitHub {
+          owner = "dknowles2";
+          repo = "pydrawise";
+          rev = "refs/tags/${version}";
+          hash = "sha256-gKOyTvdETGzKlpU67UKaHYTIvnAX9znHIynP3BiVbt4=";
         };
       });
 
@@ -321,7 +377,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.12.3";
+  hassVersion = "2023.12.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -329,7 +385,7 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.10";
+  disabled = python.pythonOlder "3.11";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -339,13 +395,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-pTDYiy9Ux7Rgsf9rXXF3GbaiJkTX5FA/7K2hJtiNOkQ=";
+    hash = "sha256-XzjsSM0xKxLeuP30u8LReJtmJMbJq+yQ2Pp5xWmNLFw=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-cvsYkuQG4i3GG8VGJ+HGSjdvpSBLzh0BFYQQpoVq4FY=";
+    hash = "sha256-dea0PacCzCWhMh2gw/kVJHwYCoT7zJ52qTQbHmqcwU8=";
   };
 
   nativeBuildInputs = with python.pkgs; [
