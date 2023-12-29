@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , buildbot
+, stdenv
 
 # patch
 , coreutils
@@ -60,5 +61,6 @@ buildPythonPackage (rec {
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })
