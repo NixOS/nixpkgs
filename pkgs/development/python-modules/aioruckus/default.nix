@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.34";
+  version = "0.37";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ms264556";
     repo = "aioruckus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SPj1w1jAJFBsWj1+N8srAbvlh+yB3ZTT7aDcZTnmUto=";
+    hash = "sha256-uFYOTF8yfskLSwRP3TIDMSTlsCuU7BxAyYeFgohZuh4=";
   };
 
   postPatch = ''
