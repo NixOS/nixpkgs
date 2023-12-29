@@ -405,6 +405,11 @@ in mkLicense lset) ({
     fullName = "Detection Rule License 1.0";
   };
 
+  dtoa = {
+    spdxId = "dtoa";
+    fullName = "dtoa License";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
