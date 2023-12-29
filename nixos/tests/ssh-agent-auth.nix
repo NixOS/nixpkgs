@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         foo.isNormalUser = true;
       };
 
-      security.pam.enableSSHAgentAuth = true;
+      security.pam.sshAgentAuth.enable = true;
       security.${lib.replaceStrings [ "_" ] [ "-" ] n} = {
         enable = true;
         wheelNeedsPassword = true;  # We are checking `pam_ssh_agent_auth(8)` works for a sudoer
