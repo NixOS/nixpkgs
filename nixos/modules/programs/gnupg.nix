@@ -66,7 +66,7 @@ in
     };
 
     agent.pinentryFlavor = mkOption {
-      type = types.nullOr (types.enum pkgs.pinentry.flavors);
+      type = types.nullOr (types.enum pkgs.pinentry.possibleFlavors);
       example = "gnome3";
       default = defaultPinentryFlavor;
       defaultText = literalMD ''matching the configured desktop environment'';

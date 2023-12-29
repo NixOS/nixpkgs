@@ -12070,11 +12070,11 @@ with pkgs;
 
   pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
-  pinentry-curses = (lib.getOutput "curses" pinentry);
-  pinentry-emacs = (lib.getOutput "emacs" pinentry);
-  pinentry-gtk2 = (lib.getOutput "gtk2" pinentry);
-  pinentry-qt = (lib.getOutput "qt" pinentry);
-  pinentry-gnome = (lib.getOutput "gnome3" pinentry);
+  pinentry-curses = pinentry.override { enabledFlavors = [ "curses" ]; };
+  pinentry-emacs = pinentry.override { enabledFlavors = [ "emacs" ]; };
+  pinentry-gtk2 = pinentry.override { enabledFlavors = [ "gtk2" ]; };
+  pinentry-qt = pinentry.override { enabledFlavors = [ "qt" ]; };
+  pinentry-gnome3 = pinentry.override { enabledFlavors = [ "gnome3" ]; };
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;

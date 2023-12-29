@@ -84,7 +84,10 @@ pinentryMkDerivation rec {
 
   outputs = [ "out" ] ++ enabledFlavors;
 
-  passthru = { flavors = enabledFlavors; };
+  passthru = {
+    flavors = enabledFlavors;
+    possibleFlavors = lib.attrNames flavorInfo;
+  };
 
   meta = with lib; {
     homepage = "http://gnupg.org/aegypten2/";
