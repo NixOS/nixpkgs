@@ -5203,6 +5203,8 @@ self: super: with self; {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hsh = callPackage ../development/python-modules/hsh { };
+
   hsluv = callPackage ../development/python-modules/hsluv { };
 
   hstspreload = callPackage ../development/python-modules/hstspreload { };
