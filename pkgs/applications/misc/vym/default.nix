@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vym";
-  version = "2.9.22";
+  version = "2.9.26";
 
   src = fetchFromGitHub {
     owner = "insilmaril";
     repo = "vym";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zeQYnJsVlHn79qaipk+lhTwSLKDRyUivY6vn5uQYch0=";
+    hash = "sha256-5cHhv9GDjJvSqGJ+7fI0xaWCiXw/0WP0Bem/ZRV8Y7M=";
   };
 
   outputs = [ "out" "man" ];
