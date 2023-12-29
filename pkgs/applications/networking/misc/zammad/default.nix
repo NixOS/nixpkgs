@@ -7,7 +7,6 @@
 , bundlerEnv
 , defaultGemConfig
 , callPackage
-, writeText
 , procps
 , ruby
 , postgresql
@@ -19,6 +18,7 @@
 , yarn2nix-moretea
 , cacert
 , redis
+, dataDir ? "/var/lib/zammad"
 }:
 
 let
@@ -26,9 +26,7 @@ let
   version = "6.3.1";
 
   src = applyPatches {
-
     src = fetchFromGitHub (lib.importJSON ./source.json);
-
     patches = [
       ./fix-sendmail-location.diff
     ];
@@ -40,16 +38,6 @@ let
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
-
-  databaseConfig = writeText "database.yml" ''
-    production:
-      url: <%= ENV['DATABASE_URL'] %>
-  '';
-
-  secretsConfig = writeText "secrets.yml" ''
-    production:
-      secret_key_base: <%= ENV['SECRET_KEY_BASE'] %>
-  '';
 
   rubyEnv = bundlerEnv {
     name = "${pname}-gems-${version}";
@@ -156,9 +144,12 @@ stdenv.mkDerivation {
 
   installPhase = ''
     cp -R . $out
-    cp ${databaseConfig} $out/config/database.yml
-    cp ${secretsConfig} $out/config/secrets.yml
-    sed -i -e "s|info|debug|" $out/config/environments/production.rb
+    rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
+    # dataDir will be set in the module, and the package gets overriden there
+    ln -s ${dataDir}/config/database.yml $out/config/database.yml
+    ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
+    ln -s ${dataDir}/tmp $out/tmp
+    ln -s ${dataDir}/log $out/log
   '';
 
   passthru = {
