@@ -72,6 +72,29 @@ in
           Use `[ "*" ]` to whitelist all.
         '';
       };
+
+      config = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str (listOf str) ]));
+        default = {};
+        defaultText = options.literalExpression "FileCache.path = \"\${config.services.rss-bridge.dataDir}/cache/\"";
+        example = options.literalExpression ''
+          {
+            system.enabled_bridges = [ "*" ];
+            error = {
+              output = "http";
+              report_limit = 5;
+            };
+            FileCache = {
+              enable_purge = true;
+            };
+          }
+        '';
+        description = lib.mdDoc ''
+          Attribute set of arbitrary config options.
+          Please consult the documentation at the [wiki](https://rss-bridge.github.io/rss-bridge/For_Hosts/Custom_Configuration.html)
+          and [sample config](https://github.com/RSS-Bridge/rss-bridge/blob/master/config.default.ini.php) to see a list of available options.
+        '';
+      };
     };
   };
 
@@ -109,13 +132,25 @@ in
             tryFiles = "$uri /index.php$is_args$args";
           };
 
-          locations."~ ^/index.php(/|$)" = {
+          locations."~ ^/index.php(/|$)" = let
+              cfgHalf = lib.mapAttrsRecursive (path: value: let
+                envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
+                envValue = if lib.isList value then
+                  lib.concatStringsSep "," value
+                else if lib.isBool value then
+                  lib.boolToString value
+                else
+                  toString value;
+              in "fastcgi_param \"${envName}\" \"${envValue}\";") cfg.config;
+              cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
+            in {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
+              ${cfgEnv}
             '';
           };
         };
