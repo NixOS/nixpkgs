@@ -3,7 +3,7 @@
 , chardet
 , fetchPypi
 , jinja2
-, jinja2_pluralize
+, jinja2-pluralize
 , pluggy
 , pycodestyle
 , pyflakes
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     chardet
     jinja2
-    jinja2_pluralize
+    jinja2-pluralize
     pluggy
     pygments
     tomli

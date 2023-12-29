@@ -70,6 +70,26 @@ in
       '';
     };
 
+    networking.nftables.checkRulesetRedirects = mkOption {
+      type = types.addCheck (types.attrsOf types.path) (attrs: all types.path.check (attrNames attrs));
+      default = {
+        "/etc/hosts" = config.environment.etc.hosts.source;
+        "/etc/protocols" = config.environment.etc.protocols.source;
+        "/etc/services" = config.environment.etc.services.source;
+      };
+      defaultText = literalExpression ''
+        {
+          "/etc/hosts" = config.environment.etc.hosts.source;
+          "/etc/protocols" = config.environment.etc.protocols.source;
+          "/etc/services" = config.environment.etc.services.source;
+        }
+      '';
+      description = mdDoc ''
+        Set of paths that should be intercepted and rewritten while checking the ruleset
+        using `pkgs.buildPackages.libredirect`.
+      '';
+    };
+
     networking.nftables.preCheckRuleset = mkOption {
       type = types.lines;
       default = "";
@@ -83,7 +103,7 @@ in
       '';
     };
 
-    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
+    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "flushing the entire ruleset on each reload");
 
     networking.nftables.extraDeletions = mkOption {
       type = types.lines;
@@ -228,7 +248,6 @@ in
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
-    networking.networkmanager.firewallBackend = mkDefault "nftables";
     # versionOlder for backportability, remove afterwards
     networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
@@ -282,7 +301,7 @@ in
             cp $out ruleset.conf
             sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
-            export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
+            export NIX_REDIRECTS=${escapeShellArg (concatStringsSep ":" (mapAttrsToList (n: v: "${n}=${v}") cfg.checkRulesetRedirects))}
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
               ${pkgs.buildPackages.nftables}/bin/nft --check --file ruleset.conf
           '';

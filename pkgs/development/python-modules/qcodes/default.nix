@@ -1,72 +1,63 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, versioningit
-, wheel
-
-  # mandatory
 , broadbean
+, buildPythonPackage
+, cf-xarray
+, dask
+, deepdiff
+, fetchPypi
 , h5netcdf
 , h5py
+, hypothesis
 , importlib-metadata
-, ipywidgets
 , ipykernel
+, ipython
+, ipywidgets
 , jsonschema
+, lxml
 , matplotlib
 , numpy
 , opencensus
 , opencensus-ext-azure
+, opentelemetry-api
 , packaging
 , pandas
-, pyvisa
-, ruamel-yaml
-, tabulate
-, typing-extensions
-, tqdm
-, uncertainties
-, websockets
-, wrapt
-, xarray
-, ipython
 , pillow
-, rsa
-
-  # optional
-, qcodes-loop
-, slack-sdk
-
-  # test
 , pip
-, pytestCheckHook
-, deepdiff
-, hypothesis
-, lxml
 , pytest-asyncio
 , pytest-mock
 , pytest-rerunfailures
 , pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyvisa
 , pyvisa-sim
+, qcodes-loop
+, rsa
+, ruamel-yaml
+, setuptools
 , sphinx
+, tabulate
+, tqdm
+, typing-extensions
+, uncertainties
+, versioningit
+, websockets
+, wheel
+, wrapt
+, xarray
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.39.1";
+  version = "0.41.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2gJ/WeynabiGB1Z66+qaUbf6/1wogf/XjIE2mCAXUZY=";
+    hash = "sha256-3Ncg51E4KYbvzlEyesVbTmzmz+UPfFkj3tudVbNYqHQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'versioningit ~=' 'versioningit >='
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -76,6 +67,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     broadbean
+    cf-xarray
+    dask
     h5netcdf
     h5py
     ipykernel
@@ -86,6 +79,7 @@ buildPythonPackage rec {
     numpy
     opencensus
     opencensus-ext-azure
+    opentelemetry-api
     packaging
     pandas
     pillow
@@ -107,12 +101,7 @@ buildPythonPackage rec {
     loop = [
       qcodes-loop
     ];
-    slack = [
-      slack-sdk
-    ];
   };
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     deepdiff
@@ -128,6 +117,8 @@ buildPythonPackage rec {
     sphinx
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pytestFlagsArray = [
     # Follow upstream with settings
     "--durations=20"
@@ -136,6 +127,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
     "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
+    # TypeError
+    "qcodes/tests/dataset/test_dataset_basic.py"
   ];
 
   disabledTests = [
@@ -160,8 +153,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python-based data acquisition framework";
-    homepage = "https://qcodes.github.io/Qcodes/";
     changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    downloadPage = "https://github.com/QCoDeS/Qcodes";
+    homepage = "https://qcodes.github.io/Qcodes/";
     license = licenses.mit;
     maintainers = with maintainers; [ evilmav ];
   };

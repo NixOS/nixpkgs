@@ -25,10 +25,15 @@ stdenv.mkDerivation rec {
     (if stdenv.isDarwin then libkrb5 else pam)  # Matches the make target.
   ];
 
-  patches = [ (fetchpatch {
-    url = "https://salsa.debian.org/holmgren/uw-imap/raw/dcb42981201ea14c2d71c01ebb4a61691b6f68b3/debian/patches/1006_openssl1.1_autoverify.patch";
-    sha256 = "09xb58awvkhzmmjhrkqgijzgv7ia381ablf0y7i1rvhcqkb5wga7";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/holmgren/uw-imap/raw/dcb42981201ea14c2d71c01ebb4a61691b6f68b3/debian/patches/1006_openssl1.1_autoverify.patch";
+      sha256 = "09xb58awvkhzmmjhrkqgijzgv7ia381ablf0y7i1rvhcqkb5wga7";
+    })
+    # Required to build with newer versions of clang. Fixes call to undeclared functions errors
+    # and incompatible function pointer conversions.
+    ./clang-fix.patch
+  ];
 
   postPatch = ''
     sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'

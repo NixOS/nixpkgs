@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9Ny1Xby2e1lyrDTZLd6UVASx8/kwjsq4ogMTSKryQqg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PFZ8B2Wtjg3xUFYcnthTW5QXLk//lFH25jwpF7hygxQ=";
   };
 
   nativeBuildInputs = [

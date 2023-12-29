@@ -11,12 +11,12 @@ buildGoModule rec {
     owner = "ipfs";
     repo = "fs-repo-migrations";
     # Use the latest git tag here, since v2.0.2 does not
-    # contain the latest migration fs-repo-13-to-14/v1.0.0
+    # contain the latest migration fs-repo-14-to-15/v1.0.1
     # The fs-repo-migrations code itself is the same between
     # the two versions but the migration code, which is built
     # into separate binaries, is not.
-    rev = "fs-repo-13-to-14/v1.0.0";
-    hash = "sha256-y0IYSKKZlFbPrTUC6XqYKhS3a79rieNGBL58teWMlC4=";
+    rev = "fs-repo-14-to-15/v1.0.1";
+    hash = "sha256-oIGDZr0cv+TIl5glHr3U+eIqAlPAOWyFzgfQGGM+xNM=";
   };
 
   sourceRoot = "${src.name}/fs-repo-migrations";

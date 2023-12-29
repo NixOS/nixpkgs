@@ -1,4 +1,6 @@
 { stdenv
+, config
+, callPackages
 , lib
 , pkgs
 , phpPackage
@@ -28,9 +30,11 @@
 , openldap
 , openssl_1_1
 , openssl
+, overrideSDK
 , pam
 , pcre2
 , postgresql
+, bison
 , re2c
 , readline
 , rsync
@@ -43,11 +47,14 @@
 }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  buildPecl = import ../build-support/build-pecl.nix {
+  buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
-    inherit lib;
-    inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
+
+  composerHooks = callPackages ../build-support/php/hooks { };
+
+  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
+  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -101,13 +108,21 @@ lib.makeScope pkgs.newScope (self: with self; {
         autoconf
         pkg-config
         re2c
+        bison
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       preConfigurePhases = [
+        "genfiles"
         "cdToExtensionRootPhase"
       ];
+
+      genfiles = ''
+        if [ -f "scripts/dev/genfiles" ]; then
+          ./scripts/dev/genfiles
+        fi
+      '';
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
@@ -225,6 +240,9 @@ lib.makeScope pkgs.newScope (self: with self; {
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
+      buildPecl = buildPecl.override {
+        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      };
       inherit (pkgs) darwin;
     };
 
@@ -246,7 +264,13 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
 
+    memcache = callPackage ../development/php-packages/memcache { };
+
     memcached = callPackage ../development/php-packages/memcached { };
+
+    meminfo = callPackage ../development/php-packages/meminfo { };
+
+    memprof = callPackage ../development/php-packages/memprof { };
 
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
@@ -284,6 +308,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
+    phalcon = callPackage ../development/php-packages/phalcon { };
+
+    php-spx = callPackage ../development/php-packages/php-spx { };
+
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -293,6 +321,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     redis = callPackage ../development/php-packages/redis { };
 
     relay = callPackage ../development/php-packages/relay { inherit php; };
+
+    rrd = callPackage ../development/php-packages/rrd { };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
@@ -440,9 +470,10 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "opcache";
-          buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [
-            valgrind.dev
-          ];
+          buildInputs = [ pcre2 ] ++
+            lib.optional
+              (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
+              valgrind.dev;
           zendExtension = true;
           postPatch = lib.optionalString stdenv.isDarwin ''
             # Tests are flaky on darwin
@@ -569,7 +600,15 @@ lib.makeScope pkgs.newScope (self: with self; {
           doCheck = false;
         }
         { name = "sodium"; buildInputs = [ libsodium ]; }
-        { name = "sqlite3"; buildInputs = [ sqlite ]; }
+        {
+          name = "sqlite3";
+          buildInputs = [ sqlite ];
+
+          # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
+          # - https://github.com/php/php-src/issues/12076
+          # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
+          patches = lib.optional (stdenv.isi686 && stdenv.isLinux) ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch;
+        }
         { name = "sysvmsg"; }
         { name = "sysvsem"; }
         { name = "sysvshm"; }

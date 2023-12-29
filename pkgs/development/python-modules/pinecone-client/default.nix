@@ -13,11 +13,11 @@
 }:
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OR/kE3VO/U4O8AFUtEJx1jxM3Uvt8IjSMRGlcl2GMhA=";
+    hash = "sha256-LBzB1mSLK+ZulE2y/6WRZqN7kWTRE1rVJdnNix4pgWg=";
   };
 
   propagatedBuildInputs = [

@@ -17,14 +17,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.5";
+  version = "2.3.6";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FONWJaLpy9Q8rmF42gjLPxIk9iYeVBymcm3zXZjpw2o=";
+    hash = "sha256-gB+Tvta1fS4iQ2aIxInVob8fduIQ887RhoB1fmDTR1o=";
   };
 
   # Tests require files not included in the PyPI archive.

@@ -3,12 +3,15 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchpatch2
 , makeSetupHook
 , makeWrapper
 , gst_all_1
 , libglvnd
 , darwin
+, overrideSDK
 , buildPackages
+, python3
 
   # options
 , developerBuild ? false
@@ -24,7 +27,7 @@ let
   addPackages = self: with self;
     let
       callPackage = self.newScope ({
-        inherit qtModule srcs;
+        inherit qtModule srcs python3;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
@@ -44,14 +47,21 @@ let
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
-          ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
-          ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
+          ./patches/0004-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
+          ./patches/0005-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0006-qtbase-find-tools-in-PATH.patch
+          ./patches/0007-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
           ./patches/0008-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-environment.patch
-          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-actuall.patch
-          ./patches/0010-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          # Revert "macOS: Silence warning about supporting secure state restoration"
+          # fix build with macOS sdk < 12.0
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
+            revert = true;
+            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -63,6 +73,7 @@ let
         qtdatavis3d
         qtdeclarative
         qtdoc
+        qtgraphs
         qtgrpc
         qthttpserver
         qtimageformats
@@ -103,6 +114,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qtgraphs = callPackage ./modules/qtgraphs.nix { };
       qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
@@ -137,13 +149,18 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        qtModule = qtModule.override {
+          stdenv = if stdenv.isDarwin
+            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+            else stdenv;
+        };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };
@@ -174,12 +191,12 @@ let
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   baseScope = lib.makeScope newScope addPackages;
 
-  bootstrapScope = baseScope.overrideScope'(final: prev: {
+  bootstrapScope = baseScope.overrideScope(final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };
     qtdeclarative = null;
   });
 
-  finalScope = baseScope.overrideScope'(final: prev: {
+  finalScope = baseScope.overrideScope(final: prev: {
     qttranslations = bootstrapScope.qttranslations;
   });
 in finalScope

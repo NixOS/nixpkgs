@@ -33,13 +33,13 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.25.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-4rIz2RXLSWzZbRuv8d4nidOa0ULYc4QHIdaYrGu1WkI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9ha6YPlvq2HUTuEqngFOAJUqCahBi7L7O8qsIMMfbrY=";
   };
 
   format = "other";

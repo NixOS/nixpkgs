@@ -24,7 +24,7 @@ buildGoModule rec {
   pname = "distrobuilder";
   version = "2.1";
 
-  vendorSha256 = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
+  vendorHash = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
 
   src = fetchFromGitHub {
     owner = "lxc";
@@ -69,5 +69,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ megheaiulian ];
     platforms = platforms.linux;
+    mainProgram = "distrobuilder";
   };
 }

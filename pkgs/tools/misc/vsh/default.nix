@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   # vendor directory is part of repository
-  vendorSha256 = null;
+  vendorHash = null;
 
   # make sure version gets set at compile time
   ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/fishi0x01/vsh";
     license = licenses.mit;
     maintainers = with maintainers; [ fishi0x01 ];
+    mainProgram = "vsh";
   };
 }

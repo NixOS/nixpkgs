@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ eigengrau ];
+    mainProgram = "x-create-mouse-void";
   };
 }

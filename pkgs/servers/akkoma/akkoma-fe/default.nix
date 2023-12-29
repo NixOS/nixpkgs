@@ -1,20 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, fixup_yarn_lock, yarn, nodejs
+, prefetch-yarn-deps, yarn, nodejs
 , jpegoptim, oxipng, nodePackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "akkoma-fe";
-  version = "unstable-2023-05-23";
+  version = "unstable-2023-08-05";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "e530c2b4626fab3bc94736cb7d0774809717911f";
-    hash = "sha256-dowo4YzlkfuQv1G4NclPrKyBwtOq7bEXruQY/BVjNyM=";
+    rev = "e7a558a533dd31de174791f130afdaa5b6893b74";
+    hash = "sha256-BRmfppsC7NjDdcLxQHuLbQZmYGkj4DFPRtQOf/pRCpI=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     yarn
     nodejs
     jpegoptim
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
 

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
+, jsonschema
 , napalm
 , poetry-core
 , pytestCheckHook
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uUw48EBUpEUw+A8wxw3qXrnqmFWQzg/zb+8qAGRSlUw=";
+    hash = "sha256-ocajE7E4xIatEmv58/9gEpWF2plJdiZXjk6ajD2vTzw=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    jsonschema
+    napalm
+  ];
+
+  passthru.optional-dependencies.optionals = [
+    jsonschema
     napalm
   ];
 

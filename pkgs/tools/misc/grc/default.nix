@@ -21,6 +21,10 @@ buildPythonApplication rec {
       substituteInPlace $f \
         --replace /usr/local/ $out/
     done
+
+    # Support for absolute store paths.
+    substituteInPlace grc.conf \
+      --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,7 +46,8 @@ buildPythonApplication rec {
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [ azahi lovek323 AndersonTorres peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "grc";
   };
 }

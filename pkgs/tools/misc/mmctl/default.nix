@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/mattermost/mmctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ ppom ];
+    mainProgram = "mmctl";
   };
 }

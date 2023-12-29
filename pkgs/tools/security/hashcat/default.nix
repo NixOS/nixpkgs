@@ -21,8 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+     # Select libstdc++ or libc++ based on stdenv
+     # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
+  '' + lib.optionalString (stdenv.cc.libcxx != null) ''
+      --replace "-lstdc++" "-lc++ -l${stdenv.cc.libcxx.cxxabi.libName}" \
+  '' + ''
+      --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
       --replace "/usr/bin/ar" "ar" \
       --replace "/usr/bin/sed" "sed" \
       --replace '-i ""' '-i'
@@ -43,6 +49,8 @@ stdenv.mkDerivation rec {
     "VERSION_TAG=${version}"
     "USE_SYSTEM_OPENCL=1"
     "USE_SYSTEM_XXHASH=1"
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
+    "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
   ];
 
   enableParallelBuilding = true;
@@ -76,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ kierdavis zimbatm ];
+    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
   };
 }

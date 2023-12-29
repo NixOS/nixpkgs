@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.3.2";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-crYxrjfo0fss9uOl7k2C2ZCpbQExxnAX4520k4iPhuo=";
+    hash = "sha256-1Dkw30WW7bCf89I+HUAvkfmlBbl+TcOVmAfBIFnTExE=";
   };
 
-  vendorHash = "sha256-PgUj7MxGeDA7hYXzN/WWwZrUthkxyQL+MnSx9ZpzHms=";
+  vendorHash = "sha256-1mBcYVmVLTFVyYU9QuJz1JoR0wAIREC0cCQZbHMdgZU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -52,5 +52,6 @@ buildGoModule rec {
 
       To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
+    mainProgram = "protonmail-bridge";
   };
 }

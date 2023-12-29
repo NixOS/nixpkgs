@@ -1,5 +1,6 @@
 { yarn2nix-moretea
 , fetchFromGitHub
+, fetchYarnDeps
 , meta
 }:
 
@@ -15,8 +16,12 @@ yarn2nix-moretea.mkYarnPackage rec {
   };
 
   packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
+  yarnLock = "${src}/frontend/yarn.lock";
+
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    hash = "sha256-KKNk4lrM7unMFClkY6F3nqhKx5xfx87Ac+rug9sOwvI=";
+  };
 
   # For Node.js v17+, this is necessary.
   NODE_OPTIONS = "--openssl-legacy-provider";

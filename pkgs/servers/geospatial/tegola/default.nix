@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tegola";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "go-spatial";
     repo = "tegola";
     rev = "v${version}";
-    sha256 = "sha256-lrFRPD16AFavc+ghpKoxwQJsfJLe5jxTQVK/0a6SIIs=";
+    sha256 = "sha256-Z72QANnkAOg0le6p0lFJUhlgE/U32Ao+M/yog00gSF4=";
   };
 
   vendorHash = null;

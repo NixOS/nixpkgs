@@ -43,6 +43,10 @@ rec {
   elaborate = args': let
     args = if lib.isString args' then { system = args'; }
            else args';
+
+    # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
+    rust = args.rust or args.rustc or {};
+
     final = {
       # Prefer to parse `config` as it is strictly more informative.
       parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);
@@ -159,9 +163,11 @@ rec {
         ({
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
-          rustc = args.rustc or {};
         } // platforms.select final)
-        linux-kernel gcc rustc;
+        linux-kernel gcc;
+
+      # TODO: remove after 23.05 is EOL, with an error pointing to the rust.* attrs.
+      rustc = args.rustc or {};
 
       linuxArch =
         if final.isAarch32 then "arm"
@@ -178,11 +184,18 @@ rec {
         else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
+      # https://source.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106
+      ubootArch =
+        if      final.isx86_32 then "x86"    # not i386
+        else if final.isMips64 then "mips64" # uboot *does* distinguish between mips32/mips64
+        else final.linuxArch;                # other cases appear to agree with linuxArch
+
       qemuArch =
         if final.isAarch32 then "arm"
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        else if final.isMips64n32 then "mipsn32${lib.optionalString final.isLittleEndian "el"}"
         else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
@@ -224,6 +237,7 @@ rec {
               gtkSupport = false;
               sdlSupport = false;
               pulseSupport = false;
+              pipewireSupport = false;
               smbdSupport = false;
               seccompSupport = false;
               enableDocs = false;
@@ -252,7 +266,98 @@ rec {
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args;
+      // args // {
+        rust = rust // {
+          # Once args.rustc.platform.target-family is deprecated and
+          # removed, there will no longer be any need to modify any
+          # values from args.rust.platform, so we can drop all the
+          # "args ? rust" etc. checks, and merge args.rust.platform in
+          # /after/.
+          platform = rust.platform or {} // {
+            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
+            arch =
+              /**/ if rust ? platform then rust.platform.arch
+              else if final.isAarch32 then "arm"
+              else if final.isMips64  then "mips64"     # never add "el" suffix
+              else if final.isPower64 then "powerpc64"  # never add "le" suffix
+              else final.parsed.cpu.name;
+
+            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
+            os =
+              /**/ if rust ? platform then rust.platform.os or "none"
+              else if final.isDarwin then "macos"
+              else final.parsed.kernel.name;
+
+            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
+            target-family =
+              /**/ if args ? rust.platform.target-family then args.rust.platform.target-family
+              else if args ? rustc.platform.target-family
+              then
+                (
+                  # Since https://github.com/rust-lang/rust/pull/84072
+                  # `target-family` is a list instead of single value.
+                  let
+                    f = args.rustc.platform.target-family;
+                  in
+                    if builtins.isList f then f else [ f ]
+                )
+              else lib.optional final.isUnix "unix"
+                   ++ lib.optional final.isWindows "windows";
+
+            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
+            vendor = let
+              inherit (final.parsed) vendor;
+            in rust.platform.vendor or {
+              "w64" = "pc";
+            }.${vendor.name} or vendor.name;
+          };
+
+          # The name of the rust target, even if it is custom. Adjustments are
+          # because rust has slightly different naming conventions than we do.
+          rustcTarget = let
+            inherit (final.parsed) cpu kernel abi;
+            cpu_ = rust.platform.arch or {
+              "armv7a" = "armv7";
+              "armv7l" = "armv7";
+              "armv6l" = "arm";
+              "armv5tel" = "armv5te";
+              "riscv64" = "riscv64gc";
+            }.${cpu.name} or cpu.name;
+            vendor_ = final.rust.platform.vendor;
+          # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
+          in args.rust.rustcTarget or args.rustc.config
+            or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+
+          # The name of the rust target if it is standard, or the json file
+          # containing the custom target spec.
+          rustcTargetSpec = rust.rustcTargetSpec or (
+            /**/ if rust ? platform
+            then builtins.toFile (final.rust.rustcTarget + ".json") (builtins.toJSON rust.platform)
+            else final.rust.rustcTarget);
+
+          # The name of the rust target if it is standard, or the
+          # basename of the file containing the custom target spec,
+          # without the .json extension.
+          #
+          # This is the name used by Cargo for target subdirectories.
+          cargoShortTarget =
+            lib.removeSuffix ".json" (baseNameOf "${final.rust.rustcTargetSpec}");
+
+          # When used as part of an environment variable name, triples are
+          # uppercased and have all hyphens replaced by underscores:
+          #
+          # https://github.com/rust-lang/cargo/pull/9169
+          # https://github.com/rust-lang/cargo/issues/8285#issuecomment-634202431
+          cargoEnvVarTarget =
+            lib.strings.replaceStrings ["-"] ["_"]
+              (lib.strings.toUpper final.rust.cargoShortTarget);
+
+          # True if the target is no_std
+          # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
+          isNoStdTarget =
+            builtins.any (t: lib.hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
+        };
+      };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl
        (pass: { assertion, message }:

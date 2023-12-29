@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.13.3";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-IZMYeuneKtcuvbEVgkF2C3gbxJe7GlXRNEYwpFxtiKA=";
+    sha256 = "sha256-JaFaqYIwcRXYl5JukAfViUn8VTpMPThFO8EaVTPIudA=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"

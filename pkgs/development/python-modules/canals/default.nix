@@ -6,24 +6,24 @@
 , mkdocs-mermaid2-plugin
 , mkdocstrings
 , networkx
-, pygraphviz
 , pytestCheckHook
 , pythonOlder
 , requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "canals";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
-    repo = pname;
+    repo = "canals";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s4nKPywfRn2hNhn/coWGqShv7D+MCEHblVzfweQJlnM=";
+    hash = "sha256-zTC9zaY2WQ4Sx/1YeEaw23UH0hoP/ktMwzH8x/rER00=";
   };
 
   nativeBuildInputs = [
@@ -32,15 +32,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     networkx
+    requests
+    typing-extensions
   ];
 
   passthru.optional-dependencies = {
-    graphviz = [
-      pygraphviz
-    ];
-    mermaid = [
-      requests
-    ];
     docs = [
       mkdocs-material
       mkdocs-mermaid2-plugin
@@ -54,7 +50,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
-    "test/pipelines/integration"
+    "test/pipeline/integration"
   ];
 
   disabledTests = [

@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cargo, cmake, rust, rustc
+, darwin, cargo, cmake, rustc, rustfmt
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -15,18 +15,24 @@
 , wezterm
 , firefox
 , thunderbird
+# This only builds std for target and reuses the rustc from build.
+, fastCross
+, lndir
+, makeWrapper
 }:
 
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
     inherit sha256;
+    # See https://nixos.org/manual/nixpkgs/stable/#using-git-bisect-on-the-rust-compiler
+    passthru.isReleaseTarball = true;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -47,7 +53,7 @@ in stdenv.mkDerivation rec {
   # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
   # environment variables.
   # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.buildPlatform)}" =
+  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] stdenv.buildPlatform.rust.rustcTarget}" =
     "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
 
   NIX_LDFLAGS = toString (
@@ -62,39 +68,48 @@ in stdenv.mkDerivation rec {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
-    setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
-    setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
-    setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
-    ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+    prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
+    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
+    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
+    setBuild  = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
+    setHost   = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
+    setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+    ccForBuild  = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    cxxForBuild  = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    ccForHost  = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    cxxForHost  = cxxPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    ccForTarget  = ccPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
+    cxxForTarget  = cxxPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
   in [
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
+  ] ++ lib.optionals (!(finalAttrs.src.passthru.isReleaseTarball or false)) [
+    # release tarballs vendor the rustfmt source; when
+    # git-bisect'ing from upstream's git repo we must prevent
+    # attempts to download the missing source tarball
+    "--set=build.rustfmt=${rustfmt}/bin/rustfmt"
+  ] ++ [
     "--tools=rustc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
-    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+    "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
+    "--host=${stdenv.hostPlatform.rust.rustcTargetSpec}"
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
-      (rust.toRustTargetSpec stdenv.targetPlatform)
+      stdenv.targetPlatform.rust.rustcTargetSpec
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
     # scripts.
-    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
-      (rust.toRustTargetSpec stdenv.buildPlatform)
+    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
+      stdenv.buildPlatform.rust.rustcTargetSpec
 
     # (host!=target): When building a cross-targeting compiler we
     # need to add the host platform as well so rustc can compile
     # build.rs scripts.
-    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
-      (rust.toRustTargetSpec stdenv.hostPlatform)
+    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
+      stdenv.hostPlatform.rust.rustcTargetSpec
     ])}"
 
     "${setBuild}.cc=${ccForBuild}"
@@ -125,12 +140,43 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+  ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
   ];
+
+  # if we already have a rust compiler for build just compile the target std
+  # library and reuse compiler
+  buildPhase = if fastCross then "
+    runHook preBuild
+
+    mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
+    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
+    ln -s ${rustc}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
+    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
+    python ./x.py --keep-stage=0 --stage=1 build library/std
+
+    runHook postBuild
+  " else null;
+
+  installPhase = if fastCross then ''
+    runHook preInstall
+
+    python ./x.py --keep-stage=0 --stage=1 install library/std
+    mkdir -v $out/bin $doc $man
+    makeWrapper ${rustc}/bin/rustc $out/bin/rustc --add-flags "--sysroot $out"
+    makeWrapper ${rustc}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+    echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
+    lndir ${rustc.doc} $doc
+    lndir ${rustc.man} $man
+
+    runHook postInstall
+  '' else null;
 
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
@@ -168,6 +214,14 @@ in stdenv.mkDerivation rec {
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     export JEMALLOC_SYS_WITH_LG_VADDR=48
+  '' + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
+    mkdir .cargo
+    cat > .cargo/config <<\EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "vendor"
+    EOF
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -179,7 +233,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     file python3 rustc cmake
     which libffi removeReferencesTo pkg-config xz
-  ];
+  ]
+    ++ optionals fastCross [ lndir makeWrapper ];
 
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security ]
@@ -188,7 +243,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  postInstall = lib.optionalString enableRustcDev ''
+  postInstall = lib.optionalString (enableRustcDev && !fastCross) ''
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
@@ -227,7 +282,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ cstrahan globin havvy ] ++ teams.rust.members;
+    maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = [
       # Platforms with host tools from
@@ -236,13 +291,12 @@ in stdenv.mkDerivation rec {
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
-      "loongarch64-linux" "mipsel-linux" "mips64el-linux"
-      "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
-      "s390x-linux" "x86_64-linux"
+      "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
+      "riscv64-linux" "s390x-linux" "x86_64-linux"
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"
       "i686-windows" "x86_64-windows"
     ];
   };
-}
+})

@@ -10,13 +10,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-brt1bNQonAjbqCsMLHgOS8leDb3Y8MWKIxV+BXoJ1lY=";
+    hash = "sha256-7sv0TzYMQLEaohy45JPPiK2wS3x4sXaevT/BfHaSbWw=";
   };
 
   buildInputs = [

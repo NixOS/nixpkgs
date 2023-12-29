@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "gtkcord4";
-  version = "0.0.11-1";
+  version = "0.0.16-1";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GkjUURmPS1KOwgYn7kO9/oGIUX9fnSgYjyU7PHXtE5w=";
+    hash = "sha256-GDQ11X202RIoJUZ2eJ9ukHalhXtKYn9C8lcvAzzaB+4=";
   };
 
   nativeBuildInputs = [
@@ -52,17 +52,17 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -D -m 444 -t $out/share/applications nix/xyz.diamondb.gtkcord4.desktop
-    install -D -m 444 internal/icons/svg/logo.svg $out/share/icons/hicolor/scalable/apps/gtkcord4.svg
-    install -D -m 444 internal/icons/png/logo.png $out/share/icons/hicolor/256x256/apps/gtkcord4.png
+    install -D -m 444 -t $out/share/applications nix/so.libdb.gtkcord4.desktop
+    install -D -m 444 internal/icons/hicolor/scalable/apps/logo.svg $out/share/icons/hicolor/scalable/apps/gtkcord4.svg
   '';
 
-  vendorHash = "sha256-RJ6dLa5EzfLMPR3LMIplFhmph+tcdsieiB5Uv95lqIs=";
+  vendorHash = "sha256-ZQBYi5t6ntukoHP2FtwpZrpFd7b2opPC8tOSU9j3jUM=";
 
   meta = with lib; {
-    description = "GTK4 Discord client in Go, attempt #4.";
+    description = "GTK4 Discord client in Go, attempt #4";
     homepage = "https://github.com/diamondburned/gtkcord4";
     license = licenses.gpl3Only;
+    mainProgram = "gtkcord4";
     maintainers = with maintainers; [ hmenke urandom aleksana ];
   };
 }

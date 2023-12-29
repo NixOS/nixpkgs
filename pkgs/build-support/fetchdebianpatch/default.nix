@@ -1,8 +1,8 @@
 { lib, fetchpatch }:
 
 lib.makeOverridable (
-  { pname, version, debianRevision ? null, patch, hash,
-    area ? "main", name ? "${patch}.patch" }:
+  { pname, version, debianRevision ? null, area ? "main",
+    patch, name ? patch, hash }:
   let
     inherit (lib.strings) hasPrefix substring;
     prefix =
@@ -14,6 +14,6 @@ lib.makeOverridable (
     inherit name hash;
     url =
       "https://sources.debian.org/data/${area}/${prefix}/"
-      + "${pname}/${versionString}/debian/patches/${patch}.patch";
+      + "${pname}/${versionString}/debian/patches/${patch}";
   }
 )

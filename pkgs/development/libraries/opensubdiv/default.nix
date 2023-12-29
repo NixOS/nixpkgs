@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensubdiv";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-pYD2HxAszE9Ux1xsSJ7s2R13U8ct5tDo3ZP7H0+F9Rc=";
+    sha256 = "sha256-uDKCT0Uoa5WQekMUFm2iZmzm+oWAZ6IWMwfpchkUZY0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
     ] ++ lib.optionals (!openclSupport) [
       "-DNO_OPENCL=1"
     ];
+
+  preBuild = let maxBuildCores = 16; in lib.optionalString cudaSupport ''
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
+  '';
 
   postInstall = "rm $out/lib/*.a";
 

@@ -1,20 +1,34 @@
 { lib
 , fetchFromSourcehut
+, buildGoModule
 , buildPythonPackage
+, python
 , srht
 , pyyaml
+, unzip
 }:
 
 buildPythonPackage rec {
   pname = "hubsrht";
-  version = "0.14.14";
+  version = "0.17.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hub.sr.ht";
     rev = version;
-    sha256 = "sha256-4n6oQ+AAvdJY/5KflxAp62chjyrlSUkmt319DKZk33w=";
+    sha256 = "sha256-A+lvRsPz5EBnM0gB4PJuxSMpELZTrK14ORxDbTKPXWg=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile --replace "all: api" ""
+  '';
+
+  hubsrht-api = buildGoModule ({
+    inherit src version;
+    pname = "hubsrht-api";
+    modRoot = "api";
+    vendorHash = "sha256-K5EmZ4U+xItTR85+SCwhwg5KUGLkKHo9Nr2pkvmJpfo=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
     srht
@@ -23,9 +37,13 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  dontUseSetuptoolsCheck = true;
+  postInstall = ''
+    ln -s ${hubsrht-api}/bin/api $out/bin/hubsrht-api
+  '';
+
   pythonImportsCheck = [ "hubsrht" ];
 
   meta = with lib; {

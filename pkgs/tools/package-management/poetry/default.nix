@@ -1,43 +1,23 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchPypi
-}:
+{ python3, fetchFromGitHub }:
 
 let
   python = python3.override {
-    packageOverrides = self: super: {
+    packageOverrides = self: super: rec {
       poetry = self.callPackage ./unwrapped.nix { };
 
-      # version overrides required by poetry and its plugins
-      cachecontrol = super.cachecontrol.overridePythonAttrs (old: rec {
-        version = "0.12.14";
-        format = "setuptools";
-        src = fetchFromGitHub {
-          owner = "ionrock";
-          repo = "cachecontrol";
-          rev = "v${version}";
-          hash = "sha256-BuBaKP7OAYoT+SPVhtE6l9U/KmN21OKTL6poV5a6+0c=";
-        };
-        nativeCheckInputs = old.nativeCheckInputs ++ [
-          self.lockfile
-        ];
-      });
-      keyring = super.keyring.overridePythonAttrs (old: rec {
-        version = "23.13.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-ui4VqbNeIZCNCq9OCkesxS1q4zRE3w2itJ1BpG721ng=";
-        };
-      });
+      # The versions of Poetry and poetry-core need to match exactly,
+      # and poetry-core in nixpkgs requires a staging cycle to be updated,
+      # so apply an override here.
+      #
+      # We keep the override around even when the versions match, as
+      # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.6.1";
+        version = "1.8.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = version;
-          hash = "sha256-Gc22Y2T4uO39jiOqEUFeOfnVCbknuDjmzFPZgk2eY74=";
+          hash = "sha256-RnCJ67jaL2knwv+Uo7p0zOejHAT73f40weaJnfqOYoM=";
         };
       });
     } // (plugins self);

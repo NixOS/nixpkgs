@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "windows";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-U5Fe5mTn/ms8w9j6NdEtiRFZkKeyV0I3aR+zYQw4yIs=";
+    sha256 = "sha256-LH9+3MLme4UIcpm5o/apNmkbmJ6NsRsW5TkGpmiNHP0=";
   };
 
   meta = with lib; {

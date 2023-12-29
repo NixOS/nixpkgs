@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , pkg-config
 , bzip2
 , openssl
@@ -10,14 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.36.13";
+  version = "0.37.4";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-9EnVO2CJY5y01mxSWphbuTVnckgUr6L8GrFy1nQcqT8=";
+  src = fetchFromGitHub {
+    owner = "sagiegurari";
+    repo = "cargo-make";
+    rev = version;
+    hash = "sha256-ZcigUYHNhzLFXA726FqalSt0hIzBVBvmep8jqzaCioc=";
   };
 
-  cargoHash = "sha256-K6D5e9inuB1y3VcEW73ikrkTcewnZyW7kdHSDkWxC3w=";
+  cargoHash = "sha256-hmEo5UQlVtgdmb6b/vhK5GHHUCgbEKdnAu2S+xrDpuk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda xrelkd ];
+    mainProgram = "cargo-make";
   };
 }

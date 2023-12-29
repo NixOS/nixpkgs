@@ -1,8 +1,15 @@
-{ buildPythonPackage, lib, fetchFromGitLab
+{ buildPythonPackage
+, lib
+, fetchFromGitLab
 
-, isPy3k, isPyPy
+, isPy3k
+, isPyPy
 
-, distro, setuptools, psutil
+, distro
+, setuptools
+, psutil
+, certifi
+, setuptools-scm
 
 , pkgs
 }:
@@ -10,6 +17,7 @@
 buildPythonPackage rec {
   pname = "openpaperwork-core";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  format = "pyproject";
 
   sourceRoot = "${src.name}/openpaperwork-core";
 
@@ -17,21 +25,31 @@ buildPythonPackage rec {
   disabled = !isPy3k && !isPyPy;
 
   patchPhase = ''
-    echo 'version = "${version}"' > src/openpaperwork_core/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
   '';
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     distro
     setuptools
     psutil
+    certifi
   ];
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which ];
+  nativeBuildInputs = [
+    pkgs.gettext
+    pkgs.which
+    setuptools-scm
+  ];
 
   preBuild = ''
     make l10n_compile
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = {

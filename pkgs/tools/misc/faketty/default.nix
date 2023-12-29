@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "faketty";
   };
 }

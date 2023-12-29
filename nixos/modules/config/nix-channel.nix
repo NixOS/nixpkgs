@@ -70,7 +70,7 @@ in
       defaultChannel = mkOption {
         internal = true;
         type = types.str;
-        default = "https://nixos.org/channels/nixos-unstable";
+        default = "https://nixos.org/channels/nixos-23.11";
         description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
       };
     };
@@ -97,12 +97,8 @@ in
 
     nix.settings.nix-path = mkIf (! cfg.channel.enable) (mkDefault "");
 
-    system.activationScripts.nix-channel = mkIf cfg.channel.enable
-      (stringAfter [ "etc" "users" ] ''
-        # Subscribe the root user to the NixOS channel by default.
-        if [ ! -e "/root/.nix-channels" ]; then
-            echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
-        fi
-      '');
+    systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
+      ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
+    ];
   };
 }

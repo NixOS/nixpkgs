@@ -1,13 +1,13 @@
 {fetchFromGitLab}:
 rec {
-  version = "2.1.2";
+  version = "2.2.1";
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     repo = "paperwork";
     group = "World";
     owner = "OpenPaperwork";
     rev = version;
-    sha256 = "/5k+zUtTE+Dr879xbHDCAYrqlEJLsbkcRSG3GbA/PCg=";
+    sha256 = "sha256-OFVj9INDiOpGd5N3ziMBWt3/IdmpInc+jEAxW3GcvOA=";
   };
   sample_documents = fetchFromGitLab {
     domain = "gitlab.gnome.org";

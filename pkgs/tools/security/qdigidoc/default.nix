@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchurl
 , cmake
+, flatbuffers
 , gettext
 , pkg-config
 , libdigidocpp
@@ -16,12 +17,12 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.12";
+  version = "4.4.0";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-6bso1qvhVhbBfrcTq4S+aHtHli7X2A926N4r45ztq4E=";
+    hash = "sha256-5zo0yoY0wufm9DWRIccxJ5g4DXn75nT4fd2h+5QP4oQ=";
   };
 
   tsl = fetchurl {
@@ -37,6 +38,7 @@ mkDerivation rec {
   '';
 
   buildInputs = [
+    flatbuffers
     libdigidocpp
     opensc
     openldap

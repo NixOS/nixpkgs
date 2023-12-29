@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.taketwo ];
     platforms = platforms.all;
+    mainProgram = "mpdas";
   };
 }

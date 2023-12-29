@@ -36,5 +36,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/fsfe/reuse-tool";
     license = with licenses; [ asl20 cc-by-sa-40 cc0 gpl3Plus ];
     maintainers = with maintainers; [ FlorianFranzen Luflosi ];
+    mainProgram = "reuse";
   };
 }

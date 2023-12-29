@@ -6,7 +6,7 @@
 , pyparsing
 , graphviz
 , pytestCheckHook
-, texlive
+, texliveSmall
 }:
 
 buildPythonPackage rec {
@@ -36,9 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    (texlive.combine {
-      inherit (texlive) scheme-small preview pstricks;
-    })
+    (texliveSmall.withPackages (ps: with ps; [ preview pstricks ]))
   ];
 
   meta = with lib; {

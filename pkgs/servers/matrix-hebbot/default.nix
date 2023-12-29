@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/haecker-felix/hebbot";
     changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v${version}";
     license = with licenses; [ agpl3 ];
+    mainProgram = "hebbot";
     maintainers = with maintainers; [ a-kenji ];
   };
 }

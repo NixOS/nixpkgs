@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
     platforms = platforms.linux;
+    mainProgram = "xlayoutdisplay";
   };
 }

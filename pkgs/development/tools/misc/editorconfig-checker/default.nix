@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.7.0";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    hash = "sha256-8qGRcyDayXx3OflhE9Kw2AXM702/2pYB3JgfpQ0UYR8=";
+    hash = "sha256-ktZeBj5feJMf4XR4hybKdNrNCIrQD6KPetZffAZjwqI=";
   };
 
-  vendorHash = "sha256-S93ZvC92V9nrBicEv1yQ3DEuf1FmxtvFoKPR15e8VmA=";
+  vendorHash = "sha256-dhvRZ+AYSmSzHsf3yOYBSvZbw7dfwQiILu+VSUX8N3s=";
 
   doCheck = false;
 
@@ -28,6 +28,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${src.rev}";
     description = "A tool to verify that your files are in harmony with your .editorconfig";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;

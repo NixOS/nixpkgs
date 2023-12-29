@@ -99,5 +99,6 @@ mkDerivation rec {
     license = with licenses; [ cc-by-40 cc0 gpl3Plus lgpl3Plus mit ];
     homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
     maintainers = with maintainers; [ peterhoeg oxalica ];
+    mainProgram = "partitionmanager";
   };
 }

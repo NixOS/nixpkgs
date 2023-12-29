@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, buildGoModule
+, buildGo120Module
 , git
 , nodejs
 , protobuf
@@ -12,6 +12,7 @@
 , openssl
 , extra-cmake-modules
 , fontconfig
+, rust-jemalloc-sys
 , testers
 , turbo
 , nix-update-script
@@ -24,12 +25,12 @@
 , CoreFoundation
 }:
 let
-  version = "1.10.7";
+  version = "1.10.16";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "sha256-AkrwaaXUiFPZqOO1mX/1XBOZRFRtCdgI7glzdv8ZOfU=";
+    sha256 = "sha256-7bEHE/bHRVOXMP7+oo+4k8yn6d+LkXBi8JcDeR0ajww";
   };
 
   ffi = rustPlatform.buildRustPackage {
@@ -37,7 +38,7 @@ let
     inherit src version;
     cargoBuildFlags = [ "--package" "turborepo-ffi" ];
 
-    cargoHash = "sha256-j+r1irE0OGMfr9TAYhTOsFjBNzxjmF5/e7EebtshuG8=";
+    cargoHash = "sha256-Mj46yNOYTqt732d7SJ3sAeXbgDkoh7o7S23lKVgpvKY=";
 
     RUSTC_BOOTSTRAP = 1;
     nativeBuildInputs = [
@@ -58,12 +59,12 @@ let
   };
 
 
-  go-turbo = buildGoModule {
+  go-turbo = buildGo120Module {
     inherit src version;
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorSha256 = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
+    vendorHash = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
 
     nativeBuildInputs = [
       git
@@ -78,7 +79,7 @@ let
       libiconv
     ];
 
-    ldFlags = [
+    ldflags = [
       "-s -w"
       "-X main.version=${version}"
       "-X main.commit=${src.rev}"
@@ -138,7 +139,7 @@ rustPlatform.buildRustPackage {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoHash = "sha256-GCo1PRB4JkHSXz7nBiKhJsC1xhMTlA136gGpUblPpVk=";
+  cargoHash = "sha256-F+mEDkP7GismosXj+ICJCE4SHhCpWK7FiSyqjJM6LJ4=";
 
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
@@ -149,6 +150,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
     fontconfig
+    rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
       IOKit
       CoreServices

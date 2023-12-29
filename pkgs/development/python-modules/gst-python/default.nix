@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.5";
+  version = "1.22.7";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-vwUjJBXPYBgUKuUd07iXu3NDJoe1zheGv0btximM5bA=";
+    hash = "sha256-HvjfdggBL6RpMpeZyVDsCHc3ptq60wA8IwZYtYxxAXI=";
   };
 
   # Python 2.x is not supported.
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   mesonFlags = [
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
-    "-Dpython=${python.pythonForBuild.interpreter}"
+    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   doCheck = true;

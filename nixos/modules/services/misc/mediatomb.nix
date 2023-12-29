@@ -186,7 +186,7 @@ let
   defaultFirewallRules = {
     # udp 1900 port needs to be opened for SSDP (not configurable within
     # mediatomb/gerbera) cf.
-    # http://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
+    # https://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
     allowedUDPPorts = [ 1900 cfg.port ];
     allowedTCPPorts = [ cfg.port ];
   };

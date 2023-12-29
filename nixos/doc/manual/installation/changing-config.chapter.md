@@ -89,7 +89,7 @@ guest. For instance, the following will forward host port 2222 to guest
 port 22 (SSH):
 
 ```ShellSession
-$ QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm
+$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-:22" ./result/bin/run-*-vm
 ```
 
 allowing you to log in via SSH (assuming you have set the appropriate
@@ -98,3 +98,8 @@ passwords or SSH authorized keys):
 ```ShellSession
 $ ssh -p 2222 localhost
 ```
+
+Such port forwardings connect via the VM's virtual network interface.
+Thus they cannot connect to ports that are only bound to the VM's
+loopback interface (`127.0.0.1`), and the VM's NixOS firewall
+must be configured to allow these connections.

@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
-
 let param =
   if lib.versionAtLeast ocaml.version "4.02" then {
     version = "0.6";
@@ -11,6 +9,9 @@ let param =
     sha256 = "1j17rhifdjv1z262dma148ywg34x0zjn8vczdrnkwajsm4qg1hw3";
   };
 in
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "functory is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-functory";

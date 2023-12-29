@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , darwin
 , removeReferencesTo
+, btop
+, testers
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +32,10 @@ stdenv.mkDerivation rec {
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = btop;
+  };
+
   meta = with lib; {
     description = "A monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
@@ -37,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rmcgibbo ];
+    mainProgram = "btop";
   };
 }

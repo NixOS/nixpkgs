@@ -100,8 +100,8 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.0.1";
-    hash = "sha256-jtUm0jy0GsxkGlFdODGodPsuSaQgiE77BORnA6SFViU=";
+    version = "14.1.0";
+    hash = "sha256-CPyXqlUb69uLCsoomjFUbBj7bzPyI01m2yinFuoX5nE=";
   };
 
   ogre_13 = common {

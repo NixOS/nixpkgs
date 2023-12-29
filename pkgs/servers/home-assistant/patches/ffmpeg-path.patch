@@ -11,11 +11,69 @@ index a98766c78c..1c47bb1f80 100644
  
  CONFIG_SCHEMA = vol.Schema(
      {
+diff --git a/tests/components/ffmpeg/test_binary_sensor.py b/tests/components/ffmpeg/test_binary_sensor.py
+index 6eec115d6f..c55b4fb26c 100644
+--- a/tests/components/ffmpeg/test_binary_sensor.py
++++ b/tests/components/ffmpeg/test_binary_sensor.py
+@@ -24,7 +24,7 @@ async def test_noise_setup_component(hass: HomeAssistant) -> None:
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+ 
+@@ -35,7 +35,7 @@ async def test_noise_setup_component_start(mock_start, hass: HomeAssistant):
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -55,7 +55,7 @@ async def test_noise_setup_component_start_callback(mock_ffmpeg, hass: HomeAssis
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -80,7 +80,7 @@ async def test_motion_setup_component(hass: HomeAssistant) -> None:
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+ 
+@@ -91,7 +91,7 @@ async def test_motion_setup_component_start(mock_start, hass: HomeAssistant):
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -111,7 +111,7 @@ async def test_motion_setup_component_start_callback(mock_ffmpeg, hass: HomeAssi
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
 diff --git a/tests/components/ffmpeg/test_init.py b/tests/components/ffmpeg/test_init.py
-index 521ac732e5..ab8a56934f 100644
+index 0c6ce300d0..ff74a5d7f7 100644
 --- a/tests/components/ffmpeg/test_init.py
 +++ b/tests/components/ffmpeg/test_init.py
-@@ -87,7 +87,7 @@ class TestFFmpegSetup:
+@@ -91,7 +91,7 @@ class TestFFmpegSetup:
          with assert_setup_component(1):
              setup_component(self.hass, ffmpeg.DOMAIN, {ffmpeg.DOMAIN: {}})
  
@@ -24,61 +82,3 @@ index 521ac732e5..ab8a56934f 100644
  
      def test_setup_component_test_service(self):
          """Set up ffmpeg component test services."""
-diff --git a/tests/components/ffmpeg/test_sensor.py b/tests/components/ffmpeg/test_sensor.py
-index a6c9c1f441..f13091da1a 100644
---- a/tests/components/ffmpeg/test_sensor.py
-+++ b/tests/components/ffmpeg/test_sensor.py
-@@ -27,7 +27,7 @@ class TestFFmpegNoiseSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_noise") is not None
- 
-     @patch("haffmpeg.sensor.SensorNoise.open_sensor", return_value=mock_coro())
-@@ -37,7 +37,7 @@ class TestFFmpegNoiseSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_noise") is not None
- 
-         self.hass.start()
-@@ -53,7 +53,7 @@ class TestFFmpegNoiseSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_noise") is not None
- 
-         self.hass.start()
-@@ -89,7 +89,7 @@ class TestFFmpegMotionSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_motion") is not None
- 
-     @patch("haffmpeg.sensor.SensorMotion.open_sensor", return_value=mock_coro())
-@@ -99,7 +99,7 @@ class TestFFmpegMotionSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_motion") is not None
- 
-         self.hass.start()
-@@ -115,7 +115,7 @@ class TestFFmpegMotionSetup:
-             setup_component(self.hass, "binary_sensor", self.config)
-         self.hass.block_till_done()
- 
--        assert self.hass.data["ffmpeg"].binary == "ffmpeg"
-+        assert self.hass.data["ffmpeg"].binary == "@ffmpeg@"
-         assert self.hass.states.get("binary_sensor.ffmpeg_motion") is not None
- 
-         self.hass.start()

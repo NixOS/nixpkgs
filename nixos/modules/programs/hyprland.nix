@@ -7,9 +7,7 @@ with lib; let
   cfg = config.programs.hyprland;
 
   finalPortalPackage = cfg.portalPackage.override {
-    hyprland-share-picker = pkgs.hyprland-share-picker.override {
-      hyprland = cfg.finalPackage;
-    };
+    hyprland = cfg.finalPackage;
   };
 in
 {
@@ -66,6 +64,7 @@ in
     xdg.portal = {
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
+      configPackages = mkDefault [ cfg.finalPackage ];
     };
   };
 

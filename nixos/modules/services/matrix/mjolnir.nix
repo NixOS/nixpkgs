@@ -96,8 +96,8 @@ in
       type = types.submodule {
         options = {
           enable = mkEnableOption (lib.mdDoc ''
-            If true, accessToken is ignored and the username/password below will be
-            used instead. The access token of the bot will be stored in the dataPath.
+            ignoring the accessToken. If true, accessToken is ignored and the username/password below will be
+            used instead. The access token of the bot will be stored in the dataPath
           '');
 
           username = mkOption {

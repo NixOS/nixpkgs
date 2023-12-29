@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "onnxconverter-common";
-  version = "1.13.0";
+  version = "1.14.0";
 
   format = "setuptools";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "onnxconverter-common";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VT9ly0d0Yhw1J6C521oUyaCx4WtFSdpyk8EdIKlre3c=";
+    hash = "sha256-NbHyjLcr/Gq1zRiJW3ZBpEVQGVQGhp7SmfVd5hBIi2o=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,10 @@ buildPythonPackage rec {
     packaging
     protobuf
     onnx
+  ];
+
+  pythonImportsCheck = [
+    "onnxconverter_common"
   ];
 
   nativeCheckInputs = [

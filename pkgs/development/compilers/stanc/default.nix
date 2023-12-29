@@ -5,7 +5,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.32.2";
+  version = "2.33.1";
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";
@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "stan-dev";
     repo = "stanc3";
     rev = "v${version}";
-    hash = "sha256-dngmZXVb59uV7EugYIZAqE1gk66em7iuzllbbPWK2xk=";
+    hash = "sha256-DeQOiYJ5OHIMXcYHTYlObJnxM2Rqf6pSN4T7sAGw+wg=";
   };
 
   # Error: This expression has type [ `Use_Sys_unix ]

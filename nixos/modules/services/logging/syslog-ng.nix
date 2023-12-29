@@ -67,7 +67,7 @@ in {
       configHeader = mkOption {
         type = types.lines;
         default = ''
-          @version: 3.6
+          @version: 4.4
           @include "scl.conf"
         '';
         description = lib.mdDoc ''

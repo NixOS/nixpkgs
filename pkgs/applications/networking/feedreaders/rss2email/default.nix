@@ -43,6 +43,7 @@ buildPythonApplication rec {
     homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ekleog ];
+    mainProgram = "r2e";
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

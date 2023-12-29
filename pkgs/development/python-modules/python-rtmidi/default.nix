@@ -6,6 +6,7 @@
 , CoreAudio
 , CoreMIDI
 , CoreServices
+, Foundation
 , cython_3
 , fetchPypi
 , flake8
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.5.5";
+  version = "1.5.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_rtmidi";
     inherit version;
-    hash = "sha256-Pz6bD6SX6BPMC91zsorgeXfJGAPk1VULx8ejShUBy94=";
+    hash = "sha256-3vsaSyrob/OYwjLFPu2lVOJKSfZ96ELnnOuos8p3N00=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +41,14 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    libjack2
   ] ++ lib.optionals stdenv.isLinux [
+    libjack2
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
     CoreMIDI
     CoreServices
+    Foundation
   ];
 
   nativeCheckInputs = [

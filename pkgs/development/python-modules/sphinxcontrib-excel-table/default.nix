@@ -21,6 +21,8 @@ buildPythonPackage rec {
   # No tests present upstream
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx excel-table extension";
     homepage = "https://github.com/hackerain/sphinxcontrib-excel-table";

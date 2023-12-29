@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
   '';
 
-  makeFlags = [ "CC:=$(CC)" ];
+  makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
   doCheck = true;
 
   configureFlags = [ "--enable-shared" ];

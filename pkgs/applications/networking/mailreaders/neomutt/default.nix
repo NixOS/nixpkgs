@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
 , lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
 , pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/neomutt/neomutt/issues/3773#issuecomment-1493295144
     ./fix-open-very-large-mailbox.patch
+    (fetchpatch {
+      # https://github.com/neomutt/neomutt/pull/3933
+      name = "disable-incorrect-tests.patch";
+      url = "https://github.com/neomutt/neomutt/compare/f624551b86cdb53224b5b48304a808ca2815111e...a9a1d99e6c0fdf367188125451300fa89d3e801a.patch";
+      hash = "sha256-Plei063T8XyXF4/7/nAb6/4OyXz72vBAXHwls9WL1vM=";
+      excludes = [".github/workflows/macos.yml"];
+    })
   ];
 
   buildInputs = [
@@ -112,7 +119,7 @@ stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 raitobezarius ];
+    maintainers = with maintainers; [ erikryb vrthra ma27 raitobezarius ];
     platforms   = platforms.unix;
   };
 }

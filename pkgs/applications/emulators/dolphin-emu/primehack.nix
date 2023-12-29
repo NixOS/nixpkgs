@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
     mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
     mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
     substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'dolphin-emu' 'dolphin-emu-primehack'
+    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'Dolphin Emulator' 'PrimeHack'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';

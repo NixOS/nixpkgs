@@ -26,8 +26,9 @@ buildPythonPackage rec {
 
   patches = [
     # See: https://review.openstack.org/#/c/608382/
+    # https://github.com/openstack/sqlalchemy-migrate/pull/18
     (fetchpatch {
-      url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
+      url = "https://github.com/openstack/sqlalchemy-migrate/commit/a5d69a17d9354ec1a792493280f96484740cf7ff.patch";
       sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
     })
     ./python3.11-comp.diff

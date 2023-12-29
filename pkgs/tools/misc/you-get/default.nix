@@ -48,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ryneeverett ];
+    mainProgram = "you-get";
   };
 }

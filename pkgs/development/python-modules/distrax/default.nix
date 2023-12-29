@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "distrax";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x9ORfhGX5catEZMfR+iXkZSRa/wIb0B3CrCWOWf35Ks=";
+    hash = "sha256-klXT5wfnWUGMrf5sQhYqz7Foc/Ou5y4GIFgtTff1ZFQ=";
   };
 
   buildInputs = [

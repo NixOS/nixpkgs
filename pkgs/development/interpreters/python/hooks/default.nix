@@ -1,8 +1,8 @@
 self: dontUse: with self;
 
 let
-  inherit (python) pythonForBuild;
-  pythonInterpreter = pythonForBuild.interpreter;
+  inherit (python) pythonOnBuildForHost;
+  pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
@@ -45,15 +45,6 @@ in {
       propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh) {};
 
-  flitBuildHook = callPackage ({ makePythonHook, flit }:
-    makePythonHook {
-      name = "flit-build-hook";
-      propagatedBuildInputs = [ flit ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
-    } ./flit-build-hook.sh) {};
-
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
@@ -66,9 +57,21 @@ in {
   pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
     makePythonHook {
       name = "pypa-build-hook.sh";
-      propagatedBuildInputs = [ build wheel ];
+      propagatedBuildInputs = [ wheel ];
+      substitutions = {
+        inherit build;
+      };
+      # A test to ensure that this hook never propagates any of its dependencies
+      #   into the build environment.
+      # This prevents false positive alerts raised by catchConflictsHook.
+      # Such conflicts don't happen within the standard nixpkgs python package
+      #   set, but in downstream projects that build packages depending on other
+      #   versions of this hook's dependencies.
+      passthru.tests = import ./pypa-build-hook-tests.nix {
+        inherit pythonOnBuildForHost runCommand;
+      };
     } ./pypa-build-hook.sh) {
-      inherit (pythonForBuild.pkgs) build;
+      inherit (pythonOnBuildForHost.pkgs) build;
     };
 
   pipInstallHook = callPackage ({ makePythonHook, pip }:
@@ -88,7 +91,7 @@ in {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pypa-install-hook.sh) {
-      inherit (pythonForBuild.pkgs) installer;
+      inherit (pythonOnBuildForHost.pkgs) installer;
     };
 
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
@@ -103,9 +106,16 @@ in {
   pythonCatchConflictsHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "python-catch-conflicts-hook";
-      substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuptools;
-        catchConflicts=../catch_conflicts/catch_conflicts.py;
+      substitutions = let
+        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
+      in {
+        inherit pythonInterpreter pythonSitePackages;
+        catchConflicts = if useLegacyHook then
+          ../catch_conflicts/catch_conflicts_py2.py
+        else
+          ../catch_conflicts/catch_conflicts.py;
+      } // lib.optionalAttrs useLegacyHook {
+        inherit setuptools;
       };
     } ./python-catch-conflicts-hook.sh) {};
 
@@ -180,16 +190,14 @@ in {
       };
     } ./setuptools-check-hook.sh) {};
 
-    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
       makePythonHook {
         name = "setuptools-rust-setup-hook";
         propagatedBuildInputs = [ setuptools-rust ];
         substitutions = {
           pyLibDir = "${python}/lib/${python.libPrefix}";
-          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
-          cargoLinkerVar = lib.toUpper (
-              builtins.replaceStrings ["-"] ["_"] (
-                rust.toRustTarget stdenv.hostPlatform));
+          cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
+          cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
           targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
         };
       } ./setuptools-rust-hook.sh) {};
@@ -221,9 +229,12 @@ in {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
-  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+  sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
+      substitutions = {
+        sphinxBuild = "${pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
+      };
     } ./sphinx-hook.sh) {};
 }

@@ -69,8 +69,8 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, postBootCommands, extraConfig
+  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
+                  , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch
                   }:
     let iface = "virtio";
@@ -152,6 +152,8 @@ let
               }'
               """
           )
+
+      ${postInstallCommands}
 
       with subtest("Shutdown system after installation"):
           machine.succeed("umount -R /mnt")
@@ -368,7 +370,9 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
+    { createPartitions
+    , postInstallCommands ? "", preBootCommands ? "", postBootCommands ? ""
+    , extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
@@ -479,7 +483,7 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions preBootCommands postBootCommands
+        inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
                 testSpecialisationConfig testFlakeSwitch;
       };
@@ -511,7 +515,7 @@ let
       enableOCR = true;
       preBootCommands = ''
         machine.start()
-        machine.wait_for_text("Passphrase for")
+        machine.wait_for_text("[Pp]assphrase for")
         machine.send_chars("supersecret\n")
       '';
     };
@@ -682,16 +686,31 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary 1024M -1s",
+          + " mkpart primary 1M 100MB"  # bpool
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s", # rpool
           "udevadm settle",
-          "mkswap /dev/vda1 -L swap",
+          "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "zpool create rpool /dev/vda2",
+          "zpool create rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
           "mount -t zfs rpool/root /mnt",
+          "zfs create -o mountpoint=legacy rpool/root/usr",
+          "mkdir /mnt/usr",
+          "mount -t zfs rpool/root/usr /mnt/usr",
+          "zpool create -o compatibility=grub2 bpool /dev/vda1",
+          "zfs create -o mountpoint=legacy bpool/boot",
+          "mkdir /mnt/boot",
+          "mount -t zfs bpool/boot /mnt/boot",
           "udevadm settle",
       )
+    '';
+
+    # umount & export bpool before shutdown
+    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
+    postInstallCommands = ''
+      machine.succeed("umount /mnt/boot")
+      machine.succeed("zpool export bpool")
     '';
   };
 
@@ -762,7 +781,7 @@ in {
         encrypted.enable = true;
         encrypted.blkDev = "/dev/vda3";
         encrypted.label = "crypt";
-        encrypted.keyFile = "/mnt-root/keyfile";
+        encrypted.keyFile = "/${if systemdStage1 then "sysroot" else "mnt-root"}/keyfile";
       };
     '';
   };
@@ -918,6 +937,10 @@ in {
     enableOCR = true;
     preBootCommands = ''
       machine.start()
+      # Enter it wrong once
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("wrong\n")
+      # Then enter it right.
       machine.wait_for_text("enter passphrase for ")
       machine.send_chars("password\n")
     '';
@@ -931,9 +954,8 @@ in {
         "udevadm settle",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
-        "keyctl link @u @s",
         "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
-        "echo password | bcachefs unlock /dev/vda3",
+        "echo password | bcachefs unlock -k session /dev/vda3",
         "echo password | mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
@@ -962,6 +984,68 @@ in {
         "swapon -L swap",
         "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
         "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsLinuxTesting = makeInstallerTest "bcachefs-linux-testing" {
+    extraInstallerConfig = {
+      imports = [ no-zfs-module ];
+
+      boot = {
+        supportedFilesystems = [ "bcachefs" ];
+        kernelPackages = pkgs.linuxPackages_testing;
+      };
+    };
+
+    extraConfig = ''
+      boot.kernelPackages = pkgs.linuxPackages_testing;
+    '';
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsUpgradeToLinuxTesting = makeInstallerTest "bcachefs-upgrade-to-linux-testing" {
+    extraInstallerConfig = {
+      imports = [ no-zfs-module ];
+      boot.supportedFilesystems = [ "bcachefs" ];
+      # We don't have network access in the VM, we need this for `nixos-install`
+      system.extraDependencies = [ pkgs.linux_testing ];
+    };
+
+    extraConfig = ''
+      boot.kernelPackages = pkgs.linuxPackages_testing;
+    '';
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",

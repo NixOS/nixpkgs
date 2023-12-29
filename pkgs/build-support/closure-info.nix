@@ -4,7 +4,7 @@
 # "nix-store --load-db" and "nix-store --register-validity
 # --hash-given".
 
-{ stdenv, buildPackages }:
+{ stdenv, coreutils, jq }:
 
 { rootPaths }:
 
@@ -19,18 +19,24 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  PATH = "${buildPackages.coreutils}/bin:${buildPackages.jq}/bin";
+  nativeBuildInputs = [ coreutils jq ];
 
-  builder = builtins.toFile "builder"
+  empty = rootPaths == [];
+
+  buildCommand =
     ''
-      . .attrs.sh
-
       out=''${outputs[out]}
 
       mkdir $out
 
-      jq -r ".closure | map(.narSize) | add" < .attrs.json > $out/total-nar-size
-      jq -r '.closure | map([.path, .narHash, .narSize, "", (.references | length)] + .references) | add | map("\(.)\n") | add' < .attrs.json | head -n -1 > $out/registration
-      jq -r .closure[].path < .attrs.json > $out/store-paths
+      if [[ -n "$empty" ]]; then
+        echo 0 > $out/total-nar-size
+        touch $out/registration $out/store-paths
+      else
+        jq -r ".closure | map(.narSize) | add" < "$NIX_ATTRS_JSON_FILE" > $out/total-nar-size
+        jq -r '.closure | map([.path, .narHash, .narSize, "", (.references | length)] + .references) | add | map("\(.)\n") | add' < "$NIX_ATTRS_JSON_FILE" | head -n -1 > $out/registration
+        jq -r '.closure[].path' < "$NIX_ATTRS_JSON_FILE" > $out/store-paths
+      fi
+
     '';
 }

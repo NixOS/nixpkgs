@@ -51,7 +51,7 @@ let
   k3sVersion = "1.24.10+k3s1";     # k3s git tag
   k3sCommit = "546a94e9ae1c3be6f9c0dcde32a6e6672b035bc8"; # k3s git commit at the above version
   k3sRepoSha256 = "sha256-HfkGb3GtR2wQkVIze26aFh6A6W0fegr8ovpSel7oujQ=";
-  k3sVendorSha256 = "sha256-YAerisDr/knlKPaO2fVMZA4FUpwshFmkpi3mJAmLqKM=";
+  k3sVendorHash = "sha256-YAerisDr/knlKPaO2fVMZA4FUpwshFmkpi3mJAmLqKM=";
 
   # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/scripts/download#L29-L32
   # see also https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/manifests/traefik.yaml#L8-L16
@@ -117,7 +117,7 @@ let
   k3sCNIPlugins = buildGoModule rec {
     pname = "k3s-cni-plugins";
     version = k3sCNIVersion;
-    vendorSha256 = null;
+    vendorHash = null;
 
     subPackages = [ "." ];
 
@@ -170,7 +170,7 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sVendorSha256;
+    vendorHash = k3sVendorHash;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
@@ -210,7 +210,7 @@ let
       rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
-    vendorSha256 = null;
+    vendorHash = null;
     buildInputs = [ btrfs-progs ];
     subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
@@ -221,7 +221,7 @@ buildGoModule rec {
   version = k3sVersion;
 
   src = k3sRepo;
-  vendorSha256 = k3sVendorSha256;
+  vendorHash = k3sVendorHash;
 
   postPatch = ''
     # Nix prefers dynamically linked binaries over static binary.
@@ -279,7 +279,7 @@ buildGoModule rec {
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
-  # So, why do we use buildGoModule at all? For the `vendorSha256` / `go mod download` stuff primarily.
+  # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 

@@ -35,5 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     license     = licenses.gpl3Plus;
     homepage    = "https://github.com/rembo10/headphones";
     maintainers = with lib.maintainers; [ rembo10 ];
+    mainProgram = "headphones";
   };
 }

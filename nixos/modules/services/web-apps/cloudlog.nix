@@ -69,7 +69,7 @@ let
 in
 {
   options.services.cloudlog = with types; {
-    enable = mkEnableOption (mdDoc "Whether to enable Cloudlog");
+    enable = mkEnableOption (mdDoc "Cloudlog");
     dataDir = mkOption {
       type = str;
       default = "/var/lib/cloudlog";

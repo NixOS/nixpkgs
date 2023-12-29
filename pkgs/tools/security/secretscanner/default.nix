@@ -50,6 +50,7 @@ buildGoModule rec {
     description = "Tool to find secrets and passwords in container images and file systems";
     homepage = "https://github.com/deepfence/SecretScanner";
     changelog = "https://github.com/deepfence/SecretScanner/releases/tag/v${version}";
+    platforms = [ "x86_64-linux" ];
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

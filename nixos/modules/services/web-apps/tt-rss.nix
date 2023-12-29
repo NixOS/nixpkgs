@@ -430,7 +430,7 @@ let
           background processes while not running tt-rss, this method is generally
           viable to keep your feeds up to date.
           Still, there are more robust (and recommended) updating methods
-          available, you can read about them here: http://tt-rss.org/wiki/UpdatingFeeds
+          available, you can read about them here: <https://tt-rss.org/wiki/UpdatingFeeds>
         '';
       };
 
@@ -529,6 +529,15 @@ let
         assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.name == cfg.user && cfg.database.user == cfg.user;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.tt-rss.database.createLocally` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
@@ -595,47 +604,9 @@ let
       tt-rss = {
         description = "Tiny Tiny RSS feeds update daemon";
 
-        preStart = let
-          callSql = e:
-              if cfg.database.type == "pgsql" then ''
-                  ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
-                  ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile})"} \
-                  ${config.services.postgresql.package}/bin/psql \
-                    -U ${cfg.database.user} \
-                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
-                    -c '${e}' \
-                    ${cfg.database.name}''
-
-              else if cfg.database.type == "mysql" then ''
-                  echo '${e}' | ${config.services.mysql.package}/bin/mysql \
-                    -u ${cfg.database.user} \
-                    ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
-                    ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \
-                    ${cfg.database.name}''
-
-              else "";
-
-        in (optionalString (cfg.database.type == "pgsql") ''
-          exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
-          | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
-
-          if [ "$exists" == 'f' ]; then
-            ${callSql "\\i ${pkgs.tt-rss}/schema/ttrss_schema_${cfg.database.type}.sql"}
-          else
-            echo 'The database contains some data. Leaving it as it is.'
-          fi;
-        '')
-
-        + (optionalString (cfg.database.type == "mysql") ''
-          exists=$(${callSql "select count(*) > 0 from information_schema.tables where table_schema = schema()"} \
-          | tail -n+2 | sed -e 's/[ \n\t]*//')
-
-          if [ "$exists" == '0' ]; then
-            ${callSql "\\. ${pkgs.tt-rss}/schema/ttrss_schema_${cfg.database.type}.sql"}
-          else
-            echo 'The database contains some data. Leaving it as it is.'
-          fi;
-        '');
+        preStart = ''
+          ${pkgs.php81}/bin/php ${cfg.root}/www/update.php --update-schema
+        '';
 
         serviceConfig = {
           User = "${cfg.user}";
@@ -670,8 +641,8 @@ let
       enable = mkDefault true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        { name = cfg.database.user;
+          ensureDBOwnership = true;
         }
       ];
     };

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , cairo
+, expat
 , ffmpeg
 , libexif
 , pango
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
+    expat
     ffmpeg
     libexif
     pango

@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pitkley/i3nator";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mpoquet ];
+    mainProgram = "i3nator";
   };
 }

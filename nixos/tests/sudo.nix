@@ -5,7 +5,7 @@ let
 in
   import ./make-test-python.nix ({ lib, pkgs, ...} : {
     name = "sudo";
-    meta.maintainers = with lib.maintainers; [ lschuermann ];
+    meta.maintainers = pkgs.sudo.meta.maintainers;
 
     nodes.machine =
       { lib, ... }:
@@ -21,7 +21,8 @@ in
         };
 
         security.sudo = {
-          enable = true;
+          # Explicitly _not_ defining 'enable = true;' here, to check that sudo is enabled by default
+
           wheelNeedsPassword = false;
 
           extraConfig = ''

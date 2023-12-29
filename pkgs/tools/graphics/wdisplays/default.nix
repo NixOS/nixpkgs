@@ -1,23 +1,19 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, gtk3, libepoxy, wayland, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wdisplays";
-  version = "unstable-2021-04-03";
+  version = "1.1.1";
 
   nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
 
   buildInputs = [ gtk3 libepoxy wayland ];
 
   src = fetchFromGitHub {
-    owner = "luispabon";
+    owner = "artizirk";
     repo = "wdisplays";
-    rev = "7f2eac0d2aa81b5f495da7950fd5a94683f7868e";
-    sha256 = "sha256-cOF3+T34zPro58maWUouGG+vlLm2C5NfcH7PZhSvApE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
   };
-
-  patchPhase = ''
-    substituteInPlace ./resources/wdisplays.desktop.in --replace "@app_id@" "wdisplays"
-  '';
 
   meta = with lib; {
     description = "A graphical application for configuring displays in Wayland compositors";
@@ -27,4 +23,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "wdisplays";
   };
-}
+})

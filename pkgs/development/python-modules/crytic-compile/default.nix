@@ -6,20 +6,21 @@
 , pythonOlder
 , setuptools
 , solc-select
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";
     rev = "refs/tags/${version}";
-    hash = "sha256-CeoACtgvMweDbIvYguK2Ca+iTBFONWcE2b0qUkBbQSU=";
+    hash = "sha256-aO2K0lc3qjKK8CZAbu/lotI5QJ/R+8npSIRX4a6HdrI=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     pycryptodome
     setuptools
     solc-select
+    toml
   ];
 
   # Test require network access

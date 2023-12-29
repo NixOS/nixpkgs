@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     # We want to have the makefile pick up $CC, etc. so that we don't have
     # to unnecessarily tie this package to the GCC stdenv.
     ./02-use-toolchain-env-vars.patch
-  ] ++ lib.optionals stdenv.targetPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # On macOS the library suffix is .dylib:
     ./03-macOS-SOsuf.patch
   ];

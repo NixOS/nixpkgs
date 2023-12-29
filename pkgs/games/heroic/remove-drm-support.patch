@@ -1,22 +1,26 @@
 diff --git a/src/backend/main.ts b/src/backend/main.ts
-index 2cd1a28f..a60e04d0 100644
+index 83b58bb2..f61656fa 100644
 --- a/src/backend/main.ts
 +++ b/src/backend/main.ts
-@@ -19,8 +19,7 @@ import {
-   powerSaveBlocker,
+@@ -19,7 +19,6 @@ import {
    protocol,
    screen,
--  clipboard,
--  components
-+  clipboard
+   clipboard,
+-  components,
+   session
  } from 'electron'
  import 'backend/updater'
- import { autoUpdater } from 'electron-updater'
-@@ -286,8 +285,7 @@ if (!gotTheLock) {
-     initImagesCache()
+@@ -310,14 +309,7 @@ if (!gotTheLock) {
+     }
  
      if (!process.env.CI) {
--      await components.whenReady()
+-      await components.whenReady().catch((e) => {
+-        logError([
+-          'Failed to download / update DRM components.',
+-          'Make sure you do not block update.googleapis.com domain if you want to use WideVine in Browser sideloaded apps',
+-          e
+-        ])
+-      })
 -      logInfo(['DRM module staus', components.status()])
 +      logInfo('DRM modules disabled for nixpkgs')
      }

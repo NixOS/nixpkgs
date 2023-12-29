@@ -24,11 +24,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+
   doCheck = false; # "check" target is probably meant to do "installcheck" or something
 
   meta = {
     description = "Parse formatted man pages and man page source from most flavors of UNIX and converts them to HTML, ASCII, TkMan, DocBook, and other formats";
     license = "artistic";
     platforms = lib.platforms.all;
+    mainProgram = "rman";
   };
 }

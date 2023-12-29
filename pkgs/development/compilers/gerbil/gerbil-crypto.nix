@@ -2,8 +2,8 @@
 
 {
   pname = "gerbil-crypto";
-  version = "unstable-2023-03-27";
-  git-version = "0.0-18-ge57f887";
+  version = "unstable-2023-09-27";
+  git-version = "0.0-23-g341e09d";
   gerbil-package = "clan/crypto";
   gerbilInputs = with gerbilPackages; [ gerbil-utils gerbil-poo ];
   nativeBuildInputs = [ pkgs.pkg-config ];
@@ -13,10 +13,10 @@
 
   pre-src = {
     fun = fetchFromGitHub;
-    owner = "fare";
+    owner = "mighty-gerbils";
     repo = "gerbil-crypto";
-    rev = "e57f88742d9b41640b4a7d9bd3e86c688d4a83f9";
-    sha256 = "08hrk3s82hbigvza75vgx9kc7qf64yhhn3xm5calc859sy6ai4ka";
+    rev = "341e09dcb15c09c836eae18093c0f63f71c0a72f";
+    sha256 = "1rq50q4p4vhr5drjvirmdkxaa4wszj1rxnhjaqz98bfpjm90yk4j";
   };
 
   meta = with lib; {

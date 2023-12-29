@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-werror"
   ];
 
+  # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
+  makeFlags = lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS=-no-undefined"] ;
+
   nativeBuildInputs = [
     perl
   ];

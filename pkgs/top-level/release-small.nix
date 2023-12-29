@@ -107,7 +107,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   openssl = all;
   pan = linux;
   pciutils = linux;
-  pdf2xml = all;
   perl = all;
   pkg-config = all;
   pmccabe = linux;

@@ -1,58 +1,82 @@
 { lib
-, python3Packages
+, buildPythonApplication
 , fetchPypi
-, nrfutil
+, pythonRelaxDepsHook
+, installShellFiles
 , libnitrokey
-, nix-update-script
+, flit-core
+, certifi
+, cffi
+, click
+, cryptography
+, ecdsa
+, fido2
+, intelhex
+, nkdfu
+, python-dateutil
+, pyusb
+, requests
+, spsdk
+, tqdm
+, tlv8
+, typing-extensions
+, pyserial
+, protobuf
+, click-aliases
+, semver
+, nethsm
+, importlib-metadata
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+let
   pname = "pynitrokey";
-  version = "0.4.39";
-  format = "flit";
+  version = "0.4.42";
+  mainProgram = "nitropy";
+in
+
+buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KXYHeWwV9Tw1ZpO/vASHjDnceeb+1K0yIUohb7EcRAI=";
+    hash = "sha256-KLUuMTGiPqm2C3+TWS7nBNZAq+rGxAL/mMaT94SkYWY=";
   };
 
   propagatedBuildInputs = [
     certifi
     cffi
     click
-    click-aliases
     cryptography
     ecdsa
-    frozendict
     fido2
     intelhex
     nkdfu
-    nrfutil
     python-dateutil
     pyusb
     requests
-    semver
     spsdk
     tqdm
-    urllib3
     tlv8
     typing-extensions
+    pyserial
+    protobuf
+    click-aliases
+    semver
+    nethsm
+    importlib-metadata
   ];
 
   nativeBuildInputs = [
+    flit-core
+    installShellFiles
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "cryptography"
-    "protobuf"
-    "python-dateutil"
-    "spsdk"
-    "typing_extensions"
-  ];
+  pythonRelaxDeps = true;
+
+  # pythonRelaxDepsHook runs in postBuild so cannot be used
+  pypaBuildFlags = [ "--skip-dependency-check" ];
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
@@ -65,13 +89,19 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "pynitrokey" ];
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    installShellCompletion --cmd ${mainProgram} \
+      --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
+      --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
+      --fish <(_NITROPY_COMPLETE=fish_source $out/bin/${mainProgram})
+  '';
 
   meta = with lib; {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
+    changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ frogamic ];
-    mainProgram = "nitropy";
+    inherit mainProgram;
   };
 }

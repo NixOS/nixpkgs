@@ -6,7 +6,7 @@ in
 {
   options = {
     services.atuin = {
-      enable = lib.mkEnableOption (mdDoc "Enable server for shell history sync with atuin");
+      enable = lib.mkEnableOption (mdDoc "Atuin server for shell history sync");
 
       openRegistration = mkOption {
         type = types.bool;
@@ -73,9 +73,7 @@ in
       enable = true;
       ensureUsers = [{
         name = "atuin";
-        ensurePermissions = {
-          "DATABASE atuin" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }];
       ensureDatabases = [ "atuin" ];
     };

@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.8";
-  format = "pyproject";
+  version = "3.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     rev = "refs/tags/${version}";
-    hash = "sha256-JfZ0sc7hFj71XxGWTTZ50uGWuKoWKY4vYm0v+zS2YiQ=";
+    hash = "sha256-8fvVK/mH+pgPaaxNKvKOw1qU0ElWAmNVP6YAqvBTwio=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

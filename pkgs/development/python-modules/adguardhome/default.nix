@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "adguardhome";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZeajC8FM7Py+DWknVjnwiM4jaCCcnxfC+kTbHEEmyms=";
+    hash = "sha256-hCiyylnc1WsKz8zQxJhXe4v+SJxKFkwzpmPYnltnc8g=";
   };
 
   postPatch = ''

@@ -1,11 +1,6 @@
 # Test ensures buildbot master comes up correctly and workers can connect
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-import ./make-test-python.nix {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "buildbot";
 
   nodes = {
@@ -110,4 +105,4 @@ import ./make-test-python.nix {
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ ];
-} {}
+})

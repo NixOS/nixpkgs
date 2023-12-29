@@ -12,7 +12,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString (nixpkgs.revCount - 551362)}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
@@ -44,10 +44,13 @@ let
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
-  versionModule =
-    { system.nixos.versionSuffix = versionSuffix;
-      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
-    };
+  versionModule = { config, ... }: {
+    system.nixos.versionSuffix = versionSuffix;
+    system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
+
+    # At creation time we do not have state yet, so just default to latest.
+    system.stateVersion = config.system.nixos.version;
+  };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
 
@@ -120,7 +123,7 @@ let
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
+      configEvaled.pkgs.symlinkJoin {
         name = "netboot";
         paths = [
           build.netbootRamdisk
@@ -310,7 +313,7 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
-  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -319,14 +322,13 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.tarball)
 
   );
 
-  # Metadata for the lxd image
-  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -335,7 +337,55 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.squashfs)
+
+  );
+
+  # Metadata for the lxd image
+  lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdVirtualMachineImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
+        ];
+    }).config.system.build.qemuImage)
+
+  );
+
+  # Metadata for the lxd image
+  lxdVirtualMachineImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
         ];
     }).config.system.build.metadata)
 
@@ -348,7 +398,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;

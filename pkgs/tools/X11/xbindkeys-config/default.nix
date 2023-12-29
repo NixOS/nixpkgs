@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [benley];
     platforms = with lib.platforms; linux;
+    mainProgram = "xbindkeys-config";
   };
 
   patches = [ ./xbindkeys-config-patch1.patch ];

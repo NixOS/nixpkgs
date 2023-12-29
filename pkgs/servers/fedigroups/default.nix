@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "fedigroups";
   };
 }

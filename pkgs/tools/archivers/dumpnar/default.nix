@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.stephank ];
+    mainProgram = "dumpnar";
   };
 }

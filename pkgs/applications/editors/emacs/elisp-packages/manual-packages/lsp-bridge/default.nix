@@ -5,7 +5,6 @@
 , substituteAll
 , acm
 , markdown-mode
-, posframe
 , git
 , go
 , gopls
@@ -17,23 +16,25 @@
 }:
 
 let
-  rev = "6f93deb32ebb3799dfedd896a17a0428a9b461bb";
+  rev = "0b30d95c6de95b150d93ecee325b95e04ff09e46";
   python = python3.withPackages (ps: with ps; [
     epc
     orjson
+    paramiko
+    rapidfuzz
     sexpdata
     six
   ]);
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20230607.135"; # 1:35 UTC
+  version = "20231021.309"; # 3:09 UTC
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
     inherit rev;
-    hash = "sha256-4AKKsU+yuLA9qv6mhYPpjBJ8wrbGPMuzN98JXcVPAHg=";
+    hash = "sha256-hR7bZh0ElJ8F9ToJ4dkazF19T8PE01MTcxKrjeaEp4o=";
   };
 
   commit = rev;
@@ -50,7 +51,6 @@ melpaBuild {
   packageRequires = [
     acm
     markdown-mode
-    posframe
   ];
 
   checkInputs = [

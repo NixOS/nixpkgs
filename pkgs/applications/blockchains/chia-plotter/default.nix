@@ -68,5 +68,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ilyakooo0 ];
+    mainProgram = "chia_plot";
   };
 }

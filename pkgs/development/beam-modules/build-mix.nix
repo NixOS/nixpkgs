@@ -12,6 +12,9 @@
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
+# A config directory that is considered for all the dependencies of an app, typically in $src/config/
+# This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
+, appConfigPath ? null
 , ...
 }@attrs:
 
@@ -28,6 +31,7 @@ let
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+    LC_ALL = "C.UTF-8";
 
     # add to ERL_LIBS so other modules can find at runtime.
     # http://erlang.org/doc/man/code.html#code-path
@@ -45,6 +49,14 @@ let
       runHook preConfigure
 
       ${./mix-configure-hook.sh}
+      ${lib.optionalString (!isNull appConfigPath)
+      # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
+      # of a library seems to be not considered, as config is always
+      # application specific. So we can safely delete it.
+      ''
+        rm -rf config
+        cp -r ${appConfigPath} config
+      ''}
 
       runHook postConfigure
     '';
@@ -74,6 +86,12 @@ let
           cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
         fi
       done
+
+      # Copy the source so it can be used by dependent packages. For example,
+      # phoenix applications need the source of phoenix and phoenix_html to
+      # build javascript and css assets.
+      mkdir -p $out/src
+      cp -r $src/* "$out/src"
 
       runHook postInstall
     '';

@@ -24,6 +24,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/jupyterhub/configurable-http-proxy";
     license = lib.licenses.bsd3;
     mainProgram = "configurable-http-proxy";
-    maintainers = with lib.maintainers; [ ixxie ];
   };
 }

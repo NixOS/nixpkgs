@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "autorestic";
-  version = "1.7.7";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "cupcakearmy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-drinKUJAlgY1PEP7NHOFfmvDVib1AFjT8hRktQgxJ4A=";
+    sha256 = "sha256-7KYbA9qKa1o0ZLb+6S/UgAPT7wpsIugEFzWYB3voqBU=";
   };
 
   vendorHash = "sha256-K3+5DRXcx56sJ4XHikVtmoxmpJbBeAgPkN9KtHVgvYA=";

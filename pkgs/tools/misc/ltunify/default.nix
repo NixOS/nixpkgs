@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
+    mainProgram = "ltunify";
   };
 }

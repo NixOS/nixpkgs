@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/caarlos0/svu";
     maintainers = with maintainers; [ caarlos0 ];
     license = licenses.mit;
+    mainProgram = "svu";
   };
 }

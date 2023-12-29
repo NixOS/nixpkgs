@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/viktomas/godu";
     license = licenses.mit;
     maintainers = with maintainers; [ rople380 ];
+    mainProgram = "godu";
   };
 }

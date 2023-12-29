@@ -20,7 +20,7 @@ qtModule {
     "bin"
   ];
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase
   ];
 

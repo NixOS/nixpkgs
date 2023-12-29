@@ -7,7 +7,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 - [`top-level`](./top-level): Entrypoints, package set aggregations
   - [`impure.nix`](./top-level/impure.nix), [`default.nix`](./top-level/default.nix), [`config.nix`](./top-level/config.nix): Definitions for the evaluation entry point of `import <nixpkgs>`
-  - [`stage.nix`](./top-level/stage.nix), [`all-packages.nix`](./top-level/all-packages.nix), [`splice.nix`](./top-level/splice.nix): Definitions for the top-level attribute set made available through `import <nixpkgs> {…}`
+  - [`stage.nix`](./top-level/stage.nix), [`all-packages.nix`](./top-level/all-packages.nix), [`by-name-overlay.nix`](./top-level/by-name-overlay.nix), [`splice.nix`](./top-level/splice.nix): Definitions for the top-level attribute set made available through `import <nixpkgs> {…}`
   - `*-packages.nix`, [`linux-kernels.nix`](./top-level/linux-kernels.nix), [`unixtools.nix`](./top-level/unixtools.nix): Aggregations of nested package sets defined in `development`
   - [`aliases.nix`](./top-level/aliases.nix), [`python-aliases.nix`](./top-level/python-aliases.nix): Aliases for package definitions that have been renamed or removed
   - `release*.nix`, [`make-tarball.nix`](./top-level/make-tarball.nix), [`packages-config.nix`](./top-level/packages-config.nix), [`metrics.nix`](./top-level/metrics.nix), [`nixpkgs-basic-release-checks.nix`](./top-level/nixpkgs-basic-release-checks.nix): Entry-points and utilities used by Hydra for continuous integration
@@ -19,6 +19,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 - [`stdenv`](./stdenv): [Standard environment](https://nixos.org/manual/nixpkgs/stable/#part-stdenv)
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
+- [`by-name`](./by-name): Top-level packages organised by name ([docs](./by-name/README.md))
 - All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
 
 ## Quick Start to Adding a Package
@@ -28,7 +29,7 @@ We welcome new contributors of new packages to Nixpkgs, arguably the greatest so
 Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
-* Does the project have a clear license statement? Remember that softwares are unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
+* Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
 * How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
 
@@ -49,22 +50,25 @@ Now that this is out of the way. To add a package to Nixpkgs:
    $ cd nixpkgs
    ```
 
-2. Find a good place in the Nixpkgs tree to add the Nix expression for your package. For instance, a library package typically goes into `pkgs/development/libraries/pkgname`, while a web browser goes into `pkgs/applications/networking/browsers/pkgname`. See the [category hierarchy section][categories] for some hints on the tree organisation. Create a directory for your package, e.g.
+2. Create a package directory `pkgs/by-name/so/some-package` where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name:
 
    ```ShellSession
-   $ mkdir pkgs/development/libraries/libfoo
+   $ mkdir -p pkgs/by-name/so/some-package
    ```
 
-3. In the package directory, create a Nix expression — a piece of code that describes how to build the package. In this case, it should be a _function_ that is called with the package dependencies as arguments, and returns a build of the package in the Nix store. The expression should usually be called `default.nix`.
+   For more detailed information, see [here](./by-name/README.md).
+
+3. Create a `package.nix` file in the package directory, containing a Nix expression — a piece of code that describes how to build the package. In this case, it should be a _function_ that is called with the package dependencies as arguments, and returns a build of the package in the Nix store.
 
    ```ShellSession
-   $ emacs pkgs/development/libraries/libfoo/default.nix
-   $ git add pkgs/development/libraries/libfoo/default.nix
+   $ emacs pkgs/by-name/so/some-package/package.nix
+   $ git add pkgs/by-name/so/some-package/package.nix
    ```
 
-   You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done. Here are some good ones:
+   You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](#category-hierarchy).
+   Here are some good ones:
 
-   - GNU Hello: [`pkgs/applications/misc/hello/default.nix`](applications/misc/hello/default.nix). Trivial package, which specifies some `meta` attributes which is good practice.
+   - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](./by-name/he/hello/package.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
    - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
@@ -94,21 +98,13 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    The exact syntax and semantics of the Nix expression language, including the built-in function, are [described in the Nix manual](https://nixos.org/manual/nix/stable/language/).
 
-4. Add a call to the function defined in the previous step to [`pkgs/top-level/all-packages.nix`](top-level/all-packages.nix) with some descriptive name for the variable, e.g. `libfoo`.
-
-   ```ShellSession
-   $ emacs pkgs/top-level/all-packages.nix
-   ```
-
-   The attributes in that file are sorted by category (like “Development / Libraries”) that more-or-less correspond to the directory structure of Nixpkgs, and then by attribute name.
-
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
    ```ShellSession
-   $ nix-build -A libfoo
+   $ nix-build -A some-package
    ```
 
-   where `libfoo` should be the variable name defined in the previous step. You may want to add the flag `-K` to keep the temporary build directory in case something fails. If the build succeeds, a symlink `./result` to the package in the Nix store is created.
+   where `some-package` should be the package name. You may want to add the flag `-K` to keep the temporary build directory in case something fails. If the build succeeds, a symlink `./result` to the package in the Nix store is created.
 
 6. If you want to install the package into your profile (optional), do
 
@@ -118,12 +114,41 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  (pkg-name): (from -> to | init at version | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 54.0.1 -> 55.0
+
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
 ## Category Hierarchy
 [categories]: #category-hierarchy
 
-Each package should be stored in its own directory somewhere in the `pkgs/` tree, i.e. in `pkgs/category/subcategory/.../pkgname`. Below are some rules for picking the right category for a package. Many packages fall under several categories; what matters is the _primary_ purpose of a package. For example, the `libxml2` package builds both a library and some tools; but it’s a library foremost, so it goes under `pkgs/development/libraries`.
+Most top-level packages are organised in a loosely-categorised directory hierarchy in this directory.
+See the [overview](#overview) for which directories are part of this.
 
-When in doubt, consider refactoring the `pkgs/` tree, e.g. creating new categories or splitting up an existing category.
+This category hierarchy is partially deprecated and will be migrated away over time.
+The new `pkgs/by-name` directory ([docs](./by-name/README.md)) should be preferred instead.
+The category hierarchy may still be used for packages that should be imported using an alternate `callPackage`, such as `python3Packages.callPackage` or `libsForQt5.callPackage`.
+
+If that is the case for a new package, here are some rules for picking the right category.
+Many packages fall under several categories; what matters is the _primary_ purpose of a package.
+For example, the `libxml2` package builds both a library and some tools; but it’s a library foremost, so it goes under `pkgs/development/libraries`.
+
+<details>
+<summary>Categories</summary>
 
 **If it’s used to support _software development_:**
 
@@ -299,6 +324,8 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 - `misc`
 
+</details>
+
 # Conventions
 
 ## Package naming
@@ -354,24 +381,16 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
 * `meta.mainProgram` must be set when appropriate.
-* `meta.maintainers` should be set.
+* `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
 ### Import From Derivation
 
-Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
-[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
-
-[Hydra]: https://github.com/NixOS/hydra
+[Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
-
-<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
-
-See also [NixOS Wiki: Import From Derivation].
-
-[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation
 
 ## Sources
 
@@ -568,7 +587,7 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 To run the main types of tests locally:
 
 - Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
-- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTests.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
 - Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
 - See `lib/tests/NAME.nix` for instructions on running specific library tests
 
@@ -696,16 +715,16 @@ It can happen that non-trivial updates include patches or more complex changes.
 
 Reviewing process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit text fits the guidelines.
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information is correct.
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Ensure that the code contains no typos.
-- Building the package locally.
-  - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+- Build the package locally.
+  - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 
     ```ShellSession
@@ -722,7 +741,7 @@ Reviewing process:
     ```ShellSession
     $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
     ```
-- Running every binary.
+- Run every binary.
 
 Sample template for a package update review is provided below.
 
@@ -731,7 +750,7 @@ Sample template for a package update review is provided below.
 
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
@@ -748,18 +767,20 @@ New packages are a common type of pull requests. These pull requests consists in
 
 Review process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit name fits the guidelines.
-- Ensure that the meta fields contain correct information.
+- Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
+- Ensure that the package name and version [fits the guidelines](#package-naming).
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
 - Report detected typos.
 - Ensure the package source:
-  - Uses mirror URLs when available.
+  - Uses `mirror://` URLs when available.
   - Uses the most appropriate functions (e.g. packages from GitHub should use `fetchFromGitHub`).
-- Building the package locally.
-- Running every binary.
+- Build the package locally.
+- Run every binary.
 
 Sample template for a new package review is provided below.
 
@@ -769,7 +790,7 @@ Sample template for a new package review is provided below.
 - [ ] package path fits guidelines
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] `meta.description` is set and fits guidelines
 - [ ] `meta.license` fits upstream license

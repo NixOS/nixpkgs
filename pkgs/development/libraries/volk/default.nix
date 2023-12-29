@@ -8,14 +8,14 @@
 , removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
-    repo = pname;
-    rev = "v${version}";
+    repo = "volk";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kI4IuO6TLplo5lLAGIPWQWtePcjIEWB9XaJDA6WlqSg=";
     fetchSubmodules = true;
   };
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
   };
-}
+})

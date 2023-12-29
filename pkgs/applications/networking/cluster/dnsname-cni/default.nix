@@ -22,7 +22,7 @@ buildGoModule rec {
     wrapProgram $out/bin/dnsname --prefix PATH : ${lib.makeBinPath [ dnsmasq ]}
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
   subPackages = [ "plugins/meta/dnsname" ];
 
   doCheck = false; # NOTE: requires root privileges

@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
       boat'';
     maintainers = with maintainers; [ kragniz ];
     platforms = platforms.all;
+    mainProgram = "sailsd";
   };
 }

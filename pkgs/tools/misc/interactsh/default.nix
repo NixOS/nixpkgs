@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "interactsh";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-p6VB3BB8iP65ZDgwIM+DqilxRx1+8l9bBickqLMAYqk=";
+    hash = "sha256-9mUyVFm/UZw0bQkI3JumFoyzYBz7X6m1YLdpEsypb7s=";
   };
 
-  vendorHash = "sha256-NXBqFARgItXXhFIhRNz/DDbKGm7MH3kgawFiXHbV/RQ=";
+  vendorHash = "sha256-C4tlyvKQ2sG6uqbO06eT9E72JCPc44PhFAcek+O8sN4=";
 
   modRoot = ".";
   subPackages = [

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.unix;
+    mainProgram = "smenu";
   };
 }

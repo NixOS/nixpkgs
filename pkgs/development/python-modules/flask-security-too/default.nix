@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 
 # extras: babel
 , babel
@@ -11,7 +12,6 @@
 , bcrypt
 , bleach
 , flask-mailman
-, qrcode
 
 # extras: fsqla
 , flask-sqlalchemy
@@ -21,20 +21,21 @@
 # extras: mfa
 , cryptography
 , phonenumbers
+, webauthn
+, qrcode
 
 # propagates
-, blinker
 , email-validator
 , flask
 , flask-login
 , flask-principal
 , flask-wtf
-, itsdangerous
 , passlib
+, importlib-resources
+, wtforms
 
 # tests
 , argon2-cffi
-, flask-mongoengine
 , mongoengine
 , mongomock
 , peewee
@@ -46,31 +47,30 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.1.2";
-  format = "setuptools";
+  version = "5.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
+    hash = "sha256-wLUHXfDWSp7zWwTIjTH79AWlkkNzb21tChpLSEWr8+U=";
   };
 
-  postPatch = ''
-    # This should be removed after updating to version 5.3.0.
-    sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
-    blinker
     email-validator
     flask
     flask-login
     flask-principal
     flask-wtf
-    itsdangerous
     passlib
+    importlib-resources
+    wtforms
   ];
 
   passthru.optional-dependencies = {
@@ -82,7 +82,6 @@ buildPythonPackage rec {
       bcrypt
       bleach
       flask-mailman
-      qrcode
     ];
     fsqla = [
       flask-sqlalchemy
@@ -92,12 +91,13 @@ buildPythonPackage rec {
     mfa = [
       cryptography
       phonenumbers
+      webauthn
+      qrcode
     ];
   };
 
   nativeCheckInputs = [
     argon2-cffi
-    flask-mongoengine
     mongoengine
     mongomock
     peewee
@@ -111,6 +111,11 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.fsqla
   ++ passthru.optional-dependencies.mfa;
 
+
+  disabledTests = [
+    # needs /etc/resolv.conf
+    "test_login_email_whatever"
+  ];
 
   pythonImportsCheck = [
     "flask_security"

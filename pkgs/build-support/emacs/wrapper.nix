@@ -32,7 +32,7 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 */
 
-{ lib, lndir, makeWrapper, runCommand, gcc }:
+{ lib, lndir, makeBinaryWrapper, runCommand, gcc }:
 self:
 let
   inherit (self) emacs;
@@ -50,7 +50,7 @@ runCommand
   (lib.appendToName "with-packages" emacs).name
   {
     inherit emacs explicitRequires;
-    nativeBuildInputs = [ emacs lndir makeWrapper ];
+    nativeBuildInputs = [ emacs lndir makeBinaryWrapper ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -201,6 +201,11 @@ runCommand
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var prog
       chmod +x $out/bin/$progname
+      # Create a “NOP” binary wrapper for the pure sake of it becoming a
+      # non-shebang, actual binary. See the makeBinaryWrapper docs for rationale
+      # (summary: it allows you to use emacs as a shebang itself on Darwin,
+      # e.g. #!$ {emacs}/bin/emacs --script)
+      wrapProgramBinary $out/bin/$progname
     done
 
     # Wrap MacOS app
@@ -220,6 +225,7 @@ runCommand
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
+      wrapProgramBinary $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
 
     mkdir -p $out/share

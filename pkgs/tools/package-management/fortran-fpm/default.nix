@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.proofconstruction ];
     license = licenses.mit;
     platforms = platforms.all;
+    mainProgram = "fortran-fpm";
   };
 }

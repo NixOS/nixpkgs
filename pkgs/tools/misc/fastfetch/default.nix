@@ -27,6 +27,7 @@
 , xfce
 , yyjson
 , zlib
+, Apple80211
 , AppKit
 , Cocoa
 , CoreDisplay
@@ -42,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.0.5";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-KYicfYpJiO7ZfQ2vlGDKuiNprIwXnxz6Razf3GrjRq8=";
+    hash = "sha256-JaD0R1vfHoWMhipMtTW0dlggR7RbD2evHfHrjoZJBmk=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.isDarwin [
+    Apple80211
     AppKit
     Cocoa
     CoreDisplay
@@ -99,6 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DENABLE_SYSTEM_YYJSON=YES"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=uninitialized"
   ];
 
   postInstall = ''

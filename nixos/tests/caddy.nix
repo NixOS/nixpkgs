@@ -48,11 +48,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           };
         };
       };
+      specialisation.explicit-config-file.configuration = {
+        services.caddy.configFile = pkgs.writeText "Caddyfile" ''
+        localhost:80
+
+        respond "hello world"
+        '';
+      };
     };
   };
 
   testScript = { nodes, ... }:
     let
+      explicitConfigFile = "${nodes.webserver.system.build.toplevel}/specialisation/explicit-config-file";
       justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/config-reload";
       multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-configs";
       rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
@@ -81,6 +89,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("rfc42 settings config"):
           webserver.succeed(
               "${rfc42Config}/bin/switch-to-configuration test >&2"
+          )
+          webserver.wait_for_open_port(80)
+          webserver.succeed("curl http://localhost | grep hello")
+
+      with subtest("explicit configFile"):
+          webserver.succeed(
+              "${explicitConfigFile}/bin/switch-to-configuration test >&2"
           )
           webserver.wait_for_open_port(80)
           webserver.succeed("curl http://localhost | grep hello")

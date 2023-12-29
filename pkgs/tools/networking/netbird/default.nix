@@ -17,6 +17,7 @@
 , UserNotifications
 , WebKit
 , ui ? false
+, netbird-ui
 }:
 let
   modules =
@@ -30,16 +31,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.22.7";
+  version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2Xvpalizazhkp8aYPYY5Er9I6dkL8AKnrjpIU44o2WM=";
+    hash = "sha256-m3LGxRUo1ModiSS1O1e5B513hRe42WuBo7GWYf/oaHA=";
   };
 
-  vendorHash = "sha256-CwozOBAPFSsa1XzDOHBgmFSwGiNekWT8t7KGR2KOOX4=";
+  vendorHash = "sha256-lto71mayUJGDiKPSoKJD2DmIJikhv6sjEGsW4Ls1UUM=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -89,7 +90,7 @@ buildGoModule rec {
       '')
       modules) + lib.optionalString (stdenv.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
-    cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
+    cp $src/client/ui/netbird-systemtray-default.png $out/share/pixmaps/netbird.png
 
     mkdir -p $out/share/applications
     cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
@@ -100,6 +101,7 @@ buildGoModule rec {
 
   passthru = {
     tests.netbird = nixosTests.netbird;
+    tests.netbird-ui = netbird-ui;
     updateScript = nix-update-script { };
   };
 

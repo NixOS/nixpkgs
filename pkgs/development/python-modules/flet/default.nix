@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.7.4";
+  version = "0.10.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vFPjN+5wIygtP035odAOSdF9PQe6eXz6CJ9Q0d8ScFo=";
+    hash = "sha256-Ogy4F9/beSb3GCpwPsN+8hsVroRoHTSojqg+5eXwcRI=";
   };
 
   postPatch = ''

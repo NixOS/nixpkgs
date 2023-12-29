@@ -4,43 +4,43 @@
 , cmake
 , pkg-config
 , libexif
-, lxqt
+, lxqt-build-tools
+, lxqt-menu-data
 , qtbase
 , qttools
 , qtx11extras
 , qtimageformats
 , libfm-qt
 , menu-cache
-, lxmenu-data
 , gitUpdater
 }:
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "qqvjsZRG+ImKHr+XLNNHhnAe1kBWh47/nFcKB1MTSJo=";
+    hash = "sha256-+U8eV6oDpaJfTzejsVtbcaQrfSjWUnVpnIDbkvVCY/c=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     libexif
+    lxqt-menu-data
     qtbase
-    qttools
     qtx11extras
     qtimageformats # add-on module to support more image file formats
     libfm-qt
     menu-cache
-    lxmenu-data
   ];
 
   passthru.updateScript = gitUpdater { };

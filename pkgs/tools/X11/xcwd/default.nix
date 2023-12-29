@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.grburst ];
     license = licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "xcwd";
   };
 }

@@ -2,7 +2,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
-, substituteAll, removeReferencesTo, gd, geoip, perl
+, installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
 , withKTLS ? false
 , withStream ? true
@@ -51,15 +51,17 @@ assert lib.assertMsg (lib.unique moduleNames == moduleNames)
 stdenv.mkDerivation {
   inherit pname version nginxVersion;
 
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit hash;
   };
 
-  nativeBuildInputs = [ removeReferencesTo ]
-    ++ nativeBuildInputs;
+  nativeBuildInputs = [
+    installShellFiles
+    removeReferencesTo
+  ] ++ nativeBuildInputs;
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
     ++ buildInputs
@@ -122,7 +124,11 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ lib.optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=gnu-folding-constant"
+    "-Wno-error=unused-but-set-variable"
+  ]);
 
   configurePlatforms = [];
 
@@ -166,6 +172,12 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $doc
     cp -r ${nginx-doc}/* $doc
+
+    # TODO: make it unconditional when `openresty` and `nginx` are not
+    # sharing this code.
+    if [[ -e man/nginx.8 ]]; then
+      installManPage man/nginx.8
+    fi
   '';
 
   disallowedReferences = map (m: m.src) modules;
@@ -178,7 +190,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sandbox nginx-sso nginx-status-page;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;

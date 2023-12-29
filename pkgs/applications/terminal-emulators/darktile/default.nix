@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ flexagoon ];
+    mainProgram = "darktile";
   };
 }

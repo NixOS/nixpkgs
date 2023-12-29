@@ -1,0 +1,20 @@
+diff --git a/src/contour/display/CMakeLists.txt b/src/contour/display/CMakeLists.txt
+index e2e9768c..fc1ea72f 100644
+--- a/src/contour/display/CMakeLists.txt
++++ b/src/contour/display/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ if(CONTOUR_QT_VERSION EQUAL "6")
+-   find_package(Qt6 COMPONENTS Core Gui OpenGLWidgets Widgets REQUIRED)
++   find_package(Qt6 COMPONENTS Core Gui OpenGLWidgets Widgets Multimedia REQUIRED)
+ else()
+    find_package(Qt5 COMPONENTS Gui Widgets REQUIRED)  # apt install qtbase5-dev libqt5gui5
+ endif()
+@@ -31,7 +31,7 @@ endif()
+ target_include_directories(ContourTerminalDisplay PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../..")
+ target_link_libraries(ContourTerminalDisplay vtrasterizer)
+ if(CONTOUR_QT_VERSION EQUAL "6")
+-    target_link_libraries(ContourTerminalDisplay Qt6::Core Qt6::Gui Qt6::OpenGL Qt6::OpenGLWidgets Qt6::Widgets)
++    target_link_libraries(ContourTerminalDisplay Qt6::Core Qt6::Gui Qt6::OpenGL Qt6::OpenGLWidgets Qt6::Widgets Qt6::Multimedia)
+ else()
+     target_link_libraries(ContourTerminalDisplay Qt5::Gui Qt5::Widgets)
+ endif()

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vtm";
-  version = "0.9.9t";
+  version = "0.9.16";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${version}";
-    sha256 = "sha256-WbigrJohLYCRvgsCNd4Cid1zGaP1aQbj59QhZ6ymLms=";
+    sha256 = "sha256-nX7T3TAGgxAB65X8D2HlI+3T6p7aH3bwG3N1pScX/4g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ ahuzik ];
+    mainProgram = "vtm";
   };
 }

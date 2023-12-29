@@ -26,7 +26,6 @@
 , perl
 , python3
 , prometheus-cpp
-, re2
 , zlib
 , texinfo
 }:
@@ -117,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
           { f = "prometheus-cpp"; p = prometheus-cpp; }
-          { f = "re2"; p = re2; }
         ]
       )}
 

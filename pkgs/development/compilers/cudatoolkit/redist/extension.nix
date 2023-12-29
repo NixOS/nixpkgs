@@ -89,9 +89,9 @@ let
     in
     {
       # features : Attr Set (String PackageFeatureAttrs)
-      features = processManifest ./manifests/redistrib_features_${fullCudaVersion}.json;
+      features = processManifest (./manifests + "/redistrib_features_${fullCudaVersion}.json");
       # manifest : Attr Set (String PackageAttrs)
-      manifest = processManifest ./manifests/redistrib_${fullCudaVersion}.json;
+      manifest = processManifest (./manifests + "/redistrib_${fullCudaVersion}.json");
     };
 
   # Function to build a single redist package

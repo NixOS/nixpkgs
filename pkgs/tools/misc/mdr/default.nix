@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-ibM3303pXnseAFP9qFTOzj0G/SxRPX+UeRfbJ+MCABk=";
   };
 
-  vendorSha256 = "sha256-5jzU4EybEGKoEXCFhnu7z4tFRS9fgf2wJXhkvigRM0E=";
+  vendorHash = "sha256-5jzU4EybEGKoEXCFhnu7z4tFRS9fgf2wJXhkvigRM0E=";
 
   ldflags = [
     "-s"
@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/mdr";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "mdr";
   };
 }

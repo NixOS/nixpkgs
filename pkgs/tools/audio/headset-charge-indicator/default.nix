@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ zebreus ];
     license = licenses.bsd2;
+    mainProgram = "headset-charge-indicator.py";
   };
 }

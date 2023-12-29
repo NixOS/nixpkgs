@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/spacejam/void";
     license = licenses.gpl3;
     maintainers = with maintainers; [ spacekookie ];
+    mainProgram = "void";
   };
 }

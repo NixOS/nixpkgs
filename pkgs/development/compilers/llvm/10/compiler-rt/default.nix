@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./find-darwin-sdk-version.patch # don't test for macOS being >= 10.15
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.16";
+  version = "0.4.17";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qqcMhwsKs2UhX45xUF9zaDxO0VsfNjhDOx3HNE/ltd0=";
+    hash = "sha256-9/0ZAmOML3oVrAfzGj72iV08FgyiYBSByoKyxhojxlc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.pythonForBuild.interpreter} pywayland/ffi_build.py
+    ${python.pythonOnBuildForHost.interpreter} pywayland/ffi_build.py
   '';
 
   # Tests need this to create sockets

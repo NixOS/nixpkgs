@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-NWV3DSQkgH4cqNnHipg4S3Nf5aEVdRzD0oT8a2OyCu4=";
+    hash = "sha256-6UXgAb42DttNgmO5KRFC5M6kuYrv+GIxQ0EQ4P5cgUI=";
     domain = "invent.kde.org";
   };
 
@@ -73,6 +73,7 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
     license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch kashw2 ];
+    mainProgram = "haruna";
   };
 }

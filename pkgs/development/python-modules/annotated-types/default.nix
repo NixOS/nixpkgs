@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "annotated-types";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "annotated-types";
     repo = "annotated-types";
-    rev = "v${version}";
-    hash = "sha256-zCsWfJ8BQuov8FN+hlm9XBKWAAQ/KHPK/x024A8k2kE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SZ9/rXYcns4DFM6vk6SRKvuv3MY3T7xO9aW7WAQqtVE=";
   };
 
   nativeBuildInputs = [

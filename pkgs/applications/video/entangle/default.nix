@@ -133,5 +133,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
+    mainProgram = "entangle";
   };
 }

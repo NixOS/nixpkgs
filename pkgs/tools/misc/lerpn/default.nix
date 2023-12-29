@@ -29,5 +29,6 @@ python3.pkgs.buildPythonApplication {
     description = "Curses RPN calculator written in straight Python";
     maintainers = with maintainers; [ ckie ];
     license = licenses.gpl3Plus;
+    mainProgram = "lerpn";
   };
 }

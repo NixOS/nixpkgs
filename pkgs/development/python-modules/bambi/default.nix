@@ -2,31 +2,29 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pytestCheckHook
+, setuptools
 , arviz
-, blackjax
 , formulae
 , graphviz
-, numpy
-, numpyro
 , pandas
 , pymc
-, scipy
-, setuptools
+, blackjax
+, numpyro
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bambinos";
-    repo = pname;
+    repo = "bambi";
     rev = "refs/tags/${version}";
-    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
+    hash = "sha256-9+uTyV3mQlHOKAjXohwkhTzNe/+I5XR/LuH1ZYvhc8I=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +34,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     arviz
     formulae
-    numpy
+    graphviz
     pandas
     pymc
-    scipy
   ];
 
   preCheck = ''
@@ -48,23 +45,39 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     blackjax
-    graphviz
     numpyro
     pytestCheckHook
   ];
 
   disabledTests = [
     # Tests require network access
+    "test_alias_equal_to_name"
+    "test_average_by"
+    "test_ax"
+    "test_basic"
+    "test_censored_response"
     "test_custom_prior"
     "test_data_is_copied"
     "test_distributional_model"
+    "test_elasticity"
+    "test_extra_namespace"
+    "test_fig_kwargs"
     "test_gamma_with_splines"
-    "test_non_distributional_model_with_categories"
+    "test_group_effects"
+    "test_hdi_prob"
+    "test_legend"
     "test_non_distributional_model"
     "test_normal_with_splines"
     "test_predict_offset"
-    # Assertion issue
-    "test_custom_likelihood_function"
+    "test_predict_new_groups"
+    "test_predict_new_groups_fail"
+    "test_set_alias_warnings"
+    "test_subplot_kwargs"
+    "test_transforms"
+    "test_use_hdi"
+    "test_with_groups"
+    "test_with_group_and_panel"
+    "test_with_user_values"
   ];
 
   pythonImportsCheck = [
@@ -74,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://bambinos.github.io/bambi";
     description = "High-level Bayesian model-building interface";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

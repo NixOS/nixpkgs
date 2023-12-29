@@ -82,11 +82,11 @@ rec {
   };
   */
   generateLuarocksConfig = {
-      externalDeps
+    externalDeps ? []
     # a list of lua derivations
-    , requiredLuaRocks
+    , requiredLuaRocks ? []
     , extraVariables ? {}
-    , rocksSubdir
+    , rocksSubdir ? "rocks-subdir"
     }: let
       rocksTrees = lib.imap0
         (i: dep: {

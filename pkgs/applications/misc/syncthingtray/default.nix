@@ -11,11 +11,14 @@
 , qtutilities
 , qtforkawesome
 , boost
+, wrapQtAppsHook
 , cmake
 , kio
 , plasma-framework
 , qttools
 , iconv
+, cppunit
+, syncthing
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -29,15 +32,15 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 , autostartExecPath ? "syncthingtray"
 }:
 
-mkDerivation rec {
-  version = "1.4.5";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.8";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
-    rev = "v${version}";
-    sha256 = "sha256-EizKDw5Fv2qXxmiCx4NAvwxBZ+qhTIx4NMZedZ9OuyA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Fy3cy6c36Qsi8F7cC/MI8g6tdfkn8fDBncL+ZOoiGcs=";
   };
 
   buildInputs = [
@@ -54,20 +57,34 @@ mkDerivation rec {
   ;
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
     qttools
+    # Although these are test dependencies, we add them anyway so that we test
+    # whether the test units compile. On Darwin we don't run the tests but we
+    # still build them.
+    cppunit
+    syncthing
   ]
     ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
   ;
 
-  # No tests are available by upstream, but we test --help anyway
-  # Don't test on Darwin because output is .app
+  # syncthing server seems to hang on darwin, causing tests to fail.
+  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+  '';
+  # don't test --help  on Darwin because output is .app
   doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${version}
+    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
 
   cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+    # See https://github.com/Martchus/syncthingtray/issues/208
+    "-DEXCLUDE_TESTS_FROM_ALL=OFF"
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
@@ -85,4 +102,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

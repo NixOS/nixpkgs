@@ -18,23 +18,23 @@
 }:
 
 let
-  get-nix-license = import ./get-nix-license.nix {
+  get-nix-license = import ./get_nix_license.nix {
     inherit lib writeText;
   };
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-VP0UwJhiY6gDF3tBI1DOW0B4XAl9CzTHzgIP68iF4VM=";
+    hash = "sha256-YUstBO+iznr0eJYVJdNQ2BjDhvviRQuojhT9IlTuR0k=";
   };
 
-  cargoHash = "sha256-x1zRQGWN2NOvDDrQgkeObf6eNoCGMSw3DVgwVqfbI48=";
+  cargoHash = "sha256-OAgEzf+EyrwjNa40BwPwSNZ4lhEH93YxCbPJJ3r7oSQ=";
 
   nativeBuildInputs = [
     curl
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     mkdir -p data
-    ln -s ${get-nix-license} data/get-nix-license.rs
+    ln -s ${get-nix-license} data/get_nix_license.rs
   '';
 
   preBuild = ''

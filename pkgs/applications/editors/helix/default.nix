@@ -2,24 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "23.05";
+  version = "23.10";
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
     url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    hash = "sha256-3ZEToXwW569P7IFLqz6Un8rClnWrW5RiYKmRVFt7My8=";
+    hash = "sha256-PH4n+zm5ShwOrzzQm0Sn8b8JzAW/CF8UzzKZYE3e2WA=";
     stripRoot = false;
   };
 
-  cargoHash = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
-
   patches = [
+    # Fixes implicit int error in rescript grammar when building with clang 16.
+    # https://github.com/nkrkv/tree-sitter-rescript/pull/227.
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/7227.patch";
-      hash = "sha256-dObMKHNJfc5TODUjZ28TVxuTen02rl8HzcXpFWnhB1k=";
+      url = "https://github.com/nkrkv/tree-sitter-rescript/commit/ea93cbf7d9c52f925ed296b4714737e8088f3a19.patch";
+      hash = "sha256-gpGPiy+yEs+dMJEnE5O3WC7iSB/6PLJYBYRcdTx//+o=";
+      extraPrefix = "runtime/grammars/sources/rescript/";
+      stripLen = 1;
     })
   ];
+
+  cargoHash = "sha256-B8RO6BADDbPchowSfNVgviGvVgH23iF42DdhEBKBQzs=";
 
   nativeBuildInputs = [ git installShellFiles makeWrapper ];
 

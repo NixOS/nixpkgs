@@ -19,8 +19,8 @@
 
 buildPythonPackage rec {
   pname = "alexapy";
-  version = "1.26.9";
-  format = "pyproject";
+  version = "1.27.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "keatontaylor";
     repo = "alexapy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mDh4kYwRXpvVCh+nBmQblmlmgG98P6+UmgG4ZioQ68M=";
+    hash = "sha256-M6cv1l6UpUJ0Wn7Swa7Cv+XsDNbzHLNrTJjU5ePL83Q=";
   };
 
   pythonRelaxDeps = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Package for controlling Alexa devices (echo dot, etc) programmatically";
     homepage = "https://gitlab.com/keatontaylor/alexapy";
-    changelog = "https://gitlab.com/keatontaylor/alexapy/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/keatontaylor/alexapy/-/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = lib.platforms.all;
+    mainProgram = "vobcopy";
   };
 }

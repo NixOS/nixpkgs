@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bwqzyhQbUI2gPOGb1S8eXo0pdz/DBi1782RQqCIH7Bs=";
+    hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
   };
 
   postPatch = ''

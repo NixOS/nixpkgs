@@ -4,7 +4,7 @@
 , fetchpatch
 , autoreconfHook
 , pkg-config
-, enableUdev ? stdenv.isLinux && !stdenv.targetPlatform.isStatic
+, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , udev
 , libobjc
 , IOKit

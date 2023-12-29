@@ -27,5 +27,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://github.com/Textualize/textualize-see";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anselmschueler ];
+    mainProgram = "see";
   };
 }

@@ -27,6 +27,11 @@ buildGoModule rec {
     hash = "sha256-C8Uuz2FC7Zu07ZmFpp+ejpNxkyC3/mM9J2dc5FUKx64=";
   };
 
+  postPatch = ''
+    # Allow configuring Version at build time
+    substituteInPlace daemon/core/version.go --replace "const " "var "
+  '';
+
   modRoot = "daemon";
 
   buildInputs = [
@@ -64,6 +69,8 @@ buildGoModule rec {
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \
       --replace "/bin/mkdir" "${coreutils}/bin/mkdir"
   '';
+
+  ldflags = [ "-s" "-w" "-X github.com/evilsocket/opensnitch/daemon/core.Version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/opensnitchd \

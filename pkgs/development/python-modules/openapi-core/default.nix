@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.18.0";
+  version = "0.18.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
+    hash = "sha256-8zD4SDGH7Pcu54CcBTJ9Q2sbYfWP4OyNh5STatZ7pAk=";
   };
 
   postPatch = ''

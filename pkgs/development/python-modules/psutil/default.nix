@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.5";
+  version = "5.9.6";
   format = "setuptools";
+
+  inherit stdenv;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VBBjjk3znFTZV/xRzgMEis2ObWCrwPUQevUeX7Vm6zw=";
+    hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
   };
 
   buildInputs =

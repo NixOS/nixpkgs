@@ -149,11 +149,10 @@ mkDerivation {
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
 
-    # backport patch fixing a Wayland crash
-    # FIXME: remove in next release
+    # Backport patch for cleaner shutdowns
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/fc01a7f837d06ee9e92d02f13acb79c2b06e9e3c.diff";
-      hash = "sha256-cHupiD6fKZ7ICFb4AcuUErrA4646sNGxeGiACPs8IHQ=";
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/6ce8f434139f47e6a71bf0b68beae92be8845ce4.patch";
+      hash = "sha256-cYw/4/9tSnCbArLr72O8F8V0NLkVXdCVnJGoGxSzZMg=";
     })
   ];
 

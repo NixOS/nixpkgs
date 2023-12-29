@@ -32,7 +32,7 @@ let
     name = "mongo.conf";
     executable = false;
     text = ''
-      # for documentation of all options, see http://docs.mongodb.org/manual/reference/configuration-options/
+      # for documentation of all options, see https://www.mongodb.com/docs/manual/reference/configuration-options/
 
       storage:
          dbPath: ${cfg.dataDir}/db
@@ -63,7 +63,7 @@ let
     executable = false;
     text = ''
       # for documentation of all options, see:
-      #   http://docs.mongodb.org/manual/reference/configuration-options/
+      #   https://www.mongodb.com/docs/manual/reference/configuration-options/
 
       storage:
          dbPath: ${cfg.dataDir}/db-wt

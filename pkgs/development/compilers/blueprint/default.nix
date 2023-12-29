@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
   ];
 
-  doCheck = true;
+  # requires xvfb-run
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -65,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ benediktbroich paveloom ranfdev ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

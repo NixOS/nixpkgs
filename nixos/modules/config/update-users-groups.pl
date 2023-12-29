@@ -4,7 +4,7 @@ use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use JSON;
-use DateTime;
+use Time::Piece;
 
 # Keep track of deleted uids and gids.
 my $uidMapFile = "/var/lib/nixos/uid-map";
@@ -26,17 +26,8 @@ sub updateFile {
 # Converts an ISO date to number of days since 1970-01-01
 sub dateToDays {
     my ($date) = @_;
-    my ($year, $month, $day) = split('-', $date, -3);
-    my $dt = DateTime->new(
-        year      => $year,
-        month     => $month,
-        day       => $day,
-        hour      => 0,
-        minute    => 0,
-        second    => 0,
-        time_zone => 'UTC',
-    );
-    return $dt->epoch / 86400;
+    my $time = Time::Piece->strptime($date, "%Y-%m-%d");
+    return $time->epoch / 60 / 60 / 24;
 }
 
 sub nscdInvalidate {
@@ -248,12 +239,12 @@ foreach my $u (@{$spec->{users}}) {
         chmod oct($u->{homeMode}), $u->{home};
     }
 
-    if (defined $u->{passwordFile}) {
-        if (-e $u->{passwordFile}) {
-            $u->{hashedPassword} = read_file($u->{passwordFile});
+    if (defined $u->{hashedPasswordFile}) {
+        if (-e $u->{hashedPasswordFile}) {
+            $u->{hashedPassword} = read_file($u->{hashedPasswordFile});
             chomp $u->{hashedPassword};
         } else {
-            warn "warning: password file ‘$u->{passwordFile}’ does not exist\n";
+            warn "warning: password file ‘$u->{hashedPasswordFile}’ does not exist\n";
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
-, wayland, libxkbcommon, pcre2, json_c, libevdev
+, libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
 , nixosTests
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wayland libxkbcommon pcre2 json_c libevdev
+    libGL wayland libxkbcommon pcre2 json_c libevdev
     pango cairo libinput gdk-pixbuf librsvg
     wayland-protocols libdrm
     (wlroots.override { inherit (finalAttrs) enableXWayland; })

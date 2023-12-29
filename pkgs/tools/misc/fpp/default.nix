@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://facebook.github.io/PathPicker/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    mainProgram = "fpp";
   };
 }

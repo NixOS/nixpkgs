@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.hostPlatform.isStatic [
     "DISABLE_SHARED=y"
   ] ++ optionals enablePython [
-    "PYTHON=${python3.pythonForBuild.interpreter}"
+    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
   ];
 

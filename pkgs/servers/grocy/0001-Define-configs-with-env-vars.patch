@@ -1,4 +1,4 @@
-From 3ec6fce101083d4f23641fd015cbe4ade317ad59 Mon Sep 17 00:00:00 2001
+From 231ee836e357b83cc2fc0a3a977f74839308ec68 Mon Sep 17 00:00:00 2001
 From: Ember Keske <git@n0emis.eu>
 Date: Wed, 2 Aug 2023 06:36:02 +0200
 Subject: [PATCH 1/2] Define configs with env vars
@@ -11,7 +11,7 @@ Subject: [PATCH 1/2] Define configs with env vars
  4 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/app.php b/app.php
-index 31905be6..30b3eb82 100644
+index bc5b1b39..26f7687e 100644
 --- a/app.php
 +++ b/app.php
 @@ -12,7 +12,7 @@ use Slim\Views\Blade;
@@ -23,16 +23,16 @@ index 31905be6..30b3eb82 100644
  require_once __DIR__ . '/config-dist.php'; // For not in own config defined values we use the default ones
  require_once __DIR__ . '/helpers/ConfigurationValidator.php';
  
-@@ -63,7 +63,7 @@ $app = AppFactory::create();
- 
+@@ -64,7 +64,7 @@ $app = AppFactory::create();
  $container = $app->getContainer();
- $container->set('view', function (Container $container) {
+ $container->set('view', function (Container $container)
+ {
 -	return new Blade(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
 +	return new Blade(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
  });
  
- $container->set('UrlManager', function (Container $container) {
-@@ -103,7 +103,7 @@ $errorMiddleware->setDefaultErrorHandler(
+ $container->set('UrlManager', function (Container $container)
+@@ -106,7 +106,7 @@ $errorMiddleware->setDefaultErrorHandler(
  
  $app->add(new CorsMiddleware($app->getResponseFactory()));
  
@@ -42,10 +42,10 @@ index 31905be6..30b3eb82 100644
  ob_clean(); // No response output before here
  $app->run();
 diff --git a/services/DatabaseService.php b/services/DatabaseService.php
-index be5486b6..b6091ee7 100644
+index 4a05bda1..ce41ed17 100644
 --- a/services/DatabaseService.php
 +++ b/services/DatabaseService.php
-@@ -104,6 +104,6 @@ class DatabaseService
+@@ -125,6 +125,6 @@ class DatabaseService
  			return GROCY_DATAPATH . '/grocy_' . $dbSuffix . '.db';
  		}
  
@@ -67,10 +67,10 @@ index 7d070350..a6dd4b08 100644
  		{
  			mkdir($this->StoragePath);
 diff --git a/services/StockService.php b/services/StockService.php
-index 16cb468c..23228803 100644
+index 7265e82b..13af591a 100644
 --- a/services/StockService.php
 +++ b/services/StockService.php
-@@ -1769,7 +1769,7 @@ class StockService extends BaseService
+@@ -1761,7 +1761,7 @@ class StockService extends BaseService
  			throw new \Exception('No barcode lookup plugin defined');
  		}
  

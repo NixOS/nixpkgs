@@ -33,10 +33,10 @@ let
     , version
     , ...
     }: python3Packages.callPackage
-      ({ buildPythonPackage, pythonOlder, parver, pulumi, semver }:
+      ({ buildPythonPackage, pythonOlder, parver, pip, pulumi, semver, setuptools }:
       buildPythonPackage rec {
         inherit pname meta src version;
-        format = "setuptools";
+        format = "pyproject";
 
         disabled = pythonOlder "3.7";
 
@@ -46,13 +46,20 @@ let
           parver
           pulumi
           semver
+          setuptools
         ];
 
         postPatch = ''
-          sed -i \
-            -e 's/^VERSION = .*/VERSION = "${version}"/g' \
-            -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
-            setup.py
+          if [[ -e "pyproject.toml" ]]; then
+            sed -i \
+              -e 's/^  version = .*/  version = "${version}"/g' \
+              pyproject.toml
+          else
+            sed -i \
+               -e 's/^VERSION = .*/VERSION = "${version}"/g' \
+               -e 's/^PLUGIN_VERSION = .*/PLUGIN_VERSION = "${version}"/g' \
+               setup.py
+          fi
         '';
 
         # Auto-generated; upstream does not have any tests.
@@ -60,7 +67,7 @@ let
         checkPhase = ''
           runHook preCheck
 
-          pip show "${pname}" | grep "Version: ${version}" > /dev/null \
+          ${pip}/bin/pip show "${pname}" | grep "Version: ${version}" > /dev/null \
             || (echo "ERROR: Version substitution seems to be broken"; exit 1)
 
           runHook postCheck

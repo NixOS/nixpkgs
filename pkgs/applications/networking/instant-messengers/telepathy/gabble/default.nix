@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
     description = "Jabber/XMPP connection manager for the Telepathy framework";
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
     license = licenses.lgpl21Plus;
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

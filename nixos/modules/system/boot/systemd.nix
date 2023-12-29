@@ -48,6 +48,7 @@ let
       "rescue.service"
 
       # Udev.
+      "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
@@ -395,7 +396,9 @@ in
       description = lib.mdDoc ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
-        Valid time units include "ms", "s", "min", "h", "d", and "w".
+        Valid time units include "ms", "s", "min", "h", "d", and "w". If left
+        `null`, systemd will use its default of `10min`; see also {command}`man
+        5 systemd-system.conf`.
       '';
     };
 
@@ -572,7 +575,7 @@ in
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
         "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
-        "CRYPTO_SHA256" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "CRYPTO_SHA256" "DMIID" "AUTOFS_FS" "TMPFS_POSIX_ACL"
         "TMPFS_XATTR" "SECCOMP"
       ];
 

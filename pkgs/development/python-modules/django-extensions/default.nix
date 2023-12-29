@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , django
-, factory_boy
+, factory-boy
 , mock
 , pip
 , pygments
@@ -16,22 +15,14 @@
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
+    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pygments 2.14 compat for tests
-      url = "https://github.com/django-extensions/django-extensions/commit/61ebfe38f8fca9225b41bec5418e006e6a8815e1.patch";
-      hash = "sha256-+sxaQMmKi/S4IlfHqARPGhaqc+F1CXUHVFyeU/ArW2U=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -45,7 +36,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     mock
     pip
     pygments # not explicitly declared in setup.py, but some tests require it

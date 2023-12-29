@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
 
     # docs
     sphinxHook
-    guzzle_sphinx_theme
+    guzzle-sphinx-theme
 
     # shell completions
     installShellFiles

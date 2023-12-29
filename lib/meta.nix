@@ -3,6 +3,11 @@
 
 { lib }:
 
+let
+  inherit (lib) matchAttrs any all;
+  inherit (builtins) isString;
+
+in
 rec {
 
 
@@ -83,14 +88,21 @@ rec {
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
   */
-  platformMatch = platform: elem: let
-      pattern =
-        if builtins.isString elem
-        then { system = elem; }
-        else if elem?parsed
-        then elem
-        else { parsed = elem; };
-    in lib.matchAttrs pattern platform;
+  platformMatch = platform: elem: (
+    # Check with simple string comparison if elem was a string.
+    #
+    # The majority of comparisons done with this function will be against meta.platforms
+    # which contains a simple platform string.
+    #
+    # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
+    # because this is a hot path for nixpkgs.
+    if isString elem then platform ? system && elem == platform.system
+    else matchAttrs (
+      # Normalize platform attrset.
+      if elem ? parsed then elem
+      else { parsed = elem; }
+    ) platform
+  );
 
   /* Check if a package is available on a given platform.
 
@@ -102,8 +114,8 @@ rec {
        2. None of `meta.badPlatforms` pattern matches the given platform.
   */
   availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
-    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
+    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /* Get the corresponding attribute in lib.licenses
      from the SPDX ID.
@@ -162,5 +174,12 @@ rec {
        getExe' pkgs.imagemagick "convert"
        => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
   */
-  getExe' = x: y: "${lib.getBin x}/bin/${y}";
+  getExe' = x: y:
+    assert lib.assertMsg (lib.isDerivation x)
+      "lib.meta.getExe': The first argument is of type ${builtins.typeOf x}, but it should be a derivation instead.";
+    assert lib.assertMsg (lib.isString y)
+     "lib.meta.getExe': The second argument is of type ${builtins.typeOf y}, but it should be a string instead.";
+    assert lib.assertMsg (builtins.length (lib.splitString "/" y) == 1)
+     "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    "${lib.getBin x}/bin/${y}";
 }

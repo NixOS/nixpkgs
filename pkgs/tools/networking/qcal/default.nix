@@ -18,12 +18,12 @@ buildGoModule rec {
   # to that config file in the nix store
   preBuild = ''
     substituteInPlace helpers.go \
-      --replace " config-sample.json " " $out/share/config-sample.json "
+      --replace " config-sample.json " " $out/share/qcal/config-sample.json "
   '';
 
   postInstall = ''
-    mkdir -p $out/share
-    cp config-sample.json $out/share/
+    mkdir -p $out/share/qcal
+    cp config-sample.json $out/share/qcal/
   '';
 
   meta = with lib; {

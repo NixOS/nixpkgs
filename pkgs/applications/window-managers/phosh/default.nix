@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.27.0";
+  version = "0.32.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-dnSYeXn3aPwvxeIjjk+PsnOVKyuGlxXMXGWDdrRrIM0=";
+    sha256 = "sha256-4LsB/7zKRkoxNQQVxwrSSIqGP7KQ0WHBnSVY+ClWTxo=";
   };
 
   nativeBuildInputs = [
@@ -138,5 +138,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
+    mainProgram = "phosh-session";
   };
 }

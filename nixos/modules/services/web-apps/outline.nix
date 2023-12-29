@@ -117,13 +117,14 @@ in
     storage = lib.mkOption {
       description = lib.mdDoc ''
         To support uploading of images for avatars and document attachments an
-        s3-compatible storage must be provided. AWS S3 is recommended for
+        s3-compatible storage can be provided. AWS S3 is recommended for
         redundancy however if you want to keep all file storage local an
         alternative such as [minio](https://github.com/minio/minio)
         can be used.
+        Local filesystem storage can also be used.
 
-        A more detailed guide on setting up S3 is available
-        [here](https://wiki.generaloutline.com/share/125de1cc-9ff6-424b-8415-0d58c809a40f).
+        A more detailed guide on setting up storage is available
+        [here](https://docs.getoutline.com/s/hosting/doc/file-storage-N4M0T6Ypu7).
       '';
       example = lib.literalExpression ''
         {
@@ -136,6 +137,19 @@ in
       '';
       type = lib.types.submodule {
         options = {
+          storageType = lib.mkOption {
+            type = lib.types.enum [ "local" "s3" ];
+            description = lib.mdDoc "File storage type, it can be local or s3.";
+            default = "s3";
+          };
+          localRootDir = lib.mkOption {
+            type = lib.types.str;
+            description = lib.mdDoc ''
+              If `storageType` is `local`, this sets the parent directory
+              under which all attachments/images go.
+            '';
+            default = "/var/lib/outline/data";
+          };
           accessKey = lib.mkOption {
             type = lib.types.str;
             description = lib.mdDoc "S3 access key.";
@@ -557,14 +571,17 @@ in
     systemd.tmpfiles.rules = [
       "f ${cfg.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
       "f ${cfg.utilsSecretFile} 0600 ${cfg.user} ${cfg.group} -"
-      "f ${cfg.storage.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
+      (if (cfg.storage.storageType == "s3") then
+        "f ${cfg.storage.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
+      else
+        "d ${cfg.storage.localRootDir} 0700 ${cfg.user} ${cfg.group} - -")
     ];
 
     services.postgresql = lib.mkIf (cfg.databaseUrl == "local") {
       enable = true;
       ensureUsers = [{
         name = "outline";
-        ensurePermissions."DATABASE outline" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       }];
       ensureDatabases = [ "outline" ];
     };
@@ -599,14 +616,6 @@ in
           URL = cfg.publicUrl;
           PORT = builtins.toString cfg.port;
 
-          AWS_ACCESS_KEY_ID = cfg.storage.accessKey;
-          AWS_REGION = cfg.storage.region;
-          AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
-          AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
-          AWS_S3_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
-          AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
-          AWS_S3_ACL = cfg.storage.acl;
-
           CDN_URL = cfg.cdnUrl;
           FORCE_HTTPS = builtins.toString cfg.forceHttps;
           ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
@@ -622,7 +631,20 @@ in
           RATE_LIMITER_ENABLED = builtins.toString cfg.rateLimiter.enable;
           RATE_LIMITER_REQUESTS = builtins.toString cfg.rateLimiter.requests;
           RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
+
+          FILE_STORAGE = cfg.storage.storageType;
+          FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
+          FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
         }
+
+        (lib.mkIf (cfg.storage.storageType == "s3") {
+          AWS_ACCESS_KEY_ID = cfg.storage.accessKey;
+          AWS_REGION = cfg.storage.region;
+          AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
+          AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
+          AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
+          AWS_S3_ACL = cfg.storage.acl;
+        })
 
         (lib.mkIf (cfg.slackAuthentication != null) {
           SLACK_CLIENT_ID = cfg.slackAuthentication.clientId;
@@ -676,7 +698,9 @@ in
       script = ''
         export SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
         export UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
-        export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+        ${lib.optionalString (cfg.storage.storageType == "s3") ''
+          export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+        ''}
         ${lib.optionalString (cfg.slackAuthentication != null) ''
           export SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
         ''}

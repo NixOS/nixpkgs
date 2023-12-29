@@ -7,7 +7,6 @@
     emptyConf = { lib, ... }: {
       services.adguardhome = {
         enable = true;
-        settings = {};
       };
     };
 

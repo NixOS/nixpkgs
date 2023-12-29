@@ -1,10 +1,11 @@
 use anyhow::{anyhow, bail, Context};
 use lock::UrlOrString;
+use log::{debug, info};
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
     fs,
-    io::{self, Read},
+    io::Write,
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
@@ -14,7 +15,13 @@ use crate::util;
 
 pub mod lock;
 
-pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Package>> {
+pub fn lockfile(
+    content: &str,
+    force_git_deps: bool,
+    force_empty_cache: bool,
+) -> anyhow::Result<Vec<Package>> {
+    debug!("parsing lockfile with contents:\n{content}");
+
     let mut packages = lock::packages(content)
         .context("failed to extract packages from lockfile")?
         .into_par_iter()
@@ -24,6 +31,10 @@ pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Packa
             Package::from_lock(p).with_context(|| format!("failed to parse data for {n}"))
         })
         .collect::<anyhow::Result<Vec<_>>>()?;
+
+    if packages.is_empty() && !force_empty_cache {
+        bail!("No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`.");
+    }
 
     let mut new = Vec::new();
 
@@ -37,6 +48,8 @@ pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Packa
         };
 
         let path = dir.path().join("package");
+
+        info!("recursively parsing lockfile for {} at {path:?}", pkg.name);
 
         let lockfile_contents = fs::read_to_string(path.join("package-lock.json"));
 
@@ -64,7 +77,13 @@ pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Packa
         }
 
         if let Ok(lockfile_contents) = lockfile_contents {
-            new.append(&mut lockfile(&lockfile_contents, force_git_deps)?);
+            new.append(&mut lockfile(
+                &lockfile_contents,
+                force_git_deps,
+                // force_empty_cache is turned on here since recursively parsed lockfiles should be
+                // allowed to have an empty cache without erroring by default
+                true,
+            )?);
         }
     }
 
@@ -106,7 +125,7 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
-                let mut body = util::get_url_with_retry(&hosted)?;
+                let body = util::get_url_body_with_retry(&hosted)?;
 
                 let workdir = tempdir()?;
 
@@ -120,7 +139,7 @@ impl Package {
                     .stdin(Stdio::piped())
                     .spawn()?;
 
-                io::copy(&mut body, &mut cmd.stdin.take().unwrap())?;
+                cmd.stdin.take().unwrap().write_all(&body)?;
 
                 let exit = cmd.wait()?;
 
@@ -139,9 +158,9 @@ impl Package {
             None => Specifics::Registry {
                 integrity: pkg
                     .integrity
-                    .expect("non-git dependencies should have assosciated integrity")
+                    .expect("non-git dependencies should have associated integrity")
                     .into_best()
-                    .expect("non-git dependencies should have non-empty assosciated integrity"),
+                    .expect("non-git dependencies should have non-empty associated integrity"),
             },
         };
 
@@ -154,13 +173,7 @@ impl Package {
 
     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {
         match &self.specifics {
-            Specifics::Registry { .. } => {
-                let mut body = Vec::new();
-
-                util::get_url_with_retry(&self.url)?.read_to_end(&mut body)?;
-
-                Ok(body)
-            }
+            Specifics::Registry { .. } => Ok(util::get_url_body_with_retry(&self.url)?),
             Specifics::Git { workdir } => Ok(Command::new("tar")
                 .args([
                     "--sort=name",

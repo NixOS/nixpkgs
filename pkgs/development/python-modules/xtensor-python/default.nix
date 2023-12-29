@@ -1,5 +1,6 @@
 { lib
-, buildPythonPackage
+, toPythonModule
+, stdenv
 , fetchFromGitHub
 , cmake
 , gtest
@@ -8,28 +9,37 @@
 , numpy
 }:
 
-buildPythonPackage rec {
+toPythonModule (stdenv.mkDerivation(finalAttrs: {
   pname = "xtensor-python";
-  version = "0.25.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
-    repo = pname;
-    rev = version;
-    sha256 = "17la76hn4r1jv67dzz8x2pzl608r0mnvz854407mchlzj6rhsxza";
+    repo = "xtensor-python";
+    rev = finalAttrs.version;
+    sha256 = "sha256-kLFt5Ah5/ZO6wfTZQviVXeIAVok+/F/XCwpgPSagOMo=";
   };
 
-  nativeBuildInputs = [ cmake pybind11 ];
-
-  propagatedBuildInputs = [ xtensor numpy ];
-
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
-
+  nativeBuildInputs = [
+    cmake
+  ];
+  buildInputs = [
+    pybind11
+  ];
   nativeCheckInputs = [
     gtest
   ];
+  doCheck = true;
+  cmakeFlags = [
+    "-DBUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+  ];
+
+  propagatedBuildInputs = [
+    xtensor
+    numpy
+  ];
+
+  checkTarget = "xtest";
 
   meta = with lib; {
     homepage = "https://github.com/xtensor-stack/xtensor-python";
@@ -37,4 +47,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ lsix ];
   };
-}
+}))

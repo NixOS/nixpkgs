@@ -23,8 +23,8 @@
 assert region == "Global" || region == "EU";
 
 let
-  kyodialog_version = "9.2";
-  date = "20220928";
+  kyodialog_version = "9.3";
+  date = "20230720";
 in
 stdenv.mkDerivation rec {
   pname = "cups-kyodialog";
@@ -33,11 +33,15 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   src = fetchzip {
+    # Steps to find the release download URL:
+    # 1. Go to https://www.kyoceradocumentsolutions.us/en/support/downloads.html
+    # 2. Search for printer model, e.g. "TASKalfa 6053ci"
+    # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
     urls = [
       "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-      "https://web.archive.org/web/20221122230412/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
+      "https://web.archive.org/web/20231021143259/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
     ];
-    sha256 = "sha256-WCHuAQO2T6S8JtRsI2Yf/ypeCLMH365Ax/qX+Ah2s3k=";
+    hash = "sha256-3h2acOmaQIiqe2Fd9QiqEfre5TrxzRrll6UlUruwj1o=";
     extension = "tar.gz";
     stripRoot = false;
     postFetch = ''

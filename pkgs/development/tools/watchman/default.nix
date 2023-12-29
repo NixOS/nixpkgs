@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with maintainers; [ cstrahan kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

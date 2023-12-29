@@ -77,5 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/amikha1lov/RecApp";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "recapp";
   };
 }

@@ -9,6 +9,7 @@
 , multitasking
 , numpy
 , pandas
+, peewee
 , pythonOlder
 , requests
 , lxml
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.28";
+  version = "0.2.31";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kTbQnpha4OHu5Xguo6v90uFpcXY1e8JJsJUo4ZbaCfk=";
+    hash = "sha256-GXnMzIjRx5c3O7J0bPjcdDvEIqTGMe002wYx28FLI6U=";
   };
 
   propagatedBuildInputs = [
@@ -34,11 +35,12 @@ buildPythonPackage rec {
     cryptography
     frozendict
     html5lib
+    lxml
     multitasking
     numpy
     pandas
+    peewee
     requests
-    lxml
   ];
 
   # Tests require internet access

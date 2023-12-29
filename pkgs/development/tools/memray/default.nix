@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.9.1";
+  version = "1.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/${version}";
     hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
   };
 
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     ipython
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     greenlet
   ];
 
@@ -66,6 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/${version}";
   };
 }

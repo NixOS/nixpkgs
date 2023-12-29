@@ -24,6 +24,7 @@
 , enableGDBJITSupport ? false
 , enableAPICheck ? false
 , enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
 , useSystemMalloc ? false
 # Upstream generates randomized string id's by default for security reasons
 # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
@@ -50,6 +51,7 @@ let
     ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
     ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
     ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
     ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 

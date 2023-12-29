@@ -25,16 +25,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.42.0";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-+65R7cbj62UXw3ZYXIK9VcAeGnpP4pLigr21awoPLi4=";
+    hash = "sha256-oL3AA/3RPKcXLBNYaBYleueQph7/xvN/UEhwcYM9lAs=";
   };
 
-  vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
+  vendorHash = "sha256-EutNjyW5bvGvMZP9xBrcu91TOAbl9TDZe2+g0/qnuAQ=";
 
   CGO_ENABLED = 0;
 
@@ -79,7 +79,10 @@ buildGoModule rec {
     install -D shell/* -t $out/share/fzf/
     install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
     mkdir -p $out/share/fish/vendor_conf.d
-    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
@@ -101,5 +104,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
     changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    mainProgram = "fzf";
   };
 }

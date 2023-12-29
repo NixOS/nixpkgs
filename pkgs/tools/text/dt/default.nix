@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dt";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "so-dang-cool";
     repo = "dt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C6sG8iqXs64x2AWCxKGFPyoXC1Fn4p2eSLWwJAQ8CSc=";
+    hash = "sha256-qHfvHf4T0wWnzqp5FfLg7n7te24xc2aMEdTK3Iia8Q0=";
   };
 
   nativeBuildInputs = [ zig_0_11.hook ];
@@ -36,8 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
       In short, dt is intended to be generally useful, with zero pretense of
       elegance.
     '';
+    changelog = "https://github.com/so-dang-cool/dt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ booniepepper ];
+    platforms = lib.platforms.unix;
     mainProgram = "dt";
   };
 })

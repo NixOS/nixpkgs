@@ -7,9 +7,9 @@
 , stdenv
 , curl
 , Security
-, version ? "0.2.87"
-, hash ? "sha256-0u9bl+FkXEK2b54n7/l9JOCtKo+pb42GF9E1EnAUQa0="
-, cargoHash ? "sha256-AsZBtE2qHJqQtuCt/wCAgOoxYMfvDh8IzBPAOkYSYko="
+, version ? "0.2.89"
+, hash ? "sha256-IPxP68xtNSpwJjV2yNMeepAS0anzGl02hYlSTvPocz8="
+, cargoHash ? "sha256-pBeQaG6i65uJrJptZQLuIaCb/WCQMhba1Z1OhYqA8Zc="
 }:
 
 rustPlatform.buildRustPackage rec {

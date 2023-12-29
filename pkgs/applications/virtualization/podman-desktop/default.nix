@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline run build
     yarn --offline run electron-builder --dir \
       --config .electron-builder.config.cjs \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -116,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ panda2134 ];
     inherit (electron.meta) platforms;
+    mainProgram = "podman-desktop";
   };
 })

@@ -49,9 +49,6 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
-  # Python 3.11 still unsupported
-  disabled = pythonAtLeast "3.11";
-
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";
@@ -152,14 +149,23 @@ in buildPythonPackage {
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/metrics/"
         "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
         "$out/${python.sitePackages}/tensorflow/python/"
-        "$out/${python.sitePackages}/tensorflow/python/framework/"
         "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
+        "$out/${python.sitePackages}/tensorflow/python/client"
         "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
         "$out/${python.sitePackages}/tensorflow/python/framework"
+        "$out/${python.sitePackages}/tensorflow/python/grappler"
+        "$out/${python.sitePackages}/tensorflow/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow/python/lib/io"
+        "$out/${python.sitePackages}/tensorflow/python/platform"
         "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
+        "$out/${python.sitePackages}/tensorflow/python/saved_model"
+        "$out/${python.sitePackages}/tensorflow/python/util"
+        "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
         "${rpath}"
       )
 

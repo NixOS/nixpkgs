@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lheckemann ];
     homepage = "https://github.com/stefanha/git-publish";
+    mainProgram = "git-publish";
   };
 }

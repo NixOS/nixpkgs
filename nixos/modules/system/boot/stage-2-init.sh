@@ -54,7 +54,7 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] || [ ! -c /dev/kmsg ] ; then
     echo "booting system configuration ${systemConfig}"
 else
     echo "booting system configuration $systemConfig" > /dev/kmsg
@@ -105,7 +105,7 @@ fi
 
 # Required by the activation script
 install -m 0755 -d /etc
-if [ -d "/etc/nixos" ]; then
+if [ ! -h "/etc/nixos" ]; then
     install -m 0755 -d /etc/nixos
 fi
 install -m 01777 -d /tmp

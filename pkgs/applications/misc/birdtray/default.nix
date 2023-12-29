@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "birdtray";
-  version = "1.9.0";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1469ng6zk0qx0qfsihrnlz1j9i1wk0hx4vqdaplz9mdpyxvmlryk";
+    sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -33,7 +33,7 @@ mkDerivation rec {
     description = "Mail system tray notification icon for Thunderbird";
     homepage = "https://github.com/gyunaev/birdtray";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi oxalica ];
+    maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
   };
 }

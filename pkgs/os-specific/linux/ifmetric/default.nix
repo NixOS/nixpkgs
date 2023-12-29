@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.anna328p ];
     platforms = platforms.linux;
+    mainProgram = "ifmetric";
   };
 }

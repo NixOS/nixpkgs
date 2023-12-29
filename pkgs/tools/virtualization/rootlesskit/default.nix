@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-QjGjP7GiJiP2bJE707Oc4wZ9o/gRmSboK9xGbbyG5EM=";
   };
 
-  vendorSha256 = "sha256-mNuj4/e1qH3P5MfbwPLddXWhc8aDcQuoSSHZ+S+zKWw=";
+  vendorHash = "sha256-mNuj4/e1qH3P5MfbwPLddXWhc8aDcQuoSSHZ+S+zKWw=";
 
   passthru = {
     updateScript = nix-update-script { };

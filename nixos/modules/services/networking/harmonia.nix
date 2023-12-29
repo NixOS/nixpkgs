@@ -28,6 +28,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nix.settings.extra-allowed-users = [ "harmonia" ];
+
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
 

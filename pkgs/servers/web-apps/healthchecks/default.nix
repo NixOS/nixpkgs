@@ -39,13 +39,36 @@ py.pkgs.buildPythonApplication rec {
     whitenoise
   ];
 
+  secrets = [
+    "DB_PASSWORD"
+    "DISCORD_CLIENT_SECRET"
+    "EMAIL_HOST_PASSWORD"
+    "LINENOTIFY_CLIENT_SECRET"
+    "MATRIX_ACCESS_TOKEN"
+    "PD_APP_ID"
+    "PUSHBULLET_CLIENT_SECRET"
+    "PUSHOVER_API_TOKEN"
+    "S3_SECRET_KEY"
+    "SECRET_KEY"
+    "SLACK_CLIENT_SECRET"
+    "TELEGRAM_TOKEN"
+    "TRELLO_APP_KEY"
+    "TWILIO_AUTH"
+  ];
+
   localSettings = writeText "local_settings.py" ''
     import os
+
     STATIC_ROOT = os.getenv("STATIC_ROOT")
-    SECRET_KEY_FILE = os.getenv("SECRET_KEY_FILE")
-    if SECRET_KEY_FILE:
-        with open(SECRET_KEY_FILE, "r") as file:
-            SECRET_KEY = file.readline()
+
+    ${lib.concatLines (map
+      (secret: ''
+        ${secret}_FILE = os.getenv("${secret}_FILE")
+        if ${secret}_FILE:
+            with open(${secret}_FILE, "r") as file:
+                ${secret} = file.readline()
+      '')
+      secrets)}
   '';
 
   installPhase = ''

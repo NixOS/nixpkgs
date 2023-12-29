@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-SZijR9PotN0O72laj+FBSCVMXLXadmLRhCSD4XqobD0=";
+    hash = "sha256-T/KAhKoxZRdbJspL+Fkos6YqVhiUxCtxbCSm+8CX1to=";
   };
 
   cargoHash = "";
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
       "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.1" = "sha256-H00QHNILEjOtavXdj4Jd+rdLprJpVSlSVV3qkTeknzQ=";
+      "supergfxctl-5.1.2" = "sha256-1XCIltd7o+Bc+UXmeuPAXdPKU86UP0p+Qh0gTZyrbH8=";
     };
   };
 

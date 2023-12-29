@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/enjarify/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    mainProgram = "enjarify";
   };
 }

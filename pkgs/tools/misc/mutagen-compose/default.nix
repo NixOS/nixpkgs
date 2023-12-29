@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/mutagen-io/mutagen-compose/releases/tag/v${version}";
     maintainers = [ maintainers.matthewpi ];
     license = licenses.mit;
+    mainProgram = "mutagen-compose";
   };
 }

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KMS/DRM based System Console";
-    homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
+    homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;
     maintainers = with maintainers; [ omasanori ];
     platforms = platforms.linux;

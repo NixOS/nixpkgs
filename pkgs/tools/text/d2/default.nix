@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "d2";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MF8RqwoMc48JYgNUJTQKHlGl59xyHOALnFL2BWQAl24=";
+    hash = "sha256-bp45tkV7f6rGDAmhle/e3cHIqa7nPakANvk4QxetLts=";
   };
 
-  vendorHash = "sha256-SocBC/1LrdSQNfcNVa9nnPaq/UvLVIghHlUSJB7ImBk=";
+  vendorHash = "sha256-QMptNFCoJouI555WkA+4TJhaEzQgJJmca3jVpM3neeI=";
 
   excludedPackages = [ "./e2etests" ];
 
@@ -50,6 +50,6 @@ buildGoModule rec {
     description = "A modern diagram scripting language that turns text to diagrams";
     homepage = "https://d2lang.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya kashw2 ];
   };
 }

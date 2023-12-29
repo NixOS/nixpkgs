@@ -37,7 +37,7 @@ in
       gyre-fonts # TrueType substitutes for standard PostScript fonts
       liberation_ttf
       unifont
-      noto-fonts-emoji
+      noto-fonts-color-emoji
     ]);
   };
 }

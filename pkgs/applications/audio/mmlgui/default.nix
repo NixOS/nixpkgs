@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mmlgui";
-  version = "unstable-2023-06-12";
+  version = "unstable-2023-11-16";
 
   src = fetchFromGitHub {
     owner = "superctr";
     repo = "mmlgui";
-    rev = "d680f576aba769b0d63300fbed57a0e9e54dfa4b";
+    rev = "627bfc7b67d4d87253517ba71df2d699a8acdd10";
     fetchSubmodules = true;
-    hash = "sha256-BqwayGQBIa0ru22Xci8vHNYPFr9scZSdrUOlDtGBnno=";
+    hash = "sha256-d/QLRlSfCrrcvzIhwEBKB5chK+XqO/R8xJ5VfagDi4U=";
   };
 
   postPatch = ''

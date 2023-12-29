@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;
+    mainProgram = "soapui";
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, unittestCheckHook
+, pytestCheckHook
 , pythonOlder
 , fetchFromGitLab
 , substituteAll
@@ -88,9 +88,12 @@ buildPythonPackage rec {
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  disabledTests = [
+    # Frequently fails when exiftool is updated and adds support for new metadata.
+    "test_all_parametred"
+  ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";

@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, pkgs }:
+{ lib, fetchurl, appimageTools, pkgs, makeWrapper }:
 
 let
   pname = "beekeeper-studio";
@@ -8,7 +8,7 @@ let
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha512 = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
+    hash = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -23,11 +23,15 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     ln -s $out/bin/${name} $out/bin/${pname}
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
+
   '';
 
   meta = with lib; {

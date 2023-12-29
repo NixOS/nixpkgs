@@ -1,27 +1,42 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, flask, six, packaging }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, flask
+, packaging
+, pytestCheckHook
+, setuptools
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Cors";
-  version = "3.0.10";
+  pname = "flask-cors";
+  version = "4.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de";
+  src = fetchFromGitHub {
+    owner = "corydolphin";
+    repo = "flask-cors";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o//ulROKKBv/CBJIGPBFP/+T0TpMHUVjr23Y5g1V05g=";
   };
 
-  nativeCheckInputs = [ nose packaging ];
-  propagatedBuildInputs = [ flask six ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  # Exclude test_acl_uncaught_exception_500 test case because is not compatible
-  # with Flask>=1.1.0. See: https://github.com/corydolphin/flask-cors/issues/253
-  checkPhase = ''
-    nosetests --exclude test_acl_uncaught_exception_500
-  '';
+  propagatedBuildInputs = [
+    flask
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    packaging
+  ];
 
   meta = with lib; {
     description = "A Flask extension adding a decorator for CORS support";
     homepage = "https://github.com/corydolphin/flask-cors";
+    changelog = "https://github.com/corydolphin/flask-cors/releases/tag/v${version}";
     license = with licenses; [ mit ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

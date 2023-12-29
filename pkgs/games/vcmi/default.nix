@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-F1g3ric23jKetl5aBG5NRpT4LnGXhBKZmGp2hg6Io9s=";
+    hash = "sha256-dwTQRpu+IrKhuiiw/uYBt8i/BYlQ5XCy/jUhDAo6aa4=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_LUA:BOOL=ON"
-    "-DENABLE_ERM:BOOL=ON"
+    "-DENABLE_ERM:BOOL=OFF"
     "-DENABLE_GITVERSION:BOOL=OFF"
     "-DENABLE_PCH:BOOL=OFF"
     "-DENABLE_TEST:BOOL=OFF"

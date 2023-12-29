@@ -69,6 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-Wno-conversion"
     "-Wno-unused-macros"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-declaration-after-statement"
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
+      "-Wno-reserved-identifier"
+      "-Wno-unused-but-set-variable"
+    ])
+    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16") [
+      "-Wno-unsafe-buffer-usage"
+      "-Wno-cast-function-type-strict"
+    ])
   ]);
 
   inherit makefile;

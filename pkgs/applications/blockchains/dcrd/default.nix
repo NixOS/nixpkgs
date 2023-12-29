@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dcrd";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
     rev = "refs/tags/release-v${version}";
-    hash = "sha256-ZNBSIzx07zJrBxas7bHpZ8ZPDWJ4d7jumpKYj5Qmzlo=";
+    hash = "sha256-nSocqwXgJhvfbdElddbb1gGxoygmtVtK6DbiSuMxYew=";
   };
 
   patches = [
@@ -19,7 +19,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorHash = "sha256-++IPB2IadXd1LC5r6f1a0UqsTG/McAf7KQAw8WKKoaE=";
+  vendorHash = "sha256-Napcfj1+KjQ21Jb/qpIzg2W/grzun2Pz5FV5yIBXoTo=";
 
   subPackages = [ "." "cmd/promptsecret" ];
 

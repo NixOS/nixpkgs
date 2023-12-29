@@ -46,6 +46,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 }:
 
 let
@@ -116,12 +118,12 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
     for i in ${libcef}/share/cef/*; do
-      cp -r $i cef/Release/
-      cp -r $i cef/Resources/
+      ln -s $i cef/Release/
+      ln -s $i cef/Resources/
     done
-    cp -r ${libcef}/lib/libcef.so cef/Release/
-    cp -r ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    cp -r ${libcef}/include cef/
+    ln -s ${libcef}/lib/libcef.so cef/Release/
+    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
+    ln -s ${libcef}/include cef/
   '';
 
   cmakeFlags = [
@@ -134,9 +136,20 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
-  preFixup = ''
+  preFixup = let
+    wrapperLibraries = [
+      xorg.libX11
+      libvlc
+      libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
+    ];
+  in ''
+    # Remove libcef before patchelf, otherwise it will fail
+    rm $out/lib/obs-plugins/libcef.so
+
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath [ xorg.libX11 libvlc libGL ]}"
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
       ''${gappsWrapperArgs[@]}
     )
   '';
@@ -144,6 +157,9 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/lib/lib*.so
     addOpenGLRunpath $out/lib/obs-plugins/*.so
+
+    # Link libcef again after patchelfing other libs
+    ln -s ${libcef}/lib/libcef.so $out/lib/obs-plugins/libcef.so
   '';
 
   meta = with lib; {
@@ -154,7 +170,7 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V ];
+    maintainers = with maintainers; [ jb55 MP2E V materus ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

@@ -25,6 +25,7 @@
 , boost
 , aubio
 , jack2
+, jack-example-tools
 , supercollider-with-sc3-plugins
 , parallel
 
@@ -187,14 +188,14 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Wrap Qt GUI (distributed binary)
     wrapQtApp $out/bin/sonic-pi \
-      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 jack-example-tools ]}
 
     # If ImGui was built
     if [ -e $out/app/build/gui/imgui/sonic-pi-imgui ]; then
       # Wrap ImGui into bin
       makeWrapper $out/app/build/gui/imgui/sonic-pi-imgui $out/bin/sonic-pi-imgui \
         --inherit-argv0 \
-        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 jack-example-tools ]}
     fi
 
     # Remove runtime Erlang references

@@ -13,7 +13,7 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: origArgs:
+  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
     let
       args = lib.fix (lib.extends
         (_: previousAttrs: {
@@ -30,7 +30,7 @@ let
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
         __functor = self: result;
       }
-      else result;
+      else result);
 
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix

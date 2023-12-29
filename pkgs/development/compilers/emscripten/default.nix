@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.45";
+  version = "3.1.47";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-kcWAio1fKuwqFCFlupX9KevjWPbv9W/Z/5EPrihQ6ms=";
+    npmDepsHash = "sha256-Qft+//za5ed6Oquxtcdpv7g5oOc2WmWuRJ/CDe+FEiI=";
 
     dontBuild = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-yf0Yb/UjaBQpIEPZzzjaUmR+JzKPSJHMkrYLHxDXwOg=";
+    hash = "sha256-cRNkQ+7vUqJLNlf5dieeDcyT1jlBUeVxO8avoUvOPHI=";
     rev = version;
   };
 
@@ -84,6 +84,9 @@ stdenv.mkDerivation rec {
     mkdir -p $appdir
     cp -r . $appdir
     chmod -R +w $appdir
+
+    mkdir -p $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules
 
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do

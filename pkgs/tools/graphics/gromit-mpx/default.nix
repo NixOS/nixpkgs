@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gromit-mpx";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     rev = version;
-    sha256 = "sha256-nbSyWcccu07FZbvOESFhlnuxgTNgJ+/6ujVQvEyQGGo=";
+    sha256 = "sha256-6sjps0wbB0sTaQtehRmz2KBWxqk3pqJmQs9htqxmJwo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    mainProgram = "gromit-mpx";
   };
 }

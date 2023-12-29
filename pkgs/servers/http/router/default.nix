@@ -40,7 +40,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
-    license = licenses.elastic;
+    license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];
+    knownVulnerabilities = [ "CVE-2023-45812" ];
   };
 }

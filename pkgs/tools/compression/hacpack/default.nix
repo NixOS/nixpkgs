@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.linux;
+    mainProgram = "hacpack";
   };
 }

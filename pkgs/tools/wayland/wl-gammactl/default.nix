@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lodi ];
+    mainProgram = "wl-gammactl";
   };
 }

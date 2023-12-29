@@ -1,22 +1,53 @@
-{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, writeText
+, jq
+, python3
+, pkg-config
+, pixman
+, cairo
+, pango
+, stdenv
+, darwin
+, conf ? { }
+}:
 
 let
   configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);
-in stdenv.mkDerivation rec {
+in
+buildNpmPackage rec {
   pname = "cinny";
-  version = "2.2.6";
+  version = "3.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/ajbura/cinny/releases/download/v${version}/cinny-v${version}.tar.gz";
-    hash = "sha256-AvYM8++PqKmm7CJN5hmg9GSC72IoHX+rRxuT3GflvjU=";
+  src = fetchFromGitHub {
+    owner = "cinnyapp";
+    repo = "cinny";
+    rev = "v${version}";
+    hash = "sha256-GcygxK9NcGlv4rwxQCJqi0BhNlOTFxjGB8mbfTaBMOk=";
   };
+
+  npmDepsHash = "sha256-4R+To2LhcnEM9x1noo6MhCckyBKgPWiAi7zgDqAmaN0=";
+
+  nativeBuildInputs = [
+    jq
+    python3
+    pkg-config
+  ];
+
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreText
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-    cp -R . $out/
-    ${jq}/bin/jq -s '.[0] * .[1]' "config.json" "${configOverrides}" > "$out/config.json"
+    cp -r dist $out
+    jq -s '.[0] * .[1]' "config.json" "${configOverrides}" > "$out/config.json"
 
     runHook postInstall
   '';
@@ -24,8 +55,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with maintainers; [ abbe ];
-    license = licenses.mit;
+    maintainers = with maintainers; [ abbe ashkitten ];
+    license = licenses.agpl3Only;
     platforms = platforms.all;
   };
 }

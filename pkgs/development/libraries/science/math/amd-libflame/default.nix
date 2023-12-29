@@ -1,78 +1,62 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cmake
 , gfortran
 , python3
 , amd-blis
+, aocl-utils
 
 , withOpenMP ? true
 , blas64 ? false
+, withAMDOpt ? true
 }:
-
-# right now only LP64 is supported
-assert !blas64;
 
 stdenv.mkDerivation rec {
   pname = "amd-libflame";
-  version = "3.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
     rev = version;
-    hash = "sha256-jESae5NqANw90RBbIHH2oGEq5/mudc4IONv50P/AeQ0=";
+    hash = "sha256-SZk11oOAnvn1vb7ucX6U9b0YtAJNxl3tQu4ExHpwwoo=";
   };
-
-  patches = [
-    # The LAPACKE interface is compiled as a separate static library,
-    # we want the main dynamic library to provide LAPACKE symbols.
-    # This patch adds lapacke.a to the shared library as well.
-    ./add-lapacke.diff
-  ];
-
-  passthru = { inherit blas64; };
-
-  nativeBuildInputs = [ gfortran python3 ];
-
-  buildInputs = [ amd-blis ];
-
-  configureFlags = [
-    # Build a dynamic library with a LAPACK interface.
-    "--disable-static-build"
-    "--enable-dynamic-build"
-    "--enable-lapack2flame"
-
-    # Use C BLAS interface.
-    "--enable-cblas-interfaces"
-
-    # Avoid overloading maximum number of arguments.
-    "--enable-max-arg-list-hack"
-
-    # libflame by default leaves BLAS symbols unresolved and leaves it
-    # up to the application to explicitly link to a BLAS. This is
-    # problematic for us, since then the BLAS library becomes an
-    # implicit dependency. Moreover, since the point of the AMD forks
-    # is to optimized for recent AMD CPUs, link against AMD BLIS.
-    "LDFLAGS=-lcblas"
-  ]
-  ++ lib.optionals withOpenMP [ "--enable-multithreading=openmp" ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs build
+
+    # Enforce reproducible build compiler flags
+    substituteInPlace CMakeLists.txt --replace '-mtune=native' ""
   '';
 
+  passthru = { inherit blas64; };
+
+  nativeBuildInputs = [ cmake gfortran python3 ];
+
+  buildInputs = [ amd-blis aocl-utils ];
+
+  cmakeFlags = [
+    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
+    "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
+    "-DENABLE_CBLAS_INTERFACES=ON"
+    "-DENABLE_EXT_LAPACK_INTERFACE=ON"
+  ]
+  ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
+  ++ lib.optional blas64 "-DENABLE_ILP64=ON"
+  ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
+
   postInstall = ''
-    ln -s $out/lib/libflame.so.${version} $out/lib/liblapack.so.3
-    ln -s $out/lib/libflame.so.${version} $out/lib/liblapacke.so.3
+    ln -s $out/lib/libflame.so $out/lib/liblapack.so.3
+    ln -s $out/lib/libflame.so $out/lib/liblapacke.so.3
   '';
 
   meta = with lib; {
     description = "LAPACK-compatible linear algebra library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
 }

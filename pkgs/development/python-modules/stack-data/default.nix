@@ -47,6 +47,10 @@ buildPythonPackage rec {
     typeguard
   ];
 
+  # https://github.com/alexmojaki/stack_data/issues/50
+  # incompatible with typeguard>=3
+  doCheck = false;
+
   disabledTests = [
     # AssertionError
     "test_example"

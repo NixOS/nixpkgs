@@ -82,15 +82,15 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    rm -r src/third_party/libsrtp
+    cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
       --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
       --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
-
-    rm -r src/third_party/libsrtp
-    cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
   '';
 
   outputs = [ "out" "dev" ];

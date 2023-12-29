@@ -1,0 +1,21 @@
+diff --git a/pybotvac/robot.py b/pybotvac/robot.py
+index f87546f..e9a61de 100644
+--- a/pybotvac/robot.py
++++ b/pybotvac/robot.py
+@@ -6,7 +6,6 @@ from datetime import datetime, timezone
+ from email.utils import format_datetime
+ 
+ import requests
+-import urllib3
+ from voluptuous import (
+     ALLOW_EXTRA,
+     All,
+@@ -21,8 +20,6 @@ from voluptuous import (
+ from .exceptions import NeatoRobotException, NeatoUnsupportedDevice
+ from .neato import Neato  # For default Vendor argument
+ 
+-# Disable warning due to SubjectAltNameWarning in certificate
+-urllib3.disable_warnings(urllib3.exceptions.SubjectAltNameWarning)
+ 
+ _LOGGER = logging.getLogger(__name__)
+ 

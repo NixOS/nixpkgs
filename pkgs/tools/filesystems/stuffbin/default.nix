@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "stuffbin";
   version = "1.1.0";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "knadh";

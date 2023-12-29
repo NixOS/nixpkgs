@@ -8,13 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "6.0.3";
-
-  format = "setuptools";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-csdQUxnopH+kYtoqdvyXKNW3fGkQNSREJYxjes9Dgi8=";
+    hash = "sha256-AI/GNubb7+nwz/vM6v/JoUtWup6rBJieKXtFQzrdPkE=";
   };
 
   postPatch = ''
@@ -22,22 +21,24 @@ python3.pkgs.buildPythonApplication rec {
       --replace "--flake8" ""
   '';
 
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    setuptools-changelog-shortener
+    wheel
+  ];
+
   buildInputs = [
     glibcLocales
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    argon2-cffi-bindings
     build
     check-manifest
     devpi-common
     iniconfig
-    pep517
     pkginfo
     pluggy
     platformdirs
-    py
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -66,6 +67,10 @@ python3.pkgs.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "devpi"
+  ];
 
   meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";

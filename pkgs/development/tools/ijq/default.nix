@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-WTA14W8JFHdouDgWmsc4wMygnwlANPjSYCAhxFVrwAA=";
   };
 
-  vendorSha256 = "sha256-DX8m5FsqMZnzk1wgJA/ESZl0QeDv3p9huF4h1HY9DIA=";
+  vendorHash = "sha256-DX8m5FsqMZnzk1wgJA/ESZl0QeDv3p9huF4h1HY9DIA=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
 

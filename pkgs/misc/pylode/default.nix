@@ -45,5 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     # Next release will move to BSD3
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ koslambrou ];
+    mainProgram = "pylode";
   };
 }

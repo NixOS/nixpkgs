@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.9.0";
+  version = "0.10.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jsvine";
     repo = "pdfplumber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cGTn1JTSp1YvksemjlvvToZcVauZ7GKINiNmG5f4zKg=";
+    hash = "sha256-fd/4I6jjc0Wz2+XHGXAGg0Am3Dmw9R2ZX7nymIj/UnA=";
   };
 
   postPatch = ''
@@ -60,6 +60,13 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test__repr_png_"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires pypdfium2
+    "tests/test_display.py"
+    # Tests require Ghostscript
+    "tests/test_repair.py"
   ];
 
   meta = with lib; {

@@ -1,21 +1,21 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "gut";
-  version = "0.2.10";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
     rev = version;
-    hash = "sha256-y6GhLuTqOaxAQjDgqh1ivDwGhpYY0a6ZNDdE3Pox3is=";
+    hash = "sha256-l7yjZEcpsnVisd93EqIug1n0k18m4tUmCQFXC6b63cg=";
   };
 
-  vendorHash = "sha256-91iyAFD/RPEkMarKKVwJ4t92qosP2Db1aQ6dmNZNDwU=";
+  vendorHash = "sha256-G9oDMHLmdv/vQfofTqKAf21xaGp+lvW+sedLmaj+A5A=";
 
   ldflags = [ "-s" "-w" "-X github.com/julien040/gut/src/telemetry.gutVersion=${version}" ];
 
@@ -24,10 +24,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
-    description = "An easy-to-use git client for Windows, macOS, and Linux";
-    homepage = "https://github.com/slackhq/go-audit";
-    maintainers = [ lib.maintainers.paveloom ];
-    license = [ lib.licenses.mit ];
+  meta = with lib; {
+    description = "An alternative git CLI";
+    homepage = "https://gut-cli.dev";
+    license = licenses.mit;
+    maintainers = with maintainers; [ paveloom ];
+    mainProgram = "gut";
   };
 }

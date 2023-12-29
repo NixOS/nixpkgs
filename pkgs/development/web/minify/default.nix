@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "minify";
-  version = "2.12.8";
+  version = "2.20.5";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5p1HWXx9kKKaiC0dTQDd1JpRDhKkDGdnDpuz+I0kgpo=";
+    hash = "sha256-+oaK6OdBRxtWW+0zp+pbCcGyphuOLzyv/LfjDqDiTGw=";
   };
 
-  vendorHash = "sha256-RBBCcqahIF1KjnK/Kxr0TZlRJirFffo9Dt40gNk5EQE=";
+  vendorHash = "sha256-GQqdr0zMQhi6QfLAyFchtWPOGfpo5yODDinKWA/s+qs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,5 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/tdewolff/minify/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "minify";
   };
 }

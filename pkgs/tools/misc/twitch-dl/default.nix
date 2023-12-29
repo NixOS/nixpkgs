@@ -49,5 +49,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "twitch-dl";
   };
 }

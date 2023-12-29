@@ -6,7 +6,7 @@
 , highlight
 , pygments
 , graphviz
-, texlive
+, texliveMinimal
 , dblatexFull
 , libxslt
 , w3m
@@ -54,6 +54,11 @@ let
   _enableAafigureFilter = enableExtraPlugins || enableAafigureFilter;
   _enableDeckjsBackend = enableExtraPlugins || enableDeckjsBackend;
   _enableOdfBackend = enableExtraPlugins || enableOdfBackend;
+
+  #
+  # texlive environment
+  #
+  texlive = texliveMinimal.withPackages (ps: [ ps.dvipng ]);
 
   #
   # filters

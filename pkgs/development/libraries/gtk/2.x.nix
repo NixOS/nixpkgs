@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     ./patches/2.0-gnome_bugzilla_557780_306776_freeciv_darwin.patch
     ./patches/2.0-darwin-x11.patch
+    # Fixes an incompatible function pointer conversion and implicit int errors with clang 16.
+    ./patches/2.0-clang.patch
   ];
 
   propagatedBuildInputs = [

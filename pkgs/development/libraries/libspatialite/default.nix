@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     # They allow any of these
     license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
   };
 }

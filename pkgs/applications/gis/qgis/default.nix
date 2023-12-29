@@ -1,5 +1,6 @@
 { lib
 , makeWrapper
+, nixosTests
 , symlinkJoin
 
 , extraPythonPackages ? (ps: [ ])
@@ -33,7 +34,10 @@ in symlinkJoin rec {
       --set PYTHONPATH $program_PYTHONPATH
   '';
 
-  passthru.unwrapped = qgis-unwrapped;
+  passthru = {
+    unwrapped = qgis-unwrapped;
+    tests.qgis = nixosTests.qgis;
+  };
 
   meta = qgis-unwrapped.meta;
 }

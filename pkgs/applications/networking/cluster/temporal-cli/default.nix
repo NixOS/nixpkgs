@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin, stdenv }:
 
 let
   metaCommon = with lib; {
@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.9.0";
+    version = "0.10.6";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-zgi1wNx7fWf/iFGKaVffcXnC90vUz+mBT6HhCGdXMa0=";
+      hash = "sha256-4kNuudnYBD6rgIkysP7dEjsRu/dFvTm3hkbBYZ6+Zh4=";
     };
 
-    vendorHash = "sha256-EX1T3AygarJn4Zae2I8CHQrZakmbNF1OwE4YZFF+nKc=";
+    vendorHash = "sha256-ZECwF/avHKE4L9GHa2w5Lx71wD6UIAaPpRkUtpEVafI=";
 
     inherit overrideModAttrs;
 
@@ -39,6 +39,9 @@ let
       "-w"
       "-X github.com/temporalio/cli/headers.Version=${version}"
     ];
+
+    # Tests fail with x86 on macOS Rosetta 2
+    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
 
     preCheck = ''
       export HOME=$(mktemp -d)

@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.14.2";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BxtEMIWJaZaCtd5auGRq+F3VkRTZXGBa6GdLWgvC+ZE=";
+    sha256 = "sha256-z8j44WFLzPDpnmQ/vG8DfpjpxnNd942mPUxoXSEJDeI=";
   };
 
-  vendorHash = "sha256-tPWdzPJyjxcjDM5UgIeQek60Df/7dSaKedZF04tfu6Q=";
+  vendorHash = "sha256-cn1rGmjrmPSo6v4TD72I01VbQjwt6dT7ZEijPOjp+kc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -62,10 +62,5 @@ buildGoModule rec {
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.ivankovnatsky ];
-    # Could not figure out how to use this application without any hustle. Weird
-    # linking of binary, aliases for god knows what.
-    # https://docs.commonfate.io/granted/usage/assuming-roles.
-    # Will mark as broken until maybe someone fixes it. Switched to aws-sso.
-    broken = true;
   };
 }

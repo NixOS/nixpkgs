@@ -33,5 +33,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.unix;
+    mainProgram = "yle-dl";
   };
 }

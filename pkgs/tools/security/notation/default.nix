@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "notation";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mj+LCO6Q4kKfYewPl0R9axZB9O4Yy+GkLlUIDe6yhlI=";
+    hash = "sha256-KcB5l6TRZhciXO04mz5iORR4//cAhrh+o4Kdq7LA4A4=";
   };
 
-  vendorHash = "sha256-wQTRgOSOq0LeiSwF5eowaW4R2xCx+kEb0WQ+upsxdAA=";
+  vendorHash = "sha256-r58ZV63KIHKxh5HDeQRfd0OF0s7xpC4sXvsYLhm8AIE=";
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
   excludedPackages = [ "./test" ];

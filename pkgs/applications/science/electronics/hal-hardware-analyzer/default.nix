@@ -67,6 +67,12 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/emsec/hal/commit/37d5c1a0eacb25de57cc552c13e74f559a5aa6e8.patch";
       hash = "sha256-a30VjDt4roJOTntisixqnH17wwCgWc4VWeh1+RgqFuY=";
     })
+    (fetchpatch {
+      name = "hal-fix-fmt-10.1-compat.patch";
+      # https://github.com/emsec/hal/pull/530
+      url = "https://github.com/emsec/hal/commit/b639a56b303141afbf6731b70b7cc7452551f024.patch";
+      hash = "sha256-a7AyDEKkqdbiHpa4OHTRuP9Yewb3Nxs/j6bwez5m0yU=";
+    })
   ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise
@@ -126,6 +132,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;

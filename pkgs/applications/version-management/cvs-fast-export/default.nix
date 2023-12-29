@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
+
   postInstall = ''
     wrapProgram $out/bin/cvssync --prefix PATH : ${lib.makeBinPath [ rsync ]}
     wrapProgram $out/bin/cvsconvert --prefix PATH : $out/bin:${lib.makeBinPath [

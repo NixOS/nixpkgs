@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, fetchgit
 , bzip2
 , expat
 , libffi
@@ -18,6 +18,7 @@
 , self
 , configd
 , darwin
+, windows
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -44,6 +45,9 @@
 , static ? stdenv.hostPlatform.isStatic
 , enableFramework ? false
 , enableOptimizations ? false
+# these dont build for windows
+, withGdbm ? !stdenv.hostPlatform.isWindows
+, withReadline ? !stdenv.hostPlatform.isWindows
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # clang starts supporting `-fno-sematic-interposition` with version 10
 , enableNoSemanticInterposition ? (!stdenv.cc.isClang || (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "10"))
@@ -54,6 +58,7 @@
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, testers
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -87,7 +92,7 @@ let
   openssl' = if openssl != null then openssl_legacy else null;
 
   buildPackages = pkgsBuildHost;
-  inherit (passthru) pythonForBuild;
+  inherit (passthru) pythonOnBuildForHost;
 
   inherit (darwin.apple_sdk.frameworks) Cocoa;
 
@@ -122,25 +127,30 @@ let
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
-    pythonForBuild
+    pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi libxcrypt gdbm sqlite readline ncurses openssl' ]
+    zlib bzip2 expat xz libffi libxcrypt ]
+    ++ optional withGdbm gdbm
+    ++ [ sqlite ]
+    ++ optional withReadline readline
+    ++ [ ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
 
     ++ optionals enableFramework [ Cocoa ]
+    ++ optionals stdenv.hostPlatform.isMinGW [ windows.mingw_w64_pthreads windows.dlfcn ]
     ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
-  else pythonForBuild.interpreter;
+  else pythonOnBuildForHost.interpreter;
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
@@ -160,6 +170,8 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
+
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
@@ -176,7 +188,7 @@ let
         powerpc64 = "ppc64";
         powerpc64le = "ppc64le";
       }.${parsed.cpu.name} or parsed.cpu.name;
-    in "${parsed.kernel.name}-${cpu}";
+    in "${machdep}-${cpu}";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
@@ -184,33 +196,31 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
-    # Python doesn't distinguish musl and glibc and always prefixes with "gnu"
-    gnuAbiName = replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name;
-    pythonAbiName =
-      # python's build doesn't support every gnu<extension>, and doesn't
-      # differentiate between musl and glibc, so we list those supported in
-      # here:
+
+    pythonAbiName = let
+      # python's build doesn't match the nixpkgs abi in some cases.
       # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-      # Note: this is an approximation, as it doesn't take into account the CPU
-      # family, or the nixpkgs abi naming conventions.
-      if elem gnuAbiName [
-        "gnux32"
-        "gnueabihf"
-        "gnueabi"
-        "gnuabin32"
-        "gnuabi64"
-        "gnuspe"
-      ]
-      then gnuAbiName
-      else "gnu";
+      nixpkgsPythonAbiMappings = {
+        "gnuabielfv2" = "gnu";
+        "muslabielfv2" = "musl";
+      };
+      pythonAbi = nixpkgsPythonAbiMappings.${parsed.abi.name} or parsed.abi.name;
+    in
+      # Python <3.11 doesn't distinguish musl and glibc and always prefixes with "gnu"
+      if lib.versionOlder version "3.11" then
+        replaceStrings [ "musl" ] [ "gnu" ] pythonAbi
+      else
+        pythonAbi;
+
     multiarch =
       if isDarwin then "darwin"
-      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
+      else if isWindows then ""
+      else "${multiarchCpu}-${machdep}-${pythonAbiName}";
 
     abiFlags = optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
-    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${machdep}_${multiarch}";
   in ''
     sysconfigdataHook() {
       if [ "$1" = '${placeholder "out"}' ]; then
@@ -222,12 +232,13 @@ let
     addEnvHooks "$hostOffset" sysconfigdataHook
   '';
 
-in with passthru; stdenv.mkDerivation {
+  execSuffix = stdenv.hostPlatform.extensions.executable;
+in with passthru; stdenv.mkDerivation (finalAttrs: {
   pname = "python3";
   inherit src version;
 
   inherit nativeBuildInputs;
-  buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ bash ] ++ buildInputs; # bash is only used for patchShebangs
 
 
   prePatch = optionalString stdenv.isDarwin ''
@@ -292,18 +303,31 @@ in with passthru; stdenv.mkDerivation {
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
     ./3.7/fix-finding-headers-when-cross-compiling.patch
-  ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
+  ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ];
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
+    # backport fix for https://github.com/python/cpython/issues/95855
+    ./platform-triplet-detection.patch
+  ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
+    # https://src.fedoraproject.org/rpms/mingw-python3
+    mingw-patch = fetchgit {
+      name = "mingw-python-patches";
+      url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
+      rev = "45c45833ab9e5480ad0ae00778a05ebf35812ed4"; # for python 3.11.5 at the time of writing.
+      sha256 = "sha256-KIyNvO6MlYTrmSy9V/DbzXm5OsIuyT/BEpuo7Umm9DI=";
+    };
+  in [
+    "${mingw-patch}/*.patch"
+  ]);
 
-  postPatch = ''
+  postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"
-  '' + optionalString (x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
@@ -360,17 +384,19 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_have_long_long_format=yes"
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
-    "ac_cv_file__dev_ptmx=yes"
-    "ac_cv_file__dev_ptc=yes"
+    # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
+    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
-    "--with-build-python=${pythonForBuildInterpreter}"
+    "--with-build-python=${pythonOnBuildForHostInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
-  ] ++ optional static "LDFLAGS=-static";
+  ] ++ optional static "LDFLAGS=-static"
+  ++ optional (execSuffix != "") "--with-suffix=${execSuffix}";
 
   preConfigure = optionalString (pythonOlder "3.12") ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -429,8 +455,6 @@ in with passthru; stdenv.mkDerivation {
     done
     touch $out/lib/${libPrefix}/test/__init__.py
 
-    ln -s "$out/include/${executable}m" "$out/include/${executable}"
-
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
     find "$out" -name 'wininst*.exe' | xargs -r rm -f
@@ -438,7 +462,7 @@ in with passthru; stdenv.mkDerivation {
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
-    ln -s "$out/bin/python3" "$out/bin/python"
+    ln -s "$out/bin/python3${execSuffix}" "$out/bin/python${execSuffix}"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
     ln -sL "$out/share/man/man1/python3.1.gz" "$out/share/man/man1/python.1.gz"
@@ -458,6 +482,9 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + lib.optionalString (pythonOlder "3.8") ''
+    # This is gone in Python >= 3.8
+    ln -s "$out/include/${executable}m" "$out/include/${executable}"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -484,9 +511,9 @@ in with passthru; stdenv.mkDerivation {
     # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
     # is not reproducible yet. https://bugs.python.org/issue29708
     # Not creating bytecode will result in a large performance loss however, so we do build it.
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
     '' + ''
     # *strip* shebang from libpython gdb script - it should be dual-syntax and
     # interpretable by whatever python the gdb in question is using, which may
@@ -504,6 +531,14 @@ in with passthru; stdenv.mkDerivation {
      To use Python with Nix and nixpkgs, have a look at the online documentation:
      <https://nixos.org/manual/nixpkgs/stable/#python>.
     EXTERNALLY_MANAGED
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    # Shebang files that link against the build python. Shebang don’t work on windows
+    rm $out/bin/2to3*
+    rm $out/bin/idle*
+    rm $out/bin/pydoc*
+
+    echo linking DLLs for python’s compiled librairies
+    linkDLLsInfolder $out/lib/python*/lib-dynload/
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -526,7 +561,7 @@ in with passthru; stdenv.mkDerivation {
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonForBuild buildPackages.bash
+    pythonOnBuildForHost buildPackages.bash
   ];
 
   separateDebugInfo = true;
@@ -546,8 +581,10 @@ in with passthru; stdenv.mkDerivation {
         mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
       '';
 
-      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
+      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python-docs-theme ];
     };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   enableParallelBuilding = true;
@@ -573,8 +610,9 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
-    platforms = platforms.linux ++ platforms.darwin;
+    pkgConfigModules = [ "python3" ];
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };
-}
+})

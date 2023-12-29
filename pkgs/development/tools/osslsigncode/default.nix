@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Lt99RO/pTEtksIuulkKTm48+1xUKZOHrnlbDZGi3VWk=";
+    sha256 = "sha256-TW4/alnAW3vifAKf02RlnpOq1uW7nc+Sjs0g1BfplLk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config python3 ];

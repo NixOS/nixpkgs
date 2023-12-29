@@ -35,6 +35,7 @@ let
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
+    "application/javascript" # Deprecated by IETF RFC 9239, but still widely used
     "application/json"
     "application/ld+json"
     "application/manifest+json"
@@ -145,6 +146,10 @@ let
     pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
+
+    ${optionalString cfg.enableQuicBPF ''
+      quic_bpf on;
+    ''}
 
     ${cfg.config}
 
@@ -325,7 +330,7 @@ let
         listenString = { addr, port, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
           # UDP listener for QUIC transport protocol.
           (optionalString (ssl && vhost.quic) ("
-            listen ${addr}:${toString port} quic "
+            listen ${addr}${optionalString (port != null) ":${toString port}"} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
@@ -334,7 +339,7 @@ let
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
-            listen ${addr}:${toString port} "
+            listen ${addr}${optionalString (port != null) ":${toString port}"} "
           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
@@ -578,11 +583,13 @@ in
           };
         });
         default = [];
-        example = literalExpression ''[
-          { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
-          { addr = "0.0.0.0"; }
-          { addr = "[::0]"; }
-        ]'';
+        example = literalExpression ''
+          [
+            { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
+            { addr = "0.0.0.0"; }
+            { addr = "[::0]"; }
+          ]
+        '';
         description = lib.mdDoc ''
           If vhosts do not specify listen, use these addresses by default.
           This option takes precedence over {option}`defaultListenAddresses` and
@@ -781,6 +788,19 @@ in
         '';
       };
 
+      enableQuicBPF = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enables routing of QUIC packets using eBPF. When enabled, this allows
+          to support QUIC connection migration. The directive is only supported
+          on Linux 5.7+.
+          Note that enabling this option will make nginx run with extended
+          capabilities that are usually limited to processes running as root
+          namely `CAP_SYS_ADMIN` and `CAP_NET_ADMIN`.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nginx";
@@ -935,7 +955,7 @@ in
         default = {};
         description = lib.mdDoc ''
           Configure a proxy cache path entry.
-          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+          See <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
         '';
       };
 
@@ -1124,6 +1144,14 @@ in
       }
 
       {
+        assertion = cfg.package.pname != "nginxQuic" -> !(cfg.enableQuicBPF);
+        message = ''
+          services.nginx.enableQuicBPF requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
+
+      {
         assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
         message = ''
           services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
@@ -1222,8 +1250,8 @@ in
         # New file permissions
         UMask = "0027"; # 0640 / 0750
         # Capabilities
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
@@ -1248,6 +1276,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
+          ++ optional cfg.enableQuicBPF [ "bpf" ]
           ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
       };
     };
@@ -1311,6 +1340,11 @@ in
     users.groups = optionalAttrs (cfg.group == "nginx") {
       nginx.gid = config.ids.gids.nginx;
     };
+
+    # do not delete the default temp directories created upon nginx startup
+    systemd.tmpfiles.rules = [
+      "X /tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*"
+    ];
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
       files = "/var/log/nginx/*.log";

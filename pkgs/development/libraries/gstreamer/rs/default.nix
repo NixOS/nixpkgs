@@ -2,13 +2,11 @@
 , stdenv
 , fetchFromGitLab
 , fetchpatch
-, writeText
 , rustPlatform
 , meson
 , ninja
 , python3
 , pkg-config
-, rust
 , rustc
 , cargo
 , cargo-c
@@ -205,14 +203,7 @@ stdenv.mkDerivation rec {
   ) ++ [
     (lib.mesonOption "sodium-source" "system")
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ (let
-    crossFile = writeText "cross-file.conf" ''
-      [binaries]
-      rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
-    '';
-  in lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "--cross-file=${crossFile}"
-  ]);
+  ];
 
   # turn off all auto plugins since we use a list of plugins we generate
   mesonAutoFeatures = "disabled";
@@ -240,6 +231,14 @@ stdenv.mkDerivation rec {
     meson test --no-rebuild --verbose --timeout-multiplier 12
 
     runHook postCheck
+  '';
+
+  doInstallCheck = (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic &&
+    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    readelf -a $out/lib/gstreamer-1.0/libgstrswebp.so | grep -F 'Shared library: [libwebpdemux.so'
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = nix-update-script {

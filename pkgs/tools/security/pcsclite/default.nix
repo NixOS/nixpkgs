@@ -8,7 +8,7 @@
 , python3
 , dbus
 , polkit
-, systemdMinimal
+, systemdLibs
 , IOKit
 , pname ? "pcsclite"
 , polkitSupport ? false
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdMinimal ]
+    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
 

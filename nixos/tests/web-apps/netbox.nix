@@ -16,6 +16,7 @@ in import ../make-test-python.nix ({ lib, pkgs, netbox, ... }: {
   };
 
   nodes.machine = { config, ... }: {
+    virtualisation.memorySize = 2048;
     services.netbox = {
       enable = true;
       package = netbox;

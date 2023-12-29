@@ -1,17 +1,15 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "keepass-diff";
-  version = "1.1.3";
+  version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "Narigo";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-jd/cUkTHylLwzxolQUzMlXHauCfXUhcUr/1zKpdngbo=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-CqLH5Dosp26YfqgOVcZilfo5svAEv+pAbi1zebGMnb4=";
   };
 
-  cargoSha256 = "sha256-2e2lGG72HmX7AFk0+J3U62Kch5ylrqvaIpitRF546JA=";
+  cargoHash = "sha256-+kgb9hbCH4Nt80nobTeDrC+LVp1r6EbzUs+t6zlIhtU=";
 
   meta = with lib; {
     description = "A CLI-tool to diff Keepass (.kdbx) files";

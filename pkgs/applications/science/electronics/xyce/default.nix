@@ -16,7 +16,7 @@
 , trilinos
 , withMPI ? false
   # for doc
-, texlive
+, texliveMedium
 , pandoc
 , enableDocs ? true
   # for tests
@@ -32,21 +32,21 @@
 assert withMPI -> trilinos.withMPI;
 
 let
-  version = "7.6.0";
+  version = "7.7.0";
 
   # useing fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
     url = "https://github.com/Xyce/Xyce.git";
     rev = "Release-${version}";
-    sha256 = "sha256-HYIzmODMWXBuVRZhcC7LntTysuyXN5A9lb2DeCQQtVw=";
+    sha256 = "sha256-F0kO86eliD1AfUUjeVllxJ231ZElXkfBfGJ3jhT0s9w=";
   };
 
   regression_src = fetchFromGitHub {
     owner = "Xyce";
     repo = "Xyce_Regression";
     rev = "Release-${version}";
-    sha256 = "sha256-uEoiKpYyHmdK7LZ1UNm2d3Jk8+sCwBwB0TCoHilIh74=";
+    sha256 = "sha256-iDxm0Vcn3JuuREciCt3/b7q94E8GhXoIUD/BCx0mW6Q=";
   };
 in
 
@@ -81,16 +81,14 @@ stdenv.mkDerivation rec {
     gfortran
     libtool_2
   ] ++ lib.optionals enableDocs [
-    (texlive.combine {
-      inherit (texlive)
-        scheme-medium
+    (texliveMedium.withPackages (ps: with ps; [
         koma-script
         optional
         framed
         enumitem
         multirow
-        preprint;
-    })
+        preprint
+      ]))
   ];
 
   buildInputs = [
@@ -156,8 +154,11 @@ stdenv.mkDerivation rec {
       "doc/Reference_Guide/Xyce_RG"
       "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
 
-    # Release notes refer to an image not in the repo.
-    sed -i -E 's/\\includegraphics\[height=(0.5in)\]\{snllineblubrd\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/' ''${docFiles[2]}.tex
+    # SANDIA LaTeX class and some organization logos are not publicly available see
+    # https://groups.google.com/g/xyce-users/c/MxeViRo8CT4/m/ppCY7ePLEAAJ
+    for img in "snllineblubrd" "snllineblk" "DOEbwlogo" "NNSA_logo"; do
+      sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
+    done
 
     install -d $doc/share/doc/${pname}-${version}/
     for d in ''${docFiles[@]}; do

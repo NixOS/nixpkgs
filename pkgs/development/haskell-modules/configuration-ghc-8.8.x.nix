@@ -148,6 +148,9 @@ self: super: {
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
 
+  # Overly-strict bounds introducted by a revision in version 0.3.2.
+  text-metrics = doJailbreak super.text-metrics;
+
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat

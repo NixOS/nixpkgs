@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/LINBIT/virter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+    mainProgram = "virter";
   };
 }

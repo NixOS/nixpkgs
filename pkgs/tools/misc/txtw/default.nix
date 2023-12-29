@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lihop ];
     license = licenses.unlicense;
     platforms = platforms.linux;
+    mainProgram = "txtw";
   };
 }

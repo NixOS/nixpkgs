@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "A PNG optimizer";
     license = lib.licenses.free;
     platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "pngcrush";
   };
 }

@@ -1,10 +1,3 @@
-##
-## Caveat: a copy of configuration-ghc-8.6.x.nix with minor changes:
-##
-##  1. "8.7" strings
-##  2. llvm 6
-##  3. disabled library update: parallel
-##
 { pkgs, haskellLib }:
 
 with haskellLib;
@@ -78,10 +71,4 @@ self: super: {
 
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
-
-  # https://github.com/fpco/inline-c/pull/131
-  # and/or https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7739
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
 }

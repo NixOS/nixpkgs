@@ -23,5 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/micahflee/semiphemeral";
     license = licenses.mit;
     maintainers = with maintainers; [ amanjeev ];
+    mainProgram = "semiphemeral";
   };
 }

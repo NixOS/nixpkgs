@@ -6,6 +6,7 @@
 , automake
 , gnome2
 , gtk2
+, libGL
 , libjack2
 , libtool
 , libxml2
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     audiofile
     gnome2.gtkglext
     gtk2
+    libGL
     libjack2
     libtool
     libxml2

@@ -111,7 +111,7 @@ rec {
             touch .${projectName}.d/env/94-appsbase.sh
 
             cd ..
-            mkdir -p /var/lib/${projectName}/mnt/{container,final,overlay,session,source}
+            mkdir -p /var/lib/${projectName}/mnt/session
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
             TMPDIR=$(pwd -P) ${projectName} build $out ./img

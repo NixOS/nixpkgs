@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-QViB9lS/znrFb7GoV0RUf1SwS7veTKlmFozWKM1zc+Y=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # scc has a scripts/ sub-package that's for testing.
   excludedPackages = [ "scripts" ];

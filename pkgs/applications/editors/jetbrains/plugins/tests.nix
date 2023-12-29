@@ -18,6 +18,7 @@
         pycharm-professional
         rider
         ruby-mine
+        rust-rover
         webstorm
       ];
       paths = builtins.concatStringsSep " " ides;

@@ -31,12 +31,6 @@ assert useCudatoolkitRunfile || (libcublas != null); let
   # versionTriple :: String
   # Version with three components: major.minor.patch
   versionTriple = majorMinorPatch version;
-
-  # cudatoolkit_root :: Derivation
-  cudatoolkit_root =
-    if useCudatoolkitRunfile
-    then cudatoolkit
-    else libcublas;
 in
   backendStdenv.mkDerivation {
     pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
@@ -65,7 +59,10 @@ in
       stdenv.cc.cc.lib
 
       zlib
-      cudatoolkit_root
+    ] ++ lists.optionals useCudatoolkitRunfile [
+      cudatoolkit
+    ] ++ lists.optionals (!useCudatoolkitRunfile) [
+      libcublas.lib
     ];
 
     # We used to patch Runpath here, but now we use autoPatchelfHook
@@ -156,8 +153,14 @@ in
       description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
       homepage = "https://developer.nvidia.com/cudnn";
       sourceProvenance = with sourceTypes; [binaryNativeCode];
-      # TODO: consider marking unfreRedistributable when not using runfile
-      license = licenses.unfree;
+      license = {
+        shortName = "cuDNN EULA";
+        fullName = "NVIDIA cuDNN Software License Agreement (EULA)";
+        url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
+        free = false;
+      } // lib.optionalAttrs (!useCudatoolkitRunfile) {
+        redistributable = true;
+      };
       platforms = ["x86_64-linux"];
       maintainers = with maintainers; [mdaiter samuela];
       # Force the use of the default, fat output by default (even though `dev` exists, which

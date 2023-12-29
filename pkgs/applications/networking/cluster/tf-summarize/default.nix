@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "tf-summarize";
-  version = "0.3.2";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "dineshba";
     repo = "tf-summarize";
     rev = "v${version}";
-    hash = "sha256-d8DIVPQkuEvDCO0wKl+aK1jSu6MJCpTxQrgKYcFnzjA=";
+    hash = "sha256-8TRX7gAbBlCIOHbwRIVoke2WBSgwLx9121Fg5h0LPF0=";
   };
 
-  vendorHash = "sha256-cnybdZth7qlP2BHK8uvLCoqJtggMIkvaL2+YugiUZRE=";
+  vendorHash = "sha256-YdfZt8SHBJHk5VUC8Em97EzX79EV4hxvo0B05npBA2U=";
 
   ldflags = [
     "-s"

@@ -21,5 +21,7 @@ in
         ln -s reiserfsck $out/bin/fsck.reiserfs
       '';
 
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.reiserfsprogs ];
+
   };
 }

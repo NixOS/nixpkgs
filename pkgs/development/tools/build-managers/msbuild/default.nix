@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, dotnetPackages, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dotnetPackages.Nuget
+    nuget
     glibcLocales
   ];
 

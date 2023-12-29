@@ -45,7 +45,7 @@ let
     ];
 
     patches = [
-      ./purity.patch
+      ../../common/clang/5-8-purity.patch
       ./xpc.patch
       # Backport for -static-pie, which the latter touches, and which is nice in
       # its own right.

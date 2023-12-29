@@ -34,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     description = "Smart Automatic Cover Art Downloader";
     homepage = "https://github.com/desbma/sacad";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

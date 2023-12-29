@@ -84,8 +84,8 @@ let
       backupScript = mkBackupScript backupJobName cfg;
     in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
-      path = with pkgs; [
-        borgbackup openssh
+      path =  [
+        config.services.borgbackup.package pkgs.openssh
       ];
       script = "exec " + optionalString cfg.inhibitsSleep ''\
         ${pkgs.systemd}/bin/systemd-inhibit \
@@ -137,7 +137,7 @@ let
     '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
-    original = "${pkgs.borgbackup}/bin/borg";
+    original = getExe config.services.borgbackup.package;
     name = "borg-job-${name}";
     set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
   };
@@ -230,6 +230,8 @@ in {
   meta.doc = ./borgbackup.md;
 
   ###### interface
+
+  options.services.borgbackup.package = mkPackageOptionMD pkgs "borgbackup" { };
 
   options.services.borgbackup.jobs = mkOption {
     description = lib.mdDoc ''
@@ -769,6 +771,7 @@ in {
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages = with pkgs; [ borgbackup ] ++ (mapAttrsToList mkBorgWrapper jobs);
+      environment.systemPackages =
+        [ config.services.borgbackup.package ] ++ (mapAttrsToList mkBorgWrapper jobs);
     });
 }

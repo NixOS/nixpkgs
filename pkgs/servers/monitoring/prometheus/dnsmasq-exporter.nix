@@ -7,11 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    sha256 = "1i7imid981l0a9k8lqyr9igm3qkk92kid4xzadkwry4857k6mgpj";
     rev = "v${version}";
+    hash = "sha256-8r5q5imI+MxnU7+TFqdIc+JRX0zZY4pmUoAGlFqs8cQ=";
   };
 
-  vendorSha256 = "1dqpa180pbdi2gcmp991d4cry560mx5rm5l9x065s9n9gnd38hvl";
+  vendorHash = "sha256-dEM0mn3JJl0M6ImWmkuvwBSfGWkhpVvZE7GtC1BQF7c=";
 
   doCheck = false;
 

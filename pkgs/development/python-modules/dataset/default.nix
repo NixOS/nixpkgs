@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "dataset";
-  version = "1.6.0";
+  version = "1.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fNvJBdZjtYKvhGzwULfP2iDNUrqhxiwRlhlFrHfmGdU=";
+    hash = "sha256-d9NiEY9nqMu0hI29MKs2K5+nz+vb+vQmycUAyziWmpk=";
   };
 
   propagatedBuildInputs = [

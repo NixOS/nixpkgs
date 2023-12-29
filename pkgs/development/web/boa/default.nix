@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boa";
-  version = "0.17";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
     rev = "v${version}";
-    hash = "sha256-3Iv7Ko6ukbmec4yDKayxW0T6+3ZNbUT4wWwEarBy4Zs=";
+    hash = "sha256-ROzdOanfHNPwHXA0SzU2fpuBonbDbgDqH+ZgOjwK/tg=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-2ZzTvVoA4oxy26rL0tvdvXm2oVWpHP+gooyjB4vIP3M=";
+  cargoHash = "sha256-UIUXayJwTrWbLm1UKnIXy1Df8a7ZoBzdNm/uZ1+H+SQ=";
 
   cargoBuildFlags = [ "--package" "boa_cli" ];
 

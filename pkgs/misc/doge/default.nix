@@ -14,5 +14,6 @@ python3Packages.buildPythonPackage rec {
     description = "wow very terminal doge";
     license = licenses.mit;
     maintainers = with maintainers; [ Gonzih ];
+    mainProgram = "doge";
   };
 }

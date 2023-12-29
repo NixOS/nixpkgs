@@ -46,7 +46,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.jellyfin = {
       description = "Jellyfin Media Server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service

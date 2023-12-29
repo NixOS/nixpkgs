@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.24.1";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FcOpLCLoeY+uZA+IMWNxUUbu9yieNVqPl4iiV8BDpTE=";
+    hash = "sha256-mT5toF4mKRP0dlwlfKHjmFFQJ/cWSb2vwg1uZbhZRhI=";
   };
 
-  cargoHash = "sha256-UvMtA+2inMLBjQA+17nozI/VrU1NR0A7eym1VyjYoAg=";
+  cargoHash = "sha256-8j0NtJB2ErrpljPHSMRD/4IGZuqA8wLuzPnuQqxaXRg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Blazing fast terminal-ui for Git written in Rust";
     homepage = "https://github.com/extrawurst/gitui";
-    changelog = "https://github.com/extrawurst/gitui/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
     mainProgram = "gitui";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne yanganto mfrw ];

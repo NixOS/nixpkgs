@@ -5,5 +5,5 @@
 
 qtModule {
   pname = "qtdatavis3d";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
 }

@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = licenses.free;
     platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "jpegexiforient";
   };
 }

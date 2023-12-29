@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-dormakaba-dkey";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1jIsKQa27XNVievU02jjanRWFtJDYsHolgPBab6qpM0=";
+    hash = "sha256-kS99du9EZwki6J2q+nI44rx/AWIPtq7wXR/61ZcyUSM=";
   };
 
   patches = [

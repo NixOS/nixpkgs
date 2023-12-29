@@ -35,16 +35,16 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.8";
+  version = "10.8.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "budgie-desktop";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-fOsTBnKtwBGQSPkBBrzwHEB3+OcJYtPIdvZsV31oi6g=";
+    hash = "sha256-K5XUYcFjDJCHhjb/UTO206+UT6lI2P7X1v3SqlYbwPM=";
   };
 
   patches = [
@@ -97,11 +97,11 @@ stdenv.mkDerivation rec {
     "budgie-desktop"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
-    license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ federicoschonborn ];
   };
-}
+})

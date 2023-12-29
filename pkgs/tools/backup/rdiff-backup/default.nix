@@ -6,11 +6,11 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "rdiff-backup";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-huKCa3hOw+pO8YfZNu5fFSd0IsQHfvoBVu9n4xOeoI4=";
+    sha256 = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
   };
 
   nativeBuildInputs = with pypkgs; [ setuptools-scm ];

@@ -74,6 +74,15 @@ in
   };
 
   config = lib.mkIf (cfg.enable || initrdCfg.enable) {
+    assertions = [
+      {
+        assertion = initrdCfg.enable -> config.boot.initrd.systemd.enable;
+        message = ''
+          'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
+        '';
+      }
+    ];
+
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"

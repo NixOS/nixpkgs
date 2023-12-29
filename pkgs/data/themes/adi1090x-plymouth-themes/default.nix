@@ -7,7 +7,7 @@
   # reference ./shas.nix for available themes
   selected_themes ? [],
 }: let
-  version = "2020-12-28";
+  version = "1.0";
   # this file is generated via ./update.sh
   # borrowed from pkgs/data/fonts/nerdfonts
   themeShas = import ./shas.nix;

@@ -61,6 +61,7 @@ in stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "git-vendor";
   };
 
 }

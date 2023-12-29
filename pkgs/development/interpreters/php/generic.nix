@@ -33,10 +33,12 @@ let
     , jq
 
     , version
-    , hash
+    , phpSrc ? null
+    , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
+    , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
     , cgiSupport ? true
@@ -159,7 +161,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject composerHooks mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -192,6 +194,11 @@ let
 
       mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
         mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
+
+      defaultPhpSrc = fetchurl {
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+        inherit hash;
+      };
     in
     stdenv.mkDerivation (
       let
@@ -271,12 +278,21 @@ let
 
               ./buildconf --copy --force
 
-              if test -f $src/genfiles; then
-                ./genfiles
+              if [ -f "scripts/dev/genfiles" ]; then
+                ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"
             '';
+
+          # When compiling PHP sources from Github, this file is missing and we
+          # need to install it ourselves.
+          # On the other hand, a distribution includes this file by default.
+          preInstall = ''
+            if [[ ! -f ./pear/install-pear-nozlib.phar ]]; then
+              cp ${pearInstallPhar} ./pear/install-pear-nozlib.phar
+            fi
+          '';
 
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
@@ -291,10 +307,7 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit hash;
-          };
+          src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 

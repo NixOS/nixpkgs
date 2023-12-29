@@ -17,7 +17,7 @@
 # use letters instead of numbers for post-appendix chapters, and we
 # want it to match the upstream format because sage depends on it.
 , texinfo4
-, texlive
+, texliveSmall
 , enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     graphviz
     latex2html
     texinfo4
-    texlive.combined.scheme-small
+    texliveSmall
   ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

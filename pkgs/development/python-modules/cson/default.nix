@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ speg ];
 
-  pythonImportChecks = [ "cson" ];
+  pythonImportsCheck = [ "cson" ];
 
   meta = with lib; {
     description = "A python parser for the Coffeescript Object Notation (CSON)";

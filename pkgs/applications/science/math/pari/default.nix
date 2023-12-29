@@ -7,7 +7,7 @@
 , libpthreadstubs
 , perl
 , readline
-, tex
+, texliveBasic
 , withThread ? true
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libX11
     perl
     readline
-    tex
+    texliveBasic
   ] ++ lib.optionals withThread [
     libpthreadstubs
   ];

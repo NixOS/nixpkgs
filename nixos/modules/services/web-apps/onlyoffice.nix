@@ -198,7 +198,7 @@ in
         ensureDatabases = [ "onlyoffice" ];
         ensureUsers = [{
           name = "onlyoffice";
-          ensurePermissions = { "DATABASE \"onlyoffice\"" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
     };

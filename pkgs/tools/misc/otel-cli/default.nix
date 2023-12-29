@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "otel-cli";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xIvxjmrZd/2eT2JAagH+mMyYkDjc7La5dUqsmNnOtrc=";
+    hash = "sha256-kOTReHG7byOqKsaVrXXNq9DAyawTz4hUeR4Q5lJKmiM=";
   };
 
-  vendorHash = "sha256-mnMtvR2r5HbKC0P5iGFkwLcpx3IvmhgCI8/CCVJunXw=";
+  vendorHash = "sha256-HwbEqWtOqiTe5Z/MtMAs63Lzvll/vgmbCpMTREXgtXA=";
 
   preCheck = ''
     ln -s $GOPATH/bin/otel-cli .
@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ emattiza urandom ];
+    mainProgram = "otel-cli";
   };
 }

@@ -8,7 +8,6 @@
 { stdenv
 , python
 , runCommand
-, substituteAll
 , lib
 , callPackage
 , pkgs
@@ -60,7 +59,7 @@ let
         is_nixenv = "True";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) rec {
+    } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) {
       # Venv built using plain Python
       # Python 2 does not support venv
       # TODO: PyPy executable name is incorrect, it should be pypy-c or pypy-3c instead of pypy and pypy3.
@@ -109,7 +108,7 @@ let
       cpython-gdb = callPackage ./tests/test_cpython_gdb {
         interpreter = python;
       };
-    } // lib.optionalAttrs (python.pythonAtLeast "3.7") rec {
+    } // lib.optionalAttrs (python.pythonAtLeast "3.7") {
       # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
       nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
         interpreter = python;
@@ -126,7 +125,7 @@ let
     extension = self: super: {
       foobar = super.numpy;
     };
-  in {
+  in lib.optionalAttrs (python.isPy3k) ({
     test-packageOverrides = let
       myPython = let
         self = python.override {
@@ -150,7 +149,7 @@ let
         ];
       });
     in pkgs_.${python.pythonAttr}.pkgs.foo;
-  };
+  });
 
   condaTests = let
     requests = callPackage ({
@@ -178,7 +177,7 @@ let
       }
     ) {};
     pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
-    in lib.optionalAttrs stdenv.isLinux
+    in lib.optionalAttrs (python.isPy3k && stdenv.isLinux)
     {
       condaExamplePackage = runCommand "import-requests" {} ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-hYyJtkwAzweH8boUY3vrvy6Ug+Ier5f6fvR52R+Di8o=";
   };
 
-  vendorSha256 = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";
+  vendorHash = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";
 
   postInstall = ''
     mv $out/bin/{cmd,ec2-metadata-mock}

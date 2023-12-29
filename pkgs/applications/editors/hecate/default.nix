@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-8L0ukzPF7aECCeZfwZYKcJAJLpPgotkVJ+OSdwQUjhw=";
   };
 
-  vendorSha256 = "sha256-eyMrTrNarNCB3w8EOeJBmCbVxpMZy25sQ19icVARU1M=";
+  vendorHash = "sha256-eyMrTrNarNCB3w8EOeJBmCbVxpMZy25sQ19icVARU1M=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -21,5 +21,6 @@ buildGoModule rec {
     longDescription = "The Hex Editor From Hell!";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ramkromberg ];
+    mainProgram = "hecate";
   };
 }

@@ -8,6 +8,7 @@
 , rdkafka
 , oniguruma
 , zstd
+, rust-jemalloc-sys
 , Security
 , libiconv
 , coreutils
@@ -26,14 +27,14 @@
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
 , nixosTests
 , nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.31.0";
+  version = "0.34.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -42,28 +43,26 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+ATOHx+LQLQV4nMdj1FRRvDTqGCTbX9kl290AbY9Vw0=";
+    hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
   };
 
-  patches = [
-    ./rust-1.71-unnecessary-mut.diff
-  ];
+  patches = [ ./vector-pr19075.patch ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "aws-config-0.54.1" = "sha256-AVumLhybVbMnEah9/JqiQOQ4R0e2OsbB8WAJ422R6uk=";
-      "azure_core-0.5.0" = "sha256-fojO7dhntpymMjV58TtYb7N4UN6rOp30D54x09RDXfQ=";
-      "chrono-0.4.26" = "sha256-4aDDfLK9H0tEyKlZVMIIU4NjvF70spVYFrfM3/05e0k=";
+      "greptime-proto-0.1.0" = "sha256-kSOy/0s8ZJ1RfqOb469oaVlreABtHxesNaMzFH6H+aE=";
+      "greptimedb-client-0.1.0" = "sha256-mGgbxp/h55snowS2BV+QRwrhnE5vywfRF9Gc+8MoAdY=";
       "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
-      "tokio-util-0.7.4" = "sha256-rAzj44O+GOZhG+o6FVN5qCcG/NWxW8fUpScm+xsRjIs=";
+      "tokio-util-0.7.8" = "sha256-HCvtfohOoa1ZjD4s7QLDbIV4fe/MVBKtgM1QQX7gGKQ=";
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
+  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library

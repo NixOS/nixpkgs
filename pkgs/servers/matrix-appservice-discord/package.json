@@ -1,11 +1,11 @@
 {
   "name": "matrix-appservice-discord",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "A bridge between Matrix and Discord",
   "main": "discordas.js",
   "engines": {
     "npm": "please-use-yarn",
-    "node": ">=16 <=18"
+    "node": ">=18 <=20"
   },
   "scripts": {
     "test": "mocha -r ts-node/register test/config.ts test/test_*.ts test/**/test_*.ts",
@@ -13,8 +13,8 @@
     "coverage": "tsc && nyc mocha build/test/config.js build/test",
     "build": "tsc",
     "postinstall": "yarn build",
-    "start": "yarn build && node ./build/src/discordas.js -c config.yaml",
-    "debug": "yarn build && node --inspect ./build/src/discordas.js -c config.yaml",
+    "start": "node ./build/src/discordas.js",
+    "debug": "node --inspect ./build/src/discordas.js",
     "addbot": "node ./build/tools/addbot.js",
     "adminme": "node ./build/tools/adminme.js",
     "usertool": "node ./build/tools/userClientTools.js",
@@ -40,16 +40,16 @@
   },
   "homepage": "https://github.com/Half-Shot/matrix-appservice-discord#readme",
   "dependencies": {
-    "@mx-puppet/matrix-discord-parser": "0.1.10",
-    "better-discord.js": "github:matrix-org/better-discord.js#5024781db755259e88abe915630b7d5b3ba5f48f",
-    "better-sqlite3": "^7.1.0",
+    "@mx-puppet/better-discord.js": "^12.5.1",
+    "@mx-puppet/matrix-discord-parser": "^0.1.10",
+    "better-sqlite3": "^8.6.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.0",
     "escape-html": "^1.0.3",
     "escape-string-regexp": "^4.0.0",
     "js-yaml": "^3.14.0",
     "marked": "^1.2.2",
-    "matrix-appservice-bridge": "^5.0.0",
+    "matrix-appservice-bridge": "^9.0.1",
     "mime": "^2.4.6",
     "p-queue": "^6.4.0",
     "pg-promise": "^10.5.6",

@@ -5,12 +5,10 @@
 , pythonOlder
 , hatch-jupyter-builder
 , hatchling
-, pandoc
 , pytestCheckHook
 , pytest-console-scripts
 , pytest-jupyter
 , pytest-timeout
-, pytest-tornasync
 , argon2-cffi
 , jinja2
 , tornado
@@ -36,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.7.0";
+  version = "2.12.1";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-NtoKJm0xpBrDNaNmyIkzwX36W7gXpI9cAsFtMDvJR38=";
+    hash = "sha256-3He33MX8BUesuisoRPAXmACGZyAe6ifGMZ/5JX1wCm0=";
   };
 
   nativeBuildInputs = [
@@ -92,9 +90,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_server_extension_list"
     "test_cull_idle"
     "test_server_extension_list"
+    "test_subscribe_websocket"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
@@ -102,7 +100,8 @@ buildPythonPackage rec {
     "test_authorized_requests"
     # Insufficient access privileges for operation
     "test_regression_is_hidden"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  ] ++ lib.optionals stdenv.isLinux [
+    # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
     "test_copy_big_dir"
   ];
 

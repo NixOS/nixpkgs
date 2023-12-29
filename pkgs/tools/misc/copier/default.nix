@@ -53,5 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://copier.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
+    mainProgram = "copier";
   };
 }

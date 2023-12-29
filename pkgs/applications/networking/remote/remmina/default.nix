@@ -1,10 +1,12 @@
 { lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
+, desktopToDarwinBundle
 , glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
+, wayland
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withKf5Wallet ? stdenv.isLinux, libsForQt5
@@ -14,16 +16,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.31";
+  version = "1.4.33";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
-    rev    = "v${finalAttrs.version}";
-    sha256 = "sha256-oEgpav4oQ9Sld9PY4TsutS5xEnhQgOHnpQhDesRFTeQ=";
+    rev    = "v.${finalAttrs.version}";
+    sha256 = "sha256-3HyG2PBnTq/fVsvWA81fQ2gCOoAxINWeUDwzKcOuECk=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gsettings-desktop-schemas
@@ -36,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium
     harfbuzz python3
+    wayland
   ] ++ lib.optionals stdenv.isLinux [ libappindicator-gtk3 libdbusmenu-gtk3 webkitgtk_4_1 ]
     ++ lib.optionals withLibsecret [ libsecret ]
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
@@ -79,7 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";
-    maintainers = with maintainers; [ melsigl ryantm ];
+    mainProgram = "remmina";
+    maintainers = with maintainers; [ bbigras melsigl ryantm ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 })

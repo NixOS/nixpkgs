@@ -74,5 +74,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ mkg20001 luc65r ];
     homepage = "https://tartube.sourceforge.io/";
+    mainProgram = "tartube";
   };
 }

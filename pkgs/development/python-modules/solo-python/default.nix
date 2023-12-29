@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, flit
 , click
 , cryptography
 , ecdsa
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "solo-python";
   version = "0.1.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
+
+  nativeBuildInputs = [
+    flit
+  ];
 
   propagatedBuildInputs = [
     click

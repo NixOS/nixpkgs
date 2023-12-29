@@ -35,7 +35,7 @@ buildGoModule rec {
     description = "An interactive Unix-like shell written in Go";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     license = licenses.mit;
   };
 }

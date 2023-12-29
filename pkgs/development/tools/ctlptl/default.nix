@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ctlptl";
-  version = "0.8.21";
+  version = "0.8.22";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ulP159bhiVxZ5D7YamPR7AhCZ5qBr63Eitgf0/Sc6lo=";
+    hash = "sha256-/LKsaWqJZG9LdUt9zVAspLOYGr0TrhOJB4j0Vv40rkE=";
   };
 
   vendorHash = "sha256-nfSqu1u7NWbZYL7CEZ/i2tdxQBblRbwJwdwoEtol/Us=";

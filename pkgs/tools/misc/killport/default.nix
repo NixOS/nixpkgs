@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jkfran/killport";
     license = licenses.mit;
     maintainers = with maintainers; [ sno2wman ];
+    mainProgram = "killport";
   };
 }

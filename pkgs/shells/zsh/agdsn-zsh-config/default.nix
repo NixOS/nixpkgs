@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agdsn-zsh-config";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "agdsn";
     repo = "agdsn-zsh-config";
     rev = "v${version}";
-    sha256 = "sha256-HMISWAZYLpKtd3oi7vEKCWwVaJCQXUon7KYo2jj+IjE=";
+    sha256 = "sha256-8POQPk/hsJBMJ/ZJe9XzVj7Rd7C2+QnpzgYbUR0s3Fc=";
   };
 
   dontBuild = true;

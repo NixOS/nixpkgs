@@ -16,7 +16,7 @@ buildGoModule {
     sha256 = "sha256-6yVMNSwwPZlADXuPBDRlgoz4Stuz2pgv6r6+y2/C8XY=";
   };
 
-  vendorSha256 = "sha256-shFld293pdmVcnu3p0NoBmPGLJddZd4O/gJ8klgdlQ8=";
+  vendorHash = "sha256-shFld293pdmVcnu3p0NoBmPGLJddZd4O/gJ8klgdlQ8=";
 
   subPackages = [ "." ];
 
@@ -31,6 +31,7 @@ buildGoModule {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.adisbladis ];
     broken = stdenv.isDarwin; # needs to update gopsutil to at least v3.21.3 to include https://github.com/shirou/gopsutil/pull/1042
+    mainProgram = "goofys";
   };
 
 }

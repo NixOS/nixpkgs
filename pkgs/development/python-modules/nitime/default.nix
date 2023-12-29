@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.10.1";
+  version = "0.10.2";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NnoVrSt6MTTcNup1e+/1v5JoHCYcycuQH4rHLzXJt+Y=";
+    hash = "sha256-NCaWr7ZqL1XV0QfUD+4+Yn33N1cCP33ib5oJ91OtJLU=";
   };
 
   # Upstream wants to build against the oldest version of numpy possible, but

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.12.1";
+  version = "0.12.2";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/DOQk5dIHJDePOyDG/uI2X4iDckZOdmWkgIC8YS0ZI4=";
+    hash = "sha256-MdSwRV1y2RRkX4A9kX2vTzFNEVxw3gV404IN64sQH2Y=";
   };
 
   nativeBuildInputs = [ cython ];

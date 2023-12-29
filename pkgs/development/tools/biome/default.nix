@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , libgit2_1_6
+, rust-jemalloc-sys
 , zlib
 , stdenv
 , darwin
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.0.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-oX/LyC6JN0NUc/xi4G9lzKgF9yOlooAt69Gw+eLJxbE=";
+    hash = "sha256-6dg/Snp9hjeE/4N2N4tEBOjurzWK3eesO1QhujMw1yY=";
   };
 
-  cargoHash = "sha256-4P57fmp5CpGn1wYkQos7PO3YFChup8LrrLExv9S76gs=";
+  cargoHash = "sha256-NGojVRaHFZSLfsjl7xh5h6tEer3BF0Hi7HJ7p5zDdfo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2_1_6
+    rust-jemalloc-sys
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -37,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     git
   ];
 
-  cargoBuildFlags = [ "-p=rome_cli" ];
+  cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = cargoBuildFlags;
 
   env = {

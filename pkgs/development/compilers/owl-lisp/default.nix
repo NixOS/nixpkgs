@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "owl-lisp";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     owner  = "owl-lisp";
     repo   = "owl";
     rev    = "v${version}";
-    sha256 = "sha256-TQOj3DYmzFT4ClZ/sBAOs5XJWRgGTaVQjH+8JotSb1A=";
+    sha256 = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
   nativeBuildInputs = [ which ];

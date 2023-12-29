@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ markus1189 wegank ];
     platforms = platforms.all;
+    mainProgram = "rehex";
   };
 }

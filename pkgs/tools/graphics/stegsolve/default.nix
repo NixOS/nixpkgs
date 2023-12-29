@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, copyDesktopItems, makeDesktopItem }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stegsolve";
   version = "1.3";
 
   src = fetchurl {
     # No versioned binary is published :(
-    url = "http://www.caesum.com/handbook/Stegsolve.jar";
+    url = "https://web.archive.org/web/20230319054116if_/http://www.caesum.com/handbook/Stegsolve.jar";
     sha256 = "0np5zb28sg6yzkp1vic80pm8iiaamvjpbf5dxmi9kwvqcrh4jyq0";
   };
 
@@ -15,10 +22,10 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = pname;
+      name = finalAttrs.pname;
       desktopName = "Stegsolve";
       comment = "A steganographic image analyzer, solver and data extractor for challanges";
-      exec = pname;
+      exec = finalAttrs.pname;
       categories = [ "Graphics" ];
     })
   ];
@@ -38,10 +45,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A steganographic image analyzer, solver and data extractor for challanges";
-    homepage = "http://www.caesum.com/handbook/stego.htm";
+    homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    license = {
+      fullName = "Cronos License";
+      url = "http://www.caesum.com/legal.php";
+      free = false;
+      redistributable = true;
+    };
     maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.all;
+    mainProgram = "stegsolve";
   };
-}
+})

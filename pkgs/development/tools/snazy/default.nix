@@ -1,32 +1,21 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
-  version = "0.51.2";
+  version = "0.52.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = pname;
     rev = version;
-    hash = "sha256-k8dcALE5+5kqNKhmiLT0Ir8SRYOIp8eV3a/xYWrKpNw=";
+    hash = "sha256-OoUu42vRe4wPaunb2vJ9ITd0Q76pBI/yC8FI0J+J+ts=";
   };
 
-  cargoHash = "sha256-mBA2BhGeYR57UrqI1qtByTkTocMymjCWlWhh4+Ko8wY=";
-
-  cargoPatches = [
-    # update Cargo.toml to fix the version
-    # https://github.com/chmouel/snazy/pull/178
-    (fetchpatch {
-      name = "update-version-in-cargo-toml.patch";
-      url = "https://github.com/chmouel/snazy/commit/4fd92c7336f51d032a0baf60fd5ab8c1056ad14f.patch";
-      hash = "sha256-WT/HHB9HB+X/L5FZdvQAG8K7PrYHQD8F5aWQVaMJuIU=";
-    })
-  ];
+  cargoHash = "sha256-gUeKZNSo/zJ4Nqy4Fpk5JuvFylGBlKJu+Nw9XWXVx0g=";
 
   nativeBuildInputs = [ installShellFiles ];
 

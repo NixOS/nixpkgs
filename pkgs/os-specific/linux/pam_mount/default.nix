@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pam-mount/pam_mount/${pname}-${version}.tar.xz";
-    sha256 = "02m6w04xhgv2yx69yxph8giw0sp39s9lvvlffslyna46fnr64qvb";
+    url = "https://inai.de/files/pam_mount/${pname}-${version}.tar.xz";
+    hash = "sha256-VCYgekhWgPjhdkukBbs4w5pODIMGvIJxkQ8bgZozbO0=";
   };
 
   patches = [

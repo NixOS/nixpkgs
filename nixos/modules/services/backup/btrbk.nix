@@ -13,7 +13,7 @@ let
     mkIf
     mkOption
     optionalString
-    sort
+    sortOn
     types
     ;
 
@@ -37,7 +37,7 @@ let
   genConfig = set:
     let
       pairs = mapAttrsToList (name: value: { inherit name value; }) set;
-      sortedPairs = sort (a: b: prioOf a < prioOf b) pairs;
+      sortedPairs = sortOn prioOf pairs;
     in
       concatMap genPair sortedPairs;
   genSection = sec: secName: value:
@@ -47,8 +47,21 @@ let
     then [ "${name} ${value}" ]
     else concatLists (mapAttrsToList (genSection name) value);
 
+  sudoRule = {
+    users = [ "btrbk" ];
+    commands = [
+      { command = "${pkgs.btrfs-progs}/bin/btrfs"; options = [ "NOPASSWD" ]; }
+      { command = "${pkgs.coreutils}/bin/mkdir"; options = [ "NOPASSWD" ]; }
+      { command = "${pkgs.coreutils}/bin/readlink"; options = [ "NOPASSWD" ]; }
+      # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
+      { command = "/run/current-system/sw/bin/btrfs"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/mkdir"; options = [ "NOPASSWD" ]; }
+      { command = "/run/current-system/sw/bin/readlink"; options = [ "NOPASSWD" ]; }
+    ];
+  };
+
   sudo_doas =
-    if config.security.sudo.enable then "sudo"
+    if config.security.sudo.enable || config.security.sudo-rs.enable then "sudo"
     else if config.security.doas.enable then "doas"
     else throw "The btrbk nixos module needs either sudo or doas enabled in the configuration";
 
@@ -157,22 +170,10 @@ in
   };
   config = mkIf (sshEnabled || serviceEnabled) {
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
-    security.sudo = mkIf (sudo_doas == "sudo") {
-      extraRules = [
-        {
-            users = [ "btrbk" ];
-            commands = [
-            { command = "${pkgs.btrfs-progs}/bin/btrfs"; options = [ "NOPASSWD" ]; }
-            { command = "${pkgs.coreutils}/bin/mkdir"; options = [ "NOPASSWD" ]; }
-            { command = "${pkgs.coreutils}/bin/readlink"; options = [ "NOPASSWD" ]; }
-            # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-            { command = "/run/current-system/bin/btrfs"; options = [ "NOPASSWD" ]; }
-            { command = "/run/current-system/sw/bin/mkdir"; options = [ "NOPASSWD" ]; }
-            { command = "/run/current-system/sw/bin/readlink"; options = [ "NOPASSWD" ]; }
-            ];
-        }
-      ];
-    };
+
+    security.sudo.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
+    security.sudo-rs.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];
+
     security.doas = mkIf (sudo_doas == "doas") {
       extraRules = let
         doasCmdNoPass = cmd: { users = [ "btrbk" ]; cmd = cmd; noPass = true; };
@@ -182,7 +183,7 @@ in
             (doasCmdNoPass "${pkgs.coreutils}/bin/mkdir")
             (doasCmdNoPass "${pkgs.coreutils}/bin/readlink")
             # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-            (doasCmdNoPass "/run/current-system/bin/btrfs")
+            (doasCmdNoPass "/run/current-system/sw/bin/btrfs")
             (doasCmdNoPass "/run/current-system/sw/bin/mkdir")
             (doasCmdNoPass "/run/current-system/sw/bin/readlink")
 

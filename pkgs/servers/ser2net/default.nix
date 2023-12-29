@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AmTJfjLpnPHtPMKP9djKTZozNPkojPqRJ3eoypY53bA=";
+    hash = "sha256-OFj9lYwI42zEcyUtsAwnkNUAaa6J4Ids4pMXquUcpJA=";
   };
 
   passthru = {
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
+    mainProgram = "ser2net";
   };
 }

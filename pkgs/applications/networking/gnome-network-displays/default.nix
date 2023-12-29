@@ -20,12 +20,12 @@
 , pipewire
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
   version = "0.90.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-2SBVQK4fJeK8Y2UrrL0g5vQIerDdGE1nhFc6ke4oIpI=";
   };
 
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-network-displays";
   };
-}
+})

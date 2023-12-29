@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.15.2";
+  version = "0.15.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ValiMail";
     repo = "authentication-headers";
     rev = "refs/tags/${version}";
-    hash = "sha256-vtLt7JUdLF0gBWgMzP65UAR6A9BnTech5n0alFErcSQ=";
+    hash = "sha256-96fCx5uN7yegTrCN+LSjtu4u3RL+dcxV/Puyo0eziI8=";
   };
 
   propagatedBuildInputs = [

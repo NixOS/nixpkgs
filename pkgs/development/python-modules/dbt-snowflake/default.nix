@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.5.2";
+  version = "1.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oz9BDvxSG4kOteuwKiPccxlsmQtOEwDLVyirDSWy1kY=";
+    hash = "sha256-AOO3VbU1R3/snH7U7K9XXokBGXtf9Udpv7eR5HCBxss=";
   };
 
   propagatedBuildInputs = [

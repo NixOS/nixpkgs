@@ -13,20 +13,24 @@
 }:
 { stdenv, lib
 , buildPackages
+, targetPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
+, pkgsBuildBuild
 , makeRustPlatform
 }:
 
 let
   # Use `import` to make sure no packages sneak in here.
-  lib' = import ../../../build-support/rust/lib { inherit lib; };
+  lib' = import ../../../build-support/rust/lib { inherit lib stdenv buildPackages targetPackages; };
+  # Allow faster cross compiler generation by reusing Build artifacts
+  fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
 in
 {
   lib = lib';
 
   # Backwards compat before `lib` was factored out.
-  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget toRustTargetForUseInEnvVars envVars;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions to build
@@ -48,7 +52,10 @@ in
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
-      bootstrapRustPackages = self.buildRustPackages.overrideScope (_: _:
+      bootstrapRustPackages = if fastCross
+      then pkgsBuildBuild.rustPackages
+      else
+        self.buildRustPackages.overrideScope (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
           (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
@@ -61,22 +68,22 @@ in
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages fastCross;
 
         patches = rustcPatches;
 
         # Use boot package set to break cycle
-        inherit (bootstrapRustPackages) cargo rustc;
+        inherit (bootstrapRustPackages) cargo rustc rustfmt;
       });
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;
         inherit (self.buildRustPackages) rustc;
       };
-      cargo = self.callPackage ./cargo.nix {
+      cargo = if (!fastCross) then self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
-      };
+      } else self.callPackage ./cargo_cross.nix {};
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
       clippy = self.callPackage ./clippy.nix {

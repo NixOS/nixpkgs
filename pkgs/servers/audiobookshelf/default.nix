@@ -1,16 +1,29 @@
-{ lib, stdenv, pkgs, fetchFromGitHub, runCommand, buildNpmPackage, nodejs_18, tone, ffmpeg-full, util-linux, python3 }:
+{
+  lib,
+  stdenv,
+  pkgs,
+  fetchFromGitHub,
+  runCommand,
+  buildNpmPackage,
+  nodejs_18,
+  tone,
+  ffmpeg-full,
+  util-linux,
+  python3,
+  getopt
+}:
 
 let
   nodejs = nodejs_18;
 
   pname = "audiobookshelf";
-  version = "2.3.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wSIA2KKDKf3DNgYNNIyYNT8xyPWCZvwLcWuDhWOZpLs=";
+    sha256 = "sha256-yPDByM09rc9zRLh0ONcY5bScY4NOrKDv0Pdwo97Czcs=";
   };
 
   client = buildNpmPackage {
@@ -24,11 +37,11 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = "sha256-s3CwGFK87podBJwAqh7JoMA28vnmf77iexrAbbwZlFk=";
+    npmDepsHash = "sha256-ZNkHDNjaQbUt3oWnNIYPYkcvjelieY4RJxNSbzR1+JM=";
   };
 
   wrapper = import ./wrapper.nix {
-    inherit stdenv ffmpeg-full tone pname nodejs;
+    inherit stdenv ffmpeg-full tone pname nodejs getopt;
   };
 
 in buildNpmPackage {
@@ -39,7 +52,7 @@ in buildNpmPackage {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
-  npmDepsHash = "sha256-gueSlQh4tRTjIWvpNG2cj1np/zUGbjsnv3fA2owtiQY=";
+  npmDepsHash = "sha256-PVgK8R8sf16KKQS/mPXtvit9CW9+4Gc9Onpaw+SSgNI=";
 
   installPhase = ''
     mkdir -p $out/opt/client
@@ -59,5 +72,6 @@ in buildNpmPackage {
     license = licenses.gpl3;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;
+    mainProgram = "audiobookshelf";
   };
 }

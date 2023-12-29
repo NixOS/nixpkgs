@@ -14,7 +14,9 @@ For new packages please briefly describe the package or provide a link to its ho
   - [ ] aarch64-linux
   - [ ] x86_64-darwin
   - [ ] aarch64-darwin
-- [ ] For non-Linux: Is `sandbox = true` set in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
+- For non-Linux: Is sandboxing enabled in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
+  - [ ] `sandbox = relaxed`
+  - [ ] `sandbox = true`
 - [ ] Tested, as applicable:
   - [NixOS test(s)](https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests) (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
   - and/or [package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests)
@@ -38,3 +40,10 @@ Thanks a lot if you do!
 List of open PRs: https://github.com/NixOS/nixpkgs/pulls
 Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
 -->
+
+### Priorities
+
+Add a :+1: [reaction] to [pull requests you find important].
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+[pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc

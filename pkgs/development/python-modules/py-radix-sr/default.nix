@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/SEKOIA-IO/py-radix";
     license = with licenses; [ isc bsdOriginal ];
-    maintainers = with maintainers; [ netali ];
+    maintainers = teams.wdz.members;
   };
 }

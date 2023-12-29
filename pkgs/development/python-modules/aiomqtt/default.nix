@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aiomqtt";
-  version = "1.1.0";
+  version = "1.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sbtinstruments";
     repo = "aiomqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8f3opbvN/hmT6AEMD7Co5n5IqdhP0higbaDGUBWJRzU=";
+    hash = "sha256-P8p21wjmFDvI0iobpQsWkKYleY4M0R3yod3/mJ7V+Og=";
   };
 
   nativeBuildInputs = [

@@ -23,23 +23,23 @@
 }:
 
 let
-  version = "3.1.2-13107";
-  _hash = "ad5b5393";
+  sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_amd64.deb";
-      hash = "sha256-mBfeexWEYpGybFFianUFvlzMv0HoFR4EeFcwlGVXIRA=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_arm64.deb";
-      hash = "sha256-V6kR2lb63nnNIEhn64Yg0BYYlz7W0Cw60TwnKaJuLgs=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      hash = sources.arm64_hash;
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation {
   pname = "qq";
-  inherit version src;
+  version = sources.version;
+  inherit src;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -97,6 +97,8 @@ stdenv.mkDerivation {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     )
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://im.qq.com/linuxqq/";

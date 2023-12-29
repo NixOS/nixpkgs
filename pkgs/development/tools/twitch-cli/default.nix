@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "twitch-cli";
-  version = "1.1.20";
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "twitchdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hIyZwXDI3lJQOK27RaABf7cnj7jOxKdLUdZB5fp+7kY=";
+    hash = "sha256-LJWZi83AynmmGBajtk8CLmQ6Vd1IqLKNaiZMLZCLly0=";
   };
 
   patches = [
     ./application-name.patch
   ];
 
-  vendorHash = "sha256-OhcRMXY8s+XciF+gV3cZ8fxtzo9+I76tBPZ0xG8ddHU=";
+  vendorHash = "sha256-1uUokMeI0D/apDFJLq+Go5BQp1JMYxJQF8nKvw52E7o=";
 
   ldflags = [
     "-s"

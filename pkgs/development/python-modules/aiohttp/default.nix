@@ -18,9 +18,7 @@
 , aiodns
 , brotli
 , faust-cchardet
-, asynctest
 , typing-extensions
-, idna-ssl
 # tests_require
 , async-generator
 , freezegun
@@ -33,25 +31,23 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.5";
+  version = "3.8.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+    hash = "sha256-sM8qRQG/+TMKilJItM6VGFHkFb3M6dwVjnbP1V4VCFw=";
   };
 
   patches = [
     (fetchpatch {
       # https://github.com/aio-libs/aiohttp/pull/7260
-      # Merged upstream, should likely be dropped post-3.8.5
+      # Merged upstream, should be dropped once updated to 3.9.0
       url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
       hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
     })
-    # https://github.com/aio-libs/aiohttp/pull/7454 but does not merge cleanly
-    ./setuptools-67.5.0-compatibility.diff
   ];
 
   postPatch = ''
@@ -75,11 +71,6 @@ buildPythonPackage rec {
     aiodns
     brotli
     faust-cchardet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    idna-ssl
   ];
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.

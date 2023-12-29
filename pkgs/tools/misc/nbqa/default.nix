@@ -76,6 +76,9 @@ python3.pkgs.buildPythonApplication rec {
     "test_running_in_different_dir_works"
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
+    # Broken since ruff was updated to 0.1.2
+    # A PR was opened upstream: https://github.com/nbQA-dev/nbQA/issues/834
+    "test_ruff_works"
   ];
 
   disabledTestPaths = [
@@ -89,5 +92,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];
+    mainProgram = "nbqa";
   };
 }

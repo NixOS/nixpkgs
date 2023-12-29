@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-m17n";
-  version = "1.4.22";
+  version = "1.4.24";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-m17n";
     rev = version;
-    sha256 = "sha256-wjWDqhhLqj77IxVpelChOEdUtneaGmL+IK2Sp3eObkA=";
+    sha256 = "sha256-E5+IA2tH9wes6Soj9DPw1cdfQ9PINUy9zKJHMt9/fjY=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,7 @@ in {
     enable = lib.mkEnableOption (lib.mdDoc ''
       direnv integration. Takes care of both installation and
       setting up the sourcing of the shell. Additionally enables nix-direnv
-      integration. Note that you need to logout and login for this change to apply.
+      integration. Note that you need to logout and login for this change to apply
     '');
 
     package = lib.mkPackageOptionMD pkgs "direnv" {};
@@ -31,15 +31,6 @@ in {
     silent = lib.mkEnableOption (lib.mdDoc ''
       the hiding of direnv logging
     '');
-
-    persistDerivations =
-      (lib.mkEnableOption (lib.mdDoc ''
-        setting keep-derivations and keep-outputs to true
-        to prevent shells from getting garbage collected
-      ''))
-      // {
-        default = true;
-      };
 
     loadInNixShell =
       lib.mkEnableOption (lib.mdDoc ''
@@ -61,6 +52,10 @@ in {
       package = lib.mkPackageOptionMD pkgs "nix-direnv" {};
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is no longer necessary")
+  ];
 
   config = lib.mkIf cfg.enable {
 
@@ -85,11 +80,6 @@ in {
          ${lib.getExe cfg.package} hook fish | source
         end
       '';
-    };
-
-    nix.settings = lib.mkIf cfg.persistDerivations {
-      keep-outputs = true;
-      keep-derivations = true;
     };
 
     environment = {

@@ -5,16 +5,19 @@
 , lua5_3
 }:
 
+let
+  version = "0.0.20231113";
+in
 stdenvNoCC.mkDerivation {
-  pname = "lunarml";
+  inherit version;
 
-  version = "unstable-2023-08-25";
+  pname = "lunarml";
 
   src = fetchFromGitHub {
     owner = "minoki";
     repo = "LunarML";
-    rev = "69d09b47601f4041ca7e8a513c75f3e4835af9dd";
-    sha256 = "sha256-GXUcWI4/akOKIvCHrsOfceZEdyNZdIdalTc6wX+svS4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LmS+pkdCraY8sor+lsq/vCODFyVneKkZqjZqbJ1trb4=";
   };
 
   outputs = [ "out" "doc" ];

@@ -1,6 +1,6 @@
 {
   "name": "mjolnir",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "description": "A moderation tool for Matrix",
   "main": "lib/index.js",
   "repository": "git@github.com:matrix-org/mjolnir.git",
@@ -30,7 +30,7 @@
     "@types/jsdom": "^16.2.11",
     "@types/mocha": "^9.0.0",
     "@types/nedb": "^1.8.12",
-    "@types/node": "^16.7.10",
+    "@types/node": "^18.0.0",
     "@types/pg": "^8.6.5",
     "@types/request": "^2.48.8",
     "@types/shell-quote": "1.7.1",
@@ -55,15 +55,15 @@
     "humanize-duration-ts": "^2.1.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^16.6.0",
-    "matrix-appservice-bridge": "8.0.0",
+    "matrix-appservice-bridge": "8.1.2",
     "parse-duration": "^1.0.2",
     "pg": "^8.8.0",
     "prom-client": "^14.1.0",
     "shell-quote": "^1.7.3",
     "ulidx": "^0.3.0",
-    "yaml": "^2.1.1"
+    "yaml": "^2.2.2"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   }
 }

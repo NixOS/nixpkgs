@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ caadar ];
     platforms = platforms.all;
+    mainProgram = "disk-filltest";
   };
 
 }

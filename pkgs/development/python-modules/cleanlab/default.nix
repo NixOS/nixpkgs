@@ -6,36 +6,36 @@
 , termcolor
 , tqdm
 , pandas
+, setuptools
 # test dependencies
+, pytestCheckHook
+, pytest-lazy-fixture
 , tensorflow
 , torch
 , datasets
 , torchvision
 , keras
 , fasttext
+, hypothesis
+, wget
+, matplotlib
+, skorch
 }:
-let
-  pname = "cleanlab";
-  version = "2.4.0";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+buildPythonPackage rec {
+  pname = "cleanlab";
+  version = "2.5.0";
+  pyproject = true;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XFrjjBJA0OQEAspnQQiSIW4td0USJDXTp9C/91mobp8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5XQQVrhjpvjwtFM79DqttObmw/GQLkMQVXb5jhiC8e0=";
   };
 
-  # postPatch = ''
-  #   substituteInPlace pyproject.toml \
-  #     --replace '"rich <= 13.0.1"' '"rich"' \
-  #     --replace '"numpy < 1.24.0"' '"numpy"'
-  # '';
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     scikit-learn
@@ -44,13 +44,38 @@ buildPythonPackage {
     pandas
   ];
 
+  # This is ONLY turned off when we have testing enabled.
+  # The reason we do this is because of duplicate packages in the enclosure
+  # when using the packages in nativeCheckInputs.
+  # Affected packages: grpcio protobuf tensorboard tensorboard-plugin-profile
+  catchConflicts = (!doCheck);
+  doCheck = true;
+
   nativeCheckInputs = [
+    pytestCheckHook
+    pytest-lazy-fixture
     tensorflow
     torch
     datasets
     torchvision
     keras
     fasttext
+    hypothesis
+    wget
+    matplotlib
+    skorch
+  ];
+
+  disabledTests = [
+    # Requires the datasets we prevent from downloading
+    "test_create_imagelab"
+  ];
+
+  disabledTestPaths = [
+    # Requires internet
+    "tests/test_dataset.py"
+    # Requires the datasets we just prevented from downloading
+    "tests/datalab/test_cleanvision_integration.py"
   ];
 
   meta = with lib; {

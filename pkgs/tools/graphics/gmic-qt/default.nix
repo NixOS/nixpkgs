@@ -17,7 +17,6 @@
 , libtiff
 , ninja
 , nix-update
-, opencv3
 , openexr
 , pkg-config
 , qtbase
@@ -55,11 +54,11 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.6";
+  version = "3.3.1";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-asB1YftHfdb7JG87WJ+ggyMCu7qb0f+aCanl5LLi9VE=";
+    hash = "sha256-d9FRNW/MXM9ZJ1xgIZvGTUPDDnHgTJU0DuWyPkzNAmo=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     libpng
-    opencv3
     openexr
     graphicsmagick
     curl
@@ -95,9 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC=ON"
-    "-DENABLE_DYNAMIC_LINKING=ON"
+    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
+    (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
@@ -135,8 +133,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://gmic.eu/";
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.lilyinstarlight ];
-    platforms = lib.platforms.unix;
     mainProgram = "gmic_qt";
+    maintainers = [
+      lib.maintainers.AndersonTorres
+      lib.maintainers.lilyinstarlight
+    ];
+    platforms = lib.platforms.unix;
   };
 })

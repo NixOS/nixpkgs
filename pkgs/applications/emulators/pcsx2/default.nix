@@ -4,6 +4,7 @@
 , llvmPackages_16
 , cubeb
 , curl
+, extra-cmake-modules
 , ffmpeg
 , fmt_8
 , gettext
@@ -36,20 +37,20 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "c09d842168689aeba88b656e3e0a042128673a7c";
-    sha256 = "sha256-h1jqv3a3Ib/4C7toZpSlVB1VFNNF1MrrUxttqKJL794=";
+    rev = "04d727b3bf451da11b6594602036e4f7f5580610";
+    sha256 = "sha256-zrulsSMRNLPFvrC/jeYzl53i4ZvFQ4Yl2nB0bA6Y8KU=";
   };
 in
 llvmPackages_16.stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.4658";
+  version = "1.7.5004";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-5y7CYFWgNh9oCBuTITvw7Rn4sC6MbMczVMAwtWFkn9A=";
+    sha256 = "sha256-o+9VSuoZgTkS75rZ6qYM8ITD+0OcwXp+xh/hdUGpVK4=";
   };
 
   cmakeFlags = [
@@ -61,6 +62,7 @@ llvmPackages_16.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook

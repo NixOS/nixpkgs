@@ -1,4 +1,5 @@
 { lib, python3Packages, fetchFromGitHub
+, ffmpeg-full
 , gtk3
 , pango
 , gobject-introspection
@@ -33,6 +34,8 @@ with python3Packages; buildPythonApplication {
 
   outputs = [ "out" "man" ];
 
+  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}"];
+
   postInstall = ''
     mkdir -p $man/share/man/man1
     cp man/escrotum.1 $man/share/man/man1/
@@ -44,5 +47,6 @@ with python3Packages; buildPythonApplication {
     platforms = platforms.linux;
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.gpl3;
+    mainProgram = "escrotum";
   };
 }

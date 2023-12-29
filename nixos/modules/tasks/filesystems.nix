@@ -187,9 +187,8 @@ let
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
       escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-    in fstabFileSystems: { rootPrefix ? "" }: concatMapStrings (fs:
-      (optionalString (isBindMount fs) (escape rootPrefix))
-      + (if fs.device != null then escape fs.device
+    in fstabFileSystems: { }: concatMapStrings (fs:
+      (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
@@ -199,9 +198,7 @@ let
       + "\n"
     ) fstabFileSystems;
 
-    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
-      rootPrefix = "/sysroot";
-    });
+    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) { });
 
 in
 

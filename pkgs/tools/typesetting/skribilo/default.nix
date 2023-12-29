@@ -13,7 +13,7 @@
 , enableEmacs ? false, emacs
 , enableLout ? stdenv.isLinux, lout
 , enablePloticus ? stdenv.isLinux, ploticus
-, enableTex ? true, tex
+, enableTex ? true, texliveSmall
 }:
 
 let
@@ -44,7 +44,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ++ optional enableEmacs emacs
   ++ optional enableLout lout
   ++ optional enablePloticus ploticus
-  ++ optional enableTex tex;
+  ++ optional enableTex texliveSmall;
 
   postInstall = ''
     wrapProgram $out/bin/skribilo \

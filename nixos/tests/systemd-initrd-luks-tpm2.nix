@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       # Booting off the TPM2-encrypted device requires an available init script
       mountHostNixStore = true;
       useEFIBoot = true;
-      qemu.options = ["-chardev socket,id=chrtpm,path=/tmp/mytpm1/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"];
+      tpm.enable = true;
     };
     boot.loader.systemd-boot.enable = true;
 
@@ -33,29 +33,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   };
 
   testScript = ''
-    import subprocess
-    import os
-    import time
-
-
-    class Tpm:
-        def __init__(self):
-            os.mkdir("/tmp/mytpm1")
-            self.start()
-
-        def start(self):
-            self.proc = subprocess.Popen(["${pkgs.swtpm}/bin/swtpm", "socket", "--tpmstate", "dir=/tmp/mytpm1", "--ctrl", "type=unixio,path=/tmp/mytpm1/swtpm-sock", "--log", "level=20", "--tpm2"])
-
-        def wait_for_death_then_restart(self):
-            while self.proc.poll() is None:
-                print("waiting for tpm to die")
-                time.sleep(1)
-            assert self.proc.returncode == 0
-            self.start()
-
-    tpm = Tpm()
-
-
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
@@ -65,8 +42,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
     machine.succeed("sync")
     machine.crash()
-
-    tpm.wait_for_death_then_restart()
 
     # Boot and decrypt the disk
     machine.wait_for_unit("multi-user.target")

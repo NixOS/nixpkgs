@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     rev = "refs/tags/${version}";
-    hash = "sha256-4Chqdr4a9+T+/o1vCPY5xMREoYl0HxY3OlGRD86ulGs=";
+    hash = "sha256-ymj97aWWOLen7YEfG72N2nyxlwuB/Su4+pgpWUuckgc=";
   };
 
   nativeBuildInputs = [

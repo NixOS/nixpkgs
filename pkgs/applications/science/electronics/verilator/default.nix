@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.012";
+  version = "5.018";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y6GkIgkauayJmGhOQg2kWjbcxYVIob6InMopv555Lb8=";
+    hash = "sha256-f06UzNw2MQ5me03EPrVFhkwxKum/GLDzQbDNTBsJMJs=";
   };
 
   enableParallelBuilding = true;

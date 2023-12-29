@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ lib.optionals disableDocs [ "--disable-docs" ]
-                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
+                   ++ lib.optionals stdenv.isDarwin [ "--disable-strip" "--enable-xonx" ];
 
   configureScript = "../configure";
 

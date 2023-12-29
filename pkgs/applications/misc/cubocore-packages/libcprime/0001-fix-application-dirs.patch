@@ -15,13 +15,13 @@ index 4c40d4c..5dbb6ff 100644
  
  SystemXdgMime::SystemXdgMime()
  {
--	appsDirs << QDir::home().filePath(".local/share/applications/");
--	appsDirs << "/usr/local/share/applications/" << "/usr/share/applications/";
--	appsDirs << "/usr/share/applications/kde4/" << "/usr/share/gnome/applications/";
-+	appsDirs << QDir::home().filePath(".nix-profile/share/applications/");
-+	appsDirs << "/run/current-system/sw/share/applications/";
-+	appsDirs << "/run/current-system/sw/share/applications/kde4/";
-+	appsDirs << "/run/current-system/sw/share/gnome/applications/";
+-    appsDirs << QDir::home().filePath(".local/share/applications/");
+-    appsDirs << QDir::root().filePath("usr/local/share/applications/") << QDir::root().filePath("usr/share/applications/");
+-    appsDirs << QDir::root().filePath("usr/share/applications/kde4/") << QDir::root().filePath("usr/share/gnome/applications/");
++    appsDirs << QDir::home().filePath(".nix-profile/share/applications/");
++    appsDirs << "/run/current-system/sw/share/applications/";
++    appsDirs << "/run/current-system/sw/share/applications/kde4/";
++    appsDirs << "/run/current-system/sw/share/gnome/applications/";
  }
  
  

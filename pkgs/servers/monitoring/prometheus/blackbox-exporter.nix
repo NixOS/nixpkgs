@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "sha256-eoXSBliHadRGPT6+K75p2tEjKHKXmLz4svE59yQAEuM=";
   };
 
-  vendorSha256 = "sha256-yhgmJaWdYR5w5A8MVnHQS1yF6sTIMd1TOiesV4mc0Gs=";
+  vendorHash = "sha256-yhgmJaWdYR5w5A8MVnHQS1yF6sTIMd1TOiesV4mc0Gs=";
 
   # dns-lookup is performed for the tests
   doCheck = false;

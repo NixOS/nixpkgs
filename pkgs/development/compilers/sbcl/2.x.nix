@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap, zstd
-, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+{ lib, stdenv, callPackage, clisp, fetchurl, fetchpatch, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -19,15 +18,55 @@ let
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.3.7" = {
-      sha256 = "sha256-aYFE+4BaMZGaYQ3pmauYOR1S62mK2qjKGbKPxu0Nmfc=";
-    };
     "2.3.8" = {
       sha256 = "sha256-QhVxsqyRbli+jrzqXvSr+NeQKGPbah0KXvqVAK3KDSk=";
     };
+    "2.3.9" = {
+      sha256 = "sha256-fSiakSMgIgKL8BKJAMMr8A5MVDDDLyivBZTIpZKphlQ=";
+    };
   };
+  # Collection of pre-built SBCL binaries for platforms that need them for
+  # bootstrapping. Ideally these are to be avoided.  If CLISP (or any other
+  # non-binary-distributed Lisp) can run on any of these systems, that entry
+  # should be removed from this list.
+  bootstrapBinaries = rec {
+    # This build segfaults using CLISP.
+    x86_64-darwin = {
+      version = "2.2.9";
+      system = "x86-64-darwin";
+      sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
+    };
+    i686-linux = {
+      version = "1.2.7";
+      system = "x86-linux";
+      sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
+    };
+    armv7l-linux = {
+      version = "1.2.14";
+      system = "armhf-linux";
+      sha256 = "0sp5445rbvms6qvzhld0kwwvydw51vq5iaf4kdqsf2d9jvaz3yx5";
+    };
+    armv6l-linux = armv7l-linux;
+    x86_64-freebsd = {
+      version = "1.2.7";
+      system = "x86-64-freebsd";
+      sha256 = "14k42xiqd2rrim4pd5k5pjcrpkac09qnpynha8j1v4jngrvmw7y6";
+    };
+    x86_64-solaris = {
+      version = "1.2.7";
+      system = "x86-64-solaris";
+      sha256 = "05c12fmac4ha72k1ckl6i780rckd7jh4g5s5hiic7fjxnf1kx8d0";
+    };
+  };
+  sbclBootstrap = callPackage ./bootstrap.nix {
+    cfg = bootstrapBinaries.${stdenv.hostPlatform.system};
+  };
+  bootstrapLisp =
+    if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
+    then "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+    else "${clisp}/bin/clisp -E UTF-8 --silent -norc";
 
-in with versionMap.${version};
+in
 
 stdenv.mkDerivation rec {
   pname = "sbcl";
@@ -35,7 +74,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
-    inherit sha256;
+    inherit (versionMap.${version}) sha256;
   };
 
   nativeBuildInputs = [ texinfo ];
@@ -108,7 +147,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}" ${
+    sh make.sh --prefix=$out --xc-host="${bootstrapLisp}" ${
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
@@ -142,5 +181,17 @@ stdenv.mkDerivation rec {
     }
   '');
 
-  meta = sbclBootstrap.meta;
+  meta = with lib; {
+    description = "Lisp compiler";
+    homepage = "https://sbcl.org";
+    license = licenses.publicDomain; # and FreeBSD
+    maintainers = lib.teams.lisp.members;
+    platforms = attrNames bootstrapBinaries ++ [
+      # These aren’t bootstrapped using the binary distribution but compiled
+      # using a separate (lisp) host
+      "x86_64-linux"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
+  };
 }

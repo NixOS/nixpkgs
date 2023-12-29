@@ -24,8 +24,8 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportCheck = [
-    "admin-datta"
+  pythonImportsCheck = [
+    "admin_datta"
   ];
 
   meta = with lib; {

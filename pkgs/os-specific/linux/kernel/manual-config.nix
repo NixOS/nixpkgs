@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 }:
 
@@ -117,11 +117,8 @@ let
           });
 
       postPatch = ''
-        sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
-
-        # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
-        # FIXME: remove when no longer needed
-        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
+        # Ensure that depmod gets resolved through PATH
+        sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
         # This way kernels can be bit-by-bit reproducible depending on settings
@@ -271,7 +268,7 @@ let
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
-        unlink $out/lib/modules/${modDirVersion}/source
+        rm -f $out/lib/modules/${modDirVersion}/source
 
         mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
@@ -332,9 +329,6 @@ let
 
         # Delete empty directories
         find -empty -type d -delete
-
-        # Remove reference to kmod
-        sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
       '';
 
       requiredSystemFeatures = [ "big-parallel" ];
@@ -352,6 +346,9 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+        badPlatforms =
+          lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
+          lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
         timeout = 14400; # 4 hours
       } // extraMeta;
     };
@@ -367,8 +364,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
       ++ optional  (lib.versionOlder version "5.8") libelf
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]

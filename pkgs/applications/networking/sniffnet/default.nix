@@ -61,5 +61,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "sniffnet";
   };
 }

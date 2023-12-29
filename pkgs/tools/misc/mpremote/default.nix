@@ -39,5 +39,6 @@ buildPythonApplication rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ _999eagle ];
+    mainProgram = "mpremote";
   };
 }

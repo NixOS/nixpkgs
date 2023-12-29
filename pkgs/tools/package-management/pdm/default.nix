@@ -2,8 +2,10 @@
 , stdenv
 , python3
 , fetchFromGitHub
+, fetchpatch
 , fetchPypi
 , nix-update-script
+, runtimeShell
 }:
 let
   python = python3.override {
@@ -30,13 +32,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.8.2";
+  version = "2.10.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uUjQC/YgaCsKxMgNIoyzBaKwFQ5JfuaTHaMOPMMFv9w=";
+    hash = "sha256-Rtr8ik/iaMRkeYduUsaWf3qao4Xh5XTmQkhnCjezWP8=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +85,8 @@ buildPythonApplication rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    substituteInPlace tests/cli/test_run.py \
+      --replace "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [
@@ -98,10 +102,11 @@ buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://pdm.fming.dev";
+    homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "pdm";
   };
 }

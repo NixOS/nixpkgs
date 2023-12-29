@@ -54,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
       free # earth images from NASA, some fonts
       cc0 # cick0.wav
     ];
+    mainProgram = "singularity";
     maintainers = with lib.maintainers; [ fgaz ];
   };
 }

@@ -1,4 +1,4 @@
-{ python3, lib, overlay ? (_: _: {}) }:
+{ python3, fetchPypi, lib, overlay ? (_: _: {}) }:
 
 python3.override {
   packageOverrides = lib.composeExtensions
@@ -18,7 +18,32 @@ python3.override {
         [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
-      django = super.django_3;
+      elasticsearch = super.elasticsearch.overridePythonAttrs ({ pname, ... }: rec {
+        version = "7.17.9";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-ZsTs4q3+fMEg4rameYof1cd3rs+C7sObuVzvfPx+orM=";
+        };
+      });
+
+      # https://gitlab.com/mailman/hyperkitty/-/merge_requests/541
+      mistune = super.mistune.overridePythonAttrs (old: rec {
+        version = "2.0.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
+
+      # django-q tests fail with redis 5.0.0.
+      redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
+        version = "4.5.4";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-c+w12k2iZ9aEfkf2hzD91fYuLKaePvWIXGp4qTdMOJM=";
+        };
+      });
     })
 
     overlay;

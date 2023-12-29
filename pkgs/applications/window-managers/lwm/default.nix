@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    mainProgram = "lwm";
   };
 }

@@ -10,6 +10,9 @@
 , pretend
 , pytest
 
+# docs
+, sphinx
+
 # coupled downsteam dependencies
 , pip-tools
 }:
@@ -36,7 +39,37 @@ buildPythonPackage rec {
     installShellFiles
     setuptools
     wheel
+
+    # docs
+    sphinx
   ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  # pip uses a custom sphinx extension and unusual conf.py location, mimic the internal build rather than attempting
+  # to fit sphinxHook see https://github.com/pypa/pip/blob/0778c1c153da7da457b56df55fb77cbba08dfb0c/noxfile.py#L129-L148
+  postBuild = ''
+    cd docs
+
+    # remove references to sphinx extentions only required for html doc generation
+    # sphinx.ext.intersphinx requires network connection or packaged object.inv files for python and pypug
+    # sphinxcontrib.towncrier is not currently packaged
+    for ext in sphinx.ext.intersphinx sphinx_copybutton sphinx_inline_tabs sphinxcontrib.towncrier myst_parser; do
+      substituteInPlace html/conf.py --replace '"'$ext'",' ""
+    done
+
+    PYTHONPATH=$src/src:$PYTHONPATH sphinx-build -v \
+      -d build/doctrees/man \
+      -c html \
+      -d build/doctrees/man \
+      -b man \
+      man \
+      build/man
+    cd ..
+  '';
 
   nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
 
@@ -44,10 +77,12 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = ''
+    installManPage docs/build/man/*
+
     installShellCompletion --cmd pip \
-      --bash <($out/bin/pip completion --bash) \
-      --fish <($out/bin/pip completion --fish) \
-      --zsh <($out/bin/pip completion --zsh)
+      --bash <($out/bin/pip completion --bash --no-cache-dir) \
+      --fish <($out/bin/pip completion --fish --no-cache-dir) \
+      --zsh <($out/bin/pip completion --zsh --no-cache-dir)
   '';
 
   passthru.tests = { inherit pip-tools; };

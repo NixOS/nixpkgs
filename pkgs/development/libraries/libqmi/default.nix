@@ -17,7 +17,7 @@
 , libmbim
 , libqrtr-glib
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 

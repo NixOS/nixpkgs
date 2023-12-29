@@ -297,6 +297,7 @@ let
     } // meta;
   });
 in
+lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

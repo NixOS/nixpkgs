@@ -138,7 +138,9 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
+  nugetDeps = ./deps.nix;
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
@@ -161,7 +163,7 @@ in buildDotnetModule rec {
 They can be installed either as a global tool for the entire system, or as a local tool specific to project.
 
 The local installation is the easiest and works on NixOS in the same way as on other Linux distributions.
-[See dotnet documention](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
+[See dotnet documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
 
 [The global installation method](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-global-tool)
 should also work most of the time. You have to remember to update the `PATH`

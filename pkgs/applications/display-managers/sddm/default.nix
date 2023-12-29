@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkg-config, qttools
 , libxcb, libXau, pam, qtbase, qtdeclarative, qtquickcontrols2, systemd, xkeyboardconfig
 }:
@@ -16,6 +16,25 @@ mkDerivation rec {
   patches = [
     ./sddm-ignore-config-mtime.patch
     ./sddm-default-session.patch
+
+    # FIXME: all of the following are Wayland related backports, drop in next release
+    # Don't use Qt virtual keyboard on Wayland
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/07631f2ef00a52d883d0fd47ff7d1e1a6bc6358f.patch";
+      hash = "sha256-HTSw3YeT4z9ldr4sLmsnrPQ+LA8/a6XxrF+KUFqXUlM=";
+    })
+
+    # Fix running sddm-greeter manually in Wayland sessions
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e27b70957505dc7b986ab2fa68219af546c63344.patch";
+      hash = "sha256-6hzrFeS2epL9vzLOA29ZA/dD3Jd4rPMBHhNp+FBq1bA=";
+    })
+
+    # Prefer GreeterEnvironment over PAM environment
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/9e7791d5fb375933d20f590daba9947195515b26.patch";
+      hash = "sha256-JNsVTJNZV6T+SPqPkaFf3wg8NDqXGx8NZ4qQfZWOli4=";
+    })
   ];
 
   postPatch = ''

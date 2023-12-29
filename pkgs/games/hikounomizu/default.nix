@@ -13,20 +13,22 @@
 , libogg
 , libvorbis
 , libGLU
+, enet
 , synfigstudio
 , inkscape
 , imagemagick
 , pngquant
 , xz
+, bc
 }:
 
 stdenv.mkDerivation rec {
   pname = "hikounomizu";
-  version = "0.9.2";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "http://download.tuxfamily.org/hnm/${version}/hikounomizu-${version}-src.tar.bz2";
-    hash = "sha256-ZtvzQAiYG4IcdgKiBDIQFOJVnLbz1TsiIbdZr/0Y2U8=";
+    hash = "sha256-3wRhe6CDq1dD0SObAygfqslYJx+EM3LM3rj6HI0whYU=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
     imagemagick
     pngquant
     xz
+    bc
   ];
 
   buildInputs = [
@@ -51,10 +54,11 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     libGLU
+    enet
   ];
 
   postBuild = ''
-    make data -j$NIX_BUILD_CORES
+    make data HNM_PARALLEL=$NIX_BUILD_CORES
   '';
 
   meta = with lib; {

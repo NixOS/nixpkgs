@@ -6,7 +6,7 @@
 , eth-hash
 , eth-typing
 , eth-utils
-, factory_boy
+, factory-boy
 , hypothesis
 , isPyPy
 , pyasn1
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asn1tools
-    factory_boy
+    factory-boy
     hypothesis
     pyasn1
     pytestCheckHook

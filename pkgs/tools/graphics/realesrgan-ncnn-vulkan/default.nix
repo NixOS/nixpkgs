@@ -60,5 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ tilcreator ];
     platforms = platforms.all;
+    mainProgram = "realesrgan-ncnn-vulkan";
   };
 }

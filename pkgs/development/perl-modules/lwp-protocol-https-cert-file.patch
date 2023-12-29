@@ -1,31 +1,14 @@
-From 321401098f2c86a6f68e186cfc06e030b09484b6 Mon Sep 17 00:00:00 2001
-From: Tyson Whitehead <twhitehead@gmail.com>
-Date: Fri, 29 Jun 2018 15:47:00 -0400
-Subject: [PATCH] Respect NIX_SSL_CERT_FILE and SSL_CERT_FILE (in that order)
-
----
- lib/LWP/Protocol/https.pm | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
 diff --git a/lib/LWP/Protocol/https.pm b/lib/LWP/Protocol/https.pm
-index f7230e2..c78b9ce 100644
+index 645e828..7098f64 100644
 --- a/lib/LWP/Protocol/https.pm
 +++ b/lib/LWP/Protocol/https.pm
-@@ -23,6 +23,14 @@ sub _extra_sock_opts
- 	$ssl_opts{SSL_verify_mode} = 0;
+@@ -29,6 +29,9 @@ sub _extra_sock_opts
+         }
      }
      if ($ssl_opts{SSL_verify_mode}) {
-+	unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
-+	    $ssl_opts{SSL_ca_file} = $ENV{'NIX_SSL_CERT_FILE'}
-+                if !defined $ssl_opts{SSL_ca_file};
-+	    $ssl_opts{SSL_ca_file} = $ENV{'SSL_CERT_FILE'}
-+                if !defined $ssl_opts{SSL_ca_file};
-+	    $ssl_opts{SSL_ca_file} = "/etc/ssl/certs/ca-certificates.crt"
-+		if !defined $ssl_opts{SSL_ca_file} && -e "/etc/ssl/certs/ca-certificates.crt";
-+	}
- 	unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
- 	    eval {
- 		require Mozilla::CA;
--- 
-2.14.0
-
++        if ($ENV{NIX_SSL_CERT_FILE}) {
++            $ssl_opts{SSL_ca_file} //= $ENV{NIX_SSL_CERT_FILE};
++        }
+         unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
+             if ($Net::HTTPS::SSL_SOCKET_CLASS eq 'IO::Socket::SSL'
+                 && defined &IO::Socket::SSL::default_ca

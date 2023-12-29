@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     badPlatforms = platforms.darwin;
+    mainProgram = "xidlehook";
   };
 }

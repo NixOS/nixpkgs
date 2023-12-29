@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.55";
 
   src = fetchurl {
-    url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${pname}-${version}.tar.gz";
+    url = "ftp://ftp.chkrootkit.org/pub/seg/pac/${pname}-${version}.tar.gz";
     sha256 = "sha256-qBwChuxEkxP5U3ASAqAOgbIE/Cz0PieFhaEcEqXgJYs=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Locally checks for signs of a rootkit";
-    homepage = "http://www.chkrootkit.org/";
+    homepage = "https://www.chkrootkit.org/";
     license = licenses.bsd2;
     platforms = with platforms; linux;
   };

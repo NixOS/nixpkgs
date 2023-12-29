@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.das-g ];
     platforms = platforms.linux;
+    mainProgram = "ili2c";
   };
 }

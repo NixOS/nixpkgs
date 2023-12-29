@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.10.1";
+  version = "2.10.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = version;
-    hash = "sha256-zZM0Ozl6uoYfzvHhQRluS4/5NNRuumQgc4MV993LNyY=";
+    hash = "sha256-iO+B/4UsMi+vf85oyLwZTigZ+mmt7Sk3qGba20/0XBs=";
   };
 
   nativeBuildInputs = [

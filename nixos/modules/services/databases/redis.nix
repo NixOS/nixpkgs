@@ -63,7 +63,7 @@ in {
 
       vmOverCommit = mkEnableOption (lib.mdDoc ''
         setting of vm.overcommit_memory to 1
-        (Suggested for Background Saving: http://redis.io/topics/faq)
+        (Suggested for Background Saving: <https://redis.io/docs/get-started/faq/>)
       '');
 
       servers = mkOption {
@@ -75,7 +75,7 @@ in {
               Note that the NixOS module for Redis disables kernel support
               for Transparent Huge Pages (THP),
               because this features causes major performance problems for Redis,
-              e.g. (https://redis.io/topics/latency).
+              e.g. (https://redis.io/topics/latency)
             '');
 
             user = mkOption {

@@ -7,13 +7,14 @@
 , nats-server
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -21,8 +22,17 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
+    hash = "sha256-gpQXCihKvuXzCt1WNOd5W7RxxfVAvpaVP6OuHUiAQkw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"--cov=nats", "--cov-report=html"' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -34,11 +44,6 @@ buildPythonPackage rec {
     pytestCheckHook
     uvloop
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=nats --cov-report html" ""
-  '';
 
   disabledTests = [
     # AssertionError: assert 5 == 0

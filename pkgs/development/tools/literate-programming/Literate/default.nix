@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ ldc dub ];
 
+  HOME = "home";
+
   installPhase = "install -D bin/lit $out/bin/lit";
 
   meta = with lib; {

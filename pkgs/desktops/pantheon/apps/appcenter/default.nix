@@ -16,7 +16,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , polkit
 , wrapGAppsHook
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.3.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Lj3j812XaCIN+TFSDAvIgtl49n5jG4fVlAFvrWqngpM=";
+    sha256 = "sha256-L6MGbzzujr4tEB2Cpd7IU+3mOtSCt2hLPw4mOfZ4TkQ=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -64,11 +62,6 @@ stdenv.mkDerivation rec {
     "-Dpayments=false"
     "-Dcurated=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

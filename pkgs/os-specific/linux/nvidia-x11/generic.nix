@@ -4,14 +4,19 @@
 , sha256_64bit
 , sha256_aarch64 ? null
 , openSha256 ? null
-, settingsSha256
+, settingsSha256 ? null
 , settingsVersion ? version
-, persistencedSha256
+, persistencedSha256 ? null
 , persistencedVersion ? version
+, fabricmanagerSha256 ? null
+, fabricmanagerVersion ? version
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+, useSettings ? true
+, usePersistenced ? true
+, useFabricmanager ? false
 , ibtSupport ? false
 
 , prePatch ? ""
@@ -33,14 +38,21 @@
   disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux"
   # 32 bit libs only version of this package
 , lib32 ? null
-  # Whether to extract the GSP firmware
-, firmware ? openSha256 != null
+  # Whether to extract the GSP firmware, datacenter drivers needs to extract the
+  # firmware
+, firmware ? openSha256 != null || useFabricmanager
+  # Whether the user accepts the NVIDIA Software License
+, config, acceptLicense ? config.nvidia.acceptLicense or false
 }:
 
 with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
+assert useSettings -> settingsSha256 != null;
+assert usePersistenced -> persistencedSha256 != null;
+assert useFabricmanager -> fabricmanagerSha256 != null;
+assert useFabricmanager -> !(useSettings || usePersistenced);
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
@@ -54,12 +66,33 @@ let
     dbus # for nvidia-powerd
   ]);
 
+  # maybe silly since we've ignored this previously and just unfree..
+  throwLicense = throw ''
+    Use of NVIDIA Software requires license acceptance of the license:
+
+      - License For Customer Use of NVIDIA Software [1]
+
+    You can express acceptance by setting acceptLicense to true your nixpkgs.config.
+    Example:
+
+      configuration.nix:
+        nixpkgs.config.allowUnfree = true;
+        nixpkgs.config.nvidia.acceptLicense = true;
+
+      config.nix:
+        allowUnfree = true;
+        nvidia.acceptLicense = true;
+
+    [1]: https://www.nvidia.com/content/DriverDownloads/licence.php?lang=us
+  '';
+
   self = stdenv.mkDerivation {
-    name = "nvidia-x11-${version}${nameSuffix}";
+    name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
 
     builder = ./builder.sh;
 
     src =
+      if !acceptLicense && (openSha256 == null) then throwLicense else
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           urls = if args ? url then [ args.url ] else [
@@ -127,11 +160,17 @@ let
         nvidia_x11 = self;
         broken = brokenOpen;
       }) openSha256;
-      settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
-        withGtk2 = preferGtk2;
-        withGtk3 = !preferGtk2;
-      };
-      persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
+      settings = if useSettings then
+        (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
+          withGtk2 = preferGtk2;
+          withGtk3 = !preferGtk2;
+        } else {};
+      persistenced = if usePersistenced then
+        mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256
+      else {};
+      fabricmanager = if useFabricmanager then
+        mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
+      else {};
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
       ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
@@ -141,12 +180,12 @@ let
 
     meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
-      description = "X.org driver and kernel module for NVIDIA graphics cards";
+      description = "${if useFabricmanager then "Data Center" else "X.org"} driver and kernel module for NVIDIA cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ]
         ++ optionals (sha256_32bit != null) [ "i686-linux" ]
         ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-      maintainers = with maintainers; [ jonringer kiskae ];
+      maintainers = with maintainers; [ jonringer kiskae edwtjo ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

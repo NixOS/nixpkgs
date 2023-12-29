@@ -58,5 +58,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ skykanin ];
     platforms = platforms.unix;
+    mainProgram = "ani-cli";
   };
 }

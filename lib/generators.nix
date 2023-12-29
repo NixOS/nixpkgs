@@ -189,10 +189,10 @@ rec {
    * }
    *
    *> [url "ssh://git@github.com/"]
-   *>   insteadOf = https://github.com/
+   *>   insteadOf = "https://github.com"
    *>
    *> [user]
-   *>   name = edolstra
+   *>   name = "edolstra"
    */
   toGitINI = attrs:
     with builtins;
@@ -209,9 +209,17 @@ rec {
         else
           ''${section} "${subsection}"'';
 
+      mkValueString = v:
+        let
+          escapedV = ''
+            "${
+              replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v
+            }"'';
+        in mkValueStringDefault { } (if isString v then escapedV else v);
+
       # generation for multiple ini values
       mkKeyValue = k: v:
-        let mkKeyValue = mkKeyValueDefault { } " = " k;
+        let mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
         in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI

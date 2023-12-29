@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-Iro/FjPFMqulcK90MbludnOXkMEHW0QSCoQRL01/LDE";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/oem/lnch";
     description = "Launches a process and moves it out of the process group";
     license = licenses.mit;
+    mainProgram = "lnch";
   };
 }

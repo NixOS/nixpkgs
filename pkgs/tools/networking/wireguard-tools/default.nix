@@ -8,6 +8,7 @@
 , openresolv
 , procps
 , bash
+, wireguard-go
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +46,11 @@ stdenv.mkDerivation rec {
       wrapProgram $f \
         --prefix PATH : ${lib.makeBinPath [ procps iproute2 ]} \
         --suffix PATH : ${lib.makeBinPath [ iptables openresolv ]}
+    done
+  '' + lib.optionalString stdenv.isDarwin ''
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ wireguard-go ]}
     done
   '';
 

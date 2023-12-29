@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
+  outputs = [ "out" "doc" "man" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook perl ];
 
   buildInputs = [ mpi blas lapack scalapack ]
@@ -74,7 +76,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-assembly"
     ++ lib.optionals enableCuda [  "--enable-nvidia-gpu" "--with-NVIDIA-GPU-compute-capability=${nvidiaArch}" ];
 
-  doCheck = true;
+  enableParallelBuilding = true;
+
+  doCheck = !enableCuda;
 
   nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   preCheck = ''

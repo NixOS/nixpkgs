@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+    mainProgram = "sselp";
   };
 }

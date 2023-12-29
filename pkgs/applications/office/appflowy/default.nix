@@ -8,15 +8,16 @@
 , gtk3
 , xdg-user-dirs
 , keybinder3
+, libnotify
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.3.0";
+  version = "0.3.8";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
-    sha256 = "sha256-05RQtvf6I4/sjGtMDfc5U4esxfFFeTwIuxFAkbr6p4A";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
+    hash = "sha256-3ICeKSqzx1zp/KpaAFl9qLSaugWm4HZrKjrDCWz9ok4=";
     stripRoot = false;
   };
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     keybinder3
+    libnotify
   ];
 
   dontBuild = true;

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marsam ];
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "git-reparent";
   };
 }

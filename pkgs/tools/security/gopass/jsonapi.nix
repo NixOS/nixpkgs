@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gopass-jsonapi";
-  version = "1.15.7";
+  version = "1.15.9";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
     rev = "v${version}";
-    hash = "sha256-lwY5uc6eKqXO8FbvzlrpQY0y5AEcV0RQFvvnE+At6z0=";
+    hash = "sha256-p1z1jFk+Fmh7kMyMI5kMCkmp62q/CC8BqsbHHpfGWaI=";
   };
 
-  vendorHash = "sha256-BKwgP22l4t4jaAHHh+ZD/2nroCtAp/A6DqHt+9HZzKw=";
+  vendorHash = "sha256-bFHm2mSWI00lVAfFK8DSjt0hgM52IycpHGRADk0QSoQ=";
 
   subPackages = [ "." ];
 
@@ -38,5 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxhbr ];
+    mainProgram = "gopass-jsonapi";
   };
 }

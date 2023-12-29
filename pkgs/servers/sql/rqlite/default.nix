@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-WvEnMAz3dKG8xMlQzm7E0TmAgvsrRED50bb4Ved1+4U=";
   };
 
-  vendorSha256 = "sha256-qirt5g7dcjAnceejrBnfhDpA4LSEj7eOuznSlfUBUgo=";
+  vendorHash = "sha256-qirt5g7dcjAnceejrBnfhDpA4LSEj7eOuznSlfUBUgo=";
 
   subPackages = [ "cmd/rqlite" "cmd/rqlited" "cmd/rqbench" ];
 

@@ -1,11 +1,13 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, makeWrapper
 , pkg-config
 , stdenv
 , openssl
-, withALSA ? true
+, withALSA ? stdenv.isLinux
 , alsa-lib
+, alsa-plugins
 , withPortAudio ? false
 , portaudio
 , withPulseAudio ? false
@@ -26,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
   ];
 
@@ -40,6 +42,11 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withALSA "alsa-backend"
     ++ lib.optional withPortAudio "portaudio-backend"
     ++ lib.optional withPulseAudio "pulseaudio-backend";
+
+  postFixup = lib.optionalString withALSA ''
+    wrapProgram "$out/bin/librespot" \
+      --set ALSA_PLUGIN_DIR '${alsa-plugins}/lib/alsa-lib'
+  '';
 
   meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";

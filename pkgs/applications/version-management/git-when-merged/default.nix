@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-when-merged";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mhagger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sw98gmsnd4iki9fx455jga9m80bxvvfgys8i1r2fc7d5whc2qa6";
+    sha256 = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
   };
 
   buildInputs = [ python3 ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = python3.meta.platforms;
     maintainers = with maintainers; [ DamienCassou ];
+    mainProgram = "git-when-merged";
   };
 }

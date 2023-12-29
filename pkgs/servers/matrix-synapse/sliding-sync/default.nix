@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "matrix-sliding-sync";
-  version = "0.99.8";
+  version = "0.99.13";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "sliding-sync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4rYLHUlHbQ6KnxyXCCLqG4/zfXdZm4KZX1cOg5ITQPk=";
+    hash = "sha256-jrsMPFUSdtUs6qG902+oRBGUvFGmhR8/NHCUwB9oVnE=";
   };
 
-  vendorHash = "sha256-JYSpjAgIvQFpYmOTifRXHVB6bSrukqSVhmAAmHylPbQ=";
+  vendorHash = "sha256-THjvc0TepIBFOTte7t63Dmadf3HMuZ9m0YzQMI5e5Pw=";
 
   subPackages = [ "cmd/syncv3" ];
 
@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "A sliding sync implementation of MSC3575 for matrix";
     homepage = "https://github.com/matrix-org/sliding-sync";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ emilylange ];
+    maintainers = with maintainers; [ emilylange yayayayaka ];
     mainProgram = "syncv3";
   };
 }

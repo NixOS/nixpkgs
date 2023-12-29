@@ -24,6 +24,9 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (optionalString (option ? params) "(${option.params})")
         }' ${optionalString (option ? class) " --class ${option.class}"} {
+          # Fallback to UEFI console for boot, efifb sometimes has difficulties.
+          terminal_output console
+
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
@@ -185,33 +188,25 @@ let
       # So instead we'll list a lot of possibly valid modes :/
       #"3840x2160"
       #"2560x1440"
+      "1920x1200"
       "1920x1080"
       "1366x768"
+      "1280x800"
       "1280x720"
+      "1200x1920"
       "1024x768"
+      "800x1280"
       "800x600"
       "auto"
     ]}
 
-    # Fonts can be loaded?
-    # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont (\$root)/EFI/boot/unicode.pf2; then
-      set with_fonts=true
-    fi
-    if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
-      # Use graphical term, it can be either with background image or a theme.
-      # input is "console", while output is "gfxterm".
-      # This enables "serial" input and output only when possible.
-      # Otherwise the failure mode is to not even enable gfxterm.
-      if test "\$with_serial" == "yes"; then
-        terminal_output gfxterm serial
-        terminal_input  console serial
-      else
-        terminal_output gfxterm
-        terminal_input  console
-      fi
+    if [ "\$textmode" == "false" ]; then
+      terminal_output gfxterm
+      terminal_input  console
     else
-      # Sets colors for the non-graphical term.
+      terminal_output console
+      terminal_input  console
+      # Sets colors for console term.
       set menu_color_normal=cyan/blue
       set menu_color_highlight=white/blue
     fi
@@ -250,18 +245,58 @@ let
     touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
-    MODULES="fat iso9660 part_gpt part_msdos \
-             normal boot linux configfile loopback chain halt \
-             efifwsetup efi_gop \
-             ls search search_label search_fs_uuid search_fs_file \
-             gfxmenu gfxterm gfxterm_background gfxterm_menu test all_video loadenv \
-             exfat ext2 ntfs btrfs hfsplus udf \
-             videoinfo png \
-             echo serial \
-            "
+    MODULES=(
+      # Basic modules for filesystems and partition schemes
+      "fat"
+      "iso9660"
+      "part_gpt"
+      "part_msdos"
+
+      # Basic stuff
+      "normal"
+      "boot"
+      "linux"
+      "configfile"
+      "loopback"
+      "chain"
+      "halt"
+
+      # Allows rebooting into firmware setup interface
+      "efifwsetup"
+
+      # EFI Graphics Output Protocol
+      "efi_gop"
+
+      # User commands
+      "ls"
+
+      # System commands
+      "search"
+      "search_label"
+      "search_fs_uuid"
+      "search_fs_file"
+      "echo"
+
+      # We're not using it anymore, but we'll leave it in so it can be used
+      # by user, with the console using "C"
+      "serial"
+
+      # Graphical mode stuff
+      "gfxmenu"
+      "gfxterm"
+      "gfxterm_background"
+      "gfxterm_menu"
+      "test"
+      "loadenv"
+      "all_video"
+      "videoinfo"
+
+      # File types for graphical mode
+      "png"
+    )
 
     echo "Building GRUB with modules:"
-    for mod in $MODULES; do
+    for mod in ''${MODULES[@]}; do
       echo " - $mod"
     done
 
@@ -270,31 +305,27 @@ let
     for mod in efi_uga; do
       if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
         echo " - $mod"
-        MODULES+=" $mod"
+        MODULES+=("$mod")
       fi
     done
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    grub-mkimage --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
-      $MODULES
+    grub-mkimage \
+      --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
+      -o $out/EFI/boot/boot${targetArch}.efi \
+      -p /EFI/boot \
+      -O ${grubPkgs.grub2_efi.grubTarget} \
+      ''${MODULES[@]}
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
-    set with_fonts=false
-    set textmode=${boolToString (!config.isoImage.graphicalGrub)}
-    # If you want to use serial for "terminal_*" commands, you need to set one up:
-    #   Example manual configuration:
-    #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
-    # This uses the defaults, and makes the serial terminal available.
-    set with_serial=no
-    if serial; then set with_serial=yes ;fi
-    export with_serial
-    clear
+    set textmode=${boolToString (config.isoImage.forceTextMode)}
     set timeout=${toString grubEfiTimeout}
 
-    # This message will only be viewable when "gfxterm" is not used.
+    clear
+    # This message will only be viewable on the default (UEFI) console.
     echo ""
     echo "Loading graphical boot menu..."
     echo ""
@@ -306,7 +337,7 @@ let
     hiddenentry 'Text mode' --hotkey 't' {
       loadfont (\$root)/EFI/boot/unicode.pf2
       set textmode=true
-      terminal_output gfxterm console
+      terminal_output console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
@@ -399,6 +430,8 @@ let
       halt
     }
     EOF
+
+    grub-script-check $out/EFI/boot/grub.cfg
 
     ${refind}
   '';
@@ -658,13 +691,17 @@ in
       '';
     };
 
-    isoImage.graphicalGrub = mkOption {
+    isoImage.forceTextMode = mkOption {
       default = false;
       type = types.bool;
       example = true;
       description = lib.mdDoc ''
-        Whether to use textmode or graphical grub.
-        false means we use textmode grub.
+        Whether to use text mode instead of graphical grub.
+        A value of `true` means graphical mode is not tried to be used.
+
+        This is useful for validating that graphics mode usage is not at the root cause of a problem with the iso image.
+
+        If text mode is required off-handedly (e.g. for serial use) you can use the `T` key, after being prompted, to use text mode for the current boot.
       '';
     };
 

@@ -57,6 +57,7 @@ in
         ReadWritePaths = "";
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
+          "-/etc/resolv.conf"
           "-/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           cfg.settings.podcast-path

@@ -1,13 +1,15 @@
 import ../make-test-python.nix ({ lib, pkgs, ... }: let
-  oldNetbox = pkgs.netbox_3_3;
+  oldNetbox = pkgs.netbox_3_5;
+  newNetbox = pkgs.netbox_3_6;
 in {
   name = "netbox-upgrade";
 
   meta = with lib.maintainers; {
-    maintainers = [ minijackson ];
+    maintainers = [ minijackson raitobezarius ];
   };
 
   nodes.machine = { config, ... }: {
+    virtualisation.memorySize = 2048;
     services.netbox = {
       enable = true;
       package = oldNetbox;
@@ -32,7 +34,7 @@ in {
 
     networking.firewall.allowedTCPPorts = [ 80 ];
 
-    specialisation.upgrade.configuration.services.netbox.package = lib.mkForce pkgs.netbox;
+    specialisation.upgrade.configuration.services.netbox.package = lib.mkForce newNetbox;
   };
 
   testScript = { nodes, ... }:
@@ -43,7 +45,7 @@ in {
         (lib.concatStringsSep ".")
       ];
       oldApiVersion = apiVersion oldNetbox.version;
-      newApiVersion = apiVersion pkgs.netbox.version;
+      newApiVersion = apiVersion newNetbox.version;
     in
     ''
       start_all()

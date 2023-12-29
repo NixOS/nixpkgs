@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , file
+, libGL
 , libjpeg
 , mesa
 , pango
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     file
+    libGL
     libjpeg
     mesa
     pango

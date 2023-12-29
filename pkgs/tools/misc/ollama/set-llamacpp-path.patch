@@ -1,0 +1,23 @@
+diff --git a/llm/llama.go b/llm/llama.go
+index f23d5d8..6563550 100644
+--- a/llm/llama.go
++++ b/llm/llama.go
+@@ -25,7 +25,6 @@ import (
+ 	"github.com/jmorganca/ollama/api"
+ )
+ 
+-//go:embed llama.cpp/*/build/*/bin/*
+ var llamaCppEmbed embed.FS
+ 
+ type ModelRunner struct {
+@@ -33,6 +32,10 @@ type ModelRunner struct {
+ }
+ 
+ func chooseRunners(workDir, runnerType string) []ModelRunner {
++	return []ModelRunner{
++		{Path: "@llamaCppServer@"},
++	}
++
+ 	buildPath := path.Join("llama.cpp", runnerType, "build")
+ 	var runners []string
+ 

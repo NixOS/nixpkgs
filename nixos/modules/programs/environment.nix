@@ -22,7 +22,6 @@ in
         # be specified here; do so in the default value of programs.less.envVariables instead
         PAGER = mkDefault "less";
         EDITOR = mkDefault "nano";
-        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
 
     # since we set PAGER to this above, make sure it's installed
@@ -33,17 +32,19 @@ in
         "/run/current-system/sw"
       ];
 
+    environment.sessionVariables =
+      {
+        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
+      };
+
     # TODO: move most of these elsewhere
     environment.profileRelativeSessionVariables =
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
-        KDEDIRS = [ "" ];
-        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" "/lib/gtk-4.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
-        MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
         LIBEXEC_PATH = [ "/lib/libexec" ];
       };
 

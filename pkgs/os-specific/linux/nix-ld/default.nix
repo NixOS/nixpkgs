@@ -52,5 +52,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.linux;
+
+    # 32 bit builds are broken due to a missing #define value:
+    # https://github.com/Mic92/nix-ld/issues/64
+    broken = stdenv.is32bit;
   };
 }

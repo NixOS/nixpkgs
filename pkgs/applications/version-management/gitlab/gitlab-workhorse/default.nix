@@ -5,8 +5,9 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "16.1.4";
+  version = "16.5.3";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = data.owner;
     repo = data.repo;
@@ -16,7 +17,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/workhorse";
 
-  vendorSha256 = "sha256-lKl/V2fti0eqrEoeJNNwvJbZO7z7v+5HlES+dyxxcP4=";
+  vendorHash = "sha256-m8cDhI6DzFnSEZscZQfFm8l9MTJqTqxhBFJeTX1HWiE=";
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;

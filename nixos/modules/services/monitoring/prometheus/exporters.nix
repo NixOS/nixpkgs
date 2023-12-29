@@ -2,8 +2,8 @@
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types mkOptionDefault flip attrNames;
+    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+    optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -20,7 +20,7 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
-  exporterOpts = genAttrs [
+  exporterOpts = (genAttrs [
     "apcupsd"
     "artifactory"
     "bind"
@@ -34,13 +34,15 @@ let
     "domain"
     "dovecot"
     "fastly"
+    "flow"
     "fritzbox"
     "graphite"
     "idrac"
+    "imap-mailstat"
     "influxdb"
     "ipmi"
-    "json"
     "jitsi"
+    "json"
     "junos-czerwonk"
     "kea"
     "keylight"
@@ -58,6 +60,7 @@ let
     "nut"
     "openldap"
     "openvpn"
+    "pgbouncer"
     "php-fpm"
     "pihole"
     "postfix"
@@ -68,12 +71,13 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
-    "snmp"
     "smartctl"
     "smokeping"
+    "snmp"
     "sql"
     "statsd"
     "surfboard"
@@ -85,10 +89,39 @@ let
     "v2ray"
     "varnish"
     "wireguard"
-    "flow"
     "zfs"
-  ] (name:
-    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+  ]
+    (name:
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+    )) // (mapAttrs
+    (name: params:
+      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options; type = params.type ; })
+    {
+      exportarr-bazarr = {
+        name = "exportarr";
+        type = "bazarr";
+      };
+      exportarr-lidarr = {
+        name = "exportarr";
+        type = "lidarr";
+      };
+      exportarr-prowlarr = {
+        name = "exportarr";
+        type = "prowlarr";
+      };
+      exportarr-radarr = {
+        name = "exportarr";
+        type = "radarr";
+      };
+      exportarr-readarr = {
+        name = "exportarr";
+        type = "readarr";
+      };
+      exportarr-sonarr = {
+        name = "exportarr";
+        type = "sonarr";
+      };
+    }
   );
 
   mkExporterOpts = ({ name, port }: {
@@ -304,6 +337,33 @@ in
           'services.mysql.enable' is set to false.
       '';
     } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
+      '';
+    } {
+      assertion =  cfg.pgbouncer.enable -> (
+        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
+      );
+        message = ''
+          PgBouncer exporter needs either connectionStringFile or connectionString configured"
+        '';
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
+        );
+        message = ''
+          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
+
+          Example:
+          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
+
+          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+        '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -341,12 +401,24 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
-    warnings = [(mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
-        Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
-        `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
-        Consider using `services.prometheus.exporters.idrac.configuration` instead.
-      ''
-    )] ++ config.services.prometheus.exporters.warnings;
+    warnings = [
+      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+          Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+          `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+          Consider using `services.prometheus.exporters.idrac.configuration` instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
+          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
+          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
+        ''
+      )
+    ] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

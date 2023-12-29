@@ -3,12 +3,14 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-((buildMozillaMach rec {
+(buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
+  requireSigning = false;
+  allowAddonSideload = true;
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
@@ -21,6 +23,7 @@ in
                                            # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
+    mainProgram = "librewolf";
   };
   tests = [ nixosTests.librewolf ];
   updateScript = callPackage ./update.nix {
@@ -29,6 +32,4 @@ in
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-}).overrideAttrs (prev: {
-  MOZ_REQUIRE_SIGNING = "";
-})
+}

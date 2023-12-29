@@ -1,15 +1,20 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, testers
+, symfony-cli
+}:
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.5.8";
-  vendorHash = "sha256-hOYVIynWsbsindNJRbXX4NkC3FW3RErORCSLlV1bCWc=";
+  version = "5.7.3";
+  vendorHash = "sha256-xC5EHP4Zb9lgvbxVkoVBxdQ4+f34zqRf4XapntZMTTc=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    hash = "sha256-K2DttdK8g5NI+XlGwIA9HTPTLlMGgGc1K625FquIhi4=";
+    hash = "sha256-mxyGdyR1yZY+YOyf9ngk6P2oBmUL+IbwLWaCvZziSIM=";
   };
 
   ldflags = [
@@ -23,11 +28,16 @@ buildGoModule rec {
   '';
 
   # Tests requires network access
-  checkPhase = ''
-    $GOPATH/bin/symfony-cli
-  '';
+  doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = symfony-cli;
+    command = "symfony version --no-ansi";
+  };
 
   meta = {
+    changelog = "https://github.com/symfony-cli/symfony-cli/releases/tag/v${version}";
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = lib.licenses.agpl3Plus;

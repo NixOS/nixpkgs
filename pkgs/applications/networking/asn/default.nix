@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nitefood/asn";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ devhell ];
+    mainProgram = "asn";
   };
 }

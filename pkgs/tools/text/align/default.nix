@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "17gs3417633z71kc6l5zqg4b3rjhpn2v8qs8rnfrk4nbwzz4nrq3";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://github.com/Guitarbum722/align";

@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.cc0;
     maintainers = with maintainers; [ athas r-burns ];
     platforms = platforms.unix;
+    mainProgram = "clinfo";
   };
 }

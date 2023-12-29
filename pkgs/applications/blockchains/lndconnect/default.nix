@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/LN-Zap/lndconnect";
     maintainers = [ maintainers.d-xo ];
     platforms = platforms.linux;
+    mainProgram = "lndconnect";
   };
 }

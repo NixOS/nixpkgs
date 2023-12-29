@@ -42,6 +42,8 @@ buildPythonPackage rec {
     "sphinxcontrib.spelling"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx spelling extension";
     homepage = "https://github.com/sphinx-contrib/spelling";

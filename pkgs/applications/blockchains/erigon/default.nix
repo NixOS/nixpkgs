@@ -2,7 +2,7 @@
 
 let
   pname = "erigon";
-  version = "2.48.1";
+  version = "2.54.0";
 in
 buildGoModule {
   inherit pname version;
@@ -11,16 +11,21 @@ buildGoModule {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ApVsrK1Di6d3WBj/VIUcYJBceFDTeNfsXYPRfbytvZg=";
+    hash = "sha256-1kgbIg/3SvVT83UfwAYUixs1RQk4PP1quiOcI1mzbZ0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-bsPeEAhvuT5GIpYMoyPyh0BHMDKyKjBiVnYLjtF4Mkc=";
+  vendorHash = "sha256-Gr9mrME8/ZDxp2ORKessNhfguklDf+jC4RSpzLOSBhQ=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
+
+  # Fix error: 'Caught SIGILL in blst_cgo_init'
+  # https://github.com/bnb-chain/bsc/issues/1521
+  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
+  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
 
   subPackages = [
     "cmd/erigon"

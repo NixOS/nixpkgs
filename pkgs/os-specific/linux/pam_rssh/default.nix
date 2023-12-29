@@ -1,25 +1,32 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, coreutils
 , pkg-config
 , openssl
 , pam
 , openssh
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    rev = "92c240bd079e9711c7afa8bacfcf01de48f42577";
-    hash = "sha256-mIQeItPh6RrF3cFbAth2Kmb2E/Xj+lOgatvjcLE4Yag=";
+    rev = "v${version}";
+    hash = "sha256-SDtMqGy2zhq9jEQVwSEl4EwRp2jgXfTVLrCX7k/kBeU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-QMyMqsjZ91WimIaaSCXtbRScS3BoB+yFtHjx3xViq7U=";
+  cargoHash = "sha256-gNy1tcHDUOG1XduGAIMapvx5dlq+U1LitUQkccGfb9o=";
+
+  postPatch = ''
+    substituteInPlace src/auth_keys.rs \
+      --replace '/bin/echo' '${coreutils}/bin/echo' \
+      --replace '/bin/false' '${coreutils}/bin/false'
+  '';
 
   nativeBuildInputs = [
     pkg-config

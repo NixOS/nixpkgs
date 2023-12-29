@@ -5,9 +5,10 @@
 , hypothesis
 , lupa
 , poetry-core
+, pybloom-live
 , pytest-asyncio
-, pytestCheckHook
 , pytest-mock
+, pytestCheckHook
 , pythonOlder
 , redis
 , six
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.18.0";
+  version = "2.20.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+bJbtqBUgix4oIq49hQEk3/cNXfvXFXE/m/qR1zy8jo=";
+    hash = "sha256-pRvUgK4OXVP2GR+Iu4ddqwApw0gYN4FkKjTpwbC1oWM=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,9 @@ buildPythonPackage rec {
     ];
     aioredis = [
       aioredis
+    ];
+    bf = [
+      pybloom-live
     ];
   };
 

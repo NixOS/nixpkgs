@@ -4,9 +4,27 @@
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    # FlexGet doesn't support transmission-rpc>=5 yet
+    # https://github.com/NixOS/nixpkgs/issues/258504
+    # https://github.com/Flexget/Flexget/issues/3847
+    packageOverrides = self: super: {
+      transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
+        version = "4.3.1";
+        src = fetchPypi {
+          pname = "transmission_rpc";
+          inherit version;
+          hash = "sha256-Kh2eARIfM6MuXu7RjPPVhvPZ+bs0AXkA4qUCbfu5hHU=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.9.5";
+  version = "3.9.18";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -14,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L3AQCc5ErWjMATKMSZf9r+4rfFA8SjCCcT0rW9oMmbA=";
+    hash = "sha256-Wxi6+6c/PK990YCoFKBMxJbYgMkS9y46hNIlkVhjbA4=";
   };
 
   postPatch = ''
@@ -22,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
     apscheduler
     beautifulsoup4

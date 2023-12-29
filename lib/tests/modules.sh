@@ -39,7 +39,7 @@ reportFailure() {
 checkConfigOutput() {
     local outputContains=$1
     shift
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
+    if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
@@ -91,6 +91,9 @@ checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 # is the option.
 checkConfigOutput '^true$' config.result ./module-argument-default.nix
 
+# gvariant
+checkConfigOutput '^true$' config.assertion ./gvariant.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
@@ -107,6 +110,12 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: 
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+# Check boolByOr type.
+checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
 
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
@@ -224,8 +233,16 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 
 # Check mkPackageOption
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
 # submoduleWith
 
@@ -443,6 +460,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
+
+# Declaration positions
+# Line should be present for direct options
+checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+# Generated options may not have line numbers but they will at least get the
+# right file
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+# Submodules don't break it
+checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+# New options under freeform submodules get collected into the parent submodule
+# (consistent with .declarations behaviour, but weird; notably appears in system.build)
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+# nested options work
+checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

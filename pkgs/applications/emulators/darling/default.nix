@@ -4,6 +4,7 @@
 , writeShellScript
 , fetchFromGitHub
 , fetchpatch
+, nixosTests
 
 , freetype
 , libjpeg
@@ -107,14 +108,14 @@ let
   ];
 in stdenv.mkDerivation {
   pname = "darling";
-  version = "unstable-2023-05-02";
+  version = "unstable-2023-11-07";
 
   src = fetchFromGitHub {
     owner = "darlinghq";
     repo = "darling";
-    rev = "557e7e9dece394a3f623825679474457e5b64fd0";
+    rev = "34351655a40d2090e70b3033a577b8cdea967633";
     fetchSubmodules = true;
-    hash = "sha256-SOoLaV7wg33qRHPQXkdMvrY++CvoG85kwd6IU6DkYa0=";
+    hash = "sha256-Jhr7Do15vms8bJ8AczVSkuWrC7gUR5ZvU9/PfCmGGcg=";
   };
 
   outputs = [ "out" "sdk" ];
@@ -220,6 +221,8 @@ in stdenv.mkDerivation {
     patchelf --add-rpath "${lib.makeLibraryPath wrappedLibs}:${addOpenGLRunpath.driverLink}/lib" \
       $out/libexec/darling/usr/libexec/darling/mldr
   '';
+
+  passthru.tests.nixos = nixosTests.darling;
 
   meta = with lib; {
     description = "Open-source Darwin/macOS emulation layer for Linux";

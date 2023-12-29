@@ -15,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
-  version = "5.5.2";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pa2kqeVl+TEsHOpnE7+iG3feYVAuYrDYnWyDpWJay7M=";
+    hash = "sha256-KIYwuDPkxhtQy989XW+DcI5NJPhfLP07mYUFc180Sdw=";
   };
 
   vendorHash = null;

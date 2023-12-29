@@ -24,7 +24,7 @@ let
       '';
     };
     sharp = {
-      nativeBuildInputs = [ pkg-config nodePackages.semver ];
+      nativeBuildInputs = [ pkg-config nodePackages.node-gyp nodePackages.semver ];
       buildInputs = [ vips ];
       postInstall = ''
         yarn --offline run install

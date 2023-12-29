@@ -36,7 +36,7 @@ buildDotnetModule rec {
   dontDotnetFixup = true;
 
   preBuild = ''
-    make VERSION=${version} version
+    make VERSION=${engine.build}-${version} version
   '';
 
   postInstall = ''

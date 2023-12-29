@@ -1,39 +1,49 @@
-{ stdenv
-, pkgs
-, lib
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
 , nodejs_20
 , runtimeShell
 }:
 
 let
   nodejs = nodejs_20;
+in buildNpmPackage rec {
+  pname = "whitebophir";
+  version = "1.19.1";
 
-  nodePackages = import ./node-packages.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
+  src = fetchFromGitHub {
+    owner = "lovasoa";
+    repo = "whitebophir";
+    rev = "v${version}";
+    hash = "sha256-4T7s9WrpyHVPcw0QY0C0sczDJYKzA4bAAfEv8q2pOy4=";
   };
 
-  whitebophir = lib.head (lib.attrValues nodePackages);
+  inherit nodejs;
 
-  combined = whitebophir.override {
-    postInstall = ''
-      out_whitebophir=$out/lib/node_modules/whitebophir
+  npmDepsHash = "sha256-mKDkkX7vWrnfEg1D65bqn/MtyUS0DKjTtkDW6ebso7g=";
 
-      mkdir $out/bin
-      cat <<EOF > $out/bin/whitebophir
-      #!${runtimeShell}
-      exec ${nodejs}/bin/node $out_whitebophir/server/server.js
-      EOF
-      chmod +x $out/bin/whitebophir
-    '';
+  # geckodriver tries to access network
+  npmFlags = [ "--ignore-scripts" ];
 
-    meta = with lib; {
-      description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
-      license = licenses.agpl3Plus;
-      homepage = "https://github.com/lovasoa/whitebophir";
-      maintainers = with maintainers; [ iblech ];
-      platforms = platforms.unix;
-    };
+  dontNpmBuild = true;
+
+  postInstall = ''
+    out_whitebophir=$out/lib/node_modules/whitebophir
+
+    mkdir $out/bin
+    cat <<EOF > $out/bin/whitebophir
+    #!${runtimeShell}
+    exec ${nodejs}/bin/node $out_whitebophir/server/server.js
+    EOF
+    chmod +x $out/bin/whitebophir
+  '';
+
+  meta = with lib; {
+    description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
+    license = licenses.agpl3Plus;
+    homepage = "https://github.com/lovasoa/whitebophir";
+    mainProgram = "whitebophir";
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
   };
-in
-  combined
+}

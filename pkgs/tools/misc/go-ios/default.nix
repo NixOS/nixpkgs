@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.115";
+  version = "1.0.120";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-pvgdGBLgRHvnGdAyA4Rrexkh5oRzVT7AYgKfLNfSf7M=";
+    sha256 = "sha256-qBy1lfG1Uppld9jwsdxHfV8oibPfr13RONfBl9GSLjs=";
   };
 
-  vendorSha256 = "sha256-lLpvpT0QVVyy12HmtOQxagT0JNwRO7CcfkGhCpouH8w=";
+  vendorHash = "sha256-lLpvpT0QVVyy12HmtOQxagT0JNwRO7CcfkGhCpouH8w=";
 
   excludedPackages = [
     "restapi"
@@ -37,5 +37,6 @@ buildGoModule rec {
     homepage = "https://github.com/danielpaulus/go-ios";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
+    mainProgram = "ios";
   };
 }

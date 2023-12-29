@@ -8,28 +8,36 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    sha256 = "sha256-RSGaOgGf3m94t3SKnvSPqz0VHhWr6NmIMtGsmOynMaM=";
+    hash = "sha256-bnKaaqh1/921SRwnwqgYb31SJ8vguEBtzywPTz79S6I=";
   };
 
-  postPatch = ''
-    cp ${writeScript "fake-gradlew-for-dafny" ''
-      mkdir -p build/libs/
-      javac $(find -name "*.java" | grep "^./src/main") -d classes
-      jar cf build/libs/DafnyRuntime-${version}.jar -C classes dafny
-    ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+  postPatch =
+    # This version number seems to be hardcoded and didn't get updated with the
+    # version bump from 4.2.0 to 4.3.0.
+    let dafnyRuntimeJarVersion = "4.2.0";
+    in ''
+      cp ${
+        writeScript "fake-gradlew-for-dafny" ''
+          mkdir -p build/libs/
+          javac $(find -name "*.java" | grep "^./src/main") -d classes
+          jar cf build/libs/DafnyRuntime-${dafnyRuntimeJarVersion}.jar -C classes dafny
+        ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
-    # Needed to fix
-    # "error NETSDK1129: The 'Publish' target is not supported without specifying a target framework. The current project targets multiple frameworks, you must specify the framework for the published application."
-    substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
-      --replace TargetFrameworks TargetFramework \
-      --replace "netstandard2.0;net452" net6.0
-  '';
+      # Needed to fix
+      # "error NETSDK1129: The 'Publish' target is not supported without
+      # specifying a target framework. The current project targets multiple
+      # frameworks, you must specify the framework for the published
+      # application."
+      substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
+        --replace TargetFrameworks TargetFramework \
+        --replace "netstandard2.0;net452" net6.0
+    '';
 
   buildInputs = [ jdk11 ];
   nugetDeps = ./deps.nix;

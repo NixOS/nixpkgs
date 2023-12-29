@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-6NUuKU8KQBfHE6fcN3a9lBcUk7p5I9SuY9g+qJxGXmU=";
   };
 
-  vendorSha256 = "sha256-vZwADD7fi9ZvJby9Ijdeueid8jRfUyyj6Nu4kgkO5Wo=";
+  vendorHash = "sha256-vZwADD7fi9ZvJby9Ijdeueid8jRfUyyj6Nu4kgkO5Wo=";
 
   ldflags = [ "-s" "-w" "-X github.com/cloudposse/atmos/cmd.Version=v${version}" ];
 

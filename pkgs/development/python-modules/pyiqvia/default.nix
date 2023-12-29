@@ -3,6 +3,7 @@
 , aiohttp
 , aresponses
 , backoff
+, certifi
 , fetchFromGitHub
 , fetchpatch
 , poetry-core
@@ -10,35 +11,22 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "2023.08.1";
+  version = "2023.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyiqvia";
     rev = "refs/tags/${version}";
-    hash = "sha256-vPcb0mwREQri9FuYhWXihWSYnZ2ywBVujPMaNThTbVI=";
+    hash = "sha256-8eTa2h+1QOL0T13+lg2OzvaQv6CYYKkviQb4J5KPsvM=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/pyiqvia/pull/245
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/pyiqvia/commit/760d5bd1f4d60f3a97f6ea9a9a57860f4be3abdd.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -47,6 +35,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
+    yarl
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -75,6 +65,7 @@ buildPythonPackage rec {
       https://flustar.com and more).
     '';
     homepage = "https://github.com/bachya/pyiqvia";
+    changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

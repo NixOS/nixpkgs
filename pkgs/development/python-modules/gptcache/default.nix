@@ -4,12 +4,14 @@
 , cachetools
 , numpy
 , pythonOlder
+, redis
+, redis-om
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "gptcache";
-  version = "0.1.37";
+  version = "0.1.42";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.1";
@@ -18,12 +20,14 @@ buildPythonPackage rec {
     owner = "zilliztech";
     repo = "GPTCache";
     rev = "refs/tags/${version}";
-    hash = "sha256-eQu3O6jPL1BRObA99XA2EOznn9NaArVRouqD1Ypz/4w=";
+    hash = "sha256-rrPs5ZwBooltVcvrs4AHObx69xmZ8F+IP/lJGPVTNXY=";
   };
 
   propagatedBuildInputs = [
     cachetools
     numpy
+    redis
+    redis-om
     requests
   ];
 

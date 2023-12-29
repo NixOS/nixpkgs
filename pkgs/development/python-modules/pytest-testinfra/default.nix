@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, pythonOlder
 , setuptools-scm
 , ansible-core
 , paramiko
@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-testinfra";
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UxGzaeBUaSD85GTDv5RbVevnWhJ1aPbWFelLiJE0AUk=";
+    hash = "sha256-L7fQGFRYqbpmn/FNDdvsizkAxr3j+2+tmwlzdM5Kt30=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
     "test_user_connection"
     "test_sudo"
     "test_docker_encoding"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # broken because salt package only built for python 3.10
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    # broken because salt package only built for python 3.11
     "test_backend_importables"
   ];
 

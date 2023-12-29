@@ -179,14 +179,22 @@ in
       };
     };
 
+    assertions = [
+      {
+        assertion = localDB -> cfg.database.username == cfg.database.dbname;
+        message = ''
+          When setting up a DB and its owner user, the owner and the DB name must be
+          equal!
+        '';
+      }
+    ];
+
     services.postgresql = mkIf localDB {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
       ensureUsers = [ {
         name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       } ];
     };
 

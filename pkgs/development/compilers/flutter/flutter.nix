@@ -117,7 +117,7 @@ let
         homepage = "https://flutter.dev";
         license = licenses.bsd3;
         platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-        maintainers = with maintainers; [ babariviere ericdallo FlafyDev gilice hacker1024 ];
+        maintainers = with maintainers; [ babariviere ericdallo FlafyDev hacker1024 ];
       };
     };
 in

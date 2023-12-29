@@ -27,22 +27,26 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.14";
-  format = "pyproject";
+  version = "0.4.20";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-0KnILQkahSiA1uuyT+kgy1XaCcZ3cpx1q114e2pecvg=";
+    hash = "sha256-WLYXUtchOaA6SGnKuVhN9CmV06xMCLQTEuEtL13ttZU=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
+
+  # The version is automatically set to ".dev" if this variable is not set.
+  # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
+  JAX_RELEASE = "1";
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
@@ -96,6 +100,18 @@ buildPythonPackage rec {
     "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
     "testQdwhWithRandomMatrix3"
     "testScanGrad_jit_scan"
+
+    # See https://github.com/google/jax/issues/17867.
+    "test_array"
+    "test_async"
+    "test_copy0"
+    "test_device_put"
+    "test_make_array_from_callback"
+    "test_make_array_from_single_device_arrays"
+
+    # Fails on some hardware due to some numerical error
+    # See https://github.com/google/jax/issues/18535
+    "testQdwhWithOnRankDeficientInput5"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [

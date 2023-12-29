@@ -1,6 +1,7 @@
 { stdenv, lib, unzip, autoPatchelfHook
-, fetchurl, atomEnv, makeWrapper
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook, libxshmfence
+, fetchurl, makeWrapper
+, alsa-lib, mesa, nss, nspr, systemd
+, makeDesktopItem, copyDesktopItems, wrapGAppsHook
 , metaCommon
 }:
 
@@ -20,11 +21,11 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    pname = "trilium-desktop";
-    inherit version;
+    inherit pname version meta;
 
     src = fetchurl linuxSource;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
@@ -32,7 +33,14 @@ let
       copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      stdenv.cc.cc
+      systemd
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -65,8 +73,9 @@ let
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
+    # Error: libstdc++.so.6: cannot open shared object file: No such file or directory
     preFixup = ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${atomEnv.libPath})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs})
     '';
 
     dontStrip = true;

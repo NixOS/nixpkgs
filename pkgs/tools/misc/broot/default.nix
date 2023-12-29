@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.25.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TLphJr1DhJ30Mu3x3/9pNe1IiI9prafFMg1dDtbgqlE=";
+    hash = "sha256-yZsb/G+8XoJS4Fg6WFuEk1v3Ht5i3G3p+sKi+Z3jeGU=";
   };
 
-  cargoHash = "sha256-dtNy3rWz6hMkatiV4z2gB4Z00gjtzREqjy7E48tmcdk=";
+  cargoHash = "sha256-xHmrFIXXkuhYGApgNoJxcL1Kpf8ellwQgiH8AEZvDRU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -88,5 +88,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
+    mainProgram = "broot";
   };
 }

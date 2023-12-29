@@ -1,19 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
 
-# # To enable on NixOS:
-# config.services.postgresql = let
-#   # The postgresql pkgs has to be taken from the
-#   # postgresql package used, so the extensions
-#   # are built for the correct postgresql version.
-#   postgresqlPackages = config.services.postgresql.package.pkgs;
-# in {
-#   extraPlugins = with postgresqlPackages; [ timescaledb ];
-#   settings.shared_preload_libraries = "timescaledb";
-# }
-
 stdenv.mkDerivation rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.11.2";
+  version = "2.13.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
@@ -22,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "timescale";
     repo = "timescaledb";
     rev = version;
-    sha256 = "sha256-c2fztGtl2cLThT0JhHCM0UaYkiWTp5T6TUZ3Au7CG7c=";
+    hash = "sha256-ZF3VNiTfuxCMVMRv9fqBssXuikxKbwza6ib7IuXYjgA=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
@@ -46,10 +35,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
-    changelog = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ marsam ];
     platforms = postgresql.meta.platforms;
     license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "12";
+    broken = versionOlder postgresql.version "13";
   };
 }

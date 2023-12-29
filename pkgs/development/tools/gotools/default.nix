@@ -20,7 +20,7 @@ buildGoModule rec {
     rm -r cmd/getgo
   '';
 
-  vendorSha256 = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
+  vendorHash = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
 
   doCheck = false;
 

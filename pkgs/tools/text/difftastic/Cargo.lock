@@ -237,7 +237,7 @@ checksum = "6184e33543162437515c2e2b48714794e37845ec9851711914eec9d308f6ebe8"
 
 [[package]]
 name = "difftastic"
-version = "0.51.1"
+version = "0.52.0"
 dependencies = [
  "assert_cmd",
  "bumpalo",
@@ -252,6 +252,7 @@ dependencies = [
  "lazy_static",
  "libc",
  "libmimalloc-sys",
+ "line-numbers",
  "log",
  "mimalloc",
  "owo-colors",
@@ -446,6 +447,12 @@ checksum = "7705fc40f6ed493f73584abbb324e74f96b358ff60dfe5659a0f8fc12c590a69"
 dependencies = [
  "cc",
 ]
+
+[[package]]
+name = "line-numbers"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "793a75315eb63b8699158825bdea85d63eeb850e7543cb834abef3c7b5b53780"
 
 [[package]]
 name = "lock_api"

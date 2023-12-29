@@ -78,11 +78,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "248";
+  version = "252";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-Lub+SIr0EyY4YmPsoLXWavXJhcpmK5VRb6eEnozZ0XQ=";
+    hash = "sha256-NmYv5htZT2v04vVksIWGuaPI1rXfNmrVSmErT/faBbQ=";
   };
 
   outputs = [
@@ -92,7 +92,6 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    ./fix-test_fit.patch
   ];
 
   postPatch = ''
@@ -245,8 +244,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_symlink_root"
   ];
 
+  disabledTestPaths = [
+    # fails due to https://github.com/NixOS/nixpkgs/issues/256896
+    # should be removed once that issue is resolved in coreboot or diffoscope
+    "tests/comparators/test_cbfs.py"
+  ]
   # Flaky tests on Darwin
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"
@@ -284,5 +288,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
+    mainProgram = "diffoscope";
   };
 }

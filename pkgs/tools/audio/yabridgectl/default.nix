@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;
+    mainProgram = "yabridgectl";
   };
 }

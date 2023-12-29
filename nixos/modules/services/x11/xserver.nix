@@ -175,6 +175,31 @@ in
         "Use services.xserver.fontPath instead of useXFS")
       (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "layout" ];
+        to = [ "services" "xserver" "xkb" "layout" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbModel" ];
+        to = [ "services" "xserver" "xkb" "model" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbOptions" ];
+        to = [ "services" "xserver" "xkb" "options" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbVariant" ];
+        to = [ "services" "xserver" "xkb" "variant" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbDir" ];
+        to = [ "services" "xserver" "xkb" "dir" ];
+      })
     ];
 
 
@@ -339,48 +364,50 @@ in
         '';
       };
 
-      layout = mkOption {
-        type = types.str;
-        default = "us";
-        description = lib.mdDoc ''
-          Keyboard layout, or multiple keyboard layouts separated by commas.
-        '';
-      };
+      xkb = {
+        layout = mkOption {
+          type = types.str;
+          default = "us";
+          description = lib.mdDoc ''
+            X keyboard layout, or multiple keyboard layouts separated by commas.
+          '';
+        };
 
-      xkbModel = mkOption {
-        type = types.str;
-        default = "pc104";
-        example = "presario";
-        description = lib.mdDoc ''
-          Keyboard model.
-        '';
-      };
+        model = mkOption {
+          type = types.str;
+          default = "pc104";
+          example = "presario";
+          description = lib.mdDoc ''
+            X keyboard model.
+          '';
+        };
 
-      xkbOptions = mkOption {
-        type = types.commas;
-        default = "terminate:ctrl_alt_bksp";
-        example = "grp:caps_toggle,grp_led:scroll";
-        description = lib.mdDoc ''
-          X keyboard options; layout switching goes here.
-        '';
-      };
+        options = mkOption {
+          type = types.commas;
+          default = "terminate:ctrl_alt_bksp";
+          example = "grp:caps_toggle,grp_led:scroll";
+          description = lib.mdDoc ''
+            X keyboard options; layout switching goes here.
+          '';
+        };
 
-      xkbVariant = mkOption {
-        type = types.str;
-        default = "";
-        example = "colemak";
-        description = lib.mdDoc ''
-          X keyboard variant.
-        '';
-      };
+        variant = mkOption {
+          type = types.str;
+          default = "";
+          example = "colemak";
+          description = lib.mdDoc ''
+            X keyboard variant.
+          '';
+        };
 
-      xkbDir = mkOption {
-        type = types.path;
-        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
-        description = lib.mdDoc ''
-          Path used for -xkbdir xserver parameter.
-        '';
+        dir = mkOption {
+          type = types.path;
+          default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+          defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
+          description = lib.mdDoc ''
+            Path used for -xkbdir xserver parameter.
+          '';
+        };
       };
 
       config = mkOption {
@@ -667,7 +694,7 @@ in
         {
           "X11/xorg.conf".source = "${configFile}";
           # -xkbdir command line option does not seems to be passed to xkbcomp.
-          "X11/xkb".source = "${cfg.xkbDir}";
+          "X11/xkb".source = "${cfg.xkb.dir}";
         })
       # localectl looks into 00-keyboard.conf
       //{
@@ -675,10 +702,10 @@ in
             Section "InputClass"
               Identifier "Keyboard catchall"
               MatchIsKeyboard "on"
-              Option "XkbModel" "${cfg.xkbModel}"
-              Option "XkbLayout" "${cfg.layout}"
-              Option "XkbOptions" "${cfg.xkbOptions}"
-              Option "XkbVariant" "${cfg.xkbVariant}"
+              Option "XkbModel" "${cfg.xkb.model}"
+              Option "XkbLayout" "${cfg.xkb.layout}"
+              Option "XkbOptions" "${cfg.xkb.options}"
+              Option "XkbVariant" "${cfg.xkb.variant}"
             EndSection
           '';
         }
@@ -759,7 +786,7 @@ in
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
-        "-xkbdir" "${cfg.xkbDir}"
+        "-xkbdir" "${cfg.xkb.dir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
@@ -777,14 +804,14 @@ in
       ];
 
     system.checks = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg) xkbModel layout xkbVariant xkbOptions;
+      inherit (cfg.xkb) model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }
-      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$model" "$layout" "$variant" "$options"
       touch "$out"
     '');
 

@@ -29,7 +29,7 @@ let
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (lib)
-    getBin optionalString literalExpression
+    getBin optionalAttrs optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
 
@@ -172,23 +172,18 @@ in
     (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
 
       security.wrappers = {
-        kscreenlocker_greet = {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
-        };
-        start_kdeinit = {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
-        };
         kwin_wayland = {
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
           source = "${getBin plasma5.kwin}/bin/kwin_wayland";
+        };
+      } // optionalAttrs (!cfg.runUsingSystemd) {
+        start_kdeinit = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         };
       };
 
@@ -314,7 +309,7 @@ in
         "/share"
       ];
 
-      environment.etc."X11/xkb".source = xcfg.xkbDir;
+      environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
       environment.sessionVariables = {
         PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
@@ -377,6 +372,7 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = mkDefault [ plasma5.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
       # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;
@@ -384,7 +380,7 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
-      nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+      programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
     })
 
     (mkIf (cfg.kwinrc != {}) {

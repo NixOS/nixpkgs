@@ -17,6 +17,7 @@ let
     text = builtins.toJSON cfg.settings;
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
+  defaultBindPort = 3000;
 
 in
 {
@@ -86,7 +87,7 @@ in
             '';
           };
           bind_port = mkOption {
-            default = 3000;
+            default = defaultBindPort;
             type = port;
             description = lib.mdDoc ''
               Port to serve HTTP pages on.
@@ -169,6 +170,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port or defaultBindPort ];
   };
 }

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ./add-table-base.patch
   ];
 
   nativeBuildInputs = [ cmake ninja ];

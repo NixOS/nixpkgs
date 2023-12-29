@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
-  version = "1.21.6";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
     rev = "refs/tags/v${version}";
-    sha256 = "esLPAKdqYdpB3/ffsV/NAmfjGU9G8y13f/59bWD0yR0=";
+    sha256 = "K7whGWIukMrCqGaunHVuvr9k1EOTPSMb0x/A2JysVI0=";
   };
 
-  cargoHash = "sha256-8k6BhhBQ8X08vW0a8x8v1YNwiXFrzvWxcL47XdaqWJs=";
+  cargoHash = "sha256-itwU6JIxDbem93KIpjWyKBiZhQP62D9h8ohIcMD14+0=";
 
   buildFeatures = [
     "cli"
@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/parcel-bundler/lightningcss/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ toastal ];
+    mainProgram = "lightningcss";
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
   };

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "roxterm";
-  version = "3.12.1";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = version;
-    sha256 = "sha256-jVcf/nrEq8dM8rw40ZhXGJjt3DQLroCePtIAdAsVIfs=";
+    sha256 = "sha256-LBxVZ5Az0vGalbQd437of5a3aoZH51v6OKTfndHkkiM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook libxslt ];

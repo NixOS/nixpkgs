@@ -9,14 +9,14 @@
 
 mkDerivation rec {
   pname = "kweathercore";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LIgUSXKHcRqcBwGTRxU5Z4eHuWmPLerorlrnI6Cf9k4=";
+    sha256 = "sha256-CnnoPkgz97SfDG13zfyIWweVnp2oxAChTPKFxJC+L8A=";
   };
 
   buildInputs = [

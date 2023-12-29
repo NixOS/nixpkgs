@@ -21,7 +21,7 @@ buildGoModule rec{
     leaveDotGit = true;
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

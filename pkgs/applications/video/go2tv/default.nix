@@ -53,5 +53,6 @@ buildGoModule rec {
     homepage = "https://github.com/alexballas/go2tv";
     license = licenses.mit;
     maintainers = with maintainers; [ gdamjan ];
+    mainProgram = "go2tv";
   };
 }

@@ -3,9 +3,10 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
-, withGameSpecificLibraries ? true # exclude game specific libraries
+, withGameSpecificLibraries ? true # include game specific libraries
 }:
 
 let
@@ -80,7 +81,7 @@ in buildFHSEnv rec {
     xorg.libXfixes
     libGL
     libva
-    pipewire.lib
+    pipewire
 
     # steamwebhelper
     harfbuzz
@@ -168,6 +169,7 @@ in buildFHSEnv rec {
     libcaca
     libcanberra
     libgcrypt
+    libunwind
     libvpx
     librsvg
     xorg.libXft
@@ -193,6 +195,7 @@ in buildFHSEnv rec {
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
     ncurses # Crusader Kings III
+    openssl
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -214,6 +217,7 @@ in buildFHSEnv rec {
     alsa-lib
 
     # Loop Hero
+    # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
     libidn2
     libpsl
     nghttp2.lib
@@ -275,6 +279,8 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
+  inherit extraBwrapArgs;
+
   meta =
     if steam != null
     then
@@ -285,21 +291,11 @@ in buildFHSEnv rec {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
-  # allows for some gui applications to share IPC
-  # this fixes certain issues where they don't render correctly
-  unshareIpc = false;
-
-  # Some applications such as Natron need access to MIT-SHM or other
-  # shared memory mechanisms. Unsharing the pid namespace
-  # breaks the ability for application to reference shared memory.
-  unsharePid = false;
-
   passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiArch multiPkgs profile extraInstallCommands;
-    inherit unshareIpc unsharePid;
+    inherit multiArch multiPkgs profile extraInstallCommands extraBwrapArgs;
 
     runScript = writeShellScript "steam-run" ''
       run="$1"
@@ -319,6 +315,7 @@ in buildFHSEnv rec {
 
     meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
+      mainProgram = "steam-run";
       name = "steam-run";
     };
   };

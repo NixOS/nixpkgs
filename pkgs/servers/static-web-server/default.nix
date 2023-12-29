@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.21.1";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-odt9ztEjb+ppi1e+SI7T6BGtSWVG4EM14lyuVoz5gOM=";
+    hash = "sha256-U+B/k/stwjJw+mxUCb4A3yUtc/+Tg0PsWhVnovLLX4A=";
   };
 
-  cargoHash = "sha256-HWiMaMnco4xkskjRroqgy11D/Plg/1VDZwn/IpNG6LM=";
+  cargoHash = "sha256-ZDrRjIM8187nr72MlzFr0NAqH2f8qkF1sGAT9+NvfhA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "static-web-server";
   };
 }

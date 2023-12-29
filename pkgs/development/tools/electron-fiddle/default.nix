@@ -61,7 +61,7 @@ let
       patchShebangs node_modules
 
       mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron}/lib/electron' "$TMPDIR/electron"
+      cp -ra '${electron}/libexec/electron' "$TMPDIR/electron"
       chmod -R u+w "$TMPDIR/electron"
       (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
 

@@ -30,6 +30,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
+  # workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+
   postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace Exec=tectonic Exec=$out/bin/tectonic

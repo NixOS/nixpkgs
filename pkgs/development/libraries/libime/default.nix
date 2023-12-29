@@ -7,6 +7,7 @@
 , boost
 , python3
 , fcitx5
+, zstd
 }:
 
 let
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-r1Px93Ly7FzcRaPUNTHNcedzHPHocnUj8t8VMZqXkFM=";
+    sha256 = "sha256-C34hcea0htc9ayytjqy/t08yA2xMC18sAkDc9PK/Hhc=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    zstd
     boost
     fcitx5
   ];

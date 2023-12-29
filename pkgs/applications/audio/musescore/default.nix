@@ -46,14 +46,14 @@ let
       Carbon
     ;
   } else portaudio;
-in stdenv'.mkDerivation rec {
+in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
   version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
   };
   patches = [
@@ -168,4 +168,4 @@ in stdenv'.mkDerivation rec {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     mainProgram = "mscore";
   };
-}
+})

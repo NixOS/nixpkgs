@@ -46,5 +46,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/yuvipanda/pre-commit-hook-ensure-sops";
     maintainers = with maintainers; [ nialov ];
     license = licenses.bsd3;
+    mainProgram = "pre-commit-hook-ensure-sops";
   };
 }

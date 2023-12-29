@@ -351,6 +351,12 @@ let
 
         new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
 
+        if [ -z "$new_response" ]; then
+            echo "Warning: Unable to generate new challenge response, current challenge persists!"
+            umount /crypt-storage
+            return
+        fi
+
         if [ ! -z "$k_user" ]; then
             new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
         else
@@ -531,7 +537,7 @@ in
       description = lib.mdDoc ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information is available at <http://en.wikipedia.org/wiki/DMA_attack>.
+        More information is available at <https://en.wikipedia.org/wiki/DMA_attack>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!

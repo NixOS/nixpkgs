@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "docker-registry";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin ma27 ironpinguin ];
+    maintainers = [ globin ironpinguin ];
   };
 
   nodes = {

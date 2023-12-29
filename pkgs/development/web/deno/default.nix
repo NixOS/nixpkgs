@@ -3,6 +3,8 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
+, cmake
+, protobuf
 , installShellFiles
 , libiconv
 , darwin
@@ -11,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.36.0";
+  version = "1.38.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PV0Q/OtO4AkY3NMwIQIwU0DCkFqXifJFuHb+Q3rIQLI=";
+    hash = "sha256-DLVeI1pnHpUya8muVUP6VNXiLmlaedOOPPef3tHNOng=";
   };
 
-  cargoHash = "sha256-w0Wr/mwn4Hdfxr7eBdZtpj3MbsMHDwAK2F7XaYEaMCk=";
+  cargoHash = "sha256-qTvPpUBinPm3eQ5PLcqdCcZEG5Q6kGyt35mL914K9jk=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -28,11 +30,22 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  # uses zlib-ng but can't dynamically link yet
+  # https://github.com/rust-lang/libz-sys/issues/158
+  nativeBuildInputs = [
+    # required by libz-ng-sys crate
+    cmake
+    # required by deno_kv crate
+    protobuf
+    installShellFiles
+  ];
   buildInputs = lib.optionals stdenv.isDarwin (
     [ libiconv darwin.libobjc ] ++
     (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
   );
+
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
 
   buildAndTestSubdir = "cli";
 
@@ -80,6 +93,7 @@ rustPlatform.buildRustPackage rec {
       bash or python.
     '';
     license = licenses.mit;
+    mainProgram = "deno";
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/phip1611/nflz";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ phip1611 ];
+    mainProgram = "nflz";
   };
 }

@@ -3,7 +3,7 @@
 , numpy
 , scikit-image
 , lib
-, opencv3
+, opencv4
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scikit-image
-    opencv3
+    opencv4
   ];
 
   doCheck = false;

@@ -8,6 +8,7 @@
 , pandas
 , numpy
 , tqdm
+, stanio
 , xarray
 
 , pytestCheckHook
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9kAd3rbSctWEhAzB6RiQlbg5/uVxGIghYLus8hWzBFQ=";
+    hash = "sha256-1/X5JDvCx21qLNamNQXpg+w3d3DdSRlB+liIv2fThs4=";
   };
 
   patches = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pandas
     numpy
     tqdm
+    stanio
   ];
 
   passthru.optional-dependencies = {

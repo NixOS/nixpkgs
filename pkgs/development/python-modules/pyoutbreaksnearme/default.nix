@@ -2,43 +2,30 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-asyncio
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , ujson
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
-  version = "2023.08.0";
-  format = "pyproject";
+  version = "2023.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyoutbreaksnearme";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qrq8/dPJsJMJNXobc+Ps6Nbg819+GFuYplovGuWK0nQ=";
+    hash = "sha256-G+/ooNhiYOaV0kjfr8Z1d31XxRYFArQnt1oIuMQfXdY=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/pyoutbreaksnearme/pull/174
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/pyoutbreaksnearme/commit/45fba9f689253a0f79ebde93086ee731a4151553.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -46,7 +33,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     ujson
+    yarl
   ];
 
   __darwinAllowLocalNetworking = true;

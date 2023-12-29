@@ -5,17 +5,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pokeget-rs";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "pokeget-rs";
     rev = version;
-    hash = "sha256-0HWv0o0wmcRomLQul99RjGAF+/qKBK6SGeNOFRTHiCc=";
+    hash = "sha256-C7pEe9nScJ/ORJJrUDo6pADKceKoagHGP/X/asR1PcM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-nsF6rInbM1Eshi2B4AYxkHj+DBrPc2doCtZSeBfs5b0=";
+  cargoHash = "sha256-gPPtVFSaaSL0QBXxHpslVdon3XVCVx1E5cfEP1Ffa9g=";
 
   meta = with lib; {
     description = "A better rust version of pokeget";

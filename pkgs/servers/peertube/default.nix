@@ -45,18 +45,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-C9mBF+QymGXyBB3IFX6MNgsZpHk739qv1/DLuvzrTaU=";
+    hash = "sha256-8JzU0JVb+JQCNiro8hPHBwkofNTUy90YkSCzTOoB+/A=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-W+pX2XO27j6qAVxvo+Xf1h7g3V0LUMtwNf+meZmkgwE=";
+    hash = "sha256-pzXH6hdDf8O6Kr12Xw0jRcnPRD2TrDGdiEfxVr3KmwY=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-TAv8QAAfT3q28jUo26h0uCGsoqBzAn8lybIaqNAApU8=";
+    hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
   };
 
   nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];

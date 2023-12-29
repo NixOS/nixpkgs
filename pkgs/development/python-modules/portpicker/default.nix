@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "portpicker";
-  version = "1.5.2";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xVaDrXJfXACkG8fbAiUiPovgJLH6Vk0DntM5Dk/Uj7M=";
+    hash = "sha256-vVB/1vlvZe4CeB8uZ06dxsmbv6bjw5mS45FiBMnUMfo=";
   };
 
   nativeBuildInputs = [

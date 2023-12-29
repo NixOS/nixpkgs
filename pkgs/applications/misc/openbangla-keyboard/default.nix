@@ -7,20 +7,25 @@
 , rustPlatform
 , rustc
 , wrapQtAppsHook
+, fcitx5
 , ibus
 , qtbase
 , zstd
+, withFcitx5Support ? false
+, withIbusSupport ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "openbangla-keyboard";
-  version = "2.0.0";
+  version = "unstable-2023-07-21";
 
   src = fetchFromGitHub {
     owner = "openbangla";
     repo = "openbangla-keyboard";
-    rev = version;
-    hash = "sha256-UoLiysaA0Wob/SLBqm36Txqb8k7bwoQ56h8ZufHR74I=";
+    # no upstream release in 3 years
+    # fcitx5 support was added over a year after the last release
+    rev = "780bd40eed16116222faff044bfeb61a07af158f";
+    hash = "sha256-4CR4lgHB51UvS/RLc0AEfIKJ7dyTCOfDrQdGLf9de8E=";
     fetchSubmodules = true;
   };
 
@@ -33,8 +38,11 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals withFcitx5Support [
+    fcitx5
+  ] ++ lib.optionals withIbusSupport [
     ibus
+  ] ++ [
     qtbase
     zstd
   ];
@@ -45,8 +53,14 @@ stdenv.mkDerivation rec {
       cp ${./Cargo.lock} Cargo.lock
     '';
     sourceRoot = "${src.name}/${cargoRoot}";
-    sha256 = "sha256-01MWuUUirsgpoprMArRp3qxKNayPHTkYWk31nXcIC34=";
+    hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
   };
+
+  cmakeFlags = lib.optionals withFcitx5Support [
+    "-DENABLE_FCITX=YES"
+  ] ++ lib.optionals withIbusSupport [
+    "-DENABLE_IBUS=YES"
+  ];
 
   cargoRoot = "src/engine/riti";
   postPatch = ''
@@ -59,17 +73,13 @@ stdenv.mkDerivation rec {
       --replace "/usr" "$out"
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s $out/share/openbangla-keyboard/openbangla-gui $out/bin/openbangla-gui
-  '';
-
-  meta = with lib; {
+  meta = {
+    isIbusEngine = withIbusSupport;
     description = "An OpenSource, Unicode compliant Bengali Input Method";
     homepage = "https://openbangla.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eclairevoyant hqurve ];
+    platforms = lib.platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
   };

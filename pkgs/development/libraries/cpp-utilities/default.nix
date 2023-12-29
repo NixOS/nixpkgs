@@ -6,15 +6,15 @@
 , iconv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.24.0";
+  version = "5.24.1";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-krskfuoCRxYcAIDqrae4+yEABXXZ9Nv0BjBVwSMjC7g=";
+    repo = "cpp-utilities";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Prb593+jXhYzwPHQnwen2qgaNfdX1Atiz1FhmXm9X7U=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

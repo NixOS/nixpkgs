@@ -16,11 +16,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2023.5.7";
+  version = "2023.5.8";
 
   src = fetchurl {
     url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-XB8ktjF6VWj57whbXC0iwH3WpuMkGnRZCCdx86Mj2ZI=";
+    sha256 = "sha256-x5DYS3DteYtq1EQuJ3EFV/d/YThPgnhhIj+GpEJsFDY=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,10 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/insomnia" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    wrapProgramShell "$out/bin/insomnia" \
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with lib; {

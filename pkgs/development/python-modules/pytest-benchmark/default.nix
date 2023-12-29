@@ -2,6 +2,7 @@
 , aspectlib
 , buildPythonPackage
 , elasticsearch
+, elastic-transport
 , fetchFromGitHub
 , fetchpatch
 , freezegun
@@ -11,6 +12,7 @@
 , pygal
 , pytest
 , pytestCheckHook
+, pytest-xdist
 , pythonOlder
 , isPy311
 }:
@@ -45,19 +47,24 @@ buildPythonPackage rec {
     py-cpuinfo
   ];
 
+  passthru.optional-dependencies = {
+    aspect = [ aspectlib ];
+    histogram = [ pygal ];
+    elasticsearch = [ elasticsearch ];
+  };
+
   pythonImportsCheck = [
     "pytest_benchmark"
   ];
 
   nativeCheckInputs = [
-    aspectlib
-    elasticsearch
+    elastic-transport
     freezegun
     git
     mercurial
-    pygal
     pytestCheckHook
-  ];
+    pytest-xdist
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

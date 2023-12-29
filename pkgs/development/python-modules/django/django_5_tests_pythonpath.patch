@@ -1,0 +1,12 @@
+diff --git a/tests/admin_scripts/tests.py b/tests/admin_scripts/tests.py
+index 7f39d7f..b5b0ae7 100644
+--- a/tests/admin_scripts/tests.py
++++ b/tests/admin_scripts/tests.py
+@@ -126,6 +126,7 @@ class AdminScriptTestCase(SimpleTestCase):
+             del test_environ["DJANGO_SETTINGS_MODULE"]
+         python_path = [base_dir, django_dir, tests_dir]
+         python_path.extend(ext_backend_base_dirs)
++        python_path.extend(sys.path)
+         test_environ["PYTHONPATH"] = os.pathsep.join(python_path)
+         test_environ["PYTHONWARNINGS"] = ""
+ 

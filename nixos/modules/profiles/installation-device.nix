@@ -102,8 +102,6 @@ with lib;
         jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-        systemdStage1
-        systemdStage1Network
       ];
 
     boot.swraid.enable = true;

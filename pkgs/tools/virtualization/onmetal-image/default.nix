@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/onmetal/onmetal-image";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    mainProgram = "onmetal-image";
   };
 }

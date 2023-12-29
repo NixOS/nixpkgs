@@ -8,19 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
+    hash = "sha256-LwRB/AQE8TZZyHEQ7kKB10itzEgYjg4R/k+YFqmutDc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "iai-0.1.1" = "sha256-EdNzCPht5chg7uF9O8CtPWR/bzSYyfYIXNdLltqdlR0=";
+      "oxipng-8.0.0" = "sha256-KIbSsQEjwJ12DxYpBTUD1g9CqJqCfSAmnFcSTiGIoio=";
+      "self-replace-1.3.5" = "sha256-N57nmLHgxhVR1CDtkgjYwpo1ypdGyVpjJY7vzuncxDc=";
     };
   };
 

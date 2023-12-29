@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.8.0";
+  version = "1.8.1";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k3VizQ9iyDawfDCeE3Zup/KkyD54tFBLdQvRKsbKDLY=";
+    hash = "sha256-B7SePM8muEL3KFVOY7+OAgQVIRvTs6k29xASK9lgCB4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

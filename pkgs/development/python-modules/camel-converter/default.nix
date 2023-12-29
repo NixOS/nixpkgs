@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.2";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sanders41";
-    repo = pname;
+    repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XKtWR9dmSMfqkJYUHDQtWBLG3CHrbrI5lNtPUTShmBE=";
+    hash = "sha256-ASUwSA63iUgeRfYdO6InZ8YzEbifQh1hr3fUbE3FYac=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=camel_converter --cov-report term-missing" ""
+      --replace "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
   '';
 
   nativeBuildInputs = [

@@ -5,6 +5,7 @@
 , pkg-config
 , perl
 , openssl
+, rust-jemalloc-sys
 , python3
 , wrapQtAppsHook
 , qtbase
@@ -173,6 +174,7 @@ rec {
 
     buildInputs = [
       openssl
+      rust-jemalloc-sys
     ];
 
     postFixup = ''

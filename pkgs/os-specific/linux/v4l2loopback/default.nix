@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "A kernel module to create V4L2 loopback devices";
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     platforms = platforms.linux;
     outputsToInstall = [ "out" ];
   };

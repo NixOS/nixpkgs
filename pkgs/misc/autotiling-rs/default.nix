@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "autotiling-rs";
   };
 }

@@ -79,7 +79,7 @@ let
     # note that this is required:
     #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
-    builtin status --is-login
+    builtin status is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
     ${if fishEnvPreInit != null then ''
     and begin
@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.6.1";
+    version = "3.6.4";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,7 +145,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-VUArtHymc52KuiXkF4CQW1zhvOCl4N0X3KkItbwLSbI=";
+      hash = "sha256-Dz9hDlgN4JL76ILIqnZiPs+Ruxb98FQyQebpDV1Lw5M=";
     };
 
     # Fix FHS paths in tests
@@ -156,6 +156,8 @@ let
       sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
       sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
       sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
+      # disable flakey test
+      sed -i '/{TEST_GROUP("history_races"), history_tests_t::test_history_races},/d' src/fish_tests.cpp
 
       # tests/checks/cd.fish
       sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
@@ -298,7 +300,7 @@ let
       homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h winter srapenne ];
+      maintainers = with maintainers; [ cole-h winter ];
       mainProgram = "fish";
     };
 

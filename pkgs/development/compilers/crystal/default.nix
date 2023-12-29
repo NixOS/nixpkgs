@@ -148,6 +148,11 @@ let
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
+      '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
+        # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
+        # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
+        substituteInPlace src/llvm/lib_llvm.cr \
+          --replace '@[Link("stdc++")]' '@[Link("c++", "-l${stdenv.cc.libcxx.cxxabi.libName}")]'
       '';
 
       # Defaults are 4
@@ -199,6 +204,9 @@ let
         wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
+          --suffix PKG_CONFIG_PATH : ${
+            lib.makeSearchPathOutput "dev" "lib/pkgconfig" finalAttrs.buildInputs
+          } \
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath finalAttrs.buildInputs
           }

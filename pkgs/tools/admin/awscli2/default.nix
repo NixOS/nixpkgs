@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , python3
 , groff
 , less
 , fetchFromGitHub
+, installShellFiles
 , nix-update-script
 , testers
 , awscli2
@@ -17,27 +19,40 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
+        pyproject = true;
+        version = "1.26.18";
+        nativeBuildInputs = with final; [
+          setuptools
+        ];
+        src = prev.src.override {
+          inherit version;
+          hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
+        };
+      });
     });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.13.13"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.33"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-0Wx/Ze6W0Fa8OzM79PFu2liSxl1UwuUqIoYT0WhTk5k=";
+    hash = "sha256-5ANfMa7b72z5E1EH9+dJ9avLDBnSEFGqvDOFFzLbZcM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4'
+      --replace 'awscrt>=0.16.4,<=0.19.6' 'awscrt>=0.16.4' \
+      --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
+      --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
     substituteInPlace requirements-base.txt \
       --replace "wheel==0.38.4" "wheel>=0.38.4" \
@@ -50,6 +65,7 @@ with py.pkgs; buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     flit-core
   ];
 
@@ -78,15 +94,10 @@ with py.pkgs; buildPythonApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/${python3.sitePackages}/awscli/data
-    ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
-
-    mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
-
-    mkdir -p $out/share/zsh/site-functions
-    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
-
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  '' + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/aws.cmd
   '';
 
@@ -127,7 +138,7 @@ with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     description = "Unified tool to manage your AWS services";
-    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
+    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];

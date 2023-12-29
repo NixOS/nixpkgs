@@ -1,20 +1,21 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchurl
 , cmake
-, extra-cmake-modules
 , pkg-config
+, wrapQtAppsHook
+, extra-cmake-modules
 , kcoreaddons
 , kpeople
 , kcontacts
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kpeoplevcard";
   version = "0.1";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "https://download.kde.org/stable/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "1hv3fq5k0pps1wdvq9r1zjnr0nxf8qc3vwsnzh9jpvdy79ddzrcd";
   };
 
@@ -25,8 +26,9 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config
     cmake
+    pkg-config
+    wrapQtAppsHook
     extra-cmake-modules
   ];
 
@@ -36,5 +38,5 @@ mkDerivation rec {
     license     = with licenses; [ lgpl2 ];
     maintainers = with maintainers; [ doronbehar ];
   };
-}
+})
 

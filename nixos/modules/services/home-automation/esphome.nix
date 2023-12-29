@@ -107,12 +107,12 @@ in
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernelTunables = false; # breaks bwrap
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
         #RemoveIPC = true; # Implied by DynamicUser
         RestrictAddressFamilies = [

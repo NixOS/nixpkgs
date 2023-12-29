@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oi9uy1zNRnKJc+31+IjMiza72EUopiM75sP+Mjjw+aE=";
+    hash = "sha256-yutQbrWmJGDsTccQcR+HtC8JvgmsXfCxbxxcMLDx5vk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

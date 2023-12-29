@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corepdf";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Dm3RDVHw1JXSC3HdS0k/IVTO/o5vaWiCr5vPDjr2uFk=";
+    hash = "sha256-t3r/bF/uKoprdDoRjrmYTND0Jws+jX6tAGnBeqofBF8=";
   };
 
   nativeBuildInputs = [

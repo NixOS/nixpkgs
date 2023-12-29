@@ -28,11 +28,18 @@ rec {
       generate = ...;
 
     });
+
+  Please note that `pkgs` may not always be available for use due to the split
+  options doc build introduced in fc614c37c653, so lazy evaluation of only the
+  'type' field is required.
+
   */
 
 
   inherit (import ./formats/java-properties/default.nix { inherit lib pkgs; })
     javaProperties;
+
+  libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
 
   json = {}: {
 

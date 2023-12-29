@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jez/as-tree";
     license = with licenses; [ blueOak100 ];
     maintainers = with maintainers; [ jshholland ];
+    mainProgram = "as-tree";
   };
 }

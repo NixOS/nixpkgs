@@ -7,7 +7,7 @@
 , brotli
 , hypothesis
 , lz4
-, memory_profiler
+, memory-profiler
 , numpy
 , py
 , pytest-benchmark
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     brotli
     hypothesis
     lz4
-    memory_profiler
+    memory-profiler
     numpy
     py
     pytest-benchmark

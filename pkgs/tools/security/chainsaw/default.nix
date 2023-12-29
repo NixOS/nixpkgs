@@ -7,20 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "chainsaw";
-  version = "2.6.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Et90CW1fHt6GuHgQP2nRvcS7in4zw2UgBiQhblQGM+8=";
+    hash = "sha256-IBMMZ4NKD7BR3l06C7Y7pRL+pB8p6Ssx6RoXlH2XKyg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "notatin-0.1.0" = "sha256-YHC/NavKf0FoYtd5NM8ovUfSd4ODhKaA82mAT+HcefA=";
-    };
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

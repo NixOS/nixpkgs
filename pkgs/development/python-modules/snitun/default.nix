@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.36.1";
+  version = "0.36.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "NabuCasa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ViFAPAA6uU5MQNHCTIw0OTR8eZPgF34GqRP+py6L6RU=";
+    hash = "sha256-ViNsmTq1iLxNujA71b9JZB5AZ79ZbiqdTyDeBGd4gUA=";
   };
 
   propagatedBuildInputs = [

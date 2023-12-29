@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pyenv";
-  version = "2.3.25";
+  version = "2.3.32";
 
   src = fetchFromGitHub {
     owner = "pyenv";
     repo = "pyenv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-804bLieYrfwzUrKSvZtC6Td4+fFPw1WrhV1NE4n49Rw=";
+    hash = "sha256-miJ/WONNDieLryD2J9JmkmSCG5Iesg2N2GT/FI9NGY0=";
   };
 
   postPatch = ''

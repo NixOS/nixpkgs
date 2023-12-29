@@ -10,25 +10,28 @@
 , qtscxml
 , qtsvg
 , qtdeclarative
+, qtwayland
 , qt5compat
 , wrapQtAppsHook
 , nix-update-script
+, pkg-config
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.22.0";
+  version = "0.22.14";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x5H7z0rwunfMwtihXEerc47Sdkl6IvSHfavXzXMLse0=";
+    sha256 = "sha256-cAxdCjaCqEkwjL+OXW7ONkS7OpKfey3bUYmGzJyV+g8=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     wrapQtAppsHook
   ];
 
@@ -40,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtscxml
     qtsvg
     qtdeclarative
+    qtwayland
     qt5compat
   ] ++ (with python3Packages; [ python pybind11 ]);
 
@@ -71,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];
+    mainProgram = "albert";
     platforms = platforms.linux;
   };
 })

@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "imapclient";
-  version = "2.3.1";
+  version = "3.0.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    rev = version;
-    hash = "sha256-aHWRhQOEjYiLlWTiuYo/a4pOhfLF7jz+ltG+yOqgfKI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ylYGh+78I+6pdvHuQPw8Gks9TLkXQL5HQiaZDnJK3DA=";
   };
 
   propagatedBuildInputs = [ six ];

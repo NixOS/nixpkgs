@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , kernel
 , nvidia_x11
 , hash
@@ -17,6 +18,13 @@ stdenv.mkDerivation ({
     rev = nvidia_x11.version;
     inherit hash;
   };
+
+  patches = lib.optionals (nvidia_x11.version == "545.29.02")[
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/open-gpu-kernel-modules/files/13310810/0001-nvkms-initialize-brightnessType-in-_BACKLIGHT_BRIGHT.patch.txt";
+      hash = "sha256-9N+DbyT4VmGNTHXWf23PJU4YWZS+0JK7yqkmkpnINPk=";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

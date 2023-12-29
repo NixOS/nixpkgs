@@ -13,10 +13,10 @@ buildGoModule rec {
     owner = "uetchy";
     repo = "gst";
     rev = "v${version}";
-    sha256 = "07cixz5wlzzb4cwcrncg2mz502wlhd3awql5js1glw9f6qfwc5in";
+    hash = "sha256-NhbGHTYucfqCloVirkaDlAtQfhWP2cw4I+t/ysvvkR0=";
   };
 
-  vendorSha256 = "0k5xl55vzpl64gwsgaff92jismpx6y7l2ia0kx7gamd1vklf0qwh";
+  vendorHash = "sha256-kGPg6NyhVfVOn0BFQY83/VYdpUjOqaf5I4bev0uhvUw=";
 
   doCheck = false;
 
@@ -52,5 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/uetchy/gst";
     maintainers = with lib.maintainers; [ _0x4A6F ];
     license = lib.licenses.asl20;
+    mainProgram = "gst";
   };
 }

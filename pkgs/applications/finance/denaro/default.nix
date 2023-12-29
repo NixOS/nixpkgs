@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.8.1";
+  version = "2023.9.2";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
     rev = version;
-    hash = "sha256-wq5dwSgfmEHy38LPjWOE+J+prjIYy2z4Hezq/45Ddjk=";
+    hash = "sha256-3Atdi0R7OHpP1HUBWGu2Y4L8hr9jLPMIFYCEWeoEq6A=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -65,7 +65,7 @@ buildDotnetModule rec {
     mainProgram = "NickvisionMoney.GNOME";
     license = licenses.mit;
     changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu kashw2 ];
     platforms = platforms.linux;
   };
 }

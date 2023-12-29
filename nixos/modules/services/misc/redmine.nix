@@ -270,6 +270,9 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
       }
+      { assertion = pgsqlLocal -> cfg.database.user == cfg.database.name;
+        message = "services.redmine.database.user and services.redmine.database.name must be the same when using a local postgresql database";
+      }
       { assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
       }
@@ -315,7 +318,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

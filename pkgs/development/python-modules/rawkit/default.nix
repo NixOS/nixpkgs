@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "CTypes based LibRaw bindings for Python";
     homepage = "https://rawkit.readthedocs.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

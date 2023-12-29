@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   # that as the version number, I guess.
   version = "2017";
 
-  libname = pname + stdenv.targetPlatform.extensions.sharedLibrary;
+  libname = pname + stdenv.hostPlatform.extensions.sharedLibrary;
 
   src = fetchurl {
     url = "https://baldur.iti.kit.edu/sat-competition-2017/solvers/incremental/glucose-ipasir.zip";

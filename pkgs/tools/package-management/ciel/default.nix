@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     # FIXME: remove this patch after https://github.com/AOSC-Dev/ciel-rs/pull/16 is merged
     (fetchpatch {
       name = "use-canonicalize-path-to-find-libexec.patch";
-      url = "https://github.com/AOSC-Dev/ciel-rs/pull/16.patch";
+      url = "https://github.com/AOSC-Dev/ciel-rs/commit/17f41538ed1057e855540f5abef7faf6ea4abf5c.patch";
       sha256 = "sha256-ELK2KpOuoBS774apomUIo8q1eXYs/FX895G7eBdgOQg=";
     })
   ];
@@ -67,5 +67,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ yisuidenghua ];
+    mainProgram = "ciel";
   };
 }

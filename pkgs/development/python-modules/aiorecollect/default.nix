@@ -13,32 +13,17 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "2023.08.0";
+  version = "2023.09.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    hash = "sha256-oTkWirq3w0DgQWWe0ziK+ry4pg6j6SQbBESLG4xgDE4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-45LgfCA8037GqP4WfEjE4hj2YdKUGu2hGrQ/f0r1PAI=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/aiorecollect/pull/207
-    #
-    (fetchpatch {
-      name = "clean-up-dependencies.patch";
-      url = "https://github.com/bachya/aiorecollect/commit/0bfddead1c1b176be4d599b8e12ed608eac97b8b.patch";
-      hash = "sha256-w/LAtyuyYsAAukDeIy8XLlp9QrydC1Wmi2zxEj1Zdm8=";
-      includes = [ "pyproject.toml" ];
-    })
-  ];
 
   postPatch = ''
     # this is not used directly by the project
@@ -80,6 +65,7 @@ buildPythonPackage rec {
       and more.
     '';
     homepage = "https://github.com/bachya/aiorecollect";
+    changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

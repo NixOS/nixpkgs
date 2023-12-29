@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "webmetro";
   };
 }

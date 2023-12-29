@@ -1,7 +1,7 @@
 { lib
 , newScope
 , pidgin
-, texlive
+, texliveBasic
 , config
 }:
 
@@ -19,7 +19,7 @@ lib.makeScope newScope (self:
     pidgin-indicator = callPackage ./pidgin-indicator { };
 
     pidgin-latex = callPackage ./pidgin-latex {
-      texLive = texlive.combined.scheme-basic;
+      texLive = texliveBasic;
     };
 
     pidgin-msn-pecan = callPackage ./msn-pecan { };

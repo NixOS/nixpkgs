@@ -3,7 +3,7 @@ import json
 import os
 import subprocess
 
-with open(".attrs.json", "r") as f:
+with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
   closures = json.load(f)["closure"]
 
 os.chdir(os.environ["out"])

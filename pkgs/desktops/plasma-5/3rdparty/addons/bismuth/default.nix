@@ -21,6 +21,10 @@ mkDerivation rec {
     sha256 = "sha256-c13OFEw6E/I8j/mqeLnuc9Chi6pc3+AgwAMPpCzh974=";
   };
 
+  patches = [
+    ./0001-esbuild-config.patch
+  ];
+
   cmakeFlags = [
     "-DUSE_TSC=OFF"
     "-DUSE_NPM=OFF"

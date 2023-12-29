@@ -17,8 +17,8 @@ let
 
       compressCmd = getAttr cfg.compression {
         "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel}";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel}";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel} --rsyncable";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel} --rsyncable";
       };
 
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
@@ -178,4 +178,5 @@ in {
     })
   ];
 
+  meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dask-glm";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WLhs6/BP5bnlgJLhxGfjLmDQHhG3H9xii6qp/G0a3uU=";
+    hash = "sha256-ddaYNBUlvsMzrku7fKrlozRmjshVbQ9yrYIlaRBQCp4=";
   };
 
   nativeBuildInputs = [

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "17.3.21";
+  version = "17.3.25";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NaSwjU4SfUYeUe/3nWQxfgMYrN4Ez1Dc/PE4ffJmlSs=";
+    hash = "sha256-EPEfBK/1nbwcajqyv5lFX+02WMvbyFnij2w5J91+UK8=";
   };
 
   nativeBuildInputs = [

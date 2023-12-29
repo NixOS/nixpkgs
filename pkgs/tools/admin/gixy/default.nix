@@ -21,6 +21,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
+  format = "setuptools";
 
   # package is only compatible with python 2.7 and 3.5+
   disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
@@ -42,7 +43,7 @@ python.pkgs.buildPythonApplication rec {
     configargparse
     pyparsing
     jinja2
-    nose
+    nose3
     setuptools
     six
   ];

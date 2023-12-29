@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sensirion-ble";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "akx";
     repo = "sensirion-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7l76/Bci1ztt2CfwytLOySK6IL8IDijpB0AYhksRP7o=";
+    hash = "sha256-VeUfrQ/1Hqs9yueUKcv/ZpCDEEy84VDcZpuTT4fXSGw=";
   };
 
   postPatch = ''

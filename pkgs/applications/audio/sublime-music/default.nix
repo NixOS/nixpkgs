@@ -44,7 +44,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.12.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sublime-music";
@@ -54,6 +54,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
+    python.pkgs.flit-core
     gobject-introspection
     wrapGAppsHook
   ];

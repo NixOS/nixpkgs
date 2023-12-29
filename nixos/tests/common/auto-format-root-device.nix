@@ -5,19 +5,19 @@
 # `virtualisation.fileSystems."/".autoFormat = true;`
 # instead.
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 let
   rootDevice = config.virtualisation.rootDevice;
 in
 {
 
-  boot.initrd.extraUtilsCommands = ''
+  boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
     # We need mke2fs in the initrd.
     copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
   '';
 
-  boot.initrd.postDeviceCommands = ''
+  boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
     # If the disk image appears to be empty, run mke2fs to
     # initialise.
     FSTYPE=$(blkid -o value -s TYPE ${rootDevice} || true)

@@ -80,5 +80,6 @@ mkDerivationWith python3.pkgs.buildPythonApplication rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    mainProgram = "openshot-qt";
   };
 }

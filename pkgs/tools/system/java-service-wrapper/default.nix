@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.suhr ];
+    mainProgram = "wrapper";
   };
 }

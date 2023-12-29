@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-5/WGYsmZAFFdONpViRaqjL/KXyOu618A8S/SqcgZoEU=";
   };
 
-  vendorSha256 = "sha256-V/6wiC0oanytzMGW/lP+t+uz6cMgXRuviDEj7ErQh5k=";
+  vendorHash = "sha256-V/6wiC0oanytzMGW/lP+t+uz6cMgXRuviDEj7ErQh5k=";
 
   subPackages = [ "cmd/shfmt" ];
 

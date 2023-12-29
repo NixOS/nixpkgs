@@ -8,6 +8,7 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 autoconf.section.md
 automake.section.md
 autopatchelf.section.md
+bmake.section.md
 breakpoint.section.md
 cmake.section.md
 gdk-pixbuf.section.md
@@ -24,7 +25,6 @@ perl.section.md
 pkg-config.section.md
 postgresql-test-hook.section.md
 python.section.md
-qt-4.section.md
 scons.section.md
 tetex-tex-live.section.md
 unzip.section.md

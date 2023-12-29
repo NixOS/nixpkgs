@@ -1,34 +1,29 @@
-{ lib, python3Packages, fetchPypi }:
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.13.1";
-  format = "pyproject";
+  version = "1.14.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-MWzbmuxUKh0yBgar1gk8QGJQwbHtINsbCsbTM+RLmQo=";
+  src = fetchFromGitHub {
+    owner = "laixintao";
+    repo = "iredis";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5TMO1c29ahAQDbAJZb3u2oY0Z8M+6b8hwbNfqMsuPzM=";
   };
 
-  pythonRelaxDeps = [
-    "configobj"
-    "wcwidth"
-    "click"
-    "packaging"
-  ];
-
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     pygments
     click
     configobj
-    importlib-resources
     mistune
     packaging
     pendulum
@@ -37,7 +32,7 @@ buildPythonApplication rec {
     wcwidth
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pexpect
   ];
@@ -47,7 +42,6 @@ buildPythonApplication rec {
     "--ignore=tests/unittests/test_client.py"
     "--deselect=tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
     "--deselect=tests/unittests/test_render_functions.py::test_render_time"
-    "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
     # Only execute unittests, because cli tests require a running Redis
     "tests/unittests/"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -59,9 +53,10 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
-    changelog = "https://github.com/laixintao/iredis/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/laixintao/iredis/raw/${src.rev}/CHANGELOG.md";
     homepage = "https://iredis.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "iredis";
   };
 }

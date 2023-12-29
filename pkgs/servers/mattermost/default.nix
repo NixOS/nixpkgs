@@ -8,43 +8,35 @@
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "7.10.3";
+  version = "8.1.7";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-nzQUkcCFEZYvqMLRv1d81pfoz/MDYjWetGLtFXf8H/Q=";
-  };
+    hash = "sha256-ZpjdJ1Uck0kM+togUKpxRij8V0jQX+12Meks+L1Tc90=";
+  } + "/server";
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-oD67sTyTvB0DVcw3e6x79Y4K8xlX75YreRwnc9olTy4=";
+    hash = "sha256-eORIoZLoxWdvuRlirJ7djBTgueIzlzIhRAoURy58zCA=";
   };
 
-  vendorHash = "sha256-7YxbBmkKeb20a3BNllB3RtvjAJLZzoC2OBK4l1Ud1bw=";
-
-  patches = [
-    (fetchpatch {
-      # Current version was set to 7.10.4 in the v7.10.3 tag, reverting it so `mattermost version` exposes the correct version
-      # and to make smoke tests happy
-      url = "https://github.com/mattermost/mattermost/commit/fbdadeacc85ae47145f69ffb766d4105aede69d5.patch";
-      hash = "sha256-9BNEc5VefRuPKb3/rQNiekNbAIBRsjAtdCKUVrh9BuY=";
-      revert = true;
-    })
-  ];
+  vendorHash = "sha256-RPnCAxksKppsjVtZYhwcoJuAmMJ85AstuoBFChKwAOk=";
 
   subPackages = [ "cmd/mattermost" ];
+
+  tags = [ "production" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mattermost/mattermost-server/v6/model.Version=${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildNumber=${version}-nixpkgs"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildDate=1970-01-01"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildHash=v${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildHashEnterprise=v${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildEnterpriseReady=false"
+    "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
   ];
 
   postInstall = ''
@@ -61,6 +53,7 @@ buildGoModule rec {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes ];
+    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    mainProgram = "mattermost";
   };
 }
