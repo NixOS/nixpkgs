@@ -40,7 +40,7 @@ buildNimPackage (finalAttrs: prevAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) nitter; };
-    updateScript = unstableGitUpdater {};
+    updateScript = unstableGitUpdater { branch = "guest_accounts"; };
   };
 
   meta = with lib; {

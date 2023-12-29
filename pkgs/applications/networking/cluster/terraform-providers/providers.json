@@ -609,6 +609,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "incus": {
+    "hash": "sha256-FWQaU2C1cRo+3SqnesJl5EXfEYR/ssSHHZ9/09zRSTQ=",
+    "homepage": "https://registry.terraform.io/providers/lxc/incus",
+    "owner": "lxc",
+    "repo": "terraform-provider-incus",
+    "rev": "v0.0.2",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-KdyhF1RUZoycsNqRnkME9Q7bTkV2xuNERx24+/p+j1w="
+  },
   "infoblox": {
     "hash": "sha256-rjqtqfmQQoJIhMtP6sFOu/XfJ691E77P0Bf9gjml2yg=",
     "homepage": "https://registry.terraform.io/providers/infobloxopen/infoblox",

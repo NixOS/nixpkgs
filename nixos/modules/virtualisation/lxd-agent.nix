@@ -60,7 +60,13 @@ in {
       wantedBy = [ "multi-user.target" ];
       before = [ "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
-      path = [ pkgs.kmod pkgs.util-linux ];
+      path = [
+        pkgs.kmod
+        pkgs.util-linux
+
+        # allow `incus exec` to find system binaries
+        "/run/current-system/sw"
+      ];
 
       preStart = preStartScript;
 
