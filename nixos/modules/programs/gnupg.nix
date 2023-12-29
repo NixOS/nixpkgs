@@ -102,8 +102,7 @@ in
 
   config = mkIf cfg.agent.enable {
     programs.gnupg.agent.settings = {
-      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
-        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null) (lib.getExe pkgs."pinentry-${cfg.agent.pinentryFlavor}");
     };
 
     environment.etc."gnupg/gpg-agent.conf".source =

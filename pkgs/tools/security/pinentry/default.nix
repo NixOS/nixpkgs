@@ -98,6 +98,7 @@ pinentryMkDerivation rec {
       Pinentry provides a console and (optional) GTK and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
+    mainProgram = "pinentry";
     maintainers = with maintainers; [ ttuegel fpletz ];
   };
 }
