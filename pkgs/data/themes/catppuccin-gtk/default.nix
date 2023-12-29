@@ -16,7 +16,7 @@
 let
   validAccents = [ "blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow" ];
   validSizes = [ "standard" "compact" ];
-  validTweaks = [ "black" "rimless" "normal" ];
+  validTweaks = [ "black" "rimless" "normal" "float" ];
   validVariants = [ "latte" "frappe" "macchiato" "mocha" ];
 
   pname = "catppuccin-gtk";
