@@ -33,7 +33,7 @@
 , linkOpenssl ? true
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
 
   hardeningEnable = [ "pie" ];
 
-  doCheck = true;
+  doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
@@ -167,6 +167,9 @@ stdenv.mkDerivation {
   ];
 
   passthru.tests = {
+    openssh = finalAttrs.finalPackage.overrideAttrs (_: {
+      doCheck = true;
+    });
     borgbackup-integration = nixosTests.borgbackup;
   };
 
@@ -179,4 +182,4 @@ stdenv.mkDerivation {
     maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
-}
+})
