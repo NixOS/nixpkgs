@@ -17160,6 +17160,12 @@
       fingerprint = "897E 6BE3 0345 B43D CADD  05B7 290F CF08 1AED B3EC";
     }];
   };
+  smrehman = {
+    name = "Syed Moiz Ur Rehman";
+    email = "smrehman@proton.me";
+    github = "syedmoizurrehman";
+    githubId = 17818950;
+  };
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "S-NA";
