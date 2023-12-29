@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
-  version = "7.3.67";
+  version = "7.4.47";
 
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
     rev = "v${version}";
-    sha256 = "sha256-gQT+5MqYo1qUiLJTzlhF5dB5BZMtr34JWn9rMa9MJvQ=";
+    sha256 = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };
 
