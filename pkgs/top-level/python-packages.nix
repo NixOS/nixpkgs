@@ -8652,6 +8652,8 @@ self: super: with self; {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  nudatus = callPackage ../development/python-modules/nudatus { };
+
   nuitka = callPackage ../development/python-modules/nuitka { };
 
   nuheat = callPackage ../development/python-modules/nuheat { };
