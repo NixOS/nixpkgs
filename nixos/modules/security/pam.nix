@@ -1477,6 +1477,16 @@ in
       }
     ];
 
+    warnings = optional
+      (with lib; with config.security.pam.sshAgentAuth;
+        enable && any (s: hasPrefix "%h" s || hasPrefix "~" s) authorizedKeysFiles)
+      ''config.security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
+
+        Specifying user-writeable files there result in an insecure configuration:
+        a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+        See https://github.com/NixOS/nixpkgs/issues/31611
+      '';
+
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
