@@ -6,7 +6,7 @@
 
 import ../make-test-python.nix ({ pkgs, ... }:
   let
-
+  
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
 
     bgpConf1 = neigh: ''
