@@ -115,7 +115,7 @@ in
     image = {
 
       id = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
         default = null;
         description = lib.mdDoc ''
           Image identifier.
@@ -129,7 +129,7 @@ in
       };
 
       version = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
         default = null;
         description = lib.mdDoc ''
           Image version.
