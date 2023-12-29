@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, stdenvNoCC }:
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, nix-update-script
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
@@ -23,6 +27,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "7000+ Material Design Icons from the Community";
