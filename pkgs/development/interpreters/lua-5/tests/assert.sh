@@ -8,9 +8,14 @@ function fail() {
 }
 
 
-function assertStringEqual {
-
+function assertStringEqual() {
     if ! diff <(echo "$1") <(echo "$2") ; then
         fail "Strings differ"
+    fi
+}
+
+function assertStringContains() {
+    if ! echo "$1" | grep -q "$2" ; then
+        fail "\"$1\" does not contain \"$2\""
     fi
 }
