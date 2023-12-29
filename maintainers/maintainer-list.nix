@@ -12975,6 +12975,12 @@
     githubId = 77314501;
     name = "Maurice Zhou";
   };
+  Nebucatnetzer = {
+    email = "andreas+nixpkgs@zweili.ch";
+    github = "Nebucatnetzer";
+    githubId = 2287221;
+    name = "Andreas Zweili";
+  };
   Necior = {
     email = "adrian@sadlocha.eu";
     github = "Necior";
