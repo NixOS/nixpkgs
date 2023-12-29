@@ -1,8 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk-engine-murrine }:
+{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater, gtk-engine-murrine }:
 
 let
   themeName = "Dracula";
-  version = "4.0.0";
+  version = "unstable-2023-12-16";
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
@@ -11,8 +11,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "v${version}";
-    hash = "sha256-q3/uBd+jPFhiVAllyhqf486Jxa0mnCDSIqcm/jwGtJA=";
+    rev = "80d5a3fedf280e9cc7f2df3b100a1082c3bcd1cc";
+    hash = "sha256-BPL0Msva1/sPQKPeRJHgvU+xXU3m8b2E6aDBLmXbkkA=";
   };
 
   propagatedUserEnvPkgs = [
@@ -37,6 +37,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Dracula variant of the Ant theme";
