@@ -654,7 +654,7 @@ let
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
-          { name = "ssh_agent_auth"; enable = config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
+          { name = "ssh_agent_auth"; enable = config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
             file = lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles;
           }; }
           (let p11 = config.security.pam.p11; in { name = "p11"; enable = cfg.p11Auth; control = p11.control; modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so"; args = [
@@ -943,7 +943,7 @@ let
       value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
-  optionalSudoConfigForSSHAgentAuth = optionalString config.security.pam.enableSSHAgentAuth ''
+  optionalSudoConfigForSSHAgentAuth = optionalString config.security.pam.sshAgentAuth.enable ''
     # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
     Defaults env_keep+=SSH_AUTH_SOCK
   '';
@@ -956,6 +956,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+    (mkRenamedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] [ "security" "pam" "sshAgentAuth" "enable" ])
   ];
 
   ###### interface
@@ -1025,16 +1026,11 @@ in
       '';
     };
 
-    security.pam.enableSSHAgentAuth = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        lib.mdDoc ''
-          Enable sudo logins if the user's SSH agent provides a key
-          present in {file}`~/.ssh/authorized_keys`.
-          This allows machines to exclusively use SSH keys instead of
-          passwords.
-        '';
+    security.pam.sshAgentAuth = {
+      enable = mkEnableOption ''
+        authenticating using a signature performed by the ssh-agent.
+        This allows using SSH keys exclusively, instead of passwords, for instance on remote machines
+      '';
     };
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
