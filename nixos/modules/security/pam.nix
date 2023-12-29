@@ -1044,9 +1044,7 @@ in
           See [issue #31611](https://github.com/NixOS/nixpkgs/issues/31611)
           :::
         '';
-        example = [ "/etc/ssh/authorized_keys.d/%u" ];
-        default = config.services.openssh.authorizedKeysFiles;
-        defaultText = literalExpression "config.services.openssh.authorizedKeysFiles";
+        default = [ "/etc/ssh/authorized_keys.d/%u" ];
       };
     };
 
