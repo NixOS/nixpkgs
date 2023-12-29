@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , copyDesktopItems
 , writeText
@@ -25,6 +26,13 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # nixpkgs has a newer pillow version
     ./update-pillow.patch
+
+    # upstream forgot to bump the project version
+    (fetchpatch {
+      name = "bump-version.patch";
+      url = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/commit/bd76e7e3e0ac0da6dd070c3e81f4fcbed2db825a.patch";
+      sha256 = "sha256-GXz/a0fDmcPoHBHPYbjPkrhOMTJgoz0BRx+TkGi96QE=";
+    })
 
     # fix path to fc-list
     (substituteAll {
