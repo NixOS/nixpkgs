@@ -1,0 +1,37 @@
+{ lib, rustPlatform, fetchFromGitHub, pkg-config
+, cairo, gdk-pixbuf, glib, libinput, libxml2, pango, udev
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "tiny-dfr";
+  version = "0.2.0";
+
+  src = fetchFromGitHub {
+    owner = "WhatAmISupposedToPutHere";
+    repo = "tiny-dfr";
+    rev = "v${version}";
+    hash = "sha256-oawKYrfXAQ5RFMdUCG7F12wHcnFif++44s2KsX9ns6U=";
+  };
+
+  cargoHash = "sha256-QOkztErJLFXPxCb8MvaXi7jGXeI5A0q8LwZtYddzUZE=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];
+
+  postConfigure = ''
+    substituteInPlace src/*.rs --replace /usr/share $out/share
+  '';
+
+  postInstall = ''
+    cp -R etc $out/lib
+    cp -R share $out
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
+    description = "The most basic dynamic function row daemon possible";
+    license = [ licenses.asl20 licenses.mit ];
+    maintainers = [ maintainers.qyliss ];
+    platforms = platforms.linux;
+  };
+}
