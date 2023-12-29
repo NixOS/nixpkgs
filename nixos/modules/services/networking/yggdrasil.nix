@@ -171,14 +171,13 @@ in
 
           # prepare config file
           ${(if settingsProvided || configFileProvided || cfg.persistentKeys then
-            "echo "
-
+            "{ :;\n"
             + (lib.optionalString settingsProvided
-              "'${builtins.toJSON cfg.settings}'")
+              "echo ${lib.escapeShellArg (builtins.toJSON cfg.settings)}\n")
             + (lib.optionalString configFileProvided
-              "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
-            + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-            + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+              "${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\"\n")
+            + (lib.optionalString cfg.persistentKeys "cat \"$CREDENTIALS_DIRECTORY/keys.json\"\n")
+            + "} | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
           else
             "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 
@@ -191,12 +190,11 @@ in
           Restart = "always";
 
           DynamicUser = true;
-          StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
           LoadCredential =
-            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+            lib.optional configFileProvided "yggdrasil.conf:${cfg.configFile}"
+              ++ lib.optional cfg.persistentKeys "keys.json:${keysPath}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
