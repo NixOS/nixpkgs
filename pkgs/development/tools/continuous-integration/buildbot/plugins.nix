@@ -122,6 +122,28 @@
     };
   };
 
+  react-waterfall-view = buildPythonPackage rec {
+    pname = "buildbot-react-waterfall-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-vt7ea0IWIKn4i8sBUUMsoOMi1gPzzFssQ6wORDClJqs=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Waterfall View Plugin (React)";
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
   grid-view = buildPythonPackage rec {
     pname = "buildbot-grid-view";
     inherit (buildbot-pkg) version;
