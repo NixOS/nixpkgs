@@ -1,6 +1,6 @@
 # Trivial build helpers {#chap-trivial-builders}
 
-Nixpkgs provides a couple of functions that help with building derivations. The most important one, `stdenv.mkDerivation`, has already been documented above. The following functions wrap `stdenv.mkDerivation`, making it easier to use in certain cases.
+`nixpkgs` provides a variety of wrapper functions that help build very simple derivations. Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these builders creates and returns a derivation, but the composition of the arguments passed to each are different (usually simpler) than the arguments that must be passed to `stdenv.mkDerivation`.
 
 ## `runCommand` {#trivial-builder-runCommand}
 
@@ -58,24 +58,101 @@ Variant of `runCommand` that forces the derivation to be built locally, it is no
 This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr-allowSubstitutes), so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
 :::
 
-## `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin` {#trivial-builder-writeText}
+## `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, `writeShellScriptBin` {#trivial-builder-textwriting}
 
-These functions write `text` to the Nix store. This is useful for creating scripts from Nix expressions. `writeTextFile` takes an attribute set and expects two arguments, `name` and `text`. `name` corresponds to the name used in the Nix store path. `text` will be the contents of the file. You can also set `executable` to true to make this file have the executable bit set.
+`nixpkgs` provides a number of functions that produce derivations which write text into the Nix store.  These include `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin`, each of which is documented below.
 
-Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
+These are useful for creating files from Nix expressions, which may be scripts or non-executable text files, depending on which of the functions is used and the arguments it takes.
 
-Here are a few examples:
+The result of each of these functions will be a derivation.  When you coerce the resulting derivation to text, it will evaluate to the *store path*. Importantly, it will not include the destination subpath produced by the particular function.  So, for example, given the following expression:
+
 ```nix
+
+my-file = writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+  destination = "/share/my-file";
+}
+```
+
+If `my-file` is coerced to text, it will resolve to `/nix/store/<store path>`, like any other derivation.  It will *not* evaluate to `/nix/store/<store path>/share/my-file`.  So to use it elsewhere, as an example (in this case, within a shell script you're writing in a Nix expression via `writeShellScript`), you might do:
+
+```nix
+writeShellScript "evaluate-my-file.sh" ''
+  cat ${my-file}/share/my-file
+'';
+```
+
+This will produce the desired result.  However, the following will not, it will fail because the store path is a directory, and is not the `my-file` file.
+
+```nix
+writeShellScript "evaluate-my-file.sh" ''
+  cat ${my-file}
+'';
+```
+
+### `writeTextFile` {#trivial-builder-writeTextFile}
+
+`writeTextFile` takes an attribute set and expects it to contain at least two attributes: `name` and `text`.
+
+`name` corresponds to the name used in the Nix store path identifier.
+
+`text` will be the contents of the file.
+
+The resulting store path will include some variation of the name, and it will be a file unless `destination` (see below) is used, in which case it will be a directory.
+
+Common optional attributes in the attribute set are:
+
+`executable`: make this file have the executable bit set.  Defaults to `false`
+
+`destination`: supplies a subpath under the derivation's Nix store ouput path into which to create the file.  It may contain directory path elements, these are created automatically when the derivation is realized.  Defaults to `""`, which indicates that the store path itself will be a file containing the text contents.
+
+Other less-frequently used optional attributes are:
+
+`checkPhase`: commands to run after generating the file, e.g. lints. It defaults to `""` (no checking).
+
+`meta`: Additional metadata for the derivation.  It defaults to `{}`.
+
+`allowSubstitutes`: whether to allow substituting from a binary cache.  It fefaults to `false`, as the operation is assumed to be faster performed locally.  You may want to set this to true if the `checkPhase` step is expensive.
+
+`preferLocalBuild`: whether to prefer building locally, even if faster remote builders are available. It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
+
+::: {.example #ex-writeTextFile}
+# Usages of `writeTextFile`
+```nix
+# Writes my-file to /nix/store/<store path>/some/subpath/my-cool-script,
+# making it executable and also supplies values for the less-used options
+writeTextFile rec {
+  name = "my-cool-script";
+  text = ''
+    #!/bin/sh
+    echo "This is my cool script!"
+  '';
+  executable = true;
+  destination = "some/subpath/my-cool-script";
+  checkPhase = ''
+    ${pkgs.shellcheck}/bin/shellcheck $out/${destination}
+  '';
+  meta = {
+    license = pkgs.lib.licenses.cc0;
+  };
+  allowSubstitutes = true;
+  preferLocalBuild = false;
+}
+
 # Writes my-file to /nix/store/<store path>
+# See also the `writeText` helper function below.
 writeTextFile {
   name = "my-file";
   text = ''
     Contents of File
   '';
 }
-# See also the `writeText` helper function below.
 
 # Writes executable my-file to /nix/store/<store path>/bin/my-file
+# see also the `writeScriptBin` helper function below.
 writeTextFile {
   name = "my-file";
   text = ''
@@ -84,37 +161,206 @@ writeTextFile {
   executable = true;
   destination = "/bin/my-file";
 }
-# Writes contents of file to /nix/store/<store path>
+```
+:::
+
+::: {.note}
+The commands `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin` documented below are convenience functions that wrap `writeTextFile`.
+:::
+
+### `writeText` {#trivial-builder-writeText}
+
+`writeText` takes two arguments: `name` and `text`.
+
+`name` is the name used in the Nix store path.   `text` will be the contents of the file.
+
+The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+
+Here is an example.
+
+::: {.example #ex-writeText}
+# Usage of `writeText`
+```nix
+# Writes my-file to /nix/store/<store path>
 writeText "my-file"
   ''
   Contents of File
   '';
+```
+:::
+
+This example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+}
+```
+
+### `writeTextDir` {#trivial-builder-writeTextDir}
+
+`writeTextDir` takes two arguments: `path` and `text`.
+
+`path` is the destination within the Nix store path under which to create the file.   `text` will be the contents of the file.
+
+The store path will be a directory. The Nix store identifier will be generated based on various elements of the path.
+
+::: {.example #ex-writeTextDir}
+# Usage of `writeTextDir`
+```nix
 # Writes contents of file to /nix/store/<store path>/share/my-file
 writeTextDir "share/my-file"
   ''
   Contents of File
   '';
+```
+:::
+
+The example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+  destination = "share/my-file";
+}
+```
+
+### `writeScript` {#trivial-builder-writeScript}
+
+`writeScript` takes two arguments: `name` and `text`.
+
+`name` is the name used in the Nix store path.   `text` will be the contents of the file.   The created file is marked as executable.
+
+The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+
+Here is an example.
+
+::: {.example #ex-writeScript}
+# Usage of `writeScript`
+```nix
 # Writes my-file to /nix/store/<store path> and makes executable
 writeScript "my-file"
   ''
   Contents of File
   '';
-# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-writeScriptBin "my-file"
-  ''
-  Contents of File
-  '';
-# Writes my-file to /nix/store/<store path> and makes executable.
-writeShellScript "my-file"
-  ''
-  Contents of File
-  '';
-# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-writeShellScriptBin "my-file"
-  ''
-  Contents of File
-  '';
+```
+:::
 
+The example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-file";
+  text = ''
+    Contents of File
+  '';
+  executable = true;
+}
+```
+
+### `writeScriptBin` {#trivial-builder-writeScriptBin}
+
+`writeScriptBin` takes two arguments: `name` and `text`.
+
+`name` is the name used in the Nix store path and within the file generated under the store path.  `text` will be the contents of the file.  The created file is marked as executable.
+
+The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
+
+The store path will include the the name, and it will be a directory. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+
+::: {.example #ex-writeScriptBin}
+# Usage of `writeScriptBin`
+```nix
+writeScriptBin "my-script"
+  ''
+  echo "hi"
+  '';
+```
+:::
+
+The example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-script";
+  text = ''
+    echo "hi"
+  '';
+  executable = true;
+  destination = "bin/my-script"
+}
+```
+
+### `writeShellScript` {#trivial-builder-writeShellScript}
+
+`writeShellScript` takes two arguments: `name` and `text`.
+
+`name` is the name used in the Nix store path.   `text` will be the contents of the file.   The created file is marked as executable.  This function is almost exactly like `writeScript`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
+
+The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+
+Here is an example.
+
+::: {.example #ex-writeShellScript}
+# Usage of `writeShellScript`
+```nix
+writeShellScript "my-script"
+  ''
+  echo "hi"
+  '';
+```
+:::
+
+The example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-script";
+  text = ''
+    #! ${pkgs.runtimeShell}
+    echo "hi"
+  '';
+  executable = true;
+}
+```
+### `writeShellScriptBin` {#trivial-builder-writeShellScriptBin}
+
+`writeShellScriptBin` takes two arguments: `name` and `text`.
+
+`name` is the name used in the Nix store path and within the file generated under the store path.  `text` will be the contents of the file.  This function is almost exactly like `writeScriptBin`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
+
+The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
+
+The store path will include the the name, and it will be a directory. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+
+::: {.example #ex-writeShellScriptBin}
+# Usage of `writeShellScriptBin`
+```nix
+writeShellScriptBin "my-script"
+  ''
+  echo "hi"
+  '';
+```
+:::
+
+The example is a simpler way to spell:
+
+```nix
+writeTextFile {
+  name = "my-script";
+  text = ''
+    #! ${pkgs.runtimeShell}
+    echo "hi"
+  '';
+  executable = true;
+  destination = "bin/my-script"
+}
 ```
 
 ## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
