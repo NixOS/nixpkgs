@@ -31,7 +31,25 @@
           );
       });
 
-      checks.x86_64-linux.tarball = jobs.tarball;
+      checks.x86_64-linux = {
+        tarball = jobs.tarball;
+        # Test that ensures that the nixosSystem function can accept a lib argument
+        nixosSystemAcceptsLib = (self.lib.nixosSystem {
+          lib = self.lib.extend (final: prev: {
+            ifThisFunctionIsMissingTheTestFails = final.id;
+          });
+          modules = [
+            ./nixos/modules/profiles/minimal.nix
+            ({ lib, ... }: lib.ifThisFunctionIsMissingTheTestFails {
+              # Define a minimal config without eval warnings
+              nixpkgs.hostPlatform = "x86_64-linux";
+              boot.loader.grub.enable = false;
+              fileSystems."/".device = "nodev";
+              system.stateVersion = lib.versions.majorMinor lib.version;
+            })
+          ];
+        }).config.system.build.toplevel;
+      };
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;
