@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "npm-check-updates";
-  version = "16.13.0";
+  version = "16.14.0";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
     rev = "v${version}";
-    hash = "sha256-RrNO1TAPNFB/6JWY8xZjNCZ+FDgM0MCn7vaDXoCSIfI=";
+    hash = "sha256-X8Mu4Fd650H7eA2nfoefmr4jW974qLBLurmj2H4t7xY=";
   };
 
-  npmDepsHash = "sha256-aghW4d3/8cJmwpmI5PcHioCnc91Yu4N5EfwuoaB5Xqw=";
+  npmDepsHash = "sha256-wm7/WlzqfE7DOT0jUTXBivlC9J8dyHa/OVSgi2SdO5w=";
 
   meta = {
     changelog = "https://github.com/raineorshine/npm-check-updates/blob/${src.rev}/CHANGELOG.md";
