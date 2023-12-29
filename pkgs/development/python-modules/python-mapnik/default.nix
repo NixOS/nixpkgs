@@ -8,7 +8,7 @@
 , pillow
 , pycairo
 , pkg-config
-, boost182
+, boost
 , cairo
 , harfbuzz
 , icu
@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     mapnik
-    boost182
+    boost
     cairo
     harfbuzz
     icu
