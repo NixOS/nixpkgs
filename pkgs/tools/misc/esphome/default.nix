@@ -75,6 +75,7 @@ python.pkgs.buildPythonApplication rec {
     # esptool is used in esphomeyaml/__main__.py
     # git is used in esphomeyaml/writer.py
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
