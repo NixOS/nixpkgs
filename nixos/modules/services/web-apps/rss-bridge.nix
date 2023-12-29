@@ -5,9 +5,6 @@ let
 
   poolName = "rss-bridge";
 
-  whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
-    (concatStringsSep "\n" cfg.whitelist);
-
   configAttr = lib.recursiveUpdate { FileCache.path = "${cfg.dataDir}/cache/"; } cfg.config;
   cfgHalf = lib.mapAttrsRecursive (path: value: let
     envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
@@ -21,6 +18,10 @@ let
   cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "rss-bridge" "whitelist" ] [ "services" "rss-bridge" "config" "system" "enabled_bridges" ])
+  ];
+
   options = {
     services.rss-bridge = {
       enable = mkEnableOption (lib.mdDoc "rss-bridge");
@@ -65,23 +66,6 @@ in
         default = "rss-bridge";
         description = lib.mdDoc ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
-        '';
-      };
-
-      whitelist = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = options.literalExpression ''
-          [
-            "Facebook"
-            "Instagram"
-            "Twitter"
-          ]
-        '';
-        description = lib.mdDoc ''
-          List of bridges to be whitelisted.
-          If the list is empty, rss-bridge will use whitelist.default.txt.
-          Use `[ "*" ]` to whitelist all.
         '';
       };
 
@@ -130,7 +114,6 @@ in
     };
     systemd.tmpfiles.rules = [
       "d '${configAttr.FileCache.path}' 0750 ${cfg.user} ${cfg.group} - -"
-      (mkIf (cfg.whitelist != []) "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
       "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
