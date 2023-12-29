@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     license = licenses.mit;
     maintainers = with maintainers; [ water-sucks lucasew kashw2 ];
