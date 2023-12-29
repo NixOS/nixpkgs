@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ linj ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     mainProgram = "kanata";
   };
 }
