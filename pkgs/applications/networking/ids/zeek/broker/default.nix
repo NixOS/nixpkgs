@@ -14,8 +14,8 @@ let
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "b191c36167bc0d6bd9f059b01ad4c99be98488d9";
-    hash = "sha256-h6xPCcdTnREeDsGQhWt2w4yJofpr7g4a8xCOB2e0/qQ=";
+    rev = "1be78cc8a889d95db047f473a0f48e0baee49f33";
+    hash = "sha256-zcXWP8CHx0RSDGpRTrYD99lHlqSbvaliXrtFowPfhBk=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
@@ -37,9 +37,9 @@ let
     doCheck = false;
   });
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zeek-broker";
-  version = "unstable-2023-02-01";
+  version = "2.7.0";
   outputs = [ "out" "py" ];
 
   strictDeps = true;
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "3df8d35732d51e3bd41db067260998e79e93f366";
-    hash = "sha256-37JIgbG12zd13YhfgVb4egzi80fUcZVj/s+yvsjcP7E=";
+    rev = "v${version}";
+    hash = "sha256-fwLqw7PPYUDm+eJxDpCtY/W6XianqBDPHOhzDQoooYo=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty
@@ -63,6 +63,10 @@ stdenv.mkDerivation {
   patches = [
     ./0001-Fix-include-path-in-exported-CMake-targets.patch
   ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl python3.pkgs.pybind11 ];
