@@ -117,6 +117,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libssh = callPackage ./libssh.nix {};
   libbsm = callPackage ./libbsm.nix {};
   cap_mkdb = callPackage ./cap_mkdb.nix {};
+  pwd_mkdb = callPackage ./pwd_mkdb.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
