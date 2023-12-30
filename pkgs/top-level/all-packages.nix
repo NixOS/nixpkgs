@@ -3977,8 +3977,6 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
-  gtklp = callPackage ../tools/misc/gtklp { };
-
   google-amber = callPackage ../tools/graphics/amber {
     inherit (darwin) cctools;
   };
