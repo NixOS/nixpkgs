@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-unused-but-set-variable";
   };
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Schrodinger-developed 2D Coordinate Generation";
     maintainers = [ maintainers.rmcgibbo ];
