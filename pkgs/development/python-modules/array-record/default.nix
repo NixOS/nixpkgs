@@ -31,7 +31,7 @@ buildPythonPackage rec {
       cp39 = "sha256-BzMOVue7E1S1+5+XTcPELko81ujc9MbmqLhNsU7pqO0=";
       cp310 = "sha256-eUD9pQu9GsbV8MPD1MiF3Ihr+zYioSOo6P15hYIwPYo=";
       cp311 = "sha256-rAmkI3EIZPYiXrxFowfDC0Gf3kRw0uX0i6Kx6Zu+hNM=";
-    }.${pyShortVersion};
+    }.${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
   };
 
   propagatedBuildInputs = [

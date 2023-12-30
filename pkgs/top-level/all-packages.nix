@@ -614,8 +614,6 @@ with pkgs;
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
-  deadcode = callPackage ../development/tools/deadcode { };
-
   deadnix = callPackage ../development/tools/deadnix { };
 
   dec-decode = callPackage ../development/tools/dec-decode { };
@@ -10727,9 +10725,7 @@ with pkgs;
 
   lwc = callPackage ../tools/misc/lwc { };
 
-  lxc = callPackage ../os-specific/linux/lxc {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  lxc = callPackage ../os-specific/linux/lxc {  };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
 
   lxd = callPackage ../tools/admin/lxd/wrapper.nix { };
@@ -18145,7 +18141,7 @@ with pkgs;
 
   ### DEVELOPMENT / MISC
 
-  inherit (callPackage ../development/misc/h3 { }) h3_3 h3_4;
+  inherit (callPackages ../development/misc/h3 { }) h3_3 h3_4;
 
   h3 = h3_3;
 
@@ -24445,7 +24441,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_1;
+    openssl_3_2;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
 

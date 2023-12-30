@@ -1456,6 +1456,8 @@ self: super: with self; {
 
   binary = callPackage ../development/python-modules/binary { };
 
+  binary2strings = callPackage ../development/python-modules/binary2strings { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   bincopy = callPackage ../development/python-modules/bincopy { };
@@ -10602,6 +10604,8 @@ self: super: with self; {
     inherit (pkgs) libusb1;
   };
 
+  pylibjpeg = callPackage ../development/python-modules/pylibjpeg { };
+
   pylibjpeg-libjpeg = callPackage ../development/python-modules/pylibjpeg-libjpeg { };
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
@@ -13121,6 +13125,8 @@ self: super: with self; {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simber = callPackage ../development/python-modules/simber { };
+
+  simple-term-menu = callPackage ../development/python-modules/simple-term-menu { };
 
   simpleaudio = callPackage ../development/python-modules/simpleaudio { };
 
