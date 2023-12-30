@@ -750,7 +750,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
         log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
         cmd=()
-    elif ! targetHostSudoCmd "${cmd[@]}" true &>/dev/null; then
+    elif ! targetHostSudoCmd "${cmd[@]}" true; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
         cmd=(
             "env"
