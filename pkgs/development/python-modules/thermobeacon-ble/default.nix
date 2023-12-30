@@ -12,16 +12,21 @@
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
   version = "0.6.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
-    repo = pname;
+    repo = "thermobeacon-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-Nmu9oS6zkCTqk/cf8+fqDFhVcG/2JuDDumGTCubeS5o=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=thermobeacon_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -36,11 +41,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=thermobeacon_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "thermobeacon_ble"
