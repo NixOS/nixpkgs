@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "mtail";
@@ -13,21 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-KD75KHXrXXm5FMXeFInNTDsVsclyqTfsfQiB3Br+F1A=";
 
-  doCheck = false;
-
-  subPackages = [ "cmd/mtail" ];
-
-  preBuild = ''
-    go generate -x ./internal/vm/
-  '';
-
   ldflags = [
-    "-X main.Version=${version}"
+    "-X=main.Branch=main"
+    "-X=main.Version=${version}"
+    "-X=main.Revision=${src.rev}"
   ];
 
+  # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
+  doCheck = !stdenv.isDarwin;
+
   meta = with lib; {
-    license = licenses.asl20;
-    homepage = "https://github.com/google/mtail";
     description = "Tool for extracting metrics from application logs";
+    homepage = "https://github.com/google/mtail";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "mtail";
   };
 }
