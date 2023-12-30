@@ -34,6 +34,8 @@
       checks.x86_64-linux = {
         tarball = jobs.tarball;
         # Test that ensures that the nixosSystem function can accept a lib argument
+        # Note: prefer not to extend or modify `lib`, especially if you want to share reusable modules
+        #       alternatives include: `import` a file, or put a custom library in an option or in `_module.args.<libname>`
         nixosSystemAcceptsLib = (self.lib.nixosSystem {
           lib = self.lib.extend (final: prev: {
             ifThisFunctionIsMissingTheTestFails = final.id;
@@ -45,7 +47,8 @@
               nixpkgs.hostPlatform = "x86_64-linux";
               boot.loader.grub.enable = false;
               fileSystems."/".device = "nodev";
-              system.stateVersion = lib.versions.majorMinor lib.version;
+              # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
+              system.stateVersion = lib.versions.majorMinor lib.version; # DON'T do this in real configs!
             })
           ];
         }).config.system.build.toplevel;
