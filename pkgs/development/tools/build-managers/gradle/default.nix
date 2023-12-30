@@ -111,6 +111,13 @@ rec {
             "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}"
         done
 
+        # The file-events library _seems_ to follow the native-platform version, but
+        # we won’t assume that.
+        fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
+        autoPatchelfInJar \
+          $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
+          "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
         mkdir $out/nix-support
