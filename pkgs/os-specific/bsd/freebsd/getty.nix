@@ -1,9 +1,9 @@
-{ mkDerivation, lib, stdenv, login, ... }:
+{ mkDerivation, lib, stdenv, login, useWrappedLogin ? true, ... }:
 mkDerivation {
   path = "libexec/getty";
 
   postPatch = ''
-    sed -E -i -e "s|/usr/bin/login|${login}/bin/login|g" $BSDSRCDIR/libexec/getty/*.h
+    sed -E -i -e "s|/usr/bin/login|${if useWrappedLogin then "/run/wrapped/bin/login" else "${login}/bin/login"}|g" $BSDSRCDIR/libexec/getty/*.h
   '';
 
   preBuild = lib.optionalString stdenv.cc.isClang ''
