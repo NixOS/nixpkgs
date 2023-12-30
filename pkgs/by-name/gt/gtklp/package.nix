@@ -1,20 +1,29 @@
-{ stdenv, lib, fetchurl
-, autoreconfHook, libtool, pkg-config
-, gtk2, glib, cups, gettext, openssl
+{ lib
+, stdenv
+, autoreconfHook
+, cups
+, fetchurl
+, gettext
+, glib
+, gtk2
+, libtool
+, openssl
+, pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtklp";
   version = "1.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.src.tar.gz";
-    sha256 = "1arvnnvar22ipgnzqqq8xh0kkwyf71q2sfsf0crajpsr8a8601xy";
+    url = "mirror://sourceforge/gtklp/gtklp-${finalAttrs.version}.src.tar.gz";
+    hash = "sha256-vgdgkEJZX6kyA047LXA4zvM5AewIY/ztu1GIrLa1O6s=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     autoreconfHook
+    pkg-config
+    cups
   ];
 
   buildInputs = [
@@ -26,9 +35,13 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  outputs = [ "out" "doc" "man" ];
+
+  strictDeps = true;
+
   patches = [
-    ./patches/mdv-fix-str-fmt.patch
-    ./patches/autoconf.patch
+    ./000-autoconf.patch
+    ./001-format-parameter.patch
   ];
 
   # Workaround build failure on -fno-common toolchains:
@@ -36,22 +49,23 @@ stdenv.mkDerivation rec {
   #     file.o:libgtklp/libgtklp.h:83: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  preConfigure = ''
-    substituteInPlace include/defaults.h --replace "netscape" "firefox"
-    substituteInPlace include/defaults.h --replace "http://localhost:631/sum.html#STANDARD_OPTIONS" \
-                                                   "http://localhost:631/help/"
+  postPatch = ''
+    substituteInPlace include/defaults.h \
+      --replace "netscape" "firefox" \
+      --replace "http://localhost:631/sum.html#STANDARD_OPTIONS" \
+                "http://localhost:631/help/"
   '';
 
   preInstall = ''
-    install -D -m0644 -t $out/share/doc AUTHORS BUGS ChangeLog README USAGE
+    install -D -m0644 -t $doc/share/doc AUTHORS BUGS ChangeLog README USAGE
   '';
 
-  meta = with lib; {
-    description = "A graphical frontend for CUPS";
+  meta = {
     homepage = "https://gtklp.sirtobi.com";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ caadar ];
-    platforms = platforms.unix;
+    description = "A GTK-based graphical frontend for CUPS";
+    license = with lib.licenses; [ gpl2Only ];
+    mainProgram = "gtklp";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-
-}
+})
