@@ -24,7 +24,7 @@ let
 
 in
 lib.checkListOfEnum "${pname}: alt variants" [ "normal" "alt" "all" ] altVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: color variants" [ "Light" "Dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "normal" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: nautilus sidebar minimum width" [ "default" "180" "220" "240" "260" "280" ] (single nautilusSize)
