@@ -11,6 +11,10 @@ rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
   version = "1.28.1";
 
+  # the build step requires this env variable to figure out the version
+  # if this is unset, the server will respond with "null" as version, which crashes newer mobile clients
+  VW_VERSION = version;
+
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
