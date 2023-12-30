@@ -1480,8 +1480,8 @@ let
         mktplcRef = {
           name = "shell-format";
           publisher = "foxundermoon";
-          version = "7.1.0";
-          sha256 = "09z72mdr5bfdcb67xyzlv7lb9vyjlc3k9ackj4jgixfk40c68cnj";
+          version = "7.2.5";
+          sha256 = "sha256-kfpRByJDcGY3W9+ELBzDOUMl06D/vyPlN//wPgQhByk=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
