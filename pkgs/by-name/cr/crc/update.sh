@@ -47,25 +47,25 @@ WRITE_KEY=$(grep 'pkg/crc/segment.WriteKey' ${FILE_MAKEFILE} |
     head -n1 | awk '{print $4}' | sed -e 's/$(REPOPATH)\/pkg\/crc\/segment.WriteKey=//g')
 
 sed -i "s|version = \".*\"|version = \"${CRC_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|gitCommit = \".*\"|gitCommit = \"${CRC_COMMIT:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|gitHash = \".*\"|gitHash = \"${CRC_GIT_HASH}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|openShiftVersion = \".*\"|openShiftVersion = \"${OPENSHIFT_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|okdVersion = \".*\"|okdVersion = \"${OKD_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|podmanVersion = \".*\"|podmanVersion = \"${PODMAN_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|microshiftVersion = \".*\"|microshiftVersion = \"${MICROSHIFT_VERSION:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
 
 sed -i "s|writeKey = \".*\"|writeKey = \"${WRITE_KEY:-}\"|" \
-    ${NIXPKGS_CRC_FOLDER}/default.nix
+    ${NIXPKGS_CRC_FOLDER}/package.nix
