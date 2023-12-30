@@ -1,5 +1,6 @@
 { stdenv, fetchurl, libwmf, libpng12, pkg-config, lib }: stdenv.mkDerivation {
-  name = "winhelpcgi-1.0-rc3";
+  pname = "winhelpcgi";
+  version = "1.0-rc3";
 
   src = fetchurl {
     url = "http://www.herdsoft.com/ftp/winhelpcgi_1.0-1.tar.gz";
@@ -13,11 +14,10 @@
 
   meta = {
     description = "CGI module for Linux, Solaris, MacOS X and AIX to read Windows Help Files";
-
     homepage = "http://www.herdsoft.com/linux/produkte/winhelpcgi.html";
-
     license = lib.licenses.gpl2Only;
-
     maintainers = [ lib.maintainers.shlevy ];
+    platforms = lib.platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
