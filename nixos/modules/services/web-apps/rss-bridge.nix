@@ -7,6 +7,18 @@ let
 
   whitelist = pkgs.writeText "rss-bridge_whitelist.txt"
     (concatStringsSep "\n" cfg.whitelist);
+
+  configAttr = lib.recursiveUpdate { FileCache.path = "${cfg.dataDir}/cache/"; } cfg.config;
+  cfgHalf = lib.mapAttrsRecursive (path: value: let
+    envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
+    envValue = if lib.isList value then
+      lib.concatStringsSep "," value
+    else if lib.isBool value then
+      lib.boolToString value
+    else
+      toString value;
+  in "fastcgi_param \"${envName}\" \"${envValue}\";") configAttr;
+  cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
   options = {
@@ -117,7 +129,7 @@ in
       };
     };
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${configAttr.FileCache.path}' 0750 ${cfg.user} ${cfg.group} - -"
       (mkIf (cfg.whitelist != []) "L+ ${cfg.dataDir}/whitelist.txt - - - - ${whitelist}")
       "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
     ];
@@ -132,18 +144,7 @@ in
             tryFiles = "$uri /index.php$is_args$args";
           };
 
-          locations."~ ^/index.php(/|$)" = let
-              cfgHalf = lib.mapAttrsRecursive (path: value: let
-                envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
-                envValue = if lib.isList value then
-                  lib.concatStringsSep "," value
-                else if lib.isBool value then
-                  lib.boolToString value
-                else
-                  toString value;
-              in "fastcgi_param \"${envName}\" \"${envValue}\";") cfg.config;
-              cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
-            in {
+          locations."~ ^/index.php(/|$)" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
