@@ -15,11 +15,11 @@ buildPythonPackage rec {
   version = "1.3.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";
-    repo = pname;
+    repo = "skodaconnect";
     rev = "refs/tags/${version}";
     hash = "sha256-7QDelJzyRnYNqVP9IuREpCm5s+qJ8cxSEn1YcqnYepA=";
   };
