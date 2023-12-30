@@ -1,11 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, git
-, stdenv
 , testers
 , crc
-, runtimeShell
 , coreutils
 }:
 
@@ -21,7 +18,6 @@ in
 buildGoModule rec {
   version = "2.30.0";
   pname = "crc";
-  modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
     owner = "crc-org";
@@ -32,15 +28,14 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  nativeBuildInputs = [ git ];
-
   postPatch = ''
     substituteInPlace pkg/crc/oc/oc_linux_test.go \
       --replace "/bin/echo" "${coreutils}/bin/echo"
-
-    substituteInPlace Makefile \
-      --replace "/bin/bash" "${runtimeShell}"
   '';
+
+  subPackages = [
+    "cmd/crc"
+  ];
 
   tags = [ "containers_image_openpgp" ];
 
@@ -54,7 +49,7 @@ buildGoModule rec {
     "-X github.com/crc-org/crc/v2/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
