@@ -63,9 +63,11 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Manages a local OpenShift 4.x cluster or a Podman VM optimized for testing and development purposes";
-    homepage = "https://crc.dev";
+    description = "Manage a local OpenShift 4.x cluster, Microshift or a Podman VM optimized for testing and development purposes";
+    homepage = "https://crc.dev/crc/getting_started/getting_started/introducing/";
+    changelog = "https://github.com/crc-org/crc/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "crc";
     maintainers = with maintainers; [ matthewpi shikanime tricktron ];
   };
 }
