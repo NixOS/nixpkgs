@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk2, openssh }:
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, gtk2
+, openssh
+, pkg-config
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssh-askpass-fullscreen";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "atj";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-1GER+SxTpbMiYLwFCwLX/hLvzCIqutyvQc9DNJ7d1C0=";
+    repo = "ssh-askpass-fullscreen";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1GER+SxTpbMiYLwFCwLX/hLvzCIqutyvQc9DNJ7d1C0=";
   };
 
   nativeBuildInputs = [
@@ -21,12 +28,15 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A small SSH askpass GUI using GTK+2";
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/atj/ssh-askpass-fullscreen";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ caadar ];
-    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
+    description = "A small, fullscreen SSH askpass GUI using GTK+2";
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "ssh-askpass-fullscreen";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
