@@ -13,6 +13,7 @@
 , pytest-asyncio
 , pytest-lazy-fixture
 , redis
+, gitUpdater
 }:
 
 buildPythonPackage rec {
@@ -60,6 +61,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiogram" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";
