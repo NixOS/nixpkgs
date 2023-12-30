@@ -1,7 +1,6 @@
 { lib
 , fetchgit
 , buildGoModule
-, installShellFiles
 }:
 
 buildGoModule {
@@ -15,8 +14,6 @@ buildGoModule {
   };
 
   vendorHash = "sha256-85jFSAOfNMihv710LtfETmkKRqcdRuFCHVuPkW94X/Y=";
-
-  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
