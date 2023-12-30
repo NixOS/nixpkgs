@@ -13,21 +13,11 @@ dotnetConfigureHook() {
         local -r parallelFlag="--disable-parallel"
     fi
 
-    dotnetRestore() {
-        local -r project="${1-}"
-        env dotnet restore ${project-} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --runtime "@runtimeId@" \
-            --source "@nugetSource@/lib" \
-            ${parallelFlag-} \
-            ${dotnetRestoreFlags[@]} \
-            ${dotnetFlags[@]}
-    }
+    nugetConfigFile="./NuGet.config"
 
     # Generate a NuGet.config file to make sure everything,
     # including things like <Sdk /> dependencies, is restored from the proper source
-cat <<EOF > "./NuGet.config"
+cat <<EOF > "$nugetConfigFile"
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <packageSources>
@@ -37,13 +27,26 @@ cat <<EOF > "./NuGet.config"
 </configuration>
 EOF
 
+    dotnetRestore() {
+        local -r project="${1-}"
+        env dotnet restore ${project-} \
+            --configfile "$nugetConfigFile" \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --runtime "@runtimeId@" \
+            --source "@nugetSource@/lib" \
+            ${parallelFlag-} \
+            ${dotnetRestoreFlags[@]} \
+            ${dotnetFlags[@]}
+    }
+
     # Patch paket.dependencies and paket.lock (if found) to use the proper source. This ensures
     # paket restore works correctly
     # We use + instead of / in sed to avoid problems with slashes
     find -name paket.dependencies -exec sed -i 's+source .*+source @nugetSource@/lib+g' {} \;
     find -name paket.lock -exec sed -i 's+remote:.*+remote: @nugetSource@/lib+g' {} \;
 
-    env dotnet tool restore --add-source "@nugetSource@/lib"
+    env dotnet tool restore --configfile "$nugetConfigFile" --add-source "@nugetSource@/lib"
 
     (( "${#projectFile[@]}" == 0 )) && dotnetRestore
 
