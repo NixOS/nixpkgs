@@ -47,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "Simple X hotkey daemon";
+    description = "Simple X hotkey daemon. Help you set custom keybinding or keyboard shortcuts to open apps, run terminal commands. 
+It rc file is usable any distribution . So , your shortcuts are safe and reproducable in any other WindowManager or Desktop Manager when you are changing it. ";
     homepage = "https://github.com/baskerville/sxhkd";
     license = lib.licenses.bsd2;
     mainProgram = "sxhkd";
