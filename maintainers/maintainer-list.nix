@@ -10918,6 +10918,12 @@
     githubId = 2486026;
     name = "Luca Fulchir";
   };
+  luleyleo = {
+    email = "git@leopoldluley.de";
+    github = "luleyleo";
+    githubId = 10746692;
+    name = "Leopold Luley";
+  };
   lumi = {
     email = "lumi@pew.im";
     github = "lumi-me-not";
