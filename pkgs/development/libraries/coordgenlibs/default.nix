@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost zlib maeparser ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-unused-but-set-variable";
+  };
+
   meta = with lib; {
     description = "Schrodinger-developed 2D Coordinate Generation";
     maintainers = [ maintainers.rmcgibbo ];
