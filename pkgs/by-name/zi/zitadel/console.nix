@@ -6,15 +6,24 @@
 { mkYarnPackage
 , fetchYarnDeps
 , lib
+
+, grpc-gateway
+, protoc-gen-grpc-web
+, protoc-gen-js
 }:
 
 let
   protobufGenerated = generateProtobufCode {
     pname = "zitadel-console";
+    nativeBuildInputs = [
+      grpc-gateway
+      protoc-gen-grpc-web
+      protoc-gen-js
+    ];
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-NmlKjKWxmqatyR6OitlQ7bfl6U6PS6KWqTALwX42HS4=";
+    hash = "sha256-Bpoe1UZGLTxUqdLbvOod6/77R4CsYQ4PirMfqvI9Lz8=";
   };
 in
 mkYarnPackage rec {

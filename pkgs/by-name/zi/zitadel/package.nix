@@ -62,6 +62,7 @@ let
       name = "${pname}-buf-generated";
 
       src = zitadelRepo;
+      patches = [ ./console-use-local-protobuf-plugins.patch ];
 
       nativeBuildInputs = nativeBuildInputs ++ [ buf ];
 
