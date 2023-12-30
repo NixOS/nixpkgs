@@ -438,7 +438,6 @@ in {
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-fstab-generator"
-        "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
 
