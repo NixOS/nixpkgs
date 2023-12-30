@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.yourkit.com";
-    description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms.";
+    description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     license = licenses.unfree;
     maintainers = with maintainers; [ herberteuler ];
     platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }
