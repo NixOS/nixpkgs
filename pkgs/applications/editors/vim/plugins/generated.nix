@@ -16347,5 +16347,17 @@ final: prev:
     meta.homepage = "https://github.com/roobert/palette.nvim/";
   };
 
+  obsidian-nvim = buildVimPlugin {
+    pname = "obsidian-nvim";
+    version = "2023-12-30";
+    src = fetchFromGitHub {
+      owner = "epwalsh";
+      repo = "obsidian.nvim";
+      rev = "88bf9150d9639a2cae3319e76abd7ab6b30d27f0";
+      sha256 = "sha256-irPk9iprbI4ijNUjMxXjw+DljudZ8aB3f/FJxXhFSoA=";
+    };
+    meta.homepage = "https://github.com/epwalsh/obsidian.nvim/";
+  };
+
 
 }
