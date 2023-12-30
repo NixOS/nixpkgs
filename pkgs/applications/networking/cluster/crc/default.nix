@@ -10,16 +10,17 @@
 }:
 
 let
-  openShiftVersion = "4.12.5";
-  okdVersion = "4.12.0-0.okd-2023-02-18-033438";
-  podmanVersion = "4.3.1";
-  writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitHash = "sha256-zk/26cG2Rt3jpbhKgprtq2vx7pIQVi7cPUA90uoQa80=";
+  openShiftVersion = "4.14.3";
+  okdVersion = "4.14.0-0.okd-2023-12-01-225814";
+  microshiftVersion = "4.14.3";
+  podmanVersion = "4.4.4";
+  writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
+  gitCommit = "b6532a3c38f2c81143153fed022bc4ebf3f2f508";
+  gitHash = "sha256-LH1vjWVzSeSswnMibn4YVjV2glauQGDXP+6i9kGzzU4=";
 in
 buildGoModule rec {
-  version = "2.15.0";
+  version = "2.30.0";
   pname = "crc";
-  gitCommit = "72256c3cb00ac01519b26658dd5cfb0dd09b37a1";
   modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
@@ -44,12 +45,13 @@ buildGoModule rec {
   tags = [ "containers_image_openpgp" ];
 
   ldflags = [
-    "-X github.com/crc-org/crc/pkg/crc/version.crcVersion=${version}"
-    "-X github.com/crc-org/crc/pkg/crc/version.ocpVersion=${openShiftVersion}"
-    "-X github.com/crc-org/crc/pkg/crc/version.okdVersion=${okdVersion}"
-    "-X github.com/crc-org/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
-    "-X github.com/crc-org/crc/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
-    "-X github.com/crc-org/crc/pkg/crc/segment.WriteKey=${writeKey}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.crcVersion=${version}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.ocpVersion=${openShiftVersion}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.okdVersion=${okdVersion}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.podmanVersion=${podmanVersion}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.microshiftVersion=${microshiftVersion}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
+    "-X github.com/crc-org/crc/v2/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
   preBuild = ''

@@ -40,7 +40,10 @@ OKD_VERSION=$(grep 'OKD_VERSION' ${FILE_MAKEFILE} |
 PODMAN_VERSION=$(grep 'PODMAN_VERSION' ${FILE_MAKEFILE} |
     head -n1 | awk '{print $3}')
 
-WRITE_KEY=$(grep '$(REPOPATH)/pkg/crc/segment.WriteKey' ${FILE_MAKEFILE} |
+MICROSHIFT_VERSION=$(grep 'MICROSHIFT_VERSION' ${FILE_MAKEFILE} |
+    head -n1 | awk '{print $3}')
+
+WRITE_KEY=$(grep 'pkg/crc/segment.WriteKey' ${FILE_MAKEFILE} |
     head -n1 | awk '{print $4}' | sed -e 's/$(REPOPATH)\/pkg\/crc\/segment.WriteKey=//g')
 
 sed -i "s|version = \".*\"|version = \"${CRC_VERSION:-}\"|" \
@@ -59,6 +62,9 @@ sed -i "s|okdVersion = \".*\"|okdVersion = \"${OKD_VERSION:-}\"|" \
     ${NIXPKGS_CRC_FOLDER}/default.nix
 
 sed -i "s|podmanVersion = \".*\"|podmanVersion = \"${PODMAN_VERSION:-}\"|" \
+    ${NIXPKGS_CRC_FOLDER}/default.nix
+
+sed -i "s|microshiftVersion = \".*\"|microshiftVersion = \"${MICROSHIFT_VERSION:-}\"|" \
     ${NIXPKGS_CRC_FOLDER}/default.nix
 
 sed -i "s|writeKey = \".*\"|writeKey = \"${WRITE_KEY:-}\"|" \
