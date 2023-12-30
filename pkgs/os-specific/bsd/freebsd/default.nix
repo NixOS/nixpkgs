@@ -118,6 +118,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libbsm = callPackage ./libbsm.nix {};
   cap_mkdb = callPackage ./cap_mkdb.nix {};
   pwd_mkdb = callPackage ./pwd_mkdb.nix {};
+  truss = callPackage ./truss.nix {};
+  libsysdecode = callPackage ./libsysdecode.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};

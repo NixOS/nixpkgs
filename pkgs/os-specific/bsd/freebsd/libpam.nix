@@ -17,7 +17,7 @@ mkDerivation {
   preBuild = lib.optionalString stdenv.cc.isClang ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
   '' + ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$BSDSRCDIR/lib/libpam/libpam"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$BSDSRCDIR/lib/libpam/libpam -DOPENPAM_MODULES_DIRECTORY=\"$out/lib\""
   '';
 
   MK_TESTS = "no";
