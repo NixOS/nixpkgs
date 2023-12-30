@@ -5136,8 +5136,6 @@ with pkgs;
 
   disfetch = callPackage ../tools/misc/disfetch { };
 
-  disk-filltest = callPackage ../tools/system/disk-filltest { };
-
   disk-inventory-x = callPackage ../tools/filesystems/disk-inventory-x { };
 
   diskscan = callPackage ../tools/misc/diskscan { };
