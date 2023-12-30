@@ -6,6 +6,7 @@
 , aiohttp
 , aiohttp-socks
 , aioredis
+, aiofiles
 , aresponses
 , babel
 , certifi
@@ -13,13 +14,16 @@
 , pytest-asyncio
 , pytest-lazy-fixture
 , redis
+, hatchling
+, pydantic
+, pytz
 , gitUpdater
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
   version = "3.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,18 +34,17 @@ buildPythonPackage rec {
     hash = "sha256-8SYrg+gfNSTR0CTPf4cYDa4bfA0LPBmZtPcATF22fqw=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<3.9.0" "aiohttp" \
-      --replace "Babel>=2.9.1,<2.10.0" "Babel" \
-      --replace "magic-filter>=1.0.9" "magic-filter"
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     babel
     certifi
     magic-filter
+    pydantic
   ];
 
   nativeCheckInputs = [
@@ -51,13 +54,14 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    pytz
     redis
   ];
 
-  # requires network
+  # import failures
   disabledTests = [
-    "test_download_file_404"
-    "test_download_404"
+    "test_aiohtt_server"
+    "test_deep_linking"
   ];
 
   pythonImportsCheck = [ "aiogram" ];
