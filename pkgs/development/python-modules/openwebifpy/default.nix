@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D2NCTn1Q3/AknmEAAOZO4d7i2mpM/kMlt94RaLmmnjM=";
+    hash = "sha256-Ec7fwpIoh1M0Pe1exUFJpZ/6vDKlrfc4qeZfwfX8JqE=";
   };
 
   nativeBuildInputs = [
@@ -35,11 +35,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "openwebif"
-  ];
-
-  disabledTests = [
-    # https://github.com/autinerd/openwebifpy/issues/1
-    "test_get_picon_name"
   ];
 
   meta = with lib; {
