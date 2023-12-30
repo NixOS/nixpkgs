@@ -1466,6 +1466,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
