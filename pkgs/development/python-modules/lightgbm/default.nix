@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , buildPythonPackage
 , fetchPypi
@@ -19,11 +20,15 @@
 
 # optionals: gpu
 , boost
-, cudatoolkit
 , ocl-icd
 , opencl-headers
-, gpuSupport ? stdenv.isLinux
+, gpuSupport ? stdenv.isLinux && !cudaSupport
+, cudaSupport ? config.cudaSupport
+, cudaPackages
 }:
+
+assert gpuSupport -> cudaSupport != true;
+assert cudaSupport -> gpuSupport != true;
 
 buildPythonPackage rec {
   pname = "lightgbm";
@@ -43,6 +48,8 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     scikit-build-core
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   dontUseCmakeConfigure = true;
@@ -51,10 +58,12 @@ buildPythonPackage rec {
     llvmPackages.openmp
   ]) ++ (lib.optionals gpuSupport [
     boost
-    cudatoolkit
     ocl-icd
     opencl-headers
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -62,7 +71,11 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  pypaBuildFlags = lib.optionalString gpuSupport "--config-setting=cmake.define.USE_CUDA=ON";
+  pypaBuildFlags = lib.optionals gpuSupport [
+    "--config-setting=cmake.define.USE_GPU=ON"
+  ] ++ lib.optionals cudaSupport [
+    "--config-setting=cmake.define.USE_CUDA=ON"
+  ];
 
   postConfigure = ''
     export HOME=$(mktemp -d)
