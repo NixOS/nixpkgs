@@ -2852,10 +2852,13 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.24.0";
-          sha256 = "sha256-zZ34KQrRPqVbfGdpYACuLMiMj4ZIWSnJIPac1yXD87k=";
+          version = "1.29.0";
+          sha256 = "sha256-mVRsVsolXj31WhbWnt3Xml+NnIq7Q2uHhUUd1zgW42c=";
         };
         meta = {
+          description = "Docker Extension for Visual Studio Code";
+          homepage = "https://github.com/microsoft/vscode-docker";
+          changelog = "https://marketplace.visualstudio.com/items/ms-azuretools.vscode-docker/changelog";
           license = lib.licenses.mit;
         };
       };
