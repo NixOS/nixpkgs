@@ -21,6 +21,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [ thehedgeh0g ];
+    maintainers = with maintainers; [ thehedgeh0g katexochen ];
   };
 }
