@@ -10,12 +10,12 @@ function fail() {
 
 function assertStringEqual() {
     if ! diff <(echo "$1") <(echo "$2") ; then
-        fail "Strings differ"
+        fail "expected \"$1\" to be equal to \"$2\""
     fi
 }
 
 function assertStringContains() {
     if ! echo "$1" | grep -q "$2" ; then
-        fail "\"$1\" does not contain \"$2\""
+        fail "expected \"$1\" to contain \"$2\""
     fi
 }

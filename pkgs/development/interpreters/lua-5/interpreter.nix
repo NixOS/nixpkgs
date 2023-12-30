@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs:
     sha256 = hash;
   };
 
-  LuaPathSearchPaths  = [ "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
-  LuaCPathSearchPaths = [ "./?.so" ] ++ luaPackages.luaLib.luaCPathList;
+  LuaPathSearchPaths  = [ "./share/lua/${self.luaversion}/?.lua" "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths = [ "./lib/lua/${self.luaversion}/?.so" "./?.so" "./lib/lua/${self.luaversion}/loadall.so" ] ++ luaPackages.luaLib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook
     finalAttrs.LuaPathSearchPaths
     finalAttrs.LuaCPathSearchPaths;
@@ -60,16 +60,7 @@ stdenv.mkDerivation (finalAttrs:
   inherit patches;
 
   # we can't pass flags to the lua makefile because for portability, everything is hardcoded
-  postPatch = ''
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
-  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \

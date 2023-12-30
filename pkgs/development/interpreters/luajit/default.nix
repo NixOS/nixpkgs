@@ -75,15 +75,6 @@ stdenv.mkDerivation rec {
       # passed by nixpkgs CC wrapper is insufficient on its own
       substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
-
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
   '';
 
   dontConfigure = true;
@@ -111,8 +102,8 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  LuaPathSearchPaths    = [ "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
-  LuaCPathSearchPaths   = [ "./?.so" ] ++ luaPackages.luaLib.luaCPathList;
+  LuaPathSearchPaths    = [ "./share/lua/${luaversion}/?.lua" "./?.lua" "./?/init.lua" ] ++ luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = [ "./lib/lua/${luaversion}/?.so" "./?.so" "./lib/lua/${luaversion}/loadall.so" ] ++ luaPackages.luaLib.luaCPathList;
 
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 

@@ -17,7 +17,7 @@ addToLuaSearchPathWithCustomDelimiter() {
   local topDir="${absPattern%%\?*}"
 
   # export only if the folder exists else LUA_PATH/LUA_CPATH grow too large
-  if [[ ! -d "$topDir" ]]; then return; fi
+  if [[ ! -d "$topDir" ]] && [[ ! "$absPattern" =~ ^\./ ]]; then return; fi
 
   # export only if we haven't already got this dir in the search path
   if [[ ${!varName-} == *"$absPattern"* ]]; then return; fi

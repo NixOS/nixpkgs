@@ -8,7 +8,7 @@
 let
 
   runTest = lua: { name, command }:
-    pkgs.runCommandLocal "test-${lua.name}" ({
+    pkgs.runCommandLocal "test-${lua.name}-${name}" ({
       nativeBuildInputs = [lua];
       meta.platforms = lua.meta.platforms;
     }) (''
@@ -54,8 +54,8 @@ in
     }) (''
       source ${./assert.sh}
 
-      lua_vanilla_package_path=$(${lua}/bin/lua -e "print(package.path)")
-      lua_with_module_package_path=$(${luaWithModule}/bin/lua -e "print(package.path)")
+      lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
+      lua_with_module_package_path="$(${luaWithModule}/bin/lua -e "print(package.path)")"
 
       assertStringContains "$lua_vanilla_package_path" "./?.lua"
       assertStringContains "$lua_vanilla_package_path" "./?/init.lua"
