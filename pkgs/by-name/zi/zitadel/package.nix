@@ -105,10 +105,11 @@ buildGo121Module rec {
 
   proxyVendor = true;
   vendorHash = goModulesHash;
+  ldflags = [ "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'" ];
 
   # Adapted from Makefile in repo, with dependency fetching and protobuf codegen
   # bits removed
-  buildPhase = ''
+  preBuild = ''
     mkdir -p pkg/grpc
     cp -r ${protobufGenerated}/grpc/github.com/zitadel/zitadel/pkg/grpc/* pkg/grpc
     mkdir -p openapi/v2/zitadel
@@ -123,12 +124,13 @@ buildGo121Module rec {
     go run internal/api/assets/generator/asset_generator.go -directory=internal/api/assets/generator/ -assets=docs/apis/assets/assets.md
 
     cp -r ${passthru.console}/* internal/api/ui/console/static
-    CGO_ENABLED=0 go build -o zitadel -v -ldflags="-s -w -X 'github.com/zitadel/zitadel/cmd/build.version=${version}'"
   '';
+
+  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/bin
-    install -Dm755 zitadel $out/bin/
+    install -Dm755 $GOPATH/bin/zitadel $out/bin/
   '';
 
   passthru = {
