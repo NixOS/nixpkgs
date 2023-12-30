@@ -9055,6 +9055,10 @@ with pkgs;
 
   gvproxy = callPackage ../tools/networking/gvproxy { };
 
+  gyroflow = qt6Packages.callPackage ../applications/video/gyroflow {
+    ffmpeg = ffmpeg_6;
+  };
+
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
@@ -24007,6 +24011,8 @@ with pkgs;
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
+
+  mdk-sdk = callPackage ../development/libraries/mdk-sdk { };
 
   mdslides = callPackage ../tools/misc/mdslides { };
 
