@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , beam
 , callPackage
 , wxGTK32
@@ -18,10 +19,10 @@ let
   versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } versionAvailables;
 
   interpretersAliases = versionLoop (version: {
-    "erlangR${version}" = self.interpreters."erlang_${version}";
-    "erlangR${version}_odbc" = self.interpreters."erlang_${version}_odbc";
-    "erlangR${version}_javac" = self.interpreters."erlang_${version}_javac";
-    "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac";
+    "erlangR${version}" = self.interpreters."erlang_${version}" or pkgs."erlang_${version}";
+    "erlangR${version}_odbc" = self.interpreters."erlang_${version}_odbc" or (throw "${pkgs."erlang_${version}"} is available ?");
+    "erlangR${version}_javac" = self.interpreters."erlang_${version}_javac" or (throw "${pkgs."erlang_${version}"} is available ?");
+    "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac" or (throw "${pkgs."erlang_${version}"} is available ?");
   });
 
   packagesAliases = versionLoop (version: { "erlangR${version}" = self.packages."erlang_${version}"; });
