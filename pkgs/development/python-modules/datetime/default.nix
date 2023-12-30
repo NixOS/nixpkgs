@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "datetime";
-  version = "5.2";
+  version = "5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zopefoundation";
     repo = "datetime";
     rev = "refs/tags/${version}";
-    hash = "sha256-J96IjyPyJaUC5mECK3g/cgxBh1OoVfj62XocBatYgOw=";
+    hash = "sha256-k4q9n3uikz+B9CUyqQTgl61OTKDWMsyhAt2gB1HWGRw=";
   };
 
   propagatedBuildInputs = [
