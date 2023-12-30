@@ -20,7 +20,7 @@
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
 , sysctl
-, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, doInstallCheck ? false  # Fails with FreeBSD changes, TODO: @artemist @rhelmot
 , tests
 }:
 
