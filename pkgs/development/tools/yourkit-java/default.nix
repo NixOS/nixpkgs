@@ -3,13 +3,16 @@
 , stdenv
 , jdk17
 }:
-let jre = jdk17;
-    vPath = v: lib.elemAt (lib.splitString "-" v) 0;
-    arch = if stdenv.targetPlatform.system == "x86_64-linux"
-           then "x64"
-           else if stdenv.targetPlatform.system == "aarch64-linux"
-           then "arm64"
-           else throw "Unsupported system";
+let
+  jre = jdk17;
+
+  vPath = v: lib.elemAt (lib.splitString "-" v) 0;
+
+  arch = if stdenv.targetPlatform.system == "x86_64-linux"
+         then "x64"
+         else if stdenv.targetPlatform.system == "aarch64-linux"
+         then "arm64"
+         else throw "Unsupported system";
 in
 stdenv.mkDerivation rec {
   pname = "YourKit-JavaProfiler";
