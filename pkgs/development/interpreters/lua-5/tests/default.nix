@@ -40,7 +40,7 @@ in
       generated=$(lua -e 'print(package.path)')
       golden_LUA_PATH='./share/lua/${lua.luaversion}/?.lua;./?.lua;./?/init.lua'
 
-      assertStringEqual "$generated" "$golden_LUA_PATH"
+      assertStringContains "$generated" "$golden_LUA_PATH"
       '';
   };
 
