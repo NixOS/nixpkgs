@@ -1151,8 +1151,8 @@ let
         mktplcRef = {
           name = "theme-dracula";
           publisher = "dracula-theme";
-          version = "2.24.2";
-          sha256 = "sha256-YNqWEIvlEI29mfPxOQVdd4db9G2qNodhz8B0MCAAWK8=";
+          version = "2.24.3";
+          sha256 = "sha256-3B18lEu8rXVXySdF3+xsPnAyruIuEQJDhlNw82Xm6b0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
