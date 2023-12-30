@@ -26,9 +26,11 @@ mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { pr
 declare -A base_addresses
 
 for index in "${sources[@]}"; do
-  base_addresses[$index]=$(
+  base_address=$(
     curl --compressed --netrc -fsL "$index" | \
       jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
+  base_address="${base_address%/}" # Remove a trailing slash if exists
+  base_addresses[$index]="$base_address"
 done
 
 echo "{ fetchNuGet }: ["
@@ -45,7 +47,7 @@ for package in *; do
 
     used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
     for source in "${sources[@]}"; do
-      url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
+      url="${base_addresses[$source]}/$package/$version/$package.$version.nupkg"
       if [[ "$source" == "$used_source" ]]; then
         sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
         found=true
