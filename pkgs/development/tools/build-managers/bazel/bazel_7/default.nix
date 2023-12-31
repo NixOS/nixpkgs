@@ -55,10 +55,12 @@ let
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
-  lockfile = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/bazelbuild/bazel/release-${version}/MODULE.bazel.lock";
-    sha256 = "sha256-5xPpCeWVKVp1s4RVce/GoW2+fH8vniz5G1MNI4uezpc=";
-  };
+  #lockfile = builtins.fetchurl {
+  #  url = "https://raw.githubusercontent.com/bazelbuild/bazel/release-${version}/MODULE.bazel.lock";
+  #  sha256 = "sha256-5xPpCeWVKVp1s4RVce/GoW2+fH8vniz5G1MNI4uezpc=";
+  #};
+  # Use a local copy of the above lockfile to make ofborg happy.
+  lockfile = ./MODULE.bazel.lock;
 
   # Two-in-one format
   distDir = repoCache;
