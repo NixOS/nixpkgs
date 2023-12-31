@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
     patchShebangs test_jbig2dec.py
   '';
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   nativeBuildInputs = [ autoconf automake libtool ];
 
   # `autogen.sh` runs `configure`, and expects that any flags needed

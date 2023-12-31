@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "11.2.0";
+  version = "12.1.1";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     rev = finalAttrs.version;
-    sha256 = "sha256-CzgfxXGZXoJ56dX+mDPsHZC31YudrZXpX2tovh/Vjr0=";
+    hash = "sha256-ofUFieeRtpnzNv3Ad5oYwKWb2XcqQHoj601TIhydJyI=";
   };
   patches = [
     # Ideally, Accelerate/Accelerate.h should be used for this implementation,

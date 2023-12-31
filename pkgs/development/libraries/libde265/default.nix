@@ -14,14 +14,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
-  version = "1.0.14";
+  version = "1.0.15";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aZRtF4wYWxi/6ORNu7yVxFFdkvJTvBwPinL5lC0Mlqg=";
+    hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
