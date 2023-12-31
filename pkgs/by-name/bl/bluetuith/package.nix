@@ -17,7 +17,15 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "TUI-based bluetooth connection manager";
+    longDescription = ''
+      Bluetuith can transfer files via OBEX, perform authenticated pairing,
+      and (dis)connect different bluetooth devices. It interacts with bluetooth
+      adapters and can toogle their power and discovery state. Bluetuith can also
+      manage Bluetooth-based networking/tethering (PANU/DUN) and remote control
+      devices. The TUI has mouse support.
+    '';
     homepage = "https://github.com/darkhz/bluetuith";
+    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "bluetuith";
