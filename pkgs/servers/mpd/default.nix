@@ -9,7 +9,7 @@
 , audiofile, faad2, ffmpeg, flac, fluidsynth, game-music-emu
 , libmad, libmikmod, mpg123, libopus, libvorbis, lame
 # Filters
-, libsamplerate
+, libsamplerate, soxr
 # Outputs
 , alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
@@ -62,6 +62,7 @@ let
     lame          = [ lame ];
     # Filter plugins
     libsamplerate = [ libsamplerate ];
+    soxr          = [ soxr ];
     # Output plugins
     alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
