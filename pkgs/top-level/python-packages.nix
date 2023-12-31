@@ -15685,6 +15685,8 @@ self: super: with self; {
 
   vacuum-map-parser-base = callPackage ../development/python-modules/vacuum-map-parser-base { };
 
+  vacuum-map-parser-roborock = callPackage ../development/python-modules/vacuum-map-parser-roborock { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validators = callPackage ../development/python-modules/validators { };
