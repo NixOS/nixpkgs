@@ -1,4 +1,5 @@
 { lib
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,36 +12,37 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-ble";
-  version = "1.5.5";
-  format = "pyproject";
+  version = "1.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "sensorpush-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-17Yzpbcy/r+GlkLktgghehfAEboZHMbB/Dze1no4I80=";
+    hash = "sha256-g0UFEkTPpKqx5+hrM+bM6iQrG8EaMcFN01JdHEVH9VQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sensorpush_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
+    pytestCheckHook  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpush_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "sensorpush_ble"
