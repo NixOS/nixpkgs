@@ -19554,6 +19554,12 @@
     githubId = 7677567;
     name = "Victor SENE";
   };
+  vsoch = {
+    email = "contact@vsoch.com";
+    github = "vsoch";
+    githubId = 814322;
+    name = "Vanessa Sochat";
+  };
   vtuan10 = {
     email = "mail@tuan-vo.de";
     github = "vtuan10";
