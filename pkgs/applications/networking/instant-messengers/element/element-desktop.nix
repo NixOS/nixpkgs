@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     genericName = "Matrix Client";
     comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "element";
+    startupWMClass = "Element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 

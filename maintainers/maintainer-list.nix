@@ -13246,6 +13246,13 @@
     githubId = 6391776;
     name = "Nikita Voloboev";
   };
+  niklaskorz = {
+    name = "Niklas Korz";
+    email = "niklas@niklaskorz.de";
+    matrix = "@niklaskorz:korz.dev";
+    github = "niklaskorz";
+    githubId = 590517;
+  };
   NikolaMandic = {
     email = "nikola@mandic.email";
     github = "NikolaMandic";
@@ -17290,6 +17297,13 @@
     github = "sontek";
     githubId = 151924;
     name = "John Anderson";
+  };
+  soopyc = {
+    name = "Cassie Cheung";
+    email = "me@soopy.moe";
+    github = "soopyc";
+    githubId = 13762043;
+    matrix = "@sophie:nue.soopy.moe";
   };
   sophrosyne = {
     email = "joshuaortiz@tutanota.com";
