@@ -105,6 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
+
+    # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
+    # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
+    # and select the line that matches the current nixpkgs version of rocBLAS.
+    # Should likely use `rocmPackages.clr.gpuTargets`.
+    "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
   ]
   ++ lib.optionals openclSupport [
     "-DLLAMA_CLBLAST=ON"
