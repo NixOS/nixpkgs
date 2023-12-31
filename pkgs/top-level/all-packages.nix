@@ -12775,6 +12775,8 @@ with pkgs;
 
   regpg = callPackage ../tools/security/regpg { };
 
+  remote-desktop-manager = callPackage ../applications/networking/remote/remote-desktop-manager { };
+
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
