@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, glib
 , gtk3
 , meson
 , mesonEmulatorHook
@@ -38,7 +39,9 @@ stdenv.mkDerivation rec {
     mesonEmulatorHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
+    # Required by amtk-5.pc
+    glib
     gtk3
   ];
 
