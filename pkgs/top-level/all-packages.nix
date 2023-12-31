@@ -28961,7 +28961,7 @@ with pkgs;
 
   upscayl = callPackage ../applications/graphics/upscayl { };
 
-  usbguard = disable-warnings-if-gcc13 (callPackage ../os-specific/linux/usbguard { });
+  usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
 
