@@ -29,8 +29,9 @@ let
     # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
     # but none of the platform-specific binaries, as they are large and useless.
     requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
-      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_|apple_support).*" name;
+      name == "_main~bazel_build_deps~workspace_repo_cache"
+      || null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
+      && null != builtins.match "(platforms|com_google_|protobuf|rules_|.*bazel_|apple_support).*" name;
   };
 
   runLocal = name: attrs: script:
