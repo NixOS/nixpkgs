@@ -89,6 +89,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libmemstat = callPackage ./libmemstat.nix {};
   libprocstat = callPackage ./libprocstat.nix {};
   libexecinfo = callPackage ./libexecinfo.nix {};
+  localedef = callPackage ./localedef.nix {};
   config = callPackage ./config.nix {};
   libsbuf = callPackage ./libsbuf.nix {};
   file2c = callPackage ./file2c.nix {};
