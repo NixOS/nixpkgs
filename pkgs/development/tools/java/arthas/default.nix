@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
       description = "Java Diagnostic Tool,Arthas allows developers to troubleshoot production issues for Java applications without modifying code or restarting servers.";
       homepage = "https://arthas.aliyun.com/";
-      license = licenses.apache;
-      platforms = platforms.mesaPlatforms;
+      license = licenses.asl20;
+      platforms = platforms.all;
       maintainers = with maintainers; [ hitsmaxft ];
   };
   }

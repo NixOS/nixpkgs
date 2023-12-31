@@ -18,16 +18,11 @@ unpackPhase
 mkdir -p $out/arthas
 
 
-echo "binPath: ${binPATH}"
-
-echo $src
-ls -alh $src
-
 cp -r $src/* $out/arthas
 
 export baseDir="$out/arthas"
 
-makeWrapper $baseDir/as.sh $out/bin/as --set-default JAVA_HOME "$jdk" 
+makeWrapper $baseDir/as.sh $out/bin/as --set-default JAVA_HOME "$jdk"
 
 makeWrapper $baseDir/as.sh $out/bin/arthas --set-default JAVA_HOME "$jdk"
 
