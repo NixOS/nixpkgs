@@ -13564,6 +13564,12 @@
     githubId = 1839979;
     name = "Niklas Thörne";
   };
+  nudelsalat = {
+    email = "nudelsalat@clouz.de";
+    name = "Fabian Dreßler";
+    github = "Noodlesalat";
+    githubId = 12748782;
+  };
   nukaduka = {
     email = "ksgokte@gmail.com";
     github = "NukaDuka";
