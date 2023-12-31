@@ -3085,8 +3085,6 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
-  roxterm = callPackage ../applications/terminal-emulators/roxterm { };
-
   rxvt = callPackage ../applications/terminal-emulators/rxvt { };
 
   rxvt-unicode = callPackage ../applications/terminal-emulators/rxvt-unicode/wrapper.nix { };
