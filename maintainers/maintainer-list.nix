@@ -4594,6 +4594,12 @@
     githubId = 32810399;
     name = "Diffumist";
   };
+  Dines97 = {
+    name = "Denis Kaynar";
+    email = "kaynar.denis@gmail.com";
+    github = "Dines97";
+    githubId = 19364873;
+  };
   diogox = {
     name = "Diogo Xavier";
     github = "diogox";
