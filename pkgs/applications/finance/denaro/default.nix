@@ -14,17 +14,17 @@
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.9.2";
+  version = "2023.11.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
     rev = version;
-    hash = "sha256-3Atdi0R7OHpP1HUBWGu2Y4L8hr9jLPMIFYCEWeoEq6A=";
+    hash = "sha256-buMoB6ZTmzGjjSCOfdUvKbJ7xJmK/zHH8sz5iO3SJXo=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
   nugetDeps = ./deps.nix;
@@ -44,10 +44,10 @@ buildDotnetModule rec {
   # Denaro switches installation tool frequently (bash -> just -> cake)
   # For maintainability, let's do it ourselves
   postInstall = ''
-    substituteInPlace NickvisionMoney.Shared/org.nickvision.money.desktop.in --replace '@EXEC@' "NickvisionMoney.GNOME"
+    substituteInPlace NickvisionMoney.Shared/Linux/org.nickvision.money.desktop.in --replace '@EXEC@' "NickvisionMoney.GNOME"
     install -Dm444 NickvisionMoney.Shared/Resources/org.nickvision.money.svg -t $out/share/icons/hicolor/scalable/apps/
     install -Dm444 NickvisionMoney.Shared/Resources/org.nickvision.money-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
-    install -Dm444 NickvisionMoney.Shared/org.nickvision.money.desktop.in -T $out/share/applications/org.nickvision.money.desktop
+    install -Dm444 NickvisionMoney.Shared/Linux/org.nickvision.money.desktop.in -T $out/share/applications/org.nickvision.money.desktop
   '';
 
   runtimeDeps = [

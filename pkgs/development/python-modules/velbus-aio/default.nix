@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2023.11.0";
+  version = "2023.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j0NGeuxhtxmlpal9MpnlHqGv47uTVx1Lyfy9u0cEtYg=";
+    hash = "sha256-cYqEF2Odouu7U0DiU+n/gKUYJia8I4Qs1l+UI6JrWTM=";
     fetchSubmodules = true;
   };
 
