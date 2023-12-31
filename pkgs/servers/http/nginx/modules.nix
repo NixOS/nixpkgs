@@ -458,15 +458,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
