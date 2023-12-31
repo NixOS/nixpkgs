@@ -1,14 +1,21 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , python3
 , freetype
 , expat
 , libxslt
+, gettext
+, docbook-xsl-nons
+, fop
+, withPdf ? false
+, docbook_xml_dtd_45
 , gperf
 , dejavu_fonts
-, autoreconfHook
+, meson
+, ninja
 , CoreFoundation
 }:
 
@@ -23,12 +30,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
   };
 
+  patches = [
+    # TODO: wait until it is merged.
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/304
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/304.patch";
+      hash = "";
+    })
+  ];
+
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
+    gettext
+    docbook-xsl-nons
+    docbook_xml_dtd_45
     gperf
     libxslt
     pkg-config
     python3
+  ] ++ lib.optionals withPdf [
+    fop
   ];
 
   buildInputs = [
@@ -39,33 +61,39 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
-  postPatch = ''
-    # Requires networking.
-    sed -i '/check_PROGRAMS += test-crbug1004254/d' test/Makefile.am
-  '';
-
-  configureFlags = [
+  mesonFlags = [
+    # otherwise the fallback is in $out/
     "--sysconfdir=/etc"
-    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
+    "--localstatedir=/var"
     # just <1MB; this is what you get when loading config fails for some reason
-    "--with-default-fonts=${dejavu_fonts.minimal}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    "-Ddefault-fonts-dirs=${dejavu_fonts.minimal}"
+    (lib.mesonEnable "doc-pdf" withPdf)
   ];
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 
-  installFlags = [
-    # Don't try to write to /var/cache/fontconfig at install time.
-    "fc_cachedir=$(TMPDIR)/dummy"
-    "RUN_FC_CACHE_TEST=false"
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  postPatch = ''
+    patchShebangs \
+      conf.d/write-35-lang-normalize-conf.py \
+      doc/edit-xml.py \
+      doc/extract-man-list.py \
+      doc/run-quiet.py \
+      fc-case/fc-case.py \
+      fc-lang/fc-lang.py
+  '';
 
   postInstall = ''
+    # Move stuff from DESTDIR to proper location.
+    for o in $(getAllOutputNames); do
+        mv "$DESTDIR''${!o}" "$(dirname "''${!o}")"
+    done
+
+    mv "$DESTDIR/etc" "$out"
+
+    # Ensure we did not forget to install anything.
+    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}"
+    ! test -e "$DESTDIR"
+
     cd "$out/etc/fonts"
     xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --path $out/share/xml/fontconfig \
@@ -76,6 +104,16 @@ stdenv.mkDerivation rec {
     # probably not so useful.
     rm -r $bin/share/man/man3
   '';
+
+  env = {
+    # HACK: We want to install configuration files to $out/etc
+    # but fontconfig should read them from /etc on a NixOS system.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "dest";
+  };
 
   meta = with lib; {
     description = "A library for font customization and configuration";
