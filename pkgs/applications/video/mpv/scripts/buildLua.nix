@@ -53,7 +53,7 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
         }
         [ ${with builtins; toString (length extraScripts)} -eq 0 ] || {
           echo "mpvScripts.buildLua does not support 'extraScripts'" \
-               "when 'scriptPath' is a directory"
+               "when 'scriptPath' is a directory" >&2
           exit 1
         }
         mkdir -p "${scriptsDir}"
