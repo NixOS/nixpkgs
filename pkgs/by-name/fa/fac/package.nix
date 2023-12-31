@@ -1,13 +1,14 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, makeWrapper
+, makeBinaryWrapper
+, installShellFiles
 , git
 }:
 
 buildGoModule rec {
   pname = "fac";
-  version = "unstable-2023-12-29";
+  version = "2.0.0-unstable-2023-12-29";
 
   src = fetchFromGitHub {
     owner = "mkchoi212";
@@ -18,21 +19,25 @@ buildGoModule rec {
 
   vendorHash = "sha256-bmGRVTjleAFS5GGf2i/zN8k3SBtaEc3RbKSVZyF6eN4=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/fac \
-      --prefix PATH : ${git}/bin
+      --prefix PATH : ${lib.makeBinPath [ git ]}
 
     # Install man page, not installed by default
-    install -D assets/doc/fac.1 $out/share/man/man1/fac.1
+    installManPage assets/doc/fac.1
   '';
 
   meta = {
+    changelog = "https://github.com/mkchoi212/fac/releases/tag/v${version}";
     description = "CUI for fixing git conflicts";
     homepage = "https://github.com/mkchoi212/fac";
-    changelog = "https://github.com/mkchoi212/fac/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "fac";
     maintainers = with lib.maintainers; [ dtzWill ];
   };
 }
