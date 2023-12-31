@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
     description = "A free, open source launcher for Minecraft";
@@ -78,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = with platforms; linux ++ darwin;
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
   };
 })
