@@ -2,22 +2,24 @@
 , stdenv
 , fetchFromGitHub
 , cc65
+, lzsa
 , python3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-rom";
-  version = "44";
+  version = "46";
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-rom";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-x/U+8e869mkWZKmCiW2fZKGB9un2cFXNclemwxbAjLQ=";
+    hash = "sha256-PcLHIT84NbH+ejq8SY/UN+TYtRFWtqQBHwHqToFUol8=";
   };
 
   nativeBuildInputs = [
     cc65
+    lzsa
     python3
   ];
 
