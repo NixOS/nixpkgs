@@ -94,6 +94,7 @@ let
     Libsystem = callPackage ./libSystem.nix { };
     LibsystemCross = pkgs.darwin.Libsystem;
     libcharset = callPackage ./libcharset.nix { };
+    libcompression = callPackage ./libcompression.nix { };
     libunwind = callPackage ./libunwind.nix { };
     libnetwork = callPackage ./libnetwork.nix { };
     libpm = callPackage ./libpm.nix { };
