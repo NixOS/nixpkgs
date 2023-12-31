@@ -51,5 +51,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/repoze/repoze.sphinx.autointerface/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
+    # https://github.com/repoze/repoze.sphinx.autointerface/issues/21
+    broken = versionAtLeast sphinx.version "7.2";
   };
 }
