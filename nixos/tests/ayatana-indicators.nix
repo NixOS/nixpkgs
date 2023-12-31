@@ -27,6 +27,7 @@ in {
     services.ayatana-indicators = {
       enable = true;
       packages = with pkgs; [
+        ayatana-indicator-datetime
         ayatana-indicator-messages
       ] ++ (with pkgs.lomiri; [
         lomiri-indicator-network
@@ -69,7 +70,7 @@ in {
 
     # Now check if all indicators were brought up successfully, and kill them for later
   '' + (runCommandOverAyatanaIndicators (service: let serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service; in ''
-    machine.succeed("pgrep -f ${serviceExec}")
+    machine.succeed("pgrep -u ${user} -f ${serviceExec}")
     machine.succeed("pkill -f ${serviceExec}")
   '')) + ''
 
