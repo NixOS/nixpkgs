@@ -3,37 +3,8 @@
 
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
-with lib;
-
-{ /*
-    pname: Nix package name without special symbols and without version or
-    "emacs-" prefix.
-  */
-  pname
-  /*
-    ename: Original Emacs package name, possibly containing special symbols.
-  */
-, ename ? null
-, version
-, recipe
-, meta ? {}
-, ...
-}@args:
-
 let
-
-  defaultMeta = {
-    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
-  };
-
-in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
-
-  ename =
-    if ename == null
-    then pname
-    else ename;
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
 
   packageBuild = stdenv.mkDerivation {
     name = "package-build";
@@ -55,8 +26,34 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     ";
   };
 
+in
+
+{ /*
+    pname: Nix package name without special symbols and without version or
+    "emacs-" prefix.
+  */
+  pname
+  /*
+    ename: Original Emacs package name, possibly containing special symbols.
+  */
+, ename ? null
+, version
+, recipe
+, meta ? {}
+, ...
+}@args:
+
+genericBuild ({
+
+  ename =
+    if ename == null
+    then pname
+    else ename;
+
   elpa2nix = ./elpa2nix.el;
   melpa2nix = ./melpa2nix.el;
+
+  inherit packageBuild;
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
@@ -104,7 +101,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     runHook postInstall
   '';
 
-  meta = defaultMeta // meta;
+  meta = {
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
+  } // meta;
 }
 
 // removeAttrs args [ "meta" ])

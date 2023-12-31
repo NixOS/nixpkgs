@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cVmIxwO1TQ8H+Sm828sxaZ6InvIkdCRhFSH5k52W1DI=";
+    hash = "sha256-3y8ORRyWjr4KT818ktXrgX4jB0Rkrnf4DQaNkyXGrts=";
   };
 
   propagatedBuildInputs = [

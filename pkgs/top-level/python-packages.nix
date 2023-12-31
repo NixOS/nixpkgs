@@ -7187,6 +7187,8 @@ self: super: with self; {
 
   mongoquery = callPackage ../development/python-modules/mongoquery { };
 
+  monitorcontrol = callPackage ../development/python-modules/monitorcontrol { };
+
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
   monosat = pkgs.monosat.python {
@@ -9504,6 +9506,8 @@ self: super: with self; {
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
+
+  python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 

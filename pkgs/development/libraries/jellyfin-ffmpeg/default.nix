@@ -36,5 +36,6 @@ ffmpeg_6-full.overrideAttrs (old: rec {
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
     license = licenses.gpl3;
     maintainers = with maintainers; [ justinas ];
+    pkgConfigModules = [ "libavutil" ];
   };
 })
