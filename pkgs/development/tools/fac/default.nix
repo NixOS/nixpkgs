@@ -1,19 +1,22 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "fac";
-  version = "2.0.0";
-
-  goPackagePath = "github.com/mkchoi212/fac";
+  version = "unstable-2023-12-29";
 
   src = fetchFromGitHub {
     owner = "mkchoi212";
     repo = "fac";
-    rev = "v${version}";
-    sha256 = "054bbiw0slz9szy3ap2sh5dy97w3g7ms27rd3ww3i1zdhvnggwpc";
+    rev = "d232b05149564701ca3a21cd1a07be2540266cb2";
+    hash = "sha256-puSHbrzxTUebK1qRdWh71jY/f7TKgONS45T7PcZcy00=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-bmGRVTjleAFS5GGf2i/zN8k3SBtaEc3RbKSVZyF6eN4=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -22,14 +25,14 @@ buildGoPackage rec {
       --prefix PATH : ${git}/bin
 
     # Install man page, not installed by default
-    install -D go/src/${goPackagePath}/assets/doc/fac.1 $out/share/man/man1/fac.1
+    install -D assets/doc/fac.1 $out/share/man/man1/fac.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CUI for fixing git conflicts";
-    inherit (src.meta) homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    homepage = "https://github.com/mkchoi212/fac";
+    changelog = "https://github.com/mkchoi212/fac/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }
-
