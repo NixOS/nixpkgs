@@ -168,4 +168,23 @@
     };
   };
 
+  gitea = buildPythonPackage rec {
+    pname = "buildbot-gitea";
+    version = "1.8.0";
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-zYcILPp42QuQyfEIzmYKV9vWf47sBAQI8FOKJlZ60yA=";
+    };
+
+    # PEP 517 issue
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://github.com/lab132/buildbot-gitea";
+      description = "Buildbot plugin for integration with gitea";
+      maintainers = with maintainers; [ zimbatm ];
+      license = licenses.mit;
+    };
+  };
 }
