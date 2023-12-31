@@ -4,6 +4,7 @@
 , buildPythonPackage
 , certifi
 , cryptography
+, fetchpatch
 , fetchPypi
 , idna
 , isPyPy
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "revert-threadsafe-poolmanager.patch";
+      url = "https://github.com/urllib3/urllib3/commit/710114d7810558fd7e224054a566b53bb8601494.patch";
+      revert = true;
+      hash = "sha256-2O0y0Tij1QF4Hx5r+WMxIHDpXTBHign61AXLzsScrGo=";
+    })
+  ];
 
   # FIXME: remove backwards compatbility hack
   propagatedBuildInputs = passthru.optional-dependencies.brotli

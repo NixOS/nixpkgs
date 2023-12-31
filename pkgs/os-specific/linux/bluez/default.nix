@@ -36,6 +36,12 @@ in stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
       sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
     })
+    # CVE-2023-45866 / https://github.com/skysafe/reblog/tree/main/cve-2023-45866
+    (fetchpatch {
+      name = "CVE-2023-45866.patch";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/profiles/input?id=25a471a83e02e1effb15d5a488b3f0085eaeb675";
+      sha256 = "sha256-IuPQ18yN0EO/PkqdT/JETyOxdZCKewBiDjGN4CG2GLo=";
+    })
   ];
 
   buildInputs = [

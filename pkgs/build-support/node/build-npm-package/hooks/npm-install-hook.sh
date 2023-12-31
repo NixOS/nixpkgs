@@ -5,16 +5,14 @@ npmInstallHook() {
 
     runHook preInstall
 
-    # `npm pack` writes to cache
-    npm config delete cache
-
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
+    # `npm pack` writes to cache so temporarily override it
     while IFS= read -r file; do
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
         cp "${npmWorkspace-.}/$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
     while IFS=" " read -ra bin; do
         mkdir -p "$out/bin"
