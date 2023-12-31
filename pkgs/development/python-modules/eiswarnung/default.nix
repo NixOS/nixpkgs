@@ -34,9 +34,7 @@ buildPythonPackage rec {
       --replace 'pytz = ">=2022.7.1,<2024.0.0"' 'pytz = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+
 
   propagatedBuildInputs = [
     aiohttp
