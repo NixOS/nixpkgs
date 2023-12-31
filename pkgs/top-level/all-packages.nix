@@ -35316,8 +35316,6 @@ with pkgs;
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
-  insync = callPackage ../applications/networking/insync { };
-
   lemurs = callPackage ../applications/display-managers/lemurs { };
 
   libstrangle = callPackage ../tools/X11/libstrangle {
