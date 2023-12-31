@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+}:
 
 buildGoModule rec {
   pname = "bluetuith";
@@ -20,6 +24,8 @@ buildGoModule rec {
     "-w"
     "-X github.com/darkhz/bluetuith/cmd.Version=${version}@nixpkgs"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "TUI-based bluetooth connection manager";
