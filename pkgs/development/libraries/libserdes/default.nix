@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     chmod -x ''${!outputInclude}/include/libserdes/*.h
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "A schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
     homepage = "https://github.com/confluentinc/libserdes";
