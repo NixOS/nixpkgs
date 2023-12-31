@@ -1,21 +1,18 @@
-{ version
-, src
-, branch
-, compat-list
-
-, lib
+{ lib
 , stdenv
+, fetchFromGitHub
+, nix-update-script
 , wrapQtAppsHook
 , alsa-lib
 , boost
 , catch2_3
 , cmake
+, compat-list
 , cpp-jwt
 , cubeb
 , discord-rpc
 , doxygen
 , enet
-, fetchurl
 , ffmpeg
 , fmt
 , glslang
@@ -29,6 +26,7 @@
 , libzip
 , lz4
 , nlohmann_json
+, nx_tzdb
 , perl
 , pkg-config
 , python3
@@ -47,17 +45,17 @@
 , zlib
 , zstd
 }:
+stdenv.mkDerivation(finalAttrs: {
+  pname = "yuzu";
+  version = "1665";
 
-let
-  tzinfoVersion = "221202";
-  tzinfo = fetchurl {
-    url = "https://github.com/lat9nq/tzdb_to_nx/releases/download/${tzinfoVersion}/${tzinfoVersion}.zip";
-    hash = "sha256-mRzW+iIwrU1zsxHmf+0RArU8BShAoEMvCz+McXFFK3c=";
+  src = fetchFromGitHub {
+    owner = "yuzu-emu";
+    repo = "yuzu-mainline";
+    rev = "mainline-0-${finalAttrs.version}";
+    hash = "sha256-xzSup1oz83GPpOGh9aJJ5YjoFX/cBI8RV6SvDYNH/zA=";
+    fetchSubmodules = true;
   };
-in stdenv.mkDerivation {
-  pname = "yuzu-${branch}";
-
-  inherit version src;
 
   nativeBuildInputs = [
     cmake
@@ -69,6 +67,10 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    # vulkan-headers must come first, so the older propagated versions
+    # don't get picked up by accident
+    vulkan-headers
+
     alsa-lib
     boost
     catch2_3
@@ -101,7 +103,6 @@ in stdenv.mkDerivation {
     sndio
     speexdsp
     udev
-    vulkan-headers
     # intentionally omitted: xbyak - prefer vendored version for compatibility
     zlib
     zstd
@@ -120,6 +121,8 @@ in stdenv.mkDerivation {
     "-DENABLE_QT_TRANSLATION=ON"
 
     # use system libraries
+    # NB: "external" here means "from the externals/ directory in the source",
+    # so "off" means "use system"
     "-DYUZU_USE_EXTERNAL_SDL2=OFF"
     "-DYUZU_USE_EXTERNAL_VULKAN_HEADERS=OFF"
 
@@ -145,13 +148,13 @@ in stdenv.mkDerivation {
   preConfigure = ''
     # see https://github.com/NixOS/nixpkgs/issues/114044, setting this through cmakeFlags does not work.
     cmakeFlagsArray+=(
-      "-DTITLE_BAR_FORMAT_IDLE=yuzu | ${branch} ${version} (nixpkgs) {}"
-      "-DTITLE_BAR_FORMAT_RUNNING=yuzu | ${branch} ${version} (nixpkgs) | {}"
+      "-DTITLE_BAR_FORMAT_IDLE=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}"
+      "-DTITLE_BAR_FORMAT_RUNNING=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}"
     )
 
     # provide pre-downloaded tz data
     mkdir -p build/externals/nx_tzdb
-    ln -sf ${tzinfo} build/externals/nx_tzdb/${tzinfoVersion}.zip
+    ln -sf ${nx_tzdb} build/externals/nx_tzdb/${nx_tzdb.version}.zip
   '';
 
   # This must be done after cmake finishes as it overwrites the file
@@ -159,12 +162,14 @@ in stdenv.mkDerivation {
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "mainline-0-(.*)" ];
+  };
 
   meta = with lib; {
     homepage = "https://yuzu-emu.org";
     changelog = "https://yuzu-emu.org/entry";
-    description = "The ${branch} branch of an experimental Nintendo Switch emulator written in C++";
+    description = "An experimental Nintendo Switch emulator written in C++";
     longDescription = ''
       An experimental Nintendo Switch emulator written in C++.
       Using the mainline branch is recommended for general usage.
@@ -185,4 +190,4 @@ in stdenv.mkDerivation {
       k900
     ];
   };
-}
+})
