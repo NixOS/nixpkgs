@@ -20764,6 +20764,12 @@
     githubId = 8100652;
     name = "David Mell";
   };
+  zshipko = {
+    email = "zachshipko@gmail.com";
+    github = "zshipko";
+    githubId = 332534;
+    name = "Zach Shipko";
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
