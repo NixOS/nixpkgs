@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -28,14 +29,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-datetime";
-  version = "23.10.0";
+  version = "23.10.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
-    rev = finalAttrs.version;
-    hash = "sha256-Ba7Csk7HzhmXzzm4SiwTXHBDKc42wIKX+MHDRpHgK+w=";
+    # Release wasn't tagged?
+    # https://github.com/AyatanaIndicators/ayatana-indicator-datetime/issues/121
+    rev = "d8debd706fe92de09e5c654c4ea2cc5dd5ce0529";
+    hash = "sha256-cm1zhG9TODGe79n/fGuyVnWL/sjxUc3ZCu9FhqA1NLE=";
   };
+
+  patches = [
+    # Fix test-menus building & running
+    # Remove when https://github.com/AyatanaIndicators/ayatana-indicator-datetime/pull/122 merged & in release
+    (fetchpatch {
+      name = "0001-ayatana-indicator-datetime-tests-test-menu-Fix-build.patch";
+      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/a6527e90d855d43f43e1ff9bccda2fa22d3c60ab.patch";
+      hash = "sha256-RZY51UnrMcXbZbwyuCHSxY6toGByaObSEntVnIMz7+w=";
+    })
+    (fetchpatch {
+      name = "0002-ayatana-indicator-datetime-tests-Fix-show_alarms-tests.patch";
+      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/5186b51c004ec25e8a44fe5918bceb3d45abb108.patch";
+      hash = "sha256-goVcpN0MNOic8mpdJdhjgS9LHQLVEZT6ZEg1PqLvmsE=";
+    })
+  ];
 
   postPatch = ''
     # Queries systemd user unit dir via pkg_get_variable, can't override prefix
@@ -124,7 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) ayatana-indicators;
     };
-    updateScript = gitUpdater { };
+    # Latest release wasn't tagged, Don't try to bump down
+    #updateScript = gitUpdater { };
   };
 
   meta = with lib; {
@@ -134,7 +153,9 @@ stdenv.mkDerivation (finalAttrs: {
       event management tool.
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime";
-    changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.version}/ChangeLog";
+    # Latest release wasn't tagged
+    # changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.finalPackage.src.rev}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
