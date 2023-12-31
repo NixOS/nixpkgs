@@ -16335,5 +16335,29 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  palette-nvim = buildVimPlugin {
+    pname = "palette-nvim";
+    version = "2023-10-02";
+    src = fetchFromGitHub {
+      owner = "roobert";
+      repo = "palette.nvim";
+      rev = "a808c190a4f74f73782302152ebf323660d8db5f";
+      sha256 = "sha256-gCyDl+2fDa5CPpibxQnp+pJSkyRl0r03Sh3+IXIoQIQ=";
+    };
+    meta.homepage = "https://github.com/roobert/palette.nvim/";
+  };
+
+  obsidian-nvim = buildVimPlugin {
+    pname = "obsidian-nvim";
+    version = "2023-12-30";
+    src = fetchFromGitHub {
+      owner = "epwalsh";
+      repo = "obsidian.nvim";
+      rev = "88bf9150d9639a2cae3319e76abd7ab6b30d27f0";
+      sha256 = "sha256-irPk9iprbI4ijNUjMxXjw+DljudZ8aB3f/FJxXhFSoA=";
+    };
+    meta.homepage = "https://github.com/epwalsh/obsidian.nvim/";
+  };
+
 
 }

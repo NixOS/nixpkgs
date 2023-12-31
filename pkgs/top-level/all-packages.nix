@@ -1804,12 +1804,8 @@ with pkgs;
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
-  fastfetch = darwin.apple_sdk_11_0.callPackage ../tools/misc/fastfetch {
-    inherit (darwin.apple_sdk_11_0.frameworks)
-    AppKit Apple80211 Cocoa CoreDisplay CoreVideo CoreWLAN DisplayServices
-    Foundation IOBluetooth MediaRemote OpenCL;
-
-    inherit (darwin) moltenvk;
+  fastfetch = callPackage ../tools/misc/fastfetch {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   fscan = callPackage ../tools/security/fscan { };
@@ -3088,8 +3084,6 @@ with pkgs;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
-
-  roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
   rxvt = callPackage ../applications/terminal-emulators/rxvt { };
 
@@ -31354,9 +31348,7 @@ with pkgs;
 
   electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
 
-  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector {
-    libdwarf = libdwarf_20210528;
-  };
+  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
   elfx86exts = callPackage ../applications/misc/elfx86exts { };
 
@@ -34082,8 +34074,6 @@ with pkgs;
   nwg-panel = callPackage ../applications/misc/nwg-panel { };
 
   nwg-wrapper = callPackage ../applications/misc/nwg-wrapper { };
-
-  ocenaudio = callPackage ../applications/audio/ocenaudio { };
 
   ocm = callPackage ../applications/networking/cluster/ocm { };
 

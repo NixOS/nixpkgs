@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "pocket-updater-utility";
-  version = "2.38.1";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-Lk5YHouQSHSWWoqTiZPjaROGM0aV7FQUvnQV/NCWV/E=";
+    hash = "sha256-rT4aK+nkqTONvo8HU60R35MWM8odZQUtEPEV/yUZb90=";
   };
 
   buildInputs = [
