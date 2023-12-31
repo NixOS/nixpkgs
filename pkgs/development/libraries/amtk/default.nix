@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    dbus
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
@@ -45,12 +44,20 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
+  nativeCheckInputs = [
+    dbus # For dbus-run-session
+  ];
+
   doCheck = stdenv.isLinux;
   checkPhase = ''
+    runHook preCheck
+
     export NO_AT_BRIDGE=1
     ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   passthru.updateScript = gnome.updateScript {
