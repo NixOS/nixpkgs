@@ -42100,4 +42100,7 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  arthas = callPackage  ../development/tools/java/arthas {};
+
 }
