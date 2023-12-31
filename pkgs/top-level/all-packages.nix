@@ -2747,8 +2747,6 @@ with pkgs;
 
   hatari = callPackage ../applications/emulators/hatari { };
 
-  hercules = callPackage ../applications/emulators/hercules { };
-
   hostapd-mana = callPackage ../tools/networking/hostapd-mana { };
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
@@ -2949,16 +2947,7 @@ with pkgs;
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
   ### APPLICATIONS/EMULATORS/YUZU
-
-  yuzu-mainline = import ../applications/emulators/yuzu {
-    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
-    branch = "mainline";
-  };
-
-  yuzu-early-access = import ../applications/emulators/yuzu {
-    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
-    branch = "early-access";
-  };
+  yuzuPackages = callPackage ../applications/emulators/yuzu {};
 
   ### APPLICATIONS/EMULATORS/COMMANDERX16
 

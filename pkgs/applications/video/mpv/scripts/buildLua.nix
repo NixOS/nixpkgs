@@ -51,7 +51,7 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
           exit 1
         }
         mkdir -p "${scriptsDir}"
-        cp -a "${scriptPath}" "${scriptsDir}/${lib.removeSuffix ".lua" scriptName}"
+        cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
       else
         install -m644 -Dt "${scriptsDir}" \
           ${escapedList ([ scriptPath ] ++ extraScripts)}
