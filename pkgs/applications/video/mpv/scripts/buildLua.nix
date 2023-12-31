@@ -2,7 +2,10 @@
 , stdenvNoCC }:
 
 let
-  escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
+  # Escape strings for embedding in shell scripts
+  escaped = s: "'${lib.escape [ "'" ] s}'";
+  escapedList = lib.concatMapStringsSep " " escaped;
+
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
   scriptsDir = "$out/share/mpv/scripts";
 
@@ -56,8 +59,8 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
         mkdir -p "${scriptsDir}"
         cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
       else
-        install -m644 -Dt "${scriptsDir}" \
-          ${escapedList ([ scriptPath ] ++ extraScripts)}
+        install -m644 -Dt "${scriptsDir}" ${escaped scriptPath}
+        ${lib.optionalString (extraScripts != []) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''}
       fi
 
       runHook postInstall
