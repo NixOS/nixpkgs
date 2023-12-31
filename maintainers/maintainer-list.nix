@@ -8248,6 +8248,12 @@
     github = "Janik-Haag";
     githubId = 80165193;
   };
+  jankaifer = {
+    name = "Jan Kaifer";
+    email = "jan@kaifer.cz";
+    github = "jankaifer";
+    githubId = 12820484;
+  };
   jansol = {
     email = "jan.solanti@paivola.fi";
     github = "jansol";
