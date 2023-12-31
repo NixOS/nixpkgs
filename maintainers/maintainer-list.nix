@@ -13246,6 +13246,13 @@
     githubId = 6391776;
     name = "Nikita Voloboev";
   };
+  niklaskorz = {
+    name = "Niklas Korz";
+    email = "niklas@niklaskorz.de";
+    matrix = "@niklaskorz:korz.dev";
+    github = "niklaskorz";
+    githubId = 590517;
+  };
   NikolaMandic = {
     email = "nikola@mandic.email";
     github = "NikolaMandic";
