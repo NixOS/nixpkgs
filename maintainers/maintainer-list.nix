@@ -3974,6 +3974,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  d3vil0p3r = {
+    name = "Antonio Voza";
+    email = "vozaanthony@gmail.com";
+    github = "D3vil0p3r";
+    githubId = 83867734;
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
