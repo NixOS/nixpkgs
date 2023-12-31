@@ -6,33 +6,33 @@
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-dEwz052aYcJtKpRcP8t7gE2RHuHPQ4T0zHFMv6zVZ6g="
+    "rev": "2023.12.02",
+    "hash": "sha256-13GSOxzt+yQQ3CvLRvBvlEe5dxqI//0SzspxxoOVZ10="
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.10.30",
-    "hash": "sha256-fuTQnnuWjIsABx457y+n6luLxQf+b9TiZGLXYjNsUrw="
+    "rev": "2023.12.23",
+    "hash": "sha256-E41AZUOmYjUZTPho4IF+oI8Yvry3PJjbfzJWATqHA3I="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-LGYGCxEPdZL4BU3TGiFxydu7AN8g5kqOdW+dcbiCf7E="
+    "rev": "2023.12.24",
+    "hash": "sha256-AXvHr5AyDV5DccYw5+ZQWaEeeW339U0Y8BNSSGup7NQ="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2023.05.31",
-    "hash": "sha256-QXu/p3o0RSwMyntFYrjIQBtOBGvL9rAsINaglG3fZvo="
+    "rev": "2023.12.15",
+    "hash": "sha256-x0HrW/G2ky59XHwvdjS7aVjNlTm2+n7IIgWrwxGaiak="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.11.16",
-    "hash": "sha256-FxUV+K9JRsdr0xqQzvg1UI4bBHyhqxiVoPN58h2+WVg="
+    "rev": "2023.12.15.2",
+    "hash": "sha256-63U5AB07l+4/HBZGYVarHd6Z8ek3+jGkpzt4g55pLVo="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-RNXP8O3UF+hwA3TNzLorZqlt04Idnc4Z9LA87JJSsZE="
+    "rev": "2023.12.24",
+    "hash": "sha256-tlkWZUJhCoVHLT7fLL06VhTK7ESp2hNb06Kb0+6z1xQ="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-s9ZKrL+XIWIwejnLz+uuyDbbDuOZLJhiuiMChKB4Reg="
+    "rev": "2023.12.02",
+    "hash": "sha256-NDYhjmVGiw9UKfOQhXLdJiTaGZeTs8kr2hBujI2s+3E="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.5.6",
-    "hash": "sha256-7TuHCCaH8/RxiVQmDILPW4T6op/XW6djwA5iSh/Yb5w="
+    "rev": "v11.5.8",
+    "hash": "sha256-YibwdhlgjgI30gqYsKchgDPlOSpBiDBDJNlUDFMygGs="
   }
 }
