@@ -36,23 +36,26 @@ let
     then builtins.substring 2 (-1) str
     else str;
 
+  # We take any "attributes" object that has a "sha256" field. Every value
+  # under "attributes" is assumed to be an object, and all the "attributes"
+  # with a "sha256" field are assumed to have either a "urls" or "url" field.
+  #
+  # We add them to the `acc`umulator:
+  #
+  #    acc // {
+  #      "ffad2b06ef2e09d040...fc8e33706bb01634" = fetchurl {
+  #        name = "source";
+  #        sha256 = "ffad2b06ef2e09d040...fc8e33706bb01634";
+  #        urls = [
+  #          "https://mirror.bazel.build/github.com/golang/library.zip",
+  #          "https://github.com/golang/library.zip"
+  #        ];
+  #      };
+  #    }
+  #
+  # !REMINDER! This works on a best-effort basis, so try to keep it from
+  # failing loudly. Prefer warning traces.
   extract_source = f: acc: value:
-    # We take any "attributes" object that has a "sha256" field. Every value
-    # under "attributes" is assumed to be an object, and all the "attributes"
-    # with a "sha256" field are assumed to have either a "urls" or "url" field.
-    #
-    # We add them to the `acc`umulator:
-    #
-    #    acc // {
-    #      "ffad2b06ef2e09d040...fc8e33706bb01634" = fetchurl {
-    #        name = "source";
-    #        sha256 = "ffad2b06ef2e09d040...fc8e33706bb01634";
-    #        urls = [
-    #          "https://mirror.bazel.build/github.com/golang/library.zip",
-    #          "https://github.com/golang/library.zip"
-    #        ];
-    #      };
-    #    }
     let
       attrs = value.attributes;
       entry = hash: urls: name: {
@@ -65,22 +68,37 @@ let
           passthru.urls = urls;
         };
       };
-      insert = acc: hash: urls: name:
-        acc // entry (sanitize hash) (map sanitize urls) (sanitize name);
-      accWithRemotePatches = lib.foldlAttrs
-        (acc: url: hash: insert acc hash [ url ] attrs.name)
+      insert = acc: hash: urls:
+        let
+          validUrls = builtins.isList urls
+            && builtins.all (url: builtins.isString url && builtins.substring 0 4 url == "http") urls;
+          validName = builtins.isString attrs.name;
+          validHash = builtins.isString hash;
+          valid = validUrls && validName && validHash;
+        in
+        if valid then acc // entry hash urls attrs.name
+        else acc;
+      withToplevelValue = acc: insert acc
+        (attrs.integrity or attrs.sha256)
+        (attrs.urls or [ attrs.url ]);
+      # for http_file patches
+      withRemotePatches = acc: lib.foldlAttrs
+        (acc: url: hash: insert acc hash [ url ])
         acc
         (attrs.remote_patches or { });
-      accWithNewSource = insert
-        accWithRemotePatches
-        (attrs.integrity or attrs.sha256)
-        (attrs.urls or [ attrs.url ])
-        attrs.name;
+      # for _distdir_tar
+      withArchives = acc: lib.foldl'
+        (acc: archive: insert acc attrs.sha256.${archive} attrs.urls.${archive})
+        acc
+        (attrs.archives or [ ]);
+      addSources = acc: withToplevelValue (withRemotePatches (withArchives acc));
     in
     if builtins.isAttrs value && value ? attributes
+      && builtins.isAttrs attrs && attrs ? name
       && (attrs ? sha256 || attrs ? integrity)
+      && (attrs ? urls || attrs ? url)
       && f attrs.name
-    then accWithNewSource
+    then addSources acc
     else acc;
 
   requiredSourcePredicate = n: requiredDepNamePredicate (sanitize n);
