@@ -20451,7 +20451,9 @@ with pkgs;
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  yourkit-java = callPackage ../development/tools/yourkit-java { };
+  yourkit-java = callPackage ../development/tools/yourkit-java {
+    jre = jdk17;
+  };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
