@@ -579,6 +579,6 @@ stdenv.mkDerivation rec {
     };
 
     # For ease of debugging
-    inherit distDir repoCache;
+    inherit distDir repoCache lockfile;
   };
 }
