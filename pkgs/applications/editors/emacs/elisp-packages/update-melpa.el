@@ -257,10 +257,9 @@ return Promise to resolve in that process."
       url (lambda (status)
             (funcall resolve (condition-case err
                                  (progn
-                                   (goto-char (point-min))
-                                   (search-forward "\n\n")
+                                   (url-http-parse-headers)
+                                   (goto-char url-http-end-of-headers)
                                    (message (buffer-substring (point-min) (point)))
-                                   (delete-region (point-min) (point))
                                    (funcall parser))
                                (funcall reject err))))))))
 
