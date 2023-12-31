@@ -13,7 +13,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-pYVEFKLPfstWWO6ypgv7ntAaE1Wmq2XKuZC2ccMa8Vc=";
 
-  ldflags = [ "-s" "-w" ];
+  CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/darkhz/bluetuith/cmd.Version=${version}@nixpkgs"
+  ];
 
   meta = with lib; {
     description = "TUI-based bluetooth connection manager";
