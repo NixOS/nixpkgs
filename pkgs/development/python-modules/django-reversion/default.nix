@@ -3,12 +3,13 @@
 , fetchPypi
 , django
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "django-reversion";
   version = "5.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,6 +17,10 @@ src = fetchPypi {
     inherit pname version;
     hash = "sha256-oXJC1o7oAfvuaJ0sKEqpWN1u9LiigA7AYcgbFnTxwBs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django
