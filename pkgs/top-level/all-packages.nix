@@ -1804,12 +1804,8 @@ with pkgs;
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
-  fastfetch = darwin.apple_sdk_11_0.callPackage ../tools/misc/fastfetch {
-    inherit (darwin.apple_sdk_11_0.frameworks)
-    AppKit Apple80211 Cocoa CoreDisplay CoreVideo CoreWLAN DisplayServices
-    Foundation IOBluetooth MediaRemote OpenCL;
-
-    inherit (darwin) moltenvk;
+  fastfetch = callPackage ../tools/misc/fastfetch {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   fscan = callPackage ../tools/security/fscan { };
