@@ -77,6 +77,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   iconv = callPackage ./iconv.nix {};
   libcapsicum = callPackage ./libcapsicum.nix {};
   libcasper = callPackage ./libcasper.nix {};
+  libcrypt = callPackage ./libcrypt.nix {};
   libnv = callPackage ./libnv.nix {};
   libutil = callPackage ./libutil.nix {};
   libjail = callPackage ./libjail.nix {};
