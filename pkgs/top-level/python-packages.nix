@@ -16443,7 +16443,7 @@ self: super: with self; {
 
   zope_event = callPackage ../development/python-modules/zope_event { };
 
-  zope_exceptions = callPackage ../development/python-modules/zope_exceptions { };
+  zope-exceptions = callPackage ../development/python-modules/zope-exceptions { };
 
   zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
 
