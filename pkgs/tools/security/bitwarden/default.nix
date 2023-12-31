@@ -16,8 +16,10 @@
 , moreutils
 , napi-rs-cli
 , nodejs_18
+, patchutils_0_4_2
 , pkg-config
 , python3
+, runCommand
 , rustc
 , rustPlatform
 }:
@@ -55,7 +57,16 @@ in buildNpmPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
-    inherit patches src;
+    inherit src;
+    patches = map
+      (patch: runCommand
+        (builtins.baseNameOf patch)
+        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
+        ''
+          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
+        ''
+      )
+      patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
     hash = "sha256-pCy3hGhI3mXm4uTOaFMykOzJqK2PC0t0hE8MrJKtA/k=";
