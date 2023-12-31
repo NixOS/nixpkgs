@@ -148,6 +148,7 @@ let
         --repository_cache=${mergedRepoCache} \
         ${extraBazelArgs} \
         --enable_bzlmod \
+        --lockfile_mode=error \
         --verbose_failures \
         //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
