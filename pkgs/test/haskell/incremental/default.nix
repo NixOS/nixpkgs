@@ -9,7 +9,7 @@ let
   inherit (haskell.lib.compose) overrideCabal;
 
   # Incremental builds work with GHC >=9.4.
-  temporary = haskell.packages.ghc944.temporary;
+  temporary = haskell.haskellPackages.temporary;
 
   # This will do a full build of `temporary`, while writing the intermediate build products
   # (compiled modules, etc.) to the `intermediates` output.
