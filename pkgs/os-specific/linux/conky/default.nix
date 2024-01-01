@@ -16,13 +16,14 @@
 
 , ncursesSupport      ? true      , ncurses       ? null
 , x11Support          ? true      , freetype, xorg
+, waylandSupport      ? true      , pango, wayland, wayland-protocols, wayland-scanner
 , xdamageSupport      ? x11Support, libXdamage    ? null
 , doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
 
 , luaSupport          ? true      , lua           ? null
 , luaImlib2Support    ? luaSupport && imlib2Support
-, luaCairoSupport     ? luaSupport && x11Support, cairo ? null
+, luaCairoSupport     ? luaSupport && (x11Support || waylandSupport), cairo ? null
 , toluapp ? null
 
 , wirelessSupport     ? true      , wirelesstools ? null
@@ -83,6 +84,9 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+  '' + optionalString waylandSupport ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
   '';
 
   env = {
@@ -93,12 +97,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
+    ++ optional  waylandSupport     wayland-scanner
     ++ optional  luaImlib2Support   toluapp
     ++ optional  luaCairoSupport    toluapp
     ;
   buildInputs = [ glib libXinerama ]
     ++ optional  ncursesSupport     ncurses
     ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
+    ++ optionals waylandSupport     [ pango wayland wayland-protocols ]
     ++ optional  xdamageSupport     libXdamage
     ++ optional  imlib2Support      imlib2
     ++ optional  luaSupport         lua
@@ -124,6 +130,7 @@ stdenv.mkDerivation rec {
     ++ optional (!ncursesSupport)   "-DBUILD_NCURSES=OFF"
     ++ optional rssSupport          "-DBUILD_RSS=ON"
     ++ optional (!x11Support)       "-DBUILD_X11=OFF"
+    ++ optional waylandSupport      "-DBUILD_WAYLAND=ON"
     ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
     ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
     ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
