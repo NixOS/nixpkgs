@@ -77,10 +77,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-L8YSbdk+qQl17L4IRajFD/AEWRXb2w7xH9sM9qPGrQo=";
   };
 
-  postPatch = ''
-    sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
-      cmake/ConkyPlatformChecks.cmake
-  '' + optionalString docsSupport ''
+  postPatch = optionalString docsSupport ''
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
