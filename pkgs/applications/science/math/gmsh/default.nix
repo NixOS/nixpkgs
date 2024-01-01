@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
+{ lib, stdenv, fetchurl, fetchpatch, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
 , zlib, libGL, libGLU, xorg, opencascade-occt
 , python ? null, enablePython ? false }:
 
@@ -24,7 +24,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./fix-python.patch ];
+  patches = [
+    ./fix-python.patch
+
+    # Pull upstream fix git gcc-13:
+    #   https://gitlab.onelab.info/gmsh/gmsh/-/issues/2416
+    (fetchpatch {
+      name = "gcc-13-p1.patch";
+      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/fb81a9c9026700e078de947b4522cb39e543a86b.patch";
+      hash = "sha256-1GInFqQZvOgflC3eQTjmZ9uBGFASRNCpCwDACN3yTQ4=";
+    })
+    (fetchpatch {
+      name = "gcc-13-p2.patch";
+      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/aceb09c807b78ea26555f99fcb16c4f87c31fb5a.patch";
+      hash = "sha256-6FI0hIvj8hglCvxoKV0GzT2/F/Wz+ddkxV/TLzzJBLU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace api/gmsh.py --subst-var-by LIBPATH ${placeholder "out"}/lib/libgmsh.so
