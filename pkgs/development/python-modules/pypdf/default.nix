@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 
 # build-system
@@ -36,6 +37,14 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     hash = "sha256-vE5ujknMpufBuwWqtjkLegTRe4eDAvBVPCVM6It2pHQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-46250.patch";
+      url = "https://github.com/py-pdf/pypdf/commit/9b23ac3c9619492570011d551d521690de9a3e2d.patch";
+      hash = "sha256-A6UEJzDAcDBoMirfow7oXLFAaDG/j4QXEHGbHBgoZA4=";
+    })
+  ];
 
   outputs = [
     "out"
