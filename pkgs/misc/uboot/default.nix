@@ -71,7 +71,6 @@ let
       ncurses # tools/kwboot
       bc
       bison
-      dtc
       flex
       installShellFiles
       (buildPackages.python3.withPackages (p: [
@@ -90,7 +89,7 @@ let
     enableParallelBuilding = true;
 
     makeFlags = [
-      "DTC=dtc"
+      "DTC=${lib.getExe buildPackages.dtc}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
