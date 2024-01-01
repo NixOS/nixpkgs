@@ -8,19 +8,21 @@
 , pillow
 , tinycss2
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "CairoSVG";
-  version = "2.7.0";
+  version = "2.7.1";
   disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
+    hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
   };
 
-  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
+  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 setuptools];
 
   propagatedNativeBuildInputs = [ cairocffi ];
 
@@ -46,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://cairosvg.org";
     license = licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dansbandit ];
   };
 }
