@@ -54,7 +54,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # terminfo is not built if GHC is a cross compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;

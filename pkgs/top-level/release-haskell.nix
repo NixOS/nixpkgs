@@ -70,6 +70,7 @@ let
     ghc945
     ghc946
     ghc947
+    ghc948
     ghc962
     ghc963
     ghc981
@@ -565,6 +566,7 @@ let
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc947
+        compilerNames.ghc948
         compilerNames.ghc962
         compilerNames.ghc963
       ];
