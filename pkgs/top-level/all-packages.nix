@@ -18127,8 +18127,6 @@ with pkgs;
 
   h3 = h3_3;
 
-  amtk = callPackage ../development/libraries/amtk { };
-
   avrlibc      = callPackage ../development/misc/avr/libc { };
   avrlibcCross = callPackage ../development/misc/avr/libc {
     stdenv = crossLibcStdenv;
@@ -18564,6 +18562,17 @@ with pkgs;
       darwin.apple_sdk_11_0.stdenv else
       if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     bazel_self = bazel_6;
+  };
+
+  bazel_7 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_7 {
+    inherit (darwin) cctools sigtool;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation IOKit;
+    buildJdk = jdk17_headless;
+    runJdk = jdk17_headless;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv
+      else if stdenv.cc.isClang then llvmPackages.stdenv
+      else stdenv;
+    bazel_self = bazel_7;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
