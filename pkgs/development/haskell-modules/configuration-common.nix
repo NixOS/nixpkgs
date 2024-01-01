@@ -2714,19 +2714,24 @@ self: super: {
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
-  # 2022-12-02: Needs newer postgrest package
-  # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
-  # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
-  # 2022-12-02: Tests require running postresql server
-  postgrest = dontCheck (doJailbreak (overrideSrc rec {
-    version = "10.1.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "PostgREST";
-      repo = "postgrest";
-      rev = "v${version}";
-      sha256 = "sha256-ceSPBH+lzGU1OwjolcaE1BCpkKCJrvMU5G8TPeaJesM=";
-    };
-  } super.postgrest));
+  # 2023-12-20: Needs newer hasql-pool package and extra dependencies
+  postgrest = lib.pipe (super.postgrest.overrideScope (lself: lsuper: {
+    hasql-pool = lself.hasql-pool_0_10;
+  })) [
+    (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
+    # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
+    doJailbreak
+    # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
+    (overrideSrc rec {
+      version = "12.0.2";
+      src = pkgs.fetchFromGitHub {
+        owner = "PostgREST";
+        repo = "postgrest";
+        rev = "v${version}";
+        hash = "sha256-fpGeL8R6hziEtIgHUMfWLF7JAjo3FDYQw3xPSeQH+to=";
+      };
+    })
+  ];
 
   html-charset = dontCheck super.html-charset;
 
@@ -2819,5 +2824,9 @@ self: super: {
     ipython-kernel = self.ipython-kernel_0_11_0_0;
     ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
   });
+
+  # 2024-01-01: Too strict bounds on megaparsec
+  # Fixed in 0.2.8: https://github.com/PostgREST/configurator-pg/pull/20
+  configurator-pg = doJailbreak super.configurator-pg;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
