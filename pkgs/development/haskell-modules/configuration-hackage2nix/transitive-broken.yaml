@@ -235,7 +235,6 @@ dont-distribute-packages:
  - IORefCAS
  - IndexedList
  - InfixApplicative
- - InternedData
  - JSON-Combinator
  - JSON-Combinator-Examples
  - Javasf
@@ -293,7 +292,6 @@ dont-distribute-packages:
  - NTRU
  - NXT
  - NaperianNetCDF
- - NaturalLanguageAlphabets
  - NearContextAlgebra
  - Ninjas
  - NoSlow
@@ -662,7 +660,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -913,8 +910,6 @@ dont-distribute-packages:
  - comonad-random
  - compaREST
  - compact-mutable
- - compact-mutable-vector
- - compact-socket
  - complexity
  - comprehensions-ghc
  - computational-algebra
@@ -3509,9 +3504,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-postgresql
- - selda-sqlite
  - selenium-server
  - semantic-source
  - semantic-version
@@ -3842,7 +3834,6 @@ dont-distribute-packages:
  - tagged-list
  - tagged-th
  - tagsoup-navigate
- - tagstew
  - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
