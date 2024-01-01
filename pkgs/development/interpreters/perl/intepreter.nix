@@ -252,6 +252,10 @@ stdenv.mkDerivation (rec {
     unpackFile ${perl-cross-src}
     chmod -R u+w ${perl-cross-src.name}
     cp -R ${perl-cross-src.name}/* perl-${version}/
+  '' + lib.optionalString (stdenv.hostPlatform.isFreeBSD && crossCompiling) ''
+    sed -E -i -e "s/crypt.h/unistd.h/g" $(find perl-${version} -type f -name '*.c')
+    sed -E -i -e "s/crypt.h/unistd.h/g" $(find perl-${version} -type f -name '*.h')
+    sed -E -i -e "s/crypt.h/unistd.h/g" $(find perl-${version} -type f -name '*.sh')
   '';
 
   configurePlatforms = [ "build" "host" "target" ];
