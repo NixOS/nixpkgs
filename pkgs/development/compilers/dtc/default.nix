@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;
+    mainProgram = "dtc";
   };
 })
