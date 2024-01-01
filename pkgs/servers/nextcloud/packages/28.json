@@ -229,6 +229,16 @@
       "agpl"
     ]
   },
+  "user_oidc": {
+    "sha256": "0a9hkp69xpw5nzb533nfh56zs7rf2cvhi4yc6d1yjqv9jdak7vi4",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v1.3.5/user_oidc-v1.3.5.tar.gz",
+    "version": "1.3.5",
+    "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
+    "homepage": "https://github.com/nextcloud/user_oidc",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "user_saml": {
     "sha256": "0y5l66ig38202mg5zhy6yi72fz8fbsr7410q6qclxivna3gvyzrc",
     "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.0.1/user_saml-v6.0.1.tar.gz",
