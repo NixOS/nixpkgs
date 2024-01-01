@@ -929,6 +929,10 @@
     dependencies = with self; [ promise-async ];
   };
 
+  obsidian-nvim = super.obsidian-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   octo-nvim = super.octo-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   };
@@ -1067,12 +1071,12 @@
 
   sniprun =
     let
-      version = "1.3.9";
+      version = "1.3.10";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-g2zPGAJIjMDWn8FCsuRPZyYHDk+ZHCd04lGlYHvb4OI=";
+        hash = "sha256-7tDREZ8ZXYySHrXVOh+ANT23CknJQvZJ8WtU5r0pOOQ=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1082,7 +1086,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-h/NhDFp+Yiyx37Tlfu0W9rMnd+ZmQp5gt+qhY3PB7DE=";
+        cargoHash = "sha256-n/HW+q4Xrme/ssS9Th5uFEUsDgkxRxKt2wSR8k08uHY=";
 
         nativeBuildInputs = [ makeWrapper ];
 

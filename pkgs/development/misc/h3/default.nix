@@ -2,7 +2,7 @@
 , stdenv
 , cmake
 , fetchFromGitHub
-, static ? stdenv.hostPlatform.isStatic
+, withFilters ? false
 }:
 
 let
@@ -18,16 +18,19 @@ let
         inherit hash;
       };
 
+      outputs = [ "out" "dev" ];
+
       nativeBuildInputs = [ cmake ];
 
       cmakeFlags = [
-        "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+        "-DBUILD_SHARED_LIBS=ON"
         "-DBUILD_BENCHMARKS=OFF"
         "-DBUILD_FUZZERS=OFF"
         "-DBUILD_GENERATORS=OFF"
         "-DENABLE_COVERAGE=OFF"
         "-DENABLE_FORMAT=OFF"
         "-DENABLE_LINTING=OFF"
+        (lib.cmakeBool "BUILD_FILTERS" withFilters)
       ];
 
       meta = with lib; {

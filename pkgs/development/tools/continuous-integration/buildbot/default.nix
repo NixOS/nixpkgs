@@ -7,11 +7,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.49";
+        version = "1.4.50";
         src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-Bv8ly64ww5bEt3N0ZPKn/Deme32kCZk7GCsCTOyArtk=";
+          hash = "sha256-O5fd9Qn8IeELCUA7UhmwbFtViyf8JFMVAnT6TnBwfb8=";
         };
         disabledTestPaths = [
            "test/aaa_profiling"

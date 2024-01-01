@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/traefik" ];
 
   preBuild = ''
-    go generate
+    GOOS= GOARCH= CGO_ENABLED=0 go generate
 
     CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
 

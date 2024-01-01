@@ -12,23 +12,17 @@
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.3.8";
+  version = "1.3.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";
-    repo = pname;
+    repo = "skodaconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-Isnji6hXkTuTmbMpSuim9uG5ECSDX6A8QZ13sTCU9t0=";
+    hash = "sha256-7QDelJzyRnYNqVP9IuREpCm5s+qJ8cxSEn1YcqnYepA=";
   };
-
-  postPatch = ''
-    # https://github.com/skodaconnect/skodaconnect/pull/103
-    substituteInPlace pyproject.toml \
-      --replace "Bug Tracker" '"Bug Tracker"'
-  '';
 
   nativeBuildInputs = [
     flit-core

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nixosTests
 , php
-, pkgs
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -31,8 +30,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -vr * $out/
+    runHook postInstall
   '';
 
   meta = with lib; {
