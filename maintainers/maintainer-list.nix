@@ -16786,6 +16786,12 @@
     }];
     name = "Shane Sveller";
   };
+  shard7 = {
+    email = "sh7user@gmail.com";
+    github = "shard77";
+    githubId = 106669955;
+    name = "Léon Gessner";
+  };
   shardy = {
     email = "shardul@baral.ca";
     github = "shardulbee";
