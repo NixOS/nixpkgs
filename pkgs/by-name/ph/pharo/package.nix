@@ -2,7 +2,7 @@
 , stdenv
 , cairo
 , cmake
-, fetchurl
+, fetchzip
 , freetype
 , libffi
 , libgit2
@@ -12,18 +12,17 @@
 , openssl
 , pixman
 , SDL2
-, unzip
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pharo";
-  version = "10.0.8";
+  version = "10.0.9-de76067";
 
-  src = fetchurl {
+  src = fetchzip {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
-    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-10.0.8-b323c5f-Linux-x86_64-c-src.zip";
-    hash = "sha256-5IHymk6yl3pMLG3FeM4nqos0yLYMa3B2+hYW08Yo1V0=";
+    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-${finalAttrs.version}-Linux-x86_64-c-src.zip";
+    hash = "sha256-INeQGYCxBu7DvFmlDRXO0K2nhxcd9K9Xwp55iNdlvhk=";
   };
 
   strictDeps = true;
@@ -43,7 +42,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper
-    unzip
   ];
 
   cmakeFlags = [
@@ -94,4 +92,4 @@ stdenv.mkDerivation {
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
   };
-}
+})
