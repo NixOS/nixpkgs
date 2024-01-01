@@ -451,7 +451,9 @@ in
       description = lib.mdDoc ''
         Device for manual resume attempt during boot. This should be used primarily
         if you want to resume from file. If left empty, the swap partitions are used.
-        Specify here the device where the file resides.
+        Specify here the device where the file resides.  If
+        `boot.initrd.systemd.enable = true`, then a device needs to be specified for
+        hibernation to work, even if a swap partition is used.
         You should also use {var}`boot.kernelParams` to specify
         `«resume_offset»`.
       '';
