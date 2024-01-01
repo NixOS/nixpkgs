@@ -929,6 +929,10 @@
     dependencies = with self; [ promise-async ];
   };
 
+  obsidian-nvim = super.obsidian-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   octo-nvim = super.octo-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   };

@@ -36,7 +36,7 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
+  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; zfs = cfg.zfsPackage; }
     else grubPkgs.grub2;
 
   grub =
@@ -611,6 +611,16 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built against libzfs.
+        '';
+      };
+
+      zfsPackage = mkOption {
+        type = types.package;
+        internal = true;
+        default = pkgs.zfs;
+        defaultText = literalExpression "pkgs.zfs";
+        description = lib.mdDoc ''
+          Which ZFS package to use if `config.boot.loader.grub.zfsSupport` is true.
         '';
       };
 

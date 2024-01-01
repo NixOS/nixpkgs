@@ -36,6 +36,9 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
     dontBuild = true;
     preferLocalBuild = true;
 
+    # Prevent `patch` from emitting `.orig` files (that end up in the output)
+    patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
+
     outputHashMode = "recursive";
     installPhase = ''
       runHook preInstall
@@ -51,7 +54,7 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
           exit 1
         }
         mkdir -p "${scriptsDir}"
-        cp -a "${scriptPath}" "${scriptsDir}/${lib.removeSuffix ".lua" scriptName}"
+        cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
       else
         install -m644 -Dt "${scriptsDir}" \
           ${escapedList ([ scriptPath ] ++ extraScripts)}

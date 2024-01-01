@@ -42,18 +42,6 @@ let
     };
   };
 in {
-  nextcloud25 = throw ''
-    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud26;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
-    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  '';
-
   nextcloud26 = generic {
     version = "26.0.10";
     hash = "sha256-yArkYMxOmvfQsJd6TJJX+t22a/V5OW9nwHfgLZsmlIw=";
