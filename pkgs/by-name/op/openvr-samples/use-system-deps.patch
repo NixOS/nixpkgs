@@ -1,0 +1,47 @@
+diff --git a/samples/CMakeLists.txt b/samples/CMakeLists.txt
+index 545ff1a..c984c63 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -124,6 +124,7 @@ endif()
+ 
+ ## SDL 2
+ ## osx32 and linux32 cmake can spot each others' .so and .a files, so keep them apart
++if(0)
+ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   foreach(lib ${SDL_REQUIRED_LIBRARIES})
+     find_library(${lib}_LIBRARY
+@@ -167,7 +168,14 @@ if(NOT (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+   )
+   set(VULKAN_INCLUDE_DIR ${THIRDPARTY_DIR}/vulkan-1.0.49.0/include)
+ endif()
++endif()
++
++find_package(sdl2 REQUIRED)
++find_package(VulkanHeaders REQUIRED)
++find_package(VulkanLoader REQUIRED)
+ 
++list(APPEND SDL2_LIBRARIES "SDL2::SDL2")
++list(APPEND VULKAN_LIBRARY "Vulkan::Headers" "Vulkan::Loader")
+ 
+ ## Qt 5
+ ## Important :
+@@ -200,6 +208,7 @@ endforeach()
+ # Correct QT_FLAGS having semicolons, which break the compile step on POSIX
+ list(REMOVE_DUPLICATES QT_FLAGS)
+ 
++if(0)
+ ## OpenVR API path
+ find_library(OPENVR_LIBRARIES
+   NAMES
+@@ -215,7 +224,10 @@ find_library(OPENVR_LIBRARIES
+   NO_CMAKE_FIND_ROOT_PATH
+ )
+ set(OPENVR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../headers)
+-
++endif()
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(OPENVR REQUIRED openvr)
++set(OPENVR_INCLUDE_DIR "${OPENVR_INCLUDE_DIRS}")
+ 
+ # -----------------------------------------------------------------------------
+ ## SHARED SOURCES ##
