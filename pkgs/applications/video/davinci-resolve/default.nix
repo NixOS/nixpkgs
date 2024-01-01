@@ -165,10 +165,10 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = "davinci-resolve";
-          desktopName = "Davinci Resolve";
+          name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
           genericName = "Video Editor";
-          exec = "resolve";
+          exec = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
           # icon = "DV_Resolve";
           comment = "Professional video editing, color, effects and audio post-processing";
           categories = [
