@@ -22601,8 +22601,6 @@ with pkgs;
 
   libebur128 = callPackage ../development/libraries/libebur128 { };
 
-  libedit = callPackage ../development/libraries/libedit { };
-
   libei = callPackage ../development/libraries/libei { };
 
   libelf = callPackage ../development/libraries/libelf { };
