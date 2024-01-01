@@ -18127,8 +18127,6 @@ with pkgs;
 
   h3 = h3_3;
 
-  amtk = callPackage ../development/libraries/amtk { };
-
   avrlibc      = callPackage ../development/misc/avr/libc { };
   avrlibcCross = callPackage ../development/misc/avr/libc {
     stdenv = crossLibcStdenv;
