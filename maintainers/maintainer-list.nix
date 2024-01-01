@@ -5006,6 +5006,15 @@
       fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE";
     }];
   };
+  dustinblackman = {
+    email = "nix@dustinblackman.com";
+    github = "dustinblackman";
+    githubId = 5246169;
+    name = "Dustin Blackman";
+    keys = [{
+      fingerprint = "6A34 CFEE 77FE 8257 C3BB  92FE 24C3 FC5D 6987 904B";
+    }];
+  };
   dwarfmaster = {
     email = "nixpkgs@dwarfmaster.net";
     github = "dwarfmaster";
