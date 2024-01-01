@@ -30867,8 +30867,6 @@ with pkgs;
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  bookletimposer = callPackage ../applications/office/bookletimposer { };
-
   boops = callPackage ../applications/audio/boops { };
 
   bumblebee-status = callPackage ../applications/window-managers/i3/bumblebee-status {
