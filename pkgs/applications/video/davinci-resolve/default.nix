@@ -247,6 +247,11 @@ buildFHSEnv {
     ''
   }";
 
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications
+    ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
+  '';
+
   passthru = { inherit davinci; };
 
   meta = with lib; {
