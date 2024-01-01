@@ -8,11 +8,10 @@
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  arch = if stdenv.targetPlatform.system == "x86_64-linux"
-         then "x64"
-         else if stdenv.targetPlatform.system == "aarch64-linux"
-         then "arm64"
-         else throw "Unsupported system";
+  arch = let inherit (stdenv.targetPlatform) system;
+         in if system == "x86_64-linux" then "x64"
+            else if system == "aarch64=linux" then "arm64"
+            else throw "Unsupported system";
 
   desktopItem = makeDesktopItem {
     name = "Yourkit JavaProfiler";
