@@ -1,0 +1,22 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 48cd347..24663f7 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -13,7 +13,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "ansi-to-html"
+-version = "0.2.0"
++version = "0.2.1"
+ dependencies = [
+  "insta",
+  "once_cell",
+@@ -489,7 +489,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "to-html"
+-version = "0.1.4"
++version = "0.1.5"
+ dependencies = [
+  "ansi-to-html",
+  "basic-toml",
