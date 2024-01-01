@@ -939,9 +939,6 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
-  dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
-  dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
   dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
   dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
@@ -2945,14 +2942,10 @@ with pkgs;
   ### APPLICATIONS/EMULATORS/YUZU
   yuzuPackages = callPackage ../applications/emulators/yuzu {};
 
-  ### APPLICATIONS/EMULATORS/COMMANDERX16
-
-  x16-emulator = callPackage ../applications/emulators/commanderx16/emulator.nix { };
-  x16-rom = callPackage ../applications/emulators/commanderx16/rom.nix { };
-  x16-run = (callPackage ../applications/emulators/commanderx16/run.nix { }) {
-    emulator = x16-emulator;
-    rom = x16-rom;
-  };
+  # Aliases kept here because they are easier to use
+  x16-emulator = x16.emulator;
+  x16-rom = x16.rom;
+  x16-run = x16.run;
 
   yabause = libsForQt5.callPackage ../applications/emulators/yabause {
     freeglut = null;
@@ -4158,9 +4151,7 @@ with pkgs;
 
   wiiload = callPackage ../development/tools/wiiload { };
 
-  winhelpcgi = callPackage ../development/tools/winhelpcgi {
-    libpng = libpng12;
-  };
+  winhelpcgi = callPackage ../development/tools/winhelpcgi { };
 
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
@@ -9840,6 +9831,8 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
+  keymapp = callPackage ../applications/misc/keymapp { };
+
   keyscope = callPackage ../tools/security/keyscope {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit Security;
   };
@@ -11220,9 +11213,8 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud25 nextcloud26 nextcloud27 nextcloud28;
+    nextcloud26 nextcloud27 nextcloud28;
 
-  nextcloud25Packages = throw "Nextcloud25 is EOL!";
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/26.json;
   };
@@ -26216,7 +26208,6 @@ with pkgs;
 
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
-    mod_evasive = throw "mod_evasive is not supported on Apache httpd 2.4";
 
     mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
 
@@ -26226,8 +26217,6 @@ with pkgs;
 
     mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
 
-    mod_wsgi  = self.mod_wsgi2;
-    mod_wsgi2 = throw "mod_wsgi2 has been removed since Python 2 is EOL. Use mod_wsgi3 instead";
     mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { };
 
     mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
@@ -26237,6 +26226,10 @@ with pkgs;
     php = pkgs.php.override { inherit apacheHttpd; };
 
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
+  } // lib.optionalAttrs config.allowAliases {
+    mod_evasive = throw "mod_evasive is not supported on Apache httpd 2.4";
+    mod_wsgi  = self.mod_wsgi2;
+    mod_wsgi2 = throw "mod_wsgi2 has been removed since Python 2 is EOL. Use mod_wsgi3 instead";
   };
 
   apacheHttpdPackages_2_4 = recurseIntoAttrs (apacheHttpdPackagesFor apacheHttpd_2_4 apacheHttpdPackages_2_4);
@@ -26705,20 +26698,6 @@ with pkgs;
   minio_legacy_fs = callPackage ../servers/minio/legacy_fs.nix { };
 
   mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
-
-  # Backwards compatibility.
-  mod_dnssd = apacheHttpdPackages.mod_dnssd;
-  mod_fastcgi = apacheHttpdPackages.mod_fastcgi;
-  mod_python = apacheHttpdPackages.mod_python;
-  mod_wsgi = apacheHttpdPackages.mod_wsgi;
-  mod_ca = apacheHttpdPackages.mod_ca;
-  mod_crl = apacheHttpdPackages.mod_crl;
-  mod_csr = apacheHttpdPackages.mod_csr;
-  mod_ocsp = apacheHttpdPackages.mod_ocsp;
-  mod_scep = apacheHttpdPackages.mod_scep;
-  mod_spkac = apacheHttpdPackages.mod_spkac;
-  mod_pkcs12 = apacheHttpdPackages.mod_pkcs12;
-  mod_timestamp = apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit;
@@ -27227,6 +27206,7 @@ with pkgs;
   prometheus-pgbouncer-exporter = callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix { };
   prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };
+  prometheus-ping-exporter = callPackage ../servers/monitoring/prometheus/ping-exporter.nix {  };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
@@ -30136,6 +30116,8 @@ with pkgs;
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
 
   template-glib = callPackage ../development/libraries/template-glib { };
+
+  templ = callPackage ../development/tools/templ { };
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
@@ -37023,12 +37005,6 @@ with pkgs;
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
-  chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
-  chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
-  chia-plotter = throw "chia-plotter has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
-
   clboss = callPackage ../applications/blockchains/clboss { };
 
   clightning = callPackage ../applications/blockchains/clightning { };
@@ -40759,11 +40735,6 @@ with pkgs;
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
   nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
-
-  nix-repl = throw (
-    "nix-repl has been removed because it's not maintained anymore, " +
-    "use `nix repl` instead. Also see https://github.com/NixOS/nixpkgs/pull/44903"
-  );
 
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 

@@ -2063,6 +2063,12 @@
     githubId = 80325;
     name = "Benjamin Andresen";
   };
+  barab-i = {
+    email = "barab_i@outlook.com";
+    github = "barab-i";
+    githubId = 92919899;
+    name = "Barab I";
+  };
   baracoder = {
     email = "baracoder@googlemail.com";
     github = "baracoder";
@@ -3967,6 +3973,12 @@
     github = "cyplo";
     githubId = 217899;
     name = "Cyryl Płotnicki";
+  };
+  d3vil0p3r = {
+    name = "Antonio Voza";
+    email = "vozaanthony@gmail.com";
+    github = "D3vil0p3r";
+    githubId = 83867734;
   };
   dadada = {
     name = "dadada";
@@ -8242,6 +8254,12 @@
     github = "Janik-Haag";
     githubId = 80165193;
   };
+  jankaifer = {
+    name = "Jan Kaifer";
+    email = "jan@kaifer.cz";
+    github = "jankaifer";
+    githubId = 12820484;
+  };
   jansol = {
     email = "jan.solanti@paivola.fi";
     github = "jansol";
@@ -10956,6 +10974,12 @@
     githubId = 2486026;
     name = "Luca Fulchir";
   };
+  luleyleo = {
+    email = "git@leopoldluley.de";
+    github = "luleyleo";
+    githubId = 10746692;
+    name = "Leopold Luley";
+  };
   lumi = {
     email = "lumi@pew.im";
     github = "lumi-me-not";
@@ -13557,6 +13581,12 @@
     github = "nthorne";
     githubId = 1839979;
     name = "Niklas Thörne";
+  };
+  nudelsalat = {
+    email = "nudelsalat@clouz.de";
+    name = "Fabian Dreßler";
+    github = "Noodlesalat";
+    githubId = 12748782;
   };
   nukaduka = {
     email = "ksgokte@gmail.com";
@@ -20205,7 +20235,7 @@
   };
   yana = {
     email = "yana@riseup.net";
-    github = "yanalunaterra";
+    github = "yanateras";
     githubId = 1643293;
     name = "Yana Timoshenko";
   };
@@ -20733,6 +20763,12 @@
     github = "zraexy";
     githubId = 8100652;
     name = "David Mell";
+  };
+  zshipko = {
+    email = "zachshipko@gmail.com";
+    github = "zshipko";
+    githubId = 332534;
+    name = "Zach Shipko";
   };
   ztzg = {
     email = "dd@crosstwine.com";
