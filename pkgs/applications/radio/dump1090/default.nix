@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux limesuite;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-implicit-function-declaration -Wno-int-conversion";
+    "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
 
-  buildFlags = [ "dump1090" "view1090" ];
+  buildFlags = [ "DUMP1090_VERSION=${version}" "dump1090" "view1090" ];
 
   doCheck = true;
 
