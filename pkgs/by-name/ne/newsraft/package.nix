@@ -10,7 +10,7 @@
 , yajl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
   version = "0.22";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
-    rev = "newsraft-${version}";
+    rev = "newsraft-${finalAttrs.version}";
     hash = "sha256-QjIADDk1PSZP89+G7B1Bpu3oTEAykD4RJYghZnMJKho=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "newsraft";
     platforms = platforms.all;
   };
-}
+})
