@@ -4,6 +4,13 @@
 , six
 , mock
 , pytestCheckHook
+
+# for passthru.tests
+, cachy
+, cherrypy
+, freeipa
+, pymemcache
+, ws4py
 }:
 
 buildPythonPackage rec {
@@ -31,6 +38,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "memcache" ];
+
+  passthru.tests = {
+    inherit cachy cherrypy freeipa pymemcache ws4py;
+  };
 
   meta = with lib; {
     description = "Pure python memcached client";
