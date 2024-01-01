@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1710";
+  version = "1742";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-fbzHjaL+qAE9HdtBVxboo8T2/KCdS5O1RkTQvDwD/xs=";
+    hash = "sha256-0xpWDKzRcm32jkPsvHD2o9grUdo9n+4cvpYiKQ8LqRY=";
   };
 
   patches = [
