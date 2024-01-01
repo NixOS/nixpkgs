@@ -24,6 +24,7 @@
 , gstreamer
 , gst-plugins-base
 , gst-plugins-bad
+, gst-plugins-good
 , gtest
 , gtk3
 , hicolor-icon-theme
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-bad
+    gst-plugins-good
     gtk3
     hicolor-icon-theme
     ilmbase
