@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
 , sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages, nixosTests, rpcsvc-proto
-, enablePython ? true
+, python3, buildPackages, nixosTests, rpcsvc-proto, openldap
+, enablePython ? true, enableLdap ? true
 }:
 
 let
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
     libuuid keyutils libkrb5 tcp_wrappers
-  ] ++ lib.optional enablePython python3;
+  ] ++ lib.optional enablePython python3
+    ++ lib.optional enableLdap  openldap;
 
   enableParallelBuilding = true;
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
       "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
       "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
-    ];
+    ] ++ lib.optional enableLdap "--with-ldap";
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # http://openwall.com/lists/musl/2015/08/18/10
