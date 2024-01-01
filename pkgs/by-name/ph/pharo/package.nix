@@ -1,11 +1,9 @@
-{ cairo
+{ lib
+, stdenv
+, cairo
 , cmake
 , fetchurl
 , freetype
-, gcc
-, git
-, gnumake
-, lib
 , libffi
 , libgit2
 , libpng
@@ -13,51 +11,38 @@
 , makeBinaryWrapper
 , openssl
 , pixman
-, runtimeShell
 , SDL2
-, stdenv
 , unzip
 }:
-let
-  inherit (lib.strings) makeLibraryPath;
-  pharo-sources = fetchurl {
+
+stdenv.mkDerivation {
+  pname = "pharo";
+  version = "10.0.8";
+
+  src = fetchurl {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
     url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-10.0.8-b323c5f-Linux-x86_64-c-src.zip";
     hash = "sha256-5IHymk6yl3pMLG3FeM4nqos0yLYMa3B2+hYW08Yo1V0=";
   };
-  library_path = makeLibraryPath [
-    libgit2
-    SDL2
-    cairo
-    "$out"
-  ];
-in
-stdenv.mkDerivation {
-  pname = "pharo";
-  version = "10.0.8";
-  src = pharo-sources;
+
+  strictDeps = true;
 
   buildInputs = [
     cairo
+    freetype
+    libffi
     libgit2
     libpng
+    libuuid
+    openssl
     pixman
     SDL2
   ];
 
   nativeBuildInputs = [
     cmake
-    freetype
-    gcc
-    git
-    gnumake
-    libffi
-    libuuid
     makeBinaryWrapper
-    openssl
-    pixman
-    SDL2
     unzip
   ];
 
@@ -71,31 +56,42 @@ stdenv.mkDerivation {
     "-DBUILD_BUNDLE=OFF"
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      library_path = lib.strings.makeLibraryPath [
+        "$out"
+        cairo
+        freetype
+        libgit2
+        SDL2
+      ];
+    in
+    ''
+      runHook preInstall
 
-    cmake --build . --target=install
-    mkdir -p "$out/lib"
-    mkdir "$out/bin"
-    cp build/vm/*.so* "$out/lib/"
-    cp build/vm/pharo "$out/bin/pharo"
-    patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
-    wrapProgram "$out/bin/pharo" --set LD_LIBRARY_PATH "${library_path}"
+      cmake --build . --target=install
+      mkdir -p "$out/lib"
+      mkdir "$out/bin"
+      cp build/vm/*.so* "$out/lib/"
+      cp build/vm/pharo "$out/bin/pharo"
+      patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
+      wrapProgram "$out/bin/pharo" --set LD_LIBRARY_PATH "${library_path}"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small core
       system, excellent dev tools, and maintained releases, Pharo is an
       attractive platform to build and deploy mission critical applications.
     '';
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ehmry ];
+    mainProgram = "pharo";
     platforms = lib.platforms.linux;
   };
 }
