@@ -30920,8 +30920,6 @@ with pkgs;
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  bookletimposer = callPackage ../applications/office/bookletimposer { };
-
   boops = callPackage ../applications/audio/boops { };
 
   cgif = callPackage ../tools/graphics/cgif { };
