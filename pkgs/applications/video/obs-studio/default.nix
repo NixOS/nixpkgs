@@ -35,6 +35,7 @@
 , libcef
 , pciutils
 , pipewireSupport ? stdenv.isLinux
+, withFdk ? true
 , pipewire
 , libdrm
 , libajantv2
@@ -83,7 +84,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    fdk_aac
     ffmpeg_4
     jansson
     libcef
@@ -112,7 +112,8 @@ stdenv.mkDerivation rec {
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
-  ++ optionals pipewireSupport [ pipewire libdrm ];
+  ++ optionals pipewireSupport [ pipewire libdrm ]
+  ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -133,6 +134,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
+    (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
   ];
 
   dontWrapGApps = true;
@@ -170,8 +172,8 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V materus ];
-    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jb55 MP2E materus ];
+    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";
   };
