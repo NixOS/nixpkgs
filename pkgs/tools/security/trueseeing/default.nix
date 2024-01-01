@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.7";
+  version = "2.1.9";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pnIn+Rqun5J3F9cgeBUBX4e9WP5fgbm+vwN3Wqh/yEc=";
+    hash = "sha256-g5OqdnPtGGV4wBwPRAjH3lweguwlfVcgpNLlq54OHKA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
