@@ -482,6 +482,7 @@ self: super: {
     hnix-store-core = self.hnix-store-core_0_6_1_0;
   });
 
+
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
@@ -1690,16 +1691,27 @@ self: super: {
   # - Patch can be removed on next package set bump (for v0.2.11)
 
   # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
-  update-nix-fetchgit = dontCheck (let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
-  in self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ] (overrideCabal
-    (drv: {
-      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
-      postInstall = drv.postInstall or "" + ''
-        wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
-          lib.makeBinPath deps
-        }"
-      '';
-    }) (addTestToolDepends deps super.update-nix-fetchgit)));
+  update-nix-fetchgit = let
+      deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
+    in lib.pipe  super.update-nix-fetchgit [
+      dontCheck
+      (self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ])
+      (overrideCabal (drv: {
+        buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
+        postInstall = drv.postInstall or "" + ''
+          wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
+            lib.makeBinPath deps
+          }"
+        '';
+      }))
+      (addTestToolDepends deps)
+      # Patch for hnix compat.
+      (appendPatch (fetchpatch {
+        url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/dfa34f9823e282aa8c5a1b8bc95ad8def0e8d455.patch";
+        sha256 = "sha256-yBjn1gVihVTlLewKgJc2I9gEj8ViNBAmw0bcsb5rh1A=";
+        excludes = [ "cabal.project" ];
+      }))
+    ];
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
   binary-strict = appendPatches [
