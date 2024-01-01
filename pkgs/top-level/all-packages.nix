@@ -35411,7 +35411,7 @@ with pkgs;
   super-slicer-latest = super-slicer.latest;
 
   bambu-studio = callPackage ../applications/misc/bambu-studio {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good;
 
     glew = glew-egl;
 
