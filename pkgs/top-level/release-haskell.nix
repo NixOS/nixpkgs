@@ -497,7 +497,7 @@ let
       funcmp = released;
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
-        compilerNames.ghc810
+        compilerNames.ghc8107
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc962
