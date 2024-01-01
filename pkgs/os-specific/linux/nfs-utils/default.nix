@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nfs-utils";
-  version = "2.6.2";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-UgCHPoHE1hDiRi/CYv4YE18tvni3l5+VrM0VmuZNUBE=";
+    hash = "sha256-AbOw+5x9C7q/URTHNlQgMHSMeI7C/Zc0dEIB6bChEZ0=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
 
-      substituteInPlace tools/nfsrahead/Makefile.in \
+      substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
         --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
       substituteInPlace utils/mount/Makefile.in \
