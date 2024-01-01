@@ -1,20 +1,18 @@
 { buildPackages, cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
 
 let
-  version = "2.17.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    sha256 = "sha256-5+Cyw1cLgBkTePNNFoNAF2oHnLQDHr4vHiaZHJrewug=";
+    hash = "sha256-7apzP37GK5ZbCxcWfjK1ID6sYa24uoS1GUH3CBDmcRA=";
   };
 
   quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {
     pname = "quick-lint-js-build-tools";
     inherit version src;
-
-    patches = [ ./build-tools-install.patch ];
 
     nativeBuildInputs = [ cmake ninja ];
     doCheck = false;
