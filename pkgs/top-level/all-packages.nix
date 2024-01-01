@@ -18221,8 +18221,6 @@ with pkgs;
 
   rappel = callPackage ../development/misc/rappel { };
 
-  pharo = callPackage ../development/pharo { };
-
   protege-distribution = callPackage ../development/web/protege-distribution { };
 
   publii = callPackage ../development/web/publii {};
