@@ -14188,6 +14188,12 @@
     githubId = 15645854;
     name = "Brad Christensen";
   };
+  patwid = {
+    email = "patrick.widmer@tbwnet.ch";
+    github = "patwid";
+    githubId = 25278658;
+    name = "Patrick Widmer";
+  };
   paulsmith = {
     email = "paulsmith@pobox.com";
     github = "paulsmith";
