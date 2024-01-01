@@ -356,7 +356,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
       }
     )
-    ++ (lib.optional (stdenv.isDarwin && lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+    ++ (lib.optional (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
