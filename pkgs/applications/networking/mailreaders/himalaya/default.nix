@@ -1,5 +1,5 @@
 { lib
-, rustPlatform
+, rustPackages_1_70
 , fetchFromGitHub
 , stdenv
 , installShellFiles
@@ -15,18 +15,21 @@
 , withSmtpSender ? true
 }:
 
+let
+  rustPlatform = rustPackages_1_70.rustPlatform;
+in
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.7.1";
+  version = "1.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yAfNH9LSXlS/Hzi5kAuur5BX2vITMucprDzxhlV8RiY=";
+    sha256 = "sha256-39XYtxmo/12hkCS7zVIQi3UbLzaIKH1OwfdDB/ghU98=";
   };
 
-  cargoSha256 = "sha256-FXfh6T8dNsnD/V/wYSMDWs+ll0d1jg1Dc3cQT39b0ws=";
+  cargoSha256 = "sha256-HIDmBPrcOcK2coTaD4v8ntIZrv2SwTa8vUTG8Ky4RhM=";
 
   nativeBuildInputs = [ ]
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles
@@ -37,10 +40,10 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withNotmuchBackend notmuch;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ ]
-    ++ lib.optional withImapBackend "imap-backend"
-    ++ lib.optional withNotmuchBackend "notmuch-backend"
-    ++ lib.optional withSmtpSender "smtp-sender";
+  buildFeatures = [ "maildir" "sendmail" ]
+    ++ lib.optional withImapBackend "imap"
+    ++ lib.optional withNotmuchBackend "notmuch"
+    ++ lib.optional withSmtpSender "smtp";
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
