@@ -1,12 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , nixosTests
 , testers
 , cmake
 , cmake-extras
+, coreutils
 , dbus
 , doxygen
 , gettext
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     rev = finalAttrs.version;
-    hash = "sha256-JrxJsdLd35coEJ0nYcYtPRQONLfKciNmBbLqXrEaOX0=";
+    hash = "sha256-rJKWhW082ndVPEQHjuSriKtl0zQw86adxiINkZQq1hY=";
   };
 
   outputs = [
@@ -45,20 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  patches = [
-    # Fix pkg-config file
-    # Remove when version > 1.0.0
-    (fetchpatch {
-      name = "0001-lomiri-indicator-network-Fix-pkg-config-file-for-liblomiri-connectivity-qt1.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/a67ac8e1a1b96f4dcad01dd4c1685fed9831eaa3.patch";
-      hash = "sha256-D3AhEJus0MysmfMg7eWFNI20Z5cTeHwiFTP0OuoQook=";
-    })
-  ];
-
   postPatch = ''
+    # Patch FHS paths
+    # DBUS_SESSION_BUS_SERVICES_DIR queried via pkg-config, prefix output path
     substituteInPlace data/CMakeLists.txt \
       --replace '/usr/lib/systemd/user' "$out/lib/systemd/user" \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart"
+      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
+      --replace 'DESTINATION "''${DBUS_SESSION_BUS_SERVICES_DIR}"' 'DESTINATION "''${CMAKE_INSTALL_PREFIX}/''${DBUS_SESSION_BUS_SERVICES_DIR}"'
 
     # Don't disregard GNUInstallDirs requests, {DOCDIR}/../<different-name> to preserve preferred name
     substituteInPlace doc/CMakeLists.txt \
@@ -113,6 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  postInstall = ''
+    substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
+      --replace '/bin/false' '${lib.getExe' coreutils "false"}'
+  '';
 
   passthru = {
     ayatana-indicators = [
