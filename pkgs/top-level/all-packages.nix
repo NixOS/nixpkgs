@@ -9721,6 +9721,7 @@ with pkgs;
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
+  jupyterLib = callPackage ../applications/editors/jupyter/lib.nix { };
 
   jupyter-all = jupyter.override {
     definitions = {
