@@ -4812,6 +4812,8 @@ self: super: with self; {
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
+  gpuctypes = callPackage ../development/python-modules/gpuctypes { };
+
   gpustat = callPackage ../development/python-modules/gpustat { };
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
