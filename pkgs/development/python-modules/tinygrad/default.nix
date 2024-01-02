@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "You like pytorch? You like micrograd? You love tinygrad";
     homepage = "https://github.com/tinygrad/tinygrad";
+    changelog = "https://github.com/tinygrad/tinygrad/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
   };
