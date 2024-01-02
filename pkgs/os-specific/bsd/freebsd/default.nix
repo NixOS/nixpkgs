@@ -124,6 +124,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   pwd_mkdb = callPackage ./pwd_mkdb.nix {};
   truss = callPackage ./truss.nix {};
   libsysdecode = callPackage ./libsysdecode.nix {};
+  shutdown = callPackage ./shutdown.nix {};
+  reboot = callPackage ./reboot.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
