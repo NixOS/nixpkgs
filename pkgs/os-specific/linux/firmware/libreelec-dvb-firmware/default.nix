@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libreelec-dvb-firmware";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     repo = "dvb-firmware";
     owner = "LibreElec";
     rev = version;
-    sha256 = "1xnfl4gp6d81gpdp86v5xgcqiqz2nf1i43sb3a4i5jqs8kxcap2k";
+    sha256 = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
   };
 
   installPhase = ''
