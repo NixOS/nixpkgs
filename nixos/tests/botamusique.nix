@@ -22,7 +22,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             channel = "NixOS tests";
           };
           bot = {
-            version = false;
             auto_check_update = false;
           };
         };
