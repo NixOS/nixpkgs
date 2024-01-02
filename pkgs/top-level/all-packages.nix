@@ -5709,6 +5709,10 @@ with pkgs;
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
+  hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
+    stdenv = gcc13Stdenv;
+  };
+
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
