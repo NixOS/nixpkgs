@@ -62,7 +62,6 @@ let
   released = with compilerNames; [
     ghc8107
     ghc902
-    ghc924
     ghc925
     ghc926
     ghc927
@@ -70,7 +69,7 @@ let
     ghc945
     ghc946
     ghc947
-    ghc962
+    ghc948
     ghc963
     ghc981
   ];
@@ -507,16 +506,12 @@ let
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
-        # Not yet supported
-        compilerNames.ghc981
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc962
         compilerNames.ghc963
         compilerNames.ghc981
       ] released;
       hlint = lib.subtractLists [
-        compilerNames.ghc962
         compilerNames.ghc963
         compilerNames.ghc981
       ] released;
@@ -568,7 +563,6 @@ let
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc924
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
@@ -576,7 +570,7 @@ let
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc947
-        compilerNames.ghc962
+        compilerNames.ghc948
         compilerNames.ghc963
       ];
     })
@@ -653,7 +647,6 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghc927
@@ -661,7 +654,6 @@ let
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927

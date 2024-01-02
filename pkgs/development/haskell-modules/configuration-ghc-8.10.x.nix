@@ -39,14 +39,14 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
@@ -170,4 +170,7 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # No instance for (Show B.Builder) arising from a use of ‘print’
+  http-types = dontCheck super.http-types;
 }

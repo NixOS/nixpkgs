@@ -54,7 +54,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # terminfo is not built if GHC is a cross compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -91,8 +91,8 @@ self: super: {
   # https://github.com/mokus0/th-extras/pull/21
   th-extras = doJailbreak super.th-extras;
 
-  ghc-lib = doDistribute self.ghc-lib_9_6_3_20231014;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231014;
+  ghc-lib = doDistribute self.ghc-lib_9_6_3_20231121;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
   # Tests fail due to the newly-build fourmolu not being in PATH
@@ -264,9 +264,6 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
-
-  # The curl executable is required for withApplication tests.
-  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
