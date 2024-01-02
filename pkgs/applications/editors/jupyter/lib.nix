@@ -61,5 +61,21 @@
       logo64 = "${env}/${env.sitePackages}/ipykernel/resources/logo-64x64.png";
     };
 
+  mkConsole = {
+    definitions ? jupyter-kernel.default
+    , kernel ? null
+  }:
+    (python3.buildEnv.override {
+      extraLibs = [ python3.pkgs.jupyter-console ];
+      makeWrapperArgs = [
+        "--set JUPYTER_PATH ${jupyter-kernel.create { inherit definitions; }}"
+      ] ++ lib.optionals (kernel != null) [
+        "--add-flags --kernel"
+        "--add-flags ${kernel}"
+      ];
+    }).overrideAttrs (oldAttrs: {
+      # To facilitate running nix run .#jupyter-console
+      meta = oldAttrs.meta // { mainProgram = "jupyter-console"; };
+    });
 
 }
