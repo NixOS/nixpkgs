@@ -9,6 +9,7 @@
 , kio
 , kitemmodels
 , kitemviews
+, konsole
 , kparts
 , kwindowsystem
 , libelf
@@ -43,6 +44,7 @@ mkDerivation rec {
     kio
     kitemmodels
     kitemviews
+    konsole
     kparts
     kwindowsystem
     libelf
