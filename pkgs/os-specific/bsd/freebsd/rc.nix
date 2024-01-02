@@ -24,13 +24,16 @@ mkDerivation rec {
     "rc.shutdown" "rc.subr" "network.subr"
   ];
 
-  patchPhase = ''
-    sed -E -i -e "s|PATH=.*|PATH=${rcDepsPath}|g" $BSDSRCDIR/libexec/rc/rc
-  '' + (let
+  patchPhase = let
     bins = ["/sbin/sysctl" "/usr/bin/protect" "/usr/bin/id" "/bin/ps" "/bin/cpuset" "/usr/bin/stat"
       "/bin/rm" "/bin/chmod" "/bin/cat" "/bin/sync" "/bin/sleep" "/bin/date"];
     scripts = ["rc" "rc.initdiskless" "rc.shutdown" "rc.subr" "rc.suspend" "rc.resume"];
-  in lib.concatMapStringsSep "\n" (fname: ''sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" $BSDSRCDIR/libexec/rc/{${lib.concatStringsSep "," scripts}}'') bins);
+    scriptPaths = "$BSDSRCDIR/libexec/rc/{${lib.concatStringsSep "," scripts}}";
+  in ''
+    sed -E -i -e "s|PATH=.*|PATH=${rcDepsPath}|g" ${scriptPaths}
+  '' + lib.concatMapStringsSep "\n" (fname: ''
+    sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" \
+      ${scriptPaths}'') bins;
 
   buildPhase = ":";
 
