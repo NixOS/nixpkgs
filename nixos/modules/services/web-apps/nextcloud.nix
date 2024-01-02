@@ -202,6 +202,7 @@ let
 in {
 
   imports = [
+    ./nextcloud-backup.nix
     (mkRenamedOptionModule
       [ "services" "nextcloud" "cron" "memoryLimit" ]
       [ "services" "nextcloud" "cli" "memoryLimit" ])
