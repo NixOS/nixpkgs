@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-zlib-ng";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohttp-zlib-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t7T3KIGId5CoBciSkwu/sejW45i2EYtq1fHvNKNXlhA=";
+    hash = "sha256-LVHZbZeAroKdc/+LWpwc4qhQYxN4krFnZ/4xjjSTUPo=";
   };
 
   postPatch = ''
