@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "aiac";
-  version = "4.0.0";
+  version = "4.1.0";
   excludedPackages = [".ci"];
 
   src = fetchFromGitHub {
     owner = "gofireflyio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OXqHZlVo1rFt/hJbc14faXTbckLx9CvsL131qj6G1dw=";
+    hash = "sha256-X3KmqKltoIFyMjLF1h8EN3RLbZ+EZu0mOH2koN0FJh8=";
   };
 
   vendorHash = "sha256-JWQQUB4/yIDGzWeshtcWnkXQS7jYcDHwG/tef6sBizQ=";
