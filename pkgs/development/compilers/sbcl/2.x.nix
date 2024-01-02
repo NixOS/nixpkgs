@@ -7,6 +7,7 @@
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
 , coreCompression ? lib.versionAtLeast version "2.2.6"
+, markRegionGC ? lib.versionAtLeast version "2.4.0"
 , texinfo
 , version
 }:
@@ -80,8 +81,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  # There are no patches necessary for the currently enabled versions, but this
-  # code is left in place for the next potential patch.
+  patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin" && version == "2.4.0") [
+    ./fix-2.4.0-aarch64-darwin.patch
+  ];
+
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
 
@@ -128,7 +131,8 @@ stdenv.mkDerivation rec {
     optional threadSupport "sb-thread" ++
     optional linkableRuntime "sb-linkable-runtime" ++
     optional coreCompression "sb-core-compression" ++
-    optional stdenv.isAarch32 "arm";
+    optional stdenv.isAarch32 "arm" ++
+    optional markRegionGC "mark-region-gc";
 
   disableFeatures = with lib;
     optional (!threadSupport) "sb-thread" ++
