@@ -4,7 +4,7 @@
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
-, openssl, openssl_1_1
+, openssl
 , linuxPackages, libsystemtap
 } @ args:
 
@@ -20,7 +20,6 @@ let
 
   generic = { version, hash, cargoHash ? null }: let
     ver = version;
-    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
     # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
@@ -30,7 +29,7 @@ let
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, openssl_1_1, opensslSupport ? true
+      , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -84,8 +83,7 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (atLeast30 && opensslSupport) openssl)
-          ++ (op (!atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
@@ -103,7 +101,7 @@ let
         enableParallelInstalling = false;
 
         patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useBaseRuby) (
+          ++ op useBaseRuby (
             if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch
             else ./do-not-update-gems-baseruby.patch
           )
@@ -114,21 +112,6 @@ let
               hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
          ]
-          ++ ops (!atLeast30 && rubygemsSupport) [
-            # We upgrade rubygems to a version that isn't compatible with the
-            # ruby 2.7 installer. Backport the upstream fix.
-            ./rbinstall-new-rubygems-compat.patch
-
-            # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
-            # the resulting error was swallowed. Newer rubygems no longer swallows
-            # this error. We upgrade rubygems when rubygemsSupport is enabled, so
-            # we have to fix this bug to prevent the install step from failing.
-            # See https://github.com/ruby/ruby/pull/2930
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
-              hash = "sha256-HqfaevMYuIVOsdEr+CnjnUqr2IrH5fkW2uKzzoqIMXM=";
-            })
-          ]
           ++ ops atLeast31 [
             # When using a baseruby, ruby always sets "libdir" to the build
             # directory, which nix rejects due to a reference in to /build/ in
@@ -155,10 +138,6 @@ let
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
-        '' + opString (!atLeast30) ''
-          # Make the build reproducible for ruby <= 2.7
-          # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
-          sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
         configureFlags = [
@@ -315,11 +294,6 @@ let
 in {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
-
-  ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "8" "";
-    hash = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
-  };
 
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
