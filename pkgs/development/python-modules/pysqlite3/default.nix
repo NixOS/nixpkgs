@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , python
 , sqlite
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-Ik//afKc7v1iBRGwOZrQbbMsHmdH5FptS9EAldhKRmk=";
   };
 
-  nativeBuildInputs = [ pythonImportsCheckHook ];
+  nativeBuildInputs = [ pythonImportsCheckHook pytestCheckHook ];
   buildInputs = [
     sqlite
   ];
