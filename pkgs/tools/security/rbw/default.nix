@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   preConfigure = lib.optionalString stdenv.isLinux ''
