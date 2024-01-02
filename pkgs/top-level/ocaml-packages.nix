@@ -1768,7 +1768,7 @@ let
     topkg = callPackage ../development/ocaml-modules/topkg { };
 
     torch = callPackage ../development/ocaml-modules/torch {
-      inherit (pkgs.python3Packages) torch;
+      torch = pkgs.libtorch-bin;
     };
 
     trace = callPackage ../development/ocaml-modules/trace { };
