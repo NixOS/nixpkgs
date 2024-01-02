@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, copyDesktopItems, makeDesktopItem, zip }:
+{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, copyDesktopItems, makeDesktopItem, zip, xorg }:
 
 stdenv.mkDerivation rec {
   version = "14.0.0";
@@ -8,12 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vr0yqKVRodtXalHEIsm5gdEp9wPU9U5nnYhMk7IiPF4=";
   };
 
-
   nativeBuildInputs = [ copyDesktopItems makeWrapper zip ];
 
   installPhase =
   let
-    libraryPath = lib.strings.makeLibraryPath [ libglvnd libnotify ];
+    libraryPath = lib.makeLibraryPath ([ libglvnd libnotify ]
+      ++ lib.optional stdenv.isLinux xorg.libXxf86vm);
+    # add JVM args from
+    # https://github.com/mediathekview/MediathekView/blob/9105485f50ec10d863727b4817c8c4ffcbb02643/pom.xml#L136-L139
     jvmArgList = [
       "-XX:+UseShenandoahGC"
       "-XX:ShenandoahGCHeuristics=compact"
@@ -51,11 +53,11 @@ stdenv.mkDerivation rec {
 
   desktopItems = makeDesktopItem {
     name = "MediathekView";
-    exec = meta.mainProgram;
+    exec = "mediathek";
     icon = "MediathekView";
-    desktopName = meta.mainProgram;
+    desktopName = "mediathek";
     genericName = "MediathekView";
-    comment = meta.description;
+    comment = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
     type = "Application";
     categories = [ "Video" "AudioVideo" ];
     startupNotify = true;
