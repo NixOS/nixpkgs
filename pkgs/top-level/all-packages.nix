@@ -7067,6 +7067,8 @@ with pkgs;
 
     bamboo = callPackage ../tools/inputmethods/ibus-engines/ibus-bamboo { };
 
+    cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
+
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
     kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
