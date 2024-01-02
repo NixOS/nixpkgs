@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     nettle
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
