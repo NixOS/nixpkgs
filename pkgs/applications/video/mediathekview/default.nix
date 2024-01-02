@@ -14,6 +14,16 @@ stdenv.mkDerivation rec {
   installPhase =
   let
     libraryPath = lib.strings.makeLibraryPath [ libglvnd libnotify ];
+    jvmArgList = [
+      "-XX:+UseShenandoahGC"
+      "-XX:ShenandoahGCHeuristics=compact"
+      "-XX:MaxRAMPercentage=50.0"
+      "-XX:+UseStringDeduplication"
+      "--add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
+      "-Dfile.encoding=UTF-8"
+      "-DexternalUpdateCheck" # disable checking for updates
+    ];
+    jvmArgs = lib.strings.concatStringsSep " " jvmArgList;
   in
   ''
     runHook preInstall
@@ -24,15 +34,16 @@ stdenv.mkDerivation rec {
     install -m644 MediathekView.svg $out/share/pixmaps
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
       --add-flags "-jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     runHook postInstall
