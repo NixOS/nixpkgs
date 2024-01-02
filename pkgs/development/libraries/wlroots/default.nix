@@ -17,6 +17,7 @@
 , xorg
 , libpng
 , ffmpeg_4
+, ffmpeg
 , hwdata
 , seatd
 , vulkan-loader
@@ -57,7 +58,6 @@ let
         ++ extraNativeBuildInputs;
 
       buildInputs = [
-        ffmpeg_4
         libGL
         libcap
         libinput
@@ -116,6 +116,9 @@ rec {
   wlroots_0_15 = generic {
     version = "0.15.1";
     hash = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
+    extraBuildInputs = [
+      ffmpeg_4
+    ];
   };
 
   wlroots_0_16 = generic {
@@ -125,12 +128,16 @@ rec {
       substituteInPlace backend/drm/meson.build \
         --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
+    extraBuildInputs = [
+      ffmpeg_4
+    ];
   };
 
   wlroots_0_17 = generic {
     version = "0.17.1";
     hash = "sha256-Z0gWM7AQqJOSr2maUtjdgk/MF6pyeyFMMTaivgt+RMI=";
     extraBuildInputs = [
+      ffmpeg
       hwdata
       libliftoff
       libdisplay-info
