@@ -3,9 +3,10 @@
 { name
 , description ? ""
 , deps ? []
-}:
+, ...
+}@args:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (lib.recursiveUpdate {
   inherit name;
 
   nativeBuildInputs = [ python3 ];
@@ -24,4 +25,4 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta.description = description;
-}
+} (removeAttrs args [ "name" "description" "deps" ]))
