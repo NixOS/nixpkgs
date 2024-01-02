@@ -1,50 +1,51 @@
 { lib, rustPlatform, fetchgit, fetchpatch
-, pkg-config, protobuf, python3, wayland-scanner
+, pkg-config, protobuf, python3, wayland-scanner, dbus, libva, libX11, libXext, mesa, ffmpeg
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "119.0";
+  version = "unstable-2024-01-02";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "b9977397be2ffc8154bf55983eb21495016d48b5";
-    sha256 = "oaCWiyYWQQGERaUPSekUHsO8vaHzIA5ZdSebm/qRR7I=";
+    url = "https://chromium.googlesource.com/crosvm/crosvm";
+    rev = "dbdd15966d6bb8239f33d31a658221cac47e3666";
+    sha256 = "sha256-UyGzimfksHdMMI3bzmctLqQqWRo5WVj04t+ElcX32Tg=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "test-page-size-fix.patch";
-      url = "https://chromium.googlesource.com/crosvm/crosvm/+/d9bc6e99ff5ac31d7d88b684c938af01a0872fc1%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      includes = [ "src/crosvm/config.rs" ];
-      hash = "sha256-3gfNzp0WhtNr+8CWSISCJau208EMIo3RJhM+4SyeV3o=";
-    })
-  ];
-
   separateDebugInfo = true;
 
-  cargoHash = "sha256-U/sF/0OWxA41iZsOTao8eeb98lluqOwcPwwA4emcSFc=";
+  cargoHash = "sha256-hTJFrqFzoARugKvXuCxLhuXDJEkWzNe8uAl2EtISE4k=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
 
   buildInputs = [
-    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    dbus
+    ffmpeg
+    libcap
+    libdrm
+    libepoxy
+    libva
+    libX11
+    libXext
+    mesa
+    minijail
+    virglrenderer
+    wayland
+    wayland-protocols
   ];
 
   preConfigure = ''
     patchShebangs third_party/minijail/tools/*.py
   '';
 
-  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
+  env.CROSVM_USE_SYSTEM_VIRGLRENDERER = "1";
+  env.CROSVM_USE_SYSTEM_MINIGBM = "1";
 
-  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
-
-  passthru.updateScript = ./update.py;
+  buildFeatures = [ "all-default" ];
 
   meta = with lib; {
     description = "A secure virtual machine monitor for KVM";
