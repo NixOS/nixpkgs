@@ -78,7 +78,7 @@ in
       export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
       # Allows `conda activate` to work properly
       condaSh=${installationPath}/etc/profile.d/conda.sh
-      if [ ! -f $condaSh ]; then 
+      if [ ! -f $condaSh ]; then
         conda-install
       fi
       source $condaSh
