@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
+, glib
 , gtk3
 , meson
 , mesonEmulatorHook
@@ -9,20 +10,22 @@
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-nons
-, gnome
+, gitUpdater
 , dbus
 , xvfb-run
 }:
 
 stdenv.mkDerivation rec {
-  pname = "amtk";
-  version = "5.6.1";
+  pname = "libgedit-amtk";
+  version = "5.8.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1QEVuFyHKqwpaTS17nJqP6FWxvWtltJ+Dt0Kpa0XMig=";
+  src = fetchFromGitHub {
+    owner = "gedit-technology";
+    repo = "libgedit-amtk";
+    rev = version;
+    hash = "sha256-U77/KMZw9k9ukebCXVXAsCa4uJaTgw9irfZ/l0303kk=";
   };
 
   strictDeps = true;
@@ -30,7 +33,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    dbus
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
@@ -38,27 +40,36 @@ stdenv.mkDerivation rec {
     mesonEmulatorHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
+    # Required by libgedit-amtk-5.pc
+    glib
     gtk3
+  ];
+
+  nativeCheckInputs = [
+    dbus # For dbus-run-session
   ];
 
   doCheck = stdenv.isLinux;
   checkPhase = ''
+    runHook preCheck
+
     export NO_AT_BRIDGE=1
     ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = pname;
-    versionPolicy = "none";
+  passthru.updateScript = gitUpdater {
+    odd-unstable = true;
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Amtk";
+    homepage = "https://github.com/gedit-technology/libgedit-amtk";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = [ maintainers.manveru ];
+    maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

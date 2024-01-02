@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , buildPythonPackage
 , fetchPypi
@@ -14,27 +15,37 @@
 , llvmPackages
 , numpy
 , scipy
-, scikit-learn
 , pythonOlder
+
+# optionals
+, cffi
+, dask
+, pandas
+, pyarrow
+, scikit-learn
 
 # optionals: gpu
 , boost
-, cudatoolkit
 , ocl-icd
 , opencl-headers
-, gpuSupport ? stdenv.isLinux
+, gpuSupport ? stdenv.isLinux && !cudaSupport
+, cudaSupport ? config.cudaSupport
+, cudaPackages
 }:
+
+assert gpuSupport -> cudaSupport != true;
+assert cudaSupport -> gpuSupport != true;
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "4.1.0";
-  format = "pyproject";
+  version = "4.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vuWd0mmpOwk/LGENSmaDp+qHxj0+o1xiISPOLAILKrw=";
+    hash = "sha256-ik0FHfKrIhiZihb3cS6EPunpbYsJ/7/MGFM9oSfg2gI=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +54,8 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     scikit-build-core
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   dontUseCmakeConfigure = true;
@@ -51,22 +64,46 @@ buildPythonPackage rec {
     llvmPackages.openmp
   ]) ++ (lib.optionals gpuSupport [
     boost
-    cudatoolkit
     ocl-icd
     opencl-headers
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+  ];
 
   propagatedBuildInputs = [
     numpy
     scipy
-    scikit-learn
   ];
 
-  pypaBuildFlags = lib.optionalString gpuSupport "--config-setting=cmake.define.USE_CUDA=ON";
+  pypaBuildFlags = lib.optionals gpuSupport [
+    "--config-setting=cmake.define.USE_GPU=ON"
+  ] ++ lib.optionals cudaSupport [
+    "--config-setting=cmake.define.USE_CUDA=ON"
+  ];
 
   postConfigure = ''
     export HOME=$(mktemp -d)
   '';
+
+  passthru.optional-dependencies = {
+    arrow = [
+      cffi
+      pyarrow
+    ];
+    dask = [
+      dask
+      pandas
+    ] ++ dask.optional-dependencies.array
+      ++ dask.optional-dependencies.dataframe
+      ++ dask.optional-dependencies.distributed;
+    pandas = [
+      pandas
+    ];
+    scikit-learn = [
+      scikit-learn
+    ];
+  };
 
   # The pypi package doesn't distribute the tests from the GitHub
   # repository. It contains c++ tests which don't seem to wired up to

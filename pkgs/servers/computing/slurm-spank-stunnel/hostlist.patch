@@ -1,0 +1,13 @@
+diff --git a/slurm-spank-stunnel.c b/slurm-spank-stunnel.c
+index 81fb4fd..dbe69f6 100644
+--- a/slurm-spank-stunnel.c
++++ b/slurm-spank-stunnel.c
+@@ -278,7 +278,7 @@ int _stunnel_connect_nodes (char* nodes)
+ {
+ 
+     char* host;
+-    hostlist_t hlist;
++    hostlist_t *hlist;
+ 
+     // Connect to the first host in the list
+     hlist = slurm_hostlist_create(nodes);
