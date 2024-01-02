@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonImportsCheckHook
 , fetchFromGitHub
 , python
 , sqlite
@@ -16,6 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-Ik//afKc7v1iBRGwOZrQbbMsHmdH5FptS9EAldhKRmk=";
   };
 
+  nativeBuildInputs = [ pythonImportsCheckHook ];
   buildInputs = [
     sqlite
   ];
