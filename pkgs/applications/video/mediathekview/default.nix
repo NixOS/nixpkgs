@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, zip }:
+{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, copyDesktopItems, makeDesktopItem, zip }:
 
 stdenv.mkDerivation rec {
   version = "14.0.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  nativeBuildInputs = [ makeWrapper zip ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper zip ];
 
   installPhase =
   let
@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
   ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/{bin,lib} $out/share/pixmaps
 
     install -m644 MediathekView.jar $out/lib
+    install -m644 MediathekView.svg $out/share/pixmaps
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
       --add-flags "-jar $out/lib/MediathekView.jar" \
@@ -36,6 +37,17 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  desktopItems = makeDesktopItem {
+    name = "MediathekView";
+    exec = "mediathek";
+    icon = "MediathekView";
+    desktopName = "MediathekView";
+    comment = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
+    type = "Application";
+    categories = [ "Video" "AudioVideo" ];
+    startupNotify = true;
+  };
 
   meta = with lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
