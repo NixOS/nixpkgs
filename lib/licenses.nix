@@ -1073,12 +1073,6 @@ in mkLicense lset) ({
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
   };
 
-  sudo = {
-    shortName = "sudo";
-    fullName = "Sudo License (ISC-style)";
-    url = "https://www.sudo.ws/about/license/";
-  };
-
   sustainableUse = {
     shortName = "sustainable";
     fullName = "Sustainable Use License";
