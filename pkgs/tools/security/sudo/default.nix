@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with licenses; [ sudo bsd2 bsd3 zlib ];
+    license = with licenses; [ isc bsd1 bsd2 bsd3 zlib ];
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
   };
