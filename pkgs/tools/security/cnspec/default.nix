@@ -32,6 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/mondoohq/cnspec";
     changelog = "https://github.com/mondoohq/cnspec/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab mariuskimmina ];
   };
 }
