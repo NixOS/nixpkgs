@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , perl
+, perlPackages
 , runtimeShell
 }:
 
@@ -13,15 +14,14 @@ stdenv.mkDerivation rec {
     owner = "keydet89";
     repo = "RegRipper3.0";
     rev = "cee174fb6f137b14c426e97d17945ddee0d31051";
-    sha256 = "sha256-vejIRlcVjxQJpxJabJJcljODYr+lLJjYINVtAPObvkQ=";
+    hash = "sha256-vejIRlcVjxQJpxJabJJcljODYr+lLJjYINVtAPObvkQ=";
   };
 
-  buildInputs = [ perl ];
+  propagatedBuildInputs = [ perl perlPackages.ParseWin32Registry ];
 
   postPatch = ''
     substituteInPlace rip.pl rr.pl \
-      --replace \"plugins/\" \"$out/share/regripper/plugins/\"
-    substituteInPlace rip.pl rr.pl \
+      --replace \"plugins/\" \"$out/share/regripper/plugins/\" \
       --replace \"plugins\" \"$out/share/regripper/plugins\"
   '';
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     mainProgram = "regripper";
     homepage = "https://github.com/keydet89/RegRipper3.0";
     maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
 }
