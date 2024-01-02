@@ -13186,6 +13186,8 @@ self: super: with self; {
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
+  sharp-aquos-rc = callPackage ../development/python-modules/sharp-aquos-rc { };
+
   shazamio = callPackage ../development/python-modules/shazamio { };
 
   sh = callPackage ../development/python-modules/sh { };
