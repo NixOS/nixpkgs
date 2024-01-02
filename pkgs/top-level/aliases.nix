@@ -435,6 +435,7 @@ mapAliases ({
   jfbview = throw "'jfbview' has been removed, because it depends on an outdated and insecure version of mupdf"; # Added 2023-06-27
   jira-cli = throw "jira-cli was removed because it is no longer maintained"; # Added 2023-02-28
   join-desktop = throw "'join-desktop' has been removed because it is unmaintained upstream"; # Added 2023-10-04
+  jupyter-all = jupyter.tests;
 
   # Julia
 

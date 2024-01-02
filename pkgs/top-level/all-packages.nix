@@ -9723,14 +9723,6 @@ with pkgs;
   jupyter = callPackage ../applications/editors/jupyter { };
   jupyterLib = callPackage ../applications/editors/jupyter/lib.nix { };
 
-  jupyter-all = jupyter.override {
-    definitions = {
-      clojure = clojupyter.definition;
-      octave = octave-kernel.definition;
-      # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
-    };
-  };
-
   jupyter-console = callPackage ../applications/editors/jupyter/console.nix { };
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
