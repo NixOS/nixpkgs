@@ -832,7 +832,9 @@ broken-packages:
   - compactable # failure in job https://hydra.nixos.org/build/233228106 at 2023-09-02
   - compact-list # failure in job https://hydra.nixos.org/build/233241961 at 2023-09-02
   - compact-map # failure in job https://hydra.nixos.org/build/233201665 at 2023-09-02
+  - compact-mutable-vector # failure in job https://hydra.nixos.org/build/245539335 at 2024-01-02
   - compact-sequences # failure in job https://hydra.nixos.org/build/233208553 at 2023-09-02
+  - compact-socket # failure in job https://hydra.nixos.org/build/245539349 at 2024-01-02
   - compact-string # failure in job https://hydra.nixos.org/build/233204162 at 2023-09-02
   - compact-string-fix # failure in job https://hydra.nixos.org/build/233238513 at 2023-09-02
   - comparse # failure in job https://hydra.nixos.org/build/233220012 at 2023-09-02
@@ -3710,6 +3712,7 @@ broken-packages:
   - nats-client # failure in job https://hydra.nixos.org/build/233241313 at 2023-09-02
   - nat-sized-numbers # failure in job https://hydra.nixos.org/build/233244238 at 2023-09-02
   - natural # failure in job https://hydra.nixos.org/build/233232490 at 2023-09-02
+  - NaturalLanguageAlphabets # failure in job https://hydra.nixos.org/build/245539294 at 2024-01-02
   - NaturalSort # failure in job https://hydra.nixos.org/build/233213239 at 2023-09-02
   - naver-translate # failure in job https://hydra.nixos.org/build/233225934 at 2023-09-02
   - nbt # failure in job https://hydra.nixos.org/build/233253509 at 2023-09-02
@@ -4847,6 +4850,7 @@ broken-packages:
   - secure-sockets # failure in job https://hydra.nixos.org/build/233254170 at 2023-09-02
   - secureUDP # failure in job https://hydra.nixos.org/build/233215410 at 2023-09-02
   - SegmentTree # failure in job https://hydra.nixos.org/build/233216161 at 2023-09-02
+  - selda-postgresql # failure in job https://hydra.nixos.org/build/245539286 at 2024-01-02
   - selectors # failure in job https://hydra.nixos.org/build/233227433 at 2023-09-02
   - selenium # failure in job https://hydra.nixos.org/build/233214276 at 2023-09-02
   - selinux # failure in job https://hydra.nixos.org/build/233192853 at 2023-09-02
