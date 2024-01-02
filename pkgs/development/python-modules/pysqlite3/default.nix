@@ -2,9 +2,11 @@
 , buildPythonPackage
 , pythonImportsCheckHook
 , fetchFromGitHub
+, fetchurl
 , python
 , sqlite
-, pytestCheckHook
+, tcl
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,9 +20,27 @@ buildPythonPackage rec {
     hash = "sha256-Ik//afKc7v1iBRGwOZrQbbMsHmdH5FptS9EAldhKRmk=";
   };
 
-  nativeBuildInputs = [ pythonImportsCheckHook pytestCheckHook ];
+  sqlitesrc = fetchurl {
+    url = "https://www.sqlite.org/src/tarball/sqlite.tar.gz";
+    hash = "sha256-jOGugJV9cD88/D3GH+uRJPm5V7LFbZIiubyOV/e4auo=";
+  };
+
+  preConfigure = ''
+    tar xzf $sqlitesrc
+    cd sqlite/
+    ./configure
+    make sqlite3.c
+    cp sqlite3.[ch] ../
+    cd ../
+  '';
+
+  nativeBuildInputs = [ tcl pythonImportsCheckHook unittestCheckHook ];
   buildInputs = [
     sqlite
+  ];
+
+  setupPyBuildFlags = [
+    "build_static"
   ];
 
   postInstall = ''
