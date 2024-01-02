@@ -151,6 +151,10 @@ let
       quic_bpf on;
     ''}
 
+    ${optionalString cfg.hasLuaModule ''
+      lua_package_path "${pkgs.luaPackages.lua-resty-core}/lib/?.lua;${pkgs.luaPackages.lua-resty-lrucache}/lib/?.lua;;";
+    ''}
+
     ${cfg.config}
 
     ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
@@ -664,6 +668,18 @@ in
         description = lib.mdDoc ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in `pkgs.nginxModules`.
+        '';
+      };
+
+      hasLuaModule = mkOption {
+        type = types.bool;
+        readOnly = true;
+        description = lib.mdDoc ''
+          Predicate that returns true if a `lua` module has been added to
+          `services.nginx.additionalModules`.
+
+          Used to set `lua_package_path` in the nginx config, so that the module
+          can function properly.
         '';
       };
 
@@ -1189,8 +1205,12 @@ in
       groups = config.users.groups;
     }) dependentCertNames;
 
-    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
+    services.nginx.additionalModules = lib.optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+
+    services.nginx.hasLuaModule = lib.lists.any
+      (mod: (lib.strings.match "lua" mod.name) != null)
+      config.services.nginx.additionalModules;
 
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       listenAddresses = lib.mkDefault ([
