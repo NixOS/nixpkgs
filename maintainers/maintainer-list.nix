@@ -18132,6 +18132,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  teatwig = {
+    email = "nix@teatwig.net";
+    name = "tea";
+    github = "teatwig";
+    githubId = 18734648;
+  };
   techknowlogick = {
     email = "techknowlogick@gitea.com";
     github = "techknowlogick";
