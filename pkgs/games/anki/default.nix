@@ -28,21 +28,21 @@
 
 let
   pname = "anki";
-  version = "23.12";
-  rev = "55ef11af84151b397f267a2f37d537aad5f1076d";
+  version = "23.12.1";
+  rev = "1a1d4d5419c6b57ef3baf99c9d2d9cf85d36ae0a";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-KkB0tNjW08XIdpmW2mzwLqhn5DHoPV0AM0ciZOxSKEs=";
+    hash = "sha256-K38bhfU1076PxdKJFvnFb2w6Q9Q2MUmL+j8be3RZQYk=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "fsrs-0.1.0" = "sha256-RIT7mbesrju70S4fPNy1N6+pSr78mcenQ6ujPtu4UbE=";
+      "fsrs-0.1.0" = "sha256-KJgT01OmMbqgYFE5Fu8nblZl9rL5QVVMa2DNFsw6cdk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
