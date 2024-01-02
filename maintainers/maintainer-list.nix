@@ -7608,6 +7608,12 @@
     githubId = 51334444;
     name = "Akshat Agarwal";
   };
+  hummeltech = {
+    email = "hummeltech2024@gmail.com";
+    github = "hummeltech";
+    githubId = 6109326;
+    name = "David Hummel";
+  };
   huyngo = {
     email = "huyngo@disroot.org";
     github = "Huy-Ngo";
