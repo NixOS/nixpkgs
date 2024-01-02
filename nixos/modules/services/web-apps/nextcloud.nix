@@ -106,6 +106,7 @@ let
 in {
 
   imports = [
+    ./nextcloud-backup.nix
     (mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpass" ] ''
       Please use `services.nextcloud.config.adminpassFile' instead!
     '')
