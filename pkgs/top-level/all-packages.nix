@@ -7946,6 +7946,10 @@ with pkgs;
     llvmPackages = llvmPackages_17;
   };
 
+  emscripten_3_1_49 = callPackage ../development/compilers/emscripten/3.1.49.nix {
+    llvmPackages = llvmPackages_16;
+  };
+
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
