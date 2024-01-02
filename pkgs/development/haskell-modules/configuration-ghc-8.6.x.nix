@@ -95,7 +95,7 @@ self: super: {
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
-  exceptions = null;
+  exceptions = self.exceptions_0_10_7;
 
   # Older compilers need the latest ghc-lib to build this package.
   hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
