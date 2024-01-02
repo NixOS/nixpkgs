@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , python
 , sqlite
-, pytestCheckHook 
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
