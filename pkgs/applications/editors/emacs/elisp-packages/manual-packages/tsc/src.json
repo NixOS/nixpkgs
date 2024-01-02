@@ -1,0 +1,10 @@
+{
+  "src": {
+    "owner": "emacs-tree-sitter",
+    "repo": "elisp-tree-sitter",
+    "rev": "909717c685ff5a2327fa2ca8fb8a25216129361c",
+    "hash": "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k="
+  },
+  "version": "0.18.0",
+  "cargoHash": "sha256-IRCZqszBkGF8anF/kpcPOzHdOP4lAtJBAp6FS5tAOx8="
+}

@@ -1,0 +1,43 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index de1cd6e..bb5700b 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -616,24 +616,6 @@ config("compiler") {
+       }
+     }
+ 
+-    # TODO(crbug.com/1488374): This causes binary size growth and potentially
+-    # other problems.
+-    # TODO(crbug.com/1491036): This isn't supported by Cronet's mainline llvm version.
+-    if (default_toolchain != "//build/toolchain/cros:target" &&
+-        !llvm_android_mainline) {
+-      cflags += [
+-        "-mllvm",
+-        "-split-threshold-for-reg-with-hint=0",
+-      ]
+-      if (use_thin_lto && is_a_target_toolchain) {
+-        if (is_win) {
+-          ldflags += [ "-mllvm:-split-threshold-for-reg-with-hint=0" ]
+-        } else {
+-          ldflags += [ "-Wl,-mllvm,-split-threshold-for-reg-with-hint=0" ]
+-        }
+-      }
+-    }
+-
+     # TODO(crbug.com/1235145): Investigate why/if this should be needed.
+     if (is_win) {
+       cflags += [ "/clang:-ffp-contract=off" ]
+@@ -800,13 +782,6 @@ config("compiler") {
+       if (is_apple) {
+         ldflags += [ "-Wcrl,object_path_lto" ]
+       }
+-      if (!is_chromeos) {
+-        # TODO(https://crbug.com/972449): turn on for ChromeOS when that
+-        # toolchain has this flag.
+-        # We only use one version of LLVM within a build so there's no need to
+-        # upgrade debug info, which can be expensive since it runs the verifier.
+-        ldflags += [ "-Wl,-mllvm,-disable-auto-upgrade-debug-info" ]
+-      }
+     }
+ 
+     # TODO(https://crbug.com/1211155): investigate why this isn't effective on

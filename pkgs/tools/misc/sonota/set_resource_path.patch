@@ -1,0 +1,20 @@
+diff --git a/sonota.py b/sonota.py
+index f67128b..9f2752e 100644
+--- a/sonota.py
++++ b/sonota.py
+@@ -475,14 +475,7 @@ def promptforval(msg):
+             return val
+
+ def resource_path(relative_path):
+-    """ Get absolute path to resource, works for dev and for PyInstaller """
+-    try:
+-        # PyInstaller creates a temp folder and stores path in _MEIPASS
+-        base_path = sys._MEIPASS
+-    except Exception:
+-        base_path = os.path.dirname(sys.argv[0])
+-
+-    return os.path.join(base_path, relative_path)
++    return os.path.join("@out@/share/sonota", relative_path)
+
+ def checkargs():
+     # Make sure all of the binary files that are needed are there

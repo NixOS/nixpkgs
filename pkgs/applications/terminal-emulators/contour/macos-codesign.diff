@@ -1,0 +1,21 @@
+diff --git a/src/contour/CMakeLists.txt b/src/contour/CMakeLists.txt
+index 0eebd585..5d0bc3c0 100644
+--- a/src/contour/CMakeLists.txt
++++ b/src/contour/CMakeLists.txt
+@@ -145,6 +145,16 @@ if(CONTOUR_BUILD_WITH_MIMALLOC)
+     target_link_libraries(contour mimalloc)
+ endif()
+ 
++if(APPLE)
++  add_custom_command(
++    TARGET contour POST_BUILD
++    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
++    COMMAND codesign --force --sign - contour.app/Contents/MacOS/contour
++    COMMENT "Codesigning macOS bundle executable"
++    VERBATIM
++  )
++endif()
++
+ if(NOT(WIN32))
+     set(terminfo_file "contour.terminfo")
+     set(terminfo_basedir "${CMAKE_CURRENT_BINARY_DIR}/terminfo")
