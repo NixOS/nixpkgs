@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kail";
-  version = "0.17.2";
+  version = "0.17.3";
 
   ldflags = [
     "-s"
@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "boz";
     repo = "kail";
     rev = "v${version}";
-    sha256 = "sha256-mUdb3f5GaD+3GceUOpIFHKgGqqollzCJ8/oUj/37xAU=";
+    sha256 = "sha256-2wdPUlZLN2SOviM/zp0iLH/+WE+QZg0IAGj0l4jz/vE=";
   };
 
   vendorHash = "sha256-GOrw/5nDMTg2FKkzii7FkyzCxfBurnnQbfBF4nfSaJI=";
