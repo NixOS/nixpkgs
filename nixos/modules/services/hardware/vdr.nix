@@ -45,6 +45,7 @@ in {
     systemd.services.vdr = {
       description = "VDR";
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/vdr \

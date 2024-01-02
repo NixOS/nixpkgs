@@ -1,0 +1,31 @@
+diff -Naurd PortMidi-0.2.0.0/portmidi/pm_linux/pmlinuxalsa.c PortMidi-0.2.0.0-alsafix/portmidi/pm_linux/pmlinuxalsa.c
+--- PortMidi-0.2.0.0/portmidi/pm_linux/pmlinuxalsa.c	2023-12-13 11:35:12.517413022 +0000
++++ PortMidi-0.2.0.0-alsafix/portmidi/pm_linux/pmlinuxalsa.c	2023-12-13 11:35:12.565413037 +0000
+@@ -719,6 +719,18 @@
+ }
+ 
+ 
++static void set_alsa_plugin_path( void )
++{
++    char *existing;
++
++    existing = getenv("ALSA_PLUGIN_DIR");
++    if (NULL != existing) {
++        return;
++    }
++    setenv("ALSA_PLUGIN_DIR", "@alsa_plugin_dir@", 0);
++}
++
++
+ PmError pm_linuxalsa_init( void )
+ {
+     int  err;
+@@ -726,6 +738,8 @@
+     snd_seq_port_info_t *pinfo;
+     unsigned int caps;
+ 
++    set_alsa_plugin_path();
++
+     /* Previously, the last parameter was SND_SEQ_NONBLOCK, but this 
+      * would cause messages to be dropped if the ALSA buffer fills up.
+      * The correct behavior is for writes to block until there is 

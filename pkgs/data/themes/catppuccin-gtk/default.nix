@@ -82,6 +82,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/catppuccin/gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fufexan PlayerNameHere ];
+    maintainers = with maintainers; [ fufexan dixslyf ];
   };
 }

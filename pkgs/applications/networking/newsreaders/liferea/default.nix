@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
+  enableParallelBuilding = true;
+
   pythonPath = with python3Packages; [
     pygobject3
     pycairo

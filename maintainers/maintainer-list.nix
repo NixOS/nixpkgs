@@ -4688,6 +4688,15 @@
       fingerprint = "8FD2 153F 4889 541A 54F1  E09E 71B6 C31C 8A5A 9D21";
     }];
   };
+  dixslyf = {
+    name = "Dixon Sean Low Yan Feng";
+    email = "dixonseanlow@protonmail.com";
+    github = "dixslyf";
+    githubId = 56017218;
+    keys = [{
+      fingerprint = "E6F4 BFB4 8DE3 893F 68FC  A15F FF5F 4B30 A41B BAC8";
+    }];
+  };
   djacu = {
     email = "daniel.n.baker@gmail.com";
     github = "djacu";
@@ -13879,10 +13888,10 @@
     name = "Sandro Stikić";
   };
   OPNA2608 = {
-    email = "christoph.neidahl@gmail.com";
+    email = "opna2608@protonmail.com";
     github = "OPNA2608";
     githubId = 23431373;
-    name = "Christoph Neidahl";
+    name = "Cosima Neidahl";
   };
   orbekk = {
     email = "kjetil.orbekk@gmail.com";
@@ -14618,15 +14627,6 @@
     githubId = 4303706;
     keys = [{
       fingerprint = "B00F E582 FD3F 0732 EA48  3937 F558 14E4 D687 4375";
-    }];
-  };
-  PlayerNameHere = {
-    name = "Dixon Sean Low Yan Feng";
-    email = "dixonseanlow@protonmail.com";
-    github = "dixslyf";
-    githubId = 56017218;
-    keys = [{
-      fingerprint = "E6F4 BFB4 8DE3 893F 68FC  A15F FF5F 4B30 A41B BAC8";
     }];
   };
   plchldr = {
@@ -16785,6 +16785,12 @@
       fingerprint = "F83C 407C ADC4 5A0F 1F2F  44E8 9210 C218 023C 15CD";
     }];
     name = "Shane Sveller";
+  };
+  shard7 = {
+    email = "sh7user@gmail.com";
+    github = "shard77";
+    githubId = 106669955;
+    name = "Léon Gessner";
   };
   shardy = {
     email = "shardul@baral.ca";

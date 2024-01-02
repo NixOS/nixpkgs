@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flare";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = pname;
     rev = version;
-    hash = "sha256-mOy16w6K/xUc28c2tRxifWxsBf9VxLuDPB+GXE2iYtE=";
+    hash = "sha256-c02+nWIklZMD5jqyjmDBL7lffHQ+dOo2ggicd/vItUE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

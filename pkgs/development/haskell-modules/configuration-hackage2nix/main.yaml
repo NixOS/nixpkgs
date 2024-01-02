@@ -33,13 +33,6 @@ default-package-overrides:
   # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
   - hasql-dynamic-statements < 0.3.1.2
   - rope-utf16-splay < 0.4.0.0
-  # hnix < 0.17 (unreleased) needs hnix-store-* 0.5.*
-  - hnix-store-core == 0.5.0.0            # 2022-06-17: Until hnix 0.17
-  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
-
-  # 2023-04-22: For dhall < 1.42 compatibility
-  - dhall-nixpkgs == 1.0.9
-  - dhall-nix == 1.1.25
 
   # 2023-07-06: ghcide-2.0.0.1 explicitly needs implicit-hie < 0.1.3, because some sort of
   # breaking change was introduced in implicit-hie-0.1.3.0.
@@ -69,7 +62,6 @@ extra-packages:
   - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
   - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
-  - cachix < 1.4                        # 2023-04-02: cachix 1.4{,.1} have known on multi-user Nix systems
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
@@ -115,6 +107,7 @@ extra-packages:
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
+  - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
@@ -154,6 +147,7 @@ extra-packages:
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - unix-compat < 0.7                   # 2023-07-04: Need System.PosixCompat.User for git-annex
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
+  - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
 
 package-maintainers:
   abbradar:

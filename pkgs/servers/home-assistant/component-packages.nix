@@ -3965,7 +3965,8 @@
     ];
     "roborock" = ps: with ps; [
       python-roborock
-    ]; # missing inputs: vacuum-map-parser-roborock
+      vacuum-map-parser-roborock
+    ];
     "rocketchat" = ps: with ps; [
     ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [
