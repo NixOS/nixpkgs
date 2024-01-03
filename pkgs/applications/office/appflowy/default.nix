@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     # Copy archive contents to the outpout directory
     cp -r ./* $out/opt/
 
+    # Copy icon
+    install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
+
     runHook postInstall
   '';
 
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
+      icon = "appflowy";
       categories = [ "Office" ];
     })
   ];
