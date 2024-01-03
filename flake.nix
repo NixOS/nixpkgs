@@ -9,8 +9,8 @@
         nixpkgs = self;
       };
 
-      libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
-      lib = (import ./lib).extend libVersionInfoOverlay;
+      libFlakeInfoOverlay = import ./lib/flake-info.nix self;
+      lib = (import ./lib).extend libFlakeInfoOverlay;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
@@ -72,7 +72,7 @@
       # information rich.
       legacyPackages = forAllSystems (system:
         (import ./. { inherit system; }).extend (final: prev: {
-          lib = prev.lib.extend libVersionInfoOverlay;
+          lib = prev.lib.extend libFlakeInfoOverlay;
         })
       );
 

@@ -232,6 +232,48 @@ in {
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
+  /* The store path to this nixpkgs as a string with context. This can be used
+     to incur a dependency on this nixpkgs, for example, to symlink it into a
+     NixOS closure.
+
+     If this nixpkgs is used as a flake directly (via `nixpkgs.lib.trivial`
+     rather than via `import nixpkgs`), or it is already in the Nix store in
+     non-flake usage such as being fetched via `builtins.fetchTarball`,
+     evaluating this attribute is quick and does not copy anything new to the
+     store.
+
+     This is different than pkgs.path if nixpkgs is already in the Nix store,
+     since pkgs.path is a path to nixpkgs rather than a string-with-context,
+     and thus its usage typically, undesirably, results in copying this
+     nixpkgs.
+
+     See: https://github.com/NixOS/nix/issues/5868
+          https://github.com/NixOS/nix/issues/9428
+
+     Type: String
+  */
+
+  nixpkgsStorePathString =
+    # Note: this is overlayed by lib/flake-info.nix if nixpkgs is used directly
+    # as a flake.
+    if lib.strings.isStorePath (toString ../.) then
+      # While `toString ../.` is already a store path here, it doesn't contain
+      # a dependency on that store path in its string context.
+      # We can use `builtins.storePath` to establishes a dependency on an
+      # existing store path that nixpkgs was imported with.
+      if lib.trivial.inPureEvalMode then
+        # However, in pure eval mode, that builtin is not currently supported, see https://github.com/NixOS/nix/issues/5868.
+        # So we fall back to string interpolation of a path, which copies the path that's already in the store to the store once more,
+        # which is slow and gives it a doubly-hashed base name, but there's not much we can do
+        # See also https://github.com/NixOS/nix/issues/9428
+        "${../.}"
+      else
+        # Only outside pure eval we can actually use builtins.storePath, which can re-use the existing store path
+        builtins.storePath ../.
+    else
+      # Here ../. is not in the store already, so we need to use string interpolation to copy the path to the store.
+      "${../.}";
+
   /* Determine whether the function is being called from inside a Nix
      shell.
 

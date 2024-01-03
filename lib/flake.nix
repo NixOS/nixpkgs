@@ -5,6 +5,6 @@
     let
       lib0 = import ./.;
     in {
-      lib = lib0.extend (import ./flake-version-info.nix self);
+      lib = lib0.extend (import ./flake-info.nix self);
     };
 }
