@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     cp -pr bin lib license.html license-redist.txt probes samples $out
+    cp ${./forbid-desktop-item-creation} $out/bin/forbid-desktop-item-creation
     for i in attach integrate; do
         sed -i -e 's|profiler.sh|yourkit-java-profiler|' $out/bin/$i.sh
     done
@@ -55,6 +56,10 @@ stdenv.mkDerivation rec {
     done
     mv $out/bin/profiler.ico $out/bin/yourkit-java-profiler.ico
     sed -i -e 's|JAVA_EXE="$YD/jre64/bin/java"|JAVA_EXE=${jre}/bin/java|' \
+        $out/bin/yourkit-java-profiler
+    # Use our desktop item, which will be purged when this package
+    # gets removed
+    sed -i -e "2isource $out/bin/forbid-desktop-item-creation" \
         $out/bin/yourkit-java-profiler
 
     runHook postInstall
