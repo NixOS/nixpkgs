@@ -9465,6 +9465,8 @@ self: super: with self; {
 
   pynobo = callPackage ../development/python-modules/pynobo { };
 
+  pynpm = callPackage ../development/python-modules/pynpm { };
+
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynut2 = callPackage ../development/python-modules/pynut2 { };
