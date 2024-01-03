@@ -3397,6 +3397,8 @@ self: super: with self; {
 
   dropbox = callPackage ../development/python-modules/dropbox { };
 
+  dropmqttapi = callPackage ../development/python-modules/dropmqttapi { };
+
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
