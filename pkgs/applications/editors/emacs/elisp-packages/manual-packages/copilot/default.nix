@@ -1,14 +1,13 @@
 {
   dash,
   editorconfig,
-  emacs,
   fetchFromGitHub,
   nodejs,
   s,
   trivialBuild,
 }:
 trivialBuild {
-  pname = "copilot-el";
+  pname = "copilot";
   version = "unstable-2023-12-26";
   src = fetchFromGitHub {
     owner = "zerolfx";
