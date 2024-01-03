@@ -667,8 +667,6 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
-  elektroid = callPackage ../applications/audio/elektroid { };
-
   eludris = callPackage ../tools/misc/eludris {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
