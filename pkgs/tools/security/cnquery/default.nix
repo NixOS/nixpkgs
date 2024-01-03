@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "cnquery";
-  version = "9.12.1";
+  version = "9.12.3";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnquery";
     rev = "v${version}";
-    hash = "sha256-ezk9HgNf4FBW/PEaNUhsb3/l1ChTC42F3slXXa8ZJp4=";
+    hash = "sha256-DMJuQkxU6VNaPgcdvKY5p/124t02QvAo8lDT9B50Ze0=";
   };
 
   subPackages = [ "apps/cnquery" ];
 
-  vendorHash = "sha256-iycKyidVpdWeccK4RxENUxEFUmQKkIyyW1c3JFZ3gx4=";
+  vendorHash = "sha256-AHVmvmTn2MlL+aVBUQs4PA3k8w9/QQRD57DvSpSq09I=";
 
   meta = with lib; {
     description = "cloud-native, graph-based asset inventory";

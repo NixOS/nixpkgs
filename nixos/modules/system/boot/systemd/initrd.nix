@@ -396,8 +396,7 @@ in {
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
-        "/lib/modules".source = "${modulesClosure}/lib/modules";
-        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
+        "/lib".source = "${modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 

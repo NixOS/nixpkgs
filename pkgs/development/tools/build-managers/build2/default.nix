@@ -17,7 +17,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.15.0";
+  version = "0.16.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    sha256 = "07369gw6zlad6nk29564kj17yp145l3dzbgrx04pyiyl1s84aa1r";
+    hash = "sha256-ZK4+UACsAs51bC1dE0sIxmCiHlH3pYGPWJNsl61oSOY=";
   };
 
   patches = [
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     ./remove-config-store-paths.patch
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
-
-    ./remove-const-void-param.patch
   ];
 
   strictDeps = true;

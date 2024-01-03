@@ -3,19 +3,24 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H5Zg1I7+/vG5U9Tnr/qXVg/tTPMtuCWQGfEgug9ehEM=";
+    hash = "sha256-FDGNRBa45Q/L8468C3mZLEPduo9EpHWczO5z3Fe7Nwc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

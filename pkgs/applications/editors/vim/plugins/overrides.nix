@@ -1022,6 +1022,10 @@
     ];
   };
 
+  roslyn-nvim = super.roslyn-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig ];
+  };
+
   sg-nvim = super.sg-nvim.overrideAttrs (old:
     let
       sg-nvim-rust = rustPlatform.buildRustPackage {

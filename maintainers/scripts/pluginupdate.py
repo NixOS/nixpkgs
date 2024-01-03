@@ -17,6 +17,7 @@ import http
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -192,6 +193,11 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
+
+            # Filter out illegal XML characters
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            xml = illegal_xml_regex.sub(b"", xml)
+
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
