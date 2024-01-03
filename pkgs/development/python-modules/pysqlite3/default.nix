@@ -22,6 +22,11 @@ buildPythonPackage rec {
 
   sqlitesrc = sqlite.src;
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace /usr $out
+  '';
+
   preConfigure = ''
     cp $sqlitesrc /build/source/sqlite.tar.gz
     tar xzf sqlite.tar.gz
@@ -39,6 +44,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [
     "build_static"
+    "build_ext"
   ];
 
   postInstall = ''
