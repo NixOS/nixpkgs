@@ -1,7 +1,6 @@
 { lib
 , fetchgit
 , buildGoModule
-, installShellFiles
 }:
 
 buildGoModule {
@@ -16,11 +15,10 @@ buildGoModule {
 
   vendorHash = "sha256-85jFSAOfNMihv710LtfETmkKRqcdRuFCHVuPkW94X/Y=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  CGO_LDFLAGS = "-s -w";
-
-  GOFLAGS = "-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=readonly -modcacherw";
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "A waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
@@ -30,4 +28,3 @@ buildGoModule {
     maintainers = with maintainers; [ khaneliman ];
   };
 }
-

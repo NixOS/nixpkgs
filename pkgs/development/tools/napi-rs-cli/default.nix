@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "napi-rs-cli";
-  version = "2.12.0";
+  version = "2.17.0";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@napi-rs/cli/-/cli-${version}.tgz";
-    hash = "sha256-TGhPPv73tb3tr1cY9mUuN4FaVql5tGh436uJeTkbnJs=";
+    hash = "sha256-DeqH3pEtGZoKEBz5G0RfDO9LWHGMKL2OiWS1uWk4v44=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
