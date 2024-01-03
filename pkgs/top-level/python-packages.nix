@@ -3295,7 +3295,7 @@ self: super: with self; {
 
   dockerpty = callPackage ../development/python-modules/dockerpty { };
 
-  docker_pycreds = callPackage ../development/python-modules/docker-pycreds { };
+  docker-pycreds = callPackage ../development/python-modules/docker-pycreds { };
 
   docker-py = callPackage ../development/python-modules/docker-py { };
 
