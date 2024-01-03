@@ -1,26 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , atpublic
-, pdm-pep517
+, pdm-backend
+, pytestCheckHook
+, sybil
 }:
 
 buildPythonPackage rec {
-  pname = "flufl.i18n";
-  version = "4.1.1";
-  format = "pyproject";
+  pname = "flufl-i18n";
+  version = "5.0.2";
+  pyproject = true;
 
-  nativeBuildInputs = [ pdm-pep517 ];
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    pname = "flufl_i18n";
+    inherit version;
+    hash = "sha256-ct6grvDeTIGJ1YuV9y/eFIilVZ/Z2RyoLKgko3CduG4=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov=flufl --cov-report=term --cov-report=xml" ""
+  '';
+
+  nativeBuildInputs = [ pdm-backend ];
+
   propagatedBuildInputs = [ atpublic ];
-
-  doCheck = false;
 
   pythonImportsCheck = [ "flufl.i18n" ];
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
-  };
+  nativeCheckInputs = [
+    pytestCheckHook
+    sybil
+  ];
+
+  pythonNamespaces = [
+    "flufl"
+  ];
 
   meta = with lib; {
     description = "A high level API for internationalizing Python libraries and applications";

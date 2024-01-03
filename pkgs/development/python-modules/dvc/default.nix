@@ -20,7 +20,7 @@
 , dvc-studio-client
 , dvc-task
 , flatten-dict
-, flufl_lock
+, flufl-lock
 , funcy
 , grandalf
 , hydra-core
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     dvc-studio-client
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     hydra-core
