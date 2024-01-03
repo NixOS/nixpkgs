@@ -4,6 +4,7 @@
 , openssl
 , pkg-config
 , stdenv
+, CoreServices
 , Security
 , SystemConfiguration
 }:
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ pkg-config ];
 
   cargoHash = "sha256-exzQOJjpRtRDyL5+cbiBfhXrJX99dPdOA2wAhrUNZvs=";
