@@ -2,6 +2,7 @@
 , buildLua
 , fetchFromGitea
 , curl
+, nix-update-script
 }:
 
 buildLua {
@@ -21,6 +22,10 @@ buildLua {
     substituteInPlace sponsorblock_minimal.lua \
       --replace "curl" "${lib.getExe curl}"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = ["--version=branch"];
+  };
 
   meta = with lib; {
     description = "A minimal script to skip sponsored segments of YouTube videos";
