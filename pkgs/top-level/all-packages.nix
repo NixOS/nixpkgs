@@ -24197,7 +24197,7 @@ with pkgs;
 
   nvidia-docker = mkNvidiaContainerPkg {
     name = "nvidia-docker";
-    containerRuntimePath = "${docker}/libexec/docker/runc";
+    containerRuntimePath = "${docker}/libexec/docker/docker";
     configTemplate = ../applications/virtualization/nvidia-docker/config.toml;
     additionalPaths = [ (callPackage ../applications/virtualization/nvidia-docker { }) ];
   };
