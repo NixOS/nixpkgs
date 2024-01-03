@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     cp -pr bin lib license.html license-redist.txt probes samples $out
+    for i in attach integrate; do
+        sed -i -e 's|profiler.sh|yourkit-java-profiler|' $out/bin/$i.sh
+    done
     for i in attach integrate profiler; do
         mv $out/bin/$i.sh $out/bin/yourkit-java-$i
     done
