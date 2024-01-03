@@ -24237,8 +24237,6 @@ with pkgs;
     configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
   };
 
-  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
-
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
