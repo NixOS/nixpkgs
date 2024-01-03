@@ -12735,6 +12735,8 @@ self: super: with self; {
 
   pyweatherflowudp = callPackage ../development/python-modules/pyweatherflowudp { };
 
+  pywebpack = callPackage ../development/python-modules/pywebpack { };
+
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
