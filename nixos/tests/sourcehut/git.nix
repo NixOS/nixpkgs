@@ -49,8 +49,6 @@ in
     ''
       start_all()
       machine.wait_for_unit("multi-user.target")
-      # For some reason, OpenSSH fails to start on boot with code 226/NAMESPACE
-      machine.systemctl("start sshd.service")
       machine.wait_for_unit("sshd.service")
 
       with subtest("Check whether meta comes up"):
