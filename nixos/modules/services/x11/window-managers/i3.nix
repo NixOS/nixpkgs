@@ -16,6 +16,9 @@ in
       description = lib.mdDoc ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
+
+        To pass in derivation paths from nix,
+        use pkgs.writeTextFile rather than builtins.toFile to provide this path.
       '';
     };
 
