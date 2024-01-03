@@ -12,6 +12,14 @@ use tempfile::NamedTempFile;
 
 /// Attribute set of this structure is returned by eval.nix
 #[derive(Deserialize)]
+enum Attribute {
+    /// An attribute that should be defined via pkgs/by-name
+    ByName(ByNameAttribute),
+    /// An attribute not defined via pkgs/by-name
+    NonByName,
+}
+
+#[derive(Deserialize)]
 enum ByNameAttribute {
     /// The attribute doesn't exist at all
     Missing,
@@ -120,7 +128,7 @@ pub fn check_values(
         anyhow::bail!("Failed to run command {command:?}");
     }
     // Parse the resulting JSON value
-    let attributes: Vec<(String, ByNameAttribute)> = serde_json::from_slice(&result.stdout)
+    let attributes: Vec<(String, Attribute)> = serde_json::from_slice(&result.stdout)
         .with_context(|| {
             format!(
                 "Failed to deserialise {}",
@@ -133,30 +141,34 @@ pub fn check_values(
             let relative_package_file = structure::relative_file_for_package(&attribute_name);
 
             use ratchet::RatchetState::*;
+            use Attribute::*;
             use AttributeInfo::*;
             use ByNameAttribute::*;
             use CallPackageVariant::*;
 
             let check_result = match attribute_value {
-                Missing => NixpkgsProblem::UndefinedAttr {
+                NonByName => Success(ratchet::Package {
+                    empty_non_auto_called: Tight,
+                }),
+                ByName(Missing) => NixpkgsProblem::UndefinedAttr {
                     relative_package_file: relative_package_file.clone(),
                     package_name: attribute_name.clone(),
                 }
                 .into(),
-                Existing(NonAttributeSet) => NixpkgsProblem::NonDerivation {
+                ByName(Existing(NonAttributeSet)) => NixpkgsProblem::NonDerivation {
                     relative_package_file: relative_package_file.clone(),
                     package_name: attribute_name.clone(),
                 }
                 .into(),
-                Existing(NonCallPackage) => NixpkgsProblem::WrongCallPackage {
+                ByName(Existing(NonCallPackage)) => NixpkgsProblem::WrongCallPackage {
                     relative_package_file: relative_package_file.clone(),
                     package_name: attribute_name.clone(),
                 }
                 .into(),
-                Existing(CallPackage(CallPackageInfo {
+                ByName(Existing(CallPackage(CallPackageInfo {
                     is_derivation,
                     call_package_variant,
-                })) => {
+                }))) => {
                     let check_result = if !is_derivation {
                         NixpkgsProblem::NonDerivation {
                             relative_package_file: relative_package_file.clone(),
@@ -203,7 +215,7 @@ pub fn check_values(
     ));
 
     Ok(check_result.map(|elems| ratchet::Nixpkgs {
-        package_names,
+        package_names: elems.iter().map(|(name, _)| name.to_owned()).collect(),
         package_map: elems.into_iter().collect(),
     }))
 }

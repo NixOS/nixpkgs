@@ -10,7 +10,7 @@ use std::collections::HashMap;
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
 pub struct Nixpkgs {
-    /// Sorted list of attributes in package_map
+    /// Sorted list of packages in package_map
     pub package_names: Vec<String>,
     /// The ratchet values for all packages
     pub package_map: HashMap<String, Package>,
@@ -29,14 +29,14 @@ impl Nixpkgs {
     }
 }
 
-/// The ratchet value for a single package in `pkgs/by-name`
+/// The ratchet value for a top-level package
 pub struct Package {
     /// The ratchet value for the check for non-auto-called empty arguments
     pub empty_non_auto_called: RatchetState<EmptyNonAutoCalled>,
 }
 
 impl Package {
-    /// Validates the ratchet checks for a single package defined in `pkgs/by-name`
+    /// Validates the ratchet checks for a top-level package
     pub fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
         RatchetState::<EmptyNonAutoCalled>::compare(
             name,

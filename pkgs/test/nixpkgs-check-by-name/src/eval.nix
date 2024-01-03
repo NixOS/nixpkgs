@@ -79,15 +79,26 @@ let
         };
       };
 
-  attrInfos = map (name: [
+  byNameAttrs = map (name: [
     name
-    (
-      if ! pkgs ? ${name} then
-        { Missing = null; }
-      else
-        { Existing = attrInfo name pkgs.${name}; }
-    )
+    {
+      ByName =
+        if ! pkgs ? ${name} then
+          { Missing = null; }
+        else
+          { Existing = attrInfo name pkgs.${name}; };
+    }
   ]) attrs;
 
+  # Information on all attributes that exist but are not in pkgs/by-name.
+  # We need this to enforce pkgs/by-name for new packages
+  nonByNameAttrs = map (name:
+    [
+      name
+      {
+        NonByName = null;
+      }
+    ]
+  ) (builtins.attrNames (builtins.removeAttrs pkgs attrs));
 in
-attrInfos
+byNameAttrs ++ nonByNameAttrs
