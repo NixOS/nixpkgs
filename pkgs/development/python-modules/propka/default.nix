@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "propka";
-  version = "3.5.0";
+  version = "3.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jensengroup";
     repo = "propka";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NbvrlapBALGbUyBqdqDcDG/igDf/xqxC35DzVUrbHlo=";
+    hash = "sha256-EJQqCe4WPOpqsSxxfbTjF0qETpSPYqpixpylweTCjko=";
   };
 
   propagatedBuildInputs = [
