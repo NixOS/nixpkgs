@@ -12,7 +12,7 @@
 , oauthlib
 , packaging
 , qrcode
-, rich
+, cookiecutter
 , watchdog
 , websocket-client
 , websockets
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     httpx
     packaging
     qrcode
-    rich
+    cookiecutter
   ];
 
   doCheck = false;
