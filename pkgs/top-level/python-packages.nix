@@ -4277,6 +4277,8 @@ self: super: with self; {
 
   flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
 
+  flask-pluginengine = callPackage ../development/python-modules/flask-pluginengine { };
+
   flask-principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-pymongo = callPackage ../development/python-modules/flask-pymongo { };
