@@ -20,14 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-Ik//afKc7v1iBRGwOZrQbbMsHmdH5FptS9EAldhKRmk=";
   };
 
-  sqlitesrc = fetchurl {
-    url = "https://www.sqlite.org/src/tarball/sqlite.tar.gz";
-    hash = "sha256-jOGugJV9cD88/D3GH+uRJPm5V7LFbZIiubyOV/e4auo=";
-  };
+  sqlitesrc = sqlite.src;
 
   preConfigure = ''
-    tar xzf $sqlitesrc
-    cd sqlite/
+    cp $sqlitesrc /build/source/sqlite.tar.gz
+    tar xzf sqlite.tar.gz
+    cd sqlite-autoconf-3430200
     ./configure
     make sqlite3.c
     cp sqlite3.[ch] ../
