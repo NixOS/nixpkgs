@@ -35,6 +35,7 @@ appimageTools.wrapType2 {
     homepage = "https://github.com/MuhammedKalkan/OpenLens";
     license = licenses.mit;
     maintainers = with maintainers; [ benwbooth sebtm ];
+    mainProgram = "openlens";
     platforms = [ "x86_64-linux" ];
   };
 }

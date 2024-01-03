@@ -32,7 +32,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
-    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +41,10 @@ buildPythonPackage rec {
     natsort
     python-dateutil
     pyyaml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "octodns" ];
