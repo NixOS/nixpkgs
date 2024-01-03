@@ -1,11 +1,7 @@
 # Takes a path to nixpkgs and a path to the json-encoded list of attributes to check.
-# Returns an attribute set containing information on each requested attribute.
-# If the attribute is missing from Nixpkgs it's also missing from the result.
-#
-# The returned information is an attribute set with:
-# - call_package_path: The <path> from `<attr> = callPackage <path> { ... }`,
-#   or null if it's not defined as with callPackage, or if the <path> is not a path
-# - is_derivation: The result of `lib.isDerivation <attr>`
+# Returns an value containing information on each requested attribute,
+# which is decoded on the Rust side.
+# See ./eval.rs for the meaning of the returned values
 {
   attrsPath,
   nixpkgsPath,
@@ -13,70 +9,78 @@
 let
   attrs = builtins.fromJSON (builtins.readFile attrsPath);
 
-  # This overlay mocks callPackage to persist the path of the first argument
-  callPackageOverlay = self: super: {
+  # We need access to the `callPackage` arguments of each attribute.
+  # The only way to do so is to override `callPackage` with our own version that adds this information to the result,
+  # and then try to access this information.
+  overlay = final: prev: {
+
+    # Information for attributes defined using `callPackage`
     callPackage = fn: args:
-      let
-        result = super.callPackage fn args;
-        variantInfo._attributeVariant = {
-          # These names are used by the deserializer on the Rust side
-          CallPackage.path =
+      addVariantInfo (prev.callPackage fn args) {
+        Manual = {
+          path =
             if builtins.isPath fn then
               toString fn
             else
               null;
-          CallPackage.empty_arg =
+          empty_arg =
             args == { };
         };
-      in
-      if builtins.isAttrs result then
-        # If this was the last overlay to be applied, we could just only return the `_callPackagePath`,
-        # but that's not the case because stdenv has another overlays on top of user-provided ones.
-        # So to not break the stdenv build we need to return the mostly proper result here
-        result // variantInfo
-      else
-        # It's very rare that callPackage doesn't return an attribute set, but it can occur.
-        variantInfo;
+      };
 
+    # Information for attributes that are auto-called from pkgs/by-name.
+    # This internal attribute is only used by pkgs/by-name
     _internalCallByNamePackageFile = file:
-      let
-        result = super._internalCallByNamePackageFile file;
-        variantInfo._attributeVariant = {
-          # This name is used by the deserializer on the Rust side
-          AutoCalled = null;
-        };
-      in
-      if builtins.isAttrs result then
-        # If this was the last overlay to be applied, we could just only return the `_callPackagePath`,
-        # but that's not the case because stdenv has another overlays on top of user-provided ones.
-        # So to not break the stdenv build we need to return the mostly proper result here
-        result // variantInfo
-      else
-        # It's very rare that callPackage doesn't return an attribute set, but it can occur.
-        variantInfo;
+      addVariantInfo (prev._internalCallByNamePackageFile file) {
+        Auto = null;
+      };
+
   };
+
+  # We can't just replace attribute values with their info in the overlay,
+  # because attributes can depend on other attributes, so this would break evaluation.
+  addVariantInfo = value: variant:
+    if builtins.isAttrs value then
+      value // {
+        _callPackageVariant = variant;
+      }
+    else
+      # It's very rare that callPackage doesn't return an attribute set, but it can occur.
+      # In such a case we can't really return anything sensible that would include the info,
+      # so just don't return the info and let the consumer handle it.
+      value;
 
   pkgs = import nixpkgsPath {
     # Don't let the users home directory influence this result
     config = { };
-    overlays = [ callPackageOverlay ];
+    overlays = [ overlay ];
   };
 
-  attrInfo = attr:
-    let
-      value = pkgs.${attr};
-    in
-    {
-    # These names are used by the deserializer on the Rust side
-    variant = value._attributeVariant or { Other = null; };
-    is_derivation = pkgs.lib.isDerivation value;
-  };
+  attrInfo = name: value:
+    if ! builtins.isAttrs value then
+      {
+        NonAttributeSet = null;
+      }
+    else if ! value ? _callPackageVariant then
+      {
+        NonCallPackage = null;
+      }
+    else
+      {
+        CallPackage = {
+          call_package_variant = value._callPackageVariant;
+          is_derivation = pkgs.lib.isDerivation value;
+        };
+      };
 
   attrInfos = builtins.listToAttrs (map (name: {
     inherit name;
-    value = attrInfo name;
+    value =
+      if ! pkgs ? ${name} then
+        { Missing = null; }
+      else
+        { Existing = attrInfo name pkgs.${name}; };
   }) attrs);
 
 in
-# Filter out attributes not in Nixpkgs
-builtins.intersectAttrs pkgs attrInfos
+attrInfos
