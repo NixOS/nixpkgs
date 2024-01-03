@@ -19,7 +19,7 @@ maven.buildMavenPackage rec {
     rev = version;
     hash = "sha256-tu3sEhmFZLMqPiBdPCiNYj5s08hMCo8mXpOCx/BP1EM=";
   };
-  mvnHash = "sha256-iGnoAZcJvaVoACi9ozG/f+A8tjvDuwn22bMRyuUU5Jg=";
+  mvnHash = "sha256-bsJlsIXIIVzZyVgEF/SN+GgpZt6v0u800arO1c5QYHk=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
