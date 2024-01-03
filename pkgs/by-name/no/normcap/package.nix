@@ -25,7 +25,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.4.4";
+  version = "0.5.2";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,7 +34,7 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dShtmoqS9TC3PHuwq24OEOhYfBHGhDCma8Du8QCkFuI=";
+    hash = "sha256-WkC9sdi6fKEHnf2j+p8KjO+MNbHWDYn5HnjeYBZLUj4==";
   };
 
   pythonRemoveDeps = [
@@ -43,11 +43,13 @@ ps.buildPythonApplication rec {
 
   nativeBuildInputs = [
     ps.pythonRelaxDepsHook
-    ps.poetry-core
+    ps.hatchling
   ];
 
   propagatedBuildInputs = [
     ps.pyside6
+    ps.babel
+    ps.toml
   ];
 
   preFixup = ''
@@ -61,6 +63,7 @@ ps.buildPythonApplication rec {
   nativeCheckInputs = wrapperDeps ++ [
     ps.pytestCheckHook
     ps.pytest-qt
+    ps.pytest-cov
     ps.toml
   ] ++ lib.optionals stdenv.isLinux [
     ps.pytest-xvfb
