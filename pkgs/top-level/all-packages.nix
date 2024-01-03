@@ -38222,9 +38222,9 @@ with pkgs;
 
   rili = callPackage ../games/rili { };
 
-  rogue = callPackage ../games/rogue {
-    ncurses = ncurses5;
-  };
+  rocksndiamonds = callPackage ../games/rocksndiamonds { };
+
+  rogauracore = callPackage ../tools/misc/rogauracore { };
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
