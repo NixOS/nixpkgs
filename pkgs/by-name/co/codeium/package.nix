@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gzip, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, gzip, autoPatchelfHook, darwin }:
 let
 
   inherit (stdenv.hostPlatform) system;
@@ -14,9 +14,9 @@ let
 
   hash = {
     x86_64-linux = "sha256-t+PM6ZYj/Lrho2wEiu+EUC27ApBPXyp78uoDUolov+4=";
-    aarch64-linux = "sha256-XdPsfhH4P9rWRC1+weSdRvCvCp8EETIN+QWHYIFh5w8=";
+    aarch64-linux = "";
     x86_64-darwin = "sha256-p9eDWtvxLipjcQnv35SMo9qRWJFEJN+gd+dzA/7LuHY=";
-    aarch64-darwin = "sha256-rlq5NG1nqAfrveLpH79edvTdPjlmigsjycqz99+Mb2I=";
+    aarch64-darwin = "";
   }.${system} or throwSystem;
 
   bin = "$out/bin/codeium_language_server";
@@ -33,17 +33,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
+  # buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  #   CoreFoundation
+  #   CoreServices
+  # ]);
+
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    gzip -dc $src > ${bin}
-    chmod +x ${bin}
-    runHook postInstall
-  '';
+  # installPhase = ''
+  #   runHook preInstall
+  #   mkdir -p $out/bin
+  #   gzip -dc $src > ${bin}
+  #   chmod +x ${bin}
+  #   runHook postInstall
+  # '';
 
   passthru.updateScript = ./update.sh;
 
