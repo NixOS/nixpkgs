@@ -100,7 +100,9 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
   # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2"
+    || (versionOlder cfg.package.version "27.0.0"
+      && versionAtLeast cfg.package.version "26.0.8");
 
 in {
 
