@@ -23955,8 +23955,6 @@ with pkgs;
 
   toml-f = callPackage ../development/libraries/toml-f { };
 
-  fypp = python3Packages.callPackage ../development/python-modules/fypp { };
-
   dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
 
   taco = callPackage ../development/libraries/taco { };
