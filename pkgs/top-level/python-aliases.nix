@@ -127,6 +127,7 @@ mapAliases ({
   django_taggit = django-taggit; # added 2021-10-11
   django_treebeard = django-treebeard; # added 2023-07-25
   dns = dnspython; # added 2017-12-10
+  docker_pycreds = docker-pycreds; # added 2024-01-03
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
