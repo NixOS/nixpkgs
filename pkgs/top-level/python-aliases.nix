@@ -86,6 +86,7 @@ mapAliases ({
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
+  covCore = cov-core; # added 2024-01-03
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cx_Freeze = cx-freeze; # added 2023-08-02
