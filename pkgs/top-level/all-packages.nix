@@ -5822,7 +5822,7 @@ with pkgs;
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
   klipper-estimator = callPackage ../applications/misc/klipper-estimator {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   klipperscreen = callPackage ../applications/misc/klipperscreen { };
