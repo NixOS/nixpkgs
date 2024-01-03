@@ -16174,6 +16174,8 @@ self: super: with self; {
 
   wtforms-dateutil = callPackage ../development/python-modules/wtforms-dateutil { };
 
+  wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
+
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
