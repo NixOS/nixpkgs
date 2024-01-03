@@ -143,7 +143,7 @@ in {
     (mkRenamedOptionModule
       [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "extraOptions" "skeletondirectory" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
+      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
     (mkRenamedOptionModule
       [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "extraOptions" "trusted_domains" ])
     (mkRenamedOptionModule
