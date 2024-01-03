@@ -36915,10 +36915,6 @@ with pkgs;
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
 
-  zola = callPackage ../applications/misc/zola {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
