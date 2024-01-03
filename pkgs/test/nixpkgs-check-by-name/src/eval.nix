@@ -54,6 +54,9 @@ let
     # Don't let the users home directory influence this result
     config = { };
     overlays = [ overlay ];
+    # We check evaluation and callPackage only for x86_64-linux.
+    # Not ideal, but hard to fix
+    system = "x86_64-linux";
   };
 
   attrInfo = name: value:

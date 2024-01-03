@@ -28,6 +28,8 @@ These checks are performed by this tool:
 - Each package directory must not refer to files outside itself using symlinks or Nix path expressions.
 
 ### Nix evaluation checks
+
+Evaluate Nixpkgs with `system` set to `x86_64-linux` and check that:
 - For each package directory, the `pkgs.${name}` attribute must be defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
 - For each package directory, `pkgs.lib.isDerivation pkgs.${name}` must be `true`.
 
