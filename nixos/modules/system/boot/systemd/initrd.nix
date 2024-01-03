@@ -108,6 +108,27 @@ let
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
+  envGenerator = pkgs.writeShellScriptBin "nixos-environment-generator" ''
+    # Figure out what closure to boot
+    closure=
+    for o in $(< /proc/cmdline); do
+        case $o in
+            init=*)
+                IFS== read -r -a initParam <<< "$o"
+                closure="$(dirname "''${initParam[1]}")"
+                ;;
+        esac
+    done
+
+    # Sanity check
+    if [ -z "''${closure:-}" ]; then
+      echo 'No init= parameter on the kernel command line' >&2
+      exit 1
+    fi
+
+    echo NIXOS_SYSTEM_CLOSURE=$closure
+  '';
+
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
@@ -396,6 +417,9 @@ in {
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
+        # Make the system closure available as an environment variable.
+        "/etc/systemd/system-environment-generators/nixos-environment-generator".source = "${envGenerator}/bin/nixos-environment-generator";
+
         "/lib/modules".source = "${modulesClosure}/lib/modules";
         "/lib/firmware".source = "${modulesClosure}/lib/firmware";
 
@@ -488,28 +512,11 @@ in {
           set -uo pipefail
           export PATH="/bin:${cfg.package.util-linux}/bin"
 
-          # Figure out what closure to boot
-          closure=
-          for o in $(< /proc/cmdline); do
-              case $o in
-                  init=*)
-                      IFS== read -r -a initParam <<< "$o"
-                      closure="$(dirname "''${initParam[1]}")"
-                      ;;
-              esac
-          done
-
-          # Sanity check
-          if [ -z "''${closure:-}" ]; then
-            echo 'No init= parameter on the kernel command line' >&2
-            exit 1
-          fi
-
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
-          if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
+          if ! [ -x "/sysroot$(readlink "/sysroot$NIXOS_SYSTEM_CLOSURE/prepare-root" || echo "$NIXOS_SYSTEM_CLOSURE/prepare-root")" ]; then
             echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
-            echo "$closure does not look like a NixOS installation - not activating"
+            echo "$NIXOS_SYSTEM_CLOSURE does not look like a NixOS installation - not activating"
             exit 0
           fi
           echo 'NEW_INIT=' > /etc/switch-root.conf
@@ -522,7 +529,7 @@ in {
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true
-          exec chroot /sysroot $closure/prepare-root
+          exec chroot /sysroot $NIXOS_SYSTEM_CLOSURE/prepare-root
         '';
       };
 
