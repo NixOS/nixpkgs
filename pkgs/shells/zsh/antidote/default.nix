@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://getantidote.github.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.hitsmaxft ];
+    platforms = lib.platforms.all;
   };
 })
