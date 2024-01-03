@@ -11,22 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.1.9";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Dtzzh4ersTLbAsG06d8dJa1rFgsruicU0bXl5IAUZMg=";
+    hash = "sha256-yKb74GADeALai4qZ/+dR6u/QzKQF5404+YJKSYU/oFU=";
   };
 
-  # Cargo.lock is outdated
-  # TODO: remove at next release
-  preBuild = ''
-    cargo update --offline
-  '';
-
-  cargoHash = "sha256-c6/baQ1o0alKGD7dZDK2udBRq2oRx1l4R97bfqkFlHk=";
+  cargoHash = "sha256-lvgLQH/WaLTO0k/L7n9ujylOhbbFAn3R4MY5JsOTcwI=";
 
   nativeBuildInputs = [
     installShellFiles
