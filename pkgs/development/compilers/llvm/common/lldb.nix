@@ -69,6 +69,11 @@ stdenv.mkDerivation (rec {
     libedit
     libxml2
     libllvm
+  ] ++ lib.optionals (lib.versionAtLeast release_version "16") [
+    # Starting with LLVM 16, the resource dir patch is no longer enough to get
+    # libclang into the rpath of the lldb executables. By putting it into
+    # buildInputs cc-wrapper will set up rpath correctly for us.
+    (lib.getLib libclang)
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
