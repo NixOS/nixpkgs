@@ -2375,7 +2375,7 @@ self: super: with self; {
 
   cot = callPackage ../development/python-modules/cot { };
 
-  covCore = callPackage ../development/python-modules/cov-core { };
+  cov-core = callPackage ../development/python-modules/cov-core { };
 
   coverage = callPackage ../development/python-modules/coverage { };
 
@@ -11763,7 +11763,7 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
-    boost182 = pkgs.boost182.override {
+    boost = pkgs.boost182.override {
       enablePython = true;
       inherit python;
     };
@@ -13641,6 +13641,8 @@ self: super: with self; {
   sqids = callPackage ../development/python-modules/sqids { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
+
+  sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
 

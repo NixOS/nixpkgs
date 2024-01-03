@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "mermaid-filter";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "raghur";
     repo = "mermaid-filter";
     rev = "v${version}";
-    hash = "sha256-5MKiUeiqEeWicOIdqOJ22x3VswYKiK4RSxZRzJntO6M=";
+    hash = "sha256-GG2RWr5nVe6PCcTEJLmPyKL2j7ggSyNnHZAffNvPukg=";
   };
 
-  npmDepsHash = "sha256-pnylo3dPgj7aD5czTWSV+uP5Cj8rVAsjZYoJ/WPRuuc=";
+  npmDepsHash = "sha256-Hj4h8xTch2Z3ByUhxzPhbCTSXNOXuTXC6XUrBkRvQ/U=";
 
   nativeBuildInputs = [ makeWrapper ];
 

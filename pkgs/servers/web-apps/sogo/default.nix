@@ -5,14 +5,14 @@
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.9.0";
+  version = "5.9.1";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-Jv+gOWNcjdXk51I22+znYLTUWDEdAOAmRJql9P+/OuQ=";
+    hash = "sha256-b6BZZ61wY0Akt1Q6+Bq6JXAx/67MwBNbzHr3sB0NuRg=";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
