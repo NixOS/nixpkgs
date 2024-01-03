@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "fastnlo_toolkit";
+  pname = "fastnlo-toolkit";
   version = "2.5.0-2826";
 
   src = fetchurl {

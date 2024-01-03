@@ -3915,7 +3915,7 @@ self: super: with self; {
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
-  fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
+  fastnlo-toolkit = toPythonModule (pkgs.fastnlo-toolkit.override {
     withPython = true;
     inherit (self) python;
   });

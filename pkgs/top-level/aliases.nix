@@ -261,7 +261,8 @@ mapAliases ({
   ### F ###
 
   faustStk = faustPhysicalModeling; # Added 2023-05-16
-  fastnlo = fastnlo_toolkit; # Added 2021-04-24
+  fastnlo = fastnlo-toolkit; # Added 2021-04-24
+  fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
   inherit (luaPackages) fennel; # Added 2022-09-24
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve
   findimagedupes = throw "findimagedupes has been removed because the perl bindings are no longer compatible"; # Added 2023-07-10
