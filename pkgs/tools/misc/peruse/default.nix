@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     mainProgram = "peruse";
+    inherit (kirigami2.meta) platforms;
   };
 })
