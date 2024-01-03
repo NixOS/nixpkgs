@@ -16957,6 +16957,8 @@ self: super: with self; {
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
 
+  wtforms-dateutil = callPackage ../development/python-modules/wtforms-dateutil { };
+
   wunsen = callPackage ../development/python-modules/wunsen { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
