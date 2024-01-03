@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.getpsyched ];
     platforms = platforms.all;
     mainProgram = "atlauncher";
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 })
