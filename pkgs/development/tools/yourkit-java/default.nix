@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , copyDesktopItems
+, imagemagick
 , makeDesktopItem
 , jre
 }:
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-fJk39cQEU924FViCwTcISIyhiwJEviVeqxLiNQifRis=";
   };
 
-  buildInputs = [ jre ];
+  nativeBuildInputs = [ copyDesktopItems imagemagick ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  buildInputs = [ jre ];
 
   desktopItems = [ desktopItem ];
 
@@ -54,7 +55,11 @@ stdenv.mkDerivation rec {
     for i in attach integrate profiler; do
         mv $out/bin/$i.sh $out/bin/yourkit-java-$i
     done
-    mv $out/bin/profiler.ico $out/bin/yourkit-java-profiler.ico
+    mkdir -p $out/share/icons
+    convert $out/bin/profiler.ico\[0] \
+            -size 256x256 \
+            $out/share/icons/yourkit-java-profiler.png
+    rm $out/bin/profiler.ico
     sed -i -e 's|JAVA_EXE="$YD/jre64/bin/java"|JAVA_EXE=${jre}/bin/java|' \
         $out/bin/yourkit-java-profiler
     # Use our desktop item, which will be purged when this package
