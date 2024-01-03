@@ -116,7 +116,7 @@ index d08f068a..cc7a173d 100644
                   && g_strlen(value) > 0)
          {
 diff --git a/libxrdp/xrdp_sec.c b/libxrdp/xrdp_sec.c
-index 8fa34aea..da94cf95 100644
+index 29c2222b..f658ade8 100644
 --- a/libxrdp/xrdp_sec.c
 +++ b/libxrdp/xrdp_sec.c
 @@ -371,7 +371,6 @@ xrdp_load_keyboard_layout(struct xrdp_client_info *client_info)
@@ -149,7 +149,7 @@ index 8fa34aea..da94cf95 100644
      }
  }
  
-@@ -2759,7 +2757,6 @@ xrdp_sec_incoming(struct xrdp_sec *self)
+@@ -2810,7 +2808,6 @@ xrdp_sec_incoming(struct xrdp_sec *self)
      int index = 0;
      char *item = NULL;
      char *value = NULL;
@@ -157,7 +157,7 @@ index 8fa34aea..da94cf95 100644
  
      iso = self->mcs_layer->iso_layer;
  
-@@ -2805,19 +2802,17 @@ xrdp_sec_incoming(struct xrdp_sec *self)
+@@ -2856,19 +2853,17 @@ xrdp_sec_incoming(struct xrdp_sec *self)
              LOG(LOG_LEVEL_DEBUG, "Using RDP security, and "
                  "reading the server configuration");
  
@@ -179,8 +179,21 @@ index 8fa34aea..da94cf95 100644
                  list_delete(items);
                  list_delete(values);
                  return 1;
+diff --git a/sesman/chansrv/chansrv.c b/sesman/chansrv/chansrv.c
+index ef3960ed..7d167728 100644
+--- a/sesman/chansrv/chansrv.c
++++ b/sesman/chansrv/chansrv.c
+@@ -1706,7 +1706,7 @@ main(int argc, char **argv)
+     /*
+      * The user is unable at present to override the sysadmin-provided
+      * sesman.ini location */
+-    config_path = XRDP_CFG_PATH "/sesman.ini";
++    config_path = argv[2];
+     if ((g_cfg = config_read(0, config_path)) == NULL)
+     {
+         main_cleanup();
 diff --git a/sesman/config.c b/sesman/config.c
-index 61e9e403..0466f61a 100644
+index 44636c60..2c3ba0af 100644
 --- a/sesman/config.c
 +++ b/sesman/config.c
 @@ -34,6 +34,7 @@
@@ -204,7 +217,7 @@ index 61e9e403..0466f61a 100644
      char *buf;
  
      list_clear(param_v);
-@@ -127,13 +127,12 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
+@@ -128,13 +128,12 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
          g_free(cf->default_wm);
          cf->default_wm = g_strdup("startwm.sh");
      }
@@ -221,7 +234,7 @@ index 61e9e403..0466f61a 100644
          g_free(cf->default_wm);
          cf->default_wm = g_strdup(buf);
          g_free(buf);
-@@ -151,10 +150,8 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
+@@ -152,10 +151,8 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
      /* if reconnect_sh doesn't begin with '/', it's a relative path to XRDP_CFG_PATH */
      if (cf->reconnect_sh[0] != '/')
      {
@@ -230,11 +243,11 @@ index 61e9e403..0466f61a 100644
 -        buf = (char *)g_malloc(length, 0);
 -        g_sprintf(buf, "%s/%s", XRDP_CFG_PATH, cf->reconnect_sh);
 +        buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->reconnect_sh) + 1, 0);
-+        g_sprintf(buf, "%s/%s", base_dir, cf->reconnect_sh);     
++        g_sprintf(buf, "%s/%s", base_dir, cf->reconnect_sh);
          g_free(cf->reconnect_sh);
          cf->reconnect_sh = g_strdup(buf);
          g_free(buf);
-@@ -511,6 +508,7 @@ struct config_sesman *
+@@ -518,6 +515,7 @@ struct config_sesman *
  config_read(const char *sesman_ini)
  {
      struct config_sesman *cfg;
@@ -242,19 +255,30 @@ index 61e9e403..0466f61a 100644
      int all_ok = 0;
  
      if ((cfg = g_new0(struct config_sesman, 1)) != NULL)
-@@ -532,8 +530,10 @@ config_read(const char *sesman_ini)
+@@ -539,8 +537,10 @@ config_read(const char *sesman_ini)
                  param_v->auto_free = 1;
  
                  /* read global config */
 -                config_read_globals(fd, cfg, param_n, param_v);
--
 +                g_strcpy(cfg_dir, sesman_ini);
 +                *(strrchr(cfg_dir, '/')) = 0;  // cfg_file validated to contain '/'
-+            
+ 
 +                config_read_globals(cfg_dir, fd, cfg, param_n, param_v);
                  /* read Xvnc/X11rdp/Xorg parameter list */
                  config_read_vnc_params(fd, cfg, param_n, param_v);
                  config_read_rdp_params(fd, cfg, param_n, param_v);
+diff --git a/sesman/session.c b/sesman/session.c
+index d352f5e8..eb0ae23a 100644
+--- a/sesman/session.c
++++ b/sesman/session.c
+@@ -411,6 +411,7 @@ session_start_chansrv(char *username, int display)
+ 
+         list_add_item(chansrv_params, (intptr_t) g_strdup(exe_path));
+         list_add_item(chansrv_params, 0); /* mandatory */
++        list_add_item(chansrv_params, (intptr_t) g_strdup(g_cfg->sesman_ini));
+ 
+         env_set_user(username, 0, display,
+                      g_cfg->env_names,
 diff --git a/xrdp/lang.c b/xrdp/lang.c
 index e4c18077..06f92997 100644
 --- a/xrdp/lang.c
@@ -294,7 +318,7 @@ index e4c18077..06f92997 100644
  
      if (g_file_exist(filename))
 diff --git a/xrdp/xrdp.c b/xrdp/xrdp.c
-index e91672fb..37cef0c0 100644
+index 60d805d2..ecebad6c 100644
 --- a/xrdp/xrdp.c
 +++ b/xrdp/xrdp.c
 @@ -384,7 +384,6 @@ xrdp_sanity_check(void)
@@ -319,10 +343,10 @@ index e91672fb..37cef0c0 100644
  }
  
 diff --git a/xrdp/xrdp.h b/xrdp/xrdp.h
-index 36d8f87a..687b9dd5 100644
+index be008aa2..54d7330e 100644
 --- a/xrdp/xrdp.h
 +++ b/xrdp/xrdp.h
-@@ -380,7 +380,7 @@ get_char_from_scan_code(int device_flags, int scan_code, int *keys,
+@@ -389,7 +389,7 @@ get_char_from_scan_code(int device_flags, int scan_code, int *keys,
                          int caps_lock, int num_lock, int scroll_lock,
                          struct xrdp_keymap *keymap);
  int
