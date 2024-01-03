@@ -15573,10 +15573,10 @@ with pkgs;
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
-  binaryen = pin-to-gcc12-if-gcc13 (callPackage ../development/compilers/binaryen {
+  binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
-  });
+  };
 
   blueprint-compiler = callPackage ../development/compilers/blueprint { };
 
@@ -18730,6 +18730,7 @@ with pkgs;
   # Dependency of build2, must also break cycle for this
   libbutl = callPackage ../development/libraries/libbutl {
     build2 = build2.bootstrap;
+    inherit (darwin) DarwinTools;
   };
 
   libbpkg = callPackage ../development/libraries/libbpkg { };
