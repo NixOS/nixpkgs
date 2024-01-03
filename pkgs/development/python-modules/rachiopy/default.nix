@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "rachiopy";
-  version = "1.0.3";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rfverbruggen";
     repo = pname;
     rev = version;
-    sha256 = "1d5v9qc7ymzns3ivc5fzwxnxz9sjkhklh57cw05va95mpk5kdskc";
+    sha256 = "sha256-PsdEXNy8vUxba/C00ARhLTQU9gMlChy9XdU20r+Maus=";
   };
 
   propagatedBuildInputs = [ requests ];
