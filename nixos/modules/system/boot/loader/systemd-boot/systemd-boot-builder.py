@@ -14,6 +14,7 @@ import warnings
 import json
 from typing import NamedTuple, Dict, List
 from dataclasses import dataclass
+from itertools import chain
 
 
 @dataclass
@@ -27,6 +28,7 @@ class BootSpec:
     system: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
+    useSystemStub: bool
 
 
 
@@ -63,7 +65,7 @@ initrd {initrd}
 options {kernel_params}
 """
 
-def generation_conf_filename(profile: str | None, generation: int, specialisation: str | None) -> str:
+def installable_filename(profile: str | None, generation: int, specialisation: str | None, extension: str) -> str:
     pieces = [
         "nixos",
         profile or None,
@@ -71,14 +73,14 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
         str(generation),
         f"specialisation-{specialisation}" if specialisation else None,
     ]
-    return "-".join(p for p in pieces if p) + ".conf"
+    return "-".join(p for p in pieces if p) + extension
 
 
 def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
             f.write("timeout @timeout@\n")
-        f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
+        f.write("default %s\n" % installable_filename(profile, generation, specialisation, ".conf"))
         if not @editor@:
             f.write("editor 0\n")
         f.write("console-mode @consoleMode@\n")
@@ -107,7 +109,8 @@ def get_bootspec(profile: str | None, generation: int) -> BootSpec:
 def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
     specialisations = bootspec_json['org.nixos.specialisation.v1']
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
-    return BootSpec(**bootspec_json['org.nixos.bootspec.v1'], specialisations=specialisations)
+    useSystemStub = bootspec_json.get("useSystemdStub", False)
+    return BootSpec(**bootspec_json['org.nixos.bootspec.v1'], specialisations=specialisations, useSystemStub=useSystemStub)
 
 
 def copy_from_file(file: str, dry_run: bool = False) -> str:
@@ -125,45 +128,59 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
     initrd = copy_from_file(bootspec.initrd)
-
     title = "@distroName@{profile}{specialisation}".format(
-        profile=" [" + profile + "]" if profile else "",
-        specialisation=" (%s)" % specialisation if specialisation else "")
-
-    try:
-        subprocess.check_call([bootspec.initrdSecrets, "@efiSysMountPoint@%s" % (initrd)])
-    except FileNotFoundError:
-        pass
-    except subprocess.CalledProcessError:
-        if current:
-            print("failed to create initrd secrets!", file=sys.stderr)
-            sys.exit(1)
-        else:
-            print("warning: failed to create initrd secrets "
-                  f'for "{title} - Configuration {generation}", an older generation', file=sys.stderr)
-            print("note: this is normal after having removed "
-                  "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
-    entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
-        generation_conf_filename(profile, generation, specialisation))
-    tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "init=%s " % bootspec.init
-
-    kernel_params = kernel_params + " ".join(bootspec.kernelParams)
+            profile=" [" + profile + "]" if profile else "",
+            specialisation=" (%s)" % specialisation if specialisation else "")
     build_time = int(os.path.getctime(system_dir(profile, generation, specialisation)))
     build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+    description = f"{bootspec.label}, built on {build_date}"
+    if bootspec.useSystemStub:
+        filename = installable_filename(profile, generation, specialisation, ".efi")
+        os_release = f'''
+        PRETTY_NAME="{title}"
+        VERSION_ID="Generation {generation} {description}"
+        '''
+        subprocess.check_call([
+            "@systemdUkify@/lib/systemd/ukify",
+            bootspec.kernel,
+            bootspec.initrd,
+            '--stub=@systemdUkify@/lib/systemd/boot/efi/linuxx64.efi.stub',
+            f'--cmdline=init={bootspec.init} {" ".join(bootspec.kernelParams)}',
+            f'--os-release={os_release}',
+            f'--output={filename}'
+            ])
+        subprocess.check_call(["install", filename, "@efiSysMountPoint@/EFI/Linux/"])
+    else:
+        try:
+            subprocess.check_call([bootspec.initrdSecrets, "@efiSysMountPoint@%s" % (initrd)])
+        except FileNotFoundError:
+            pass
+        except subprocess.CalledProcessError:
+            if current:
+                print("failed to create initrd secrets!", file=sys.stderr)
+                sys.exit(1)
+            else:
+                print("warning: failed to create initrd secrets "
+                    f'for "{title} - Configuration {generation}", an older generation', file=sys.stderr)
+                print("note: this is normal after having removed "
+                    "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
+        entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
+            installable_filename(profile, generation, specialisation, ".conf"))
+        tmp_path = "%s.tmp" % (entry_file)
+        kernel_params = "init=%s " % bootspec.init
 
-    with open(tmp_path, 'w') as f:
-        f.write(BOOT_ENTRY.format(title=title,
-                    generation=generation,
-                    kernel=kernel,
-                    initrd=initrd,
-                    kernel_params=kernel_params,
-                    description=f"{bootspec.label}, built on {build_date}"))
-        if machine_id is not None:
-            f.write("machine-id %s\n" % machine_id)
-        f.flush()
-        os.fsync(f.fileno())
-    os.rename(tmp_path, entry_file)
+        with open(tmp_path, 'w') as f:
+            f.write(BOOT_ENTRY.format(title=title,
+                        generation=generation,
+                        kernel=kernel,
+                        initrd=initrd,
+                        kernel_params=kernel_params,
+                        description=description))
+            if machine_id is not None:
+                f.write("machine-id %s\n" % machine_id)
+            f.flush()
+            os.fsync(f.fileno())
+        os.rename(tmp_path, entry_file)
 
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
@@ -190,24 +207,27 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
-    rex_profile = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
+    rex_profile = re.compile(r"^nixos-(.*)-generation-.*\.(conf|efi)$")
+    rex_generation = re.compile(r"^nixos.*-generation-([0-9]+)(-specialisation-.*)?\.(conf|efi)$")
     known_paths = []
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
         known_paths.append(copy_from_file(bootspec.kernel, True))
         known_paths.append(copy_from_file(bootspec.initrd, True))
-    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
-        if rex_profile.match(path):
-            prof = rex_profile.sub(r"\1", path)
-        else:
-            prof = None
-        try:
-            gen_number = int(rex_generation.sub(r"\1", path))
-        except ValueError:
-            continue
-        if not (prof, gen_number, None) in gens:
-            os.unlink(path)
+    for root_dir in [ "@efiSysMountPoint@/loader/entries/", "@efiSysMountPoint@/EFI/Linux/" ]:
+        iterator_conf = glob.iglob("nixos*-generation-[1-9]*.conf", root_dir=root_dir)
+        iterator_efi = glob.iglob("nixos*-generation-[1-9]*.efi", root_dir=root_dir)
+        for path in chain(iterator_conf, iterator_efi):
+            if rex_profile.match(path):
+                prof = rex_profile.sub(r"\1", path)
+            else:
+                prof = None
+            try:
+                gen_number = int(rex_generation.sub(r"\1", path))
+            except ValueError:
+                continue
+            if not (prof, gen_number, None) in gens:
+                os.unlink(root_dir + path)
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)

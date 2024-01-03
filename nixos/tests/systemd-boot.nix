@@ -322,4 +322,20 @@ in
         machine.wait_for_unit("multi-user.target")
       '';
     };
+  systemdStub = makeTest {
+    name = "systemd-stub";
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+    nodes.machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.useSystemdStub = true;
+      virtualisation.mountHostNixStore = true;
+      virtualisation.memorySize = 8000;
+    };
+
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+    '';
+  };
 }
