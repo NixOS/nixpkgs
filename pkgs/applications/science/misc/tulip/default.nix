@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
-  # error: format string is not a string literal (potentially insecure)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-format-security";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    # fatal error: 'Python.h' file not found
+    "-I${python3}/include/${python3.libPrefix}"
+    # error: format string is not a string literal (potentially insecure)
+    "-Wno-format-security"
+  ]);
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
