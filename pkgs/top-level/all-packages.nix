@@ -18713,6 +18713,7 @@ with pkgs;
   # Dependency of build2, must also break cycle for this
   libbutl = callPackage ../development/libraries/libbutl {
     build2 = build2.bootstrap;
+    inherit (darwin) DarwinTools;
   };
 
   libbpkg = callPackage ../development/libraries/libbpkg { };
