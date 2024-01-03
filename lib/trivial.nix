@@ -274,6 +274,18 @@ in {
       # Here ../. is not in the store already, so we need to use string interpolation to copy the path to the store.
       "${../.}";
 
+  /* Whether this nixpkgs is being used directly as a flake.
+
+     Note that this is not set for `import nixpkgs` from another flake; it is
+     only set if using `nixpkgs.lib` or the `lib` flake.
+
+     Type: Bool
+   */
+  isFlake =
+    # Note: this is overlayed by lib/flake-info.nix if nixpkgs is used directly
+    # as a flake.
+    false;
+
   /* Determine whether the function is being called from inside a Nix
      shell.
 

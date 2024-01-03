@@ -17,6 +17,9 @@ finalLib: prevLib: # lib overlay
       ".${finalLib.substring 0 8 (self.lastModifiedDate or "19700101")}.${self.shortRev or "dirty"}";
     revisionWithDefault = default: self.rev or default;
 
+    # this overrides lib/trivial.nix, in which isFlake is unconditionally set
+    # to false.
+    isFlake = true;
     # This overrides the nixpkgsStorePathString logic in lib/trivial.nix for
     # the special case of flakes, where we are in pure eval mode and thus
     # would not be able to use builtins.storePath to establish a dependency on
