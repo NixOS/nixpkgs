@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
-    maintainers = with maintainers; [ zzzsy ];
+    maintainers = with maintainers; [ zzzsy donovanglover ];
     mainProgram = "lutgen";
     license = licenses.mit;
   };
