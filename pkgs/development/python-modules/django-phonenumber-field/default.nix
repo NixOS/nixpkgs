@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "7.2.0";
+  version = "7.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "stefanfoulis";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-QEmwCdSiaae7mhmCPcV5F01f1GRxmIur3tyhv0XK7I4=";
+    hash = "sha256-IsUNWxFCDvCEvDsJzgv8Wzbi6wlHasMzaLQaR/3oy+8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
