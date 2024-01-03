@@ -61,6 +61,7 @@ in {
     };
     systemd.user.units."slice" = lib.mkIf cfg.enableUserSlices {
       text = ''
+        [Slice]
         ManagedOOMMemoryPressure=kill
         ManagedOOMMemoryPressureLimit=80%
       '';
