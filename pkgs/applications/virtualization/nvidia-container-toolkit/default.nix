@@ -47,6 +47,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  preConfigure = ''
+    # Ensure the runc symlink isn't broken:
+    if ! readlink --quiet --canonicalize-existing "${isolatedContainerRuntimePath}/runc" ; then
+      echo "${isolatedContainerRuntimePath}/runc: broken symlink" >&2
+      exit 1
+    fi
+  '';
+
   checkFlags =
     let
       skippedTests = [
