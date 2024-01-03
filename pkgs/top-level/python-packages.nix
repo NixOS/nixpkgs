@@ -9953,6 +9953,8 @@ self: super: with self; {
 
   pynotifier = callPackage ../development/python-modules/pynotifier { };
 
+  pynpm = callPackage ../development/python-modules/pynpm { };
+
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynut2 = callPackage ../development/python-modules/pynut2 { };
