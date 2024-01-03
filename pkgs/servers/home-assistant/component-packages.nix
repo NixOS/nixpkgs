@@ -559,7 +559,7 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-      btsmarthub_devicelist
+      btsmarthub-devicelist
     ];
     "bthome" = ps: with ps; [
       aioesphomeapi
