@@ -34,6 +34,10 @@ buildPythonPackage rec {
       url = "https://github.com/jax-ml/ml_dtypes/commit/c082a2df6bc0686b35c4b4a303fd1990485e181f.patch";
       hash = "sha256-aVJy9vT00b98xOrJCdbCHSZBI3uyjafmN88Z2rjBS48=";
     })
+    (fetchpatch {
+      url = "https://github.com/jax-ml/ml_dtypes/commit/79e4a1a5c5d85be5dd3ab9427eb0810cbeca2f99.patch";
+      hash = "sha256-8ClenaAhKx0Pi6qTSDPr8MKjYV67skiGq6QKYlt3T5o=";
+    })
   ];
 
   postPatch = ''
