@@ -21,7 +21,7 @@ in
 
   control-lock = callPackage ./manual-packages/control-lock { };
 
-  copilot-el = callPackage ./manual-packages/copilot-el { };
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
