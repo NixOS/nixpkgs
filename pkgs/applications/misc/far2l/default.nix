@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, ninja, pkg-config, m4, bash
+{ lib, stdenv, fetchFromGitHub, makeWrapper, cmake, ninja, pkg-config, m4, perl, bash
 , xdg-utils, zip, unzip, gzip, bzip2, gnutar, p7zip, xz
 , IOKit, Carbon, Cocoa, AudioToolbox, OpenGL, System
 , withTTYX ? true, libX11
@@ -14,18 +14,16 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.4.1";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-0t1ND6LmDcivfrZ8RaEr1vjeS5JtaeWkoHkl2e7Xr5s=";
+    sha256 = "sha256-aK6+7ChFAkeDiEYU2llBb//PBej2Its/wBeuG7ys/ew=";
   };
 
-  patches = [ ./python_prebuild.patch ];
-
-  nativeBuildInputs = [ cmake ninja pkg-config m4 makeWrapper ];
+  nativeBuildInputs = [ cmake ninja pkg-config m4 perl makeWrapper ];
 
   buildInputs = lib.optional withTTYX libX11
     ++ lib.optional withGUI wxGTK32
@@ -39,21 +37,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs python/src/prebuild.sh
-    substituteInPlace far2l/src/vt/vtcompletor.cpp \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
-    substituteInPlace far2l/src/cfg/config.cpp \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+    patchShebangs far2l/bootstrap/view.sh
   '';
 
-  cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${if v then "yes" else "no"}") {
-    TTYX = withTTYX;
-    USEWX = withGUI;
-    USEUCD = withUCD;
-    COLORER = withColorer;
-    MULTIARC = withMultiArc;
-    NETROCKS = withNetRocks;
-    PYTHON = withPython;
-  };
+  cmakeFlags = [
+    (lib.cmakeBool "TTYX" withTTYX)
+    (lib.cmakeBool "USEWX" withGUI)
+    (lib.cmakeBool "USEUCD" withUCD)
+    (lib.cmakeBool "COLORER" withColorer)
+    (lib.cmakeBool "MULTIARC" withMultiArc)
+    (lib.cmakeBool "NETROCKS" withNetRocks)
+    (lib.cmakeBool "PYTHON" withPython)
+  ] ++ lib.optionals withPython [
+    (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
+    (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
+  ];
 
   runtimeDeps = [ unzip zip p7zip xz gzip bzip2 gnutar ];
 
