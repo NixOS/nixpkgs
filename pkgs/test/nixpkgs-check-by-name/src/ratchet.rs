@@ -16,26 +16,13 @@ pub struct Nixpkgs {
 
 impl Nixpkgs {
     /// Validates the ratchet checks for Nixpkgs
-    pub fn compare(optional_from: Option<Self>, to: Self) -> Validation<()> {
+    pub fn compare(from: Self, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
-            to.packages.into_iter().map(|(name, attr_to)| {
-                let attr_from = if let Some(from) = &optional_from {
-                    from.packages.get(&name)
-                } else {
-                    // This pretends that if there's no base version to compare against, all
-                    // attributes existed without conforming to the new strictness check for
-                    // backwards compatibility.
-                    // TODO: Remove this case. This is only needed because the `--base`
-                    // argument is still optional, which doesn't need to be once CI is updated
-                    // to pass it.
-                    Some(&Package {
-                        empty_non_auto_called: EmptyNonAutoCalled::Invalid,
-                    })
-                };
-                Package::compare(&name, attr_from, &attr_to)
-            }),
+            to.packages
+                .into_iter()
+                .map(|(name, attr_to)| Package::compare(&name, from.packages.get(&name), &attr_to)),
         )
     }
 }

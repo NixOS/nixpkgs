@@ -38,15 +38,13 @@ pub struct Args {
 
     /// Path to the base Nixpkgs to run ratchet checks against.
     /// For PRs, this should be set to a checkout of the PRs base branch.
-    /// If not specified, no ratchet checks will be performed.
-    /// However, this flag will become required once CI uses it.
     #[arg(long)]
-    base: Option<PathBuf>,
+    base: PathBuf,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(args.base.as_deref(), &args.nixpkgs, &[], &mut io::stderr()) {
+    match process(&args.base, &args.nixpkgs, &[], &mut io::stderr()) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -77,7 +75,7 @@ fn main() -> ExitCode {
 /// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
 /// - `Ok(true)` if there are no problems
 pub fn process<W: io::Write>(
-    base_nixpkgs: Option<&Path>,
+    base_nixpkgs: &Path,
     main_nixpkgs: &Path,
     eval_accessible_paths: &[&Path],
     error_writer: &mut W,
@@ -87,18 +85,14 @@ pub fn process<W: io::Write>(
     let check_result = main_result.result_map(|nixpkgs_version| {
         // If the main Nixpkgs doesn't have any problems, run the ratchet checks against the base
         // Nixpkgs
-        if let Some(base) = base_nixpkgs {
-            check_nixpkgs(base, eval_accessible_paths, error_writer)?.result_map(
-                |base_nixpkgs_version| {
-                    Ok(ratchet::Nixpkgs::compare(
-                        Some(base_nixpkgs_version),
-                        nixpkgs_version,
-                    ))
-                },
-            )
-        } else {
-            Ok(ratchet::Nixpkgs::compare(None, nixpkgs_version))
-        }
+        check_nixpkgs(base_nixpkgs, eval_accessible_paths, error_writer)?.result_map(
+            |base_nixpkgs_version| {
+                Ok(ratchet::Nixpkgs::compare(
+                    base_nixpkgs_version,
+                    nixpkgs_version,
+                ))
+            },
+        )
     })?;
 
     match check_result {
@@ -234,9 +228,9 @@ mod tests {
 
         let base_path = path.join("base");
         let base_nixpkgs = if base_path.exists() {
-            Some(base_path.as_path())
+            base_path.as_path()
         } else {
-            None
+            Path::new("tests/empty-base")
         };
 
         // We don't want coloring to mess up the tests
