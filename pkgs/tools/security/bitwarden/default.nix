@@ -16,8 +16,10 @@
 , moreutils
 , napi-rs-cli
 , nodejs_18
+, patchutils_0_4_2
 , pkg-config
 , python3
+, runCommand
 , rustc
 , rustPlatform
 }:
@@ -28,13 +30,13 @@ let
   electron = electron_27;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.12.0";
+  version = "2023.12.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-WYhLKV3j3Ktite5u1H4fSku38hCCrMzKoxtjq6aT9yo=";
+    hash = "sha256-kmMEi9jYMPFHIdXyZAkeu8rh+34fEAkFw9uhwUt5k9o=";
   };
 
   patches = [
@@ -51,14 +53,23 @@ in buildNpmPackage rec {
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-QwG+D0M94HN1AyQlmzKeScZyksiUr5A9igEaox9DYN4=";
+  npmDepsHash = "sha256-IDqyHiXdMezdPNlZDyRdNzwC3SO5G3gI3h5zoxzzz/g=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
-    inherit patches src;
+    inherit src;
+    patches = map
+      (patch: runCommand
+        (builtins.baseNameOf patch)
+        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
+        ''
+          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
+        ''
+      )
+      patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-pCy3hGhI3mXm4uTOaFMykOzJqK2PC0t0hE8MrJKtA/k=";
+    hash = "sha256-8A33f2q9GoSM8Wh55iqnSfqWIpeRBz+EQT+rmsZsuXs=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

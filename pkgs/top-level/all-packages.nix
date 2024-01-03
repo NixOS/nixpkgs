@@ -6700,8 +6700,6 @@ with pkgs;
 
   blueman = callPackage ../tools/bluetooth/blueman { };
 
-  bluetuith = callPackage ../tools/bluetooth/bluetuith { };
-
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
@@ -18043,7 +18041,6 @@ with pkgs;
   })
     mkRubyVersion
     mkRuby
-    ruby_2_7
     ruby_3_1
     ruby_3_2
     ruby_3_3;
@@ -18051,7 +18048,6 @@ with pkgs;
   ruby = ruby_3_1;
   rubyPackages = rubyPackages_3_1;
 
-  rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
@@ -24259,8 +24255,6 @@ with pkgs;
     containerRuntimePath = "${runc}/bin/runc";
     configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
   };
-
-  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
@@ -30894,8 +30888,6 @@ with pkgs;
   };
 
   bookworm = callPackage ../applications/office/bookworm { };
-
-  bookletimposer = callPackage ../applications/office/bookletimposer { };
 
   boops = callPackage ../applications/audio/boops { };
 

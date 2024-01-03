@@ -80,14 +80,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.13.1";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-WhctvEmOGOxkVQUC84BcC4Td5GUEpY7dOG5La6lTv8E=";
+    hash = "sha256-1awdqojy2nWUtrK/VS8ALCK47rGWpS8Q6H2LciG2ymw=";
   };
 
   patches = [
@@ -222,6 +222,7 @@ stdenv.mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
+    "-DDESKTOP_APP_DISABLE_SCUDO=ON"
   ];
 
   preBuild = ''

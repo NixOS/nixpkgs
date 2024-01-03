@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-qCcWReo72eHN9MoTVAmSHYVhpqw0kZ9VU/plYRcirVA=";
 
   meta = with lib; {
-    homepage = "https://sea-ql.org/SeaORM";
+    homepage = "https://www.sea-ql.org/SeaORM";
     description = " Command line utility for SeaORM";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ traxys ];
