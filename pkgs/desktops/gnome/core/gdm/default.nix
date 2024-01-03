@@ -29,13 +29,14 @@
 , dbus
 , nixos-icons
 , runCommand
+, loginScreenIcon ? "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg"
 }:
 
 let
 
   override = substituteAll {
     src = ./org.gnome.login-screen.gschema.override;
-    icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+    icon = loginScreenIcon;
   };
 
 in
