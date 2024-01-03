@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
+, monorepoSrc, runCommand, fetchpatch
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt, libunwind
@@ -44,6 +44,17 @@ stdenv.mkDerivation rec {
     cd ../${basename}
     chmod -R u+w .
   '';
+
+  patches = [
+    # fix for https://github.com/NixOS/nixpkgs/issues/269548
+    # https://github.com/llvm/llvm-project/pull/77218
+    (fetchpatch {
+      name = "darwin-system-libcxxabi-link-flags.patch";
+      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
+      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
+      relative = "libcxx";
+    })
+  ];
 
   postPatch = ''
     cd ../runtimes
