@@ -9,6 +9,7 @@ let
   jsonFormat = pkgs.formats.json {};
 
   defaultPHPSettings = {
+    output_buffering = "0";
     short_open_tag = "Off";
     expose_php = "Off";
     error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
