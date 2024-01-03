@@ -193,6 +193,12 @@ in
             ""
             "${pkgs.procps}/bin/kill -s HUP $MAINPID"
           ];
+
+          # Fix from https://github.com/containerd/containerd/pull/4475
+          # (see also https://github.com/containerd/containerd/pull/7566 )
+          # Setting this to infinity breaks e.g. cupsd inside docker
+          # So we reset to the default value.
+          LimitNOFILE = 1048576;
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
