@@ -23,5 +23,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "littlefs-fuse";
     inherit (fuse.meta) platforms;
+    # fatal error: 'linux/fs.h' file not found
+    broken = stdenv.isDarwin;
   };
 }
