@@ -11,7 +11,6 @@ in
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
   version = "6.2.4"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
-  
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
