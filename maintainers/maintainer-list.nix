@@ -14884,6 +14884,16 @@
     githubId = 11898437;
     name = "Florian Ströger";
   };
+  presto8 = {
+    name = "Preston Hunt";
+    email = "me@prestonhunt.com";
+    matrix = "@presto8:matrix.org";
+    github = "presto8";
+    githubId = 246631;
+    keys = [{
+      fingerprint = "3E46 7EF1 54AA A1D0 C7DF  A694 E45C B17F 1940 CA52";
+    }];
+  };
   priegger = {
     email = "philipp@riegger.name";
     github = "priegger";
