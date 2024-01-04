@@ -1,29 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nbformat
-, sphinx
+, hatchling
+, ipykernel
+, ipython
 , ipywidgets
-, pythonOlder
 , nbconvert
+, nbformat
+, pythonOlder
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-sphinx";
-  version = "0.4.0";
-  format = "setuptools";
+  version = "0.5.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "jupyter_sphinx";
-    hash = "sha256-DBGjjxNDE48sUFHA00xMVF9EgBdMG9QcAlb+gm4LqlU=";
+    hash = "sha256-LiNpmjoc9dsxsQmB2lqjJgbucw9rc6hE0edtgAdWr1Y=";
   };
 
-  propagatedBuildInputs = [ nbconvert nbformat sphinx ipywidgets ];
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    ipykernel
+    ipython
+    ipywidgets
+    nbconvert
+    nbformat
+    sphinx
+  ];
 
   doCheck = false;
-
-  disabled = pythonOlder "3.5";
 
   meta = with lib; {
     description = "Jupyter Sphinx Extensions";
