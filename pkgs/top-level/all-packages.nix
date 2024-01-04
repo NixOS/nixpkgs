@@ -39100,6 +39100,7 @@ with pkgs;
   trimal = callPackage ../applications/science/biology/trimal { };
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
+    jdk = pkgs.jdk11_headless;
     # Reduce closure size
     jre = pkgs.jre_minimal.override {
       modules = [ "java.base" "java.logging" ];
