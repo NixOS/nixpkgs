@@ -59,6 +59,7 @@ let
           inherit (upstream-info.deps.gn) url rev hash;
         };
       });
+      recompressTarball = callPackage ./recompress-tarball.nix { };
     });
 
     browser = callPackage ./browser.nix {
