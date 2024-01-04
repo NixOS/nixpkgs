@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , mashumaro
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
