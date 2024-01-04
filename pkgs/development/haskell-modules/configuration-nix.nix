@@ -824,6 +824,7 @@ self: super: builtins.intersectAttrs super {
 
   # Tests require internet
   http-download = dontCheck super.http-download;
+  http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
   pantry_0_9_3_1 = doDistribute (dontCheck super.pantry_0_9_3_1);
 

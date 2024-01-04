@@ -1239,22 +1239,22 @@ self: super: {
 
         # stack-2.13.1 requires a bunch of the latest packages.
         (drv: drv.overrideScope (hfinal: hprev: {
-          ansi-terminal = hprev.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
-          crypton = hprev.crypton_0_34; # needs crypton >= 0.33
+          ansi-terminal = hfinal.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
+          crypton = hfinal.crypton_0_34; # needs crypton >= 0.33
           hedgehog = doJailbreak hprev.hedgehog; # has too strict version bound for ansi-terminal
-          hpack = hprev.hpack_0_36_0; # needs hpack == 0.36.0
-          http-client-tls = hprev.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
-          http-download = dontCheck hprev.http-download_0_2_1_0; # needs http-download >= 0.2.1.0, tests access network
-          optparse-applicative = hprev.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
+          hpack = hfinal.hpack_0_36_0; # needs hpack == 0.36.0
+          http-client-tls = hfinal.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
+          http-download = hfinal.http-download_0_2_1_0; # needs http-download >= 0.2.1.0
+          optparse-applicative = hfinal.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
           pantry = hfinal.pantry_0_9_3_1; # needs pantry >= 0.9.2
           syb = dontCheck hprev.syb; # cyclic dependencies
-          tar-conduit = hprev.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
+          tar-conduit = hfinal.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
           temporary = dontCheck hprev.temporary; # cyclic dependencies
         }))
       ];
 
   hopenpgp-tools = super.hopenpgp-tools.override {
-      optparse-applicative = self.optparse-applicative_0_18_1_0;
+    optparse-applicative = self.optparse-applicative_0_18_1_0;
   };
 
   # musl fixes
