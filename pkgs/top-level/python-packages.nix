@@ -16047,6 +16047,8 @@ self: super: with self; {
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 
+  wikitools3 = callPackage ../development/python-modules/wikitools3 { };
+
   willow = callPackage ../development/python-modules/willow { };
 
   winacl = callPackage ../development/python-modules/winacl { };
