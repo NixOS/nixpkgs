@@ -18,17 +18,29 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     autoreconf -i
     ./configure
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv rogauracore $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
