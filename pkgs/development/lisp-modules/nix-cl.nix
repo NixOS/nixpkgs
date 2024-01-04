@@ -306,7 +306,7 @@ let
           inherit pkg faslExt program flags asdf;
           inherit packageOverrides;
         };
-      buildASDFSystem = args: build-asdf-system (args // spec);
+      buildASDFSystem = args: build-asdf-system (spec // args);
     in pkg // {
       inherit pkgs withPackages withOverrides buildASDFSystem;
     };
