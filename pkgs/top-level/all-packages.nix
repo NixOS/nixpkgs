@@ -4780,8 +4780,6 @@ with pkgs;
 
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
-  czkawka = callPackage ../tools/misc/czkawka { };
-
   chayang = callPackage ../tools/wayland/chayang { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
