@@ -2,11 +2,14 @@
 , buildPythonPackage
 , emoji
 , fetchFromGitHub
+, networkx
 , numpy
+, peft
 , protobuf
 , pythonOlder
 , requests
 , six
+, toml
 , torch
 , tqdm
 , transformers
@@ -17,7 +20,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
@@ -28,10 +31,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     emoji
+    networkx
     numpy
+    peft
     protobuf
     requests
     six
+    toml
     torch
     tqdm
     transformers
