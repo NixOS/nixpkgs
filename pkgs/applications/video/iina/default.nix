@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
   sourceRoot = "IINA.app";
 
   installPhase = ''
-    mkdir -p "$out/Applications/IINA.app"
+    mkdir -p $out/{bin,Applications/IINA.app}
     cp -R . "$out/Applications/IINA.app"
+    ln -s "$out/Applications/IINA.app/Contents/MacOS/iina-cli" "$out/bin/iina"
   '';
 
   passthru.updateScript = nix-update-script { };
