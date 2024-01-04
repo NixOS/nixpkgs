@@ -1942,6 +1942,11 @@ self: super: {
       # pandoc depends on skylighting >= 0.14
       skylighting = self.skylighting_0_14_1;
       skylighting-core = self.skylighting-core_0_14_1;
+
+      # pandoc needs up to date typst
+      typst-symbols = self.typst-symbols_0_1_5;
+      # and texmath to match
+      texmath = self.texmath_0_12_8_6;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;

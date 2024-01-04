@@ -5193,7 +5193,6 @@ broken-packages:
   - staged-gg # failure in job https://hydra.nixos.org/build/233252183 at 2023-09-02
   - standalone-derive-topdown # failure in job https://hydra.nixos.org/build/233252467 at 2023-09-02
   - standalone-haddock # failure in job https://hydra.nixos.org/build/233254339 at 2023-09-02
-  - stan # failure in job https://hydra.nixos.org/build/233200000 at 2023-09-02
   - starling # failure in job https://hydra.nixos.org/build/233255468 at 2023-09-02
   - starter # failure in job https://hydra.nixos.org/build/233208799 at 2023-09-02
   - starter-snake-haskell # failure in job https://hydra.nixos.org/build/236685019 at 2023-10-04
