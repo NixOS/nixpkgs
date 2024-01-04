@@ -1042,9 +1042,10 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      dropmqttapi
       janus
       paho-mqtt
-    ]; # missing inputs: dropmqttapi
+    ];
     "dsmr" = ps: with ps; [
       dsmr-parser
     ];
@@ -5846,6 +5847,7 @@
     "doorbird"
     "dormakaba_dkey"
     "dremel_3d_printer"
+    "drop_connect"
     "dsmr"
     "dsmr_reader"
     "dte_energy_bridge"
