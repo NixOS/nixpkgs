@@ -6,7 +6,6 @@ use std::path::Path;
 
 use anyhow::Context;
 use serde::Deserialize;
-use std::collections::HashMap;
 use std::path::PathBuf;
 use std::process;
 use tempfile::NamedTempFile;
@@ -119,7 +118,7 @@ pub fn check_values(
         anyhow::bail!("Failed to run command {command:?}");
     }
     // Parse the resulting JSON value
-    let attributes: HashMap<String, ByNameAttribute> = serde_json::from_slice(&result.stdout)
+    let attributes: Vec<(String, ByNameAttribute)> = serde_json::from_slice(&result.stdout)
         .context(format!(
             "Failed to deserialise {}",
             String::from_utf8_lossy(&result.stdout)
@@ -201,6 +200,7 @@ pub fn check_values(
     ));
 
     Ok(check_result.map(|elems| ratchet::Nixpkgs {
-        packages: elems.into_iter().collect(),
+        package_names,
+        package_map: elems.into_iter().collect(),
     }))
 }

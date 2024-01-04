@@ -76,14 +76,15 @@ let
         };
       };
 
-  attrInfos = builtins.listToAttrs (map (name: {
-    inherit name;
-    value =
+  attrInfos = map (name: [
+    name
+    (
       if ! pkgs ? ${name} then
         { Missing = null; }
       else
-        { Existing = attrInfo name pkgs.${name}; };
-  }) attrs);
+        { Existing = attrInfo name pkgs.${name}; }
+    )
+  ]) attrs;
 
 in
 attrInfos

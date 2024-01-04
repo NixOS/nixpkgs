@@ -10,8 +10,10 @@ use std::collections::HashMap;
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
 pub struct Nixpkgs {
-    /// The ratchet values for each package in `pkgs/by-name`
-    pub packages: HashMap<String, Package>,
+    /// Sorted list of attributes in package_map
+    pub package_names: Vec<String>,
+    /// The ratchet values for all packages
+    pub package_map: HashMap<String, Package>,
 }
 
 impl Nixpkgs {
@@ -20,9 +22,9 @@ impl Nixpkgs {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
-            to.packages
-                .into_iter()
-                .map(|(name, attr_to)| Package::compare(&name, from.packages.get(&name), &attr_to)),
+            to.package_names.into_iter().map(|name| {
+                Package::compare(&name, from.package_map.get(&name), &to.package_map[&name])
+            }),
         )
     }
 }
