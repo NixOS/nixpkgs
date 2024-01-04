@@ -478,6 +478,17 @@ self: super: builtins.intersectAttrs super {
   # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
   llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
+  # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
+  # can't use pkg-config (LLVM has no official .pc files), we need to pass the
+  # `dev` and `lib` output in, or Cabal will have trouble finding the library.
+  # Since it looks a bit neater having it in a list, we circumvent the singular
+  # LLVM input here.
+  llvm-ffi =
+    addBuildDepends [
+      pkgs.llvmPackages_16.llvm.lib
+      pkgs.llvmPackages_16.llvm.dev
+    ] (super.llvm-ffi.override { LLVM = null; });
+
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
 
