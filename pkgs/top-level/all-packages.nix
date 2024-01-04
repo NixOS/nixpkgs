@@ -568,8 +568,6 @@ with pkgs;
 
   coost = callPackage ../development/libraries/coost { };
 
-  crc = callPackage ../applications/networking/cluster/crc { };
-
   confetty = callPackage ../applications/misc/confetty { };
 
   confy = callPackage ../applications/misc/confy { };
