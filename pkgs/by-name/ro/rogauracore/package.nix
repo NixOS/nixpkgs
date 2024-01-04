@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux-compatible open-source libusb implementation similar to the ROG Aura Core software";
     homepage = "https://github.com/wroberts/rogauracore";
-    maintainers = [ "truebad0ur" ];
+    maintainers = with maintainers; [ truebad0ur ];
     licenses = licenses.mit;
     platforms = platforms.linux;
   };
