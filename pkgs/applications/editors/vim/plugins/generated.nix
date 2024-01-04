@@ -6046,6 +6046,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/neoconf.nvim/";
   };
 
+  neocord = buildVimPlugin {
+    pname = "neocord";
+    version = "2024-01-03";
+    src = fetchFromGithub {
+      owner = "IogaMaster";
+      repo = "neocord";
+      rev = "7351eba601fc445ea2f44d5016f3a1df66b93565";
+      sha256 = "1pcnvpyg0pylvbyvcx85zpab7l9sjx7gncw2sgnp9n4cds52fgmb";
+    };
+    meta.homepage = "https://github.com/IogaMaster/neocord/";
+  };
+
   neodark-vim = buildVimPlugin {
     pname = "neodark.vim";
     version = "2023-07-15";
