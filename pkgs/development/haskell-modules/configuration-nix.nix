@@ -447,9 +447,8 @@ self: super: builtins.intersectAttrs super {
   mime-mail = appendConfigureFlag "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"" super.mime-mail;
 
   # Help the test suite find system timezone data.
-  tz = overrideCabal (drv: {
-    preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
-  }) super.tz;
+  tz = addBuildDepends [ pkgs.tzdata ] super.tz;
+  tzdata = addBuildDepends [ pkgs.tzdata ] super.tzdata;
 
   # https://hydra.nixos.org/build/128665302/nixlog/3
   # Disable tests because they require a running dbus session
