@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
-  # fastcdr doesn't respect BUILD_TESTING
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "-DEPROSIMA_BUILD_TESTS=ON"
+  # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
+  ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"
   ++ lib.optional withDocs "-DBUILD_DOCUMENTATION=ON";
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";

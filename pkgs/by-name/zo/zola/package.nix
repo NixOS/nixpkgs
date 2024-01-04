@@ -1,52 +1,38 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
-, cmake
 , pkg-config
-, openssl
 , oniguruma
-, CoreServices
+, darwin
 , installShellFiles
-, libsass
 , zola
 , testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.17.2";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    hash = "sha256-br7VpxkVMZ/TgwMaFbnVMOw9RemNjur/UYnloMoDzHs=";
+    hash = "sha256-kNlFmCqWEfU2ktAMxXNKe6dmAV25voHjHYaovBYsOu8=";
   };
 
-  cargoHash = "sha256-AAub8UwAvX3zNX+SM/T9biyNxFTgfqUQG/MUGfwWuno=";
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-40274.patch";
-      url = "https://github.com/getzola/zola/commit/fe1967fb0fe063b1cee1ad48820870ab2ecc0e5b.patch";
-      hash = "sha256-B/SVGhVX5hAbvMhBYO+mU5+xdZXU2JyS4uKmOj+aZuI=";
-    })
-  ];
+  cargoHash = "sha256-JWYuolHh/qdWF+i6WTgz/uDrkQ6V+SDFhEzGGkUA0E4=";
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     installShellFiles
   ];
+
   buildInputs = [
-    openssl
     oniguruma
-    libsass
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    CoreServices SystemConfiguration
+  ]);
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 

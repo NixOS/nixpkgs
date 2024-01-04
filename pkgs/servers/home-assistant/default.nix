@@ -31,36 +31,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.9";
-        src = fetchFromGitHub {
-          owner = "Noltari";
-          repo = "aioairzone";
-          rev = "refs/tags/${version}";
-          hash = "sha256-0nbH0pnTYRuSOkzG5Yn/fJmRKtXBMd6ti6Z+AW72j3Q=";
-        };
-      });
-
-      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.1";
-        src = fetchFromGitHub {
-          owner = "CorantGmbH";
-          repo = "aioairq";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-SRsDSHTZkkygaQZjHENKNLx3ZWMi/PubS1m/MonEKNk=";
-        };
-      });
-
-      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
-        version = "19.2.1";
-        src = fetchFromGitHub {
-          owner = "esphome";
-          repo = "aioesphomeapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
-        };
-      });
-
       aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
         version = "22.10.1";
         src = fetchFromGitHub {
@@ -103,13 +73,13 @@ let
         };
       });
 
-      aiohttp-zlib-ng = super.aiohttp-zlib-ng.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.1";
+      aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
+        version = "22.7.0";
         src = fetchFromGitHub {
-          owner = "bdraco";
-          repo = "aiohttp-zlib-ng";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dTNwt4eX6ZQ8ySK2/9ziVbc3KFg2aL/EsiBWaJRC4x8=";
+          owner = "tkdrob";
+          repo = "aioskybell";
+          rev = "refs/tags/${version}";
+          hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
 
@@ -245,32 +215,6 @@ let
         doCheck = false; # no tests
       });
 
-      openai = super.openai.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28.1";
-        src = fetchFromGitHub {
-          owner = "openai";
-          repo = "openai-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
-        };
-        nativeBuildInputs = with self; [
-          setuptools
-        ];
-        propagatedBuildInputs = with self; [
-          aiohttp
-          requests
-          tqdm
-        ];
-        disabledTestPaths = [
-          # Requires a real API key
-          "openai/tests/test_endpoints.py"
-          "openai/tests/asyncio/test_endpoints.py"
-          # openai: command not found
-          "openai/tests/test_file_cli.py"
-          "openai/tests/test_long_examples_validator.py"
-        ];
-      });
-
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -322,16 +266,6 @@ let
         };
       });
 
-      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
-        version = "7.6.0";
-        src = fetchFromGitHub {
-          owner = "jabesq";
-          repo = "pyatmo";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-rAmSxayXljOJchiMtSOgnotzQmapK2n86HwNi9HJX68=";
-        };
-      });
-
       pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.18";
         src = fetchFromGitHub {
@@ -373,22 +307,6 @@ let
         };
       });
 
-      pyprusalink = super.pyprusalink.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.0";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pyprusalink";
-          rev = "refs/tags/${version}";
-          hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
-        };
-        patches = [
-          (fetchpatch {
-            url = "https://github.com/home-assistant-libs/pyprusalink/commit/bc3a2f4a00979e7daaf783cdc1f1862087e8d4df.patch";
-            hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
-          })
-        ];
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -408,16 +326,6 @@ let
         };
       });
 
-      python-tado = super.python-tado.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
-        src = fetchFromGitHub {
-          owner = "wmalgadey";
-          repo = "PyTado";
-          rev = "refs/tags/${version}";
-          hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
-        };
-      });
-
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -425,16 +333,6 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-      });
-
-      screenlogicpy = super.screenlogicpy.overridePythonAttrs (oldAttrs: rec {
-        version = "0.9.4";
-        src = fetchFromGitHub {
-          owner = "dieselrabbit";
-          repo = "screenlogicpy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-OdAhA+vzIrUnE8Xdv52x7ij0LJKyxawaSY4QORP1TUg=";
         };
       });
 
@@ -525,7 +423,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.12.4";
+  hassVersion = "2024.1.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -543,13 +441,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-XzjsSM0xKxLeuP30u8LReJtmJMbJq+yQ2Pp5xWmNLFw=";
+    hash = "sha256-aNSyBr4QEK4pmYnRGW1LNuCSU5EpZtLEGQUtYL+CvUg=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-dea0PacCzCWhMh2gw/kVJHwYCoT7zJ52qTQbHmqcwU8=";
+    hash = "sha256-szlvSfkcPG6DGGHZ5iNtz0EBa8DVYaoGZWSlc7AEG1I=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -565,6 +463,8 @@ in python.pkgs.buildPythonApplication rec {
     "lru-dict"
     "orjson"
     "pyopenssl"
+    "typing-extensions"
+    "urllib3"
     "voluptuous"
     "yarl"
   ];
