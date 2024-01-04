@@ -19716,7 +19716,7 @@ with pkgs;
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
   openai-whisper-cpp = darwin.apple_sdk_11_0.callPackage ../tools/audio/openai-whisper-cpp {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo;
+    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo MetalKit;
   };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
