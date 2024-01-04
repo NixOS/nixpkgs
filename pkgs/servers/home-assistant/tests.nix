@@ -64,6 +64,10 @@ let
     conversation = [
       "--deselect tests/components/conversation/test_init.py::test_get_agent_list"
     ];
+    cloud = [
+      # Tries to connect to alexa-api.nabucasa.com:443
+      "--deselect tests/components/cloud/test_http_api.py::test_websocket_update_preferences_alexa_report_state"
+    ];
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
@@ -134,6 +138,8 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
       broken = lib.elem component [
         # pinned version incompatible with urllib3>=2.0
         "telegram_bot"
+        # depends on telegram_bot
+        "telegram"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
