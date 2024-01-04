@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, libusb1, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, libusb1, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "rogauracore";
