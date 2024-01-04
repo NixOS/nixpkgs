@@ -238,6 +238,10 @@ self: super: builtins.intersectAttrs super {
           done
 
           install -v -Dm644 *.info* -t "$out/share/info/"
+
+          if [ -e shell-completion/hledger-completion.bash ]; then
+            installShellCompletion --name hledger shell-completion/hledger-completion.bash
+          fi
         '';
       });
 
