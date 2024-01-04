@@ -38220,6 +38220,10 @@ with pkgs;
 
   rili = callPackage ../games/rili { };
 
+  rogue = callPackage ../games/rogue {
+    ncurses = ncurses5;
+  };
+
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
   rott = callPackage ../games/rott { SDL = SDL_compat; };
