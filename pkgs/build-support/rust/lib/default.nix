@@ -12,13 +12,20 @@ rec {
   # hostPlatform-targeted compiler -- for example, `-m64` being
   # passed on a build=x86_64/host=aarch64 compilation.
   envVars = let
+
+    # As a workaround for https://github.com/rust-lang/rust/issues/89626 use lld on pkgsStatic aarch64
+    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.isDarwin;
+
     ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
     linkerForBuild = ccForBuild;
 
     ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-    linkerForHost = ccForHost;
+    linkerForHost = if shouldUseLLD stdenv.targetPlatform
+      && !stdenv.cc.bintools.isLLVM
+      then "${buildPackages.lld}/bin/ld.lld"
+      else ccForHost;
 
     # Unfortunately we must use the dangerous `targetPackages` here
     # because hooks are artificially phase-shifted one slot earlier
@@ -26,7 +33,10 @@ rec {
     # a targetPlatform to them).
     ccForTarget = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc";
     cxxForTarget = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++";
-    linkerForTarget = ccForTarget;
+    linkerForTarget = if shouldUseLLD targetPackages.stdenv.targetPlatform
+      && !targetPackages.stdenv.cc.bintools.isLLVM # whether stdenv's linker is lld already
+      then "${buildPackages.lld}/bin/ld.lld"
+      else ccForTarget;
 
     rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;
     rustBuildPlatformSpec = stdenv.buildPlatform.rust.rustcTargetSpec;
