@@ -128,7 +128,6 @@ extra-packages:
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
-  - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer

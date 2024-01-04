@@ -825,7 +825,6 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
-  pantry_0_5_2_1 = dontCheck super.pantry_0_5_2_1;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
