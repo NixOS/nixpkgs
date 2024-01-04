@@ -5,15 +5,18 @@
 
 let
   versionSuffix = "20240101011938.ae7e4a1c15";
+
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "6.2.4"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "6.2.4"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    hash = "sha256-XyGb9F83z8+OSjxOaO5k+h2qIY78ofS/ZfTXki54E5Q=";
+    # hash = "sha256-X3BJksdddTdxeUqVjzcq3cDRGRqmaYE7Z+eXtHoqbkg=";
+    hash = "5f219bf45f37cfcf8e4a3c4e68ee64fa1daa218efca1f4bf65f4d7922e781394";
   };
 
   nativeBuildInputs = [
