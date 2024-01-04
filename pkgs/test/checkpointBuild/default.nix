@@ -1,9 +1,9 @@
-{ hello, checkpointBuildTools, runCommandNoCC, texinfo, stdenv, rsync }:
+{ hello, checkpointBuildTools, runCommand, texinfo, stdenv, rsync }:
 let
   baseHelloArtifacts = checkpointBuildTools.prepareCheckpointBuild hello;
   patchedHello = hello.overrideAttrs (old: {
     buildInputs = [ texinfo ];
-    src = runCommandNoCC "patch-hello-src" { } ''
+    src = runCommand "patch-hello-src" { } ''
       mkdir -p $out
       cd $out
       tar xf ${hello.src} --strip-components=1
@@ -24,7 +24,7 @@ let
     patches = [ ./hello-additionalFile.patch ];
   }));
 
-  preparedHelloRemoveFileSrc = runCommandNoCC "patch-hello-src" { } ''
+  preparedHelloRemoveFileSrc = runCommand "patch-hello-src" { } ''
     mkdir -p $out
     cd $out
     tar xf ${hello.src} --strip-components=1
@@ -33,7 +33,7 @@ let
 
   patchedHelloRemoveFile = hello.overrideAttrs (old: {
     buildInputs = [ texinfo ];
-    src = runCommandNoCC "patch-hello-src" { } ''
+    src = runCommand "patch-hello-src" { } ''
       mkdir -p $out
       cd $out
       ${rsync}/bin/rsync -cutU --chown=$USER:$USER --chmod=+w -r ${preparedHelloRemoveFileSrc}/* .
