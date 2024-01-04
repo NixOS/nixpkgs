@@ -667,8 +667,6 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
-  elektroid = callPackage ../applications/audio/elektroid { };
-
   eludris = callPackage ../tools/misc/eludris {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5822,7 +5820,7 @@ with pkgs;
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
   klipper-estimator = callPackage ../applications/misc/klipper-estimator {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   klipperscreen = callPackage ../applications/misc/klipperscreen { };
@@ -8258,6 +8256,8 @@ with pkgs;
   libbtbb = callPackage ../development/libraries/libbtbb {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor {};
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) cctools autoSignDarwinBinariesHook;
@@ -14512,7 +14512,7 @@ with pkgs;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
@@ -18713,6 +18713,7 @@ with pkgs;
   # Dependency of build2, must also break cycle for this
   libbutl = callPackage ../development/libraries/libbutl {
     build2 = build2.bootstrap;
+    inherit (darwin) DarwinTools;
   };
 
   libbpkg = callPackage ../development/libraries/libbpkg { };
@@ -19580,8 +19581,6 @@ with pkgs;
     });
 
   lurk = callPackage ../development/tools/lurk { };
-
-  lutgen = callPackage ../applications/graphics/lutgen { };
 
   maizzle = callPackage ../development/tools/maizzle { };
 
@@ -24236,8 +24235,6 @@ with pkgs;
     containerRuntimePath = "${runc}/bin/runc";
     configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
   };
-
-  nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
@@ -36917,10 +36914,6 @@ with pkgs;
   zita-at1 = callPackage ../applications/audio/zita-at1 { };
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
-
-  zola = callPackage ../applications/misc/zola {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
 
   zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 

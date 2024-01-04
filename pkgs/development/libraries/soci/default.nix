@@ -4,9 +4,12 @@
 , sqlite
 , postgresql
 , boost
+, darwin
 , lib, stdenv
 }:
-
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Kerberos;
+in
 stdenv.mkDerivation rec {
   pname = "soci";
   version = "4.0.2";
@@ -34,6 +37,8 @@ stdenv.mkDerivation rec {
     sqlite
     postgresql
     boost
+  ] ++ lib.optionals stdenv.isDarwin [
+    Kerberos
   ];
 
   meta = with lib; {
