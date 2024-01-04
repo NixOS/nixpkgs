@@ -228,7 +228,7 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      installHledgerManPages = overrideCabal (drv: {
+      installHledgerExtraFiles = overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
@@ -249,15 +249,15 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerManPages super.hledger;
-      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerManPages super.hledger-ui;
+      hledger = installHledgerExtraFiles super.hledger;
+      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerManPages
+      hledger_1_30_1 = installHledgerExtraFiles
         (doDistribute (super.hledger_1_30_1.override {
           hledger-lib = self.hledger-lib_1_30;
         }));
-      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
         (doDistribute (super.hledger-web_1_30.override {
           hledger = self.hledger_1_30_1;
           hledger-lib = self.hledger-lib_1_30;
