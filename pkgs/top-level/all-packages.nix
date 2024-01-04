@@ -38222,8 +38222,6 @@ with pkgs;
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
-  rogauracore = callPackage ../tools/misc/rogauracore { };
-
   rott = callPackage ../games/rott { SDL = SDL_compat; };
 
   rott-shareware = rott.override {
