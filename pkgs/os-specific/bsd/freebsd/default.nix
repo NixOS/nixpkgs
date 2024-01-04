@@ -126,6 +126,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libsysdecode = callPackage ./libsysdecode.nix {};
   shutdown = callPackage ./shutdown.nix {};
   reboot = callPackage ./reboot.nix {};
+  syslogd = callPackage ./syslogd.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
