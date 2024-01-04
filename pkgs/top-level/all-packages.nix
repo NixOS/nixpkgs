@@ -7997,8 +7997,6 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
-  eris-go = callPackage ../servers/eris-go { };
-
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -41194,8 +41192,6 @@ with pkgs;
   touchosc = callPackage ../applications/audio/touchosc { };
 
   tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
-
-  tup = callPackage ../development/tools/build-managers/tup { };
 
   turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 
