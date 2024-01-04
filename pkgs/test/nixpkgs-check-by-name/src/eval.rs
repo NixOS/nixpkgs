@@ -130,6 +130,7 @@ pub fn check_values(
             let relative_package_file = structure::relative_file_for_package(&attribute_name);
             let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
+            use ratchet::RatchetState::*;
             use AttributeInfo::*;
             use ByNameAttribute::*;
             use CallPackageVariant::*;
@@ -166,7 +167,7 @@ pub fn check_values(
 
                     check_result.and(match &call_package_variant {
                         Auto => Success(ratchet::Package {
-                            empty_non_auto_called: ratchet::EmptyNonAutoCalled::Valid,
+                            empty_non_auto_called: Tight,
                         }),
                         Manual { path, empty_arg } => {
                             let correct_file = if let Some(call_package_path) = path {
@@ -179,9 +180,9 @@ pub fn check_values(
                                 Success(ratchet::Package {
                                     // Empty arguments for non-auto-called packages are not allowed anymore.
                                     empty_non_auto_called: if *empty_arg {
-                                        ratchet::EmptyNonAutoCalled::Invalid
+                                        Loose(ratchet::EmptyNonAutoCalled)
                                     } else {
-                                        ratchet::EmptyNonAutoCalled::Valid
+                                        Tight
                                     },
                                 })
                             } else {
