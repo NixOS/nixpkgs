@@ -57,11 +57,12 @@ self: super: {
 
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
-  weeder_2_4_1 = super.weeder_2_4_1.override {
+  # Allow dhall 1.42.*
+  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
     # weeder < 2.6 only supports algebraic-graphs < 0.7
     # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  };
+  });
 
   hls-cabal-plugin = super.hls-cabal-plugin.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
