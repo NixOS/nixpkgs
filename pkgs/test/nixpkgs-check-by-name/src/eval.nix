@@ -9,6 +9,9 @@
 let
   attrs = builtins.fromJSON (builtins.readFile attrsPath);
 
+  nixpkgsPathLength = builtins.stringLength (toString nixpkgsPath) + 1;
+  removeNixpkgsPrefix = builtins.substring nixpkgsPathLength (-1);
+
   # We need access to the `callPackage` arguments of each attribute.
   # The only way to do so is to override `callPackage` with our own version that adds this information to the result,
   # and then try to access this information.
@@ -20,7 +23,7 @@ let
         Manual = {
           path =
             if builtins.isPath fn then
-              toString fn
+              removeNixpkgsPrefix (toString fn)
             else
               null;
           empty_arg =

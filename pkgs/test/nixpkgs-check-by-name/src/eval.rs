@@ -127,7 +127,6 @@ pub fn check_values(
     let check_result = validation::sequence(attributes.into_iter().map(
         |(attribute_name, attribute_value)| {
             let relative_package_file = structure::relative_file_for_package(&attribute_name);
-            let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
             use ratchet::RatchetState::*;
             use AttributeInfo::*;
@@ -170,7 +169,7 @@ pub fn check_values(
                         }),
                         Manual { path, empty_arg } => {
                             let correct_file = if let Some(call_package_path) = path {
-                                absolute_package_file == *call_package_path
+                                relative_package_file == *call_package_path
                             } else {
                                 false
                             };
