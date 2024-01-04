@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.18.1";
+  version = "1.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
-    hash = "sha256-SdyohC98PWP9NatVSSryqLWznxzIEQQv43/77RxIMD8=";
+    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
   };
 
   propagatedBuildInputs = [
