@@ -1246,7 +1246,7 @@ self: super: {
           http-client-tls = hprev.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
           http-download = dontCheck hprev.http-download_0_2_1_0; # needs http-download >= 0.2.1.0, tests access network
           optparse-applicative = hprev.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
-          pantry = dontCheck hprev.pantry_0_9_3; # needs pantry >= 0.9.2, tests access network
+          pantry = hfinal.pantry_0_9_3_1; # needs pantry >= 0.9.2
           syb = dontCheck hprev.syb; # cyclic dependencies
           tar-conduit = hprev.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
           temporary = dontCheck hprev.temporary; # cyclic dependencies
