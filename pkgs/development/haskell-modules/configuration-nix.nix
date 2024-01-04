@@ -114,6 +114,7 @@ self: super: builtins.intersectAttrs super {
       }))
       super)
     hls-brittany-plugin
+    hls-stan-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-overloaded-record-dot-plugin

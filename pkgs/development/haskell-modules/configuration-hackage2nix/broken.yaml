@@ -1513,7 +1513,6 @@ broken-packages:
   - extensible-data # failure in job https://hydra.nixos.org/build/233198917 at 2023-09-02
   - extensible-effects-concurrent # failure in job https://hydra.nixos.org/build/233233685 at 2023-09-02
   - extensioneer # failure in job https://hydra.nixos.org/build/233663099 at 2023-09-02
-  - extensions # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/239249292 at 2023-11-10
   - external-sort # failure in job https://hydra.nixos.org/build/233244337 at 2023-09-02
   - extism # failure in job https://hydra.nixos.org/build/233242807 at 2023-09-02
   - extism-pdk # failure in job https://hydra.nixos.org/build/237239071 at 2023-10-21
@@ -2439,7 +2438,6 @@ broken-packages:
   - hls-haddock-comments-plugin # failure in job https://hydra.nixos.org/build/233233944 at 2023-09-02
   - hls-refine-imports-plugin # failure in job https://hydra.nixos.org/build/233211155 at 2023-09-02
   - hls-selection-range-plugin # failure in job https://hydra.nixos.org/build/233205582 at 2023-09-02
-  - hls-stan-plugin # failure in job https://hydra.nixos.org/build/233246900 at 2023-09-02
   - hls-tactics-plugin # failure in job https://hydra.nixos.org/build/233238907 at 2023-09-02
   - hlwm # failure in job https://hydra.nixos.org/build/233235119 at 2023-09-02
   - hly # failure in job https://hydra.nixos.org/build/233206910 at 2023-09-02

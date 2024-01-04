@@ -92,6 +92,12 @@ self: super: {
     guardian
   ;
 
+  # Extensions needs the latest version of Cabal for its list of Haskell language
+  # extensions.
+  extensions = super.extensions.override {
+    Cabal = self.Cabal_3_10_2_1;
+  };
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
