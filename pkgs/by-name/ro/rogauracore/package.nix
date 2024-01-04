@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     autoreconfHook
-    #pkgs.boost
-    #pkgs.cmake
   ];
 
   configurePhase = ''
