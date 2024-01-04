@@ -1,19 +1,21 @@
 { lib
 , stdenv
-, fetchurl
-, python
-, rcs
+, fetchFromGitLab
 , git
 , makeWrapper
+, python3
+, rcs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "src";
   version = "1.32";
 
-  src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CSA1CmPvXuOl9PzX97/soGRq2HHBcYuA5PepOVMaMWU=";
+  src = fetchFromGitLab {
+    owner = "esr";
+    repo = "src";
+    rev = finalAttrs.version;
+    hash = "sha256-gVB0BdnrJ1ew49t9j5zlLpBC4WP9xxYlU26ilOWtq08=";
   };
 
   nativeBuildInputs = [
@@ -21,16 +23,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
-    rcs
     git
+    python3
+    rcs
   ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/src \
@@ -48,10 +52,10 @@ stdenv.mkDerivation rec {
       will seem familiar to Subversion/Git/hg users, and no binary blobs
       anywhere.
     '';
-    changelog = "https://gitlab.com/esr/src/raw/${version}/NEWS";
+    changelog = "https://gitlab.com/esr/src/-/raw/${finalAttrs.version}/NEWS.adoc";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ calvertvl AndersonTorres ];
-    inherit (python.meta) platforms;
     mainProgram = "src";
+    maintainers = with maintainers; [ AndersonTorres ];
+    inherit (python3.meta) platforms;
   };
-}
+})

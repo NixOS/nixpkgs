@@ -35486,10 +35486,7 @@ with pkgs;
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
-  src = callPackage ../applications/version-management/src {
-    git = gitMinimal;
-    python = python3;
-  };
+  src = callPackage ../applications/version-management/src { };
 
   ssrc = callPackage ../applications/audio/ssrc { };
 
