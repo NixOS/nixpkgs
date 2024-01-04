@@ -23201,9 +23201,7 @@ with pkgs;
   libjpeg = libjpeg_turbo;
   libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
 
-  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp {
-    libmicrohttpd = libmicrohttpd_0_9_72;
-  };
+  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
 
   libjwt = callPackage ../development/libraries/libjwt { };
 
