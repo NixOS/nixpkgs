@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, python3, autoconf, automake, libtool }:
 
-stdenv.mkDerivation rec {
+let
+  autogenArgs = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) "--host ${stdenv.hostPlatform.system}";
+in stdenv.mkDerivation rec {
   pname = "jbig2dec";
   version = "0.20";
 
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    ./autogen.sh
+    ./autogen.sh ${autogenArgs}
   '';
 
   nativeBuildInputs = [ autoconf automake libtool ];
