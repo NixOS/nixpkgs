@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.21.3";
+  version = "0.21.5";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lqFhLCOLiuSQWhbcZUEj2xFRlZ+x1ZTVc8IJw7tJjhE=";
+    sha256 = "sha256-Ofr9xJH/wVlBJ1n1MMecSP8SltYwjdhb7tmkTsOMoX8=";
   };
 
-  cargoHash = "sha256-3hrpg2cMvIuFy6mH1/1igIpU4nbzFQLCAhiIRZbTuaI=";
+  cargoHash = "sha256-1wzqWGp0qPn2sQ1v0+6NAxvIxqCIVuN0WwpNddj71Xc=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
   env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
