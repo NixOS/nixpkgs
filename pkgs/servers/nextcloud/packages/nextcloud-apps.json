@@ -30,5 +30,6 @@
 , "twofactor_totp": "agpl3Plus"
 , "twofactor_webauthn": "agpl3Plus"
 , "unsplash": "agpl3Only"
+, "user_oidc": "agpl3Plus"
 , "user_saml": "agpl3Plus"
 }
