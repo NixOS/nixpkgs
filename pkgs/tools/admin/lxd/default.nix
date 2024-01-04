@@ -76,6 +76,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-to-incus = nixosTests.incus.lxd-to-incus;
   passthru.ui = callPackage ./ui.nix { };
   passthru.updateScript = gitUpdater {
     url = "https://github.com/canonical/lxd.git";
