@@ -15,7 +15,7 @@
         version = "2023-10-23";
       };
     };
-    hash = "sha256-+T2TOLwIwFxVDae7MFDZrjREGF+3Zx2xt/Dlu7uZggc=";
+    hash = "sha256-6RURdPU1k3GaQAgA1LMQ0NhSGBEpOEJBPvk2QjLdoHo=";
     hash_deb_amd64 = "sha256-0FB1gTbsjqFRy0ocE0w5ACtD9kSJ5AMnxg+qBxqCulc=";
     version = "120.0.6099.129";
   };
@@ -32,7 +32,7 @@
         rev = "120.0.6099.129-1";
       };
     };
-    hash = "sha256-+T2TOLwIwFxVDae7MFDZrjREGF+3Zx2xt/Dlu7uZggc=";
+    hash = "sha256-6RURdPU1k3GaQAgA1LMQ0NhSGBEpOEJBPvk2QjLdoHo=";
     hash_deb_amd64 = "sha256-0FB1gTbsjqFRy0ocE0w5ACtD9kSJ5AMnxg+qBxqCulc=";
     version = "120.0.6099.129";
   };
