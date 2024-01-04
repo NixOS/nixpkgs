@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, pythonRelaxDepsHook
 
 # build-system
 , hatchling
@@ -18,18 +20,25 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "1.7.0";
+  version = "2.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
     rev = "refs/tags/${version}";
-    hash = "sha256-cMWYmCbkhJmz+RMCh3NIhOkC5bX46nwz09WhTV+Mz6w=";
+    hash = "sha256-jHPZjS/J1VLpsLN2wg5UJCgavoSEs4Uogo4GI6bZMuY=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
   propagatedBuildInputs = [
@@ -52,7 +61,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/yezz123/pyngo";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
-    # https://github.com/yezz123/pyngo/issues/70
-    broken = versionAtLeast pydantic.version "2";
   };
 }
