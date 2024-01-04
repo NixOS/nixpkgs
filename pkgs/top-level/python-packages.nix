@@ -365,6 +365,8 @@ self: super: with self; {
 
   aiortm = callPackage ../development/python-modules/aiortm { };
 
+  aiortsp = callPackage ../development/python-modules/aiortsp { };
+
   aioruckus = callPackage ../development/python-modules/aioruckus { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
@@ -2527,7 +2529,7 @@ self: super: with self; {
 
   cx-freeze = callPackage ../development/python-modules/cx-freeze { };
 
-  cx_oracle = callPackage ../development/python-modules/cx_oracle { };
+  cx-oracle = callPackage ../development/python-modules/cx-oracle { };
 
   cxxfilt = callPackage ../development/python-modules/cxxfilt { };
 
@@ -3298,7 +3300,7 @@ self: super: with self; {
 
   dockerpty = callPackage ../development/python-modules/dockerpty { };
 
-  docker_pycreds = callPackage ../development/python-modules/docker-pycreds { };
+  docker-pycreds = callPackage ../development/python-modules/docker-pycreds { };
 
   docker-py = callPackage ../development/python-modules/docker-py { };
 
@@ -3820,7 +3822,7 @@ self: super: with self; {
 
   extruct = callPackage ../development/python-modules/extruct { };
 
-  eyeD3 = callPackage ../development/python-modules/eyed3 { };
+  eyed3 = callPackage ../development/python-modules/eyed3 { };
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
@@ -3979,7 +3981,7 @@ self: super: with self; {
 
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
-  filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
+  filebrowser-safe = callPackage ../development/python-modules/filebrowser-safe { };
 
   filebytes = callPackage ../development/python-modules/filebytes { };
 
@@ -4209,7 +4211,7 @@ self: super: with self; {
 
   flower = callPackage ../development/python-modules/flower { };
 
-  flowlogs_reader = callPackage ../development/python-modules/flowlogs_reader { };
+  flowlogs-reader = callPackage ../development/python-modules/flowlogs-reader { };
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 

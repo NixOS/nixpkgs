@@ -1,13 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, odpic }:
 
 buildPythonPackage rec {
-  pname = "cx_Oracle";
+  pname = "cx-oracle";
   version = "8.3.0";
 
   buildInputs = [ odpic ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "cx_Oracle";
+    inherit version;
     sha256 = "3b2d215af4441463c97ea469b9cc307460739f89fdfa8ea222ea3518f1a424d9";
   };
 

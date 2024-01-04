@@ -8000,8 +8000,6 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
-  eris-go = callPackage ../servers/eris-go { };
-
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -12498,7 +12496,7 @@ with pkgs;
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
   };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
@@ -19596,8 +19594,6 @@ with pkgs;
     });
 
   lurk = callPackage ../development/tools/lurk { };
-
-  lutgen = callPackage ../applications/graphics/lutgen { };
 
   maizzle = callPackage ../development/tools/maizzle { };
 
@@ -36942,10 +36938,6 @@ with pkgs;
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
 
-  zola = callPackage ../applications/misc/zola {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
@@ -41226,8 +41218,6 @@ with pkgs;
   touchosc = callPackage ../applications/audio/touchosc { };
 
   tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
-
-  tup = callPackage ../development/tools/build-managers/tup { };
 
   turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 
