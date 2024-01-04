@@ -31,16 +31,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioairzone = super.aioairzone.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.9";
-        src = fetchFromGitHub {
-          owner = "Noltari";
-          repo = "aioairzone";
-          rev = "refs/tags/${version}";
-          hash = "sha256-0nbH0pnTYRuSOkzG5Yn/fJmRKtXBMd6ti6Z+AW72j3Q=";
-        };
-      });
-
       aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
         version = "22.10.1";
         src = fetchFromGitHub {
@@ -276,16 +266,6 @@ let
         };
       });
 
-      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
-        version = "7.6.0";
-        src = fetchFromGitHub {
-          owner = "jabesq";
-          repo = "pyatmo";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-rAmSxayXljOJchiMtSOgnotzQmapK2n86HwNi9HJX68=";
-        };
-      });
-
       pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.18";
         src = fetchFromGitHub {
@@ -327,22 +307,6 @@ let
         };
       });
 
-      pyprusalink = super.pyprusalink.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.0";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pyprusalink";
-          rev = "refs/tags/${version}";
-          hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
-        };
-        patches = [
-          (fetchpatch {
-            url = "https://github.com/home-assistant-libs/pyprusalink/commit/bc3a2f4a00979e7daaf783cdc1f1862087e8d4df.patch";
-            hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
-          })
-        ];
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -369,16 +333,6 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-      });
-
-      screenlogicpy = super.screenlogicpy.overridePythonAttrs (oldAttrs: rec {
-        version = "0.9.4";
-        src = fetchFromGitHub {
-          owner = "dieselrabbit";
-          repo = "screenlogicpy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-OdAhA+vzIrUnE8Xdv52x7ij0LJKyxawaSY4QORP1TUg=";
         };
       });
 
@@ -509,6 +463,8 @@ in python.pkgs.buildPythonApplication rec {
     "lru-dict"
     "orjson"
     "pyopenssl"
+    "typing-extensions"
+    "urllib3"
     "voluptuous"
     "yarl"
   ];
