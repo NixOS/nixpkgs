@@ -521,6 +521,7 @@ package-maintainers:
     - latex
     - lazyio
     - linear-programming
+    - llvm-ffi
     - markov-chain
     - midi
     - midi-alsa
