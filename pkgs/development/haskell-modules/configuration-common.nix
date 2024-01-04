@@ -2716,7 +2716,7 @@ self: super: {
 
   # 2023-12-20: Needs newer hasql-pool package and extra dependencies
   postgrest = lib.pipe (super.postgrest.overrideScope (lself: lsuper: {
-    hasql-pool = lself.hasql-pool_0_10;
+    hasql-pool = lself.hasql-pool_0_10_0_1;
   })) [
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
     # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580

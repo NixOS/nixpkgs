@@ -422,7 +422,7 @@ self: super: builtins.intersectAttrs super {
   hasql-interpolate = dontCheck super.hasql-interpolate;
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
-  hasql-pool_0_10 = dontCheck super.hasql-pool_0_10;
+  hasql-pool_0_10_0_1 = doDistribute (dontCheck super.hasql-pool_0_10_0_1);
   hasql-transaction = dontCheck super.hasql-transaction;
 
   # Test suite requires a running postgresql server,
