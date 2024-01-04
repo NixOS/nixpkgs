@@ -127,13 +127,10 @@ backendStdenv.mkDerivation (
     # Useful for introspecting why something went wrong.
     # Maps descriptions of why the derivation would be marked broken to
     # booleans indicating whether that description is true.
+    # NOTE: This should not include reasons relating to the architecture, as those are handled by
+    # the `badPlatforms` attribute.
     # brokenConditions :: AttrSet Bool
-    brokenConditions = {
-      # Using an unrecognized redistArch
-      "Unrecognized NixOS platform ${hostPlatform.system}" = redistArch == "unsupported";
-      # Trying to build for a platform that doesn't have a redistributable
-      "Unsupported NixOS platform (or configuration) ${hostPlatform.system}" = finalAttrs.src == null;
-    };
+    brokenConditions = { };
 
     # src :: Optional Derivation
     src = trivial.pipe redistArch [
