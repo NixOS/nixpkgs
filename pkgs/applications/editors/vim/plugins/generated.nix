@@ -15734,6 +15734,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
   };
 
+  vscode-nvim = buildVimPlugin {
+    pname = "vscode.nvim";
+    version = "2023-12-21";
+    src = fetchFromGitHub {
+      owner = "Mofiqul";
+      repo = "vscode.nvim";
+      rev = "39841d05ab4a5c03ea0985196b9f3dfa48d83411";
+      sha256 = "1xnfvyc1996c0vkpvqc1f4ys0wklq4f4k0lv557zfwmp96dl6x8f";
+    };
+    meta.homepage = "https://github.com/Mofiqul/vscode.nvim/";
+  };
+
   wal-vim = buildVimPlugin {
     pname = "wal.vim";
     version = "2020-11-08";
