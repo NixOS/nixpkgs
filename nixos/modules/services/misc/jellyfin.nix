@@ -120,5 +120,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ minijackson ];
+  meta.maintainers = with lib.maintainers; [ minijackson nu-nu-ko ];
 }
