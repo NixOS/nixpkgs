@@ -72,4 +72,7 @@ self: super: {
 
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
+  # Too strict bound on base, believe it or not.
+  # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
+  terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
 }
