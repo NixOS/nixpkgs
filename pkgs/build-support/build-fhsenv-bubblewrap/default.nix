@@ -191,7 +191,12 @@ let
     # sddm places XAUTHORITY in /tmp
     if [[ "$XAUTHORITY" == /tmp/* ]]; then
       x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
-    fi''}
+    fi
+
+    # provide DBUS from host env
+    for dbus in /tmp/dbus-*; do
+        auto_mounts+=(--bind "$dbus" "$dbus")
+    done''}
 
     cmd=(
       ${bubblewrap}/bin/bwrap
