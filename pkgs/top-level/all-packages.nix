@@ -24203,7 +24203,6 @@ with pkgs;
       { };
   inherit (nvidiaCtkPackages)
     nvidia-container-toolkit
-    nvidia-container-toolkit-podman
     nvidia-docker
     nvidia-podman
     ;

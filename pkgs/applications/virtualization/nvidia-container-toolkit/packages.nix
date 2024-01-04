@@ -12,6 +12,11 @@ lib.makeScope newScope (
 
     nvidia-container-toolkit = self.callPackage ./. {
       containerRuntimePath = "${docker}/libexec/docker/docker";
+    };
+
+    # Keeping around for compatibility.
+    # Setting the default `config.toml` is no longer necessary.
+    nvidia-container-toolkit-docker = self.nvidia-container-toolkit.override {
       configTemplate = ../nvidia-docker/config.toml;
     };
     nvidia-container-toolkit-podman = self.nvidia-container-toolkit.override {
