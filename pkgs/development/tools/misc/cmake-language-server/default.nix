@@ -66,5 +66,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/regen100/cmake-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
+    mainProgram = "cmake-language-server";
   };
 }
