@@ -121,17 +121,6 @@ self: super: {
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
-  # 2023-12-03: https://github.com/haskell/haskell-language-server/pull/3867
-  hls-plugin-api = appendPatch (fetchpatch {
-    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
-    relative = "hls-plugin-api";
-    hash = "sha256-vlXPdEvmuIl+cM+u/GdHi8r72r4+Tqtsvx0CGbWEFCQ=";
-  }) (doJailbreak super.hls-plugin-api);
-  ghcide = appendPatch (fetchpatch {
-    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
-    relative = "ghcide";
-    hash = "sha256-1URXyQf88v3hjFGvNmcIjHxJ5vExH3iI92XktDrQs0U=";
-  }) (doJailbreak super.ghcide);
   hls-test-utils = doJailbreak super.hls-test-utils;
   hls-alternate-number-format-plugin = doJailbreak super.hls-alternate-number-format-plugin;
   hls-cabal-plugin = doJailbreak super.hls-cabal-plugin;
