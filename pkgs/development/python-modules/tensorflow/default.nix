@@ -20,6 +20,10 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackagesGoogle
+# use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
+# cudaPackages.cudnn led to this:
+# https://github.com/tensorflow/tensorflow/issues/60398
+, cudnnAttribute ? "cudnn_8_6"
 , cudaCapabilities ? cudaPackagesGoogle.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
@@ -54,10 +58,6 @@ let
     else if originalStdenv.isDarwin then llvmPackages_11.stdenv
     else originalStdenv;
   inherit (cudaPackagesGoogle) cudatoolkit nccl;
-  # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
-  # cudaPackages.cudnn led to this:
-  # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnnAttribute = "cudnn_8_6";
   cudnn = cudaPackagesGoogle.${cudnnAttribute};
   gentoo-patches = fetchzip {
     url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
