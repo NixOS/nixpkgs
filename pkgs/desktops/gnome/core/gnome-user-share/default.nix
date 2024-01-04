@@ -4,16 +4,19 @@
 , meson
 , ninja
 , fetchurl
-, apacheHttpd
+, apacheHttpdPackages
 , pkg-config
 , glib
 , libxml2
 , systemd
 , wrapGAppsHook
 , itstool
-, mod_dnssd
 , gnome
 }:
+
+let
+  inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
+in
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-share";
