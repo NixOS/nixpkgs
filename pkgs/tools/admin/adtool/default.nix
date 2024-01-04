@@ -1,37 +1,59 @@
-{ lib, stdenv, fetchurl, openldap }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, db, openldap }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib) getDev getLib;
+
+  # adtools needs openldap 2.4.x
+  openldap' = openldap.overrideAttrs (old: rec {
+    version = "2.4.59";
+    src = fetchurl {
+      url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${version}.tgz";
+      hash = "sha256-mfN9Z0fYggbEcAZ+2mJNXkjBAR6UPsCrIXuuhxLiLzQ=";
+    };
+    buildInputs = old.buildInputs ++ [ db ];
+    extraContribModules = [ "passwd/sha2" "passwd/pbkdf2" ];
+    # tests are slow and there is not much point in running them when we have pinned this version
+    doCheck = false;
+    # patchelf gets confused and adds libraries found under /build to RPATH
+    preFixup = ''
+      rm -r libraries/*/.libs
+    '' + old.preFixup;
+  });
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "adtool";
-  version = "1.3.3";
+  version = "1.3.3.20180426";
 
-  src = fetchurl {
-    url = "https://gp2x.org/adtool/${pname}-${version}.tar.gz";
-    sha256  = "1awmpjamrwivi69i0j2fyrziy9s096ckviqd9c4llc3990mfsn4n";
+  src = fetchFromGitHub {
+    owner = "blroot";
+    repo = "adtool";
+    rev = "4159ddec386db9d6545fe5a386686638553bc6af";
+    hash = "sha256-LSTn1f/A9rFv7MgmkF+tMFchGNmilDJ6ahj9b4DkHS0=";
   };
+
+  postPatch = ''
+    substituteInPlace src/lib/active_directory.c \
+      --replace 'AD_CONFIG_FILE SYSCONFDIR "/adtool.cfg"' 'AD_CONFIG_FILE "/etc/adtool.cfg"'
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
   ];
 
   installFlags = [
-    "sysconfdir=$(out)/etc"
+    "sysconfdir=$(out)/share/doc/${finalAttrs.pname}"
   ];
 
-  buildInputs = [ openldap ];
+  buildInputs = [ openldap' ];
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: ../../src/lib/libactive_directory.a(active_directory.o):/build/adtool-1.3.3/src/lib/active_directory.h:31:
-  #     multiple definition of `system_config_file'; adtool.o:/build/adtool-1.3.3/src/tools/../../src/lib/active_directory.h:31: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # it expects headers and libraries to exist under the same prefix
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${getDev openldap'}/include";
+    NIX_LDFLAGS = "-L${getLib openldap'}/lib";
+  };
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    mkdir -p $out/share/doc/adtool
-    mv $out/etc/* $out/share/doc/adtool
-    rmdir $out/etc
-  '';
 
   # It requires an LDAP server for tests
   doCheck = false;
@@ -39,8 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Active Directory administration utility for Unix";
     homepage = "https://gp2x.org/adtool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
-    broken = true; # does not link against recent libldap versions and unmaintained since 2017
   };
-}
+})
