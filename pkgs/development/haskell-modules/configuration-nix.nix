@@ -228,10 +228,6 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      # Copy hledger man pages from the source tarball into the proper place.
-      # It always contains the relevant man page(s) at the top level. For
-      # hledger it additionally has all the other man pages in embeddedfiles/
-      # which we ignore.
       installHledgerManPages = overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
