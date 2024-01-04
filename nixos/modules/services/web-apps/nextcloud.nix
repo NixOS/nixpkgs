@@ -996,7 +996,7 @@ in {
             ln -sf ${overrideConfig} ${datadir}/config/override.config.php
 
             # Do not install if already installed
-            if [[ ! -e ${datadir}/config/config.php ]]; then
+            if [[ ! -s ${datadir}/config/config.php ]]; then
               ${occInstallCmd}
             fi
 
