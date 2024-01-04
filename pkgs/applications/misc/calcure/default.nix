@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calcure";
-  version = "2.8.2";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "calcure";
     rev = version;
-    hash = "sha256-CWuyBjIhEYb3zOIXT0+pVs9fFahMi04yq2sJjDMwKTI=";
+    hash = "sha256-rs3TCZjMndeh2N7e+U62baLs+XqWK1Mk7KVnypSnWPg=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     jdatetime
     holidays
+    icalendar
     ics
     attrs
   ];
