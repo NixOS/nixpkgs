@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Streaming HTTP uploads and multipart/form-data encoding";
     homepage = "https://atlee.ca/software/poster/";
     license = licenses.mit;
-    maintainers = with maintainers; [ WhittlesJr ];
+    maintainers = with maintainers; [ TheBrainScrambler ];
   };
 }
