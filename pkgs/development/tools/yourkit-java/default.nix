@@ -20,7 +20,7 @@ let
     name = "YourKit Java Profiler";
     desktopName = "YourKit Java Profiler " + version;
     type = "Application";
-    exec = "yourkit-java-profiler";
+    exec = "yourkit-java-profiler %f";
     icon = "yourkit-java-profiler";
     categories = [ "Development" "Java" "Profiling" ];
     terminal = false;
