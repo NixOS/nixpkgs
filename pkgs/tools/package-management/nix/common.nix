@@ -115,7 +115,10 @@ self = stdenv.mkDerivation {
     boost
     brotli
     bzip2
-    curl
+    # ran test tests/fetchurl.sh... [FAIL]
+    (curl.overrideAttrs {
+      patches = [ ];
+    })
     editline
     libsodium
     openssl
