@@ -14,23 +14,23 @@ let
             else if system == "aarch64=linux" then "arm64"
             else throw "Unsupported system";
 
+  version = "2023.9-b103";
+
   desktopItem = makeDesktopItem {
-    name = "Yourkit JavaProfiler";
-    exec = "yourkit-java-profiler";
-    comment = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
-    desktopName = "YourKit JavaProfiler";
     type = "Application";
+    name = "Yourkit Java Profiler " + version;
+    exec = "yourkit-java-profiler";
     icon = "yourkit-java-profiler";
+    categories = [ "Development" "Java" "Profiling" ];
     terminal = false;
-    categories = [ "Development" ];
-    startupWMClass = "yourkit-java-profiler";
-    startupNotify = false;
+    startupWMClass = "YourKit Java Profiler";
+    desktopName = "YourKit Java Profiler";
   };
 in
 stdenv.mkDerivation rec {
-  pname = "yourkit-java";
+  inherit version;
 
-  version = "2023.9-b103";
+  pname = "yourkit-java";
 
   src = fetchzip {
     url = "https://download.yourkit.com/yjp/${vPath version}/YourKit-JavaProfiler-${version}-${arch}.zip";
@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
         $out/bin/yourkit-java-profiler
     # Use our desktop item, which will be purged when this package
     # gets removed
-    sed -i -e "2isource $out/bin/forbid-desktop-item-creation" \
+    sed -i -e "/^YD=/isource $out/bin/forbid-desktop-item-creation\\
+        " \
         $out/bin/yourkit-java-profiler
 
     runHook postInstall
