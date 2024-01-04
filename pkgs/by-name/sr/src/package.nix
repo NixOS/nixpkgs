@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, asciidoc
 , fetchFromGitLab
 , git
 , makeWrapper
@@ -9,16 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "src";
-  version = "1.32";
+  version = "1.33";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "src";
     rev = finalAttrs.version;
-    hash = "sha256-gVB0BdnrJ1ew49t9j5zlLpBC4WP9xxYlU26ilOWtq08=";
+    hash = "sha256-xyKJcM9dWsFGhe+ISR6S1f67jkYlS9heZe0TFXY8DgQ=";
   };
 
   nativeBuildInputs = [
+    asciidoc
     makeWrapper
   ];
 
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     rcs
   ];
+
+  strictDeps = true;
 
   preConfigure = ''
     patchShebangs .
