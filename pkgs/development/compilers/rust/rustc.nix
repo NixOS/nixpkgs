@@ -159,7 +159,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
-    python ./x.py --keep-stage=0 --stage=1 build library/std
+    python ./x.py --keep-stage=0 --stage=1 build library
 
     runHook postBuild
   " else null;
