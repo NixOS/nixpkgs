@@ -207,7 +207,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # to do this when rustc's target platform is dynamically linked musl.
     #
     # [1]: https://github.com/rust-lang/compiler-team/issues/422
-    substituteInPlace compiler/rustc_target/src/spec/linux_musl_base.rs \
+    substituteInPlace compiler/rustc_target/src/spec/base/linux_musl.rs \
         --replace "base.crt_static_default = true" "base.crt_static_default = false"
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997
