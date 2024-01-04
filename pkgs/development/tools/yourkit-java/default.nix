@@ -17,14 +17,14 @@ let
   version = "2023.9-b103";
 
   desktopItem = makeDesktopItem {
+    name = "YourKit Java Profiler";
+    desktopName = "YourKit Java Profiler " + version;
     type = "Application";
-    name = "Yourkit Java Profiler " + version;
     exec = "yourkit-java-profiler";
     icon = "yourkit-java-profiler";
     categories = [ "Development" "Java" "Profiling" ];
     terminal = false;
     startupWMClass = "YourKit Java Profiler";
-    desktopName = "YourKit Java Profiler";
   };
 in
 stdenv.mkDerivation rec {
