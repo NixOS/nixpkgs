@@ -13,7 +13,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    hash = "sha256-fSa113BYpTZ4jvxroQsoslAkWfQr4/ROkgVOFyiVsKQ=";
+    hash = "sha256-4a66bc7b7035b5fec99a7952e266ed945f7c3b0e5a44fab0f9a5288adcc28e69=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
