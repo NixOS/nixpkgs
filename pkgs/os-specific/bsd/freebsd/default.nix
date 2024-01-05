@@ -116,6 +116,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   mknod = callPackage ./mknod.nix {};
   mount = callPackage ./mount.nix {};
   mtree = callPackage ./mtree.nix {};
+  newsyslog = callPackage ./newsyslog.nix {};
   nscd = callPackage ./nscd.nix {};
   protect = callPackage ./protect.nix {};
   pwd_mkdb = callPackage ./pwd_mkdb.nix {};
