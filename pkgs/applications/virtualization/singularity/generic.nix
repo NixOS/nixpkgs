@@ -43,8 +43,7 @@ in
 , gpgme
 , libseccomp
 , libuuid
-  # This is for nvidia-container-cli
-, nvidia-docker
+, libnvidia-container
 , openssl
 , squashfsTools
 , squashfuse
@@ -137,7 +136,7 @@ in
     openssl
     squashfsTools # Required at build time by SingularityCE
   ]
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker
+  ++ lib.optionals enableNvidiaContainerCli [ libnvidia-container ]
   ++ lib.optional enableSeccomp libseccomp
   ;
 
@@ -168,7 +167,7 @@ in
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ]
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker
+  ++ lib.optionals enableNvidiaContainerCli [ libnvidia-container ]
   ;
 
   postPatch = ''
@@ -218,7 +217,7 @@ in
     ''}
     ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${libnvidia-container}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
