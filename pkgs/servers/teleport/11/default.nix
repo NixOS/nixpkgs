@@ -13,7 +13,5 @@ callPackage ../generic.nix ({
   extPatches = [
     # https://github.com/NixOS/nixpkgs/issues/120738
     ../tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ../test.patch
   ];
 } // builtins.removeAttrs args [ "callPackage" ])
