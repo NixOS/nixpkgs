@@ -7,7 +7,7 @@
 , nodePackages
 , python3Packages
 , jdk
-, llvmPackages_8
+, llvmPackages
 , llvmPackages_14
 , nixpkgs-fmt
 , protobuf
@@ -2162,7 +2162,7 @@ let
         };
       };
 
-      llvm-org.lldb-vscode = llvmPackages_8.lldb;
+      llvm-org.lldb-vscode = llvmPackages.lldb;
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
