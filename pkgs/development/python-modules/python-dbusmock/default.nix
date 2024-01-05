@@ -7,7 +7,6 @@
 , pygobject3
 , bluez
 , networkmanager
-, setuptools
 , setuptools-scm
 , runCommand
 }:
@@ -21,18 +20,17 @@ let
   '';
 in buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.30.0";
-  pyproject = true;
+  version = "0.29.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jYlVbxeBXEmKiVvkFGdmChETCKUHllQG53VW4tTa0Tc=";
+    hash = "sha256-sfvVLPTSTXjwyB0a2NyDIONv01FXZ40nHZwwo3oqI90=";
   };
 
   nativeBuildInputs = [
-    setuptools
     setuptools-scm
   ];
 
