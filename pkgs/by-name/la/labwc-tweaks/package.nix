@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/labwc/labwc-tweaks";
     description = "Configuration gui app for labwc";
     mainProgram = "labwc-tweaks";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
   };
