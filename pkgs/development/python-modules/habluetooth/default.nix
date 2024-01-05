@@ -11,7 +11,6 @@
 , bluetooth-adapters
 , bluetooth-auto-recovery
 , bluetooth-data-tools
-, home-assistant-bluetooth
 , pythonOlder
 }:
 
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     bluetooth-adapters
     bluetooth-auto-recovery
     bluetooth-data-tools
-    home-assistant-bluetooth
   ];
 
   nativeCheckInputs = [
