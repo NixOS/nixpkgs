@@ -568,8 +568,6 @@ with pkgs;
 
   coost = callPackage ../development/libraries/coost { };
 
-  crc = callPackage ../applications/networking/cluster/crc { };
-
   confetty = callPackage ../applications/misc/confetty { };
 
   confy = callPackage ../applications/misc/confy { };
@@ -7997,8 +7995,6 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
-  eris-go = callPackage ../servers/eris-go { };
-
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -9989,8 +9985,6 @@ with pkgs;
 
   linuxwave = callPackage ../tools/audio/linuxwave { };
 
-  littlefs-fuse = callPackage ../tools/filesystems/littlefs-fuse { };
-
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
 
   lldpd = callPackage ../tools/networking/lldpd { };
@@ -11566,7 +11560,6 @@ with pkgs;
   ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
-  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
   openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
 
@@ -12493,7 +12486,7 @@ with pkgs;
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qdrant = darwin.apple_sdk_11_0.callPackage ../servers/search/qdrant {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
   };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
@@ -12865,9 +12858,7 @@ with pkgs;
     lua = lua5_4;
   };
 
-  rpm-ostree = callPackage ../tools/misc/rpm-ostree {
-    gperf = gperf_3_0;
-  };
+  rpm-ostree = callPackage ../tools/misc/rpm-ostree { };
 
   rpm2targz = callPackage ../tools/archivers/rpm2targz { };
 
@@ -32967,6 +32958,8 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo120Module;
   }) k3s_1_26 k3s_1_27 k3s_1_28;
+  inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_29;
+
   k3s = k3s_1_27;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
@@ -33255,7 +33248,7 @@ with pkgs;
   lame = callPackage ../development/libraries/lame { };
 
   labwc = callPackage ../by-name/la/labwc/package.nix {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   larswm = callPackage ../applications/window-managers/larswm { };
@@ -41194,8 +41187,6 @@ with pkgs;
   touchosc = callPackage ../applications/audio/touchosc { };
 
   tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
-
-  tup = callPackage ../development/tools/build-managers/tup { };
 
   turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 

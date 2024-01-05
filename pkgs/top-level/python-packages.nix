@@ -3029,6 +3029,8 @@ self: super: with self; {
 
   django-csp = callPackage ../development/python-modules/django-csp { };
 
+  django-currentuser = callPackage ../development/python-modules/django-currentuser { };
+
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
@@ -3096,6 +3098,8 @@ self: super: with self; {
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
+
+  django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
@@ -3400,6 +3404,8 @@ self: super: with self; {
   dronecan = callPackage ../development/python-modules/dronecan { };
 
   dropbox = callPackage ../development/python-modules/dropbox { };
+
+  dropmqttapi = callPackage ../development/python-modules/dropmqttapi { };
 
   ds-store = callPackage ../development/python-modules/ds-store { };
 
@@ -4583,7 +4589,7 @@ self: super: with self; {
 
   github-webhook = callPackage ../development/python-modules/github-webhook { };
 
-  github3_py = callPackage ../development/python-modules/github3_py { };
+  github3-py = callPackage ../development/python-modules/github3-py { };
 
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
