@@ -12,13 +12,11 @@ let
     , flutterHash
     , dartHash
     , patches
-    , pubspecLockFile
-    , vendorHash
-    , depsListFile
+    , pubspecLock
     }:
     let
       args = {
-        inherit version engineVersion patches pubspecLockFile vendorHash depsListFile;
+        inherit version engineVersion patches pubspecLock;
 
         dart = dart.override {
           version = dartVersion;
@@ -77,8 +75,6 @@ in
     };
     flutterHash = "sha256-00G030FvZZTsdf9ruFs9jdIHcC5h+xpp4NlmL64qVZA=";
     patches = flutter3Patches;
-    pubspecLockFile = ./lockfiles/stable/pubspec.lock;
-    vendorHash = "sha256-lsFOvvmhszBcFb9XvabpqfL2Ek4wjhmB0OrcWUOURFQ=";
-    depsListFile = ./lockfiles/stable/deps.json;
+    pubspecLock = lib.importJSON ./lockfiles/stable/pubspec.lock.json;
   };
 }

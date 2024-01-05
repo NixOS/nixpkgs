@@ -3,11 +3,14 @@
 , runCommand
 , makeWrapper
 , wrapGAppsHook
-, fetchDartDeps
 , buildDartApplication
 , cacert
 , glib
 , flutter
+, pkg-config
+, jq
+, yq
+, moreutils
 }:
 
 # absolutely no mac support for now
@@ -20,7 +23,6 @@
 
 (buildDartApplication.override {
   dart = flutter;
-  fetchDartDeps = fetchDartDeps.override { dart = flutter; };
 }) (args // {
   sdkSetupScript = ''
     # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
@@ -50,7 +52,46 @@
 
   inherit pubGetScript;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook ];
+  sdkSourceBuilders = {
+    # https://github.com/dart-lang/pub/blob/68dc2f547d0a264955c1fa551fa0a0e158046494/lib/src/sdk/flutter.dart#L81
+    "flutter" = name: runCommand "flutter-sdk-${name}" { passthru.packageRoot = "."; } ''
+      for path in '${flutter}/packages/${name}' '${flutter}/bin/cache/pkg/${name}'; do
+        if [ -d "$path" ]; then
+          ln -s "$path" "$out"
+          break
+        fi
+      done
+
+      if [ ! -e "$out" ]; then
+        echo 1>&2 'The Flutter SDK does not contain the requested package: ${name}!'
+        exit 1
+      fi
+    '';
+  };
+
+  extraPackageConfigSetup = ''
+    # https://github.com/flutter/flutter/blob/3.13.8/packages/flutter_tools/lib/src/dart/pub.dart#L755
+    if [ "$('${yq}/bin/yq' '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+      '${jq}/bin/jq' '.packages |= . + [{
+        name: "flutter_gen",
+        rootUri: "flutter_gen",
+        languageVersion: "2.12",
+      }]' "$out" | '${moreutils}/bin/sponge' "$out"
+    fi
+  '';
+
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+    wrapGAppsHook
+
+    # Flutter requires pkg-config for Linux desktop support, and many plugins
+    # attempt to use it.
+    #
+    # It is available to the `flutter` tool through its wrapper, but it must be
+    # added here as well so the setup hook adds plugin dependencies to the
+    # pkg-config search paths.
+    pkg-config
+  ];
+
   buildInputs = (args.buildInputs or [ ]) ++ [ glib ];
 
   dontDartBuild = true;
@@ -59,7 +100,6 @@
 
     mkdir -p build/flutter_assets/fonts
 
-    doPubGet flutter pub get --offline -v
     flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
 
     runHook postBuild
@@ -93,6 +133,11 @@
         patchelf --set-rpath "$newrp" "$f"
       fi
     done
+
+    # Install the package_config.json file.
+    # This is normally done by dartInstallHook, but we disable it.
+    mkdir -p "$pubcache"
+    cp .dart_tool/package_config.json "$pubcache/package_config.json"
 
     runHook postInstall
   '';
