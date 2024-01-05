@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "resolve-march-native";
-  version = "2.2.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vJzkVL23fvFO1pGJwdPiqR73K9iNJ6OglVxL5tCVa2U=";
+    hash = "sha256-fkiEWZvg/h8Gn0TL3Ov8aq2cAG5VncUTrVcUTRNOx+Y=";
   };
 
   # NB: The tool uses gcc at runtime to resolve the -march=native flags
@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/hartwork/resolve-march-native";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
