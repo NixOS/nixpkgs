@@ -371,7 +371,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+  hardeningDisable = [ "bindnow" "format" "pie" "relro" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = [
