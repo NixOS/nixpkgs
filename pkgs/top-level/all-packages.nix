@@ -8661,8 +8661,6 @@ with pkgs;
 
   gnome-randr = callPackage ../tools/wayland/gnome-randr { };
 
-  gnome-resources = callPackage ../tools/system/gnome-resources { };
-
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
 
   gnu-shepherd = callPackage ../misc/gnu-shepherd { };
