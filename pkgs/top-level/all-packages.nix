@@ -41669,8 +41669,6 @@ with pkgs;
 
   NSPlist = callPackage ../development/libraries/NSPlist { };
 
-  PlistCpp = callPackage ../development/libraries/PlistCpp { };
-
   linode-cli = python3Packages.callPackage ../tools/virtualization/linode-cli { };
 
   hss = callPackage ../tools/networking/hss { };

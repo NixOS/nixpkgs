@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , boost
-, PlistCpp
+, plistcpp
 , pugixml
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    PlistCpp
+    plistcpp
     pugixml
   ];
 
