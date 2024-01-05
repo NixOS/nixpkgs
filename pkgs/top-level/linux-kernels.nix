@@ -96,6 +96,14 @@ in {
       rpiVersion = 4;
     };
 
+    linux_rpi5 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
+      kernelPatches = with kernelPatches; [
+        bridge_stp_helper
+        request_key_helper
+      ];
+      rpiVersion = 5;
+    };
+
     linux_4_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "4.19";
       kernelPatches =
@@ -615,6 +623,7 @@ in {
     linux_rpi2 = packagesFor kernels.linux_rpi2;
     linux_rpi3 = packagesFor kernels.linux_rpi3;
     linux_rpi4 = packagesFor kernels.linux_rpi4;
+    linux_rpi5 = packagesFor kernels.linux_rpi5;
      __attrsFailEvaluation = true;
   };
 

@@ -569,6 +569,7 @@ mapAliases ({
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
+  linuxPackages_rpi5 = linuxKernel.packages.linux_rpi5;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
   linuxPackages_rt_5_15 = linuxKernel.packages.linux_rt_5_15;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
@@ -595,6 +596,7 @@ mapAliases ({
   linux_rpi2 = linuxKernel.kernels.linux_rpi2;
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
   linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linux_rpi5 = linuxKernel.kernels.linux_rpi5;
 
   # Added 2021-04-04
   linuxPackages_xen_dom0 = linuxPackages;
