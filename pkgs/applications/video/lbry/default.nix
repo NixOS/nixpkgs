@@ -12,7 +12,7 @@ in appimageTools.wrapAppImage rec {
     src = fetchurl {
       url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
-      hash = "6AhlSq0NiOxPx25uMYrQypPiiFtJzI/vZMns/l5ALFZ4BKlLtUVqLv1DvVcnuYxmuTMvw6Ylf4Whr/Knp8lRbA==";
+      hash = "sha512-6AhlSq0NiOxPx25uMYrQypPiiFtJzI/vZMns/l5ALFZ4BKlLtUVqLv1DvVcnuYxmuTMvw6Ylf4Whr/Knp8lRbA==";
     };
   };
 
