@@ -2372,6 +2372,8 @@ self: super: with self; {
 
   cot = callPackage ../development/python-modules/cot { };
 
+  courlan = callPackage ../development/python-modules/courlan { };
+
   cov-core = callPackage ../development/python-modules/cov-core { };
 
   coverage = callPackage ../development/python-modules/coverage { };
