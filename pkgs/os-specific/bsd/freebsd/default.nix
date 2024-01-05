@@ -123,6 +123,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   rcorder = callPackage ./rcorder.nix {};
   reboot = callPackage ./reboot.nix {};
   rpcgen = callPackage ./rpcgen.nix {};
+  services_mkdb = callPackage ./services_mkdb.nix {};
   shutdown = callPackage ./shutdown.nix {};
   stat = callPackage ./stat.nix {};
   sysctl = callPackage ./sysctl.nix {};
