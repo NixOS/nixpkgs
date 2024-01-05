@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
     rev = finalAttrs.version;
-    hash = "sha256-szMNSqkocf/aVs1aF+TLV1qu0MDHTNDiO4V1j4ySBvQ=";
+    hash = "sha256-23rG+12pAw33rm+jDu9pp8TsumNYh+UbnbeEKs4yB+M=";
     fetchSubmodules = true;
   };
 
