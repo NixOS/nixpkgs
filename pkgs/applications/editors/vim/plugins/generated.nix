@@ -2059,12 +2059,12 @@ final: prev:
 
   codeium-vim = buildVimPlugin {
     pname = "codeium.vim";
-    version = "2023-12-26";
+    version = "2024-01-03";
     src = fetchFromGitHub {
       owner = "Exafunction";
       repo = "codeium.vim";
-      rev = "a31ff444697497438cd2569200ddb4af846cae65";
-      sha256 = "0bxyi5jhbjyjya98w6qm5nnvahbdpv9h1vmkr7h5mhn7i74nq2kh";
+      rev = "4063291e335e74e9ee2be04beb47d40b376312fa";
+      sha256 = "sha256-kRwkgDQq0x4JusuUww5X/lXoJF/gHeZ57FOndNGS4Go=";
     };
     meta.homepage = "https://github.com/Exafunction/codeium.vim/";
   };

@@ -175,6 +175,7 @@ mapAliases ({
   GeoIP = geoip; # added 2023-02-19
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
+  github3_py = github3-py; # added 2024-01-04
   GitPython = gitpython; # added 2022-10-28
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   glasgow = throw "glasgow has been promoted to a top-level attribute"; # added 2023-02-05
