@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, nixosTests, makeWrapper, openjdk11, which, gawk }:
+{ stdenv, lib, fetchurl, nixosTests, makeWrapper, openjdk21, which, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
         chmod +x "$out/share/neo4j/bin/$NEO4J_SCRIPT"
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
-            --prefix PATH : "${lib.makeBinPath [ openjdk11 which gawk ]}" \
-            --set JAVA_HOME "${openjdk11}"
+            --prefix PATH : "${lib.makeBinPath [ openjdk21 which gawk ]}" \
+            --set JAVA_HOME "${openjdk21}"
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
