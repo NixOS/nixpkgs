@@ -613,7 +613,6 @@ broken-packages:
   - cacophony # failure in job https://hydra.nixos.org/build/233239380 at 2023-09-02
   - cafeteria-prelude # failure in job https://hydra.nixos.org/build/233254881 at 2023-09-02
   - cairo-core # failure in job https://hydra.nixos.org/build/233248151 at 2023-09-02
-  - cairo-image # failure in job https://hydra.nixos.org/build/243813080 at 2024-01-01
   - cake3 # failure in job https://hydra.nixos.org/build/233231662 at 2023-09-02
   - cal3d # failure in job https://hydra.nixos.org/build/233200357 at 2023-09-02
   - calamity # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/238601583 at 2023-10-21
