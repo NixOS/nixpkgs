@@ -1,0 +1,1 @@
+pkgs.foo: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.

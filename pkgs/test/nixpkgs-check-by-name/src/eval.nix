@@ -93,10 +93,18 @@ let
   # Information on all attributes that exist but are not in pkgs/by-name.
   # We need this to enforce pkgs/by-name for new packages
   nonByNameAttrs = map (name:
+    let
+      output = attrInfo name pkgs.${name};
+      result = builtins.tryEval (builtins.deepSeq output null);
+    in
     [
       name
       {
-        NonByName = null;
+        NonByName =
+          if result.success then
+            { EvalSuccess = output; }
+          else
+            { EvalFailure = null; };
       }
     ]
   ) (builtins.attrNames (builtins.removeAttrs pkgs attrs));
