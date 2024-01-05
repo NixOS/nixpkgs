@@ -504,7 +504,6 @@ self: super: {
   msgpack-rpc = dontCheck super.msgpack-rpc;
   persistent-zookeeper = dontCheck super.persistent-zookeeper;
   pocket-dns = dontCheck super.pocket-dns;
-  postgresql-simple = dontCheck super.postgresql-simple;
   squeal-postgresql = dontCheck super.squeal-postgresql;
   postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
@@ -1359,6 +1358,14 @@ self: super: {
   json-autotype = dontCheck super.json-autotype;
 
   # Requires pg_ctl command during tests
+  postgresql-simple =
+    overrideCabal (drv: {
+      testToolDepends = drv.testToolDepends or [] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+    })
+    super.postgresql-simple;
   beam-postgres = overrideCabal (drv: {
     # https://github.com/NixOS/nixpkgs/issues/198495
     doCheck = pkgs.postgresql.doCheck;
