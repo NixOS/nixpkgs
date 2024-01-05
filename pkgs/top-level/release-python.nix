@@ -16,6 +16,7 @@
       # Keep evaluating home-assistant, which is transitively affected
       # by home-assistant-chip-core consuming OpenSSL 1.1. Affects roughly
       # 800 jobs.
+      # https://github.com/home-assistant-libs/chip-wheels/issues/24
       "openssl-1.1.1w"
     ];
   }; }

@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     libnl
+    # https://github.com/home-assistant-libs/chip-wheels/issues/24
     openssl_1_1
   ];
 
