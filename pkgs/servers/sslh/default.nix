@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libcap, libev, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, libcap, libev, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libev libconfig perl tcp_wrappers pcre2 ];
+  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.isLinux [ libcap tcp_wrappers ];
 
-  makeFlags = [ "USELIBCAP=1" "USELIBWRAP=1" ];
+  makeFlags = lib.optionals stdenv.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
 
   postInstall = ''
     # install all flavours
