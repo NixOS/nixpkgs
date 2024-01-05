@@ -15570,6 +15570,13 @@
     githubId = 12279531;
     name = "Ricardo Guevara";
   };
+  rhelmot = {
+    name = "Audrey Dutcher";
+    github = "rhelmot";
+    githubId = 2498805;
+    email = "audrey@rhelmot.io";
+    matrix = "@rhelmot:matrix.org";
+  };
   rhendric = {
     name = "Ryan Hendrickson";
     github = "rhendric";
