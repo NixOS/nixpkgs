@@ -1,33 +1,229 @@
 # pkgs.dockerTools {#sec-pkgs-dockerTools}
 
-`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120). Docker itself is not used to perform any of the operations done by these functions.
+`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+Docker itself is not used to perform any of the operations done by these functions.
 
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
 
-This function is analogous to the `docker build` command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the result is suitable for being loaded in Docker with `docker load`.
+This function builds a Docker-compatible repository tarball containing a single image.
+As such, the result is suitable for being loaded in Docker with `docker load` (see [](#ex-dockerTools-buildImage) for how to do this).
 
-The parameters of `buildImage` with relative example values are described below:
+This function will create a single layer for all files (and dependencies) that are specified in its argument.
+Only new dependencies that are not already in the existing layers will be copied.
+If you prefer to create multiple layers for the files and dependencies you want to add to the image, see [](#ssec-pkgs-dockerTools-buildLayeredImage) or [](#ssec-pkgs-dockerTools-streamLayeredImage) instead.
 
-[]{#ex-dockerTools-buildImage}
-[]{#ex-dockerTools-buildImage-runAsRoot}
+`buildImage` allows scripts to be run during the layer generation process, allowing custom behaviour to affect the contents of the image (see the documentation of the `runAsRoot` and `extraCommands` attributes).
+
+The resulting repository tarball will only list a single image as specified by the `name` and `tag` attributes.
+By default, that image will use a static creation date (see documentation for the `created` attribute).
+This allows `buildImage` to produce reproducible images.
+
+:::{.tip}
+When running an image built with `buildImage`, you might encounter certain errors depending on what you included in the image, especially if you did not start with any base image.
+
+If you encounter errors similar to `getProtocolByName: does not exist (no such protocol name: tcp)`, you may need to add the contents of `pkgs.iana-etc` in the `copyToRoot` attribute.
+Similarly, if you encounter errors similar to `Error_Protocol ("certificate has unknown CA",True,UnknownCa)`, you may need to add the contents of `pkgs.cacert` in the `copyToRoot` attribute.
+:::
+
+### Inputs {#ssec-pkgs-dockerTools-buildImage-inputs}
+
+`buildImage` expects an argument with the following attributes:
+
+`name` (String)
+
+: The name of the generated image.
+
+`tag` (String or Null; _optional_)
+
+: Tag of the generated image.
+  If `null`, the hash of the nix derivation will be used as the tag.
+
+  _Default value:_ `null`.
+
+`fromImage` (Path or Null; _optional_)
+
+: The repository tarball of an image to be used as the base for the generated image.
+  It must be a valid Docker image, such as one exported by `docker save`, or another image built with the `dockerTools` utility functions.
+  This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
+  A value of `null` can be seen as an equivalent of `FROM scratch`.
+
+  If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
+  Otherwise, the resulting image with contain the single layer created by `buildImage`.
+
+  _Default value:_ `null`.
+
+`fromImageName` (String or Null; _optional_)
+
+: Used to specify the image within the repository tarball in case it contains multiple images.
+  A value of `null` means that `buildImage` will use the first image available in the repository.
+
+  :::{.note}
+  This must be used with `fromImageTag`. Using only `fromImageName` without `fromImageTag` will make `buildImage` use the first image available in the repository.
+  :::
+
+  _Default value:_ `null`.
+
+`fromImageTag` (String or Null; _optional_)
+
+: Used to specify the image within the repository tarball in case it contains multiple images.
+  A value of `null` means that `buildImage` will use the first image available in the repository.
+
+  :::{.note}
+  This must be used with `fromImageName`. Using only `fromImageTag` without `fromImageName` will make `buildImage` use the first image available in the repository
+  :::
+
+  _Default value:_ `null`.
+
+`copyToRoot` (Path, List of Paths, or Null; _optional_)
+
+: Files to add to the generated image.
+  This can be either a path or a list of paths.
+  Anything that coerces to a path (e.g. a derivation) can also be used.
+  This can be seen as an equivalent of `ADD contents/ /` in a `Dockerfile`.
+
+  _Default value:_ `null`.
+
+`keepContentsDirlinks` (Boolean; _optional_)
+
+: When adding files to the generated image (as specified by `copyToRoot`), this attribute controls whether to preserve symlinks to directories.
+  If `false`, the symlinks will be transformed into directories.
+  This behaves the same as `rsync -k` when `keepContentsDirlinks` is `false`, and the same as `rsync -K` when `keepContentsDirlinks` is `true`.
+
+  _Default value:_ `false`.
+
+`runAsRoot` (String or Null; _optional_)
+
+: A bash script that will run as root inside a VM that contains the existing layers of the base image and the new generated layer (including the files from `copyToRoot`).
+  The script will be run with a working directory of `/`.
+  This can be seen as an equivalent of `RUN ...` in a `Dockerfile`.
+  A value of `null` means that this step in the image generation process will be skipped.
+
+  See [](#ex-dockerTools-buildImage-runAsRoot) for how to work with this attribute.
+
+  :::{.caution}
+  Using this attribute requires the `kvm` device to be available, see [`system-features`](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-system-features).
+  If the `kvm` device isn't available, you should consider using [`buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage) or [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage) instead.
+  Those functions allow scripts to be run as root without access to the `kvm` device.
+  :::
+
+  :::{.note}
+  At the time the script in `runAsRoot` is run, the files specified directly in `copyToRoot` will be present in the VM, but their dependencies might not be there yet.
+  Copying their dependencies into the generated image is a step that happens after `runAsRoot` finishes running.
+  :::
+
+  _Default value:_ `null`.
+
+`extraCommands` (String; _optional_)
+
+: A bash script that will run before the layer created by `buildImage` is finalised.
+  The script will be run on some (opaque) working directory which will become `/` once the layer is created.
+  This is similar to `runAsRoot`, but the script specified in `extraCommands` is **not** run as root, and does not involve creating a VM.
+  It is simply run as part of building the derivation that outputs the layer created by `buildImage`.
+
+  See [](#ex-dockerTools-buildImage-extraCommands) for how to work with this attribute, and subtle differences compared to `runAsRoot`.
+
+  _Default value:_ `""`.
+
+`config` (Attribute Set; _optional_)
+
+: Used to specify the configuration of the containers that will be started off the generated image.
+  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+
+  _Default value:_ `null`.
+
+`architecture` (String; _optional_)
+
+: Used to specify the image architecture.
+  This is useful for multi-architecture builds that don't need cross compiling.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
+
+  _Default value:_ the same value from `pkgs.go.GOARCH`.
+
+`diskSize` (Number; _optional_)
+
+: Controls the disk size (in megabytes) of the VM used to run the script specified in `runAsRoot`.
+  This attribute is ignored if `runAsRoot` is `null`.
+
+  _Default value:_ 1024.
+
+`buildVMMemorySize` (Number; _optional_)
+
+: Controls the amount of memory (in megabytes) provisioned for the VM used to run the script specified in `runAsRoot`.
+  This attribute is ignored if `runAsRoot` is `null`.
+
+  _Default value:_ 512.
+
+`created` (String; _optional_)
+
+: Specifies the time of creation of the generated image.
+  This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case `buildImage` will use the current date.
+
+  See [](#ex-dockerTools-buildImage-creatednow) for how to use `"now"`.
+
+  :::{.caution}
+  Using `"now"` means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
+  :::
+
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
+
+`uid` (Number; _optional_)
+
+: The uid of the user that will own the files packed in the new layer built by `buildImage`.
+
+  _Default value:_ 0.
+
+`gid` (Number; _optional_)
+
+: The gid of the group that will own the files packed in the new layer built by `buildImage`.
+
+  _Default value:_ 0.
+
+`contents` **DEPRECATED**
+
+: This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.
+
+### Passthru outputs {#ssec-pkgs-dockerTools-buildImage-passthru-outputs}
+
+`buildImage` defines a few [`passthru`](#var-stdenv-passthru) attributes:
+
+`buildArgs` (Attribute Set)
+
+: The argument passed to `buildImage` itself.
+  This allows you to inspect all attributes specified in the argument, as described above.
+
+`layer` (Attribute Set)
+
+: The derivation with the layer created by `buildImage`.
+  This allows easier inspection of the contents added by `buildImage` in the generated image.
+
+`imageTag` (String)
+
+: The tag of the generated image.
+  This is useful if no tag was specified in the attributes of the argument to `buildImage`, because an automatic tag will be used instead.
+  `imageTag` allows you to retrieve the value of the tag used in this case.
+
+### Examples {#ssec-pkgs-dockerTools-buildImage-examples}
+
+:::{.example #ex-dockerTools-buildImage}
+# Building a Docker image
+
+The following package builds a Docker image that runs the `redis-server` executable from the `redis` package.
+The Docker image will have name `redis` and tag `latest`.
 
 ```nix
-buildImage {
+{ dockerTools, buildEnv, redis }:
+dockerTools.buildImage {
   name = "redis";
   tag = "latest";
 
-  fromImage = someBaseImage;
-  fromImageName = null;
-  fromImageTag = "latest";
-
-  copyToRoot = pkgs.buildEnv {
+  copyToRoot = buildEnv {
     name = "image-root";
-    paths = [ pkgs.redis ];
+    paths = [ redis ];
     pathsToLink = [ "/bin" ];
   };
 
   runAsRoot = ''
-    #!${pkgs.runtimeShell}
     mkdir -p /data
   '';
 
@@ -36,68 +232,112 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
-
-  diskSize = 1024;
-  buildVMMemorySize = 512;
 }
 ```
 
-The above example will build a Docker image `redis/latest` from the given base image. Loading and running this image in Docker results in `redis-server` being started automatically.
+The result of building this package is a `.tar.gz` file that can be loaded into Docker:
 
-- `name` specifies the name of the resulting image. This is the only required argument for `buildImage`.
+```shell
+$ nix-build
+(some output removed for clarity)
+building '/nix/store/yw0adm4wpsw1w6j4fb5hy25b3arr9s1v-docker-image-redis.tar.gz.drv'...
+Adding layer...
+tar: Removing leading `/' from member names
+Adding meta...
+Cooking the image...
+Finished.
+/nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-redis.tar.gz
 
-- `tag` specifies the tag of the resulting image. By default it's `null`, which indicates that the nix output hash will be used as tag.
-
-- `fromImage` is the repository tarball containing the base image. It must be a valid Docker image, such as exported by `docker save`. By default it's `null`, which can be seen as equivalent to `FROM scratch` of a `Dockerfile`.
-
-- `fromImageName` can be used to further specify the base image within the repository, in case it contains multiple images. By default it's `null`, in which case `buildImage` will peek the first image available in the repository.
-
-- `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
-
-- `copyToRoot` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
-
-- `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
-
-> **_NOTE:_** Using this parameter requires the `kvm` device to be available.
-
-- `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
-
-- `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
-
-- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
-
-- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
-
-After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
-
-At the end of the process, only one new single layer will be produced and added to the resulting image.
-
-The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage), it would be `redis/latest`.
-
-It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
-
-> **_NOTE:_** If you see errors similar to `getProtocolByName: does not exist (no such protocol name: tcp)` you may need to add `pkgs.iana-etc` to `contents`.
-
-> **_NOTE:_** If you see errors similar to `Error_Protocol ("certificate has unknown CA",True,UnknownCa)` you may need to add `pkgs.cacert` to `contents`.
-
-By default `buildImage` will use a static date of one second past the UNIX Epoch. This allows `buildImage` to produce binary reproducible images. When listing images with `docker images`, the newly created images will be listed like this:
-
-```ShellSession
-$ docker images
-REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
-hello        latest   08c791c7846e   48 years ago   25.2MB
+$ docker load -i /nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-redis.tar.gz
+(some output removed for clarity)
+Loaded image: redis:latest
 ```
+:::
 
-You can break binary reproducibility but have a sorted, meaningful `CREATED` column by setting `created` to `now`.
+:::{.example #ex-dockerTools-buildImage-runAsRoot}
+# Building a Docker image with `runAsRoot`
+
+The following package builds a Docker image with the `hello` executable from the `hello` package.
+It uses `runAsRoot` to create a directory and a file inside the image.
+
+This works the same as [](#ex-dockerTools-buildImage-extraCommands), but uses `runAsRoot` instead of `extraCommands`.
 
 ```nix
-pkgs.dockerTools.buildImage {
+{ dockerTools, buildEnv, hello }:
+dockerTools.buildImage {
   name = "hello";
   tag = "latest";
-  created = "now";
-  copyToRoot = pkgs.buildEnv {
+
+  copyToRoot = buildEnv {
     name = "image-root";
-    paths = [ pkgs.hello ];
+    paths = [ hello ];
+    pathsToLink = [ "/bin" ];
+  };
+
+  runAsRoot = ''
+    mkdir -p /data
+    echo "some content" > my-file
+  '';
+
+  config = {
+    Cmd = [ "/bin/hello" ];
+    WorkingDir = "/data";
+  };
+}
+```
+:::
+
+:::{.example #ex-dockerTools-buildImage-extraCommands}
+# Building a Docker image with `extraCommands`
+
+The following package builds a Docker image with the `hello` executable from the `hello` package.
+It uses `extraCommands` to create a directory and a file inside the image.
+
+This works the same as [](#ex-dockerTools-buildImage-runAsRoot), but uses `extraCommands` instead of `runAsRoot`.
+Note that with `extraCommands`, we can't directly reference `/` and must create files and directories as if we were already on `/`.
+
+```nix
+{ dockerTools, buildEnv, hello }:
+dockerTools.buildImage {
+  name = "hello";
+  tag = "latest";
+
+  copyToRoot = buildEnv {
+    name = "image-root";
+    paths = [ hello ];
+    pathsToLink = [ "/bin" ];
+  };
+
+  extraCommands = ''
+    mkdir -p data
+    echo "some content" > my-file
+  '';
+
+  config = {
+    Cmd = [ "/bin/hello" ];
+    WorkingDir = "/data";
+  };
+}
+```
+:::
+
+:::{.example #ex-dockerTools-buildImage-creatednow}
+
+# Building a Docker image with a creation date set to the current time
+
+Note that using a value of `"now"` in the `created` attribute will break reproducibility.
+
+```nix
+{ dockerTools, buildEnv, hello }:
+dockerTools.buildImage {
+  name = "hello";
+  tag = "latest";
+
+  created = "now";
+
+  copyToRoot = buildEnv {
+    name = "image-root";
+    paths = [ hello ];
     pathsToLink = [ "/bin" ];
   };
 
@@ -105,7 +345,7 @@ pkgs.dockerTools.buildImage {
 }
 ```
 
-Now the Docker CLI will display a reasonable date and sort the images as expected:
+After importing the generated repository tarball with Docker, its CLI will display a reasonable date and sort the images as expected:
 
 ```ShellSession
 $ docker images
@@ -113,7 +353,7 @@ REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
 
-However, the produced images will not be binary reproducible.
+:::
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
 
