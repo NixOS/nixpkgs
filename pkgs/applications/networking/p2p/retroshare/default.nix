@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "retroshare";
-  version = "0.6.6";
+  version = "0.6.7.2";
 
   src = fetchFromGitHub {
     owner = "RetroShare";
     repo = "RetroShare";
     rev = "v${version}";
-    sha256 = "1hsymbhsfgycj39mdkrdp2hgq8irmvxa4a6jx2gg339m1fgf2xmh";
+    sha256 = "sha256-1A1YvOWIiWlP1JPUTg5Z/lxVGCBv4tCPf5sZdPogitU=";
     fetchSubmodules = true;
   };
 
@@ -19,7 +19,6 @@ mkDerivation rec {
     # The build normally tries to get git sub-modules during build
     # but we already have them checked out
     ./no-submodules.patch
-    ./cpp-filesystem.patch
   ];
 
   nativeBuildInputs = [ pkg-config qmake cmake ];
@@ -29,6 +28,11 @@ mkDerivation rec {
   ];
 
   qmakeFlags = [
+    # LIBSAM3 does not compile, so i2p support is broken
+    # https://github.com/RetroShare/RetroShare/issues/2811 might be related
+    "CONFIG+=no_rs_sam3"
+    "CONFIG+=no_rs_sam3_libsam3"
+
     # Upnp library autodetection doesn't work
     "RS_UPNP_LIB=miniupnpc"
 
@@ -36,7 +40,7 @@ mkDerivation rec {
     "RS_MAJOR_VERSION=${lib.versions.major version}"
     "RS_MINOR_VERSION=${lib.versions.minor version}"
     "RS_MINI_VERSION=${lib.versions.patch version}"
-    "RS_EXTRA_VERSION="
+    "RS_EXTRA_VERSION=.2"
   ];
 
   postInstall = ''
