@@ -1,4 +1,7 @@
-{ fetchFromGitLab
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
 , libao
 , libmodplug
 , libsamplerate
@@ -7,29 +10,31 @@
 , ncurses
 , which
 , pkg-config
-, lib, stdenv }:
+}:
 
 stdenv.mkDerivation rec {
-  version = "2.53";
   pname = "frotz";
+  version = "2.54";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
-    sha256 = "sha256-xVC/iE71W/Wdy5aPGH9DtcVAHWCcg3HkEA3iDV6OYUo=";
+    hash = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/496e5b91e3b6c9dc6820d77ab60dbe400d1924ee/games/frotz/files/Makefile.patch";
+      extraPrefix = "";
+      hash = "sha256-P83ZzSi3bhncQ52Y38Q3F/7v1SJKr5614tytt862HRg=";
+    })
+  ];
 
   nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ libao libmodplug libsamplerate libsndfile libvorbis ncurses ];
-  preBuild = ''
-    makeFlagsArray+=(
-      CC="cc"
-      CFLAGS="-D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600"
-      LDFLAGS="-lncursesw -ltinfo"
-    )
-  '';
+
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
     description = "A z-machine interpreter for Infocom games and other interactive fiction";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nicknovitski  ddelabru ];
+    maintainers = with maintainers; [ nicknovitski ddelabru ];
     license = licenses.gpl2;
   };
 }
