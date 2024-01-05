@@ -386,6 +386,7 @@ mapAliases ({
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
+  pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
