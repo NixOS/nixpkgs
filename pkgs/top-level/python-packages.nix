@@ -7229,6 +7229,8 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
+  mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
+
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
