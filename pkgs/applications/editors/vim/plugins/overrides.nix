@@ -70,6 +70,9 @@
 , # LanguageClient-neovim dependencies
   CoreFoundation
 , CoreServices
+, # nvim-dap-rr dependencies
+  rr
+, vscode-extensions
 , # nvim-treesitter dependencies
   callPackage
 , # sg.nvim dependencies
@@ -948,6 +951,11 @@
   nvim-dap-python = super.nvim-dap-python.overrideAttrs {
     dependencies = with self; [ nvim-dap ];
   };
+
+  nvim-dap-rr = super.nvim-dap-rr.overrideAttrs {
+    dependencies = [ rr vscode-extensions.ms-vscode.cpptools ];
+  };
+
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];

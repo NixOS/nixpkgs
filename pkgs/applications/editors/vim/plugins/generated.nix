@@ -16371,5 +16371,17 @@ final: prev:
     meta.homepage = "https://github.com/jmederosalvarado/roslyn.nvim/";
   };
 
+  nvim-dap-rr = buildVimPlugin {
+    pname = "nvim-dap-rr";
+    version = "2023-12-27";
+    src = fetchFromGitHub {
+      owner = "jonboh";
+      repo = "nvim-dap-rr";
+      rev = "40e04f33b907d760437c6d58c312425bfe298ac7";
+      sha256 = "sha256-JNztLTSyHmEmh3xT4WR0cpP25vjZ4A6aQbnU49U6+Ss=";
+    };
+    meta.homepage = "https://github.com/jonboh/nvim-dap-rr/";
+  };
+
 
 }
