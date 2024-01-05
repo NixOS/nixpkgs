@@ -4,7 +4,7 @@
 , appimageTools
 , makeWrapper
 # graphs will not sync without matching upstream's major electron version
-, electron_25
+, electron_27
 , git
 , nix-update-script
 }:
@@ -14,11 +14,11 @@ stdenv.mkDerivation (finalAttrs: let
 
 in {
   pname = "logseq";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-jDIfOHGki4InGuLvsnxdd2/FMPbT3VyuHtPxA4r3s5c=";
+    hash = "sha256-aduFqab5cpoXR3oFOHzsXJwogm1bZ9KgT2Mt6G9kbBA=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -57,7 +57,7 @@ in {
 
   postFixup = ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron_25}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_27}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
@@ -66,12 +66,12 @@ in {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
     changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 })
