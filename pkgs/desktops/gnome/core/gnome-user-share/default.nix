@@ -4,23 +4,26 @@
 , meson
 , ninja
 , fetchurl
-, apacheHttpd
+, apacheHttpdPackages
 , pkg-config
 , glib
 , libxml2
 , systemd
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , itstool
-, mod_dnssd
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-share";
   version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major version}/gnome-user-share-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
     sha256 = "DfMGqgVYMT81Pvf1G/onwDYoGtxFZ34c+/p8n4YVOM4=";
   };
 
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -55,16 +58,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-user-share";
+      attrPath = "gnome.gnome-user-share";
     };
   };
 
   meta = with lib; {
-    homepage = "https://help.gnome.org/users/gnome-user-share/3.8";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-user-share";
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})
