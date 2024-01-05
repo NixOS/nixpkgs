@@ -90,7 +90,7 @@ in
         User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0750";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
         CapabilityBoundingSet = [ "" ];
