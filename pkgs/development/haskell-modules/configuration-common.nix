@@ -510,7 +510,6 @@ self: super: {
   sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
   texrunner = dontCheck super.texrunner;
-  users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
@@ -1371,6 +1370,15 @@ self: super: {
     doCheck = pkgs.postgresql.doCheck;
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
   }) super.beam-postgres;
+  users-postgresql-simple =
+    overrideCabal (drv: {
+      testToolDepends = drv.testToolDepends or [] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+    })
+    super.users-postgresql-simple;
+
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
