@@ -141,6 +141,7 @@ with self;
   };
 
   async_ssl = janePackage {
+    version = "0.16.1";
     pname = "async_ssl";
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
     meta.description = "Async wrappers for SSL";
@@ -647,6 +648,7 @@ with self;
   };
 
   ppx_accessor = janePackage {
+    version = "0.16.1";
     pname = "ppx_accessor";
     hash = "sha256-o70q8eSbPeuGkIcCnKoK0BpaqPhy/NS7x2YYR6wfki8=";
     meta.description = "[@@deriving] plugin to generate accessors for use with the Accessor libraries";
@@ -1143,6 +1145,7 @@ with self;
   };
 
   streamable = janePackage {
+    version = "0.16.1";
     pname = "streamable";
     hash = "sha256-3djrUW2tPKaEmoOIpdjN6ok7U9i07yreqbi1kP+6pnY=";
     meta.description = "A collection of types suitable for incremental serialization";
