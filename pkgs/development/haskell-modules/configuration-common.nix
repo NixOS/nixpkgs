@@ -688,7 +688,6 @@ self: super: {
   pipes-websockets = dontCheck super.pipes-websockets;
   posix-pty = dontCheck super.posix-pty; # https://github.com/merijn/posix-pty/issues/12
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
-  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
   powerdns = dontCheck super.powerdns; # Tests require networking and external services
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
@@ -1365,6 +1364,16 @@ self: super: {
       ];
     })
     super.postgresql-simple;
+  postgresql-simple-migration = overrideCabal (drv: {
+      preCheck = ''
+        PGUSER=test
+        PGDATABASE=test
+      '';
+      testToolDepends = drv.testToolDepends or [] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+    }) (doJailbreak super.postgresql-simple-migration);
   beam-postgres = overrideCabal (drv: {
     # https://github.com/NixOS/nixpkgs/issues/198495
     doCheck = pkgs.postgresql.doCheck;

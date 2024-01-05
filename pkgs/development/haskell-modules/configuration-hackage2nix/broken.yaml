@@ -4303,7 +4303,6 @@ broken-packages:
   - postgresql-replicant # failure in job https://hydra.nixos.org/build/233247943 at 2023-09-02
   - postgresql-resilient # failure in job https://hydra.nixos.org/build/233212362 at 2023-09-02
   - postgresql-simple-bind # failure in job https://hydra.nixos.org/build/233220640 at 2023-09-02
-  - postgresql-simple-migration # failure in job https://hydra.nixos.org/build/233222723 at 2023-09-02
   - postgresql-simple-named # failure in job https://hydra.nixos.org/build/233202481 at 2023-09-02
   - postgresql-simple-sop # failure in job https://hydra.nixos.org/build/233249757 at 2023-09-02
   - postgresql-tx-monad-logger # failure in job https://hydra.nixos.org/build/233227034 at 2023-09-02
