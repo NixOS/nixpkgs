@@ -207,8 +207,8 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
-        message = "Backups for database backends other than sqlite will need customization";
+        assertion = cfg.backupDir == null -> cfg.dbBackend == "sqlite";
+        message = "Backups for database backends other than sqlite need backupDir to be set";
       }
       {
         assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);

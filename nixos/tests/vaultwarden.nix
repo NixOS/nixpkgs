@@ -115,7 +115,10 @@ let
                       package = pkgs.mariadb;
                     };
 
-                    services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+                    services.vaultwarden = {
+                      backupDir = "/srv/backups/vaultwarden";
+                      config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+                    };
 
                     systemd.services.vaultwarden.after = [ "mysql.service" ];
                   };
@@ -132,14 +135,15 @@ let
                       ];
                     };
 
-                    services.vaultwarden.config.databaseUrl = "postgresql:///vaultwarden?host=/run/postgresql";
+                    services.vaultwarden = {
+                      backupDir = "/srv/backups/vaultwarden";
+                      config.databaseUrl = "postgresql:///vaultwarden?host=/run/postgresql";
+                    };
 
                     systemd.services.vaultwarden.after = [ "postgresql.service" ];
                   };
 
                   sqlite = {
-                    services.vaultwarden.backupDir = "/srv/backups/vaultwarden";
-
                     environment.systemPackages = [ pkgs.sqlite ];
                   };
                 }
