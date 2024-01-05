@@ -3877,6 +3877,12 @@
       fingerprint = "1C3C 6547 538D 7152 310C 0EEA 84DD 0C01 30A5 4DF7";
     }];
   };
+  CryoMyst= {
+    name = "CryoMyst";
+    email = "CryoMyst@hotmail.com";
+    github = "CryoMyst";
+    githubId = 38846413;
+  };
   cryptix = {
     email = "cryptix@riseup.net";
     github = "cryptix";
