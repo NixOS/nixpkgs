@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.89";
+  version = "1.0.90";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sgflHkG4FncQ31+BwcZsp7LRgqeqANCIKGysxUk8aEs=";
+    sha256 = "sha256-C1xrsL7+S+TyMWULVuw7+ZV5hxfhXorScfqndomefRw=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
