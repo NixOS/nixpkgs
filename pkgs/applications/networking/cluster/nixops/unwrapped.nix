@@ -13,14 +13,14 @@
 
 buildPythonApplication rec {
   pname = "nixops";
-  version = "unstable-2023-10-26";
+  version = "unstable-2023-12-17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nixops";
-    rev = "2cfc2cb4fa9ecb89a4274574ff7f63ea61782498";
-    hash = "sha256-4uvQQkERZFEeRJjMAcyLYJzNvH0rNiiJ+5BDQmD58gI=";
+    rev = "053668e849bb369973cf265b7e8f38e66ef70138";
+    hash = "sha256-Kus1Ls1tT8fVGLX0NakRXmjuz5/J/tfqU4TLOkiZqvo=";
   };
 
   postPatch = ''
