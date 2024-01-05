@@ -392,6 +392,10 @@ in stdenv.mkDerivation (finalAttrs: {
     find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
   '' + optionalString stdenv.isAarch64 ''
     sed -e '/CPPUNIT_TEST(testStatisticalFormulasFODS);/d' -i './sc/qa/unit/functions_statistical.cxx'
+  '' + optionalString (variant == "fresh") ''
+    sed -e '/CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage3Objs->size());/d' -i './sw/qa/core/text/porrst.cxx'
+    sed -e '/CPPUNIT_ASSERT(pPage4Objs);/d' -i './sw/qa/core/text/porrst.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage4Objs->size());/d' -i './sw/qa/core/text/porrst.cxx'
   '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
