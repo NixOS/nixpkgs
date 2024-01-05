@@ -167,6 +167,7 @@ in rec {
         (onFullSupported "nixos.tests.xfce")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
+        (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
         ["nixpkgs.tarball"]
 
         # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,

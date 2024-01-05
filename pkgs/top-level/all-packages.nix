@@ -23991,6 +23991,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
+  mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
