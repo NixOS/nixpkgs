@@ -22939,11 +22939,10 @@ with pkgs;
   libguestfs = callPackage ../development/libraries/libguestfs {
     autoreconfHook = buildPackages.autoreconfHook264;
   };
-  libguestfs-with-appliance = libguestfs.override {
-    appliance = libguestfs-appliance;
+  libguestfsMinimal = libguestfs.override {
+    libguestfs-appliance = null;
     autoreconfHook = buildPackages.autoreconfHook264;
   };
-
 
   libhangul = callPackage ../development/libraries/libhangul { };
 

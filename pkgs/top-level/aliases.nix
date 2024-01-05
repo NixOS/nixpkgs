@@ -482,6 +482,7 @@ mapAliases ({
   libclc = llvmPackages_latest.libclc; # Added 2023-10-28
   libgme = game-music-emu; # Added 2022-07-20
   libgpgerror = libgpg-error; # Added 2021-09-04
+  libguestfs-with-appliance = throw "'libguestfs-with-appliance' has been renamed to/replaced by 'pkgs.libguestfs'"; # Added 2024-01-05
   libheimdal = heimdal; # Added 2022-11-18
   libintlOrEmpty = throw "'libintlOrEmpty' has been replaced by gettext"; # Converted to throw 2023-09-10
   libixp_hg = libixp;

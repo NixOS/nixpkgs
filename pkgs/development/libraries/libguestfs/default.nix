@@ -35,13 +35,11 @@
 , perlPackages
 , ocamlPackages
 , libtirpc
-, appliance ? null
+, libguestfs-appliance
 , javaSupport ? false
 , jdk
 , zstd
 }:
-
-assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
@@ -130,13 +128,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = lib.optionalString (appliance != null) ''
+  postFixup = lib.optionalString (libguestfs-appliance != null) ''
     mkdir -p $out/{lib,lib64}
-    ln -s ${appliance} $out/lib64/guestfs
-    ln -s ${appliance} $out/lib/guestfs
+    ln -s ${libguestfs-appliance} $out/lib64/guestfs
+    ln -s ${libguestfs-appliance} $out/lib/guestfs
   '';
 
-  doInstallCheck = appliance != null;
+  doInstallCheck = libguestfs-appliance != null;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -162,7 +160,5 @@ stdenv.mkDerivation rec {
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
-    # this is to avoid "output size exceeded"
-    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }

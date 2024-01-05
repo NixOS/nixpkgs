@@ -12,7 +12,7 @@
 , gnupg
 , hivex
 , jansson
-, libguestfs-with-appliance
+, libguestfs
 , libosinfo
 , libvirt
 , libxml2
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     glib
     hivex
     jansson
-    libguestfs-with-appliance
+    libguestfs
     libosinfo
     libvirt
     libxml2
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "LIBGUESTFS_PATH=${libguestfs-with-appliance}/lib/guestfs"
+    "LIBGUESTFS_PATH=${libguestfs}/lib/guestfs"
   ];
 
   installFlags = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ curl gnupg ]}:$out/bin \
       --suffix VIRT_BUILDER_DIRS : /etc:$out/etc
     wrapProgram $out/bin/virt-win-reg \
-      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
+      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs ]}
   '';
 
   meta = with lib; {
