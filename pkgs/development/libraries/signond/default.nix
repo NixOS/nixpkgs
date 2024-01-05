@@ -1,6 +1,6 @@
-{ mkDerivation, lib, fetchFromGitLab, qmake, doxygen }:
+{ stdenv, lib, fetchFromGitLab, qmake, qtbase, wrapQtAppsHook, doxygen }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "signond";
   version = "8.61";
 
@@ -14,7 +14,10 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     doxygen
+    wrapQtAppsHook
   ];
+
+  buildInputs = [ qtbase ];
 
   preConfigure = ''
     substituteInPlace src/signond/signond.pro \
@@ -24,7 +27,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/accounts-sso/signond";
     description = "Signon Daemon for Qt";
-    maintainers = with maintainers; [ freezeboy  ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.linux;
   };
 }
