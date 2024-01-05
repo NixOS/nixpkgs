@@ -34666,6 +34666,8 @@ with pkgs;
 
   purpur = callPackage ../games/purpur { };
 
+  pyfa = callPackage ../games/pyfa { };
+
   pikopixel = callPackage ../applications/graphics/pikopixel { };
 
   pithos = callPackage ../applications/audio/pithos {
