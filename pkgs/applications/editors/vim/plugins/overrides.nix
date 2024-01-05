@@ -1192,6 +1192,10 @@
     nvimRequireCheck = "dapui";
   };
 
+  nvim-dap-rr = super.nvim-dap-rr.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   nvim-genghis = super.nvim-genghis.overrideAttrs {
     dependencies = [ self.dressing-nvim ];
 
