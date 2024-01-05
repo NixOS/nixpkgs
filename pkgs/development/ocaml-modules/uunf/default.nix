@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, cmdliner
 , cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "15.1.0" else "15.0.0"
 }:
 
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
-  version = "15.0.0";
+  hash = {
+    "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+    "15.1.0" = "sha256-D8yvb7hVWaYxMqMZ5089/5tWDfvyGXKUOjhfU/4zSeQ=";
+  }."${version}";
 in
 
 if lib.versionOlder ocaml.version "4.03"
@@ -18,14 +22,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+    inherit hash;
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg uutf ]
   ++ lib.optional cmdlinerSupport cmdliner;
-
-  propagatedBuildInputs = [ uchar ];
 
   strictDeps = true;
 
