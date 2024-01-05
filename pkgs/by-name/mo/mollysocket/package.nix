@@ -6,6 +6,7 @@
 , sqlite
 , stdenv
 , darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=ws::tls::tests::connect_untrusted_server"
     "--skip=ws::tls::tests::connect_trusted_server"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) mollysocket;
+  };
 
   meta = {
     changelog = "https://github.com/mollyim/mollysocket/releases/tag/${version}";
