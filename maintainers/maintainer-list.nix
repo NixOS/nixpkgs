@@ -10258,6 +10258,12 @@
     githubId = 21087104;
     name = "Laurent Fainsin";
   };
+  lavafroth = {
+    email = "lavafroth@protonmail.com";
+    github = "lavafroth";
+    githubId = 107522312;
+    name = "Himadri Bhattacharjee";
+  };
   layus = {
     email = "layus.on@gmail.com";
     github = "layus";
