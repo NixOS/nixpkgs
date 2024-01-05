@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.17.2";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-lGdFxbD8O5kmiMdM0EPJF1jmnyVs1WkK4Y+qC71t4EY=";
+    hash = "sha256-mEx0RMfPNRvsgjVcZDTzr74G7l5C8UcTZ15INNX4Kuo=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-2s6DLVUpizFQpOOs0jBinBlIhIRVzLxveUcWCuSgW68=";
+  vendorHash = "sha256-zVSgrlTWDaN5uhA0iTcYMer4anly+m0BRTa6uuiLIjk=";
   proxyVendor = true;
 
   # Exclude broken genji, hive & impala drivers (bad group)
