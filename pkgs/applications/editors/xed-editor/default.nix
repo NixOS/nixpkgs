@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , libxml2
 , libpeas
 , glib
@@ -20,23 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-IpUBB7Viwc/nRfwzFllRiWoOmUxRZzS2BcxyM7W3oHI=";
+    sha256 = "sha256-MXRxzmRo/dRhp5Llib9ng1gzWW8uvzqTMjUVK8a3eJ8=";
   };
-
-  patches = [
-    # Fix missing include for libxml2 2.12
-    # https://github.com/linuxmint/xed/pull/611
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xed/commit/28cb2e8136c1bfe90faf5f2341bde66156990778.patch";
-      hash = "sha256-AqIb7Jj19SF3tIriPwn1JeB7niCmPbBsLE4ch2AX7fk=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
