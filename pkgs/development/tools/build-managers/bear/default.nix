@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands
