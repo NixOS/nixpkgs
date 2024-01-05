@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  doCheck = true;
+  # Tests fail on 32-bit due to not enough precision
+  doCheck = stdenv.is64bit;
 
   passthru.tests = {
     inherit prometheus-cpp;
