@@ -20451,7 +20451,7 @@ with pkgs;
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  yourkit-java = callPackage ../development/tools/yourkit-java {
+  yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
     jre = jdk17;
   };
 
