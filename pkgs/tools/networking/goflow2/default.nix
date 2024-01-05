@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "goflow2";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "netsampler";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tY2+4lGy+2thpRDNeTw1kfOtZvOspXCYU7dhYcckbRo=";
+    hash = "sha256-c+1Y3OTM2FR9o7zWYGW3uH1LQ2U1occf1++Rnf/atVQ=";
   };
 
   ldflags = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  vendorHash = "sha256-KcknR2IaHz2EzOFwSHppbmNDISrFdNoB4QmLT74/KWY=";
+  vendorHash = "sha256-9Ebrkizt/r60Kxh291CLzwKIkpdQqJuVYQ2umxih9lo=";
 
   meta = with lib; {
     description = "High performance sFlow/IPFIX/NetFlow Collector";
