@@ -53,6 +53,10 @@ let
     if cfg.environmentFiles == []
     then staticConfigFile
     else "/run/traefik/config.toml";
+  finalDynamicConfigFile = 
+    if cfg.environmentFiles == []
+    then dynamicConfigFile
+    else "/run/traefik/dynamic_config.toml";
 in {
   options.services.traefik = {
     enable = mkEnableOption (lib.mdDoc "Traefik web server");
@@ -134,7 +138,7 @@ in {
       example = [ "/run/secrets/traefik.env" ];
       description = lib.mdDoc ''
         Files to load as environment file. Environment variables from this file
-        will be substituted into the static configuration file using envsubst.
+        will be substituted into the static and dynamic configuration files using envsubst.
       '';
     };
   };
@@ -151,10 +155,12 @@ in {
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
         ExecStartPre = lib.optional (cfg.environmentFiles != [])
-          (pkgs.writeShellScript "pre-start" ''
+          (pkgs.writeShellScript "pre-start" (''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          '');
+          '' + lib.optionalString (finalDynamicConfigFile != null) ''
+            ${pkgs.envsubst}/bin/envsubst -i "${dynamicConfigFile}" > "${finalDynamicConfigFile}"
+          ''));
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
