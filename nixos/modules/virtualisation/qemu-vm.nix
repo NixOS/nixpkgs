@@ -450,6 +450,16 @@ in
           '';
       };
 
+    virtualisation.opengl =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            Whether or not to run QEMU with OpenGL hardware acceleration.
+          '';
+      };
+
     virtualisation.cores =
       mkOption {
         type = types.ints.positive;
@@ -1153,12 +1163,15 @@ in
       (mkIf cfg.qemu.virtioKeyboard [
         "-device virtio-keyboard"
       ])
-      (mkIf pkgs.stdenv.hostPlatform.isx86 [
-        "-usb" "-device usb-tablet,bus=usb-bus.0"
-      ])
-      (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
-      ])
+      (mkIf pkgs.stdenv.hostPlatform.isx86 (mkMerge [
+        [ "-usb" "-device usb-tablet,bus=usb-bus.0" ]
+        (mkIf cfg.opengl [ "-vga none" "-device virtio-gpu-gl-pci" ])
+      ]))
+      (mkIf pkgs.stdenv.hostPlatform.isAarch (mkMerge [
+        [ "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ]
+        (mkIf cfg.opengl [ "-device virtio-gpu-gl-pci" ])
+        (mkIf (!cfg.opengl) [ "-device virtio-gpu-pci" ])
+      ]))
       (let
         alphaNumericChars = lowerChars ++ upperChars ++ (map toString (range 0 9));
         # Replace all non-alphanumeric characters with underscores
@@ -1175,9 +1188,13 @@ in
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
       ])
-      (mkIf (!cfg.graphics) [
-        "-nographic"
+      (mkIf cfg.graphics [
+        "-display default${lib.optionalString cfg.opengl ",gl=on"}"
       ])
+      (mkIf (!cfg.graphics) (mkMerge [
+        [ "-nographic" ]
+        (mkIf cfg.opengl [ "-display egl-headless" ])
+      ]))
       (mkIf (cfg.tpm.enable) [
         "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
