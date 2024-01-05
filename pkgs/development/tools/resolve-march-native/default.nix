@@ -1,6 +1,6 @@
 { python3Packages
 , fetchFromGitHub
-, gcc
+, gcc-unwrapped
 , lib
 }:
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   # NB: The tool uses gcc at runtime to resolve the -march=native flags
-  propagatedBuildInputs = [ gcc ];
+  propagatedBuildInputs = [ gcc-unwrapped ];
 
   doCheck = true;
 
