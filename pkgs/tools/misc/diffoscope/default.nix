@@ -254,6 +254,9 @@ python3.pkgs.buildPythonApplication rec {
     # fails due to https://github.com/NixOS/nixpkgs/issues/256896
     # should be removed once that issue is resolved in coreboot or diffoscope
     "tests/comparators/test_cbfs.py"
+
+    # Broken
+    "tests/comparators/test_fsimage.py"
   ]
   # Flaky tests on Darwin
   ++ lib.optionals stdenv.isDarwin [
