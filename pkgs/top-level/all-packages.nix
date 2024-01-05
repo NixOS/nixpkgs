@@ -35471,11 +35471,6 @@ with pkgs;
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
-  src = callPackage ../applications/version-management/src {
-    git = gitMinimal;
-    python = python3;
-  };
-
   ssrc = callPackage ../applications/audio/ssrc { };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray { };
