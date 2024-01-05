@@ -10,7 +10,7 @@
 let
   # 0.18.12 was yanked from PyPI, it refers to this issue:
   # https://github.com/deschler/django-modeltranslation/issues/701
-  version = "0.18.11";
+  version = "0.18.12";
 in
 buildPythonPackage {
   pname = "django-modeltranslation";
@@ -19,8 +19,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    rev = "v${version}";
-    hash = "sha256-WEtTy449z7Fo9+UmiM+QAuUJ5eQ1RFe1HrIqFrY3L9k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6rAAu3Fd4D93rX8kvkcqhykzBu/lDByQ6zpjWq7J8mg=";
   };
 
   # Remove all references to pytest-cov
