@@ -53,7 +53,7 @@ let
     if cfg.environmentFiles == []
     then staticConfigFile
     else "/run/traefik/config.toml";
-  finalDynamicConfigFile = 
+  finalDynamicConfigFile =
     if cfg.environmentFiles == []
     then dynamicConfigFile
     else "/run/traefik/dynamic_config.toml";
