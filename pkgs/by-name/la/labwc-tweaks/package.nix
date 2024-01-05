@@ -7,6 +7,7 @@
 , gtk3
 , libxml2
 , wrapGAppsHook
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace stack-lang.c --replace /usr/share /run/current-system/sw/share
     sed -i '/{ NULL, "\/usr\/share" },/i { NULL, "/run/current-system/sw/share" },' theme.c
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks";
