@@ -6706,7 +6706,7 @@
   };
   getpsyched = {
     name = "Priyanshu Tripathi";
-    email = "priyanshutr@proton.me";
+    email = "priyanshu@getpsyched.dev";
     matrix = "@getpsyched:matrix.org";
     github = "getpsyched";
     githubId = 43472218;
