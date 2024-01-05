@@ -19,13 +19,13 @@
 buildPythonPackage rec {
   pname = "hahomematic";
   version = "2024.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
-    repo = pname;
+    repo = "hahomematic";
     rev = "refs/tags/${version}";
     hash = "sha256-cf7hucJJzA3AGBb03aPHkz4sGGYI7OAfki7b8wdgQLM=";
   };
