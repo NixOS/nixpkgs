@@ -169,6 +169,7 @@ mapAliases ({
   foundationdb60 = throw "foundationdb60 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb61 = throw "foundationdb61 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
+  fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute"; # added 2023-02-15

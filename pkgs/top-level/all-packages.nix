@@ -31593,8 +31593,6 @@ with pkgs;
 
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
-  fritzprofiles = with python3.pkgs; toPythonApplication fritzprofiles;
-
   fsv = callPackage ../applications/misc/fsv { };
 
   ft2-clone = callPackage ../applications/audio/ft2-clone {
