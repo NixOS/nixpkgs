@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, fetchFromGitHub, argparse, mosquitto, cmake, autoconf, automake, libtool, pkg-config, openssl }:
+{ lib, stdenv, pkgs, fetchFromGitHub, fetchpatch, argparse, mosquitto, cmake, autoconf, automake, libtool, pkg-config, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "ebusd";
@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/ebusd-cmake.patch
+    # Upstream patch for gcc-13 copmpatibility:
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/john30/ebusd/commit/3384f3780087bd6b94d46bf18cdad18201ad516c.patch";
+      hash = "sha256-+wZDHjGaIhBCqhy2zmIE8Ko3uAiw8kfKx64etCqRQjM=";
+    })
   ];
 
   cmakeFlags = [
