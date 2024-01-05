@@ -39,8 +39,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       with subtest("squeezelite player successfully connects to slimserver"):
           machine.wait_for_unit("squeezelite.service")
-          machine.wait_until_succeeds("journalctl -u squeezelite.service | grep 'slimproto:937 connected'")
-          player_mac = machine.wait_until_succeeds("journalctl -eu squeezelite.service | grep 'sendHELO:148 mac:'").strip().split(" ")[-1]
+          machine.wait_until_succeeds("journalctl -u squeezelite.service | grep -E 'slimproto:[0-9]+ connected'")
+          player_mac = machine.wait_until_succeeds("journalctl -eu squeezelite.service | grep -E 'sendHELO:[0-9]+ mac:'").strip().split(" ")[-1]
           player_id = machine.succeed(f"curl http://localhost:9000/jsonrpc.js -g -X POST -d '{json.dumps(rpc_get_player)}'")
           assert player_mac == json.loads(player_id)["result"]["_id"], "squeezelite player not found"
     '';
