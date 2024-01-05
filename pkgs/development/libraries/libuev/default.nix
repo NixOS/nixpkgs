@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight event loop library for Linux epoll() family APIs";
     homepage = "https://codedocs.xyz/troglobit/libuev/";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ vifino ];
   };
 }
