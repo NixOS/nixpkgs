@@ -3,10 +3,10 @@
 , crcmod
 , cython
 , dill
+, distlib
 , fastavro
 , fasteners
 , fetchFromGitHub
-, fetchpatch
 , freezegun
 , grpcio
 , grpcio-tools
@@ -49,45 +49,41 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.52.0";
+  version = "2.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s/DgTMsJc3c3dqR5Ak9p+xmLm72uNL3AofGzR26B3nI=";
+    hash = "sha256-DcqYBPAS+yUqTJLUem8+2OqRUzb6DoBOeRkMjmvuvws=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/apache/beam/pull/24143
-      name = "fix-for-dill-0.3.6.patch";
-      url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
-      hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
-      stripLen = 2;
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "grpcio-tools==1.53.0" "grpcio-tools" \
+      --replace "numpy>=1.14.3,<1.25" "numpy"
+  '';
 
-  pythonRelaxDeps = [
-    # See https://github.com/NixOS/nixpkgs/issues/156957
-    "dill"
-    "numpy"
-    "pymongo"
+  # pythonRelaxDeps = [
+  #   # See https://github.com/NixOS/nixpkgs/issues/156957
+  #   "dill"
+  #   "numpy"
+  #   "pymongo"
 
-    # See https://github.com/NixOS/nixpkgs/issues/193613
-    "protobuf"
+  #   # See https://github.com/NixOS/nixpkgs/issues/193613
+  #   "protobuf"
 
-    # As of apache-beam v2.45.0, the requirement is httplib2>=0.8,<0.21.0, but
-    # the current (2023-02-08) nixpkgs's httplib2 version is 0.21.0. This can be
-    # removed once beam is upgraded since the current requirement on master is
-    # for httplib2>=0.8,<0.22.0.
-    "httplib2"
+  #   # As of apache-beam v2.45.0, the requirement is httplib2>=0.8,<0.21.0, but
+  #   # the current (2023-02-08) nixpkgs's httplib2 version is 0.21.0. This can be
+  #   # removed once beam is upgraded since the current requirement on master is
+  #   # for httplib2>=0.8,<0.22.0.
+  #   "httplib2"
 
-    # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
-    # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
-    "pyarrow"
-  ];
+  #   # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
+  #   # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
+  #   "pyarrow"
+  # ];
 
   sourceRoot = "${src.name}/sdks/python";
 
@@ -103,6 +99,7 @@ buildPythonPackage rec {
     cloudpickle
     crcmod
     dill
+    distlib
     fastavro
     fasteners
     grpcio
@@ -212,7 +209,5 @@ buildPythonPackage rec {
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
-    # https://github.com/apache/beam/issues/27221
-    broken = lib.versionAtLeast pandas.version "2";
   };
 }
