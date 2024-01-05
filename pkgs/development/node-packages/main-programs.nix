@@ -13,6 +13,7 @@
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
+  "@immich/cli" = "immich";
   "@prisma/language-server" = "prisma-language-server";
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";

@@ -5,6 +5,7 @@
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
+, "@immich/cli"
 , "@microsoft/rush"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"

@@ -1911,8 +1911,6 @@ with pkgs;
 
   igir = callPackage ../tools/games/igir { };
 
-  immich-cli = callPackage ../tools/misc/immich-cli { };
-
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };

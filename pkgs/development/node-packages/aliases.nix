@@ -89,7 +89,7 @@ mapAliases {
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
-  immich = pkgs.immich-cli; # added 2023-08-19
+  immich = throw "immich was replaced by @immich/cli"; # added 2024-01-05
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
