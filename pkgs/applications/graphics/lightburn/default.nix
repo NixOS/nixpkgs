@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, p7zip
 , nss, nspr, libusb1
-, qtbase, qtmultimedia, qtserialport
-, autoPatchelfHook, wrapQtAppsHook
+, qtbase, qtmultimedia, qtserialport, cups
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     p7zip
     autoPatchelfHook
-    wrapQtAppsHook
   ];
 
   src = fetchurl {
@@ -21,23 +20,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     nss nspr libusb1
-    qtbase qtmultimedia qtserialport
+    qtbase qtmultimedia qtserialport cups
   ];
 
-  # We nuke the vendored Qt5 libraries that LightBurn ships and instead use our
-  # own.
   unpackPhase = ''
     7z x $src
-    rm -rf LightBurn/lib LightBurn/plugins
   '';
 
   installPhase = ''
     mkdir -p $out/share $out/bin
     cp -ar LightBurn $out/share/LightBurn
-    ln -s $out/share/LightBurn/LightBurn $out/bin
-
-    wrapQtApp $out/bin/LightBurn
+    ln -s $out/share/LightBurn/AppRun $out/bin/LightBurn
   '';
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "Layout, editing, and control software for your laser cutter";
