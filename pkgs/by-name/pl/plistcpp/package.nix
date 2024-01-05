@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , boost
-, NSPlist
+, nsplist
 , pugixml
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    NSPlist
+    nsplist
     pugixml
   ];
 

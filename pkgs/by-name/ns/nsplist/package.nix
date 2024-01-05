@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, flex, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, flex
+}:
 
 stdenv.mkDerivation {
-  pname = "NSPlist";
-  version = "unstable-2017-04-11";
+  pname = "nsplist";
+  version = "0-unstable-2017-04-11";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "NSPlist";
     rev = "713decf06c1ef6c39a707bc99eb45ac9925f2b8a";
-    sha256 = "0v4yfiwfd08hmh2ydgy6pnmlzjbd96k78dsla9pfd56ka89aw74r";
+    hash = "sha256-mRyuElLTlOZuUlQ3dKZJbclPq73Gv+YFrBCB5nh0nmw=";
   };
 
-  nativeBuildInputs = [ flex cmake ];
+  nativeBuildInputs = [
+    cmake
+    flex
+  ];
 
   preConfigure = ''
     # Regenerate the lexer for improved compatibility with clang 16.
