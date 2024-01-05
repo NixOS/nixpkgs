@@ -364,6 +364,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
+  python-openzwave-mqtt = throw "python-openzwave was removed, as it was packaged as a dependency of home-assistant, which it is no longer."; # added 2024-01-05
   python_docs_theme = python-docs-theme; # added 2023-11-04
   python_fedora = python-fedora; # added 2023-11-15
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16

@@ -9543,8 +9543,6 @@ self: super: with self; {
 
   python-opensky = callPackage ../development/python-modules/python-opensky { };
 
-  python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
-
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
 
   python-pptx = callPackage ../development/python-modules/python-pptx { };
