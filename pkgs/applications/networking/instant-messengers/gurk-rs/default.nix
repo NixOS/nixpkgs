@@ -4,6 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , Cocoa
+, pkgsBuildHost
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";
