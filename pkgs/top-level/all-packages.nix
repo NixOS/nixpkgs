@@ -41671,8 +41671,6 @@ with pkgs;
 
   PlistCpp = callPackage ../development/libraries/PlistCpp { };
 
-  xib2nib = callPackage ../development/tools/xib2nib { };
-
   linode-cli = python3Packages.callPackage ../tools/virtualization/linode-cli { };
 
   hss = callPackage ../tools/networking/hss { };
