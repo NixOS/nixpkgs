@@ -97,7 +97,6 @@
 , errcheck
 , go-motion
 , go-tools
-, gocode
 , gocode-gomod
 , godef
 , gogetdoc
@@ -1513,7 +1512,6 @@
         errcheck
         go-motion
         go-tools # contains staticcheck
-        gocode
         gocode-gomod
         godef
         gogetdoc
