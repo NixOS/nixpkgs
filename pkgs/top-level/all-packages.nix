@@ -30340,7 +30340,9 @@ with pkgs;
 
   akira-unstable = callPackage ../applications/graphics/akira { };
 
-  alembic = callPackage ../development/libraries/alembic { };
+  alembic = callPackage ../development/libraries/alembic {
+    openexr = openexr_3;
+  };
 
   alfaview = callPackage ../applications/networking/instant-messengers/alfaview { };
 
