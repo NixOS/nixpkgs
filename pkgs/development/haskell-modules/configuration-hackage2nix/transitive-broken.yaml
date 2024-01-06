@@ -1983,7 +1983,6 @@ dont-distribute-packages:
  - hcg-minus-cairo
  - hcheat
  - hcheckers
- - hcount
  - hcube
  - hdbi
  - hdbi-conduit
@@ -2161,6 +2160,7 @@ dont-distribute-packages:
  - hslogstash
  - hsparql
  - hspec-expectations-pretty
+ - hspec-formatter-github
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -2242,6 +2242,7 @@ dont-distribute-packages:
  - hyena
  - hylotab
  - hyloutils
+ - hyperbole
  - hyperpublic
  - i
  - iException
@@ -3596,12 +3597,10 @@ dont-distribute-packages:
  - silvi
  - simgi
  - simple-c-value
- - simple-cairo
  - simple-firewire
  - simple-log-syslog
  - simple-logging
  - simple-nix
- - simple-pango
  - simple-pascal
  - simple-postgresql-orm
  - simpleirc-lens
