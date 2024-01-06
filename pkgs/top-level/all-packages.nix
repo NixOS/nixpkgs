@@ -10011,7 +10011,7 @@ with pkgs;
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
-  less = if stdenv.isFreeBSD then freebsd.less else callPackage ../by-name/le/less/package.nix { };
+  less = if stdenv.isFreeBSD then freebsd.less else super.less;
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg-full;
