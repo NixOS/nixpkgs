@@ -3,7 +3,7 @@
   exiv2, kactivities, kactivities-stats, karchive, kbookmarks, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdsoap, kguiaddons, kdnssd, kiconthemes, ki18n, kio,
   khtml, kpty, syntax-highlighting, libmtp, libssh, openexr, libtirpc,
-  ilmbase, phonon, qtsvg, samba, solid, gperf, taglib, libX11, libXcursor
+  phonon, qtsvg, samba, solid, gperf, taglib, libX11, libXcursor
 }:
 
 mkDerivation {
@@ -25,6 +25,4 @@ mkDerivation {
     substituteInPlace $out/share/dbus-1/services/org.kde.kmtpd5.service \
       --replace Exec=$out Exec=${kio}
   '';
-
-  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 }
