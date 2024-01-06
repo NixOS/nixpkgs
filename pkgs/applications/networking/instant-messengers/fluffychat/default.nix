@@ -23,8 +23,12 @@ flutter.buildFlutterApplication rec {
     hash = "sha256-VTpZvoyZXJ5SCKr3Ocfm4iT6Z/+AWg+SCw/xmp68kMg=";
   };
 
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-uGrz7QwETZGlwLbfKr1vDo0p/emK1ZCjCX2w0nNVJsA=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = {
+    keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
+    wakelock_windows = "sha256-Dfwe3dSScD/6kvkP67notcbb+EgTQ3kEYcH7wpra2dI=";
+  };
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";

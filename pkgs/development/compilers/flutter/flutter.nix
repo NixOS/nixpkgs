@@ -3,9 +3,7 @@
 , patches
 , dart
 , src
-, pubspecLockFile
-, vendorHash
-, depsListFile
+, pubspecLock
 , lib
 , stdenv
 , callPackage
@@ -20,7 +18,7 @@ let
     inherit dart version;
     flutterSrc = src;
     inherit patches;
-    inherit pubspecLockFile vendorHash depsListFile;
+    inherit pubspecLock;
   };
 
   unwrapped =
@@ -66,7 +64,7 @@ let
         # application attempts to read its own package_config.json to find these
         # assets at runtime.
         mkdir -p packages/flutter_tools/.dart_tool
-        ln -s '${tools.dartDeps.packageConfig}' packages/flutter_tools/.dart_tool/package_config.json
+        ln -s '${tools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 
         echo -n "${version}" > version
       '';

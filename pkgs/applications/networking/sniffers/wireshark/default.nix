@@ -54,7 +54,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.2.1";
+  version = "4.2.2";
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-iqRlJTkyXhgLQ1hX01RTPcWAKaUDao7OoQ74GBY5ciw=";
+    hash = "sha256-4SxrlNrVg8Yc1THyRPEQDM/yQzDTLM1ppVwCw9vResE=";
   };
 
   patches = [
