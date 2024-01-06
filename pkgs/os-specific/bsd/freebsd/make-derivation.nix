@@ -1,13 +1,6 @@
 { lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, ... }:
 lib.makeOverridable (attrs: let
-  #crossLibcStdenv' = crossLibcStdenv // {
-  #  cc = crossLibcStdenv.cc.override {
-  #    cc = crossLibcStdenv.cc.cc.override {
-  #      enableShared = false;
-  #    };
-  #  };
-  #};
-  stdenv' = if (attrs.isStatic or false && stdenv.targetPlatform != stdenv.hostPlatform) then crossLibcStdenv else stdenv;  # TODO stdenvNoCC?
+  stdenv' = if (attrs.isStatic or false && stdenv.buildPlatform != stdenv.hostPlatform) then crossLibcStdenv else stdenv;
 in stdenv'.mkDerivation (rec {
   pname = "${attrs.pname or (baseNameOf attrs.path)}";
   version = hostVersion;
