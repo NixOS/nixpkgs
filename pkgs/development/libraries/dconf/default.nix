@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
+    mainProgram = "dconf";
   };
 }

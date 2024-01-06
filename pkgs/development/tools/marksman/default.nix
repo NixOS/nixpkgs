@@ -54,5 +54,6 @@ buildDotnetModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ stasjok plusgut ];
     platforms = dotnet-sdk.meta.platforms;
+    mainProgram = "marksman";
   };
 }
