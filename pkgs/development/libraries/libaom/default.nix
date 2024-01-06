@@ -2,6 +2,11 @@
 , enableButteraugli ? true, libjxl
 , enableVmaf ? true, libvmaf
 , gitUpdater
+
+# for passthru.tests
+, ffmpeg
+, libavif
+, libheif
 }:
 
 let
@@ -70,6 +75,10 @@ stdenv.mkDerivation rec {
       url = "https://aomedia.googlesource.com/aom";
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
+    };
+    tests = {
+      inherit libavif libheif;
+      ffmpeg = ffmpeg.override { withAom = true; };
     };
   };
 
