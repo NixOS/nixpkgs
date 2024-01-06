@@ -30659,6 +30659,7 @@ with pkgs;
   blender = callPackage  ../applications/misc/blender {
     # LLVM 11 crashes when compiling GHOST_SystemCocoa.mm
     stdenv = if stdenv.isDarwin then llvmPackages_10.stdenv else stdenv;
+    openexr = openexr_3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
