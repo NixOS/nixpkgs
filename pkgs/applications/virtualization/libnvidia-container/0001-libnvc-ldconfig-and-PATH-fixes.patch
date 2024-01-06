@@ -1,124 +1,170 @@
-From b6ad711cc3b4b1145fc4a884b6b325c843c39488 Mon Sep 17 00:00:00 2001
+From a15ed348b14f65a4b25d666ad502b5f99a5e0b90 Mon Sep 17 00:00:00 2001
 From: Averell Dalton <averell+nixpkgs@rxd4.com>
 Date: Wed, 27 Feb 2019 09:44:05 +0100
-Subject: [PATCH] libnvc: ldconfig and PATH fixes
+Subject: [PATCH 1/4] libnvc: ldconfig and PATH fixes
 
+Signed-off-by: Someone Serge <sergei.kozlukov@aalto.fi>
 ---
- src/ldcache.c     | 43 +++++++++++++++----------------------------
- src/ldcache.h     |  2 +-
- src/nvc_info.c    | 10 +++-------
+ src/common.h      |  2 +-
+ src/ldcache.c     | 73 +++++++++++++++++++++++++++++++++++++++++++----
+ src/nvc_info.c    |  7 +++--
  src/nvc_ldcache.c |  2 +-
- 4 files changed, 20 insertions(+), 37 deletions(-)
+ 4 files changed, 73 insertions(+), 11 deletions(-)
 
+diff --git a/src/common.h b/src/common.h
+index c91d349..58e7926 100644
+--- a/src/common.h
++++ b/src/common.h
+@@ -20,7 +20,7 @@
+ #define PROC_OVERFLOW_UID         "/proc/sys/kernel/overflowuid"
+ #define PROC_OVERFLOW_GID         "/proc/sys/kernel/overflowgid"
+ 
+-#define LDCACHE_PATH              "/etc/ld.so.cache"
++#define LDCACHE_PATH              "/tmp/ld.so.conf.nvidia-host"
+ #define LDCONFIG_PATH             "/sbin/ldconfig"
+ #define LDCONFIG_ALT_PATH         "/sbin/ldconfig.real"
+ 
 diff --git a/src/ldcache.c b/src/ldcache.c
-index 38bab05..e1abc89 100644
+index 38bab05..4ccdff4 100644
 --- a/src/ldcache.c
 +++ b/src/ldcache.c
-@@ -108,40 +108,27 @@ ldcache_close(struct ldcache *ctx)
+@@ -9,7 +9,10 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <fts.h>
++#include <gelf.h>
  
++#include "elftool.h"
+ #include "ldcache.h"
+ #include "utils.h"
+ #include "xfuncs.h"
+@@ -65,6 +68,15 @@ ldcache_open(struct ldcache *ctx)
+         struct header_libc6 *h6;
+         size_t padding;
+ 
++        bool cacheExists = access(ctx->path, F_OK) == 0;
++
++        if (!cacheExists) {
++                ctx->ptr = NULL;
++                ctx->size = 0;
++                ctx->addr = NULL;
++                return (0);
++        }
++
+         ctx->addr = ctx->ptr = file_map(ctx->err, ctx->path, &ctx->size);
+         if (ctx->addr == NULL)
+                 return (-1);
+@@ -97,6 +109,9 @@ ldcache_open(struct ldcache *ctx)
  int
- ldcache_resolve(struct ldcache *ctx, uint32_t arch, const char *root, const char * const libs[],
--    char *paths[], size_t size, ldcache_select_fn select, void *select_ctx)
-+    char *paths[], size_t size, const char* version)
+ ldcache_close(struct ldcache *ctx)
+ {
++        if (ctx->ptr == NULL)
++                return (0);
++
+         if (file_unmap(ctx->err, ctx->path, ctx->addr, ctx->size) < 0)
+                 return (-1);
+ 
+@@ -111,16 +126,58 @@ ldcache_resolve(struct ldcache *ctx, uint32_t arch, const char *root, const char
+     char *paths[], size_t size, ldcache_select_fn select, void *select_ctx)
  {
          char path[PATH_MAX];
 -        struct header_libc6 *h;
--        int override;
-+        char dir[PATH_MAX];
-+        char lib[PATH_MAX];
++        struct header_libc6 *h = NULL;
++        int nLdEntries = 0;
+         int override;
  
 -        h = (struct header_libc6 *)ctx->ptr;
++        if (ctx != NULL && ctx->ptr != NULL) {
++                h = (struct header_libc6 *)ctx->ptr;
++                nLdEntries = h->nlibs;
++        }
          memset(paths, 0, size * sizeof(*paths));
  
 -        for (uint32_t i = 0; i < h->nlibs; ++i) {
 -                int32_t flags = h->libs[i].flags;
 -                char *key = (char *)ctx->ptr + h->libs[i].key;
 -                char *value = (char *)ctx->ptr + h->libs[i].value;
--
--                if (!(flags & LD_ELF) || (flags & LD_ARCH_MASK) != arch)
-+        for (size_t j = 0; j < size; ++j) {
-+                snprintf(dir, 100, "/run/opengl-driver%s/lib",
-+                    arch == LD_I386_LIB32 ? "-32" : "");
-+                if (!strncmp(libs[j], "libvdpau_nvidia.so", 100))
-+                  strcat(dir, "/vdpau");
-+                snprintf(lib, 100, "%s/%s.%s", dir, libs[j], version);
-+                if (path_resolve_full(ctx->err, path, "/", lib) < 0)
-+                        return (-1);
-+                if (!file_exists(ctx->err, path))
++        FTS *ftsp;
++        FTSENT *p = NULL;
++        char *ftsArgv[] = {"argv0", "@driverLink@/lib", NULL};
++        if (arch == LD_I386_LIB32) {
++                ftsArgv[1] = "@driverLink@-32/lib";
++        }
++        ftsp = fts_open(ftsArgv, FTS_LOGICAL | FTS_NOCHDIR, NULL);
++        bool driverLinkExists = ftsp != NULL && fts_children(ftsp, 0) != NULL;
++        bool moreChildren = driverLinkExists;
++
++        for (int iLd = 0; (driverLinkExists && moreChildren) || iLd < nLdEntries;) {
++                int32_t flags = 0;
++                char *key, *value;
++                if (driverLinkExists && moreChildren && (moreChildren = (p = fts_read(ftsp)) != NULL)) {
++                    key = p->fts_name;
++                    value = p->fts_path;
++
++                    struct elftool et;
++                    elftool_init(&et, ctx->err);
++                    if (elftool_open(&et, value) < 0) {
++                        error_reset(et.err);
++                        continue;
++                    }
++                    GElf_Ehdr ehdr;
++                    if (gelf_getehdr(et.elf , &ehdr) == NULL) {
++                        error_setx(ctx->err, "gelf_getehdr failed");
++                    }
++                    if (ehdr.e_machine == EM_386) {
++                        flags |= LD_I386_LIB32;
++                        flags |= LD_ELF;
++                    } else if (ehdr.e_machine == EM_X86_64) {
++                        /* FIXME */
++                        flags |= LD_X8664_LIB64;
++                        flags |= LD_ELF;
++                    }
++                    elftool_close(&et);
++                } else if (iLd < nLdEntries) {
++                    flags = h->libs[iLd].flags;
++                    key = (char *)ctx->ptr + h->libs[iLd].key;
++                    value = (char *)ctx->ptr + h->libs[iLd].value;
++                    iLd += 1;
++                }
+ 
+                 if (!(flags & LD_ELF) || (flags & LD_ARCH_MASK) != arch)
                          continue;
--
--                for (size_t j = 0; j < size; ++j) {
--                        if (!str_has_prefix(key, libs[j]))
--                                continue;
--                        if (path_resolve(ctx->err, path, root, value) < 0)
--                                return (-1);
--                        if (paths[j] != NULL && str_equal(paths[j], path))
--                                continue;
--                        if ((override = select(ctx->err, select_ctx, root, paths[j], path)) < 0)
--                                return (-1);
--                        if (override) {
--                                free(paths[j]);
--                                paths[j] = xstrdup(ctx->err, path);
--                                if (paths[j] == NULL)
--                                        return (-1);
--                        }
--                        break;
--                }
-+                paths[j] = xstrdup(ctx->err, path);
-+                if (paths[j] == NULL)
-+                        return (-1);
+@@ -143,5 +200,9 @@ ldcache_resolve(struct ldcache *ctx, uint32_t arch, const char *root, const char
+                         break;
+                 }
          }
++
++        if (ftsp != NULL) {
++                fts_close(ftsp);
++        }
          return (0);
  }
-diff --git a/src/ldcache.h b/src/ldcache.h
-index 33d78dd..2b087db 100644
---- a/src/ldcache.h
-+++ b/src/ldcache.h
-@@ -50,6 +50,6 @@ void ldcache_init(struct ldcache *, struct error *, const char *);
- int  ldcache_open(struct ldcache *);
- int  ldcache_close(struct ldcache *);
- int  ldcache_resolve(struct ldcache *, uint32_t, const char *, const char * const [],
--    char *[], size_t, ldcache_select_fn, void *);
-+    char *[], size_t, const char*);
- 
- #endif /* HEADER_LDCACHE_H */
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index 2d203ae..8f0f4dd 100644
+index 2d203ae..7f21589 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
-@@ -218,15 +218,13 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
+@@ -218,8 +218,9 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
          if (path_resolve_full(err, path, root, ldcache) < 0)
                  return (-1);
          ldcache_init(&ld, err, path);
 -        if (ldcache_open(&ld) < 0)
--                return (-1);
++        if (ldcache_open(&ld) < 0) {
+                 return (-1);
++        }
  
          info->nlibs = size;
          info->libs = array_new(err, size);
-         if (info->libs == NULL)
-                 goto fail;
-         if (ldcache_resolve(&ld, LIB_ARCH, root, libs,
--            info->libs, info->nlibs, select_libraries_fn, info) < 0)
-+            info->libs, info->nlibs, info->nvrm_version) < 0)
-                 goto fail;
- 
-         info->nlibs32 = size;
-@@ -234,13 +232,11 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
-         if (info->libs32 == NULL)
-                 goto fail;
-         if (ldcache_resolve(&ld, LIB32_ARCH, root, libs,
--            info->libs32, info->nlibs32, select_libraries_fn, info) < 0)
-+            info->libs32, info->nlibs32, info->nvrm_version) < 0)
-                 goto fail;
+@@ -239,7 +240,7 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
          rv = 0;
  
   fail:
 -        if (ldcache_close(&ld) < 0)
--                return (-1);
++        if (ld.ptr != NULL && ldcache_close(&ld) < 0)
+                 return (-1);
          return (rv);
  }
- 
-@@ -254,7 +250,7 @@ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_d
+@@ -254,7 +255,7 @@ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_d
          char path[PATH_MAX];
          int rv = -1;
  

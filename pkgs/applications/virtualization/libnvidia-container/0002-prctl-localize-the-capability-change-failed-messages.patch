@@ -1,0 +1,331 @@
+From 46ae709a60b6b6a4e1254b14afb02dc3cbd1894b Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 6 Jan 2024 02:50:17 +0000
+Subject: [PATCH 2/4] prctl: localize the "capability change failed" messages
+
+perm_drop_privileges: set detailed errors
+---
+ src/cli/configure.c |  7 +++++-
+ src/error_generic.c | 12 +++++++---
+ src/nvc_info.c      | 42 ++++++++++++++++++++++++++--------
+ src/nvc_ldcache.c   |  3 ++-
+ src/utils.c         | 56 ++++++++++++++++++++++++++++++++-------------
+ 5 files changed, 89 insertions(+), 31 deletions(-)
+
+diff --git a/src/cli/configure.c b/src/cli/configure.c
+index 415f6b3..f682ca5 100644
+--- a/src/cli/configure.c
++++ b/src/cli/configure.c
+@@ -242,6 +242,7 @@ configure_command(const struct context *ctx)
+             perm_set_capabilities(&err, CAP_INHERITABLE, NULL, 0) < 0 ||
+             perm_set_bounds(&err, bcaps, nitems(bcaps)) < 0) {
+                 warnx("permission error: %s", err.msg);
++                error_setx(&err, "perm_set_capabilities CAP_PERMITTED or CAP_INHERITABLE: permission error");
+                 return (rv);
+         }
+ 
+@@ -249,11 +250,13 @@ configure_command(const struct context *ctx)
+         int c = ctx->load_kmods ? NVC_INIT_KMODS : NVC_INIT;
+         if (perm_set_capabilities(&err, CAP_EFFECTIVE, ecaps[c], ecaps_size(c)) < 0) {
+                 warnx("permission error: %s", err.msg);
++                error_setx(&err, "%s:%d: perm_set_capabilities CAP_EFFECTIVE: permission error", __FILE__, __LINE__);
+                 goto fail;
+         }
+         if ((nvc = libnvc.context_new()) == NULL ||
+             (nvc_cfg = libnvc.config_new()) == NULL ||
+             (cnt_cfg = libnvc.container_config_new(ctx->pid, ctx->rootfs)) == NULL) {
++                error_setx(&err, "perm_set_capabilities CAP_EFFECTIVE: permission error");
+                 warn("memory allocation failed");
+                 goto fail;
+         }
+@@ -264,10 +267,12 @@ configure_command(const struct context *ctx)
+         nvc_cfg->ldcache = ctx->ldcache;
+         if (libnvc.init(nvc, nvc_cfg, ctx->init_flags) < 0) {
+                 warnx("initialization error: %s", libnvc.error(nvc));
++                error_setx(&err, "%s:%d: libnvc.init failed", __FILE__, __LINE__);
+                 goto fail;
+         }
+         if (perm_set_capabilities(&err, CAP_EFFECTIVE, ecaps[NVC_CONTAINER], ecaps_size(NVC_CONTAINER)) < 0) {
+                 warnx("permission error: %s", err.msg);
++                error_setx(&err, "%s:%d: perm_set_capabilities CAP_EFFECTIVE: permission error", __FILE__, __LINE__);
+                 goto fail;
+         }
+         cnt_cfg->ldconfig = ctx->ldconfig;
+@@ -283,7 +288,7 @@ configure_command(const struct context *ctx)
+         }
+         if ((drv = libnvc.driver_info_new(nvc, NULL)) == NULL ||
+             (dev = libnvc.device_info_new(nvc, NULL)) == NULL) {
+-                warnx("detection error: %s", libnvc.error(nvc));
++                warnx("detection error: %s; drv is %s, dev is %s", libnvc.error(nvc), drv == NULL ? "NULL" : "not NULL", dev == NULL ? "NULL" : "not NULL");
+                 goto fail;
+         }
+ 
+diff --git a/src/error_generic.c b/src/error_generic.c
+index 3c01499..428ffce 100644
+--- a/src/error_generic.c
++++ b/src/error_generic.c
+@@ -29,6 +29,8 @@ error_vset(struct error *err, int errcode, const char *errmsg, const char *fmt,
+         if (err == NULL)
+                 return (0);
+ 
++        char *oldMsg = err->msg == NULL ? NULL : xstrdup(err, err->msg);
++
+         error_reset(err);
+         err->code = errcode;
+ 
+@@ -37,19 +39,23 @@ error_vset(struct error *err, int errcode, const char *errmsg, const char *fmt,
+                 goto fail;
+         }
+         if (errmsg == NULL) {
+-                err->msg = msg;
+-                return (0);
++            errmsg = "[no errmsg]";
+         }
+-        if (asprintf(&err->msg, "%s: %s", msg, errmsg) < 0) {
++        if (oldMsg == NULL && asprintf(&err->msg, "%s: %s", msg, errmsg) < 0) {
+                 err->msg = NULL;
+                 goto fail;
+         }
++        if (oldMsg != NULL && asprintf(&err->msg, "%s: %s. Previous message: %s", msg, errmsg, oldMsg) < 0) {
++        }
+         err->msg[strcspn(err->msg, "\n")] = '\0';
+         str_lower(strrchr(err->msg, ':'));
+         rv = 0;
+ 
+  fail:
+         free(msg);
++        if (oldMsg != NULL) {
++            free(oldMsg);
++        }
+         return (rv);
+ }
+ 
+diff --git a/src/nvc_info.c b/src/nvc_info.c
+index 7f21589..2965fba 100644
+--- a/src/nvc_info.c
++++ b/src/nvc_info.c
+@@ -215,10 +215,13 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
+ 
+         ldcache_select_fn select_libraries_fn = dxcore->initialized ? select_wsl_libraries : select_libraries;
+ 
+-        if (path_resolve_full(err, path, root, ldcache) < 0)
++        if (path_resolve_full(err, path, root, ldcache) < 0) {
++                error_setx(err, "path_resolve_full failed");
+                 return (-1);
++        }
+         ldcache_init(&ld, err, path);
+         if (ldcache_open(&ld) < 0) {
++                error_setx(err, "ldcache_open failed");
+                 return (-1);
+         }
+ 
+@@ -359,6 +362,7 @@ static int
+ lookup_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_driver_info *info, const char *root, int32_t flags, const char *ldcache)
+ {
+         if (lookup_libraries(err, dxcore, info, root, flags, ldcache) < 0) {
++                error_setx(err, "lookup_libraries failed;");
+                 log_err("error looking up libraries");
+                 return (-1);
+         }
+@@ -395,8 +399,10 @@ lookup_libraries(struct error *err, struct dxcore_context *dxcore, struct nvc_dr
+         if (dxcore->initialized)
+                 ptr = array_append(ptr, dxcore_libs, nitems(dxcore_libs));
+ 
+-        if (find_library_paths(err, dxcore, info, root, ldcache, libs, (size_t)(ptr - libs)) < 0)
++        if (find_library_paths(err, dxcore, info, root, ldcache, libs, (size_t)(ptr - libs)) < 0) {
++                error_setx(err, "find_library_paths failed;");
+                 return (-1);
++        }
+ 
+         for (size_t i = 0; info->libs != NULL && i < info->nlibs; ++i) {
+                 if (info->libs[i] == NULL)
+@@ -789,27 +795,43 @@ nvc_driver_info_new(struct nvc_context *ctx, const char *opts)
+         struct nvc_driver_info *info;
+         int32_t flags;
+ 
+-        if (validate_context(ctx) < 0)
++        if (validate_context(ctx) < 0) {
++                error_setx(&ctx->err, "%s:%d: validate_context failed;", __FILE__, __LINE__);
+                 return (NULL);
++        }
+         if (opts == NULL)
+                 opts = default_driver_opts;
+-        if ((flags = options_parse(&ctx->err, opts, driver_opts, nitems(driver_opts))) < 0)
++        if ((flags = options_parse(&ctx->err, opts, driver_opts, nitems(driver_opts))) < 0) {
++                error_setx(&ctx->err, "%s:%d: options_parse failed", __FILE__, __LINE__);
+                 return (NULL);
++        }
+ 
+         log_infof("requesting driver information with '%s'", opts);
+-        if ((info = xcalloc(&ctx->err, 1, sizeof(*info))) == NULL)
++        if ((info = xcalloc(&ctx->err, 1, sizeof(*info))) == NULL) {
++                error_setx(&ctx->err, "%s:%d: xcalloc failed", __FILE__, __LINE__);
+                 return (NULL);
++        }
+ 
+-        if (driver_get_rm_version(&ctx->err, &info->nvrm_version) < 0)
++        if (driver_get_rm_version(&ctx->err, &info->nvrm_version) < 0) {
++                error_setx(&ctx->err, "%s:%d: driver_get_rm_version failed", __FILE__, __LINE__);
+                 goto fail;
+-        if (driver_get_cuda_version(&ctx->err, &info->cuda_version) < 0)
++        }
++        if (driver_get_cuda_version(&ctx->err, &info->cuda_version) < 0) {
++                error_setx(&ctx->err, "%s:%d: driver_get_cuda_version failed", __FILE__, __LINE__);
+                 goto fail;
+-        if (lookup_paths(&ctx->err, &ctx->dxcore, info, ctx->cfg.root, flags, ctx->cfg.ldcache) < 0)
++        }
++        if (lookup_paths(&ctx->err, &ctx->dxcore, info, ctx->cfg.root, flags, ctx->cfg.ldcache) < 0) {
++                error_setx(&ctx->err, "%s:%d: lookup_paths failed", __FILE__, __LINE__);
+                 goto fail;
+-        if (lookup_devices(&ctx->err, &ctx->dxcore, info, ctx->cfg.root, flags) < 0)
++        }
++        if (lookup_devices(&ctx->err, &ctx->dxcore, info, ctx->cfg.root, flags) < 0) {
++                error_setx(&ctx->err, "%s:%d: lookup_devices failed", __FILE__, __LINE__);
+                 goto fail;
+-        if (lookup_ipcs(&ctx->err, info, ctx->cfg.root, flags) < 0)
++        }
++        if (lookup_ipcs(&ctx->err, info, ctx->cfg.root, flags) < 0) {
++                error_setx(&ctx->err, "%s:%d: lookup_ipcs failed", __FILE__, __LINE__);
+                 goto fail;
++        }
+         return (info);
+ 
+  fail:
+diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
+index ae5def4..514d05b 100644
+--- a/src/nvc_ldcache.c
++++ b/src/nvc_ldcache.c
+@@ -221,7 +221,7 @@ adjust_privileges(struct error *err, uid_t uid, gid_t gid, bool drop_groups)
+                 if (errno == EPERM)
+                         log_warn("could not preserve capabilities, containers may require additional tuning");
+                 else {
+-                        error_set(err, "privilege change failed");
++                        error_set(err, "adjust_privileges: privilege change failed");
+                         return (-1);
+                 }
+         }
+@@ -384,6 +384,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+ 
+         if ((child = create_process(&ctx->err, CLONE_NEWPID|CLONE_NEWIPC)) < 0) {
+                 xclose(fd);
++                error_setx(&ctx->err, "%s:%d create_process failed", __FILE__, __LINE__);
+                 return (-1);
+         }
+         if (child == 0) {
+diff --git a/src/utils.c b/src/utils.c
+index 8ff6f26..eee7b7d 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -406,8 +406,10 @@ file_map(struct error *err, const char *path, size_t *length)
+         struct stat s;
+         void *p = NULL;
+ 
+-        if ((fd = xopen(err, path, O_RDONLY)) < 0)
++        if ((fd = xopen(err, path, O_RDONLY)) < 0) {
++                error_setx(err, "file_map: xopen(..., \"%s\", ...) failed", path);
+                 return (NULL);
++        }
+         if (fstat(fd, &s) < 0)
+                 goto fail;
+ 
+@@ -637,6 +639,10 @@ file_exists_at(struct error *err, const char *dir, const char *path)
+         int fd;
+         int rv;
+ 
++        if (access(path, F_OK) != 0) {
++            error_setx(err, "file_map: %s doesn't exist", path);
++        }
++
+         if ((fd = xopen(err, dir, O_PATH|O_DIRECTORY)) < 0)
+                 return (-1);
+         if ((rv = faccessat(fd, (*path == '/') ? path + 1 : path, F_OK, 0)) < 0 && errno != ENOENT) {
+@@ -913,36 +919,47 @@ perm_drop_privileges(struct error *err, uid_t uid, gid_t gid, bool drop_groups)
+         if (drop_groups) {
+                 switch (getgroups(0, NULL)) {
+                 case -1:
+-                        goto fail;
++                        error_set(err, "perm_drop_privileges: getgroups(0, NULL) == -1");
++                        return (-1);
+                 case 0:
+                         break;
+                 case 1:
+-                        if (getgroups(1, &egroup) < 0)
+-                                goto fail;
++                        if (getgroups(1, &egroup) < 0) {
++                                error_set(err, "perm_drop_privileges: getgroups(1, &egroup) < 0");
++                                return (-1);
++                        }
+                         if (egroup == gid)
+                                 break;
+                         /* Fallthrough */
+                 default:
+-                        if (setgroups(1, &gid) < 0)
+-                                goto fail;
++                        if (setgroups(1, &gid) < 0) {
++                                error_set(err, "perm_drop_privileges: setgroups(1, &gid) < 0");
++                                return (-1);
++                        }
+                         break;
+                 }
+         }
+         if (egid != gid && setregid(gid, gid) < 0)
+-                goto fail;
+-        if (euid != uid && setreuid(uid, uid) < 0)
+-                goto fail;
++                error_setx(err, "perm_drop_privileges: setregid(gid, gid) < 0; gid=%d", gid);
++                return (-1);
++        if (euid != uid && setreuid(uid, uid) < 0) {
++                error_set(err, "perm_drop_privileges: setreuid(uid, uid) < 0");
++                return (-1);
++        }
+         if ((egid != gid && getegid() != gid) ||
+             (euid != uid && geteuid() != uid)) {
+                 errno = EPERM;
+-                goto fail;
++                error_set(err, "perm_drop_privileges: egid != gid || euid != uid");
++                return (-1);
++        }
++        if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0) {
++                error_set(err, "perm_drop_privileges: prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0");
++                return (-1);
+         }
+-        if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0)
+-                goto fail;
+         return (0);
+ 
+  fail:
+-        error_set(err, "privilege change failed");
++        error_set(err, "perm_drop_privileges: privilege change failed");
+         return (-1);
+ }
+ 
+@@ -963,7 +980,7 @@ perm_set_bounds(struct error *err, const cap_value_t caps[], size_t size)
+                                 goto next;
+                 }
+                 if (prctl(PR_CAPBSET_READ, c) > 0 && prctl(PR_CAPBSET_DROP, c) < 0) {
+-                        error_set(err, "capability change failed");
++                        error_set(err, "perm_set_bounds: capability change failed");
+                         return (-1);
+                 }
+          next:;
+@@ -1015,8 +1032,15 @@ perm_set_capabilities(struct error *err, cap_flag_t type, const cap_value_t caps
+         rv = 0;
+ 
+  fail:
+-        if (rv < 0)
+-                error_set(err, "capability change failed");
++        if (rv < 0) {
++            error_set(err,
++                      "%s:%d: perm_set_capabilities(%s, ...): capability change failed",
++                      __FILE__, __LINE__,
++                      type == CAP_EFFECTIVE   ? "CAP_EFFECTIVE"
++                      : type == CAP_AMBIENT   ? "CAP_AMBIENT"
++                      : type == CAP_PERMITTED ? "CAP_PERMITTED"
++                                              : "CAP_UNKNOWN");
++        }
+         cap_free(state);
+         cap_free(tmp);
+         return (rv);
+-- 
+2.42.0
+

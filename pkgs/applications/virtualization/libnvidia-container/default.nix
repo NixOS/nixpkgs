@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, addOpenGLRunpath
+, addDriverRunpath
 , fetchFromGitHub
 , pkg-config
 , elfutils
@@ -13,6 +13,7 @@
 , removeReferencesTo
 , bmake
 , go
+, failIfNotFound ? false
 }:
 let
   modprobeVersion = "495.44";
@@ -43,7 +44,9 @@ stdenv.mkDerivation rec {
     # doesn't get used on NixOS. Additional support binaries like nvidia-smi
     # are not resolved via the environment PATH but via the derivation output
     # path.
-    ./0001-libnvc-ldconfig-and-PATH-fixes.patch
+    (substituteAll { src = ./0001-libnvc-ldconfig-and-PATH-fixes.patch; inherit (addDriverRunpath) driverLink; })
+    ./0002-prctl-localize-the-capability-change-failed-messages.patch
+    ./0003-perm_drop_privileges-ignore-EPERM-on-setgroups.patch
 
     # fix bogus struct declaration
     ./inline-c-struct.patch
@@ -85,9 +88,6 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
-
   nativeBuildInputs = [
     bmake
     go
@@ -98,6 +98,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ elfutils libcap libseccomp libtirpc ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" "-g" ];
+  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
   # 2024-01-05: Upstream manually launches bmake from their top-level Makefile.
   # This is almost surely going to break very soon, but let's give it a chance.
@@ -120,9 +123,10 @@ stdenv.mkDerivation rec {
   dontUseBmakeCheck = true;
   dontUseBmakeInstall = true;
   dontUseBmakeDist = true;
+  dontStrip = true;
   postInstall =
     let
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
       libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
     in
     ''

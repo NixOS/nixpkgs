@@ -1,0 +1,77 @@
+From c5793b0d72c8e34f2cc6f5ddb276740e128b7903 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 6 Jan 2024 03:49:56 +0000
+Subject: [PATCH 3/4] perm_drop_privileges: ignore EPERM on setgroups
+
+...and EINVAL on setregid/setreuid
+---
+ src/utils.c | 39 +++++++++++++++++++++++++++++----------
+ 1 file changed, 29 insertions(+), 10 deletions(-)
+
+diff --git a/src/utils.c b/src/utils.c
+index eee7b7d..4f051a4 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -916,6 +916,9 @@ perm_drop_privileges(struct error *err, uid_t uid, gid_t gid, bool drop_groups)
+         euid = geteuid();
+         egid = getegid();
+ 
++        bool ignoreUid = false;
++        bool ignoreGid = false;
++
+         if (drop_groups) {
+                 switch (getgroups(0, NULL)) {
+                 case -1:
+@@ -933,23 +936,39 @@ perm_drop_privileges(struct error *err, uid_t uid, gid_t gid, bool drop_groups)
+                         /* Fallthrough */
+                 default:
+                         if (setgroups(1, &gid) < 0) {
+-                                error_set(err, "perm_drop_privileges: setgroups(1, &gid) < 0");
+-                                return (-1);
++                                /* We may not have a the capability to setgroups */
++                                if (errno == EPERM) {
++                                    errno = 0;
++                                } else {
++                                    error_set(err, "perm_drop_privileges: setgroups(1, &gid) < 0");
++                                    return (-1);
++                                }
+                         }
+                         break;
+                 }
+         }
+-        if (egid != gid && setregid(gid, gid) < 0)
+-                error_setx(err, "perm_drop_privileges: setregid(gid, gid) < 0; gid=%d", gid);
+-                return (-1);
++        if (egid != gid && setregid(gid, gid) < 0) {
++                /* EINVAL probably means we're trying to set a non-existent group */
++                if (errno != EINVAL) {
++                    error_setx(err, "perm_drop_privileges: setregid(gid, gid) < 0; gid=%d", gid);
++                    return (-1);
++                }
++                errno = 0;
++                ignoreGid = true;
++        }
+         if (euid != uid && setreuid(uid, uid) < 0) {
+-                error_set(err, "perm_drop_privileges: setreuid(uid, uid) < 0");
+-                return (-1);
++                /* EINVAL probably means we're trying to set a non-existent user */
++                if (errno != EINVAL) {
++                    error_set(err, "perm_drop_privileges: setreuid(uid, uid) < 0");
++                    return (-1);
++                }
++                errno = 0;
++                ignoreUid = true;
+         }
+-        if ((egid != gid && getegid() != gid) ||
+-            (euid != uid && geteuid() != uid)) {
++        if ((egid != gid && getegid() != gid && !ignoreGid) ||
++            (euid != uid && geteuid() != uid && !ignoreUid)) {
++                error_setx(err, "perm_drop_privileges: egid != gid || euid != uid; (uid, gid)=(%d, %d); (euid, egid)=(%d, %d) (geteuid(), getegid())=(%d, %d)", uid, gid, euid, egid, geteuid(), getegid());
+                 errno = EPERM;
+-                error_set(err, "perm_drop_privileges: egid != gid || euid != uid");
+                 return (-1);
+         }
+         if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0) {
+-- 
+2.42.0
+
