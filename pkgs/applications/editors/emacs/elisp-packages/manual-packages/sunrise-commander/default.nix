@@ -1,29 +1,42 @@
 { lib
-, trivialBuild
 , fetchFromGitHub
-, emacs
+, melpaBuild
+, writeText
 }:
 
-trivialBuild {
-  pname = "sunrise-commander";
-  version = "unstable=2021-09-27";
+let
+  argset = {
+    pname = "sunrise-commander";
+    ename = "sunrise";
+    version = "20210924.1620";
 
-  src = fetchFromGitHub {
-    owner = "sunrise-commander";
-    repo = "sunrise-commander";
-    rev = "16e6df7e86c7a383fb4400fae94af32baf9cb24e";
-    hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
+    src = fetchFromGitHub {
+      owner = "sunrise-commander";
+      repo = "sunrise-commander";
+      rev = "16e6df7e86c7a383fb4400fae94af32baf9cb24e";
+      hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
+    };
+
+    commit = argset.src.rev;
+
+    outputs = [ "out" "doc" ];
+
+    recipe = writeText "recipe" ''
+      (sunrise
+       :repo "sunrise-commander/sunrise-commander"
+       :fetcher github)
+    '';
+
+    postInstall = ''
+      install -Dm644 ${argset.src}/README.md -t $doc/share/doc/emacs-sunrise-${argset.version}/
+    '';
+
+    meta = {
+      homepage = "https://github.com/sunrise-commander/sunrise-commander/";
+      description = "Orthodox (two-pane) file manager for Emacs";
+      license = lib.licenses.gpl3Plus;
+      maintainers = [ lib.maintainers.AndersonTorres ];
+    };
   };
-
-  buildInputs = [
-    emacs
-  ];
-
-  meta = {
-    homepage = "https://github.com/sunrise-commander/sunrise-commander/";
-    description = "Orthodox (two-pane) file manager for Emacs";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.all;
-  };
-}
+in
+melpaBuld argset
