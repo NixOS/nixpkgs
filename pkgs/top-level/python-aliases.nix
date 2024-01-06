@@ -187,6 +187,7 @@ mapAliases ({
   graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grappelli_safe = grappelli-safe; # added 2023-10-08
+  groestlcoin_hash = groestlcoin-hash; # added 2024-01-06
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
