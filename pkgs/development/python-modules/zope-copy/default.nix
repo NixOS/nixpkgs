@@ -2,9 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, zope_interface
-, zope_location
-, zope_schema
+, zope-interface
+, zope-location
+, zope-schema
 , unittestCheckHook
 }:
 
@@ -18,10 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-epg2yjqX9m1WGzYPeGUBKGif4JNAddzg75ECe9xPOlc=";
   };
 
-  propagatedBuildInputs = [ zope_interface ];
+  propagatedBuildInputs = [ zope-interface ];
 
   doCheck = !isPy27; # namespace conflicts
-  nativeCheckInputs = [ unittestCheckHook zope_location zope_schema ];
+  nativeCheckInputs = [ unittestCheckHook zope-location zope-schema ];
 
   unittestFlagsArray = [ "-s" "src/zope/copy" ];
 

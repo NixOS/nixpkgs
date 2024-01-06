@@ -493,12 +493,20 @@ mapAliases ({
   zope_component = zope-component; # added 2023-07-28
   zope_configuration = zope-configuration; # added 2023-11-12
   zope_contenttype = zope-contenttype; # added 2023-10-11
+  zope_copy = zope-copy; # added 2024-01-06
   zope_deprecation = zope-deprecation; # added 2023-10-07
   zope_dottedname = zope-dottedname; # added 2023-11-12
+  zope_event = zope-event; # added 2024-01-06
   zope_exceptions = zope-exceptions; # added 2023-10-11
+  zope_filerepresentation = zope-filerepresentation; # added 2024-01-06
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
+  zope_interface = zope-interface; # added 2024-01-06
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
+  zope_location = zope-location; # added 2024-01-06
   zope_proxy = zope-proxy; # added 2023-10-07
+  zope_schema = zope-schema; # added 2024-01-06
+  zope_size = zope-size; # added 2024-01-06
   zope_testing = zope-testing; # added 2023-11-12
+  zope_testrunner = zope-testrunner; # added 2024-01-06
   zxing_cpp = zxing-cpp; # added 2023-11-05
 })
