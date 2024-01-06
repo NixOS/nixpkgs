@@ -297,7 +297,7 @@ in
 
             to = lib.mkOption {
               type = with lib.types; nullOr (listOf str);
-              default = null;
+              default = [];
               description = lib.mdDoc ''
                 The addresses to send outgoing mail to.
               '';
