@@ -546,6 +546,7 @@ if [ "$action" = repl ]; then
                     - ${blue}config${reset}   All option values
                     - ${blue}options${reset}  Option data and metadata
                     - ${blue}pkgs${reset}     Nixpkgs package set
+                    - ${blue}lib${reset}      Nixpkgs library functions
                     - other module arguments
 
                     - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
@@ -566,6 +567,7 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
+                  inherit (configuration.pkgs) lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope
