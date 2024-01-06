@@ -235,6 +235,7 @@ mapAliases ({
   lazr_config = lazr-config; # added 2023-11-03
   lazr_delegates = lazr-delegates; # added 2023-11-03
   lazy_imports = lazy-imports; # added 2023-10-13
+  ledger_agent = ledger-agent; # Added 2024-01-07
   lektor = throw "lektor has been promoted to a top-level attribute"; # added 2023-08-01
   line_profiler = line-profiler; # added 2023-11-04
   livestreamer = throw "'livestreamer' has been removed, as it unmaintained. A currently maintained fork is 'streamlink'."; # added 2023-11-14
