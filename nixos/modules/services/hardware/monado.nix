@@ -11,7 +11,7 @@ let
 in
 {
   options.services.monado = {
-    enable = mkEnableOption "Monado wrapper and user service";
+    enable = mkEnableOption "Monado user service";
 
     package = mkPackageOption pkgs "monado" { };
 
@@ -26,16 +26,19 @@ in
       default = false;
       example = true;
     };
+
+    highPriority = mkEnableOption "high priority capability for monado-service"
+      // mkOption { default = true; };
   };
 
   config = mkIf cfg.enable {
-    security.wrappers."monado-service" = {
+    security.wrappers."monado-service" = mkIf cfg.highPriority {
       setuid = false;
       owner = "root";
       group = "root";
       # cap_sys_nice needed for asynchronous reprojection
       capabilities = "cap_sys_nice+eip";
-      source = "${cfg.package}/bin/monado-service";
+      source = lib.getExe' cfg.package "monado-service";
     };
 
     services.udev.packages = with pkgs; [ xr-hardware ];
@@ -57,7 +60,10 @@ in
         };
 
         serviceConfig = {
-          ExecStart = "${config.security.wrapperDir}/monado-service";
+          ExecStart =
+            if cfg.highPriority
+            then "${config.security.wrapperDir}/monado-service"
+            else lib.getExe' cfg.package "monado-service";
           Restart = "no";
         };
 
