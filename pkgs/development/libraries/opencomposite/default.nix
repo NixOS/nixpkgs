@@ -11,6 +11,8 @@
 , vulkan-headers
 , vulkan-loader
 , xorg
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation {
@@ -49,6 +51,10 @@ stdenv.mkDerivation {
     cp -r bin/ $out/lib/opencomposite
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=openxr" ];
+  };
 
   meta = with lib; {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";

@@ -10,7 +10,6 @@
 , ninja
 , curl
 , perl
-, llvmPackages_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -57,17 +56,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.2";
+  version = "4.6.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
+    sha256 = "sha256-cksn4yBNGCLebcU+oJCmsc5V98MiJtNGQmiXdcaKrMI=";
   };
 
-  nativeBuildInputs = [ cmake ninja llvmPackages_13.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ]
-    # LLVM Clang C compiler version 11.1.0 is too old and is unsupported. Version 12+ is required.
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages_13.clang ];
+  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
     cairo

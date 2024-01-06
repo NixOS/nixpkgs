@@ -96,6 +96,16 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  buildbot = {
+    members = [
+      lopsided98
+      mic92
+      zowoq
+    ];
+    scope = "Maintain Buildbot CI framework";
+    shortName = "Buildbot";
+  };
+
   c = {
     members = [
       matthewbauer
@@ -524,7 +534,6 @@ with lib.maintainers; {
       dtzWill
       ericson2314
       lovek323
-      primeos
       qyliss
       raitobezarius
       rrbutani

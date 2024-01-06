@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "23.356.9";
+  version = "23.360.11";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "plymouth";
     repo = "plymouth";
     rev = finalAttrs.version;
-    hash = "sha256-71QMhQqWpa4FID9vPEL2QuOaGxuk7+sXKRynCa1n2tw=";
+    hash = "sha256-Uun4KtrbkFCiGq3WpZlZ8NKKCOnM+jcgYa8qoqAYdaw=";
   };
 
   patches = [

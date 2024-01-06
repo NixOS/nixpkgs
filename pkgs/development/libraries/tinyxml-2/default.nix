@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyxml-2";
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     repo = "tinyxml2";
     owner = "leethomason";
     rev = version;
-    sha256 = "sha256-AQQOctXi7sWIH/VOeSUClX6hlm1raEQUOp+VoPjLM14=";
+    sha256 = "sha256-9xrpPFMxkAecg3hMHzzThuy0iDt970Iqhxs57Od+g2g=";
   };
 
   nativeBuildInputs = [ cmake ];

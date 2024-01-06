@@ -25,20 +25,20 @@ let
   ) deviceIds;
 
   componentHashes = {
-    "arria_lite" = "140jqnb97vrxx6398cpgpw35zrrx3z5kv1x5gr9is1xdbnf4fqhy";
-    "cyclone" = "116kf69ryqcmlc2k8ra0v32jy7nrk7w4s5z3yll7h3c3r68xcsfr";
-    "cyclone10lp" = "07wpgx9bap6rlr5bcmr9lpsxi3cy4yar4n3pxfghazclzqfi2cyl";
-    "cyclonev" = "11baa9zpmmfkmyv33w1r57ipf490gnd3dpi2daripf38wld8lgak";
-    "max" = "1zy2d42dqmn97fwmv4x6pmihh4m23jypv3nd830m1mj7jkjx9kcq";
-    "max10" = "1hvi9cpcjgbih3l6nh8x1vsp0lky5ax85jb2yqmzla80n7dl9ahs";
+    "arria_lite" = "07p862i3dn2c0s3p39y23g94id59nzrpzbwdmrdnhy61ca3m0vzp";
+    "cyclone" = "0dic35j9q1ndrn8i2vdqg9176fr3kn6c8iiv0c03nni0m4ar3ykn";
+    "cyclone10lp" = "03w4f71fhhwvnkzzly9m15nrdf0jw8m0ckhhzv1vg3nd9pkk86jh";
+    "cyclonev" = "091mlg2iy452fk28idbiwi3rhcgkbhg7ggh3xvnqa9jrfffq9pjc";
+    "max" = "0r649l2n6hj6x5v6hx8k4xnvd6df6wxajx1xp2prq6dpapjfb06y";
+    "max10" = "1p5ds3cq2gq2mzq2hjwwjhw50c931kgiqxaf7ss228c6s7rv6zpk";
   };
 
-  version = "20.1.1.720";
+  version = "22.1std.2.922";
 
   download = {name, sha256}: fetchurl {
     inherit name sha256;
-    # e.g. "20.1.1.720" -> "20.1std.1/720"
-    url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std.${lib.versions.patch version}/${lib.elemAt (lib.splitVersion version) 3}/ib_installers/${name}";
+    # e.g. "22.1std.2.922" -> "22.1std.2/922"
+    url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std.${lib.elemAt (lib.splitVersion version) 3}/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
   };
 
 in stdenv.mkDerivation rec {
@@ -47,10 +47,10 @@ in stdenv.mkDerivation rec {
 
   src = map download ([{
     name = "QuartusLiteSetup-${version}-linux.run";
-    sha256 = "0mjp1rg312dipr7q95pb4nf4b8fwvxgflnd1vafi3g9cshbb1c3k";
+    sha256 = "078x42pbc51n6ynrvzpwiwgi6g2sg4csv6x2vnnzjgx6bg5kq6l3";
   } {
-    name = "ModelSimSetup-${version}-linux.run";
-    sha256 = "1cqgv8x6vqga8s4v19yhmgrr886rb6p7sbx80528df5n4rpr2k4i";
+    name = "QuestaSetup-${version}-linux.run";
+    sha256 = "04pv5fq3kfy3xsjnj435zzpj5kf6329cbs1xgvkgmq1gpn4ji5zy";
   }] ++ (map (id: {
     name = "${id}-${version}.qdz";
     sha256 = lib.getAttr id componentHashes;
@@ -68,12 +68,12 @@ in stdenv.mkDerivation rec {
         patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
       '';
     copyComponent = component: "cp ${component} $TEMP/${component.name}";
-    # leaves enabled: quartus, modelsim_ase, devinfo
+    # leaves enabled: quartus, questa_fse, devinfo
     disabledComponents = [
       "quartus_help"
       "quartus_update"
-      # not modelsim_ase
-      "modelsim_ae"
+      # not questa_fse
+      "questa_fe"
     ] ++ (lib.attrValues unsupportedDeviceIds);
   in ''
       ${lib.concatMapStringsSep "\n" copyInstaller installers}

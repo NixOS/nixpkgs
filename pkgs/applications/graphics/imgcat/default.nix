@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "imgcat";
-  version = "2.5.2";
+  version = "2.6.0";
 
   buildInputs = [ ncurses cimg ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "eddieantonio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-61xIB/Fa+Utu694aITzBoMQeYa0Trh5L0oIKp8Be+D0=";
+    sha256 = "sha256-miFjlahTI0GDpgsjnA/K1R4R5654M8AoK78CycoLTqA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

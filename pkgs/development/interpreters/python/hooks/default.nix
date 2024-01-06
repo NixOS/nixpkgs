@@ -2,6 +2,7 @@ self: dontUse: with self;
 
 let
   inherit (python) pythonOnBuildForHost;
+  inherit (pkgs) runCommand;
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
@@ -67,7 +68,7 @@ in {
       # Such conflicts don't happen within the standard nixpkgs python package
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
-      passthru.tests = import ./pypa-build-hook-tests.nix {
+      passthru.tests = import ./pypa-build-hook-test.nix {
         inherit pythonOnBuildForHost runCommand;
       };
     } ./pypa-build-hook.sh) {

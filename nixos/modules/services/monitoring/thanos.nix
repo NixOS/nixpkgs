@@ -394,9 +394,8 @@ let
         Maximum number of queries processed concurrently by query node.
       '';
 
-      query.replica-labels = mkAttrsParam "query.replica-label" ''
+      query.replica-labels = mkListParam "query.replica-label" ''
         Labels to treat as a replica indicator along which data is
-
         deduplicated.
 
         Still you will be able to query without deduplication using

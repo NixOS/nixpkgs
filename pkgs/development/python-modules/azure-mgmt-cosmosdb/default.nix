@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.3.0";
+  version = "9.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-02DisUN2/auBDhPgE9aUvEvYwoQUQC4NYGD/PQZOl/Y=";
+    hash = "sha256-yruCHNRGsJ5z0kwxwoemD8w2I0iPH/qTNcaSJn55w0E=";
   };
 
   propagatedBuildInputs = [

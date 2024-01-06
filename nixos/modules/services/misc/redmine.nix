@@ -53,7 +53,7 @@ in
       enable = mkEnableOption (lib.mdDoc "Redmine");
 
       package = mkPackageOption pkgs "redmine" {
-        example = "redmine.override { ruby = pkgs.ruby_2_7; }";
+        example = "redmine.override { ruby = pkgs.ruby_3_2; }";
       };
 
       user = mkOption {

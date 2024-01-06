@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydrawise";
-  version = "2023.12.1";
+  version = "2024.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pydrawise";
     rev = "refs/tags/${version}";
-    hash = "sha256-w5M6ihPGOVCqMrWd8qj6XEmS4tfxKhwpwZSXjcOc4z0=";
+    hash = "sha256-FbnCo0kdAkm//OHINeEL8ibEH0BxVb9cOypyo54kXY4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

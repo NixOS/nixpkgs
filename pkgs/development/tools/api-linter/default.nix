@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "api-linter";
-  version = "1.60.0";
+  version = "1.62.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "api-linter";
     rev = "v${version}";
-    hash = "sha256-3uxPHSmIFrkAm82sqQxWKzJwU3cFhTDVsJYp8cENaRg=";
+    hash = "sha256-QUI54nFlZJnZ2zfhSnFV5nGoXFiVm9jEnWP7B9HwjNI=";
   };
 
-  vendorHash = "sha256-egAZ4CeSSStfkN2mGgzGHTBojHKHoVEf3o0oi+OpMkw=";
+  vendorHash = "sha256-GOgjHrYSFpzkGUorr4w3YShOHWCczp0Qzjq/qw89i4k=";
 
   subPackages = [ "cmd/api-linter" ];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  # reference: https://github.com/googleapis/api-linter/blob/v1.60.0/.github/workflows/release.yaml#L76
+  # reference: https://github.com/googleapis/api-linter/blob/v1.62.0/.github/workflows/release.yaml#L76
   preBuild = ''
     cat > cmd/api-linter/version.go <<EOF
     package main

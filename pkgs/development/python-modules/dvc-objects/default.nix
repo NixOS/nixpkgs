@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fsspec
 , funcy
+, pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "2.0.1";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-objects";
     rev = "refs/tags/${version}";
-    hash = "sha256-nxZN0Q9mRAZJUOoxfE58lXZVOrY0r05iROcuo+nV99A=";
+    hash = "sha256-JQ3UDUOpuxPavXkoJqbS0T7y3kpwuJ8NvqAl3DahoLU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
     reflink

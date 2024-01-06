@@ -80,10 +80,17 @@ with lib;
         ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="${cfg.device}", ATTR{device/speed}="${toString cfg.speed}", ATTR{device/sensitivity}="${toString cfg.sensitivity}"
       '';
 
-      system.activationScripts.trackpoint =
-        ''
-          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
+      systemd.services.trackpoint = {
+        wantedBy = [ "sysinit.target" ] ;
+        before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.ExecStart = ''
+          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}
         '';
+      };
     })
 
     (mkIf (cfg.emulateWheel) {

@@ -7,7 +7,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = pkgs.libsForQt5.sddm;
+  sddm = cfg.package;
 
   iniFmt = pkgs.formats.ini { };
 
@@ -107,6 +107,8 @@ in
           Whether to enable sddm as the display manager.
         '';
       };
+
+      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] {};
 
       enableHidpi = mkOption {
         type = types.bool;

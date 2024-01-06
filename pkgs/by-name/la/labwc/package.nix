@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.6.6";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     rev = finalAttrs.version;
-    hash = "sha256-ahupqI4mLrgQQjzdfLeQATc2iXQ0V6Sz5f6Yv1koLL0=";
+    hash = "sha256-/z2Wo9zhuEVIpk8jHYwg2JbBqkX7tfDP2KTZ9yzj454=";
   };
 
   nativeBuildInputs = [

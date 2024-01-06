@@ -106,5 +106,6 @@ buildPythonPackage rec {
     license = with licenses; [ mpl20 mit ];
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    mainProgram = "ocrmypdf";
   };
 }

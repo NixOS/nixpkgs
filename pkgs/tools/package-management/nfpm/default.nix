@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "nfpm";
-  version = "2.35.0";
+  version = "2.35.1";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WYLXhRoB8+a5zhTs1qxJVrDjor5orCw6UJrqEt+fBBQ=";
+    hash = "sha256-ew0iXtOKQIYxpyeNFBHD2F7KflTEQ7qHQMHYaL35Rvw=";
   };
 
   vendorHash = "sha256-P9jSQG6EyVGMZKtThy8Q7Y/pV7mbMl2eGrylea0VHRc=";

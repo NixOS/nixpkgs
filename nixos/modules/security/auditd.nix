@@ -14,7 +14,7 @@ with lib;
       description = "Linux Audit daemon";
       wantedBy = [ "basic.target" ];
       before = [ "shutdown.target" ];
-      conflicts = [ "shutdown.target "];
+      conflicts = [ "shutdown.target" ];
 
       unitConfig = {
         ConditionVirtualization = "!container";

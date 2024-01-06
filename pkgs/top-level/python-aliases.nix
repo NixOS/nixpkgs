@@ -74,6 +74,7 @@ mapAliases ({
   buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
   buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
+  btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
   cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
@@ -86,9 +87,11 @@ mapAliases ({
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
+  covCore = cov-core; # added 2024-01-03
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cx_Freeze = cx-freeze; # added 2023-08-02
+  cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
   dask-xgboost = throw "dask-xgboost was removed because its features are available in xgboost"; # added 2022-05-24
   dateutil = python-dateutil; # added 2021-07-03
@@ -127,6 +130,7 @@ mapAliases ({
   django_taggit = django-taggit; # added 2021-10-11
   django_treebeard = django-treebeard; # added 2023-07-25
   dns = dnspython; # added 2017-12-10
+  docker_pycreds = docker-pycreds; # added 2024-01-03
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
@@ -135,6 +139,7 @@ mapAliases ({
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   et_xmlfile = et-xmlfile; # added 2023-10-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
+  eyeD3 = eyed3; # added 2024-01-03
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
   face_recognition_models = face-recognition-models; # added 2022-10-15
@@ -142,6 +147,7 @@ mapAliases ({
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
+  filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
   flask_assets = flask-assets; # added 2023-08-23
@@ -156,18 +162,21 @@ mapAliases ({
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
+  flowlogs_reader = flowlogs-reader; # added 2024-01-03
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb60 = throw "foundationdb60 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb61 = throw "foundationdb61 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
+  fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute"; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
   gigalixir = throw "gigalixir has been promoted to a top-level attribute"; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
+  github3_py = github3-py; # added 2024-01-04
   GitPython = gitpython; # added 2022-10-28
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   glasgow = throw "glasgow has been promoted to a top-level attribute"; # added 2023-02-05
@@ -186,6 +195,7 @@ mapAliases ({
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hglib = python-hglib; # added 2023-10-13
+  homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
   HTSeq = htseq; # added 2023-02-19
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
@@ -221,6 +231,7 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  langchainplus-sdk = langsmith; # added 2023-08-01
   lazr_config = lazr-config; # added 2023-11-03
   lazr_delegates = lazr-delegates; # added 2023-11-03
   lazy_imports = lazy-imports; # added 2023-10-13
@@ -303,6 +314,7 @@ mapAliases ({
   pyialarmxr-homeassistant = throw "The package was removed together with the component support in home-assistant 2022.7.0"; # added 2022-07-07
   PyICU = pyicu; # Added 2022-12-22
   pyjson5 = json5; # added 2022-08-28
+  pyhs100 = throw "pyhs100 has been removed in favor of python-kasa."; # added 2024-01-05
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
   pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
@@ -354,6 +366,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
+  python-openzwave-mqtt = throw "python-openzwave was removed, as it was packaged as a dependency of home-assistant, which it is no longer."; # added 2024-01-05
   python_docs_theme = python-docs-theme; # added 2023-11-04
   python_fedora = python-fedora; # added 2023-11-15
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16
@@ -375,6 +388,7 @@ mapAliases ({
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
+  pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
@@ -388,6 +402,9 @@ mapAliases ({
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   retworkx = rustworkx; # added 2023-05-14
   repeated_test = repeated-test; # added 2022-11-15
+  repoze_lru = repoze-lru; # added 2023-11-11
+  repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
+  repoze_who = repoze-who; # added 2023-11-11
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   restructuredtext_lint = restructuredtext-lint; # added 2023-11-04
@@ -445,6 +462,7 @@ mapAliases ({
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
+  ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
@@ -470,12 +488,14 @@ mapAliases ({
   zake = throw "zake has been removed because it is abandoned"; # added 2023-06-20
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
+  zipstream-new = throw "zipstream-new has been removed, because it  was packaged as a dependency for octoprint, which has switched to zipstream-ng since."; # added 2024-01-05
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28
   zope_configuration = zope-configuration; # added 2023-11-12
   zope_contenttype = zope-contenttype; # added 2023-10-11
   zope_deprecation = zope-deprecation; # added 2023-10-07
   zope_dottedname = zope-dottedname; # added 2023-11-12
+  zope_exceptions = zope-exceptions; # added 2023-10-11
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
   zope_proxy = zope-proxy; # added 2023-10-07

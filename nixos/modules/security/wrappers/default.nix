@@ -280,6 +280,7 @@ in
       wantedBy = [ "sysinit.target" ];
       before = [ "sysinit.target" "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
+      after = [ "systemd-sysusers.service" ];
       unitConfig.DefaultDependencies = false;
       unitConfig.RequiresMountsFor = [ "/nix/store" "/run/wrappers" ];
       serviceConfig.Type = "oneshot";

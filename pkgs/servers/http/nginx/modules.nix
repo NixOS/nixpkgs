@@ -22,7 +22,7 @@
 , libuuid
 , libxml2
 , lmdb
-, luajit
+, luajit_openresty
 , msgpuck
 , openssl
 , opentracing-cpp
@@ -379,7 +379,7 @@ let self = {
       sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
 
     preConfigure = let
       # fix compilation against nginx 1.23.0
@@ -388,8 +388,8 @@ let self = {
         sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
       };
     in ''
-      export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+      export LUAJIT_LIB="${luajit_openresty}/lib"
+      export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src
@@ -420,7 +420,7 @@ let self = {
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
     allowMemoryWriteExecute = true;
 
     meta = with lib; {
@@ -458,15 +458,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
