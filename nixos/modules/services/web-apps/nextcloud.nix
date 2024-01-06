@@ -132,6 +132,9 @@ in {
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
       Use services.nextcloud.enableImagemagick instead.
     '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
+      Add port to services.nextcloud.config.dbhost instead.
+    '')
     (mkRenamedOptionModule
       [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "extraOptions" "loglevel" ])
     (mkRenamedOptionModule
@@ -363,17 +366,13 @@ in {
           else if mysqlLocal then "localhost:/run/mysqld/mysqld.sock"
           else "localhost";
         defaultText = "localhost";
+        example = "localhost:5000";
         description = lib.mdDoc ''
-          Database host or socket path.
+          Database host (+port) or socket path.
           If [](#opt-services.nextcloud.database.createLocally) is true and
           [](#opt-services.nextcloud.config.dbtype) is either `pgsql` or `mysql`,
           defaults to the correct Unix socket instead.
         '';
-      };
-      dbport = mkOption {
-        type = with types; nullOr (either int str);
-        default = null;
-        description = lib.mdDoc "Database port.";
       };
       dbtableprefix = mkOption {
         type = types.nullOr types.str;
@@ -886,7 +885,6 @@ in {
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
-              ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
               ${optionalString (c.dbpassFile != null) ''
@@ -931,7 +929,6 @@ in {
               # will be omitted.
               ${if c.dbname != null then "--database-name" else null} = ''"${c.dbname}"'';
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
-              ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
               "--database-pass" = "\"\$${dbpass.arg}\"";
               "--admin-user" = ''"${c.adminuser}"'';

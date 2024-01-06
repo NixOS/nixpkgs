@@ -26061,9 +26061,7 @@ with pkgs;
 
   # GNU Common Lisp
   gcl = wrapLisp {
-    pkg = callPackage ../development/compilers/gcl {
-      gmp = gmp4;
-    };
+    pkg = callPackage ../development/compilers/gcl { };
     faslExt = "o";
   };
 

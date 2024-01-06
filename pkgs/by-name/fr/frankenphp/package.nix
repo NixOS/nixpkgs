@@ -25,13 +25,13 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-iR47S52L2cMORE2MOzddFRDwlqaHAtB8dJs/UrufB0w=";
+    hash = "sha256-DNU127IZ+lw2+NqzrU07ioJKCjjCsnqgS+cqUlX7TUw=";
   };
 
   sourceRoot = "source/caddy";

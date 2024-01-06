@@ -9102,9 +9102,11 @@ self: super: with self; {
   pem = callPackage ../development/python-modules/pem { };
 
   pendulum = if pythonAtLeast "3.12" then
-    callPackage ../development/python-modules/pendulum/3.nix { }
+    pendulum_3
   else
     callPackage ../development/python-modules/pendulum { };
+
+  pendulum_3 = callPackage ../development/python-modules/pendulum/3.nix { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
@@ -15668,6 +15670,8 @@ self: super: with self; {
   urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
+
+  urwidgets = callPackage ../development/python-modules/urwidgets { };
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
