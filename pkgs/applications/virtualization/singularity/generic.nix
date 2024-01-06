@@ -33,6 +33,7 @@ in
 , which
   # Build inputs
 , bash
+, callPackage
 , conmon
 , coreutils
 , cryptsetup
@@ -270,6 +271,39 @@ in
         contents = [ hello cowsay ];
         singularity = finalAttrs.finalPackage;
       };
+    };
+    gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
+      # Should be in tests, but Ofborg would skip image-hello-cowsay because
+      # saxpy is unfree.
+      image-saxpy = callPackage
+        ({ singularity-tools, cudaPackages }:
+          singularity-tools.buildImage {
+            name = "saxpy";
+            contents = [ cudaPackages.saxpy ];
+            memSize = 2048;
+            diskSize = 2048;
+            singularity = finalAttrs.finalPackage;
+          })
+        { };
+      saxpy =
+        callPackage
+          ({ runCommand, writeShellScriptBin }:
+            let
+              unwrapped = writeShellScriptBin "apptainer-cuda-saxpy"
+                ''
+                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
+                '';
+            in
+            runCommand "run-apptainer-cuda-saxpy"
+              {
+                requiredSystemFeatures = [ "cuda" ];
+                nativeBuildInputs = [ unwrapped ];
+                passthru = { inherit unwrapped; };
+              }
+              ''
+                apptainer-cuda-saxpy
+              '')
+          { };
     };
   };
 })
