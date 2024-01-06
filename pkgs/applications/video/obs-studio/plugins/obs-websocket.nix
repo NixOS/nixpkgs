@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Legacy websocket 4.9.1 protocol support for OBS Studio 28 or above";
+    description = "Legacy websocket 4.9.1 protocol support for OBS Studio < 28";
     homepage = "https://github.com/obsproject/obs-websocket";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
