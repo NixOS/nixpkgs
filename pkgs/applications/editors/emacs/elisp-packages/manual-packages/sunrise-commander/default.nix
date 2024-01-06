@@ -1,12 +1,13 @@
 { lib
-, trivialBuild
 , fetchFromGitHub
-, emacs
+, melpaBuild
+, writeText
 }:
 
-trivialBuild {
+let
   pname = "sunrise-commander";
-  version = "unstable=2021-09-27";
+  ename = "sunrise";
+  version = "20210924.1620";
 
   src = fetchFromGitHub {
     owner = "sunrise-commander";
@@ -14,10 +15,23 @@ trivialBuild {
     rev = "16e6df7e86c7a383fb4400fae94af32baf9cb24e";
     hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
   };
+in
+melpaBuild {
+  inherit pname ename version src;
 
-  buildInputs = [
-    emacs
-  ];
+  commit = src.rev;
+
+  outputs = [ "out" "doc" ];
+
+  recipe = writeText "recipe" ''
+    (sunrise
+     :repo "sunrise-commander/sunrise-commander"
+     :fetcher github)
+  '';
+
+  postInstall = ''
+    install -Dm644 ${src}/README.md -t $doc/share/doc/emacs-sunrise-${version}/
+  '';
 
   meta = {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";
