@@ -14,7 +14,6 @@ python3Packages.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "paulgazz";
     repo = "kmax";
-    inherit version;
     rev = "v${version}";
     hash = "sha256-fNs/i8kjc3P6XvX5lvSvNLfhoetr0plNVG+KcRD/Otc=";
   };
