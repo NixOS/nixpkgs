@@ -5,10 +5,10 @@
 , cmake
 , expat
 , yaml-cpp
-, ilmbase
 , pystring
 , imath
 , minizip-ng
+, zlib
 # Only required on Linux
 , glew
 , freeglut
@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     yaml-cpp
-    ilmbase
     pystring
     imath
     minizip-ng
+    zlib
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
