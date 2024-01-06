@@ -31874,13 +31874,28 @@ with pkgs;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
   firefox = wrapFirefox firefox-unwrapped { };
-  firefox-beta = wrapFirefox firefox-beta-unwrapped { };
-  firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
+  firefox-beta = wrapFirefox firefox-beta-unwrapped {
+    nameSuffix = "-beta";
+    desktopName = "Firefox Beta";
+    wmClass = "firefox-beta";
+    icon = "firefox-beta";
+  };
+  firefox-devedition = wrapFirefox firefox-devedition-unwrapped {
+    nameSuffix = "-devedition";
+    desktopName = "Firefox Developer Edition";
+    wmClass = "firefox-devedition";
+    icon = "firefox-devedition";
+  };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-115;
-  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
+  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
+    nameSuffix = "-esr";
+    desktopName = "Firefox ESR";
+    wmClass = "firefox-esr";
+    icon = "firefox-esr";
+  };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
