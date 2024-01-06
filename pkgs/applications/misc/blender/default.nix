@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
+, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
+, libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr_3, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, fftwFloat, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
-    [ boost ffmpeg gettext glew ilmbase
+    [ boost ffmpeg gettext glew
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimageio openjpeg python zlib zstd fftw fftwFloat jemalloc
+      opencolorio openexr_3 openimageio openjpeg python zlib zstd fftw fftwFloat jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -168,8 +168,6 @@ stdenv.mkDerivation (finalAttrs: rec {
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
