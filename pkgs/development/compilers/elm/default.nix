@@ -69,8 +69,6 @@ let
         license = licenses.bsd3;
         maintainers = [ maintainers.turbomack ];
       }) (self.callPackage ./packages/elm-instrument.nix {}));
-
-      elmVersion = elmPkgs.elm.version;
     };
     in elmPkgs // {
       inherit elmPkgs;
@@ -141,7 +139,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
         `patchNpmElm` function also defined in `packages/lib.nix`.
   */
   elmLib = let
-    hsElmPkgs = hs810Pkgs self;
+    hsElmPkgs = (hs810Pkgs self) // (hs96Pkgs self);
   in import ./packages/lib.nix {
     inherit lib;
     inherit (pkgs) writeScriptBin stdenv;
