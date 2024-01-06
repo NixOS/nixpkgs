@@ -81,6 +81,11 @@ in
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 , hardeningDisable ? null
+, # If true, use patch(1) with --binary which is useful if there's a disagreement
+  # in line endings between patch and patched file.
+  # By default, this is enabled if a Hackage revision is applied, since Hackage
+  # converts cabal files to Windows-style line endings.
+  useBinaryPatchMode ? revision != null
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
@@ -786,6 +791,11 @@ stdenv.mkDerivation ({
          // optionalAttrs (args ? mainProgram)    { inherit mainProgram; }
          ;
 
+}
+// optionalAttrs (args ? patchFlags || useBinaryPatchMode) {
+  patchFlags =
+    args.patchFlags or [ ]
+    ++ lib.optionals useBinaryPatchMode [ "--binary" ];
 }
 // optionalAttrs (args ? preCompileBuildDriver)  { inherit preCompileBuildDriver; }
 // optionalAttrs (args ? postCompileBuildDriver) { inherit postCompileBuildDriver; }
