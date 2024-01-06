@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+, coreutils
+, curl
 , enableMail ? false
 , gnused
 , hostname
@@ -18,7 +20,7 @@ let
     sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
     name = "smartmontools-drivedb.h";
   };
-  scriptPath = lib.makeBinPath ([ gnused hostname ] ++ lib.optionals enableMail [ mailutils ]);
+  scriptPath = lib.makeBinPath ([ coreutils curl gnused hostname ] ++ lib.optionals enableMail [ mailutils ]);
 
 in
 stdenv.mkDerivation rec {
