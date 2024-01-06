@@ -14,7 +14,6 @@
 , exiv2
 , glib
 , glib-networking
-, ilmbase
 , gtk3
 , intltool
 , lcms2
@@ -27,7 +26,7 @@
 , librsvg
 , libtiff
 , libjxl
-, openexr_3
+, openexr
 , osm-gps-map
 , pkg-config
 , sqlite
@@ -73,7 +72,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
-    ilmbase
     lcms2
     lensfun
     libexif
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     librsvg
     libtiff
     libjxl
-    openexr_3
+    openexr
     sqlite
     libxslt
     libsoup
