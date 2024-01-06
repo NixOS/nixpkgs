@@ -13,6 +13,7 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , zlib
 , openssl
@@ -46,6 +47,13 @@ stdenv.mkDerivation {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # merged upstream; drop on next version bump
+    (fetchpatch {
+      name = "workaround-for-gcc13-regression-on-ppc64";
+      url = "https://github.com/openssh/openssh-portable/commit/1036d77b34a5fa15e56f516b81b9928006848cbd.patch";
+      hash = "sha256-axIOxEMJVo0mBP1osAO4M0zsJERK+zhL5UYKiAs6IEc=";
+    })
   ] ++ extraPatches;
 
   postPatch =
