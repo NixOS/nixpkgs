@@ -174,11 +174,18 @@ in
     if [[ ! -e .git || ! -e VERSION ]]; then
       echo "${version}" > VERSION
     fi
+
     # Patch shebangs for script run during build
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
+
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
     substituteInPlace cmd/internal/cli/actions.go \
       --replace "defaultPath = \"${defaultPathOriginal}\"" "defaultPath = \"''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}${defaultPathOriginal}\""
+
+    substituteInPlace internal/pkg/util/gpu/nvidia.go \
+      --replace \
+        'return fmt.Errorf("/usr/bin not writable in the container")' \
+        ""
   '';
 
   postConfigure = ''
