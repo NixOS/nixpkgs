@@ -1,7 +1,8 @@
 { lib
 , stdenv
+, maven
 , autoPatchelfHook
-, fetchurl
+, fetchFromGitHub
 , glib-networking
 , glibc
 , gcc-unwrapped
@@ -11,7 +12,7 @@
 , makeDesktopItem
 , webkitgtk
 , wrapGAppsHook
-, writeScript
+, nix-update-script
 }:
 let
   desktopItem = makeDesktopItem {
@@ -25,14 +26,20 @@ let
 
   runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];
 in
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "PortfolioPerformance";
   version = "0.67.0";
 
-  src = fetchurl {
-    url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-bm38t8wgLEYZVDsMnOv3Wj6TgKu2s36wo8q0Sj7pPNI=";
+  src = fetchFromGitHub {
+    owner = "buchen";
+    repo = "portfolio";
+    rev = version;
+    hash = "sha256-bZCWjJ0+yDu/oGGutebh5ZSaCF3lyn/ghSo73mpM8Po=";
   };
+
+  mvnHash = "sha256-gbb/lhobNlAHggWIiAuPbQMYBak3b8F0mvLNEJ7sVOk=";
+
+  mvnParameters = "--file portfolio-app/pom.xml";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -48,7 +55,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/portfolio
-    cp -av ./* $out/portfolio
+    cp -av ./portfolio-product/target/products/name.abuchen.portfolio.product/linux/gtk/${stdenv.targetPlatform.linuxArch}/portfolio/* $out/portfolio/
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
@@ -61,20 +68,14 @@ stdenv.mkDerivation rec {
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/buchen/portfolio/tags" | jq '.[0].name' --raw-output)"
-    update-source-version portfolio "$version"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier kilianar oyren shawn8901 ];
     mainProgram = "portfolio";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
