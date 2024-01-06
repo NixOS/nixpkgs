@@ -1,18 +1,59 @@
 # shellcheck shell=bash
 
-echo Sourcing setup-cuda-hook >&2
+# Starting with 24.05: only run the hook from nativeBuildInputs
+# (( "$hostOffset" == -1 && "$targetOffset" == 0)) || return 0
 
-extendCUDAToolkit_ROOT() {
-    if [[ -f "$1/nix-support/include-in-cudatoolkit-root" ]] ; then
-        addToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "$1"
+guard=Sourcing
+reason=
 
-        if [[ -d "$1/include" ]] ; then
-            addToSearchPathWithCustomDelimiter ";" CUDAToolkit_INCLUDE_DIR "$1/include"
-        fi
-    fi
+[[ -n ${cudaSetupHookOnce-} ]] && guard=Skipping && reason=" because the hook has been propagated more than once"
+
+if (( "${NIX_DEBUG:-0}" >= 1 )) ; then
+    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset setupCudaHook$reason" >&2
+else
+    echo "$guard setup-cuda-hook$reason" >&2
+fi
+
+[[ "$guard" = Sourcing ]] || return 0
+
+declare -g cudaSetupHookOnce=1
+declare -Ag cudaHostPathsSeen=()
+declare -Ag cudaOutputToPath=()
+
+extendcudaHostPathsSeen() {
+    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "extendcudaHostPathsSeen $1" >&2
+
+    local markerPath="$1/nix-support/include-in-cudatoolkit-root"
+    [[ ! -f "${markerPath}" ]] && return
+    [[ -v cudaHostPathsSeen[$1] ]] && return
+
+    cudaHostPathsSeen["$1"]=1
+
+    # E.g. cuda_cudart-lib
+    local cudaOutputName
+    read -r cudaOutputName < "$markerPath"
+
+    [[ -z "$cudaOutputName" ]] && return
+
+    local oldPath="${cudaOutputToPath[$cudaOutputName]-}"
+    [[ -n "$oldPath" ]] && echo "extendcudaHostPathsSeen: warning: overwriting $cudaOutputName from $oldPath to $1" >&2
+    cudaOutputToPath["$cudaOutputName"]="$1"
 }
+addEnvHooks "$targetOffset" extendcudaHostPathsSeen
 
-addEnvHooks "$targetOffset" extendCUDAToolkit_ROOT
+setupCUDAToolkit_ROOT() {
+    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "setupCUDAToolkit_ROOT: cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
+
+    for path in "${!cudaHostPathsSeen[@]}" ; do
+        addToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "$path"
+        if [[ -d "$path/include" ]] ; then
+            addToSearchPathWithCustomDelimiter ";" CUDAToolkit_INCLUDE_DIR "$path/include"
+        fi
+    done
+
+    export cmakeFlags+=" -DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR -DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
+}
+preConfigureHooks+=(setupCUDAToolkit_ROOT)
 
 setupCUDAToolkitCompilers() {
     echo Executing setupCUDAToolkitCompilers >&2
@@ -56,13 +97,43 @@ setupCUDAToolkitCompilers() {
     # CMake's enable_language(CUDA) runs a compiler test and it doesn't account for
     # CUDAToolkit_ROOT. We have to help it locate libcudart
     if [[ -z "${nvccDontPrependCudartFlags-}" ]] ; then
-        export NVCC_APPEND_FLAGS+=" -L@cudartLib@/lib -L@cudartStatic@/lib -I@cudartInclude@/include"
+        if [[ ! -v cudaOutputToPath["cuda_cudart-out"] ]] ; then
+            echo "setupCUDAToolkitCompilers: missing cudaPackages.cuda_cudart. This may become an an error in the future" >&2
+            # exit 1
+        fi
+        for pkg in "${!cudaOutputToPath[@]}" ; do
+            [[ ! "$pkg" = cuda_cudart* ]] && continue
+
+            local path="${cudaOutputToPath[$pkg]}"
+            if [[ -d "$path/include" ]] ; then
+                export NVCC_PREPEND_FLAGS+=" -I$path/include"
+            fi
+            if [[ -d "$path/lib" ]] ; then
+                export NVCC_PREPEND_FLAGS+=" -L$path/lib"
+            fi
+        done
     fi
 }
+preConfigureHooks+=(setupCUDAToolkitCompilers)
 
-setupCMakeCUDAToolkit_ROOT() {
-    export cmakeFlags+=" -DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR -DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
+propagateCudaLibraries() {
+    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "propagateCudaLibraries: cudaPropagateToOutput=$cudaPropagateToOutput cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
+
+    [[ -z "${cudaPropagateToOutput-}" ]] && return
+
+    mkdir -p "${!cudaPropagateToOutput}/nix-support"
+    # One'd expect this should be propagated-bulid-build-deps, but that doesn't seem to work
+    echo "@setupCudaHook@" >> "${!cudaPropagateToOutput}/nix-support/propagated-native-build-inputs"
+
+    local propagatedBuildInputs=( "${!cudaHostPathsSeen[@]}" )
+    for output in $(getAllOutputNames) ; do
+        if [[ ! "$output" = "$cudaPropagateToOutput" ]] ; then
+            propagatedBuildInputs+=( "${!output}" )
+        fi
+        break
+    done
+
+    # One'd expect this should be propagated-host-host-deps, but that doesn't seem to work
+    printWords "${propagatedBuildInputs[@]}" >> "${!cudaPropagateToOutput}/nix-support/propagated-build-inputs"
 }
-
-postHooks+=(setupCUDAToolkitCompilers)
-preConfigureHooks+=(setupCMakeCUDAToolkit_ROOT)
+postFixupHooks+=(propagateCudaLibraries)

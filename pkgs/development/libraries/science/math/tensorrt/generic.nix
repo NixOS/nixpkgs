@@ -8,20 +8,22 @@
 , cudnn
 }:
 
-{ fullVersion
+{ enable ? true
+, fullVersion
 , fileVersionCudnn ? null
 , tarball
 , sha256
 , supportedCudaVersions ? [ ]
 }:
 
-assert fileVersionCudnn == null || lib.assertMsg (lib.strings.versionAtLeast cudnn.version fileVersionCudnn)
+assert !enable || fileVersionCudnn == null || lib.assertMsg (lib.strings.versionAtLeast cudnn.version fileVersionCudnn)
   "This version of TensorRT requires at least cuDNN ${fileVersionCudnn} (current version is ${cudnn.version})";
 
 backendStdenv.mkDerivation rec {
   pname = "cudatoolkit-${cudatoolkit.majorVersion}-tensorrt";
   version = fullVersion;
-  src = requireFile rec {
+  src = if !enable then null else
+  requireFile rec {
     name = tarball;
     inherit sha256;
     message = ''
@@ -38,13 +40,13 @@ backendStdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals enable [
     autoPatchelfHook
     autoAddOpenGLRunpathHook
   ];
 
   # Used by autoPatchelfHook
-  buildInputs = [
+  buildInputs = lib.optionals enable [
     backendStdenv.cc.cc.lib # libstdc++
     cudatoolkit
     cudnn
@@ -75,6 +77,7 @@ backendStdenv.mkDerivation rec {
     '';
 
   passthru.stdenv = backendStdenv;
+  passthru.enable = enable;
 
   meta = with lib; {
     # Check that the cudatoolkit version satisfies our min/max constraints (both
@@ -82,7 +85,7 @@ backendStdenv.mkDerivation rec {
     # official version constraints (as recorded in default.nix). In some cases
     # you _may_ be able to smudge version constraints, just know that you're
     # embarking into unknown and unsupported territory when doing so.
-    broken = !(elem cudaVersion supportedCudaVersions);
+    broken = !enable || !(elem cudaVersion supportedCudaVersions);
     description = "TensorRT: a high-performance deep learning interface";
     homepage = "https://developer.nvidia.com/tensorrt";
     license = licenses.unfree;

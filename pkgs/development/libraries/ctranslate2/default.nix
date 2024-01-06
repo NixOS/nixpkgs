@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals withMkl [
     mkl
   ] ++ lib.optionals withCUDA [
+    cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.libcurand

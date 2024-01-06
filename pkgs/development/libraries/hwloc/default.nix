@@ -22,12 +22,13 @@ stdenv.mkDerivation rec {
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [ expat ncurses ]
     ++ lib.optionals x11Support [ cairo libX11 ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optional enableCuda cudaPackages.cudatoolkit;
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
   propagatedBuildInputs = lib.optional stdenv.isLinux pciutils;
