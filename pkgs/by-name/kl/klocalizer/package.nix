@@ -33,7 +33,7 @@ python3Packages.buildPythonPackage {
 
   meta = {
     description = "Linux Kconfig constraint SAT/SMT solver";
-    license = [ lib.licenses.gpl2 ];
+    license = [ lib.licenses.gpl2Plus ];
     mainProgram = "klocalizer";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     homepage = "https://github.com/paulgazz/kmax";
