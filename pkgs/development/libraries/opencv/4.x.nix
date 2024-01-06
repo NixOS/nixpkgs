@@ -28,7 +28,6 @@
 , libwebp
 , enableEXR ? !stdenv.isDarwin
 , openexr
-, ilmbase
 , enableJPEG2000 ? true
 , openjpeg
 , enableEigen ? true
@@ -310,7 +309,7 @@ effectiveStdenv.mkDerivation {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [ openexr ]
     ++ lib.optional enableJPEG2000 openjpeg
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin)
@@ -365,8 +364,6 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString withOpenblas openblas_.dev;
