@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vcsh";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchurl {
     url = "https://github.com/RichiH/vcsh/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8KkTU1BrO39vgWproT+QsRaBN2I6WR3lp4Oehd6yOMs=";
+    sha256 = "sha256-Rx5yBCDRqFNyhP0Pfoo2upn7t4Yh5hxTgNKmMtaY/08=";
   };
 
   nativeBuildInputs = [
