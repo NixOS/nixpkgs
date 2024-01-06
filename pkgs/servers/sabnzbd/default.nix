@@ -43,7 +43,7 @@ let
     sgmllib3k
     six
     tempora
-    zc_lockfile
+    zc-lockfile
   ]);
   path = lib.makeBinPath [ coreutils par2cmdline unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {

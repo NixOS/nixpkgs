@@ -46,7 +46,7 @@
 , tqdm
 , typing-extensions
 , voluptuous
-, zc_lockfile
+, zc-lockfile
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
@@ -117,7 +117,7 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     voluptuous
-    zc_lockfile
+    zc-lockfile
   ]
   ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
   ++ lib.optionals enableAWS passthru.optional-dependencies.s3
