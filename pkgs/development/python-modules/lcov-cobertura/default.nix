@@ -5,13 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "lcov_cobertura";
+  pname = "lcov-cobertura";
   version = "2.0.2";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "lcov_cobertura";
+    inherit version;
     hash = "sha256-xs40e/PuZ/jV0CDNZiYmo1lM8r5yfMY0qg0R+j9/E3Q=";
   };
 
