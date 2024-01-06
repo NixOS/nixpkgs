@@ -3,7 +3,7 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, fribidi, libaom, libheif, libkdcraw, lcms2, gsl, openexr, giflib
-, libjxl, mlt , openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, immer, kseexpr, lager
+, libjxl, mlt , openjpeg, opencolorio, xsimd, poppler, curl, immer, kseexpr, lager
 , libmypaint , libunibreak, libwebp
 , qtmultimedia, qtx11extras, quazip, SDL2, zug, pkg-config
 , python3Packages
@@ -36,13 +36,12 @@ mkDerivation rec {
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 fribidi lcms2 gsl openexr lager libaom libheif libkdcraw giflib
-    libjxl mlt openjpeg opencolorio xsimd poppler curl ilmbase immer kseexpr libmypaint
+    libjxl mlt openjpeg opencolorio xsimd poppler curl immer kseexpr libmypaint
     libunibreak libwebp qtmultimedia qtx11extras quazip SDL2 zug
     python3Packages.pyqt5
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([ "-I${ilmbase.dev}/include/OpenEXR" ]
-    ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-deprecated-copy";
 
   # Krita runs custom python scripts in CMake with custom PYTHONPATH which krita determined in their CMake script.
   # Patch the PYTHONPATH so python scripts can import sip successfully.
