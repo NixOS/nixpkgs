@@ -24,6 +24,7 @@
 , bash-completion ? null
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -91,6 +92,10 @@ stdenv.mkDerivation rec {
     substituteInPlace data/meson.build \
       --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
   '';
+
+  passthru.tests = {
+    nixos-test = nixosTests.packagekit;
+  };
 
   meta = with lib; {
     description = "System to facilitate installing and updating packages";
