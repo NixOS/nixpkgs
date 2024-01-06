@@ -1983,7 +1983,6 @@ dont-distribute-packages:
  - hcg-minus-cairo
  - hcheat
  - hcheckers
- - hcount
  - hcube
  - hdbi
  - hdbi-conduit
@@ -2161,6 +2160,7 @@ dont-distribute-packages:
  - hslogstash
  - hsparql
  - hspec-expectations-pretty
+ - hspec-formatter-github
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -2242,6 +2242,7 @@ dont-distribute-packages:
  - hyena
  - hylotab
  - hyloutils
+ - hyperbole
  - hyperpublic
  - i
  - iException
@@ -2529,9 +2530,6 @@ dont-distribute-packages:
  - linearscan-hoopl
  - linkchk
  - linkcore
- - linnet
- - linnet-aeson
- - linnet-conduit
  - linux-ptrace
  - lio-eci11
  - lion
@@ -2745,7 +2743,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
@@ -2947,7 +2944,6 @@ dont-distribute-packages:
  - overload
  - package-o-tron
  - padKONTROL
- - pagerduty
  - pairing
  - panda
  - pandoc-highlighting-extensions
@@ -3229,7 +3225,6 @@ dont-distribute-packages:
  - quiver-interleave
  - quiver-sort
  - qux
- - rabocsv2qif
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
@@ -3281,7 +3276,6 @@ dont-distribute-packages:
  - redHandlers
  - reddit
  - redis-io
- - redis-resp
  - rediscaching-haxl
  - reduce-equations
  - refh
@@ -3540,7 +3534,6 @@ dont-distribute-packages:
  - servant-haxl-client
  - servant-http2-client
  - servant-matrix-param
- - servant-mock
  - servant-oauth2
  - servant-oauth2-examples
  - servant-openapi3
@@ -3556,7 +3549,6 @@ dont-distribute-packages:
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
- - servant-swagger-tags
  - servant-to-elm
  - servant-util
  - servant-util-beam-pg
@@ -3596,12 +3588,10 @@ dont-distribute-packages:
  - silvi
  - simgi
  - simple-c-value
- - simple-cairo
  - simple-firewire
  - simple-log-syslog
  - simple-logging
  - simple-nix
- - simple-pango
  - simple-pascal
  - simple-postgresql-orm
  - simpleirc-lens
@@ -4127,7 +4117,6 @@ dont-distribute-packages:
  - wai-middleware-route
  - wai-middleware-validation
  - wai-middleware-verbs
- - wai-predicates
  - wai-route
  - wai-routing
  - wai-session-alt
@@ -4157,7 +4146,6 @@ dont-distribute-packages:
  - webcrank-wai
  - webdriver-w3c
  - webgear-openapi
- - webgear-server
  - webify
  - webserver
  - websockets-rpc

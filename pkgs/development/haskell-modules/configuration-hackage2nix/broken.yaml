@@ -548,7 +548,6 @@ broken-packages:
   - bytepatch # failure in job https://hydra.nixos.org/build/236678340 at 2023-10-04
   - bytestring-arbitrary # failure in job https://hydra.nixos.org/build/233195013 at 2023-09-02
   - bytestring-class # failure in job https://hydra.nixos.org/build/233230793 at 2023-09-02
-  - bytestring-conversion # failure in job https://hydra.nixos.org/build/233211464 at 2023-09-02
   - bytestring-csv # failure in job https://hydra.nixos.org/build/233215194 at 2023-09-02
   - bytestring-delta # failure in job https://hydra.nixos.org/build/233207977 at 2023-09-02
   - bytestring-handle # failure in job https://hydra.nixos.org/build/233192234 at 2023-09-02
@@ -2897,7 +2896,6 @@ broken-packages:
   - ip-quoter # failure in job https://hydra.nixos.org/build/233234581 at 2023-09-02
   - iptables-helpers # failure in job https://hydra.nixos.org/build/233198949 at 2023-09-02
   - IPv6DB # failure in job https://hydra.nixos.org/build/233199983 at 2023-09-02
-  - ircbot # failure in job https://hydra.nixos.org/build/233237219 at 2023-09-02
   - irc-core # failure in job https://hydra.nixos.org/build/233242138 at 2023-09-02
   - irc-dcc # failure in job https://hydra.nixos.org/build/233230181 at 2023-09-02
   - Irc # failure in job https://hydra.nixos.org/build/233230852 at 2023-09-02
