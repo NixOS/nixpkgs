@@ -9797,7 +9797,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
+  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
   keepmenu = callPackage ../applications/misc/keepmenu { };
 
