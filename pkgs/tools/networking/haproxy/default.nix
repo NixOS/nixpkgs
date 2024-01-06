@@ -1,13 +1,16 @@
 { useLua ? true
 , usePcre ? true
+# QUIC "is currently supported as an experimental feature" so shouldn't be enabled by default
+, useQuicTls ? false
 , withPrometheusExporter ? true
 , stdenv
 , lib
 , fetchurl
 , nixosTests
-, openssl
 , zlib
 , libxcrypt
+, openssl ? null
+, quictls ? null
 , lua5_3 ? null
 , pcre ? null
 , systemd ? null
@@ -15,17 +18,20 @@
 
 assert useLua -> lua5_3 != null;
 assert usePcre -> pcre != null;
+assert useQuicTls -> quictls != null;
+assert !useQuicTls -> openssl != null;
 
-stdenv.mkDerivation (finalAttrs: {
+let sslPkg = if useQuicTls then quictls else openssl;
+in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.8.4";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-gbrL9Q7G0Pfsqq18A+WZeLADIvva1u1KmJ3TF1S28l0=";
+    hash = "sha256-1YAcdyqrnEP0CWS3sztDiNFLW0V1C+TSZxeFhjzbnxw=";
   };
 
-  buildInputs = [ openssl zlib libxcrypt ]
+  buildInputs = [ sslPkg zlib libxcrypt ]
     ++ lib.optional useLua lua5_3
     ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;
@@ -41,7 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [
     "USE_OPENSSL=yes"
+    "SSL_LIB=${sslPkg}/lib"
+    "SSL_INC=${sslPkg}/include"
     "USE_ZLIB=yes"
+  ] ++ lib.optionals useQuicTls [
+    "USE_QUIC=1"
   ] ++ lib.optionals usePcre [
     "USE_PCRE=yes"
     "USE_PCRE_JIT=yes"
