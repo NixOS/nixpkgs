@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_location
-, zope_event
-, zope_interface
+, zope-location
+, zope-event
+, zope-interface
 , zope-testing
 }:
 
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-6tTbywM1TU5BDJo7kERR60TZAlR1Gxy97fSmGu3p+7k=";
   };
 
-  propagatedBuildInputs = [ zope_location zope_event zope_interface zope-testing ];
+  propagatedBuildInputs = [ zope-location zope-event zope-interface zope-testing ];
 
   # ImportError: No module named 'zope.event'
-  # even though zope_event has been included.
+  # even though zope-event has been included.
   # Package seems to work fine.
   doCheck = false;
 

@@ -4,8 +4,8 @@
 , pythonOlder
 , setuptools
 , pytestCheckHook
-, zope_interface
-, zope_testrunner
+, zope-interface
+, zope-testrunner
 , sphinx
 }:
 
@@ -27,13 +27,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_interface
+    zope-interface
     sphinx
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    zope_testrunner
+    zope-testrunner
   ];
 
   pythonImportsCheck = [

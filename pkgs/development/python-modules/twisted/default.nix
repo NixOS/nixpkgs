@@ -17,7 +17,7 @@
 , hyperlink
 , incremental
 , typing-extensions
-, zope_interface
+, zope-interface
 
 # optional-dependencies
 , appdirs
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     hyperlink
     incremental
     typing-extensions
-    zope_interface
+    zope-interface
   ];
 
   postPatch = ''
