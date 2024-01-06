@@ -35,7 +35,7 @@ bundlerApp rec {
     description = "A parser, generator, and validator for CDDL";
     homepage    = "https://rubygems.org/gems/cddl";
     license     = with licenses; mit;
-    maintainers = with maintainers; [ fdns nicknovitski ];
+    maintainers = with maintainers; [ fdns nicknovitski amesgen ];
     platforms   = platforms.unix;
   };
 }
