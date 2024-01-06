@@ -6493,7 +6493,7 @@ self: super: with self; {
 
   limnoria = callPackage ../development/python-modules/limnoria { };
 
-  linear_operator = callPackage ../development/python-modules/linear_operator { };
+  linear-operator = callPackage ../development/python-modules/linear-operator { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
