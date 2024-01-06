@@ -672,6 +672,8 @@ let
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
 
+      UDMABUF = whenAtLeast "4.20" yes;
+
       # VirtualBox guest drivers in the kernel conflict with the ones in the
       # official additions package and prevent the vboxsf module from loading,
       # so disable them for now.
