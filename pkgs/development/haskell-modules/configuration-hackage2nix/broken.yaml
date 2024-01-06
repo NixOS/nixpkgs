@@ -548,7 +548,6 @@ broken-packages:
   - bytepatch # failure in job https://hydra.nixos.org/build/236678340 at 2023-10-04
   - bytestring-arbitrary # failure in job https://hydra.nixos.org/build/233195013 at 2023-09-02
   - bytestring-class # failure in job https://hydra.nixos.org/build/233230793 at 2023-09-02
-  - bytestring-conversion # failure in job https://hydra.nixos.org/build/233211464 at 2023-09-02
   - bytestring-csv # failure in job https://hydra.nixos.org/build/233215194 at 2023-09-02
   - bytestring-delta # failure in job https://hydra.nixos.org/build/233207977 at 2023-09-02
   - bytestring-handle # failure in job https://hydra.nixos.org/build/233192234 at 2023-09-02
