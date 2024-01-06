@@ -4,7 +4,7 @@
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
-, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
+, enableEXR ? (!stdenv.isDarwin), openexr_3
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     [ # Don't include a copy of the CMake status output in the
       # build. This causes a runtime dependency on GCC.
       ./no-build-info.patch
+      ./opencv2-openexr3.patch
     ];
 
   # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [ openexr_3 ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
@@ -55,8 +56,6 @@ stdenv.mkDerivation rec {
     ;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
