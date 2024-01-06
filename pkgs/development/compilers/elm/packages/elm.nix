@@ -8,15 +8,12 @@
 }:
 mkDerivation {
   pname = "elm";
-  # We're building binaries from commit that npm installer is using since
-  # November 1st release called 0.19.1-6.
-  # These binaries are built with newer ghc version and also support Aarch64 for Linux and Darwin.
-  # Upstream git tag for 0.19.1 is still pointing to original commit from 2019.
-  version = "0.19.1-6";
+  version = "0.19.1";
   src = fetchgit {
     url = "https://github.com/elm/compiler";
+    sha256 = "1h9jhwlv1pqqna5s09vd72arwhhjn0dlhv0w9xx5771x0xryxxg8";
     rev = "2f6dd29258e880dbb7effd57a829a0470d8da48b";
-    sha256 = "sha256-6PXucwc9nFN6TxxsSBuwEkKelThtJ6CLshjfsCmHMsE=";
+    fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
