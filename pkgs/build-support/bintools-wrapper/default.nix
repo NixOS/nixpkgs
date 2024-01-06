@@ -379,6 +379,7 @@ stdenv.mkDerivation {
     gnugrep_bin = lib.optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
+    inherit (targetPlatform) isStatic;
     inherit bintools_bin libc_bin libc_dev libc_lib;
   };
 

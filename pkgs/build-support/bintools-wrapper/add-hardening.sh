@@ -42,8 +42,13 @@ for flag in "${!hardeningEnableMap[@]}"; do
             || " ${params[*]} " =~ " -r " \
             || " ${params[*]} " =~ " -Ur " \
             || " ${params[*]} " =~ " -i ") ]]; then
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningLDFlags+=('-pie')
+        if (( @isStatic@ )); then
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie --no-dynamic-linker >&2; fi
+          hardeningLDFlags+=('-pie' '--no-dynamic-linker')
+        else
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
+          hardeningLDFlags+=('-pie')
+        fi
       fi
       ;;
     relro)
