@@ -1322,14 +1322,12 @@ self: super: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
   }) super.beam-postgres;
 
-  # PortMidi needs an environment variable to have ALSA find its plugins:
+  # PortMidi needs a wrapper to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
-    patches = (drv.patches or []) ++ [ ./patches/portmidi-alsa-plugins.patch ];
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
-        --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
-    '';
+    librarySystemDepends = [
+      pkgs.alsa-lib-with-plugins
+    ] ++ (lib.remove pkgs.alsa-lib drv.librarySystemDepends);
   }) super.PortMidi;
 
   # Fix for base >= 4.11
