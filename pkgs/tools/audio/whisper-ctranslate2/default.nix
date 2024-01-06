@@ -5,7 +5,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.3.5";
+  version = "0.3.6";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     rev = version;
-    hash = "sha256-2eBJghncgzIbQKItj0Qng5xwvh9BBHNMxlbjO+tUdVU=";
+    hash = "sha256-lKzv33mFuXOmKNSOJJViS9VWCxJ+UQu8GXsswoIgdwE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
