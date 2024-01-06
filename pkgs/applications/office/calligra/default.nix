@@ -6,7 +6,7 @@
 , knotifications, knotifyconfig, kparts, ktextwidgets, kwallet, kwidgetsaddons
 , kwindowsystem, kxmlgui, sonnet, threadweaver
 , kcontacts, akonadi, akonadi-calendar, akonadi-contacts
-, eigen, git, gsl, ilmbase, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
+, eigen, git, gsl, kproperty, kreport, lcms2, marble, pcre, libgit2, libodfgen
 , librevenge, libvisio, libwpd, libwpg, libwps, okular, openexr, openjpeg, phonon
 , poppler, pstoedit, qca-qt5, vc, fontconfig
 # TODO: package Spnav, m2mml LibEtonyek, Libqgit2
@@ -47,6 +47,14 @@ mkDerivation rec {
       url = "https://invent.kde.org/office/calligra/-/commit/6b75bec784c9835c78993349845d8c2ef22ec3de.patch";
       sha256 = "sha256-z9/4he4x0WN2K/ZGrDAAtHF/W5X1PAtpeO6s7fgL/fA=";
     })
+
+    # Fixes build with OpenEXR 3.x
+    # Can be dropped on next release
+    (fetchpatch {
+      name = "Support-building-with-OpenEXR-3.patch";
+      url = "https://github.com/KDE/calligra/commit/eab11436712f92afc6e7b14b25d1f6df217d79d7.patch";
+      hash = "sha256-wcS3CCJcTLkHclWWPLz/TzbiV0Z70eLCDPpJRMKjNHU=";
+    })
   ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -62,14 +70,12 @@ mkDerivation rec {
     kjobwidgets kcmutils kdelibs4support kio kross knotifications knotifyconfig kparts
     ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui sonnet threadweaver
     kcontacts akonadi akonadi-calendar akonadi-contacts
-    eigen git gsl ilmbase kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
+    eigen git gsl kproperty kreport lcms2 marble pcre libgit2 libodfgen librevenge
     libvisio libwpd libwpg libwps okular openexr openjpeg phonon poppler qca-qt5 vc
     fontconfig
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   qtWrapperArgs = [
     "--prefix PATH : ${lib.getBin pstoedit}/bin"
