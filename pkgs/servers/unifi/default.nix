@@ -67,6 +67,7 @@ in rec {
 
   unifi7 = generic {
     version = "7.5.187";
+    suffix = "-f57f5bf7ab";
     sha256 = "sha256-a5kl8gZbRnhS/p1imPl7soM0/QSFHdM0+2bNmDfc1mY=";
   };
 
