@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21.1";
+  version = "0.22.4";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
+    hash = "sha256-weC7KkQnqQJDkMZizVMtZkxLNrj/RE7V5UsRX9t6Guo=";
   };
   patches = [
     ./absolute-paths.diff
