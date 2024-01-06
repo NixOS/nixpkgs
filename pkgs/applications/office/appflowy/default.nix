@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.4.1";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-x86_64-unknown-linux-gnu-x86_64.tar.gz";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
     hash = "sha256-9wv7/3wtR1xiOHRYXP29Qbom1Xl9xZbhCFEPf0LJitg=";
     stripRoot = false;
   };
