@@ -24,6 +24,8 @@ buildPythonPackage rec {
     hash = "sha256-W9VeRhsCXLLgOgvJcNNCGNmPvakPtKHAtwQAGtYJbcY=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
