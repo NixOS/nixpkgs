@@ -184,6 +184,7 @@ mapAliases ({
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   google-apitools = throw "google-apitools was removed because it is deprecated and unsupported by upstream"; # added 2023-02-25
   gpyopt = throw "gpyopt was remove because it's been archived upstream"; # added 2023-06-07
+  gradient_statsd = gradient-statsd; # added 2024-01-06
   graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grappelli_safe = grappelli-safe; # added 2023-10-08
