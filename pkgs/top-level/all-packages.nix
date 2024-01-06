@@ -22140,8 +22140,6 @@ with pkgs;
 
   ilbc = callPackage ../development/libraries/ilbc { };
 
-  ilmbase = callPackage ../development/libraries/ilmbase { };
-
   imgui = callPackage ../development/libraries/imgui { };
 
   imtui = callPackage ../development/libraries/imtui { };
