@@ -1,3 +1,15 @@
+From b6ad711cc3b4b1145fc4a884b6b325c843c39488 Mon Sep 17 00:00:00 2001
+From: Averell Dalton <averell+nixpkgs@rxd4.com>
+Date: Wed, 27 Feb 2019 09:44:05 +0100
+Subject: [PATCH] libnvc: ldconfig and PATH fixes
+
+---
+ src/ldcache.c     | 43 +++++++++++++++----------------------------
+ src/ldcache.h     |  2 +-
+ src/nvc_info.c    | 10 +++-------
+ src/nvc_ldcache.c |  2 +-
+ 4 files changed, 20 insertions(+), 37 deletions(-)
+
 diff --git a/src/ldcache.c b/src/ldcache.c
 index 38bab05..e1abc89 100644
 --- a/src/ldcache.c
@@ -71,10 +83,10 @@ index 33d78dd..2b087db 100644
  
  #endif /* HEADER_LDCACHE_H */
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index 30e3cfd..6d12a50 100644
+index 2d203ae..8f0f4dd 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
-@@ -167,15 +167,13 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
+@@ -218,15 +218,13 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
          if (path_resolve_full(err, path, root, ldcache) < 0)
                  return (-1);
          ldcache_init(&ld, err, path);
@@ -91,7 +103,7 @@ index 30e3cfd..6d12a50 100644
                  goto fail;
  
          info->nlibs32 = size;
-@@ -183,13 +181,11 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
+@@ -234,13 +232,11 @@ find_library_paths(struct error *err, struct dxcore_context *dxcore, struct nvc_
          if (info->libs32 == NULL)
                  goto fail;
          if (ldcache_resolve(&ld, LIB32_ARCH, root, libs,
@@ -106,7 +118,7 @@ index 30e3cfd..6d12a50 100644
          return (rv);
  }
  
-@@ -203,7 +199,7 @@ find_binary_paths(struct error *err, struct nvc_driver_info *info, const char *r
+@@ -254,7 +250,7 @@ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_d
          char path[PATH_MAX];
          int rv = -1;
  
@@ -116,15 +128,18 @@ index 30e3cfd..6d12a50 100644
                  return (-1);
          }
 diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
-index 6ff380f..cbe6a69 100644
+index db3b2f6..ae5def4 100644
 --- a/src/nvc_ldcache.c
 +++ b/src/nvc_ldcache.c
-@@ -340,7 +340,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+@@ -367,7 +367,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
          if (validate_args(ctx, cnt != NULL) < 0)
                  return (-1);
  
--        argv = (char * []){cnt->cfg.ldconfig, cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
+-        argv = (char * []){cnt->cfg.ldconfig, "-f", "/etc/ld.so.conf", "-C", "/etc/ld.so.cache", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
 +        argv = (char * []){cnt->cfg.ldconfig, "-f", "/tmp/ld.so.conf.nvidia-host", "-C", "/tmp/ld.so.cache.nvidia-host", cnt->cfg.libs_dir, cnt->cfg.libs32_dir, NULL};
          if (*argv[0] == '@') {
                  /*
                   * We treat this path specially to be relative to the host filesystem.
+-- 
+2.42.0
+

@@ -11,6 +11,7 @@
 , makeWrapper
 , substituteAll
 , removeReferencesTo
+, bmake
 , go
 }:
 let
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.9.0";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7OTawWwjeKU8wIa8I/+aSvAJli4kEua94nJSNyCajpE=";
+    sha256 = "sha256-KOLeZKTdXiDuuziAhavlRPwDD5aPdJSoaPLtCGYKLUY=";
   };
 
   patches = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     # doesn't get used on NixOS. Additional support binaries like nvidia-smi
     # are not resolved via the environment PATH but via the derivation output
     # path.
-    ./libnvc-ldconfig-and-path-fixes.patch
+    ./0001-libnvc-ldconfig-and-PATH-fixes.patch
 
     # fix bogus struct declaration
     ./inline-c-struct.patch
@@ -87,10 +88,21 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
-  nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];
+  nativeBuildInputs = [
+    bmake
+    go
+    makeWrapper
+    pkg-config
+    removeReferencesTo
+    rpcsvc-proto
+  ];
 
   buildInputs = [ elfutils libcap libseccomp libtirpc ];
 
+  # 2024-01-05: Upstream manually launches bmake from their top-level Makefile.
+  # This is almost surely going to break very soon, but let's give it a chance.
+  dontUseBmakeBuild = true;
+  makeTargets = [ "all" ];
   makeFlags = [
     "WITH_LIBELF=yes"
     "prefix=$(out)"
@@ -98,15 +110,23 @@ stdenv.mkDerivation rec {
     # same reason we patch out the static library use of libtirpc so we set the
     # define in CFLAGS
     "CFLAGS=-DWITH_TIRPC"
+
+    # Makefile asserts these are set
+    "MAJOR=${lib.versions.major version}"
+    "MINOR=${lib.versions.minor version}"
+    "PATCH=${lib.versions.patch version}"
   ];
 
+  dontUseBmakeCheck = true;
+  dontUseBmakeInstall = true;
+  dontUseBmakeDist = true;
   postInstall =
     let
       inherit (addOpenGLRunpath) driverLink;
       libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
     in
     ''
-      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.1.9.0
+      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so*
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
   disallowedReferences = [ go ];
