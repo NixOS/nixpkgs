@@ -1,6 +1,6 @@
-{ lib, mkDerivation, cmake, fetchFromGitHub, fetchpatch, pkg-config
+{ lib, mkDerivation, cmake, fetchFromGitHub, fetchpatch, fetchurl, pkg-config
 , boost, exiv2, fftwFloat, gsl
-, ilmbase, lcms2, libraw, libtiff, openexr
+, lcms2, libraw, libtiff, openexr
 , qtbase, qtdeclarative, qttools, qtwebengine, eigen
 }:
 
@@ -21,13 +21,15 @@ mkDerivation rec {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/luminancehdr/-/raw/2e4a7321c7d20a52da104f4aa4dc76ac7224d94b/exiv2-0.28.patch";
       hash = "sha256-Hj+lqAd5VuTjmip8Po7YiGOWWDxnu4IMXOiEFBukXpk=";
     })
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/luminancehdr/-/raw/9d79fc89fed4726163502eb9767bab218dbfbb95/luminancehdr-openexr3.patch";
+      hash = "sha256-i8yuUvf0+BVCCIhNCw4oJofXDriqm2O5sUOwzhW8jjA=";
+    })
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   buildInputs = [
     qtbase qtdeclarative qttools qtwebengine eigen
-    boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
+    boost exiv2 fftwFloat gsl lcms2 libraw libtiff openexr
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
