@@ -92,10 +92,13 @@ self: super: {
     guardian
   ;
 
-  # Extensions needs the latest version of Cabal for its list of Haskell language
-  # extensions.
+  # Extensions wants the latest version of Cabal for its list of Haskell
+  # language extensions.
   extensions = super.extensions.override {
-    Cabal = self.Cabal_3_10_2_1;
+    Cabal =
+      if versionOlder self.ghc.version "9.6"
+      then self.Cabal_3_10_2_1
+      else null; # use GHC bundled version
   };
 
   #######################################
