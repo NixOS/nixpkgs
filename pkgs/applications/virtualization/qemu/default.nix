@@ -23,6 +23,7 @@
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
+, rutabagaSupport ? openGLSupport && !toolsOnly, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
     ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
+    ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
