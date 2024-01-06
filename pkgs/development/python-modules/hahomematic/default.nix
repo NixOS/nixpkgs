@@ -30,6 +30,8 @@ buildPythonPackage rec {
     hash = "sha256-cf7hucJJzA3AGBb03aPHkz4sGGYI7OAfki7b8wdgQLM=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "setuptools~=68.2" "setuptools" \
