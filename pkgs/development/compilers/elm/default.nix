@@ -8,7 +8,7 @@ let
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
   # Haskell packages that require ghc 9.2
-  hs96Pkgs = self: pkgs.haskell.packages.ghc92.override {
+  hs96Pkgs = self: pkgs.haskell.packages.ghc96.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
