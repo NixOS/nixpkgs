@@ -136,6 +136,7 @@ in
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
     virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+      opengl = lib.mkDefault false;
       qemu = {
         # Only use a serial console, no TTY.
         # NOTE: optionalAttrs
