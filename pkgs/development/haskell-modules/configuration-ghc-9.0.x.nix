@@ -79,12 +79,6 @@ self: super: {
   stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
   doctest = dontCheck super.doctest;
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  }) (doJailbreak super.language-haskell-extract);
-
   haskell-language-server = let
     # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
     # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`

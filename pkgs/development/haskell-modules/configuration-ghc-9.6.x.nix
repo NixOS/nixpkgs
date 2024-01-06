@@ -143,12 +143,6 @@ self: super: {
   # https://github.com/dreixel/syb/issues/40
   syb = dontCheck super.syb;
 
-  # Support for template-haskell >= 2.16
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
-
   # Patch 0.17.1 for support of mtl-2.3
   xmonad-contrib = appendPatch
     (pkgs.fetchpatch {
