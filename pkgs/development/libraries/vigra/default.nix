@@ -1,12 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , boost
 , cmake
 , fftw
 , fftwSinglePrec
 , hdf5
-, ilmbase
 , libjpeg
 , libpng
 , libtiff
@@ -28,7 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pFANoT00Wkh1/Dyd2x75IVTfyaoVA7S86tafUSr29Og=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  patches = [
+    # Support OpenEXR 3.x
+    # https://github.com/ukoethe/vigra/issues/496
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/vigra/raw/25fc581843ceffa0a7240cc5fed79f4af3fc94aa/f/vigra-openexr3.patch";
+      hash = "sha256-L6S7nEgR6duqIgg816+EAp6jKbzxiF/lGOThWJb/4Vw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -36,7 +43,6 @@ stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     hdf5
-    ilmbase
     libjpeg
     libpng
     libtiff
