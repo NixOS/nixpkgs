@@ -52,7 +52,7 @@
     # Except when:
     #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
     #    - static armv7l, where compilation fails.
-    && !(hostPlatform.isAarch && hostPlatform.isStatic)
+    && !(targetPlatform.isAarch && targetPlatform.isStatic)
   ) "pie"
 
 # Darwin code signing support utilities
