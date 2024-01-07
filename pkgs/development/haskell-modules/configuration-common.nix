@@ -234,6 +234,12 @@ self: super: {
     sha256 = "14gllipl28lqry73c5dnclsskzk1bsrrgazibl4lkl8z98j2csjb";
   }) super.leveldb-haskell;
 
+  # 2024-01-08: fix tests failure for fgl >= 5.8.1 https://github.com/koalaman/shellcheck/issues/2677
+  ShellCheck = appendPatch (fetchpatch {
+    url = "https://github.com/koalaman/shellcheck/commit/c05380d518056189412e12128a8906b8ca6f6717.patch";
+    hash = "sha256-FXZQ/D7ut84Yng2/denihDM8e+q04/t2LVALFbohfT0=";
+  }) super.ShellCheck;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
