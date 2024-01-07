@@ -99,6 +99,17 @@ in {
       type = types.nullOr types.path;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open etcd ports in the firewall.
+        Ports opened:
+        - 2379/tcp for client requests
+        - 2380/tcp for peer communication
+      '';
+    };
+
     peerCertFile = mkOption {
       description = lib.mdDoc "Cert file to use for peer to peer communication";
       default = cfg.certFile;
@@ -160,7 +171,10 @@ in {
     systemd.services.etcd = {
       description = "etcd key-value store";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ]
+        ++ lib.optional config.networking.firewall.enable "firewall.service";
+      wants = [ "network-online.target" ]
+        ++ lib.optional config.networking.firewall.enable "firewall.service";
 
       environment = (filterAttrs (n: v: v != null) {
         ETCD_NAME = cfg.name;
@@ -190,6 +204,8 @@ in {
 
       serviceConfig = {
         Type = "notify";
+        Restart = "always";
+        RestartSec = "30s";
         ExecStart = "${cfg.package}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
@@ -197,6 +213,13 @@ in {
     };
 
     environment.systemPackages = [ cfg.package ];
+
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [
+        2379 # for client requests
+        2380 # for peer communication
+      ];
+    };
 
     users.users.etcd = {
       isSystemUser = true;
