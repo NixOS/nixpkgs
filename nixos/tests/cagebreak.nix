@@ -37,6 +37,10 @@ in
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
   };
 
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+  };
+
   enableOCR = true;
 
   testScript = { nodes, ... }: let
