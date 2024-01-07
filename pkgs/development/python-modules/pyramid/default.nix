@@ -12,7 +12,7 @@
 , venusian
 , webob
 , zope-deprecation
-, zope_interface
+, zope-interface
 , pythonOlder
 }:
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     venusian
     webob
     zope-deprecation
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

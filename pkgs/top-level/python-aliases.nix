@@ -187,12 +187,14 @@ mapAliases ({
   graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grappelli_safe = grappelli-safe; # added 2023-10-08
+  groestlcoin_hash = groestlcoin-hash; # added 2024-01-06
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
   hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
+  hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hglib = python-hglib; # added 2023-10-13
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
@@ -219,6 +221,7 @@ mapAliases ({
   jinja2_pluralize = jinja2-pluralize; # added 2023-11-01
   jinja2_time = jinja2-time; # added 2022-11-07
   JPype1 = jpype1; # added 2023-02-19
+  jsonpath_rw = jsonpath-rw; # added 2024-01-06
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
   jupyter_console = jupyter-console; # added  2023-07-31
@@ -234,6 +237,7 @@ mapAliases ({
   langchainplus-sdk = langsmith; # added 2023-08-01
   lazr_config = lazr-config; # added 2023-11-03
   lazr_delegates = lazr-delegates; # added 2023-11-03
+  lazy_import = lazy-import; # added 2024-01-07
   lazy_imports = lazy-imports; # added 2023-10-13
   lektor = throw "lektor has been promoted to a top-level attribute"; # added 2023-08-01
   line_profiler = line-profiler; # added 2023-11-04
@@ -494,12 +498,20 @@ mapAliases ({
   zope_component = zope-component; # added 2023-07-28
   zope_configuration = zope-configuration; # added 2023-11-12
   zope_contenttype = zope-contenttype; # added 2023-10-11
+  zope_copy = zope-copy; # added 2024-01-06
   zope_deprecation = zope-deprecation; # added 2023-10-07
   zope_dottedname = zope-dottedname; # added 2023-11-12
+  zope_event = zope-event; # added 2024-01-06
   zope_exceptions = zope-exceptions; # added 2023-10-11
+  zope_filerepresentation = zope-filerepresentation; # added 2024-01-06
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
+  zope_interface = zope-interface; # added 2024-01-06
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
+  zope_location = zope-location; # added 2024-01-06
   zope_proxy = zope-proxy; # added 2023-10-07
+  zope_schema = zope-schema; # added 2024-01-06
+  zope_size = zope-size; # added 2024-01-06
   zope_testing = zope-testing; # added 2023-11-12
+  zope_testrunner = zope-testrunner; # added 2024-01-06
   zxing_cpp = zxing-cpp; # added 2023-11-05
 })
