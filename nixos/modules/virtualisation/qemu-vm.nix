@@ -1166,6 +1166,8 @@ in
       (mkIf pkgs.stdenv.hostPlatform.isx86 (mkMerge [
         [ "-usb" "-device usb-tablet,bus=usb-bus.0" ]
         (mkIf cfg.opengl [ "-vga none" "-device virtio-gpu-gl-pci" ])
+        # Use software rendering when opengl is required, but hardware acceleration is disabled
+        (mkIf (!cfg.opengl && config.hardware.opengl.enable) [ "-vga none" "-device virtio-gpu-pci" ])
       ]))
       (mkIf pkgs.stdenv.hostPlatform.isAarch (mkMerge [
         [ "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ]
