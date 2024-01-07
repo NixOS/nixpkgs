@@ -40,10 +40,6 @@ mkDerivation rec {
     sha256 = "sha256-z+udRjvAZbnu6EcvvdaFVCr0OKLxFBJbgoYpH9QjrDI=";
   };
 
-  cmakeFlags = [
-    "-DUSE_WEBKIT=off"
-  ];
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
