@@ -2697,10 +2697,6 @@ self: super: {
   # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
   tomland = doJailbreak super.tomland;
 
-  llvm-ffi = super.llvm-ffi.override {
-    LLVM = pkgs.llvmPackages_13.libllvm;
-  };
-
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
 
