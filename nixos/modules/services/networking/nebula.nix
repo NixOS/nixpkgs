@@ -259,7 +259,11 @@ in
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
       unique (flatten (mapAttrsToList (netName: netCfg: [netCfg.listen.port] ++ optional (netCfg.serveDns) netCfg.dns.port) enabledNetworks));
-
+assertions =
+      [ { assertion = !(!netcfg.isLighthouse && netcfg.serverDns)
+          message = "serveDns needs isLighthouse to be true";
+        }
+      ];
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
       {
