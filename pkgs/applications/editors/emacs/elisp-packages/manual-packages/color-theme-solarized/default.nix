@@ -38,6 +38,6 @@ melpaBuild {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samuelrivas AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
