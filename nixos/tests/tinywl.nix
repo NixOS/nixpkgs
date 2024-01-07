@@ -29,9 +29,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           touch /tmp/tinywl-exit-ok
         fi
       '';
+    };
 
-      # Switch to a different GPU driver (default: -vga std), otherwise TinyWL segfaults:
-      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    interactive.nodes.machine = {
+      virtualisation.opengl = true;
+      environment.variables = {
+        "WLR_NO_HARDWARE_CURSORS" = "1";
+      };
     };
 
     testScript = { nodes, ... }: ''
