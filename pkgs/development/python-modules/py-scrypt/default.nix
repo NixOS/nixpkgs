@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "scrypt";
+  pname = "py-scrypt";
   version = "0.8.20";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "scrypt";
+    inherit version;
     hash = "sha256-DSJsHGdE+y4wizkUEGabHfXP6CY3/8te1Im/grLS63g=";
   };
 

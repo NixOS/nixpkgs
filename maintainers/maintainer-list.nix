@@ -17018,6 +17018,12 @@
       fingerprint = "ADF4 C13D 0E36 1240 BD01  9B51 D1DE 6D7F 6936 63A5";
     }];
   };
+  Silver-Golden = {
+    name = "Brendan Golden";
+    email = "github+nixpkgs@brendan.ie";
+    github = "Silver-Golden";
+    githubId = 7858375;
+  };
   simarra = {
     name = "simarra";
     email = "loic.martel@protonmail.com";

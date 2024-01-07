@@ -4,12 +4,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sysv_ipc";
+  pname = "sysv-ipc";
   version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "sysv_ipc";
+    inherit version;
     sha256 = "0f063cbd36ec232032e425769ebc871f195a7d183b9af32f9901589ea7129ac3";
   };
 

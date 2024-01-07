@@ -605,6 +605,7 @@ in {
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
   nixos-rebuild-specialisations = handleTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};

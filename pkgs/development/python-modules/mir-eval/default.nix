@@ -9,12 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mir_eval";
+  pname = "mir-eval";
   version = "0.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "mir_eval";
+    inherit version;
     hash = "sha256-4f66pXZsZadUXCoXCyQUkPR6mJhzcLHgZ0JCTF3r5l4=";
   };
 

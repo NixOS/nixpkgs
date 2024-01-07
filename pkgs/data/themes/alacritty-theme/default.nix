@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (self: {
   sourceRoot = "${self.src.name}/themes";
   installPhase = ''
     runHook preInstall
-    install -Dt $out *.yaml
+    install -Dt $out *.toml
     runHook postInstall
   '';
 

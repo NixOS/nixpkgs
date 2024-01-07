@@ -3928,7 +3928,7 @@ self: super: with self; {
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
-  fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
+  fastnlo-toolkit = toPythonModule (pkgs.fastnlo-toolkit.override {
     withPython = true;
     inherit (self) python;
   });
@@ -6679,7 +6679,7 @@ self: super: with self; {
 
   m3u8 = callPackage ../development/python-modules/m3u8 { };
 
-  mac_alias = callPackage ../development/python-modules/mac_alias { };
+  mac-alias = callPackage ../development/python-modules/mac-alias { };
 
   mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
 
@@ -7047,7 +7047,7 @@ self: super: with self; {
 
   mip = callPackage ../development/python-modules/mip { };
 
-  mir_eval = callPackage ../development/python-modules/mir_eval { };
+  mir-eval = callPackage ../development/python-modules/mir-eval { };
 
   mirakuru = callPackage ../development/python-modules/mirakuru { };
 
@@ -11155,7 +11155,7 @@ self: super: with self; {
 
   pyscreeze = callPackage ../development/python-modules/pyscreeze { };
 
-  py_scrypt = callPackage ../development/python-modules/py_scrypt { };
+  py-scrypt = callPackage ../development/python-modules/py-scrypt { };
 
   pyscrypt = callPackage ../development/python-modules/pyscrypt { };
 
@@ -13328,6 +13328,14 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake-executor-plugin-cluster-generic = callPackage ../development/python-modules/snakemake-executor-plugin-cluster-generic { };
+
+  snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
+
+  snakemake-interface-executor-plugins = callPackage ../development/python-modules/snakemake-interface-executor-plugins { };
+
+  snakemake-interface-storage-plugins = callPackage ../development/python-modules/snakemake-interface-storage-plugins { };
+
   snakebite = callPackage ../development/python-modules/snakebite { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
@@ -13940,7 +13948,7 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
-  sysv_ipc = callPackage ../development/python-modules/sysv_ipc { };
+  sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
@@ -14277,8 +14285,6 @@ self: super: with self; {
   thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
 
   throttler = callPackage ../development/python-modules/throttler { };
-
-  thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };

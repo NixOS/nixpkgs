@@ -8,7 +8,11 @@ in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  # ghcjs does not use `llvmPackages` and exposes `null` attribute.
+  llvmPackages =
+    if self.ghc.llvmPackages != null
+    then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages
+    else null;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -84,13 +88,6 @@ self: super: {
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
-
-  # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    name = "language-haskell-extract-0.2.4.patch";
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
-    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
