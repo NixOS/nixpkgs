@@ -2672,6 +2672,10 @@ self: super: {
     })
   ];
 
+  # Too strict bounds on hspec < 2.11
+  fuzzyset_0_2_4 = doJailbreak super.fuzzyset_0_2_4;
+  swagger2 = doJailbreak super.swagger2;
+
   html-charset = dontCheck super.html-charset;
 
   # true-name-0.1.0.4 has been tagged, but has not been released to Hackage.
