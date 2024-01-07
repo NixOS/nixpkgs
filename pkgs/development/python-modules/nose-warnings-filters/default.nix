@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nose_warnings_filters";
+  pname = "nose-warnings-filters";
   version = "0.1.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "nose_warnings_filters";
+    inherit version;
     sha256 = "17dvfqfy2fm7a5cmiffw2dc3064kpx72fn5mlw01skm2rhn5nv25";
   };
 
