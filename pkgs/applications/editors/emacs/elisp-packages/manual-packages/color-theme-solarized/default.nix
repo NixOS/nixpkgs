@@ -1,26 +1,43 @@
 { lib
-, trivialBuild
-, fetchFromGitHub
 , color-theme
+, emacs
+, fetchFromGitHub
+, melpaBuild
+, writeText
 }:
 
-trivialBuild {
+let
   pname = "color-theme-solarized";
-  version = "0.pre+unstable=2017-10-24";
+  ename = "color-theme-solarized";
+  version = "20230209.837";
 
   src = fetchFromGitHub {
     owner = "sellout";
     repo = "emacs-color-theme-solarized";
-    rev = "f3ca8902ea056fb8e46cb09f09c96294e31cd4ee";
-    hash = "sha256-oxX0lo6sxotEiR3nPrKPE9H01HKB3ohB/p8eEHFTp5k=";
+    rev = "b186e5d62d0b83cbf5cf38f7eb7a199dea9a3ee3";
+    hash = "sha256-7E8r56dzfD06tsQEnqU5mWSbwz9x9QPbzken2J/fhlg=";
   };
+in
+melpaBuild {
+  inherit pname ename version src;
 
-  packageRequires = [ color-theme ];
+  packageRequires = [
+    emacs
+    color-theme
+  ];
 
-  meta = with lib; {
+  commit = src.rev;
+
+  recipe = writeText "recipe" ''
+    (color-theme-solarized
+     :repo "sellout/emacs-color-theme-solarized"
+     :fetcher github)
+  '';
+
+  meta =  {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuelrivas AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuelrivas AndersonTorres ];
   };
 }
