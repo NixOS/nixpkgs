@@ -6,7 +6,6 @@
 , isPyPy
 , pythonOlder
 
-# https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
 , certifi
 , pkg-config
@@ -182,8 +181,10 @@ buildPythonPackage rec {
 
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
-  # Matplotlib needs to be built against a specific version of freetype in
-  # order for all of the tests to pass.
+  # Encountering a ModuleNotFoundError, as describved and investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
+  # which may fail due to a freetype version that doesn't match the freetype
+  # version used by upstream.
   doCheck = false;
 
   meta = with lib; {
