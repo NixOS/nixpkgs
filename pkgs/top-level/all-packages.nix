@@ -9803,7 +9803,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
+  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
   keepmenu = callPackage ../applications/misc/keepmenu { };
 
@@ -26073,17 +26073,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_3_10 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.10"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_3_11 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.11"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_3_11;
+  sbcl_2_4_0 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.4.0"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_0;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -28137,10 +28137,6 @@ with pkgs;
   # Testing (rc) kernel
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
-
-  # FIXME: Remove and alias to `linux(Packages)_testing`` after 23.11 is released
-  linuxPackages_testing_bcachefs = linuxKernel.packages.linux_testing_bcachefs;
-  linux_testing_bcachefs = linuxKernel.kernels.linux_testing_bcachefs;
 
   # Realtime kernel
   linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
@@ -35747,10 +35743,9 @@ with pkgs;
 
   tessen = callPackage ../tools/security/tessen { };
 
-  inherit (lib.mapAttrs (_: disable-warnings-if-gcc13)
-    (callPackage ../applications/graphics/tesseract {
-      inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
-    }))
+  inherit (callPackage ../applications/graphics/tesseract {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+  })
     tesseract3
     tesseract4
     tesseract5;
@@ -37098,7 +37093,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  ledger_agent = with python3Packages; toPythonApplication ledger_agent;
+  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
@@ -37521,6 +37516,8 @@ with pkgs;
   bastet = callPackage ../games/bastet { };
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
+
+  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
 
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;

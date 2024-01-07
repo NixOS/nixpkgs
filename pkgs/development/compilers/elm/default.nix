@@ -282,8 +282,11 @@ in lib.makeScope pkgs.newScope (self: with self; {
         }
       );
 
-      elm-land = nodePkgs."elm-land".overrideAttrs (
-        old: {
+      elm-land =
+        let
+          patched = patchNpmElm nodePkgs.elm-land;
+        in
+        patched.override (old: {
           meta = with lib; nodePkgs."elm-land".meta // {
             description = "A production-ready framework for building Elm applications.";
             homepage = "https://elm.land/";

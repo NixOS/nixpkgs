@@ -20,7 +20,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libuv
 , libuuid
 , libselinux
 , libXdmcp
@@ -80,7 +79,6 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libuv
     libuuid
     libselinux
     libsepol

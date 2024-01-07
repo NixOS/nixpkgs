@@ -9825,6 +9825,20 @@ with self; {
     };
   };
 
+  FileFcntlLock = buildPerlPackage {
+    pname = "File-FcntlLock";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JT/JTT/File-FcntlLock-0.22.tar.gz";
+      hash = "sha256-mpq7Lv/5Orc3QaEo0/cA5SUnNUbBXQTnxRxwSrCdvN8=";
+    };
+    meta = {
+      description = "File locking with fcntl(2)";
+      license = with lib.licenses; [ artistic1 ];
+      maintainers = with maintainers; [ ajs124 das_j ];
+    };
+  };
+
   FileGrep = buildPerlPackage {
     pname = "File-Grep";
     version = "0.02";
