@@ -2764,8 +2764,4 @@ self: super: {
     ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
   });
 
-  # 2024-01-01: Too strict bounds on megaparsec
-  # Fixed in 0.2.8: https://github.com/PostgREST/configurator-pg/pull/20
-  configurator-pg = doJailbreak super.configurator-pg;
-
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
