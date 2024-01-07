@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+    # prevent infinite recursion for the darwin stdenv
+    ./0002-Revert-Avoid-crash-on-macOS-14.patch
   ];
 
   outputs = [ "out" "man" "doc" "info" ];
