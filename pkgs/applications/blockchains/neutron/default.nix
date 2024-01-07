@@ -32,19 +32,12 @@
   ];
 
   meta = with lib; {
-    description = "Neutron node";
+    description = "Neutron's node manager";
 
     longDescription = ''
-      Neutron node to interact with neutron blockchain
+      neutrond is a tool to interact with Neutron blockchain
     '';
 
     homepage = "https://github.com/neutron-org/neutron";
-
-    license = licenses.asl20; # Apache license
-
-    maintainers = with maintainers; [
-      pr0n00gler
-      foxpy
-    ];
   };
 }
