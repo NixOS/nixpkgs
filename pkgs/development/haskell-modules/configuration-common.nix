@@ -1982,6 +1982,10 @@ self: super: {
     pandoc-lua-engine
     ;
 
+  # Doesn't work without typst-symbols >= 0.1.5 which conflicts with Stackage
+  # TODO(@sternenseemann): clean up with Stackage LTS 22
+  typst = dontDistribute super.typst;
+
   crypton-x509 =
     lib.pipe
       super.crypton-x509
