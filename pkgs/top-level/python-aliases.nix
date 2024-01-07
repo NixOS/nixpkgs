@@ -349,6 +349,7 @@ mapAliases ({
   Pyro5 = pyro5; # added 2023-02-19
   PyRSS2Gen = pyrss2gen; # added 2023-02-19
   pyruckus = throw "pyruckus has been removed, it was deprecrated in favor of aioruckus."; # added 2023-09-07
+  py_scrypt = py-scrypt; # added 2024-01-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
