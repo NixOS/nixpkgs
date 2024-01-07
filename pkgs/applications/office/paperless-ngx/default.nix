@@ -211,7 +211,7 @@ python.pkgs.buildPythonApplication rec {
     whitenoise
     whoosh
     zipp
-    zope_interface
+    zope-interface
     zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis

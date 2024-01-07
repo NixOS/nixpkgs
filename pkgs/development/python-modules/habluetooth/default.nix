@@ -11,13 +11,12 @@
 , bluetooth-adapters
 , bluetooth-auto-recovery
 , bluetooth-data-tools
-, home-assistant-bluetooth
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vUq3WVo9dAt4Q/oid9ixLwI6v6jCavRU9FZYR6t6TzI=";
+    hash = "sha256-3HyFKg+JR48MQrWmOjOQV2qhVHRHLnJHvtvBajXPDMg=";
   };
 
   postPatch = ''
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     bluetooth-adapters
     bluetooth-auto-recovery
     bluetooth-data-tools
-    home-assistant-bluetooth
   ];
 
   nativeCheckInputs = [

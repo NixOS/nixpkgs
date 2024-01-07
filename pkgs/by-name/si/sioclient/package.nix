@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "sioclient";
-  version = "unstable-2023-02-13";
+  version = "3.1.0-unstable-2023-11-10";
 
   src = fetchFromGitHub {
     owner = "socketio";
     repo = "socket.io-client-cpp";
-    rev = "b10474e3eaa6b27e75dbc1382ac9af74fdf3fa85";
-    hash = "sha256-bkuFA6AvZvBpnO6Lixqx8Ux5Dy5NHWGB2y1VF7allC0=";
+    rev = "0dc2f7afea17a0e5bfb5e9b1e6d6f26ab1455cef";
+    hash = "sha256-iUKWDv/CS2e68cCSM0QUobkfz2A8ZjJ7S0zw7rowQJ0=";
   };
 
   nativeBuildInputs = [

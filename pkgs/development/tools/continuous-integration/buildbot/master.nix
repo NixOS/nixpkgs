@@ -9,7 +9,7 @@
 , twisted
 , jinja2
 , msgpack
-, zope_interface
+, zope-interface
 , sqlalchemy
 , alembic
 , python-dateutil
@@ -85,7 +85,7 @@ let
       twisted
       jinja2
       msgpack
-      zope_interface
+      zope-interface
       sqlalchemy
       alembic
       python-dateutil

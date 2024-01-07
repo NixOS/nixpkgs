@@ -1,5 +1,6 @@
-{ trivialBuild, fetchFromGitHub, pkgs, lib, }:
-trivialBuild {
+{ fetchFromGitHub, melpaBuild, pkgs, lib, substituteAll, writeText }:
+
+melpaBuild {
   pname = "codeium";
   version = "1.6.13";
   src = fetchFromGitHub {
@@ -8,13 +9,21 @@ trivialBuild {
     rev = "1.6.13";
     hash = "sha256-CjT21GhryO8/iM0Uzm/s/I32WqVo4M3tSlHC06iEDXA=";
   };
-
+  commit = "02f9382c925633a19dc928e99b868fd5f6947e58";
   buildInputs = [ pkgs.codeium ];
 
-  patches = [ ./codeium.el.patch ];
-  postPatch = ''
-    substituteInPlace codeium.el --subst-var-by codeium ${pkgs.codeium}/bin/codeium_language_server
+  recipe = writeText "recipe" ''
+    (codeium
+      :repo "Exafunction/codeium.el"
+      :fetcher github)
   '';
+
+  patches = [
+    (substituteAll {
+      src = ./codeium.el.patch;
+      codeium = "${pkgs.codeium}/bin/codeium_language_server";
+    })
+  ];
 
   meta = {
     description = "Free, ultrafast Copilot alternative for Emacs";
