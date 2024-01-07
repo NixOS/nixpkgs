@@ -2655,8 +2655,8 @@ self: super: {
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
-  # 2023-12-20: Needs newer hasql-pool package and extra dependencies
   postgrest = lib.pipe super.postgrest [
+    # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
     # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
     doJailbreak
