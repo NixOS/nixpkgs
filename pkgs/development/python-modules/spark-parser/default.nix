@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "spark_parser";
+  pname = "spark-parser";
   version = "1.8.9";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "spark_parser";
+    inherit version;
     sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
   };
 
