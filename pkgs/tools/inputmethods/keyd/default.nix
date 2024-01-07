@@ -5,6 +5,7 @@
 , runtimeShell
 , python3
 , nixosTests
+, makeWrapper
 }:
 
 let
@@ -27,6 +28,14 @@ let
     postPatch = ''
       substituteInPlace scripts/${pname} \
         --replace /bin/sh ${runtimeShell}
+      substituteInPlace scripts/${pname} \
+        --replace "CONFIG_PATH = os.getenv('HOME')+'/.config/keyd/app.conf'" "CONFIG_PATH = '/etc/keyd/application-mapper/app.conf'"
+      substituteInPlace scripts/${pname} \
+        --replace "LOCKFILE = os.getenv('HOME')+'/.config/keyd/app.lock'" "LOCKFILE = '/etc/keyd/application-mapper/app.lock'"
+      substituteInPlace scripts/${pname} \
+        --replace "LOGFILE = os.getenv('HOME')+'/.config/keyd/app.log'" "LOGFILE = '/etc/keyd/application-mapper/app.log'"
+      substituteInPlace scripts/${pname} \
+        --replace "~/.config/keyd/app.conf" "/etc/keyd/application-mapper/app.conf"
     '';
 
     propagatedBuildInputs = with pypkgs; [ xlib ];
@@ -57,13 +66,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ systemd ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   enableParallelBuilding = true;
 
   # post-2.4.2 may need this to unbreak the test
   # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
 
   postInstall = ''
-    ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
+    makeWrapper ${appMap}/bin/${appMap.pname} $out/bin/keyd-application-mapper
     rm -rf $out/etc
   '';
 
