@@ -14,7 +14,7 @@ rec {
     *   changedVBox = pkgs.virtuabox.overrideAttrs (old: {
     *      src = path/to/vbox/sources;
     *   }
-    * - use `mkCheckpointedBuild changedVBox buildOutput`
+    * - use `mkCheckpointBuild changedVBox incrementalBuildArtifacts`
     * - enjoy shorter build times
   */
   prepareCheckpointBuild = drv: drv.overrideAttrs (old: {
@@ -49,9 +49,9 @@ rec {
     * Usage:
     * let
     *   checkpointArtifacts = prepareCheckpointBuild drv
-    * in mkCheckpointedBuild drv checkpointArtifacts
+    * in mkCheckpointBuild drv checkpointArtifacts
   */
-  mkCheckpointedBuild = drv: previousBuildArtifacts: drv.overrideAttrs (old: {
+  mkCheckpointBuild = drv: previousBuildArtifacts: drv.overrideAttrs (old: {
     # The actual checkpoint build phase.
     # We compare the changed sources from a previous build with the current and create a patch
     # Afterwards we clean the build directory to copy the previous output files (Including the sources)
@@ -66,4 +66,8 @@ rec {
       patch -p 1 -i sourceDifference.patch
     '';
   });
+
+  mkCheckpointedBuild = pkgs.lib.warn
+    "`mkCheckpointedBuild` is deprecated, use `mkCheckpointBuild` instead!"
+    mkCheckpointBuild;
 }

@@ -18,7 +18,7 @@ changedVBox = pkgs.virtualbox.overrideAttrs (old: {
   src = path/to/vbox/sources;
 }
 ```
-  - use `mkCheckpointedBuild changedVBox buildOutput`
+  - use `mkCheckpointBuild changedVBox incrementalBuildArtifacts`
   - enjoy shorter build times
 
 ## Example {#sec-checkpoint-build-example}
