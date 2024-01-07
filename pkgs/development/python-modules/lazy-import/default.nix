@@ -6,12 +6,13 @@
 , six }:
 
 buildPythonPackage rec {
-  pname = "lazy_import";
+  pname = "lazy-import";
   version = "0.2.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "lazy_import";
+    inherit version;
     sha256 = "0gca9xj60qr3aprj9qdc66crr4r7hl8wzv6gc9y40nclazwawj91";
   };
 
