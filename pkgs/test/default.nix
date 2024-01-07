@@ -117,7 +117,7 @@ with pkgs;
 
   install-shell-files = callPackage ./install-shell-files {};
 
-  checkpoint-build = callPackage ./checkpointBuild {};
+  checkpointBuildTools = callPackage ./checkpointBuild {};
 
   kernel-config = callPackage ./kernel.nix {};
 
