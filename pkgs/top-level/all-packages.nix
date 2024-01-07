@@ -21263,6 +21263,8 @@ with pkgs;
 
   flint = callPackage ../development/libraries/flint { };
 
+  flint3 = callPackage ../development/libraries/flint/3.nix { };
+
   flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk {
