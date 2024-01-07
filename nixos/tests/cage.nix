@@ -20,6 +20,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
     };
   };
 
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+  };
+
   enableOCR = true;
 
   testScript = { nodes, ... }: let
