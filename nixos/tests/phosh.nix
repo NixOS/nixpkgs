@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...}: let
+import ./make-test-python.nix ({ pkgs, ... }: let
   pin = "1234";
 in {
   name = "phosh";
@@ -25,15 +25,12 @@ in {
         };
       };
 
-      systemd.services.phosh = {
-        environment = {
-          # Accelerated graphics fail on phoc 0.20 (wlroots 0.15)
-          "WLR_RENDERER" = "pixman";
-        };
-      };
-
       virtualisation.resolution = { x = 720; y = 1440; };
     };
+  };
+
+  interactive.nodes.phone = {
+    virtualisation.opengl = true;
   };
 
   enableOCR = true;
