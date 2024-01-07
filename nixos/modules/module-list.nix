@@ -497,6 +497,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
@@ -1175,6 +1176,7 @@
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
+  ./services/security/bitwarden-directory-connector-cli.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
