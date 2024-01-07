@@ -735,7 +735,6 @@ dont-distribute-packages:
  - cabal-cargs
  - cabal-flatpak
  - cabal-helper
- - cabal-plan-bounds
  - cabal-query
  - cabal-test
  - cabal2arch

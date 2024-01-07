@@ -595,7 +595,6 @@ broken-packages:
   - cabal-meta # failure in job https://hydra.nixos.org/build/233194466 at 2023-09-02
   - cabal-mon # failure in job https://hydra.nixos.org/build/233217320 at 2023-09-02
   - cabal-nirvana # failure in job https://hydra.nixos.org/build/233222083 at 2023-09-02
-  - cabal-plan # failure in job https://hydra.nixos.org/build/233223914 at 2023-09-02
   - cabal-progdeps # failure in job https://hydra.nixos.org/build/233251917 at 2023-09-02
   - cabalQuery # failure in job https://hydra.nixos.org/build/233211475 at 2023-09-02
   - CabalSearch # failure in job https://hydra.nixos.org/build/233200817 at 2023-09-02
@@ -1585,7 +1584,6 @@ broken-packages:
   - file-command-qq # failure in job https://hydra.nixos.org/build/233205913 at 2023-09-02
   - filediff # failure in job https://hydra.nixos.org/build/233256056 at 2023-09-02
   - file-embed-poly # failure in job https://hydra.nixos.org/build/233252504 at 2023-09-02
-  - file-io # failure in job https://hydra.nixos.org/build/233192040 at 2023-09-02
   - file-location # failure in job https://hydra.nixos.org/build/233202456 at 2023-09-02
   - FileManipCompat # failure in job https://hydra.nixos.org/build/233254887 at 2023-09-02
   - FileManip # failure in job https://hydra.nixos.org/build/233237292 at 2023-09-02

@@ -65,42 +65,9 @@ self: super: {
   # Version deviations from Stackage LTS
   #
 
-  doctest = doDistribute super.doctest_0_22_2;
-  http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
-  some = doDistribute self.some_1_0_6;
-  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
-  th-desugar = doDistribute self.th-desugar_1_16;
-  semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
-  bifunctors = doDistribute self.bifunctors_5_6_1;
-  base-compat = doDistribute self.base-compat_0_13_1;
-  base-compat-batteries = doDistribute self.base-compat-batteries_0_13_1;
-  fgl = doDistribute self.fgl_5_8_2_0;
-
-  # Because we bumped the version of th-abstraction above.^
-  aeson = doJailbreak super.aeson;
-  free = doJailbreak super.free;
-
-  # Because we bumped the version of base-compat above.^
-  cabal-plan = unmarkBroken super.cabal-plan;
-  cabal-plan-bounds = unmarkBroken super.cabal-plan-bounds;
-
-  # Requires filepath >= 1.4.100.0 <=> GHC >= 9.6
-  file-io = unmarkBroken super.file-io;
-
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/pull/21
   th-extras = doJailbreak super.th-extras;
-
-  ghc-lib = doDistribute self.ghc-lib_9_6_3_20231121;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231121;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
-
-  fourmolu = doDistribute self.fourmolu_0_14_0_0;
-  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-  hlint = super.hlint_3_6_1;
-
-  # v0.1.6 forbids base >= 4.18
-  singleton-bool = doDistribute super.singleton-bool_0_1_7;
 
   #
   # Too strict bounds without upstream fix
@@ -159,46 +126,18 @@ self: super: {
     })
     super.arbtt;
 
-  # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
-  #
-  haskell-language-server = super.haskell-language-server.override {
-      hls-floskell-plugin = null;
-    };
-
-  # Newer version of servant required for GHC 9.6
-  servant = self.servant_0_20_1;
-  servant-server = self.servant-server_0_20;
-  servant-client = self.servant-client_0_20;
-  servant-client-core = self.servant-client-core_0_20;
-  # Select versions compatible with servant_0_20_1
-  servant-docs = self.servant-docs_0_13;
-  servant-swagger = self.servant-swagger_1_2;
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
-
-  # Jailbreak strict upper bounds: http-api-data <0.6
-  servant_0_20_1 = doJailbreak super.servant_0_20_1;
-  servant-server_0_20 = doJailbreak super.servant-server_0_20;
-  servant-client_0_20 = doJailbreak super.servant-client_0_20;
-  servant-client-core_0_20 = doJailbreak super.servant-client-core_0_20;
-  # Jailbreak strict upper bounds: doctest <0.22
-  servant-swagger_1_2 = doJailbreak super.servant-swagger_1_2;
 
   lifted-base = dontCheck super.lifted-base;
   hw-fingertree = dontCheck super.hw-fingertree;
   hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
-  rebase = doJailbreak super.rebase_1_20_2;
-  rerebase = doJailbreak super.rerebase_1_20_2;
   hiedb = dontCheck super.hiedb;
   retrie = dontCheck super.retrie;
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck (doJailbreak super.relude);
-
-  ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
-   HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
-  ]) super.ghc-exactprint_1_7_0_1);
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin

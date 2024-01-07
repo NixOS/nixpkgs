@@ -34,8 +34,6 @@ self: super: {
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
         {
-          # Needs to be upgraded compared to Stackage LTS 21
-          cabal-install-solver = cself.cabal-install-solver_3_10_2_1;
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
@@ -314,10 +312,6 @@ self: super: {
   # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
 
-  # Overriding the version pandoc dependency uses as the latest release has version bounds
-  # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_11; };
-
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
   # negatively affect any other packages, at least currently...
@@ -518,9 +512,6 @@ self: super: {
 
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
-
-  # Requires alex >= 3.4
-  jacinda = super.jacinda.override { alex = self.alex_3_4_0_1; };
 
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
@@ -1250,32 +1241,6 @@ self: super: {
     tls = self.tls_1_9_0;
   };
 
-  stack =
-    lib.pipe
-      super.stack
-      [
-        (self.generateOptparseApplicativeCompletions [ "stack" ])
-
-        # stack-2.13.1 requires a bunch of the latest packages.
-        (drv: drv.overrideScope (hfinal: hprev: {
-          ansi-terminal = hfinal.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
-          crypton = hfinal.crypton_0_34; # needs crypton >= 0.33
-          hedgehog = doJailbreak hprev.hedgehog; # has too strict version bound for ansi-terminal
-          hpack = hfinal.hpack_0_36_0; # needs hpack == 0.36.0
-          http-client-tls = hfinal.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
-          http-download = hfinal.http-download_0_2_1_0; # needs http-download >= 0.2.1.0
-          optparse-applicative = hfinal.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
-          pantry = hfinal.pantry_0_9_3_1; # needs pantry >= 0.9.2
-          syb = dontCheck hprev.syb; # cyclic dependencies
-          tar-conduit = hfinal.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
-          temporary = dontCheck hprev.temporary; # cyclic dependencies
-        }))
-      ];
-
-  hopenpgp-tools = super.hopenpgp-tools.override {
-    optparse-applicative = self.optparse-applicative_0_18_1_0;
-  };
-
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
@@ -1700,6 +1665,12 @@ self: super: {
     doCheck = false;
   }) super.hcoord;
 
+  # Break infinite recursion via tasty
+  temporary = dontCheck super.temporary;
+
+  # Break infinite recursion via doctest-lib
+  utility-ht = dontCheck super.utility-ht;
+
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
@@ -1785,23 +1756,6 @@ self: super: {
   # Strange doctest problems
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
-
-  # Give latest hspec correct dependency versions without overrideScope
-  hspec_2_11_7 = doDistribute (super.hspec_2_11_7.override {
-    hspec-discover = self.hspec-discover_2_11_7;
-    hspec-core = self.hspec-core_2_11_7;
-  });
-  hspec-meta_2_11_7 = doDistribute (super.hspec-meta_2_11_7.override {
-    hspec-expectations = self.hspec-expectations_0_8_4;
-  });
-  hspec-discover_2_11_7 = doDistribute (super.hspec-discover_2_11_7.override {
-    hspec-meta = self.hspec-meta_2_11_7;
-  });
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_7
-  # is overlayed to hspec-core.
-  hspec-core_2_11_7 = doDistribute (dontCheck (super.hspec-core_2_11_7.override {
-    hspec-expectations = self.hspec-expectations_0_8_4;
-  }));
 
   # Point hspec 2.7.10 to correct dependencies
   hspec_2_7_10 = super.hspec_2_7_10.override {
@@ -1941,50 +1895,6 @@ self: super: {
 
   # test suite doesn't compile anymore due to changed hunit/tasty APIs
   fullstop = dontCheck super.fullstop;
-
-  # https://github.com/jgm/pandoc/issues/7163
-  pandoc = dontCheck super.pandoc;
-
-  # Since pandoc-3, the actual `pandoc` executable is in the pandoc-cli
-  # package.  It is no longer distributed in the pandoc package itself.  So for
-  # people that want to use the `pandoc` cli tool, they must use pandoc-cli.
-  #
-  # The unfortunate thing is that LTS-21 includes no possible build plan for
-  # pandoc-cli, because pandoc-cli pandoc-lua-engine are not in LTS 21.
-  # To get pandoc-lua-engine building we need either to downgrade a ton
-  # of hslua-module-* packages from stackage or use pandoc 3.1 although
-  # LTS contains pandoc 3.0.
-  inherit (let
-    pandoc-cli-overlay = self: super: {
-      # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_11;
-
-      # pandoc depends on http-client-tls, which only starts depending
-      # on crypton-connection in http-client-tls-0.3.6.2.
-      http-client-tls = self.http-client-tls_0_3_6_3;
-
-      # pandoc depends on skylighting >= 0.14
-      skylighting = self.skylighting_0_14_1;
-      skylighting-core = self.skylighting-core_0_14_1;
-
-      # pandoc needs up to date typst
-      typst-symbols = self.typst-symbols_0_1_5;
-      # and texmath to match
-      texmath = self.texmath_0_12_8_6;
-    };
-  in {
-    pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_11 = doDistribute (super.pandoc_3_1_11.overrideScope pandoc-cli-overlay);
-    pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
-  })
-    pandoc-cli
-    pandoc_3_1_11
-    pandoc-lua-engine
-    ;
-
-  # Doesn't work without typst-symbols >= 0.1.5 which conflicts with Stackage
-  # TODO(@sternenseemann): clean up with Stackage LTS 22
-  typst = dontDistribute super.typst;
 
   crypton-x509 =
     lib.pipe
@@ -2743,9 +2653,7 @@ self: super: {
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
   # 2023-12-20: Needs newer hasql-pool package and extra dependencies
-  postgrest = lib.pipe (super.postgrest.overrideScope (lself: lsuper: {
-    hasql-pool = lself.hasql-pool_0_10_0_1;
-  })) [
+  postgrest = lib.pipe super.postgrest [
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
     # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
     doJailbreak
@@ -2842,11 +2750,6 @@ self: super: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.git];
   }) super.kmonad;
 
-  # Both of these need specific versions of ghc-lib-parser, the minor releases
-  # seem to be tied.
-  ghc-syntax-highlighter_0_0_10_0 = super.ghc-syntax-highlighter_0_0_10_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_6_3_20231121;
-  });
   ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231121;
   });
@@ -2855,7 +2758,6 @@ self: super: {
   # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
   # transitively pulls in
   ihaskell = super.ihaskell.overrideScope (self: super: {
-    ipython-kernel = self.ipython-kernel_0_11_0_0;
     ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
   });
 

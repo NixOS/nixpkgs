@@ -655,6 +655,8 @@ self: super: builtins.intersectAttrs super {
   # tests require working stack installation with all-cabal-hashes cloned in $HOME
   stackage-curator = dontCheck super.stackage-curator;
 
+  stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
+
   # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
   io-streams = enableCabalFlag "NoInteractiveTests" super.io-streams;
 
@@ -1228,11 +1230,9 @@ self: super: builtins.intersectAttrs super {
 
     {
       fourmolu = fourmoluTestFix super.fourmolu;
-      fourmolu_0_14_0_0 = fourmoluTestFix super.fourmolu_0_14_0_0;
       fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
     })
     fourmolu
-    fourmolu_0_14_0_0
     fourmolu_0_14_1_0
     ;
 
