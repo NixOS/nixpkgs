@@ -14256,8 +14256,6 @@ self: super: with self; {
 
   throttler = callPackage ../development/python-modules/throttler { };
 
-  thumborPexif = callPackage ../development/python-modules/thumborpexif { };
-
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
