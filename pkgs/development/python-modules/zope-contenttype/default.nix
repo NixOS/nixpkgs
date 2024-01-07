@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_testrunner
+, zope-testrunner
 , pytestCheckHook
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    zope_testrunner
+    zope-testrunner
   ];
 
   pythonImportsCheck = [

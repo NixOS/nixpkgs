@@ -7,7 +7,7 @@
 , pythonOlder
 , sphinxHook
 , sphinx-rtd-theme
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     setuptools
     sphinxHook
     sphinx-rtd-theme
-    zope_interface
+    zope-interface
   ];
 
   passthru.optional-dependencies.crypto = [

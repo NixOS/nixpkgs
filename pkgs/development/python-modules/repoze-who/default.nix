@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, zope_interface
+, zope-interface
 , webob
 , pytestCheckHook
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ zope_interface webob ];
+  propagatedBuildInputs = [ zope-interface webob ];
 
   nativeCheckInputs = [
     pytestCheckHook

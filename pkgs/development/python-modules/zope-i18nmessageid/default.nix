@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_testrunner
+, zope-testrunner
 , unittestCheckHook
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-    zope_testrunner
+    zope-testrunner
   ];
 
   unittestFlagsArray = [
