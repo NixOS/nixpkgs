@@ -13,17 +13,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-wt2eDCNZAss3zSqvXeKTlsrPfj8pMXKWa3Yb33uuW0M=";
 
-  preCheck = let
-    skippedTests = [
-      "TestBacktracking"
-      "TestInconsistentLabelsE2E"
-      "TestIssue111"
-      "TestIssue61"
-      "TestIssue90"
-    ];
-  in ''
-    buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-  '';
+  checkFlags =
+    let
+      skippedTests = [
+        "TestBacktracking"
+        "TestInconsistentLabelsE2E"
+        "TestIssue111"
+        "TestIssue61"
+        "TestIssue90"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) graphite; };
 

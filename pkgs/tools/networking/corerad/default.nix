@@ -17,12 +17,8 @@ buildGoModule rec {
   # we fetch the expected tag's timestamp from a file in the root of the
   # repository.
   preBuild = ''
-    buildFlagsArray=(
-      -ldflags="
-        -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)
-        -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
-      "
-    )
+    ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}"
+    ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)"
   '';
 
   passthru.tests = {
