@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.8.1";
+  version = "0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-Bbwq4Ods3P/724KO94jSmMLD1ubfaMHP/gTlOL/2pnE=";
+    hash = "sha256-ISd+J7R8qZ0NXdlyHMj+torzr+541UAhNCSaUH8ytSQ=";
   };
 
   nativeBuildInputs = [
