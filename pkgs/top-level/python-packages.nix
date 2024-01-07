@@ -6670,7 +6670,7 @@ self: super: with self; {
 
   m3u8 = callPackage ../development/python-modules/m3u8 { };
 
-  mac_alias = callPackage ../development/python-modules/mac_alias { };
+  mac-alias = callPackage ../development/python-modules/mac-alias { };
 
   mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
 
