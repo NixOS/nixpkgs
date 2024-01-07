@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, linear_operator
+, linear-operator
 , scikit-learn
 , setuptools
 , setuptools-scm
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    linear_operator
+    linear-operator
     scikit-learn
     torch
   ];
