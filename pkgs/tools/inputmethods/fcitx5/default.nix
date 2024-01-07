@@ -20,7 +20,7 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
+, libuv
 , libuuid
 , libselinux
 , libXdmcp
@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-HclPnxeDtWzlyOEXKgTrypiHVJezuUCBhfUW+9ytPVg=";
+    hash = "sha256-UZr+Ee8oNSKTv0zzuhVKDzjNaai9QaFHYMpAqzcbwrE=";
   };
 
   prePatch = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
+    libuv
     libuuid
     libselinux
     libsepol
