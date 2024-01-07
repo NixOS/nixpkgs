@@ -14,12 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ufoLib2";
+  pname = "ufolib2";
   version = "0.16.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ufoLib2";
+    inherit version;
     hash = "sha256-SfDcf3LMrP5/rv4NU9N5cdRWZNiwVj7zaVb6e/pVor0=";
   };
 
