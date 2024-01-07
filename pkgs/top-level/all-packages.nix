@@ -28718,8 +28718,6 @@ with pkgs;
 
   fira-go = callPackage ../data/fonts/fira-go { };
 
-  fira-mono = callPackage ../data/fonts/fira-mono { };
-
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
