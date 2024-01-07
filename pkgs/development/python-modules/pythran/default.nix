@@ -36,7 +36,7 @@ in buildPythonPackage rec {
   ];
 
   # xsimd: unvendor this header-only C++ lib
-  postPatch = ''
+  postPatch = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform xsimd) ''
     rm -r third_party/xsimd
     ln -s '${lib.getDev xsimd}'/include/xsimd third_party/
   '';
