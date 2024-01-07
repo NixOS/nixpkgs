@@ -9858,7 +9858,7 @@ with pkgs;
 
   krakenx = callPackage ../tools/system/krakenx { };
 
-  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
+  partition-manager = libsForQt5.partitionmanager;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
