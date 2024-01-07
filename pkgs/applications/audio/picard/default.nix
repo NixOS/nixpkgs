@@ -14,7 +14,7 @@ let
   pythonPackages = python3Packages;
   pyqt5 =
     if enablePlayback then
-      pythonPackages.pyqt5_with_qtmultimedia
+      pythonPackages.pyqt5-multimedia
     else
       pythonPackages.pyqt5;
 in
