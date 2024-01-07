@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
   nodes.machine = { nodes, ... }: let
     user = nodes.machine.users.users.alice;
   in
-
     { imports = [ ./common/user-account.nix ];
 
       services.xserver.enable = true;
@@ -39,8 +38,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           };
         };
       };
-
     };
+
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+  };
 
   testScript = { nodes, ... }: let
     user = nodes.machine.users.users.alice;
