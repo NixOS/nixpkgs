@@ -12480,6 +12480,8 @@ self: super: with self; {
 
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
+  recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
