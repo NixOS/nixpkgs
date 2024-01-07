@@ -99,6 +99,7 @@ in buildPythonPackage {
     lapack
     pybind11
     pooch
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform xsimd) [
     xsimd
   ] ++ lib.optionals (pythonOlder "3.9") [
     libxcrypt
