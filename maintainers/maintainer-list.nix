@@ -16346,12 +16346,6 @@
       fingerprint = "79A1 CC17 67C7 32B6 A8A2  BF4F 71E0 8761 642D ACD2";
     }];
   };
-  samuelrivas = {
-    email = "samuelrivas@gmail.com";
-    github = "samuelrivas";
-    githubId = 107703;
-    name = "Samuel Rivas";
-  };
   samueltardieu = {
     email = "nixpkgs@sam.rfc1149.net";
     github = "samueltardieu";
