@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
   };
 
   nodes.machine = { ... }:
-
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
@@ -20,6 +19,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
       user = "alice";
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+  };
+
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
   };
 
   testScript = { nodes, ... }: let
