@@ -19,15 +19,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # For glinfo and wayland-info:
       systemPackages = with pkgs; [ mesa-demos wayland-utils alacritty ];
       # Use a fixed SWAYSOCK path (for swaymsg):
-      variables = {
-        "SWAYSOCK" = "/tmp/sway-ipc.sock";
-        # TODO: Investigate if we can get hardware acceleration to work (via
-        # virtio-gpu and Virgil). We currently have to use the Pixman software
-        # renderer since the GLES2 renderer doesn't work inside the VM (even
-        # with WLR_RENDERER_ALLOW_SOFTWARE):
-        # "WLR_RENDERER_ALLOW_SOFTWARE" = "1";
-        "WLR_RENDERER" = "pixman";
-      };
+      variables."SWAYSOCK" = "/tmp/sway-ipc.sock";
       # For convenience:
       shellAliases = {
         test-x11 = "glinfo | tee /tmp/test-x11.out && touch /tmp/test-x11-exit-ok";
@@ -70,6 +62,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # To test pinentry via gpg-agent:
     programs.gnupg.agent.enable = true;
+  };
+
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
   };
 
   testScript = { nodes, ... }: ''
