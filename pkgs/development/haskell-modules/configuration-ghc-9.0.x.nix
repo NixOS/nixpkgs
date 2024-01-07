@@ -79,7 +79,7 @@ self: super: {
   haskell-language-server =  throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_6);
 
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
   # https://github.com/ekmett/reflection/issues/51
