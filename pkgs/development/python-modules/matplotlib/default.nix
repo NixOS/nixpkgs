@@ -175,9 +175,8 @@ buildPythonPackage rec {
     libs = {
       system_freetype = true;
       system_qhull = true;
-    } // lib.optionalAttrs stdenv.isDarwin {
       # LTO not working in darwin stdenv, see #19312
-      enable_lto = false;
+      enable_lto = !stdenv.isDarwin;
     };
   };
 
