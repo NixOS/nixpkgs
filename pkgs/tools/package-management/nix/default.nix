@@ -4,7 +4,6 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
 , fetchpatch2
 , runCommand
@@ -236,6 +235,11 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-rapidcheck-shared
     ];
+  };
+
+  nix_2_19 = common {
+    version = "2.19.2";
+    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
   };
 
   # The minimum Nix version supported by Nixpkgs

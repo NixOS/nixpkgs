@@ -68,7 +68,7 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
-, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
 , libselinux
 }:
