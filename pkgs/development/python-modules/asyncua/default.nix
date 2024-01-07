@@ -12,14 +12,15 @@
 , python-dateutil
 , pythonOlder
 , pytz
+, setuptools
 , sortedcontainers
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "1.0.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eDrnDDiijkr5377BVWVAc5QEQCCDBoFynuT4MncCx9g=";
+    hash = "sha256-16OzTxYafK1a/WVH46bL7VhxNI+XpkPHi2agbArpHUk=";
     fetchSubmodules = true;
   };
 
@@ -41,6 +42,10 @@ buildPythonPackage rec {
     substituteInPlace tests/test_tools.py \
       --replace "tools/" "$out/bin/"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles

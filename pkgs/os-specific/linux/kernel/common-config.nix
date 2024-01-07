@@ -476,6 +476,9 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
+      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
+      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
       F2FS_FS             = module;
@@ -671,6 +674,8 @@ let
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
+
+      UDMABUF = whenAtLeast "4.20" yes;
 
       # VirtualBox guest drivers in the kernel conflict with the ones in the
       # official additions package and prevent the vboxsf module from loading,

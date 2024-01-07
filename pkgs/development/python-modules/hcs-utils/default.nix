@@ -1,12 +1,13 @@
 { lib, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
 
 buildPythonPackage rec {
-  pname = "hcs_utils";
+  pname = "hcs-utils";
   version = "2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "hcs_utils";
+    inherit version;
     sha256 = "04xq69hrys8lf9kp8pva0c4aphjjfw412km7c32ydkwq0i59rhp2";
   };
 

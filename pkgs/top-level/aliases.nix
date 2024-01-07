@@ -460,6 +460,7 @@ mapAliases ({
   kdeconnect = plasma5Packages.kdeconnect-kde; # Added 2020-10-28
   keepassx = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
   keepassx2 = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
+  keepkey_agent = keepkey-agent; # added 2024-01-06
   kerberos = libkrb5; # moved from top-level 2021-03-14
   kexectools = kexec-tools; # Added 2021-09-03
   keysmith = libsForQt5.kdeGear.keysmith; # Added 2021-07-14
@@ -484,6 +485,7 @@ mapAliases ({
   larynx = piper-tts; # Added 2023-05-09
   latinmodern-math = lmmath;
   ldgallery = throw "'ldgallery' has been removed from nixpkgs. Use the Flake provided by ldgallery instead"; # Added 2023-07-26
+  ledger_agent = ledger-agent; # Added 2024-01-07
   lfs = dysk; # Added 2023-07-03
   llvmPackages_rocm = throw "'llvmPackages_rocm' has been replaced with 'rocmPackages.llvm'"; # Added 2023-10-08
   libayatana-indicator-gtk3 = libayatana-indicator; # Added 2022-10-18
@@ -594,6 +596,10 @@ mapAliases ({
     [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
   '';
   linux_latest_hardened = linuxPackages_latest_hardened;
+
+  # Added 2023-11-18
+  linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_testing', or any other linux kernel with bcachefs support";
+  linux_testing_bcachefs = throw "'linux_testing_bcachefs' has been removed, please use 'linux_testing', or any other linux kernel with bcachefs support";
 
   lld_7 = throw "lld_7 has been removed from nixpkgs"; # Added 2023-11-19
   lldb_7 = throw "lldb_7 has been removed from nixpkgs"; # Added 2023-11-19

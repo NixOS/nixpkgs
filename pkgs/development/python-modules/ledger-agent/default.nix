@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ledger_agent";
+  pname = "ledger-agent";
   version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ledger_agent";
+    inherit version;
     sha256 = "03zj602m2rln9yvr08dswy56vzkbldp8b074ixwzz525dafblr92";
   };
 
