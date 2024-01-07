@@ -31,6 +31,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       '';
     };
 
+    interactive.nodes.machine = {
+      virtualisation.opengl = true;
+    };
+
     testScript = { nodes, ... }: ''
       start_all()
       machine.wait_for_unit("multi-user.target")
