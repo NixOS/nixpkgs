@@ -221,6 +221,7 @@ mapAliases ({
   jinja2_pluralize = jinja2-pluralize; # added 2023-11-01
   jinja2_time = jinja2-time; # added 2022-11-07
   JPype1 = jpype1; # added 2023-02-19
+  jsonpath_rw = jsonpath-rw; # added 2024-01-06
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
   jupyter_console = jupyter-console; # added  2023-07-31
