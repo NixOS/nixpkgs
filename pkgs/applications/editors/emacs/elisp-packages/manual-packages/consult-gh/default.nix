@@ -4,44 +4,38 @@
 , consult
 , embark
 , forge
-, gh
 , markdown-mode
 , writeText
-, unstableGitUpdater
 }:
 
 let
-  commit = "1fe876d9552b6ec6af257a4299a34eca99b40539";
-in
-melpaBuild {
   pname = "consult-gh";
-  version = "20230706.438";
-
-  inherit commit;
-
+  ename = "consult-gh";
+  version = "20231206.1823";
   src = fetchFromGitHub {
     owner = "armindarvish";
     repo = "consult-gh";
-    rev = commit;
-    hash = "sha256-bi+qlNvNMXbS4cXbXt01txwD2NAyAqJGNKeOtdtj7tg=";
+    rev = "a035eac54a3be270168e86f32075e5f6f426c103";
+    hash = "sha256-qZ7ra8Q8kcBDfR832rquKn8fy0UrNhonHZcX1oCz3dI=";
   };
+in
+melpaBuild {
+  inherit pname ename version src;
+
+  commit = src.rev;
 
   packageRequires = [
     consult
     embark
     forge
-    gh
     markdown-mode
   ];
 
   recipe = writeText "recipe" ''
     (consult-gh
-      :repo "armindarvish/consult-gh"
-      :fetcher github
-      :files ("consult-gh-embark.el" "consult-gh-forge.el" "consult-gh.el"))
+     :repo "armindarvish/consult-gh"
+     :fetcher github)
   '';
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/armindarvish/consult-gh";
