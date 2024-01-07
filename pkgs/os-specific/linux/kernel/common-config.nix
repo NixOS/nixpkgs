@@ -123,6 +123,7 @@ let
     };
 
     optimization = {
+      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
