@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modul for connecting with Happy Eyeballs";
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
-    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = licenses.psfl;
     maintainers = with maintainers; [ fab ];
   };
