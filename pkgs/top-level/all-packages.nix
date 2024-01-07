@@ -14049,7 +14049,7 @@ with pkgs;
     buildGoModule = buildGo120Module;
   };
 
-  trezor_agent = with python3Packages; toPythonApplication trezor_agent;
+  trezor-agent = with python3Packages; toPythonApplication trezor-agent;
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
