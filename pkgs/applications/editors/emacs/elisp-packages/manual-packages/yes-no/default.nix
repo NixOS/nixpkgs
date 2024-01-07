@@ -1,19 +1,36 @@
-{ lib, fetchurl, trivialBuild }:
+{ lib
+, fetchFromGitHub
+, melpaBuild
+, writeText
+}:
 
-trivialBuild {
+let
   pname = "yes-no";
-  version = "2017-10-01";
-
-  src = fetchurl {
-    url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/143bcaeb679a8fa8a548e92a5a9d5c2baff50d9c/yes-no.el";
-    sha256 = "03w4wfx885y89ckyd5d95n2571nmmzrll6kr0yan3ip2aw28xq3i";
+  ename = "yes-no";
+  version = "20240107.122";
+  src = fetchFromGitHub {
+    owner = "emacsmirror";
+    repo = "emacswiki.org";
+    rev = "02dbe9aa48c735cfcc7e977ea8fe512328666cad";
+    hash = "sha256-J7JbAUwlf0dQlKx613bdmwRNI0qs7INJuj7FEm5uvBU=";
   };
+in
+melpaBuild {
+  inherit pname ename version src;
 
-  meta = with lib; {
+  commit = src.rev;
+
+  recipe = writeText "recipe" ''
+    (yes-no
+     :repo "emacsmirror/emacswiki.org"
+     :fetcher github
+     :files ("yes-no.el"))
+  '';
+
+  meta = {
     description = "Specify use of `y-or-n-p' or `yes-or-no-p' on a case-by-case basis";
     homepage = "https://www.emacswiki.org/emacs/yes-no.el";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jcs090218 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jcs090218 ];
   };
 }
