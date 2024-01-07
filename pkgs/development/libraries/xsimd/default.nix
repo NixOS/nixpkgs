@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ tobim ];
     platforms = platforms.all;
+    badPlatforms = [ lib.systems.inspect.patterns.isPower ];  # no AltiVec support, build fails
   };
 })
