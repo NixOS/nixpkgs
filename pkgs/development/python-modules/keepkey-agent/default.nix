@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "keepkey_agent";
+  pname = "keepkey-agent";
   version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "keepkey_agent";
+    inherit version;
     sha256 = "03779gvlx70i0nnry98i4pl1d92604ix5x6jgdfkrdgzqbh5vj27";
   };
 

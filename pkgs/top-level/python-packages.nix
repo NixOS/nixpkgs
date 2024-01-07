@@ -4843,7 +4843,7 @@ self: super: with self; {
 
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };
 
-  gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
+  gradient-statsd = callPackage ../development/python-modules/gradient-statsd { };
 
   gradio = callPackage ../development/python-modules/gradio { };
 
@@ -6065,7 +6065,7 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
-  keepkey_agent = callPackage ../development/python-modules/keepkey_agent { };
+  keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
@@ -6226,7 +6226,7 @@ self: super: with self; {
 
   lcgit = callPackage ../development/python-modules/lcgit { };
 
-  lcov_cobertura = callPackage ../development/python-modules/lcov_cobertura { };
+  lcov-cobertura = callPackage ../development/python-modules/lcov-cobertura { };
 
   ld2410-ble = callPackage ../development/python-modules/ld2410-ble { };
 
@@ -6251,7 +6251,7 @@ self: super: with self; {
     python3 = python;
   })).py;
 
-  ledger_agent = callPackage ../development/python-modules/ledger_agent { };
+  ledger-agent = callPackage ../development/python-modules/ledger-agent { };
 
   ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
 
