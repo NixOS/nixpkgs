@@ -1,25 +1,36 @@
 { lib
 , fetchFromGitHub
-, emacs
-, trivialBuild
+, melpaBuild
+, writeText
 }:
 
-trivialBuild {
+let
   pname = "git-undo";
-  version = "0.pre+unstable=2019-12-21";
+  ename = "git-undo";
+  version = "20231224.2002";
 
   src = fetchFromGitHub {
     owner = "jwiegley";
     repo = "git-undo-el";
-    rev = "cf31e38e7889e6ade7d2d2b9f8719fd44f52feb5";
-    sha256 = "sha256-cVkK9EF6qQyVV3uVqnBEjF8e9nEx/8ixnM8PvxqCyYE=";
+    rev = "3d9c95fc40a362eae4b88e20ee21212d234a9ee6";
+    hash = "sha256-cVkK9EF6qQyVV3uVqnBEjF8e9nEx/8ixnM8PvxqCyYE=";
   };
+in
+melpaBuild {
+  inherit pname ename version src;
 
-  meta = with lib; {
+  recipe = writeText "" ''
+    (git-undo
+     :repo "jwiegley/git-undo-el"
+     :fetcher github)
+  '';
+
+  commit = src.rev;
+
+  meta = {
     homepage = "https://github.com/jwiegley/git-undo-el";
     description = "Revert region to most recent Git-historical version";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leungbk ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
 }
