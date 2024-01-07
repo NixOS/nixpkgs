@@ -191,7 +191,13 @@ let
     # sddm places XAUTHORITY in /tmp
     if [[ "$XAUTHORITY" == /tmp/* ]]; then
       x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
-    fi''}
+    fi
+    # dbus session connectivity requires socket files in /tmp
+    if [[ "$DBUS_SESSION_BUS_ADDRESS" =~ unix:path=([^,]*) ]]; then
+      dbusSocket="''${BASH_REMATCH[1]}"
+      x11_args+=(--ro-bind-try "$dbusSocket" "$dbusSocket")
+    fi
+    ''}
 
     cmd=(
       ${bubblewrap}/bin/bwrap
