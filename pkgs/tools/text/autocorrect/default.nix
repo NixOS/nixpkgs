@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   cargoBuildFlags = [ "-p" "autocorrect-cli" ];
   cargoTestFlags = [ "-p" "autocorrect-cli" ];
