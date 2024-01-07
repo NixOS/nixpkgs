@@ -28,9 +28,6 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
-  multiArch = false; # no p32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}
 
