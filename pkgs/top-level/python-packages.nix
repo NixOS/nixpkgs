@@ -16091,7 +16091,7 @@ self: super: with self; {
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
-  wxPython_4_2 = callPackage ../development/python-modules/wxPython/4.2.nix {
+  wxpython = callPackage ../development/python-modules/wxpython/4.2.nix {
     wxGTK = pkgs.wxGTK32.override {
       withWebKit = true;
     };

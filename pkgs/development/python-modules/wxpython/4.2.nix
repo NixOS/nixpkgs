@@ -40,13 +40,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "wxPython";
+  pname = "wxpython";
   version = "4.2.1";
   format = "other";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "wxPython";
+    inherit version;
     hash = "sha256-5I3iEaZga/By7D+neHcda3RsALf0uXDrWHKN31bRPVw=";
   };
 

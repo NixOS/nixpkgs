@@ -485,8 +485,9 @@ mapAliases ({
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
-  wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
-  wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
+  wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19
+  wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxpython instead"; # added 2023-03-19
+  wxPython_4_2 = wxpython; # added 2024-01-07
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
