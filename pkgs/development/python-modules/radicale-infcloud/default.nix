@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildPythonPackage, radicale }:
 
 buildPythonPackage {
-  pname = "radicale_infcloud";
+  pname = "radicale-infcloud";
   version = "unstable-2022-04-18";
   format = "setuptools";
 
