@@ -445,6 +445,7 @@ mapAliases ({
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   SPARQLWrapper = sparqlwrapper;
+  spark_parser = spark-parser; # added 2024-01-07
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
   sphinx_pypi_upload = throw "sphinx_pypi_upload has been removed since it is abandoned."; # added 2023-10-11
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03

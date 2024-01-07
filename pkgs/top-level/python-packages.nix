@@ -13432,7 +13432,7 @@ self: super: with self; {
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
-  spark_parser = callPackage ../development/python-modules/spark_parser { };
+  spark-parser = callPackage ../development/python-modules/spark-parser { };
 
   sparklines = callPackage ../development/python-modules/sparklines { };
 
