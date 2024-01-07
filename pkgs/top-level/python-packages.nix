@@ -11301,6 +11301,8 @@ self: super: with self; {
 
   pystardict = callPackage ../development/python-modules/pystardict { };
 
+  pystatgrab = callPackage ../development/python-modules/pystatgrab { };
+
   pystemd = callPackage ../development/python-modules/pystemd {
     inherit (pkgs) systemd;
   };
