@@ -1223,7 +1223,6 @@ self: super: builtins.intersectAttrs super {
         preCheck = drv.preCheck or "" + ''
           export PATH="$PWD/dist/build/fourmolu:$PATH"
         '';
-        hydraPlatforms = lib.platforms.all; # also test versioned attributes
       });
     in
 
