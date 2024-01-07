@@ -12255,7 +12255,7 @@ self: super: with self; {
 
   qudida = callPackage ../development/python-modules/qudida { };
 
-  querystring_parser = callPackage ../development/python-modules/querystring-parser { };
+  querystring-parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
 
