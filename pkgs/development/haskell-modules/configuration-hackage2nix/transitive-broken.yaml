@@ -806,6 +806,7 @@ dont-distribute-packages:
  - chart-svg
  - chart-svg-various
  - chart-unit
+ - chassis
  - cheapskate-highlight
  - cheapskate-lucid
  - cheapskate-terminal
@@ -911,7 +912,20 @@ dont-distribute-packages:
  - comonad-random
  - compaREST
  - compact-mutable
+ - compdoc
+ - compdoc-dhall-decoder
  - complexity
+ - composite-aeson
+ - composite-aeson-cofree-list
+ - composite-aeson-throw
+ - composite-aeson-writeonly
+ - composite-binary
+ - composite-hashable
+ - composite-ix
+ - composite-lens-extra
+ - composite-tuple
+ - composite-xml
+ - composite-xstep
  - comprehensions-ghc
  - computational-algebra
  - concraft
@@ -1071,6 +1085,7 @@ dont-distribute-packages:
  - definitive-parser
  - definitive-reactive
  - definitive-sound
+ - defun
  - deka-tests
  - delaunay
  - delicious
@@ -2530,6 +2545,8 @@ dont-distribute-packages:
  - linearscan-hoopl
  - linkchk
  - linkcore
+ - linnet-aeson
+ - linnet-conduit
  - linux-ptrace
  - lio-eci11
  - lion
@@ -2713,6 +2730,8 @@ dont-distribute-packages:
  - modular-prelude-classy
  - modularity
  - modulo
+ - moffy-samples-gtk4
+ - moffy-samples-gtk4-run
  - mole
  - monad-exception
  - monad-http
@@ -3518,6 +3537,7 @@ dont-distribute-packages:
  - serpentine
  - serv
  - serv-wai
+ - servant-aeson-generics-typescript
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
@@ -3549,6 +3569,7 @@ dont-distribute-packages:
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
+ - servant-swagger-tags
  - servant-to-elm
  - servant-util
  - servant-util-beam-pg
