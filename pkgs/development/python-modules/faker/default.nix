@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "faker";
   version = "19.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Faker";

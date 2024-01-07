@@ -15,7 +15,7 @@
 , pythonOlder
 , service-identity
 , twisted
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     incremental
     twisted
     automat
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [

@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.6.1";
-  format = "pyproject";
+  version = "4.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-weXEwrOP+TKVwhqCeFVqUw4x+q2Wplr0QWVUzpbNPSc=";
+    hash = "sha256-Z89T0HXB66MZTYNKSK8fHunUBFuI1wT5jcy+P3+9tIk=";
   };
 
   nativeBuildInputs = [

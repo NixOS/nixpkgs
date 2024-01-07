@@ -5,8 +5,8 @@ dartInstallHook() {
 
     runHook preInstall
 
+    # Install snapshots and executables.
     mkdir -p "$out"
-
     while IFS=$'\t' read -ra target; do
         dest="${target[0]}"
         # Wrap with runtime command, if it's defined
@@ -18,6 +18,10 @@ dartInstallHook() {
             install -Dm755 "$dest" "$out/$dest"
         fi
     done < <(_getDartEntryPoints)
+
+    # Install the package_config.json file.
+    mkdir -p "$pubcache"
+    cp .dart_tool/package_config.json "$pubcache/package_config.json"
 
     runHook postInstall
 

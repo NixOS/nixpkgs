@@ -18,8 +18,8 @@ let
     hasRocksDB ? pkgs.stdenv.hostPlatform.is64bit
   }: makeTest {
     inherit name;
-    meta = with lib.maintainers; {
-      maintainers = [ ajs124 das_j ];
+    meta = {
+      maintainers = lib.teams.helsinki-systems.members;
     };
 
     nodes = {

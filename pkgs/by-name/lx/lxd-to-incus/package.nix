@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "lxd-to-incus";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oPBrIN4XUc9GnBszEWAAnEcNahV4hfB48XSKvkpq5Kk=";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
   modRoot = "cmd/lxd-to-incus";
 
-  vendorHash = "sha256-/ONflpW1HGvXooPF+Xui8q4xFu/Zq5br+Vjm9d2gm5U=";
+  vendorHash = "sha256-cBAqJz3Y4CqyxTt7u/4mXoQPKmKgQ3gYJV1NiC/H+TA=";
 
   CGO_ENABLED = 0;
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     description = "LXD to Incus migration tool";
     homepage = "https://linuxcontainers.org/incus";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

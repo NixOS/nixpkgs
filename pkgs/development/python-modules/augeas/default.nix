@@ -11,6 +11,7 @@
 buildPythonPackage rec {
     pname = "augeas";
     version = "1.2.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "hercules-team";

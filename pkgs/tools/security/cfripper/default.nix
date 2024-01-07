@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Gtg4zoMTOW/nrFm7PF4/96VGcMALg2msVZ3E7lGm5KA=";
+    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

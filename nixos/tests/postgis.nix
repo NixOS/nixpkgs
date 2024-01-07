@@ -9,10 +9,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql; in {
+        services.postgresql = {
             enable = true;
-            package = mypg;
-            extraPlugins = with mypg.pkgs; [
+            package = pkgs.postgresql;
+            extraPlugins = ps: with ps; [
               postgis
             ];
         };

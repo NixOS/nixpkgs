@@ -69,8 +69,8 @@ with lib;
       confDir = mkOption {
         type = types.path;
         description = lib.mdDoc "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
-        default = "${cfg.package}/lib/${cfg.package.untarDir}/conf";
-        defaultText = literalExpression ''"''${package}/lib/''${package.untarDir}/conf"'';
+        default = "${cfg.package}/conf";
+        defaultText = literalExpression ''"''${package}/conf"'';
       };
       logDir = mkOption {
         type = types.path;
@@ -111,9 +111,9 @@ with lib;
             Type = "forking";
             User = "spark";
             Group = "spark";
-            WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
-            ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-master.sh";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-master.sh";
+            WorkingDirectory = "${cfg.package}/";
+            ExecStart = "${cfg.package}/sbin/start-master.sh";
+            ExecStop  = "${cfg.package}/sbin/stop-master.sh";
             TimeoutSec = 300;
             StartLimitBurst=10;
             Restart = "always";
@@ -134,9 +134,9 @@ with lib;
           serviceConfig = {
             Type = "forking";
             User = "spark";
-            WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
-            ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-worker.sh spark://${cfg.worker.master}";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-worker.sh";
+            WorkingDirectory = "${cfg.package}/";
+            ExecStart = "${cfg.package}/sbin/start-worker.sh spark://${cfg.worker.master}";
+            ExecStop  = "${cfg.package}/sbin/stop-worker.sh";
             TimeoutSec = 300;
             StartLimitBurst=10;
             Restart = "always";

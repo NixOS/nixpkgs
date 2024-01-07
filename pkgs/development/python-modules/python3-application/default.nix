@@ -1,8 +1,9 @@
-{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope_interface, twisted }:
+{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope-interface, twisted }:
 
 buildPythonPackage rec {
   pname = "python3-application";
   version = "3.0.6";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -13,7 +14,7 @@ buildPythonPackage rec {
     hash = "sha256-L7KN6rKkbjNmkSoy8vdMYpXSBkWN7afNpreJO0twjq8=";
   };
 
-  propagatedBuildInputs = [ zope_interface twisted ];
+  propagatedBuildInputs = [ zope-interface twisted ];
 
   pythonImportsCheck = [ "application" ];
 

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jqw65VTMLA/X7VQGxN0BlTzF/lxBYirDKBf+xI9cfhg=";
+    hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
-    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

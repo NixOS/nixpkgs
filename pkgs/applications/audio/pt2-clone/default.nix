@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsa-lib;
 
+  postInstall = ''
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.desktop" \
+      -t $out/share/applications
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.png" \
+      -t $out/share/icons/hicolor/512x512/apps
+  '';
+
   passthru.tests = {
     pt2-clone-opens = nixosTests.pt2-clone;
   };

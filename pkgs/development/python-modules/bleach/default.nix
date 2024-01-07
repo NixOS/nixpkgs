@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "bleach";
   version = "6.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

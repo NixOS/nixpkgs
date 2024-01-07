@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "fpylll";
   version = "0.5.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fplll";

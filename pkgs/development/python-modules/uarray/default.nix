@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uarray";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";

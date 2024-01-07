@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "audible";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkb79";

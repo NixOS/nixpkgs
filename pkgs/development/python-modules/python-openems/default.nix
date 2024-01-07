@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "python-openems";
   version = openems.version;
+  format = "setuptools";
 
   src = openems.src;
 

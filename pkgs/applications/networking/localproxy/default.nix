@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "localproxy";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "aws-iot-securetunneling-localproxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ec72bvBkRBj4qlTNfzNPeQt02OfOPA8y2PoejHpP9cY=";
+    hash = "sha256-voUKfXa43mOltePQEXgmJ2EBaN06E6R/2Zz6O09ogyY=";
   };
 
   nativeBuildInputs = [ cmake ];

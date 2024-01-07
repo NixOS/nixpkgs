@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.5.0";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-m38ur7IxQsI46iMpveEXW3OZONbTI7xNq96XSocxxbs=";
+    hash = "sha256-Tt2g7xwXf/o/ip5RgUCXclL9omWa/pRglkDMoEGn1AM=";
   };
 
   nativeBuildInputs = [

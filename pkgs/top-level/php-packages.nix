@@ -227,10 +227,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   # 2. The contrib extensions available
   # 3. The core extensions
   extensions =
-  # Contrib conditional extensions
-   lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
-    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-  } //
   # Contrib extensions
   {
     amqp = callPackage ../development/php-packages/amqp { };
@@ -238,6 +234,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     apcu = callPackage ../development/php-packages/apcu { };
 
     ast = callPackage ../development/php-packages/ast { };
+
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
@@ -312,8 +310,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phalcon = callPackage ../development/php-packages/phalcon { };
 
-    php-spx = callPackage ../development/php-packages/php-spx { };
-
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -332,6 +328,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       inherit (pkgs) darwin;
     };
 
+    spx = callPackage ../development/php-packages/spx { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     ssh2 = callPackage ../development/php-packages/ssh2 { };
@@ -345,6 +343,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+  } // lib.optionalAttrs config.allowAliases {
+    php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
     # Core extensions
     let
@@ -476,6 +476,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             lib.optional
               (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
               valgrind.dev;
+          configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
           zendExtension = true;
           postPatch = lib.optionalString stdenv.isDarwin ''
             # Tests are flaky on darwin

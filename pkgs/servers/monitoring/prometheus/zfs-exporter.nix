@@ -16,6 +16,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-uIilESEmAxANxFOy7qvYxlF/bId/Kqh4jUspNknlhlc=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
+    "-X github.com/prometheus/common/version.Branch=unknown"
+    "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
+    "-X github.com/prometheus/common/version.BuildDate=unknown"
+  ];
+
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.md
   '';

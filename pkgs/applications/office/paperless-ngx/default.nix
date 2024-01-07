@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -17,16 +16,18 @@
 , poppler_utils
 , liberation_ttf
 , xcbuild
+, pango
+, pkg-config
 }:
 
 let
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qSX+r99y7a/eITfaC/UYqSgcxx/xYOqJ4tY/iuvoeNA=";
+    hash = "sha256-ds/hQ0+poUTO2bnXiHvNUanVFJcxxyuW3a9Yxcq5cAg=";
   };
 
   python = python3;
@@ -47,17 +48,22 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-uDaZ7j7IDgKy7wCWND2xzR1qHwUtdyjR4eyIAVy01dM=";
+    postPatch = ''
+      cd src-ui
+    '';
+
+    npmDepsHash = "sha256-o/inxHiOeMhQvZVcy6CM3Jy8B2sSp+8WJBknp3KVbZM=";
 
     nativeBuildInputs = [
+      pkg-config
       python3
     ] ++ lib.optionals stdenv.isDarwin [
       xcbuild
     ];
 
-    postPatch = ''
-      cd src-ui
-    '';
+    buildInputs = [
+      pango
+    ];
 
     CYPRESS_INSTALL_BINARY = "0";
     NG_CLI_ANALYTICS = "false";
@@ -205,7 +211,7 @@ python.pkgs.buildPythonApplication rec {
     whitenoise
     whoosh
     zipp
-    zope_interface
+    zope-interface
     zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis
@@ -224,16 +230,18 @@ python.pkgs.buildPythonApplication rec {
     ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
-  installPhase = ''
+  installPhase = let
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  in ''
     mkdir -p $out/lib/paperless-ngx
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
     ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
     makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
-      --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/paperless-ngx/src" \
+      --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
   '';
 
@@ -271,10 +279,6 @@ python.pkgs.buildPythonApplication rec {
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
       --replace "--cov --cov-report=html --cov-report=xml" ""
-    # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
-    # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
-    substituteInPlace src/paperless_tesseract/tests/test_parser.py \
-      --replace "this is awebp document" "this is a webp document"
   '';
 
   disabledTests = [

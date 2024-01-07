@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "dm-haiku";
   version = "0.0.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";

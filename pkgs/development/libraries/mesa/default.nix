@@ -133,6 +133,29 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/44734d1fe98ef47019fe2c56d867d1645c526e4e.diff";
+      hash = "sha256-ipaISEY5xcnGvrwFxNY80JVlYWddfiHofkYEBuPkyDY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/d2a46afbfc44121aa491a2b4d1a3249d26fc6a11.diff";
+      hash = "sha256-i00s9oUhZXXf/A4cHwWN6uRDP70cHjz+kgVpiDM/eMw=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/17cde1ee87cc0cbb896ca81949b8f192d5496271.diff";
+      hash = "sha256-ao2pWQwMBskOjWJsjWqwFYAeqpTWAyJbEtSryDO+xyo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/4489d737d5c12eb0a3441ed0b303f9f1100a7166.diff";
+      hash = "sha256-WxqwEngd79NHLedQOWMjjroaN0gr6Upd96uteSvr4Yw=";
+    })
+    # fixes a linking error
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/c8b64452c076c1768beb23280de25faf2bcbe2c8.diff";
+      hash = "sha256-mqivdzyoLtkfkAb+r57gjPwg8d7whgFAahiUhGVOOvo=";
+    })
   ];
 
   postPatch = ''
@@ -202,6 +225,15 @@ self = stdenv.mkDerivation {
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable features that are explicitly unsupported on the platform
+    "-Dgbm=disabled"
+    "-Dxlib-lease=disabled"
+    "-Degl=disabled"
+    "-Dgallium-vdpau=disabled"
+    "-Dgallium-va=disabled"
+    "-Dgallium-xa=disabled"
+    "-Dlmsensors=disabled"
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
     "-Dgallium-opencl=icd"
@@ -379,9 +411,6 @@ self = stdenv.mkDerivation {
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
-
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
-    broken = stdenv.isDarwin;
   };
 };
 

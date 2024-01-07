@@ -45,6 +45,7 @@
 buildPythonPackage rec {
   pname = "fontbakery";
   version = "0.10.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

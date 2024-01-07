@@ -1,17 +1,17 @@
-{ lib, php, fetchFromGitHub }:
+{ lib, php82, fetchFromGitHub }:
 
-php.buildComposerProject (finalAttrs: {
+php82.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "box-project";
     repo = "box";
     rev = finalAttrs.version;
-    hash = "sha256-6icHXRxqre2RBIRoc3zfQnxGRHh2kIen2oLJ3eQjD/0=";
+    hash = "sha256-s3FnpfKWmsLLXwa/xI80NZ1030fB9LcrMVzNWGeFkn4=";
   };
 
-  vendorHash = "sha256-n/F/il1u+3amSVf8fr0scZSkXuwxW43iq5F2XQJ3xfM=";
+  vendorHash = "sha256-t1DvlcgTSq4n8xVUMcEIfs5ZAq9XIqL3qUqabheVVrs=";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";

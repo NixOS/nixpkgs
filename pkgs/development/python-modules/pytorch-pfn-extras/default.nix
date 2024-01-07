@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
   version = "0.7.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pfnet";

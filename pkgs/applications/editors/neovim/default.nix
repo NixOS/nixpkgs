@@ -43,7 +43,6 @@ let
     luabitop
     mpack
   ] ++ lib.optionals doCheck [
-    nvim-client
     luv
     coxpcall
     busted
@@ -70,13 +69,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.9.4";
+    version = "0.9.5";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      hash = "sha256-Lyo98cAs7Zhx23N4s4f3zpWFKYJMmXleWpt3wiVDQZo=";
+      hash = "sha256-CcaBqA0yFCffNPmXOJTo8c9v1jrEBiqAl8CG5Dj5YxE=";
     };
 
     patches = [

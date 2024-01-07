@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "avro3k";
   version = "1.7.7-SNAPSHOT";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

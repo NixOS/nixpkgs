@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "eth-utils";
   version = "2.1.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

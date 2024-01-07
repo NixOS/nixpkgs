@@ -1387,6 +1387,13 @@ let
       '';
     });
 
+    tesseract = old.tesseract.overrideAttrs (_: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+      '';
+    });
+
     ijtiff = old.ijtiff.overrideAttrs (_: {
       preConfigure = ''
         patchShebangs configure

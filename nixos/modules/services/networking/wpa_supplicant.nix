@@ -107,6 +107,10 @@ let
       stopIfChanged = false;
 
       path = [ package ];
+      # if `userControl.enable`, the supplicant automatically changes the permissions
+      #  and owning group of the runtime dir; setting `umask` ensures the generated
+      #  config file isn't readable (except to root);  see nixpkgs#267693
+      serviceConfig.UMask = "066";
       serviceConfig.RuntimeDirectory = "wpa_supplicant";
       serviceConfig.RuntimeDirectoryMode = "700";
       serviceConfig.EnvironmentFile = mkIf (cfg.environmentFile != null)

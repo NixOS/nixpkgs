@@ -215,6 +215,11 @@ in
 # which is not supported by the clang integrated assembler used by default on Darwin.
 ++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
 
+# Make avr-gcc8 build on aarch64-darwin
+# avr-gcc8 is maintained for the `qmk` package
+# https://github.com/osx-cross/homebrew-avr/blob/main/Formula/avr-gcc%408.rb#L69
+++ optional (is8 && targetPlatform.isAvr && hostPlatform.isDarwin && hostPlatform.isAarch64) ./8/avr-gcc-8-darwin.patch
+
 
 ## gcc 7.0 and older ##############################################################################
 

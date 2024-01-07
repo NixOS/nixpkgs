@@ -1,25 +1,25 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, zope_interface
+, zope-interface
 , mock
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "transaction";
-  version = "3.1.0";
+  version = "4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZdCx6pLb58Tjsjf7a9i0Heoj10Wee92MOIC//a+RL6Q=";
+    hash = "sha256-aANduRP2DRvhL2Vj0gHaqzbIPnY94ViZ/4M48m5eYvI=";
   };
 
   propagatedBuildInputs = [
-    zope_interface
+    zope-interface
     mock
   ];
 

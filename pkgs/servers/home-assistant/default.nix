@@ -30,23 +30,25 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.4";
-        src = fetchFromGitHub {
-          owner = "CorantGmbH";
-          repo = "aioairq";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
-        };
-      });
-
       # https://github.com/home-assistant/core/pull/101913
       aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.8.5";
+        version = "3.9.1";
         src = fetchPypi {
           inherit (old) pname;
           inherit version;
-          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+          hash = "sha256-j8Sah6wmnUUp2kWHHi/7aHTod3nD0OLM2BPAiZIhI50=";
+        };
+        patches = [];
+        doCheck = false;
+      });
+
+      aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
+        version = "22.7.0";
+        src = fetchFromGitHub {
+          owner = "tkdrob";
+          repo = "aioskybell";
+          rev = "refs/tags/${version}";
+          hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
 
@@ -57,6 +59,15 @@ let
           repo = "aiowatttime";
           rev = "refs/tags/${version}";
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
+        };
+      });
+
+      aioresponses = super.aioresponses.overridePythonAttrs (oldAttrs: rec {
+        pname = "aioresponses";
+        version = "0.7.6";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
         };
       });
 
@@ -105,10 +116,10 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
         };
-        nativeBuildInputs = with super; [
+        nativeBuildInputs = with self; [
           setuptools
         ];
-        propagatedBuildInputs = with super; [
+        propagatedBuildInputs = with self; [
           aenum
           aiohttp
           pydantic
@@ -135,11 +146,6 @@ let
         };
       });
 
-      # moto tests are a nuissance
-      moto = super.moto.overridePythonAttrs (_: {
-        doCheck = false;
-      });
-
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
@@ -151,11 +157,11 @@ let
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
-        nativeBuildInputs = with super; [
+        nativeBuildInputs = with self; [
           setuptools
         ];
 
-        propagatedBuildInputs = with super; [
+        propagatedBuildInputs = with self; [
           requests
         ];
 
@@ -180,24 +186,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
-        };
-      });
-
-      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
-        version = "5.9.6";
-        src = fetchPypi {
-          pname = "psutil";
-          inherit version;
-          hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
         };
       });
 
@@ -241,6 +229,16 @@ let
         };
       });
 
+      pydrawise = super.pydrawise.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.11.0";
+        src = fetchFromGitHub {
+          owner = "dknowles2";
+          repo = "pydrawise";
+          rev = "refs/tags/${version}";
+          hash = "sha256-gKOyTvdETGzKlpU67UKaHYTIvnAX9znHIynP3BiVbt4=";
+        };
+      });
+
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -260,22 +258,22 @@ let
         };
       });
 
+      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
+        version = "0.38.0";
+        src = fetchFromGitHub {
+          owner = "humbertogontijo";
+          repo = "python-roborock";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-jYESUMhLb5oiM3PWIIIU4dn/waGUnCAaXe0URnIq0C8=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
-        };
-      });
-
-      python-tado = super.python-tado.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
-        src = fetchFromGitHub {
-          owner = "wmalgadey";
-          repo = "PyTado";
-          rev = "refs/tags/${version}";
-          hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
         };
       });
 
@@ -324,7 +322,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.3";
+  hassVersion = "2024.1.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -332,23 +330,23 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.10";
+  disabled = python.pythonOlder "3.11";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # Primary source is the pypi sdist, because it contains translations
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-llGHI6LVpTo9m2RMtcDSkW2wWraje2OkVFx5P7lzZ30=";
-  };
-
-  # Secondary source is git for tests
-  gitSrc = fetchFromGitHub {
+  # Primary source is the git, which has the tests and allows bisecting the core
+  src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-KD53O+UlAjGfVGp4kbLgpgU7j0A+KqZZT492WmeCOnQ=";
+    hash = "sha256-FlGSVYgKDw0x4l1z1qe+cUAuzFH0XrE2o7LC2ByY5Bo=";
+  };
+
+  # Secondary source is pypi sdist for translations
+  sdist = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ijs9RNx17JI0nSHCBB3ysgrM4OdOtcH/96O9DcrTtFQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -378,10 +376,9 @@ in python.pkgs.buildPythonApplication rec {
     "yarl"
   ];
 
-  # copy tests early, so patches apply as they would to the git repo
+  # extract translations from pypi sdist
   prePatch = ''
-    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
-    chmod u+x tests/auth/providers/test_command_line_cmd.sh
+    tar --extract --gzip --file $sdist --strip-components 1 --wildcards "**/translations"
   '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -481,6 +478,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
+    # SystemError: PyThreadState_SetAsyncExc failed
+    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # tests are located in tests/
     "tests"
   ];

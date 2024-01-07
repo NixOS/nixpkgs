@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pycollada";
   version = "0.7.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

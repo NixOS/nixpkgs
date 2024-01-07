@@ -25,6 +25,7 @@ in
 buildPythonPackage rec {
   pname = "ansible-kernel";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

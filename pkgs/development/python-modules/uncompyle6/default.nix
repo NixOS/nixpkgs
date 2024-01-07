@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uncompyle6";
   version = "3.9.0";
+  format = "setuptools";
   disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {

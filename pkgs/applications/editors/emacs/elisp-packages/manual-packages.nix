@@ -17,9 +17,13 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
+
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
@@ -113,4 +117,6 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+
+  __attrsFailEvaluation = true;
 }

@@ -10,6 +10,7 @@
 
 buildPythonPackage rec {
   version = "1.3.7";
+  format = "setuptools";
   pname = "nose";
 
   src = fetchPypi {

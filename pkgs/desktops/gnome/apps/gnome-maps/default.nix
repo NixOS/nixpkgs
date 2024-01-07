@@ -26,13 +26,13 @@
 , geocode-glib_2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "45.1";
+  version = "45.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-v2nFDi4ZsV280KDvOCfUAqGVq0ogKbm2LlSr8472334=";
+    url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6es3CnlxtPhC+qME0xpIXb2P+K7EKnZScvL8GnqAmPI=";
   };
 
   doCheck = true;
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-maps";
+      attrPath = "gnome.gnome-maps";
     };
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

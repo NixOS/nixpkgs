@@ -1,0 +1,19 @@
+This is the one remaining Polly install dirs related change that hasn't made it
+into upstream yet; previously this patch file also included:
+https://reviews.llvm.org/D117541
+
+diff --git a/tools/polly/cmake/polly_macros.cmake b/tools/polly/cmake/polly_macros.cmake
+index 518a09b45a42..bd9d6f5542ad 100644
+--- a/tools/polly/cmake/polly_macros.cmake
++++ b/tools/polly/cmake/polly_macros.cmake
+@@ -44,8 +44,8 @@ macro(add_polly_library name)
+   if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY OR ${name} STREQUAL "LLVMPolly")
+     install(TARGETS ${name}
+       EXPORT LLVMExports
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++	  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+   endif()
+   set_property(GLOBAL APPEND PROPERTY LLVM_EXPORTS ${name})
+ endmacro(add_polly_library)

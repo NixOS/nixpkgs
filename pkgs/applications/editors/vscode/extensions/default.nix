@@ -344,8 +344,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.0.1";
-          sha256 = "1yf065syb5hskds47glnv18nk0fg7d84w1j72hg1pqb082gn1sdv";
+          version = "1.5.0";
+          sha256 = "1glad9xmzq58jc7js8afjmqrxgd3rqm80fk528wv5kqcmn90bgk3";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -710,8 +710,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.40.0";
-          sha256 = "sha256-Ym76WtKvz18NgxH9o8O/Ozn+/AtqLvjJs8ffLhPOWkQ=";
+          version = "2023.60.0";
+          sha256 = "sha256-zxE4QcWt8M6djTbdIf0YNSpeF1w7vMK4/BW5ArCOYbE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1151,8 +1151,8 @@ let
         mktplcRef = {
           name = "theme-dracula";
           publisher = "dracula-theme";
-          version = "2.24.2";
-          sha256 = "sha256-YNqWEIvlEI29mfPxOQVdd4db9G2qNodhz8B0MCAAWK8=";
+          version = "2.24.3";
+          sha256 = "sha256-3B18lEu8rXVXySdF3+xsPnAyruIuEQJDhlNw82Xm6b0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
@@ -1234,8 +1234,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.17.10";
-          sha256 = "sha256-4/B70DyNlImz60PSTSL5CKihlOJen/tR1/dXGc3s1ZY=";
+          version = "0.18.1";
+          sha256 = "sha256-PdXoc9+ejYr1SiikuabUH+2tt1tByJn5gycaHrHuaBE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1580,8 +1580,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.135.544";
-          sha256 = "sha256-OeG1nkQbQAfu8NuDEA+iaWy0ioFyXPe7Qm/CZIKPiX8=";
+          version = "1.143.601";
+          sha256 = "sha256-Ge/q1fAfhI5EuJFLHZqZyuPahHSgES7G0ns9FbS9vzA=";
         };
 
         meta = {
@@ -2123,19 +2123,19 @@ let
 
       kddejong.vscode-cfn-lint =
         let
-          inherit (python3Packages) cfn-lint;
+          inherit (python3Packages) cfn-lint pydot;
         in
         buildVscodeMarketplaceExtension {
           mktplcRef = {
             name = "vscode-cfn-lint";
             publisher = "kddejong";
-            version = "0.21.0";
+            version = "0.25.1";
             sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
           };
 
           nativeBuildInputs = [ jq moreutils ];
 
-          buildInputs = [ cfn-lint ];
+          buildInputs = [ cfn-lint pydot ];
 
           postInstall = ''
             cd "$out/$installPrefix"
@@ -2749,8 +2749,8 @@ let
           publisher = "nvarner";
           # Please update the corresponding binary (typst-lsp) when updating
           # this extension.
-          version = "0.11.0";
-          sha256 = "sha256-fs+CBg3FwzTn608dm9EvfF2UrI2Sa5hsm0OK/WQyy6o=";
+          version = "0.12.0";
+          sha256 = "sha256-9v6zJyeUBj0TOpK2otLqZ0ksjmzExKTJYRF+9akvuuo=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -3111,8 +3111,8 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.0";
-          sha256 = "080zd103vjrz86vllr1ricq2vi3hawn4534n492m7xdcry9l9dpc";
+          version = "0.6.5";
+          sha256 = "sha256-HgqM4PKGk3R5MLY4cVjKxv79p5KlOkVDeDbv7/6FmpM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3136,15 +3136,17 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.6.10";
-          sha256 = "sha256-nCsl7ZYwuTvNZSTUMR6jEywClmcPm8xW6ABu9220wJI=";
+          version = "0.8.10";
+          sha256 = "sha256-BjTV2uH9QqCS1VJ94XXgzNMJb4FB4Ee+t/5uAQfJCuM=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
           longDescription = ''
-            Markdown Preview Enhanced provides you with many useful functionalities
-            such as automatic scroll sync, math typesetting, mermaid, PlantUML,
-            pandoc, PDF export, code chunk, presentation writer, etc.
+            Markdown Preview Enhanced is an extension that provides you with
+            many useful functionalities such as automatic scroll sync, math
+            typesetting, mermaid, PlantUML, pandoc, PDF export, code chunk,
+            presentation writer, etc. A lot of its ideas are inspired by
+            Markdown Preview Plus and RStudio Markdown.
           '';
           homepage = "https://github.com/shd101wyy/vscode-markdown-preview-enhanced";
           license = lib.licenses.ncsa;
@@ -3555,8 +3557,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.25";
-          sha256 = "sha256-qM+CLV8jWYkJWXZyELnR1H9pSWFifAOGqH+LgHr7nNA=";
+          version = "0.0.27";
+          sha256 = "sha256-wEY1FZjgiQJ7VrJGZX0SgZqz/14v//jxgrqdafLjIfM=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

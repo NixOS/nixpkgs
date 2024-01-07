@@ -7,7 +7,7 @@ index d85a17491..90ea5e387 100644
  
  require 'rails/all'
 +require 'nulldb'
- require_relative 'issue_2656_workaround_for_rails_issue_33600'
+ require_relative '../lib/zammad/safe_mode'
  
  # DO NOT REMOVE THIS LINE - see issue #2037
 diff --git a/db/schema.rb b/db/schema.rb

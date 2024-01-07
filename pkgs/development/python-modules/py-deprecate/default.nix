@@ -8,6 +8,7 @@
 let
   pname = "py-deprecate";
   version = "0.3.2";
+  format = "setuptools";
 in
 buildPythonPackage {
   inherit pname version;

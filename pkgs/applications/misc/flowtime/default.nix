@@ -5,16 +5,14 @@
 , meson
 , ninja
 , wrapGAppsHook4
+, gst_all_1
 , libadwaita
 , libxml2
-, libgee
-, gst_all_1
-, gobject-introspection
 , desktop-file-utils
-, glib
 , pkg-config
 , libportal-gtk4
 , blueprint-compiler
+, appstream-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -31,24 +29,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     blueprint-compiler
     desktop-file-utils
-    glib
-    gobject-introspection
     meson
     ninja
     pkg-config
     vala
     wrapGAppsHook4
+    appstream-glib
   ];
 
   buildInputs = [
     libadwaita
     libxml2
-    libgee
     libportal-gtk4
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
-    gst-plugins-bad
   ]);
 
   meta = with lib; {
@@ -56,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Diego-Ivan/Flowtime";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared pokon548 ];
+    platforms = platforms.linux;
   };
 }

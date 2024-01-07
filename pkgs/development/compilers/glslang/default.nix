@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 bison jq ];
 
+  # Workaround missing atomic ops with gcc <13
+  env.LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
     ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers

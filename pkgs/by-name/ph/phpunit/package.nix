@@ -18,6 +18,7 @@ php.buildComposerProject (finalAttrs: {
     description = "PHP Unit Testing framework";
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
+    mainProgram = "phpunit";
     maintainers = [ lib.maintainers.onny ] ++ lib.teams.php.members;
   };
 })

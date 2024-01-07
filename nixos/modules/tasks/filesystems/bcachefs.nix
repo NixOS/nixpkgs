@@ -78,9 +78,10 @@ let
     value = {
       description = "Unlock bcachefs for ${fs.mountPoint}";
       requiredBy = [ mountUnit ];
-      before = [ mountUnit ];
-      bindsTo = [ deviceUnit ];
       after = [ deviceUnit ];
+      before = [ mountUnit "shutdown.target" ];
+      bindsTo = [ deviceUnit ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {
         Type = "oneshot";

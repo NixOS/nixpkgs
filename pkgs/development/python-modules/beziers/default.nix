@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "beziers";
   version = "0.5.0";
+  format = "setuptools";
 
   # PyPI doesn't have a proper source tarball, fetch from Github instead
   src = fetchFromGitHub {

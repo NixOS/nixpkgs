@@ -125,7 +125,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
@@ -134,14 +134,16 @@ in buildPythonPackage rec {
     "out" # output standard python package
     "dev" # output libtorch headers
     "lib" # output libtorch libraries
+    "cxxdev" # propagated deps for the cmake consumers of torch
   ];
+  cudaPropagateToOutput = "cxxdev";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-01+uqHvPbQVXKLohGWfsCsZOjb7xmfjBKkTGUGMEdAI=";
+    hash = "sha256-E/GQCRWBf3hYsDCCk0twaL9gkVOCEQeCvO3Va+jgIdE=";
   };
 
   patches = lib.optionals cudaSupport [
@@ -180,7 +182,7 @@ in buildPythonPackage rec {
     # Strangely, this is never set in cmake
     substituteInPlace cmake/public/LoadHIP.cmake \
       --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
-        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitString "." rocmPackages.clr.version))})"
+        "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
   ''
   # Detection of NCCL version doesn't work particularly well when using the static binary.
   + lib.optionalString cudaSupport ''
@@ -271,7 +273,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (cudaPackages ? nccl);
+  USE_NCCL = setBool (cudaSupport && cudaPackages ? nccl);
   USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
   USE_STATIC_NCCL = setBool useSystemNccl;
 
@@ -337,7 +339,9 @@ in buildPythonPackage rec {
   buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
-      cuda_cudart # cuda_runtime.h and libraries
+      cuda_cudart.dev # cuda_runtime.h and libraries
+      cuda_cudart.lib
+      cuda_cudart.static
       cuda_cupti.dev # For kineto
       cuda_cupti.lib # For kineto
       cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
@@ -370,7 +374,10 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ]
+    ++ lib.optionals tritonSupport [ openai-triton ]
+    ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   propagatedBuildInputs = [
     cffi
@@ -391,8 +398,10 @@ in buildPythonPackage rec {
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
+  ] ++ lib.optionals tritonSupport [ openai-triton ];
+
+  propagatedCxxBuildInputs = [
   ]
-  ++ lib.optionals tritonSupport [ openai-triton ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -453,7 +462,10 @@ in buildPythonPackage rec {
       --replace "/build/source/torch/include" "$dev/include"
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = ''
+    mkdir -p "$cxxdev/nix-support"
+    printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
+  '' + lib.optionalString stdenv.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
         install_name_tool -id $lib/lib/$(basename $f) $f || true
     done

@@ -53,7 +53,10 @@ let
     , argon2Support ? true
     , cgotoSupport ? false
     , embedSupport ? false
+    , staticSupport ? false
     , ipv6Support ? true
+    , zendSignalsSupport ? true
+    , zendMaxExecutionTimersSupport ? false
     , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
@@ -236,7 +239,6 @@ let
             # PCRE
             ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
-
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
@@ -250,11 +252,14 @@ let
             ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
             ++ lib.optional argon2Support "--with-password-argon2=${libargon2}"
             ++ lib.optional cgotoSupport "--enable-re2c-cgoto"
-            ++ lib.optional embedSupport "--enable-embed"
+            ++ lib.optional embedSupport "--enable-embed${lib.optionalString staticSupport "=static"}"
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
+            ++ lib.optional staticSupport "--enable-static"
+            ++ lib.optional (!zendSignalsSupport) ["--disable-zend-signals"]
+            ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
 
             # Sendmail

@@ -186,6 +186,12 @@ in {
       };
     };
 
+    # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
+    # is not located in the moonraker config directory.
+    services.moonraker.settings = lib.mkIf (!config.services.klipper.mutableConfig) {
+      file_manager.check_klipper_config_path = false;
+    };
+
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''
       // nixos/moonraker: Allow Moonraker to perform system-level operations
       //

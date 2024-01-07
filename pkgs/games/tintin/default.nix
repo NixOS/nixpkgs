@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tintin";
-  version = "2.02.31";
+  version = "2.02.40";
 
   src = fetchFromGitHub {
     owner = "scandum";
     repo = "tintin";
     rev = version;
-    hash = "sha256-emCxA5+YB4S7QXxRqkDKN1xeWttR857VfGzFQ1cGbYg=";
+    hash = "sha256-nJTxAAM5HOStYFjEopLA47ruM9uoVway+aH97AdXo/w=";
   };
 
   buildInputs = [ zlib pcre gnutls ]

@@ -5,6 +5,9 @@
 , php
 , testers
 , frankenphp
+, darwin
+, pkg-config
+, makeBinaryWrapper
 , runCommand
 , writeText
 }:
@@ -13,19 +16,22 @@ let
   phpEmbedWithZts = php.override {
     embedSupport = true;
     ztsSupport = true;
+    staticSupport = stdenv.isDarwin;
+    zendSignalsSupport = false;
+    zendMaxExecutionTimersSupport = stdenv.isLinux;
   };
   phpUnwrapped = phpEmbedWithZts.unwrapped;
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.0.0-rc.4";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-4jNCKHt4eYI1BNaonIdS1Eq2OnJwgrU6qWZoiSpeIYk=";
+    hash = "sha256-DNU127IZ+lw2+NqzrU07ioJKCjjCsnqgS+cqUlX7TUw=";
   };
 
   sourceRoot = "source/caddy";
@@ -33,9 +39,10 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-Lgj/pFtSQIgjrycajJ1zNY3ytvArmuk0E3IjsAzsNdM=";
+  vendorHash = "sha256-ZkbhpY8+BSTSdzQGsvXUfTBdTPUvQ8tHjbnr0lYho5I=";
 
   buildInputs = [ phpUnwrapped ] ++ phpUnwrapped.buildInputs;
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 
@@ -52,7 +59,18 @@ in buildGoModule rec {
     export CGO_CFLAGS="$(${phpConfig} --includes)"
     export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
       $(${phpConfig} --ldflags) \
-      -Wl,--start-group $(${phpConfig} --libs) -Wl,--end-group"
+      $(${phpConfig} --libs)"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # replace hard-code homebrew path
+    substituteInPlace ../frankenphp.go \
+      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${darwin.libiconv}/lib"
+  '';
+
+  preFixup = ''
+    mkdir -p $out/lib
+    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/frankenphp.ini"
+
+    wrapProgram $out/bin/frankenphp --set-default PHP_INI_SCAN_DIR $out/lib
   '';
 
   doCheck = false;
@@ -82,7 +100,7 @@ in buildGoModule rec {
     homepage = "https://github.com/dunglas/frankenphp";
     license = licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with maintainers; [ gaelreyrol ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ gaelreyrol shyim ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

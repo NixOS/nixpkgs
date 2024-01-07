@@ -21,6 +21,7 @@ fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
+image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,
 ldbus,,,http://luarocks.org/dev,,,
@@ -95,8 +96,8 @@ mediator_lua,,,,,,
 middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
+nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
-nvim-client,https://github.com/neovim/lua-client.git,,,,,
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,

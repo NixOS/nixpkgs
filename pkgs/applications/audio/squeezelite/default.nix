@@ -44,13 +44,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1449";
+  version = "1.9.9.1463";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "8581aba8b1b67af272b89b62a7a9b56082307ab6";
-    hash = "sha256-/qyoc0/7Q8yiu5AhuLQFUiE88wf+/ejHjSucjpoN5bI=";
+    rev = "c2534dc4139f3635ff7aed49b90ff03c43723dd9";
+    hash = "sha256-MTGeF62jb7auOtUDougWZz7VJUNCBD/QL9jfDB7UmQE=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]

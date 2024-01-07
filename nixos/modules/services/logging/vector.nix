@@ -51,13 +51,17 @@ in
         {
           ExecStart = "${getExe cfg.package} --config ${validateConfig conf}";
           DynamicUser = true;
-          Restart = "no";
+          Restart = "always";
           StateDirectory = "vector";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           # This group is required for accessing journald.
           SupplementaryGroups = mkIf cfg.journaldAccess "systemd-journal";
         };
+      unitConfig = {
+        StartLimitIntervalSec = 10;
+        StartLimitBurst = 5;
+      };
     };
   };
 }

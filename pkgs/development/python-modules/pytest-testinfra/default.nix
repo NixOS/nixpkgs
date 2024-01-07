@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pytest-testinfra";
   version = "10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

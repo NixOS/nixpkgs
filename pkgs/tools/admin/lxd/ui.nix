@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Web user interface for LXD.";
     homepage = "https://github.com/canonical/lxd-ui";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

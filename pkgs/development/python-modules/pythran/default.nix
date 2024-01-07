@@ -18,6 +18,7 @@ let
 in buildPythonPackage rec {
   pname = "pythran";
   version = "0.13.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";

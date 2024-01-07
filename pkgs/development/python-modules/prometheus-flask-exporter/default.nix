@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";
   version = "0.22.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rycus86";

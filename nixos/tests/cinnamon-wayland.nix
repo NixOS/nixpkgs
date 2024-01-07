@@ -12,6 +12,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       autoLogin.user = nodes.machine.users.users.alice.name;
       defaultSession = "cinnamon-wayland";
     };
+
+    # For the sessionPath subtest.
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
   };
 
   enableOCR = true;
@@ -46,6 +49,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             machine.wait_until_succeeds(f"pgrep -f {i}")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
+
+      with subtest("Check if sessionPath option actually works"):
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
 
       with subtest("Open Cinnamon Settings"):
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")

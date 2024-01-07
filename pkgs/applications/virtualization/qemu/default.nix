@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
+, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
+, sigtool
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
@@ -53,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.1.3";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Q8wXaAQQVYb3T5A5jzTp+FeH3/QA07ZA2B93efviZbs=";
+    hash = "sha256-vwDS+hIBDfiwrekzcd71jmMssypr/cX1oP+Oah+xvzI=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper removeReferencesTo
-    pkg-config flex bison meson ninja
+    pkg-config flex bison dtc meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
     python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme

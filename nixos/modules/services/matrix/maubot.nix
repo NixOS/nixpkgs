@@ -42,7 +42,7 @@ let
       database = lib.last (lib.splitString "/" noSchema);
     };
 
-  postgresDBs = [
+  postgresDBs = builtins.filter isPostgresql [
     cfg.settings.database
     cfg.settings.crypto_database
     cfg.settings.plugin_databases.postgres

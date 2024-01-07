@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "cepa";
   version = "1.8.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

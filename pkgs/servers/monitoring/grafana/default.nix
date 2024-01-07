@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "10.2.2";
+  version = "10.2.3";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" "modowners" ];
 
@@ -10,19 +10,19 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-MlrGBa/ZQwfETr5vt7CyJxtvZC021aeWsgKtfuc8wAc=";
+    hash = "sha256-F61RtPEjQ4uFVcJLG04CD4//w8X7uJinxzYyoW/MosA=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-Mt0si5TxkXGQp5vmVD37fl3WKXuuIcJNtiTcEYCroZ8=";
+    hash = "sha256-xoZgaml1SB9PEI3kTE3zRlJR5O4tog58bua2blvc8to=";
   };
 
-  vendorHash = "sha256-z2eDbnezG9TWrqLPxAXHBgdtXvaEf8ccUQUe9MnhjtQ=";
+  vendorHash = "sha256-rQOnuh6t+cUqyAAnUhGgxMaW88pawnauAGQd6w0T57Q=";
 
   nativeBuildInputs = [ wire ];
 
-  preBuild = let
+  postConfigure = let
     skipTest = lineOffset: testCase: file:
       let
         jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);

@@ -18,7 +18,7 @@ which runs the server.
     port = 20123;
     # See note below about security
     environmentFile = pkgs.writeText "livebook.env" ''
-      LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+      LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     '';
   };
 }
@@ -37,3 +37,14 @@ A better approach would be to put the password in some secure
 user-readable location and set `environmentFile = /home/user/secure/livebook.env`.
 
 :::
+
+### Extra dependencies {#module-services-livebook-extra-dependencies}
+
+By default, the Livebook service is run with minimum dependencies, but
+some features require additional packages.  For example, the machine
+learning Kinos require `gcc` and `gnumake`.  To add these, use
+`extraPackages`:
+
+```
+services.livebook.extraPackages = with pkgs; [ gcc gnumake ];
+```

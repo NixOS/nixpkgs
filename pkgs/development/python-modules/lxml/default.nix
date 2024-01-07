@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "lxml";
   version = "4.9.3-3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

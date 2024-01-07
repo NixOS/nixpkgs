@@ -308,8 +308,9 @@ in
       description = "Firewall";
       wantedBy = [ "sysinit.target" ];
       wants = [ "network-pre.target" ];
-      before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
+      before = [ "network-pre.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
 
       path = [ cfg.package ] ++ cfg.extraPackages;
 

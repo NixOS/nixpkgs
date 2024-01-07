@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "proto-plus";
   version = "1.22.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

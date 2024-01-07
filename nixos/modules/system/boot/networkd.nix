@@ -597,6 +597,8 @@ let
           "DHCP"
           "DHCPServer"
           "LinkLocalAddressing"
+          "IPv6LinkLocalAddressGenerationMode"
+          "IPv6StableSecretAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -648,6 +650,7 @@ let
         (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
         (assertValueOneOf "DHCPServer" boolValues)
         (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
         (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
@@ -1612,7 +1615,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };

@@ -38,6 +38,19 @@ let
       "--bin=codelldb"
     ];
 
+    postFixup = ''
+      mkdir -p $out/share
+      # codelldb expects libcodelldb.so to be in the same
+      # directory as the executable, and can't find it in $out/lib.
+      # To make codelldb executable as a standalone,
+      # we put all files in $out/share, and then wrap the binary in $out/bin.
+      mv $out/bin/* $out/share
+      cp $out/lib/* $out/share
+      ln -s ${lldb.lib} $out/lldb
+      makeWrapper $out/share/codelldb $out/bin/codelldb \
+        --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
+    '';
+
     patches = [ ./adapter-output-shared_object.patch ];
 
     # Tests are linked to liblldb but it is not available here.
@@ -112,7 +125,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/{bin,lib}/*
+    cp -t $ext/adapter ${adapter}/share/*
     cp -r ../adapter/scripts $ext/adapter
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"

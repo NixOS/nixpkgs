@@ -42,12 +42,16 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionOlder info.version "28")
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "27")
     (substituteAll {
       name = "version.patch";
-      src = if lib.versionAtLeast info.version "27" then ./version.patch else ./version-old.patch;
+      src = ./version.patch;
       inherit (info) version;
     })
+
+  # we remove the web_tests directory in the chromium src FOD to reduce the output size, but this backported patch includes patches on web_tests
+  ++ lib.optional (lib.versions.major info.version == "26")
+    ./electron-26-remove-web_tests-patch.patch
   ;
 
   unpackPhase = ''
@@ -165,15 +169,17 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_widevine = false;
     use_perfetto_client_library = false;
     enable_check_raw_ptr_fields = false;
-  } // lib.optionalAttrs (lib.versionOlder info.version "26")  {
-    use_gnome_keyring = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "28")  {
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "27")  {
     override_electron_version = info.version;
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
+
+    runHook postInstall
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -181,14 +187,18 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   passthru = {
     inherit info;
     headers = stdenv.mkDerivation rec {
-      name = "node-v${info.node}-headers.tar.xz";
+      name = "node-v${info.node}-headers.tar.gz";
       nativeBuildInputs = [ python3 ];
       src = fetchdep info.deps."src/third_party/electron_node";
       buildPhase = ''
+        runHook preBuild
         make tar-headers
+        runHook postBuild
       '';
       installPhase = ''
+        runHook preInstall
         mv ${name} $out
+        runHook postInstall
       '';
     };
   };

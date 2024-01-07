@@ -58,6 +58,15 @@ impl<A> Validation<A> {
             Success(value) => Success(f(value)),
         }
     }
+
+    /// Map a `Validation<A>` to a `Result<B>` by applying a function `A -> Result<B>`
+    /// only if there is a `Success` value
+    pub fn result_map<B>(self, f: impl FnOnce(A) -> Result<B>) -> Result<B> {
+        match self {
+            Failure(err) => Ok(Failure(err)),
+            Success(value) => f(value),
+        }
+    }
 }
 
 impl Validation<()> {

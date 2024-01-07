@@ -38,7 +38,7 @@ let
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
     hash = "sha256-xcKmFI8HcRA9bbh6EQGElKykIQ3RJX/q5f4IxXvM1Is=";
@@ -110,11 +110,11 @@ in stdenv.mkDerivation (finalAttrs: {
   # Find zstd and add to target. Mainly for torch.
   patches = [
     (fetchpatch {
-      url = "https://github.com/ROCmSoftwarePlatform/MIOpen/commit/e608b4325646afeabb5e52846997b926d2019d19.patch";
+      url = "https://github.com/ROCm/MIOpen/commit/e608b4325646afeabb5e52846997b926d2019d19.patch";
       hash = "sha256-oxa3qlIC2bzbwGxrQOZXoY/S7CpLsMrnWRB7Og0tk0M=";
     })
     (fetchpatch {
-      url = "https://github.com/ROCmSoftwarePlatform/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
+      url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
       hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
     })
   ];
@@ -230,10 +230,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Machine intelligence library for ROCm";
-    homepage = "https://github.com/ROCmSoftwarePlatform/MIOpen";
+    homepage = "https://github.com/ROCm/MIOpen";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -352,10 +352,11 @@ let
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
-        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null))
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
+        ''
           location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
@@ -375,10 +376,11 @@ let
             ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+
             location / {
-              return 301 https://$host$request_uri;
+              return ${toString vhost.redirectCode} https://$host$request_uri;
             }
+            ${acmeLocation}
           }
         ''}
 
@@ -391,13 +393,6 @@ let
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
-          ''}
-          ${acmeLocation}
-          ${optionalString (vhost.root != null) "root ${vhost.root};"}
-          ${optionalString (vhost.globalRedirect != null) ''
-            location / {
-              return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
-            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -421,6 +416,14 @@ let
 
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString (vhost.root != null) "root ${vhost.root};"}
+
+          ${optionalString (vhost.globalRedirect != null) ''
+            location / {
+              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
+          ''}
+          ${acmeLocation}
           ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
@@ -449,7 +452,7 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
-      ${optionalString (config.return != null) "return ${config.return};"}
+      ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
       ${mkBasicAuth "sublocation" config}
@@ -649,6 +652,8 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
+          Supported Nginx forks include `angie`, `openresty` and `tengine`.
+          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -1128,14 +1133,6 @@ in
       }
 
       {
-        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.kTLS requires nginx version
-          1.21.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -1144,18 +1141,20 @@ in
       }
 
       {
-        assertion = cfg.package.pname != "nginxQuic" -> !(cfg.enableQuicBPF);
+        assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
         message = ''
           services.nginx.enableQuicBPF requires using nginxQuic package,
-          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
+          `services.nginx.package = pkgs.angieQuic;`.
         '';
       }
 
       {
-        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> all (host: !host.quic) (attrValues virtualHosts);
         message = ''
-          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
-          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
+          `services.nginx.package = pkgs.angieQuic;`.
         '';
       }
 
@@ -1340,6 +1339,8 @@ in
     users.groups = optionalAttrs (cfg.group == "nginx") {
       nginx.gid = config.ids.gids.nginx;
     };
+
+    boot.kernelModules = optional (versionAtLeast config.boot.kernelPackages.kernel.version "4.17") "tls";
 
     # do not delete the default temp directories created upon nginx startup
     systemd.tmpfiles.rules = [

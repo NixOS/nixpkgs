@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    hash = "sha256-/9CzcnPd1D8jSl/pfl54+8/728r+GCqWFXahl47MJ3g=";
+    hash = "sha256-29SuR4RDW0+yNR1RHlm3I4avy0CjBTGxv1FKxMDZxO0=";
   };
 
   nativeBuildInputs = [ cmake ];

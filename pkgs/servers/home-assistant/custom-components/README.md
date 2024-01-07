@@ -25,7 +25,7 @@ versions into the Python environment.
 }:
 
 buildHomeAssistantComponent {
-  # pname, version
+  # owner, domain, version
 
   src = fetchFromGithub {
     # owner, repo, rev, hash
@@ -40,18 +40,34 @@ buildHomeAssistantComponent {
   }
 }
 
-## Package name normalization
+## Package attribute
 
-Apply the same normalization rules as defined for python packages in
-[PEP503](https://peps.python.org/pep-0503/#normalized-names).
-The name should be lowercased and dots, underlines or multiple
-dashes should all be replaced by a single dash.
+The attribute name must reflect the domain as seen in the
+`manifest.json`, which in turn will match the python module name below
+in the `custom_components/` directory.
+
+**Example:**
+
+The project [mweinelt/ha-prometheus-sensor](https://github.com/mweinelt/ha-prometheus-sensor/blob/1.0.0/custom_components/prometheus_sensor/manifest.json#L2)
+would receive the attribute name `"prometheus_sensor"`, because both
+domain in the `manifest.json` as well as the module name are
+`prometheus_sensor`.
+
+## Package name
+
+The `pname` attribute is a composition of both `owner` and `domain`.
+
+Don't set `pname`, set `owner and `domain` instead.
+
+Exposing the `domain` attribute separately allows checking for
+conflicting components at eval time.
 
 ## Manifest check
 
 The `buildHomeAssistantComponent` builder uses a hook to check whether
 the dependencies specified in the `manifest.json` are present and
-inside the specified version range.
+inside the specified version range. It also makes sure derivation
+and manifest agree about the domain name.
 
 There shouldn't be a need to disable this hook, but you can set
 `dontCheckManifest` to `true` in the derivation to achieve that.

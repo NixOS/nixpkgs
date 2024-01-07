@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
-  version = "56.0";
+  version = "58.0";
 
   src = fetchFromGitHub {
     owner = "tvraman";
     repo = pname;
     rev = version;
-    hash= "sha256-juy+nQ7DrG818/uTH6Dv/lrrzu8qzPWwi0sX7JrhHK8=";
+    hash= "sha256-5pWC17nvy3ZuG0bR//LqDVpKsH5hFSFf63Q33a1BfBk=";
   };
 
   nativeBuildInputs = [

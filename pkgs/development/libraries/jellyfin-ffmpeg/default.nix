@@ -39,5 +39,6 @@
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
     license = licenses.gpl3;
     maintainers = with maintainers; [ justinas ];
+    pkgConfigModules = [ "libavutil" ];
   };
 })

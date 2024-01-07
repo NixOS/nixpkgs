@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-0otJxgVYLwvVYIWT/hjrrpuSj5jslP1dbJRt6GUOrDs=";
@@ -96,10 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Mixed precision matrix multiplication and accumulation";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocWMMA";
+    homepage = "https://github.com/ROCm/rocWMMA";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

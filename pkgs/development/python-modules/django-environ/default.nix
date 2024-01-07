@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "django-environ";
   version = "0.11.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

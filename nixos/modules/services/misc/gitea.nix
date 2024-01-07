@@ -234,6 +234,13 @@ in
         description = lib.mdDoc "Path to the git repositories.";
       };
 
+      camoHmacKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/camoHmacKey";
+        description = lib.mdDoc "Path to a file containing the camo HMAC key.";
+      };
+
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -429,6 +436,10 @@ in
         LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
+      camo = mkIf (cfg.camoHmacKeyFile != null) {
+        HMAC_KEY = "#hmackey#";
+      };
+
       session = {
         COOKIE_NAME = lib.mkDefault "session";
       };
@@ -568,6 +579,10 @@ in
 
             ${lib.optionalString cfg.lfs.enable ''
               ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
             ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''

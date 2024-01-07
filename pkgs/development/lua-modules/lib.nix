@@ -76,18 +76,23 @@ rec {
 
   /* generate luarocks config
 
-  generateLuarocksConfig {
-    externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
-    rocksSubdir = "subdir";
-  };
+    Example:
+      generateLuarocksConfig {
+        externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
+        rocksSubdir = "subdir";
+      };
+
+    Type:
+       generateLuarocksConfig :: AttrSet -> String
   */
   generateLuarocksConfig = {
-    externalDeps ? []
+      externalDeps ? []
     # a list of lua derivations
     , requiredLuaRocks ? []
     , extraVariables ? {}
     , rocksSubdir ? "rocks-subdir"
-    }: let
+    , ...
+    }@args: let
       rocksTrees = lib.imap0
         (i: dep: {
           name = "dep-${toString i}";
@@ -140,5 +145,7 @@ rec {
     # Some needed machinery to handle multiple-output external dependencies,
     # as per https://github.com/luarocks/luarocks/issues/766
     variables = (depVariables // extraVariables);
-  });
+  }
+  // removeAttrs args [ "rocksSubdir" "extraVariables" "requiredLuaRocks" "externalDeps" ]
+  );
 }

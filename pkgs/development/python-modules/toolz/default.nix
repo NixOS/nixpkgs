@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.12.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

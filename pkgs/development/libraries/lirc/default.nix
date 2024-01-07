@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # use empty inc file instead of a from linux kernel generated one
     touch lib/lirc/input_map.inc
+
+    export PKGCONFIG="$PKG_CONFIG"
   '';
 
   strictDeps = true;

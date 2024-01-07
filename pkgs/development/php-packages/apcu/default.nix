@@ -13,13 +13,6 @@ in buildPecl {
     sha256 = "sha256-UDKLLCCnYJj/lCD8ZkkDf2WYZMoIbcP75+0/IXo4vdQ=";
   };
 
-  patches = lib.optionals (lib.versionAtLeast php.version "8.3") [
-    (fetchpatch {
-      url = "https://github.com/krakjoe/apcu/commit/c9a29161c68c0faf71046e8f03f6a90900023ded.patch";
-      hash = "sha256-B0ZKk9TJy2+sYGs7TEX2KxUiOVawIb+RXNgToU1Fz5I=";
-    })
-  ];
-
   buildInputs = [ pcre2 ];
   doCheck = true;
   checkTarget = "test";
@@ -30,8 +23,8 @@ in buildPecl {
   meta = with lib; {
     changelog = "https://github.com/krakjoe/apcu/releases/tag/v${version}";
     description = "Userland cache for PHP";
-    license = licenses.php301;
     homepage = "https://pecl.php.net/package/APCu";
+    license = licenses.php301;
     maintainers = teams.php.members;
   };
 }

@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "23.11";
+  version = "23.11.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "sha256:1q1plg9qhwlrcvljnrv8yd1gaz9a98pxgql7bqxjq37vk3lfggw6";
+    sha256 = "sha256-n1+9Q493N/N5sr7sVpzhObtbKpEejsNUUhhbYPukveg=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool

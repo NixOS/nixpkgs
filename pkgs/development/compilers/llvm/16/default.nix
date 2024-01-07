@@ -162,7 +162,7 @@ in let
         [
           # FIXME: do we need this? ./procfs.patch
           resourceDirPatch
-          ./lldb/gnu-install-dirs.patch
+          ../common/lldb/gnu-install-dirs.patch
         ]
         # This is a stopgap solution if/until the macOS SDK used for x86_64 is
         # updated.
@@ -281,7 +281,7 @@ in let
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
     # non-cross build in cross builds.
-    libclc = callPackage ./libclc {
+    libclc = callPackage ../common/libclc.nix {
       inherit buildLlvmTools;
     };
   });

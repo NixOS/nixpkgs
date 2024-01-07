@@ -28,7 +28,6 @@
 , xcbutilwm
 , xwayland
 , debug ? false
-, enableNvidiaPatches ? false
 , enableXWayland ? true
 , legacyRenderer ? false
 , withSystemd ? true
@@ -36,18 +35,20 @@
   # deprecated flags
 , nvidiaPatches ? false
 , hidpiXWayland ? false
+, enableNvidiaPatches ? false
 }:
-assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been renamed `enableNvidiaPatches`";
+assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
+assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.32.3";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8PP26+ybmScq5WpFd2JPqUDzG2VggYOvD6/rzY9/CJ4=";
+    hash = "sha256-p7el5oQZPy9l1zyIrlHu6nA4BAu59eLoSqBjhkw2jaw=";
   };
 
   patches = [
@@ -99,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       pango
       pciutils
-      (wlroots.override { inherit enableNvidiaPatches; })
+      wlroots
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]

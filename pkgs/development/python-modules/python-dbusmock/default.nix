@@ -21,6 +21,7 @@ let
 in buildPythonPackage rec {
   pname = "python-dbusmock";
   version = "0.29.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martinpitt";

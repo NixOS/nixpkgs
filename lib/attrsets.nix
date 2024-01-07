@@ -14,6 +14,14 @@ rec {
 
   /* Return an attribute from nested attribute sets.
 
+     Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
+     # and
+     (x.${f p}."example.com" or 6) == attrByPath [ (f p) "example.com" ] 6 x
+     ```
+
      Example:
        x = { a = { b = 3; }; }
        # ["a" "b"] is equivalent to x.a.b
@@ -51,12 +59,27 @@ rec {
 
   /* Return if an attribute from nested attribute set exists.
 
+     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x?a.b) == hasAttryByPath ["a" "b"] x
+     # and
+     (x?${f p}."example.com") == hasAttryByPath [ (f p) "example.com" ] x
+     ```
+
+     **Laws**:
+      1.  ```nix
+          hasAttrByPath [] x == true
+          ```
+
      Example:
        x = { a = { b = 3; }; }
        hasAttrByPath ["a" "b"] x
        => true
        hasAttrByPath ["z" "z"] x
        => false
+       hasAttrByPath [] (throw "no need")
+       => true
 
     Type:
       hasAttrByPath :: [String] -> AttrSet -> Bool
@@ -79,6 +102,71 @@ rec {
       );
     in
       hasAttrByPath' 0 e;
+
+  /*
+    Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
+
+    Can be used after [`mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) to apply a condition,
+    although this will evaluate the predicate function on sibling attributes as well.
+
+    Note that the empty attribute path is valid for all values, so this function only throws an exception if any of its inputs does.
+
+    **Laws**:
+    1.  ```nix
+        attrsets.longestValidPathPrefix [] x == []
+        ```
+
+    2.  ```nix
+        hasAttrByPath (attrsets.longestValidPathPrefix p x) x == true
+        ```
+
+    Example:
+      x = { a = { b = 3; }; }
+      attrsets.longestValidPathPrefix ["a" "b" "c"] x
+      => ["a" "b"]
+      attrsets.longestValidPathPrefix ["a"] x
+      => ["a"]
+      attrsets.longestValidPathPrefix ["z" "z"] x
+      => []
+      attrsets.longestValidPathPrefix ["z" "z"] (throw "no need")
+      => []
+
+    Type:
+      attrsets.longestValidPathPrefix :: [String] -> Value -> [String]
+  */
+  longestValidPathPrefix =
+    # A list of strings representing the longest possible path that may be returned.
+    attrPath:
+    # The nested attribute set to check.
+    v:
+    let
+      lenAttrPath = length attrPath;
+      getPrefixForSetAtIndex =
+        # The nested attribute set to check, if it is an attribute set, which
+        # is not a given.
+        remainingSet:
+        # The index of the attribute we're about to check, as well as
+        # the length of the prefix we've already checked.
+        remainingPathIndex:
+
+          if remainingPathIndex == lenAttrPath then
+            # All previously checked attributes exist, and no attr names left,
+            # so we return the whole path.
+            attrPath
+          else
+            let
+              attr = elemAt attrPath remainingPathIndex;
+            in
+            if remainingSet ? ${attr} then
+              getPrefixForSetAtIndex
+                remainingSet.${attr}      # advance from the set to the attribute value
+                (remainingPathIndex + 1)  # advance the path
+            else
+              # The attribute doesn't exist, so we return the prefix up to the
+              # previously checked length.
+              take remainingPathIndex attrPath;
+    in
+      getPrefixForSetAtIndex v 0;
 
   /* Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
@@ -104,6 +192,14 @@ rec {
 
   /* Like `attrByPath`, but without a default value. If it doesn't find the
      path it will throw an error.
+
+     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+    ```nix
+     x.a.b == getAttrByPath ["a" "b"] x
+     # and
+     x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
+     ```
 
      Example:
        x = { a = { b = 3; }; }

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "numpy-stl";
   version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

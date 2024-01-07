@@ -8,10 +8,11 @@
 , curl
 , bash
 , debugInfo ? false
-}:
+} @ inputs:
 
 { baseName ? "elixir"
 , version
+, erlang ? inputs.erlang
 , minimumOTPVersion
 , sha256 ? null
 , rev ? "v${version}"

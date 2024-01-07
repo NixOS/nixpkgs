@@ -246,7 +246,9 @@ fn main() -> anyhow::Result<()> {
     packages.into_par_iter().try_for_each(|package| {
         eprintln!("{}", package.name);
 
-        let tarball = package.tarball()?;
+        let tarball = package
+            .tarball()
+            .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
         let integrity = package.integrity().map(ToString::to_string);
 
         cache

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pyexcel-ods";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

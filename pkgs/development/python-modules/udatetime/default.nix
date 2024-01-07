@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "udatetime";
   version = "0.0.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

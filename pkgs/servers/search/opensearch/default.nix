@@ -41,7 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"
-    wrapProgram $out/bin/opensearch-cli --set JAVA_HOME "${jre_headless}"
+
+    rm $out/bin/opensearch-cli
 
     runHook postInstall
   '';

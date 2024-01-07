@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-An1biuaqPeRniJZroxoT2o9IEA4XFf5l6ut4nmOsQJI=";
+    sha256 = "sha256-s6b15FhVfEwsHtVt4bhd6LDxl/WW1PXlUrH2XFOTT5E=";
   };
 
-  cargoHash = "sha256-gnFu0JsMt1wMfifF6EnjDwwydFnVyqpkHV0cyR5Qt3Y=";
+  cargoHash = "sha256-Ilsv0mo7/4eEdRH3jWZXdF4LSYYdWr6gCvnMMAZn5j0=";
 
   nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
     changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";
   };

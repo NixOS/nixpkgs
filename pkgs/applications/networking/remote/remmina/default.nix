@@ -6,6 +6,7 @@
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
+, wayland
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
 , withKf5Wallet ? stdenv.isLinux, libsForQt5
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium
     harfbuzz python3
+    wayland
   ] ++ lib.optionals stdenv.isLinux [ libappindicator-gtk3 libdbusmenu-gtk3 webkitgtk_4_1 ]
     ++ lib.optionals withLibsecret [ libsecret ]
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
@@ -81,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";
+    mainProgram = "remmina";
     maintainers = with maintainers; [ bbigras melsigl ryantm ];
     platforms = platforms.linux ++ platforms.darwin;
   };

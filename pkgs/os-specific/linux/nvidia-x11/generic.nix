@@ -58,12 +58,13 @@
 
 with lib;
 
+assert useSettings -> !libsOnly;
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
-assert useFabricmanager -> !(useSettings || usePersistenced);
+assert useFabricmanager -> !useSettings;
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";

@@ -6,25 +6,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20230517";
+  version = "20231103";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-1i0STaJulJP0LWdNfLLIEKVapfkcguYRnbc+psWlVE4=";
+    sha256 = "sha256-9/XYgQjOdIwDpoJz5kNmiRBdoSod9l7Yl0u4e20KDPw=";
   };
 
   patches = [
     # https://github.com/neomutt/neomutt/issues/3773#issuecomment-1493295144
     ./fix-open-very-large-mailbox.patch
+    # https://github.com/neomutt/neomutt/issues/4128
     (fetchpatch {
-      # https://github.com/neomutt/neomutt/pull/3933
-      name = "disable-incorrect-tests.patch";
-      url = "https://github.com/neomutt/neomutt/compare/f624551b86cdb53224b5b48304a808ca2815111e...a9a1d99e6c0fdf367188125451300fa89d3e801a.patch";
-      hash = "sha256-Plei063T8XyXF4/7/nAb6/4OyXz72vBAXHwls9WL1vM=";
-      excludes = [".github/workflows/macos.yml"];
+      name = "fix-attr-color-copy.patch";
+      url = "https://github.com/neomutt/neomutt/commit/24f8644c28e602206a63fae53c4eb3d32426ce0c.patch";
+      hash = "sha256-8qcW9hb6yxEZICRYgl6ZhPQDrI6nZN9NH+40GhTgR0o=";
     })
   ];
 

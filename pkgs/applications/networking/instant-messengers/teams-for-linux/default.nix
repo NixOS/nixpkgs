@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -19,19 +20,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.22";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nyhAq06k0nNrGSbD0N1RNwcplYf5vO1BvnvEfNYGG0A=";
+    hash = "sha256-1URS9VPqV58p8RUA47j8sdqYqps1Ruo0aqdZXedvPX8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-ydhJXAvz3k6GwpnSL6brl9xFpb+ooi8Am89TkcE00hc=";
+    hash = "sha256-ef+JW5ud9LlRxaCJC2iOT5N7FgZO7IkAABJcMQPvIBA=";
   };
+
+  patches = [
+    # remove when IsmaelMartinez/teams-for-linux#1058 is merged
+    (fetchpatch {
+      name = "teams-for-linux-fix-version.patch";
+      url = "https://github.com/IsmaelMartinez/teams-for-linux/commit/1d14947eef35c6a2e0cbdfcce405820f8dd36c68.diff";
+      hash = "sha256-kj2jEAqgZ0frUw85hY23mFYFcXz95z/WQSDymsheDfg=";
+    })
+  ];
+
 
   nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 

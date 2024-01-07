@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "partd";
   version = "1.4.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

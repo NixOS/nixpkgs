@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "django-js-reverse";
   version = "0.10.1-b1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "BITSOLVER";

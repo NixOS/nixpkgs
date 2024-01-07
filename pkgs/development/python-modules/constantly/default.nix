@@ -4,6 +4,7 @@ let
   self = buildPythonPackage rec {
     pname = "constantly";
     version = "15.1.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "twisted";

@@ -21,7 +21,7 @@ TOKENS = {
 }
 SNAPSHOT_VALUE = 99999
 PLUGINS_FILE = Path(__file__).parent.joinpath("plugins.json").resolve()
-IDES_FILE = Path(__file__).parent.joinpath("../versions.json").resolve()
+IDES_FILE = Path(__file__).parent.joinpath("../bin/versions.json").resolve()
 # The plugin compatibility system uses a different naming scheme to the ide update system.
 # These dicts convert between them
 FRIENDLY_TO_PLUGIN = {

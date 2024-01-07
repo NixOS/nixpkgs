@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.apollographql.com/docs/router/";
     license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];
+    knownVulnerabilities = [ "CVE-2023-45812" ];
   };
 }

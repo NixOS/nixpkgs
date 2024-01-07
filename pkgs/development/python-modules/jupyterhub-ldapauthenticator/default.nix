@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
   version = "1.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

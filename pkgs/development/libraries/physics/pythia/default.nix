@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
-
   configureFlags = [
     "--enable-shared"
     "--with-lhapdf6=${lhapdf}"

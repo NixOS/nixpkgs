@@ -60,7 +60,7 @@ buildGoModule rec {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ megheaiulian adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };

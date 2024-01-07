@@ -67,6 +67,7 @@ let
     ;
   outer_types =
 rec {
+  __attrsFailEvaluation = true;
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
@@ -112,9 +113,14 @@ rec {
     , # Description of the type, defined recursively by embedding the wrapped type if any.
       description ? null
       # A hint for whether or not this description needs parentheses. Possible values:
-      #  - "noun": a simple noun phrase such as "positive integer"
-      #  - "conjunction": a phrase with a potentially ambiguous "or" connective.
+      #  - "noun": a noun phrase
+      #    Example description: "positive integer",
+      #  - "conjunction": a phrase with a potentially ambiguous "or" connective
+      #    Example description: "int or string"
       #  - "composite": a phrase with an "of" connective
+      #    Example description: "list of string"
+      #  - "nonRestrictiveClause": a noun followed by a comma and a clause
+      #    Example description: "positive integer, meaning >0"
       # See the `optionDescriptionPhrase` function.
     , descriptionClass ? null
     , # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
@@ -275,6 +281,22 @@ rec {
       merge = mergeEqualOption;
     };
 
+    boolByOr = mkOptionType {
+      name = "boolByOr";
+      description = "boolean (merged using or)";
+      descriptionClass = "noun";
+      check = isBool;
+      merge = loc: defs:
+        foldl'
+          (result: def:
+            # Under the assumption that .check always runs before merge, we can assume that all defs.*.value
+            # have been forced, and therefore we assume we don't introduce order-dependent strictness here
+            result || def.value
+          )
+          false
+          defs;
+    };
+
     int = mkOptionType {
       name = "int";
       description = "signed integer";
@@ -321,10 +343,12 @@ rec {
         unsigned = addCheck types.int (x: x >= 0) // {
           name = "unsignedInt";
           description = "unsigned integer, meaning >=0";
+          descriptionClass = "nonRestrictiveClause";
         };
         positive = addCheck types.int (x: x > 0) // {
           name = "positiveInt";
           description = "positive integer, meaning >0";
+          descriptionClass = "nonRestrictiveClause";
         };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
@@ -366,10 +390,12 @@ rec {
       nonnegative = addCheck number (x: x >= 0) // {
         name = "numberNonnegative";
         description = "nonnegative integer or floating point number, meaning >=0";
+        descriptionClass = "nonRestrictiveClause";
       };
       positive = addCheck number (x: x > 0) // {
         name = "numberPositive";
         description = "positive integer or floating point number, meaning >0";
+        descriptionClass = "nonRestrictiveClause";
       };
     };
 
@@ -446,6 +472,7 @@ rec {
     passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
       name = "passwdEntry ${entryType.name}";
       description = "${optionDescriptionPhrase (class: class == "noun") entryType}, not containing newlines or colons";
+      descriptionClass = "nonRestrictiveClause";
     };
 
     attrs = mkOptionType {
@@ -853,7 +880,13 @@ rec {
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
-      description = "${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t1} or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction" || class == "composite") t2}";
+      description =
+        if t1.descriptionClass or null == "nonRestrictiveClause"
+        then
+          # Plain, but add comma
+          "${t1.description}, or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t2}"
+        else
+          "${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t1} or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction" || class == "composite") t2}";
       descriptionClass = "conjunction";
       check = x: t1.check x || t2.check x;
       merge = loc: defs:

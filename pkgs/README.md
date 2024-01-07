@@ -470,7 +470,7 @@ Preferred source hash type is sha256. There are several ways to get it.
 
    in the package expression, attempt build and extract correct hash from error messages.
 
-   > **Warning**
+   > [!Warning]
    > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
    > See [here][secure-hashes]
 

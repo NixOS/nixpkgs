@@ -357,18 +357,13 @@ self: super: builtins.intersectAttrs super {
 
   # Doesn't declare boost dependency
   nix-serve-ng = overrideSrc {
-    src = assert super.nix-serve-ng.version == "1.0.0";
-      # Workaround missing files in sdist
-      # https://github.com/aristanetworks/nix-serve-ng/issues/10
-      #
-      # Workaround for libstore incompatibility with Nix 2.13
-      # https://github.com/aristanetworks/nix-serve-ng/issues/22
-      pkgs.fetchFromGitHub {
-        repo = "nix-serve-ng";
-        owner = "aristanetworks";
-        rev = "dabf46d65d8e3be80fa2eacd229eb3e621add4bd";
-        hash = "sha256-SoJJ3rMtDMfUzBSzuGMY538HDIj/s8bPf8CjIkpqY2w=";
-      };
+    version = "1.0.0-unstable-2023-12-18";
+    src = pkgs.fetchFromGitHub {
+      repo = "nix-serve-ng";
+      owner = "aristanetworks";
+      rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
+      hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
+    };
   } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
   # These packages try to access the network.
@@ -399,7 +394,6 @@ self: super: builtins.intersectAttrs super {
   socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
-  warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
@@ -419,13 +413,26 @@ self: super: builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # The curl executable is required for withApplication tests.
+  warp = addTestToolDepend pkgs.curl super.warp;
+
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
   hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
   hasql-interpolate = dontCheck super.hasql-interpolate;
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
+  hasql-pool_0_10 = dontCheck super.hasql-pool_0_10;
   hasql-transaction = dontCheck super.hasql-transaction;
+
+  # Test suite requires a running postgresql server,
+  # avoid compiling twice by providing executable as a separate output (with small closure size),
+  # generate shell completion
+  postgrest = lib.pipe super.postgrest [
+    dontCheck
+    enableSeparateBinOutput
+    (self.generateOptparseApplicativeCompletions [ "postgrest" ])
+  ];
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -1095,7 +1102,6 @@ self: super: builtins.intersectAttrs super {
     '';
   }) (lib.pipe
         (super.cachix.override {
-          hnix-store-core = self.hnix-store-core_0_7_0_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [

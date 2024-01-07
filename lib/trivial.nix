@@ -1,6 +1,18 @@
 { lib }:
 
-rec {
+let
+  inherit (lib.trivial)
+    isFunction
+    isInt
+    functionArgs
+    pathExists
+    release
+    setFunctionArgs
+    toBaseDigits
+    version
+    versionSuffix
+    warn;
+in {
 
   ## Simple (higher order) functions
 
@@ -58,9 +70,7 @@ rec {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = val: functions:
-    let reverseApply = x: f: f x;
-    in builtins.foldl' reverseApply val functions;
+  pipe = builtins.foldl' (x: f: f x);
 
   # note please don’t add a function like `compose = flip pipe`.
   # This would confuse users, because the order of the functions
@@ -439,7 +449,7 @@ rec {
   */
   functionArgs = f:
     if f ? __functor
-    then f.__functionArgs or (lib.functionArgs (f.__functor f))
+    then f.__functionArgs or (functionArgs (f.__functor f))
     else builtins.functionArgs f;
 
   /* Check whether something is a function or something
@@ -510,22 +520,20 @@ rec {
 
      toHexString 250 => "FA"
   */
-  toHexString = i:
-    let
-      toHexDigit = d:
-        if d < 10
-        then toString d
-        else
-          {
-            "10" = "A";
-            "11" = "B";
-            "12" = "C";
-            "13" = "D";
-            "14" = "E";
-            "15" = "F";
-          }.${toString d};
-    in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  toHexString = let
+    hexDigits = {
+      "10" = "A";
+      "11" = "B";
+      "12" = "C";
+      "13" = "D";
+      "14" = "E";
+      "15" = "F";
+    };
+    toHexDigit = d:
+      if d < 10
+      then toString d
+      else hexDigits.${toString d};
+  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:

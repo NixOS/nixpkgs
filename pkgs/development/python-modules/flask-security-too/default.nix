@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-wLUHXfDWSp7zWwTIjTH79AWlkkNzb21tChpLSEWr8+U=";
+    hash = "sha256-we2TquU28qP/ir4eE67J0Nlft/8IL8w7Ny3ypSE5cNk=";
   };
 
   nativeBuildInputs = [

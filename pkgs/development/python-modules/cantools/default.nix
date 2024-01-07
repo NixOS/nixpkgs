@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.0";
+  version = "39.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-44zzlyOIQ2qo4Zq5hb+xnCy0ANm6iCpcBww0l2KWdMs=";
+    hash = "sha256-gGmo9HO7FnmZC+oJA/OiLVjfVJWuu/CfWNSfYnURthk=";
   };
 
   postPatch = ''

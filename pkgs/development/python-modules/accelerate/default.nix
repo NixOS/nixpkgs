@@ -11,6 +11,7 @@
 , packaging
 , psutil
 , pyyaml
+, safetensors
 , torch
 , evaluate
 , parameterized
@@ -19,25 +20,17 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.24.1";
-  format = "pyproject";
+  version = "0.25.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DKyFb+4DUMhVUwr+sgF2IaJS9pEj2o2shGYwExfffWg=";
+    hash = "sha256-WIMOSfo9fGbevMkUHvFsA51SOiGkBO1cK388FudRDY0=";
   };
-
-  patches = [
-    # https://github.com/huggingface/accelerate/pull/2121
-    (fetchpatch {
-      name = "fix-import-error-without-torch_distributed.patch";
-      url = "https://github.com/huggingface/accelerate/commit/42048092eabd67a407ea513a62f2acde97079fbc.patch";
-      hash = "sha256-9lvnU6z5ZEFc5RVw2bP0cGVyrwAp/pxX4ZgnmCN7qH8=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -46,6 +39,7 @@ buildPythonPackage rec {
     packaging
     psutil
     pyyaml
+    safetensors
     torch
   ];
 
@@ -83,9 +77,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # python3.11 not yet supported for torch.compile
-    "test_dynamo_extract_model"
   ];
 
   disabledTestPaths = lib.optionals (!(stdenv.isLinux && stdenv.isx86_64)) [

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-excel-table";
   version = "1.0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

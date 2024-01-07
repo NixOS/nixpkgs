@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyarr";
   version = "5.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.14.2";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ojc4NmmI+vTSZSAPV8XeQxLvo9FLtDS5Km5UFxP12QY=";
+    hash = "sha256-d4Y+1U94/NLhlMoRPJzF5+QLhzBszsG6MH5G3PgfBzc=";
   };
 
   propagatedBuildInputs = [
@@ -48,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Text-to-Speech API client library";
-    homepage = "https://github.com/googleapis/python-texttospeech";
-    changelog = "https://github.com/googleapis/python-texttospeech/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-texttospeech";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${version}/packages/google-cloud-texttospeech/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

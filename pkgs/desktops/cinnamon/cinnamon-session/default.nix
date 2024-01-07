@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Use-dbus_glib-instead-of-elogind.patch
+    ./0002-Use-login-shell-for-wayland-session.patch
   ];
 
   buildInputs = [

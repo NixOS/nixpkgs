@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "6.0";
+  version = "6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "wagtail";
-    repo = "modelcluster";
+    repo = "django-modelcluster";
     rev = "refs/tags/v${version}";
-    hash = "sha256-p6hvOkPWRVJYLHvwyn9nS05wblikRFmlSYZuLiCcuqc=";
+    hash = "sha256-fNGD2aU668VQ8YHcaFjtjiW/gYJgSx7arDAyUKpFYRE=";
   };
 
   propagatedBuildInputs = [

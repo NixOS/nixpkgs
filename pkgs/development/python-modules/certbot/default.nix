@@ -16,7 +16,7 @@
 , requests
 , six
 , zope-component
-, zope_interface
+, zope-interface
 , setuptools
 , dialog
 , gnureadline
@@ -28,6 +28,7 @@
 buildPythonPackage rec {
   pname = "certbot";
   version = "2.7.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     requests
     six
     zope-component
-    zope_interface
+    zope-interface
     setuptools # for pkg_resources
   ];
 

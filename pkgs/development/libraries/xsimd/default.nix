@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "11.1.0";
+  version = "11.2.0";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     rev = finalAttrs.version;
-    sha256 = "sha256-l6IRzndjb95hIcFCCm8zmlNHWtKduqy2t/oml/9Xp+w=";
+    sha256 = "sha256-CzgfxXGZXoJ56dX+mDPsHZC31YudrZXpX2tovh/Vjr0=";
   };
   patches = [
     # Ideally, Accelerate/Accelerate.h should be used for this implementation,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if (finalAttrs.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${if (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
   ];
 
   doCheck = true;

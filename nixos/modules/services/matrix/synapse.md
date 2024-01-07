@@ -16,13 +16,13 @@ around Matrix.
 
 ## Synapse Homeserver {#module-services-matrix-synapse}
 
-[Synapse](https://github.com/matrix-org/synapse) is
+[Synapse](https://github.com/element-hq/synapse) is
 the reference homeserver implementation of Matrix from the core development
 team at matrix.org. The following configuration example will set up a
 synapse server for the `example.org` domain, served from
 the host `myhostname.example.org`. For more information,
 please refer to the
-[installation instructions of Synapse](https://matrix-org.github.io/synapse/latest/setup/installation.html) .
+[installation instructions of Synapse](https://element-hq.github.io/synapse/latest/setup/installation.html) .
 ```
 { pkgs, lib, config, ... }:
 let
@@ -70,7 +70,7 @@ in {
         # the domain (i.e. example.org from @foo:example.org) and the federation port
         # is 8448.
         # Further reference can be found in the docs about delegation under
-        # https://matrix-org.github.io/synapse/latest/delegate.html
+        # https://element-hq.github.io/synapse/latest/delegate.html
         locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
         # This is usually needed for homeserver discovery (from e.g. other Matrix clients).
         # Further reference can be found in the upstream docs at
@@ -169,7 +169,7 @@ in an additional file like this:
 ::: {.note}
 It's also possible to user alternative authentication mechanism such as
 [LDAP (via `matrix-synapse-ldap3`)](https://github.com/matrix-org/matrix-synapse-ldap3)
-or [OpenID](https://matrix-org.github.io/synapse/latest/openid.html).
+or [OpenID](https://element-hq.github.io/synapse/latest/openid.html).
 :::
 
 ## Element (formerly known as Riot) Web Client {#module-services-matrix-element-web}

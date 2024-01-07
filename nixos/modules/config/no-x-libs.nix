@@ -34,6 +34,7 @@ with lib;
       ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support
       gd = super.gd.override { withXorg = false; };
+      ghostscript = super.ghostscript.override { cupsSupport = false; x11Support = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
@@ -44,6 +45,7 @@ with lib;
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
+      intel-vaapi-driver = super.intel-vaapi-driver.override { enableGui = false; };
       libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
       libva = super.libva-minimal;
@@ -51,6 +53,7 @@ with lib;
       mc = super.mc.override { x11Support = false; };
       mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
+      mupdf = super.mupdf.override { enableGL = false; enableX11 = false; };
       neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
@@ -71,7 +74,7 @@ with lib;
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {
-        qtbase = super'.qtbase.override { withGtk3 = false; };
+        qtbase = super'.qtbase.override { withGtk3 = false; withQttranslation = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11

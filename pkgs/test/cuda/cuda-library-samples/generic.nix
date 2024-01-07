@@ -1,7 +1,11 @@
-{ lib, backendStdenv, fetchFromGitHub
-, cmake, addOpenGLRunpath
-, cudatoolkit
-, cutensor
+{
+  lib,
+  backendStdenv,
+  fetchFromGitHub,
+  cmake,
+  addOpenGLRunpath,
+  cudatoolkit,
+  cutensor,
 }:
 
 let
@@ -14,8 +18,11 @@ let
   };
   commonAttrs = {
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
-    nativeBuildInputs = [ cmake addOpenGLRunpath ];
-    buildInputs = [ cudatoolkit ];
+    nativeBuildInputs = [
+      cmake
+      addOpenGLRunpath
+    ];
+    buildInputs = [cudatoolkit];
     postFixup = ''
       for exe in $out/bin/*; do
         addOpenGLRunpath $exe
@@ -29,43 +36,50 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+      maintainers = with lib.maintainers; [obsidian-systems-maintenance] ++ lib.teams.cuda.members;
     };
   };
 in
 
 {
-  cublas = backendStdenv.mkDerivation (commonAttrs // {
-    pname = "cuda-library-samples-cublas";
+  cublas = backendStdenv.mkDerivation (
+    commonAttrs
+    // {
+      pname = "cuda-library-samples-cublas";
 
-    src = "${src}/cuBLASLt";
-  });
+      src = "${src}/cuBLASLt";
+    }
+  );
 
-  cusolver = backendStdenv.mkDerivation (commonAttrs // {
-    pname = "cuda-library-samples-cusolver";
+  cusolver = backendStdenv.mkDerivation (
+    commonAttrs
+    // {
+      pname = "cuda-library-samples-cusolver";
 
-    src = "${src}/cuSOLVER";
+      src = "${src}/cuSOLVER";
 
-    sourceRoot = "cuSOLVER/gesv";
-  });
+      sourceRoot = "cuSOLVER/gesv";
+    }
+  );
 
-  cutensor = backendStdenv.mkDerivation (commonAttrs // {
-    pname = "cuda-library-samples-cutensor";
+  cutensor = backendStdenv.mkDerivation (
+    commonAttrs
+    // {
+      pname = "cuda-library-samples-cutensor";
 
-    src = "${src}/cuTENSOR";
+      src = "${src}/cuTENSOR";
 
-    buildInputs = [ cutensor ];
+      buildInputs = [cutensor];
 
-    cmakeFlags = [
-      "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
-    ];
+      cmakeFlags = ["-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"];
 
-    # CUTENSOR_ROOT is double escaped
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
-    '';
+      # CUTENSOR_ROOT is double escaped
+      postPatch = ''
+        substituteInPlace CMakeLists.txt \
+          --replace "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
+      '';
 
-    CUTENSOR_ROOT = cutensor;
-  });
+      CUTENSOR_ROOT = cutensor;
+    }
+  );
 }

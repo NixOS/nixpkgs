@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
-    rev = version;
-    hash = "sha256-qOY1ILMDqSguLnbhuu5JJVMvG3uA08Lv2fB70TgrKqI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cMWYmCbkhJmz+RMCh3NIhOkC5bX46nwz09WhTV+Mz6w=";
   };
 
   nativeBuildInputs = [
