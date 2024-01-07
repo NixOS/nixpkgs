@@ -94,7 +94,7 @@
 , withCryptsetup ? true
 , withRepart ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi
+, withEfi ? stdenv.hostPlatform.hasEfi
 , withFido2 ? true
 , withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
