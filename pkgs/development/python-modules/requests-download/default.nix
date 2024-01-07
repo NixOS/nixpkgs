@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "requests_download";
+  pname = "requests-download";
   version = "0.1.2";
 
   format = "wheel";
@@ -16,7 +16,8 @@ buildPythonPackage rec {
   #};
 
   src = fetchPypi {
-    inherit pname version format;
+    pname = "requests_download";
+    inherit version format;
     sha256 = "1ballx1hljpdpyvqzqn79m0dc21z2smrnxk2ylb6dbpg5crrskcr";
   };
 

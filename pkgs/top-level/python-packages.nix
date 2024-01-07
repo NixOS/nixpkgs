@@ -12550,7 +12550,7 @@ self: super: with self; {
 
   requests = callPackage ../development/python-modules/requests { };
 
-  requests_download = callPackage ../development/python-modules/requests_download { };
+  requests-download = callPackage ../development/python-modules/requests-download { };
 
   requestsexceptions = callPackage ../development/python-modules/requestsexceptions { };
 
