@@ -28,14 +28,23 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
-  preConfigure = ''
-    ldflags="-X main.gitCommit=$(cat .git-revision) -X main.version=${version}"
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.gitCommit=${builtins.readFile "${src}/.git-revision"}"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
+  ];
 
-  CGO_ENABLED = if stdenv.hostPlatform.isStatic then "0" else "1";
-  GO_EXTLINK_ENABLED = if stdenv.hostPlatform.isStatic then "0" else "1";
-  ldflags = lib.optionals stdenv.hostPlatform.isStatic [ "-w" "-extldflags" "-static" ];
-  tags = lib.optionals stdenv.hostPlatform.isStatic [ "netgo" ];
+  tags = lib.optionals stdenv.hostPlatform.isStatic [
+    "cgo"
+    "netgo"
+    "osusergo"
+    "static_build"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = manifest-tool;
