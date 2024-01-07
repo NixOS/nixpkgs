@@ -109,13 +109,6 @@ buildPythonPackage rec {
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '' +
-    # bring our own system libraries
-    # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst#c-libraries
-    ''
-      echo "[libs]
-      system_freetype=true
-      system_qhull=true" > mplsetup.cfg
     '';
 
   nativeBuildInputs = [
