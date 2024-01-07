@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     pyusb
-    wxPython_4_2
+    wxpython
   ];
 
   doCheck = false;
