@@ -255,6 +255,7 @@ mapAliases ({
   Markups = markups; # added 2022-02-14
   markdownsuperscript = throw "markdownsuperscript is unmaintained, use pymdown-extensions"; # added 2023-06-10
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
+  mac_alias = mac-alias; # added 2024-01-07
   MDP = mdp; # added 2023-02-19
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
@@ -264,6 +265,7 @@ mapAliases ({
   manticore = throw "manticore has been removed because its dependency wasm no longer builds and is unmaintained"; # added 2023-05-20
   markerlib = throw "markerlib has been removed because it's abandoned since 2013"; # added 2023-05-19
   memory_profiler = memory-profiler; # added 2023-10-09
+  mir_eval = mir-eval; # added 2024-01-07
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
@@ -455,6 +457,7 @@ mapAliases ({
   suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
   supervise_api = supervise-api; # added 2023-10-11
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
+  sysv_ipc = sysv-ipc; # added 2024-01-07
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator = tensorflow-estimator-bin; # added 2023-01-17

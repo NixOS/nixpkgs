@@ -506,6 +506,8 @@ let
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
+        # Support ceased as of 2.5.0.0
+        compilerNames.ghc902
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc963

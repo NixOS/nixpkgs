@@ -95,9 +95,7 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
-  # Tests fail due to the newly-build fourmolu not being in PATH
-  # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu = dontCheck super.fourmolu_0_14_0_0;
+  fourmolu = doDistribute self.fourmolu_0_14_0_0;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
   hlint = super.hlint_3_6_1;
 
@@ -142,12 +140,6 @@ self: super: {
   # Test suite doesn't compile with base-4.18 / GHC 9.6
   # https://github.com/dreixel/syb/issues/40
   syb = dontCheck super.syb;
-
-  # Support for template-haskell >= 2.16
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
 
   # Patch 0.17.1 for support of mtl-2.3
   xmonad-contrib = appendPatch
@@ -197,8 +189,8 @@ self: super: {
   hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
-  rebase = doJailbreak super.rebase_1_20_1_1;
-  rerebase = doJailbreak super.rerebase_1_20_1_1;
+  rebase = doJailbreak super.rebase_1_20_2;
+  rerebase = doJailbreak super.rerebase_1_20_2;
   hiedb = dontCheck super.hiedb;
   retrie = dontCheck super.retrie;
   # https://github.com/kowainik/relude/issues/436

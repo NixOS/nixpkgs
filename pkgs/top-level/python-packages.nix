@@ -6679,7 +6679,7 @@ self: super: with self; {
 
   m3u8 = callPackage ../development/python-modules/m3u8 { };
 
-  mac_alias = callPackage ../development/python-modules/mac_alias { };
+  mac-alias = callPackage ../development/python-modules/mac-alias { };
 
   mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
 
@@ -7047,7 +7047,7 @@ self: super: with self; {
 
   mip = callPackage ../development/python-modules/mip { };
 
-  mir_eval = callPackage ../development/python-modules/mir_eval { };
+  mir-eval = callPackage ../development/python-modules/mir-eval { };
 
   mirakuru = callPackage ../development/python-modules/mirakuru { };
 
@@ -13940,7 +13940,7 @@ self: super: with self; {
     inherit (pkgs) systemd;
   };
 
-  sysv_ipc = callPackage ../development/python-modules/sysv_ipc { };
+  sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
