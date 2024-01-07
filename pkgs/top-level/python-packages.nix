@@ -6242,7 +6242,7 @@ self: super: with self; {
     python3 = python;
   })).py;
 
-  ledger_agent = callPackage ../development/python-modules/ledger_agent { };
+  ledger-agent = callPackage ../development/python-modules/ledger-agent { };
 
   ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
 

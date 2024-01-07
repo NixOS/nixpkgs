@@ -484,6 +484,7 @@ mapAliases ({
   larynx = piper-tts; # Added 2023-05-09
   latinmodern-math = lmmath;
   ldgallery = throw "'ldgallery' has been removed from nixpkgs. Use the Flake provided by ldgallery instead"; # Added 2023-07-26
+  ledger_agent = ledger-agent; # Added 2024-01-07
   lfs = dysk; # Added 2023-07-03
   llvmPackages_rocm = throw "'llvmPackages_rocm' has been replaced with 'rocmPackages.llvm'"; # Added 2023-10-08
   libayatana-indicator-gtk3 = libayatana-indicator; # Added 2022-10-18

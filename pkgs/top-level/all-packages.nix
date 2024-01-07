@@ -37072,7 +37072,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  ledger_agent = with python3Packages; toPythonApplication ledger_agent;
+  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   ledger-live-desktop = callPackage ../applications/blockchains/ledger-live-desktop { };
 
