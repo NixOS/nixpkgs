@@ -95,9 +95,7 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
-  # Tests fail due to the newly-build fourmolu not being in PATH
-  # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu = dontCheck super.fourmolu_0_14_0_0;
+  fourmolu = doDistribute self.fourmolu_0_14_0_0;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
   hlint = super.hlint_3_6_1;
 

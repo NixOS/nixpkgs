@@ -1216,18 +1216,26 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/fourmolu:$PATH"
-    '';
-  }) super.fourmolu;
+  # https://github.com/fourmolu/fourmolu/issues/231
+  inherit (
+    let
+      fourmoluTestFix = overrideCabal (drv: {
+        preCheck = drv.preCheck or "" + ''
+          export PATH="$PWD/dist/build/fourmolu:$PATH"
+        '';
+        hydraPlatforms = lib.platforms.all; # also test versioned attributes
+      });
+    in
 
-  # Test suite wants to run main executable
-  fourmolu_0_10_1_0 = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/fourmolu:$PATH"
-    '';
-  }) super.fourmolu_0_10_1_0;
+    {
+      fourmolu = fourmoluTestFix super.fourmolu;
+      fourmolu_0_14_0_0 = fourmoluTestFix super.fourmolu_0_14_0_0;
+      fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
+    })
+    fourmolu
+    fourmolu_0_14_0_0
+    fourmolu_0_14_1_0
+    ;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {
