@@ -74,6 +74,7 @@ let
     mpvacious = callPackage ./mpvacious.nix { };
     quack = callPackage ./quack.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
+    reload = callPackage ./reload.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
     sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
