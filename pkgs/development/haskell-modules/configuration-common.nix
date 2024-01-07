@@ -92,6 +92,15 @@ self: super: {
     guardian
   ;
 
+  # Extensions wants the latest version of Cabal for its list of Haskell
+  # language extensions.
+  extensions = super.extensions.override {
+    Cabal =
+      if versionOlder self.ghc.version "9.6"
+      then self.Cabal_3_10_2_1
+      else null; # use GHC bundled version
+  };
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
@@ -121,17 +130,6 @@ self: super: {
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
-  # 2023-12-03: https://github.com/haskell/haskell-language-server/pull/3867
-  hls-plugin-api = appendPatch (fetchpatch {
-    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
-    relative = "hls-plugin-api";
-    hash = "sha256-vlXPdEvmuIl+cM+u/GdHi8r72r4+Tqtsvx0CGbWEFCQ=";
-  }) (doJailbreak super.hls-plugin-api);
-  ghcide = appendPatch (fetchpatch {
-    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
-    relative = "ghcide";
-    hash = "sha256-1URXyQf88v3hjFGvNmcIjHxJ5vExH3iI92XktDrQs0U=";
-  }) (doJailbreak super.ghcide);
   hls-test-utils = doJailbreak super.hls-test-utils;
   hls-alternate-number-format-plugin = doJailbreak super.hls-alternate-number-format-plugin;
   hls-cabal-plugin = doJailbreak super.hls-cabal-plugin;
@@ -147,6 +145,12 @@ self: super: {
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
+
+  # Support for template-haskell >= 2.16
+  language-haskell-extract = appendPatch (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
+    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
+  }) (doJailbreak super.language-haskell-extract);
 
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
@@ -188,6 +192,21 @@ self: super: {
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
+
+  # Fixes the build if Cabal >= 3.10.2 is used for Setup.hs, as it got stricter
+  # about c- vs. cxx-sources: https://github.com/haskell/double-conversion/issues/43
+  double-conversion = overrideCabal (drv: {
+    patches = drv.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        name = "double-conversion-c-to-cxx-sources.patch";
+        url = "https://github.com/haskell/double-conversion/pull/44/commits/d480fb057c5387251b8cfdeb3666b24087811219.patch";
+        sha256 = "0jw2i2cybmv190bhab0afhz2v3zva2chazhmngh884fsq2p3j1cv";
+      })
+    ];
+    prePatch = drv.prePatch or "" + ''
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
+  }) super.double-conversion;
 
   # Allow aeson == 2.1.*
   # https://github.com/hdgarrood/aeson-better-errors/issues/23
@@ -297,7 +316,7 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_9; };
+  patat = super.patat.override { pandoc = self.pandoc_3_1_11; };
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
@@ -1239,22 +1258,22 @@ self: super: {
 
         # stack-2.13.1 requires a bunch of the latest packages.
         (drv: drv.overrideScope (hfinal: hprev: {
-          ansi-terminal = hprev.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
-          crypton = hprev.crypton_0_34; # needs crypton >= 0.33
+          ansi-terminal = hfinal.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
+          crypton = hfinal.crypton_0_34; # needs crypton >= 0.33
           hedgehog = doJailbreak hprev.hedgehog; # has too strict version bound for ansi-terminal
-          hpack = hprev.hpack_0_36_0; # needs hpack == 0.36.0
-          http-client-tls = hprev.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
-          http-download = dontCheck hprev.http-download_0_2_1_0; # needs http-download >= 0.2.1.0, tests access network
-          optparse-applicative = hprev.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
-          pantry = dontCheck hprev.pantry_0_9_3; # needs pantry >= 0.9.2, tests access network
+          hpack = hfinal.hpack_0_36_0; # needs hpack == 0.36.0
+          http-client-tls = hfinal.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
+          http-download = hfinal.http-download_0_2_1_0; # needs http-download >= 0.2.1.0
+          optparse-applicative = hfinal.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
+          pantry = hfinal.pantry_0_9_3_1; # needs pantry >= 0.9.2
           syb = dontCheck hprev.syb; # cyclic dependencies
-          tar-conduit = hprev.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
+          tar-conduit = hfinal.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
           temporary = dontCheck hprev.temporary; # cyclic dependencies
         }))
       ];
 
   hopenpgp-tools = super.hopenpgp-tools.override {
-      optparse-applicative = self.optparse-applicative_0_18_1_0;
+    optparse-applicative = self.optparse-applicative_0_18_1_0;
   };
 
   # musl fixes
@@ -1938,7 +1957,7 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_9;
+      pandoc = self.pandoc_3_1_11;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
@@ -1947,16 +1966,25 @@ self: super: {
       # pandoc depends on skylighting >= 0.14
       skylighting = self.skylighting_0_14_1;
       skylighting-core = self.skylighting-core_0_14_1;
+
+      # pandoc needs up to date typst
+      typst-symbols = self.typst-symbols_0_1_5;
+      # and texmath to match
+      texmath = self.texmath_0_12_8_6;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_9 = doDistribute (super.pandoc_3_1_9.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_11 = doDistribute (super.pandoc_3_1_11.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_9
+    pandoc_3_1_11
     pandoc-lua-engine
     ;
+
+  # Doesn't work without typst-symbols >= 0.1.5 which conflicts with Stackage
+  # TODO(@sternenseemann): clean up with Stackage LTS 22
+  typst = dontDistribute super.typst;
 
   crypton-x509 =
     lib.pipe
@@ -2716,7 +2744,7 @@ self: super: {
 
   # 2023-12-20: Needs newer hasql-pool package and extra dependencies
   postgrest = lib.pipe (super.postgrest.overrideScope (lself: lsuper: {
-    hasql-pool = lself.hasql-pool_0_10;
+    hasql-pool = lself.hasql-pool_0_10_0_1;
   })) [
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
     # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
@@ -2762,13 +2790,19 @@ self: super: {
   # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
   diagrams-gtk = doJailbreak super.diagrams-gtk;
 
-  # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
-  # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
-  tomland = doJailbreak super.tomland;
-
-  llvm-ffi = super.llvm-ffi.override {
-    LLVM = pkgs.llvmPackages_13.libllvm;
-  };
+  tomland = overrideCabal (drv: {
+    # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
+    # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
+    jailbreak = true;
+    # Fix compilation of test suite with GHC >= 9.8
+    patches = drv.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        name = "tomland-disambiguate-string-type-for-ghc-9.8.patch";
+        url = "https://github.com/kowainik/tomland/commit/0f107269b8835a8253f618b75930b11d3a3f1337.patch";
+        sha256 = "13ndlfw32xh8jz5g6lpxzn2ks8zchb3y4j1jbbm2x279pdyvvars";
+      })
+    ];
+  }) super.tomland;
 
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
