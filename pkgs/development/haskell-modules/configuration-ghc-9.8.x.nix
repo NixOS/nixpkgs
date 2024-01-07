@@ -113,7 +113,4 @@ self: super: {
       "--match" "!/hiedb/Command line/point-info/correctly prints type signatures/"
     ];
   }) super.hiedb;
-
-  # Unbroken due to hspec* upgrades
-  hspec-api = doDistribute (unmarkBroken super.hspec-api);
 }

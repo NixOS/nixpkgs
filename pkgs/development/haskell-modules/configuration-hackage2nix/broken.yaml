@@ -2622,7 +2622,6 @@ broken-packages:
   - hsp-cgi # failure in job https://hydra.nixos.org/build/233254927 at 2023-09-02
   - hspear # failure in job https://hydra.nixos.org/build/233192286 at 2023-09-02
   - hspec2 # failure in job https://hydra.nixos.org/build/233251459 at 2023-09-02
-  - hspec-api # failure in job https://hydra.nixos.org/build/233201204 at 2023-09-02
   - hspec-expectations-match # failure in job https://hydra.nixos.org/build/233210221 at 2023-09-02
   - hspec-experimental # failure in job https://hydra.nixos.org/build/233216119 at 2023-09-02
   - hspec-jenkins # failure in job https://hydra.nixos.org/build/233213269 at 2023-09-02
