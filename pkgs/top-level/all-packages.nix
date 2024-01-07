@@ -37496,6 +37496,8 @@ with pkgs;
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
 
+  beancount-share = callPackage ../applications/office/beancount/beancount_share.nix { };
+
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
   };
