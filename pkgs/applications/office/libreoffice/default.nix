@@ -196,6 +196,7 @@ in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
   src = srcsAttributes.main;
+  outputs = ["out"] ++ optionals (variant == "collabora") ["dev"];
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
@@ -404,7 +405,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  doCheck = true;
+  doCheck = variant != "collabora";
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
@@ -480,6 +481,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--without-system-mdds"
   ] ++ optionals (variant == "fresh") [
     "--with-system-mdds"
+  ] ++ optionals (variant == "collabora") [
+    # only a webui is needed for collabora
+    #"--disable-gui"
   ] ++ [
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
