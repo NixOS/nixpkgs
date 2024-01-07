@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-qcVVp+81S3Y0fxDWA/PWQeFT2g0N6tIHNUaOHSru2GA=";
   };
 
+  postPatch = ''
+    sed -i 's/libcint.so/libcint${stdenv.hostPlatform.extensions.sharedLibrary}/g' testsuite/*.py
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ blas ];
   cmakeFlags = [
@@ -46,5 +50,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
+    platforms = platforms.unix;
   };
 }
