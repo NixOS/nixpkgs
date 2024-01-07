@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin" && version == "2.4.0") [
+  patches = lib.optionals (version == "2.4.0") [
     ./fix-2.4.0-aarch64-darwin.patch
   ];
 
