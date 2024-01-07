@@ -14523,7 +14523,7 @@ self: super: with self; {
 
   treq = callPackage ../development/python-modules/treq { };
 
-  trezor_agent = callPackage ../development/python-modules/trezor_agent { };
+  trezor-agent = callPackage ../development/python-modules/trezor-agent { };
 
   trezor = callPackage ../development/python-modules/trezor { };
 
