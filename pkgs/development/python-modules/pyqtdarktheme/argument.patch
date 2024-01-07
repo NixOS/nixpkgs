@@ -1,0 +1,13 @@
+diff --git a/qdarktheme/_proxy_style.py b/qdarktheme/_proxy_style.py
+index b1fb358..f04f01e 100644
+--- a/qdarktheme/_proxy_style.py
++++ b/qdarktheme/_proxy_style.py
+@@ -14,7 +14,7 @@ class QDarkThemeStyle(QProxyStyle):
+ 
+     def __init__(self):
+         """Initialize style proxy."""
+-        super().__init__()
++        super().__init__(None)
+ 
+     def standardIcon(  # noqa: N802
+         self, standard_icon: QStyle.StandardPixmap, option: QStyleOption | None, widget
