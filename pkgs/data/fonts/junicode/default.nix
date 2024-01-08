@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.204";
+  version = "2.205";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-n0buIXc+xjUuUue2Fu1jnlTc74YvmrDKanfmWtM4bFs=";
+    hash = "sha256-/9vkc6Ic3xyfpKEE64dBpoVM/gcRsLnAcrZWie9lNa4=";
   };
 
   outputs = [ "out" "doc" "tex" "texdoc" ];
@@ -14,8 +14,10 @@ stdenvNoCC.mkDerivation rec {
   patches = [ ./tex-font-path.patch ];
 
   postPatch = ''
-    substituteInPlace TeX/Junicode.sty \
+    substituteInPlace TeX/junicode.sty \
       --replace '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+    substituteInPlace TeX/junicodevf.sty \
       --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
   '';
 
@@ -28,11 +30,13 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
 
-    install -Dm 444 -t $tex/tex/latex/Junicode TeX/Junicode.sty
+    install -Dm 444 -t $tex/tex/latex/junicode TeX/junicode.sty
+    install -Dm 444 -t $tex/tex/latex/junicodevf TeX/junicodevf.{sty,lua}
 
-    install -Dm 444 -t $texdoc/doc/tex/latex/Junicode TeX/*.pdf
+    install -Dm 444 -t $texdoc/doc/tex/latex/junicode TeX/junicode-package.pdf
+    install -Dm 444 -t $texdoc/doc/tex/latex/junicodevf TeX/junicodevf-package.pdf
 
-    cat >$texdoc/doc/tex/latex/Junicode/nix-font-note.txt <<EOF
+    cat >$texdoc/doc/tex/latex/junicode/nix-font-note.txt <<EOF
     The style file is patched to refer directly to the corresponding
     font files; thus, contrary to the documentation, the fonts
     do *not* have to be installed globally.
