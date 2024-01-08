@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
   version = "2.8.19.20240106";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-H42yIcO5jmygLqg6WDcbIsN09Crlu98YbbnJp2WBRZ8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Modules doesn't have tests
   doCheck = false;
