@@ -4,7 +4,7 @@
 
 # build-system
 , cmake
-, cython
+, cython_3
 , ninja
 , oldest-supported-numpy
 , scikit-build
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_3
     ninja
     oldest-supported-numpy
     scikit-build
