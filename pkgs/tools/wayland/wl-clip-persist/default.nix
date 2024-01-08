@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage {
     inherit (wayland.meta) platforms;
     license = licenses.mit;
     mainProgram = "wl-clip-persist";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ ];
   };
 }
