@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , overrides
 , poetry-core
 , pythonOlder
 , requests
+, pytestCheckHook
 , types-requests
+, responses
 }:
 
 buildPythonPackage rec {
@@ -15,9 +17,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jlcc9Kj1MYSsnvJkKZXXWWJVDx3KIuojjbGtl8kDUpw=";
+  src = fetchFromGitHub {
+    owner = "totaldebug";
+    repo = "pyarr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yvlDnAjmwDNdU1SWHGVrmoD3WHwrNt7hXoNNPo1hm1w=";
   };
 
   postPatch = ''
@@ -36,8 +40,24 @@ buildPythonPackage rec {
     types-requests
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
+
   pythonImportsCheck = [
     "pyarr"
+  ];
+
+  disabledTests = [
+    # Tests require a running sonarr instance
+    "test_add"
+    "test_create"
+    "test_del"
+    "test_get"
+    "test_lookup"
+    "test_post"
+    "test_upd"
   ];
 
   meta = with lib; {
