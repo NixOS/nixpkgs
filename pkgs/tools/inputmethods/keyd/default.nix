@@ -29,11 +29,7 @@ let
       substituteInPlace scripts/${pname} \
         --replace /bin/sh ${runtimeShell}
       substituteInPlace scripts/${pname} \
-        --replace "CONFIG_PATH = os.getenv('HOME')+'/.config/keyd/app.conf'" "CONFIG_PATH = '/etc/keyd/application-mapper/app.conf'"
-      substituteInPlace scripts/${pname} \
-        --replace "LOCKFILE = os.getenv('HOME')+'/.config/keyd/app.lock'" "LOCKFILE = '/etc/keyd/application-mapper/app.lock'"
-      substituteInPlace scripts/${pname} \
-        --replace "LOGFILE = os.getenv('HOME')+'/.config/keyd/app.log'" "LOGFILE = '/etc/keyd/application-mapper/app.log'"
+        --replace "os.getenv('HOME')+'/.config/keyd" "'/etc/keyd/application-mapper"
       substituteInPlace scripts/${pname} \
         --replace "~/.config/keyd/app.conf" "/etc/keyd/application-mapper/app.conf"
     '';
