@@ -30316,7 +30316,7 @@ with pkgs;
   aaxtomp3 = callPackage ../applications/audio/aaxtomp3 { };
 
   abcde = callPackage ../applications/audio/abcde {
-    inherit (python3Packages) eyeD3;
+    inherit (python3Packages) eyed3;
   };
 
   abiword = callPackage ../applications/office/abiword { };

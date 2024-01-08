@@ -4,7 +4,7 @@
 
   # dependencies
 , cmake
-, dateutil
+, python-dateutil
 , dbus-python
 , dnf4
 , gettext
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     dbus-python
     dnf4.py
     libcomps
