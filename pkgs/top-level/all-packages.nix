@@ -15614,7 +15614,6 @@ with pkgs;
   };
 
   clang = llvmPackages.clang;
-  clang_6  = llvmPackages_6.clang;
   clang_8  = llvmPackages_8.clang;
   clang_9  = llvmPackages_9.clang;
   clang_10 = llvmPackages_10.clang;
@@ -15627,10 +15626,6 @@ with pkgs;
   clang_17 = llvmPackages_17.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools { };
-
-  clang-tools_6 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_6;
-  };
 
   clang-tools_8 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_8;
@@ -16570,7 +16565,6 @@ with pkgs;
   };
 
   lld = llvmPackages.lld;
-  lld_6 = llvmPackages_6.lld;
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
   lld_10 = llvmPackages_10.lld;
@@ -16583,7 +16577,6 @@ with pkgs;
   lld_17 = llvmPackages_17.lld;
 
   lldb = llvmPackages.lldb;
-  lldb_6 = llvmPackages_6.lldb;
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
   lldb_10 = llvmPackages_10.lldb;
@@ -16596,7 +16589,6 @@ with pkgs;
   lldb_17 = llvmPackages_17.lldb;
 
   llvm = llvmPackages.llvm;
-  llvm_6  = llvmPackages_6.llvm;
   llvm_8  = llvmPackages_8.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_10 = llvmPackages_10.llvm;
