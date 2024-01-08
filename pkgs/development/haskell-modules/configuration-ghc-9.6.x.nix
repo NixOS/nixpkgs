@@ -103,11 +103,6 @@ self: super: {
       })
     ] (super.hourglass);
 
-
-  # Test suite doesn't compile with base-4.18 / GHC 9.6
-  # https://github.com/dreixel/syb/issues/40
-  syb = dontCheck super.syb;
-
   # Patch 0.17.1 for support of mtl-2.3
   xmonad-contrib = appendPatch
     (pkgs.fetchpatch {

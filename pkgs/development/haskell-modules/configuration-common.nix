@@ -1679,6 +1679,9 @@ self: super: {
   # Break infinite recursion via doctest-lib
   utility-ht = dontCheck super.utility-ht;
 
+  # Break infinite recursion via optparse-applicative (alternatively, dontCheck syb)
+  prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
+
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
