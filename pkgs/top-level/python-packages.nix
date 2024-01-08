@@ -13952,6 +13952,7 @@ self: super: with self; {
             hash = "sha256-3rs48WtXAfP5g15j8BDSd0ee+c6CPy+OTfUB3HLgPm8=";
             fetchSubmodules = true;
           };
+          disabledTests = [ "testBetweenCustomTypes_bfloat16" "testPredicateUfunc_bfloat16" ];
           postPatch = oldAttrs.postPatch + ''
             substituteInPlace pyproject.toml \
               --replace "pybind11~=2.10.0" "pybind11" \

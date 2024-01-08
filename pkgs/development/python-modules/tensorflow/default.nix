@@ -20,7 +20,7 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackagesGoogle
-, cudaCapabilities ? cudaPackagesGoogle.cudaFlags.cudaCapabilities
+, cudaCapabilities ? lib.optional (config.cudaSupport) cudaPackagesGoogle.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -29,7 +29,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages_16
+, Foundation, Security, cctools, llvmPackages_16, xcbuild
 }:
 
 let
@@ -221,7 +221,8 @@ let
 
     nativeBuildInputs = [
       which pythonEnv cython perl protobuf-core protobuf-extra clang lndir
-    ] ++ lib.optional cudaSupport addOpenGLRunpath;
+    ] ++ lib.optional cudaSupport addOpenGLRunpath
+    ++ lib.optional (stdenv.isDarwin) xcbuild;
 
     buildInputs = [
       jemalloc
@@ -319,6 +320,7 @@ let
     TF_NEED_GCP = true;
     TF_NEED_HDFS = true;
     TF_ENABLE_XLA = tfFeature xlaSupport;
+    TF_PYTHON_VERSION = python.pythonVersion;
 
     CC_OPT_FLAGS = " ";
 
@@ -431,7 +433,7 @@ let
         then "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
         else "sha256-m+4GrkyFT/e0UViSwfPZa4kkf3AgAsNJPx30Qazqi6E=";
       x86_64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      aarch64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      aarch64-darwin = "sha256-7SwkyRdeTveml70/JXOZ11pPA+4jkUbt+cLPvEj+YX0=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
