@@ -9694,7 +9694,7 @@ self: super: with self; {
 
   portpicker = callPackage ../development/python-modules/portpicker { };
 
-  posix_ipc = callPackage ../development/python-modules/posix_ipc { };
+  posix-ipc = callPackage ../development/python-modules/posix-ipc { };
 
   posthog = callPackage ../development/python-modules/posthog { };
 
@@ -10411,7 +10411,7 @@ self: super: with self; {
     SDL2_image = pkgs.SDL2_image_2_0_5;
   };
 
-  pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
+  pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
 
@@ -11300,6 +11300,8 @@ self: super: with self; {
   pystache = callPackage ../development/python-modules/pystache { };
 
   pystardict = callPackage ../development/python-modules/pystardict { };
+
+  pystatgrab = callPackage ../development/python-modules/pystatgrab { };
 
   pystemd = callPackage ../development/python-modules/pystemd {
     inherit (pkgs) systemd;
@@ -12269,7 +12271,7 @@ self: super: with self; {
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
-  radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {
+  radicale-infcloud = callPackage ../development/python-modules/radicale-infcloud {
     radicale = pkgs.radicale.override { python3 = python; };
   };
 
@@ -15499,7 +15501,7 @@ self: super: with self; {
 
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
 
-  ufoLib2 = callPackage ../development/python-modules/ufoLib2 { };
+  ufolib2 = callPackage ../development/python-modules/ufolib2 { };
 
   ufolint = callPackage ../development/python-modules/ufolint { };
 

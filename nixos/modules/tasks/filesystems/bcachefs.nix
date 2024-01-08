@@ -123,8 +123,8 @@ in
       inherit assertions;
       # needed for systemd-remount-fs
       system.fsPackages = [ pkgs.bcachefs-tools ];
-      # FIXME: Replace this with `linuxPackages_latest` when 6.7 is released, remove this line when the LTS version is at least 6.7
-      boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_testing;
+      # FIXME: Remove this line when the default kernel has bcachefs
+      boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
     }
 

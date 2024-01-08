@@ -164,8 +164,6 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
-  kpmcore = callPackage ../development/libraries/kpmcore { };
-
   mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
 
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };

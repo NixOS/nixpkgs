@@ -1,6 +1,5 @@
-{ stdenv
+{ mkDerivation
 , lib
-, fetchurl
 , extra-cmake-modules
 , qca-qt5
 , kauth
@@ -9,15 +8,8 @@
 , util-linux
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kpmcore";
-  # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "23.04.1";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-NFIq8CZwYvpqDOOYLlBqoGdgfNPsyf15FkB3dToDCB8=";
-  };
 
   patches = [
     ./nixostrustedprefix.patch
