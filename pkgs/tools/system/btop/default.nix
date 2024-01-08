@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.2.13";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
+    hash = "sha256-QQM2/LO/EHovhj+S+4x3ro/aOVrtuxteVVvYAd6feTk=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
