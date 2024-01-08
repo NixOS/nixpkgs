@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "types-deprecated";
-  version = "1.2.9.3";
+  version = "1.2.9.20240106";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types-Deprecated";
     inherit version;
-    hash = "sha256-74cyet8+PEpMfY4G5Y9kdnENNGbs+1PEnvsICASnDvM=";
+    hash = "sha256-r+uBnpoD0KV5XxjIj+YgfEjtE8Y56TKBvZ2be7bTQxA=";
   };
 
   # Modules has no tests
