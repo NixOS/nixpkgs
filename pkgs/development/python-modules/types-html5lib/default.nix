@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-html5lib";
-  version = "1.1.11.15";
+  version = "1.1.11.20240106";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gOGiBi0io6/+XCjZfaML/786B205PID8bxZxIWwb1JI=";
+    hash = "sha256-/DobGOtgGz7q+SyQC9Z2dcCk+h3R0qKJPr20aSNUfuk=";
   };
 
   # Module has no tests
