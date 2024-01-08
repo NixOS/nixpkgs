@@ -445,6 +445,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
+  ./services/databases/tigerbeetle.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
