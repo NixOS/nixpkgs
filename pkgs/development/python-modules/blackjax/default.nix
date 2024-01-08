@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "blackjax-devs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-hqOKSHyZ/BmOu6MJLeecD3H1BbLbZqywmlBzn3xjQRk=";
+    hash = "sha256-VAsCDI0rEqx0UJlD82wbZ8KuMi6LOjUlO6YzqnOfAGk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
