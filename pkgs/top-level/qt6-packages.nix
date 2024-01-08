@@ -34,6 +34,8 @@ makeScopeWithSplicing' {
 
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
+  fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
