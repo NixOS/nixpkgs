@@ -6,16 +6,16 @@
 
 buildGo121Module rec {
   pname = "k0sctl";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DUDvsF4NCFimpW9isqEhodieiJXwjhwhfXR2t/ho3kE=";
+    hash = "sha256-j+FSXW9HGZdirBsCDXOE505y2UA2F3Q1oxZNmgALwc8=";
   };
 
-  vendorHash = "sha256-eJTVUSAcgE1AaOCEEc202sC0yIfMj30UoK/ObowJ9Zk=";
+  vendorHash = "sha256-DrjYqFbPyhjWGJomhPci/EsPOUJPATM0lWqIKbsH6Eg=";
 
   ldflags = [
     "-s"
@@ -26,9 +26,6 @@ buildGo121Module rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  # https://github.com/k0sproject/k0sctl/issues/569
-  checkFlags = [ "-skip=^Test(Unmarshal|VersionDefaulting)/version_not_given$" ];
 
   postInstall = ''
     for shell in bash zsh fish; do
