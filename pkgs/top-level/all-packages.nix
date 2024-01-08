@@ -13282,6 +13282,8 @@ with pkgs;
 
   smug = callPackage ../tools/misc/smug { };
 
+  smcipmitool = callPackage ../applications/misc/smcipmitool { };
+
   smpq = callPackage ../applications/misc/smpq { };
 
   sn0int = callPackage ../tools/security/sn0int { };
