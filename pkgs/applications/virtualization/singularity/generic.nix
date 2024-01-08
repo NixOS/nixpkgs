@@ -27,6 +27,7 @@ in
 , buildGoModule
 , runCommandLocal
   # Native build inputs
+, addDriverRunpath
 , makeWrapper
 , pkg-config
 , util-linux
@@ -54,6 +55,9 @@ in
 , hello
   # Overridable configurations
 , enableNvidiaContainerCli ? true
+  # --nvccli currently requires extra privileges:
+  # https://github.com/apptainer/apptainer/issues/1893#issuecomment-1881240800
+, forceNvcCli ? false
   # Compile with seccomp support
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
 , enableSeccomp ? true
@@ -65,6 +69,7 @@ in
   # Whether to compile with SUID support
 , enableSuid ? false
 , starterSuidPath ? null
+, substituteAll
   # newuidmapPath and newgidmapPath are to support --fakeroot
   # where those SUID-ed executables are unavailable from the FHS system PATH.
   # Path to SUID-ed newuidmap executable
@@ -93,6 +98,10 @@ let
 in
 (buildGoModule {
   inherit pname version src;
+
+  patches = lib.optionals (projectName == "apptainer") [
+    (substituteAll { src = ./apptainer/0001-ldCache-patch-for-driverLink.patch; inherit (addDriverRunpath) driverLink; })
+  ];
 
   # Override vendorHash with the output got from
   # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
@@ -219,7 +228,7 @@ in
     wrapProgram "$out/bin/${projectName}" \
       --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
     # Make changes in the config file
-    ${lib.optionalString enableNvidiaContainerCli ''
+    ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
@@ -288,7 +297,7 @@ in
             let
               unwrapped = writeShellScriptBin "apptainer-cuda-saxpy"
                 ''
-                  ${lib.getExe finalAttrs.finalPackage} exec --nv --nvccli ${finalAttrs.passthru.tests.image-saxpy} saxpy
+                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.tests.image-saxpy} saxpy
                 '';
             in
             runCommand "run-apptainer-cuda-saxpy"
