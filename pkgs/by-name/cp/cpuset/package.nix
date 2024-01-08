@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SUSE/cpuset";
     license = licenses.gpl2;
     mainProgram = "cset";
-    maintainers = with maintainers; [ thiagokokada wykurz ];
+    maintainers = with maintainers; [ wykurz ];
     platforms = platforms.linux;
   };
 }
