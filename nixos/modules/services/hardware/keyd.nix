@@ -95,12 +95,14 @@ in
     };
 
     application-mapping = {
-      enable = mkEnableOption (lib.mdDoc "keyd-application-mapper script, which allows for different sets of keybindings based on the application window that is currently in focus");
       users = mkOption {
         type = types.listOf types.str;
         default = [];
+        example = literalExpression ''
+          [ "alice" "bob" ]
+        '';
         description = ''
-          List of users which are allowed to run the application mapping script.
+          List of users that will have keyd-application-mapper enabled. Note that because this also sets a group `keyd` for the user, it might require a re-login to start functioning.
         '';
       };
       settings = mkOption {
@@ -185,30 +187,85 @@ in
           config.users.groups.input.name
           config.users.groups.uinput.name
         ];
+
+        # Hardening
+        # CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
+        DeviceAllow = [
+          "char-input rw"
+          "/dev/uinput rw"
+        ];
+        ProtectClock = true;
+        PrivateNetwork = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        PrivateUsers = false;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        RestrictNamespaces = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        ProtectProc = "invisible";
+        SystemCallFilter = [
+          "nice"
+          "@system-service"
+          "~@privileged"
+        ];
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictSUIDSGID = true;
+        IPAddressDeny = [ "any" ];
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProcSubset = "pid";
+        UMask = "0077";
       };
     };
 
-    systemd.user.services.keyd-application-mapper = {
-      description = "partner script to keyd";
+    systemd.user.services.keyd-application-mapper = mkIf (
+    cfg.application-mapping.settings != {} &&
+    cfg.application-mapping.users != []) {
+      description = "keyd-application-mapper";
       partOf = ["graphical-session.target"];
       after = ["graphical-session.target"];
+      wantedBy = ["graphical-session.target"];
       serviceConfig = {
         Environment = "PATH=${cfg.package}/bin/:$PATH";
         ExecStart = "${cfg.package}/bin/keyd-application-mapper -v";
-        Restart = "on-failure";
+        Restart = "always";
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
-      wantedBy = ["graphical-session.target"];
+      restartTriggers = [
+        config.environment.etc."keyd/application-mapper/app.conf".source
+      ];
+      unitConfig = {
+        ConditionGroup = "keyd";
+      };
     };
 
-    systemd.services.keyd-config-permissions = {
+    systemd.services.setup-keyd-directory = {
       wantedBy = [ "multi-user.target" ];
       script = ''
-        ${pkgs.coreutils}/bin/mkdir -p /etc/keyd
-        ${pkgs.coreutils}/bin/chmod -R 775 /etc/keyd
-        ${pkgs.coreutils}/bin/chown -R root:keyd /etc/keyd
+        mkdir -p /etc/keyd
+        chmod -R 775 /etc/keyd
+        chown -R root:keyd /etc/keyd
       '';
     };
+
+    assertions = [
+        {
+          assertion = !(cfg.application-mapping.settings != {} && cfg.application-mapping.users == []);
+          message = "ERROR: `keyd.application-mapping.users` should not be empty if you want keyd application mapping to have any effect";
+        }
+        {
+          assertion = !(cfg.application-mapping.settings == {} && cfg.application-mapping.users != []);
+          message = "ERROR: `keyd.application-mapping.settings` should not be empty if you want keyd application mapping to have any effect";
+        }
+      ];
+
   };
 }
