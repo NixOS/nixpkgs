@@ -1,6 +1,7 @@
 { rustPlatform
 , fetchFromGitHub
 , lib
+, installShellFiles
 , openssl
 , pkg-config
 , stdenv
@@ -24,9 +25,16 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   cargoHash = "sha256-KytXqILji1pbiMz7OX+O5B2bw5MMlKf/MYh13+nd+bg=";
+
+  postInstall = ''
+    installShellCompletion --cmd sentry-cli \
+        --bash <($out/bin/sentry-cli completions bash) \
+        --fish <($out/bin/sentry-cli completions fish) \
+        --zsh <($out/bin/sentry-cli completions zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";
