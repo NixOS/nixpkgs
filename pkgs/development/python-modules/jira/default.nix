@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , defusedxml
-, filemagic
 , flaky
 , ipython
 , keyring
@@ -54,7 +53,7 @@ buildPythonPackage rec {
       keyring
     ];
     opt = [
-      filemagic
+      # filemagic
       pyjwt
       # requests-jwt
       # requests-keyberos
