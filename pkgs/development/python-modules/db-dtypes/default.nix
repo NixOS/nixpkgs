@@ -7,12 +7,13 @@
 , pyarrow
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FVRqh30mYVfC8zuhPteuvqGYGTp3PW+pi1bquUjYFAg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
