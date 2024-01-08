@@ -29,7 +29,7 @@ lib.makeScope newScope (
       paths = [
         libnvidia-container
         self.nvidia-docker-unwrapped
-        self.nvidia-container-toolkit
+        self.nvidia-container-toolkit-docker
       ];
     };
     nvidia-docker-unwrapped = self.callPackage ../nvidia-docker { };
