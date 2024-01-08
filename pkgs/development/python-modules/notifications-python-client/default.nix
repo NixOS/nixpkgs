@@ -10,6 +10,7 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,10 +22,19 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alphagov";
-    repo = pname;
+    repo = "notifications-python-client";
     rev = "refs/tags/${version}";
     hash = "sha256-HDxCVwagHFenx0S2TPxiMIyyq4ovxe0yNi76sX2CC9s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docopt
@@ -39,11 +49,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   pythonImportsCheck = [
     "notifications_python_client"
