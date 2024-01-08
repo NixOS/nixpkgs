@@ -3,6 +3,7 @@
 , fetchFrom9Front
 , unstableGitUpdater
 , byacc
+, coreutils
 , installShellFiles
 }:
 
@@ -23,6 +24,10 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   patches = [ ./path.patch ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  postPatch = ''
+    substituteInPlace ./rcmain.unix --replace COREUTILS ${coreutils}
+  '';
 
   installPhase = ''
     runHook preInstall
