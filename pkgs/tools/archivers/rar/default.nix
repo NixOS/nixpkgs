@@ -8,7 +8,7 @@
 let
   version = "6.24";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
-  # Use `./update.sh <version>` to generate the below
+  # Use `./update.sh` to generate the entries below
   srcUrl = {
     i686-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x32-${downloadVersion}.tar.gz";
@@ -60,6 +60,8 @@ stdenv.mkDerivation {
   postInstall = ''
     installManPage ${manSrc}
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Utility for RAR archives";
