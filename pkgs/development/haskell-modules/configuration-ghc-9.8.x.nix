@@ -53,7 +53,6 @@ self: super: {
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
   haskell-language-server = super.haskell-language-server.override {
     hls-class-plugin = null;
-    hls-floskell-plugin = null;
     hls-fourmolu-plugin = null;
     hls-gadt-plugin = null;
     hls-hlint-plugin = null;
@@ -66,29 +65,12 @@ self: super: {
   };
 
   # Version upgrades
-  alex = doDistribute self.alex_3_4_0_1;
-  some = doDistribute self.some_1_0_6;
-  tagged = doDistribute self.tagged_0_8_8;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
-  hspec-core = doDistribute self.hspec-core_2_11_7;
-  hspec-meta = doDistribute self.hspec-meta_2_11_7;
-  hspec-discover = doDistribute self.hspec-discover_2_11_7;
-  hspec = doDistribute self.hspec_2_11_7;
-  hspec-expectations = doDistribute self.hspec-expectations_0_8_4;
-  bifunctors = doDistribute self.bifunctors_5_6_1;
-  free = doDistribute self.free_5_2;
-  semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
-  doctest = doDistribute self.doctest_0_22_2;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_1_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_0;
   ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
   megaparsec = doDistribute self.megaparsec_9_6_1;
-  tasty-hspec = doDistribute self.tasty-hspec_1_2_0_4;
-  hedgehog = doDistribute self.hedgehog_1_4;
-  rebase = doDistribute self.rebase_1_20_2;
-  rerebase = doDistribute self.rerebase_1_20_2;
   aeson = doDistribute self.aeson_2_2_1_0;
-  aeson-pretty = doDistribute self.aeson-pretty_0_8_10;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   ormolu = doDistribute self.ormolu_0_7_3_0;
   fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
