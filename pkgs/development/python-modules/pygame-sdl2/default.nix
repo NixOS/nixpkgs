@@ -2,7 +2,7 @@
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
-  pname = "pygame_sdl2";
+  pname = "pygame-sdl2";
   version = "2.1.0";
   format = "setuptools";
   renpy_version = renpy.base_version;

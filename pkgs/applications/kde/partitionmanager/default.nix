@@ -65,15 +65,8 @@ let
   ];
 
 in
-mkDerivation rec {
+mkDerivation {
   pname = "partitionmanager";
-  # NOTE: When changing this version, also change the version of `kpmcore`.
-  version = "23.04.1";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-iMf6/QOJIDTKHAsCg3ey4GX0QHwrYl2LcCWxZsolMl8=";
-  };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 

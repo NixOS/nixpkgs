@@ -4778,10 +4778,6 @@ with pkgs;
 
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
-  czkawka = callPackage ../tools/misc/czkawka {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   chayang = callPackage ../tools/wayland/chayang { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
@@ -9863,8 +9859,6 @@ with pkgs;
   };
 
   krakenx = callPackage ../tools/system/krakenx { };
-
-  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
 
@@ -15427,8 +15421,6 @@ with pkgs;
 
   oksh = callPackage ../shells/oksh { };
 
-  loksh = callPackage ../shells/loksh { };
-
   scponly = callPackage ../shells/scponly { };
 
   rush = callPackage ../shells/rush { };
@@ -20738,9 +20730,7 @@ with pkgs;
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
-  # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  # ghc94: https://discourse.haskell.org/t/facing-mmap-4096-bytes-at-nil-cannot-allocate-memory-youre-not-alone/6259
-  cachix = haskell.lib.justStaticExecutables haskell.packages.ghc94.cachix;
+  cachix = lib.getBin haskellPackages.cachix;
 
   calcium = callPackage ../development/libraries/calcium { };
 
@@ -25374,8 +25364,6 @@ with pkgs;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
-  tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
-
   tiscamera = callPackage ../os-specific/linux/tiscamera { };
 
   tivodecode = callPackage ../applications/video/tivodecode { };
@@ -27756,10 +27744,6 @@ with pkgs;
 
   cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
     inherit (pkgs) meson;
-  };
-
-  cpuset = callPackage ../os-specific/linux/cpuset {
-    pythonPackages = python3Packages;
   };
 
   criu = callPackage ../os-specific/linux/criu { };
@@ -33572,8 +33556,6 @@ with pkgs;
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mbrola = callPackage ../applications/audio/mbrola { };
-
-  mcomix = callPackage ../applications/graphics/mcomix { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
 
