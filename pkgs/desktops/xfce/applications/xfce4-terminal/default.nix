@@ -44,5 +44,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "A modern terminal emulator";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    mainProgram = "xfce4-terminal";
   };
 }
