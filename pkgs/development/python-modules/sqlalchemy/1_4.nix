@@ -13,7 +13,7 @@
 , aiosqlite
 , asyncmy
 , asyncpg
-, cx_oracle
+, cx-oracle
 , mariadb
 , mypy
 , mysql-connector
@@ -79,7 +79,7 @@ buildPythonPackage rec {
       mariadb
     ];
     oracle = [
-      cx_oracle
+      cx-oracle
     ];
     postgresql = [
       psycopg2
