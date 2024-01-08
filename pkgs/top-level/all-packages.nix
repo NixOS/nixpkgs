@@ -4780,10 +4780,6 @@ with pkgs;
 
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
-  czkawka = callPackage ../tools/misc/czkawka {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   chayang = callPackage ../tools/wayland/chayang { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };

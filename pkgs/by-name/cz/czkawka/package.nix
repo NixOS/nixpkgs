@@ -1,23 +1,23 @@
 { lib
 , stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, glib
-, cairo
-, pango
-, gdk-pixbuf
 , atk
-, gtk4
-, Foundation
-, wrapGAppsHook4
-, gobject-introspection
-, xvfb-run
-, testers
+, cairo
 , czkawka
+, darwin
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk4
+, pango
+, pkg-config
+, rustPlatform
+, testers
+, wrapGAppsHook4
+, xvfb-run
 }:
 
-rustPlatform.buildRustPackage rec {
+let
   pname = "czkawka";
   version = "6.1.0";
 
@@ -27,29 +27,33 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
   };
-
   cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version src cargoHash;
 
   nativeBuildInputs = [
+    gobject-introspection
     pkg-config
     wrapGAppsHook4
-    gobject-introspection
   ];
 
   buildInputs = [
-    glib
-    cairo
-    pango
-    gdk-pixbuf
     atk
+    cairo
+    gdk-pixbuf
+    glib
     gtk4
+    pango
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   nativeCheckInputs = [
     xvfb-run
   ];
+
+  strictDeps = true;
 
   checkPhase = ''
     runHook preCheck
@@ -65,23 +69,20 @@ rustPlatform.buildRustPackage rec {
     command = "czkawka_cli --version";
   };
 
+  # Desktop items, icons and metainfo are not installed automatically
   postInstall = ''
-    # Install Icons
+    install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
     install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
     install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
-
-    # Install MetaInfo
     install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
-
-    # Install Desktop Entry
-    install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ yanganto _0x4A6F ];
+    license = with lib.licenses; [ mit ];
+    mainProgram = "czkawka_gui";
+    maintainers = with lib.maintainers; [ AndersonTorres yanganto _0x4A6F ];
   };
 }
