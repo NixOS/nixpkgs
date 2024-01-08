@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-html5lib";
   version = "1.1.11.20240106";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/DobGOtgGz7q+SyQC9Z2dcCk+h3R0qKJPr20aSNUfuk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Module has no tests
   doCheck = false;
