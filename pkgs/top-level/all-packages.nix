@@ -16731,7 +16731,7 @@ with pkgs;
 
   minimacy = callPackage ../development/compilers/minimacy { };
 
-  mint = callPackage ../development/compilers/mint { crystal = crystal_1_2; };
+  mint = callPackage ../development/compilers/mint { crystal = crystal_1_9; };
 
   mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
 
