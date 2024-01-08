@@ -41266,7 +41266,6 @@ with pkgs;
   vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
-    llvmPackages = llvmPackages_6;
     luaPackages = lua51Packages;
   });
 
