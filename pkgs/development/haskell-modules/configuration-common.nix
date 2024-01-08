@@ -208,6 +208,7 @@ self: super: {
 
   # Too strict bounds on hspec < 2.11
   http-api-data = doJailbreak super.http-api-data;
+  tasty-discover = doJailbreak super.tasty-discover;
 
   # Allow aeson == 2.1.*
   # https://github.com/hdgarrood/aeson-better-errors/issues/23
