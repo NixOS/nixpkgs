@@ -11,13 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "linear_operator";
+  pname = "linear-operator";
   version = "0.5.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
-    repo = pname;
+    repo = "linear_operator";
     rev = "refs/tags/v${version}";
     hash = "sha256-OuE6jx9Q4IU+b2a+mrglRdBOReN1tt/thetNXxwk1GI=";
   };

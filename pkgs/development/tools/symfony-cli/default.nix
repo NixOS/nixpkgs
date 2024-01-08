@@ -4,6 +4,8 @@
 , nix-update-script
 , testers
 , symfony-cli
+, nssTools
+, makeBinaryWrapper
 }:
 
 buildGoModule rec {
@@ -25,8 +27,14 @@ buildGoModule rec {
     "-X main.channel=stable"
   ];
 
+  buildInputs = [ makeBinaryWrapper ];
+
   postInstall = ''
-    mv $out/bin/symfony-cli $out/bin/symfony
+    mkdir $out/libexec
+    mv $out/bin/symfony-cli $out/libexec/symfony
+
+    makeBinaryWrapper $out/libexec/symfony $out/bin/symfony \
+      --prefix PATH : ${lib.makeBinPath [ nssTools ]}
   '';
 
   # Tests requires network access
