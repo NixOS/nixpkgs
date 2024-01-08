@@ -39,6 +39,12 @@ appimageTools.wrapAppImage rec {
   extraInstallCommands = ''
     mv $out/bin/bazecor-* $out/bin/bazecor
 
+    install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/Bazecor.desktop \
+      --replace 'Exec=Bazecor' 'Exec=bazecor'
+
+    install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps
+
     mkdir -p $out/lib/udev/rules.d
     ln -s --target-directory=$out/lib/udev/rules.d ${./10-dygma.rules}
   '';
