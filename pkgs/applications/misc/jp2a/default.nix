@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.2.0";
   pname = "jp2a";
 
   src = fetchFromGitHub {
     owner = "Talinx";
     repo = "jp2a";
     rev = "v${version}";
-    sha256 = "sha256-CUyJMVvzXniK5fdZBuWUK9GLSGJyL5Zig49ikGOGRTw=";
+    sha256 = "sha256-TyXEaHemKfCMyGwK6P2vVL9gPWRLbkaNP0g+/UYGSVc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
