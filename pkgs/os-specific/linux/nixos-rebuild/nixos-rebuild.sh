@@ -31,7 +31,6 @@ profile=/nix/var/nix/profiles/system
 specialisation=
 buildHost=
 targetHost=
-remoteSudo=
 verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
@@ -125,9 +124,6 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
-        remoteSudo=1
-        ;;
       --flake)
         flake="$1"
         shift 1
@@ -157,7 +153,7 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
+if [[ "$UID" != 0 ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
