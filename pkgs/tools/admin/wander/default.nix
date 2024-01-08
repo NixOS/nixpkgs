@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "wander";
-  version = "0.14.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ULttOJcP3LHQAlyJKGEKT3B3PqYOP5+IxDej673020M=";
+    sha256 = "sha256-zz9DqRrylCbUCSBl4wspb8BYfmCyQhMmmYwdsbTExbo=";
   };
 
   vendorHash = "sha256-0S8tzP5yNUrH6fp+v7nbUPTMWzYXyGw+ZNcXkSN+tWY=";
