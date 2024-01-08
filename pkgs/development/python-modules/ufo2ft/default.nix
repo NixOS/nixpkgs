@@ -13,7 +13,7 @@
 , defcon
 , fonttools
 , skia-pathops
-, ufoLib2
+, ufolib2
 
 # tests
 , pytestCheckHook
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     compreffor
     booleanoperations
     cffsubr
-    ufoLib2
+    ufolib2
     skia-pathops
   ]
   ++ fonttools.optional-dependencies.lxml

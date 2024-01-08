@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.statmake
     python3.pkgs.ufo2ft
     python3.pkgs.setuptools
-    python3.pkgs.ufoLib2
+    python3.pkgs.ufolib2
     gettext
     appstream-glib
   ];

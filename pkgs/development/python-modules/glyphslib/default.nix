@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fonttools
 , openstep-plist
-, ufoLib2
+, ufolib2
 , pytestCheckHook
 , unicodedata2
 , setuptools-scm
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     fonttools
     openstep-plist
-    ufoLib2
+    ufolib2
     unicodedata2
     ufonormalizer
     xmldiff
@@ -59,4 +59,3 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.BarinovMaxim ];
   };
 }
-
