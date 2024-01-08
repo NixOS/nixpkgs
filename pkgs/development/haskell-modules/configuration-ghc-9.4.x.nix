@@ -109,23 +109,18 @@ in {
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231121;
-          ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
           Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = self.fourmolu_0_14_0_0;
-        ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-        hlint = super.hlint_3_6_1;
+        fourmolu = super.fourmolu;
+        ormolu = super.ormolu;
+        hlint = super.hlint;
         stylish-haskell = super.stylish-haskell;
       }
     )
     haskell-language-server
-    # HLS from 2.3 needs at least formolu 0.14.
-    # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
-    # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
     fourmolu
     ormolu
     hlint
