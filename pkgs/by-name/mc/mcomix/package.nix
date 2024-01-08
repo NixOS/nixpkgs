@@ -11,6 +11,8 @@
   # Recommended Dependencies:
 , p7zip
 , unrar
+, chardetSupport ? true
+, pdfSupport ? true
 , unrarSupport ? false  # unfree software
 }:
 
@@ -36,14 +38,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    # Runtime dependencies
     pillow
     pycairo
     pygobject3
-    # Optional dependencies
-    chardet
-    pymupdf
-  ];
+  ]
+  ++ lib.optionals chardetSupport [ chardet ]
+  ++ lib.optionals pdfSupport [ pymupdf ];
 
   # No tests included in .tar.gz
   doCheck = false;
