@@ -845,7 +845,8 @@ mapAliases ({
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
   rdc = throw "'rdc' has been replaced with 'rocmPackages.rdc'"; # Added 2023-10-08
   redpanda = redpanda-client; # Added 2023-10-14
-  retroshare06 = retroshare;
+  retroshare = retroshare-gui; # Added 2024-01-07
+  retroshare06 = throw "'retroshare06' has been replaced with 'retroshare-gui'"; # Converted to throw 2024-01-07
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
   ring-daemon = jami-daemon; # Added 2021-10-26
   rockbox_utility = rockbox-utility; # Added 2022-03-17

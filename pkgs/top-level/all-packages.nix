@@ -35042,7 +35042,8 @@ with pkgs;
 
   restique = libsForQt5.callPackage ../applications/backup/restique { };
 
-  retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
+  retroshare-gui = libsForQt5.callPackage ../applications/networking/p2p/retroshare/gui.nix { };
+  retroshare-service = callPackage ../applications/networking/p2p/retroshare/service.nix { };
 
   revanced-cli = callPackage ../applications/misc/revanced-cli { };
 
