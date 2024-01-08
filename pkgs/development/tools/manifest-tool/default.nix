@@ -32,12 +32,15 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X main.version=${version}"
-    "-X main.gitCommit=${builtins.readFile "${src}/.git-revision"}"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "-linkmode=external"
     "-extldflags"
     "-static"
   ];
+
+  preConfigure = ''
+    export ldflags+=" -X main.gitCommit=$(cat .git-revision)"
+  '';
 
   tags = lib.optionals stdenv.hostPlatform.isStatic [
     "cgo"
