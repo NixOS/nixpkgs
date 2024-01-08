@@ -77,7 +77,11 @@ for arg in "$@" "${UPDATE_NIX_PNAME}"; do
 done
 
 here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-now=$(date --iso-8601 --utc)
+commit_date() {
+  gitlab_json="$(curl -s https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/commits/"$1")"
+  commit_created="$(jq .created_at --raw-output <<< "${gitlab_json}")"
+  date --date="${commit_created}" --iso-8601 --utc
+}
 
 file="${here}/versions.nix"
 # just in case this runs in parallel
@@ -137,6 +141,8 @@ for version in "${all_versions[@]}"; do
   if [[ (-n ${check_stable} && ${version} != "master" && ${version} != "testing") \
      || (-n ${check_testing} && ${version} == "testing") \
      || (-n ${check_unstable} && ${version} == "master" ) ]]; then
+
+    now=$(commit_date "${src_version}")
 
     if [[ ${version} == "master" ]]; then
       pname="kicad-unstable"
