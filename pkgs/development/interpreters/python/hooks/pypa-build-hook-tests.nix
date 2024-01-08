@@ -25,6 +25,7 @@
         # At least one dependency of `build` should be included here to
         # keep the test meaningful
         (mkConflict pythonOnBuildForHost.pkgs.tomli)
+        (mkConflict pythonOnBuildForHost.pkgs.wheel)
         # setuptools is also needed to build the example project
         pythonOnBuildForHost.pkgs.setuptools
       ];
