@@ -27731,10 +27731,6 @@ with pkgs;
     inherit (pkgs) meson;
   };
 
-  cpuset = callPackage ../os-specific/linux/cpuset {
-    pythonPackages = python3Packages;
-  };
-
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {

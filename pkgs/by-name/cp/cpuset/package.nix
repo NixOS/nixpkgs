@@ -1,14 +1,14 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
-, pythonPackages
+, python3
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cpuset";
   version = "1.6";
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3.pkgs; [
     configparser
     future
   ];
@@ -37,8 +37,8 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls to make using the cpusets facilities in the Linux kernel easier";
-    homepage    = "https://github.com/lpechacek/cpuset";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/lpechacek/cpuset";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ thiagokokada wykurz ];
     mainProgram = "cset";
   };
