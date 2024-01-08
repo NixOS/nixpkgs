@@ -3,13 +3,13 @@
 , pythonOlder
 , fetchPypi
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "types-tqdm";
   version = "4.66.0.20240106";
   pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -19,7 +19,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   # This package does not have tests.
