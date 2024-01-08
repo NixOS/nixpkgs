@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , poetry-core
 , argparse-dataclass
-, ConfigArgParse
+, configargparse
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     argparse-dataclass
-    ConfigArgParse
+    configargparse
   ];
 
   pythonImportsCheck = [ "snakemake_interface_common" ];
