@@ -13,11 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "dimkr";
-    repo = finalAttrs.pname;
+    repo = "loksh";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-gQK9gq6MsKVyOikOW0sW/SbIM1K/3I8pn58P/SqzKys=";
+    hash = "sha256-gQK9gq6MsKVyOikOW0sW/SbIM1K/3I8pn58P/SqzKys=";
   };
+
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [
     meson
@@ -33,11 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/ksh $out/bin/loksh
-    mv $out/share/man/man1/ksh.1 $out/share/man/man1/loksh.1
-    mv $out/share/man/man1/sh.1 $out/share/man/man1/loksh-sh.1
+    pushd $man/share/man/man1/
+    mv ksh.1 loksh.1
+    mv sh.1 loksh-sh.1
+    popd
   '';
 
-  meta = with lib; {
+  passthru = {
+    shellPath = "/bin/loksh";
+  };
+
+  meta = {
     homepage = "https://github.com/dimkr/loksh";
     description = "Linux port of OpenBSD's ksh";
     longDescription = ''
@@ -49,12 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
       vulnerabilities and makes loksh a good fit for resource-constrained
       systems.
     '';
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ cameronnemo ];
-    platforms = platforms.linux;
-  };
-
-  passthru = {
-    shellPath = "/bin/loksh";
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ AndersonTorres cameronnemo ];
+    platforms = lib.platforms.linux;
   };
 })

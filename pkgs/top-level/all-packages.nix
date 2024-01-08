@@ -15415,8 +15415,6 @@ with pkgs;
 
   oksh = callPackage ../shells/oksh { };
 
-  loksh = callPackage ../shells/loksh { };
-
   scponly = callPackage ../shells/scponly { };
 
   rush = callPackage ../shells/rush { };
