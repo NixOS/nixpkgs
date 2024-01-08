@@ -391,7 +391,42 @@ self: super: {
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
-  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] super.cachix;
+  # Manually maintained
+  cachix-api = overrideCabal (drv: {
+    version = "1.7";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.7";
+      sha256 = "sha256-d9BohugsKajvjNgt+VyXHuDdLOFKr9mhwpdUNkpIP3s=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+  }) super.cachix-api;
+  cachix = (overrideCabal (drv: {
+    version = "1.7";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.7";
+      sha256 = "sha256-d9BohugsKajvjNgt+VyXHuDdLOFKr9mhwpdUNkpIP3s=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+  }) (lib.pipe
+        (super.cachix.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+        })
+        [
+         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
+         (addBuildTool pkgs.buildPackages.pkg-config)
+         (addBuildDepend self.immortal)
+         # should be removed once hackage packages catch up
+         (addBuildDepend self.crypton)
+         (addBuildDepend self.generic-lens)
+         (addBuildDepend self.amazonka)
+         (addBuildDepend self.amazonka-core)
+         (addBuildDepend self.amazonka-s3)
+        ]
+  ));
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
