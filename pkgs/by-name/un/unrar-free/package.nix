@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "unrar";
     maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 })
