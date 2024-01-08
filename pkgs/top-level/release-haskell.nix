@@ -334,6 +334,7 @@ let
         nota
         nvfetcher
         ormolu
+        pakcs
         pandoc
         petrinizer
         place-cursor-at
