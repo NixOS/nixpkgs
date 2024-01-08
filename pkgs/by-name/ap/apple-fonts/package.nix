@@ -2,7 +2,7 @@
 
 let
   pro = fetchurl {
-    url = "";
+    url = "https://archive.org/download/sf-pro_202401/SF-Pro.dmg";
     hash = "sha256-nkuHge3/Vy8lwYx9z+pvsQZfzrNIP4K0OutpPl4yXn0=";
   };
 
