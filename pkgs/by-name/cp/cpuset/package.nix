@@ -39,7 +39,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls to make using the cpusets facilities in the Linux kernel easier";
     homepage = "https://github.com/lpechacek/cpuset";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ thiagokokada wykurz ];
     mainProgram = "cset";
+    maintainers = with maintainers; [ thiagokokada wykurz ];
+    platforms = platforms.linux;
   };
 }
