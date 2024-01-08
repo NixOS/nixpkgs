@@ -68,6 +68,6 @@ rustPlatform.buildRustPackage rec {
     description = "EdgeDB cli";
     homepage = "https://www.edgedb.com/docs/cli/index";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.ranfdev ];
+    maintainers = with maintainers; [ ahirner kirillrdy ];
   };
 }
