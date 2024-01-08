@@ -39,7 +39,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Build, Release and Operate Containerized Applications on AWS.";
+    description = "Build, Release and Operate Containerized Applications on AWS";
     homepage = "https://github.com/aws/copilot-cli";
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
     license = licenses.asl20;
