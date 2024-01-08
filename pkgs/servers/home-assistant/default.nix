@@ -506,6 +506,9 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiohttp
+    aiohttp-cors
+    aiohttp-fast-url-dispatcher
+    aiohttp-zlib-ng
     astral
     async-timeout
     atomicwrites-homeassistant

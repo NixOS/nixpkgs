@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, pythonOlder,
-cython, smart-open, pytestCheckHook, moto, requests-toolbelt }:
+cython, pytestCheckHook, requests-toolbelt }:
 
 buildPythonPackage rec {
   pname = "streaming-form-data";
@@ -14,11 +14,16 @@ buildPythonPackage rec {
     hash = "sha256-Ntiad5GZtfRd+2uDPgbDzLBzErGFroffK6ZAmMcsfXA=";
   };
 
+  # streaming-form-data has a small bit of code that uses smart_open, which has a massive closure.
+  # The only consumer of streaming-form-data is Moonraker, which doesn't use that code.
+  # So, just drop the dependency to not have to deal with it.
+  patches = [
+    ./drop-smart-open.patch
+  ];
+
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [ smart-open ];
-
-  nativeCheckInputs = [ pytestCheckHook moto requests-toolbelt ];
+  nativeCheckInputs = [ pytestCheckHook requests-toolbelt ];
 
   pytestFlagsArray = [ "tests" ];
 
