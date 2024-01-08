@@ -225,8 +225,6 @@ with pkgs;
       }
     '');
 
-  chkservice = callPackage ../tools/admin/chkservice { };
-
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
