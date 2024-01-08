@@ -39698,6 +39698,8 @@ with pkgs;
     jdk = jdk17;
   };
 
+  degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
+
   diylc = callPackage ../applications/science/electronics/diylc { };
 
   flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
