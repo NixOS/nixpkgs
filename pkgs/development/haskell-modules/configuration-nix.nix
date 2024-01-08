@@ -1092,41 +1092,8 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix-api = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix-api.cabal
-    '';
-  }) super.cachix-api;
-  cachix = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix.cabal
-    '';
-  }) (lib.pipe
-        (super.cachix.override {
-          nix = self.hercules-ci-cnix-store.nixPackage;
-        })
-        [
-         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
-         (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.immortal)
-        ]
-  );
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
+    (enableSeparateBinOutput super.cachix);
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
