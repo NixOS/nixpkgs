@@ -9863,8 +9863,6 @@ with pkgs;
 
   krakenx = callPackage ../tools/system/krakenx { };
 
-  partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
-
   kpcli = callPackage ../tools/security/kpcli { };
 
   kphotoalbum = libsForQt5.callPackage ../applications/graphics/kphotoalbum { };
