@@ -5,12 +5,11 @@
 , embark
 , forge
 , markdown-mode
-, writeText
+, writeMelpaRecipe
 }:
 
 let
   pname = "consult-gh";
-  ename = "consult-gh";
   version = "20231206.1823";
   src = fetchFromGitHub {
     owner = "armindarvish";
@@ -20,7 +19,7 @@ let
   };
 in
 melpaBuild {
-  inherit pname ename version src;
+  inherit pname version src;
 
   commit = src.rev;
 
@@ -31,11 +30,11 @@ melpaBuild {
     markdown-mode
   ];
 
-  recipe = writeText "recipe" ''
-    (consult-gh
-     :repo "armindarvish/consult-gh"
-     :fetcher github)
-  '';
+  recipe = writeMelpaRecipe {
+    package-name = "consult-gh";
+    fetcher = "github";
+    repo = "armindarvish/consult-gh";
+  };
 
   meta = {
     homepage = "https://github.com/armindarvish/consult-gh";
