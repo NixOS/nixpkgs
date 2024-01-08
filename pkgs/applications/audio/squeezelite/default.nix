@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , flac
+, libgpiod
 , libmad
 , libpulseaudio
 , libvorbis
@@ -62,7 +63,8 @@ stdenv.mkDerivation {
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl;
+    ++ optional sslSupport openssl
+    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -81,7 +83,8 @@ stdenv.mkDerivation {
     ++ optional portaudioSupport "-DPORTAUDIO"
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL";
+    ++ optional sslSupport "-DUSE_SSL"
+    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
 
   env = lib.optionalAttrs stdenv.isDarwin {
     LDADD = "-lportaudio -lpthread";
