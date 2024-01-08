@@ -8254,7 +8254,9 @@ self: super: with self; {
 
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
-  nftables = callPackage ../os-specific/linux/nftables/python.nix { nftables = pkgs.nftables; };
+  nftables = callPackage ../os-specific/linux/nftables/python.nix {
+    inherit (pkgs) nftables;
+  };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
