@@ -1,19 +1,19 @@
-From 46ae709a60b6b6a4e1254b14afb02dc3cbd1894b Mon Sep 17 00:00:00 2001
+From 4af3ccb478d7b6655da033903ed83c5896a53c1c Mon Sep 17 00:00:00 2001
 From: Someone Serge <sergei.kozlukov@aalto.fi>
 Date: Sat, 6 Jan 2024 02:50:17 +0000
 Subject: [PATCH 2/4] prctl: localize the "capability change failed" messages
 
 perm_drop_privileges: set detailed errors
 ---
- src/cli/configure.c |  7 +++++-
+ src/cli/configure.c |  9 ++++++--
  src/error_generic.c | 12 +++++++---
  src/nvc_info.c      | 42 ++++++++++++++++++++++++++--------
  src/nvc_ldcache.c   |  3 ++-
  src/utils.c         | 56 ++++++++++++++++++++++++++++++++-------------
- 5 files changed, 89 insertions(+), 31 deletions(-)
+ 5 files changed, 90 insertions(+), 32 deletions(-)
 
 diff --git a/src/cli/configure.c b/src/cli/configure.c
-index 415f6b3..f682ca5 100644
+index 415f6b3..6f4ecb6 100644
 --- a/src/cli/configure.c
 +++ b/src/cli/configure.c
 @@ -242,6 +242,7 @@ configure_command(const struct context *ctx)
@@ -57,6 +57,15 @@ index 415f6b3..f682ca5 100644
              (dev = libnvc.device_info_new(nvc, NULL)) == NULL) {
 -                warnx("detection error: %s", libnvc.error(nvc));
 +                warnx("detection error: %s; drv is %s, dev is %s", libnvc.error(nvc), drv == NULL ? "NULL" : "not NULL", dev == NULL ? "NULL" : "not NULL");
+                 goto fail;
+         }
+ 
+@@ -413,7 +418,7 @@ configure_command(const struct context *ctx)
+                 goto fail;
+         }
+         if (libnvc.ldcache_update(nvc, cnt) < 0) {
+-                warnx("ldcache error: %s", libnvc.error(nvc));
++                warnx("%s:%d: ldcache error: %s", __FILE__, __LINE__, libnvc.error(nvc));
                  goto fail;
          }
  
@@ -192,7 +201,7 @@ index 7f21589..2965fba 100644
  
   fail:
 diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
-index ae5def4..514d05b 100644
+index f15a6c9..28e1d8b 100644
 --- a/src/nvc_ldcache.c
 +++ b/src/nvc_ldcache.c
 @@ -221,7 +221,7 @@ adjust_privileges(struct error *err, uid_t uid, gid_t gid, bool drop_groups)
@@ -204,14 +213,14 @@ index ae5def4..514d05b 100644
                          return (-1);
                  }
          }
-@@ -384,6 +384,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+@@ -386,6 +386,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
  
-         if ((child = create_process(&ctx->err, CLONE_NEWPID|CLONE_NEWIPC)) < 0) {
+         if (ldconfigExists && (child = create_process(&ctx->err, CLONE_NEWPID|CLONE_NEWIPC)) < 0) {
                  xclose(fd);
 +                error_setx(&ctx->err, "%s:%d create_process failed", __FILE__, __LINE__);
                  return (-1);
          }
-         if (child == 0) {
+         if (ldconfigExists && child == 0) {
 diff --git a/src/utils.c b/src/utils.c
 index 8ff6f26..eee7b7d 100644
 --- a/src/utils.c

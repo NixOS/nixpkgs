@@ -1,4 +1,4 @@
-From c5793b0d72c8e34f2cc6f5ddb276740e128b7903 Mon Sep 17 00:00:00 2001
+From b8896cebe11e0385c2ec5cf062047b6637bea4f6 Mon Sep 17 00:00:00 2001
 From: Someone Serge <sergei.kozlukov@aalto.fi>
 Date: Sat, 6 Jan 2024 03:49:56 +0000
 Subject: [PATCH 3/4] perm_drop_privileges: ignore EPERM on setgroups

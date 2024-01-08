@@ -1,4 +1,4 @@
-From a15ed348b14f65a4b25d666ad502b5f99a5e0b90 Mon Sep 17 00:00:00 2001
+From df52a846881fdd233da1353c9feae06bf3bca963 Mon Sep 17 00:00:00 2001
 From: Averell Dalton <averell+nixpkgs@rxd4.com>
 Date: Wed, 27 Feb 2019 09:44:05 +0100
 Subject: [PATCH 1/4] libnvc: ldconfig and PATH fixes
@@ -8,8 +8,8 @@ Signed-off-by: Someone Serge <sergei.kozlukov@aalto.fi>
  src/common.h      |  2 +-
  src/ldcache.c     | 73 +++++++++++++++++++++++++++++++++++++++++++----
  src/nvc_info.c    |  7 +++--
- src/nvc_ldcache.c |  2 +-
- 4 files changed, 73 insertions(+), 11 deletions(-)
+ src/nvc_ldcache.c | 20 +++++++------
+ 4 files changed, 84 insertions(+), 18 deletions(-)
 
 diff --git a/src/common.h b/src/common.h
 index c91d349..58e7926 100644
@@ -174,10 +174,17 @@ index 2d203ae..7f21589 100644
                  return (-1);
          }
 diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
-index db3b2f6..ae5def4 100644
+index db3b2f6..f15a6c9 100644
 --- a/src/nvc_ldcache.c
 +++ b/src/nvc_ldcache.c
-@@ -367,7 +367,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+@@ -361,32 +361,34 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+         bool drop_groups = true;
+         bool host_ldconfig = false;
+         int fd = -1;
++        bool ldconfigExists = false;
+ 
+         if (validate_context(ctx) < 0)
+                 return (-1);
          if (validate_args(ctx, cnt != NULL) < 0)
                  return (-1);
  
@@ -186,6 +193,48 @@ index db3b2f6..ae5def4 100644
          if (*argv[0] == '@') {
                  /*
                   * We treat this path specially to be relative to the host filesystem.
+                  * Force proc to be remounted since we're creating a PID namespace and fexecve depends on it.
+                  */
+                 ++argv[0];
+-                if ((fd = xopen(&ctx->err, argv[0], O_RDONLY|O_CLOEXEC)) < 0)
+-                        return (-1);
++                if ((fd = xopen(&ctx->err, argv[0], O_RDONLY|O_CLOEXEC)) < 0) {
++                    ldconfigExists = true;
++                }
+                 host_ldconfig = true;
+                 log_infof("executing %s from host at %s", argv[0], cnt->cfg.rootfs);
+         } else {
+                 log_infof("executing %s at %s", argv[0], cnt->cfg.rootfs);
+         }
+ 
+-        if ((child = create_process(&ctx->err, CLONE_NEWPID|CLONE_NEWIPC)) < 0) {
++        if (ldconfigExists && (child = create_process(&ctx->err, CLONE_NEWPID|CLONE_NEWIPC)) < 0) {
+                 xclose(fd);
+                 return (-1);
+         }
+-        if (child == 0) {
++        if (ldconfigExists && child == 0) {
+                 prctl(PR_SET_NAME, (unsigned long)"nvc:[ldconfig]", 0, 0, 0);
+ 
+                 if (ns_enter(&ctx->err, cnt->mnt_ns, CLONE_NEWNS) < 0)
+@@ -412,12 +414,14 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+                 (ctx->err.code == ENOENT) ? _exit(EXIT_SUCCESS) : _exit(EXIT_FAILURE);
+         }
+ 
+-        xclose(fd);
+-        if (waitpid(child, &status, 0) < 0) {
++        if (ldconfigExists) {
++                xclose(fd);
++        }
++        if (ldconfigExists && waitpid(child, &status, 0) < 0) {
+                 error_set(&ctx->err, "process reaping failed");
+                 return (-1);
+         }
+-        if (WIFSIGNALED(status)) {
++        if (ldconfigExists && WIFSIGNALED(status)) {
+                 error_setx(&ctx->err, "process %s terminated with signal %d", argv[0], WTERMSIG(status));
+                 return (-1);
+         }
 -- 
 2.42.0
 
