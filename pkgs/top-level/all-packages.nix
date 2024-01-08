@@ -12419,6 +12419,8 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  pywikibot = with python3Packages; toPythonApplication pywikibot;
+
   pystring = callPackage ../development/libraries/pystring { };
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};

@@ -9698,6 +9698,8 @@ self: super: with self; {
 
   posthog = callPackage ../development/python-modules/posthog { };
 
+  poster3 = callPackage ../development/python-modules/poster3 { };
+
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
@@ -9739,6 +9741,8 @@ self: super: with self; {
   prefixed = callPackage ../development/python-modules/prefixed { };
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
+
+  pre-commit-poetry-export = callPackage ../development/python-modules/pre-commit-poetry-export { };
 
   preggy = callPackage ../development/python-modules/preggy { };
 
@@ -12095,6 +12099,8 @@ self: super: with self; {
   pywerview = callPackage ../development/python-modules/pywerview { };
 
   pywfa = callPackage ../development/python-modules/pywfa { };
+
+  pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
 
@@ -16038,6 +16044,8 @@ self: super: with self; {
   wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
+
+  wikitools3 = callPackage ../development/python-modules/wikitools3 { };
 
   willow = callPackage ../development/python-modules/willow { };
 
