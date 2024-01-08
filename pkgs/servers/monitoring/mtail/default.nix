@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.0.0-rc52";
+  version = "3.0.0-rc53";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mtail";
     rev = "v${version}";
-    hash = "sha256-F3UNvt7OicZJVcUgn5dQb7KjH0k3QOYOYDLrVpI5D64=";
+    hash = "sha256-bKNSUXBnKDYaF0VyFn1ke6UkdZWHu5JbUkPPRfIdkh8=";
   };
 
-  vendorHash = "sha256-KD75KHXrXXm5FMXeFInNTDsVsclyqTfsfQiB3Br+F1A=";
+  vendorHash = "sha256-z71Q1I4PG7a1PqBLQV1yHlXImORp8cEtKik9itfvvNs=";
 
   ldflags = [
     "-X=main.Branch=main"
