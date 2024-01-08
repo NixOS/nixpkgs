@@ -170,4 +170,9 @@ self: super: {
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;
+
+  # Needs compat library for GHC < 9.6
+  indexed-traversable = addBuildDepends [
+    self.foldable1-classes-compat
+  ] super.indexed-traversable;
 }

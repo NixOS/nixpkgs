@@ -126,4 +126,9 @@ in {
     hlint
     stylish-haskell
   ;
+
+  # Needs compat library for GHC < 9.6
+  indexed-traversable = addBuildDepends [
+    self.foldable1-classes-compat
+  ] super.indexed-traversable;
 }

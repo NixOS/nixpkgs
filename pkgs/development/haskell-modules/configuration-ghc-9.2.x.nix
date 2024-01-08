@@ -127,4 +127,9 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # Needs compat library for GHC < 9.6
+  indexed-traversable = addBuildDepends [
+    self.foldable1-classes-compat
+  ] super.indexed-traversable;
 }
