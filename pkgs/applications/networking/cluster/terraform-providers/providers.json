@@ -935,13 +935,13 @@
     "vendorHash": null
   },
   "pass": {
-    "hash": "sha256-QGcHOsyUINH4bqK14OEzNm4b7oMK/4hwN9SuKt4m6t8=",
+    "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
     "homepage": "https://registry.terraform.io/providers/camptocamp/pass",
     "owner": "camptocamp",
     "repo": "terraform-provider-pass",
-    "rev": "v2.1.0",
+    "rev": "v2.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LWyfkhyTr6xHtt8nCdqid/zKwGerYVxSEpqSe853S9w="
+    "vendorHash": "sha256-Koojva0MAw5WC942VbxZ6d1Pf1VwFvJMmp16TsHRS3w="
   },
   "porkbun": {
     "hash": "sha256-YWUccesHNy8mdP5iWtXP1macOLGRKqqla6dWGYihJAo=",
