@@ -37,6 +37,8 @@ buildPythonPackage rec {
     hash = "sha256-yX6NbtGxBa3lL/bS3j2ouTPku6a4obqNGx1xRzx+Skk=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [
     setuptools
   ];
