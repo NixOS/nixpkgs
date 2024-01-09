@@ -16,11 +16,6 @@ let
           hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
         };
       };
-      bloodhound-py = super.bloodhound-py.overridePythonAttrs (old: {
-        propagatedBuildInputs =
-          lib.lists.remove super.impacket old.propagatedBuildInputs
-          ++ [ self.impacket ];
-      });
     };
   };
 
