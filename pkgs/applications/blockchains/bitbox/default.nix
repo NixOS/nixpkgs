@@ -42,13 +42,19 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   buildPhase = ''
+    runHook preBuild
+
     ln -s ${web} frontends/web/build
     export GOCACHE=$TMPDIR/go-cache
     make -C frontends/qt/server linux
     make -C frontends/qt base
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r frontends/qt/resources/linux/usr/share $out
     mkdir $out/{bin,lib}
@@ -56,6 +62,8 @@ stdenv.mkDerivation {
     cp frontends/qt/build/assets.rcc $out/bin
     cp frontends/qt/server/libserver.so $out/lib
     install -Dt $out/lib/udev/rules.d ${./rules.d}/*
+
+    runHook postInstall
   '';
 
   buildInputs = [ qtwebengine ];
