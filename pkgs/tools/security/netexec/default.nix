@@ -58,25 +58,6 @@ let
     };
   };
 
-  dploot = buildPythonPackage rec {
-    pname = "dploot";
-    version = "2.2.4";
-    pyproject = true;
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-40/5KOlEFvPL9ohCfR3kqoikpKFfJO22MToq3GhamKM=";
-    };
-    nativeBuildInputs = with python.pkgs; [
-      poetry-core
-    ];
-    propagatedBuildInputs = with python.pkgs; [
-      impacket
-      cryptography
-      pyasn1
-      lxml
-    ];
-  };
-
   resource = buildPythonPackage rec {
     pname = "resource";
     version = "0.2.1";
