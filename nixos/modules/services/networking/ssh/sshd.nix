@@ -305,7 +305,7 @@ in
 
       authorizedKeysInHomedir = mkOption {
         type = types.bool;
-        default = true;
+        default = lib.versionOlder config.system.stateVersion "24.11";
         description = ''
           Enables the use of the `~/.ssh/authorized_keys` file.
 
