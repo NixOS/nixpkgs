@@ -19120,6 +19120,12 @@
     github = "uakci";
     githubId = 6961268;
   };
+  uartman = {
+    name = "Anton Gusev";
+    email = "uartman@mail.ru";
+    github = "UARTman";
+    githubId = 21099202;
+  };
   udono = {
     email = "udono@virtual-things.biz";
     github = "udono";
