@@ -86,8 +86,8 @@ touch /etc/initrd-release
 # Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
-    # Split device string using ':' as a delimiter as bcachefs
-    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    # Split device string using ':' as a delimiter, bcachefs uses
+    # this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
     local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
