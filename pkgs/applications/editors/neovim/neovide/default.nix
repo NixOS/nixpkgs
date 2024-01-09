@@ -6,6 +6,7 @@
 , fetchgit
 , runCommand
 , gn
+, neovim
 , ninja
 , makeWrapper
 , pkg-config
@@ -67,11 +68,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  # All tests passes but at the end cargo prints for unknown reason:
-  #   error: test failed, to rerun pass '--bin neovide'
-  # Increasing the loglevel did not help. In a nix-shell environment
-  # the failure do not occure.
-  doCheck = false;
+  nativeCheckInputs = [ neovim ];
 
   buildInputs = [
     SDL2
@@ -80,6 +77,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -117,6 +119,5 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d multisn8 ];
     platforms = platforms.all;
-    badPlatforms = platforms.darwin;
   };
 }
