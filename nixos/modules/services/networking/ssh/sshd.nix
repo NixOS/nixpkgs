@@ -296,16 +296,12 @@ in
         '';
       };
 
-      authorizedKeysInHomedir = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Enables the use of the `~/.ssh/authorized_keys` file.
+      authorizedKeysInHomedir = mkEnableOption ''
+        the use of the `~/.ssh/authorized_keys` file.
 
-          Otherwise, the only files trusted by default are those in `/etc/ssh/authorized_keys.d`,
-          *i.e.* SSH keys from [](#opt-users.users._name_.openssh.authorizedKeys.keys).
-        '';
-      };
+        Otherwise, the only files trusted by default are those in `/etc/ssh/authorized_keys.d`,
+        *i.e.* SSH keys from [](#opt-users.users._name_.openssh.authorizedKeys.keys)
+      '';
 
       authorizedKeysCommand = mkOption {
         type = types.str;
