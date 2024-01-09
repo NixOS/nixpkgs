@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     pkg-config
-  ];
+  ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
   buildInputs = [
     blas
@@ -72,8 +72,12 @@ stdenv.mkDerivation rec {
     eigen
     libvdwxc
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_profiler_api
+    cudaPackages.cudatoolkit
+    cudaPackages.libcublas
+  ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
   ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp

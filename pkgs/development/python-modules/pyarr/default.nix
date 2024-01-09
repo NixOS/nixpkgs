@@ -1,21 +1,21 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, fetchpatch
-
-# build-system
-, poetry-core
-
-# dependencies
+, fetchFromGitHub
 , overrides
+, poetry-core
+, pythonOlder
 , requests
+, pytestCheckHook
 , types-requests
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "pyarr";
   version = "5.2.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "totaldebug";
@@ -24,13 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-yvlDnAjmwDNdU1SWHGVrmoD3WHwrNt7hXoNNPo1hm1w=";
   };
 
-  patches = [
-    (fetchpatch {
-      # fix build hook specification
-      url = "https://github.com/totaldebug/pyarr/commit/e0aaf53fdb3ab2f60c27c1ec74ce361eca5278d6.patch";
-      hash = "sha256-vD7to465/tviY25D+FUjsg6mJ+N8ZP6qJbWCw9hx/84=";
-    })
-  ];
+  postPatch = ''
+    # https://github.com/totaldebug/pyarr/pull/167
+    substituteInPlace pyproject.toml \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -42,15 +40,30 @@ buildPythonPackage rec {
     types-requests
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
+
   pythonImportsCheck = [
     "pyarr"
   ];
 
-  doCheck = false; # requires running *arr instances
+  disabledTests = [
+    # Tests require a running sonarr instance
+    "test_add"
+    "test_create"
+    "test_del"
+    "test_get"
+    "test_lookup"
+    "test_post"
+    "test_upd"
+  ];
 
   meta = with lib; {
     description = "Python client for Servarr API's (Sonarr, Radarr, Readarr, Lidarr)";
     homepage = "https://github.com/totaldebug/pyarr";
+    changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

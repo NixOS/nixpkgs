@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , hwdata
-, gtk2
+, gtk3
 , pkg-config
 , gettext
 , sqlite # compile GUI
@@ -11,24 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "lshw";
-  # FIXME: when switching to a stable release:
   # Fix repology.org by not including the prefixed B, otherwise the `pname` attr
   # gets filled as `lshw-B.XX.XX` in `nix-env --query --available --attr nixpkgs.lshw --meta`
   # See https://github.com/NixOS/nix/pull/4463 for a definitive fix
-  version = "unstable-2023-03-20";
+  version = "02.20";
 
   src = fetchFromGitHub {
     owner = "lyonel";
     repo = pname;
-    rev = "b4e067307906ec6f277cce5c8a882f5edd03cbbc";
-    #rev = "B.${version}";
-    sha256 = "sha256-ahdaQeYZEFCVxwAMJPMB9bfo3ndIiqFyM6OghXwtm1A=";
+    rev = "B.${version}";
+    hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
 
   nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ hwdata ]
-    ++ lib.optionals withGUI [ gtk2 sqlite ];
+    ++ lib.optionals withGUI [ gtk3 sqlite ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -44,11 +42,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     description = "Provide detailed information on the hardware configuration of the machine";
+    homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     license = licenses.gpl2;
+    mainProgram = "lshw";
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;
-    mainProgram = "lshw";
   };
 }
