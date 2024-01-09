@@ -401,6 +401,10 @@ let
       orga = "szebniok";
       repo = "tree-sitter-wgsl";
     };
+    "tree-sitter-mermaid" = {
+      orga = "monaqa";
+      repo = "tree-sitter-mermaid";
+    };
   };
 
   allGrammars =
