@@ -379,7 +379,7 @@ with pkgs;
 
   bloom = qt6Packages.callPackage ../development/tools/bloom { };
 
-  bloodhound-py = callPackage ../tools/security/bloodhound-py { };
+  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   bodyclose = callPackage ../development/tools/bodyclose { };
 
@@ -10264,6 +10264,8 @@ with pkgs;
   nbutools = callPackage ../tools/security/nbutools { };
 
   ncrack = callPackage ../tools/security/ncrack { };
+
+  netexec = python3Packages.callPackage ../tools/security/netexec { };
 
   nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
 
