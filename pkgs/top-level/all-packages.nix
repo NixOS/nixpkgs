@@ -13683,8 +13683,6 @@ with pkgs;
 
   squeekboard = callPackage ../applications/accessibility/squeekboard { };
 
-  sx = callPackage ../tools/X11/sx { };
-
   systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
 
   t = callPackage ../tools/misc/t { };
