@@ -13,7 +13,10 @@ callPackage ../generic.nix ({
   extPatches = [
     # https://github.com/NixOS/nixpkgs/issues/120738
     ../tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ../test.patch
+  ];
+  knownVulnerabilities = [
+    "GHSA-hw4x-mcx5-9q36"
+    "GHSA-c9v7-wmwj-vf6x"
+    "GHSA-vfxf-76hv-v4w4"
   ];
 } // builtins.removeAttrs args [ "callPackage" ])
