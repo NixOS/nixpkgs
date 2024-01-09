@@ -11345,6 +11345,8 @@ self: super: with self; {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
+  pytedee-async = callPackage ../development/python-modules/pytedee-async { };
+
   pytenable = callPackage ../development/python-modules/pytenable { };
 
   pytensor = callPackage ../development/python-modules/pytensor { };
