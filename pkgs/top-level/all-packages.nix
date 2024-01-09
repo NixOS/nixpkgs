@@ -32505,6 +32505,8 @@ with pkgs;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
+  pipewire-screenaudio = callPackage ../applications/misc/pipewire-screenaudio { };
+
   pixel2svg = python310Packages.callPackage ../tools/graphics/pixel2svg { };
 
   pixelfed = callPackage ../servers/web-apps/pixelfed { };
