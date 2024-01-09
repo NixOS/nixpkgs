@@ -341,6 +341,7 @@ mapAliases ({
   pymyq = python-myq; # added 2023-10-20
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
+  pyqt5_with_qtwebkit = pyqt5-webkit; # added 2024-01-07
   pyramid_beaker = pyramid-beaker; # added 2023-08-23
   pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
   pyramid_exclog = pyramid-exclog; # added 2023-08-24
