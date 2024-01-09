@@ -8,6 +8,7 @@
 , CoreGraphics
 , CoreML
 , CoreVideo
+, MetalKit
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo ];
+  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo MetalKit ];
 
   env = lib.optionalAttrs stdenv.isDarwin {
     WHISPER_COREML = "1";
@@ -50,6 +51,15 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/whisper-cpp-download-ggml-model \
       --prefix PATH : ${lib.makeBinPath [wget]}
+
+    ${lib.optionalString stdenv.isDarwin ''
+      install -Dt $out/share/whisper-cpp ggml-metal.metal
+
+      for bin in whisper-cpp whisper-cpp-stream whisper-cpp-command; do
+        wrapProgram $out/bin/$bin \
+          --set-default GGML_METAL_PATH_RESOURCES $out/share/whisper-cpp
+      done
+    ''}
 
     runHook postInstall
   '';
