@@ -39555,6 +39555,8 @@ with pkgs;
 
   monosat = callPackage ../applications/science/logic/monosat { };
 
+  msat = callPackage ../applications/science/logic/msat { };
+
   nusmv = callPackage ../applications/science/logic/nusmv { };
 
   nuXmv = callPackage ../applications/science/logic/nuXmv { };
