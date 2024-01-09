@@ -10680,8 +10680,6 @@ with pkgs;
   # former a lower priority than Nettle.
   lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
-  lshw = callPackage ../tools/system/lshw { };
-
   lunatic = callPackage ../development/interpreters/lunatic { };
 
   lux = callPackage ../tools/video/lux { };

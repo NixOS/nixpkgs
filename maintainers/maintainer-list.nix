@@ -20181,7 +20181,7 @@
   xfix = {
     email = "kamila@borowska.pw";
     matrix = "@xfix:matrix.org";
-    github = "xfix";
+    github = "KamilaBorowska";
     githubId = 1297598;
     name = "Kamila Borowska";
   };
