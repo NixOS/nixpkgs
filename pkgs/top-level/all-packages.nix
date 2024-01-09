@@ -20472,6 +20472,8 @@ with pkgs;
 
   adslib = callPackage ../development/libraries/adslib { };
 
+  aemu = callPackage ../development/libraries/aemu { };
+
   afflib = callPackage ../development/libraries/afflib { };
 
   aften = callPackage ../development/libraries/aften { };
@@ -21436,6 +21438,8 @@ with pkgs;
   gettext = callPackage ../development/libraries/gettext { };
 
   gf2x = callPackage ../development/libraries/gf2x { };
+
+  gfxstream = callPackage ../development/libraries/gfxstream { };
 
   gd = callPackage ../development/libraries/gd {
     automake = automake115x;
@@ -24825,6 +24829,8 @@ with pkgs;
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
+
+  rutabaga_gfx = callPackage ../development/libraries/rutabaga_gfx { };
 
   rure = callPackage ../development/libraries/rure { };
 
