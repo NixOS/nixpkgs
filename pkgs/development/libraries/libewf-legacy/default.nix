@@ -10,8 +10,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20140814";
   pname = "libewf-ewf";
+  version = "20140814";
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf-legacy/releases/download/${version}/libewf-${version}.tar.gz";
