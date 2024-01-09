@@ -35,7 +35,7 @@ let bsuite = buildPythonPackage rec {
     hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     absl-py
     dm-env
     dm-tree
