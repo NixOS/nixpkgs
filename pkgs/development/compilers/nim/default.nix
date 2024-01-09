@@ -147,7 +147,7 @@ in {
       ln -sf $out/nim/bin/nim $out/bin/nim
       ln -sf $out/nim/lib $out/lib
       ./install.sh $out
-      cp -a tools $out/nim/
+      cp -a tools dist $out/nim/
       runHook postInstall
     '';
 
