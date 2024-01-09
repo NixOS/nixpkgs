@@ -1,46 +1,82 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
-, ncurses, pygobject3, isPy3k }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPyPy
+
+# build-system
+, meson
+, meson-python
+, ninja
+, patchelf
+, pkg-config
+, setuptools
+
+# native dependencies
+, dbus
+, dbus-glib
+}:
 
 buildPythonPackage rec {
   pname = "dbus-python";
-  version = "1.2.18";
+  version = "1.3.2";
+  pyproject = true;
 
   disabled = isPyPy;
-  format = "other";
-  outputs = [ "out" "dev" ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q3jrw515z98mqdk9x822nd95rky455zz9876f1nqna5igkd3gcj";
+    hash = "sha256-rWeBkwhhi1BpU3viN/jmjKHH/Mle5KEh/mhFsUGCSPg=";
   };
 
-  patches = [
-    ./fix-includedir.patch
-  ];
+  postPatch = ''
+    # we provide patchelf natively, not through the python package
+    sed -i '/patchelf/d' pyproject.toml
 
-  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
+    # dont run autotols configure phase
+    rm configure.ac configure
+
+    patchShebangs test/*.sh
   '';
 
-  configureFlags = [
-    "PYTHON=${python.pythonOnBuildForHost.interpreter}"
+  nativeBuildInputs = [
+    meson
+    meson-python
+    ninja
+    patchelf
+    pkg-config
+    setuptools
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus dbus-glib ]
-    # My guess why it's sometimes trying to -lncurses.
-    # It seems not to retain the dependency anyway.
-    ++ lib.optional (! python ? modules) ncurses;
+  buildInputs = [
+    dbus
+    dbus-glib
+  ];
 
-  doCheck = isPy3k;
-  nativeCheckInputs = [ dbus.out pygobject3 ];
+  pypaBuildFlags = [
+    # Don't discard meson build directory, still needed for tests!
+    "-Cbuild-dir=_meson-build"
+  ];
 
-  postInstall = ''
-    cp -r dbus_python.egg-info $out/${python.sitePackages}/
+  nativeCheckInputs = [
+    dbus.out
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    meson test -C _meson-build --no-rebuild --print-errorlogs
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Python DBus bindings";
+    homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
     license = licenses.mit;
     platforms = dbus.meta.platforms;
     maintainers = with maintainers; [ ];
