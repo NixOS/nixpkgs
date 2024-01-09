@@ -16,6 +16,7 @@ in
 substituteAll {
   name = "nixos-rebuild";
   src = ./nixos-rebuild.sh;
+  nixos_apply_sh = ./../../../../nixos/modules/system/apply/nixos-apply.sh;
   dir = "bin";
   isExecutable = true;
   inherit runtimeShell nix;
