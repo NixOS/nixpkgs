@@ -55,7 +55,7 @@ flutter313.buildFlutterApplication (rec {
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
-    exec = "@out@/bin/fluffychat";
+    exec = "fluffychat";
     icon = "fluffychat";
     desktopName = "Fluffychat";
     genericName = "Chat with your friends (matrix client)";
@@ -74,8 +74,6 @@ flutter313.buildFlutterApplication (rec {
       mkdir -p $D
       convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
-    substituteInPlace $out/share/applications/*.desktop \
-      --subst-var out
 
     patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
