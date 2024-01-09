@@ -32347,6 +32347,8 @@ with pkgs;
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
+  hiddenbar = callPackage ../applications/misc/hiddenbar { };
+
   himalaya = callPackage ../applications/networking/mailreaders/himalaya { };
 
   hydrogen-web-unwrapped = callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix { };
