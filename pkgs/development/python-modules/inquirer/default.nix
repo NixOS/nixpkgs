@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.1.4";
+  version = "3.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1xaxLIk4GFRpcodhBX+Co9TgpYkWhB/D4OE4Nny4ijM=";
+    hash = "sha256-71lV7DQxck+rU4G8P6qAaD2e4g3jFRmLKKs9JfPwvJw=";
   };
 
   nativeBuildInputs = [
