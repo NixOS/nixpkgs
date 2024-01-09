@@ -14,12 +14,13 @@ let
     '';
 
     mkHandler = name: handler: ''
-      echo "event=${handler.event}" > "$out/handlers/${name}"
-      echo "action=$out/scripts/${name}.sh" >> "$out/handlers/${name}"
+      {
+        echo "event=${handler.event}"
+        echo "action=$out/scripts/${name}.sh"
+      } > "$out/handlers/${name}"
     '';
-  in pkgs.runCommand "acpi-events" { preferLocalBuild = true; } ''
-    mkdir -p $out/scripts
-    mkdir -p $out/handlers
+  in pkgs.runCommandLocal "acpi-events" {} ''
+    mkdir -p $out/scripts $out/handlers
     ${concatStringsSep "\n" (mapAttrsToList mkScript handlers)}
     ${concatStringsSep "\n" (mapAttrsToList mkHandler handlers)}
   '';
@@ -139,7 +140,7 @@ let
       script = ''
         ln -s /run /var/run || true
 
-        ${cfg.package}/bin/acpid \
+        ${lib.getExe cfg.package} \
           --foreground \
           --netlink \
           --confdir "${acpiConfFor cfg}/handlers" \
