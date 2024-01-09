@@ -2,10 +2,10 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gtk3
-, gtk-engine-murrine
+, hicolor-icon-theme
 }:
 stdenvNoCC.mkDerivation {
-  pname = "kanagawa-gtk-theme";
+  pname = "kanagawa-icon-theme";
   version = "0-unstable-2023-07-03";
 
   src = fetchFromGitHub {
@@ -19,21 +19,26 @@ stdenvNoCC.mkDerivation {
     gtk3
   ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
+  propagatedBuildInputs = [
+    hicolor-icon-theme
   ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    mkdir -p $out/share/icons
+    cp -a icons/* $out/share/icons
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache -f $theme
+    done
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A GTK theme with the Kanagawa colour palette";
+    description = "An icon theme for the Kanagawa colour palette";
     homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ iynaix ];
