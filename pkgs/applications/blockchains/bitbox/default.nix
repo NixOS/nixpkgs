@@ -35,9 +35,13 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    ./desktop.patch
     ./genassets.patch
   ];
+
+  postPatch = ''
+    substituteInPlace frontends/qt/resources/linux/usr/share/applications/bitbox.desktop \
+        --replace 'Exec=BitBox %u' 'Exec=bitbox %u'
+  '';
 
   dontConfigure = true;
 
