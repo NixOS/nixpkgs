@@ -88,7 +88,12 @@ waitDevice() {
     local device="$1"
     # Split device string using ':' as a delimiter, bcachefs uses
     # this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
-    local IFS=':'
+    local IFS
+
+    # bcachefs is the only known use for this at the moment
+    # Preferably, the 'UUID=' syntax should be enforced, but
+    # this is kept for compatibility reasons
+    if [ "$fsType" = bcachefs ]; then IFS=':'; fi
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
