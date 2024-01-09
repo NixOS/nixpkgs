@@ -24,8 +24,9 @@ let
 
   ## symlink farm for --sysroot flag
   sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
-    mkdir -p $out/boot
+    mkdir -p $out/boot $out/usr/lib/debug
     ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
+    ln -s ${kernel.dev}/vmlinux $out/usr/lib/debug
     ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
   '';
 
