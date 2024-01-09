@@ -655,13 +655,13 @@
     "vendorHash": "sha256-cLp8w0UcO9Hork/GTLOGCcSvfaYEIKl5so3/0ELm79Y="
   },
   "keycloak": {
-    "hash": "sha256-itnXalLx5Bku7sxM5wKJs2vCvDeJnhR1bQ55ye1tpKs=",
+    "hash": "sha256-2Z7nQ5NKS18OtoXXLm/P1n64NAxLR8nfMGyS2y17lag=",
     "homepage": "https://registry.terraform.io/providers/mrparkers/keycloak",
     "owner": "mrparkers",
     "repo": "terraform-provider-keycloak",
-    "rev": "v4.3.1",
+    "rev": "v4.4.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-GhmawLENmRuG5ZbXEZAw8pYmHn2SN2ONzfSIVEyN4U4="
+    "vendorHash": "sha256-F78OR8EG0Vy3WVJWTOlAsIBazsSXGD6KeceYuGnBqjQ="
   },
   "kubectl": {
     "hash": "sha256-UkUwWi7Z9cSMyZakD6JxMl+qdczAYfZQgwroCUjFIUM=",
