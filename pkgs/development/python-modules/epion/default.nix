@@ -18,8 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devenzo-com";
     repo = "epion_python";
-    # https://github.com/devenzo-com/epion_python/issues/1
-    rev = "d8759951fc7bfd1507abe725b2bc98754cbbf505";
+    rev = "refs/tags/${version}";
     hash = "sha256-uC227rlu4NB5lpca02QLi2JZ5SKklLfv7rXvvJA1aCA=";
   };
 
