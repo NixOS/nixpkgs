@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2023.2";
+  version = "2024.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-1TJorIjajWFO7i9vqSBDTAIukBdyvxbr5dargt4QB8M=";
+    hash = "sha256-6PB6wjdTOa55dXV7QIsjxI77hhc95WFEjNePfupBUJQ=";
     fetchSubmodules = true;
   };
 
@@ -157,6 +157,7 @@ stdenv.mkDerivation rec {
                  -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
                  -I${lib.getDev sirius}/include/sirius \
                  -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev hdf5-fortran}/include \
                  -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
