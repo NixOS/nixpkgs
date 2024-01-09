@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
   };
 
   mesonFlags = [
-	  (lib.mesonBool "enable_file_io" true)
-	  (lib.mesonBool "enable_io_uring" true)
-	  (lib.mesonBool "enable_tests" true)
+    (lib.mesonBool "enable_file_io" true)
+    (lib.mesonBool "enable_io_uring" true)
+    (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
   ];
