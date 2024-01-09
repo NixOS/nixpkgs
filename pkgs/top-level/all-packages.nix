@@ -34368,7 +34368,7 @@ with pkgs;
   obs-cli = callPackage ../applications/misc/obs-cli { };
 
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio {
-    ffmpeg_4 = ffmpeg-full;
+    ffmpeg = ffmpeg-full;
   };
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
