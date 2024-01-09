@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "py-serializable";
   version = "0.17.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
