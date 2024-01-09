@@ -948,6 +948,8 @@ self: super: with self; {
 
   automate-home = callPackage ../development/python-modules/automate-home { };
 
+  automatix = callPackage ../development/python-modules/automatix { };
+
   automx2 = callPackage ../development/python-modules/automx2 { };
 
   autopage = callPackage ../development/python-modules/autopage { };
@@ -1744,6 +1746,8 @@ self: super: with self; {
   bunch = callPackage ../development/python-modules/bunch { };
 
   bundlewrap = callPackage ../development/python-modules/bundlewrap { };
+
+  bundlewrap-teamvault = callPackage ../development/python-modules/bundlewrap-teamvault { };
 
   busypie = callPackage ../development/python-modules/busypie { };
 
