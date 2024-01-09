@@ -9,6 +9,8 @@
 }:
 
 let
+  version = "4.40.0";
+
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "bitbox-wallet-app";
@@ -16,7 +18,7 @@ let
     fetchSubmodules = true;
     hash = "sha256-kvkfz9zwleZNB+leefx+cciJCPkFSSRDxBNRKNqeODc=";
   };
-  version = "4.40.0";
+
   web = buildNpmPackage {
     pname = "bitbox-web";
     inherit version;
@@ -57,6 +59,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ qtwebengine ];
+
   nativeBuildInputs = [
     clang
     go
