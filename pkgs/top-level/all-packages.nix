@@ -35182,6 +35182,8 @@ with pkgs;
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
 
+  signalhound-spike = callPackage ../applications/science/electronics/signalhound-spike { };
+
   simple-scan = gnome.simple-scan;
 
   sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
