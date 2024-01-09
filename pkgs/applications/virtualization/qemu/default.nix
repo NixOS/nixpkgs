@@ -23,6 +23,7 @@
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
+, rutabagaSupport ? openGLSupport && !toolsOnly, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
     ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
+    ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
@@ -132,6 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
+    })
+    # Fix display issues when using virtio-gpu on 8.2.0 https://gitlab.com/qemu-project/qemu/-/issues/2051
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/9d5b42beb6978dc6219d5dc029c9d453c6b8d503.diff";
+      sha256 = "sha256-NknkH/gFTsMcdq8/ArwM4+qrpU+ZHd+xVMFUuMJTtf0=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

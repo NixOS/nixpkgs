@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Chat with gpt-3.5/chatgpt in terminal.";
+    description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
     license = licenses.mit;
     maintainers = with maintainers; [ mwdomino ];

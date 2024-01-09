@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Configure BIOS settings on Dell laptops.";
+    description = "Configure BIOS settings on Dell laptops";
     homepage =
       "https://www.dell.com/support/article/us/en/19/sln311302/dell-command-configure";
     license = licenses.unfree;

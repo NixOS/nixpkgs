@@ -1561,6 +1561,8 @@ self: super: with self; {
 
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
+  bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
+
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
@@ -3554,6 +3556,8 @@ self: super: with self; {
   edlib = callPackage ../development/python-modules/edlib {
     inherit (pkgs) edlib;
   };
+
+  eduvpn-common = callPackage ../development/python-modules/eduvpn-common { };
 
   edward = callPackage ../development/python-modules/edward { };
 
@@ -15442,6 +15446,8 @@ self: super: with self; {
   types-html5lib = callPackage ../development/python-modules/types-html5lib { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+  types-markdown = callPackage ../development/python-modules/types-markdown { };
 
   types-mock = callPackage ../development/python-modules/types-mock { };
 

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sx";
-  version = "2.1.7";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "earnestly";
     repo = pname;
     rev = version;
-    sha256 = "0xv15m30nhcknasqiybj5wwf7l91q4a4jf6xind8x5x00c6br6nl";
+    hash = "sha256-hKoz7Kuus8Yp7D0F05wCOQs6BvV0NkRM9uUXTntLJxQ=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
     description = "Simple alternative to both xinit and startx for starting a Xorg server";
     homepage = "https://github.com/earnestly/sx";
     license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda thiagokokada ];
     mainProgram = "sx";
+    maintainers = with maintainers; [ figsoda thiagokokada ];
+    platforms = platforms.linux;
   };
 }
