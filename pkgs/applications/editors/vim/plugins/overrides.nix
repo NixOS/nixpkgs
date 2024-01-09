@@ -436,6 +436,8 @@
         --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
                   "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
     '';
+
+    meta.license = lib.licenses.unfree;
   };
 
   coq_nvim = super.coq_nvim.overrideAttrs {
