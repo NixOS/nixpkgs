@@ -7,8 +7,8 @@ with pkgs.lib;
 
 let
   stapScript = pkgs.writeText "test.stp" ''
-    probe begin {
-      println("println works")
+    probe kernel.function("do_sys_poll") {
+      println("kernel function probe & println work")
       exit()
     }
   '';
@@ -32,19 +32,13 @@ let
             output = machine.succeed("stap ${stapScript} 2>&1")
 
         with subtest("Ensure that expected output from stap script is there"):
-            assert "println works\n" == output, "println works\n != " + output
+            assert "kernel function probe & println work\n" == output, "kernel function probe & println work\n != " + output
       '';
   }) args);
 
   ## TODO shared infra with ../kernel-generic.nix
   kernels = {
-    inherit (pkgs.linuxKernel.vanillaPackages)
-      linux_6_1 linux_6_6
-    ;
-    inherit (pkgs.linuxKernel.packages)
-      linux_rt_6_1 linux_6_1_hardened
-      linux_libre linux_testing
-    ;
+    inherit (pkgs.linuxKernel.packageAliases) linux_default linux_latest;
   };
 
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
