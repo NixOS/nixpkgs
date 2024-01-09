@@ -1476,7 +1476,7 @@ in
         '';
       }
       {
-        assertion = config.security.pam.enableSSHAgentAuth -> config.services.openssh.authorizedKeysFiles != [];
+        assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [];
         message = ''
           `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
           Did you forget to set `services.openssh.enable` ?
