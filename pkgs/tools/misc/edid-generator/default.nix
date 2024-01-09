@@ -21,9 +21,6 @@ stdenv.mkDerivation {
   pname = "edid-generator";
   version = "master-2023-11-20";
 
-  # so `hardware.firmware` doesn't compress it
-  compressFirmware = false;
-
   src = fetchFromGitHub {
     owner = "akatrevorjay";
     repo = "edid-generator";
