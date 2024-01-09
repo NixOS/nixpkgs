@@ -78,7 +78,6 @@ python.pkgs.buildPythonApplication rec {
   pname = "netexec";
   version = "1.1.0";
   pyproject = true;
-  doCheck = true;
   pythonRelaxDeps = true;
 
   src = fetchFromGitHub {
@@ -87,6 +86,14 @@ python.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-cNkZoIdfrKs5ZvHGKGBybCWGwA6C4rqjCOEM+pX70S8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"'
+
+    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
+  '';
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
@@ -126,19 +133,15 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python.pkgs; [
-    pytest
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"'
-
-    substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
-    description = "Network service exploitation tool (Maintaned fork of CrackMapExec)";
+    description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
     license = with licenses; [ bsd2 ];
