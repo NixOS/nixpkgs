@@ -1,7 +1,7 @@
 { lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, ... }:
 lib.makeOverridable (attrs: let
   # the use of crossLibcStdenv in the isStatic case is kind of a misnomer but I think it works
-  stdenv' = if (attrs.isStatic or false) then crossLibcStdenv else if (stdenv.buildPlatform != stdenv.hostPlatform) then crossLibcStdenv else stdenv;
+  stdenv' = if (attrs.isStatic or false) then crossLibcStdenv else stdenv;
 in stdenv'.mkDerivation (rec {
   pname = "${attrs.pname or (baseNameOf attrs.path)}";
   version = hostVersion;
