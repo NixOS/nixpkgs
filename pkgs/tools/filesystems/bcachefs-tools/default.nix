@@ -19,13 +19,13 @@
 , rustPlatform
 , makeWrapper
 , writeScript
+, python3
 , fuseSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
   version = "1.4.1";
-
 
   src = fetchFromGitHub {
     owner = "koverstreet";
@@ -69,14 +69,24 @@ stdenv.mkDerivation (finalAttrs: {
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "PREFIX="
+    "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
+  '';
+
+  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+  installFlags = [
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/libexec/bcachefsck_all \
+      --replace "/usr/bin/python3" "${python3}/bin/python3"
   '';
 
   passthru = {
