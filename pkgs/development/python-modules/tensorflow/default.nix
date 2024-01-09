@@ -29,7 +29,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages_16, xcbuild
+, Foundation, Security, cctools, llvmPackages_16
 }:
 
 let
@@ -222,7 +222,7 @@ let
     nativeBuildInputs = [
       which pythonEnv cython perl protobuf-core protobuf-extra clang lndir
     ] ++ lib.optional cudaSupport addOpenGLRunpath
-    ++ lib.optional (stdenv.isDarwin) xcbuild;
+    ++ lib.optional (stdenv.isDarwin) cctools;
 
     buildInputs = [
       jemalloc
