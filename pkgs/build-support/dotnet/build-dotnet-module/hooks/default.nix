@@ -8,7 +8,6 @@
 , makeSetupHook
 , makeWrapper
 , dotnet-sdk
-, dotnet-test-sdk
 , disabledTests
 , nuget-source
 , dotnet-runtime
@@ -25,7 +24,6 @@ in
   dotnetConfigureHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-configure-hook";
-      propagatedBuildInputs = [ dotnet-sdk nuget-source ];
       substitutions = {
         nugetSource = nuget-source;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
@@ -43,7 +41,6 @@ in
   dotnetBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-build-hook";
-      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -52,7 +49,6 @@ in
   dotnetCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-check-hook";
-      propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
         inherit buildType runtimeId libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
@@ -67,7 +63,6 @@ in
   dotnetInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-install-hook";
-      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -76,7 +71,6 @@ in
   dotnetFixupHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      propagatedBuildInputs = [ dotnet-runtime ];
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;
