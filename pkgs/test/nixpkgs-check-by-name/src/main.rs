@@ -117,10 +117,12 @@ pub fn check_nixpkgs<W: io::Write>(
     error_writer: &mut W,
 ) -> validation::Result<ratchet::Nixpkgs> {
     Ok({
-        let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
-            "Nixpkgs path {} could not be resolved",
-            nixpkgs_path.display()
-        ))?;
+        let nixpkgs_path = nixpkgs_path.canonicalize().with_context(|| {
+            format!(
+                "Nixpkgs path {} could not be resolved",
+                nixpkgs_path.display()
+            )
+        })?;
 
         if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
             writeln!(
@@ -237,7 +239,7 @@ mod tests {
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
             process(base_nixpkgs, &path, &[&extra_nix_path], &mut writer)
-                .context(format!("Failed test case {name}"))?;
+                .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;
 
