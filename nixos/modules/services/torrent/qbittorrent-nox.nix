@@ -4,9 +4,6 @@ with lib;
 
 let
   cfg = config.services.qbittorrent-nox;
-  cfg_web = config.services.qbittorrent-nox.web;
-
-  listToRange = x: { from = elemAt x 0; to = elemAt x 1; };
 in {
   options = {
     services = {
