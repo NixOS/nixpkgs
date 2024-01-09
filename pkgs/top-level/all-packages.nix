@@ -34541,9 +34541,7 @@ with pkgs;
 
   pcloud = callPackage ../applications/networking/pcloud { };
 
-  jpsxdec = callPackage ../tools/games/jpsxdec {
-    jdk = openjdk8;
-  };
+  jpsxdec = callPackage ../tools/games/jpsxdec { };
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
