@@ -37,5 +37,6 @@ in appimageTools.wrapType2 {
     license = licenses.asl20;
     maintainers = with maintainers; [ andersk jonafato ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "zulip";
   };
 }
