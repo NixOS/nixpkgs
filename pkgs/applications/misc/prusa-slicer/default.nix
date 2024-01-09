@@ -1,8 +1,5 @@
 { stdenv
 , lib
-, openexr
-, jemalloc
-, c-blosc
 , binutils
 , fetchFromGitHub
 , cmake
@@ -63,9 +60,7 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost tbb_2021_8 jemalloc c-blosc ilmbase ];
-  });
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_8; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
 stdenv.mkDerivation (finalAttrs: {
