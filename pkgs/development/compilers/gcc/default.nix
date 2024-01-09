@@ -14,6 +14,7 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
+, freebsd
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
@@ -143,6 +144,7 @@ let inherit version;
         enableShared
         fetchpatch
         fetchurl
+        freebsd
         gettext
         gmp
         gnat-bootstrap

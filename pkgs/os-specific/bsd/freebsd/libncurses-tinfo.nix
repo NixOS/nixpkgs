@@ -3,7 +3,7 @@ mkDerivation {
   path = "lib/ncurses/tinfo";
   extraPaths = ["lib/ncurses" "contrib/ncurses" "lib/Makefile.inc"];
   patches = /${patchesRoot}/tinfo-host-cc.patch;
-  CC_HOST = "${pkgsBuildBuild.clang}/bin/clang";
+  CC_HOST = "${pkgsBuildBuild.stdenv.cc}/bin/cc";
   MK_TESTS = "no";
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -D_WCHAR_T"

@@ -182,11 +182,6 @@ mkDerivation rec {
     make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
     rm -f $out/libexec/ld-elf.so.1
     mv $out/bin/ld-elf.so.1 $out/libexec
-  '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
-    NIX_LDFLAGS="$ORIG_NIX_LDFLAGS"
-  '' + lib.optionalString (stdenv.buildPlatform.isFreeBSD) ''
-    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags
-    make -C $BSDSRCDIR/lib/ncurses/tinfo $makeFlags install
   '';
 
   # libc should not be allowed to refer to anything other than itself

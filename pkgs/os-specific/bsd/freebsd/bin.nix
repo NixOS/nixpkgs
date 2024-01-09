@@ -25,8 +25,8 @@ mkDerivation {
     export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE -D_WCHAR_T -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T"
     make -C $BSDSRCDIR/lib/libsm $makeFlags
 
-    make -C $BSDSRCDIR/bin/sh $makeFlags "CC=${pkgsBuildBuild.clang}/bin/clang" CFLAGS="-D__unused= -D__printf0like\(a,b\)= -D__dead2=" mkbuiltins mksyntax mktokens mknodes
-    make -C $BSDSRCDIR/bin/csh $makeFlags "CC=${pkgsBuildBuild.clang}/bin/clang" CFLAGS="-D__unused= -D__printf0like\(a,b\)= -D__dead2= -I$BSDSRCDIR/contrib/tcsh -I." gethost
+    make -C $BSDSRCDIR/bin/sh $makeFlags "CC=${pkgsBuildBuild.stdenv.cc}/bin/cc" CFLAGS="-D__unused= -D__printf0like\(a,b\)= -D__dead2=" mkbuiltins mksyntax mktokens mknodes
+    make -C $BSDSRCDIR/bin/csh $makeFlags "CC=${pkgsBuildBuild.stdenv.cc}/bin/cc" CFLAGS="-D__unused= -D__printf0like\(a,b\)= -D__dead2= -I$BSDSRCDIR/contrib/tcsh -I." gethost
   '';
 
   preInstall = ''

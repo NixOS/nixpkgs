@@ -2,6 +2,7 @@
 , stdenv
 , enableMultilib
 , buildPackages
+, freebsd
 }:
 
 let
@@ -132,7 +133,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
 
             "CFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
             "CXXFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
-            "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
+            "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET${lib.optionalString (stdenv.hostPlatform.isFreeBSD) " -idirafter ${freebsd.libncurses-tinfo}/include"}"
         )
 
         if test -z "''${targetConfig-}"; then
