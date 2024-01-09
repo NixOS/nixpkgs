@@ -20640,10 +20640,6 @@ with pkgs;
 
   bencodetools = callPackage ../development/libraries/bencodetools { };
 
-  beignet = callPackage ../development/libraries/beignet {
-    inherit (llvmPackages_6) libllvm libclang;
-  };
-
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
 
@@ -21054,7 +21050,6 @@ with pkgs;
       mesa
       libvdpau-va-gl
       vaapiVdpau
-      beignet
       glxinfo
       vdpauinfo;
   };
