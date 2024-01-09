@@ -4,6 +4,7 @@
   autoAddCudaCompatRunpathHook,
   autoPatchelfHook,
   backendStdenv,
+  config,
   fetchurl,
   lib,
   lndir,
@@ -124,13 +125,21 @@ backendStdenv.mkDerivation (
       python = ["**/*.whl"];
     };
 
-    # Useful for introspecting why something went wrong.
-    # Maps descriptions of why the derivation would be marked broken to
-    # booleans indicating whether that description is true.
-    # NOTE: This should not include reasons relating to the architecture, as those are handled by
-    # the `badPlatforms` attribute.
+    # Useful for introspecting why something went wrong. Maps descriptions of why the derivation would be marked as
+    # broken on have badPlatforms include the current platform.
+
     # brokenConditions :: AttrSet Bool
+    # Sets `meta.broken = true` if any of the conditions are true.
+    # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
     brokenConditions = { };
+
+    # badPlatformsConditions :: AttrSet Bool
+    # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
+    # Example: Broken on a specific architecture or when cudaSupport is false (building with CUDA essentially targets)
+    # a platform which NixOS doesn't have a notion of, otherwise we would specify the platform directly.
+    badPlatformsConditions = {
+      "CUDA support is disabled" = !config.cudaSupport;
+    };
 
     # src :: Optional Derivation
     src = trivial.pipe redistArch [
@@ -303,13 +312,18 @@ backendStdenv.mkDerivation (
     meta = {
       description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
       sourceProvenance = [sourceTypes.binaryNativeCode];
+      broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
       platforms = trivial.pipe supportedRedistArchs [
         # Map each redist arch to the equivalent nix system or null if there is no equivalent.
         (builtins.map flags.getNixSystem)
         # Filter out unsupported systems
         (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
       ];
-      broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
+      badPlatforms =
+        let
+          isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
+        in
+        lists.optionals isBadPlatform finalAttrs.meta.platforms;
       license = licenses.unfree;
       maintainers = teams.cuda.members;
       # Force the use of the default, fat output by default (even though `dev` exists, which
