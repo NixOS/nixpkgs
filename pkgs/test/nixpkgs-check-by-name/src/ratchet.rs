@@ -38,7 +38,7 @@ pub struct Package {
 impl Package {
     /// Validates the ratchet checks for a single package defined in `pkgs/by-name`
     pub fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
-        EmptyNonAutoCalled::compare(
+        RatchetState::<EmptyNonAutoCalled>::compare(
             name,
             optional_from.map(|x| &x.empty_non_auto_called),
             &to.empty_non_auto_called,
@@ -50,7 +50,7 @@ impl Package {
 pub enum RatchetState<Context> {
     /// The ratchet is loose, it can be tightened more.
     /// In other words, this is the legacy state we're trying to move away from.
-    /// Introducing new instances is now allowed but previous instances will continue to be allowed.
+    /// Introducing new instances is not allowed but previous instances will continue to be allowed.
     /// The `Context` is context for error messages in case a new instance of this state is
     /// introduced
     Loose(Context),
@@ -60,18 +60,16 @@ pub enum RatchetState<Context> {
     Tight,
 }
 
-/// A trait for a specific ratchet check for an attribute.
-trait AttributeRatchet: Sized {
-    /// What error to produce in case the ratchet went in the wrong direction
-    fn to_error(name: &str, context: &Self, existed_before: bool) -> NixpkgsProblem;
+/// A trait that can convert an attribute-specific error context into a NixpkgsProblem
+pub trait ToNixpkgsProblem {
+    /// How to convert an attribute-specific error context into a NixpkgsProblem
+    fn to_nixpkgs_problem(name: &str, context: &Self, existed_before: bool) -> NixpkgsProblem;
+}
 
+impl<Context: ToNixpkgsProblem> RatchetState<Context> {
     /// Compare the previous ratchet state of an attribute to the new state.
     /// The previous state may be `None` in case the attribute is new.
-    fn compare(
-        name: &str,
-        optional_from: Option<&RatchetState<Self>>,
-        to: &RatchetState<Self>,
-    ) -> Validation<()> {
+    fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
         // If we don't have a previous state, enforce a tight ratchet
         let from = optional_from.unwrap_or(&RatchetState::Tight);
         match (from, to) {
@@ -83,7 +81,7 @@ trait AttributeRatchet: Sized {
 
             // Loosening a ratchet is now allowed
             (RatchetState::Tight, RatchetState::Loose(context)) => {
-                Self::to_error(name, context, optional_from.is_some()).into()
+                Context::to_nixpkgs_problem(name, context, optional_from.is_some()).into()
             }
         }
     }
@@ -96,8 +94,8 @@ trait AttributeRatchet: Sized {
 /// with an empty second argument like `callPackage ... { }`.
 pub struct EmptyNonAutoCalled;
 
-impl AttributeRatchet for EmptyNonAutoCalled {
-    fn to_error(name: &str, _context: &Self, _existed_before: bool) -> NixpkgsProblem {
+impl ToNixpkgsProblem for EmptyNonAutoCalled {
+    fn to_nixpkgs_problem(name: &str, _context: &Self, _existed_before: bool) -> NixpkgsProblem {
         NixpkgsProblem::WrongCallPackage {
             relative_package_file: structure::relative_file_for_package(name),
             package_name: name.to_owned(),
