@@ -41808,6 +41808,10 @@ with pkgs;
 
   nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy { };
 
+  weasis = callPackage ../by-name/we/weasis/package.nix {
+    jre = jdk21;
+  };
+
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
   werf = callPackage ../applications/networking/cluster/werf { };
