@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-cloud";
-  version = "0.1.0";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAirthings";
-    rev = version;
-    hash = "sha256-sqHNK6biSWso4uOYimzU7PkEn0uP5sHAaPGsS2vSMNY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HdH/z5xsumOXU0ZYOUc8LHpjKGkfp5e5yGER+Nm8xB4=";
   };
 
   propagatedBuildInputs = [
