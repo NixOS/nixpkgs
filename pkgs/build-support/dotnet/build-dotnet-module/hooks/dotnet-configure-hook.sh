@@ -15,7 +15,7 @@ dotnetConfigureHook() {
 
     dotnetRestore() {
         local -r project="${1-}"
-        env dotnet restore ${project-} \
+        dotnet restore ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
             --runtime "@runtimeId@" \
@@ -43,7 +43,7 @@ EOF
     find -name paket.dependencies -exec sed -i 's+source .*+source @nugetSource@/lib+g' {} \;
     find -name paket.lock -exec sed -i 's+remote:.*+remote: @nugetSource@/lib+g' {} \;
 
-    env dotnet tool restore --add-source "@nugetSource@/lib"
+    dotnet tool restore --add-source "@nugetSource@/lib"
 
     (( "${#projectFile[@]}" == 0 )) && dotnetRestore
 
