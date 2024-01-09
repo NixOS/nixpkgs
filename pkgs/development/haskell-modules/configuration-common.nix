@@ -1041,10 +1041,17 @@ self: super: {
 
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
-  djinn = appendPatch (fetchpatch {
-    url = "https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch";
-    sha256 = "0s021y5nzrh74gfp8xpxpxm11ivzfs3jwg6mkrlyry3iy584xqil";
-  }) super.djinn;
+  djinn = overrideSrc {
+    version = "unstable-2023-11-20";
+    src = pkgs.fetchFromGitHub {
+      owner = "augustss";
+      repo = "djinn";
+      rev = "69b3fbad9f42f0b1b2c49977976b8588c967d76e";
+      hash = "sha256-ibxn6DXk4pqsOsWhi8KcrlH/THnuMWvIu5ENOn3H3So=";
+    };
+  } super.djinn;
+
+  mueval = doJailbreak super.mueval;
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
