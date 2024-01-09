@@ -3,7 +3,7 @@
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
-, langD ? false
+, langD ? false, gdc ? null
 , langGo ? false
 , reproducibleBuild ? true
 , profiledCompiler ? false
@@ -85,9 +85,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 assert (atLeast6 && !is7 && !is8) -> (langAda -> gnat-bootstrap != null);
 
-# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
-#   error: GDC is required to build d
-assert atLeast12 -> !langD;
+assert atLeast12 -> (langD -> gdc != null);
 
 # threadsCross is just for MinGW
 assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
@@ -143,6 +141,7 @@ let inherit version;
         enableShared
         fetchpatch
         fetchurl
+        gdc
         gettext
         gmp
         gnat-bootstrap

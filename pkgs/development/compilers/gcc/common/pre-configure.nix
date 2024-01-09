@@ -3,6 +3,7 @@
 , version, buildPlatform, hostPlatform, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
+, langD ? false, gdc ? null
 , langFortran
 , langJava ? false
 , langJit ? false
@@ -14,7 +15,10 @@
 }:
 
 assert langJava -> lib.versionOlder version "7";
-assert langAda -> gnat-bootstrap != null; let
+assert langAda -> gnat-bootstrap != null;
+assert langD && lib.versionAtLeast version "12" -> gdc != null;
+
+let
   needsLib
     =  (lib.versionOlder version "7" && (langJava || langGo))
     || (lib.versions.major version == "4" && lib.versions.minor version == "9" && targetPlatform.isDarwin);
@@ -27,6 +31,8 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
+'' + lib.optionalString (langD && lib.versionAtLeast version "12") ''
+  export PATH=${gdc}/bin:$PATH
 ''
 
 # For a cross-built native compiler, i.e. build!=(host==target), the

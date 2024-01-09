@@ -16199,15 +16199,57 @@ with pkgs;
   gcc-arm-embedded-13 = callPackage ../development/compilers/gcc-arm-embedded/13 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
-  # It would be better to match the default gcc so that there are no linking errors
-  # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
-  gdc = gdc11;
+  # Has to match the default gcc so that there are no linking errors when
+  # using C/C++ libraries in D packages
+  gdc = gdc13;
   gdc11 = wrapCC (gcc11.cc.override {
     name = "gdc";
-    langCC = false;
-    langC = false;
+    langCC = true; # required to bootstrap newer gdc
+    langC = true;
     langD = true;
     profiledCompiler = false;
+    gdc = null; # gdc>=12 requires gdc to bootstrap
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  });
+
+  gdc12 = wrapCC (gcc12.cc.override {
+    name = "gdc";
+    langCC = true;
+    langC = true;
+    langD = true;
+    profiledCompiler = false;
+    gdc = gdc11; # gdc>=12 requires gdc to bootstrap
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gdc11
+      else stdenv;
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  });
+
+  gdc13 = wrapCC (gcc13.cc.override {
+    name = "gdc";
+    langCC = true;
+    langC = true;
+    langD = true;
+    profiledCompiler = false;
+    gdc = gdc11; # gdc>=12 requires gdc to bootstrap
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gdc11
+      else stdenv;
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   });
 
   gforth = callPackage ../development/compilers/gforth { };
@@ -38376,7 +38418,9 @@ with pkgs;
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
-  titanion = callPackage ../games/titanion { };
+  titanion = callPackage ../games/titanion {
+    gdc = gdc11;
+  };
 
   tome2 = callPackage ../games/tome2 { };
 
@@ -38386,13 +38430,17 @@ with pkgs;
     SDL2_image = SDL2_image_2_0_5;
   };
 
-  torus-trooper = callPackage ../games/torus-trooper { };
+  torus-trooper = callPackage ../games/torus-trooper {
+    gdc = gdc11;
+  };
 
   trackballs = callPackage ../games/trackballs { };
 
   try = callPackage ../tools/admin/try { };
 
-  tumiki-fighters = callPackage ../games/tumiki-fighters { };
+  tumiki-fighters = callPackage ../games/tumiki-fighters {
+    gdc = gdc11;
+  };
 
   tuxpaint = callPackage ../games/tuxpaint { };
 

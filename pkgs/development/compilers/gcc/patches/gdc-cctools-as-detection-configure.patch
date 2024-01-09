@@ -1,0 +1,20 @@
+As originally implemented, the error message check
+described in the configure script
+breaks detection of Ada compiler support on x86_64-darwin,
+because the assembler in the version of cctools currently used
+unconditionally emits a deprecation message to stdout,
+with no way to disable it.
+diff --git a/configure b/configure
+index 117a7ef23..a98af1b85 100755
+--- a/configure
++++ b/configure
+@@ -5692,8 +5692,7 @@ module conftest; int main() { return 0; }
+ EOF
+ acx_cv_d_compiler_works=no
+ if test "x$GDC" != xno; then
+-  errors=`(${GDC} -c conftest.d) 2>&1 || echo failure`
+-  if test x"$errors" = x && test -f conftest.$ac_objext; then
++  if ${GDC} -c conftest.d && test -f conftest.$ac_objext; then
+     acx_cv_d_compiler_works=yes
+   fi
+   rm -f conftest.*

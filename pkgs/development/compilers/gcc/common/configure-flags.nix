@@ -243,6 +243,9 @@ let
     ]
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
+      # libphobos is only enabled by default on a handful of tested platforms.
+      # it is required to bootstrap gdc>=12
+      "--enable-libphobos"
     ]
     # On mips64-unknown-linux-gnu libsanitizer defines collide with
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
