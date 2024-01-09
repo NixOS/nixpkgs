@@ -34818,6 +34818,8 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
+  qemu-esp32c3 = callPackage ../applications/virtualization/qemu/qemu-esp32c3.nix { };
+
   qemu-utils = qemu.override {
     toolsOnly = true;
   };
