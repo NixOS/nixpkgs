@@ -3550,6 +3550,8 @@ self: super: with self; {
     inherit (pkgs) edlib;
   };
 
+  eduvpn-common = callPackage ../development/python-modules/eduvpn-common { };
+
   edward = callPackage ../development/python-modules/edward { };
 
   effdet = callPackage ../development/python-modules/effdet { };
