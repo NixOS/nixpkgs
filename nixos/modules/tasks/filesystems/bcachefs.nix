@@ -125,7 +125,12 @@ in
       system.fsPackages = [ pkgs.bcachefs-tools ];
       # FIXME: Remove this line when the LTS (default) kernel is at least version 6.7
       boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-      systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
+      services.udev.packages = [ pkgs.bcachefs-tools ];
+
+      systemd = {
+        packages = [ pkgs.bcachefs-tools ];
+        services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
+      };
     }
 
     (lib.mkIf ((lib.elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
