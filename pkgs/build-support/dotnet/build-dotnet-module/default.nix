@@ -87,8 +87,6 @@
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
   # The dotnet runtime to use.
 , dotnet-runtime ? dotnetCorePackages.runtime_6_0
-  # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
-, dotnet-test-sdk ? dotnet-sdk
 , ...
 } @ args:
 
@@ -99,7 +97,7 @@ let
     else dotnet-sdk.meta.platforms;
 
   inherit (callPackage ./hooks {
-    inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
+    inherit dotnet-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
     runtimeId =
       if runtimeId != null
       then runtimeId
