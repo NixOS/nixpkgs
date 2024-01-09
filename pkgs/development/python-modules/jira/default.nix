@@ -39,6 +39,8 @@ buildPythonPackage rec {
     keyring
     requests-oauthlib
     requests-toolbelt
+    packaging
+    typing-extensions
   ];
 
   nativeCheckInputs = [
