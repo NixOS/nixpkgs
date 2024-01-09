@@ -12986,8 +12986,6 @@ with pkgs;
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
-  sonarr = callPackage ../servers/sonarr { };
-
   sonata = callPackage ../applications/audio/sonata { };
 
   sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
