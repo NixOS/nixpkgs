@@ -6,6 +6,7 @@
 , pkg-config
 , gtk3
 , libxml2
+, xkeyboard_config
 , wrapGAppsHook
 , unstableGitUpdater
 }:
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace stack-lang.c --replace /usr/share /run/current-system/sw/share
+    substituteInPlace stack-lang.c --replace /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
     sed -i '/{ NULL, "\/usr\/share" },/i { NULL, "/run/current-system/sw/share" },' theme.c
   '';
 
