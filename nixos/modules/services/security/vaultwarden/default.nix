@@ -55,6 +55,7 @@ in {
       description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
+      example = "/var/backup/vaultwarden";
     };
 
     config = mkOption {
@@ -234,6 +235,13 @@ in {
         Unit = "backup-vaultwarden.service";
       };
       wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.tmpfiles.settings = mkIf (cfg.backupDir != null) {
+      "10-vaultwarden".${cfg.backupDir}.d = {
+        inherit user group;
+        mode = "0770";
+      };
     };
   };
 
