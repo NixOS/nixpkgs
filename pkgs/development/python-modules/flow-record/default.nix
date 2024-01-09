@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "flow-record";
   version = "3.14";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
