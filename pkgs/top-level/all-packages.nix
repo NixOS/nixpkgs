@@ -36295,6 +36295,12 @@ with pkgs;
 
   warpd = callPackage ../applications/misc/warpd { };
 
+  warp-terminal-beta = callPackage ../by-name/wa/warp-terminal/package.nix { channel = "beta"; };
+
+  warp-terminal-preview = callPackage ../by-name/wa/warp-terminal/package.nix { channel = "preview"; };
+
+  warp-terminal-dev = callPackage ../by-name/wa/warp-terminal/package.nix { channel = "dev"; };
+
   watershot = callPackage ../applications/misc/watershot { };
 
   waypaper = callPackage ../applications/misc/waypaper { };
