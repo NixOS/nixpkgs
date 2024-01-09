@@ -302,7 +302,8 @@ in
 
       authorizedKeysInHomedir = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = lib.versionOlder config.system.stateVersion "25.05";
+        defaultText = lib.literalMD "`false` unless [](#opt-system.stateVersion) is (strictly) less than 25.05";
         description = ''
           Enables the use of the `~/.ssh/authorized_keys` file.
 
