@@ -649,7 +649,7 @@ with prev;
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-m1TQC2D9fiAMOOYhKpDGF1zyMzZ9AOTmyr1L/mFNpLc=";
+      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
     };
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];

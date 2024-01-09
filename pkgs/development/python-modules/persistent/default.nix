@@ -2,7 +2,7 @@
 , buildPythonPackage
 , cffi
 , fetchPypi
-, zope_interface
+, zope-interface
 , sphinx
 , manuel
 , pythonOlder
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    zope_interface
+    zope-interface
     cffi
   ];
 

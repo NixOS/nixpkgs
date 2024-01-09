@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LMvELnN6Sy6DssXfH6fQ84N2rhdjqB8AlikTMidrjT4=";
+    hash = "sha256-3Lj1eUDPoVCElrxowBhhrS0GCjD5qeUCiSB/gHoqC3Q=";
   };
 
   outputs = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Happy Eyeballs for pre-resolved hosts";
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
-    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = licenses.psfl;
     maintainers = with maintainers; [ fab hexa ];
   };

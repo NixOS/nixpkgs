@@ -480,5 +480,5 @@ in
     };
   };
 } // lib.optionalAttrs config.allowAliases {
-  octoprint-dashboard = self.dashboard;
+  octoprint-dashboard = super.dashboard;
 }

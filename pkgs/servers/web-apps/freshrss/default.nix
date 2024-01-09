@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , nixosTests
 , php
-, pkgs
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.23.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-X7MYPn1OFmzMWGGlZZ67EHEaRJRKGrdnw6nCzuUfbgU=";
+    hash = "sha256-uidTsL8TREZ/qcqO/J+6hguP6Dr6J+995WNWCJCduBw=";
   };
 
   passthru.tests = {
@@ -31,8 +30,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -vr * $out/
+    runHook postInstall
   '';
 
   meta = with lib; {

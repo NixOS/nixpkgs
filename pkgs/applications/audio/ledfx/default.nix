@@ -5,18 +5,18 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.80";
+  version = "2.0.86";
   pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vwLk3EpXqUSAwzY2oX0ZpXrmH2cT0GdYdL/Mifav6mU=";
+    hash = "sha256-miOGMsrvK3A3SYnd+i/lqB+9GOHtO4F3RW8NkxDgFqU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace "sentry-sdk==1.14.0" "sentry-sdk" \
+      --replace "sentry-sdk==1.38.0" "sentry-sdk" \
       --replace "~=" ">="
   '';
 
@@ -32,12 +32,14 @@ python3.pkgs.buildPythonPackage rec {
     cython
     flux-led
     icmplib
+    mss
     multidict
     numpy
     openrgb-python
     paho-mqtt
     pillow
     psutil
+    pybase64
     pyserial
     pystray
     python-mbedtls

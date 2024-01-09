@@ -2,6 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 buildLua {
   pname = "visualizer";
@@ -13,6 +14,7 @@ buildLua {
     rev = "7dbbfb283508714b73ead2a57b6939da1d139bd3";
     sha256 = "zzB4uBc1M2Gdr/JKY2uk8MY0hmQl1XeomkfTzuM45oE=";
   };
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     description = "various audio visualization";

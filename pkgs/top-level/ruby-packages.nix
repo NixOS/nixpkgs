@@ -2520,10 +2520,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "004ip9x9281fxhpipwi8di1sb1dnabscq9dy1p3cxgdwbniqqi12";
+      sha256 = "NBOIGE6XXQkebjjOPzsziL+35Kw9eQ79jjkSSEQEC9E=";
       type = "gem";
     };
-    version = "1.15.5";
+    version = "1.16.0";
   };
   octokit = {
     dependencies = ["faraday" "sawyer"];

@@ -5,7 +5,6 @@
 , fetchpatch
 , nix-update-script
 , stdenv
-, symlinkJoin
 
 , config
 , cudaSupport ? config.cudaSupport
@@ -17,38 +16,27 @@
 , openclSupport ? false
 , clblast
 
-, openblasSupport ? true
+, blasSupport ? !rocmSupport && !cudaSupport
 , openblas
 , pkg-config
+, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 }:
 
-assert lib.assertMsg
-  (lib.count lib.id [openclSupport openblasSupport rocmSupport] == 1)
-  "llama-cpp: exactly one  of openclSupport, openblasSupport and rocmSupport should be enabled";
-
 let
-  cudatoolkit_joined = symlinkJoin {
-    name = "${cudaPackages.cudatoolkit.name}-merged";
-    paths = [
-      cudaPackages.cudatoolkit.lib
-      cudaPackages.cudatoolkit.out
-    ] ++ lib.optionals (lib.versionOlder cudaPackages.cudatoolkit.version "11") [
-      # for some reason some of the required libs are in the targets/x86_64-linux
-      # directory; not sure why but this works around it
-      "${cudaPackages.cudatoolkit}/targets/${stdenv.system}"
-    ];
-  };
-  metalSupport = stdenv.isDarwin && stdenv.isAarch64;
+  # It's necessary to consistently use backendStdenv when building with CUDA support,
+  # otherwise we get libstdc++ errors downstream.
+  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1671";
+  version = "1710";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-OFRc3gHKQboVCsDlQVHwzEBurIsOMj/bVGYuCLilydE=";
+    hash = "sha256-fbzHjaL+qAE9HdtBVxboo8T2/KCdS5O1RkTQvDwD/xs=";
   };
 
   patches = [
@@ -67,25 +55,42 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals openblasSupport [ pkg-config ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals blasSupport [ pkg-config ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
 
-  buildInputs = lib.optionals metalSupport
+    # TODO: Replace with autoAddDriverRunpath
+    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
+
+  buildInputs = lib.optionals effectiveStdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [
       Accelerate
       CoreGraphics
       CoreVideo
       Foundation
-      MetalKit
     ])
-  ++ lib.optionals cudaSupport [
-    cudatoolkit_joined
-  ] ++ lib.optionals rocmSupport [
+  ++ lib.optionals metalSupport (with darwin.apple_sdk.frameworks; [
+    MetalKit
+  ])
+  ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl.dev # <nv/target>
+
+    # A temporary hack for reducing the closure size, remove once cudaPackages
+    # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
+    cuda_cudart.dev
+    cuda_cudart.lib
+    cuda_cudart.static
+    libcublas.dev
+    libcublas.lib
+    libcublas.static
+  ]) ++ lib.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.hipblas
     rocmPackages.rocblas
   ] ++ lib.optionals openclSupport [
     clblast
-  ] ++ lib.optionals openblasSupport [
+  ] ++ lib.optionals blasSupport [
     openblas
   ];
 
@@ -109,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals openclSupport [
     "-DLLAMA_CLBLAST=ON"
   ]
-  ++ lib.optionals openblasSupport [
+  ++ lib.optionals blasSupport [
     "-DLLAMA_BLAS=ON"
     "-DLLAMA_BLAS_VENDOR=OpenBLAS"
   ];
@@ -140,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "llama-cpp-main";
     maintainers = with maintainers; [ dit7ya elohmeier ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = (effectiveStdenv.isDarwin && effectiveStdenv.isx86_64) || lib.count lib.id [openclSupport blasSupport rocmSupport cudaSupport] == 0;
     platforms = platforms.unix;
   };
 })

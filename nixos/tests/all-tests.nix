@@ -164,7 +164,7 @@ in {
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix {};
   btrbk-section-order = handleTest ./btrbk-section-order.nix {};
   budgie = handleTest ./budgie.nix {};
-  buildbot = handleTestOn [ "x86_64-linux" ] ./buildbot.nix {};
+  buildbot = handleTest ./buildbot.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
   c2fmzq = handleTest ./c2fmzq.nix {};
   caddy = handleTest ./caddy.nix {};
@@ -257,6 +257,7 @@ in {
   dolibarr = handleTest ./dolibarr.nix {};
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
+  drawterm = discoverTests (import ./drawterm.nix);
   drbd = handleTest ./drbd.nix {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
@@ -604,6 +605,7 @@ in {
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
   nixos-rebuild-specialisations = handleTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
@@ -742,6 +744,7 @@ in {
   rosenpass = handleTest ./rosenpass.nix {};
   rshim = handleTest ./rshim.nix {};
   rspamd = handleTest ./rspamd.nix {};
+  rspamd-trainer = handleTest ./rspamd-trainer.nix {};
   rss2email = handleTest ./rss2email.nix {};
   rstudio-server = handleTest ./rstudio-server.nix {};
   rsyncd = handleTest ./rsyncd.nix {};
@@ -785,6 +788,7 @@ in {
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
   sslh = handleTest ./sslh.nix {};
+  ssh-agent-auth = handleTest ./ssh-agent-auth.nix {};
   ssh-audit = handleTest ./ssh-audit.nix {};
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix {};
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix {};

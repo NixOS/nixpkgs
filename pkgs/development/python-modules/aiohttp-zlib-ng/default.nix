@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , aiohttp
 , buildPythonPackage
-, cpufeature
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
@@ -12,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-zlib-ng";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohttp-zlib-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lSzBmEgYrWKthpgceFn9LjsNw/ByPOrdPwVI8WU0Cvo=";
+    hash = "sha256-t7T3KIGId5CoBciSkwu/sejW45i2EYtq1fHvNKNXlhA=";
   };
 
   postPatch = ''
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     zlib-ng
-  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform cpufeature) cpufeature;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

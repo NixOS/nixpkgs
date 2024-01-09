@@ -118,7 +118,7 @@ let
 
   wxGTK = wxGTK32;
   python = python3;
-  wxPython = python.pkgs.wxPython_4_2;
+  wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
   addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
 

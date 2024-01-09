@@ -7,7 +7,7 @@
 , nodePackages
 , python3Packages
 , jdk
-, llvmPackages_8
+, llvmPackages
 , llvmPackages_14
 , nixpkgs-fmt
 , protobuf
@@ -710,8 +710,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.40.0";
-          sha256 = "sha256-Ym76WtKvz18NgxH9o8O/Ozn+/AtqLvjJs8ffLhPOWkQ=";
+          version = "2023.60.0";
+          sha256 = "sha256-zxE4QcWt8M6djTbdIf0YNSpeF1w7vMK4/BW5ArCOYbE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1151,8 +1151,8 @@ let
         mktplcRef = {
           name = "theme-dracula";
           publisher = "dracula-theme";
-          version = "2.24.2";
-          sha256 = "sha256-YNqWEIvlEI29mfPxOQVdd4db9G2qNodhz8B0MCAAWK8=";
+          version = "2.24.3";
+          sha256 = "sha256-3B18lEu8rXVXySdF3+xsPnAyruIuEQJDhlNw82Xm6b0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
@@ -1234,8 +1234,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.17.10";
-          sha256 = "sha256-4/B70DyNlImz60PSTSL5CKihlOJen/tR1/dXGc3s1ZY=";
+          version = "0.18.1";
+          sha256 = "sha256-PdXoc9+ejYr1SiikuabUH+2tt1tByJn5gycaHrHuaBE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -2162,7 +2162,7 @@ let
         };
       };
 
-      llvm-org.lldb-vscode = llvmPackages_8.lldb;
+      llvm-org.lldb-vscode = llvmPackages.lldb;
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3111,8 +3111,8 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.0";
-          sha256 = "080zd103vjrz86vllr1ricq2vi3hawn4534n492m7xdcry9l9dpc";
+          version = "0.6.5";
+          sha256 = "sha256-HgqM4PKGk3R5MLY4cVjKxv79p5KlOkVDeDbv7/6FmpM=";
         };
         meta = {
           license = lib.licenses.mit;

@@ -4,18 +4,20 @@
 , nix-update-script
 , testers
 , symfony-cli
+, nssTools
+, makeBinaryWrapper
 }:
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.7.6";
-  vendorHash = "sha256-GuLcevYEM+neWAJoNBZrAVzVxdaLFFi9nubXGzp4EXw=";
+  version = "5.7.8";
+  vendorHash = "sha256-bscRqFYV2qzTmu04l00/iMsFQR5ITPBFVr9BQwVGFU8=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    hash = "sha256-HMyq4raB6pPtx4DEJlcSM2+jlw7KWJW72RRVdG2wvn0=";
+    hash = "sha256-s8Ca8nKcJI6BqhT3CI6hIhUCgxPXD6mZMIvNNaAXFH0=";
   };
 
   ldflags = [
@@ -25,8 +27,14 @@ buildGoModule rec {
     "-X main.channel=stable"
   ];
 
+  buildInputs = [ makeBinaryWrapper ];
+
   postInstall = ''
-    mv $out/bin/symfony-cli $out/bin/symfony
+    mkdir $out/libexec
+    mv $out/bin/symfony-cli $out/libexec/symfony
+
+    makeBinaryWrapper $out/libexec/symfony $out/bin/symfony \
+      --prefix PATH : ${lib.makeBinPath [ nssTools ]}
   '';
 
   # Tests requires network access

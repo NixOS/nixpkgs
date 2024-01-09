@@ -28,6 +28,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ libxml2.dev libxslt.dev cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
   buildInputs = [ libxml2 libxslt zlib ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
+
   # tests are meant to be ran "in-place" in the same directory as src
   doCheck = false;
 

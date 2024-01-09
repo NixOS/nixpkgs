@@ -28,21 +28,21 @@
 
 let
   pname = "anki";
-  version = "23.10.1";
-  rev = "fac9e0ee1436ba5ac3366c72dd9394a6e692b1cf";
+  version = "23.12.1";
+  rev = "1a1d4d5419c6b57ef3baf99c9d2d9cf85d36ae0a";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-leGdamjCehffv2ByL7JWdaUhxRA4ZEPRKxBphUVzfRw=";
+    hash = "sha256-K38bhfU1076PxdKJFvnFb2w6Q9Q2MUmL+j8be3RZQYk=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "fsrs-0.1.0" = "sha256-bnLmJk2aaWBdgdsiasRrDG4NiTDMCDCXotCSoc0ldlk=";
+      "fsrs-0.1.0" = "sha256-KJgT01OmMbqgYFE5Fu8nblZl9rL5QVVMa2DNFsw6cdk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
@@ -51,7 +51,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ckpKxALSpZAu5xyBOYzMcNDQDfCMaYAtSGONHTCBhw4=";
+    hash = "sha256-tOl+gLBE6SNPQvVWT/N7RKFaaP9SnpCBJf5dq2wCPuM=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [

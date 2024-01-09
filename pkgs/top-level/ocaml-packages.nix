@@ -1387,6 +1387,8 @@ let
 
     oseq = callPackage ../development/ocaml-modules/oseq { };
 
+    otfed = callPackage ../development/ocaml-modules/otfed { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };

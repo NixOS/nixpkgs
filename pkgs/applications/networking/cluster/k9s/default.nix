@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.29.1";
+  version = "0.30.8";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     rev = "v${version}";
-    sha256 = "sha256-agGayZ20RMAcGOx+owwDbUUDsjF3FZajhwDZ5wtE93k=";
+    hash = "sha256-RIk3e/rySYev5n0NLN6ZYHIx3ssfdUXnzBJ2y6Y/n5U=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-9w44gpaB2C/F7hTImjdeabWVgTU5AA/7OSJmAqayrzU=";
+  vendorHash = "sha256-Exn4NYegZWrItBoGVb97GUDRhhfeSJUEdr7xJnxcRMI=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
@@ -51,7 +51,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
+    changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "k9s";
     maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
   };
 }

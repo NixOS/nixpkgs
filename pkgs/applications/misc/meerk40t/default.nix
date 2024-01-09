@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
     pyusb
     setuptools
-    wxPython_4_2
+    wxpython
   ];
 
   preFixup = ''

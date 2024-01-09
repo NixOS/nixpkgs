@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, chainer
 , fetchFromGitHub
 , hatchling
 , jupyter
@@ -15,7 +14,7 @@
 buildPythonPackage rec {
   pname = "einops";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
-    chainer
     jupyter
     nbconvert
     numpy
@@ -38,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env.EINOPS_TEST_BACKENDS = "numpy,chainer";
+  env.EINOPS_TEST_BACKENDS = "numpy";
 
   preCheck = ''
     export HOME=$(mktemp -d);

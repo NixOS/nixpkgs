@@ -15,18 +15,19 @@
 , pyfakefs
 , pytestCheckHook
 , yappi
+, pyre-extensions
 }:
 
 buildPythonPackage rec {
   pname = "ax";
-  version = "0.3.5";
+  version = "0.3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-AMnE5bHBUyfMGBxfhkByHY0dC/ft1/QLZgRGk0TyN10=";
+    rev = version;
+    hash = "sha256-5f2VpOFDRz6YzxvxFYWMu8hljkMVbBsyULYVreUxYRU=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     pandas
     plotly
     typeguard
+    pyre-extensions
   ];
 
   checkInputs = [

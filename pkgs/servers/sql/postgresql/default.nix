@@ -109,6 +109,17 @@ let
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
 
+      # Fix build with libxml2 2.12.0 and -Wincompatible-function-pointer-types
+      (if atLeast "16" then
+        # https://www.postgresql.org/message-id/CACpMh%2BDMZVHM%2BiDSyqdcpK8sr7jd_HxxLJRNvGTzcLBE0W07QA%40mail.gmail.com
+        fetchurl {
+          url = "https://www.postgresql.org/message-id/attachment/152769/v1-0001-Make-PostgreSQL-work-with-newer-version-of-libxml.patch";
+          hash = "sha256-1j5mtG++hFmYwfS98PdN1SmNI4T86q4FXvKLz2VeJyg=";
+        }
+      else
+        ./patches/libxml2.12-15.patch
+      )
+
       (substituteAll {
         src = ./locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";

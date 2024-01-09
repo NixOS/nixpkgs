@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.47";
+  version = "0.49";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-CYv5AZsGvN2dtN7t58b50a8PH7804Lnm4d4wAX6Mm5Q=";
+    hash = "sha256-xir0v3SzfkxNXKR6N7Rso0QFtVQIRfu0TIPGWSEwsHM=";
   };
 
   meta = with lib; {
@@ -36,6 +36,7 @@ let
       lockFile = ./Cargo.lock;
       outputHashes = {
         "subprocess-0.2.10" = "sha256-WcGrJ103ofGlQwi32kRGM3Z+uvKSCFBmFZbZXAtuWwM=";
+        "tree-sitter-vim-0.3.1-dev.0" = "sha256-CWxZ28LdptiMNO2VIk+Ny/DhQXdN604EuqRIb9oaCmI=";
       };
     };
 
@@ -47,7 +48,9 @@ let
       libgit2
       zlib
     ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
   };
 in

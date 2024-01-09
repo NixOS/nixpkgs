@@ -206,7 +206,7 @@ in {
 
   pypy39_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy39_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";

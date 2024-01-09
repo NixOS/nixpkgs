@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, fetchzip, zstd
+, recompressTarball
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
@@ -148,33 +148,6 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
-  recompressTarball = { version, hash ? "" }: fetchzip {
-    name = "chromium-${version}.tar.zstd";
-    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    inherit hash;
-
-    nativeBuildInputs = [ zstd ];
-
-    postFetch = ''
-      echo removing unused code from tarball to stay under hydra limit
-      rm -r $out/third_party/{rust-src,llvm}
-
-      echo moving remains out of \$out
-      mv $out source
-
-      echo recompressing final contents into new tarball
-      # try to make a deterministic tarball
-      tar \
-        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
-        --sort name \
-        --mtime 1970-01-01 \
-        --owner=root --group=root \
-        --numeric-owner --mode=go=rX,u+rw,a-s \
-        -cf $out source
-    '';
-  };
-
-
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -246,17 +219,9 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
-    ] ++ lib.optionals (!chromiumVersionAtLeast "120") [
-      # We need to revert this patch to build M114+ with LLVM 16:
-      (githubPatch {
-        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
-        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
-        hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
-        revert = true;
-      })
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
-      # We need to revert this patch to build M120+ with LLVM 16:
-      ./patches/chromium-120-llvm-16.patch
+      # We need to revert this patch to build M120+ with LLVM 17:
+      ./patches/chromium-120-llvm-17.patch
     ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
       # Fix build with at-spi2-core ≥ 2.49
       # This version is still needed for electron.

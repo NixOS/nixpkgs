@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
-, testVersion
+, testers
 , gofumpt
 }:
 
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = gofumpt;
       version = "v${version}";
     };

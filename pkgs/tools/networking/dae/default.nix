@@ -2,24 +2,27 @@
 , clang
 , fetchFromGitHub
 , buildGoModule
+, installShellFiles
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-WiJqhXYehuUCLEuVbsQkmTntuH1srtePtZgYBSTbxiw=";
+    hash = "sha256-DxGKfxu13F7+5zV/31GP9gkbGHrz5RdRe84J3DQ0iUs=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-fb4PEMhV8+5zaRJyl+nYi2BHcOUDUVAwxce2xaRt5JA=";
+  vendorHash = "sha256-UQRM3/JSsPDAGqYZ43bVYVvSLvqqZ/BJE6hwx5wzfcQ=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ clang installShellFiles ];
+
+  CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
@@ -41,6 +44,7 @@ buildGoModule rec {
     install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
     substituteInPlace $out/lib/systemd/system/dae.service \
       --replace /usr/bin/dae $out/bin/dae
+    installShellCompletion install/shell-completion/dae.{bash,zsh,fish}
   '';
 
   meta = with lib; {

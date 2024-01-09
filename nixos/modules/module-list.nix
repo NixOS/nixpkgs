@@ -497,6 +497,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
@@ -620,6 +621,7 @@
   ./services/mail/public-inbox.nix
   ./services/mail/roundcube.nix
   ./services/mail/rspamd.nix
+  ./services/mail/rspamd-trainer.nix
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
@@ -722,6 +724,7 @@
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
+  ./services/misc/ollama.nix
   ./services/misc/ombi.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
@@ -1173,6 +1176,7 @@
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
+  ./services/security/bitwarden-directory-connector-cli.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix

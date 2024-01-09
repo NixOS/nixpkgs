@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -117,13 +117,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.14";
+      version = "0.23.15";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-S71PXj+XTGsp5aJXH+82D7tdemfA6cnLBWT/fDmb8oA=";
+        sha256 = "sha256-QURq7ysSsxmBOtoBlPTPWiloXQpjEdxnM0L1fLwXfpw=";
       };
 
       buildInputs = [
@@ -147,15 +147,6 @@ let
         ++ concatAttrVals features_ nativeFeatureDependencies;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-      # FIXME: see if it's still necessary and remove on next release
-      patches = [
-        (fetchpatch {
-          url = "https://github.com/MusicPlayerDaemon/MPD/commit/50c1e3738a672f933560247b5527d365d17b1c02.patch";
-          hash = "sha256-99XL3Yb1f9yrD0p+Ssn1HfAHrVoO/ky6bp3e1n1+yvg=";
-          excludes = [ "NEWS" ];
-        })
-      ];
 
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \

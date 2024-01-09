@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-K/B2FRzAtVdXa+lTi0bhkHjBe0rbAc4yFNv9uNDvB4Y=";
+    hash = "sha256-Ez34JC8QhOCVS7itZAOtYcspbM9MjtZa+1BP2FEIt8U=";
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -30,7 +30,7 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = "sha256-2WA4mqY/bO/K3m19T5/xGbUbcR95DXQnywkjjzstmd4=";
+      hash = "sha256-TjlkWozbZlDOsCOdZnOM6axkBYi5G2BCOlvSY4dZg4c=";
     };
 
     env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -56,7 +56,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version;
 
-  vendorHash = "sha256-1go3lkNaar9HSjJxKqqR+RII7V7Ufj1gYLalxyvJaVE=";
+  vendorHash = "sha256-mJWSCqgIPChMR1iFS2rXXOCG+lF1HekmmAjwPPa140g=";
 
   CGO_ENABLED = 0;
 

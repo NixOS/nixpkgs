@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
-    url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
+    url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    hash = "sha256-esS1D+7gBKn6iPHf0tL6c4qCiWdjBQzXc7PFSwqBgoM=";
   };
 
   patches = [

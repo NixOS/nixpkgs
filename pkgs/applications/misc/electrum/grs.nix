@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication {
     bitstring
     cryptography
     dnspython
-    groestlcoin_hash
+    groestlcoin-hash
     jsonrpclib-pelix
     matplotlib
     pbkdf2

@@ -9,7 +9,7 @@
 , boto3
 , buildPythonPackage
 , click
-, docker_pycreds
+, docker-pycreds
 , fetchFromGitHub
 , flask
 , git
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     click
-    docker_pycreds
+    docker-pycreds
     gitpython
     pathtools
     protobuf

@@ -185,6 +185,14 @@ in {
       ];
     };
 
+    linux_6_7 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.7";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -199,13 +207,6 @@ in {
     in if latest.kernelAtLeast testing.baseVersion
        then latest
        else testing;
-
-    # FIXME: Remove after 23.11 is released
-    linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
-      # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = linux_6_5;
-      kernelPatches = linux_6_5.kernelPatches;
-   };
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -593,6 +594,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
+    linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
@@ -626,8 +628,6 @@ in {
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
-    # FIXME: Remove after 23.11 is released
-    linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
@@ -659,7 +659,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_6;
+    linux_latest = packages.linux_6_7;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;

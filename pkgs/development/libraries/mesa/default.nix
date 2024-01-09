@@ -85,8 +85,8 @@
 */
 
 let
-  version = "23.3.1";
-  hash = "sha256-bkgSbXD9s/IP/rJGygwuQf/cg18GY6A9RSa4v120HeY=";
+  version = "23.3.2";
+  hash = "sha256-PPy4H6FvicVqvjhV0mN9OW7k4DhJtlkACmuOX1fmmtw=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -129,9 +129,6 @@ self = stdenv.mkDerivation {
     ./backports/0001-dri-added-build-dependencies-for-systems-using-non-s.patch
     ./backports/0002-util-Update-util-libdrm.h-stubs-to-allow-loader.c-to.patch
     ./backports/0003-glx-fix-automatic-zink-fallback-loading-between-hw-a.patch
-
-    # Fix build on i686
-    ./backports/0004-d3d12-Fix-AV1-video-encode-32-bits-build.patch
   ];
 
   postPatch = ''

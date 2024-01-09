@@ -431,8 +431,8 @@ let
     };
 
     kea = let
-      controlSocketPathV4 = "/run/kea-dhcp4/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea-dhcp6/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea/dhcp6.sock";
     in
     {
       exporterConfig = {
@@ -1050,6 +1050,50 @@ let
         wait_for_unit("phpfpm-php-fpm-exporter.service")
         wait_for_unit("prometheus-php-fpm-exporter.service")
         succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
+    ping = {
+      exporterConfig = {
+        enable = true;
+
+        settings = {
+          targets = [ {
+            "localhost" = {
+              alias = "local machine";
+              env = "prod";
+              type = "domain";
+            };
+          } {
+            "127.0.0.1" = {
+              alias = "local machine";
+              type = "v4";
+            };
+          } {
+            "::1" = {
+              alias = "local machine";
+              type = "v6";
+            };
+          } {
+            "google.com" = {};
+          } ];
+          dns = {};
+          ping = {
+            interval = "2s";
+            timeout = "3s";
+            history-size = 42;
+            payload-size = 56;
+          };
+          log = {
+            level = "warn";
+          };
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-ping-exporter.service")
+        wait_for_open_port(9427)
+        succeed("curl -sSf http://localhost:9427/metrics | grep 'ping_up{.*} 1'")
       '';
     };
 

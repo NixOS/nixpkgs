@@ -2,7 +2,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 4d3da0c90..d37931c1b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -503,11 +503,6 @@ if (NOT MSVC)
+@@ -508,11 +508,6 @@ if (NOT MSVC)
      set(HAVE_SUPERVISOR true)
  endif ()
  
@@ -11,11 +11,11 @@ index 4d3da0c90..d37931c1b 100644
 -install(DIRECTORY DESTINATION ${ZEEK_SPOOL_DIR})
 -install(DIRECTORY DESTINATION ${ZEEK_LOG_DIR})
 -
- configure_file(zeek-path-dev.in ${CMAKE_CURRENT_BINARY_DIR}/zeek-path-dev)
+ configure_file(cmake_templates/zeek-path-dev.in ${CMAKE_CURRENT_BINARY_DIR}/zeek-path-dev)
  
  file(
-@@ -1198,7 +1193,7 @@ if (INSTALL_ZKG)
-                    @ONLY)
+@@ -1201,7 +1201,7 @@ if (INSTALL_ZKG)
+                    ${CMAKE_CURRENT_BINARY_DIR}/zkg-config @ONLY)
  
      install(DIRECTORY DESTINATION var/lib/zkg)
 -    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zkg-config DESTINATION ${ZEEK_ZKG_CONFIG_DIR}
@@ -37,7 +37,7 @@ index 1ebe7c2..1435509 100644
  
  ########################################################################
  ## Dependency Configuration
-@@ -200,38 +200,9 @@ else ()
+@@ -186,38 +186,9 @@ else ()
      set(LOGS ${VAR}/logs)
  endif ()
  

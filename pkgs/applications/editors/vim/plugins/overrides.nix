@@ -315,16 +315,77 @@
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
   };
 
-  codeium-nvim = super.codeium-nvim.overrideAttrs {
+  codeium-nvim = let
+    # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
+    codeiumVersion = "1.6.7";
+    codeiumHashes = {
+      x86_64-linux = "sha256-z1cZ6xmP25iPezeLpz4xRh7czgx1JLwsYwGAEUA6//I=";
+      aarch64-linux = "sha256-8cSdCiIVbqv91lUMOLV1Xld8KuIzJA5HCIDbhyyc404=";
+      x86_64-darwin = "sha256-pjW7tNyO0cIFdIm69H6I3HDBpFwnJIRmIN7WRi1OfLw=";
+      aarch64-darwin = "sha256-DgE4EVNCM9+YdTVJeVYnrDGAXOJV1VrepiVeX3ziwfg=";
+    };
+
+    codeium' = codeium.overrideAttrs rec {
+      version = codeiumVersion;
+
+      src = let
+        inherit (stdenv.hostPlatform) system;
+        throwSystem = throw "Unsupported system: ${system}";
+
+        platform = {
+          x86_64-linux = "linux_x64";
+          aarch64-linux = "linux_arm";
+          x86_64-darwin = "macos_x64";
+          aarch64-darwin = "macos_arm";
+        }.${system} or throwSystem;
+
+        hash = codeiumHashes.${system} or throwSystem;
+      in fetchurl {
+        name = "codeium-${version}.gz";
+        url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${version}/language_server_${platform}.gz";
+        inherit hash;
+      };
+    };
+
+  in super.codeium-nvim.overrideAttrs {
     dependencies = with self; [ nvim-cmp plenary-nvim ];
     buildPhase = ''
       cat << EOF > lua/codeium/installation_defaults.lua
       return {
         tools = {
-          language_server = "${codeium}/bin/codeium_language_server"
+          language_server = "${codeium'}/bin/codeium_language_server"
         };
       };
       EOF
+    '';
+
+    doCheck = true;
+    checkInputs = [ jq ];
+    checkPhase = ''
+      runHook preCheck
+
+      expected_codeium_version=$(jq -r '.version' lua/codeium/versions.json)
+      actual_codeium_version=$(${codeium'}/bin/codeium_language_server --version)
+
+      expected_codeium_stamp=$(jq -r '.stamp' lua/codeium/versions.json)
+      actual_codeium_stamp=$(${codeium'}/bin/codeium_language_server --stamp | grep STABLE_BUILD_SCM_REVISION | cut -d' ' -f2)
+
+      if [ "$actual_codeium_stamp" != "$expected_codeium_stamp" ]; then
+        echo "
+      The version of codeium patched in vimPlugins.codeium-nvim is incorrect.
+      Expected stamp: $expected_codeium_stamp
+      Actual stamp: $actual_codeium_stamp
+
+      Expected codeium version: $expected_codeium_version
+      Actual codeium version: $actual_codeium_version
+
+      Please, update 'codeiumVersion' in pkgs/applications/editors/vim/plugins/overrides.nix accordingly to:
+      https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
+        "
+        exit 1
+      fi
+
+      runHook postCheck
     '';
   };
 
@@ -929,6 +990,10 @@
     dependencies = with self; [ promise-async ];
   };
 
+  obsidian-nvim = super.obsidian-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   octo-nvim = super.octo-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
   };
@@ -1018,6 +1083,10 @@
     ];
   };
 
+  roslyn-nvim = super.roslyn-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig ];
+  };
+
   sg-nvim = super.sg-nvim.overrideAttrs (old:
     let
       sg-nvim-rust = rustPlatform.buildRustPackage {
@@ -1067,12 +1136,12 @@
 
   sniprun =
     let
-      version = "1.3.9";
+      version = "1.3.10";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-g2zPGAJIjMDWn8FCsuRPZyYHDk+ZHCd04lGlYHvb4OI=";
+        hash = "sha256-7tDREZ8ZXYySHrXVOh+ANT23CknJQvZJ8WtU5r0pOOQ=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1082,7 +1151,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-h/NhDFp+Yiyx37Tlfu0W9rMnd+ZmQp5gt+qhY3PB7DE=";
+        cargoHash = "sha256-n/HW+q4Xrme/ssS9Th5uFEUsDgkxRxKt2wSR8k08uHY=";
 
         nativeBuildInputs = [ makeWrapper ];
 

@@ -29,6 +29,8 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   futuresql = callPackage ../development/libraries/futuresql { };
@@ -77,6 +79,10 @@ makeScopeWithSplicing' {
     qt6Support = true;
     suffix = "qt6";
   };
+
+  # Not a library, but we do want it to be built for every qt version there
+  # is, to allow users to choose the right build if needed.
+  sddm = callPackage ../applications/display-managers/sddm {};
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.

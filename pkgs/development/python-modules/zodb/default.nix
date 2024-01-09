@@ -2,10 +2,10 @@
 , fetchPypi
 , buildPythonPackage
 , python
-, zope_testrunner
+, zope-testrunner
 , transaction
 , six
-, zope_interface
+, zope-interface
 , zodbpickle
 , zconfig
 , persistent
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     transaction
     six
-    zope_interface
+    zope-interface
     zodbpickle
     zconfig
     persistent
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     manuel
-    zope_testrunner
+    zope-testrunner
   ];
 
   checkPhase = ''

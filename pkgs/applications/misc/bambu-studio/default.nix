@@ -24,6 +24,7 @@
 , gstreamer
 , gst-plugins-base
 , gst-plugins-bad
+, gst-plugins-good
 , gtest
 , gtk3
 , hicolor-icon-theme
@@ -57,13 +58,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.01.57";
+  version = "01.08.02.56";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-15Eq+ylQK+xlxG7cg6xoCPb+zJ66qqwQIKd1zA13I5o=";
+    hash = "sha256-9AUHS7dXqWx8LPkTP7/scxu3Cc/mxuK+v+5PrCvUPf0=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-bad
+    gst-plugins-good
     gtk3
     hicolor-icon-theme
     ilmbase

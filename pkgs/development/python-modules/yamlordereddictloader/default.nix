@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "YAML loader and dump for PyYAML allowing to keep keys order";
     homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

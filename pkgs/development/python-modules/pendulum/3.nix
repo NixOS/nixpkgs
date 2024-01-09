@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -7,6 +8,9 @@
 # build-system
 , poetry-core
 , rustPlatform
+
+# native dependencies
+, iconv
 
 # dependencies
 , backports-zoneinfo
@@ -22,28 +26,41 @@
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "3.0.0b1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdispater";
     repo = "pendulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-11W22RpoYUcL9Nya32HRX4Jdo4L9XP2Zftevc+7eFzw=";
+    hash = "sha256-v0kp8dklvDeC7zdTDOpIbpuj13aGub+oCaYz2ytkEpI=";
   };
+
+  postPatch = ''
+    substituteInPlace rust/Cargo.lock \
+      --replace "3.0.0-beta-1" "3.0.0"
+  '';
 
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "source/rust";
     name = "${pname}-${version}";
-    hash = "sha256-qyyPR4a+IHrRSZzOZaW+DXGpOTyFcEVu/+Mt5QlQFqw=";
+    hash = "sha256-6fw0KgnPIMfdseWcunsGjvjVB+lJNoG3pLDqkORPJ0I=";
+    postPatch = ''
+      substituteInPlace Cargo.lock \
+        --replace "3.0.0-beta-1" "3.0.0"
+    '';
   };
 
   nativeBuildInputs = [
     poetry-core
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    iconv
   ];
 
   propagatedBuildInputs = [
@@ -67,6 +84,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/benchmarks"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
+    "tests/testing/test_time_travel.py"
   ];
 
   meta = with lib; {

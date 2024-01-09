@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchzip, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, meson, ninja, cunit }:
+{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, meson, ninja, cunit, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
-  version = "1.8.0";
+  version = "1.8.1";
 
-  src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-libtraceevent-${version}.tar.gz";
-    hash = "sha256-l1x9tiHKhfdetlnn9S/EfpcHDzZqiTOrdFhHQtOC6Do=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
+    rev = "libtraceevent-${version}";
+    hash = "sha256-zib2IrgtaDGDEO/2Kp9ytHuceW/7slRPDUClYgqemOE=";
   };
 
   postPatch = ''
@@ -21,6 +22,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ cunit ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
+    rev-prefix = "libtraceevent-";
+  };
 
   meta = with lib; {
     description = "Linux kernel trace event library";

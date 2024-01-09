@@ -23,9 +23,9 @@ python3Packages.buildPythonApplication rec {
     markdown2
     matrix-client
     minidb
+    playwright
     pushbullet-py
     pycodestyle
-    pyppeteer
     pyyaml
     requests
   ];

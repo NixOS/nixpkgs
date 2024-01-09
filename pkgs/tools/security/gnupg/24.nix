@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
+    ./24-revert-rfc4880bis-defaults.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];

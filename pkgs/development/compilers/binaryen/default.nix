@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
       hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
     })
+
+    # Fix fmin tests on gcc-13: https://github.com/WebAssembly/binaryen/pull/5994
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/WebAssembly/binaryen/commit/1e17dfb695a19d5d41f1f88411fbcbc5f2408c8f.patch";
+      hash = "sha256-5JZh15CXkg5XdTG8eRJXPwO+zmymYeFjKbHutRPTmlU=";
+    })
   ];
 
   nativeBuildInputs = [ cmake python3 ];

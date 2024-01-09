@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-9m8GmVIZgHETkemzElXOfVxaZlzJwZaT2sJcTU7vZ2g=";
+    hash = "sha256-UFe4hVzn/jN22KtTuTcyNpseJdgIkmh9/eAJdSObfYU=";
   };
 
-  cargoHash = "sha256-g1gdFGj0nzczR2yyjCdjpCGtFlmX7yrdAQIa3sQRATg=";
+  cargoHash = "sha256-WY8egnsyCuTLHd2Jnw+RLNd2LUOorHlnHVGLxtR5exQ=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = true; # nextest is the upstream integration framework

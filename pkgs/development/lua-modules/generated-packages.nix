@@ -3326,11 +3326,11 @@ buildLuarocksPackage {
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/vhyrro/toml-edit.lua",
-  "rev": "dfb3524f94a39c3b7c704b1d8bd866078bf16b39",
-  "date": "2023-11-23T17:25:02+01:00",
-  "path": "/nix/store/xi3d022yk8rvaavlnk5c7vj2wx290c44-toml-edit.lua",
-  "sha256": "0gfc481hhsq36bhdb3ym81szj31lgqs8rszbgybmzraycn9vbj9n",
-  "hash": "sha256-Nsm1k2Ve5V+Xf+vrjDR+NAz5dUDVj9XgMgNrCAMizD0=",
+  "rev": "34f072d8ff054b3124d9d2efc0263028d7425525",
+  "date": "2023-12-29T15:53:36+01:00",
+  "path": "/nix/store/z1gn59hz9ypk3icn3gmafaa19nzx7a1v-toml-edit.lua",
+  "sha256": "0jzzp4sd48haq1kmh2k85gkygfq39i10kvgjyqffcrv3frdihxvx",
+  "hash": "sha256-fXcYW3ZjZ+Yc9vLtCUJMA7vn5ytoClhnwAoi0jS5/0s=",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
