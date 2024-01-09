@@ -2,14 +2,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.205";
+  version = "2.206";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-/9vkc6Ic3xyfpKEE64dBpoVM/gcRsLnAcrZWie9lNa4=";
+    hash = "sha256-oOKg85Yz5/2/pvwjVqeQXE8xE7X+QJvPYwYN+E18oEc=";
   };
 
-  outputs = [ "out" "doc" "tex" "texdoc" ];
+  outputs = [ "out" "doc" "tex" ];
 
   patches = [ ./tex-font-path.patch ];
 
@@ -32,15 +32,6 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm 444 -t $tex/tex/latex/junicode TeX/junicode.sty
     install -Dm 444 -t $tex/tex/latex/junicodevf TeX/junicodevf.{sty,lua}
-
-    install -Dm 444 -t $texdoc/doc/tex/latex/junicode TeX/junicode-package.pdf
-    install -Dm 444 -t $texdoc/doc/tex/latex/junicodevf TeX/junicodevf-package.pdf
-
-    cat >$texdoc/doc/tex/latex/junicode/nix-font-note.txt <<EOF
-    The style file is patched to refer directly to the corresponding
-    font files; thus, contrary to the documentation, the fonts
-    do *not* have to be installed globally.
-    EOF
 
     runHook postInstall
   '';
