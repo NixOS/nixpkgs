@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
 , cargo
 , rustc
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -27,6 +29,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   pythonImportsCheck = [ "pdoc_pyo3_sample_library" ];
