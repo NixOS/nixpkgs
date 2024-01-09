@@ -20,6 +20,7 @@
 
 buildPythonPackage {
   pname = "dm-haiku-tests";
+  format = "other";
   inherit (dm-haiku) version;
 
   src = dm-haiku.testsout;

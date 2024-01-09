@@ -1,6 +1,9 @@
 { buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, absl-py
+, flax
+, numpy
 , callPackage
 , lib
 , jmp
@@ -10,23 +13,17 @@
 
 buildPythonPackage rec {
   pname = "dm-haiku";
-  version = "0.0.10";
+  version = "0.0.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
+    repo = "dm-haiku";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EZx3o6PgTeFjTwI9Ko9H39EqPSE0yLWWpsdqX6ALlo4=";
+    hash = "sha256-xve1vNsVOC6/HVtzmzswM/Sk3uUNaTtqNAKheFb/tmI=";
   };
 
   patches = [
-    # https://github.com/deepmind/dm-haiku/issues/717
-    (fetchpatch {
-      name = "remove-typing-extensions.patch";
-      url = "https://github.com/deepmind/dm-haiku/commit/c22867db1a3314a382bd2ce36511e2b756dc32a8.patch";
-      hash = "sha256-SxJc8FrImwMqTJ5OuJ1f4T+HfHgW/sGqXeIqlxEatlE=";
-    })
     # https://github.com/deepmind/dm-haiku/pull/672
     (fetchpatch {
       name = "fix-find-namespace-packages.patch";
@@ -41,8 +38,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    absl-py
+    flax
     jaxlib
     jmp
+    numpy
     tabulate
   ];
 
