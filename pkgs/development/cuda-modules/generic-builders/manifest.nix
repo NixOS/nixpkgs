@@ -4,7 +4,6 @@
   autoAddCudaCompatRunpathHook,
   autoPatchelfHook,
   backendStdenv,
-  config,
   fetchurl,
   lib,
   lndir,
@@ -135,11 +134,8 @@ backendStdenv.mkDerivation (
 
     # badPlatformsConditions :: AttrSet Bool
     # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
-    # Example: Broken on a specific architecture or when cudaSupport is false (building with CUDA essentially targets)
-    # a platform which NixOS doesn't have a notion of, otherwise we would specify the platform directly.
-    badPlatformsConditions = {
-      "CUDA support is disabled" = !config.cudaSupport;
-    };
+    # Example: Broken on a specific architecture when some condition is met (like targeting Jetson).
+    badPlatformsConditions = { };
 
     # src :: Optional Derivation
     src = trivial.pipe redistArch [
