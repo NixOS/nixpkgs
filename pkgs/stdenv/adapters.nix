@@ -83,7 +83,10 @@ rec {
     in
     overrideCC stdenv (stdenv.cc.override {
       inherit libcxx;
-      extraPackages = [ cxxabi pkgs.pkgsTargetTarget."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt ];
+      extraPackages = [
+        cxxabi
+        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+      ];
     });
 
   # Override the setup script of stdenv.  Useful for testing new

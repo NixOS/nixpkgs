@@ -14994,6 +14994,12 @@
     githubId = 18549627;
     name = "Proglodyte";
   };
+  proglottis = {
+    email = "proglottis@gmail.com";
+    github = "proglottis";
+    githubId = 74465;
+    name = "James Fargher";
+  };
   progval = {
     email = "progval+nix@progval.net";
     github = "progval";
@@ -18183,6 +18189,12 @@
     github = "tckmn";
     githubId = 2389333;
     name = "Andy Tockman";
+  };
+  teatwig = {
+    email = "nix@teatwig.net";
+    name = "tea";
+    github = "teatwig";
+    githubId = 18734648;
   };
   techknowlogick = {
     email = "techknowlogick@gitea.com";

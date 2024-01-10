@@ -1086,8 +1086,8 @@ in
 
     security.pam.krb5 = {
       enable = mkOption {
-        default = config.krb5.enable;
-        defaultText = literalExpression "config.krb5.enable";
+        default = config.security.krb5.enable;
+        defaultText = literalExpression "config.security.krb5.enable";
         type = types.bool;
         description = lib.mdDoc ''
           Enables Kerberos PAM modules (`pam-krb5`,
@@ -1095,7 +1095,7 @@ in
 
           If set, users can authenticate with their Kerberos password.
           This requires a valid Kerberos configuration
-          (`config.krb5.enable` should be set to
+          (`config.security.krb5.enable` should be set to
           `true`).
 
           Note that the Kerberos PAM modules are not necessary when using SSS
