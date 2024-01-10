@@ -16500,6 +16500,7 @@ with pkgs;
     julia_16-bin
     julia_18-bin
     julia_19-bin
+    julia_110-bin
     julia_18
     julia_19;
 
