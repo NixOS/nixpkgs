@@ -26,6 +26,7 @@
   redistribRelease,
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
+  cudaMajorMinorVersion,
 }:
 let
   inherit (lib)
@@ -98,7 +99,7 @@ backendStdenv.mkDerivation (
     outputToPatterns = {
       bin = [ "bin" ];
       dev = [
-        "share/pkg-config"
+        "share/pkgconfig"
         "**/*.pc"
         "**/*.cmake"
       ];
@@ -127,21 +128,33 @@ backendStdenv.mkDerivation (
       sha256 = redistribRelease.${redistArch}.sha256 or lib.fakeHash;
     };
 
+    # Handle the pkg-config files:
+    # 1. No FHS
+    # 2. Location expected by the pkg-config wrapper
+    # 3. Generate unversioned names too
     postPatch = ''
-      if [[ -d pkg-config ]] ; then
-        mkdir -p share/pkg-config
-        mv pkg-config/* share/pkg-config/
-        rmdir pkg-config
-      fi
+      for path in pkg-config pkgconfig ; do
+        [[ -d "$path" ]] || continue
+        mkdir -p share/pkgconfig
+        mv "$path"/* share/pkgconfig/
+        rmdir "$path"
+      done
 
-      for pc in share/pkg-config/*.pc ; do
+      for pc in share/pkgconfig/*.pc ; do
         sed -i \
           -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
           -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
           -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
           "$pc"
       done
+
+      # E.g. cuda-11.8.pc -> cuda.pc
+      for pc in share/pkgconfig/*-"$majorMinorVersion.pc" ; do
+        ln -s "$(basename "$pc")" "''${pc%-$majorMinorVersion.pc}".pc
+      done
     '';
+
+    env.majorMinorVersion = cudaMajorMinorVersion;
 
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
