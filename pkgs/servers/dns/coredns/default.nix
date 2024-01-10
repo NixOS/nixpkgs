@@ -1,11 +1,16 @@
+let
+  defaultVendorHash = "sha256-tp22jj6DNnYFQhtAFW2uLo10ty//dyNqIDH2egDgbOw=";
+in
 { lib
 , stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , externalPlugins ? []
-, vendorHash ? "sha256-tp22jj6DNnYFQhtAFW2uLo10ty//dyNqIDH2egDgbOw="
+, vendorHash ? defaultVendorHash
 }:
+
+assert lib.assertMsg (builtins.length externalPlugins > 0 -> vendorHash != defaultVendorHash) "Vendor hash must be changed when using external plugins";
 
 let
   attrsToPlugins = attrs:
@@ -34,6 +39,7 @@ in buildGoModule rec {
     for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
+    go get
     go mod vendor
   '';
 
