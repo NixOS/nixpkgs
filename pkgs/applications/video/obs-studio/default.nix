@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
+    (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
   ];
 
   dontWrapGApps = true;
