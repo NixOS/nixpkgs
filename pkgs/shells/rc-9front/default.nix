@@ -5,6 +5,11 @@
 , byacc
 , coreutils
 , installShellFiles
+
+  # for tests only
+, rc-9front
+, runCommand
+, nawk
 }:
 
 stdenv.mkDerivation {
@@ -43,6 +48,19 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/rc";
     updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = {
+      simple = runCommand "rc-test" { } ''
+        ${rc-9front}/bin/rc -c 'nl=`{echo} && \
+          res=`$nl{for(i in `{seq 1 10}) echo $i} && \
+          echo -n $res' >$out
+        [ "$(wc -l $out | ${nawk}/bin/nawk '{ print $1 }' )" = 10 ]
+        [ "$(${nawk}/bin/nawk '{ a=a+$1 } END{ print a }' < $out)" = "$((10+9+8+7+6+5+4+3+2+1))" ]
+      '';
+      path = runCommand "rc-path" { } ''
+        PATH='${coreutils}/bin:/a:/b:/c' ${rc-9front}/bin/rc -c 'echo $path(2-)' >$out
+        [ '/a /b /c' = "$(cat $out)" ]
+      '';
+    };
   };
 
   meta = with lib; {
