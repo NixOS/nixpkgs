@@ -3,6 +3,7 @@
 , installShellFiles
 , makeWrapper
 , fetchFromGitHub
+, nix-update-script
 , nvd
 , use-nom ? true
 , nix-output-monitor ? null
@@ -48,6 +49,8 @@ rustPlatform.buildRustPackage {
   '';
 
   cargoHash = "sha256-Ul4DM8WmKvKG32zBXzpdzHZknpTQAVvrxFcEd/C1buA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Yet another nix cli helper";
