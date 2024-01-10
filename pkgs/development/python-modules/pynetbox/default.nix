@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.3.0";
+  version = "7.3.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/ptLsV+3EYDBjM+D1VO75VqvCYe6PTlpKAJuQskazJc=";
+    hash = "sha256-QIvh24ZqnF8uF9HOuY0yt3QT/jHgJ2C916d+rBqezWQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
