@@ -16793,6 +16793,8 @@ with pkgs;
 
   nextpnr = callPackage ../development/compilers/nextpnr { };
 
+  nextpnr-xilinx = callPackage ../development/compilers/nextpnr-xilinx { };
+
   nextpnrWithGui = libsForQt5.callPackage ../development/compilers/nextpnr {
     enableGui = true;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
