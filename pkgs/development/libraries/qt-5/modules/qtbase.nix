@@ -15,7 +15,7 @@
   # optional dependencies
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
-, withQttranslation ? true, qttranslations ? null
+, qttranslations ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -351,8 +351,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
-    ] ++ lib.optional (withQttranslation && (qttranslations != null)) [
-      # depends on x11
+    ] ++ lib.optional (qttranslations != null) [
       "-translationdir" "${qttranslations}/translations"
     ]
   );
