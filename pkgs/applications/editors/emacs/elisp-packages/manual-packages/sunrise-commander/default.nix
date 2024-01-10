@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
 , melpaBuild
-, writeText
+, writeMelpaRecipe
 }:
 
 let
   pname = "sunrise-commander";
-  ename = "sunrise";
   version = "20210924.1620";
 
   src = fetchFromGitHub {
@@ -17,17 +16,17 @@ let
   };
 in
 melpaBuild {
-  inherit pname ename version src;
+  inherit pname version src;
 
   commit = src.rev;
 
   outputs = [ "out" "doc" ];
 
-  recipe = writeText "recipe" ''
-    (sunrise
-     :repo "sunrise-commander/sunrise-commander"
-     :fetcher github)
-  '';
+  recipe = writeMelpaRecipe {
+    package-name = "sunrise";
+    fetcher = "github";
+    repo = "sunrise-commander/sunrise-commander";
+  };
 
   postInstall = ''
     install -Dm644 ${src}/README.md -t $doc/share/doc/emacs-sunrise-${version}/
