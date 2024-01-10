@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "jaxopt";
     rev = "refs/tags/jaxopt-v${version}";
-    hash = "sha256-uVOd3knoku5fKBNXOhCikGtjDuW3TtRqev94OM/8Pgk=";
+    hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 
   propagatedBuildInputs = [
@@ -50,11 +50,6 @@ buildPythonPackage rec {
     "jaxopt.linear_solve"
     "jaxopt.loss"
     "jaxopt.tree_util"
-  ];
-
-  disabledTests = [
-    # Stack frame issue
-    "test_bisect"
   ];
 
   meta = with lib; {
