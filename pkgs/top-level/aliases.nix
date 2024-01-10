@@ -40,11 +40,21 @@ let
     then throw "Alias ${n} is still in all-packages.nix"
     else alias;
 
+  deprecationWarning = n: v:
+    if !(with builtins; tryEval (typeOf v)).success then
+      v  # Presumably a `throw`
+    else
+      let trailer =
+        with lib; optionalString (isDerivation v)
+          ", use `${v.pname or v.name}` instead";
+      in lib.warn "`pkgs.${n}` is deprecated${trailer}" v;
+
   mapAliases = aliases:
     lib.mapAttrs (n: alias:
-      removeDistribute
-        (removeRecurseForDerivations
-          (checkInPkgs n alias)))
+      deprecationWarning n
+        (removeDistribute
+          (removeRecurseForDerivations
+            (checkInPkgs n alias))))
       aliases;
 in
 
