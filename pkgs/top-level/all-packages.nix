@@ -5398,7 +5398,9 @@ with pkgs;
 
   ### TOOLS/TYPESETTING/TEX
 
-  advi = callPackage ../tools/typesetting/tex/advi { };
+  advi = callPackage ../tools/typesetting/tex/advi {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
