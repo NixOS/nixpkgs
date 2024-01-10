@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "Bibata_Cursor";
     rev = "v${version}";
-    sha256 = "zCk7qgPeae0BfzhxxU2Dk1SOWJQOxiWyJuzH/ri+Gq4=";
+    sha256 = "sha256-BjLvQ6cjvN0jVEBvKyP6HeFDYH9tdUSP+lgREPX9JIw=";
   };
 
   buildInputs = [ clickgen attrs ];
