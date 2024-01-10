@@ -1487,6 +1487,8 @@ self: super: with self; {
 
   bip32 = callPackage ../development/python-modules/bip32 { };
 
+  birch = callPackage ../development/python-modules/birch { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitbox02 = callPackage ../development/python-modules/bitbox02 { };
@@ -11008,11 +11010,11 @@ self: super: with self; {
   };
 
   /*
-    `pyqt5_with_qtwebkit` should not be used by python libraries in
+    `pyqt5-webkit` should not be used by python libraries in
     pkgs/development/python-modules/*. Putting this attribute in
     `propagatedBuildInputs` may cause collisions.
   */
-  pyqt5_with_qtwebkit = self.pyqt5.override {
+  pyqt5-webkit = self.pyqt5.override {
     withWebKit = true;
   };
 
@@ -13813,6 +13815,8 @@ self: super: with self; {
   stravalib = callPackage ../development/python-modules/stravalib { };
 
   strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
+
+  strct = callPackage ../development/python-modules/strct { };
 
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
