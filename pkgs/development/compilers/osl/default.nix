@@ -6,7 +6,7 @@
 , libclang
 , libxml2
 , zlib
-, openexr
+, openexr_3
 , openimageio
 , llvm
 , boost
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     boost_static
     libclang
     llvm
-    openexr
+    openexr_3
     openimageio
     partio
     pugixml
