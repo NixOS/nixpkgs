@@ -259,7 +259,7 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_19;
 
   unstable = self.nix_2_19;
 } // lib.optionalAttrs config.allowAliases {
