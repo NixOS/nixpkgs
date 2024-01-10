@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    sha256 = "sha256-4r85RDfndLUjpAmipe3oLFcGzD4GRfPgf7wku2unoes=";
+    hash = "sha256-4r85RDfndLUjpAmipe3oLFcGzD4GRfPgf7wku2unoes=";
   };
 
   vendorHash = null;
