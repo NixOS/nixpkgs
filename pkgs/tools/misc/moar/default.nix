@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "moar";
-  version = "1.21.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7Wgt1LE+YmUlV4d79/sXoBmeH4KUhSNUVW5wjYUjg9Y=";
+    hash = "sha256-fS+HmLnqs3haQ/cv768zSY62CcqONCkTF/GpUsPNX0c=";
   };
 
-  vendorHash = "sha256-RJdjaq2meZ9E3g5E2B1PdRvVCVLwK0WMwM5uYOn3B34=";
+  vendorHash = "sha256-1u/2OlMX2FuZaxWnpU4n5r/4xKe+rK++GoCJiSq/BdE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
