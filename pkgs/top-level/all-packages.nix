@@ -18033,7 +18033,9 @@ with pkgs;
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
-  spark2014 = callPackage ../development/libraries/ada/spark2014 { };
+  spark2014 = callPackage ../development/libraries/ada/spark2014 {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix {
     inherit (darwin) libobjc;
