@@ -1,7 +1,7 @@
 { lib
 , rustPlatform
 , installShellFiles
-, makeWrapper
+, makeBinaryWrapper
 , fetchFromGitHub
 , nix-update-script
 , nvd
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   preFixup = ''
