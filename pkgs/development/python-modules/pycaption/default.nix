@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.0";
+  version = "2.2.1";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W/sD/Nh2k1z7YvFVnQB9dGa1bXoCTb4QrPk/1mi4Hdk=";
+    hash = "sha256-fYhxHC2pQD16GF6fm7ZiyljaLtORa0yuV9hcKntzPAI=";
   };
 
   propagatedBuildInputs = [
