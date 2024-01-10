@@ -3662,6 +3662,8 @@ with pkgs;
 
   codeql = callPackage ../development/tools/analysis/codeql { };
 
+  dcm = callPackage ../development/tools/analysis/dcm { };
+
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
   ccextractor = callPackage ../applications/video/ccextractor { };

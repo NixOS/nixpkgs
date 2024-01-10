@@ -12925,6 +12925,11 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
+  NANASHI0X74 = {
+    github = "NANASHI0X74";
+    name = "Rian";
+    matrix = "@donjoe:nanashi0x74.dev";
+  };
   naphta = {
     github = "naphta";
     githubId = 6709831;
