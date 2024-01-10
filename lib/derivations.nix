@@ -98,4 +98,28 @@ in
       # `lazyDerivation` caller knew a shortcut, be taken from there.
       meta = args.meta or checked.meta;
     } // passthru;
+
+    defaultOutput = drv: (drv.${(lib.head (drv.outputs or [ "out" ]))}
+      or (throw "something is up with the outputs of this derivation: ${drv}")) // {
+        # We want the generic derivation without outputs specified so that
+        # we can set `meta.outputsToInstall` later.
+        outputSpecified = false;
+      };
+
+    setOutputsToInstall = drv: outputsToInstall:
+      if lib.length outputsToInstall > 0 then
+        drv // {
+          meta = (drv.meta or {}) // {
+            outputsToInstall = lib.filter
+              (output: (drv.${output} or null) != null)
+              outputsToInstall;
+          };
+        }
+      else drv;
+
+    outputsFor = drv:
+      if drv.outputSpecified or false then
+        [ drv.outputName ]
+      else
+        ((drv.meta or {}).outputsToInstall or [ (drv.outputName or "out") ]);
 }
