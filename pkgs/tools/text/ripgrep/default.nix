@@ -7,10 +7,12 @@
 , Security
 , withPCRE2 ? true
 , pcre2
-, enableManpages ? stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRunRg = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg";
+in rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
   version = "14.0.3";
 
@@ -30,24 +32,24 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = lib.optionalString enableManpages ''
-    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate man > rg.1
+  preFixup = lib.optionalString canRunRg ''
+    ${rg} --generate man > rg.1
     installManPage rg.1
-  '' + ''
+
     installShellCompletion --cmd rg \
-      --bash <($out/bin/rg --generate complete-bash) \
-      --fish <($out/bin/rg --generate complete-fish) \
-      --zsh <($out/bin/rg --generate complete-zsh)
+      --bash <(${rg} --generate complete-bash) \
+      --fish <(${rg} --generate complete-fish) \
+      --zsh <(${rg} --generate complete-zsh)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     file="$(mktemp)"
     echo "abc\nbcd\ncde" > "$file"
-    $out/bin/rg -N 'bcd' "$file"
-    $out/bin/rg -N 'cd' "$file"
+    ${rg} -N 'bcd' "$file"
+    ${rg} -N 'cd' "$file"
   '' + lib.optionalString withPCRE2 ''
-    echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
   '';
 
   meta = with lib; {

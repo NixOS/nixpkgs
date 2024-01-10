@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "semodule-utils";
-  version = "3.5";
+  version = "3.6";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yaVQpzcFHrrywQL2ZcfsL4XnIyhwmAqgBnmYRZtBQoM=";
+    sha256 = "sha256-7tuI8rISTlOPLWFL4GPA2aw+rMDFGk2kRQDKHtG6FvQ=";
   };
 
   buildInputs = [ libsepol ];

@@ -9,6 +9,7 @@ let
   jsonFormat = pkgs.formats.json {};
 
   defaultPHPSettings = {
+    output_buffering = "0";
     short_open_tag = "Off";
     expose_php = "Off";
     error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
@@ -142,7 +143,7 @@ in {
     (mkRenamedOptionModule
       [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "extraOptions" "skeletondirectory" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
+      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
     (mkRenamedOptionModule
       [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "extraOptions" "trusted_domains" ])
     (mkRenamedOptionModule

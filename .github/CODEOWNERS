@@ -167,6 +167,8 @@
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
+/pkgs/applications/networking/browsers/chromium @emilylange
+/nixos/tests/chromium.nix @emilylange
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
@@ -336,3 +338,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
+
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq

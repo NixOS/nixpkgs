@@ -48,6 +48,8 @@ let
         inherit gpus nvccCompatibilities flags;
         cudaMajorVersion = versions.major cudaVersion;
         cudaMajorMinorVersion = versions.majorMinor cudaVersion;
+        cudaOlder = strings.versionOlder cudaVersion;
+        cudaAtLeast = strings.versionAtLeast cudaVersion;
 
         # Maintain a reference to the final cudaPackages.
         # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,

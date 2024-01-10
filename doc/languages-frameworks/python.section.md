@@ -299,14 +299,13 @@ python3Packages.buildPythonApplication rec {
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-    python3Packages.wheel
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.tornado
-    python3Packages.python-daemon
+  propagatedBuildInputs = with python3Packages; [
+    tornado
+    python-daemon
   ];
 
   meta = with lib; {

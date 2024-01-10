@@ -46,14 +46,14 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Jailbreaks & Version Updates
 
@@ -115,7 +115,7 @@ in {
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231014;
+          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231121;
           ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
           Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };

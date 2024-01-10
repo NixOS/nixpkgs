@@ -235,7 +235,6 @@ dont-distribute-packages:
  - IORefCAS
  - IndexedList
  - InfixApplicative
- - InternedData
  - JSON-Combinator
  - JSON-Combinator-Examples
  - Javasf
@@ -292,8 +291,8 @@ dont-distribute-packages:
  - NGLess
  - NTRU
  - NXT
+ - NaCl
  - NaperianNetCDF
- - NaturalLanguageAlphabets
  - NearContextAlgebra
  - Ninjas
  - NoSlow
@@ -522,6 +521,7 @@ dont-distribute-packages:
  - apiary-redis
  - apiary-session
  - apiary-websockets
+ - apigen
  - apis
  - apotiki
  - approx-rand-test
@@ -661,7 +661,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -912,8 +911,6 @@ dont-distribute-packages:
  - comonad-random
  - compaREST
  - compact-mutable
- - compact-mutable-vector
- - compact-socket
  - complexity
  - comprehensions-ghc
  - computational-algebra
@@ -972,7 +969,7 @@ dont-distribute-packages:
  - couch-simple
  - couchdb-enumerator
  - country
- - country_0_2_4_0
+ - country_0_2_4_1
  - cpkg
  - cprng-aes-effect
  - cql-io-tinylog
@@ -998,6 +995,7 @@ dont-distribute-packages:
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
+ - crypto-sodium
  - cryptocipher
  - cryptoids
  - cryptoids-class
@@ -1161,6 +1159,7 @@ dont-distribute-packages:
  - dobutokO4
  - doc-review
  - doi
+ - dojang
  - domaindriven
  - dormouse-client
  - dotparse
@@ -1480,7 +1479,7 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
- - ghc-lib_9_8_1_20231009
+ - ghc-lib_9_8_1_20231121
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
@@ -1931,6 +1930,8 @@ dont-distribute-packages:
  - hasklepias
  - haskoin-bitcoind
  - haskoin-crypto
+ - haskoin-node
+ - haskoin-node_1_0_1
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -3113,7 +3114,6 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
- - postgrest
  - postmark
  - potoki
  - potoki-cereal
@@ -3453,7 +3453,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
- - sandwich_0_2_0_0
+ - sandwich_0_2_1_0
  - sarsi
  - sasha
  - sasl
@@ -3507,9 +3507,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-postgresql
- - selda-sqlite
  - selenium-server
  - semantic-source
  - semantic-version
@@ -3599,10 +3596,12 @@ dont-distribute-packages:
  - silvi
  - simgi
  - simple-c-value
+ - simple-cairo
  - simple-firewire
  - simple-log-syslog
  - simple-logging
  - simple-nix
+ - simple-pango
  - simple-pascal
  - simple-postgresql-orm
  - simpleirc-lens
@@ -3840,7 +3839,6 @@ dont-distribute-packages:
  - tagged-list
  - tagged-th
  - tagsoup-navigate
- - tagstew
  - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
@@ -4140,6 +4138,8 @@ dont-distribute-packages:
  - warp-grpc
  - warp-quic
  - warped
+ - waterfall-cad
+ - waterfall-cad-examples
  - wavesurfer
  - wavy
  - weatherhs

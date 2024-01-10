@@ -100,8 +100,8 @@ in {
     };
 
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
-      after = ["tailscale.service"];
-      wants = ["tailscale.service"];
+      after = ["tailscaled.service"];
+      wants = ["tailscaled.service"];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";

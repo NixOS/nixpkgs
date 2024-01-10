@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.7.7";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EiWwy417PFMzk/v6mUCPuTW/xWicq7sqPZKpL+M3ZIo=";
+    hash = "sha256-rMt5u+EusvZ6vl0xlBguh7zs6ZJgdgOaBzimsaww6Ew=";
   };
 
-  vendorHash = "sha256-cd0oN11YqgG8wJZJ4PiPaD1krKc2UcB0zngj9nTrpoY=";
+  vendorHash = "sha256-6A2FwU2ozgREdyID4TZrBHufcSWYVy4TfhI7ouIPA6c=";
 
   tags = [
     "with_quic"

@@ -156,7 +156,7 @@ let
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
       homepage = "https://buildbot.net/";
       changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2Only;
       broken = stdenv.isDarwin;
     };
