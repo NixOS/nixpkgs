@@ -568,19 +568,23 @@ in
 
     users.groups.oauth2_proxy = {};
 
-    systemd.services.oauth2_proxy = {
-      description = "OAuth2 Proxy";
-      path = [ cfg.package ];
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+    systemd.services.oauth2_proxy =
+      let needsKeycloak = lib.elem cfg.provider ["keycloak" "keycloak-oidc"]
+                          && config.services.keycloak.enable;
+      in {
+        description = "OAuth2 Proxy";
+        path = [ cfg.package ];
+        wantedBy = [ "multi-user.target" ];
+        after = mkMerge [["network-online.target"]
+                         (mkIf needsKeycloak ["keycloak.service"])];
+        wants = mkIf needsKeycloak ["keycloak.service"];
 
-      serviceConfig = {
-        User = "oauth2_proxy";
-        Restart = "always";
-        ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
-        EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
+        serviceConfig = {
+          User = "oauth2_proxy";
+          Restart = "always";
+          ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
+          EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
+        };
       };
-    };
-
   };
 }
