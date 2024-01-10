@@ -1886,7 +1886,9 @@ with pkgs;
 
   grizzly = callPackage ../tools/misc/grizzly { };
 
-  guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
+  guestfs-tools = callPackage ../tools/virtualization/guestfs-tools {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   fabs = callPackage ../tools/backup/fabs { };
 
