@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
 , melpaBuild
-, writeText
+, writeMelpaRecipe
 }:
 
 let
   pname = "yes-no";
-  ename = "yes-no";
   version = "20240107.122";
   src = fetchFromGitHub {
     owner = "emacsmirror";
@@ -16,16 +15,16 @@ let
   };
 in
 melpaBuild {
-  inherit pname ename version src;
+  inherit pname version src;
 
   commit = src.rev;
 
-  recipe = writeText "recipe" ''
-    (yes-no
-     :repo "emacsmirror/emacswiki.org"
-     :fetcher github
-     :files ("yes-no.el"))
-  '';
+  recipe = writeMelpaRecipe {
+    package-name = "yes-no";
+    fetcher = "github";
+    repo = "emacsmirror/emacswiki.org";
+    files = ''("yes-no.el")'';
+  };
 
   meta = {
     description = "Specify use of `y-or-n-p' or `yes-or-no-p' on a case-by-case basis";
