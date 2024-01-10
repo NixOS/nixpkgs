@@ -13,7 +13,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
 in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-CHX4fesnqxoeplqXGFrn4RSfGdrkhKNANvXIwMkWXDs=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
