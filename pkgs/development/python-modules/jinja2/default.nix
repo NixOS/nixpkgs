@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.1.2";
+  version = "3.1.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MTUacCpAip51laj8YVD8P0O7a/fjGXcMvA2535Q36FI=";
+    hash = "sha256-rIvWVE1Lssl5K/OhWegLuo/afwfoG8Ou1WVDLVklupA=";
   };
 
   propagatedBuildInputs = [
