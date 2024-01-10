@@ -6002,6 +6002,7 @@ with pkgs;
        else
          throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression.");
 
+  meson64-tools = callPackage ../misc/meson64-tools { };
   meson-tools = callPackage ../misc/meson-tools { };
 
   metabase = callPackage ../servers/metabase {
@@ -28810,6 +28811,8 @@ with pkgs;
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
+    ubootOdroidN2
+    ubootOdroidN2Plus
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
     ubootOrangePi3
