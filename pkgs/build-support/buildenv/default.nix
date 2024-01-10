@@ -57,23 +57,22 @@ runCommand name
             nativeBuildInputs buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
-        # First add the usual output(s): respect if user has chosen explicitly,
-        # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
-        # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
-        # aren't expected to have multiple outputs.
-        (if (! drv ? outputSpecified || ! drv.outputSpecified)
-            && drv.meta.outputsToInstall or null != null
-          then map (outName: drv.${outName}) drv.meta.outputsToInstall
-          else [ drv ])
-        # Add any extra outputs specified by the caller of `buildEnv`.
-        ++ lib.filter (p: p!=null)
-          (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+        if lib.isDerivation drv then
+          lib.filter (p: p != null) (
+            map (outName: drv.${outName} or null)
+                ((lib.outputsFor drv) ++ extraOutputsToInstall)
+          )
+        # In some places, the outPath is passed as a string instead of
+        # the actual derivation in order to avoid all outputs listed in
+        # extraOutputsToInstall being added for those derivations.
+        else if lib.isString drv then [ drv ]
+        else lib.warnIf (drv != null) "buildenv.nix: unexpected value of type ${lib.nixType drv}" [ ];
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
-    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
+    passAsFile = if lib.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
   }
   ''
     ${buildPackages.perl}/bin/perl -w ${builder}
