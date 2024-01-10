@@ -5,10 +5,16 @@
 , buildGoModule
 , linkFarm
 , writeShellScript
+, formats
 , containerRuntimePath
 , configTemplate
+, configTemplatePath ? null
 , libnvidia-container
 }:
+
+assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
+assert configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
+
 let
   isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
     {
@@ -23,6 +29,8 @@ let
       echo >&2 "$(tput setaf 3)warning: \$XDG_CONFIG_HOME=$XDG_CONFIG_HOME$(tput sgr 0)"
     fi
   '';
+
+  configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
 in
 buildGoModule rec {
   pname = "container-toolkit/container-toolkit";
@@ -82,7 +90,7 @@ buildGoModule rec {
       --prefix PATH : ${isolatedContainerRuntimePath}:${libnvidia-container}/bin \
       --set-default XDG_CONFIG_HOME $out/etc
 
-    cp ${configTemplate} $out/etc/nvidia-container-runtime/config.toml
+    cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
     substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
       --subst-var-by glibcbin ${lib.getBin glibc}
