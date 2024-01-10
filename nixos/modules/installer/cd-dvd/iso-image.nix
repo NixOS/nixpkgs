@@ -426,6 +426,18 @@ let
       echo "If you see this message, your EFI system doesn't support this feature."
       echo ""
     }
+
+    ${lib.concatStrings
+      (
+        map
+        ({name, class, body}: ''
+          menuentry '${name}' --class ${class} {
+            ${body}
+          }
+        '')
+        config.isoImage.grubExtraMenus
+      )}
+
     menuentry 'Shutdown' --class shutdown {
       halt
     }
@@ -437,7 +449,11 @@ let
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" {
-    nativeBuildInputs = [ pkgs.buildPackages.mtools pkgs.buildPackages.libfaketime pkgs.buildPackages.dosfstools ];
+    nativeBuildInputs = [
+      pkgs.buildPackages.mtools
+      pkgs.buildPackages.libfaketime
+      pkgs.buildPackages.dosfstools
+    ];
     strictDeps = true;
   }
     # Be careful about determinism: du --apparent-size,
@@ -446,6 +462,16 @@ let
       mkdir ./contents && cd ./contents
       mkdir -p ./EFI/boot
       cp -rp "${efiDir}"/EFI/boot/{grub.cfg,*.efi} ./EFI/boot
+
+      ${lib.concatStrings
+        (
+          map
+          ({source, target}: ''
+            mkdir -p ./`dirname ./${target}`
+            cp -rp ${source} ./${target}
+          '')
+          config.isoImage.bootContents
+        )}
 
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
@@ -463,11 +489,11 @@ let
       mkfs.vfat --invariant -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI -type d | sort); do
+      for d in $(find -type d | tail -n +2 | sort); do
         faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
       done
 
-      for f in $(find EFI -type f | sort); do
+      for f in $(find -type f | sort); do
         mcopy -pvm -i "$out" "$f" "::/$f"
       done
 
@@ -548,7 +574,19 @@ in
       '';
       description = lib.mdDoc ''
         This option lists files to be copied to fixed locations in the
-        generated ISO image.
+        main data partition of the generated ISO image.
+      '';
+    };
+
+    isoImage.bootContents = mkOption {
+      example = literalExpression ''
+        [ { source = ./your-custom-efi-app.efi;
+            target = "EFI/boot/your-custom-efi-app.efi";
+        } ]
+      '';
+      description = lib.mdDoc ''
+        This option lists files to be copied to fixed locations in the
+        El-Torito boot catalog.
       '';
     };
 
@@ -632,6 +670,26 @@ in
       description = lib.mdDoc ''
         The grub2 theme used for UEFI boot.
       '';
+    };
+
+    isoImage.grubExtraMenus = mkOption {
+      default = [];
+      type = types.listOf (types.submodule {
+        options.name = mkOption {
+          description = lib.mdDoc "Label of the option on the GRUB menu.";
+          type = types.str;
+        };
+
+        options.class = mkOption {
+          description = lib.mdDoc "Class of the option in the GRUB menu (i.e. `settings`)";
+          type = types.str;
+        };
+
+        options.body = mkOption {
+          description = lib.mdDoc "GRUB script to be executed when the option is selected";
+          type = types.str;
+        };
+      });
     };
 
     isoImage.syslinuxTheme = mkOption {
