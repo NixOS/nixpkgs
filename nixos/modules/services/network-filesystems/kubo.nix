@@ -282,8 +282,9 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.variables.IPFS_PATH = fakeKuboRepo;
 
-    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
     boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+    boot.kernel.sysctl."net.core.wmem_max" = mkDefault 2500000;
 
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
