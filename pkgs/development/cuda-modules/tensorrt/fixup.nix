@@ -1,7 +1,7 @@
 {
   cudaVersion,
   final,
-  hostPlatform,
+  targetPlatform,
   lib,
   mkVersionedPackageName,
   package,
@@ -18,7 +18,7 @@ let
     versions
     ;
   # targetArch :: String
-  targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
+  targetArch = attrsets.attrByPath [ targetPlatform.system ] "unsupported" {
     x86_64-linux = "x86_64-linux-gnu";
     aarch64-linux = "aarch64-linux-gnu";
   };
@@ -106,7 +106,7 @@ finalAttrs: prevAttrs: {
   meta = prevAttrs.meta // {
     badPlatforms =
       prevAttrs.meta.badPlatforms or [ ]
-      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
+      ++ lib.optionals (targetArch == "unsupported") [ targetPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
   };

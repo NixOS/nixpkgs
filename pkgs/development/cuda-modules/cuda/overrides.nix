@@ -1,4 +1,4 @@
-{cudaVersion, lib, addDriverRunpath}:
+{cudaVersion, lib}:
 let
   inherit (lib) attrsets lists strings;
   # cudaVersionOlder : Version -> Boolean
@@ -58,7 +58,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           while IFS= read -r -d $'\0' path ; do
             sed -i \
               -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
-              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
+              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${final.pkgs.addDriverRunpath.driverLink}/lib|" \
               "$path"
           done < <(find -iname 'cuda-*.pc' -print0)
         ''
@@ -91,6 +91,11 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       badPlatformsConditions = prevAttrs.badPlatformsConditions // {
         "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" =
           !final.flags.isJetsonBuild;
+      };
+      meta = prevAttrs.meta // {
+        # For cross-compilation, we need the hostPlatform to be included in order to fetch and build the package. This
+        # doesn't change the fact that it won't work on non-Jetson devices, so we only add it when building for Jetson.
+        platforms = prevAttrs.meta.platforms ++ lib.optionals final.flags.isJetsonBuild [ "x86_64-linux" ];
       };
     }
   );

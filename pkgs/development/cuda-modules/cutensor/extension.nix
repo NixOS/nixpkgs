@@ -15,7 +15,7 @@
 {
   cudaVersion,
   flags,
-  hostPlatform,
+  targetPlatform,
   lib,
   mkVersionedPackageName,
 }:
@@ -93,7 +93,7 @@ let
   # LibPath are not constant across the same release -- one platform may support fewer
   # CUDA versions than another.
   # redistArch :: String
-  redistArch = flags.getRedistArch hostPlatform.system;
+  redistArch = flags.getRedistArch targetPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
     {feature, ...}:

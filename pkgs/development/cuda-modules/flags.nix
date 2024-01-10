@@ -7,7 +7,9 @@
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
+  buildPlatform,
   hostPlatform,
+  targetPlatform,
   # gpus :: List Gpu
   gpus,
 }:
@@ -216,16 +218,19 @@ let
             lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))
               cudaCapabilities;
           jetsonBuildSufficientCondition = requestedJetsonDevices != [];
-          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [] && hostPlatform.isAarch64;
+          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [] && targetPlatform.isAarch64;
         in
         trivial.throwIf (jetsonBuildSufficientCondition && !jetsonBuildNecessaryCondition)
           ''
-            Jetson devices cannot be targeted with non-Jetson devices. Additionally, they require hostPlatform to be aarch64.
-            You requested ${builtins.toJSON cudaCapabilities} for host platform ${hostPlatform.system}.
+            Jetson devices cannot be targeted with non-Jetson devices. Additionally, they require targetPlatform to be aarch64.
+            You requested ${builtins.toJSON cudaCapabilities} for:
+            - Build platform ${buildPlatform.system}
+            - Host platform ${hostPlatform.system}
+            - Target platform ${targetPlatform.system}
             Requested Jetson devices: ${builtins.toJSON requestedJetsonDevices}.
             Requested non-Jetson devices: ${builtins.toJSON requestedNonJetsonDevices}.
             Exactly one of the following must be true:
-            - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
+            - All CUDA capabilities belong to Jetson devices and targetPlatform is aarch64.
             - No CUDA capabilities belong to Jetson devices.
             See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
           ''
@@ -346,7 +351,7 @@ assert let
 in
 asserts.assertMsg
   # We can't do this test unless we're targeting aarch64
-  (hostPlatform.isAarch64 -> (expected == actualWrapped))
+  (targetPlatform.isAarch64 -> (expected == actualWrapped))
   ''
     Jetson devices can only be built with other Jetson devices.
     Both 6.2 and 7.2 are Jetson devices.

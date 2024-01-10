@@ -71,22 +71,19 @@ final: _: {
   autoAddCudaCompatRunpath =
     final.callPackage
       (
-        {makeSetupHook, autoFixElfFiles, cuda_compat ? null }:
+        {makeSetupHook, autoFixElfFiles, lib, flags, cuda_compat ? null }:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";
             propagatedBuildInputs = [autoFixElfFiles];
 
-            substitutions = {
-              # Hotfix Ofborg evaluation
-              libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;
+            substitutions.libcudaPath = lib.optionalString flags.isJetsonBuild "${cuda_compat}/compat";
+
+            meta = {
+              broken = !flags.isJetsonBuild;
+              badPlatforms = lib.optionals (cuda_compat == null) lib.platforms.all;
+              platforms = cuda_compat.meta.platforms or [ ];
             };
-
-            meta.broken = !final.flags.isJetsonBuild;
-
-            # Pre-cuda_compat CUDA release:
-            meta.badPlatforms = final.lib.optionals (cuda_compat == null) final.lib.platforms.all;
-            meta.platforms = cuda_compat.meta.platforms or [ ];
           }
           ./auto-add-cuda-compat-runpath.sh
       )

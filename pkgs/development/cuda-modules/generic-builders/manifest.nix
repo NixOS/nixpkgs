@@ -10,7 +10,7 @@
   markForCudatoolkitRootHook,
   flags,
   stdenv,
-  hostPlatform,
+  targetPlatform,
   # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
@@ -46,7 +46,7 @@ let
   # redistArch :: String
   # The redistArch is the name of the architecture for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the target platform.
-  redistArch = flags.getRedistArch hostPlatform.system;
+  redistArch = flags.getRedistArch targetPlatform.system;
 
   sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
 in
@@ -195,6 +195,8 @@ backendStdenv.mkDerivation (
       # Check e.g. with `patchelf --print-rpath path/to/my/binary
       autoAddDriverRunpath
       markForCudatoolkitRootHook
+      # To create fat outputs from each component and find a version of `lndir` built for the host platform.
+      lndir
     ]
     # autoAddCudaCompatRunpath depends on cuda_compat and would cause
     # infinite recursion if applied to `cuda_compat` itself (beside the fact
@@ -296,11 +298,14 @@ backendStdenv.mkDerivation (
 
     # For each output, create a symlink to it in the out output.
     # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
+    # TODO: Previously we used `meta.getExe lndir` to get the path to lndir, but that doesn't work under
+    # cross-compilation -- whatever machinery Nixpkgs uses to get a version built for hostPlatform (so it can run
+    # during the build) doesn't extend to `meta.getExe`.
     postPatchelf = ''
       mkdir -p "$out"
       for output in $(getAllOutputNames); do
         if [[ "$output" != "out" ]]; then
-          ${meta.getExe lndir} "''${!output}" "$out"
+          lndir "''${!output}" "$out"
         fi
       done
     '';

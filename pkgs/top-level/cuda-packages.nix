@@ -21,17 +21,16 @@
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
-  callPackage,
+  config,
   cudaVersion,
+  generateSplicesForMkScope,
   lib,
-  newScope,
+  makeScopeWithSplicing',
   pkgs,
   __attrsFailEvaluation ? true,
 }:
 let
   inherit (lib)
-    attrsets
-    customisation
     fixedPoints
     strings
     versions
@@ -39,13 +38,13 @@ let
   # Backbone
   gpus = builtins.import ../development/cuda-modules/gpus.nix;
   nvccCompatibilities = builtins.import ../development/cuda-modules/nvcc-compatibilities.nix;
-  flags = callPackage ../development/cuda-modules/flags.nix {inherit cudaVersion gpus;};
   passthruFunction =
     final:
     (
       {
         inherit cudaVersion lib pkgs;
-        inherit gpus nvccCompatibilities flags;
+        inherit gpus nvccCompatibilities;
+        flags = final.callPackage ../development/cuda-modules/flags.nix {};
         cudaMajorVersion = versions.major cudaVersion;
         cudaMajorMinorVersion = versions.majorMinor cudaVersion;
         cudaOlder = strings.versionOlder cudaVersion;
@@ -58,7 +57,7 @@ let
         cudaPackages = final;
 
         # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
-        cudaFlags = flags;
+        cudaFlags = final.flags;
 
         # Exposed as cudaPackages.backendStdenv.
         # This is what nvcc uses as a backend,
@@ -86,32 +85,33 @@ let
     ];
 
   composedExtension = fixedPoints.composeManyExtensions [
-    (import ../development/cuda-modules/setup-hooks/extension.nix)
-    (callPackage ../development/cuda-modules/cuda/extension.nix {inherit cudaVersion;})
-    (callPackage ../development/cuda-modules/cuda/overrides.nix {inherit cudaVersion;})
-    (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
-      inherit cudaVersion flags mkVersionedPackageName;
-      pname = "cudnn";
-      releasesModule = ../development/cuda-modules/cudnn/releases.nix;
-      shimsFn = ../development/cuda-modules/cudnn/shims.nix;
-      fixupFn = ../development/cuda-modules/cudnn/fixup.nix;
-    })
-    (callPackage ../development/cuda-modules/cutensor/extension.nix {
-      inherit cudaVersion flags mkVersionedPackageName;
-    })
-    (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
-      inherit cudaVersion flags mkVersionedPackageName;
-      pname = "tensorrt";
-      releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
-      shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
-      fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
-    })
-    (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
-    (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
+    (builtins.import ../development/cuda-modules/setup-hooks/extension.nix)
+    (builtins.import ../development/cuda-modules/cuda/extension.nix {inherit cudaVersion lib;})
+    (builtins.import ../development/cuda-modules/cuda/overrides.nix {inherit cudaVersion lib;})
+    # (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
+    #   inherit cudaVersion flags mkVersionedPackageName;
+    #   pname = "cudnn";
+    #   releasesModule = ../development/cuda-modules/cudnn/releases.nix;
+    #   shimsFn = ../development/cuda-modules/cudnn/shims.nix;
+    #   fixupFn = ../development/cuda-modules/cudnn/fixup.nix;
+    # })
+    # (callPackage ../development/cuda-modules/cutensor/extension.nix {
+    #   inherit cudaVersion flags mkVersionedPackageName;
+    # })
+    # (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
+    #   inherit cudaVersion flags mkVersionedPackageName;
+    #   pname = "tensorrt";
+    #   releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
+    #   shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
+    #   fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
+    # })
+    # (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
+    # (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
   ];
 
-  cudaPackages = customisation.makeScope newScope (
-    fixedPoints.extends composedExtension passthruFunction
-  );
+  cudaPackages = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "cudaPackages";
+    f = fixedPoints.extends composedExtension passthruFunction;
+  };
 in
 cudaPackages // { inherit __attrsFailEvaluation; }

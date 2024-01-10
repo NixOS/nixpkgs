@@ -3,7 +3,7 @@
   lib,
   cudaVersion,
   flags,
-  hostPlatform,
+  targetPlatform,
   # Expected to be passed by the caller
   mkVersionedPackageName,
   # pname :: String
@@ -74,7 +74,7 @@ let
   # Get all of the packages for our given platform.
   # redistArch :: String
   # Value is `"unsupported"` if the platform is not supported.
-  redistArch = flags.getRedistArch hostPlatform.system;
+  redistArch = flags.getRedistArch targetPlatform.system;
 
   preferable =
     p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
