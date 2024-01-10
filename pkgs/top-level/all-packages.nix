@@ -16893,7 +16893,9 @@ with pkgs;
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
-  rml = callPackage ../development/compilers/rml { };
+  rml = callPackage ../development/compilers/rml {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   rgxg = callPackage ../tools/text/rgxg { };
 
