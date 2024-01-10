@@ -2,23 +2,26 @@
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.4.1";
+  # Inclues git compatibility fixes which are in master, but no official release
+  version = "unstable-2023-01-10";
+  # This is the commit hash on the upstream repo, used for vendoring
+  upstreamVersion = "cd04b35";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    rev = "v${version}";
-    hash = "sha256-XqxkNCC2yzUTVOi/1iDsnxtLkw4jfQuBh9UsjtZ1zVc=";
+    rev = "cd04b3598344a57d22cd5e6ce2658a719de848e3";
+    hash = "sha256-JHfTge+vmjNKkbBeICaJ9srGSNdPIV8fPS9Xs8WSDMs=";
   };
 
-  vendorHash = "sha256-VmPeQYWOHFqFLHKcKH3WHz50yx7GMHVIDPzqiVwwjSg=";
+  vendorHash = "sha256-N8HB2qwBxjzfNucftHxmX2W9srCx62pjmkCWzwiCj/I=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/git-lfs/git-lfs/v${lib.versions.major version}/config.Vendor=${version}"
+    "-X github.com/git-lfs/git-lfs/v${lib.versions.major upstreamVersion}/config.Vendor=${upstreamVersion}"
   ];
 
   subPackages = [ "." ];
