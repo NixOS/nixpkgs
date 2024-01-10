@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, flet-client-flutter
 , pythonRelaxDepsHook
 
 # build-system
@@ -24,13 +24,11 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.21.1";
+  inherit (flet-client-flutter) version src;
+
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YAMZku8jbdQ8JvUr5aLATIGIiTDmG6CGvfUKo28q7ks=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet";
 
   nativeBuildInputs = [
     poetry-core

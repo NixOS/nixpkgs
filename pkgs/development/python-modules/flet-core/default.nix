@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, flet-client-flutter
 
 # build-system
 , poetry-core
@@ -12,14 +12,10 @@
 
 buildPythonPackage rec {
   pname = "flet-core";
-  version = "0.21.1";
+  inherit (flet-client-flutter) version src;
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "flet_core";
-    inherit version;
-    hash = "sha256-PZY4aRj/zBuHHIPHkEbZ1oXGnJyeCOqP9Pp8jYbOZ4I=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet-core";
 
   nativeBuildInputs = [
     poetry-core
