@@ -39938,7 +39938,9 @@ with pkgs;
     perl = perl536;
   };
 
-  megam = callPackage ../applications/science/misc/megam { };
+  megam = callPackage ../applications/science/misc/megam {
+    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
+  };
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
