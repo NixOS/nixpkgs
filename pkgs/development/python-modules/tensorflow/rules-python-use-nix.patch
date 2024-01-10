@@ -1,0 +1,75 @@
+diff -Naurd python/repositories.bzl python-use-nix/repositories.bzl
+--- python/repositories.bzl	2023-11-29 23:07:55.169106050 +0000
++++ python-use-nix/repositories.bzl	2023-12-01 12:00:06.746231531 +0000
+@@ -103,60 +103,22 @@
+         fail("Exactly one of (url, urls) must be set.")
+ 
+     platform = rctx.attr.platform
+-    python_version = rctx.attr.python_version
++    python_version = "@python_version@"
+     python_short_version = python_version.rpartition(".")[0]
+     release_filename = rctx.attr.release_filename
+     urls = rctx.attr.urls or [rctx.attr.url]
+ 
+-    if release_filename.endswith(".zst"):
+-        rctx.download(
+-            url = urls,
+-            sha256 = rctx.attr.sha256,
+-            output = release_filename,
+-        )
+-        unzstd = rctx.which("unzstd")
+-        if not unzstd:
+-            url = rctx.attr.zstd_url.format(version = rctx.attr.zstd_version)
+-            rctx.download_and_extract(
+-                url = url,
+-                sha256 = rctx.attr.zstd_sha256,
+-            )
+-            working_directory = "zstd-{version}".format(version = rctx.attr.zstd_version)
+-            make_result = rctx.execute(
+-                ["make", "--jobs=4"],
+-                timeout = 600,
+-                quiet = True,
+-                working_directory = working_directory,
+-            )
+-            if make_result.return_code:
+-                fail_msg = (
+-                    "Failed to compile 'zstd' from source for use in Python interpreter extraction. " +
+-                    "'make' error message: {}".format(make_result.stderr)
+-                )
+-                fail(fail_msg)
+-            zstd = "{working_directory}/zstd".format(working_directory = working_directory)
+-            unzstd = "./unzstd"
+-            rctx.symlink(zstd, unzstd)
+-
+-        exec_result = rctx.execute([
+-            "tar",
+-            "--extract",
+-            "--strip-components=2",
+-            "--use-compress-program={unzstd}".format(unzstd = unzstd),
+-            "--file={}".format(release_filename),
+-        ])
+-        if exec_result.return_code:
+-            fail_msg = (
+-                "Failed to extract Python interpreter from '{}'. ".format(release_filename) +
+-                "'tar' error message: {}".format(exec_result.stderr)
+-            )
+-            fail(fail_msg)
+-    else:
+-        rctx.download_and_extract(
+-            url = urls,
+-            sha256 = rctx.attr.sha256,
+-            stripPrefix = rctx.attr.strip_prefix,
++    lndir_result = rctx.execute([
++        "lndir",
++        "@python@",
++        ".",
++    ])
++    if lndir_result.return_code:
++        fail_msg = (
++            "Failed to link Python interpreter from '{}'. ".format("@python@") +
++            "'lndir' error message: {}".format(lndir_result.stderr)
+         )
++        fail(fail_msg)
+ 
+     patches = rctx.attr.patches
+     if patches:
