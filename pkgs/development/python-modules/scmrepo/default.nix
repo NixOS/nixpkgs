@@ -2,6 +2,8 @@
 , asyncssh
 , buildPythonPackage
 , dulwich
+, dvc-http
+, dvc-objects
 , fetchFromGitHub
 , fsspec
 , funcy
@@ -37,6 +39,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asyncssh
     dulwich
+    dvc-http
+    dvc-objects
     fsspec
     funcy
     gitpython
