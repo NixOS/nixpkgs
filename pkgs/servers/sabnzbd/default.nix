@@ -2,7 +2,7 @@
 , coreutils
 , fetchFromGitHub
 , python3
-, par2cmdline
+, par2cmdline-turbo
 , unzip
 , unrar
 , p7zip
