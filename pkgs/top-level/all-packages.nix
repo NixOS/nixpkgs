@@ -42035,4 +42035,8 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  zed-sans = callPackage ../data/fonts/zed-sans { };
+
+  zed-mono = callPackage .../data/fonts/zed-mono { };
 }
