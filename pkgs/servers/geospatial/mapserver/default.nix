@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fAf4kOe/6bQW0i46+EZbD/6iWI2Bjkn2no6XeR/+mg4=";
   };
 
+  patches = [
+    # drop this patch for version 8.0.2
+    ./fix-build-w-libxml2-12.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

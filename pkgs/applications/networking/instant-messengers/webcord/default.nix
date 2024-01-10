@@ -5,6 +5,7 @@
 , python3
 , pipewire
 , libpulseaudio
+, libnotify
 , xdg-utils
 , electron_28
 , makeDesktopItem
@@ -44,6 +45,7 @@ buildNpmPackage rec {
       libPath = lib.makeLibraryPath [
         libpulseaudio
         pipewire
+        libnotify
       ];
       binPath = lib.makeBinPath [ xdg-utils ];
     in
