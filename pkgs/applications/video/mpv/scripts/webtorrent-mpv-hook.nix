@@ -2,23 +2,23 @@
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mrxdst";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AFKX31kriacXygZy0Mw+QwO+SwFEu13687mJ/WeAoKY=";
+    hash = "sha256-/dMtXcIyfAs++Zgz2CxRW0tkzn5QjS+WVGChlCyrU0U=";
   };
 
   postPatch = ''
     substituteInPlace src/webtorrent.ts --replace "node_path: 'node'" "node_path: '${nodejs}/bin/node'"
     # This executable is just for telling non-Nix users how to install
-    substituteInPlace package.json --replace '"bin": "build/bin.js",' ""
+    substituteInPlace package.json --replace '"bin": "build/bin.mjs",' ""
     rm -rf src/bin.ts
   '';
 
-  npmDepsHash = "sha256-GpNUJ5ZCgMjSYLqsIE/RwkTSFT3uAhxrHPe7XvGDRHE=";
+  npmDepsHash = "sha256-EqHPBoYyBuW9elxQH/XVTZoPkKHC6+7aksYo60t7WA4=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [

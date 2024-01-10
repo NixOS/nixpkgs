@@ -5,7 +5,6 @@
 , makeWrapper
 , jre
 , fetchzip
-, bash
 }:
 let
   desktopItem = makeDesktopItem {
@@ -19,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ugs";
-  version = "2.0.18";
+  version = "2.1.4";
 
   src = fetchzip {
     url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${version}/UniversalGcodeSender.zip";
-    hash = "sha256-NaEDG3dmpPRwfVvwYJQXqpCcAkRPeQ1EcKoa0xKeDFA=";
+    hash = "sha256-2WGRHdxmGa2b8ca20xNJoA0NAY9a0pngzdf94ROfirk=";
   };
 
   dontUnpack = true;
@@ -49,5 +48,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = platforms.all;
+    mainProgram = "ugs";
   };
 }

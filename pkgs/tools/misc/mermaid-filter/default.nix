@@ -35,5 +35,6 @@ buildNpmPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ ners ];
     platforms = chromium.meta.platforms;
+    mainProgram = "mermaid-filter";
   };
 }

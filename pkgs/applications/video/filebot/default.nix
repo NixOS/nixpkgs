@@ -10,11 +10,11 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.0.3";
+  version = "5.1.2";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230418205553/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-8FTmR+ztR2ugPcgHvfwyh9yfxPiUJdeAVvjjl5cQCy0=";
+    url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
+    hash = "sha256-+5I0t67asbCwaMCuqI/ixRHNAdcLTziuYOfepVThoPk=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -67,5 +67,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;
+    mainProgram = "filebot";
   };
 })

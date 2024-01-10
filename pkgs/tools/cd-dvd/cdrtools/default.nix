@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+
   meta = with lib; {
     homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";

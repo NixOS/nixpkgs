@@ -142,7 +142,7 @@ in
       theme
     ];
 
-    fonts.fonts = [ font ];
+    fonts.packages = [ font ];
 
     environment.etc."lightdm/slick-greeter.conf".source = slickGreeterConf;
   };

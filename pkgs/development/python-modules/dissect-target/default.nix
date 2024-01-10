@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , asn1crypto
 , buildPythonPackage
 , defusedxml
@@ -38,8 +39,8 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.9";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-oqBBcoqk8HFuxnJK7/01Neb7Lwb1sIM/TMgXKVCBUoc=";
+    hash = "sha256-vp1upVwohMXFKxlHy5lWmigdq9MUk1UknSsPpCXt50s=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -107,13 +108,22 @@ buildPythonPackage rec {
     "test_exec_target_command"
     # Issue with tar file
     "test_tar_sensitive_drive_letter"
+    "test_dpapi_decrypt_blob"
+    "test_notifications_appdb"
+    "test_md"
+    "test_notifications_wpndatabase"
+    "test_nested_md_lvm"
     # Tests compare dates and times
     "yum"
-  ];
+    # Filesystem access, windows defender tests
+    "test_defender_quarantine_recovery"
+  ] ++
+  # test is broken on Darwin
+  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
     # Tests are using Windows paths
-    "tests/test_plugins_browsers.py"
+    "tests/plugins/apps/browser/test_browser.py"
   ];
 
   meta = with lib; {

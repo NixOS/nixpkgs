@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raboof ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "xlogo";
   };
 }

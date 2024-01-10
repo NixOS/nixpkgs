@@ -1,11 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libmysqlclient
+, pkg-config
+}:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
-  version = "2.1.1";
+  version = "2.2.1";
+  format = "setuptools";
 
   nativeBuildInputs = [
-    libmysqlclient
+    pkg-config
   ];
 
   buildInputs = [
@@ -17,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-godX5Bn7Ed1sXtJXbsksPvqpOg98OeJjWG0e53nD14I=";
+    hash = "sha256-LHrRW4cpOxL9RLR8RoeeyV7GR/RWfoZszXC4M3WE6bI=";
   };
 
   meta = with lib; {

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbytesize";
-  version = "2.8";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
     rev = finalAttrs.version;
-    hash = "sha256-/TVv/srhbotIkne0G77hgBF4j+74INqVUr8zlKsaoM0=";
+    hash = "sha256-IPBoYcnSQ1/ws3mzPUXxgbetZkXRWrGhtakXaVVFb6U=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" ];
@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     pcre2
   ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";

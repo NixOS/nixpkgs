@@ -7,7 +7,7 @@
 let derive2 = derive { biocVersion = "3.17"; };
 in with self; {
   AHCytoBands = derive2 { name="AHCytoBands"; version="0.99.1"; sha256="0svxxhj3mh5gqik45ikcxnlhnma8n1c0rv8pycj2034cb9ms1dbv"; depends=[]; };
-  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.8"; sha256="1bn39n8lwb6w533fl4vlszivb4b3x9adkjh04z98sbn333bicgki"; depends=[AnnotationHubData ensembldb]; };
+  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.1.10"; sha256="0mqginwp70rwsmqwdl64awj4jr78n17rbaxmik86sk4n98fgd4xf"; depends=[AnnotationHubData ensembldb]; };
   AHLRBaseDbs = derive2 { name="AHLRBaseDbs"; version="1.6.0"; sha256="0vz0chz41w45c1md49grav5jrbhws888ir1si9lp8dw7pj74vy9c"; depends=[AnnotationHub]; };
   AHMeSHDbs = derive2 { name="AHMeSHDbs"; version="1.6.0"; sha256="0jd4i76qnr1vqqm3sq0ll8pdkihbkh83hqxzi3cvl3q786rxc1hk"; depends=[AnnotationHub]; };
   AHPathbankDbs = derive2 { name="AHPathbankDbs"; version="0.99.5"; sha256="10wcrglm521xcrfbzc39dkbjvg1pkz0zq70vgnh68akiwmdirp89"; depends=[AnnotationHub]; };
@@ -126,6 +126,7 @@ in with self; {
   BSgenome_Vvinifera_URGI_IGGP12Xv0 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv0"; version="0.1"; sha256="1m8mqkiqs7291hccb8pfyf2yxpky45qr6j3d9wkvp9x3ra3h0yxf"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP12Xv2 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv2"; version="0.1"; sha256="1saavsi75gw33jphhm3qb5psyfrv850ss4cmqr4i7aw1kc0fvs1j"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP8X = derive2 { name="BSgenome.Vvinifera.URGI.IGGP8X"; version="0.1"; sha256="0v0hi2pbbi5ynd92bvbv4bzr7bgv48kvyz62hdv7k9gh7s5pg0id"; depends=[BSgenome]; };
+  BioMartGOGeneSets = derive2 { name="BioMartGOGeneSets"; version="0.99.10"; sha256="1lnxh564l4qib7bqjmil3hlnfzg8f8ka22lhc72arw434dv5xxqh"; depends=[GenomicRanges S4Vectors]; };
   CTCF = derive2 { name="CTCF"; version="0.99.11"; sha256="06gy1f71p01h6yfj5xmvlgz6n7sg7rpkc3723y51h30ir6xrzbrg"; depends=[]; };
   ChemmineDrugs = derive2 { name="ChemmineDrugs"; version="1.0.2"; sha256="0l47ac6lkycmghra2cbcdcxcv47ari8xg6lxpzilvkf4n6ld6064"; depends=[BiocGenerics ChemmineR RSQLite]; };
   DO_db = derive2 { name="DO.db"; version="2.9"; sha256="10bqqa124l61ivzy4mdd3z3ar9a6537qbxw23pc4y9w8a6dwnavn"; depends=[AnnotationDbi]; };
@@ -149,7 +150,7 @@ in with self; {
   FDb_UCSC_tRNAs = derive2 { name="FDb.UCSC.tRNAs"; version="1.0.1"; sha256="1dymdalx9fzrplxyc0fd9faa4r5jimi7zyry9k65lyz1pabpkwqz"; depends=[AnnotationDbi GenomicFeatures]; };
   GGHumanMethCancerPanelv1_db = derive2 { name="GGHumanMethCancerPanelv1.db"; version="1.4.1"; sha256="0ag1pkbh4mx4aplfrrz1q4f4cl05mczq9pcsfkd1071qk51dcwvx"; depends=[AnnotationDbi AnnotationForge org_Hs_eg_db]; };
   GO_db = derive2 { name="GO.db"; version="3.17.0"; sha256="072062xdhjsadzwlkp4gas7fyxnajg3xjd2vfadc7j0k1034igjx"; depends=[AnnotationDbi]; };
-  GeneSummary = derive2 { name="GeneSummary"; version="0.99.4"; sha256="0fliy0z1byh7zlf7k3lklarrd2l2rl3sgliqsxnn4sviskv2rlxz"; depends=[]; };
+  GeneSummary = derive2 { name="GeneSummary"; version="0.99.5"; sha256="1k3yi6872s9sdzc8732aqshzgzyz7pqwr8jh6z7dnpr73kv0n1yj"; depends=[]; };
   GenomeInfoDbData = derive2 { name="GenomeInfoDbData"; version="1.2.10"; sha256="0r7qb1nh680c0d5iplr2r0xb2prirvcc1xam5m8qyghndmaxpibl"; depends=[]; };
   GenomicState = derive2 { name="GenomicState"; version="0.99.15"; sha256="1r7z3n6wyrd2cclj5b7sg15wpmjdh9k5b1hjlw7jjx8j384l7l1h"; depends=[AnnotationDbi AnnotationHub bumphunter derfinder GenomeInfoDb GenomicFeatures IRanges org_Hs_eg_db rtracklayer]; };
   HDO_db = derive2 { name="HDO.db"; version="0.99.1"; sha256="14ngyxailmxrbxqqi9m7mchqcvchmbg7zm34i8a927b20s6z4z61"; depends=[AnnotationDbi]; };
@@ -270,7 +271,7 @@ in with self; {
   TxDb_Sscrofa_UCSC_susScr11_refGene = derive2 { name="TxDb.Sscrofa.UCSC.susScr11.refGene"; version="3.12.0"; sha256="1i3w8avi5ihkynapya1wy70i6f0nq4jyy5nvlwikppqpdjwn7gb4"; depends=[AnnotationDbi GenomicFeatures]; };
   TxDb_Sscrofa_UCSC_susScr3_refGene = derive2 { name="TxDb.Sscrofa.UCSC.susScr3.refGene"; version="3.12.0"; sha256="01bl7zdxyhhg4706jhi7271fs09riixkyr3x0bancl1fpzwszc6p"; depends=[AnnotationDbi GenomicFeatures]; };
   UCSCRepeatMasker = derive2 { name="UCSCRepeatMasker"; version="3.15.2"; sha256="0hi1h8vvbf27wk13gbfgm0amjqgl7b2qxlgakcbr87qxwbi02zv7"; depends=[AnnotationHub GenomeInfoDb RCurl XML]; };
-  UniProtKeywords = derive2 { name="UniProtKeywords"; version="0.99.4"; sha256="0rs3y7kw77nwbvil4kvmjjlvjdsdyd8rdc0qb1ghm3bvisycgnyh"; depends=[]; };
+  UniProtKeywords = derive2 { name="UniProtKeywords"; version="0.99.6"; sha256="1p2kzr959k0c713l4cba624i0av6jm0cn26975wrdhr86v7isj7g"; depends=[]; };
   XtraSNPlocs_Hsapiens_dbSNP144_GRCh37 = derive2 { name="XtraSNPlocs.Hsapiens.dbSNP144.GRCh37"; version="0.99.12"; sha256="0k823fvqjmdkmd47m7wyra6jxmv8lnk2i1xl4pp0mh3zgb87hgfb"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
   XtraSNPlocs_Hsapiens_dbSNP144_GRCh38 = derive2 { name="XtraSNPlocs.Hsapiens.dbSNP144.GRCh38"; version="0.99.12"; sha256="0d4q32ij2x4726wvw06sgmivid0n94vfdmszdyh607xlcahqxa5z"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
   adme16cod_db = derive2 { name="adme16cod.db"; version="3.4.0"; sha256="1vn9s1lrl6zzs00madb111fdzqjfb45mprpjqap8bvib65942rvq"; depends=[AnnotationDbi org_Rn_eg_db]; };
@@ -340,7 +341,7 @@ in with self; {
   excluderanges = derive2 { name="excluderanges"; version="0.99.8"; sha256="19pdwlhqlz420yss371bsqhkx8c7wxr0sv4wsycnc0mlplwq4bsf"; depends=[GenomicRanges]; };
   fitCons_UCSC_hg19 = derive2 { name="fitCons.UCSC.hg19"; version="3.7.1"; sha256="19isa4x8js0pdb4k8a11bw3bzmzv6jc4jphzrvav7piqkvrgykzx"; depends=[BSgenome GenomeInfoDb GenomicRanges GenomicScores IRanges S4Vectors]; };
   fly_db0 = derive2 { name="fly.db0"; version="3.17.0"; sha256="0xsrzgp7ifi91hhfdq88k7jzamkhpyf8c3mxk0nfn9rqaam9dyr4"; depends=[AnnotationDbi]; };
-  geneplast_data = derive2 { name="geneplast.data"; version="0.99.6"; sha256="1vq2l828d25lsmmac6079vip8bbvqhiyr1x58s467cwcl1mgayrk"; depends=[]; };
+  geneplast_data = derive2 { name="geneplast.data"; version="0.99.7"; sha256="1br68rvn6rc5fg2lpa5drgdzk809ym58i2gzgdsjgyzb4rl0xf2y"; depends=[ape BiocFileCache dplyr geneplast igraph purrr readr tibble treeio]; };
   geneplast_data_string_v91 = derive2 { name="geneplast.data.string.v91"; version="0.99.6"; sha256="0mc26d0sgmpmfmqsqinqv5k6vhg0hlc8hsjkcnvf369yav224nq1"; depends=[]; };
   genomewidesnp5Crlmm = derive2 { name="genomewidesnp5Crlmm"; version="1.0.6"; sha256="06dmwnjy3gb53y6nr02dmp22qzfl5d63wppazrabcqbzwimhnvp8"; depends=[]; };
   genomewidesnp6Crlmm = derive2 { name="genomewidesnp6Crlmm"; version="1.0.7"; sha256="16qcxa32fmbdcv5dck0grsnqyfcqql7wpxa1l6andv9hrvabv2jx"; depends=[]; };

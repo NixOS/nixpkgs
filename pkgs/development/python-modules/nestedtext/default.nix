@@ -2,7 +2,7 @@
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , hypothesis
 , inform
 , nestedtext
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [

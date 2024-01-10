@@ -13,12 +13,24 @@ merging is handled.
 `types.bool`
 
 :   A boolean, its values can be `true` or `false`.
+    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+
+`types.boolByOr`
+
+:   A boolean, its values can be `true` or `false`.
+    The result is `true` if _any_ of multiple definitions is `true`.
+    In other words, definitions are merged with the logical _OR_ operator.
 
 `types.path`
 
 :   A filesystem path is anything that starts with a slash when
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
+
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
 `types.package`
 
@@ -523,7 +535,7 @@ The only required parameter is `name`.
 
 :   A string representation of the type function name.
 
-`definition`
+`description`
 
 :   Description of the type used in documentation. Give information of
     the type and any of its arguments.

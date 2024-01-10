@@ -7,7 +7,7 @@ let
     mdDoc
     mkIf
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     optionalAttrs
     optional
     types;
@@ -25,7 +25,7 @@ in
   options.services.legit = {
     enable = mkEnableOption (mdDoc "legit git web frontend");
 
-    package = mkPackageOptionMD pkgs "legit-web" { };
+    package = mkPackageOption pkgs "legit-web" { };
 
     user = mkOption {
       type = types.str;

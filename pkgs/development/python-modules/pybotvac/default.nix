@@ -19,6 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-SXIs9AUXWm1H49MVDT4z6msNPaW5sAU20rcsWZ7ERdU=";
   };
 
+  patches = [
+    ./urllib3-2.0-compat.patch
+  ];
+
   propagatedBuildInputs = [
     requests
     requests-oauthlib

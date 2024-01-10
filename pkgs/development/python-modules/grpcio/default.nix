@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
+, fetchPypi
 , grpc
 , six
 , protobuf
@@ -14,9 +16,14 @@
 }:
 
 buildPythonPackage rec {
-  inherit (grpc) src version;
   pname = "grpcio";
   format = "setuptools";
+  version = "1.59.3";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-eAD5lWinSgbr3M1BndG25jm0d9yvbad+pwL4+xTOX4A=";
+  };
 
   outputs = [ "out" "dev" ];
 
@@ -51,6 +58,6 @@ buildPythonPackage rec {
     description = "HTTP/2-based RPC framework";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -87,7 +87,7 @@ rec {
     isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
-    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
+    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnuabin32 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
@@ -99,6 +99,32 @@ rec {
       { cpu = { family = "x86"; }; }
     ];
   };
+
+  # given two patterns, return a pattern which is their logical AND.
+  # Since a pattern is a list-of-disjuncts, this needs to
+  patternLogicalAnd = pat1_: pat2_:
+    let
+      # patterns can be either a list or a (bare) singleton; turn
+      # them into singletons for uniform handling
+      pat1 = lib.toList pat1_;
+      pat2 = lib.toList pat2_;
+    in
+      lib.concatMap (attr1:
+        map (attr2:
+          lib.recursiveUpdateUntil
+            (path: subattr1: subattr2:
+              if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
+              then true
+              else throw ''
+                pattern conflict at path ${toString path}:
+                  ${builtins.toJSON subattr1}
+                  ${builtins.toJSON subattr2}
+                '')
+            attr1
+            attr2
+            )
+          pat2)
+        pat1;
 
   matchAnyAttrs = patterns:
     if builtins.isList patterns then attrs: any (pattern: matchAttrs pattern attrs) patterns

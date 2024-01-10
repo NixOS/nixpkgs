@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, makeWrapper, bash }:
+{ stdenv, lib, fetchFromGitLab, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sensible-utils";

@@ -1,32 +1,35 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests }:
+{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests, useGpiod ? false }:
 
 let
-  pythonEnv = python3.withPackages (packages: with packages; [
-    tornado
-    pyserial-asyncio
-    pillow
-    lmdb
-    streaming-form-data
-    distro
-    inotify-simple
-    libnacl
-    paho-mqtt
-    pycurl
-    zeroconf
-    preprocess-cancellation
-    jinja2
-    dbus-next
-    apprise
-  ]);
+  pythonEnv = python3.withPackages (packages:
+    with packages; [
+      tornado
+      pyserial-asyncio
+      pillow
+      lmdb
+      streaming-form-data
+      distro
+      inotify-simple
+      libnacl
+      paho-mqtt
+      pycurl
+      zeroconf
+      preprocess-cancellation
+      jinja2
+      dbus-next
+      apprise
+    ]
+    ++ (lib.optionals useGpiod [ libgpiod ])
+  );
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "unstable-2022-11-18";
+  version = "unstable-2023-12-16";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "362bc1a3d3ad397416f7fc48b8efe33837428b90";
-    sha256 = "sha256-cebRHOx2hg470jM1CoQAk13Whv+KN2qx97BTlpjxSZg=";
+    rev = "42357891a3716cd332ef60b28af09f8732dbf67a";
+    sha256 = "sha256-5w336GaHUkbmhAPvhOO3kNW5q7qTFVw3p0Q+Rv+YdYM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -49,5 +52,6 @@ in stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Arksine/moonraker";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ zhaofengli ];
+    mainProgram = "moonraker";
   };
 }

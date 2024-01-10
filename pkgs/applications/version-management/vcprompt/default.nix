@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
       about the current working directory for various version control systems
     '';
     homepage    = "http://hg.gerg.ca/vcprompt";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     platforms   = with platforms; linux ++ darwin;
     license = licenses.gpl2Plus;
+    mainProgram = "vcprompt";
   };
 }

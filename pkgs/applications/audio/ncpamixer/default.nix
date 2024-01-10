@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncpamixer";
-  version = "1.3.3.3";
+  version = "1.3.3.5";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
     rev = version;
-    sha256 = "sha256-TxSfiBSsCAImzCXv6o64Jy7tSefpYCkU0xtuHx26Ss4=";
+    sha256 = "sha256-iwwfuMZn8HwnTIEBgTuvnJNlRlPt4G+j/piXO8S7mPc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fulhax/ncpamixer";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ StijnDW ] ++ teams.c3d2.members;
+    maintainers = teams.c3d2.members;
   };
 }

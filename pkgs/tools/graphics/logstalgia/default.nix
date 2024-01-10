@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.gnu ++ platforms.linux;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "logstalgia";
   };
 }

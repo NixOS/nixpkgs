@@ -33,7 +33,7 @@ let
     pname = "bordeaux-threads";
     version = "0.8.8";
     src = pkgs.fetchzip {
-      url = "http://github.com/sionescu/bordeaux-threads/archive/v0.8.8.tar.gz";
+      url = "https://github.com/sionescu/bordeaux-threads/archive/v0.8.8.tar.gz";
       sha256 = "19i443fz3488v1pbbr9x24y8h8vlyhny9vj6c9jk5prm702awrp6";
     };
     lisp = sbcl;

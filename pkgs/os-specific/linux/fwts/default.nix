@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "23.05.00";
+  version = "23.07.00";
 
   src = fetchzip {
     url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "sha256-LRsxgvo7XQ62gPjdH4F+03MQyRZ1VxEwokI9RvVkpKI=";
+    sha256 = "sha256-Fo5qdb0eT8taYfPAf5LQu0toNXcoVjNoDgeeAlUfbs4=";
     stripRoot = false;
   };
 
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
       --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
       --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
+
+    substituteInPlace src/lib/src/fwts_devicetree.c \
+                      src/devicetree/dt_base/dt_base.c \
+      --replace "dtc -I" "${dtc}/bin/dtc -I"
   '';
 
   enableParallelBuilding = true;

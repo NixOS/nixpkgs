@@ -4,19 +4,20 @@
 let
   copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
   copyPlugins = ''
+    mkdir -p plugins
     ${lib.concatMapStringsSep "\n" copySinglePlugin plugins}
     chmod +w -R plugins/*
   '';
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.8.5";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FkkZIxSuqlFFOjABBpnE5ax2Vdo9tzP0prM7ATDIIdk=";
+    sha256 = "sha256-4gEdltdm9A3FxwyZqgSyUWgQ934glinfKwHF8S05f5I=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ vonfry ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }

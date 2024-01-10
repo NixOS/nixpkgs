@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
     "--enable-quartz-backend=yes"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   #doCheck = true; # no tests possible without a display
 
   passthru = {

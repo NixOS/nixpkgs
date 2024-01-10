@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
   };
 

@@ -54,5 +54,6 @@ python3Packages.buildPythonApplication rec {
     description = "Utility to automate updating of nix derivation sources";
     maintainers = with lib.maintainers; [ timbertson ];
     license = lib.licenses.mit;
+    mainProgram = "nix-update-source";
   };
 }

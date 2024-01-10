@@ -52,6 +52,8 @@ let
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
 
+    ${cfg.extraConfigBeforePlugins}
+
     ${lib.optionalString (cfg.plugins != []) ''
     # Run plugins
     ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
@@ -108,10 +110,18 @@ in {
         description = lib.mdDoc "Time in milliseconds for which tmux waits after an escape is input.";
       };
 
+      extraConfigBeforePlugins = mkOption {
+        default = "";
+        description = lib.mdDoc ''
+          Additional contents of /etc/tmux.conf, to be run before sourcing plugins.
+        '';
+        type = types.lines;
+      };
+
       extraConfig = mkOption {
         default = "";
         description = lib.mdDoc ''
-          Additional contents of /etc/tmux.conf
+          Additional contents of /etc/tmux.conf, to be run after sourcing plugins.
         '';
         type = types.lines;
       };

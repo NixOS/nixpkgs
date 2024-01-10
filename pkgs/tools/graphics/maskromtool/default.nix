@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "maskromtool";
-  version = "2023-06-17";
+  version = "2023-09-13";
 
   src = fetchFromGitHub {
     owner = "travisgoodspeed";
     repo = "maskromtool";
     rev = "v${version}";
-    hash = "sha256-NumMO9whM5ZdEtxI3gjp2Ky2b8/rjPSiD9G/95xJk1o=";
+    hash = "sha256-HZOQFFEADjmd3AbZLK3Qr57Jw+DKkRa3cMxW0mU77Us=";
   };
 
   buildInputs = [

@@ -97,10 +97,17 @@ let
     enableParallelBuilding = true;
 
     installPhase = (''
-      for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024 scalable; do
-        install -Dm644 ../../misc/logos/xonotic_icon.svg \
-          $out/share/icons/hicolor/$size/xonotic.svg
+      install -Dm644 ../../misc/logos/xonotic_icon.svg \
+        $out/share/icons/hicolor/scalable/apps/xonotic.svg
+      pushd ../../misc/logos/icons_png
+      for img in *.png; do
+        size=''${img#xonotic_}
+        size=''${size%.png}
+        dimensions="''${size}x''${size}"
+        install -Dm644 $img \
+          $out/share/icons/hicolor/$dimensions/apps/xonotic.png
       done
+      popd
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''

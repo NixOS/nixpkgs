@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     yelp-tools
+    gobject-introspection
   ];
 
   buildInputs = [
     clutter-gst
     clutter-gtk
     glib
-    gobject-introspection
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good

@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
       inherit version;
       format = "wheel";
       dist = python;
-      python = "cp37.cp38.cp39.py37.py38.py39";
+      python = "cp37.cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311";
       inherit (data) platform hash;
     };
 

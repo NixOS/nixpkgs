@@ -131,8 +131,8 @@ let
       src = fetchFromGitHub {
         owner = "josefs";
         repo = "gradualizer";
-        rev = "6e89b4e1cd489637a848cc5ca55058c8a241bf7d";
-        sha256 = "1ix0xgd0267ibx6y68fx4pq8q3j0y7rjs7j3cv3v2gdiy190psy9";
+        rev = "3021d29d82741399d131e3be38d2a8db79d146d4";
+        sha256 = "052f8x9x93yy00pbkl1745ffnwj3blcm39j12i4k166y1zbnwy00";
       };
       beamDeps = [ ];
     };

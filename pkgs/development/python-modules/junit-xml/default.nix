@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "junit-xml";
   version = "1.9";
+  format = "setuptools";
 
   # Only a wheel on PyPI
   src = fetchFromGitHub {

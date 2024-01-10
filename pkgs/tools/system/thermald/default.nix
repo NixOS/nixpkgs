@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.5.2";
+  version = "2.5.4";
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "sha256-Ex3HSGJJDPPciX0Po9TpySVPUL257wz1ZjaLCa2igCM=";
+    sha256 = "sha256-5UILKdv+HhilY+NsbMwqqvYjbM3mAeec/lX+CGY0CPE=";
   };
 
   nativeBuildInputs = [
@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "thermald";
   };
 }

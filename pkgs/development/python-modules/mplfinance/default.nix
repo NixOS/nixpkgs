@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "mplfinance";
   version = "0.12.7a7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

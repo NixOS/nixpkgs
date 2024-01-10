@@ -5,14 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.3.0";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9W4xN+ZSNdR5NOnwohNrQVW8JSEKFyKxWTz012uiUm8=";
+    hash = "sha256-tnCiI4bte2RSWSkEL2rwFz6WFjfRMMFiEBOvv3QMyos=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
@@ -63,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/laramies/theHarvester";
     changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
     license = licenses.gpl2Only;
   };
 }

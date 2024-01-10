@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "sha256-fcqtyfpxdjD+1GsYl05RSJaFDoLSYQDdWcQV6a+vNGA=";
   };
 
-  vendorSha256 = "sha256-nLr12VQogr4nV9E/DJu2XTcgEi7GsOdOn/ZqVk7HS7I=";
+  vendorHash = "sha256-nLr12VQogr4nV9E/DJu2XTcgEi7GsOdOn/ZqVk7HS7I=";
 
   subPackages = [ "cmd/${pname}" ];
 
@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/cruise-automation/fwanalyzer";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "fwanalyzer";
   };
 }

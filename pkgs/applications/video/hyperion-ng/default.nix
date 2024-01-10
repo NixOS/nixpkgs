@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   '' ;
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DENABLE_DEPLOY_DEPENDENCIES=OFF"
     "-DUSE_SYSTEM_FLATBUFFERS_LIBS=ON"
     "-DUSE_SYSTEM_PROTO_LIBS=ON"

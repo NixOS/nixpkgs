@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pyavm";
   version = "0.9.5";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyAVM";

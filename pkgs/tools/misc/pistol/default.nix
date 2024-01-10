@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "pistol";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-umejrLdx8R//o9uQIT9JhAKJOIF5Ifpx7s3x3ejsJgo=";
+    sha256 = "sha256-7nALrB+QubEnryVsGPpFMJ003SP2lheYTkWXF5w/V8I=";
   };
 
-  vendorHash = "sha256-zs7qzXvOnIiDwwNldMPB4Jkm2GWxVZnLpDzpf+ivhCc=";
+  vendorHash = "sha256-9Ydps8UA1f0fwG5SHRE4F61OyRJiITw/4SyoMEbsRgM=";
 
   doCheck = false;
 
@@ -42,5 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/doronbehar/pistol";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "pistol";
   };
 }

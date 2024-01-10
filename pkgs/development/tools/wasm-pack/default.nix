@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sfcf/Dko2lAfkfYdeanLAqhbUgeKtGBxx4timZi2kCk=";
+    hash = "sha256-L4mCgUPG4cgTUpCoaIUOTONBOggXn5vMyPKj48B3MMk=";
   };
 
-  cargoHash = "sha256-bl1KDFNvpNtkbKqiBRbmQLo1/oqLl7u7gNHLhhm8ETI=";
+  cargoHash = "sha256-mqQRQXaUW6mreE7UUEA0zhhaaGGKLRUngH9QLxcaIdY=";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 

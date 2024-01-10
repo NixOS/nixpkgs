@@ -4,10 +4,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1i5g23mjc4fiwymrfkvgcmsym50rapw7vm988fm46rlpg3zijgl1";
+      sha256 = "18d1w5j7vjaza3v1ig9j7zyis04kxqdkb1272vbgncxn03ck45mm";
       type = "gem";
     };
-    version = "3.21.2";
+    version = "3.25.0";
   };
   pg_query = {
     dependencies = ["google-protobuf"];
@@ -15,10 +15,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00bhwkhjy6bkp04313m5il7vd165i3fz0x4jissflf66i164ppgk";
+      sha256 = "15ynrzqsmmbmxib8ri8n9k6z3l6rwd91j7y1mghm33nfgdf9bj8w";
       type = "gem";
     };
-    version = "2.1.3";
+    version = "4.2.3";
   };
   sqlint = {
     dependencies = ["pg_query"];
@@ -26,9 +26,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wbsi0ivashmpgavz7j22qns3zcya8j6sd2f9y8hk8bnqx7i3ak0";
+      sha256 = "06gljzjhbfvxs85699jr1p7y2j8hhi629kfarad7yjqy7ssl541n";
       type = "gem";
     };
-    version = "0.2.1";
+    version = "0.3.0";
   };
 }

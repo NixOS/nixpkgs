@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
       routers.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    mainProgram = "dynamips";
     maintainers = with maintainers; [ primeos ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

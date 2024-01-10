@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/quininer/unzrip";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "unzrip";
   };
 }

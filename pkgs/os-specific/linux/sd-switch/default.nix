@@ -1,17 +1,18 @@
-{ lib, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
+{ lib, fetchFromSourcehut, rustPlatform, pkg-config, dbus }:
 
-rustPlatform.buildRustPackage rec {
+let version = "0.3.0";
+in rustPlatform.buildRustPackage {
   pname = "sd-switch";
-  version = "0.2.3";
+  inherit version;
 
-  src = fetchFromGitLab {
-    owner = "rycee";
-    repo = pname;
+  src = fetchFromSourcehut {
+    owner = "~rycee";
+    repo = "sd-switch";
     rev = version;
-    sha256 = "12h2d7v7pdz7b0hrna64561kf35nbpwb2kzxa791xk8raxc2b72k";
+    hash = "sha256-mWrLbCUnoJ3hVtpSU/7dw91U5TLyw5kNchX5nmP9asA=";
   };
 
-  cargoSha256 = "12ny3cir2nxzrmf4vwq6sgc35dbpq88hav53xqdp44rigdf4vzbs";
+  cargoHash = "sha256-VK+kPX1pGhowbWKkUs1PL0DXIhDXJOFVoIHTtWQcWEs=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];

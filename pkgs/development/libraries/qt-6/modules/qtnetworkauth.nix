@@ -2,5 +2,5 @@
 
 qtModule {
   pname = "qtnetworkauth";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
 }

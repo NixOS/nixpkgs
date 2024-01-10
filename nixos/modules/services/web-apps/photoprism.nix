@@ -77,7 +77,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs "photoprism" { };
+    package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
@@ -123,7 +123,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
+        SystemCallFilter = [ "@system-service" "~@setuid @keyring" ];
         UMask = "0066";
       } // lib.optionalAttrs (cfg.port < 1024) {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

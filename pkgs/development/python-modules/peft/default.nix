@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 , setuptools
 , numpy
 , packaging
@@ -15,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.3.0";
+  version = "0.7.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7j//SDuld2ANxEcG4R0rK5vEaTX7gQwWRH56PO2KqAY=";
+    hash = "sha256-sdv9rMj5Qh2/QtBVSxHMAP/Tk+ZyrHtNfX/4q8/Qw3A=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     accelerate
   ];
 
-  doCheck = false;  # tried to download pretrained model
+  doCheck = false;  # tries to download pretrained models
   pythonImportsCheck = [
     "peft"
   ];

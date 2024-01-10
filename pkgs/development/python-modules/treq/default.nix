@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "treq";
   version = "22.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/treq";
     description = "Requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "flametree";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";

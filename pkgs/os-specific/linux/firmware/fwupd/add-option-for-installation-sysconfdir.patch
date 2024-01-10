@@ -1,5 +1,5 @@
 diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
-index b0ff5b10..13ac380d 100644
+index b0ff5b106..13ac380d0 100644
 --- a/data/bios-settings.d/meson.build
 +++ b/data/bios-settings.d/meson.build
 @@ -1,5 +1,5 @@
@@ -10,7 +10,7 @@ index b0ff5b10..13ac380d 100644
  )
  endif
 diff --git a/data/meson.build b/data/meson.build
-index 8999ee57..b57174dc 100644
+index e13da4adf..6858c240f 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -26,7 +26,7 @@ endif
@@ -23,7 +23,7 @@ index 8999ee57..b57174dc 100644
    )
    plugin_quirks += files([
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index 3649fece..c3462744 100644
+index 3649fecea..c3462744b 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
 @@ -12,13 +12,13 @@ install_data([
@@ -57,7 +57,7 @@ index 3649fece..c3462744 100644
  )
  endif
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index c20a1a05..5354bac7 100644
+index c20a1a05e..5354bac7f 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
 @@ -15,14 +15,14 @@ if build_standalone and get_option('lvfs') != 'false'
@@ -93,10 +93,10 @@ index c20a1a05..5354bac7 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index fa7a5599..5b53a407 100644
+index ca6ccdf92..0a3097d90 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -191,6 +191,12 @@ endif
+@@ -195,6 +195,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
 
@@ -107,32 +107,24 @@ index fa7a5599..5b53a407 100644
 +endif
 +
  diffcmd = find_program('diff')
- gio = dependency('gio-2.0', version: '>= 2.45.8')
- giounix = dependency('gio-unix-2.0', version: '>= 2.45.8', required: false)
+ gio = dependency('gio-2.0', version: '>= 2.68.0')
+ giounix = dependency('gio-unix-2.0', version: '>= 2.68.0', required: false)
 
 diff --git a/meson_options.txt b/meson_options.txt
-index 81d373f8..d214cf64 100644
+index 877891126..986d0ee31 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -1,3 +1,4 @@
-+option('sysconfdir_install', type: 'string', value: '', description: 'sysconfdir to use during installation')
- option('build', type : 'combo', choices : ['all', 'standalone', 'library'], value : 'all', description : 'build type')
- option('consolekit', type : 'feature', description : 'ConsoleKit support', deprecated: {'true': 'enabled', 'false': 'disabled'})
- option('static_analysis', type : 'boolean', value : false, description : 'enable GCC static analysis support')
-diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
-index 88c039f8..62a7691f 100644
---- a/plugins/dell-esrt/meson.build
-+++ b/plugins/dell-esrt/meson.build
-@@ -27,6 +27,6 @@ configure_file(
-   output: 'dell-esrt.conf',
-   configuration: con2,
-   install: true,
--  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
-+  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
- )
- endif
+@@ -1,3 +1,8 @@
++option('sysconfdir_install',
++  type: 'string',
++  value: '',
++  description: 'sysconfdir to use during installation'
++)
+ option('build',
+   type: 'combo',
+   choices: [
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
-index f4657a6a..28ca0653 100644
+index eb196c21e..c9a29f680 100644
 --- a/plugins/uefi-capsule/meson.build
 +++ b/plugins/uefi-capsule/meson.build
 @@ -20,7 +20,7 @@ if host_machine.system() == 'linux'
@@ -144,5 +136,3 @@ index f4657a6a..28ca0653 100644
    )
  elif host_machine.system() == 'freebsd'
    backend_srcs += 'fu-uefi-backend-freebsd.c'
---
-2.40.1

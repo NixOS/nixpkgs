@@ -5,6 +5,7 @@
 , gtk3
 , gtksourceview4
 , gspell
+, enablePolkit ? true
 , polkit
 }:
 
@@ -23,7 +24,8 @@ mkXfceDerivation {
     gtk3
     gtksourceview4
     gspell
-    polkit # optional polkit support
+  ] ++ lib.optionals enablePolkit [
+    polkit
   ];
 
   # Use the GSettings keyfile backend rather than DConf

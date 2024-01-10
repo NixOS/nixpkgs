@@ -19,18 +19,18 @@ index 749b409..831f4c0 100755
 -models_path="$(get_script_path)"
 -
  # Whisper models
- models=( "tiny.en" "tiny" "base.en" "base" "small.en" "small" "medium.en" "medium" "large-v1" "large" )
- 
-@@ -54,8 +42,6 @@ fi
+ models=(
+     "tiny.en"
+@@ -82,8 +70,6 @@ fi
  
  printf "Downloading ggml model $model from '$src' ...\n"
  
--cd $models_path
+-cd "$models_path"
 -
  if [ -f "ggml-$model.bin" ]; then
      printf "Model $model already exists. Skipping download.\n"
      exit 0
-@@ -77,7 +63,7 @@ if [ $? -ne 0 ]; then
+@@ -105,7 +91,7 @@ if [ $? -ne 0 ]; then
      exit 1
  fi
  

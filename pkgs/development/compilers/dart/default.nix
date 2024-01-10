@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://www.dartlang.org/";
+    homepage = "https://dart.dev";
     maintainers = with maintainers; [ grburst ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''

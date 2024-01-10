@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.35";
+  version = "4.4.36";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qMk1UFtV8d8NF/i/1ZRox8Zwmh0xgxsPjj4EWrj9RV0=";
+    hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
 
   outputs = [
@@ -24,9 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
+    # required for musl, android, march=native
     "--disable-werror"
   ];
+
+  # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
+  makeFlags = lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS=-no-undefined"] ;
 
   nativeBuildInputs = [
     perl

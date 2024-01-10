@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , django
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , pylint-plugin-utils
 , pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     pytestCheckHook
   ];
 

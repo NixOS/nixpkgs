@@ -1,9 +1,14 @@
-{stdenv, unzip, jq, zip, fetchurl,writeScript,  ...}:
+{ stdenv
+, fetchurl
+, jq
+, strip-nondeterminism
+, unzip
+, writeScript
+, zip
+}:
 
-{
-  name
+{ name
 , url ? null
-, md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
@@ -14,9 +19,10 @@
 
 let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
-  source = if url == null then src else fetchurl {
+  source = if url == null then src else
+  fetchurl {
     url = url;
-    inherit md5 sha1 sha256 sha512 hash;
+    inherit sha1 sha256 sha512 hash;
   };
 in
 stdenv.mkDerivation {
@@ -38,7 +44,14 @@ stdenv.mkDerivation {
     echo "$NEW_MANIFEST" > "$out/$UUID/manifest.json"
     cd "$out/$UUID"
     zip -r -q -FS "$out/$UUID.xpi" *
+    strip-nondeterminism "$out/$UUID.xpi"
     rm -r "$out/$UUID"
   '';
-  nativeBuildInputs = [ unzip zip jq  ];
+
+  nativeBuildInputs = [
+    jq
+    strip-nondeterminism
+    unzip
+    zip
+  ];
 }

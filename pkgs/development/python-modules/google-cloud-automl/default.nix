@@ -12,19 +12,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MFYWx791WDdZLClul+f/hNHeTEmlQWEJw5zLs5FVgh8=";
+    hash = "sha256-IvemHgS0qbA9UE7y22aD30YqAy2lP+P7ssNvUlB0q7U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -58,14 +63,11 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  disabledTestPaths = [
-    # requires credentials
-    "tests/system/gapic/v1beta1/test_system_tables_client_v1.py"
-  ];
-
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_prediction_client_client_info"
+    # Test requires project ID
+    "test_list_models"
   ];
 
   pythonImportsCheck = [
@@ -76,9 +78,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud AutoML API client library";
-    homepage = "https://github.com/googleapis/python-automl";
-    changelog = "https://github.com/googleapis/python-automl/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

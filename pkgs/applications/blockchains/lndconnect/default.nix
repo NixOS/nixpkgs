@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, lndconnect }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "lndconnect";
   version = "0.2.1";
@@ -7,10 +7,10 @@ buildGoModule rec {
     owner = "LN-Zap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cuZkVeFUQq7+kQo/YjXCMPANUL5QooAWgegcoWo3M0c=";
+    hash = "sha256-cuZkVeFUQq7+kQo/YjXCMPANUL5QooAWgegcoWo3M0c=";
   };
 
-  vendorSha256 = "sha256-iE0nht3PH2R9pTyyrySk759untC7snGt3wTXk4/pjrU=";
+  vendorHash = "sha256-iE0nht3PH2R9pTyyrySk759untC7snGt3wTXk4/pjrU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/LN-Zap/lndconnect";
     maintainers = [ maintainers.d-xo ];
     platforms = platforms.linux;
+    mainProgram = "lndconnect";
   };
 }

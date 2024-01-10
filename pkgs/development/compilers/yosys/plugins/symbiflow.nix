@@ -7,21 +7,16 @@
 , yosys
 , zlib
 , yosys-symbiflow
-, uhdm
-, capnproto
-, surelog
-, antlr4
-, flatbuffers
 , pkg-config
 }: let
 
-  version = "1.20230425";
+  version = "1.20230906";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo  = "yosys-f4pga-plugins";
     rev   = "v${version}";
-    hash  = "sha256-KNkmhvpKTby85P88+DqCOOGxIKpzbw5KF9ymqy40pfw=";
+    hash  = "sha256-XIn5wFw8i2njDN0Arua5BdZ0u1q6a/aJAs48YICehsc=";
   };
 
   # Supported symbiflow plugins.
@@ -38,7 +33,6 @@
     # "ql-qlf"
     "sdc"
     "xdc"
-    "systemverilog"
   ];
 
   static_gtest = gtest.overrideAttrs (old: {
@@ -57,10 +51,6 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
     yosys
     readline
     zlib
-    uhdm
-    surelog
-    capnproto
-    antlr4.runtime.cpp
   ];
 
   # xdc has an incorrect path to a test which has yet to be patched

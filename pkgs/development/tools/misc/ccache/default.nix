@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.8.2";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-wft9T0XzTJhN/85kV+pIAUqTvcIBClbj+nHPQK0ncVE=";
+    sha256 = "sha256-fcstTjwwOh5SAe6+VT5MpBaD+AEFoQtHop99dOMr7/A=";
   };
 
   outputs = [ "out" "man" ];
@@ -31,9 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
     # Darwin.
+    # Additionally, when cross compiling, the correct target prefix
+    # needs to be set.
     (substituteAll {
-      src = ./force-objdump-on-darwin.patch;
-      objdump = "${binutils.bintools}/bin/objdump";
+      src = ./fix-objdump-path.patch;
+      objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
 
@@ -84,11 +86,19 @@ stdenv.mkDerivation (finalAttrs: {
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];
-      buildCommand = ''
+      # Unwrapped clang does not have a targetPrefix because it is multi-target
+      # target is decided with argv0.
+      buildCommand = let
+        targetPrefix = if unwrappedCC.isClang or false
+          then
+            ""
+          else
+            (lib.optionalString (unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != "") "${unwrappedCC.targetConfig}-");
+      in ''
         mkdir -p $out/bin
 
         wrap() {
-          local cname="$1"
+          local cname="${targetPrefix}$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
               --run ${lib.escapeShellArg extraConfig} \
@@ -125,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
     license = licenses.gpl3Plus;
+    mainProgram = "ccache";
     maintainers = with maintainers; [ kira-bruneau r-burns ];
     platforms = platforms.unix;
   };

@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sfrotz";
-  version = "2.52";
+  version = "2.54";
 
   src = fetchFromGitLab  {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
-    sha256 = "11ca1dz31b7s5vxjqncwjwmbbcr2m5v2rxjn49g4gnvwd6mqw48y";
+    sha256 = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
   };
 
   buildInputs = [

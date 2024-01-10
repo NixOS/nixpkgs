@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
 , cython
 , cmake
@@ -12,23 +11,15 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.2";
+  version = "0.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "v${version}";
-    hash = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uUMcNnynE2itIwc7IGFwxveqLRL8f4dAAcaD6FUWJaY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # setuptools 61 compat
-      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
-      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -57,6 +48,6 @@ buildPythonPackage rec {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

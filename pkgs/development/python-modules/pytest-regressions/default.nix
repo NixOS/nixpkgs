@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.4.2";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6riee6SqM5vf4HsxBH6OanCx54RudKi7/DGliNAecwM=";
+    hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -36,23 +36,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    pandas
-    pillow
     pytest-datadir
     pyyaml
   ];
 
 
   nativeCheckInputs = [
-    pytestCheckHook
     matplotlib
+    pandas
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
   ];
+
+  passthru.optional-dependencies = {
+    dataframe = [ pandas numpy ];
+    image = [ numpy pillow ];
+    num = [ numpy pandas ];
+  };
 
   meta = with lib; {
     description = "Pytest fixtures to write regression tests";

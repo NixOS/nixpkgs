@@ -3,7 +3,7 @@
 
 let
 
-  inherit (stdenv.targetPlatform) system;
+  inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
   target = {
@@ -35,6 +35,13 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/shim
     install -m 644 ${target} $out/share/shim/
   '';
+
+  passthru = {
+    # Expose the target file name so that consumers
+    # (e.g. infrastructure for signing this shim) don't need to
+    # duplicate the logic from here
+    inherit target;
+  };
 
   meta = with lib; {
     description = "UEFI shim loader";

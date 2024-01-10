@@ -59,7 +59,7 @@ buildPythonApplication rec {
     desktopName = "Gaphor";
   };
 
-  # We need to wrap it manually to resolve all icons
+  # Disable automatic wrapGAppsHook to prevent double wrapping
   dontWrapGApps = true;
 
   postInstall = ''
@@ -67,10 +67,11 @@ buildPythonApplication rec {
   '';
 
   preFixup = ''
-    wrapProgram $out/bin/gaphor \
-        ''${gappsWrapperArgs[@]} \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    )
   '';
 
   meta = with lib; {

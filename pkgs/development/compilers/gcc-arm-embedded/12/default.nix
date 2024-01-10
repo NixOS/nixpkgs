@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "12.2.rel1";
+  version = "12.3.rel1";
 
   platform = {
     aarch64-darwin = "darwin-arm64";
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu/${version}/binrel/arm-gnu-toolchain-${version}-${platform}-arm-none-eabi.tar.xz";
     sha256 = {
-      aarch64-darwin = "0j12n631bmbfvnfbmv4q7cfhmh4l7ka3vcjcvyw0vjqb4msyia91";
-      aarch64-linux  = "131ydgndff7dyhkivfchbk43lv3cv2p172knkqilx64aapvk5qvy";
-      x86_64-darwin  = "00i9gd1ny00681pwinh6ng9x45xsyrnwc6hm2vr348z9gasyxh00";
-      x86_64-linux   = "0rv8r5zh0a5621v0xygxi8f6932qgwinw2s9vnniasp9z7897gl4";
+      aarch64-darwin = "sha256-Oy7uC99xwbvrPDt0JPv3vZ1cPw9aOkp4FZyeOtIZ570=";
+      aarch64-linux  = "sha256-FMBIfVdT9gcdJOVoiB98fmf4DdgxZd7FFks3MTlK9DE=";
+      x86_64-darwin  = "sha256-5u2L+TD62c4z4SCrkLNpV7H3efzKpt5snKmliYLAQpE=";
+      x86_64-linux   = "sha256-EqKBVkQxjrzOr4S+q7Zl0JJLbnniEEhFLFMxpWMyswk=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

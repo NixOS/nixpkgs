@@ -154,22 +154,67 @@ let
       outputHash = if vendorHash != "" then vendorHash else lib.fakeSha256;
     } // (removeAttrs drvArgs [ "name" "pname" ]));
 
-  depsListDrv = stdenvNoCC.mkDerivation ({
-    name = "${name}-dart-deps-list.json";
-    nativeBuildInputs = [ hook dart jq ];
+  mkDepsDrv = args: stdenvNoCC.mkDerivation (args // {
+    nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ hook dart ];
 
-    configurePhase = ''
+    configurePhase = args.configurePhase or ''
       runHook preConfigure
-      doPubGet dart pub get --offline
+
+      ${sdkSetupScript}
+
+      _pub_get() {
+        ${pubGetScript} --offline
+      }
+      doPubGet _pub_get
+
       runHook postConfigure
     '';
+  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
+
+  depsListDrv = mkDepsDrv {
+    name = "${name}-dart-deps-list.json";
+
+    nativeBuildInputs = [ jq ];
 
     buildPhase = ''
       runHook preBuild
-      dart pub deps --json | jq .packages > $out
+      if [ -e ${dart}/bin/flutter ]; then
+        flutter pub deps --json | jq .packages > $out
+      else
+        dart pub deps --json | jq .packages > $out
+      fi
       runHook postBuild
     '';
-  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
+
+    dontInstall = true;
+  };
+
+  packageConfigDrv = mkDepsDrv {
+    name = "${name}-package-config.json";
+
+    nativeBuildInputs = [ jq ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      # Canonicalise the package_config.json, and replace references to the
+      # reconstructed package cache with the original FOD.
+      #
+      # The reconstructed package cache is not reproducible. The intended
+      # use-case of this derivation is for use with tools that use a
+      # package_config.json to load assets from packages, and not for use with
+      # Pub directly, which requires the setup performed by the hook before
+      # usage.
+      jq -S '
+        .packages[] |= . + { rootUri: .rootUri | gsub("'"$PUB_CACHE"'"; "${hook.deps}/cache/.pub-cache") }
+      | .generated |= "1970-01-01T00:00:00.000Z"
+      ' .dart_tool/package_config.json > $out
+
+      runHook postBuild
+    '';
+
+    dontInstall = true;
+  };
 
   # As of Dart 3.0.0, Pub checks the revision of cached Git-sourced packages.
   # Git must be wrapped to return a positive result, as the real .git directory is wiped
@@ -193,8 +238,10 @@ let
     substitutions = { inherit gitSourceWrapper deps; };
     propagatedBuildInputs = [ dart git ];
     passthru = {
+      inherit deps;
       files = deps.outPath;
       depsListFile = depsListDrv.outPath;
+      packageConfig = packageConfigDrv;
     };
   }) ./setup-hook.sh;
 in

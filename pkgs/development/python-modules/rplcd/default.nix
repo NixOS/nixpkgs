@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "rplcd";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

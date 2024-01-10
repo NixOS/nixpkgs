@@ -1,20 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, sphinxHook
+, poetry-core
+, poetry-dynamic-versioning
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-prompt";
-  version = "1.5.0";
+  version = "1.7.0"; # read before updating past 1.7.0 https://github.com/sbrunner/sphinx-prompt/issues/398
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    rev = version;
-    hash = "sha256-ClUPAIyPrROJw4GXeakA8U443Vlhy3P/2vFnAtyrPHU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/XxUSsW8Bowks7P+d6iTlklyMIfTb2otXva/VtRVAkM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"poetry-plugin-tweak-dependencies-version", ' ""
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
   propagatedBuildInputs = [ sphinx ];
 

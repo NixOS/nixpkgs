@@ -1,21 +1,32 @@
-{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
+{ lib, rustPlatform, fetchgit, fetchpatch
+, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "114.1";
+  version = "119.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "a8b48953a7d209b32d34fe64e2324cb1113b4336";
-    sha256 = "PdP+Jx2oIAy+gxHjJDU5YlAlSYFtoX7ey3r5ELD9QPM=";
+    rev = "b9977397be2ffc8154bf55983eb21495016d48b5";
+    sha256 = "oaCWiyYWQQGERaUPSekUHsO8vaHzIA5ZdSebm/qRR7I=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "test-page-size-fix.patch";
+      url = "https://chromium.googlesource.com/crosvm/crosvm/+/d9bc6e99ff5ac31d7d88b684c938af01a0872fc1%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      includes = [ "src/crosvm/config.rs" ];
+      hash = "sha256-3gfNzp0WhtNr+8CWSISCJau208EMIo3RJhM+4SyeV3o=";
+    })
+  ];
+
   separateDebugInfo = true;
 
-  cargoSha256 = "EhxrtCGrwCcODCjPUONjY1glPGEXbjvk6No/g2kJzI8=";
+  cargoHash = "sha256-U/sF/0OWxA41iZsOTao8eeb98lluqOwcPwwA4emcSFc=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
@@ -29,11 +40,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
-  # crosvm mistakenly expects the stable protocols to be in the root
-  # of the pkgdatadir path, rather than under the "stable"
-  # subdirectory.
-  PKG_CONFIG_WAYLAND_PROTOCOLS_PKGDATADIR =
-    "${wayland-protocols}/share/wayland-protocols/stable";
+  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
@@ -41,7 +48,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A secure virtual machine monitor for KVM";
-    homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
+    homepage = "https://crosvm.dev/";
+    mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
     platforms = [ "aarch64-linux" "x86_64-linux" ];

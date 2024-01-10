@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
 
     tests.version = testers.testVersion { package = colmena; };
   };

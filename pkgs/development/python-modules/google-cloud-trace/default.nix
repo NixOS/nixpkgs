@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.11.1";
+  version = "1.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-twaJlx/2W1BQCWZMTQbZOp74oFecL2vwZkAxK/XwE8E=";
+    hash = "sha256-IvbMxHbOMQHUH7q86sP+/N/gV9KWez6OIMAmcTY6Uko=";
   };
 
   propagatedBuildInputs = [
@@ -50,9 +50,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
-    changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

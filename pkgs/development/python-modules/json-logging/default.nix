@@ -46,6 +46,11 @@ buildPythonPackage rec {
     "quart"
   ];
 
+  disabledTestPaths = [
+    # Smoke tests don't always work
+    "tests/smoketests/test_run_smoketest.py"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {

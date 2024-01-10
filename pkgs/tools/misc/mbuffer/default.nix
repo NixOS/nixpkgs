@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tokudan ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
+    mainProgram = "mbuffer";
   };
 }

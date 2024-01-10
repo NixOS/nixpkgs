@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D ./goxel $out/bin/goxel
+
+    for res in $(ls data/icons | sed -e 's/icon//g' -e 's/.png//g'); do
+      install -Dm444 data/icons/icon$res.png $out/share/icons/hicolor/''${res}x''${res}/apps/goxel.png
+    done
+
+    install -Dm444 snap/gui/goxel.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/goxel.desktop \
+      --replace 'Icon=''${SNAP}/icon.png' 'Icon=goxel'
   '';
 
   meta = with lib; {

@@ -1,28 +1,35 @@
 { lib
+, stdenv
 , buildPythonPackage
 , callPackage
 , fetchPypi
 , hatchling
 , pythonOlder
+, appnope
 , comm
+, debugpy
 , ipython
 , jupyter-client
+, jupyter-core
+, matplotlib-inline
+, nest-asyncio
 , packaging
 , psutil
+, pyzmq
 , tornado
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.21.2";
-  format = "pyproject";
+  version = "6.28.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bpITSE5M4fsUJn7kNeGPI8w6BjTmNbn7TtRne4Tg/fg=";
+    hash = "sha256-acEUA9Jt5p3wIiWRb5FrN+pLmvQX2gqMgn+EMo2I5fM=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
@@ -36,12 +43,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     comm
+    debugpy
     ipython
     jupyter-client
+    jupyter-core
+    matplotlib-inline
+    nest-asyncio
     packaging
     psutil
+    pyzmq
     tornado
     traitlets
+  ] ++ lib.optionals stdenv.isDarwin [
+    appnope
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
@@ -54,7 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "IPython Kernel for Jupyter";
     homepage = "https://ipython.org/";
+    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ] ++ lib.teams.jupyter.members;
   };
 }

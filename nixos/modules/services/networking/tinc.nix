@@ -279,14 +279,7 @@ in
               '';
             };
 
-            package = mkOption {
-              type = types.package;
-              default = pkgs.tinc_pre;
-              defaultText = literalExpression "pkgs.tinc_pre";
-              description = lib.mdDoc ''
-                The package to use for the tinc daemon's binary.
-              '';
-            };
+            package = mkPackageOption pkgs "tinc_pre" { };
 
             chroot = mkOption {
               default = false;

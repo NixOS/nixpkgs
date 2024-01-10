@@ -13,17 +13,32 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.12";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5m4aeuCqSJNgerQKyP9M6Qf7P4ijCtCY4Efew6E09Bc=";
+    sha256 = "sha256-U4xq9FY2uZlnBwm8Se1wReU1c1RAJMx6FIoD0D2BlM4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ wayland-scanner wayland pango glib harfbuzz cairo libxkbcommon ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    wayland-scanner
+  ];
+  buildInputs = [
+    cairo
+    glib
+    harfbuzz
+    libxkbcommon
+    pango
+    wayland
+  ];
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
@@ -32,5 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.elohmeier ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "wvkbd-mobintl";
   };
 }

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "cgen";
   version = "2020.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/cgen";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

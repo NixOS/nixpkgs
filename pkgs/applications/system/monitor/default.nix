@@ -9,6 +9,7 @@
 , pantheon
 , python3
 , curl
+, flatpak
 , gettext
 , glib
 , gtk3
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-ZTsb1xcJ7eeCEPebZW0anmG1SUPAzZakw4WzJql9VTQ=";
+    sha256 = "sha256-GUNMA4CRO4cKBjNr7i8yRflstbT8g2ciDHppjUUbAOc=";
     fetchSubmodules = true;
   };
 
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
+    flatpak
     glib
     gtk3
     json-glib
@@ -85,7 +87,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      ignoredVersions = "ci.*";
+      # Upstream frequently tags these to fix CI, which are mostly irrelevant to us.
+      ignoredVersions = "-";
     };
   };
 

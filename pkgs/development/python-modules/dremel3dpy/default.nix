@@ -1,6 +1,7 @@
 { lib
 , async-timeout
 , buildPythonPackage
+, decorator
 , fetchPypi
 , imageio
 , imutils
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
+    decorator
     imageio
     imutils
     requests

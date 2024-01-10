@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "age";
   version = "1.1.1";
-  vendorSha256 = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
+  vendorHash = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
@@ -53,10 +53,16 @@ buildGoModule rec {
     fi
   '';
 
+  # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517
+  checkFlags = [
+    "-skip" "TestScript/plugin"
+  ];
+
   meta = with lib; {
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;
+    mainProgram = "age";
     maintainers = with maintainers; [ tazjin ];
   };
 }

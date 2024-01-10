@@ -1,4 +1,4 @@
-{ lib, perl, buildEnv, makeWrapper
+{ lib, perl, buildEnv, makeBinaryWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -17,7 +17,7 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''

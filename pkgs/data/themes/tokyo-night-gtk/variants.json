@@ -1,0 +1,18 @@
+{
+  "icons": {
+    "dark": "Dark",
+    "dark-cyan": "Dark-Cyan",
+    "light": "Light",
+    "moon": "Moon"
+  },
+  "themes": {
+    "dark-b": "Dark-B",
+    "dark-bl": "Dark-BL",
+    "dark-b-lb": "Dark-B-LB",
+    "dark-bl-lb": "Dark-BL-LB",
+    "storm-b": "Storm-B",
+    "storm-bl": "Storm-BL",
+    "storm-b-lb": "Storm-B-LB",
+    "storm-bl-lb": "Storm-BL-LB"
+  }
+}

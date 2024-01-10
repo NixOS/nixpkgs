@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -8,17 +9,27 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.5";
+  version = "2.11";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-QGrZid1MVAofFcsnZ20f8RJdyNrVsRkUg2yPGC/iGVU=";
+    hash = "sha256-kE9GBVTKNpgEuE9jQ7k85OhEAN3VWgjmAgifvZfq46I=";
   };
+
+  patches = [
+    # Fix unit/test-dpp on aarch64.
+    (fetchpatch {
+      name = "size_t-vararg.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=688d27700833258a139a6fbd5661334bd2c9fa98";
+      hash = "sha256-g3gG1c25o6ODFfHL4a0HcnNJBBOKRbdo+ZuVbzoxCLs=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
@@ -87,11 +98,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
+
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
   };
 }

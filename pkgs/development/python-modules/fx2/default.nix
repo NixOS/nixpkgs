@@ -9,13 +9,14 @@
 
 buildPythonPackage rec {
   pname = "fx2";
-  version = "0.11";
+  version = "unstable-2023-09-20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
-    rev = "v${version}";
-    hash = "sha256-uJpXsUMFqJY7mjj1rtfc0XWEfNDxO1xXobgBDGFHnp4=";
+    rev = "73fa811818d56a86b82c12e07327946aeddd2b3e";
+    hash = "sha256-AGQPOVTdaUCUeVVNQTBmoNvz5CGxcBOK7+oL+X8AcIw=";
   };
 
   nativeBuildInputs = [ sdcc ];

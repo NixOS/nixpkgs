@@ -1,10 +1,8 @@
 { lib
 , bundlerApp
-, buildRubyGem
-, ruby
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "haste";
   gemdir = ./.;
   exes = [ "haste" ];
@@ -15,5 +13,6 @@ bundlerApp rec {
     license     = licenses.mit;
     maintainers = with maintainers; [ shamilton ];
     platforms   = platforms.unix;
+    mainProgram = "haste";
   };
 }

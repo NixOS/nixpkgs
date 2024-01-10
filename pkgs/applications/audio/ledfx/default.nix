@@ -1,25 +1,28 @@
 { lib
-, python3
 , fetchPypi
+, python3
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.67";
-  format = "setuptools";
+  version = "2.0.86";
+  pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFxAMjglQZXCySr83PtvStU6hw2ucQu+rSjIHo1yZBk=";
+    hash = "sha256-miOGMsrvK3A3SYnd+i/lqB+9GOHtO4F3RW8NkxDgFqU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"openrgb-python~=0.2.10",' "" \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace '"sentry-sdk==1.14.0",' "" \
+      --replace "sentry-sdk==1.38.0" "sentry-sdk" \
       --replace "~=" ">="
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -29,14 +32,18 @@ python3.pkgs.buildPythonPackage rec {
     cython
     flux-led
     icmplib
+    mss
     multidict
     numpy
-    # openrgb-python # not packaged
+    openrgb-python
     paho-mqtt
     pillow
     psutil
+    pybase64
     pyserial
     pystray
+    python-mbedtls
+    python-osc
     python-rtmidi
     # rpi-ws281x # not packaged
     requests
@@ -53,7 +60,7 @@ python3.pkgs.buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "LedFx is a network based LED effect controller with support for advanced real-time audio effects";
+    description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = licenses.gpl3Only;

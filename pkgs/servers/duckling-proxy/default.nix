@@ -8,14 +8,16 @@ buildGoModule {
     owner = "LukeEmmet";
     repo = "duckling-proxy";
     rev = "e2bfd73a60d7afa43f13a9d420d514131fee8fd1";
-    sha256 = "134hnfa4f5sb1z1j5684wmqzascsrlagx8z36i1470yggb00j4hr";
+    hash = "sha256-GRIJwHrPg0NCNOOj/hTNmmn1ceUEmSLDD0sXR5SzkIw=";
   };
-  vendorSha256 = "0wxk1a5gn9a7q2kgq11a783rl5cziipzhndgp71i365y3p1ssqyf";
+
+  vendorHash = "sha256-zmOtwx2+mBHDua9Z+G+MnxWaBzoqBPymwEcl+4oKs3M=";
 
   meta = with lib; {
     description = "Gemini proxy to access the Small Web";
     homepage = "https://github.com/LukeEmmet/duckling-proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
+    mainProgram = "duckling-proxy";
   };
 }

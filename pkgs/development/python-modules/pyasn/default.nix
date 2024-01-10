@@ -2,17 +2,18 @@
 
 buildPythonPackage rec {
   pname = "pyasn";
-  version = "1.6.1";
+  version = "1.6.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
+    hash = "sha256-otVfs+5HlHYJ9QIRylsLrEEahvPJNfuSyksLirfGaP8=";
   };
 
   datasrc = fetchFromGitHub {
     owner = "hadiasghari";
     repo = "pyasn";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
   };
 

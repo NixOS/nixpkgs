@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "docker-buildx";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
-    sha256 = "sha256-iO0ZcQB/sNyrZV8R7EbonMARNAdt5aMXF9h8knrccDg=";
+    hash = "sha256-O2oXswExH6OQLDZcgCGF62oZ7v6svZuOziw0SZgOVHI=";
   };
 
   doCheck = false;
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [
     "-w" "-s"

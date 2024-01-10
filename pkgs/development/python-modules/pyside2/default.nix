@@ -10,18 +10,13 @@
 , qt5
 , shiboken2
 }:
-
-# Only build when Python<=3.10
-# See https://bugreports.qt.io/browse/PYSIDE-1864
-# "There are no plans to support Python versions > 3.10 in the 5.15 branch."
-disabledIf (pythonAtLeast "3.11") (
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.5";
+  version = "5.15.11";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "0cwvw6695215498rsbm2xzkwaxdr3w7zfvy4kc62c01k6pxs881r";
+    sha256 = "sha256-2lZ807eFTSegtK/j6J3osvmLem1XOTvlbx/BP3cPryk=";
   };
 
   patches = [
@@ -70,7 +65,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd ../../..
-    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside2
+    ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside2
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 
@@ -80,4 +75,4 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
   };
-})
+}

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.8.0";
+  version = "4.8.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-YalruviwykmpIloiVLlEPE/44FDTN0N9ha9N6InhASc=";
+    hash = "sha256-f0DIy8RlDQb+Sau6eZAuurs4Q2Pau9XO8nGWSgfDZFw=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium"
     "--with-sqlite3"
     "--with-libcrypto=${openssl.dev}"
+    "sysconfdir=/etc/pdns"
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -78,6 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-dynmodules=bind geoip gmysql godbc gpgsql gsqlite3 ldap lmdb lua2 pipe remote tinydns"
     )
   '';
+
+  # We want the various utilities to look for the powerdns config in
+  # /etc/pdns, but to actually install the sample config file in
+  # $out
+  installFlags = [ "sysconfdir=$(out)/etc/pdns" ];
 
   enableParallelBuilding = true;
   doCheck = true;

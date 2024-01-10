@@ -31,5 +31,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/DCsunset/pandoc-include";
     license = licenses.mit;
     maintainers = with maintainers; [ ppenguin ];
+    mainProgram = "pandoc-include";
   };
 }

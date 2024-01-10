@@ -2,7 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , adwaita-icon-theme
-, libsForQt5
+, breeze-icons
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -19,13 +19,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brow
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-04-16";
+  version = "2023-10-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "OHI/kT4HMlWUTxIeGXjtuIYBzQKM3XTGXuE9cviNDTM=";
+    hash = "sha256-il+bYIcwm0BQF6U0J6h6rlzHSGSHYN/O8BezehYIpQ4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    libsForQt5.breeze-icons
+    breeze-icons
     hicolor-icon-theme
   ];
 

@@ -1,29 +1,29 @@
-{ lib,
-  fetchFromGitHub,
-  rustPlatform,
-  enableAppletSymlinks ? true,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, enableAppletSymlinks ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rsbkb";
-  version = "1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "trou";
     repo = "rsbkb";
     rev = "release-${version}";
-    hash = "sha256-SqjeH0eOo+upSfPWh2IW75p1VHMqmzAbCchDrXhvMxs=";
+    hash = "sha256-+plf7BoYpEFPRsGKNrvLF8TAU3Z7nyx6Td6uRBoNGiE=";
   };
-  cargoSha256 = "N3Xlw2JzTjqWLiVNCZaomsWQl330kGVlwdz4Gf05TGU=";
+
+  cargoHash = "sha256-HyosR/5tZCRU2CNnnGITEuESW30Zq3s33UFNcLmEWIA=";
 
   # Setup symlinks for all the utilities,
   # busybox style
-  postInstall = lib.optionalString enableAppletSymlinks
-    ''
+  postInstall = lib.optionalString enableAppletSymlinks ''
     cd $out/bin || exit 1
     path="$(realpath --canonicalize-missing ./rsbkb)"
     for i in $(./rsbkb list) ; do ln -s $path $i ; done
-    '';
+  '';
 
   meta = with lib; {
     description = "Command line tools to encode/decode things";

@@ -22,15 +22,20 @@
 , pypugjs
 , boto3
 , moto
-, mock
+, markdown
 , lz4
-, setuptoolsTrial
+, setuptools-trial
 , buildbot-worker
 , buildbot-plugins
 , buildbot-pkg
 , parameterized
 , git
 , openssh
+, setuptools
+, croniter
+, importlib-resources
+, packaging
+, unidiff
 , glibcLocales
 , nixosTests
 , callPackage
@@ -65,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.8.0";
-    format = "setuptools";
+    version = "3.10.1";
+    format = "pyproject";
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Z4BmC6Ed+7y4rJologiLXhkIvucXz65KEBxX3LFqExY=";
+      hash = "sha256-/J4jWoIZEObSZKw04Ib6h4AvJtfNwzwozRu+gFek1Dk=";
     };
 
     propagatedBuildInputs = [
@@ -88,6 +93,11 @@ let
       autobahn
       pyjwt
       pyyaml
+      setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -98,9 +108,9 @@ let
       pypugjs
       boto3
       moto
-      mock
+      markdown
       lz4
-      setuptoolsTrial
+      setuptools-trial
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -119,6 +129,9 @@ let
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
+
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;

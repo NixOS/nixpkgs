@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtgraphicaleffects";
-  qtInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [ qtdeclarative ];
   outputs = [ "out" "dev" ];
 }

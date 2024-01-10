@@ -51,7 +51,7 @@ assert luaImlib2Support    -> luaSupport && imlib2Support
 assert luaCairoSupport     -> luaSupport && toluapp != null
                                          && cairo   != null;
 assert luaCairoSupport || luaImlib2Support
-                           -> lua.luaversion == "5.3";
+                           -> lua.luaversion == "5.4";
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
@@ -67,28 +67,29 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.13.1";
+  version = "1.19.6";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
+    hash = "sha256-L8YSbdk+qQl17L4IRajFD/AEWRXb2w7xH9sM9qPGrQo=";
   };
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
       cmake/ConkyPlatformChecks.cmake
   '' + optionalString docsSupport ''
-    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
-    sed -i 's/ Example: .*$//' doc/config_settings.xml
-
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env = {
+    # For some reason -Werror is on by default, causing the project to fail compilation.
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
@@ -137,7 +138,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = "https://conky.sourceforge.net/";
+    homepage = "https://conky.cc";
+    changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${version}";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;

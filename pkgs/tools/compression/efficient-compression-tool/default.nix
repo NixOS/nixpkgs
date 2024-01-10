@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.lunik1 ];
     platforms = platforms.linux;
+    mainProgram = "ect";
   };
 }

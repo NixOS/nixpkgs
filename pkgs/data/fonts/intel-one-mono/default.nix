@@ -2,16 +2,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "intel-one-mono";
-  version = "1.2.1";
+  version = "1.3.0";
 
   srcs = [
     (fetchurl {
       url = "https://github.com/intel/intel-one-mono/releases/download/V${finalAttrs.version}/otf.zip";
-      hash = "sha256-RBJwIUkmAZIRaIEWUxFZlRMfFTUFdLbHCMRkagU0gU0=";
+      hash = "sha256-iZIfkXH+GplVwES4LaQBIaCWs7OKmEto9J2SpzvagSs=";
     })
     (fetchurl {
       url = "https://github.com/intel/intel-one-mono/releases/download/V${finalAttrs.version}/ttf.zip";
-      hash = "sha256-DV/PT+P+GGq/ejS5cx5ENuCy+iiE32AMOirwuTCP3vY=";
+      hash = "sha256-EeUTEMuoTHKmuO5Uj0jjiDRF9t7jxbIy45nTWozlgfc=";
     })
   ];
 

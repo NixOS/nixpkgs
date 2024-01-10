@@ -41,7 +41,7 @@ lib.runTests (
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv6l-netbsd" "armv6l-none" "armv7a-linux" "armv7a-netbsd" "armv7l-linux" "armv7l-netbsd" "arm-none" "armv7a-darwin" ];
   testarmv7 = mseteq armv7 [ "armv7a-darwin" "armv7a-linux" "armv7l-linux" "armv7a-netbsd" "armv7l-netbsd" ];
   testi686 = mseteq i686 [ "i686-linux" "i686-freebsd13" "i686-genode" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" "i686-none" "i686-darwin" ];
-  testmips = mseteq mips [ "mips-linux" "mips64-linux" "mips64el-linux" "mipsel-linux" "mipsel-netbsd" ];
+  testmips = mseteq mips [ "mips-none" "mips64-none" "mips-linux" "mips64-linux" "mips64el-linux" "mipsel-linux" "mipsel-netbsd" ];
   testmmix = mseteq mmix [ "mmix-mmixware" ];
   testpower = mseteq power [ "powerpc-netbsd" "powerpc-none" "powerpc64-linux" "powerpc64le-linux" "powerpcle-none" ];
   testriscv = mseteq riscv [ "riscv32-linux" "riscv64-linux" "riscv32-netbsd" "riscv64-netbsd" "riscv32-none" "riscv64-none" ];

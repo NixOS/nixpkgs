@@ -56,5 +56,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.all;
+    mainProgram = "bootiso";
   };
 }

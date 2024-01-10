@@ -13,20 +13,20 @@
 }:
 let
   pname = "blast-bin";
-  version = "2.13.0";
+  version = "2.14.1";
 
   srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-linux.tar.gz";
-      hash = "sha256-QPK3OdT++GoNI1NHyEpu2/hB2hqHYPQ/vNXFAVCwVEc=";
+      hash = "sha256-OO8MNOk6k0J9FlAGyCOhP+hirEIT6lL+rIInB8dQWEU=";
     };
     aarch64-linux = fetchurl {
-      url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-arm-linux.tar.gz";
-      hash = "sha256-vY8K66k7KunpBUjFsJTTb+ur5n1XmU0/mYxhZsi9ycs=";
+      url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-aarch64-linux.tar.gz";
+      hash = "sha256-JlOyoxZQBbvUcHIMv5muTuGQgrh2uom3rzDurhHQ+FM=";
     };
     x86_64-darwin = fetchurl {
       url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-x64-macosx.tar.gz";
-      hash = "sha256-Y0JlOUl9Ego6LTxTCNny3P5c1H3fApPXQm7Z6Zhq9RA=";
+      hash = "sha256-eMfuwMCD6VlDgeshLslDhYBBp0YOpL+6q/zSchR0bAs=";
     };
     aarch64-darwin = x86_64-darwin;
   };
@@ -55,6 +55,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (blast.meta) description homepage license;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ natsukium ];
   };
 }

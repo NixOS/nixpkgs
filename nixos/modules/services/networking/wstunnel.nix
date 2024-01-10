@@ -48,7 +48,7 @@ let
       default = true;
     };
 
-    package = mkPackageOptionMD pkgs "wstunnel" {};
+    package = mkPackageOption pkgs "wstunnel" {};
 
     autoStart = mkOption {
       description = mdDoc "Whether this tunnel server should be started automatically.";
@@ -86,12 +86,12 @@ let
         description = mdDoc "Address and port to listen on. Setting the port to a value below 1024 will also give the process the required `CAP_NET_BIND_SERVICE` capability.";
         type = types.submodule hostPortSubmodule;
         default = {
-          address = "0.0.0.0";
+          host = "0.0.0.0";
           port = if config.enableHTTPS then 443 else 80;
         };
         defaultText = literalExpression ''
           {
-            address = "0.0.0.0";
+            host = "0.0.0.0";
             port = if enableHTTPS then 443 else 80;
           }
         '';

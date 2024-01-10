@@ -1,28 +1,30 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , bitbox02
+, buildPythonPackage
 , cbor
 , ecdsa
+, fetchFromGitHub
 , hidapi
 , libusb1
 , mnemonic
 , pyaes
 , pyserial
-, typing-extensions
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "2.2.1";
+  version = "2.3.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
     rev = "refs/tags/${version}";
-    hash = "sha256-vQJN2YXWGvYSVV9lemZyu61inc9iBFxf5nIlpIiRe+s=";
+    hash = "sha256-V4BWB4mCONQ8kjAy6ySonAbCUTaKpBTvhSnHmoH8TQM=";
   };
 
   propagatedBuildInputs = [
@@ -37,16 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # relax required dependencies:
-  # libusb1           - https://github.com/bitcoin-core/HWI/issues/579
-  # typing-extensions - https://github.com/bitcoin-core/HWI/issues/572
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'libusb1>=1.7,<3' 'libusb1>=1.7,<4' \
-      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7,<5.0'
-  '';
-
-  # tests require to clone quite a few firmwares
+  # Tests require to clone quite a few firmwares
   doCheck = false;
 
   pythonImportsCheck = [
@@ -56,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
+    changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ prusnak ];
   };

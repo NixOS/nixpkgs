@@ -2,9 +2,9 @@
 
 buildGoModule rec {
   pname = "shiori";
-  version = "1.5.4";
+  version = "1.5.5";
 
-  vendorHash = "sha256-8aiaG2ry/XXsosbrLBmwnjbwIhbKMdM6WHae07MG7WI=";
+  vendorHash = "sha256-suWdtqf5IZntEVD+NHGD6RsL1tjcGH9vh5skISW+aCc=";
 
   doCheck = false;
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QZTYhRz65VLs3Ytv0k8ptfeQ/36M2VBXFaD9zhQXDh8=";
+    sha256 = "sha256-kGPvCYvLLixEH9qih/F3StUyGPqlKukTWLSw41+Mq8E=";
   };
 
   passthru.tests = {

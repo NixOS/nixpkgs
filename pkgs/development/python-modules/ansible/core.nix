@@ -1,15 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
 , installShellFiles
 , ansible
 , cryptography
+, importlib-resources
 , jinja2
 , junit-xml
 , lxml
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
 , passlib
 , pexpect
 , psutil
@@ -24,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.15.0";
+  version = "2.15.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2kP1Ou0BZDgDFrNwGJHWMpMWNHksrAuwCagNAcOv00=";
+    hash = "sha256-jMU5y41DSa8//ZAccHIvenogOuZCfdrJX/31RqbkFgI=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -41,6 +45,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -58,13 +64,22 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ] ++ lib.optionals windowsSupport [
+    pywinrm
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ];
+
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
+    "importlib-resources"
+  ];
 
   postInstall = ''
     installManPage docs/man/man1/*.1

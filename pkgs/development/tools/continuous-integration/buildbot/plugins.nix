@@ -8,7 +8,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-6hLJADdd84LTpxVB8C+i8rea9/65QfcCPuZC/7+55Co=";
+      hash = "sha256-W0NRRS0z02/31eyqVRGJUZlUaI77I9WuAI3d3FlWHOQ=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -29,13 +29,40 @@
     };
   };
 
+  www-react = buildPythonPackage rec {
+    pname = "buildbot-www-react";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-NfpgTZ0+sP2U8rkf+C4WTpXKVBvO8T+ijs8xIPe49tA=";
+    };
+
+    # Remove unnecessary circular dependency on buildbot
+    postPatch = ''
+      sed -i "s/'buildbot'//" setup.py
+    '';
+
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot UI (React)";
+      maintainers = with maintainers; [ mic92 ];
+      license = licenses.gpl2Only;
+    };
+  };
+
   console-view = buildPythonPackage rec {
     pname = "buildbot-console-view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-JA+3WnZAN4224LbrluHJcnTmQ8VnuAmoEqqLtw0H10M=";
+      hash = "sha256-ykzzvsxP8e0TIHnZJPSnFJoZNNZDvbZ7vZ6hCZyd0iA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -57,7 +84,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-NwLb9aQQwOxo9AqvsYbl/g8mNUeufdPrCwFMJNzdfQM=";
+      hash = "sha256-cu0+66DHf8Hfvfx/IvVyexwl3I0MmLjJrNDBPLxo7Bg=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -79,7 +106,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-hIBH8+RvZ53Txxl2FyrCs+ZFzRAAbK2th5Im2gZCs3c=";
+      hash = "sha256-Fd8r2+jV4YSuYu6zUl0fDjEdUGkzuHckR+PTSEyoXio=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -101,7 +128,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-iK9MwE5Nzc0tHMui0LquCqTFIPbRTEYeHam+5hiOQJE=";
+      hash = "sha256-LzsdHTABtHJzEfkyJ6LbmLE0QmKA3DVjY8VP90O3jT4=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -123,7 +150,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-HtVleYQE+pfwso7oBNucRjHEkwjgQSZJ6Ts1x7ncLsA=";
+      hash = "sha256-tVMXGYTZlkchfeEcHh3B/wGEZb8xUemtnbFzX65tvb8=";
     };
 
     buildInputs = [ buildbot-pkg ];

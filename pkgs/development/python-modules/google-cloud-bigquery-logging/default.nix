@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.2.1";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zTVOt3175ruIHatHTemOAt9VF4pvJn/fQIvm/DXXw9M=";
+    hash = "sha256-4pl7cT8bLy0y3ntYt1qO027KF7yokHun5lGZHWnBkUw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -43,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bigquery logging client library";
-    homepage = "https://github.com/googleapis/python-bigquery-logging";
-    changelog = "https://github.com/googleapis/python-bigquery-logging/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-logging";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-logging-v${version}/packages/google-cloud-bigquery-logging/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

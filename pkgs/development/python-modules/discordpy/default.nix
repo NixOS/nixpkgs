@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "2.2.3";
+  version = "2.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Rapptz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rh3gijm67LVyOaliP7w3YwKviKydnxXvu4snNrM5H1c=";
+    hash = "sha256-bZoYdDpk34x+Vw1pAZ3EcTFp2JJ/Ow0Jfof/XjqeRmY=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace "discord/opus.py" \
-      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
+      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '' + lib.optionalString withVoice ''
     substituteInPlace "discord/player.py" \
       --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"

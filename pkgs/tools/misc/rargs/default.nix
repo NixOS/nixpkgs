@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://github.com/lolabout/rargs";
     license     = with licenses; [ mit ];
     maintainers = with maintainers; [ pblkt ];
+    mainProgram = "rargs";
   };
 }

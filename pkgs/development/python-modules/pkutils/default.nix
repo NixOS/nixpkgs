@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, nose3
 , pythonOlder
 , pythonRelaxDepsHook
 , semver
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    nose3
   ];
 
   checkPhase = ''

@@ -5,19 +5,18 @@
 , fetchurl
 , fetchpatch
 , frigate
-, opencv4
 , nixosTests
 }:
 
 let
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     #name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kJ0MnmWThiFbXvrN+zL5pZHq+Ig3DhCc8wPlWX2+nP8=";
+    hash = "sha256-kNvYsHoObi6b9KT/LYhTGK4uJ/uAHnYhyoQkiXIA/s8=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -26,28 +25,6 @@ let
 
   python = python3.override {
     packageOverrides = self: super: {
-      # https://github.com/blakeblackshear/frigate/blob/v0.12.0/requirements-wheels.txt#L7
-      opencv = super.toPythonModule ((opencv4.override {
-        enablePython = true;
-        pythonPackages = self;
-      }).overrideAttrs (oldAttrs: rec {
-        version = "4.5.5";
-        src = fetchFromGitHub {
-          owner = "opencv";
-          repo = "opencv";
-          rev = "refs/tags/${version}";
-          hash = "sha256-TJfzEAMh4JSshZ7oEZPgB59+NBACsj6Z5TCzVOBaEP4=";
-        };
-        contribSrc = fetchFromGitHub {
-          owner = "opencv";
-          repo = "opencv_contrib";
-          rev = "refs/tags/${version}";
-          hash = "sha256-skuH9GYg0mivGaJjxbggXk4x/0bbQISrAawA3ZUGfCk=";
-        };
-        postUnpack = ''
-          cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
-        '';
-      }));
     };
   };
 
@@ -92,11 +69,11 @@ python.pkgs.buildPythonApplication rec {
 
     substituteInPlace frigate/const.py \
       --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate"
+      --replace "/tmp/cache" "/var/cache/frigate/"
 
     substituteInPlace frigate/http.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
-      --replace "/tmp/cache/" "/var/cache/frigate"
+      --replace "/tmp/cache/" "/var/cache/frigate/"
 
     substituteInPlace frigate/output.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
@@ -129,7 +106,7 @@ python.pkgs.buildPythonApplication rec {
     imutils
     matplotlib
     numpy
-    opencv
+    opencv4
     openvino
     paho-mqtt
     peewee

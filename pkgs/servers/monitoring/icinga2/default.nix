@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.13.7";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    sha256 = "sha256-YLNzXdR54DA9araC7pxZmopAZB90j9sx4gb3hOVsu0I=";
+    sha256 = "sha256-MrNfkbbmID27Ht2sDSklrPvRvCmewOuOOBIFnHJz1zE=";
   };
 
   patches = [
@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

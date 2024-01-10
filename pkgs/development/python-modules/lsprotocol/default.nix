@@ -4,6 +4,7 @@
 , cattrs
 , fetchFromGitHub
 , flit-core
+, importlib-resources
 , jsonschema
 , nox
 , pyhamcrest
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2023.0.0a2";
+  version = "2023.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AEvs2fb8nhWEFMyLvwNv9HoxxxE50/KW3TGZ5pDf4dc=";
+    hash = "sha256-K5jocKVxMNoUYYUi9YO2+N7hHWj0MFLprqGOzsg1QRs=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    importlib-resources
     jsonschema
     pyhamcrest
   ];

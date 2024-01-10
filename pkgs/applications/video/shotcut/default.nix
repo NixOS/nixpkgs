@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
-, mkDerivation
+, stdenv
+, wrapQtAppsHook
+, substituteAll
 , SDL2
 , frei0r
 , ladspaPlugins
@@ -8,71 +10,53 @@
 , mlt
 , jack1
 , pkg-config
+, fftw
 , qtbase
-, qtmultimedia
-, qtx11extras
-, qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, qmake
 , qttools
+, qtmultimedia
+, qtcharts
+, cmake
 , gitUpdater
 }:
-
-assert lib.versionAtLeast mlt.version "6.24.0";
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "shotcut";
-  version = "21.09.20";
+  version = "23.12.15";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    hash = "sha256-wTFnf7YMFzFI+buAI2Cqy7+cfcdDS0O1vAwiIZZKWhU=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
     SDL2
     frei0r
     ladspaPlugins
     gettext
     mlt
+    fftw
     qtbase
+    qttools
     qtmultimedia
-    qtx11extras
-    qtwebsockets
-    qtquickcontrols2
-    qtgraphicaleffects
+    qtcharts
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
-  qmakeFlags = [
-    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
-    "SHOTCUT_VERSION=${version}"
-    "DEFINES+=SHOTCUT_NOUPGRADE"
+  env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
+  cmakeFlags = [
+    "-DSHOTCUT_VERSION=${version}"
   ];
 
-  prePatch = ''
-    sed 's_shotcutPath, "melt[^"]*"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
-    sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
-    sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
-    NICE=$(type -P nice)
-    sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
-  '';
+  patches = [
+    (substituteAll { inherit mlt; src = ./fix-mlt-ffmpeg-path.patch; })
+  ];
 
   qtWrapperArgs = [
-    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
-    "--prefix PATH : ${mlt}/bin"
+    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [jack1 SDL2]}"
   ];
-
-  postInstall = ''
-    mkdir -p $out/share/shotcut
-    cp -r src/qml $out/share/shotcut/
-  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -93,5 +77,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
+    mainProgram = "shotcut";
   };
 }

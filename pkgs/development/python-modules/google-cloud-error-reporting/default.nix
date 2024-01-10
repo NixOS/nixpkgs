@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.9.1";
+  version = "1.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3N7LtFKvTdV0zBGIyUgi6tCVZX7+rbJD5Lb+xZafJNw=";
+    hash = "sha256-S+7x6gIxJDfV7Xe6DOBVbJNMREYlRFLyGo8BEpIdIow=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-error-reporting";
     changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

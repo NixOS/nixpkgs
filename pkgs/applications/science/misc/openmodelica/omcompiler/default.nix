@@ -46,8 +46,8 @@ mkOpenModelicaDerivation ({
 
   preFixup = ''
     for entry in $(find $out -name libipopt.so); do
-      patchelf --shrink-rpath --allowed-rpath-prefixes /nix/store $entry
-      patchelf --set-rpath '$ORIGIN':"$(patchelf --print-rpath $entry)" $entry
+      patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$entry"
+      patchelf --set-rpath '$ORIGIN':"$(patchelf --print-rpath $entry)" "$entry"
     done
   '';
 

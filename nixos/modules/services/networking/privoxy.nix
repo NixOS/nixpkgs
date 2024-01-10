@@ -12,7 +12,7 @@ let
     else "${name} ${toString val}\n";
 
   configType = with types;
-    let atom = oneOf [ int bool string path ];
+    let atom = oneOf [ int bool str path ];
     in attrsOf (either atom (listOf atom))
     // { description = ''
           privoxy configuration type. The format consists of an attribute

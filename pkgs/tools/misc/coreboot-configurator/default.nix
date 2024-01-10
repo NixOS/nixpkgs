@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , inkscape
 , meson
@@ -57,5 +56,6 @@ mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danth ];
+    mainProgram = "coreboot-configurator";
   };
 }

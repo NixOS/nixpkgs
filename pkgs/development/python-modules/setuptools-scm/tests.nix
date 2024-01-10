@@ -7,12 +7,10 @@
 , virtualenv
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "setuptools-scm-tests";
-  inherit (setuptools-scm) version;
+  inherit (setuptools-scm) version src;
   format = "other";
-
-  src = setuptools-scm.src;
 
   dontBuild = true;
   dontInstall = true;

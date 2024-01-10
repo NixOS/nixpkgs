@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.2.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-1gllk6pRMEf4hYUN/i4jHZ5zwx9C+eoTOn3h+w7Pr0U=";
+    hash = "sha256-KuXXXvuQhRQ0xKaw7tNO6HgQP7PsdxylDouwDQDDSJU=";
   };
 
-  vendorHash = "sha256-41Le59X4TW105X3q+r3U1y1hZLz7Hup7TS/zP2E4v0M=";
+  vendorHash = "sha256-QUJD7ICxaUClK82mKumyQVoINfWXSD64UfhZ4pu5dGU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,6 +37,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
+    install -Dm444 dist/proton-bridge.desktop -t $out/share/applications
+    install -Dm444 dist/bridge.svg $out/share/icons/hicolor/scalable/apps/protonmail-bridge.svg
   '';
 
   meta = with lib; {
@@ -50,7 +52,8 @@ buildGoModule rec {
       An application that runs on your computer in the background and seamlessly encrypts
       and decrypts your mail as it enters and leaves your computer.
 
-      To work, gnome-keyring service must be enabled.
+      To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
+    mainProgram = "protonmail-bridge";
   };
 }

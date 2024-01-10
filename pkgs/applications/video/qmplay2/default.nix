@@ -4,7 +4,9 @@
 , alsa-lib
 , cmake
 , ffmpeg
+, fribidi
 , game-music-emu
+, libXdmcp
 , libXv
 , libass
 , libcddb
@@ -12,6 +14,7 @@
 , libpulseaudio
 , libsidplayfp
 , libva
+, libxcb
 , pkg-config
 , qtbase
 , qttools
@@ -23,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "23.02.05";
+  version = "23.10.22";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = finalAttrs.version;
-    sha256 = "sha256-ZDpUgD9qTvjopGFVrwTBSEmrXn+4aKq2zeqoTnXwmI8=";
     fetchSubmodules = true;
+    hash = "sha256-yDymUXuILgT4AFTt302GniPi/WNwrTCOuOfdUiKOIyk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ffmpeg
+    fribidi
     game-music-emu
+    libXdmcp
     libXv
     libass
     libcddb
@@ -50,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libsidplayfp
     libva
+    libxcb
     qtbase
     qttools
     taglib
@@ -73,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
     platforms = lib.platforms.linux;
   };
 })

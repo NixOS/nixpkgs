@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ cabextract ];
 
-  sourceRoot = "./.";
+  sourceRoot = ".";
 
   unpackCmd = ''
     cabextract -F FW_ACC_00U.bin ${src}

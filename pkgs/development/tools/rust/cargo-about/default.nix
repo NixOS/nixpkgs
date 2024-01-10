@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-nlumcRcL5HwRJTNqLJ9+UkSg88HuE96Rg8Tgc+ZcK2M=";
+    sha256 = "sha256-srJ5NyO+kySFCcqyF0i99Zvh2XsNAyFvTUcks/kt0qs=";
   };
 
-  cargoSha256 = "sha256-Fa1DGXzHDR3EAZyFg0g2aKFynQlC/LL+Tg5LKpOUzmM=";
+  cargoHash = "sha256-eO4dBXVBjuN68cTvw8LzzJEedu5+dizOMu4QFEOzKK8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EmbarkStudios/cargo-about";
     changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ evanjs figsoda ];
+    maintainers = with maintainers; [ evanjs figsoda matthiasbeyer ];
+    mainProgram = "cargo-about";
   };
 }

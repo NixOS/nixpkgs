@@ -2,12 +2,11 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
-, cmake
 , dblatex
 , desktop-file-utils
 , graphene
-, gtk2
-, gtk-mac-integration-gtk2
+, gtk3
+, gtk-mac-integration-gtk3
 , intltool
 , libxml2
 , libxslt
@@ -16,23 +15,22 @@
 , pkg-config
 , poppler
 , python3
-  # Building with docs are failing in unstable-2022-12-14
+, wrapGAppsHook
+  # Building with docs are still failing in unstable-2023-09-28
 , withDocs ? false
 }:
 
 stdenv.mkDerivation {
   pname = "dia";
-  version = "unstable-2022-12-14";
+  version = "unstable-2023-09-28";
 
   src = fetchFromGitLab {
     owner = "GNOME";
     repo = "dia";
     domain = "gitlab.gnome.org";
-    rev = "4a619ec7cc93be5ddfbcc48d9e1572d04943bcad";
-    hash = "sha256-xi45Ak4rlDQjs/FNkdkm145mx76GNHjE6Nrs1dc94ww=";
+    rev = "bd551bb2558dcc89bc0bf7b4dd85b38cd85ad322";
+    hash = "sha256-U+8TUE1ULt6MNxnvw9kFjCAVBecUy2Sarof6H9+kR7Q=";
   };
-
-  patches = [ ./poppler-22_09-build-fix.patch ];
 
   # Required for the PDF plugin when building with clang.
   CXXFLAGS = "-std=c++17";
@@ -43,7 +41,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     graphene
-    gtk2
+    gtk3
     libxml2
     python3
     poppler
@@ -52,7 +50,7 @@ stdenv.mkDerivation {
     libxslt
   ] ++
   lib.optionals stdenv.isDarwin [
-    gtk-mac-integration-gtk2
+    gtk-mac-integration-gtk3
   ];
 
   nativeBuildInputs = [
@@ -62,6 +60,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wrapGAppsHook
   ] ++
   lib.optionals withDocs [
     dblatex

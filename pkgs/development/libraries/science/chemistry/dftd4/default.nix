@@ -14,13 +14,13 @@ assert !blas.isILP64 && !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "dftd4";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZCoFbjTNQD7slq5sKwPRPkrHSHofsxU9C9h/bF5jmZI=";
+    hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
   };
 
   nativeBuildInputs = [ cmake gfortran ];

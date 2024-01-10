@@ -87,7 +87,7 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
-    package = lib.mkPackageOptionMD pkgs "sanoid" {};
+    package = lib.mkPackageOption pkgs "sanoid" {};
 
     interval = mkOption {
       type = types.str;
@@ -123,9 +123,7 @@ in
     };
 
     sshKey = mkOption {
-      type = types.nullOr types.path;
-      # Prevent key from being copied to store
-      apply = mapNullable toString;
+      type = with types; nullOr (coercedTo path toString str);
       default = null;
       description = lib.mdDoc ''
         SSH private key file to use to login to the remote system. Can be
@@ -205,9 +203,7 @@ in
           recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
           sshKey = mkOption {
-            type = types.nullOr types.path;
-            # Prevent key from being copied to store
-            apply = mapNullable toString;
+            type = with types; nullOr (coercedTo path toString str);
             description = lib.mdDoc ''
               SSH private key file to use to login to the remote system.
               Defaults to {option}`services.syncoid.sshKey` option.
@@ -369,7 +365,7 @@ in
               PrivateDevices = true;
               PrivateMounts = true;
               PrivateNetwork = mkDefault false;
-              PrivateUsers = true;
+              PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
               ProtectClock = true;
               ProtectControlGroups = true;
               ProtectHome = true;

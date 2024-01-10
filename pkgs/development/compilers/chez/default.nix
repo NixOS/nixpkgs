@@ -1,18 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchurl
 , coreutils, cctools
 , ncurses, libiconv, libX11, libuuid
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "9.5.8a";
+  version = "9.6.4";
 
-  src = fetchFromGitHub {
-    owner  = "cisco";
-    repo   = "ChezScheme";
-    rev    = "refs/tags/v${version}";
-    sha256 = "sha256-d8DgHATZzZbOYODHFKTqg4oWg/wja8jQgcCVpj8j6yQ=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
+    hash = "sha256-9YJ2gvolnEeXX/4Hh4X7Vh5KXFT3ZDMe9mwyEyhDaF0=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
@@ -62,7 +59,7 @@ stdenv.mkDerivation rec {
   ** Clean up some of the examples from the build output.
   */
   postInstall = ''
-    rm -rf $out/lib/csv${version}/examples
+    rm -rf $out/lib/csv${finalAttrs.version}/examples
   '';
 
   setupHook = ./setup-hook.sh;
@@ -75,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms    = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
-}
+})

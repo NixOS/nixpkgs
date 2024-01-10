@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-sql";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KkcvQLQPlFmdBi6/92BHm2NTX2LQLrnH1nGR4Iq/ctw=";
+    hash = "sha256-stuHXGcgwblayCyD6lLOu5RMQHvmii7wN8zdi6ucxTw=";
   };
 
   nativeCheckInputs = [

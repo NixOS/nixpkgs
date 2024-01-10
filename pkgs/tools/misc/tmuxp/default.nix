@@ -2,17 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.28.1";
+  version = "1.29.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sNLqUyas6QY11eW/FhkqB6+u4MTqiY1ixvD3BN69Fic=";
+    hash = "sha256-MiXG4MVzomyc4LjovPsvhmPngtJv85s6Ypo/Cm2Whho=";
   };
-
-  # No tests in archive
-  doCheck = false;
-
-  format = "pyproject";
 
   nativeBuildInputs = [
     python3Packages.poetry-core
@@ -27,6 +23,9 @@ python3Packages.buildPythonApplication rec {
     libtmux
   ];
 
+  # No tests in archive
+  doCheck = false;
+
   postInstall = ''
     installShellCompletion --cmd tmuxp \
       --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
@@ -39,5 +38,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "tmuxp";
   };
 }

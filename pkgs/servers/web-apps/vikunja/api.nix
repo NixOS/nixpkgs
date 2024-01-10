@@ -1,30 +1,30 @@
-{ lib, buildGoModule, fetchFromGitea, mage, writeShellScriptBin, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, mage, writeShellScriptBin, nixosTests }:
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.20.4";
+  version = "0.22.0";
 
-  src = fetchFromGitea {
-    domain = "kolaente.dev";
-    owner = "vikunja";
+  src = fetchFromGitHub {
+    owner = "go-vikunja";
     repo = "api";
     rev = "v${version}";
-    hash = "sha256-SkZf8LFU4/HFEWVEEj7Gl2jVwIL834GRwyua4cw9nh4=";
+    hash = "sha256-hqyopIV/cLLC8An+ELN0a/cFAq6BoCZZjBRviaJ5ygI=";
   };
 
   nativeBuildInputs =
-      let
-        fakeGit = writeShellScriptBin "git" ''
-          if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-              echo "${version}"
-          else
-              >&2 echo "Unknown command: $@"
-              exit 1
-          fi
-        '';
-      in [ fakeGit mage ];
+    let
+      fakeGit = writeShellScriptBin "git" ''
+        if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
+            echo "${version}"
+        else
+            >&2 echo "Unknown command: $@"
+            exit 1
+        fi
+      '';
+    in
+    [ fakeGit mage ];
 
-  vendorSha256 = "sha256-TY6xJnz6phIrybZ2Ix7xwuMzGQ1f0xk0KwgPnaTaKYw=";
+  vendorHash = "sha256-+V6a6h5pg8FU87pA4JxZo07HGBXIgCv4FjmtjIpQUP4=";
 
   # checks need to be disabled because of needed internet for some checks
   doCheck = false;

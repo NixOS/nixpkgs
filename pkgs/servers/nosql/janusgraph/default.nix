@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "janusgraph";
-  version = "0.6.3";
+  version = "1.0.0";
 
   src = fetchzip {
     url = "https://github.com/JanusGraph/janusgraph/releases/download/v${version}/janusgraph-${version}.zip";
-    sha256 = "sha256-KpGvDfQExU6pHheqmcOFoAhHdF4P+GBQu779h+/L5mE=";
+    sha256 = "sha256-X/ZHvmCJzo0X/sUpbm1CkQcnNi3NMNAaVXep6cpoIAA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jdk11}/bin/java $out/bin/janusgraph-server \
       --add-flags "-classpath $classpath org.janusgraph.graphdb.server.JanusGraphServer"
+
+    # temporary workaround for
+    # https://github.com/NixOS/nixpkgs/pull/244400#issuecomment-1667330430
+    cd "$TMPDIR"
   '';
 
   meta = with lib; {

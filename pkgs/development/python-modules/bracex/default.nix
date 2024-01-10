@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.3.post1";
+  version = "2.4";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-57I/yLLNBtPewGkrqr7LJJ3alOBqYXkB/wOmxW/XFpM=";
+    hash = "sha256-on6vHfQs9WH+1Yt6jz/fEp0eoWqB4frdHReYm8Y4S+s=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Bash style brace expansion for Python";
     homepage = "https://github.com/facelessuser/bracex";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

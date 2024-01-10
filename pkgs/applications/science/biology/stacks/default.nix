@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "stacks";
-  version = "2.62";
+  version = "2.65";
   src = fetchurl {
     url = "http://catchenlab.life.illinois.edu/stacks/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7uhQVLC/AEPAPUdm3+vABoIwG4uhNy/EngjsrZjT0Ts=";
+    sha256 = "sha256-/9a9PWKVq5yJzEUfOF03zR1Hp3AZw9MF8xICoriV4uo=";
   };
 
   buildInputs = [ zlib ];
@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = "http://catchenlab.life.illinois.edu/stacks/";
     maintainers = [ lib.maintainers.bzizou ];
     license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

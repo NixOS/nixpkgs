@@ -1,6 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 }:
 
@@ -15,15 +16,21 @@ buildNpmPackage rec {
     hash = "sha256-W/ZQXJXvFEIgj5PeI+jvw4nIkNP4qa1NyQCOv0unIuA=";
   };
 
-  npmDepsHash = "sha256-WOsStvm7UC2Jnb803mHoJxDUs1I8dDT7HRPdpIXQne8=";
+  npmDepsHash = "sha256-x/Oc39S6XwZ/ZsS/lmMU9OkHLlKuUxETYmD8pdHAIg8=";
+
+  patches = [
+    # djot.js v0.2.3 doesn't include package-lock.json in the repository
+    # remove at next release
+    (fetchpatch {
+      name = "add-package-lock-json-and-yarn-lock-to-repository.patch";
+      url = "https://github.com/jgm/djot.js/commit/15ed52755b2968932d4a9a80805b9ea6183fe539.patch";
+      hash = "sha256-saNmU7z4IOOG3ptXMFDSNci5uu0d2GiVZ/FAlaNccTc=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
   ];
-
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
-  '';
 
   postInstall = ''
     installManPage doc/djot.1

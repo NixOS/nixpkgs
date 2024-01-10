@@ -19,7 +19,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "18ygvkl92yr69kxsym57k1mc90asdxpz4b943i61qr0s4fc5n4mq";
   };
 
-  buildInputs = [ libpulseaudio libnotify gobject-introspection ];
+  nativeBuildInputs = [
+    gobject-introspection
+  ];
+
+  buildInputs = [ libpulseaudio libnotify ];
 
   propagatedBuildInputs = with python3Packages; [
     keyring colour netifaces psutil basiciw pygobject3

@@ -21,6 +21,7 @@ PKG_PREFERENCES = {
     "dnspython": "dnspython",
     "elasticsearch-dsl": "elasticsearch-dsl",
     "google-api-python-client": "google-api-python-client",
+    "protobuf": "protobuf",
     "psycopg2-binary": "psycopg2",
     "requests_toolbelt": "requests-toolbelt",
 }
@@ -46,7 +47,7 @@ def get_file_from_github(version: str, path: str):
 
 
 def repository_root() -> Path:
-    return Path(os.path.dirname(sys.argv[0])) / "../../../.."
+    return Path(os.path.dirname(sys.argv[0])) / "../../.."
 
 
 def dump_packages() -> Dict[str, Dict[str, str]]:

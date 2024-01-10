@@ -27,5 +27,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/vinayak-mehta/present";
     license = licenses.asl20;
     maintainers = with maintainers; [ lom ];
+    mainProgram = "present";
   };
 }

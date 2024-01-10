@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "4.1.3";
+  version = "4.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "elementpath";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AkFDAmJX3wyRHHHCNFX/VqAqhNTjaYVoJDTRrFZ71H0=";
+    hash = "sha256-5K2xcnTo3/A6/pCxQn5qZqni7C64p/yNAWWJlhQeKe4=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this

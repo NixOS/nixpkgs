@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc.lib
   ];
 
-  sourceRoot = "./sratoolkit.${version}-ubuntu64/bin";
+  sourceRoot = "sratoolkit.${version}-ubuntu64/bin";
 
   installPhase = ''
     find -L . -executable -type f -! -name "*remote-fuser*" -exec install -m755 -D {} $out/bin/{} \;

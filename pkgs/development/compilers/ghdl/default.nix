@@ -11,25 +11,16 @@
 
 assert backend == "mcode" || backend == "llvm";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl";
-    rev    = "v${version}";
-    sha256 = "sha256-B/G3FGRzYy4Y9VNNB8yM3FohiIjPJhYSVbqsTN3cL5k=";
+    rev    = "v${finalAttrs.version}";
+    hash   = "sha256-94RNtHbOpbC2q/Z+PsQplrLxXmpS3LXOCXyTBB+n9c4=";
   };
-
-  patches = [
-    # https://github.com/ghdl/ghdl/issues/2056
-    (fetchpatch {
-      name = "fix-build-gcc-12.patch";
-      url = "https://github.com/ghdl/ghdl/commit/f8b87697e8b893b6293ebbfc34670c32bfb49397.patch";
-      hash = "sha256-tVbMm8veFkNPs6WFBHvaic5Jkp1niyg0LfFufa+hT/E=";
-    })
-  ];
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
@@ -59,8 +50,6 @@ stdenv.mkDerivation rec {
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ];
 
-  hardeningDisable = [ "format" ];
-
   enableParallelBuilding = true;
 
   passthru = {
@@ -72,11 +61,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ghdl/ghdl";
     description = "VHDL 2008/93/87 simulator";
-    maintainers = with maintainers; [ lucus16 thoughtpolice ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "ghdl";
+    maintainers = with lib.maintainers; [ eclairevoyant lucus16 thoughtpolice ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -82,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonPath = with python3.pkgs; [
     dbus-python
-    distutils_extra
+    distutils-extra
     pyatspi
     pycairo
     pygobject3

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
-  version = "1.20.3";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3HKVHH9S409t07TgiZtw58AhQH6W+Ch8chsSmof1Jkk=";
+    hash = "sha256-7Yf22EpOTEGGqPoNGnHFyn5A4n7aYFXoSE1G6zyzT3M=";
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it

@@ -1,14 +1,21 @@
 { lib
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
 , pythonOlder
 
 # build time
 , astropy-extension-helpers
-, astropy-helpers
 , cython
 , jinja2
+, oldest-supported-numpy
 , setuptools-scm
+, wheel
+# testing
+, pytestCheckHook
+, pytest-xdist
+, pytest-astropy
+, python
 
 # runtime
 , numpy
@@ -17,29 +24,32 @@
 , pyyaml
 }:
 
-let
+buildPythonPackage rec {
   pname = "astropy";
-  version = "5.2.1";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "5.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
+    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  # Relax cython dependency to allow this to build, upstream only doesn't
+  # support cython 3 as of writing. See:
+  # https://github.com/astropy/astropy/issues/15315
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cython==' 'cython>='
+  '';
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    astropy-helpers
     cython
     jinja2
+    oldest-supported-numpy
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -49,14 +59,33 @@ buildPythonPackage {
     pyyaml
   ];
 
-  # infinite recursion with pytest-astropy (pytest-astropy-header depends on astropy itself)
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    pytest-astropy
+  ];
 
-  meta = with lib; {
+  # Not running it inside the build directory. See:
+  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  preCheck = ''
+    cd "$out"
+    export HOME="$(mktemp -d)"
+    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+  '';
+  pythonImportsCheck = [
+    "astropy"
+  ];
+  disabledTests = [
+    # May fail due to parallelism, see:
+    # https://github.com/astropy/astropy/issues/15441
+    "TestUnifiedOutputRegistry"
+  ];
+
+  meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.kentjames ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ kentjames doronbehar ];
   };
 }

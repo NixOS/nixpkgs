@@ -1,19 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tlds";
-  version = "2023050900";
-  format = "setuptools";
+  version = "2023110300";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kichik";
     repo = "tlds";
     rev = "refs/tags/${version}";
-    hash = "sha256-Fm2cRhUb1Gsr7mrcym/JjYAeG8f3RDhUnxzYIvpxmQE=";
+    hash = "sha256-rmKqY7Z4bBR4r+w4gH04g0Xm9N7QeMVcuFR3pB/pOQY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [
     "tlds"

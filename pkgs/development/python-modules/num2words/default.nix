@@ -7,12 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.12";
+  version = "0.5.13";
+  format = "setuptools";
   pname = "num2words";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fnwLDwgEBao6HdnTKxypCzvwO6sXuOVNsF4beDAaCYg=";
+    hash = "sha256-owZHFvu/kNdcRJRQzr+8c6ahPmOyUx0JvezDqxoiCc8=";
   };
 
   propagatedBuildInputs = [ docopt ];

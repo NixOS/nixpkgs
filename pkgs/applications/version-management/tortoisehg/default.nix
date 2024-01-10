@@ -14,40 +14,51 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-Xbvg/FcuX/AL2reWsaM2oaFyLby3+HDCfYtRyswE7DA=";
   };
 
-  # Extension point for when thg's mercurial is lagging behind mainline.
-  tortoiseMercurial = mercurial;
-
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+  ];
   propagatedBuildInputs = with python3Packages; [
-    tortoiseMercurial
+    mercurial
+    # The one from python3Packages
     qscintilla-qt5
     iniparse
   ];
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  buildInputs = [
+    # Makes wrapQtAppsHook add these qt libraries to the wrapper search paths
+    qt5.qtwayland
+  ];
 
-  doCheck = true;
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+  # Convenient alias
   postInstall = ''
-    mkdir -p $out/share/doc/tortoisehg
-    cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
-    # convenient alias
     ln -s $out/bin/thg $out/bin/tortoisehg
-    wrapQtApp $out/bin/thg
   '';
 
+  # In python3Packages.buildPythonApplication doCheck is always true, and we
+  # override it to not run the default unittests
   checkPhase = ''
-    export QT_QPA_PLATFORM=offscreen
-    echo "test: thg smoke test"
+    runHook preCheck
+
+    $out/bin/thg version | grep -q "${version}"
+    # Detect breakage of thg in case of out-of-sync mercurial update. In that
+    # case any thg subcommand just opens up an gui dialog with a description of
+    # version mismatch.
+    echo "thg smoke test"
     $out/bin/thg -h > help.txt &
     sleep 1s
-    if grep "list of commands" help.txt; then
-      echo "thg help output was captured. Seems like package in a working state."
-      exit 0
-    else
-      echo "thg help output was not captured. Seems like package is broken."
-      exit 1
-    fi
+    grep -q "list of commands" help.txt
+
+    runHook postCheck
   '';
 
-  passthru.mercurial = tortoiseMercurial;
+  passthru = {
+    # If at some point we'll override this argument, it might be useful to have
+    # access to it here.
+    inherit mercurial;
+  };
 
   meta = {
     description = "Qt based graphical tool for working with Mercurial";

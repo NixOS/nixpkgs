@@ -11,8 +11,8 @@
 
 let
   pname = "expressvpn";
-  clientVersion = "3.25.0";
-  clientBuild = "13";
+  clientVersion = "3.52.0";
+  clientBuild = "2";
   version = lib.strings.concatStringsSep "." [ clientVersion clientBuild ];
 
   expressvpnBase = stdenvNoCC.mkDerivation {
@@ -20,7 +20,7 @@ let
 
     src = fetchurl {
       url = "https://www.expressvpn.works/clients/linux/expressvpn_${version}-1_amd64.deb";
-      hash = "sha256-lyDjG346FrgT7SZbsWET+Hexl9Un6mzMukfO2PwlInA=";
+      hash = "sha256-cDZ9R+MA3FXEto518bH4/c1X4W9XxgTvXns7zisylew=";
     };
 
     nativeBuildInputs = [ dpkg autoPatchelfHook ];

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gnostic";
-  version = "0.6.8";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+/KZmwVV3pnbv3JNwNk9Q2gcTyDxV1tgsDzW5IYnnds=";
+    hash = "sha256-Wpe+rK4XMfMZYhR1xTEr0nsEjRGkSDA7aiLeBbGcRpA=";
   };
 
-  vendorHash = "sha256-OoI1/OPBgAy4AysPPSCXGmf0S4opzxO7ZrwBsQYImwU=";
+  vendorHash = "sha256-Wyv5czvD3IwE236vlAdq8I/DnhPXxdbwZtUhun+97x4=";
 
   # some tests are broken and others require network access
   doCheck = false;

@@ -103,13 +103,19 @@ in mkDerivation rec {
     cp src/hidapi/libusb/.libs/*.so* $out/lib
     cp src/univalue/.libs/*.so* $out/lib
 
-    # [RPATH][patchelf] Avoid forbidden reference error
-    rm -rf $PWD
-
     # Provide udev rules as documented in https://digitalbitbox.com/start_linux
     mkdir -p "$out/etc/udev/rules.d"
     ${copyUdevRuleToOutput "51-hid-digitalbox.rules" udevRule51}
     ${copyUdevRuleToOutput "52-hid-digitalbox.rules" udevRule52}
+  '';
+
+  # remove forbidden references to $TMPDIR
+  preFixup = ''
+    for f in "$out"/{bin,lib}/*; do
+      if [ -f "$f" ] && isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
   '';
 
   enableParallelBuilding = true;

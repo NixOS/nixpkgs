@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "dlx";
   version = "1.0.4";
+  format = "setuptools";
 
   # untagged releases
   src = fetchFromGitHub {

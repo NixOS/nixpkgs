@@ -5,22 +5,27 @@
 , installShellFiles
 , scdoc
 , Security
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-n88X3RJD7PqOcVRK/bp/gMNLVrbwnJ2iwi2rCpsfp+o=";
+    hash = "sha256-c0gKvVaMiUOGHlPmtaW6it8J9MusQY7BA/5F9I3ysMc=";
   };
 
-  cargoHash = "sha256-Yqh3AQIOahKz2mLeVNm58Yr6vhjU4aQwN62y3Z5/EJc=";
+  cargoHash = "sha256-8VrEZZNSFLAjUagsiRApvjiXusBHLLn1O/+QKtQY4wg=";
 
-  doCheck = false; # Uses extenal testing framework that requires network
+  doCheck = false; # Uses external testing framework that requires network
+
+  passthru.tests = {
+    basic-functionality = nixosTests.stargazer;
+  };
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 

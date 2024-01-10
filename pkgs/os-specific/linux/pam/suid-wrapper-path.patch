@@ -1,6 +1,6 @@
 It needs the SUID version during runtime, and that can't be in /nix/store/**
---- a/modules/pam_unix/Makefile.in
-+++ b/modules/pam_unix/Makefile.in
-@@ -651 +651 @@
+--- a/modules/pam_unix/Makefile.am
++++ b/modules/pam_unix/Makefile.am
+@@ -21 +21 @@
 -	-DCHKPWD_HELPER=\"$(sbindir)/unix_chkpwd\" \
 +	-DCHKPWD_HELPER=\"/run/wrappers/bin/unix_chkpwd\" \

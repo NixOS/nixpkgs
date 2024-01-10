@@ -26,14 +26,14 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${version}";
-    sha256 = "sha256-eqNprBgR0hZnbLKLZLJqjemKxHhDtGblmaSxYlmegsc=";
+    sha256 = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };
 

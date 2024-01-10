@@ -4,42 +4,27 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, mashumaro
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "1.0.0";
+  version = "2.1.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6oVACUnK8WVlEx047CUXmSXQ0+M3xnSvyMHw5Wttk7M=";
+    hash = "sha256-Js8oPEMxJyWK1E6GDm1xwm2BilnV3WBM6Hibf6oFOKE=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-    yarl
-  ];
-
-  nativeCheckInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -47,6 +32,23 @@ buildPythonPackage rec {
       --replace "0.0.0" "${version}" \
       --replace "--cov" ""
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+    mashumaro
+    yarl
+  ];
+
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [
     "pvo"

@@ -27,7 +27,7 @@ let
       "i386-linux-gnu"
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64-linux-gnu"
-    else throw "amdgpu-pro is Linux only. Sorry.";
+    else throw "amdgpu-pro is Linux only. Sorry ${stdenv.hostPlatform.system}.";
 
 in stdenv.mkDerivation rec {
 

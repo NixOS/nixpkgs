@@ -35,6 +35,7 @@ let
       domain = cfg.hostName;
       muc = "conference.${cfg.hostName}";
       focus = "focus.${cfg.hostName}";
+      jigasi = "jigasi.${cfg.hostName}";
     };
     bosh = "//${cfg.hostName}/http-bind";
     websocket = "wss://${cfg.hostName}/xmpp-websocket";
@@ -105,9 +106,9 @@ in
         type = bool;
         default = true;
         description = lib.mdDoc ''
-          Whether to enable Jitsi Videobridge instance and configure it to connect to Prosody.
+          Jitsi Videobridge instance and configure it to connect to Prosody.
 
-          Additional configuration is possible with {option}`services.jitsi-videobridge`.
+          Additional configuration is possible with {option}`services.jitsi-videobridge`
         '';
       };
 
@@ -145,6 +146,16 @@ in
       '';
     };
 
+    jigasi.enable = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Whether to enable jigasi instance and configure it to connect to Prosody.
+
+        Additional configuration is possible with <option>services.jigasi</option>.
+      '';
+    };
+
     nginx.enable = mkOption {
       type = bool;
       default = true;
@@ -169,6 +180,15 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    excalidraw.enable = mkEnableOption (lib.mdDoc "Excalidraw collaboration backend for Jitsi");
+    excalidraw.port = mkOption {
+      type = types.port;
+      default = 3002;
+      description = lib.mdDoc ''The port which the Excalidraw backend for Jitsi should listen to.'';
+    };
+
+    secureDomain.enable = mkEnableOption (lib.mdDoc "Authenticated room creation");
   };
 
   config = mkIf cfg.enable {
@@ -192,41 +212,121 @@ in
           roomLocking = false;
           roomDefaultPublicJids = true;
           extraConfig = ''
+            restrict_room_creation = true
             storage = "memory"
+            admins = { "focus@auth.${cfg.hostName}" }
           '';
         }
         {
-          domain = "internal.${cfg.hostName}";
+          domain = "breakout.${cfg.hostName}";
+          name = "Jitsi Meet Breakout MUC";
+          roomLocking = false;
+          roomDefaultPublicJids = true;
+          extraConfig = ''
+            restrict_room_creation = true
+            storage = "memory"
+            admins = { "focus@auth.${cfg.hostName}" }
+          '';
+        }
+        {
+          domain = "internal.auth.${cfg.hostName}";
           name = "Jitsi Meet Videobridge MUC";
+          roomLocking = false;
+          roomDefaultPublicJids = true;
           extraConfig = ''
             storage = "memory"
-            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
+            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}", "jigasi@auth.${cfg.hostName}" }
           '';
           #-- muc_room_cache_size = 1000
         }
+        {
+          domain = "lobby.${cfg.hostName}";
+          name = "Jitsi Meet Lobby MUC";
+          roomLocking = false;
+          roomDefaultPublicJids = true;
+          extraConfig = ''
+            restrict_room_creation = true
+            storage = "memory"
+          '';
+        }
       ];
-      extraModules = [ "pubsub" "smacks" ];
+      extraModules = [
+        "pubsub"
+        "smacks"
+        "speakerstats"
+        "external_services"
+        "conference_duration"
+        "end_conference"
+        "muc_lobby_rooms"
+        "muc_breakout_rooms"
+        "av_moderation"
+        "muc_hide_all"
+        "muc_meeting_id"
+        "muc_domain_mapper"
+        "muc_rate_limit"
+        "limits_exception"
+        "persistent_lobby"
+        "room_metadata"
+      ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
-      extraConfig = lib.mkMerge [ (mkAfter ''
-        Component "focus.${cfg.hostName}" "client_proxy"
-          target_address = "focus@auth.${cfg.hostName}"
+      extraConfig = lib.mkMerge [
+        (mkAfter ''
+          Component "focus.${cfg.hostName}" "client_proxy"
+            target_address = "focus@auth.${cfg.hostName}"
+
+          Component "jigasi.${cfg.hostName}" "client_proxy"
+            target_address = "jigasi@auth.${cfg.hostName}"
+
+          Component "speakerstats.${cfg.hostName}" "speakerstats_component"
+            muc_component = "conference.${cfg.hostName}"
+
+          Component "conferenceduration.${cfg.hostName}" "conference_duration_component"
+            muc_component = "conference.${cfg.hostName}"
+
+          Component "endconference.${cfg.hostName}" "end_conference"
+            muc_component = "conference.${cfg.hostName}"
+
+          Component "avmoderation.${cfg.hostName}" "av_moderation_component"
+            muc_component = "conference.${cfg.hostName}"
+
+          Component "metadata.${cfg.hostName}" "room_metadata_component"
+            muc_component = "conference.${cfg.hostName}"
+            breakout_rooms_component = "breakout.${cfg.hostName}"
         '')
         (mkBefore ''
+          muc_mapper_domain_base = "${cfg.hostName}"
+
           cross_domain_websocket = true;
           consider_websocket_secure = true;
+
+          unlimited_jids = {
+            "focus@auth.${cfg.hostName}",
+            "jvb@auth.${cfg.hostName}"
+          }
         '')
       ];
       virtualHosts.${cfg.hostName} = {
         enabled = true;
         domain = cfg.hostName;
         extraConfig = ''
-          authentication = "anonymous"
+          authentication = ${if cfg.secureDomain.enable then "\"internal_hashed\"" else "\"jitsi-anonymous\""}
           c2s_require_encryption = false
           admins = { "focus@auth.${cfg.hostName}" }
           smacks_max_unacked_stanzas = 5
           smacks_hibernation_time = 60
           smacks_max_hibernated_sessions = 1
           smacks_max_old_sessions = 1
+
+          av_moderation_component = "avmoderation.${cfg.hostName}"
+          speakerstats_component = "speakerstats.${cfg.hostName}"
+          conference_duration_component = "conferenceduration.${cfg.hostName}"
+          end_conference_component = "endconference.${cfg.hostName}"
+
+          c2s_require_encryption = false
+          lobby_muc = "lobby.${cfg.hostName}"
+          breakout_rooms_muc = "breakout.${cfg.hostName}"
+          room_metadata_component = "metadata.${cfg.hostName}"
+          main_muc = "conference.${cfg.hostName}"
         '';
         ssl = {
           cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
@@ -237,7 +337,7 @@ in
         enabled = true;
         domain = "auth.${cfg.hostName}";
         extraConfig = ''
-          authentication = "internal_plain"
+          authentication = "internal_hashed"
         '';
         ssl = {
           cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
@@ -252,6 +352,14 @@ in
           c2s_require_encryption = false
         '';
       };
+      virtualHosts."guest.${cfg.hostName}" = {
+        enabled = true;
+        domain = "guest.${cfg.hostName}";
+        extraConfig = ''
+          authentication = "anonymous"
+          c2s_require_encryption = false
+        '';
+      };
     };
     systemd.services.prosody = mkIf cfg.prosody.enable {
       preStart = let
@@ -262,7 +370,10 @@ in
         ${config.services.prosody.package}/bin/prosodyctl mod_roster_command subscribe focus.${cfg.hostName} focus@auth.${cfg.hostName}
         ${config.services.prosody.package}/bin/prosodyctl register jibri auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-auth-secret)"
         ${config.services.prosody.package}/bin/prosodyctl register recorder recorder.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"
+      '' + optionalString cfg.jigasi.enable ''
+        ${config.services.prosody.package}/bin/prosodyctl register jigasi auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jigasi-user-secret)"
       '';
+
       serviceConfig = {
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
@@ -270,20 +381,20 @@ in
       reloadIfChanged = true;
     };
 
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
     systemd.tmpfiles.rules = [
       "d '/var/lib/jitsi-meet' 0750 root jitsi-meet - -"
     ];
 
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
-      before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service");
+      before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service") ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
       };
 
       script = let
-        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+        secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optionals cfg.jigasi.enable [ "jigasi-user-secret" "jigasi-component-secret" ]) ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
       in
       ''
         cd /var/lib/jitsi-meet
@@ -297,6 +408,7 @@ in
 
         # for easy access in prosody
         echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
+        echo "JIGASI_COMPONENT_SECRET=$(cat jigasi-component-secret)" >> secrets-env
         chown root:jitsi-meet secrets-env
         chmod 640 secrets-env
       ''
@@ -315,6 +427,20 @@ in
           chown root:jitsi-meet /var/lib/jitsi-meet/jitsi-meet.{crt,key}
         fi
       '';
+    };
+
+    systemd.services.jitsi-excalidraw = mkIf cfg.excalidraw.enable {
+      description = "Excalidraw collaboration backend for Jitsi";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.PORT = toString cfg.excalidraw.port;
+
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.jitsi-excalidraw}/bin/jitsi-excalidraw-backend";
+        Restart = "on-failure";
+        Group = "jitsi-meet";
+      };
     };
 
     services.nginx = mkIf cfg.nginx.enable {
@@ -345,11 +471,22 @@ in
         locations."=/external_api.js" = mkDefault {
           alias = "${pkgs.jitsi-meet}/libs/external_api.min.js";
         };
+        locations."=/_api/room-info" = {
+          proxyPass = "http://localhost:5280/room-info";
+          extraConfig = ''
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+          '';
+        };
         locations."=/config.js" = mkDefault {
           alias = overrideJs "${pkgs.jitsi-meet}/config.js" "config" (recursiveUpdate defaultCfg cfg.config) cfg.extraConfig;
         };
         locations."=/interface_config.js" = mkDefault {
           alias = overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig "";
+        };
+        locations."/socket.io/" = mkIf cfg.excalidraw.enable {
+          proxyPass = "http://127.0.0.1:${toString cfg.excalidraw.port}";
+          proxyWebsockets = true;
         };
       };
     };
@@ -359,8 +496,8 @@ in
       virtualHosts.${cfg.hostName} = {
         extraConfig =
         let
-          templatedJitsiMeet = pkgs.runCommand "templated-jitsi-meet" {} ''
-            cp -R ${pkgs.jitsi-meet}/* .
+          templatedJitsiMeet = pkgs.runCommand "templated-jitsi-meet" { } ''
+            cp -R --no-preserve=all ${pkgs.jitsi-meet}/* .
             for file in *.html **/*.html ; do
               ${pkgs.sd}/bin/sd '<!--#include virtual="(.*)" -->' '{{ include "$1" }}' $file
             done
@@ -390,13 +527,24 @@ in
       };
     };
 
+    services.jitsi-meet.config = recursiveUpdate
+      (mkIf cfg.excalidraw.enable {
+        whiteboard = {
+          enabled = true;
+          collabServerBaseUrl = "https://${cfg.hostName}";
+        };
+      })
+      (mkIf cfg.secureDomain.enable {
+        hosts.anonymousdomain = "guest.${cfg.hostName}";
+      });
+
     services.jitsi-videobridge = mkIf cfg.videobridge.enable {
       enable = true;
       xmppConfigs."localhost" = {
         userName = "jvb";
         domain = "auth.${cfg.hostName}";
         passwordFile = "/var/lib/jitsi-meet/videobridge-secret";
-        mucJids = "jvbbrewery@internal.${cfg.hostName}";
+        mucJids = "jvbbrewery@internal.auth.${cfg.hostName}";
         disableCertificateVerification = true;
       };
     };
@@ -409,17 +557,27 @@ in
       userName = "focus";
       userPasswordFile = "/var/lib/jitsi-meet/jicofo-user-secret";
       componentPasswordFile = "/var/lib/jitsi-meet/jicofo-component-secret";
-      bridgeMuc = "jvbbrewery@internal.${cfg.hostName}";
+      bridgeMuc = "jvbbrewery@internal.auth.${cfg.hostName}";
       config = mkMerge [{
         jicofo.xmpp.service.disable-certificate-verification = true;
         jicofo.xmpp.client.disable-certificate-verification = true;
-      #} (lib.mkIf cfg.jibri.enable {
-       } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
-         jicofo.jibri = {
-           brewery-jid = "JibriBrewery@internal.${cfg.hostName}";
-           pending-timeout = "90";
-         };
-      })];
+      }
+        (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
+          jicofo.jibri = {
+            brewery-jid = "JibriBrewery@internal.auth.${cfg.hostName}";
+            pending-timeout = "90";
+          };
+        })
+        (lib.mkIf cfg.secureDomain.enable {
+          jicofo = {
+            authentication = {
+              enabled = "true";
+              type = "XMPP";
+              login-url = cfg.hostName;
+            };
+            xmpp.client.client-proxy = "focus.${cfg.hostName}";
+          };
+        })];
     };
 
     services.jibri = mkIf cfg.jibri.enable {
@@ -430,7 +588,7 @@ in
         xmppDomain = cfg.hostName;
 
         control.muc = {
-          domain = "internal.${cfg.hostName}";
+          domain = "internal.auth.${cfg.hostName}";
           roomName = "JibriBrewery";
           nickname = "jibri";
         };
@@ -450,6 +608,20 @@ in
         usageTimeout = "0";
         disableCertificateVerification = true;
         stripFromRoomDomain = "conference.";
+      };
+    };
+
+    services.jigasi = mkIf cfg.jigasi.enable {
+      enable = true;
+      xmppHost = "localhost";
+      xmppDomain = cfg.hostName;
+      userDomain = "auth.${cfg.hostName}";
+      userName = "jigasi";
+      userPasswordFile = "/var/lib/jitsi-meet/jigasi-user-secret";
+      componentPasswordFile = "/var/lib/jitsi-meet/jigasi-component-secret";
+      bridgeMuc = "jigasibrewery@internal.${cfg.hostName}";
+      config = {
+        "org.jitsi.jigasi.ALWAYS_TRUST_MODE_ENABLED" = "true";
       };
     };
   };

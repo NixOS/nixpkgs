@@ -18,25 +18,25 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-  googleapisRev = "13d5b3f3f9412f38427c8ad48068f04ad1ee9808";
+  googleapisRev = "85f8c758016c279fb7fa8f0d51ddc7ccc0dd5e05";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-SiU7N1EQ/7LWhUwgf4c0CBfUzNGiLe4sSbbJmJF3sao=";
+    hash = "sha256-4Qiz0pBgW3OZi+Z8Zq6k9E94+8q6/EFMwPh8eQxDjdI=";
   };
   excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "2.4.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-o8aURM8fvxn0FZjuqJGclq9Brss8LOFZzD0FV2j/lUc=";
+    sha256 = "sha256-0SoOaAqvk8cVC5W3ejTfe4O/guhrro3uAzkeIpAkCpg=";
   };
 
   postPatch = ''
@@ -120,7 +120,6 @@ stdenv.mkDerivation rec {
     # this adds a good chunk of time to the build
     "-DBUILD_TESTING:BOOL=ON"
     "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
-    "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}"
   ] ++ lib.optionals (apis != [ "*" ]) [
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];

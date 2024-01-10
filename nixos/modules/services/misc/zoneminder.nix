@@ -67,14 +67,14 @@ in {
   options = {
     services.zoneminder = with lib; {
       enable = lib.mkEnableOption (lib.mdDoc ''
-        ZoneMinder
+        ZoneMinder.
 
         If you intend to run the database locally, you should set
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
         Additionally, you will need to run `zmupdate.pl` yourself when
-        upgrading to a newer version.
+        upgrading to a newer version
       '');
 
       webserver = mkOption {
@@ -351,7 +351,7 @@ in {
           CacheDirectory = dirs cacheDirs;
           RuntimeDirectory = dirName;
           ReadWriteDirectories = lib.mkIf useCustomDir [ cfg.storageDir ];
-          StateDirectory = dirs (if useCustomDir then [] else libDirs);
+          StateDirectory = dirs (lib.optionals (!useCustomDir) libDirs);
           LogsDirectory = dirName;
           PrivateTmp = true;
           ProtectSystem = "strict";

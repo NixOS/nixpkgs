@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
-  version = "2022.9.24";
+  version = "2023.5.7";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-kIPGEjmnHlgVb11W2RKBlrMy3/+kUOcQZiLCcnHCcno=";
+    sha256 = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
   };
 
   patches = [

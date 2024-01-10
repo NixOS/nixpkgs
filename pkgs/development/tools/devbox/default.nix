@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "devbox";
-  version = "0.5.5";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "jetpack-io";
     repo = pname;
     rev = version;
-    hash = "sha256-PR3JRA2Dme/KbU59QV0G3VzmTByynnDL9y33wHsX3PI=";
+    hash = "sha256-Vgke4CTVU5KW7iDyzk6P1ab5nOyICblvJtUQTISc2jg=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
   # integration tests want file system access
   doCheck = false;
 
-  vendorHash = "sha256-UEMFHRP9XKxg1wa3JYJ522yuyrPTDhyVCdQdSpDi6Cg=";
+  vendorHash = "sha256-rP3vktCfmUeZhc0DaU2osVryNabsnaWWyfFYFy7W1pc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,6 +38,6 @@ buildGoModule rec {
     description = "Instant, easy, predictable shells and containers.";
     homepage = "https://www.jetpack.io/devbox";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = with maintainers; [ urandom lagoja ];
   };
 }

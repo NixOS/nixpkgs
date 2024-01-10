@@ -24,19 +24,23 @@ assert (blas.isILP64 == lapack.isILP64 &&
         blas.isILP64 == arpack.isILP64 &&
         !blas.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.4";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "igraph";
-    repo = pname;
-    rev = version;
-    hash = "sha256-LsTOxUktGZcp46Ec9QH3+9C+VADMYTZZCjKF1gp36xk=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-suma1iS9NdJwU/4EQl6qoFyD4bErLSkY+0yxgh3dHkw=";
   };
 
   postPatch = ''
-    echo "${version}" > IGRAPH_VERSION
+    echo "${finalAttrs.version}" > IGRAPH_VERSION
+  ''
+  # https://github.com/igraph/igraph/issues/2340
+  + lib.optionalString stdenv.isDarwin ''
+    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -92,12 +96,16 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
+
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
-}
+})

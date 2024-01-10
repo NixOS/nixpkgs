@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.15.1";
+  version = "1.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OaF1pzRY5k5SvXNCxTviP/2lhC7Up+oXaQB14f2tGj8=";
+    hash = "sha256-1wXyDI1/NMqMwgqYZb3/pLExyi1Wo7st8R/mNwMte44=";
   };
 
   propagatedBuildInputs = [
@@ -37,8 +37,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Test requires a project ID
     "test_patch_deployment"
     "test_patch_job"
+    "test_list_patch_jobs"
   ];
 
   meta = with lib; {
@@ -46,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-os-config";
     changelog = "https://github.com/googleapis/python-os-config/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

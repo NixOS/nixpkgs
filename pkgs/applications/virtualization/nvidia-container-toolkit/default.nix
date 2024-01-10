@@ -2,7 +2,7 @@
 , glibc
 , fetchFromGitLab
 , makeWrapper
-, buildGoPackage
+, buildGoModule
 , linkFarm
 , writeShellScript
 , containerRuntimePath
@@ -24,7 +24,7 @@ let
     fi
   '';
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "container-toolkit/container-toolkit";
   version = "1.9.0";
 
@@ -32,20 +32,30 @@ buildGoPackage rec {
     owner = "nvidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b4mybNB5FqizFTraByHk5SCsNO66JaISj18nLgLN7IA=";
+    hash = "sha256-b4mybNB5FqizFTraByHk5SCsNO66JaISj18nLgLN7IA=";
   };
 
-  goPackagePath = "github.com/NVIDIA/nvidia-container-toolkit";
+  vendorHash = null;
+
+  postPatch = ''
+    # replace the default hookDefaultFilePath to the $out path
+    substituteInPlace cmd/nvidia-container-runtime/main.go \
+      --replace '/usr/bin/nvidia-container-runtime-hook' '${placeholder "out"}/bin/nvidia-container-runtime-hook'
+  '';
 
   ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  preBuild = ''
-    # replace the default hookDefaultFilePath to the $out path
-    substituteInPlace go/src/github.com/NVIDIA/nvidia-container-toolkit/cmd/nvidia-container-runtime/main.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' '${placeholder "out"}/bin/nvidia-container-runtime-hook'
-  '';
+  checkFlags =
+    let
+      skippedTests = [
+        # Disable tests executing nvidia-container-runtime command.
+        "TestGoodInput"
+        "TestDuplicateHook"
+      ];
+    in
+    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
   postInstall = ''
     mkdir -p $out/etc/nvidia-container-runtime

@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "A utility to read and manipulate EXIF data in digital photographs";
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
+    mainProgram = "exif";
   };
 }

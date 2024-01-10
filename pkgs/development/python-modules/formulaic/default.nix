@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "0.5.2";
+  version = "0.6.6";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matthewwardrop";
     repo = "formulaic";
-    rev = "v${version}";
-    hash = "sha256-sIvHTuUS/nkcDjRgZCoEOY2negIOsarzH0PeXJsavWc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-82+j3JAkjltXuzRhdvO4hoesSTWlNCY6w2mn6TsZqGM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

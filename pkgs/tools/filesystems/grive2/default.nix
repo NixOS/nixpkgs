@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vitalif/grive2";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    mainProgram = "grive";
   };
 }

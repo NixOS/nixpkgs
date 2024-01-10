@@ -9,7 +9,7 @@
 
 qtModule {
   pname = "qtsvg";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
   buildInputs = [ libwebp jasper libmng zlib ];
   nativeBuildInputs = [ pkg-config ];
 }

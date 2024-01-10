@@ -1,14 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
-  cabextract, zip, lzip, zpaq, gnutar, gnugrep, diffutils, file,
-  gzip, bzip2, xz}:
-
-# unrar is unfree, as well as 7z with unrar support, not including it (patool doesn't support unar)
-# it will still use unrar if present in the path
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, p7zip
+, cabextract
+, zip
+, lzip
+, zpaq
+, gnutar
+, unar  # Free alternative to unrar
+, gnugrep
+, diffutils
+, file
+, gzip
+, bzip2
+, xz
+}:
 
 let
   compression-utilities = [
     p7zip
     gnutar
+    unar
     cabextract
     zip
     lzip
@@ -23,14 +37,15 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "1.12";
+  version = "2.0.0";
+  format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
     rev = "upstream/${version}";
-    sha256 = "0v4r77sm3yzh7y1whfwxmp01cchd82jbhvbg9zsyd2yb944imzjy";
+    hash = "sha256-Hjpifsi5Q1eoe/MFWuQBDyjoXi/aUG4VN84yNMkAZaE=";
   };
 
   postPatch = ''
@@ -45,6 +60,8 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_ar"
   ];
 
   meta = with lib; {

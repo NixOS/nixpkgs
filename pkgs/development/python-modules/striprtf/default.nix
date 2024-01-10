@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.25";
+  version = "0.0.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5soxa3sCeBeYeNsxr4Y96ztTVdeSHgSH/6z8WWUvGQI=";
+    hash = "sha256-/bK7p6xEAHLRxB6rUNjXSuiPYKi2V1xuLHgF3EYgk6o=";
   };
 
   pythonImportsCheck = [

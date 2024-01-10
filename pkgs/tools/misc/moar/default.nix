@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "moar";
-  version = "1.15.2";
+  version = "1.18.6";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CUPMeuXjPVh1zWaonz7heJb0H9M4t1PksAtHe/KwsUE=";
+    hash = "sha256-QQapWDTJkP0YuyNR8J1N2IEETG1BfkdWv40SPD/JKYg=";
   };
 
-  vendorHash = "sha256-aFCv6VxHD1bOLhCHXhy4ubik8Z9uvU6AeqcMqIZI2Oo=";
+  vendorHash = "sha256-x6BeU6JDayCOi8T8+NvXZe59QmTaO9RAYwSiFlDPL/c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,6 +28,7 @@ buildGoModule rec {
     description = "Nice-to-use pager for humans";
     homepage = "https://github.com/walles/moar";
     license = licenses.bsd2WithViews;
+    mainProgram = "moar";
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }

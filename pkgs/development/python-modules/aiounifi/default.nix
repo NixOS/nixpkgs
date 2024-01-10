@@ -8,25 +8,43 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, segno
+, setuptools
+, trustme
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "48";
-  format = "setuptools";
+  version = "67";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HxZoHul8Nef52st/e10jjtRUvI9NGXuX6/pFYoFI/80=";
+    hash = "sha256-bad9wDV8kGEXjdjQ8GKhUsdMHqTohLjJJWH+gJCvuIo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools==" "setuptools>=" \
+      --replace "wheel==" "wheel>="
+
+    sed -i '/--cov=/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     orjson
+    segno
   ];
 
   nativeCheckInputs = [
@@ -34,6 +52,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    trustme
   ];
 
   pytestFlagsArray = [

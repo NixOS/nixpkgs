@@ -150,8 +150,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   file-roller = callPackage ./apps/file-roller { };
 
-  gedit = callPackage ./apps/gedit { };
-
   ghex = callPackage ./apps/ghex { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
@@ -240,9 +238,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
-  gnome-panel = callPackage ./misc/gnome-panel {
-    autoreconfHook = pkgs.autoreconfHook269;
-  };
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
+  gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
 
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
@@ -262,17 +260,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  empathy = throw "The ‘gnome.empathy’ package was removed as it is unmaintained and no longer launches due to libsoup3 migration."; # added 2023-01-20
-  gnome-desktop = throw "The ‘gnome.gnome-desktop’ alias was removed. Please use ‘pkgs.gnome-desktop’ directly."; # converted to throw on 2022-10-26
-  gnome-todo = pkgs.endeavour; # added 2022-07-30
-  libgnome-games-support = throw "The ‘gnome.libgnome-games-support’ alias was removed. Please use ‘pkgs.libgnome-games-support’ directly."; # converted to throw on 2022-10-26
-
-  gnome-books = throw "The ‘gnome.gnome-books’ package was removed as it is broken and abandoned."; # added 2022-10-26
-  gnome-documents = throw "The ‘gnome.gnome-documents’ package was removed as it is broken and abandoned."; # added 2022-10-26
-  gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
-
-  mutter338 = throw "The ‘gnome.mutter338’ package was removed as it is no longer needed by Pantheon."; # added 2023-02-22
-  mutter42 = throw "The ‘gnome.mutter42’ package was removed as it is no longer needed by Pantheon."; # added 2023-03-23
-  gnome-settings-daemon338 = throw "The ‘gnome.gnome-settings-daemon338’ package was removed as it is no longer needed by Pantheon."; # added 2023-02-22
-  gnome-settings-daemon42 = throw "The ‘gnome.gnome-settings-daemon42’ package was removed as it is no longer needed by Pantheon."; # added 2023-03-23
+  gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
+  gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 }

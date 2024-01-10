@@ -6,15 +6,15 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "22.7.0";
+  version = "23.12.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vU+M5aCCGSA+IwJXTLMYvno/Qei+5Hwck3Q/Ah7N09s=";
+    repo = "smplayer";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ip4y9GF2u1yl1Ts8T9XcFg9wdXVTYXfDrrPuHLz6oSs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.smplayer.info";
     description = "A complete front-end for MPlayer";
     longDescription = ''
@@ -53,9 +53,10 @@ stdenv.mkDerivation rec {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
-# TODO [ AndersonTorres ]: some form of wrapping mplayer/mpv around it
+})
+# TODO [ AndersonTorres ]: create a wrapper including mplayer/mpv

@@ -1,5 +1,6 @@
 { lib
 , aiofiles
+, async-timeout
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    hash = "sha256-+RU3nyJpHq0r/9erEbjUILpwIPWq14HdOX7LkSxySs4=";
+    hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     async = [
       aiofiles
+      async-timeout
     ];
     usb = [
       libusb1
@@ -46,9 +48,7 @@ buildPythonPackage rec {
     mock
     pycryptodome
     pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async
-  ++ passthru.optional-dependencies.usb;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "adb_shell"

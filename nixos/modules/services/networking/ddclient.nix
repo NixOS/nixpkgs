@@ -126,7 +126,7 @@ with lib;
         default = "dyndns2";
         type = str;
         description = lib.mdDoc ''
-          Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
+          Protocol to use with dynamic DNS provider (see https://ddclient.net/protocols.html ).
         '';
       };
 
@@ -218,7 +218,7 @@ with lib;
         inherit StateDirectory;
         Type = "oneshot";
         ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
-        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStart = "${lib.getExe cfg.package} -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-oe8RG8E7xcp3ZqdDXYvpOVF3AfeSBFMherHD1YYFE/M=";
   };
 
-  vendorSha256 = "sha256-kLQH7mMmBSsS9av+KnnEuBwiH6hzBOSozrn+1X+8774=";
+  vendorHash = "sha256-kLQH7mMmBSsS9av+KnnEuBwiH6hzBOSozrn+1X+8774=";
 
   preConfigure = ''
     for i in *.go **/*.go; do

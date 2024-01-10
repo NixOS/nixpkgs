@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-github ripgrep
+#!nix-shell -I nixpkgs=./. -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-git nix-prefetch-github ripgrep
 
 set -euo pipefail
 
@@ -12,8 +12,7 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
   exit 0
 fi
 
-srcHash=$(nix-prefetch-github ralph-irving squeezelite --rev "$latestRev" | jq -r .sha256)
-srcHash=$(nix hash to-sri --type sha256 "$srcHash")
+srcHash=$(nix-prefetch-github ralph-irving squeezelite --rev "$latestRev" | jq -r .hash)
 
 
 update-source-version squeezelite "$latestVersion" "$srcHash" --rev="${latestRev}"

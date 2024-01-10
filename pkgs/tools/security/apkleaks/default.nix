@@ -33,5 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/dwisiswant0/apkleaks";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "apkleaks";
   };
 }

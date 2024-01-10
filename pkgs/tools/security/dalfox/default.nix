@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dalfox";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-AG5CNqkxPQJQ+HN3JGUIgSYxgFigmUqVGn1yAHmo7Mo=";
+    sha256 = "sha256-7wSmPmS8m+rYhYlREzKlPUiUfDvru9zwFFvSCDq6JY8=";
   };
 
-  vendorSha256 = "sha256-OLT85GOcTnWmU+ZRem2+vY29nzvzXhnmIN2W+U6phPk=";
+  vendorHash = "sha256-W+37EL3e7G+U0EZUDuVqjZpfIf5+HcirH8NVsC+1NvA=";
 
   # Tests require network access
   doCheck = false;
@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/hahwul/dalfox/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "dalfox";
   };
 }

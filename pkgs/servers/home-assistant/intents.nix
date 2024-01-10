@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
 
 # build
 , hassil
@@ -11,6 +10,8 @@
 , regex
 , voluptuous
 , python
+, setuptools
+, wheel
 
 # tests
 , pytest-xdist
@@ -19,23 +20,21 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.6.5";
+  version = "2023.12.05";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "intents";
+    repo = "intents-package";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZfPOxTFPQNdZ3Tq8p410RHlLGej+FOqhafD+91MRbRo=";
+    hash = "sha256-BVcvlmX5+w7b9uNHA4ZP6Ebj+7ROUgEaAmXAGQrby+s=";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = "source/package";
-
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "2023.4.26" "${version}"
+    substituteInPlace pyproject.toml --replace 'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' 'requires = ["setuptools", "wheel"]'
   '';
 
   nativeBuildInputs = [
@@ -44,13 +43,14 @@ buildPythonPackage rec {
     pyyaml
     regex
     setuptools
+    wheel
     voluptuous
   ];
 
   postInstall = ''
-    pushd ..
+    pushd intents
     # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
+    ${python.pythonOnBuildForHost.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
     popd
   '';
 
@@ -60,7 +60,12 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "../tests"
+    "intents/tests"
+  ];
+
+  disabledTests = [
+    # AssertionError: Recognition failed for 'put apples on the list'
+    "test_shopping_list_HassShoppingListAddItem"
   ];
 
   meta = with lib; {

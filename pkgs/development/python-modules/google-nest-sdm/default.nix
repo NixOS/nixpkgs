@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "2.2.5";
+  version = "3.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     rev = "refs/tags/${version}";
-    hash = "sha256-UMP4FMyS8nAZmN7oKBZhMbqTgi4bSR/JmIeyWaZRZis=";
+    hash = "sha256-VO/TY/QBzVFxqIumVJjw+Ic0hrqkRBS+7wQKBhcN9Jw=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,8 @@ buildPythonPackage rec {
     pydantic
     requests-oauthlib
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     coreutils

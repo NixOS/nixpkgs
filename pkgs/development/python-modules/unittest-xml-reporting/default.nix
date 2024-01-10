@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
   version = "3.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
     description = "unittest-based test runner with Ant/JUnit like XML reporting";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ rprospero SuperSandro2000 ];
+    maintainers = with maintainers; [ rprospero ];
   };
 }

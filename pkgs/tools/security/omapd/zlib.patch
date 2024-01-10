@@ -1,9 +1,0 @@
-diff -uNr omapd-0.9.2-old/omapd.pro omapd-0.9.2/omapd.pro
---- omapd-0.9.2-old/omapd.pro	2015-08-03 09:46:47.463420480 +0200
-+++ omapd-0.9.2/omapd.pro	2015-08-03 09:48:32.238657105 +0200
-@@ -37,4 +37,4 @@
-     clientconfiguration.h \
-     managementserver.h \
-     json.h
--INCLUDEPATH += $$[QT_INSTALL_PREFIX]/src/3rdparty/zlib
-+LIBS += -lz

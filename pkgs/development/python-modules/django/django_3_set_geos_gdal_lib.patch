@@ -18,7 +18,7 @@ diff -Nur a/django/contrib/gis/geos/libgeos.py b/django/contrib/gis/geos/libgeos
          lib_path = settings.GEOS_LIBRARY_PATH
      except (AttributeError, ImportError, ImproperlyConfigured, OSError):
 -        lib_path = None
-+        lib_path = "@geos39@/lib/libgeos_c@extension@"
++        lib_path = "@geos_3_9@/lib/libgeos_c@extension@"
 
      # Setting the appropriate names for the GEOS-C library.
      if lib_path:

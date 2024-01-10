@@ -3,18 +3,22 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron
+# graphs will not sync without matching upstream's major electron version
+, electron_25
 , git
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: let
+  inherit (finalAttrs) pname version src appimageContents;
+
+in {
   pname = "logseq";
-  version = "0.9.9";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-DwxRhC8HKJnu1F9mfU3+UdpTjtKLhxs4LJY9A0cZvBo=";
+    hash = "sha256-jDIfOHGki4InGuLvsnxdd2/FMPbT3VyuHtPxA4r3s5c=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -53,10 +57,11 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_25}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -69,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

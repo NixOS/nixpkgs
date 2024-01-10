@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kail";
-  version = "0.16.1";
+  version = "0.17.2";
 
   ldflags = [
     "-s"
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "boz";
     repo = "kail";
     rev = "v${version}";
-    sha256 = "sha256-x9m0NoZjCf/lBWcSGFbjlJIukL6KIYt56Q1hADS8N9I=";
+    sha256 = "sha256-mUdb3f5GaD+3GceUOpIFHKgGqqollzCJ8/oUj/37xAU=";
   };
 
-  vendorHash = "sha256-W+/vIq7qC+6apk+1GOWvmcwyyjFRkndq8X5m/lRYOu4=";
+  vendorHash = "sha256-GOrw/5nDMTg2FKkzii7FkyzCxfBurnnQbfBF4nfSaJI=";
 
   meta = with lib; {
     description = "Kubernetes log viewer";

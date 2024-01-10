@@ -11,12 +11,12 @@ buildGoModule rec {
     sha256 = "sha256-xZFQQDK+yGAv4IbuNe2dvNa3GDASeJY2mOYw94goAIM=";
   };
 
-  # Set vendorSha256 to null because dstask vendors its dependencies (meaning
+  # Set vendorHash to null because dstask vendors its dependencies (meaning
   # that third party dependencies are stored in the repository).
   #
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#issuecomment-633204382>
   # and <https://github.com/NixOS/nixpkgs/blob/d4226e3a4b5fcf988027147164e86665d382bbfa/pkgs/development/go-modules/generic/default.nix#L18>
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

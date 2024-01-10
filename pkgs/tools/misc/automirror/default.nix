@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Automatic Display Mirror";
     license = licenses.gpl3;
     platforms = platforms.all;
+    mainProgram = "automirror";
   };
 }

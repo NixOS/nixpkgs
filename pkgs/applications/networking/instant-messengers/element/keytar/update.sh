@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-npm-deps
+#!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-npm-deps nix-prefetch-github
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the keytar package."
@@ -25,7 +25,7 @@ wget "$SRC/package.json"
 npm_hash=$(prefetch-npm-deps package-lock.json)
 rm -rf node_modules package.json package-lock.json
 
-src_hash=$(nix-prefetch-github atom node-keytar --rev v${version} | jq -r .sha256)
+src_hash=$(nix-prefetch-github atom node-keytar --rev v${version} | jq -r .hash)
 
 cat > pin.json << EOF
 {

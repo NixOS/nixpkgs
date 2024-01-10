@@ -10,6 +10,7 @@
 
 buildPythonPackage rec {
   version = "1.3.7";
+  format = "setuptools";
   pname = "nose";
 
   src = fetchPypi {
@@ -27,17 +28,17 @@ buildPythonPackage rec {
   '';
 
   preBuild = lib.optionalString (isPy3k) ''
-    ${python.pythonForBuild}/bin/2to3 -wn nose functional_tests unit_tests
+    ${python.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 
   propagatedBuildInputs = [ coverage ];
 
   doCheck = false; # lot's of transient errors, too much hassle
   checkPhase = if isPy3k then ''
-    ${python.pythonForBuild.interpreter} setup.py build_tests
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_tests
   '' else "" + ''
     rm functional_tests/test_multiprocessing/test_concurrent_shared.py* # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
-    ${python.pythonForBuild.interpreter} selftest.py
+    ${python.pythonOnBuildForHost.interpreter} selftest.py
   '';
 
   meta = with lib; {

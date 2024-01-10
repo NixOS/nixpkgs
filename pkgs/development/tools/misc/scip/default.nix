@@ -1,33 +1,22 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , testers
 , scip
 }:
 
 buildGoModule rec {
   pname = "scip";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     rev = "v${version}";
-    hash = "sha256-tcnBv+dxuLD/ixeOLGrHu2UVfOnrfANjyaRzW5oDC94=";
+    hash = "sha256-lZ3W2Z69P5QQN+PgF9+Apj/uEXWaTS+5QOg17m1mGPU=";
   };
 
-  vendorHash = "sha256-+IR3fc6tvSwPGDZ4DxrE48Ii3azcT0LMmID1LRAu5g8=";
-
-  patches = [
-    # update documentation to fix broken test
-    # https://github.com/sourcegraph/scip/pull/174
-    (fetchpatch {
-      name = "test-fix-out-of-sync-documentation.patch";
-      url = "https://github.com/sourcegraph/scip/commit/7450b7701637956d4ae6669338c808234f7a7bfa.patch";
-      hash = "sha256-Y5nAVHyy430xdN89ohA8XAssNdSSPq4y7QaesN48jVs=";
-    })
-  ];
+  vendorHash = "sha256-3Tq2cexcxHjaH6WIz2hneE1QeBSGoMINBncKbqxODxQ=";
 
   ldflags = [
     "-s"
@@ -35,8 +24,10 @@ buildGoModule rec {
     "-X=main.Reproducible=true"
   ];
 
-  postInstall = ''
-    mv $out/bin/{cmd,scip}
+  # update documentation to fix broken test
+  postPatch = ''
+    substituteInPlace docs/CLI.md \
+      --replace 0.3.0 0.3.1
   '';
 
   passthru.tests = {

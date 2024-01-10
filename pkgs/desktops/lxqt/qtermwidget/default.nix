@@ -11,23 +11,23 @@
 
 mkDerivation rec {
   pname = "qtermwidget";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "eir9PvJXzAQYwRqoUf0Nc4SfkVGa7bohbJVdKPCoyNs=";
+    hash = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
   ];
 
   passthru.updateScript = gitUpdater { };

@@ -9,33 +9,34 @@
 , requireFile
 , substituteAll
 }:
+
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
+  bins =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x64-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "i686-linux" then "x86-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64-linux-gnu"
     else throw "Unsupported architecture";
-  bins = "${arch}-ubuntu-1604";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
 
 in
 stdenv.mkDerivation rec {
   pname = "displaylink";
-  version = "5.6.1-59.184";
+  version = "5.8.0-63.33";
 
   src = requireFile rec {
-    name = "displaylink-561.zip";
-    sha256 = "1hihsz35ccydzx04r8r9kz0hvqwj5fgr8zpzvwyhfxp2m549f9w9";
+    name = "displaylink-580.zip";
+    sha256 = "05m8vm6i9pc9pmvar021lw3ls60inlmq92nling0vj28skm55i92";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.6.1
+      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.8
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu5.6.1-EXE.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu5.8-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
     '';
   };
@@ -71,8 +72,9 @@ stdenv.mkDerivation rec {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ abbradar peterhoeg eyjhb ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ abbradar ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     hydraPlatforms = [];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

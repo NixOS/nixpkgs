@@ -51,6 +51,7 @@ let
     py_binary(
       name = "bin",
       srcs = [ "bin.py" ],
+      imports = [ "." ],
       deps = [ ":lib" ],
     )
   '';

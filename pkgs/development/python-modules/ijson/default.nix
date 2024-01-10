@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.2.2";
+  version = "3.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uYg8hxYAHXpcgYWQUgjkCnfu+bKnPbzk0YnOsJKqk70=";
+    hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
   };
 
   buildInputs = [
@@ -38,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvl ];
   };
 }

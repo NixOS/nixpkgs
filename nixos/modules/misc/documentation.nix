@@ -346,7 +346,7 @@ in
       system.build.manual = manual;
 
       environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
+        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
     })
 

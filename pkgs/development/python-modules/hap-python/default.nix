@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , base36
 , chacha20poly1305-reuseable
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.7.0";
+  version = "4.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,10 +26,11 @@ buildPythonPackage rec {
     owner = "ikalchev";
     repo = "HAP-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-fAJB1gk8zTS/mW5KzWr3z26qctZc/EQlk//WM1Xwpl0=";
+    hash = "sha256-nnh8PSEcuPN1qGuInJ7uYe83zdne8axbTrHd4g1xoJs=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     chacha20poly1305-reuseable
     cryptography
     h11

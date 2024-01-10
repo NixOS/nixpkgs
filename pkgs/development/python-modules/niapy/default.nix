@@ -5,14 +5,15 @@
 , numpy
 , openpyxl
 , pandas
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.0.5";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,8 +21,12 @@ buildPythonPackage rec {
     owner = "NiaOrg";
     repo = "NiaPy";
     rev = "refs/tags/${version}";
-    hash = "sha256-qstTxUo4jZ8YKbEjtDtSZUvR67VNkBQJdXeERJPOMDw=";
+    hash = "sha256-cT5CU1r3LZ9ValJwRUA0PaISmF6kXAz40alXbWYogGA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     matplotlib

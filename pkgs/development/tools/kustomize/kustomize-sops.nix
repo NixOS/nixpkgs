@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kustomize-sops";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "viaduct-ai";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Jm4mA91fyXQ8eScvRGDAmCBFVqT2GP57XIBZQo/bApg=";
+    hash = "sha256-fN83o84GbfMVG20c1/ROwxYPgnJ4g1U2wsM6j/VGtMY=";
   };
 
-  vendorHash = "sha256-tNYPgXFDJuNRlrVE0ywg77goNzfoWHFVzOG9mHqK3q8=";
+  vendorHash = "sha256-3AA7Zn9KYAJrcotiIpwm5eOfiuJuvLb0rl6FrcwGgSA=";
 
   installPhase = ''
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/

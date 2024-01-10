@@ -5,17 +5,22 @@
 
 let
   throwUnsupportedSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
-
-  versionMap = rec {
+in
+stdenv.mkDerivation(finalAttrs:
+  let versionMap =
+    let url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
+    in {
     "11" = {
       gccVersion = "11.2.0";
       alireRevision = "4";
     } // {
       x86_64-darwin = {
+        inherit url;
         hash = "sha256-FmBgD20PPQlX/ddhJliCTb/PRmKxe9z7TFPa2/SK4GY=";
         upstreamTriplet = "x86_64-apple-darwin19.6.0";
       };
       x86_64-linux = {
+        inherit url;
         hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
@@ -25,27 +30,26 @@ let
       alireRevision = "2";
     } // {
       x86_64-darwin = {
+        inherit url;
         hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
         upstreamTriplet = "x86_64-apple-darwin19.6.0";
       };
       x86_64-linux = {
+        inherit url;
         hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
     }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
   };
-
-in with versionMap.${majorVersion};
-
-stdenv.mkDerivation rec {
+  inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
+in {
   pname = "gnat-bootstrap";
-  inherit gccVersion alireRevision;
+  inherit (versionMap.${majorVersion}) gccVersion alireRevision;
 
-  version = "${gccVersion}-${alireRevision}";
+  version = "${gccVersion}${lib.optionalString (alireRevision!="") "-"}${alireRevision}";
 
   src = fetchzip {
-    url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${version}/gnat-${stdenv.hostPlatform.system}-${version}.tar.gz";
-    inherit hash;
+    inherit (versionMap.${majorVersion}) url hash;
   };
 
   nativeBuildInputs = [
@@ -142,4 +146,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

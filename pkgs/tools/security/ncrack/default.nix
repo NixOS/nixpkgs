@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Our version is good; the check is bad.
+  configureFlags = [ "--without-zlib-version-check" ];
+
   buildInputs = [ openssl zlib ];
 
   meta = with lib; {

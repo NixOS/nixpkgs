@@ -17,15 +17,14 @@
 , zlib
 }:
 
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "fs-uae";
   version = "3.1.66";
 
   src = fetchFromGitHub {
     owner = "FrodeSolheim";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fs-uae";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zPVRPazelmNaxcoCStB0j9b9qwQDTgv3O7Bg3VlW9ys=";
   };
 
@@ -49,17 +48,17 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fs-uae.net";
     description = "An accurate, customizable Amiga Emulator";
     longDescription = ''
-      FS-UAE integrates the most accurate Amiga emulation code available
-      from WinUAE. FS-UAE emulates A500, A500+, A600, A1200, A1000, A3000
-      and A4000 models, but you can tweak the hardware configuration and
-      create customized Amigas.
+      FS-UAE integrates the most accurate Amiga emulation code available from
+      WinUAE. FS-UAE emulates A500, A500+, A600, A1200, A1000, A3000 and A4000
+      models, but you can tweak the hardware configuration and create customized
+      Amigas.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
-}
+})

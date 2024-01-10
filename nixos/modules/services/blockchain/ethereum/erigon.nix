@@ -13,6 +13,8 @@ in {
     services.erigon = {
       enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
 
+      package = mkPackageOption pkgs "erigon" { };
+
       extraArgs = mkOption {
         type = types.listOf types.str;
         description = lib.mdDoc "Additional arguments passed to Erigon";
@@ -92,7 +94,7 @@ in {
 
       serviceConfig = {
         LoadCredential = "ERIGON_JWT:${cfg.secretJwtPath}";
-        ExecStart = "${pkgs.erigon}/bin/erigon --config ${configFile} --authrpc.jwtsecret=%d/ERIGON_JWT ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package}/bin/erigon --config ${configFile} --authrpc.jwtsecret=%d/ERIGON_JWT ${lib.escapeShellArgs cfg.extraArgs}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "erigon";

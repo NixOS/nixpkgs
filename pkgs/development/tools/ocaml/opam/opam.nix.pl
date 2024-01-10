@@ -112,6 +112,11 @@ print <<'EOF';
   outputs = [ "out" "installer" ];
   setOutputFlags = false;
 
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   # change argv0 to "opam" as a workaround for
   # https://github.com/ocaml/opam/issues/2142
   postInstall = ''
@@ -129,7 +134,7 @@ print <<'EOF';
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
     changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
-    maintainers = [ maintainers.henrytill maintainers.marsam ];
+    maintainers = [ maintainers.marsam ];
     license = licenses.lgpl21Only;
     platforms = platforms.all;
   };

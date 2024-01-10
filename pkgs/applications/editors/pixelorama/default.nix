@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, godot-headless, godot-export-templates, nix-update-script }:
+{ lib
+, stdenv
+, alsa-lib
+, autoPatchelfHook
+, fetchFromGitHub
+, godot3-headless
+, godot3-export-templates
+, libGLU
+, libpulseaudio
+, libX11
+, libXcursor
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, nix-update-script
+, udev
+}:
 
 let
   preset =
@@ -9,17 +26,28 @@ let
     else throw "unsupported platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-r4iQJBxXzIbQ7n19Ah6szuIfALmuKlHKcvKsxEzOttk=";
+    sha256 = "sha256-+bQRUTEJluhcs5P87It9/oJOzrCcNFzDJVpixoQKXQc=";
   };
 
   nativeBuildInputs = [
-    godot-headless
+    autoPatchelfHook
+    godot3-headless
+  ];
+
+  buildInputs = [
+    libGLU
+    libX11
+    libXcursor
+    libXi
+    libXinerama
+    libXrandr
+    libXrender
   ];
 
   buildPhase = ''
@@ -27,10 +55,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.local/share/godot/
-    ln -s "${godot-export-templates}/share/godot/templates" "$HOME/.local/share/godot/templates"
+    ln -s "${godot3-export-templates}/share/godot/templates" "$HOME/.local/share/godot/templates"
     mkdir -p build
-    godot-headless -v --export "${preset}" ./build/pixelorama
-    godot-headless -v --export-pack "${preset}" ./build/pixelorama.pck
+    godot3-headless -v --export "${preset}" ./build/pixelorama
+    godot3-headless -v --export-pack "${preset}" ./build/pixelorama.pck
 
     runHook postBuild
   '';
@@ -47,13 +75,21 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  runtimeDependencies = map lib.getLib [
+    alsa-lib
+    libpulseaudio
+    udev
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://orama-interactive.itch.io/pixelorama";
     description = "A free & open-source 2D sprite editor, made with the Godot Engine!";
+    changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
+    mainProgram = "pixelorama";
   };
 })

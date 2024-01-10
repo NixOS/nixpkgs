@@ -7,7 +7,7 @@
 , kimageannotator
 , wrapQtAppsHook
 , qtsvg
-, qttranslations
+, qttools
 , qtx11extras
 }:
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
     kcolorpicker
     kimageannotator
     qtsvg
-    qttranslations
     qtx11extras
   ];
 
@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
+    mainProgram = "ksnip";
   };
 }

@@ -2,13 +2,14 @@
 
 buildPythonApplication rec {
   pname = "fypp";
-  version = "3.1";
+  version = "3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aradi";
     repo = pname;
     rev = version;
-    hash = "sha256-iog5Gdcd1F230Nl4JDrKoyYr8JualVgNZQzHLzd4xe8=";
+    hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
 
   meta = with lib; {

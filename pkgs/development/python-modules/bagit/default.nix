@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "bagit";
   version = "1.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";

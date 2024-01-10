@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "bin" "man" "dev" ];
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
   makeFlags = [
     "TOPDIR=$(out)"
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
       mkdir $out/share/zoneinfo/posix
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
+
+      cp leap-seconds.list $out/share/zoneinfo
 
       mkdir -p "$dev/include"
       cp tzfile.h "$dev/include/tzfile.h"

@@ -145,7 +145,7 @@ services.xserver.desktopManager.gnome = {
 
     # Favorite apps in gnome-shell
     [org.gnome.shell]
-    favorite-apps=['org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop']
+    favorite-apps=['org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop']
   '';
 
   extraGSettingsOverridePackages = [

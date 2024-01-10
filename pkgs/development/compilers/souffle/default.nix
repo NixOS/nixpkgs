@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-5g2Ikbfm5nQrsgGntZZ/VbjqSDOj0AP/mnH1nW2b4co=";
+    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
   };
 
   patches = [
@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
 
   cmakeFlags = [ "-DSOUFFLE_GIT=OFF" ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   postInstall = ''
     wrapProgram "$out/bin/souffle" --prefix PATH : "${toolsPath}"

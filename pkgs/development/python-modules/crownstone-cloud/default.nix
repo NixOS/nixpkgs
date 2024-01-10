@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    asynctest
     certifi
   ];
 

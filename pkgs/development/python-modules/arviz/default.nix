@@ -8,13 +8,11 @@
 , numba
 , numpy
 , pandas
-, pytest
 , setuptools
 , cloudpickle
 , pytestCheckHook
 , scipy
 , packaging
-, typing-extensions
 , pythonOlder
 , xarray
 , xarray-einstats
@@ -28,20 +26,21 @@
 , pyro-ppl
   #, pystan (not packaged)
 , numpyro
+, bokeh
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.17.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
-    repo = pname;
+    repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jjA+yltvpPZldIxXXqu1bXCLqpiU5/NBYTPlI9ImGVs=";
+    hash = "sha256-DqVwbiNJHdRxK3Ppfa6sqPJzDqMaj1mtlAJHFq09u2Y=";
   };
 
   propagatedBuildInputs = [
@@ -72,6 +71,7 @@ buildPythonPackage rec {
     pytestCheckHook
     torchvision
     zarr
+    bokeh
   ];
 
   preCheck = ''
@@ -84,6 +84,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_plot_ppc_transposed"
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
@@ -93,6 +94,12 @@ buildPythonPackage rec {
     "test_plot_pair"
     # Array mismatch
     "test_plot_ts"
+    # The following two tests fail in a common venv-based setup.
+    # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
+    "test_plot_ppc_discrete"
+    "test_plot_ppc_discrete_save_animation"
+    # Assertion error
+    "test_data_zarr"
   ];
 
   pythonImportsCheck = [

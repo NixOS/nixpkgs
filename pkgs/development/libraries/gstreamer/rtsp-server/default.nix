@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.22.4";
+  version = "1.22.7";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-RmZhLXqZxg3NbwvbobenTSVioFAbKj4FdvCRa/HYgRs=";
+    hash = "sha256-9/rAAeIK0h420YOXdBxGV8XUNXHrHMO0n5qTrhJ9yI8=";
   };
 
   outputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
-    gobject-introspection
   ];
 
   mesonFlags = [

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.8.11";
+  version = "0.8.18";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dArR1z3wkGDd3Y1WHK0sLjhuaKHAcsx6cCH2rgVdUGs=";
+    hash = "sha256-5qjEABNTSUD9I2uAn49HQ4n+gbAcmfnqS4Z2M9MvFXQ=";
   };
 
   pythonRelaxDeps = [

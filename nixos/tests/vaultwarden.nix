@@ -61,9 +61,8 @@ let
             services.postgresql = {
               enable = true;
               initialScript = pkgs.writeText "postgresql-init.sql" ''
-                CREATE DATABASE bitwarden;
                 CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
-                GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
+                CREATE DATABASE bitwarden WITH OWNER bitwardenuser;
               '';
             };
 
@@ -183,7 +182,7 @@ let
           )
 
       with subtest("use the web interface to sign up, log in, and save a password"):
-          server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
+          server.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner")
 
       with subtest("log in with the cli"):
           key = client.succeed(

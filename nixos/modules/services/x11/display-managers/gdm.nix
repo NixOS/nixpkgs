@@ -97,6 +97,19 @@ in
         type = types.bool;
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        example = ''
+          foo
+          bar
+          baz
+        '';
+        description = lib.mdDoc ''
+          Optional message to display on the login screen.
+        '';
+      };
+
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
@@ -207,7 +220,9 @@ in
     # conflicts display-manager.service, then when nixos-rebuild
     # switch starts multi-user.target, display-manager.service is
     # stopped so plymouth-quit.service can be started.)
-    systemd.services.plymouth-quit.wantedBy = lib.mkForce [];
+    systemd.services.plymouth-quit = mkIf config.boot.plymouth.enable {
+      wantedBy = lib.mkForce [];
+    };
 
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
@@ -229,40 +244,19 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm =
-    let
-      customDconf = pkgs.writeTextFile {
-        name = "gdm-dconf";
-        destination = "/dconf/gdm-custom";
-        text = ''
-          ${optionalString (!cfg.gdm.autoSuspend) ''
-            [org/gnome/settings-daemon/plugins/power]
-            sleep-inactive-ac-type='nothing'
-            sleep-inactive-battery-type='nothing'
-            sleep-inactive-ac-timeout=0
-            sleep-inactive-battery-timeout=0
-          ''}
-        '';
+    programs.dconf.profiles.gdm.databases = lib.optionals (!cfg.gdm.autoSuspend) [{
+      settings."org/gnome/settings-daemon/plugins/power" = {
+        sleep-inactive-ac-type = "nothing";
+        sleep-inactive-battery-type = "nothing";
+        sleep-inactive-ac-timeout = lib.gvariant.mkInt32 0;
+        sleep-inactive-battery-timeout = lib.gvariant.mkInt32 0;
       };
-
-      customDconfDb = pkgs.stdenv.mkDerivation {
-        name = "gdm-dconf-db";
-        buildCommand = ''
-          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
-        '';
+    }] ++ lib.optionals (cfg.gdm.banner != null) [{
+      settings."org/gnome/login-screen" = {
+        banner-message-enable = true;
+        banner-message-text = cfg.gdm.banner;
       };
-    in pkgs.stdenv.mkDerivation {
-      name = "dconf-gdm-profile";
-      buildCommand = ''
-        # Check that the GDM profile starts with what we expect.
-        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
-          echo "GDM dconf profile changed, please update gdm.nix"
-          exit 1
-        fi
-        # Insert our custom DB behind it.
-        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
-      '';
-    };
+    }] ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still

@@ -1,7 +1,7 @@
-{ lib, beamPackages, makeWrapper, rebar3, elixir, erlang, fetchFromGitHub }:
+{ lib, beamPackages, makeWrapper, rebar3, elixir, erlang, fetchFromGitHub, nixosTests }:
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.9.2";
+  version = "0.12.0";
 
   inherit elixir;
 
@@ -13,13 +13,13 @@ beamPackages.mixRelease rec {
     owner = "livebook-dev";
     repo = "livebook";
     rev = "v${version}";
-    hash = "sha256-khC3gtRvywgAY6qHslZgAV3kmziJgKhdCB8CDg/HkIU=";
+    hash = "sha256-ONNl88ZUjeAjYV8kdk4Tf6noQ7YSp/UN9OHEJHk7+5s=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-rwWGs4fGeuyV6BBFgCyyDwKf/YLgs1wY0xnHYy8iioE=";
+    hash = "sha256-JA0890hGShavn60khnevt4L0qEWKZnTmafImU4dkCr8=";
   };
 
   installPhase = ''
@@ -31,6 +31,10 @@ beamPackages.mixRelease rec {
       --prefix PATH : ${lib.makeBinPath [ elixir ]} \
       --set MIX_REBAR3 ${rebar3}/bin/rebar3
   '';
+
+  passthru.tests = {
+    livebook-service = nixosTests.livebook-service;
+  };
 
   meta = with lib; {
     license = licenses.asl20;

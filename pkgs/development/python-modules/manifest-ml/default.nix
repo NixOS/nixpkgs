@@ -95,6 +95,12 @@ buildPythonPackage rec {
     "test_get"
     # this test has network access
     "test_retry_handling"
+    # Test is time-senstive
+    "test_timing"
+  ];
+
+  pythonImportsCheck = [
+    "manifest"
   ];
 
   meta = with lib; {

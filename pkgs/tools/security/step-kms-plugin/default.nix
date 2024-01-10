@@ -7,20 +7,20 @@
 , softhsm
 , opensc
 , yubihsm-shell
-, writeScriptBin }:
+}:
 
 buildGoModule rec {
   pname = "step-kms-plugin";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-b8YYLsEmbr/XP04aB5u2DMPc0hpgaYYspyWzSGuYccQ=";
+    hash = "sha256-l0MMcLghhqVVQAdhk0a0nDqYvJbXCV2PFbRtiGQcDn0=";
   };
 
-  vendorHash = "sha256-Zv70C1JkOjOrncNuox8yh2LB31gVcXxr01l+o7HRXm0=";
+  vendorHash = "sha256-3du8KlM08N5hKmzZWYZdfPOL5R+BspbK6ABF+RSJzHg=";
 
   proxyVendor = true;
 

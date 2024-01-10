@@ -10,6 +10,7 @@
 , libffi
 , libtool
 , libunistring
+, libxcrypt
 , makeWrapper
 , pkg-config
 , pkgsBuildBuild
@@ -48,6 +49,8 @@ builder rec {
     libtool
     libunistring
     readline
+  ] ++ lib.optionals stdenv.isLinux [
+    libxcrypt
   ];
   propagatedBuildInputs = [
     boehmgc
@@ -59,6 +62,8 @@ builder rec {
     # flags, see below.
     libtool
     libunistring
+  ] ++ lib.optionals stdenv.isLinux [
+    libxcrypt
   ];
 
   # According to
@@ -69,6 +74,7 @@ builder rec {
 
   patches = [
     ./eai_system.patch
+    ./guile-hurd-posix-spawn.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.isDarwin
     (fetchpatch {
@@ -98,9 +104,6 @@ builder rec {
     # See below.
     "--without-threads"
   ]
-  # Disable JIT on Apple Silicon, as it is not yet supported
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
-  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no"
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.isDarwin) "--disable-lto";
@@ -114,8 +117,9 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|-lcrypt|-L${libxcrypt}/lib -lcrypt|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|includedir=$out|includedir=$dev|g
             "
     '';
@@ -125,9 +129,16 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
+
   setupHook = ./setup-hook-3.0.sh;
 
-  passthru = {
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -153,7 +164,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

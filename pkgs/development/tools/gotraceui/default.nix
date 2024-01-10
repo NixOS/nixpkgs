@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gotraceui";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "gotraceui";
     rev = "v${version}";
-    sha256 = "sha256-dryDDunvxjHHzsMtTbEeIWqWOM7wtcyb9DjqzR2SgYE=";
+    sha256 = "sha256-hdI1TT33pPHK5018RQ+riPVqzqOF/xDkvh0WoYi6Pes=";
   };
 
-  vendorHash = "sha256-Nx91u2JOBWYiYeG4VbCYKg66GANDViVHrbE31YdPIzM=";
+  vendorHash = "sha256-nXPiwSG2Hs86/raDvTv2p77P6Xwm+t8VT0dvZpXE8Os=";
   subPackages = ["cmd/gotraceui"];
 
   nativeBuildInputs = [ pkg-config ];

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.15.3";
+  version = "1.17.1";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-Xe+baALN8Ow6vjneWAvC65cBSsrMAsdxjEQRBcvWxCw=";
+    hash = "sha256-z6pO9+fQ+0jeYM3wCG8T/1C5aSeSZITj+f8TmGxR+Gw=";
   };
 
   passthru.tests.consul = nixosTests.consul;
@@ -26,7 +26,7 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  vendorHash = "sha256-tbwX/uF9+yIhd+KSGF2v7HjxGtfaZYSm+1GIspQmC9A=";
+  vendorHash = "sha256-Xt7azJS65B53jYPWLytNaGQv3Poy+3j4ak1Jq68vZRI=";
 
   doCheck = false;
 
@@ -40,7 +40,8 @@ buildGoModule rec {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mpl20;
+    license = licenses.bsl11;
     maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
+    mainProgram = "consul";
   };
 }

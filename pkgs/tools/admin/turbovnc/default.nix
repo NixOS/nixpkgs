@@ -17,6 +17,7 @@
 , openssl
 , pam
 , perl
+, pkg-config
 , python3
 , which
 , xkbcomp
@@ -26,15 +27,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
-  version = "3.0.1";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
-    rev = version;
-    sha256 = "sha256-GRY6aW6Kvy5sDQRiOVz2cUgKEG0IMveh80S26/rGWdM=";
+    rev = finalAttrs.version;
+    hash = "sha256-nMqH/jhw4GhffGYR+WGcUnF6EOFSS6HDuSKvjoCtGkk=";
   };
 
   # TODO:
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   #   * `-- FONT_ENCODINGS_DIRECTORY = /var/empty/share/X11/fonts/encodings`
   #     Maybe relevant what the tigervnc and tightvnc derivations
   #     do with their `fontDirectories`?
-  #   * `SERVER_MISC_CONFIG_PATH = /var/empty/lib64/xorg`
+  #   * `XORG_REGISTRY_PATH = /var/empty/lib64/xorg`
   #   * The thing about xorg `protocol.txt`
   # * Does SSH support require `openssh` on PATH?
   # * Add `enableClient ? true` flag that disables the client GUI
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     openjdk_headless
+    pkg-config
     python3
   ];
 
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
     # to the swrast dri driver in Mesa.
     # Can also be given at runtime to its `Xvnc` as:
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
-    "-DDRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
+    "-DXORG_DRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
     # The build system doesn't find these files automatically.
     "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
     "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
@@ -137,6 +139,6 @@ stdenv.mkDerivation rec {
     description = "High-speed version of VNC derived from TightVNC";
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
-    changelog = "https://github.com/TurboVNC/turbovnc/blob/${version}/ChangeLog.md";
+    changelog = "https://github.com/TurboVNC/turbovnc/blob/${finalAttrs.version}/ChangeLog.md";
   };
-}
+})

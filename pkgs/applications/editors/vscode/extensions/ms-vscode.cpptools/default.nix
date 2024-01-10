@@ -31,12 +31,12 @@
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
 in
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.11.0";
-    sha256 = "c0725d3914aeb2515627691727455cc27e7a75031fa02ca957be02cc210bd64d";
+    version = "1.17.3";
+    sha256 = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
     arch = "linux-x64";
   };
 

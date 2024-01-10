@@ -4,13 +4,13 @@
 # Refer to the following comment to get you setup: https://github.com/NixOS/nixpkgs/pull/201646#issuecomment-1320893716
 buildFishPlugin rec {
   pname = "tide";
-  version = "5.5.1";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "IlanCosman";
     repo = "tide";
     rev = "v${version}";
-    sha256 = "sha256-vi4sYoI366FkIonXDlf/eE2Pyjq7E/kOKBrQS+LtE+M=";
+    hash = "sha256-oLD7gYFCIeIzBeAW1j62z5FnzWAp3xSfxxe7kBtTLgA=";
   };
 
   #buildFishplugin will only move the .fish files, but tide has a tide configure function
@@ -19,7 +19,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "The ultimate Fish prompt.";
+    description = "The ultimate Fish prompt";
     homepage = "https://github.com/IlanCosman/tide";
     license = licenses.mit;
     maintainers = [ maintainers.jocelynthode ];

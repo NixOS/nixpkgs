@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.17";
+  version = "4.2.27";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eF/3++wRG0JulVTT+GvtqleBPkzLSZeu+RfHDI1xfOY=";
+    sha256 = "sha256-7pI9K7VOksQREbDFa02w48tcvanehBQ+5d/XYUD/gSo=";
   };
 
   buildInputs = [
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
-    maintainers = with maintainers; [ pulsation ];
+    maintainers = with maintainers; [ pulsation kashw2 ];
     platforms = platforms.linux;
   };
 }

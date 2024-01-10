@@ -111,13 +111,13 @@ in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "7.0.2";
+    version = "7.2";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
     src = fetchurl {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      sha256 = "sha256-9Jv/U7afG6+LwPB6IhqLePjQA67bPKelP+UcuvizBqo=";
+      sha256 = "sha256-Io3HfussfSy6CLHE0JCAk0gjBAla/u+pS1Gan8BxozY=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

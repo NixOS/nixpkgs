@@ -44,14 +44,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xrdp;
-        defaultText = literalExpression "pkgs.xrdp";
-        description = lib.mdDoc ''
-          The package to use for the xrdp daemon's binary.
-        '';
-      };
+      package = mkPackageOption pkgs "xrdp" { };
 
       port = mkOption {
         type = types.port;
@@ -121,7 +114,7 @@ in
       icons.enable = true;
     };
 
-    fonts.enableDefaultFonts = mkDefault true;
+    fonts.enableDefaultPackages = mkDefault true;
 
     systemd = {
       services.xrdp = {

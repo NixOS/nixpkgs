@@ -19,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2023.05.0";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "simplisafe-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-dcWDB9tpKrFbnWf35HLDmgy2zNTzKNeJQrdtRXbSMvs=";
+    hash = "sha256-Nr4HvjIOLk/WMKCjj/ZX67OBSImRhs9SfZtLjFs81Sk=";
   };
+
 
   nativeBuildInputs = [
     poetry-core

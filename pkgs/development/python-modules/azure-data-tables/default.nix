@@ -1,33 +1,43 @@
 { lib
+, azure-core
 , buildPythonPackage
 , fetchPypi
-, azure-core
-, msrest
+, isodate
+, pythonOlder
+, typing-extensions
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "azure-data-tables";
-  version = "12.4.3";
+  version = "12.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-qLA0vNRyIu36xKwB55BD/TCTOv+nmyOtk3+Y4P+SalI=";
+    hash = "sha256-HWjIQBWYmU43pSxKLcwx45EExn10jeEkyY9Hpbyn0vw=";
   };
 
   propagatedBuildInputs = [
     azure-core
-    msrest
+    isodate
+    typing-extensions
+    yarl
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.data.tables" ];
+  pythonImportsCheck = [
+    "azure.data.tables"
+  ];
 
   meta = with lib; {
     description = "NoSQL data storage service that can be accessed from anywhere";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-data-tables_${version}/sdk/tables/azure-data-tables/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

@@ -1,24 +1,22 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , stdenv
 , darwin
 , makeWrapper
 , typst
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "typst-live";
-  version = "unstable-2023-05-27";
+  version = "0.6.0";
 
-  src = fetchFromGitHub {
-    owner = "ItsEthra";
-    repo = "typst-live";
-    rev = "10a2da57b93f8d6e4eaa0bfcec1e68e46b916868";
-    hash = "sha256-42QzqbyIjPn0C4coCU81gtlI7v5XJStlsDZvnLlwpYs=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-8YndEqhIESC3Cbe4klQfkVqesNFeZ2g1oRd1VoVrMnE=";
   };
 
-  cargoHash = "sha256-M5jYSLw5oquAq2gGWZOJvx5/CGAl2Rg+G94V6ivAOzc=";
+  cargoHash = "sha256-62tBefXek6W01RfdPczXBuYhrLK+wG1YQ7va7FQmAhA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,5 +36,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/ItsEthra/typst-live";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "typst-live";
   };
 }

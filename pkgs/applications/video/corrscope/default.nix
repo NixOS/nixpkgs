@@ -2,6 +2,7 @@
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
@@ -18,8 +19,17 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     owner = "corrscope";
     repo = "corrscope";
     rev = version;
-    sha256 = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
+    hash = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
   };
+
+  patches = [
+    # https://github.com/corrscope/corrscope/pull/446
+    (fetchpatch {
+      name = "remove-setuptools-dependency.patch";
+      url = "https://github.com/corrscope/corrscope/commit/70b123173a7a012d9f29d6d3a8960b85caf6cc79.patch";
+      hash = "sha256-YCtb7v8cGP0pdceAKeoempnRzw+LRKQqDb3AfN0z/9s=";
+    })
+  ];
 
   pythonRelaxDeps = [ "attrs" ];
 

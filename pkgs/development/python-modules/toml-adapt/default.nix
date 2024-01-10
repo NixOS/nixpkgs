@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "toml-adapt";
-  version = "0.2.11";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = pname;
-    rev = version;
-    hash = "sha256-7gQZCjsCtzvmV5NPZNAW4d34TkKemH9FgeN0Iwydwgc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BI0yZlut9PEupa597KN4qdVABOiOLwFpovN8L1lfUmk=";
   };
 
   nativeBuildInputs = [

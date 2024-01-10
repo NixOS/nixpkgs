@@ -14,7 +14,7 @@
 , stdenv
 , xdg-utils
 , yarn
-, yarn2nix-moretea
+, prefetch-yarn-deps
 , nixosTests
 
 , withRdpClient ? true
@@ -22,6 +22,7 @@
 , version
 , hash
 , vendorHash
+, extPatches ? null
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -71,7 +72,7 @@ let
     nativeBuildInputs = [
       nodejs
       yarn
-      yarn2nix-moretea.fixup_yarn_lock
+      prefetch-yarn-deps
     ];
 
     configurePhase = ''
@@ -80,7 +81,7 @@ let
 
     buildPhase = ''
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline \
         --frozen-lockfile \
@@ -111,11 +112,7 @@ buildGoModule rec {
     ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/120738
-    ./tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ./test.patch
+  patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
   ];
@@ -158,7 +155,7 @@ buildGoModule rec {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy ];
+    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy techknowlogick ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.

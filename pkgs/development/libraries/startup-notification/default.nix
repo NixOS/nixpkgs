@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "3c391f7e930c583095045cd2d10eb73a64f085c7fde9d260f2652c7cb3cfbe4a";
   };
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "lf_cv_sane_realloc=yes"
   ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libxcb xcbutil ];
 
   meta = {
-    homepage = "http://www.freedesktop.org/software/startup-notification";
+    homepage = "https://www.freedesktop.org/software/startup-notification";
     description = "Application startup notification and feedback library";
     license = lib.licenses.lgpl2;
   };

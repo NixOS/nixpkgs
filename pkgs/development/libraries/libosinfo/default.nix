@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-olLgD8WA3rIdoNqMCqA7jDHoRAuESMi5gUP6tHfTIwU=";
+    sha256 = "sha256-G/lu7J4UYPPRpxMWPMof8NSAo0kLUImSkvFFSLOpa2A=";
   };
 
   outputs = [ "out" "dev" ]

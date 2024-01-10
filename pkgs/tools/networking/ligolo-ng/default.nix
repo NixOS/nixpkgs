@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     rev = "v${version}";
-    hash = "sha256-O/qiznQs+x7qBYXVItd0W7a0irEzRf0We7kW7HHLqcw=";
+    hash = "sha256-T+SBGAE+hzHzrYLTm6t7NGh78B1/84TMiT1odGSPtKo=";
   };
+
+  vendorHash = "sha256-QEGF12yJ+CQjIHx6kOwsykVhelp5npnglk7mIbOeIpI=";
 
   postConfigure = ''
     export CGO_ENABLED=0
   '';
 
   ldflags = [ "-s" "-w" "-extldflags '-static'" ];
-
-  vendorHash = "sha256-If0K6DmkGk3AmO3eb/ocAl1RJeBN/xgY7dOh9lnVLh8=";
 
   doCheck = false; # tests require network access
 

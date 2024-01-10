@@ -1,23 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmcfp";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "mhekkel";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Mi5nj8vR1j3V7fIMBrSyhD57emmlkCb0F08+5s7Usj0=";
+    repo = "libmcfp";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-Xz7M3TmUHGqiYZbFGSDxsVvg4VhgoVvr9TW03UxdFBw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   meta = with lib; {
     description = "Header only library that can collect configuration options from command line arguments";
     homepage = "https://github.com/mhekkel/libmcfp";
+    changelog = "https://github.com/mhekkel/libmcfp/blob/${finalAttrs.src.rev}/changelog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;
   };
-}
+})

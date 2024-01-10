@@ -13,15 +13,16 @@ let
                       else pkgs.linuxPackages
     , enableUnstable ? false
     , enableSystemdStage1 ? false
+    , zfsPackage ? if enableUnstable then pkgs.zfs else pkgs.zfsUnstable
     , extraTest ? ""
     }:
     makeTest {
       name = "zfs-" + name;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis elvishjerricco ];
+        maintainers = [ elvishjerricco ];
       };
 
-      nodes.machine = { pkgs, lib, ... }:
+      nodes.machine = { config, pkgs, lib, ... }:
         let
           usersharePath = "/var/lib/samba/usershares";
         in {
@@ -35,8 +36,8 @@ let
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
+        boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
-        boot.zfs.enableUnstable = enableUnstable;
         boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
@@ -133,9 +134,8 @@ let
             )
             machine.crash()
             machine.wait_for_unit("multi-user.target")
+            machine.succeed("zfs set sharesmb=on rpool/shared_smb")
             machine.succeed(
-                "zfs set sharesmb=on rpool/shared_smb",
-                "zfs share rpool/shared_smb",
                 "smbclient -gNL localhost | grep rpool_shared_smb",
                 "umount /tmp/mnt",
                 "zpool destroy rpool",
@@ -194,6 +194,11 @@ let
 
 in {
 
+  # maintainer: @raitobezarius
+  series_2_1 = makeZfsTest "2.1-series" {
+    zfsPackage = pkgs.zfs_2_1;
+  };
+
   stable = makeZfsTest "stable" { };
 
   unstable = makeZfsTest "unstable" {
@@ -205,6 +210,7 @@ in {
     enableSystemdStage1 = true;
   };
 
+  installerBoot = (import ./installer.nix { }).separateBootZfs;
   installer = (import ./installer.nix { }).zfsroot;
 
   expand-partitions = makeTest {

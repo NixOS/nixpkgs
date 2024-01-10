@@ -3,22 +3,24 @@
 , fetchPypi
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-anjD/UfKyfgfJh16cR8ZSUjdAmswO3cdMYKRczyMN3A=";
+    hash = "sha256-TbcFgWKKgHXFyi1NqwVy1ITGHESb4ZusivOpFWazN1s=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   # Project has no tests

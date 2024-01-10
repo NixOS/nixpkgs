@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "21.2.1";
+  version = "23.9.9";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    sha256 = "sha256-sVp13PhLj2LmhyDMqxOT+WEcB4/NOv3WOaEIbK0BCQA=";
+    sha256 = "107q6gmxlsya4yv38r1x1axrgyyfgdrfkkz97zfp64bcrasdl6y5";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];

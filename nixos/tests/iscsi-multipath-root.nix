@@ -202,7 +202,7 @@ import ./make-test-python.nix (
       initiatorAuto.succeed("umount /mnt")
 
       initiatorAuto.succeed("systemctl restart multipathd")
-      initiatorAuto.succeed("multipath -ll | systemd-cat")
+      initiatorAuto.succeed("systemd-cat multipath -ll")
 
       # Install our RootDisk machine to 123456, the alias to the device that multipath is now managing
       initiatorAuto.succeed("mount /dev/mapper/123456 /mnt")
@@ -223,7 +223,7 @@ import ./make-test-python.nix (
       initiatorRootDisk.fail("iscsiadm -m discovery -o update -t sendtargets -p 192.168.1.3 --login")
       initiatorRootDisk.fail("iscsiadm -m discovery -o update -t sendtargets -p 192.168.2.3 --login")
       initiatorRootDisk.succeed("systemctl restart multipathd")
-      initiatorRootDisk.succeed("multipath -ll | systemd-cat")
+      initiatorRootDisk.succeed("systemd-cat multipath -ll")
 
       # Verify we can write and sync the root disk
       initiatorRootDisk.succeed("mkdir /scratch")

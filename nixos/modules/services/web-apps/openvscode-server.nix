@@ -10,7 +10,7 @@ in
     services.openvscode-server = {
       enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
 
-      package = lib.mkPackageOptionMD pkgs "openvscode-server" { };
+      package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
         default = [ ];

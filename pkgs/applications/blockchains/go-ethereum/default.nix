@@ -9,16 +9,16 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.11.6";
+  version = "1.13.5";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mZ11xan3MGgaUORbiQczKrXSrxzjvQMhZbpHnEal11Y=";
+    sha256 = "sha256-UbRsY9fSUYAwPcLfGGDHeqvSsLKUKR+2a93jH5xA9uQ=";
   };
 
-  vendorHash = "sha256-rjSGR2ie5sFK2OOo4HUZ6+hrDlQuUDtyTKn0sh8jFBY=";
+  vendorHash = "sha256-dOvpOCMxxmcAaticSLVlro1L4crAVJWyvgx/JZZ7buE=";
 
   doCheck = false;
 
@@ -33,7 +33,6 @@ in buildGoModule rec {
     "cmd/abidump"
     "cmd/abigen"
     "cmd/bootnode"
-    "cmd/checkpoint-admin"
     "cmd/clef"
     "cmd/devp2p"
     "cmd/ethkey"
@@ -58,6 +57,6 @@ in buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ adisbladis RaghavSood ];
+    maintainers = with maintainers; [ RaghavSood ];
   };
 }

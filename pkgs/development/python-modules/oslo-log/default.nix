@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.2.0";
+  version = "5.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-YiYzbVtu4YhfBXtl2+3oTEqcXk5K51oOjn84PBY+xIA=";
+    hash = "sha256-LrNVtYVw8lgR2nb6gUU7h1x8lEoZoj0sMFtKTf670iM=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,8 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
+    # File which is used doesn't seem not to be present
+    "test_log_config_append_invalid"
   ];
 
   pythonImportsCheck = [
@@ -55,10 +57,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "oslo.log library";
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
+    broken = stdenv.isDarwin;
   };
 }

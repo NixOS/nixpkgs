@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tile38";
-  version = "1.31.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aGt5iBVT5MTbnuoZ4zd5r6sIwmNKPo1J7UjDAefKfPo=";
+    sha256 = "sha256-hG+ad68Q4KjtovmTlS/63NQxCQ9ZkcC8lrNGfhE9C6U=";
   };
 
-  vendorHash = "sha256-9KK1IRwERcJtVnK4y5l3Nr87I3hg7E8nJuJjRiCMCZk=";
+  vendorHash = "sha256-5mkxTumqLP+fEBTwhJrPpteeDPTN9hLEAh6A4l4lQhs=";
 
   subPackages = [ "cmd/tile38-cli" "cmd/tile38-server" ];
 
@@ -25,6 +25,6 @@ buildGoModule rec {
     '';
     homepage = "https://tile38.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
   };
 }

@@ -12,13 +12,13 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.17.4";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-g3SEUVcyr6+nt0zMHB1F4drCwmQvPYQErOwSl9I+1Tg=";
+    hash = "sha256-2oEpBNMHj4qpkPp8rXEMsRRiRQeC30hQCQh7d8bOLUU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -27,6 +27,12 @@ buildPythonApplication rec {
     git
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Requires fully functioning shells including zsh modules and bash
+    # completion.
+    "completion_e2e"
   ];
 
   postInstall = ''
@@ -49,5 +55,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ blitz ];
+    mainProgram = "git-machete";
   };
 }

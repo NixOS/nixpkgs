@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-clone";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "janlikar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lfg47kw07k4r795n0iixl5cnrb13g74hqlbp8jzbypr255bc16q";
+    sha256 = "sha256-al+C3p9jzPbykflt3WN+SibHm/AN4BdTxuTGmFiGGrE=";
   };
 
-  cargoSha256 = "sha256-rJcTl5fe3vkNNyLRvm7q5KmzyJXchh1/JuzK0GFhHLk=";
+  cargoHash = "sha256-sQVjK6i+wXwOfQMvnatl6PQ1S+91I58YEtRjzjSNNo8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

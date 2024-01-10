@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , astroid
 , dill
@@ -18,24 +19,40 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.16.2";
+  version = "2.17.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+    hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update-setuptools.patch";
+      url = "https://github.com/pylint-dev/pylint/commit/1d029b594aa258fa01570632d001e801f9257d60.patch";
+      hash = "sha256-brQwelZVkSX9h0POH8OJeapZuWZ8p7BY/ZzhYzGbiHY=";
+    })
+    # https://github.com/pylint-dev/pylint/pull/8961
+    (fetchpatch {
+      name = "unpin-setuptools.patch";
+      url = "https://github.com/pylint-dev/pylint/commit/a0ac282d6f8df381cc04adc0a753bec66fc4db63.patch";
+      hash = "sha256-15O72LE2WQK590htNc3jghdbVoGLHUIngERDpqT8pK8=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -68,6 +85,7 @@ buildPythonPackage rec {
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
     "-W" "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -103,7 +121,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
@@ -115,6 +133,6 @@ buildPythonPackage rec {
       - epylint: Emacs and Flymake compatible Pylint
     '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

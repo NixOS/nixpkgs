@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stb";
-  version = "unstable-2021-09-10";
+  version = "unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "af1a5bc352164740c1cc1354942b1c6b72eacb8a";
-    sha256 = "0qq35cd747lll4s7bmnxb3pqvyp2hgcr9kyf758fax9lx76iwjhr";
+    rev = "5736b15f7ea0ffb08dd38af21067c314d6a3aae9";
+    hash = "sha256-s2ASdlT3bBNrqvwfhhN6skjbmyEnUgvNOrvhgUSRj98=";
   };
 
   nativeBuildInputs = [ copyPkgconfigItems ];
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nothings/stb";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

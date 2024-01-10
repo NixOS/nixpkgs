@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
+{ lib
+, stdenv
+, fetchurl
+, lv2
+, meson
+, ninja
+, pkg-config
+, python3
+, libsndfile
+, serd
+, sord
+, sratom
+, gitUpdater
 
 # test derivations
 , pipewire
@@ -6,24 +18,29 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.12";
+  version = "0.24.22";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-JqN3kIkMnB+DggO0f1sjIDNP6SwCpNJuu+Jmnb12kGE=";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    hash = "sha256-dvlJ0OWfyDNjQJtexeFcEEb7fdZYnTwbkgzsH9Kfn/M=";
   };
 
-  patches = [ ./lilv-pkgconfig.patch ];
-
-  nativeBuildInputs = [ pkg-config python3 wafHook ];
-  buildInputs = [ serd sord sratom ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 ];
+  buildInputs = [ libsndfile serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
-  dontAddWafCrossFlags = true;
 
-  passthru.tests = {
-    inherit pipewire;
+  mesonFlags = [ "-Ddocs=disabled" ];
+
+  passthru = {
+    tests = {
+      inherit pipewire;
+    };
+    updateScript = gitUpdater {
+      url = "https://gitlab.com/lv2/lilv.git";
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {

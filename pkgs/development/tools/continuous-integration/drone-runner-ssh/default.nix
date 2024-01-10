@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/drone-runners/drone-runner-ssh";
     license = licenses.unfreeRedistributable;
     maintainers = teams.c3d2.members;
+    mainProgram = "drone-runner-ssh";
   };
 }

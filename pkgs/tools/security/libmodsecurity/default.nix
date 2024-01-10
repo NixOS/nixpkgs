@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.9";
+  version = "3.0.11";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-7tA1fqKK5aGOhWBifLAjDmQ80ven4+OcwAzAowPStzA=";
+    sha256 = "sha256-dbAX4lokmiUc+glhTG0PPaD/WEXcoQX0AQ/WZwJQYPY=";
     fetchSubmodules = true;
   };
 
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "modsec-rules-check";
   };
 }

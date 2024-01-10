@@ -40,14 +40,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.virtualbox;
-      defaultText = literalExpression "pkgs.virtualbox";
-      description = lib.mdDoc ''
-        Which VirtualBox package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "virtualbox" { };
 
     addNetworkInterface = mkOption {
       type = types.bool;
@@ -91,7 +84,7 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [{
-    warnings = mkIf (config.nixpkgs.config.virtualbox.enableExtensionPack or false)
+    warnings = mkIf (pkgs.config.virtualbox.enableExtensionPack or false)
       ["'nixpkgs.virtualbox.enableExtensionPack' has no effect, please use 'virtualisation.virtualbox.host.enableExtensionPack'"];
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
     boot.extraModulePackages = [ kernelModules ];

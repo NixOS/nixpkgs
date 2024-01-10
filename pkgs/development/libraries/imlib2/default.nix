@@ -22,6 +22,8 @@
 , enlightenment
 , xorg
 , testers
+
+, gitUpdater
 }:
 
 let
@@ -29,11 +31,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9xK2u53K1G2Lj0rVJhDcu667TMgLX9EvkxJNOjgPpr8=";
+    hash = "sha256-jCTS0YnE1a5gLb8vwPuxF6qSPqtsiDBB8P7spOjGd04=";
   };
 
   buildInputs = [
@@ -59,18 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "bin" "out" "dev" ];
 
-  passthru.tests = {
-    inherit
-      libcaca
-      diffoscopeMinimal
-      feh
-      icewm
-      openbox
-      fluxbox
-      enlightenment;
+  passthru = {
+    tests = {
+      inherit
+        libcaca
+        diffoscopeMinimal
+        feh
+        icewm
+        openbox
+        fluxbox
+        enlightenment;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.enlightenment.org/old/legacy-imlib2.git";
+      rev-prefix = "v";
+    };
   };
-
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Image manipulation library";
@@ -84,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
-    changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
+    changelog = "https://git.enlightenment.org/old/legacy-imlib2/raw/tag/v${finalAttrs.version}/ChangeLog";
     license = licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;

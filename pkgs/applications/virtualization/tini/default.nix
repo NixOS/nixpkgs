@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/krallin/tini";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "tini";
   };
 }

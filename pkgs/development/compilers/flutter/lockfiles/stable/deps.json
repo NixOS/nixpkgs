@@ -1,0 +1,1020 @@
+[
+  {
+    "name": "flutter_tools",
+    "version": "0.0.0",
+    "kind": "root",
+    "source": "root",
+    "dependencies": [
+      "archive",
+      "args",
+      "browser_launcher",
+      "dds",
+      "dwds",
+      "completion",
+      "coverage",
+      "crypto",
+      "file",
+      "flutter_template_images",
+      "html",
+      "http",
+      "intl",
+      "meta",
+      "multicast_dns",
+      "mustache_template",
+      "package_config",
+      "process",
+      "fake_async",
+      "stack_trace",
+      "usage",
+      "webdriver",
+      "webkit_inspection_protocol",
+      "xml",
+      "yaml",
+      "native_stack_traces",
+      "shelf",
+      "vm_snapshot_analysis",
+      "uuid",
+      "web_socket_channel",
+      "stream_channel",
+      "shelf_web_socket",
+      "shelf_static",
+      "pub_semver",
+      "pool",
+      "path",
+      "mime",
+      "logging",
+      "http_multi_server",
+      "convert",
+      "async",
+      "unified_analytics",
+      "test_api",
+      "test_core",
+      "vm_service",
+      "standard_message_codec",
+      "_fe_analyzer_shared",
+      "analyzer",
+      "boolean_selector",
+      "built_collection",
+      "built_value",
+      "clock",
+      "csslib",
+      "dap",
+      "dds_service_extensions",
+      "devtools_shared",
+      "fixnum",
+      "frontend_server_client",
+      "glob",
+      "http_parser",
+      "io",
+      "js",
+      "json_rpc_2",
+      "matcher",
+      "petitparser",
+      "platform",
+      "shelf_packages_handler",
+      "shelf_proxy",
+      "source_map_stack_trace",
+      "source_maps",
+      "source_span",
+      "sse",
+      "string_scanner",
+      "sync_http",
+      "term_glyph",
+      "typed_data",
+      "watcher",
+      "collection",
+      "file_testing",
+      "pubspec_parse",
+      "checked_yaml",
+      "json_annotation",
+      "node_preamble",
+      "test"
+    ]
+  },
+  {
+    "name": "test",
+    "version": "1.24.3",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "boolean_selector",
+      "collection",
+      "coverage",
+      "http_multi_server",
+      "io",
+      "js",
+      "node_preamble",
+      "package_config",
+      "path",
+      "pool",
+      "shelf",
+      "shelf_packages_handler",
+      "shelf_static",
+      "shelf_web_socket",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "typed_data",
+      "web_socket_channel",
+      "webkit_inspection_protocol",
+      "yaml",
+      "test_api",
+      "test_core",
+      "matcher"
+    ]
+  },
+  {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
+    "name": "test_api",
+    "version": "0.6.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "term_glyph",
+    "version": "1.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "string_scanner",
+    "version": "1.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_span",
+    "version": "1.10.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "path",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "path",
+    "version": "1.8.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "collection",
+    "version": "1.17.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "stream_channel",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "async",
+    "version": "2.11.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "meta",
+    "version": "1.9.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "test_core",
+    "version": "0.5.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "async",
+      "args",
+      "boolean_selector",
+      "collection",
+      "coverage",
+      "frontend_server_client",
+      "glob",
+      "io",
+      "meta",
+      "package_config",
+      "path",
+      "pool",
+      "source_map_stack_trace",
+      "source_maps",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "vm_service",
+      "yaml",
+      "test_api"
+    ]
+  },
+  {
+    "name": "yaml",
+    "version": "3.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "vm_service",
+    "version": "11.7.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "source_maps",
+    "version": "0.10.12",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_map_stack_trace",
+    "version": "2.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "source_maps",
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "pool",
+    "version": "1.5.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "package_config",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "io",
+    "version": "1.0.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "glob",
+    "version": "2.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "file",
+      "path",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "file",
+    "version": "6.1.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "frontend_server_client",
+    "version": "3.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "coverage",
+    "version": "1.6.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "logging",
+      "package_config",
+      "path",
+      "source_maps",
+      "stack_trace",
+      "vm_service"
+    ]
+  },
+  {
+    "name": "logging",
+    "version": "1.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "args",
+    "version": "2.4.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "analyzer",
+    "version": "5.13.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "_fe_analyzer_shared",
+      "collection",
+      "convert",
+      "crypto",
+      "glob",
+      "meta",
+      "package_config",
+      "path",
+      "pub_semver",
+      "source_span",
+      "watcher",
+      "yaml"
+    ]
+  },
+  {
+    "name": "watcher",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "path"
+    ]
+  },
+  {
+    "name": "pub_semver",
+    "version": "2.1.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "crypto",
+    "version": "3.0.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "typed_data",
+    "version": "1.3.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "convert",
+    "version": "3.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "_fe_analyzer_shared",
+    "version": "61.0.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "webkit_inspection_protocol",
+    "version": "1.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "logging"
+    ]
+  },
+  {
+    "name": "web_socket_channel",
+    "version": "2.4.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "crypto",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "shelf_web_socket",
+    "version": "1.0.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "shelf",
+      "stream_channel",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "shelf",
+    "version": "1.4.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "http_parser",
+      "path",
+      "stack_trace",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "http_parser",
+    "version": "4.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner",
+      "typed_data"
+    ]
+  },
+  {
+    "name": "shelf_static",
+    "version": "1.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "convert",
+      "http_parser",
+      "mime",
+      "path",
+      "shelf"
+    ]
+  },
+  {
+    "name": "mime",
+    "version": "1.0.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "shelf_packages_handler",
+    "version": "3.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "shelf",
+      "shelf_static"
+    ]
+  },
+  {
+    "name": "node_preamble",
+    "version": "2.0.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "js",
+    "version": "0.6.7",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "http_multi_server",
+    "version": "3.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "json_annotation",
+    "version": "4.8.1",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "checked_yaml",
+    "version": "2.0.3",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "json_annotation",
+      "source_span",
+      "yaml"
+    ]
+  },
+  {
+    "name": "pubspec_parse",
+    "version": "1.2.3",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "checked_yaml",
+      "collection",
+      "json_annotation",
+      "pub_semver",
+      "yaml"
+    ]
+  },
+  {
+    "name": "file_testing",
+    "version": "3.0.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "test"
+    ]
+  },
+  {
+    "name": "sync_http",
+    "version": "0.3.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "sse",
+    "version": "4.1.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "collection",
+      "js",
+      "logging",
+      "pool",
+      "shelf",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "shelf_proxy",
+    "version": "1.0.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "http",
+      "path",
+      "shelf"
+    ]
+  },
+  {
+    "name": "http",
+    "version": "0.13.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "http_parser",
+      "meta"
+    ]
+  },
+  {
+    "name": "platform",
+    "version": "3.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "petitparser",
+    "version": "5.4.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "json_rpc_2",
+    "version": "3.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "stack_trace",
+      "stream_channel"
+    ]
+  },
+  {
+    "name": "fixnum",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "devtools_shared",
+    "version": "2.24.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "shelf",
+      "usage",
+      "vm_service",
+      "webkit_inspection_protocol"
+    ]
+  },
+  {
+    "name": "usage",
+    "version": "4.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "dds_service_extensions",
+    "version": "1.5.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "dap",
+      "vm_service"
+    ]
+  },
+  {
+    "name": "dap",
+    "version": "1.0.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "csslib",
+    "version": "1.0.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "clock",
+    "version": "1.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "built_value",
+    "version": "8.6.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "built_collection",
+      "collection",
+      "fixnum",
+      "meta"
+    ]
+  },
+  {
+    "name": "built_collection",
+    "version": "5.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "standard_message_codec",
+    "version": "0.0.1+3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "unified_analytics",
+    "version": "2.0.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "file",
+      "http",
+      "intl",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "intl",
+    "version": "0.18.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "uuid",
+    "version": "3.0.7",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "crypto"
+    ]
+  },
+  {
+    "name": "vm_snapshot_analysis",
+    "version": "0.7.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "collection",
+      "path"
+    ]
+  },
+  {
+    "name": "native_stack_traces",
+    "version": "0.5.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "path"
+    ]
+  },
+  {
+    "name": "xml",
+    "version": "6.3.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "petitparser"
+    ]
+  },
+  {
+    "name": "webdriver",
+    "version": "3.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "matcher",
+      "path",
+      "stack_trace",
+      "sync_http"
+    ]
+  },
+  {
+    "name": "fake_async",
+    "version": "1.3.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "collection"
+    ]
+  },
+  {
+    "name": "process",
+    "version": "4.2.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "file",
+      "path",
+      "platform"
+    ]
+  },
+  {
+    "name": "mustache_template",
+    "version": "2.0.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "multicast_dns",
+    "version": "0.3.2+3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "html",
+    "version": "0.15.4",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "csslib",
+      "source_span"
+    ]
+  },
+  {
+    "name": "flutter_template_images",
+    "version": "4.2.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "completion",
+    "version": "1.0.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "logging",
+      "path"
+    ]
+  },
+  {
+    "name": "dwds",
+    "version": "19.0.1+1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "built_collection",
+      "built_value",
+      "collection",
+      "crypto",
+      "dds",
+      "file",
+      "http",
+      "http_multi_server",
+      "logging",
+      "meta",
+      "package_config",
+      "path",
+      "pool",
+      "pub_semver",
+      "shelf",
+      "shelf_packages_handler",
+      "shelf_proxy",
+      "shelf_static",
+      "shelf_web_socket",
+      "source_maps",
+      "stack_trace",
+      "sse",
+      "uuid",
+      "vm_service",
+      "web_socket_channel",
+      "webkit_inspection_protocol"
+    ]
+  },
+  {
+    "name": "dds",
+    "version": "2.9.0+hotfix",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "async",
+      "browser_launcher",
+      "collection",
+      "dds_service_extensions",
+      "dap",
+      "devtools_shared",
+      "http_multi_server",
+      "json_rpc_2",
+      "meta",
+      "path",
+      "shelf_proxy",
+      "shelf_static",
+      "shelf_web_socket",
+      "shelf",
+      "sse",
+      "stack_trace",
+      "stream_channel",
+      "vm_service",
+      "web_socket_channel"
+    ]
+  },
+  {
+    "name": "browser_launcher",
+    "version": "1.1.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "webkit_inspection_protocol"
+    ]
+  },
+  {
+    "name": "archive",
+    "version": "3.3.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "crypto",
+      "path"
+    ]
+  }
+]

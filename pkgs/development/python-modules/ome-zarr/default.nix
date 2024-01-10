@@ -6,47 +6,39 @@
 , pytestCheckHook
 , aiohttp
 , dask
+, distributed
 , fsspec
 , numpy
 , requests
 , scikit-image
-, s3fs
 , toolz
 , zarr
 }:
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.6.1";
+  version = "0.8.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpweOuqruh7mAqmSaNbehLCr8OCLe1IZNWV4bpHpTl0=";
+    hash = "sha256-DMBTrDyUmNsrjOsFKrqukJNZ1f/mAjz4aunNUcwVMKg=";
   };
-
-  patches = [
-    # remove after next release:
-    (fetchpatch {
-      name = "fix-writer-bug";
-      url = "https://github.com/ome/ome-zarr-py/commit/c1302e05998dfe2faf94b0f958c92888681f5ffa.patch";
-      hash = "sha256-1WANObABUXkjqeGdnmg0qJ48RcZcuAwgitZyMwiRYUw=";
-    })
-  ];
 
   propagatedBuildInputs = [
     numpy
     dask
+    distributed
     zarr
     fsspec
     aiohttp
     requests
-    s3fs
     scikit-image
     toolz
-  ];
+  ] ++ fsspec.passthru.optional-dependencies.s3;
 
   nativeCheckInputs = [
     pytestCheckHook

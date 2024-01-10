@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, ant, unzip }:
+{ lib, stdenv, fetchurl, ant, unzip, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
-  version = "8.0.33";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
-    sha256 = "sha256-k3jft7sM2xrc88mdhltxtm+SZcRAn6B4EvglMyJyX4Y=";
+    hash = "sha256-N0emBuTaYlyL1SS0wDOR8uiz4yGUOMllKR7LC60eFEg=";
   };
 
   installPhase = ''
@@ -18,11 +18,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ant ];
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/mysql/mysql-connector-j.git";
+  };
+
   meta = with lib; {
     description = "MySQL Connector/J";
-    homepage = "https://dev.mysql.com/doc/connector-j/8.0/en/";
+    homepage = "https://dev.mysql.com/doc/connector-j/en/";
+    changelog = "https://dev.mysql.com/doc/relnotes/connector-j/en/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.gpl2;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

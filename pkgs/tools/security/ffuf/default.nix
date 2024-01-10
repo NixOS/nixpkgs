@@ -1,23 +1,38 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "ffuf";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ffuf";
+    repo = "ffuf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TfPglATKQ3RIGODcIpSRL6FjbLyCjDzbi70jTLKYlLk=";
+    hash = "sha256-+wcNqQHtB8yCLiJXMBxolCWsYZbBAsBGS1hs7j1lzUU=";
   };
 
-  vendorHash = "sha256-nqv45e1W7MA8ElsJ7b4XWs26OicJ7IXmh93+wkueZg4=";
+  vendorHash = "sha256-SrC6Q7RKf+gwjJbxSZkWARw+kRtkwVv1UJshc/TkNdc=";
+
+  patches = [
+    # Fix CSV test, https://github.com/ffuf/ffuf/pull/731
+    (fetchpatch {
+      name = "fix-csv-test.patch";
+      url = "https://github.com/ffuf/ffuf/commit/7f2aae005ad73988a1fa13c1c33dab71f4ae5bbd.patch";
+      hash = "sha256-/v9shGICmsbFfEJe4qBkBHB9PVbBlrjY3uFmODxHu9M=";
+    })
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
-    description = "Fast web fuzzer written in Go";
+    description = "Tool for web fuzzing";
     longDescription = ''
       FFUF, or “Fuzz Faster you Fool” is an open source web fuzzing tool,
       intended for discovering elements and content within web applications

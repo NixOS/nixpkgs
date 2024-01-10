@@ -1,18 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+}:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.12.0";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
+    hash = "sha256-tKywmFSSWc538i7raCrZnFpMDnFMT23hYVoYndnIKJ4=";
   };
 
-  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
+  vendorHash = "sha256-eFoXUroJgrstNYjSYsP6o0vTEW2k/+6JjyVn6bb4um8=";
 
   subPackages = [
     # The server
@@ -44,8 +51,14 @@ buildGoModule rec {
     rm roomserver/internal/input/input_test.go
   '';
 
+  # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {

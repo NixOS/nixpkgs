@@ -20,5 +20,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "icemon";
   };
 }

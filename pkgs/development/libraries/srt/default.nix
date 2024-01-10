@@ -1,20 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, windows
 }:
 
 stdenv.mkDerivation rec {
   pname = "srt";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "sha256-qVvoHtROtJjrUd+YpjN/0I6KmiH7c24+pQ4xYTUGPXk=";
+    sha256 = "sha256-HW5l26k9w4F6IJrtiahU/8/CPY6M/cKn8AgESsntC6A=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    windows.mingw_w64_pthreads
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    ./no-msvc-compat-headers.patch
+  ];
 
   cmakeFlags = [
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
@@ -29,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure, Reliable, Transport";
-    homepage    = "https://github.com/Haivision/srt";
-    license     = licenses.mpl20;
+    homepage = "https://github.com/Haivision/srt";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ nh2 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

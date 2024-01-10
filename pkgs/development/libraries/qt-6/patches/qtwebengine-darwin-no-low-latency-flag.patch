@@ -1,10 +1,10 @@
 diff --git a/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc b/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
-index 6a3a777..249d4cc 100644
+index d4b0161b2e..e5a0eb1967 100644
 --- a/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
 +++ b/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
-@@ -20,12 +20,6 @@
- #include "media/base/media_log.h"
- #include "media/base/video_frame.h"
+@@ -29,12 +29,6 @@
+ #include "media/base/video_types.h"
+ #include "media/video/video_encode_accelerator.h"
  
 -// This is a min version of macOS where we want to support SVC encoding via
 -// EnableLowLatencyRateControl flag. The flag is actually supported since 11.3,
@@ -15,21 +15,22 @@ index 6a3a777..249d4cc 100644
  namespace media {
  
  namespace {
-@@ -150,8 +144,6 @@ VTVideoEncodeAccelerator::GetSupportedProfiles() {
-   profile.max_framerate_numerator = kMaxFrameRateNumerator;
-   profile.max_framerate_denominator = kMaxFrameRateDenominator;
-   profile.max_resolution = gfx::Size(kMaxResolutionWidth, kMaxResolutionHeight);
+@@ -277,8 +271,6 @@ VTVideoEncodeAccelerator::GetSupportedH264Profiles() {
+   profile.rate_control_modes = VideoEncodeAccelerator::kConstantMode |
+                                VideoEncodeAccelerator::kVariableMode;
+   profile.scalability_modes.push_back(SVCScalabilityMode::kL1T1);
 -  if (__builtin_available(macOS LOW_LATENCY_FLAG_AVAILABLE_VER, *))
 -    profile.scalability_modes.push_back(SVCScalabilityMode::kL1T2);
+ 
    for (const auto& supported_profile : kSupportedProfiles) {
-     profile.profile = supported_profile;
-     profiles.push_back(profile);
-@@ -595,13 +587,6 @@ bool VTVideoEncodeAccelerator::CreateCompressionSession(
-       kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder};
-   std::vector<CFTypeRef> encoder_values{kCFBooleanTrue};
+     if (VideoCodecProfileToVideoCodec(supported_profile) == VideoCodec::kH264) {
+@@ -814,14 +806,6 @@ bool VTVideoEncodeAccelerator::CreateCompressionSession(
+     encoder_values.push_back(kCFBooleanFalse);
+   }
  
 -  if (__builtin_available(macOS LOW_LATENCY_FLAG_AVAILABLE_VER, *)) {
--    if (require_low_delay_) {
+-    // Remove the validation once HEVC SVC mode is supported on macOS.
+-    if (require_low_delay_ && codec == VideoCodec::kH264) {
 -      encoder_keys.push_back(
 -          kVTVideoEncoderSpecification_EnableLowLatencyRateControl);
 -      encoder_values.push_back(kCFBooleanTrue);
@@ -38,10 +39,10 @@ index 6a3a777..249d4cc 100644
    base::ScopedCFTypeRef<CFDictionaryRef> encoder_spec =
        video_toolbox::DictionaryWithKeysAndValues(
            encoder_keys.data(), encoder_values.data(), encoder_keys.size());
-@@ -669,19 +654,8 @@ bool VTVideoEncodeAccelerator::ConfigureCompressionSession() {
-   }
+@@ -891,19 +875,8 @@ bool VTVideoEncodeAccelerator::ConfigureCompressionSession(VideoCodec codec) {
  
-   if (num_temporal_layers_ == 2) {
+   // Remove the validation once HEVC SVC mode is supported on macOS.
+   if (num_temporal_layers_ == 2 && codec_ == VideoCodec::kH264) {
 -    if (__builtin_available(macOS LOW_LATENCY_FLAG_AVAILABLE_VER, *)) {
 -      if (!session_property_setter.IsSupported(
 -              kVTCompressionPropertyKey_BaseLayerFrameRateFraction)) {

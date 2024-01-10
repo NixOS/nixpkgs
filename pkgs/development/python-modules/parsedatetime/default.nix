@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
+  format = "setuptools";
   disabled = isPy27; # no longer compatible with icu package
 
   src = fetchPypi {

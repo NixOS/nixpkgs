@@ -6,24 +6,28 @@
 , enableDefaultMusicPack ? true
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
   pname = "endgame-singularity";
   version = "1.00";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "singularity";
-      repo = "singularity";
-      rev = "v${version}";
-      sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
-    })
-  ] ++ lib.optional enableDefaultMusicPack (
-    fetchurl {
-      url = "http://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
-      sha256 = "0vf2qaf66jh56728pq1zbnw50yckjz6pf6c6qw6dl7vk60kkqnpb";
-    }
-  );
-  sourceRoot = "source";
+  main_src = fetchFromGitHub {
+    owner = "singularity";
+    repo = "singularity";
+    rev = "v${version}";
+    sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
+  };
+
+  music_src = fetchurl {
+    url = "http://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
+    sha256 = "0vf2qaf66jh56728pq1zbnw50yckjz6pf6c6qw6dl7vk60kkqnpb";
+  };
+in
+
+python3.pkgs.buildPythonApplication rec {
+  inherit pname version;
+
+  srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
+  sourceRoot = main_src.name;
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
   propagatedBuildInputs = with python3.pkgs; [ pygame numpy polib ];
@@ -50,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
       free # earth images from NASA, some fonts
       cc0 # cick0.wav
     ];
+    mainProgram = "singularity";
     maintainers = with lib.maintainers; [ fgaz ];
   };
 }

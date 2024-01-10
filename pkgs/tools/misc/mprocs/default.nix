@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pvolok/mprocs";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage thehedgeh0g ];
+    mainProgram = "mprocs";
   };
 }

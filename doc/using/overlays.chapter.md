@@ -24,7 +24,7 @@ The list of overlays is determined as follows.
 
 2.  Otherwise, if the Nix path entry `<nixpkgs-overlays>` exists, we look for overlays at that path, as described below.
 
-    See the section on `NIX_PATH` in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
+    See the [section on `NIX_PATH`](https://nixos.org/manual/nix/stable/command-ref/env-common.html#env-NIX_PATH) in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
 
 3.  If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
 
@@ -77,7 +77,7 @@ In Nixpkgs, we have multiple implementations of the BLAS/LAPACK numerical linear
 
     The Nixpkgs attribute is `openblas` for ILP64 (integer width = 64 bits) and `openblasCompat` for LP64 (integer width = 32 bits).  `openblasCompat` is the default.
 
--   [LAPACK reference](http://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
+-   [LAPACK reference](https://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
 
     The Nixpkgs attribute is `lapack-reference`.
 
@@ -156,7 +156,7 @@ All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Pas
 
 -   [MVAPICH](https://mvapich.cse.ohio-state.edu/), attribute name `mvapich`
 
-To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, simply use the following overlay:
+To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, use the following overlay:
 
 ```nix
 self: super:

@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     CONFIG_LIBNL32=y
     CONFIG_OWE=y
     CONFIG_P2P=y
+    CONFIG_SAE_PK=y
     CONFIG_TDLS=y
     CONFIG_TLS=openssl
     CONFIG_TLSV11=y

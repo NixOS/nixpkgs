@@ -1,8 +1,7 @@
 { lib
+, argon2-cffi
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
-, argon2-cffi
 , keyring
 , pycryptodome
 , pytestCheckHook
@@ -10,26 +9,22 @@
 }:
 
 buildPythonPackage rec {
-  pname = "keyrings.cryptfile";
-  # NOTE: newer releases are bugged/incompatible
-  # https://github.com/frispete/keyrings.cryptfile/issues/15
-  version = "1.3.4";
+  pname = "keyrings-cryptfile";
+  version = "1.3.9";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jW+cKMm+xef8C+fl0CGe+6SEkYBHDjFX2/kLCZ62j6c=";
+    pname = "keyrings.cryptfile";
+    inherit version;
+    hash = "sha256-fCpFPKuZhUJrjCH3rVSlfkn/joGboY4INAvYgBrPAJE=";
   };
 
-  patches = [
-    # upstream setup.cfg has an option that is not supported
-    ./fix-testsuite.patch
-    # change of API in keyrings.testing
-    (fetchpatch {
-      url = "https://github.com/frispete/keyrings.cryptfile/commit/6fb9e45f559b8b69f7a0a519c0bece6324471d79.patch";
-      hash = "sha256-1878pMO9Ed1zs1pl+7gMjwx77HbDHdE1CryN8TPfPdU=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "-s --cov=keyrings/cryptfile" ""
+  '';
 
   propagatedBuildInputs = [
     argon2-cffi
@@ -46,14 +41,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_set_properties"
-    "UncryptedFileKeyringTestCase"
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/...
+    "test_versions"
   ];
 
   meta = with lib; {
     description = "Encrypted file keyring backend";
     homepage = "https://github.com/frispete/keyrings.cryptfile";
+    changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = teams.chia.members;
+    maintainers = [ maintainers.lourkeur ];
   };
 }

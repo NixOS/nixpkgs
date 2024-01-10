@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.15.0";
+  version = "2.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w6BCbs0lpw2lOyqQedcXMSKahJak7a6NN4Xsy7+CjVs=";
+    hash = "sha256-PRhRAJMSraXoq/IP92GvhHS3UwYKtuC31uxHvBHysTY=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-monitoring";
     changelog = "https://github.com/googleapis/python-monitoring/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

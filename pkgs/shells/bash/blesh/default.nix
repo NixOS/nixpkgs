@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "blesh";
-  version = "0.3.4";
+  version = "0.4.0-devel3";
 
   src = fetchzip {
     url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
-    sha256 = "sha256-MGCQirZvqGfjTTsbDfihY2il/u2suWBaZ6dX8mF1zLk=";
+    sha256 = "sha256-kGLp8RaInYSrJEi3h5kWEOMAbZV/gEPFUjOLgBuMhCI=";
   };
 
   dontBuild = true;

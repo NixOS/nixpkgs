@@ -8,7 +8,7 @@ let
       environment.variables.NIXOS_OZONE_WL = "1";
       environment.variables.DISPLAY = "do not use";
 
-      fonts.fonts = with pkgs; [ dejavu_fonts ];
+      fonts.packages = with pkgs; [ dejavu_fonts ];
     };
     xorg = { pkgs, ... }: {
       imports = [ ./common/user-account.nix ./common/x11.nix ];

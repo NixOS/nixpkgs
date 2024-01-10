@@ -9,13 +9,16 @@
 , six
 , nose
 , mako
-, cudaSupport ? false, cudaPackages
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
 , openclSupport ? true, ocl-icd, clblas
 }:
 
 buildPythonPackage rec {
   pname = "libgpuarray";
   version = "0.7.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Theano";

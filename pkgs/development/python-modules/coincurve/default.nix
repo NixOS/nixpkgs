@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "coincurve";
   version = "18.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -67,6 +68,6 @@ buildPythonPackage rec {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

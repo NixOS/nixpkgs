@@ -1,31 +1,38 @@
 { lib
 , buildPythonPackage
-, cloudscraper
 , fetchFromGitHub
+, garth
+, pdm-backend
 , pythonOlder
 , requests
+, withings-sync
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.1.55";
-  format = "setuptools";
+  version = "0.2.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-YPLlrlV8UyoaNtE+LgX7jpZkR7jbSe/2WRR0v0cfACY=";
+    hash = "sha256-uq3biWZvcORvrAMd/Ix0Cj1ol5fiqdDsO54zD82G2vA=";
   };
 
-  propagatedBuildInputs = [
-    cloudscraper
-    requests
+  nativeBuildInputs = [
+    pdm-backend
   ];
 
-  # Module has no tests
+  propagatedBuildInputs = [
+    garth
+    requests
+    withings-sync
+  ];
+
+  # Tests require a token
   doCheck = false;
 
   pythonImportsCheck = [

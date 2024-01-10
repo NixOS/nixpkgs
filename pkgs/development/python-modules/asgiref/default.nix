@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.0";
+  version = "3.7.2";
   pname = "asgiref";
   format = "setuptools";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "asgiref";
     rev = "refs/tags/${version}";
-    hash = "sha256-Kl4483rfuFKbnD7pBSTND1QAtBsZP6jKsrDlpVCZLDs=";
+    hash = "sha256-VW1PBh6+nLMD7qxmL83ymuxCPYKVY3qGKsB7ZiMqMu8=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

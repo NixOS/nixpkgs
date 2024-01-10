@@ -48,5 +48,6 @@ stdenvNoCC.mkDerivation {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
+    mainProgram = "colorscript";
   };
 }

@@ -6,18 +6,14 @@
 
 buildPythonPackage rec {
   pname = "arpeggio";
-  version = "2.0.0";
+  version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
-    hash = "sha256-1rA4OQGbuKaHhfkpLuajaxlU64S5JbhKa4peHibT7T0=";
+    hash = "sha256-x5CysG4ibS3UaOT7+1t/UGzsZkFgMf3hRBzx3ioLpwA=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,6 +23,6 @@ buildPythonPackage rec {
     description = "Recursive descent parser with memoization based on PEG grammars (aka Packrat parser)";
     homepage = "https://github.com/textX/Arpeggio";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

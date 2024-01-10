@@ -18,6 +18,8 @@ stdenv.mkDerivation  rec {
     sha256 = "sha256-NJLpitq2K1l+8NKS+yRZthI7yABwqKoKML5pYgdaEvA=";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   configureFlags = [
     "--enable-shared"
     "--enable-sharedlib"

@@ -19,7 +19,7 @@
 , lib
 , testers
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 
@@ -143,8 +143,9 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
-    # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
-    moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+    # gdk_pixbuf_binarydir and gdk_pixbuf_moduledir variables from gdk-pixbuf-2.0.pc
+    binaryDir = "lib/gdk-pixbuf-2.0/2.10.0";
+    moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
   meta = with lib; {

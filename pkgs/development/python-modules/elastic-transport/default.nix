@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.4.0";
+  version = "8.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rZdl2gjY5Yg2Ls777tj12pPATMn//xVvEM4wkrZ3qUY=";
+    hash = "sha256-4W9p9niHf2EMY+sS1RCdqWndzvpz8pKrIlLo3NxJ8mk=";
   };
 
   postPatch = ''
@@ -60,6 +60,13 @@ buildPythonPackage rec {
     "test_default_headers"
     "test_head"
     "tls"
+    "test_simple_request"
+    "test_node"
+    "test_debug_logging"
+    "test_debug_logging_uncompressed_body"
+    "test_debug_logging_no_body"
+    "test_httpbin"
+    "test_sniffed_nodes_added_to_pool"
   ];
 
   meta = with lib; {

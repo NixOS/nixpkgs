@@ -4595,7 +4595,7 @@ dependencies = [
 
 [[package]]
 name = "uk-content"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "indexmap",
@@ -4632,7 +4632,7 @@ dependencies = [
 
 [[package]]
 name = "uk-editor"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "eframe",
@@ -4659,7 +4659,7 @@ dependencies = [
 
 [[package]]
 name = "uk-manager"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "anyhow_ext",
@@ -4697,7 +4697,7 @@ dependencies = [
 
 [[package]]
 name = "uk-mod"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "anyhow_ext",
@@ -4738,7 +4738,7 @@ dependencies = [
 
 [[package]]
 name = "uk-reader"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "anyhow_ext",
@@ -4763,7 +4763,7 @@ dependencies = [
 
 [[package]]
 name = "uk-ui"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "catppuccin-egui",
  "color-hex",
@@ -4796,14 +4796,14 @@ dependencies = [
 
 [[package]]
 name = "uk-util"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "once_cell",
 ]
 
 [[package]]
 name = "ukmm"
-version = "0.10.0"
+version = "0.10.1"
 dependencies = [
  "anyhow",
  "anyhow_ext",

@@ -12,12 +12,7 @@ in {
         default = false;
         description = lib.mdDoc "Whether to enable the qemu guest agent.";
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.qemu_kvm.ga;
-        defaultText = literalExpression "pkgs.qemu_kvm.ga";
-        description = lib.mdDoc "The QEMU guest agent package.";
-      };
+      package = mkPackageOption pkgs [ "qemu_kvm" "ga" ] { };
   };
 
   config = mkIf cfg.enable (

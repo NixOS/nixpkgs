@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, wheel
 , docutils
 , importlib-metadata
 , jinja2
@@ -18,19 +20,20 @@
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.100";
-
+  version = "0.101";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Zkw8FubT3qJ06ECkNurE26bLUKtq8xYvydVxa+PLe0I=";
+    hash = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
   };
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -66,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Convert reStructured Text to PDF via ReportLab";
     homepage = "https://rst2pdf.org/";
+    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

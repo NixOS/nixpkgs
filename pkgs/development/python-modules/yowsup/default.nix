@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "yowsup";
   version = "3.3.0";
+  format = "setuptools";
 
   # The Python 2.x support of this package is incompatible with `six==1.11`:
   # https://github.com/tgalal/yowsup/issues/2416#issuecomment-365113486
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

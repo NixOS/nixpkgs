@@ -41,7 +41,7 @@ buildDotnetModule rec {
     hash = "sha256-/XQ5HD0dBfFn3ERlLwHknS9Fyd3YMpKHBXuvMwRXcQ8=";
   };
 
-  sourceRoot = "source/Source";
+  sourceRoot = "${src.name}/Source";
 
   projectFile = [ "mqttMultimeter.sln" ];
   nugetDeps = ./deps.nix;

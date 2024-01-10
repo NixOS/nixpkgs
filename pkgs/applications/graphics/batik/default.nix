@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "batik";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${version}.tar.gz";
-    sha256 = "sha256-Y4bJ6X46sKx1+fmNkOS2RU7gn7n0fKDnkOYMq0S8fYM=";
+    sha256 = "sha256-sEJphF3grlwZCEt3gHHm4JF8RpvKKBLLvKXf2lu/dhA=";
   };
 
   meta = with lib; {

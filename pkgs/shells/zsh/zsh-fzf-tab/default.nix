@@ -4,17 +4,25 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "unstable-2023-05-19";
+  version = "unstable-2023-06-11";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "5a81e13792a1eed4a03d2083771ee6e5b616b9ab";
-    sha256 = "sha256-bIlnYKjjOC6h5/Gg7xBg+i2TBk+h82wmHgAJPhzMsek=";
+    rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
+    sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
   };
 
   strictDeps = true;
   buildInputs = [ ncurses ];
+
+  # https://github.com/Aloxaf/fzf-tab/issues/337
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
 
   postConfigure = ''
     pushd modules

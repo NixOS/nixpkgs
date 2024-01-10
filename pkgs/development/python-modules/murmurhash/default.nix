@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.9";
+  version = "1.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/no4yw09h8FOyd3cSTL/4tvHfXVGmrgP1QFGibDge1g=";
+    hash = "sha256-UoKqsTF4BMbr1t1/afFbqQda7mccRKNL4r3g8bEe+Io=";
   };
 
   postPatch = ''

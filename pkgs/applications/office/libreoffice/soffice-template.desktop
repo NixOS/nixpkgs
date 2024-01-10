@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=LibreOffice @app@...
-Comment=Enter LibreOffice @app@ filename:
-Type=Link
-URL=.source/soffice.@ext@
-Icon=libreoffice-oasis-@type@

@@ -2,38 +2,49 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
-, autoreconfHook
-, perl
-, pkg-config
-, libsidplayfp
 , alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
+, autoreconfHook
 , pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
+, libsidplayfp
 , out123Support ? stdenv.hostPlatform.isDarwin
 , mpg123
+, perl
+, pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
-    rev = "v${version}";
-    sha256 = "sha256-ECHtHJrkJ5Y0YvDNdMM3VB+s7I/8JCPZiwsPYLM/oig=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oV7ZPWgMEsNlsF2OoOvf7Ah5ZLcVkIDyC+PrPIJGyzQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook perl pkg-config ];
+  strictDeps = true;
 
-  buildInputs = [ libsidplayfp ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional out123Support mpg123;
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+  ];
 
-  configureFlags = lib.optionals out123Support [
-    "--with-out123"
+  buildInputs = [
+    libsidplayfp
+  ] ++ lib.optionals alsaSupport [
+    alsa-lib
+  ] ++ lib.optionals pulseSupport [
+    libpulseaudio
+  ] ++ lib.optionals out123Support [
+    mpg123
+  ];
+
+  configureFlags = [
+    (lib.strings.withFeature out123Support "out123")
   ];
 
   enableParallelBuilding = true;
@@ -46,7 +57,8 @@ stdenv.mkDerivation rec {
     description = "A SID player using libsidplayfp";
     homepage = "https://github.com/libsidplayfp/sidplayfp";
     license = with licenses; [ gpl2Plus ];
+    mainProgram = "sidplayfp";
     maintainers = with maintainers; [ dezgeg OPNA2608 ];
     platforms = platforms.all;
   };
-}
+})

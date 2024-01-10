@@ -6,6 +6,7 @@
 , flit-core
 , linkify-it-py
 , markdown
+, mdit-py-plugins
 , mdurl
 , mistletoe
 , mistune
@@ -19,12 +20,13 @@
 , stdenv
 , pytest-regressions
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "2.2.0";
+  version = "3.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -33,10 +35,16 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
+    hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
   };
 
+  # fix downstrem usage of markdown-it-py[linkify]
+  pythonRelaxDeps = [
+    "linkify-it-py"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     flit-core
   ];
 
@@ -62,6 +70,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     compare = [ commonmark markdown mistletoe mistune panflute ];
     linkify = [ linkify-it-py ];
+    plugins = [ mdit-py-plugins ];
     rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
   };
 
@@ -71,5 +80,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
+    mainProgram = "markdown-it";
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   configureFlags = [ "--enable-shared" ];
 
-  sourceRoot = "./ZenLib/Project/GNU/Library/";
+  sourceRoot = "ZenLib/Project/GNU/Library";
 
   preConfigure = "sh autogen.sh";
 

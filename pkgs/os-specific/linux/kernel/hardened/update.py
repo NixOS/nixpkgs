@@ -193,21 +193,14 @@ with open(HARDENED_PATCHES_PATH) as patches_file:
 
 # Get the set of currently packaged kernel versions.
 kernel_versions = {}
-for filename in os.listdir(NIXPKGS_KERNEL_PATH):
-    filename_match = re.fullmatch(r"linux-(\d+)\.(\d+)\.nix", filename)
-    if filename_match:
-        nix_version_expr = f"""
-            with import {NIXPKGS_PATH} {{}};
-            (callPackage {NIXPKGS_KERNEL_PATH / filename} {{}}).version
-        """
-        kernel_version_json = run(
-            "nix-instantiate", "--eval", "--system", "x86_64-linux", "--json", "--expr", nix_version_expr,
-        ).stdout
-        kernel_version = parse_version(json.loads(kernel_version_json))
-        if kernel_version < MIN_KERNEL_VERSION:
-            continue
-        kernel_key = major_kernel_version_key(kernel_version)
-        kernel_versions[kernel_key] = kernel_version
+with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as kernel_versions_json:
+    kernel_versions = json.load(kernel_versions_json)
+    for kernel_branch_str in kernel_versions:
+        if kernel_branch_str == "testing": continue
+        kernel_branch = [int(i) for i in kernel_branch_str.split(".")]
+        if kernel_branch < MIN_KERNEL_VERSION: continue
+        kernel_version = [int(i) for i in kernel_versions[kernel_branch_str]["version"].split(".")]
+        kernel_versions[kernel_branch_str] = kernel_version
 
 # Remove patches for unpackaged kernel versions.
 for kernel_key in sorted(patches.keys() - kernel_versions.keys()):

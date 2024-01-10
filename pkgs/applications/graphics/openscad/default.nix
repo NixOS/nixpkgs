@@ -11,7 +11,7 @@
 , libGLU, libGL
 , glew
 , opencsg
-, cgal
+, cgal_4
 , mpfr
 , gmp
 , glib
@@ -60,7 +60,7 @@ mkDerivation rec {
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
-    eigen boost glew opencsg cgal mpfr gmp glib
+    eigen boost glew opencsg cgal_4 mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla cairo
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
@@ -105,9 +105,10 @@ mkDerivation rec {
       machine parts but pretty sure is not what you are looking for when you are more
       interested in creating computer-animated movies.
     '';
-    homepage = "http://openscad.org/";
+    homepage = "https://openscad.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    mainProgram = "openscad";
   };
 }

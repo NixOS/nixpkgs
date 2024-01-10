@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "goeland";
-  version = "0.15.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "slurdge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b/A76f9/pFDdG1ZiHQnJrxYmlvFIjhZZhTIGl09cMcg=";
+    sha256 = "sha256-3LO0p3klnwamhTuOw5S0dN5qsI8u1l5UWN5FkGnY5Lo=";
   };
 
-  vendorHash = "sha256-jOtIA7+rM/2qObhR61utvmXD+Rxi/+dEvzgYkGR76I8=";
+  vendorHash = "sha256-zwUX6EBz34lg7vg7R52xcslrhyRTiueP3RNLRxsupn4=";
 
   ldflags = [
     "-s"

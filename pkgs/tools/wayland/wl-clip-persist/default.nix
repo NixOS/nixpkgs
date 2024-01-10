@@ -29,11 +29,12 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = with lib; {
-    inherit (wayland.meta) platforms;
-    homepage = "https://github.com/Linus789/wl-clip-persist";
-    description = "Keep Wayland clipboard even after programs close";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
     broken = stdenv.isDarwin;
+    description = "Keep Wayland clipboard even after programs close";
+    homepage = "https://github.com/Linus789/wl-clip-persist";
+    inherit (wayland.meta) platforms;
+    license = licenses.mit;
+    mainProgram = "wl-clip-persist";
+    maintainers = with maintainers; [ thiagokokada ];
   };
 }

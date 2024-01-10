@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.2";
+  version = "2.6.6";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Parquery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NUgMt/o9EpSQyOiAhYBVJtQKJn0Pd2lI45bKlo2z7mk=";
+    hash = "sha256-R5/FBfuTvXItfTlNZMSnO18Q+etnHbQyXFWpaOpOLes=";
   };
 
   preCheck = ''
@@ -50,13 +50,14 @@ buildPythonPackage rec {
     # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
+    # those tests seems to simply re-run some typeguard tests
+    "tests/test_typeguard.py"
   ];
 
-  # Upstream adds some plain text files direct to the package's root directory
-  # https://github.com/Parquery/icontract/blob/master/setup.py#L63
-  postInstall = ''
-    rm -f $out/{LICENSE.txt,README.rst,requirements.txt}
-  '';
+  pytestFlagsArray = [
+    # RuntimeWarning: coroutine '*' was never awaited
+    "-W" "ignore::RuntimeWarning"
+  ];
 
   pythonImportsCheck = [ "icontract" ];
 

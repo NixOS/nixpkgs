@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "ics";
   version = "0.7.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

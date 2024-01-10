@@ -28,6 +28,27 @@
 , extraPackages ? []
 # For Adding additional python packaages
 , extraPythonPackages ? []
+, soapysdr # For it's passthru.searchPath
+# soapysdr plugins we add by default. Ideally, we should have a
+# soapysdrPackages = soapysdr.pkgs attribute set, but until now this wasn't
+# crucial.
+, soapyairspy
+, soapyaudio
+, soapybladerf
+, soapyhackrf
+, soapyremote
+, soapyrtlsdr
+, soapyuhd
+# For adding / changing soapysdr packages, like soapsdr-with-plugins does
+, extraSoapySdrPackages ? [
+  soapyairspy
+  soapyaudio
+  soapybladerf
+  soapyhackrf
+  soapyremote
+  soapyrtlsdr
+  soapyuhd
+]
 # Allow to add whatever you want to the wrapper
 , extraMakeWrapperArgs ? []
 }:
@@ -86,6 +107,10 @@ let
     ]
     ++ lib.optionals (extraPackages != []) [
       "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
+    ]
+    ++ lib.optionals (extraSoapySdrPackages != []) [
+      "--prefix" "SOAPY_SDR_PLUGIN_PATH" ":" "${lib.makeSearchPath
+      soapysdr.passthru.searchPath extraSoapySdrPackages}"
     ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4

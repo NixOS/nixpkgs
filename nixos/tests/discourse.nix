@@ -166,7 +166,7 @@ import ./make-test-python.nix (
         request = builtins.toJSON {
           title = "Private message";
           raw = "This is a test message.";
-          target_usernames = admin.username;
+          target_recipients = admin.username;
           archetype = "private_message";
         };
       in ''

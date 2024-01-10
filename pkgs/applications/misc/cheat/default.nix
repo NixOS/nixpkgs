@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "sha256-lEMwPGXvgI8wtXska9ngAy9R2tr41Jq5yO6xQk9V5n4=";
+    sha256 = "sha256-GUU6VWfTmNS6ny12HnMr3uQmS7HI86Oupcmqx0MVAvE=";
   };
 
   subPackages = [ "cmd/cheat" ];
@@ -21,7 +21,7 @@ buildGoModule rec {
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

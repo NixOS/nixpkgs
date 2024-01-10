@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pycxx";
   version = "7.1.4";
+  format = "setuptools";
 
   src = fetchurl {
     url = "mirror://sourceforge/cxx/CXX/PyCXX%20V${version}/pycxx-${version}.tar.gz";

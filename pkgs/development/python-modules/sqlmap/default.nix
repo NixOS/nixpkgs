@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.7.6";
+  version = "1.7.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T2ei1cqDAeR+/sSifb0SvJaJX3sgcPcRzrmjgncQDRc=";
+    hash = "sha256-9sl/tH/TNXGkeTcXhG9i6/QByOO7SC0GkzyEhzVfJdk=";
   };
 
   postPatch = ''

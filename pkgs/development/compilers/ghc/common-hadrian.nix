@@ -39,7 +39,7 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+              || stdenv.targetPlatform.isAarch64
               || stdenv.targetPlatform.isGhcjs)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -57,8 +57,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -151,10 +150,15 @@
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
-, hadrian ? bootPkgs.callPackage ../../tools/haskell/hadrian {
+, hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
     ghcSrc = ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
+    # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+    enableHyperlinkedSource =
+      # TODO(@sternenseemann): Disabling currently doesn't work with GHC >= 9.8
+      lib.versionAtLeast version "9.8" ||
+      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
   }
 
 , #  Whether to build sphinx documentation.
@@ -262,6 +266,12 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  patches = [
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    (if lib.versionAtLeast version "9.8"
+      then ./docs-sphinx-7-ghc98.patch
+      else ./docs-sphinx-7.patch )
+  ];
   postPatch = ''
     patchShebangs --build .
   '';
@@ -385,6 +395,12 @@ stdenv.mkDerivation ({
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+  ] ++ lib.optionals targetPlatform.isDarwin [
+    # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
+    # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    "fp_cv_prog_ar_supports_dash_l=no"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -461,6 +477,14 @@ stdenv.mkDerivation ({
   preInstall = ''
     pushd _build/bindist/*
 
+  ''
+  # the bindist configure script uses different env variables than the GHC configure script
+  # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    export InstallNameToolCmd=$INSTALL_NAME_TOOL
+    export OtoolCmd=$OTOOL
+  ''
+  + ''
     $configureScript $configureFlags "''${configureFlagsArray[@]}"
   '';
 

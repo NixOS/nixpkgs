@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, ninja, python3, xcbuild, libllvm, libcxxabi, libxcrypt
+, cmake, ninja, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -9,7 +9,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
-  inherit (stdenv.hostPlatform) isMusl isGnu;
+  inherit (stdenv.hostPlatform) isMusl;
 
   baseName = "compiler-rt";
 
@@ -29,7 +29,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ninja python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+  buildInputs =
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
+    ++ lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"

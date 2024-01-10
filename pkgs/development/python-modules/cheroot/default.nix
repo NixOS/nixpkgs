@@ -2,8 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, jaraco_functools
-, jaraco_text
+, jaraco-functools
+, jaraco-text
 , more-itertools
 , portend
 , pypytools
@@ -20,13 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "9.0.0";
+  version = "10.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PUetnuGey+wUS0dYOZA2aS/b9npAuW7vH7FFQ2ez0zg=";
+    hash = "sha256-WcShh3/vmWmzw8CAyqrzd+J4CRlDeFP8DTKp30CzEfA=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +36,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     more-itertools
     six
   ];
 
   nativeCheckInputs = [
-    jaraco_text
+    jaraco-text
     portend
     pypytools
     pytest-mock

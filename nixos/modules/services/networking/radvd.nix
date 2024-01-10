@@ -32,14 +32,7 @@ in
         '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.radvd;
-      defaultText = literalExpression "pkgs.radvd";
-      description = lib.mdDoc ''
-        The RADVD package to use for the RADVD service.
-      '';
-    };
+    package = mkPackageOption pkgs "radvd" { };
 
     config = mkOption {
       type = types.lines;

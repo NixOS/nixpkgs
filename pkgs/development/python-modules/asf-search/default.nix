@@ -1,23 +1,24 @@
 { lib
 , buildPythonPackage
+, dateparser
+, defusedxml
 , fetchFromGitHub
-, pythonOlder
-, requests
-, shapely
-, python-dateutil
-, pytz
 , importlib-metadata
 , numpy
-, dateparser
-, remotezip
 , pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, remotezip
+, requests
 , requests-mock
-, defusedxml
+, shapely
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "6.3.1";
+  version = "6.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,27 +27,25 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9mhb8PEpRdFjbPBZ/B8he/UcRSLryBQU0Dgjcii7LGY=";
+    hash = "sha256-cgd+OrBhMCc0UAYF1y5FiUSuKf3l3/7i8Y6JjhWnR0M=";
   };
 
   propagatedBuildInputs = [
-    requests
-    shapely
-    python-dateutil
-    pytz
+    dateparser
     importlib-metadata
     numpy
-    dateparser
+    python-dateutil
+    pytz
     remotezip
+    requests
+    shapely
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    requests-mock
     defusedxml
+    pytestCheckHook
+    requests-mock
+    tenacity
   ];
 
   pythonImportsCheck = [

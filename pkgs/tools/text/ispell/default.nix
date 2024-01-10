@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ispell";
-  version = "3.4.05";
+  version = "3.4.06";
 
   src = fetchurl {
     url = "https://www.cs.hmc.edu/~geoff/tars/${pname}-${version}.tar.gz";
-    sha256 = "sha256-zwxt7eP9JfraQ3XYasr+WDy5bY/lRt50apLrtt+JVgI=";
+    sha256 = "sha256-F8kWM9TIB1rMUDFjoWRj/FSrHHRTKArTnNPbdceD66Y=";
   };
 
   buildInputs = [ bison ncurses ];

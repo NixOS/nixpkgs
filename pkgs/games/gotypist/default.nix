@@ -7,11 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pb-";
     repo = "gotypist";
-    rev = "${version}";
+    rev = version;
     sha256 = "0khl2f6bl121slw9mlf4qzsdarpk1v3vry11f3dvz7pb1q6zjj11";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "A touch-typing tutor";

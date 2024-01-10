@@ -2,19 +2,35 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
+, setuptools
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "starline";
-  version = "0.2.0";
+  version = "0.1.5";
 
   disabled = pythonOlder "3.5";
 
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "550b00ab95cf59d933f7708abab40a4e41e5790e62b653471afe86a3af3320e6";
+    hash = "sha256-F1P1/NKml2rtd1r7A/g5IVnwQMZzkXzAxjRRDZXBPLk=";
   };
+
+  patches = [
+    # https://github.com/Anonym-tsk/starline/pull/5
+    (fetchpatch {
+      url = "https://github.com/Anonym-tsk/starline/commit/4e6cdf8e05c5fb8509ee384e77b39a2495587160.patch";
+      hash = "sha256-y9b6ePH3IEgmt3ALHQGwH102rlm4KfmH4oIoIC93cWU=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

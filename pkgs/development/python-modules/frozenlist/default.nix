@@ -4,33 +4,32 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.3.3";
-  format = "setuptools";
+  version = "1.4.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lJWRdXvuzyvJwNSpv0+ojY4rwws3jwDtlLOqYyLPrZc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sI6jnrTxDbW0sNVodpCjBnA31VAAmunwMp9s8GkoHGI=";
   };
 
   nativeBuildInputs = [
     cython
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
+    setuptools
+    wheel
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=frozenlist" ""
+    sed -i "/addopts =/d" pytest.ini
   '';
 
   preBuild = ''
@@ -39,6 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "frozenlist"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {

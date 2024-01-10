@@ -9,10 +9,10 @@ buildGoModule rec {
     owner = "danderson";
     repo = "netboot";
     inherit rev;
-    sha256 = "14dslmx3gk08h9gqfjw5y27x7d2c6r8ir7mjd7l9ybysagpzr02a";
+    hash = "sha256-SoD871PaL5/oabKeHFE2TLTTj/CFS4dfggjMN3qlupE=";
   };
 
-  vendorSha256 = "08n3m6fkwh8jmmzky3ygij4gxlcqidqk5ywi8ki8bkyzzs2lqaw7";
+  vendorHash = "sha256-hytMhf7fz4XiRJH7MnGLmNH+iIzPDz9/rRJBPp2pwyI=";
 
   doCheck = false;
 

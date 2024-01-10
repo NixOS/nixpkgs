@@ -1,16 +1,25 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, nixosTests, fetchFromGitHub, fetchpatch, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.0";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-B0hbXar/RulfBJUR1Jtczf3p1H6Zj5OVCXVCaj5zf/U=";
+    hash = "sha256-qINtAOPrmLUWfEjZNj11W2WoIFw7Ye3KDk+9ZKtZAvo=";
   };
-  cargoHash = "sha256-6Z+mcQAJwW7tm4SBbrHwHIwiqlFV+PIa5I2onU2rPts=";
+
+  cargoPatches = [
+    # Update version in Cargo.lock
+    (fetchpatch {
+      url = "https://github.com/mbrubeck/agate/commit/ac57093d2f73a20d0d4f84b551beef4ac9cb4a24.patch";
+      hash = "sha256-OknfBkaBWm3svSp8LSvyfy2g0y0SkR7VtJQUdAjClFs=";
+    })
+  ];
+
+  cargoHash = "sha256-18V1/d2A3DJmpYX/5Z8M3uAaHrULGIgCT4ntcV4N8l0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

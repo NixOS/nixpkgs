@@ -2,44 +2,44 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, fetchpatch
 , click
 , click-default-group
 , docformatter
 , jinja2
 , toposort
+, typing-extensions
 , lxml
 , requests
 , pytestCheckHook
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.12";
+  version = "23.8";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o9Xxt7b/+MkW94Jcg26ihaTn0/OpTcu+0OY7oV3JRGY=";
+    hash = "sha256-VfA9TIgjbwRyZq/+VQug3RlHat/OagHz4K76x8gHjlY=";
   };
 
-  patches = [
-    # https://github.com/tefra/xsdata/pull/741
-    (fetchpatch {
-      name = "use-docformatter-1.5.1.patch";
-      url = "https://github.com/tefra/xsdata/commit/040692db47e6e51028fd959c793e757858c392d7.patch";
-      excludes = [ "setup.cfg" ];
-      hash = "sha256-ncecMJLJUiUb4lB8ys+nyiGU/UmayK++o89h3sAwREQ=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--benchmark-skip" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   passthru.optional-dependencies = {
     cli = [

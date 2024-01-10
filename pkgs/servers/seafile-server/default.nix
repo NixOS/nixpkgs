@@ -10,13 +10,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "seafile-server";
-  version = "9.0.6";
+  version = "9.0.10";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "881c270aa8d99ca6648e7aa1458fc283f38e6f31"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-M1jIysirtl1KKyEvScOIshLvSa5vjxTdFEARgy8bLTc=";
+    rev = "079a8b65a543bfbc48e7671c3dbbffe19fd02944"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-F1n4E6ajpri3CVM7B28UKoTV1oOLr5nTy6Lw0E5tCrc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

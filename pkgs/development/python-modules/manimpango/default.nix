@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ManimCommunity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FT3X6TmGfwd8kRPtuqy78ZCGeEGGg6IJEeEpB7ZbIsA=";
+    hash = "sha256-EBSbvjQyQIXOzvQMbuTwOoV8xSAOYDlCBZ56NLneuQI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   pythonImportsCheck = [

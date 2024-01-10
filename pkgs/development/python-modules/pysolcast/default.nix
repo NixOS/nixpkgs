@@ -7,13 +7,13 @@
 , pyyaml
 , requests
 , responses
-, setuptools-scm
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "1.0.14";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,13 +21,11 @@ buildPythonPackage rec {
     owner = "mcaulifn";
     repo = "solcast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SI8lRihzJClciPLX9DXOO0K7YWgix74aM784j7fVu/g=";
+    hash = "sha256-jLhM47o6LvkPux0kusOrRk4TDS6VLWE0QMEiQxlBCwo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools-scm
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -40,11 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   pythonImportsCheck = [
     "pysolcast"

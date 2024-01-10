@@ -1,38 +1,45 @@
-{ stdenv, fetchFromGitHub, makeWrapper, unzip, lib, php }:
+{
+  stdenv
+, fetchurl
+, makeBinaryWrapper
+, php
+, lib
+, unzip
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "n98-magerun2";
-  version = "6.1.1";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "7.2.0";
 
-  src = fetchFromGitHub {
-    owner = "netz98";
-    repo = "n98-magerun2-dist";
-    rev = version;
-    sha256 = "sha256-D2U1kLG6sOpBHDzNQ/LbiFUknvFhK+rkOPgWvW0pNmY=";
+  src = fetchurl {
+    url = "https://github.com/netz98/n98-magerun2/releases/download/${finalAttrs.version}/n98-magerun2.phar";
+    hash = "sha256-w+58TTyoS44Ouaz6KFIJLhSl/UeF1I7cSznlZH6fLXw=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -D $src/n98-magerun2 $out/libexec/n98-magerun2/n98-magerun2-${version}.phar
+
+    mkdir -p $out/bin $out/libexec/n98-magerun2
+
+    install -D $src $out/libexec/n98-magerun2/n98-magerun2.phar
     makeWrapper ${php}/bin/php $out/bin/n98-magerun2 \
-      --add-flags "$out/libexec/n98-magerun2/n98-magerun2-${version}.phar" \
+      --add-flags "$out/libexec/n98-magerun2/n98-magerun2.phar" \
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
+
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "The swiss army knife for Magento2 developers";
-    license = licenses.mit;
-    homepage = "https://magerun.net/";
+  meta = {
     changelog = "https://magerun.net/category/magerun/";
-    maintainers = teams.php.members;
+    description = "The swiss army knife for Magento2 developers";
+    homepage = "https://magerun.net/";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.php.members;
   };
-}
+})

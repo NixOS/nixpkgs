@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openrgb";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "sha256-46dL1D5oVlw6mNuFDCbbrUDmq42yFXV/qFJ1JnPT5/s=";
+    sha256 = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jonringer ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "openrgb";
   };
 }

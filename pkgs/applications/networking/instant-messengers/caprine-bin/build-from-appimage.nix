@@ -43,6 +43,5 @@ in
 
   meta = metaCommon // {
     platforms = [ "x86_64-linux" ];
-    mainProgram = "caprine";
   };
 })

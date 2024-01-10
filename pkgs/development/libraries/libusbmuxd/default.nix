@@ -9,18 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libusbmuxd";
-  version = "2.0.2+date=2022-05-04";
+  version = "2.0.2+date=2023-04-30";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "36ffb7ab6e2a7e33bd1b56398a88895b7b8c615a";
-    hash = "sha256-41N5cSLAiPJ9FjdnCQnMvPu9/qhI3Je/M1VmKY+yII4=";
+    rev = "f47c36f5bd2a653a3bd7fb1cf1d2c50b0e6193fb";
+    hash = "sha256-ojFnFD0lcdJLP27oFukwzkG5THx1QE+tRBsaMj4ZCc4=";
   };
-
-  postPatch = ''
-    echo '${version}' > .tarball-version
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -31,6 +27,10 @@ stdenv.mkDerivation rec {
     libplist
     libimobiledevice-glue
   ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
 
   meta = with lib; {
     description = "A client library to multiplex connections from and to iOS devices";

@@ -8,10 +8,11 @@
 , curl
 , bash
 , debugInfo ? false
-}:
+} @ inputs:
 
 { baseName ? "elixir"
 , version
+, erlang ? inputs.erlang
 , minimumOTPVersion
 , sha256 ? null
 , rev ? "v${version}"
@@ -20,7 +21,7 @@
 } @ args:
 
 let
-  inherit (lib) getVersion versionAtLeast optional;
+  inherit (lib) getVersion versionAtLeast optional concatStringsSep;
 
 in
 assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -36,7 +37,12 @@ stdenv.mkDerivation ({
   LANG = "C.UTF-8";
   LC_TYPE = "C.UTF-8";
 
-  buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
+  ERLC_OPTS =
+    let
+      erlc_opts = [ "deterministic" ]
+        ++ optional debugInfo "debug_info";
+    in
+    "[${concatStringsSep "," erlc_opts}]";
 
   preBuild = ''
     patchShebangs ${escriptPath} || true
@@ -50,14 +56,14 @@ stdenv.mkDerivation ({
     # to PATH so the scripts can run without problems.
 
     for f in $out/bin/*; do
-     b=$(basename $f)
+      b=$(basename $f)
       if [ "$b" = mix ]; then continue; fi
       wrapProgram $f \
         --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}"
     done
 
     substituteInPlace $out/bin/mix \
-          --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
+      --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;

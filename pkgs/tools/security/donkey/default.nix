@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = "tags/release/${version}";
     hash = "sha256-2xgb9l0Eko39HJVROAWEIP3qLg5t/5h/rm2MoXoKnJI=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   buildInputs = [ libmd ];
 

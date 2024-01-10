@@ -11,6 +11,11 @@ stdenv.mkDerivation {
     hash = "sha256-Li/c5uf9rfpuU+hduuSm7EmhVwIIkS72dqzmN+0cE3A=";
   };
 
+  postPatch = ''
+    substituteInPlace contacts.m \
+      --replace "int peopleSort" "long peopleSort"
+  '';
+
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ Foundation AddressBook ];
 

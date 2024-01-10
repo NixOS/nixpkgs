@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , autoPatchelfHook
 , pythonRelaxDepsHook
@@ -7,6 +8,7 @@
 , numpy
 , packaging
 , oneDNN
+, re2
 
 }:
 
@@ -34,8 +36,9 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    autoPatchelfHook
     pythonRelaxDepsHook
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
@@ -48,6 +51,7 @@ buildPythonPackage {
   # Libraries are not linked correctly.
   buildInputs = [
     oneDNN
+    re2
     onnxruntime.protobuf
   ];
 

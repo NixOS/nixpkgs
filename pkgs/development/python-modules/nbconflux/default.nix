@@ -11,18 +11,24 @@
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
+  format = "setuptools";
   disabled = isPy27; # no longer compatible with python 2 urllib
 
   src = fetchFromGitHub {
     owner = "Valassis-Digital-Media";
     repo = "nbconflux";
-    rev = version;
-    sha256 = "1708qkb275d6f7b4b5zmqx3i0jh56nrx2n9rwwp5nbaah5p2wwlh";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kHIuboFKLVsu5zlZ0bM1BUoQR8f1l0XWcaaVI9bECJw=";
   };
 
   propagatedBuildInputs = [ nbconvert requests ];
 
   nativeCheckInputs = [ pytestCheckHook responses ];
+
+  patches = [
+    # The original setup.py file is missing commas in the install_requires list
+    ./setup-py.patch
+  ];
 
   JUPYTER_PATH="${nbconvert}/share/jupyter";
   disabledTests = [

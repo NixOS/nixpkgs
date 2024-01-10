@@ -2,7 +2,6 @@
 , testers
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , openssl
 , libsamplerate
 , swig
@@ -16,27 +15,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.13";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
-    rev = finalAttrs.version;
-    sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-PWCeIvnBAOqbcNYPhIY7hykdvLzoD9lssSViCCPNT68=";
   };
 
   patches = [
     ./fix-aarch64.patch
-    (fetchpatch {
-      name = "CVE-2022-23537.patch";
-      url = "https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1.patch";
-      sha256 = "sha256-7ueQCHIiJ7MLaWtR4+GmBc/oKaP+jmEajVnEYqiwLRA=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-23547.patch";
-      url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
-      sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
-    })
   ];
 
   nativeBuildInputs =
@@ -46,11 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
+  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
+    # work around https://github.com/NixOS/nixpkgs/issues/166205
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++11";
+  } // lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+  };
+
   preConfigure = ''
     export LD=$CC
   '';
-
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
 
   postBuild = lib.optionalString pythonSupport ''
     make -C pjsip-apps/src/swig/python
@@ -113,9 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     command = "pjsua --version";
   };
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
-    moduleName = "libpjproject";
   };
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
@@ -129,5 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ olynch ];
     mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
+    pkgConfigModules = [
+      "libpjproject"
+    ];
   };
 })

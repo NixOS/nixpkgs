@@ -1,7 +1,7 @@
 { buildPecl, lib, fetchFromGitHub }:
 
 let
-  version = "1.1.0";
+  version = "1.1.1";
 in buildPecl {
   inherit version;
   pname = "ast";
@@ -10,7 +10,7 @@ in buildPecl {
     owner = "nikic";
     repo = "php-ast";
     rev = "v${version}";
-    sha256 = "sha256-e9J6O4A+8xRBlR9m4OK1kTVpzgzsviD0Eqi0iY4AgkY=";
+    sha256 = "sha256-ulMLufhLf9E11Z6+rVBZ14CY3ILp/NrhMjRXmrUHnBA=";
   };
 
   meta = with lib; {

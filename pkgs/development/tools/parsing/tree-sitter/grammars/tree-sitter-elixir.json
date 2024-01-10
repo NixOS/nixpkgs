@@ -4,6 +4,7 @@
   "date": "2023-03-14T10:58:34+01:00",
   "path": "/nix/store/d8k07yvr8q14rc21fvhcnqrlpcwhlnmk-tree-sitter-elixir",
   "sha256": "0m10vykaj36yxk0wwh0vk0pzvpdmac4apgihmxn3j0dwwgirchf0",
+  "hash": "sha256-wEGW4+O8ATlsrzC+qwhTtd39L5gbQM7B7N4MqabfIFQ=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

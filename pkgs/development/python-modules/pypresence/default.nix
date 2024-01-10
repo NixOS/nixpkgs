@@ -2,11 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pypresence";
-  version = "4.2.1";
+  version = "4.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "691daf98c8189fd216d988ebfc67779e0f664211512d9843f37ab0d51d4de066";
+    sha256 = "sha256-phkaOvM6lmfypO8BhVd8hrli7nCqgmQ8Rydopv7R+/M=";
   };
 
   doCheck = false; # tests require internet connection

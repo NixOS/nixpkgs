@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = platforms.linux;
     maintainers = with maintainers; [ domenkozar ];
+    mainProgram = "dunst";
   };
 }

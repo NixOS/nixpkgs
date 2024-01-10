@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sysconfdir=/etc"
+    "--localstatedir=/var/lib"
     "--program-transform-name=s@^call$@ax&@;s@^listen$@ax&@"
   ];
 

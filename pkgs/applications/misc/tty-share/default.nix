@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   # Upstream has a `./vendor` directory with all deps which we rely upon.
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

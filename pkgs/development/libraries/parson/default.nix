@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "parson";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "kgabis";
     repo = "parson";
-    rev = "60c37844d7a1c97547812cac3423d458c73e60f9"; # upstream doesn't use tags
-    hash = "sha256-SbM0kqRtdcz1s+pUTW7VPMY1O6zdql3bao19Rk4t470=";
+    rev = "ba29f4eda9ea7703a9f6a9cf2b0532a2605723c3"; # upstream doesn't use tags
+    hash = "sha256-IEmCa0nauUzG+zcLpr++ySD7i21zVJh/35r9RaQkok0=";
   };
 
   nativeBuildInputs = [ meson ninja ];

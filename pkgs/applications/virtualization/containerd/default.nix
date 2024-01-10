@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.7.2";
+  version = "1.7.11";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    hash = "sha256-L4zaA+kMBz2tRMbitZUxb9/wdimSO2njx6ozvyKKlkk=";
+    hash = "sha256-kvBD9Qh10kRowr32zDzjpHYh2IZC6+w+nOO4joShgEE=";
   };
 
   vendorHash = null;
@@ -50,7 +50,7 @@ buildGoModule rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes ];
     platforms = platforms.linux;
   };
 }

@@ -3,7 +3,7 @@
 , fetchPypi
 , notebook
 , qtconsole
-, jupyter_console
+, jupyter-console
 , nbconvert
 , ipykernel
 , ipywidgets
@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   version = "1.0.0";
+  format = "setuptools";
   pname = "jupyter";
 
   src = fetchPypi {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
   };
 
-  propagatedBuildInputs = [ notebook qtconsole jupyter_console nbconvert ipykernel ipywidgets ];
+  propagatedBuildInputs = [ notebook qtconsole jupyter-console nbconvert ipykernel ipywidgets ];
 
   # Meta-package, no tests
   doCheck = false;

@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, darwin
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -26,8 +28,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
   meta = with lib; {
     description = "A music theory binary and library for Rust";

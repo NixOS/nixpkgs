@@ -7,17 +7,19 @@
 , cmake
 , wrapQtAppsHook
 , qtbase
+, qttools
+, doxygen
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-app-services";
-  version = "0.0.20";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M9XXNV3N4CifOXitT6+UxaGsLoVuoNGqC5SO/mF+bLw=";
+    hash = "sha256-INxbRDpG3MqPW6IMTqEagDCGo7vwxkR6D1+lcWdjO3w=";
   };
 
   postPatch = ''
@@ -28,10 +30,16 @@ stdenv.mkDerivation rec {
     substituteInPlace dconfig-center/CMakeLists.txt \
       --replace 'add_subdirectory("example")' " " \
       --replace 'add_subdirectory("tests")'   " "
+
+    substituteInPlace dconfig-center/dde-dconfig-daemon/services/dde-dconfig-daemon.service \
+      --replace "/usr/bin" "$out/bin" \
+      --replace "/usr/share" "/run/current-system/sw/share"
   '';
 
   nativeBuildInputs = [
     cmake
+    qttools
+    doxygen
     wrapQtAppsHook
   ];
 
@@ -44,7 +52,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDVERSION=${version}"
     "-DDSG_DATA_DIR=/run/current-system/sw/share/dsg"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "out"}/${qtbase.qtDocPrefix}"
   ];
+
+  preConfigure = ''
+    # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
+    # A workaround is to set QT_PLUGIN_PATH explicitly
+    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
 
   meta = with lib; {
     description = "Provids dbus service for reading and writing DSG configuration";

@@ -1,26 +1,42 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, meson
+, ninja
+, pkg-config
 , czmq
 , libusb1
 , ncurses
+, SDL2
 }:
 
 stdenv.mkDerivation rec {
   pname = "orbuculum";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "orbcode";
     repo = pname;
     rev = "V${version}";
-    sha256 = "sha256-aMMXfrBQQ9oOx17MUKmqe5vdTpxhBGM5mVfAel0y0a0=";
+    sha256 = "sha256-Ohcc8739W/EmDjOYhcMgzEPVhzbWrUYgsPLdy4qzxhY=";
   };
+
+  prePatch = ''
+    substituteInPlace meson.build --replace \
+      "/etc/udev/rules.d" "$out/etc/udev/rules.d"
+  '';
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     czmq
     libusb1
     ncurses
+    SDL2
   ];
 
   installFlags = [

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.9.4";
+  version = "1.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TTvTLs27e7+0ip/p5tb9aoMaG1nQPibikiECNzc+fbU=";
+    hash = "sha256-jnZFwy5PIAZ15p8HRUFTNetZo2Y/X+tIer+gswxFiIs=";
   };
 
   propagatedBuildInputs = [
@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "A database migration tool for SQLAlchemy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "alembic";
   };
 }

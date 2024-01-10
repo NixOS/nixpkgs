@@ -27,13 +27,13 @@
 , dbusSupport ? true
 }:
 stdenv.mkDerivation rec {
-  version = "2.9.0";
+  version = "3.7.0";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-B4d8D4IfLYAIYVN80Lrh5bywD5iacSnUVwEzbc6Xq7g=";
+    hash = "sha256-A1S8pen0aPd3CmeRpttwivhwHnAv7Rk2lao8I/CWvo0=";
   };
   prePatch = lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace 'list(APPEND MODULES ctrl_dbus)' ""

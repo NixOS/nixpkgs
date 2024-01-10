@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "aubio";
   version = "0.4.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

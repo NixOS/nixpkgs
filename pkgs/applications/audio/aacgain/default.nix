@@ -5,26 +5,19 @@
 , autoconf
 , automake
 , libtool
-, faad2
-, mp4v2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aacgain";
-  version = "2.0.0";
+  version = "2.0.0-unstable-2022-07-12";
 
   src = fetchFromGitHub {
     owner = "dgilman";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-9Y23Zh7q3oB4ha17Fpm1Hu2+wtQOA1llj6WDUAO2ARU=";
+    repo = "aacgain";
+    rev = "9f9ae95a20197d1072994dbd89672bba2904bdb5";
+    hash = "sha256-WqL9rKY4lQD7wQSZizoM3sHNzLIG0E9xZtjw8y7fgmE=";
+    fetchSubmodules = true;
   };
-
-  postPatch = ''
-    cp -R ${faad2.src}/* 3rdparty/faad2
-    cp -R ${mp4v2.src}/* 3rdparty/mp4v2
-    chmod -R +w 3rdparty
-  '';
 
   nativeBuildInputs = [
     cmake

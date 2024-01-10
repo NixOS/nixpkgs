@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "stack-data";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
@@ -46,6 +47,10 @@ buildPythonPackage rec {
     pytestCheckHook
     typeguard
   ];
+
+  # https://github.com/alexmojaki/stack_data/issues/50
+  # incompatible with typeguard>=3
+  doCheck = false;
 
   disabledTests = [
     # AssertionError

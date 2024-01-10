@@ -71,7 +71,7 @@ in rec {
     yarnFlags ? [ ],
     ignoreScripts ? true,
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -88,7 +88,7 @@ in rec {
           (key: pkgConfig.${key}.buildInputs or [])
           (builtins.attrNames pkgConfig);
 
-      postInstall = (builtins.map (key:
+      postInstall = builtins.map (key:
         if (pkgConfig.${key} ? postInstall) then
           ''
             for f in $(find -L -path '*/node_modules/${key}' -type d); do
@@ -97,7 +97,7 @@ in rec {
           ''
         else
           ""
-      ) (builtins.attrNames pkgConfig));
+      ) (builtins.attrNames pkgConfig);
 
       # build-time JSON generation to avoid IFD
       # see https://nixos.wiki/wiki/Import_From_Derivation
@@ -180,7 +180,7 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     packageOverrides ? {},
     ...
   }@attrs:
@@ -254,7 +254,7 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -267,8 +267,8 @@ in rec {
   }@attrs:
     let
       package = lib.importJSON packageJSON;
-      pname = package.name;
-      safeName = reformatPackageName pname;
+      pname = attrs.pname or package.name;
+      safeName = reformatPackageName package.name;
       version = attrs.version or package.version;
       baseName = unlessNull name "${safeName}-${version}";
 
@@ -278,14 +278,15 @@ in rec {
       );
 
       deps = mkYarnModules {
+        pname = package.name;
         name = "${safeName}-modules-${version}";
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
+        inherit packageJSON version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
       };
 
-      publishBinsFor_ = unlessNull publishBinsFor [pname];
+      publishBinsFor_ = unlessNull publishBinsFor [ package.name ];
 
       linkDirFunction = ''
         linkDirToDirLinks() {
@@ -307,17 +308,17 @@ in rec {
       workspaceDependencyCopy = lib.concatMapStringsSep "\n"
         (dep: ''
           # ensure any existing scope directory is not a symlink
-          linkDirToDirLinks "$(dirname node_modules/${dep.pname})"
-          mkdir -p "deps/${dep.pname}"
-          tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.pname}" --strip-components=1
-          if [ ! -e "deps/${dep.pname}/node_modules" ]; then
-            ln -s "${deps}/deps/${dep.pname}/node_modules" "deps/${dep.pname}/node_modules"
+          linkDirToDirLinks "$(dirname node_modules/${dep.package.name})"
+          mkdir -p "deps/${dep.package.name}"
+          tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.package.name}" --strip-components=1
+          if [ ! -e "deps/${dep.package.name}/node_modules" ]; then
+            ln -s "${deps}/deps/${dep.package.name}/node_modules" "deps/${dep.package.name}/node_modules"
           fi
         '')
         workspaceDependenciesTransitive;
 
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
-      inherit src version pname;
+      inherit pname version src;
 
       name = baseName;
 
@@ -335,27 +336,27 @@ in rec {
           fi
         done
 
-        # move convent of . to ./deps/${pname}
+        # move convent of . to ./deps/${package.name}
         mv $PWD $NIX_BUILD_TOP/temp
-        mkdir -p "$PWD/deps/${pname}"
-        rm -fd "$PWD/deps/${pname}"
-        mv $NIX_BUILD_TOP/temp "$PWD/deps/${pname}"
+        mkdir -p "$PWD/deps/${package.name}"
+        rm -fd "$PWD/deps/${package.name}"
+        mv $NIX_BUILD_TOP/temp "$PWD/deps/${package.name}"
         cd $PWD
 
-        ln -s ${deps}/deps/${pname}/node_modules "deps/${pname}/node_modules"
+        ln -s ${deps}/deps/${package.name}/node_modules "deps/${package.name}/node_modules"
 
         cp -r $node_modules node_modules
         chmod -R +w node_modules
 
         ${linkDirFunction}
 
-        linkDirToDirLinks "$(dirname node_modules/${pname})"
-        ln -s "deps/${pname}" "node_modules/${pname}"
+        linkDirToDirLinks "$(dirname node_modules/${package.name})"
+        ln -s "deps/${package.name}" "node_modules/${package.name}"
 
         ${workspaceDependencyCopy}
 
         # Help yarn commands run in other phases find the package
-        echo "--cwd deps/${pname}" > .yarnrc
+        echo "--cwd deps/${package.name}" > .yarnrc
         runHook postConfigure
       '';
 
@@ -364,11 +365,11 @@ in rec {
       installPhase = attrs.installPhase or ''
         runHook preInstall
 
-        mkdir -p $out/{bin,libexec/${pname}}
-        mv node_modules $out/libexec/${pname}/node_modules
-        mv deps $out/libexec/${pname}/deps
+        mkdir -p $out/{bin,libexec/${package.name}}
+        mv node_modules $out/libexec/${package.name}/node_modules
+        mv deps $out/libexec/${package.name}/deps
 
-        node ${./internal/fixup_bin.js} $out/bin $out/libexec/${pname}/node_modules ${lib.concatStringsSep " " publishBinsFor_}
+        node ${./internal/fixup_bin.js} $out/bin $out/libexec/${package.name}/node_modules ${lib.concatStringsSep " " publishBinsFor_}
 
         runHook postInstall
       '';
@@ -378,13 +379,13 @@ in rec {
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option
         rm -f .yarnrc
-        cd $out/libexec/${pname}/deps/${pname}
+        cd $out/libexec/${package.name}/deps/${package.name}
         mkdir -p $out/tarballs/
         yarn pack --offline --ignore-scripts --filename $out/tarballs/${baseName}.tgz
       '';
 
       passthru = {
-        inherit pname package packageJSON deps;
+        inherit package packageJSON deps;
         workspaceDependencies = workspaceDependenciesTransitive;
       } // (attrs.passthru or {});
 
@@ -403,7 +404,7 @@ in rec {
 
         mkFilter = { dirsToInclude, filesToInclude, root }: path: type:
           let
-            inherit (pkgs.lib) any flip elem hasSuffix hasPrefix elemAt splitString;
+            inherit (lib) elem elemAt splitString;
 
             subpath = elemAt (splitString "${toString root}/" path) 1;
             spdir = elemAt (splitString "/" subpath) 0;

@@ -1,26 +1,33 @@
-{lib, fetchgit, rustPlatform}:
-
+{ lib
+, fetchFromGitea
+, rustPlatform
+, nix-update-script
+}:
 let
-  repoUrl = "https://codeberg.org/explosion-mental/wallust";
-in rustPlatform.buildRustPackage rec {
+  version = "2.9.0";
+in
+rustPlatform.buildRustPackage {
   pname = "wallust";
-  version = "2.4.1";
+  inherit version;
 
-  src = fetchgit {
-    url = "${repoUrl}.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "explosion-mental";
+    repo = "wallust";
     rev = version;
-    sha256 = "sha256-7zSUyj8Zzk8rsDe7ukPaV02HH7VQ+yjh+wM5TZzJxSA=";
+    hash = "sha256-AuZRt02bFr7GzI7qe4giGgjlXK/WX+gmF4+QwD0ChXk=";
   };
 
-  cargoSha256 = "sha256-toqt5vqEsflhqFargEcCXrb6ab748mn6k6/RH5d/3RA=";
+  cargoHash = "sha256-O9w18ae83mgF3zjk0WUMeu16Ap7CF2ubuPnOqeCt4Nw=";
 
-  meta = with lib; {
-    description = "A better pywall";
-    homepage = repoUrl;
-    license = licenses.mit;
-    maintainers = with maintainers; [onemoresuza];
-    downloadPage = "${repoUrl}/releases/tag/${version}";
-    platforms = platforms.unix;
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "A better pywal";
+    homepage = "https://codeberg.org/explosion-mental/wallust";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza iynaix ];
+    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
     mainProgram = "wallust";
   };
 }

@@ -1,0 +1,173 @@
+diff --git a/configure.ac b/configure.ac
+index 088e8f3b5..bded3c54c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -196,13 +196,15 @@ AC_SUBST(GMODULE_LIBS)
+ 
+ AC_ARG_WITH(cgraph, AS_HELP_STRING([--with-cgraph], [Required flag for cross-compilation to define capability of graphviz]), [], with_cgraph=check)
+ AC_ARG_ENABLE(valadoc, AS_HELP_STRING([--disable-valadoc], [Disable valadoc]), enable_valadoc=$enableval, enable_valadoc=yes)
++AC_ARG_ENABLE(graphviz, AS_HELP_STRING([--disable-graphviz], [Disable graphviz usage for valadoc]), enable_graphviz=$enableval, enable_graphviz=yes)
+ AS_IF([test "$VALAC" != :], [FOUND_VALAC_VERION=`$VALAC --version | sed 's/Vala  *//'`
+ 	AS_VERSION_COMPARE(["$FOUND_VALAC_VERION"], ["$VALAC_VALADOC_REQUIRED"], [
+ 		AC_MSG_WARN([Force disable build of valadoc, valac >= $VALAC_VALADOC_REQUIRED is required])
+ 		enable_valadoc=no
+ 	])
+ ])
+-if test x$enable_valadoc = xyes; then
++if test x$enable_valadoc = xyes && test x$enable_graphviz = xyes; then
++	VALAFLAGS="$VALAFLAGS -D HAVE_GRAPHVIZ"
+ 	PKG_CHECK_MODULES(LIBGVC, libgvc >= $LIBGVC_REQUIRED)
+ 	AC_MSG_CHECKING([for CGRAPH])
+ 	cgraph_tmp_LIBADD="$LIBADD"
+@@ -244,6 +246,7 @@ if test x$enable_valadoc = xyes; then
+ fi
+ AM_CONDITIONAL(HAVE_CGRAPH, test "$have_cgraph" = "yes")
+ AM_CONDITIONAL(ENABLE_VALADOC, test x$enable_valadoc = xyes)
++AM_CONDITIONAL(ENABLE_GRAPHVIZ, test x$enable_graphviz = xyes)
+ 
+ AC_PATH_PROG([G_IR_COMPILER], [g-ir-compiler], :)
+ AM_CONDITIONAL(HAVE_G_IR_COMPILER, test "$G_IR_COMPILER" != :)
+diff --git a/libvaladoc/Makefile.am b/libvaladoc/Makefile.am
+index dad9a9e99..e23266606 100644
+--- a/libvaladoc/Makefile.am
++++ b/libvaladoc/Makefile.am
+@@ -119,10 +119,6 @@ libvaladoc_la_VALASOURCES = \
+ 	content/tablerow.vala \
+ 	content/taglet.vala \
+ 	content/text.vala \
+-	charts/chart.vala \
+-	charts/chartfactory.vala \
+-	charts/hierarchychart.vala \
+-	charts/simplechartfactory.vala \
+ 	parser/manyrule.vala \
+ 	parser/oneofrule.vala \
+ 	parser/optionalrule.vala \
+@@ -149,19 +145,34 @@ libvaladoc_la_VALASOURCES = \
+ 	highlighter/codetoken.vala \
+ 	highlighter/highlighter.vala \
+ 	html/basicdoclet.vala \
+-	html/htmlchartfactory.vala \
+ 	html/linkhelper.vala \
+ 	html/cssclassresolver.vala \
+ 	html/htmlmarkupwriter.vala \
+ 	html/htmlrenderer.vala \
+ 	$(NULL)
+ 
++if ENABLE_GRAPHVIZ
++libvaladoc_la_VALASOURCES += \
++	charts/chart.vala \
++	charts/chartfactory.vala \
++	charts/hierarchychart.vala \
++	charts/simplechartfactory.vala \
++	html/htmlchartfactory.vala \
++	$(NULL)
++endif
++
+ libvaladoc@PACKAGE_SUFFIX@_la_SOURCES = \
+ 	libvaladoc.vala.stamp \
+ 	$(libvaladoc_la_VALASOURCES:.vala=.c) \
+-	gvc-compat.c \
+ 	$(NULL)
+ 
++if ENABLE_GRAPHVIZ
++libvaladoc@PACKAGE_SUFFIX@_la_SOURCES += \
++	gvc-compat.c
++
++LIBGVC_PKG = --vapidir $(top_srcdir)/vapi --pkg libgvc
++endif
++
+ valadoc@PACKAGE_SUFFIX@.vapi valadoc.h: libvaladoc.vala.stamp
+ libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
+ 	$(VALA_V)$(VALAC) \
+@@ -174,7 +185,7 @@ libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
+ 		--library valadoc \
+ 		--vapi valadoc@PACKAGE_SUFFIX@.vapi \
+ 		--vapidir $(top_srcdir)/vapi --pkg gmodule-2.0 \
+-		--vapidir $(top_srcdir)/vapi --pkg libgvc \
++		$(LIBGVC_PKG) \
+ 		--vapidir $(top_srcdir)/gee --pkg gee \
+ 		--vapidir $(top_srcdir)/vala --pkg vala \
+ 		--vapidir $(top_srcdir)/ccode --pkg ccode \
+@@ -206,6 +217,9 @@ nodist_pkgconfig_DATA = valadoc@PACKAGE_SUFFIX@.pc
+ 
+ valadoc@PACKAGE_SUFFIX@.pc: valadoc.pc
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc //g" $@
++endif
+ 
+ vapidir = $(datadir)/vala/vapi
+ dist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.vapi
+@@ -213,6 +227,9 @@ nodist_vapi_DATA = valadoc@PACKAGE_SUFFIX@.deps
+ 
+ valadoc@PACKAGE_SUFFIX@.deps: valadoc.deps
+ 	cp $< $@
++if !ENABLE_GRAPHVIZ
++	sed -i "s/libgvc//g" $@
++endif
+ 
+ EXTRA_DIST = \
+ 	$(libvaladoc_la_VALASOURCES) \
+diff --git a/libvaladoc/html/basicdoclet.vala b/libvaladoc/html/basicdoclet.vala
+index f4999efd4..03871d687 100644
+--- a/libvaladoc/html/basicdoclet.vala
++++ b/libvaladoc/html/basicdoclet.vala
+@@ -46,7 +46,11 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	protected HtmlRenderer _renderer;
+ 	protected Html.MarkupWriter writer;
+ 	protected Html.CssClassResolver cssresolver;
++#if HAVE_GRAPHVIZ
+ 	protected Charts.Factory image_factory;
++#else
++	protected void* image_factory;
++#endif
+ 	protected ErrorReporter reporter;
+ 	protected string package_list_link = "../index.html";
+ 
+@@ -120,7 +124,9 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 		this.linker = new LinkHelper ();
+ 
+ 		_renderer = new HtmlRenderer (settings, this.linker, this.cssresolver);
++#if HAVE_GRAPHVIZ
+ 		this.image_factory = new SimpleChartFactory (settings, linker);
++#endif
+ 	}
+ 
+ 
+@@ -1028,6 +1034,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 	}
+ 
+ 	protected void write_image_block (Api.Node element) {
++#if HAVE_GRAPHVIZ
+ 		if (element is Class || element is Interface || element is Struct) {
+ 			unowned string format = (settings.use_svg_images ? "svg" : "png");
+ 			var chart = new Charts.Hierarchy (image_factory, element);
+@@ -1047,6 +1054,7 @@ public abstract class Valadoc.Html.BasicDoclet : Api.Visitor, Doclet {
+ 									   this.get_img_path_html (element, format)});
+ 			writer.add_usemap (chart);
+ 		}
++#endif
+ 	}
+ 
+ 	public void write_namespace_content (Namespace node, Api.Node? parent) {
+diff --git a/libvaladoc/html/htmlmarkupwriter.vala b/libvaladoc/html/htmlmarkupwriter.vala
+index 5aa4afdea..e79b0b8f5 100644
+--- a/libvaladoc/html/htmlmarkupwriter.vala
++++ b/libvaladoc/html/htmlmarkupwriter.vala
+@@ -51,12 +51,16 @@ public class Valadoc.Html.MarkupWriter : Valadoc.MarkupWriter {
+ 		}
+ 	}
+ 
++#if HAVE_GRAPHVIZ
+ 	public unowned MarkupWriter add_usemap (Charts.Chart chart) {
+ 		string? buf = (string?) chart.write_buffer ("cmapx");
+ 		if (buf != null) {
+ 			raw_text ("\n");
+ 			raw_text ((!) buf);
+ 		}
++#else
++	public unowned MarkupWriter add_usemap (void* chart) {
++#endif
+ 
+ 		return this;
+ 	}

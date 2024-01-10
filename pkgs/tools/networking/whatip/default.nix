@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -44,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     librsvg
     libadwaita
-    gobject-introspection
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

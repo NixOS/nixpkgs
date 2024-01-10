@@ -21,6 +21,7 @@
 , redis
 , prometheus-client
 , polib
+, python
 }:
 
 buildPythonPackage rec {
@@ -69,7 +70,7 @@ buildPythonPackage rec {
   postInstall = ''
     # expose static files to be able to serve them via web-server
     mkdir -p $out/share/libretranslate
-    ln -s $out/lib/python*/site-packages/libretranslate/static $out/share/libretranslate/static
+    ln -s $out/${python.sitePackages}/libretranslate/static $out/share/libretranslate/static
   '';
 
   doCheck = false; # needs network access

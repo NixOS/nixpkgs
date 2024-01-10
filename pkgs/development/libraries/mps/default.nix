@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, autoreconfHook, sqlite }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "mps";
-  version = "1.117.0";
+  version = "1.118.0";
 
-  src = fetchurl {
-    url    = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
-    sha256 = "04ix4l7lk6nxxk9sawpnxbybvqb82lks5606ym10bc1qbc2kqdcz";
+  src = fetchFromGitHub {
+    owner = "Ravenbrook";
+    repo = "mps";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-3ql3jWLccgnQHKf23B1en+nJ9rxqmHcWd7aBr93YER0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -21,7 +28,6 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    broken      = true;
     description = "A flexible memory management and garbage collection library";
     homepage    = "https://www.ravenbrook.com/project/mps";
     license     = lib.licenses.sleepycat;

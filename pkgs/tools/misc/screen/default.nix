@@ -11,23 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "4.9.0";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
-    sha256 = "1x1hqy4h47i7hk85f779lkwkm7gkq8h8mxwd0znkh5adpf0m4czr";
+    hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-24626.patch";
-      url = "https://git.savannah.gnu.org/cgit/screen.git/patch/?id=e9ad41bfedb4537a6f0de20f00b27c7739f168f7";
-      stripLen = 1;
-      sha256 = "sha256-NV6Uh4h9AK7kQMHqbxeuhjFEvwQH7OWdu7h8pZCGFog=";
-    })
-  ];
-
-  configureFlags= [
+  configureFlags = [
     "--enable-telnet"
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"

@@ -1,56 +1,60 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flatten-dict
 , fsspec
 , funcy
-, pygtrie
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, reflink
 , setuptools-scm
 , shortuuid
-, tqdm
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-objects";
     rev = "refs/tags/${version}";
-    hash = "sha256-fWe/nnI8ugKGOvuwvH8ufvfkhQr3y1PldyYzsvJ5yLw=";
+    hash = "sha256-hpiDbECVXbBkewJa+RwrgTQFEFAb3Ir2qs0ENYuJtwI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --benchmark-skip" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    flatten-dict
     fsspec
     funcy
-    pygtrie
     shortuuid
-    tqdm
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    reflink
   ];
 
   pythonImportsCheck = [
     "dvc_objects"
+  ];
+
+  disabledTestPaths = [
+    # Disable benchmarking
+    "tests/benchmarks/"
   ];
 
   meta = with lib; {

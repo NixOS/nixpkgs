@@ -8,7 +8,7 @@ in
   meta.maintainers = [ lib.maintainers.ratsclub ];
 
   nodes = {
-    server = { config, pkgs }: {
+    server = { config, pkgs, ... }: {
       services.legit = {
         enable = true;
         settings = {

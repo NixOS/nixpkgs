@@ -1,37 +1,42 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, poetry-core
 , lxml
-, docopt
-, six
+, docopt-ng
+, typing-extensions
+, importlib-metadata
+, importlib-resources
 , pytestCheckHook
 , mock
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "rnginline";
-  version = "0.0.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j4W4zwHA4yA6iAFVa/LDKp00eeCX3PbmWkjd2LSUGfk=";
+    hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
 
-  patches = [
-    # Fix failing tests. Should be included in releases after 0.0.2
-    # https://github.com/h4l/rnginline/issues/3
-    (fetchpatch {
-      url = "https://github.com/h4l/rnginline/commit/b1d1c8cda2a17d46627309950f2442021749c07e.patch";
-      hash = "sha256-XbisEwun2wPOp7eqW2YDVdayJ4sjAMG/ezFwgoCKe9o=";
-      name = "fix_tests_failing_collect.patch";
-    })
+  format = "pyproject";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'importlib-metadata = "^6.6.0"' 'importlib-metadata = "^6.0.0"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
   ];
 
   propagatedBuildInputs = [
-    docopt
+    docopt-ng
     lxml
-    six
+    typing-extensions
+    importlib-metadata
+    importlib-resources
   ];
 
   nativeCheckInputs = [

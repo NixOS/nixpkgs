@@ -5,6 +5,8 @@
 , buildPythonPackage
 , dill
 , fetchFromGitHub
+, flask
+, flask-cors
 , moto
 , pytest-asyncio
 , pytestCheckHook
@@ -14,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OWIhjZhrjvbjQg6tzZm0aoKiErWBazzbGHpChkJHjbU=";
+    hash = "sha256-e8FBUG08yWNL9B51Uv4ftYx1C0kcdoweOreUtvvvTAk=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -41,6 +43,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dill
+    flask
+    flask-cors
     moto
     pytest-asyncio
     pytestCheckHook

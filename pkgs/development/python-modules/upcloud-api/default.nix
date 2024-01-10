@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "upcloud-api";
-  version = "2.0.1";
+  version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-thmrbCpGjlDkHIZwIjRgIVMplaypiKByFS/nS8F2LXA=";
+    hash = "sha256-fMsI0aZ8jA08rrNPm8HmfYz/a3HLUExvvXIeDGPh2e8=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "upcloud_api" ];
 
   meta = with lib; {
+    changelog = "https://github.com/UpCloudLtd/upcloud-python-api/blob/${src.rev}/CHANGELOG.md";
     description = "UpCloud API Client";
     homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
     license = licenses.mit;

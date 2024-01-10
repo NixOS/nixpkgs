@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";
-  version = "2023.05.03";
+  version = "2023.09.01";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8lTQirN2WuriuFYiLhGpXUSu9RmmZjh3xx72j65MjBI=";
+    sha256 = "sha256-JtTCpyfMWSObhHNarYVrfH0LBOMKpcI1xPf0f18FNJE=";
   };
 
   dontBuild = true;

@@ -27,6 +27,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ skeidel ];
+    maintainers = with maintainers; [ ];
   };
 }

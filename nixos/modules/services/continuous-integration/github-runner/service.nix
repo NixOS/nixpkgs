@@ -22,6 +22,7 @@ with lib;
 
 let
   workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
+  package = cfg.package.override { inherit (cfg) nodeRuntimes; };
 in
 {
   description = "GitHub Actions runner";
@@ -47,7 +48,7 @@ in
 
   serviceConfig = mkMerge [
     {
-      ExecStart = "${cfg.package}/bin/Runner.Listener run --startuptype service";
+      ExecStart = "${package}/bin/Runner.Listener run --startuptype service";
 
       # Does the following, sequentially:
       # - If the module configuration or the token has changed, purge the state directory,
@@ -149,7 +150,7 @@ in
               else
                 args+=(--token "$token")
               fi
-              ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
+              ${package}/bin/Runner.Listener configure "''${args[@]}"
               # Move the automatically created _diag dir to the logs dir
               mkdir -p  "$STATE_DIRECTORY/_diag"
               cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"

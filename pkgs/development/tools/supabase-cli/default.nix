@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "1.73.0";
+  version = "1.129.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Gl5jIMh0zH7BWFKny4cT3QpwM0/W9Bd9ycRYbNPxXAQ=";
+    hash = "sha256-/qApBCjwgnuCHP6DsK4LE5KA6RVu8lV84fxGVkrKyOs=";
   };
 
-  vendorSha256 = "sha256-6wJxAD3s5UcAqPJy6CzHe1aP097+aXHjBNG4BJ0zhmQ=";
+  vendorHash = "sha256-lFholyFVr6uMcfafM/tb8r1/4ysgWZOW5neoy3uL0Vw=";
 
   ldflags = [
     "-s"
@@ -51,7 +51,7 @@ buildGoModule rec {
     description = "A CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [ gerschtli kashw2 ];
     mainProgram = "supabase";
   };
 }

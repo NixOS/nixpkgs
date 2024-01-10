@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoPatchelfHook
 , bash
 , copyDesktopItems
@@ -51,14 +50,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.91";
+  version = "1.0.96";
 
-  src = let
-    inherit (finalAttrs) version;
-  in fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-9vsFdOxsW1Cs06gVPvQusju2+wp4PpBwbHZUugwb3co=";
-  };
+  src =
+    let
+      inherit (finalAttrs) version;
+    in
+    fetchurl {
+      url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+      hash = "sha256-eUpxfJQ0u3bpAXTUCKlMO/ViwKcBI59YFKJ3xGzSdcg=";
+    };
 
   patches = [
     ./000-nixos-sanitization.patch
@@ -112,7 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
       categories = [ "Utility" ];
       startupNotify = true;
-    })];
+    })
+  ];
 
   dontConfigure = true;
   dontBuild = true;

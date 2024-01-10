@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-v8Afdz1X1s5P/soXB+9M4C01HbvPNlEXo7Hdf1o9NdM=";
+    sha256 = "sha256-TsFj/iUG/PkGvVVn5RSWwEnHsEIGWMY8iapBHVpzt1c=";
   };
 
-  vendorHash = "sha256-YpiwRkujjuqfNH1Mmv6mtm6nNXx6kp272+6fzsK97xw=";
+  vendorHash = "sha256-IoguUXHxEeyHb2io41ROgam8+7vD5WKzEWwNh4Dlk1o=";
 
   preCheck = ''
     # Fix `insecure algorithm SHA1-RSA` problem
