@@ -502,6 +502,15 @@ rec {
           else res;
     };
 
+    packageByOutPath =
+      package // {
+        merge = loc: defs:
+          let res = mergeEqualOption loc defs;
+          in if builtins.isPath res || (builtins.isString res && ! builtins.hasContext res)
+            then toDerivation res
+            else res;
+      };
+
     shellPackage = package // {
       check = x: isDerivation x && hasAttr "shellPath" x;
     };
