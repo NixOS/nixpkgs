@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
 , melpaBuild
-, writeText
+, writeMelpaRecipe
 }:
 
 let
   pname = "git-undo";
-  ename = "git-undo";
   version = "20231224.2002";
 
   src = fetchFromGitHub {
@@ -17,13 +16,13 @@ let
   };
 in
 melpaBuild {
-  inherit pname ename version src;
+  inherit pname version src;
 
-  recipe = writeText "" ''
-    (git-undo
-     :repo "jwiegley/git-undo-el"
-     :fetcher github)
-  '';
+  recipe = writeMelpaRecipe {
+    package-name = "git-undo";
+    fetcher = "github";
+    repo = "jwiegley/git-undo-el";
+  };
 
   commit = src.rev;
 
