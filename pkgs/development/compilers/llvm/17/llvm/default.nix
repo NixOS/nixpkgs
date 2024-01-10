@@ -166,7 +166,7 @@ stdenv.mkDerivation (rec {
 
     # This test tries to call the intrinsics `@llvm.roundeven.f32` and
     # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-    # and `roundeven` on macOS.
+    # and `roundeven` on macOS and FreeBSD.
     #
     # However these functions are glibc specific so the test fails:
     #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
@@ -240,6 +240,10 @@ stdenv.mkDerivation (rec {
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
+  '' + optionalString stdenv.isFreeBSD ''
+    # This test fails for the same reason it fails on MacOS, but the fix is
+    # not trivial to apply.
+    rm test/ExecutionEngine/Interpreter/intrinsics.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';
