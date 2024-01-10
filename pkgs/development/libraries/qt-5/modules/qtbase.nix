@@ -56,7 +56,6 @@
   withGtk3 ? false,
   dconf,
   gtk3,
-  withQttranslation ? true,
   qttranslations ? null,
   withLibinput ? false,
   libinput,
@@ -492,8 +491,7 @@ stdenv.mkDerivation (
             "-I"
             "${libmysqlclient}/include"
           ]
-          ++ lib.optional (withQttranslation && (qttranslations != null)) [
-            # depends on x11
+          ++ lib.optional (qttranslations != null) [
             "-translationdir"
             "${qttranslations}/translations"
           ]
