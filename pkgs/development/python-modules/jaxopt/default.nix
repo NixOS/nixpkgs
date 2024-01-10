@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pytest-xdist
 , pytestCheckHook
 , absl-py
 , cvxpy
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     cvxpy
     optax
