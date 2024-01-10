@@ -45,7 +45,7 @@ let
     tempora
     zc_lockfile
   ]);
-  path = lib.makeBinPath [ coreutils par2cmdline unrar unzip p7zip util-linux ];
+  path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
   version = "4.2.1";
   pname = "sabnzbd";
