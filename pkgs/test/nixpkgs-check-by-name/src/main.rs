@@ -226,7 +226,9 @@ mod tests {
     }
 
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
-        let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
+        let mock_nixpkgs_path = Path::new("tests/mock-nixpkgs.nix");
+        let real_lib_path = Path::new("../../../lib");
+        let extra_nix_path = [mock_nixpkgs_path, real_lib_path];
 
         let base_path = path.join("base");
         let base_nixpkgs = if base_path.exists() {
@@ -238,7 +240,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(base_nixpkgs, &path, &[&extra_nix_path], &mut writer)
+            process(base_nixpkgs, &path, &extra_nix_path, &mut writer)
                 .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

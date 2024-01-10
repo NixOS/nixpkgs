@@ -25,25 +25,7 @@ It returns a Nixpkgs-like function that can be auto-called and evaluates to an a
 let
 
   # Simplified versions of lib functions
-  lib = {
-    fix = f: let x = f x; in x;
-
-    extends = overlay: f: final:
-      let
-        prev = f final;
-      in
-      prev // overlay final prev;
-
-    callPackageWith = autoArgs: fn: args:
-      let
-        f = if builtins.isFunction fn then fn else import fn;
-        fargs = builtins.functionArgs f;
-        allArgs = builtins.intersectAttrs fargs autoArgs // args;
-      in
-      f allArgs;
-
-    isDerivation = value: value.type or null == "derivation";
-  };
+  lib = import ../../../../lib;
 
   # The base fixed-point function to populate the resulting attribute set
   pkgsFun = self: {
