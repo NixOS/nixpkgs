@@ -63,6 +63,7 @@ lib.makeScope newScope (
         self.nvidia-docker-unwrapped
         self.nvidia-container-toolkit-docker
       ];
+      inherit (self.nvidia-docker-unwrapped) meta;
     };
     nvidia-docker-unwrapped = self.callPackage ../nvidia-docker { };
 
@@ -72,6 +73,7 @@ lib.makeScope newScope (
         libnvidia-container
         self.nvidia-container-toolkit-podman
       ];
+      inherit (self.nvidia-container-toolkit-podman) meta;
     };
   }
 )
