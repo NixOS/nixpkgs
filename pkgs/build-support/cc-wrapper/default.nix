@@ -110,6 +110,9 @@ let
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
+  # Analogously to cc_solib and gccForLibs_solib
+  libcxx_solib = "${lib.getLib libcxx}/lib";
+
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
   # (`-march` or `-mtune`) is accepted by one compiler but rejected
@@ -270,14 +273,14 @@ stdenv.mkDerivation {
         givenGccForLibs = useGccForLibs && gccForLibs.langCC or false;
       in
       if (!givenLibcxx) && givenGccForLibs then
-        { kind = "libstdc++"; lib = gccForLibs; }
+        { kind = "libstdc++"; package = gccForLibs; solib = gccForLibs_solib; }
       else if givenLibcxx then
-        { kind = "libc++"; lib = libcxx; }
+        { kind = "libc++"; package = libcxx;  solib = libcxx_solib;}
       else
       # We're probably using the `libstdc++` that came with our `gcc`.
       # TODO: this is maybe not always correct?
       # TODO: what happens when `nativeTools = true`?
-        { kind = "libstdc++"; lib = cc_solib; }
+        { kind = "libstdc++"; package = cc; solib = cc_solib; }
     ;
 
     emacsBufferSetup = pkgs: ''
@@ -590,7 +593,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
     ##

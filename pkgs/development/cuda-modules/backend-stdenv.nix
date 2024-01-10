@@ -45,6 +45,6 @@ in
 
 # We should use libstdc++ at least as new as nixpkgs' stdenv's one.
 assert ((stdenv.cc.cxxStdlib.kind or null) == "libstdc++")
-  -> lib.versionAtLeast cxxStdlib.version stdenv.cc.cxxStdlib.lib.version;
+  -> lib.versionAtLeast cxxStdlib.version stdenv.cc.cxxStdlib.package.version;
 
 lib.extendDerivation assertCondition passthruExtra cudaStdenv
