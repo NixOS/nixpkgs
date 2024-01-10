@@ -16226,9 +16226,11 @@ with pkgs;
 
   haskellPackages = dontRecurseIntoAttrs
     # Prefer native-bignum to avoid linking issues with gmp
+    # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
+    # until 9.8 is ready
+    (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
     # JS backend can't use gmp
-    (if stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isGhcjs
-    then haskell.packages.native-bignum.ghc96
+    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
     else haskell.packages.ghc96)
   // { __recurseIntoDerivationForReleaseJobs = true; };
 
@@ -16242,10 +16244,11 @@ with pkgs;
   # plain, cross-compiled compiler (which is only theoretical at the moment).
   ghc = targetPackages.haskellPackages.ghc or
     # Prefer native-bignum to avoid linking issues with gmp
+    # Use 9.4 for static over broken 9.6
+    (if stdenv.targetPlatform.isStatic then haskell.compiler.native-bignum.ghc94
     # JS backend can't use GMP
-    (if stdenv.targetPlatform.isStatic || stdenv.targetPlatform.isGhcjs
-       then haskell.compiler.native-bignum.ghc96
-       else haskell.compiler.ghc96);
+    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc96
+    else haskell.compiler.ghc96);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
