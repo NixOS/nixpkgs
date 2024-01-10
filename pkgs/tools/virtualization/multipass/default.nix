@@ -134,7 +134,7 @@ stdenv.mkDerivation
   };
 
   meta = with lib; {
-    description = "Ubuntu VMs on demand for any workstation.";
+    description = "Ubuntu VMs on demand for any workstation";
     homepage = "https://multipass.run";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jnsgruk ];

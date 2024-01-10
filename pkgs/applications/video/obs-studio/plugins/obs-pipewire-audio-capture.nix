@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
   ];
 
-  preConfigure = ''
-    cp ${obs-studio.src}/cmake/external/ObsPluginHelpers.cmake cmake/FindLibObs.cmake
-  '';
-
   meta = with lib; {
     description = "Audio device and application capture for OBS Studio using PipeWire";
     homepage = "https://github.com/dimtpap/obs-pipewire-audio-capture";

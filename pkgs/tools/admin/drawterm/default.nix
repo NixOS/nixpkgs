@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Connect to Plan 9 CPU servers from other operating systems.";
+    description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r moody ];
