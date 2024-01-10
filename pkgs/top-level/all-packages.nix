@@ -2087,7 +2087,9 @@ with pkgs;
 
   supercronic = callPackage ../tools/system/supercronic { };
 
-  supermin = callPackage ../tools/virtualization/supermin { };
+  supermin = callPackage ../tools/virtualization/supermin {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   sx-go = callPackage ../tools/security/sx-go { };
 
