@@ -291,6 +291,8 @@ with pkgs;
 
   _0x =  callPackage ../tools/misc/0x { };
 
+  atsi = callPackage ../tools/misc/atsi { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) AppKit Security SystemConfiguration;
   };
