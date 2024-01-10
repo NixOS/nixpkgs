@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pytest-xdist
 , pytestCheckHook
 , setuptools-scm
 , fastprogress
@@ -39,7 +40,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
   disabledTestPaths = [ "tests/test_benchmarks.py" ];
   disabledTests = [
     # too slow
