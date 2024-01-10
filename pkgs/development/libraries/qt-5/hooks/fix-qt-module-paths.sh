@@ -4,6 +4,15 @@
 #
 # Find Qt module definitions in directory _dir_ and patch the module paths.
 #
+
+lndir() {
+    local link_to_dir=$(realpath "$1")
+    local link_from_dir=$(realpath "$2")
+    for f in $(ls "$link_to_dir"); do
+        ln -s "$link_to_dir/$f" "$link_from_dir/$f"
+    done
+}
+
 fixQtModulePaths () {
     local dir="$1"
     local bin="${!outputBin}"
@@ -30,7 +39,7 @@ fixQtModulePaths () {
     if [ "z$bin" != "z$dev" ]; then
         if [ -d "$bin/bin" ]; then
             mkdir -p "$dev/bin"
-            lndir -silent "$bin/bin" "$dev/bin"
+            lndir "$bin/bin" "$dev/bin"
         fi
     fi
 }

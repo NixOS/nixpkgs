@@ -30,12 +30,24 @@ else
     cmakeBuildType="Release"
 fi
 
-if [[ -n "@qtPlatformCross@" ]]; then
+isCrossBuild() {
+    # Check if the tool is prefixed. Will probably break on Windows.
+    # Maybe we should have a standard variable for this?
+    [[ -v AS ]] && [[ "${#AS}" -gt 2 ]]
+}
+
+if isCrossBuild; then
     # When cross compiling we're using a native-built qmake binary and
     # it will need a little help finding the target of cross compilation.
+    if [[ "$(uname)" == 'Linux' ]]; then
+       qtPlatformCross="linux-generic-g++"
+    else
+        echo "Please add a qtPlatformCross entry for $(uname)" >&2
+        exit 1
+    fi
 
     # Enable cross-compilation in qmake
-    export "XQMAKESPEC=devices/@qtPlatformCross@"
+    export "XQMAKESPEC=devices/$qtPlatformCross"
     # Use the same config for tools marked with host_build
     export "QMAKESPEC=$XQMAKESPEC"
 fi

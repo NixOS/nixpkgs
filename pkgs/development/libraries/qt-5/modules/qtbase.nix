@@ -11,7 +11,6 @@
   flex,
   gdb,
   gperf,
-  lndir,
   perl,
   pkg-config,
   python3,
@@ -88,6 +87,7 @@ let
       "linux-generic-g++"
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
+  postFixupPatch = ../${lib.versions.majorMinor version}/qtbase.patch.d/0016-qtbase-cross-build-postFixup.patch;
 
   # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
   darwinVersionInputs = [
@@ -170,7 +170,6 @@ stdenv.mkDerivation (
         bison
         flex
         gperf
-        lndir
         perl
         pkg-config
         which
@@ -193,7 +192,7 @@ stdenv.mkDerivation (
       # out there that use cmake as their main configurator (i.e. don't depend on qmake-the-package) but
       # still need qmake&co to be available at build time. In fact, cmake scripts provided by qtbase.dev
       # itself look for those tools.
-      propagatedNativeBuildInputs = [ lndir ] ++ lib.optional isCrossBuild qtbase-bootstrap.qmake;
+      propagatedNativeBuildInputs = lib.optional isCrossBuild qtbase-bootstrap.qmake;
 
       strictDeps = true;
 
@@ -289,7 +288,6 @@ stdenv.mkDerivation (
       qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
       qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
       qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
-      qtPlatformCross = lib.optionalString isCrossBuild (qtPlatformCross stdenv.hostPlatform);
 
       setOutputFlags = false;
       preConfigure = ''
@@ -607,6 +605,9 @@ stdenv.mkDerivation (
         # Don't propagate nativeBuildInputs
         sed '/HOST_QT_TOOLS/ d' -i $dev/mkspecs/qmodule.pri
         sed '/PKG_CONFIG_LIBDIR/ d' -i $dev/mkspecs/qconfig.pri
+
+        # Dynamically detect cross-compilation. This patch breaks the build of qtbase itself, so we need to appy it late.
+        patch -p1 -d $dev < ${postFixupPatch}
 
         fixQtModulePaths "''${!outputDev}/mkspecs/modules"
         fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
