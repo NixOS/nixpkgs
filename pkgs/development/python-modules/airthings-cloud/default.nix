@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Airthings";
     homepage = "https://github.com/Danielhiversen/pyAirthings";
+    changelog = "https://github.com/Danielhiversen/pyAirthings/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
