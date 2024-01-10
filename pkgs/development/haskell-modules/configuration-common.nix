@@ -517,6 +517,10 @@ self: super: {
   # Generally a slightly packaging hostile bound practice.
   matterhorn = doJailbreak super.matterhorn;
 
+  # Too strict bounds on transformers and resourcet
+  # https://github.com/alphaHeavy/lzma-conduit/issues/23
+  lzma-conduit = doJailbreak super.lzma-conduit;
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   hnix = dontCheck (super.hnix.override {
     # 2023-12-11: Needs older core due to remote
