@@ -99,6 +99,16 @@
       "agpl"
     ]
   },
+  "gpoddersync": {
+    "sha256": "1b74l6j9w3xnjbb57viz4bfridkpyvq7rq29kfr8cm03jm2nzq3r",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.8.2/gpoddersync.tar.gz",
+    "version": "3.8.2",
+    "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
+    "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "groupfolders": {
     "sha256": "19j2iqn3fjlzcswgbxwvxggzqc3aili8br4vjpr8dd9h1rzm453y",
     "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v14.0.7/groupfolders-v14.0.7.tar.gz",
