@@ -26,6 +26,7 @@
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
+, knownVulnerabilities ? [ ]
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -160,5 +161,6 @@ buildGoModule rec {
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
+    inherit knownVulnerabilities;
   };
 }

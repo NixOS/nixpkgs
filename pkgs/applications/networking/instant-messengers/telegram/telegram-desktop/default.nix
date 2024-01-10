@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.3";
+  version = "4.14.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-xFbS8nhtWzIu+b/Hlnvtp925cf8UuBDywNnq5spMQ5Q=";
+    hash = "sha256-kApiPJN9hdOv9WLRiqIO94Pd3Stuv+wrV4RM6x8Ak9M=";
   };
 
   patches = [
