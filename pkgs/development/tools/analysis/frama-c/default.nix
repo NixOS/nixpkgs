@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-KWEogjMOy27d0LTKOvwEkrcND+szeaG46JMZTG4XOYM=";
   };
 
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
+
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
   strictDeps = true;
