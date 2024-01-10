@@ -15,7 +15,7 @@ Alternatively, `autoPubspecLock` can be used instead, and set to a path to a reg
 
 ::: {.warning}
 When using `autoPubspecLock` with a local source directory, make sure to use a
-concatenation operator (e.g. `autoPubspecLock = ${src} + "/pubspec.lock";`), and
+concatenation operator (e.g. `autoPubspecLock = src + "/pubspec.lock";`), and
 not string interpolation.
 
 String interpolation will copy your entire source directory to the Nix store and
