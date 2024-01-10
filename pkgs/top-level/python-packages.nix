@@ -4546,6 +4546,8 @@ self: super: with self; {
 
   gevent = callPackage ../development/python-modules/gevent { };
 
+  gevent-eventemitter = callPackage ../development/python-modules/gevent-eventemitter { };
+
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
 
   gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
@@ -5534,6 +5536,8 @@ self: super: with self; {
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
+
+  inputs = callPackage ../development/python-modules/inputs { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
@@ -13761,6 +13765,8 @@ self: super: with self; {
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
   stdlibs = callPackage ../development/python-modules/stdlibs { };
+
+  steam = callPackage ../development/python-modules/steam { };
 
   steamodd = callPackage ../development/python-modules/steamodd { };
 
