@@ -33,7 +33,7 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-/cumOKaWPdAruMLZP2GMUdocIhsbo59dc4Q3ngc/JOc=";
+    x86_64-linux = "sha256-8iQR6cWqDzjTRL6psiugQOdYqaEOgZnjcLN+90apWuY=";
     aarch64-linux = "sha256-xMV+9etnuFwRGIHdaXNViKd4FMOuVtugGDS1xyMwEnM=";
   }.${system} or throwSystem;
 
@@ -41,7 +41,7 @@ let
 
 in stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "1.7.3";
+  version = "1.7.13";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
