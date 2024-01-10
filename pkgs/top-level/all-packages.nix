@@ -15699,7 +15699,9 @@ with pkgs;
 
   coffeescript = callPackage ../development/compilers/coffeescript { };
 
-  comby = callPackage ../development/tools/comby { };
+  comby = callPackage ../development/tools/comby {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  };
 
   inherit (coqPackages_8_17) compcert;
 
