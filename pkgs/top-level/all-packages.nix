@@ -19151,6 +19151,7 @@ with pkgs;
 
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
   fly = callPackage ../development/tools/continuous-integration/fly { };
