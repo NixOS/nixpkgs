@@ -3,12 +3,11 @@
 , fetchFromGitHub
 , markdown-mode
 , melpaBuild
-, writeText
+, writeMelpaRecipe
 }:
 
 let
   pname = "evil-markdown";
-  ename = "evil-markdown";
   version = "20210721.723";
   src = fetchFromGitHub {
     owner = "Somelauw";
@@ -18,7 +17,7 @@ let
   };
 in
 melpaBuild {
-  inherit pname ename version src;
+  inherit pname version src;
 
   packageRequires = [
     evil
@@ -27,11 +26,11 @@ melpaBuild {
 
   commit = src.rev;
 
-  recipe = writeText "recipe" ''
-    (evil-markdown
-     :repo "Somelauw/evil-markdown"
-     :fetcher github)
-  '';
+  recipe = writeMelpaRecipe {
+    package-name = "evil-markdown";
+    fetcher = "github";
+    repo = "Somelauw/evil-markdown";
+  };
 
   meta = {
     homepage = "https://github.com/Somelauw/evil-markdown";
