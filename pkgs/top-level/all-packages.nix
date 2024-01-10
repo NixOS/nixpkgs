@@ -17320,7 +17320,7 @@ with pkgs;
   };
 
   teyjus = callPackage ../development/compilers/teyjus {
-    inherit (ocamlPackages) buildDunePackage;
+    inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
   };
 
   thrust = callPackage ../development/tools/thrust {
