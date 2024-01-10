@@ -30,7 +30,9 @@ let
   # The base fixed-point function to populate the resulting attribute set
   pkgsFun = self: {
     inherit lib;
-    callPackage = lib.callPackageWith self;
+    newScope = extra: lib.callPackageWith (self // extra);
+    callPackage = self.newScope { };
+    callPackages = lib.callPackagesWith self;
     someDrv = { type = "derivation"; };
   };
 
