@@ -16329,6 +16329,7 @@ with pkgs;
   fsharp = callPackage ../development/compilers/fsharp { };
 
   fstar = callPackage ../development/compilers/fstar {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
     z3 = z3_4_8_5;
   };
 
