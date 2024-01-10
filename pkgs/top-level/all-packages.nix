@@ -3831,7 +3831,7 @@ with pkgs;
   flavours = callPackage ../applications/misc/flavours { };
 
   flirc = libsForQt5.callPackage ../applications/video/flirc {
-    readline = readline63;
+    readline = readline70;
   };
 
   flood = callPackage ../applications/networking/p2p/flood { };
