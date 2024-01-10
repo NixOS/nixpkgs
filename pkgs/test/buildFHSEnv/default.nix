@@ -58,6 +58,16 @@ let
   '';
 
 in {
+  # This test proves an issue with buildFHSEnv - don't expect it to succeed,
+  # this is discussed in https://github.com/NixOS/nixpkgs/pull/279844 .
+  libtinfo = makeSharedObjectTest (getSharedObjectFromDebian "libedit.so.2.0.70" (fetchurl {
+    url = "mirror://debian/pool/main/libe/libedit/libedit2_3.1-20221030-2_amd64.deb";
+    hash = "sha256-HPFKvycW0yedsS0GV6VzfPcAdKHnHTvfcyBmJePInOY=";
+  })) (p: [
+    p.ncurses
+    p.libbsd
+  ]);
+
   liblzma = makeSharedObjectTest (getSharedObjectFromDebian "libxml2.so.2.9.14" (fetchurl {
     url = "mirror://debian/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3~deb12u1_amd64.deb";
     hash = "sha256-NbdstwOPwclAIEpPBfM/+3nQJzU85Gk5fZrc+Pmz4ac=";
