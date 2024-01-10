@@ -42038,5 +42038,5 @@ with pkgs;
 
   zed-sans = callPackage ../data/fonts/zed-sans { };
 
-  zed-mono = callPackage .../data/fonts/zed-mono { };
+  zed-mono = callPackage ../data/fonts/zed-mono { };
 }
