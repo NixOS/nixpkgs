@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, perl, gcc
 , ncurses5
-, ncurses6, gmp, libiconv, numactl
+, ncurses6, gmp, libiconv, numactl, freebsd
 , llvmPackages
 , coreutils
 , targetPackages
@@ -107,6 +107,18 @@ let
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
       };
+      x86_64-freebsd14 = {
+        variantSuffix = "";
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-unknown-freebsd.tar.xz";
+          sha256 = "45e35d24bc700e1093efa39189e9fa01498069881aed2fa8779c011941a80da1";
+        };
+        exePathForLibraryCheck = null;
+        archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
+          { nixPackage = freebsd.libncurses; fileToCheckFor = null; }
+        ];
+      };
       aarch64-darwin = {
         variantSuffix = "";
         src = {
@@ -197,6 +209,9 @@ stdenv.mkDerivation rec {
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location.
   ${libEnvVar} = libPath;
+
+  # FreeBSD binary builds expect to be able to link -lgmp
+  propagatedBuildInputs = lib.optionals (stdenv.isFreeBSD) [ gmp ];
 
   postUnpack =
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
@@ -333,9 +348,9 @@ stdenv.mkDerivation rec {
   # This is extremely bogus and should be investigated.
   dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
-  # On Linux, use patchelf to modify the executables so that they can
+  # On Linux/FreeBSD, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString stdenv.isLinux
+  postFixup = lib.optionalString (stdenv.isLinux || stdenv.isFreeBSD)
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes

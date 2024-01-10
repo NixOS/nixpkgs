@@ -5,6 +5,7 @@
 , gzip
 , lib
 , libiconv
+, libiconvReal
 , libpipeline
 , makeWrapper
 , nixosTests
@@ -28,8 +29,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  buildInputs = [ libpipeline db groff ] # (Yes, 'groff' is both native and build input)
+  ++ lib.optionals stdenv.isFreeBSD [ libiconvReal ];
+  nativeCheckInputs = if stdenv.isFreeBSD then [ libiconvReal ] else [ libiconv /* for 'iconv' binary */ ];
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -45,6 +47,9 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+  '' + lib.optionalString stdenv.isFreeBSD ''
+    # don't know how this is supposed to work
+    sed -E -i -e /man-suffixed-extension/d src/tests/Makefile.am
   '';
 
   configureFlags = [

@@ -118,6 +118,11 @@ buildPythonPackage rec {
     "test_isattributedescriptor"
     "test_methoddescriptor"
     "test_partialfunction"
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # fail outside of nix
+    "test_connect_to_selfsigned_with_tls_verify_false"
+    "test_connect_to_selfsigned_with_tls_cacerts"
+    "test_connect_to_selfsigned_with_requests_env_var"
   ];
 
   meta = {

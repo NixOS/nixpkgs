@@ -280,9 +280,10 @@ stdenv.mkDerivation (rec {
       'MinBootGhcVersion="8.10"'
   '';
 
+  # FreeBSD prebuilts are built for x86_64-portbld-freebsd instead of x86_64-unknown-freebsd
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = lib.optionals (!stdenv.isFreeBSD) ([ "build" "host" ]
+    ++ lib.optional (targetPlatform != hostPlatform) "target");
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
@@ -306,7 +307,11 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
-  ];
+  ] ++ lib.optionals stdenv.isFreeBSD (let unport = (s: builtins.replaceStrings ["unknown"] ["portbld"] s); in [
+    "--build=${unport stdenv.buildPlatform.config}"
+    "--host=${unport stdenv.hostPlatform.config}"
+    "--target=${unport stdenv.targetPlatform.config}"
+  ]);
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;

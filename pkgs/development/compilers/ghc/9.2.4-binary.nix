@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, perl, gcc
 , ncurses5
-, ncurses6, gmp, libiconv, numactl, libffi
+, ncurses6, gmp, libiconv, numactl, libffi, freebsd
 , llvmPackages
 , coreutils
 , targetPackages
@@ -109,6 +109,18 @@ let
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
         isHadrian = true;
+      };
+      x86_64-freebsd14 = {
+        variantSuffix = "";
+        src = {
+          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-portbld-freebsd.tar.xz";
+          sha256 = "d462447a57f032291864ef78a7f826a07b17af76392b9a15dc0a672c9bc2d024";
+        };
+        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
+        archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
+          { nixPackage = freebsd.libncurses; fileToCheckFor = null; }
+        ];
       };
     };
     # Binary distributions for the musl libc for the respective system.
@@ -314,9 +326,9 @@ stdenv.mkDerivation rec {
   # This is extremely bogus and should be investigated.
   dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
-  # On Linux, use patchelf to modify the executables so that they can
+  # On Linux/FreeBSD, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString (stdenv.isLinux && !(binDistUsed.isStatic or false))
+  postFixup = lib.optionalString ((stdenv.isLinux || stdenv.isFreeBSD) && !(binDistUsed.isStatic or false))
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes

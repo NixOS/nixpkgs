@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, patchesRoot, ... }:
+{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, patchesRoot, hostVersion, ... }:
 mkDerivation {
   path = "contrib/bmake";
   extraPaths = [ "share/mk" ]
@@ -47,7 +47,7 @@ mkDerivation {
     substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
       --replace '-Wl,--fatal-warnings' "" \
       --replace '-Wl,--warn-shared-textrel' ""
-  '' + lib.optionalString stdenv.targetPlatform.isFreeBSD ''
+  '' + lib.optionalString (stdenv.targetPlatform.isFreeBSD && hostVersion != "freebsd13") ''
     substituteInPlace $BSDSRCDIR/share/mk/local.sys.dirdeps.env.mk \
       --replace 'MK_host_egacy= yes' 'MK_host_egacy= no'
   '';

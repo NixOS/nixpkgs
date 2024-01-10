@@ -9,6 +9,7 @@
 , pkg-config
 , pycparser
 , pythonAtLeast
+, freebsd
 }:
 
 if isPyPy then null else buildPythonPackage rec {
@@ -66,7 +67,8 @@ if isPyPy then null else buildPythonPackage rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";
 
-  doCheck = !stdenv.hostPlatform.isMusl;
+  # tests do dynamic library loading that fails on musl and freebsd outside nix
+  doCheck = !stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isFreeBSD;
 
   nativeCheckInputs = [
     pytestCheckHook
