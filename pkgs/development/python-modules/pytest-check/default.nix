@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.2.3";
+  version = "2.2.4";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-bfAyZLa7zyXNhhUSDNoDtObRH9srfI3eapyP7xinSVw=";
+    hash = "sha256-0uaWYDFB9bLekFuTWD5FmE7DxhzscCZJ3rEL2XSFYLs=";
   };
 
   nativeBuildInputs = [

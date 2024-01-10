@@ -1359,6 +1359,7 @@ in {
               ''
               else ''
                 jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                   '${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.9" then ".production.main as $main | del(.production.main) | .production |= {main: $main} + ." else ""}' \
                    >'${cfg.statePath}/config/database.yml'
               ''
             }
