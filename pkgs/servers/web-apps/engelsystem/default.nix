@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchzip {
     url = "https://github.com/engelsystem/engelsystem/releases/download/v${version}/engelsystem-v${version}.zip";
-    hash = "sha256-5KniP1nrLfmWHruXnUJmlvgL95U+EsDmCs4tg/YLWtw=";
+    hash = "sha256-RbzAHBZN02u14WaLtq5EOh4XwIdHKvzX7NhDBhn/CaU=";
   };
 
   buildInputs = [ phpExt ];
