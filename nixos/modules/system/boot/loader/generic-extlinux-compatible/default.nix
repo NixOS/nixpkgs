@@ -74,8 +74,10 @@ in
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
     mkIf cfg.enable {
-      system.build.installBootLoader = "${builder} ${builderArgs} -c";
-      system.boot.loader.id = "generic-extlinux-compatible";
+      boot.loader.builders.generic-extlinux-compatible = {
+        id = "generic-extlinux-compatible";
+        script = "${builder} ${builderArgs} -c";
+      };
 
       boot.loader.generic-extlinux-compatible.populateCmd = "${populateBuilder} ${builderArgs}";
     };

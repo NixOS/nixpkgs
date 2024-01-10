@@ -99,7 +99,7 @@ openlog("nixos", "", LOG_USER);
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
     chomp(my $install_boot_loader = <<'EOFBOOTLOADER');
-@installBootLoader@
+@installBootLoader@/bin/nixos-install-bootloader
 EOFBOOTLOADER
     system("$install_boot_loader $toplevel") == 0 or exit 1;
 }
