@@ -18,14 +18,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wike";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     rev = version;
-    hash = "sha256-R8Zg/2tr9MrmtTdbvqD+Ra8+MEBJdgMqC3ptx1VgkeA=";
+    hash = "sha256-BXmLZhotQK6L4c2D8F8qF3zmOlSuzXycEN2FaC1K6/g=";
   };
 
   nativeBuildInputs = [
