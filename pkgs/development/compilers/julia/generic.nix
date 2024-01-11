@@ -1,3 +1,8 @@
+{ version
+, hash
+, patches
+}:
+
 { lib
 , stdenv
 , fetchurl
@@ -13,16 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.9.4";
+
+  inherit version patches;
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
+    inherit hash;
   };
-
-  patches = [
-    ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
-  ];
 
   strictDeps = true;
 
@@ -63,12 +65,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doInstallCheck = !stdenv.hostPlatform.isAarch64; # tests are flaky for aarch64-linux on hydra
+  # tests are flaky for aarch64-linux on hydra
+  doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
+
   installCheckTarget = "testall";
 
   preInstallCheck = ''
-    export HOME="$TMPDIR"
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
+    # Some tests require read/write access to $HOME.
+    # And $HOME cannot be equal to $TMPDIR as it causes test failures
+    export HOME=$(mktemp -d)
   '';
 
   dontStrip = true;
