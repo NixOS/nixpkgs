@@ -20,7 +20,7 @@
   # The featureRelease is used to populate meta.platforms (by way of looking at the attribute names)
   # and to determine the outputs of the package.
   # shimFn :: {package, redistArch} -> AttrSet
-  shimsFn ? ({package, redistArch}: throw "shimsFn must be provided"),
+  shimsFn ? (throw "shimsFn must be provided"),
   # fixupFn :: Path
   # A path (or nix expression) to be evaluated with callPackage and then
   # provided to the package's overrideAttrs function.
@@ -29,16 +29,8 @@
   # - cudaVersion
   # - mkVersionedPackageName
   # - package
-  fixupFn ? (
-    {
-      final,
-      cudaVersion,
-      mkVersionedPackageName,
-      package,
-      ...
-    }:
-    throw "fixupFn must be provided"
-  ),
+  # - ...
+  fixupFn ? (throw "fixupFn must be provided"),
 }:
 let
   inherit (lib)
@@ -80,9 +72,11 @@ let
     && strings.versionAtLeast package.maxCudaVersion cudaVersion;
 
   # Get all of the packages for our given platform.
+  # redistArch :: String
+  # Value is `"unsupported"` if the platform is not supported.
   redistArch = flags.getRedistArch hostPlatform.system;
 
-  allReleases = builtins.concatMap (xs: xs) (builtins.attrValues releaseSets);
+  allReleases = lists.flatten (builtins.attrValues releaseSets);
 
   # All the supported packages we can build for our platform.
   # perSystemReleases :: List Package
