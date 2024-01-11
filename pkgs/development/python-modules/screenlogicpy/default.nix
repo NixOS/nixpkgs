@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dieselrabbit";
     repo = "screenlogicpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pilPmHE5amCQ/mGTy3hJqtSEElx7SevQpeMJZKYv7BA=";
+    hash = "sha256-z6cM0sihZvOHCA3v1DYQEev0axf4AcqEW13WA1EMhQM=";
   };
 
   nativeBuildInputs = [

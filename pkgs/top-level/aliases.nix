@@ -172,7 +172,7 @@ mapAliases ({
   cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
   # these are for convenience, not for backward compat and shouldn't expire
-  clang6Stdenv = lowPrio llvmPackages_6.stdenv;
+  clang6Stdenv = throw "clang6Stdenv has been removed from nixpkgs"; # Added 2024-01-08
   clang7Stdenv = throw "clang7Stdenv has been removed from nixpkgs"; # Added 2023-11-19
   clang8Stdenv = lowPrio llvmPackages_8.stdenv;
   clang9Stdenv = lowPrio llvmPackages_9.stdenv;
@@ -185,7 +185,9 @@ mapAliases ({
   clang16Stdenv = lowPrio llvmPackages_16.stdenv;
   clang17Stdenv = lowPrio llvmPackages_17.stdenv;
 
+  clang-tools_6  = throw "clang-tools_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang-tools_7  = throw "clang-tools_7 has been removed from nixpkgs"; # Added 2023-11-19
+  clang_6  = throw "clang_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang_7  = throw "clang_7 has been removed from nixpkgs"; # Added 2023-11-19
 
   ### D ###
@@ -595,9 +597,13 @@ mapAliases ({
   linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_testing', or any other linux kernel with bcachefs support";
   linux_testing_bcachefs = throw "'linux_testing_bcachefs' has been removed, please use 'linux_testing', or any other linux kernel with bcachefs support";
 
+  lld_6 = throw "lld_6 has been removed from nixpkgs"; # Added 2024-01-08
   lld_7 = throw "lld_7 has been removed from nixpkgs"; # Added 2023-11-19
+  lldb_6 = throw "lldb_6 has been removed from nixpkgs"; # Added 2024-01-08
   lldb_7 = throw "lldb_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvmPackages_6 = throw "llvmPackages_6 has been removed from nixpkgs"; # Added 2024-01-09
   llvmPackages_7 = throw "llvmPackages_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvm_6 = throw "llvm_6 has been removed from nixpkgs"; # Added 2024-01-08
   llvm_7 = throw "llvm_7 has been removed from nixpkgs"; # Added 2023-11-19
 
   lobster-two = google-fonts; # Added 2021-07-22
