@@ -1,30 +1,61 @@
 { lib, mkDerivation, fetchFromGitLab, cmake, luajit
-, SDL2, SDL2_image, SDL2_ttf, physfs, fetchpatch
-, openal, libmodplug, libvorbis, solarus
-, qtbase, qttools, glm }:
+, SDL2, SDL2_image, SDL2_ttf, physfs
+, openal, libmodplug, libvorbis, libtiff, solarus, libxcb
+, qt5, glm , gdb, fetchpatch}:
 
 mkDerivation rec {
   pname = "solarus-quest-editor";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qbc2j9kalk7xqk9j27s7wnm5zawiyjs47xqkqphw683idmzmjzn";
+    sha256 = "sha256-oOZ48JKz5s+97xZFy+FXi0KQOC0FBj61LjF25Uh7ct8=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/solarus-games/solarus-quest-editor/-/commit/81d5c7f1602cf355684d70a5e3449fefccfc44b8.patch";
-      sha256 = "tVUxkkDp2PcOHGy4dGvUcYj9gF7k4LN21VuxohCw9NE=";
-    })
+  patches = [(fetchpatch {
+    url = "https://gitlab.com/solarus-games/solarus-quest-editor/-/commit/88bc50d260ab93c4e36d4a32ded333c5e7b2226b.patch";
+    sha256 = "sha256-rKPcWzBn7E+E7WgPgjlVQ5ipQPI2LIvoJKi7zE8YM20=";
+  })];
+
+  nativeBuildInputs = [ cmake qt5.qttools qt5.full];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  # preInstall = ''
+  #   cp -vr ../assets ./bin/assets
+  # '';
 
-  buildInputs = [ luajit SDL2 SDL2_image SDL2_ttf physfs openal
-    libmodplug libvorbis solarus qtbase qttools glm ];
+  # Custom post-install phase
+  postInstall = ''
+    # Copy the assets directory to the bin directory in the output path
+    mkdir -p $out/bin
+    cp -rv ../assets $out/bin/assets
+    cp -rv ../assets $out/bin/assets/assets
+  '';
+
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    glm
+    libmodplug
+    libvorbis
+    qt5.full
+    libxcb
+    libtiff
+    openal
+    physfs
+    qt5.qtbase
+    qt5.qttools
+    solarus
+    luajit
+    gdb
+  ];
+
+
 
   meta = with lib; {
     description = "The editor for the Zelda-like ARPG game engine, Solarus";
