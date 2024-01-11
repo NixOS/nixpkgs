@@ -25,6 +25,7 @@
 , pugixml
 , qtbase
 , qtmultimedia
+, qtwayland
 , utf8cpp
 , xdg-utils
 , zlib
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.isLinux [ qtwayland ]
   ++ optionals stdenv.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
