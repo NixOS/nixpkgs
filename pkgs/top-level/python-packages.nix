@@ -1912,6 +1912,8 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  coolname = callPackage ../development/python-modules/coolname { };
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
