@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # Tests fail because of client server setup which is not possible inside the
