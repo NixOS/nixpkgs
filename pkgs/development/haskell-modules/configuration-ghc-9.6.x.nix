@@ -167,6 +167,10 @@ self: super: {
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 
+  # 2023-12-23: It needs this to build under ghc-9.6.3.
+  #   A factor of 100 is insufficent, 200 seems seems to work.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
   # Doctest comments have bogus imports.
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 

@@ -49,8 +49,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  #
   # HLS
   # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
+  #
   haskell-language-server = super.haskell-language-server.override {
     hls-class-plugin = null;
     hls-fourmolu-plugin = null;
@@ -64,7 +66,9 @@ self: super: {
     hls-stylish-haskell-plugin = null;
   };
 
+  #
   # Version upgrades
+  #
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_1_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_0;
@@ -94,7 +98,9 @@ self: super: {
   # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
 
+  #
   # Test suite issues
+  #
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   # https://github.com/wz1000/HieDb/issues/64
@@ -103,4 +109,12 @@ self: super: {
       "--match" "!/hiedb/Command line/point-info/correctly prints type signatures/"
     ];
   }) super.hiedb;
+
+  #
+  # Other build fixes
+  #
+
+  # 2023-12-23: It needs this to build under ghc-9.6.3.
+  #   A factor of 100 is insufficent, 200 seems seems to work.
+  hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 }

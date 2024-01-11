@@ -2071,7 +2071,6 @@ dont-distribute-packages:
  - hinduce-examples
  - hinvaders
  - hinze-streams
- - hip
  - hipbot
  - hipe
  - hipsql-client
