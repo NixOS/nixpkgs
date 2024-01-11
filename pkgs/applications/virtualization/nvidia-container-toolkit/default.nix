@@ -1,15 +1,18 @@
 { lib
+, stdenv
 , glibc
 , fetchFromGitLab
 , makeWrapper
 , buildGoModule
 , linkFarm
 , writeShellScript
+, fetchpatch2
 , formats
 , containerRuntimePath
 , configTemplate
 , configTemplatePath ? null
 , libnvidia-container
+, cudaPackages
 }:
 
 assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
@@ -31,29 +34,34 @@ let
   '';
 
   configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
+
+  # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/6f3d9307bbde56cb4f0be92ea7246e183e98dda6/Makefile#L54
+  cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
 buildGoModule rec {
   pname = "container-toolkit/container-toolkit";
-  version = "1.9.0";
+  version = "unstable-2024-01-22";
 
   src = fetchFromGitLab {
     owner = "nvidia";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-b4mybNB5FqizFTraByHk5SCsNO66JaISj18nLgLN7IA=";
+    rev = "b3519fadc469229e920766c4be7fad0fb955fd35";
+    hash = "sha256-tGZB3gj4OQtxKOqSVvuZo33iVPW5BtvMLir+Ixr1bq0=";
   };
 
   vendorHash = null;
 
-  postPatch = ''
-    # replace the default hookDefaultFilePath to the $out path
-    substituteInPlace cmd/nvidia-container-runtime/main.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' '${placeholder "out"}/bin/nvidia-container-runtime-hook'
-  '';
+  patches = [
+    (fetchpatch2 {
+      name = "0001-Add-dlopen-discoverer.patch";
+      url = "https://gitlab.com/jmbaur/container-toolkit/commit/e4449f06a8989ff22947309151855b388c311aed.patch";
+      hash = "sha256-0rfyJNoLSXxEvXfRemgoZba0gONZVJYy0c4JRtMsGVw=";
+    })
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-extldflags=-Wl,-z,lazy" "-X" "${cliVersionPackage}.version=${version}" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isx86_64 cudaPackages.autoAddOpenGLRunpathHook ;
 
   preConfigure = ''
     # Ensure the runc symlink isn't broken:
@@ -95,7 +103,7 @@ buildGoModule rec {
     substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
       --subst-var-by glibcbin ${lib.getBin glibc}
 
-    ln -s $out/bin/nvidia-container-{toolkit,runtime-hook}
+    ln -s $out/bin/nvidia-container-{runtime-hook,toolkit}
 
     wrapProgram $out/bin/nvidia-container-toolkit \
       --add-flags "-config ${placeholder "out"}/etc/nvidia-container-runtime/config.toml"
