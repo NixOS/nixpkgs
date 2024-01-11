@@ -4669,6 +4669,12 @@
     githubId = 13730968;
     name = "Justin Restivo";
   };
+  dietmarw = {
+    name = "Dietmar Winkler";
+    email = "dietmar.winkler@dwe.no";
+    github = "dietmarw";
+    githubId = 9332;
+  };
   diffumist = {
     email = "git@diffumist.me";
     github = "Diffumist";
