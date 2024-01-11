@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
     rev = "v${version}";
-    hash = "sha256-YPEJP+RdGxEMVRoDohxGiOkOMmWLhlBrkr+T+zcST5g=";
+    hash = "sha256-wbJpMKn9y6fij1C2/pI2vxnU9LHingrnVWtMZQYMUKo=";
   };
 
-  cargoHash = "sha256-Dia0/yV2rsUx0Mfd2rQkNh7QB+dZubudcoyfMmeaxx8=";
+  cargoHash = "sha256-AEae0Lpg+0UcS9ie6/Kvwdhn4I4R86/71oidcJNmuD0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
