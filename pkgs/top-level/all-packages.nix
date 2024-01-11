@@ -3921,6 +3921,8 @@ with pkgs;
 
   goperf = callPackage ../development/tools/goperf { };
 
+  gow = callPackage ../development/tools/gow { };
+
   graphite-cli = nodePackages.graphite-cli;
 
   gucci = callPackage ../tools/text/gucci { };
