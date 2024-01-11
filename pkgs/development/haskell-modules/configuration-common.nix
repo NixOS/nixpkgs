@@ -707,6 +707,10 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
+  # 2023-01-11: Too strict bounds on optparse-applicative
+  # https://github.com/Gabriella439/bench/issues/49
+  bench = doJailbreak super.bench;
+
   # 2023-06-26: Test failure: https://hydra.nixos.org/build/224869905
   comfort-blas = dontCheck super.comfort-blas;
 
