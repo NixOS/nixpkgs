@@ -66,6 +66,10 @@
 /doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
+# Nix, the package manager
+pkgs/tools/package-management/nix/                    @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
