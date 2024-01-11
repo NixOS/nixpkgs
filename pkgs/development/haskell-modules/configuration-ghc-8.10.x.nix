@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -120,13 +121,6 @@ self: super: {
   # Overly-strict bounds introducted by a revision in version 0.3.2.
   text-metrics = doJailbreak super.text-metrics;
 
-  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
-  OneTuple = addBuildDepends [
-    self.foldable1-classes-compat
-  ] (super.OneTuple.override {
-    ghc-prim = self.hashable;
-  });
-
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
 
@@ -171,8 +165,19 @@ self: super: {
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;
 
-  # Needs compat library for GHC < 9.6
-  indexed-traversable = addBuildDepends [
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    these
+  ;
+
+  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
+  OneTuple = addBuildDepends [
     self.foldable1-classes-compat
-  ] super.indexed-traversable;
+  ] (super.OneTuple.override {
+    ghc-prim = self.hashable;
+  });
 }

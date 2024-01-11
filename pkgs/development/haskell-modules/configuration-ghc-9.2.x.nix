@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -128,8 +129,13 @@ self: super: {
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 
-  # Needs compat library for GHC < 9.6
-  indexed-traversable = addBuildDepends [
-    self.foldable1-classes-compat
-  ] super.indexed-traversable;
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
 }
