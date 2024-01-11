@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.darwin;
     license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "iina";
     maintainers = with maintainers; [ arkivm stepbrobd ];
   };
 }
