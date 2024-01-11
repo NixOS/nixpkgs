@@ -5921,7 +5921,6 @@ broken-packages:
   - vty-examples # failure in job https://hydra.nixos.org/build/233235872 at 2023-09-02
   - vty-menu # failure in job https://hydra.nixos.org/build/233232391 at 2023-09-02
   - vty-ui # failure in job https://hydra.nixos.org/build/233200900 at 2023-09-02
-  - vty-unix # failure in job https://hydra.nixos.org/build/241443107 at 2023-11-19
   - wacom-daemon # failure in job https://hydra.nixos.org/build/233213077 at 2023-09-02
   - waddle # failure in job https://hydra.nixos.org/build/233239973 at 2023-09-02
   - wai-git-http # failure in job https://hydra.nixos.org/build/233191513 at 2023-09-02
