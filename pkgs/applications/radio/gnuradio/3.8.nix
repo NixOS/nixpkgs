@@ -5,7 +5,7 @@
 # Remove gcc and python references
 , removeReferencesTo
 , pkg-config
-, volk
+, libvolk
 , cppunit
 , swig
 , orc
@@ -66,10 +66,10 @@ let
         six
       ];
     };
-    volk = {
+    libvolk = {
       cmakeEnableFlag = "VOLK";
       runtime = [
-        volk
+        libvolk
       ];
     };
     doxygen = {
@@ -258,7 +258,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must
     inherit
       boost
-      volk
+      libvolk
     ;
     # Used by many gnuradio modules, the same attribute is present in
     # gnuradio3.10 where there it's spdlog.
@@ -285,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm${stdenv.hostPlatform.extensions.sharedLibrary}"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
-    ++ lib.optionals (hasFeature "volk" && volk != null) [
+    ++ lib.optionals (hasFeature "libvolk" && libvolk != null) [
       "-DENABLE_INTERNAL_VOLK=OFF"
     ]
   ;

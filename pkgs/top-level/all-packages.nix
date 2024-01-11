@@ -7856,10 +7856,10 @@ with pkgs;
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  volk = if (stdenv.isDarwin && stdenv.isAarch64) then
-    (callPackage ../development/libraries/volk/2.5.0.nix { })
+  libvolk = if (stdenv.isDarwin && stdenv.isAarch64) then
+    (callPackage ../development/libraries/libvolk/2.5.0.nix { })
   else
-    (callPackage ../development/libraries/volk { })
+    (callPackage ../development/libraries/libvolk { })
   ;
 
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
@@ -31606,7 +31606,7 @@ with pkgs;
   gnuradioMinimal = gnuradio.override {
     doWrap = false;
     unwrapped = gnuradio.unwrapped.override {
-      volk = volk.override {
+      libvolk = libvolk.override {
         # So it will not reference python
         enableModTool = false;
       };
@@ -31639,7 +31639,7 @@ with pkgs;
   gnuradio3_9Minimal = gnuradio.override {
     doWrap = false;
     unwrapped = gnuradio.unwrapped.override {
-      volk = volk.override {
+      libvolk = libvolk.override {
         # So it will not reference python
         enableModTool = false;
       };
@@ -31672,7 +31672,7 @@ with pkgs;
   gnuradio3_8Minimal = gnuradio3_8.override {
     doWrap = false;
     unwrapped = gnuradio3_8.unwrapped.override {
-      volk = volk.override {
+      libvolk = libvolk.override {
         enableModTool = false;
       };
       uhd = uhdMinimal;

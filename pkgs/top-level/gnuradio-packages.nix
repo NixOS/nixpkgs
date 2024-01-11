@@ -18,7 +18,7 @@ let
     inherit (gnuradio)
       # Packages that are potentially overridden and used as deps here.
       boost
-      volk
+      libvolk
       logLib
       python
     ;
