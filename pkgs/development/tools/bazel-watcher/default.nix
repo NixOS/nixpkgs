@@ -50,6 +50,10 @@ buildBazelPackage rec {
   fetchAttrs = {
     inherit patches;
 
+    preHook = ''
+      export GOPROXY=https://proxy.golang.org,direct
+    '';
+
     preBuild = ''
       patchShebangs .
 
