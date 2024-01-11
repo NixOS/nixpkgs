@@ -14029,6 +14029,11 @@
     github = "pennae";
     githubId = 82953136;
   };
+  peret = {
+    name = "Peter Retzlaff";
+    github = "peret";
+    githubId = 617977;
+  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
