@@ -41,5 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab Misaka13514 ];
+    mainProgram = "nuclei";
   };
 }
