@@ -13,14 +13,20 @@ stdenv.mkDerivation(finalAttrs: {
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "libusbp";
-    rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-60xpJ97GlqEcy2+pxGNGPfWDnbIFGoPXJijaErOBXQs=";
+    rev = finalAttrs.version;
+    hash = "sha256-60xpJ97GlqEcy2+pxGNGPfWDnbIFGoPXJijaErOBXQs=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  propagatedBuildInputs = [ udev ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  propagatedBuildInputs = [
+    udev
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pololu/libusbp";
