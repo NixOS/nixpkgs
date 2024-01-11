@@ -12,9 +12,8 @@ import subprocess
 import sys
 import warnings
 import json
-from typing import NamedTuple, Dict, List, Type, Generator, Iterable
+from typing import NamedTuple, Dict, List
 from dataclasses import dataclass
-from pathlib import Path
 
 
 @dataclass
@@ -29,114 +28,7 @@ class BootSpec:
     specialisations: Dict[str, "BootSpec"]
     initrdSecrets: str | None = None
 
-@dataclass
-class Entry:
-    profile: str | None
-    generation_number: int
-    specialisation: str | None
 
-    @classmethod
-    def from_path(cls: Type["Entry"], path: Path) -> "Entry":
-        filename = path.name
-        # Matching nixos-$profile-generation-*.conf
-        rex_profile = re.compile(r"^nixos-(.*)-generation-.*\.conf$")
-        # Matching nixos*-generation-$number*.conf
-        rex_generation = re.compile(r"^nixos.*-generation-([0-9]+).*\.conf$")
-        # Matching nixos*-generation-$number-specialisation-$specialisation_name*.conf
-        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9]+).*\.conf$")
-        profile = rex_profile.sub(r"\1", filename) if rex_profile.match(filename) else None
-        specialisation = rex_specialisation.sub(r"\2", filename) if rex_specialisation.match(filename) else None
-        try:
-            generation_number = int(rex_generation.sub(r"\1", filename))
-        except ValueError:
-            raise
-        return cls(profile, generation_number, specialisation)
-
-
-BOOT_ENTRY = """title {title}
-version Generation {generation} {description}
-linux {kernel}
-initrd {initrd}
-options {kernel_params}
-machine-id {machine_id}
-sort-key {sort_key}
-"""
-
-@dataclass
-class DiskEntry():
-    entry: Entry
-    default: bool
-    counters: str | None
-    title: str
-    description: str
-    kernel: str
-    initrd: str
-    kernel_params: str
-    machine_id: str
-
-    @classmethod
-    def from_path(cls: Type["DiskEntry"], path: Path) -> "DiskEntry":
-        entry = Entry.from_path(path)
-        with open(path, 'r') as f:
-            data = f.read().splitlines()
-            if '' in data:
-                data.remove('')
-            entry_map = dict(l.split(' ', 1) for l in data)
-            assert "title" in entry_map
-            assert "version" in entry_map
-            version_splitted = entry_map["version"].split(" ", 2)
-            assert version_splitted[0] == "Generation"
-            assert version_splitted[1].isdigit()
-            assert "linux" in entry_map
-            assert "initrd" in entry_map
-            assert "options" in entry_map
-            assert "machine-id" in entry_map
-            assert "sort-key" in entry_map
-            filename = path.name
-            # Matching nixos*-generation-*$counters.conf
-            rex_counters = re.compile(r"^nixos.*-generation-.*(\+\d(-\d)?)\.conf$")
-            counters = rex_counters.sub(r"\1", filename) if rex_counters.match(filename) else None
-            disk_entry = cls(
-                    entry=entry,
-                    default=(entry_map["sort-key"] == "default"),
-                    counters=counters,
-                    title=entry_map["title"],
-                    description=entry_map["version"],
-                    kernel=entry_map["linux"],
-                    initrd=entry_map["initrd"],
-                    kernel_params=entry_map["options"],
-                    machine_id=entry_map["machine-id"])
-            return disk_entry
-
-    def write(self) -> None:
-        tmp_path = self.path.with_suffix(".tmp")
-        with tmp_path.open('w') as f:
-            # We use "sort-key" to sort the default generation first.
-            # The "default" string is sorted before "non-default" (alphabetically)
-            f.write(BOOT_ENTRY.format(title=self.title,
-                          generation=self.entry.generation_number,
-                          kernel=self.kernel,
-                          initrd=self.initrd,
-                          kernel_params=self.kernel_params,
-                          machine_id=self.machine_id,
-                          description=self.description,
-                          sort_key="default" if self.default else "non-default"))
-            f.flush()
-            os.fsync(f.fileno())
-        tmp_path.rename(self.path)
-
-
-    @property
-    def path(self) -> Path:
-        pieces = [
-            "nixos",
-            self.entry.profile or None,
-            "generation",
-            str(self.entry.generation_number),
-            f"specialisation-{self.entry.specialisation}" if self.entry.specialisation else None,
-        ]
-        prefix = "-".join(p for p in pieces if p)
-        return Path(f"@efiSysMountPoint@/loader/entries/{prefix}{self.counters if self.counters else ''}.conf")
 
 libc = ctypes.CDLL("libc.so.6")
 
@@ -164,14 +56,29 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
     else:
         return d
 
-def write_loader_conf(profile: str | None) -> None:
+BOOT_ENTRY = """title {title}
+version Generation {generation} {description}
+linux {kernel}
+initrd {initrd}
+options {kernel_params}
+"""
+
+def generation_conf_filename(profile: str | None, generation: int, specialisation: str | None) -> str:
+    pieces = [
+        "nixos",
+        profile or None,
+        "generation",
+        str(generation),
+        f"specialisation-{specialisation}" if specialisation else None,
+    ]
+    return "-".join(p for p in pieces if p) + ".conf"
+
+
+def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
             f.write("timeout @timeout@\n")
-        if profile:
-            f.write("default nixos-%s-generation-*\n" % profile)
-        else:
-            f.write("default nixos-generation-*\n")
+        f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not @editor@:
             f.write("editor 0\n")
         f.write("console-mode @consoleMode@\n")
@@ -179,17 +86,6 @@ def write_loader_conf(profile: str | None) -> None:
         os.fsync(f.fileno())
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
-def scan_entries() -> Generator[DiskEntry, None, None]:
-    """
-    Scan all entries in $ESP/loader/entries/*
-    Does not support Type 2 entries as we do not support them for now.
-    Returns a generator of Entry.
-    """
-    for path in Path("@efiSysMountPoint@/loader/entries/").glob("nixos*-generation-[1-9]*.conf"):
-        try:
-            yield DiskEntry.from_path(path)
-        except ValueError:
-            continue
 
 def get_bootspec(profile: str | None, generation: int) -> BootSpec:
     system_directory = system_dir(profile, generation, None)
@@ -224,7 +120,7 @@ def copy_from_file(file: str, dry_run: bool = False) -> str:
     return efi_file_path
 
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
-                machine_id: str, bootspec: BootSpec, entries: Iterable[DiskEntry], current: bool) -> None:
+                machine_id: str, bootspec: BootSpec, current: bool) -> None:
     if specialisation:
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
@@ -246,30 +142,28 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                   f'for "{title} - Configuration {generation}", an older generation', file=sys.stderr)
             print("note: this is normal after having removed "
                   "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
+    entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
+        generation_conf_filename(profile, generation, specialisation))
+    tmp_path = "%s.tmp" % (entry_file)
     kernel_params = "init=%s " % bootspec.init
+
     kernel_params = kernel_params + " ".join(bootspec.kernelParams)
     build_time = int(os.path.getctime(system_dir(profile, generation, specialisation)))
     build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
-    counters = "+@bootCountingTrials@" if @bootCounting@ else ""
-    entry = Entry(profile, generation, specialisation)
-    # We check if the entry we are writing is already on disk
-    # and we update its "default entry" status
-    for entry_on_disk in entries:
-        if entry == entry_on_disk.entry:
-            entry_on_disk.default = current
-            entry_on_disk.write()
-            return
 
-    DiskEntry(
-            entry=entry,
-            title=title,
-            kernel=kernel,
-            initrd=initrd,
-            counters=counters,
-            kernel_params=kernel_params,
-            machine_id=machine_id,
-            description=f"{bootspec.label}, built on {build_date}",
-            default=current).write()
+    with open(tmp_path, 'w') as f:
+        f.write(BOOT_ENTRY.format(title=title,
+                    generation=generation,
+                    kernel=kernel,
+                    initrd=initrd,
+                    kernel_params=kernel_params,
+                    description=f"{bootspec.label}, built on {build_date}"))
+        if machine_id is not None:
+            f.write("machine-id %s\n" % machine_id)
+        f.flush()
+        os.fsync(f.fileno())
+    os.rename(tmp_path, entry_file)
+
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     gen_list = subprocess.check_output([
@@ -294,18 +188,29 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     return configurations[-configurationLimit:]
 
 
-def remove_old_entries(gens: list[SystemIdentifier], disk_entries: Iterable[DiskEntry]) -> None:
+def remove_old_entries(gens: list[SystemIdentifier]) -> None:
+    rex_profile = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
+    rex_generation = re.compile(r"^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
         known_paths.append(copy_from_file(bootspec.kernel, True))
         known_paths.append(copy_from_file(bootspec.initrd, True))
-    for disk_entry in disk_entries:
-        if (disk_entry.entry.profile, disk_entry.entry.generation_number, None) not in gens:
-            os.unlink(disk_entry.path)
-    for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
-        if path not in known_paths and not os.path.isdir(path):
+    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
+        if rex_profile.match(path):
+            prof = rex_profile.sub(r"\1", path)
+        else:
+            prof = None
+        try:
+            gen_number = int(rex_generation.sub(r"\1", path))
+        except ValueError:
+            continue
+        if not (prof, gen_number, None) in gens:
             os.unlink(path)
+    for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
+        if not path in known_paths and not os.path.isdir(path):
+            os.unlink(path)
+
 
 def get_profiles() -> list[str]:
     if os.path.isdir("/nix/var/nix/profiles/system-profiles/"):
@@ -379,17 +284,16 @@ def install_bootloader(args: argparse.Namespace) -> None:
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
-    entries = scan_entries()
-    remove_old_entries(gens, entries)
+    remove_old_entries(gens)
     for gen in gens:
         try:
             bootspec = get_bootspec(gen.profile, gen.generation)
             is_default = os.path.dirname(bootspec.init) == args.default_config
-            write_entry(*gen, machine_id, bootspec, entries, current=is_default)
+            write_entry(*gen, machine_id, bootspec, current=is_default)
             for specialisation in bootspec.specialisations.keys():
-                write_entry(gen.profile, gen.generation, specialisation, machine_id, bootspec, entries, current=is_default)
+                write_entry(gen.profile, gen.generation, specialisation, machine_id, bootspec, current=is_default)
             if is_default:
-                write_loader_conf(gen.profile)
+                write_loader_conf(*gen)
         except OSError as e:
             # See https://github.com/NixOS/nixpkgs/issues/114552
             if e.errno == errno.EINVAL:
