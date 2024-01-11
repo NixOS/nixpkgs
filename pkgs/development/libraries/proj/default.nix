@@ -1,11 +1,14 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
-, fetchpatch
+
+# install grid resource files from proj-data package
+, withProjData ? false
+
 , cmake
 , pkg-config
 , buildPackages
-, callPackage
 , sqlite
 , libtiff
 , curl
@@ -13,6 +16,7 @@
 , nlohmann_json
 , python3
 , cacert
+, proj-data
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -57,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: rec {
       '';
 
   doCheck = true;
+
+  postInstall = lib.optionalString withProjData ''
+    cp --recursive ${proj-data}/* $out/share/proj/
+  '';
 
   passthru.tests = {
     python = python3.pkgs.pyproj;
