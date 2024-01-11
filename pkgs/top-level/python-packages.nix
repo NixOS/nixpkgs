@@ -1323,6 +1323,8 @@ self: super: with self; {
 
   baron = callPackage ../development/python-modules/baron { };
 
+  base2048 = callPackage ../development/python-modules/base2048 { };
+
   base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
