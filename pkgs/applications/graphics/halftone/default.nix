@@ -56,6 +56,8 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/tfuxu/halftone";
     description = "Simple app for giving images that pixel-art style";
     license = licenses.gpl3Plus;
+    mainProgram = "halftone";
     maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = platforms.linux;
   };
 }
