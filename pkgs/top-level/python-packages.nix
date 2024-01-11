@@ -9752,6 +9752,8 @@ self: super: with self; {
 
   prefect = callPackage ../development/python-modules/prefect { };
 
+  prefect-dask = callPackage ../development/python-modules/prefect-dask { };
+
   prefixed = callPackage ../development/python-modules/prefixed { };
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
