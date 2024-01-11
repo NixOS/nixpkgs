@@ -2508,6 +2508,12 @@
     githubId = 5700358;
     name = "Thomas Blank";
   };
+  blinry = {
+    name = "blinry";
+    email = "mail@blinry.org";
+    github = "blinry";
+    githubId = 81277;
+  };
   blitz = {
     email = "js@alien8.de";
     matrix = "@js:ukvly.org";
