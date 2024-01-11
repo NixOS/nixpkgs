@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     # CMAKE_INSTALL_{BIN,LIB}DIR, which breaks if these are absolute paths.
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeBool "ENABLE_UNIT_TESTS" false)
+    (lib.cmakeBool "ENABLE_FUNC_TESTS" false)
   ];
 
   patches = [
