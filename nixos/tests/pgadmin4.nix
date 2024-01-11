@@ -41,7 +41,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         enable = true;
         initialEmail = "bruh@localhost.de";
         initialPasswordFile = pkgs.writeText "pw" "bruh2012!";
-        passwordLength = 12;
+        minimumPasswordLength = 12;
       };
     };
   };

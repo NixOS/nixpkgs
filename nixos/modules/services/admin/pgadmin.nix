@@ -44,13 +44,13 @@ in
     initialPasswordFile = mkOption {
       description = lib.mdDoc ''
         Initial password file for the pgAdmin account. Minimum length by default is 6.
-        Please see services.pgadmin.passwordLength.
+        Please see `services.pgadmin.minimumPasswordLength`.
         NOTE: Should be string not a store path, to prevent the password from being world readable
       '';
       type = types.path;
     };
 
-    passwordLength = mkOption {
+    minimumPasswordLength = mkOption {
       description = lib.mdDoc "Minimum length of the password";
       type = types.int;
       default = 6;
@@ -122,7 +122,7 @@ in
 
     services.pgadmin.settings = {
       DEFAULT_SERVER_PORT = cfg.port;
-      PASSWORD_LENGTH_MIN = cfg.passwordLength;
+      PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
       SERVER_MODE = true;
     } // (optionalAttrs cfg.openFirewall {
       DEFAULT_SERVER = mkDefault "::";
@@ -151,9 +151,8 @@ in
         # and presenting a hard to find error message
         # see https://github.com/NixOS/nixpkgs/issues/270624
         PW_LENGTH=$(wc -m < ${escapeShellArg cfg.initialPasswordFile})
-        if [ $PW_LENGTH -lt ${toString cfg.passwordLength} ]
-          then
-            echo "Password must be at least ${toString cfg.passwordLength} characters long"
+        if [ $PW_LENGTH -lt ${toString cfg.minimumPasswordLength} ]; then
+            echo "Password must be at least ${toString cfg.minimumPasswordLength} characters long"
             exit 1
         fi
         (
