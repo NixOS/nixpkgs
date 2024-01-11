@@ -16187,8 +16187,6 @@ with pkgs;
     inherit (llvmPackages_15) llvm;
   };
 
-  gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
-
   gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 { };
   gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 { };
   gcc-arm-embedded-8 = callPackage ../development/compilers/gcc-arm-embedded/8 { };
