@@ -24,9 +24,6 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  # preInstall = ''
-  #   cp -vr ../assets ./bin/assets
-  # '';
 
   # Custom post-install phase
   postInstall = ''
