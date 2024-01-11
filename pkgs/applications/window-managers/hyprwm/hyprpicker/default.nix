@@ -1,40 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, ninja
-, cairo
-, fribidi
-, libGL
-, libdatrie
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libxkbcommon
-, pango
-, pcre
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, libXdmcp
-, debug ? false
+{
+  lib,
+  stdenv,
+  pkg-config,
+  cmake,
+  ninja,
+  cairo,
+  fribidi,
+  libdatrie,
+  libGL,
+  libjpeg,
+  libselinux,
+  libsepol,
+  libthai,
+  libxkbcommon,
+  pango,
+  pcre,
+  utillinux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
+  libXdmcp,
+  debug ? false,
+  version ? "git",
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.2.0";
+  inherit version;
+  src = ../.;
 
-  src = fetchFromGitHub {
-    owner = "hyprwm";
-    repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bys8S7wuY9FJRLD5WriktWED5Hi7nCKSiNbs1Rvfk4s=";
-  };
-
-  cmakeBuildType = if debug then "Debug" else "Release";
+  cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
   nativeBuildInputs = [
     cmake
@@ -45,13 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fribidi
-    libGL
     libdatrie
+    libGL
     libjpeg
     libselinux
     libsepol
     libthai
-    libxkbcommon
     pango
     pcre
     wayland
@@ -59,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     wlroots
     libXdmcp
-    util-linux
+    libxkbcommon
+    utillinux
   ];
 
   configurePhase = ''
@@ -90,11 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
+    description = "A wlroots-compatible Wayland color picker that does not suck";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = wayland.meta.platforms;
-    mainProgram = "hyprpicker";
+    platforms = platforms.linux;
   };
-})
+}
