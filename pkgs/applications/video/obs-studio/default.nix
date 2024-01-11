@@ -93,10 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/obsproject/obs-studio/commit/6e080a68067b27fe5463f0f4eee7df690451f3d7.patch";
       hash = "sha256-nbn/q3uszoHaDvaW8Et1MS1sgQzMsJRmjGSMHzUxV70=";
     })
-    (fetchpatch {
-      url = "https://github.com/obsproject/obs-studio/commit/df70743385965f979f922e05af9a249f20f94869.patch";
-      hash = "sha256-uIBsFuggz8SgQsQ0Ry2lvSPeMm63lgVe7oFx/3aT12k=";
-    })
   ];
 
   nativeBuildInputs = [
