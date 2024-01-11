@@ -1010,8 +1010,6 @@ let
 
     macaddr-sexp = callPackage ../development/ocaml-modules/macaddr/sexp.nix { };
 
-    macaque = callPackage ../development/ocaml-modules/macaque { };
-
     mad = callPackage ../development/ocaml-modules/mad { };
 
     magic = callPackage ../development/ocaml-modules/magic { };
