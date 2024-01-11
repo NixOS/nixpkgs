@@ -85,6 +85,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
+    "-include cstdint"
+  ];
+
   cmakeFlags = [
     "-DUSE_SCALAPACK=ON"
     "-DBUILD_TESTING=ON"
