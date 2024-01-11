@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "zcbor";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0mGp7Hnq8ZNEUx/9eQ6UD9/cOuLl6S5Aif1qNh1+jYA=";
+    hash = "sha256-47HwITfFcHNze3tt4vJxHB4BQ7oyl17DM8IV0WomM5Q=";
   };
 
   nativeBuildInputs = [
