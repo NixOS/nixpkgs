@@ -3,12 +3,15 @@
 , aresponses
 , async-modbus
 , async-timeout
+, asyncclick
 , buildPythonPackage
 , construct
 , exceptiongroup
 , fetchFromGitHub
+, pandas
 , pytest-asyncio
 , pytestCheckHook
+, python-slugify
 , pythonOlder
 , setuptools
 , tenacity
@@ -39,6 +42,16 @@ buildPythonPackage rec {
     exceptiongroup
     tenacity
   ];
+
+  passthru.optional-dependencies = {
+    convert = [
+      pandas
+      python-slugify
+    ];
+    cli = [
+      asyncclick
+    ];
+  };
 
   nativeCheckInputs = [
     aresponses
