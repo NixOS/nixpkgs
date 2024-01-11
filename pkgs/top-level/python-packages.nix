@@ -9750,6 +9750,8 @@ self: super: with self; {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  prefect = callPackage ../development/python-modules/prefect { };
+
   prefixed = callPackage ../development/python-modules/prefixed { };
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
