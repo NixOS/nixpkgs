@@ -24168,31 +24168,13 @@ with pkgs;
   nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
   nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
 
-  mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
-    let
-      nvidia-container-toolkit = callPackage ../applications/virtualization/nvidia-container-toolkit {
-        inherit containerRuntimePath configTemplate;
-      };
-    in symlinkJoin {
-      inherit name;
-      paths = [
-        libnvidia-container
-        nvidia-container-toolkit
-      ] ++ additionalPaths;
-    };
-
-  nvidia-docker = mkNvidiaContainerPkg {
-    name = "nvidia-docker";
-    containerRuntimePath = "${docker}/libexec/docker/runc";
-    configTemplate = ../applications/virtualization/nvidia-docker/config.toml;
-    additionalPaths = [ (callPackage ../applications/virtualization/nvidia-docker { }) ];
-  };
-
-  nvidia-podman = mkNvidiaContainerPkg {
-    name = "nvidia-podman";
-    containerRuntimePath = "${runc}/bin/runc";
-    configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
-  };
+  nvidiaCtkPackages =
+    callPackage ../applications/virtualization/nvidia-container-toolkit/packages.nix
+      { };
+  inherit (nvidiaCtkPackages)
+    nvidia-docker
+    nvidia-podman
+    ;
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
