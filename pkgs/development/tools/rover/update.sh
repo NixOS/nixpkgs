@@ -49,27 +49,3 @@ cargoSha256=$(
 sed --in-place \
     "s|cargoSha256 = \".*\"|cargoSha256 = \"$cargoSha256\"|" \
     "$dirname/default.nix"
-
-# Update apollo api schema info
-response="$(mktemp)"
-schemaUrl=https://graphql.api.apollographql.com/api/schema
-
-mkdir -p "$dirname"/schema
-
-# Fetch schema info
-echo "Fetching Apollo GraphQL schema"
-# include response headers, and append terminating newline to response body
-curl --include --write-out "\n" "$schemaUrl" > "$response"
-
-# Parse response headers and write the etag to schema/etag.id
-grep \
-    --max-count=1 \
-    --only-matching \
-    --perl-regexp \
-    '^etag: \K\S*' \
-    "$response" \
-    > "$dirname"/schema/etag.id
-
-# Discard headers and blank line (terminated by carriage return), and write the
-# response body to schema/schema.graphql
-sed '1,/^\r/d' "$response" > "$dirname"/schema/schema.graphql
