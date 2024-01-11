@@ -162,6 +162,10 @@ stdenv.mkDerivation(finalAttrs: {
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
   '';
 
+  postInstall = ''
+    install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
+  '';
+
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex" "mainline-0-(.*)" ];
   };

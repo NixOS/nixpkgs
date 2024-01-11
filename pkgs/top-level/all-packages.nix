@@ -7007,7 +7007,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security CoreServices SystemConfiguration;
   };
 
-  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
+  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
   kime = callPackage ../tools/inputmethods/kime { };
 
@@ -16207,8 +16207,6 @@ with pkgs;
     inherit (llvmPackages_15) llvm;
   };
 
-  gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
-
   gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 { };
   gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 { };
   gcc-arm-embedded-8 = callPackage ../development/compilers/gcc-arm-embedded/8 { };
@@ -22265,7 +22263,10 @@ with pkgs;
 
   libjson = callPackage ../development/libraries/libjson { };
 
-  libjodycode = callPackage ../development/libraries/libjodycode { };
+  libjodycode = callPackage ../development/libraries/libjodycode {
+    # missing aligned_alloc()
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   libb64 = callPackage ../development/libraries/libb64 { };
 
@@ -31544,8 +31545,6 @@ with pkgs;
   };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
-
-  freefilesync = callPackage ../applications/networking/freefilesync { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
