@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./patches/1.8/0002-skip-failing-and-flaky-tests.patch
+    ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
   ];
 
   strictDeps = true;
