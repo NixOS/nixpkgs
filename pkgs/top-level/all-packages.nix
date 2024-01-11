@@ -11021,7 +11021,7 @@ with pkgs;
 
   muffet = callPackage ../tools/networking/muffet { };
 
-  multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
+  multipass = qt6Packages.callPackage ../tools/virtualization/multipass { };
 
   multitime = callPackage ../tools/misc/multitime { };
 
