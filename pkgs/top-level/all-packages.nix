@@ -40429,8 +40429,6 @@ with pkgs;
 
   mamba = callPackage ../applications/audio/mamba { };
 
-  martyr = callPackage ../development/libraries/martyr { };
-
   mas = callPackage ../os-specific/darwin/mas { };
 
   micromamba = callPackage ../tools/package-management/micromamba { };
