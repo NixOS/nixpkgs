@@ -255,7 +255,7 @@ in rec {
     nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
     postInstall = ''
       shards build --production
-      rm -rf $target/*
+      rm -rf $target/* $target/.*
       cp -r bin $target/bin
       echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
       chmod +x $target/${rtpFilePath}
