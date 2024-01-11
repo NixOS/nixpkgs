@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       name = "0003-fd_set.patch";
-      url = "https://github.com/msys2/MINGW-packages/raw/90e7536e3b9c3af55c336d929cfcc32468b2f135/mingw-w64-readline/0003-fd_set.patch";
+      url = "https://github.com/msys2/MINGW-packages/raw/35830ab27e5ed35c2a8d486961ab607109f5af50/mingw-w64-readline/0003-fd_set.patch";
       stripLen = 1;
-      hash = "sha256-MlsX5JYp1PHD25uuVnDKJWEquegUN3dkj9fhjQX51/M=";
+      hash = "sha256-UiaXZRPjKecpSaflBMCphI2kqOlcz1JkymlCrtpMng4=";
     })
     (fetchpatch {
       name = "0004-locale.patch";
