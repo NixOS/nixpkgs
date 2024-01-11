@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.21.1"; # N.B.: when updating, tests bleak and aioesphomeapi tests
-  format = "pyproject";
+  version = "0.23.3"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
+    repo = "pytest-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wpo8MpCPGiXrckT2x5/yBYtGlzso/L2urG7yGc7SPkA=";
+    hash = "sha256-PTHHzVeRk5YER3Jjdim0zB60ypKU2i07z8cdx0eiStc=";
   };
 
   outputs = [
