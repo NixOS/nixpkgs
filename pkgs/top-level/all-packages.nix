@@ -41547,9 +41547,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb { };
 
-  sccache = callPackage ../development/tools/misc/sccache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  sccache = callPackage ../development/tools/misc/sccache { };
 
   scip = callPackage ../development/tools/misc/scip { };
 

@@ -4,7 +4,7 @@
 , pkg-config
 , openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # Tests fail because of client server setup which is not possible inside the
