@@ -753,6 +753,7 @@ in {
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
+  sane = handleTest ./saned-sane-net.nix {};
   sanoid = handleTest ./sanoid.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};

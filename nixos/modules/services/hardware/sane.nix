@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -23,7 +23,7 @@ let
     destination = "/etc/sane.d/net.conf";
     text = ''
       ${lib.optionalString config.services.saned.enable "localhost"}
-      ${config.hardware.sane.netConf}
+      ${lib.strings.concatStringsSep "\n" config.hardware.sane.remoteHosts}
     '';
   };
 
@@ -32,14 +32,35 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends = [ pkg netConf ]
+    ++ optional config.services.saned.enable sanedConf
+    ++ (
+      if
+        # airscan was explicitly disabled
+        (options.hardware.sane.airscan.enable == true && config.hardware.sane.airscan.enable == false)
+      then
+        # ...ensure, the sane-airscan pkg is not listed in extraBackends
+        lib.lists.remove pkgs.sane-airscan config.hardware.sane.extraBackends
+      else
+        # ...just use extraBackends and if airscan is enabled, add sane-airscan
+        lib.lists.unique (config.hardware.sane.extraBackends ++ (optional config.hardware.sane.airscan.enable pkgs.sane-airscan))
+    );
+  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends enabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
+
+  listenStreams = map (address: "${address}:${toString config.services.saned.listenPort}") config.services.saned.listenAddresses;
 
 in
 
 {
+
+  imports = [
+    (mkRemovedOptionModule ["hardware" "sane" "netConf"] ''
+      The configuration for SANE remote hosts has been moved to the `remoteHosts` option,
+      which accepts now a list of IP addresses or hostnames as input.
+    '')
+  ];
 
   ###### interface
 
@@ -85,6 +106,15 @@ in
       example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
     };
 
+    hardware.sane.airscan.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enable SANE AirScan, to use network connected scanners based on
+        the WSD or eSCL protocol.
+      '';
+    };
+
     hardware.sane.disabledDefaultBackends = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -95,18 +125,28 @@ in
       '';
     };
 
+    hardware.sane.enabledDefaultBackends = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "plustek_pp" ];
+      description = lib.mdDoc ''
+        Names of backends which are disabled by default but should be enabled.
+        See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
+      '';
+    };
+
     hardware.sane.configDir = mkOption {
       type = types.str;
       internal = true;
       description = lib.mdDoc "The value of SANE_CONFIG_DIR.";
     };
 
-    hardware.sane.netConf = mkOption {
-      type = types.lines;
-      default = "";
-      example = "192.168.0.16";
+    hardware.sane.remoteHosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = ["192.168.0.16" "192.168.0.38"];
       description = lib.mdDoc ''
-        Network hosts that should be probed for remote scanners.
+        Network hosts providing scanners via a `saned`.
       '';
     };
 
@@ -143,12 +183,55 @@ in
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Enable saned network daemon for remote connection to scanners.
-
-        saned would be run from `scanner` user; to allow
-        access to hardware that doesn't have `scanner` group
-        you should add needed groups to this user.
+        Enable `saned` network daemon to share local scanners with other remote SANE
+        instances which utilize the `net` backend to connect to remote `saned` instances.
       '';
+    };
+
+    services.saned.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open incoming ports needed so that other SANE clients using
+        the `net` backend can connect to this `saned` instance.
+      '';
+    };
+
+    services.saned.extraGroups = mkOption {
+      type = types.listOf types.string;
+      default = [];
+      example = literalExpression "[ \"video\" \"usb\" ]";
+      description = lib.mdDoc ''
+        Additional groups to which the `saned` service will get access to.
+        This might be required, when `saned` needs to access device nodes of scanners
+        protected by a group membership.
+      '';
+    };
+
+    services.saned.listenAddresses = mkOption {
+      type = types.listOf types.string;
+      default = [ "0.0.0.0" "[::]" ];
+      example = [ "192.168.25.3" "[2041:0000:140f::875b:131b]" ];
+      description = lib.mdDoc ''
+        The IPv4/IPv6 address(es) on which `saned` binds to and listens for incoming requests.
+      '';
+    };
+
+    # it's a deliberate decision to make `listenPort` read-only,
+    # since the `sane-net` backend doesn't allow to define a custom port per remote scanner,
+    # but instead relies on `sane-port` from `/etc/services`, which would then have to be the
+    # same port for all remote devices.
+    # Besides that, `/etc/services` isn't easily customizable on NixOS, but is instead taken
+    # as-is from pkgs.iana-etc
+    services.saned.listenPort = mkOption {
+      type = types.port;
+      default = 6566;
+      example = literalExpression "7654";
+      description = lib.mdDoc ''
+        Port on which `saned` listens for incoming requests.
+      '';
+      readOnly = true;
+      visible = false;
     };
 
     services.saned.extraConfig = mkOption {
@@ -180,14 +263,17 @@ in
     })
 
     (mkIf config.services.saned.enable {
+      networking.firewall.allowedTCPPorts = mkIf config.services.saned.openFirewall [ config.services.saned.listenPort ];
       networking.firewall.connectionTrackingModules = [ "sane" ];
 
       systemd.services."saned@" = {
         description = "Scanner Service";
         environment = mapAttrs (name: val: toString val) env;
         serviceConfig = {
-          User = "scanner";
-          Group = "scanner";
+          User = "saned";
+          Group = "saned";
+          DynamicUser = true;
+          SupplementaryGroups = [ "lp" "scanner" ] ++ config.services.saned.extraGroups;
           ExecStart = "${pkg}/bin/saned";
         };
       };
@@ -195,7 +281,7 @@ in
       systemd.sockets.saned = {
         description = "saned incoming socket";
         wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        listenStreams = listenStreams;
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
