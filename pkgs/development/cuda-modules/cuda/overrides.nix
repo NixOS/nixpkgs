@@ -87,8 +87,8 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (
     oldAttrs:
     let
-      # This replicates the logic in backend-stdenv.nix, except the stdenv uses
-      # buildPackages and we use pkgsHostTarget.
+      # This replicates the logic in stdenvAdapters.useLibsFrom, except we use
+      # gcc from pkgsHostTarget and not from buildPackages.
       ccForLibs-wrapper = final.pkgs.stdenv.cc;
       gccMajorVersion = final.nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
       cc = final.pkgs.wrapCCWith {
