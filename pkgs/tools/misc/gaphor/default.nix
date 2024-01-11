@@ -5,7 +5,7 @@
 , gobject-introspection
 , poetry-core
 , wrapGAppsHook
-, gtksourceview4
+, gtksourceview5
 , pango
 , gaphas
 , generic
@@ -13,21 +13,23 @@
 , pycairo
 , pygobject3
 , tinycss2
-, gtk3
+, gtk4
+, libadwaita
 , librsvg
 , makeDesktopItem
 , python
+, python3Packages
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.8.2";
+  version = "2.23.0";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    sha256 = "sha256-/JvWvzNprY8CsMBeLPdMR4WEZa6OUhUv2TdgZI5kpos=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +40,10 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtksourceview4
+    gtksourceview5
     pango
+    gtk4
+    libadwaita
   ];
 
   propagatedBuildInputs = [
@@ -49,6 +53,7 @@ buildPythonApplication rec {
     pycairo
     pygobject3
     tinycss2
+    python3Packages.defusedxml
   ];
 
   desktopItems = makeDesktopItem {
@@ -69,7 +74,7 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}/" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
   '';
