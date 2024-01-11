@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
     homepage = "https://pypi.org/project/zcbor/";
+    changelog = "https://github.com/NordicSemiconductor/zcbor/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
   };
