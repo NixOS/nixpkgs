@@ -16506,11 +16506,11 @@ with pkgs;
     julia_110;
 
   julia-lts = julia_16-bin;
-  julia-stable = julia_19;
+  julia-stable = julia_110;
   julia = julia-stable;
 
   julia-lts-bin = julia_16-bin;
-  julia-stable-bin = julia_19-bin;
+  julia-stable-bin = julia_110-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
