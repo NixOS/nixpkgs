@@ -7,7 +7,7 @@
 , jbig2dec
 , deprecated
 , lxml
-, mupdf
+, mupdf-headless
 , numpy
 , packaging
 , pillow
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./paths.patch;
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
-      mutool = lib.getExe' mupdf "mutool";
+      mutool = lib.getExe' mupdf-headless "mutool";
     })
   ];
 
