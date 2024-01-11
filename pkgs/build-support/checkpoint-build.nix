@@ -85,6 +85,6 @@ rec {
   });
 
   mkCheckpointedBuild = lib.warn
-    "`mkCheckpointedBuild` is deprecated, use `mkCheckpointBuild` instead!"
+    "`mkCheckpointedBuild` is deprecated; use `mkCheckpointBuild` instead."
     mkCheckpointBuild;
 }
