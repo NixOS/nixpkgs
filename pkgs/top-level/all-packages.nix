@@ -37738,7 +37738,7 @@ with pkgs;
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
-  en-croissant = callPackage ../by-name/en/en-croissant { };
+  en-croissant = callPackage ../by-name/en/en-croissant/package.nix { };
 
   endgame-singularity = callPackage ../games/endgame-singularity { };
 
