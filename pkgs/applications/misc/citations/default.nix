@@ -22,21 +22,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.5.2";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-QofsVqulFMiyYKci2vHdQAUJoIIgnPyTRizoBDvYG+g=";
+    hash = "sha256-RV9oQcXzRsNcvZc/8Xt7qZ/88DvHofC2Av0ftxzeF6Q=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nom-bibtex-0.4.0" = "sha256-hulMoH3gkhD2HurrXdIqqkfKkZGujV9We0m0jsgHFfM=";
-    };
   };
 
   nativeBuildInputs = [
