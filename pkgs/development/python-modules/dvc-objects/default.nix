@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     fsspec
+  ]  ++ lib.optionals (pythonOlder "3.12") [
     funcy
-    shortuuid
   ];
 
   nativeCheckInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     reflink
+    shortuuid
   ];
 
   pythonImportsCheck = [
