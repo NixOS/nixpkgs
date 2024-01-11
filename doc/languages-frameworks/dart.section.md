@@ -11,6 +11,18 @@ If you are packaging a Flutter desktop application, use [`buildFlutterApplicatio
 `pubspecLock` is the parsed pubspec.lock file. pub2nix uses this to download required packages.
 This can be converted to JSON from YAML with something like `yq . pubspec.lock`, and then read by Nix.
 
+Alternatively, `autoPubspecLock` can be used instead, and set to a path to a regular `pubspec.lock` file. This relies on import-from-derivation, and is not permitted in Nixpkgs, but can be useful at other times.
+
+::: {.warning}
+When using `autoPubspecLock` with a local source directory, make sure to use a
+concatenation operator (e.g. `autoPubspecLock = src + "/pubspec.lock";`), and
+not string interpolation.
+
+String interpolation will copy your entire source directory to the Nix store and
+use its store path, meaning that unrelated changes to your source tree will
+cause the generated `pubspec.lock` derivation to rebuild!
+:::
+
 If the package has Git package dependencies, the hashes must be provided in the `gitHashes` set. If a hash is missing, an error message prompting you to add it will be shown.
 
 The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`, you can also add flags using `dartCompileFlags` or `dartJitFlags`.
@@ -101,8 +113,8 @@ flutter.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 }
+```
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 
-See the [Dart documentation](#ssec-dart-applications-nix-shell) nix-shell instructions.
-```
+See the [Dart documentation](#ssec-dart-applications-nix-shell) for nix-shell instructions.
