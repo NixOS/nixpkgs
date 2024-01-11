@@ -1910,6 +1910,7 @@ broken-packages:
   - Gleam # failure in job https://hydra.nixos.org/build/233228018 at 2023-09-02
   - GLFW-b-demo # failure in job https://hydra.nixos.org/build/233230505 at 2023-09-02
   - GLFW # failure in job https://hydra.nixos.org/build/233234389 at 2023-09-02
+  - glib-stopgap # needs https://github.com/YoshikuniJujo/glib-stopgap/pull/1 to be merged
   - glicko # failure in job https://hydra.nixos.org/build/233200868 at 2023-09-02
   - glider-nlp # failure in job https://hydra.nixos.org/build/233229600 at 2023-09-02
   - gli # failure in job https://hydra.nixos.org/build/233210279 at 2023-09-02
