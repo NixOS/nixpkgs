@@ -1897,8 +1897,16 @@ self: super: {
     "--haddock-option=--optghc=-fno-safe-haskell"
   ] super.alg;
 
+  # Windows.normalise changed in filepath >= 1.4.100.4 which fails the equivalency
+  # test suite. This is of no great consequence for us, though.
+  # Patch solving this has been submitted to upstream by me (@sternenseemann).
+  filepath-bytestring =
+    lib.warnIf
+      (lib.versionAtLeast super.filepath-bytestring.version "1.4.100.4")
+      "filepath-bytestring override may be obsolete"
+      dontCheck super.filepath-bytestring;
+
   # Break out of overspecified constraint on QuickCheck.
-  filepath-bytestring = doJailbreak super.filepath-bytestring;
   haddock-library = doJailbreak super.haddock-library;
 
   # Test suite has overly strict bounds on tasty, jailbreaking fails.
