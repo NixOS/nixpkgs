@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchDebianPatch
 , copyDesktopItems
 , pkg-config
 , wrapGAppsHook
@@ -15,16 +16,9 @@
 , makeDesktopItem
 }:
 
-let
-  wxGTK32' = wxGTK32.overrideAttrs (old: {
-    configureFlags = old.configureFlags ++ [
-      "--disable-exceptions"
-    ];
-  });
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.2";
+  version = "13.3";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -33,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-Hb3DkHdINtg5vNs6IcCHKxgSiN5u/2kY8V8Fnq5yFCM=";
+    hash = "sha256-mpCCecG1teBjIJqCzB3pGAQKT6t8bMKbK8KihMXOn3g=";
   };
 
   sourceRoot = ".";
@@ -42,19 +36,25 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Disable loading of the missing Animal.dat
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/f/freefilesync/12.0-2/debian/patches/ffs_devuan.patch";
-      postFetch = ''
-        substituteInPlace $out \
-          --replace "-std=c++2b" "-std=c++23" \
-          --replace "imageWidth," "wxsizeToScreen(imageWidth),"
-      '';
+      url = "https://sources.debian.org/data/main/f/freefilesync/13.3-1/debian/patches/ffs_devuan.patch";
       excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
-      hash = "sha256-LH549fJWGpJ0p6/0YNda1zZHGs/QRl1CYLC/vYKdkO4=";
+      hash = "sha256-cW0Y9+ByQWGzMU4NFRSkW46KkxQB4jRZotHlCFniv5o=";
     })
     # Fix build with GTK 3
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/f/freefilesync/12.0-2/debian/patches/ffs_devuan_gtk3.patch";
+    (fetchDebianPatch {
+      pname = "freefilesync";
+      version = "13.3";
+      debianRevision = "1";
+      patch = "ffs_devuan_gtk3.patch";
       hash = "sha256-0n58Np4JI3hYK/CRBytkPHl9Jp4xK+IRjgUvoYti/f4=";
+    })
+    # Fix build with vanilla wxWidgets
+    (fetchDebianPatch {
+      pname = "freefilesync";
+      version = "13.3";
+      debianRevision = "1";
+      patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
+      hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
     })
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libssh2
     openssl
-    wxGTK32'
+    wxGTK32
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
