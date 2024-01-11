@@ -3,6 +3,7 @@
 , fetchurl
 , fontutil
 , lib
+, libei
 , libGL
 , libGLU
 , libX11
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     egl-wayland
     libepoxy
+    libei
     fontutil
     libGL
     libGLU
