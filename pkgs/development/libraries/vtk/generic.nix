@@ -58,7 +58,8 @@ in stdenv.mkDerivation {
   # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
   postPatch = ''
     sed '1i#include <cstdint>' \
-      -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp
+      -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
+      -i IO/Image/vtkSEPReader.h
   ''
   + optionalString stdenv.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
