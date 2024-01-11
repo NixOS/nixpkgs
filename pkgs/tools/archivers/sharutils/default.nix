@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
       substituteInPlace intl/Makefile.in --replace "AR = ar" ""
     '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   doCheck = true;
 
   meta = with lib; {

@@ -11,4 +11,7 @@ import ./generic.nix (args // {
 
   drvArgs.hardeningDisable = [ "format" ];
   drvArgs.doCheck = false;
+  drvArgs.env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 })

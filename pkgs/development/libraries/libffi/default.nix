@@ -3,7 +3,7 @@
 
   # test suite depends on dejagnu which cannot be used during bootstrapping
   # dejagnu also requires tcl which can't be built statically at the moment
-, doCheck ? !(stdenv.hostPlatform.isStatic)
+, doCheck ? (!(stdenv.hostPlatform.isStatic) && stdenv.hostPlatform == stdenv.buildPlatform)
 , dejagnu
 , nix-update-script
 }:
@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+  };
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
   meta = with lib; {

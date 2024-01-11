@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
     "SCONFIGDIR=${placeholder "out"}/etc/security"
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   doCheck = false; # fails
 
   passthru.tests = {
