@@ -77,8 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    util-linux
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ util-linux ];
 
   doCheck = true;
 

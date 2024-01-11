@@ -100,7 +100,7 @@ python3.pkgs.buildPythonApplication rec {
     ''
   ]
   # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') [
+  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
     # requires git, creating cyclic dependency
     ''test cases/common/66 vcstag''
     # requires glib, creating cyclic dependency
@@ -110,7 +110,13 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ])
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # pch doesn't work quite right on FreeBSD, I think
+    ''test cases/common/13 pch''
+    # tests hardcode lib instead of libdata, which FreeBSD uses
+    ''test cases/common/44 pkgconfig-gen''
+    ''test cases/common/230 external project''
+  ]))
   ++ [
     ''HOME="$TMPDIR" python ./run_project_tests.py''
     "runHook postCheck"
