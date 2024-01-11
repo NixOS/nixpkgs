@@ -20,12 +20,12 @@
         "hash": "sha256:0ns8qxcrxj9i76b93xcghl002l8vbkg7ksd435sikig62qr62gf4"
     },
     "5.4": {
-        "version": "5.4.265",
-        "hash": "sha256:05cvvwjiznn7hfd02qklklalg0chahvh5v18w64lcva6kzj9kbjd"
+        "version": "5.4.266",
+        "hash": "sha256:1dmcn9i3nvf1gldm1a32gnl5ybwbk2lizb3wa4gc06g7dxz2y1ys"
     },
     "4.19": {
-        "version": "4.19.303",
-        "hash": "sha256:0dlbl47xs7z4yf9cxbxqzd7zs1f9070jr6ck231wgppa6lwwwb82"
+        "version": "4.19.304",
+        "hash": "sha256:165mljr8v1cf4vf4a4b44hx089rprkssvi2azq5wbxxg3basbind"
     },
     "6.6": {
         "version": "6.6.10",

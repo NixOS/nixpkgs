@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     # fix ipv6 autodetect compile error in configure script
     # remove once https://github.com/curl/curl/pull/12607 released (8.6.0)
     ./configure-ipv6-autodetect.diff
+    # https://curl.se/docs/CVE-2023-46219.html
+    ./0001-CVE-2023-42619.patch
+    # https://curl.se/docs/CVE-2023-46218.html
+    ./0002-CVE-2023-42618.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
