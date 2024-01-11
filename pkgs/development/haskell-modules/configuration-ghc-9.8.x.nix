@@ -88,11 +88,8 @@ self: super: {
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
-    active  # base <4.19
-    blaze-svg  # base <4.19
-    bmp  # bytestring <0.12
-    commutative-semigroups  # base < 4.19
-    diagrams-lib  # base <4.19, text <2.1
+    blaze-svg  # base <4.19  https://github.com/diagrams/blaze-svg/pull/2
+    diagrams-lib  # base <4.19, text <2.1  https://github.com/diagrams/diagrams-lib/pull/364
     diagrams-postscript  # base <4.19, bytestring <0.12
     diagrams-svg  # base <4.19, text <2.1
     free  # Because we bumped the version of th-abstraction above.^
@@ -101,9 +98,7 @@ self: super: {
     hw-prim  # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
     newtype-generics  # base < 4.19
     primitive-unlifted  # bytestring < 0.12
-    semigroupoids  # base <4.18
-    stack  # yaml >=0.10.4.0 && <0.11  https://github.com/commercialhaskell/stack/issues/4485
-    statestack  # base <4.19
+    statestack  # base <4.19  https://github.com/diagrams/statestack/pull/11
     svg-builder   # base <4.19, bytestring <0.12, text <2.1
   ;
 
