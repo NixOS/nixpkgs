@@ -1,5 +1,6 @@
 { lib, stdenv
 , cmake
+, fetchpatch2
 , fetchurl
 , perl
 , zlib
@@ -22,6 +23,15 @@ stdenv.mkDerivation rec {
     url = "https://libzip.org/download/${pname}-${version}.tar.gz";
     sha256 = "sha256-/Wp/dF3j1pz1YD7cnLM9KJDwGY5BUlXQmHoM8Q2CTG8=";
   };
+
+  patches = [
+    # https://github.com/nih-at/libzip/issues/404
+    (fetchpatch2 {
+      name = "Check-for-zstd_TARGET-before-using-it-in-a-regex.patch";
+      url = "https://github.com/nih-at/libzip/commit/c719428916b4d19e838f873b1a177b126a080d61.patch";
+      hash = "sha256-4ksbXEM8kNvs3wtbIaXLEQNSKaxl0es/sIg0EINaTHE=";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" ];
 
