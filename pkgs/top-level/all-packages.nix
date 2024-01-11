@@ -22264,7 +22264,10 @@ with pkgs;
 
   libjson = callPackage ../development/libraries/libjson { };
 
-  libjodycode = callPackage ../development/libraries/libjodycode { };
+  libjodycode = callPackage ../development/libraries/libjodycode {
+    # missing aligned_alloc()
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   libb64 = callPackage ../development/libraries/libb64 { };
 
