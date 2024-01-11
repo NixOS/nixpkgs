@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fractalsoftworks.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras rafaelrc ];
   };
 
   passthru.updateScript = writeScript "starsector-update-script" ''
