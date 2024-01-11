@@ -9,6 +9,7 @@
 , typing-extensions
 , beartype
 , optax
+, pytest-xdist
 , pytestCheckHook
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beartype
     optax
+    pytest-xdist
     pytestCheckHook
   ];
 
