@@ -90,10 +90,10 @@ stdenv.mkDerivation rec {
       computer screen showing a lot less of English, and far more of their
       own language.
 
-      GNU `gettext' is an important step for the GNU Translation Project, as
+      GNU `gettext` is an important step for the GNU Translation Project, as
       it is an asset on which we may build many other steps. This package
       offers to programmers, translators, and even users, a well integrated
-      set of tools and documentation. Specifically, the GNU `gettext'
+      set of tools and documentation. Specifically, the GNU `gettext`
       utilities are a set of tools that provides a framework to help other
       GNU packages produce multi-lingual messages.
     '';
