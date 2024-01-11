@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, stdenv, Security }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, stdenv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   version = "0.7.5";
@@ -13,11 +20,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-VdI39DgQrUZhoawMqBC6ngTvldW+QbDjMjxjjbH9G1A=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
-  # Tests fail because of client server setup which is not possible inside the pure environment,
-  # see https://github.com/mozilla/sccache/issues/460
+  # Tests fail because of client server setup which is not possible inside the
+  # pure environment, see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
 
   meta = with lib; {
