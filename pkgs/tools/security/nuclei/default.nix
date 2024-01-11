@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "nuclei";
     rev = "refs/tags/v${version}";
     hash = "sha256-U6FEVlW7fr2COyPASja42M3hJX6eAo4pH3kyl9APfG0=";
   };
@@ -18,6 +18,11 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/nuclei/"
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   # Test files are not part of the release tarball
