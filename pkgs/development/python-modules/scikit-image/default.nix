@@ -121,9 +121,10 @@ let
       "skimage/feature/tests/test_util.py::test_plot_matches"
       "skimage/filters/tests/test_thresholding.py::TestSimpleImage::test_try_all_threshold"
       "skimage/io/tests/test_mpl_imshow.py::"
+      # See https://github.com/scikit-image/scikit-image/issues/7061 and https://github.com/scikit-image/scikit-image/issues/7104
+      "skimage/measure/tests/test_fit.py"
     ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
       # https://github.com/scikit-image/scikit-image/issues/7104
-      "skimage/measure/tests/test_fit.py"
       "skimage/measure/tests/test_moments.py"
     ]);
 
