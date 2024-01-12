@@ -16,9 +16,22 @@
 , xorg
 , cups
 , pango
+, freetype
 , useChineseVersion ? false
 }:
-
+let
+  # Bold font rendered abnormally when use freetype > 2.13.0
+  # Pin on 2.13.0 until upstream fixes this issue
+  # https://github.com/NixOS/nixpkgs/issues/279314
+  freetype-wps = freetype.overrideAttrs (old: {
+    pname = "freetype-wps";
+    version = "2.13.0";
+    src = fetchurl {
+      url = "mirror://savannah/freetype/freetype-2.13.0.tar.xz";
+      hash = "sha256-XuI6vQR2NsJLLUPGYl3K/GZmHRrKZN7J4NBd8pWSYkw=";
+    };
+  });
+in
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = "11.1.0.11711";
@@ -89,6 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    ln -s ${freetype-wps}/lib/libfreetype.so.* $out/opt/kingsoft/wps-office/office6/
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
     patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
     # dlopen dependency
