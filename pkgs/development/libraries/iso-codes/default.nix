@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, gettext, python3 }:
+{ lib, stdenv, fetchurl, gettext, python3, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "iso-codes";
   version = "4.15.0";
 
@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
   meta = with lib; {
     homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;
     platforms = platforms.all;
+    pkgConfigModules = ["iso-codes"];
   };
-}
+})
