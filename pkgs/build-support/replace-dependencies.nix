@@ -1,7 +1,7 @@
 {
-  runCommandLocal,
-  nix,
   lib,
+  runCommandLocal,
+  replaceDirectDependencies,
 }:
 
 # Replace some dependencies in the requisites tree of drv, propagating the change all the way up the tree, even within other replacements, without a full rebuild.
@@ -43,15 +43,13 @@ let
   inherit (builtins) unsafeDiscardStringContext appendContext;
   inherit (lib)
     trace
-    substring
     stringLength
-    concatStringsSep
-    mapAttrsToList
     listToAttrs
     attrValues
     mapAttrs
     filter
     hasAttr
+    mapAttrsToList
     all
     ;
   inherit (lib.attrsets) mergeAttrsList;
@@ -90,21 +88,6 @@ let
           echo }) > $out
         ''
       ).outPath;
-  rewriteHashes =
-    drv: rewrites:
-    if rewrites == { } then
-      drv
-    else
-      let
-        drvName = substring 33 (stringLength (baseNameOf drv)) (baseNameOf drv);
-      in
-      runCommandLocal drvName { nixStore = "${nix}/bin/nix-store"; } ''
-        $nixStore --dump ${drv} | sed 's|${baseNameOf drv}|'$(basename $out)'|g' | sed -e ${
-          concatStringsSep " -e " (
-            mapAttrsToList (name: value: "'s|${baseNameOf name}|${baseNameOf value}|g'") rewrites
-          )
-        } | $nixStore --restore $out
-      '';
 
   knownDerivations = [ drv ] ++ map ({ newDependency, ... }: newDependency) replacements;
   referencesMemo = listToAttrs (
@@ -162,7 +145,13 @@ let
           }) rewrittenReferences
         );
       in
-      rewriteHashes storePathOrKnownDerivationMemo.${drv} rewrites
+      replaceDirectDependencies {
+        drv = storePathOrKnownDerivationMemo.${drv};
+        replacements = mapAttrsToList (name: value: {
+          oldDependency = name;
+          newDependency = value;
+        }) rewrites;
+      }
     ) relevantReferences
     // listToAttrs (
       map (drv: {
