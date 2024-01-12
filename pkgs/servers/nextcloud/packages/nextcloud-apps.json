@@ -9,6 +9,7 @@
 , "files_texteditor": "agpl3Plus"
 , "files_markdown": "agpl3Plus"
 , "forms": "agpl3Plus"
+, "gpoddersync": "agpl3Only"
 , "groupfolders": "agpl3Plus"
 , "impersonate": "agpl3Plus"
 , "keeweb": "agpl3Plus"
