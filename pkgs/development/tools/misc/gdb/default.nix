@@ -1,7 +1,7 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages, freebsd
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional stdenv.isFreeBSD freebsd.libkvm;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -153,7 +154,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     # GDB upstream does not support ARM darwin
-    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
+    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"] ++ platforms.freebsd;
     maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

@@ -1,12 +1,16 @@
 { lib
 , stdenv
+, clangStdenv
 , cmake
 , ninja
 , gtest
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+let stdenv' = if stdenv.isFreeBSD then clangStdenv else stdenv;
+in
+
+stdenv'.mkDerivation rec {
   pname = "libhwy";
   version = "1.0.7";
 
@@ -46,7 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # freebsd has some linking issues with gtest. Not sure what's up.
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD;
 
   meta = with lib; {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";

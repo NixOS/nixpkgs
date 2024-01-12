@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ]
+  buildInputs = lib.optionals (!stdenv.isFreeBSD) [ udev ]
     ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
     ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
@@ -53,6 +53,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${version}";
     license = with licenses; [ lgpl21Plus gpl2Plus ];
     maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
   };
 }

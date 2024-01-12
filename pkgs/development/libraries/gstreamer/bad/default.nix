@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.isLinux) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
@@ -362,7 +362,7 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

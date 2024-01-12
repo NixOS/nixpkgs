@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , fetchFromGitHub
 , installShellFiles
 , coreutils
@@ -71,6 +72,8 @@ python3.pkgs.buildPythonApplication rec {
     libxcrypt
   ];
 
+  propagatedNativeBuildInputs = lib.optionals stdenv.isFreeBSD [ buildPackages.freebsd.ldd ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
@@ -89,6 +92,11 @@ python3.pkgs.buildPythonApplication rec {
     OpenGL
     openldap
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    # This edge case is explicilty part of meson but is wrong for nix
+    sed -E -i -e s/mesonlib.is_freebsd../False/g mesonbuild/modules/pkgconfig.py
+  '';
 
   checkPhase = lib.concatStringsSep "\n" ([
     "runHook preCheck"

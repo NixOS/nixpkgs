@@ -1,63 +1,57 @@
-{ lib, stdenv, linuxHeaders, freebsd, runCommandCC, buildPackages }:
-
-stdenv.mkDerivation {
+{ lib, stdenv, makeLinuxHeaders, fetchurl, freebsd, runCommandCC, buildPackages }:
+let
+  WRKSRC = "include/uapi/linux";
+in
+stdenv.mkDerivation rec {
   pname = "evdev-proto";
-  inherit (linuxHeaders) version;
+  version = "5.8";
 
-  src = freebsd.ports;
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+    hash = "sha256-5/dRhqoGQhFK+PGdmVWZNzAMonrK90UbNtT5sPhc8fU=";
+  };
+  allFiles = [ "input.h" "input-event-codes.h" "joystick.h" "uinput.h" ];
 
-  sourceRoot = "${freebsd.ports.name}/devel/evdev-proto";
+  nativeBuildInputs = [ buildPackages.freebsd.sed ];
 
-  useTempPrefix = true;
-
-  nativeBuildInputs = [ freebsd.bmakeMinimal ];
-
-  ARCH = freebsd.bmakeMinimal.MACHINE_ARCH;
-  OPSYS = "FreeBSD";
-  _OSRELEASE = "${lib.versions.majorMinor freebsd.bmakeMinimal.version}-RELEASE";
-
-  AWK = "awk";
-  CHMOD = "chmod";
-  FIND = "find";
-  MKDIR = "mkdir -p";
-  PKG_BIN = "${buildPackages.pkg}/bin/pkg";
-  RM = "rm -f";
-  SED = "${buildPackages.freebsd.sed}/bin/sed";
-  SETENV = "env";
-  SH = "sh";
-  TOUCH = "touch";
-  XARGS = "xargs";
-
-  ABI_FILE = runCommandCC "abifile" {} "$CC -shared -o $out";
-  CLEAN_FETCH_ENV = true;
-  INSTALL_AS_USER = true;
-  NO_CHECKSUM = true;
-  NO_MTREE = true;
-  SRC_BASE = freebsd.freebsdSrc;
-
-  preUnpack = ''
-    export MAKE_JOBS_NUMBER="$NIX_BUILD_CORES"
-
-    export DISTDIR="$PWD/distfiles"
-    export PKG_DBDIR="$PWD/pkg"
-    export PREFIX="$prefix"
-
-    mkdir -p "$DISTDIR/evdev-proto"
-    tar -C "$DISTDIR/evdev-proto" \
-        -xf ${linuxHeaders.src} \
-        --strip-components 4 \
-        linux-${linuxHeaders.version}/include/uapi/linux
+  patchPhase = ''
+    sed -i "" -E \
+      -e 's/__u([[:digit:]]+)/uint\1_t/g' \
+      -e 's/__s([[:digit:]]+)/int\1_t/g' \
+      -e '/# *include/ s|<sys/ioctl.h>|<sys/ioccom.h>|' \
+      -e '/# *include[[:space:]]+<linux\/types.h>/d' \
+      -e '/EVIOC(RMFF|GRAB|REVOKE)/ s/_IOW(.*), *int/_IOWINT\1/' \
+      -e '/EVIOCGKEYCODE/ s/_IOR/_IOWR/' \
+      -e '/EVIOCGMASK/ s/_IOR/_IOW/' \
+      -e '/EVIOCGMTSLOTS/ s/_IOC_READ/IOC_INOUT/' \
+      -e '/#define/ s/_IOC_READ/IOC_OUT/' \
+      -e '/#define/ s/_IOC_WRITE/IOC_IN/' \
+      -e 's/[[:space:]]+__user[[:space:]]+/ /' \
+      -e '/__USE_TIME_BITS64/ s|^#if (.*)$|#if 1 /* \1 */|' \
+      ${WRKSRC}/input.h
+    sed -i "" -E \
+      -e 's/__u([[:digit:]]+)/uint\1_t/g' \
+      -e 's/__s([[:digit:]]+)/int\1_t/g' \
+      -e '/# *include/s|<linux/types.h>|<sys/types.h>|' \
+      -e '/#define/ s/_IOW(.*), *int/_IOWINT\1/' \
+      -e '/#define/ s/_IOW(.*), *char\*/_IO\1/' \
+      -e '/#define/ s/_IOC_READ/IOC_OUT/' \
+      ${WRKSRC}/joystick.h \
+      ${WRKSRC}/uinput.h
   '';
 
-  makeFlags = [ "DIST_SUBDIR=evdev-proto" ];
+  buildPhase = ":";
 
-  postInstall = ''
-    mv $prefix $out
+  installPhase = ''
+    mkdir -p $out/include/linux
+    for f in $allFiles; do
+      cp ${WRKSRC}/$f $out/include/linux/$f
+    done
   '';
 
   meta = with lib; {
     description = "Input event device header files for FreeBSD";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ qyliss rhelmot ];
     platforms = platforms.freebsd;
     license = licenses.gpl2Only;
   };

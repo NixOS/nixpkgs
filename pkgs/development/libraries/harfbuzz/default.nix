@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+  '' + lib.optionalString stdenv.isFreeBSD ''
+    # the test asserts something that is not true of the FreeBSD ports version
+    sed -E -i -e /check-libstdc../d src/Makefile.am
+    sed -E -i -e s/\'check-libstdc..\',.//g src/meson.build
   '';
 
   outputs = [ "out" "dev" "devdoc" ];

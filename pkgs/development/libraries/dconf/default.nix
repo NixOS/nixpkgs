@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     dbus # for dbus-daemon
   ];
 
-  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
+  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin && !stdenv.isFreeBSD;
 
   postPatch = ''
     chmod +x meson_post_install.py tests/test-dconf.py

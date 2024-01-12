@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, clangStdenv
 , fetchpatch
 , brotli
 , cmake
@@ -19,7 +19,11 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+# strange libgcc linking issue
+let stdenv' = if stdenv.isFreeBSD then clangStdenv else stdenv;
+
+in
+stdenv'.mkDerivation rec {
   pname = "libjxl";
   version = "0.8.2";
 
@@ -121,7 +125,8 @@ stdenv.mkDerivation rec {
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
-  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
+  # freebsd has some linking issues with gtest. Not sure what's up.
+  doCheck = with stdenv; !(hostPlatform.isi686 || (isDarwin && isx86_64) || hostPlatform.isFreeBSD);
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

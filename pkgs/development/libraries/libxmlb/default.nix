@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , lib
 , fetchFromGitHub
 , docbook_xml_dtd_43

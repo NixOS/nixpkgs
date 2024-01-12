@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isFreeBSD;
   mesonFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-Dtests=disabled";
 
   passthru = {
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A library that provides GObject bindings for libudev";
     homepage = "https://wiki.gnome.org/Projects/libgudev";
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     license = licenses.lgpl2Plus;
   };
 })

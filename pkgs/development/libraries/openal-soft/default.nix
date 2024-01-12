@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, removeReferencesTo
-, alsaSupport ? !stdenv.isDarwin, alsa-lib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , dbusSupport ? !stdenv.isDarwin, dbus
-, pipewireSupport ? !stdenv.isDarwin, pipewire
+, pipewireSupport ? (!stdenv.isDarwin && !stdenv.isFreeBSD), pipewire
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , CoreServices, AudioUnit, AudioToolbox
 }:

@@ -28795,8 +28795,11 @@ with pkgs;
     buildLibsOnly = true;
   };
 
+  libudev-devd = callPackage ../development/libraries/libudev-devd { };
+
   udev =
     if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
+    else if (stdenv.hostPlatform.isFreeBSD) then libudev-devd
     else systemdLibs;
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };

@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Python 3 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
     license = with licenses; [ lgpl21Only mpl11 ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
   };
 }

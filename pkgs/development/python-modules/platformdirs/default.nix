@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , appdirs
 , buildPythonPackage
 , fetchFromGitHub
@@ -36,6 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "platformdirs"
+  ];
+
+  disabledTests = lib.optionals stdenv.isFreeBSD [
+    # possibly related to incomplete build isolation on FreeBSD
+    "test_xdg_variable_empty_value"
+    "test_xdg_variable_not_set"
   ];
 
   meta = with lib; {

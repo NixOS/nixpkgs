@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-RuahOkDLbac9bhXn8QSf7lMRw11PIpXQo3eaQ9N4Rtc=";
   };
+  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [ ./freebsd-threads.patch ];
 
   nativeBuildInputs = [ cmake ];
 

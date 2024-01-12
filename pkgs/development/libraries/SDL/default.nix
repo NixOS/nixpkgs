@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
   #
   # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
+  # note 10 Jan 2024: this may be workaroundable with -DSDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32 or some option that enables it
+  ] ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
 

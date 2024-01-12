@@ -1,0 +1,14 @@
+--- a/include/posix/threads.h	2024-01-11 00:23:40.428596000 -0700
++++ b/include/posix/threads.h	2024-01-11 00:23:48.864268000 -0700
+@@ -37,11 +37,6 @@
+ #define THREADS_H
+ 
+ #include <pthread.h>
+-
+-#ifndef PTHREAD_MUTEX_NORMAL
+-#  define PTHREAD_MUTEX_NORMAL PTHREAD_MUTEX_TIMED_NP
+-#endif
+-
+ #include <stdint.h>
+ #include <stdlib.h>
+ 

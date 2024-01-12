@@ -135,6 +135,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   truss = callPackage ./truss.nix {};
   tsort = callPackage ./tsort.nix {};
   vtfontcvt = callPackage ./vtfontcvt.nix {};
+  sed = callPackage ./sed.nix {};
+  ldd = callPackage ./ldd.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};

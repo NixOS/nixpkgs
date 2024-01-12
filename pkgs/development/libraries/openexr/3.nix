@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   doCheck = !stdenv.isAarch32;
 
+  # sigh. not sure why this doesn't trip on other platforms.
+  # the flagged line is effectively printf(strerror(errno))
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isFreeBSD [ "format" ];
+
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
