@@ -52,14 +52,13 @@ in
     freebsd.libcapsicum
     libcxxrt
     zlib
-    libxml2
     pcre2
     libffi
     ncurses
-    libxml2
     readline
     gmp
     llvmPackages_16.libllvm
+    libxml2.out
     (lib.getLib bzip2)
     (lib.getLib binutils-unwrapped)
     (lib.getLib llvmPackages_16.clang-unwrapped)
