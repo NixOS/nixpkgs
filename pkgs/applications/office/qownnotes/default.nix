@@ -19,14 +19,14 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.1.1";
+  version = "24.1.2";
 in
 stdenv.mkDerivation {
   inherit pname appname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-yCsYIi1StZOYutDAWS04u3DccrPB+2oqaynnH4GBEPc=";
+    hash = "sha256-UlHLGO5Rictj0/eZKxyFKxa/2XasQOAixnejOc+dH0M=";
   };
 
   nativeBuildInputs = [
