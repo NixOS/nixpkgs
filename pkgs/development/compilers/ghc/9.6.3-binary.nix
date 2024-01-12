@@ -222,7 +222,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
-        isScript $exe && continue
+        isMachO $exe || continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
         install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
       done
@@ -333,7 +333,7 @@ stdenv.mkDerivation rec {
     '') + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
-      isScript $exe && continue
+      isMachO $exe || continue
       ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
       install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
     done
