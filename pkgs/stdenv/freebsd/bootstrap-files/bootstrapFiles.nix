@@ -56,6 +56,7 @@ in
     pcre2
     libffi
     ncurses
+    libxml2
     readline
     gmp
     llvmPackages_16.libllvm
