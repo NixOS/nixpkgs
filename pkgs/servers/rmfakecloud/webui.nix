@@ -1,4 +1,4 @@
-{ version, src, stdenv, lib, fetchFromGitHub, fetchYarnDeps, prefetch-yarn-deps, yarn, nodejs }:
+{ version, src, stdenv, lib, fetchYarnDeps, prefetch-yarn-deps, yarn, nodejs }:
 
 stdenv.mkDerivation rec {
   inherit version src;
