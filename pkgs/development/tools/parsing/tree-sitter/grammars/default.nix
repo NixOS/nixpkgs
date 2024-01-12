@@ -3,6 +3,7 @@
   tree-sitter-bash = lib.importJSON ./tree-sitter-bash.json;
   tree-sitter-beancount = lib.importJSON ./tree-sitter-beancount.json;
   tree-sitter-bibtex = lib.importJSON ./tree-sitter-bibtex.json;
+  tree-sitter-bitbake = lib.importJSON ./tree-sitter-bitbake.json;
   tree-sitter-c = lib.importJSON ./tree-sitter-c.json;
   tree-sitter-c-sharp = lib.importJSON ./tree-sitter-c-sharp.json;
   tree-sitter-clojure = lib.importJSON ./tree-sitter-clojure.json;

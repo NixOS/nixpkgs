@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , nixosTests
 
@@ -11,6 +10,7 @@
 , ncurses
 , pkg-config
 , python3
+, scdoc
 
 , expat
 , fontconfig
@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.12.3";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SUEI7DTgs6NYT4oiqaMBNCQ8gP1XoZjPFIKhob7tfsk=";
+    hash = "sha256-Nn/G7SkRuHXRSRgNjlmdX1G07sp7FPx8UyAn63Nivfg=";
   };
 
-  cargoHash = "sha256-iLhctiCDNpcTxoMrWwUWHBRc6X5rxSH9Jl2EDuktWmw=";
+  cargoHash = "sha256-vCoKaDd0mQRF6NNfK679FhEXuAdn/1o3F1gTfT8NK+0=";
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage rec {
     ncurses
     pkg-config
     python3
+    scdoc
   ];
 
   buildInputs = rpathLibs
@@ -107,16 +108,17 @@ rustPlatform.buildRustPackage rec {
       patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
-
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash
     installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
-    gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
-    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
+    install -dm 755 "$out/share/man/man5"
 
-    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
+    scdoc < extra/man/alacritty.1.scd | gzip -c > $out/share/man/man1/alacritty.1.gz
+    scdoc < extra/man/alacritty-msg.1.scd | gzip -c > $out/share/man/man1/alacritty-msg.1.gz
+    scdoc < extra/man/alacritty.5.scd | gzip -c > $out/share/man/man5/alacritty.5.gz
+    scdoc < extra/man/alacritty-bindings.5.scd | gzip -c > $out/share/man/man5/alacritty-bindings.5.gz
 
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info

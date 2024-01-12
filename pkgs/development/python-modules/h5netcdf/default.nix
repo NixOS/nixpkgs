@@ -11,17 +11,15 @@
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f2snM73gbqJXW3mmRQ2b1cOJGP9MsqNVvyK76Mhsa88=";
+    hash = "sha256-oXHAJ9rrNLJMJKO2MEGVuOq7tvEMdIJW7Tz+GYBjg88=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

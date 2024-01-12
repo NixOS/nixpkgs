@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Hf9tW1oBAw8/1KIRZpIpyVaEitLkVr2v6ilTHREzwvU=";
+    hash = "sha256-e+vhisUzSYKUUoYfSaQwpfMz2OzNcZbeHgbvyPon18g=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -27,6 +27,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
 
   NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+
+  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
+  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export HOME=$TMPDIR
+  '';
 
   postInstall = ''
     installShellCompletion --cmd starship \
@@ -39,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     cp docs/.vuepress/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-OENey+brI3B2CThNm1KOxuX/OO8tHb7i5X0jXit7FrU=";
+  cargoHash = "sha256-xLlZyLvS9AcXQHxjyL4Dden1rEwCLB8/comfRyqXXCI=";
 
   nativeCheckInputs = [ git ];
 

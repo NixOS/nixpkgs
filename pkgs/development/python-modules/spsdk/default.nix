@@ -27,6 +27,7 @@
 , pypemicro
 , pyserial
 , ruamel-yaml
+, setuptools
 , sly
 , spsdk
 , testers
@@ -37,18 +38,19 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-B3qedAXSG3A8rcWu1O2GnZ1ZqHN+7fQK43qXzGnDEY0=";
+    hash = "sha256-1aW5ivdpnSscTaMIRn4tlsBG6StN95gHAyRIzmAO9Uo=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [

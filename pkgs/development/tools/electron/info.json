@@ -3,10 +3,10 @@
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-ms8zX3Ov/du5J6M0qzmQFlbGaR9S9tQHMwQs+AutF0w=",
+                "hash": "sha256-YUwftKxD+aEJ7jorrJ12q7brfhih8ukChdlVUmnRAEw=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v28.1.0"
+                "rev": "v28.1.1"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
@@ -873,7 +873,7 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "28.1.0",
+        "version": "28.1.1",
         "modules": "119",
         "chrome": "120.0.6099.109",
         "node": "18.18.2",
@@ -888,17 +888,17 @@
                 }
             }
         },
-        "electron_yarn_hash": "0n64fi2s97ly7kl0f8922sgavdm6qh24ms3qwf21663a1igdd4jn",
-        "chromium_npm_hash": "sha256-zexxXAAJDnhMmh7HfBO1V1z1Yds06C3gSpXacsbjUb4="
+        "chromium_npm_hash": "sha256-zexxXAAJDnhMmh7HfBO1V1z1Yds06C3gSpXacsbjUb4=",
+        "electron_yarn_hash": "0n64fi2s97ly7kl0f8922sgavdm6qh24ms3qwf21663a1igdd4jn"
     },
     "27": {
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-bafuK4n9UXZqG1NHBzM5eLQ0PPkQx7CBHQLmShmQHWQ=",
+                "hash": "sha256-695wQ4JKMWTLE/ZNn9LCFkhn2xsn5Roce8AZ1LYEJKI=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v27.2.0"
+                "rev": "v27.2.1"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
@@ -1765,7 +1765,7 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "27.2.0",
+        "version": "27.2.1",
         "modules": "118",
         "chrome": "118.0.5993.159",
         "node": "18.17.1",
@@ -1787,10 +1787,10 @@
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-K14NaU0INgNQP4mD6lXeYRd3COoMvMjRUOtsUZB9KiQ=",
+                "hash": "sha256-BVuGSlIH2iuCGV8P6TvesEx92dgJAMevHHXELKwWWk8=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v26.6.3"
+                "rev": "v26.6.4"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
@@ -2609,7 +2609,7 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "26.6.3",
+        "version": "26.6.4",
         "modules": "116",
         "chrome": "116.0.5845.228",
         "node": "18.16.1",

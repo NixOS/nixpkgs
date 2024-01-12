@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , coreutils
 , darwin
 , libxcrypt
+, openldap
 , ninja
 , pkg-config
 , python3
@@ -14,17 +14,17 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation OpenGL;
+  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenGL;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-dgYYz3tQDG6Z4eE77WO2dXdardxVzzGaFLQ5znPcTlw=";
+    hash = "sha256-Jt3PWnbv/8P6Rvf3E/Yli2vdtfgx3CmsW+jlc9CK5KA=";
   };
 
   patches = [
@@ -66,15 +66,8 @@ python3.pkgs.buildPythonApplication rec {
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
 
-    # Fix passing multiple --define-variable arguments to pkg-config.
-    # https://github.com/mesonbuild/meson/pull/10670
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
-      hash = "sha256-GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
-      excludes = [
-        "docs/yaml/objects/dep.yaml"
-      ];
-    })
+    # https://github.com/mesonbuild/meson/pull/12587
+    ./007-darwin-case-sensitivity.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -95,7 +88,9 @@ python3.pkgs.buildPythonApplication rec {
     AppKit
     Cocoa
     Foundation
+    LDAP
     OpenGL
+    openldap
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([

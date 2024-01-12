@@ -123,6 +123,7 @@ let
     };
 
     optimization = {
+      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
@@ -476,6 +477,9 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
+      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
+      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
       F2FS_FS             = module;
@@ -671,6 +675,8 @@ let
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
+
+      UDMABUF = whenAtLeast "4.20" yes;
 
       # VirtualBox guest drivers in the kernel conflict with the ones in the
       # official additions package and prevent the vboxsf module from loading,
@@ -989,6 +995,9 @@ let
       # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
       # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
       KUNIT = whenAtLeast "5.5" no;
+
+      # Set system time from RTC on startup and resume
+      RTC_HCTOSYS = option yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

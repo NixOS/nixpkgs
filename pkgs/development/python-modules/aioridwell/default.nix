@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , freezegun
 , poetry-core
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     pyjwt
     pytz
     titlecase

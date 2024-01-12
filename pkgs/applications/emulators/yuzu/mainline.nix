@@ -47,13 +47,13 @@
 }:
 stdenv.mkDerivation(finalAttrs: {
   pname = "yuzu";
-  version = "1665";
+  version = "1676";
 
   src = fetchFromGitHub {
     owner = "yuzu-emu";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
-    hash = "sha256-xzSup1oz83GPpOGh9aJJ5YjoFX/cBI8RV6SvDYNH/zA=";
+    hash = "sha256-vRrliVuGXI/Dpmdkbj+P5hshzPzB6nijrXQfLXHaGqk=";
     fetchSubmodules = true;
   };
 
@@ -160,6 +160,10 @@ stdenv.mkDerivation(finalAttrs: {
   # This must be done after cmake finishes as it overwrites the file
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
+  '';
+
+  postInstall = ''
+    install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
   '';
 
   passthru.updateScript = nix-update-script {

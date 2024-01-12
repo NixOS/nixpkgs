@@ -17,9 +17,13 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
+
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 

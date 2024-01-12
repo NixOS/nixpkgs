@@ -6,23 +6,18 @@
 
 buildGoModule rec {
   pname = "portunus";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
     rev = "v${version}";
-    sha256 = "sha256-jicqH31Q+kDkOvtCg+HStQ4LUUzKm5ZO4utnAkCOLvY=";
+    sha256 = "sha256-+pMMIutj+OWKZmOYH5NuA4a7aS5CD+33vAEC9bJmyfM=";
   };
 
   buildInputs = [ libxcrypt-legacy ];
 
   vendorHash = null;
-
-  postInstall = ''
-    mv $out/bin/{,portunus-}orchestrator
-    mv $out/bin/{,portunus-}server
-  '';
 
   meta = with lib; {
     description = "Self-contained user/group management and authentication service";

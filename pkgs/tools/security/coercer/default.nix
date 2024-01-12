@@ -5,22 +5,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coercer";
-  version = "1.6";
+  version = "2.4.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "Coercer";
     rev = "refs/tags/${version}";
-    hash = "sha256-xftYnwu6uUTvJTZU9E7wvdgBxqa8xy83K5GOlgNSCvc=";
+    hash = "sha256-WeaKToKYIB+jjTNIQvAUQQNb25TsNWALYZwIZuBjkPE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "impacket"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     impacket
+    xlsxwriter
   ];
 
   pythonImportsCheck = [

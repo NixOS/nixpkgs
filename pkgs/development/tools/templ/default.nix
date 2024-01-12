@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.476";
+  version = "0.2.513";
 
   subPackages = [ "cmd/templ" ];
 
@@ -21,10 +21,10 @@ buildGoModule rec {
     owner = "a-h";
     repo = "templ";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lgeVfe+9kUxN4XXL7ANiFxtmupZwDaiRFABJIAclyd8=";
+    hash = "sha256-LWvwtAX1KBK33FIyY6alkG0RBXL6Ce4fR0cklQfwaRk=";
   };
 
-  vendorHash = "sha256-hbXKWWwrlv0w3SxMgPtDBpluvrbjDRGiJ/9QnRKlwCE=";
+  vendorHash = "sha256-buJArvaaKGRg3yS7BdcVY0ydyi4zah57ABeo+CHkZQU=";
 
   meta = with lib; {
     description = "A language for writing HTML user interfaces in Go";

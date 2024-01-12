@@ -117,6 +117,7 @@ in
     services.pgadmin.settings = {
       DEFAULT_SERVER_PORT = cfg.port;
       SERVER_MODE = true;
+      UPGRADE_CHECK_ENABLED = false;
     } // (optionalAttrs cfg.openFirewall {
       DEFAULT_SERVER = mkDefault "::";
     }) // (optionalAttrs cfg.emailServer.enable {

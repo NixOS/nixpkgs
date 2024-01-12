@@ -83,7 +83,10 @@ rec {
     in
     overrideCC stdenv (stdenv.cc.override {
       inherit libcxx;
-      extraPackages = [ cxxabi pkgs.pkgsTargetTarget."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt ];
+      extraPackages = [
+        cxxabi
+        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+      ];
     });
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -416,5 +419,19 @@ rec {
         "propagatedNativeBuildInputs"
         "propagatedBuildInputs"
       ]);
+    });
+
+  withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
+    bintools = let
+      bintools' = stdenv.cc.bintools;
+    in if bintools' ? override then (bintools'.override {
+      inherit defaultHardeningFlags;
+    }) else bintools';
+  in
+    stdenv.override (old: {
+      cc = if stdenv.cc == null then null else stdenv.cc.override {
+        inherit bintools;
+      };
+      allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
     });
 }

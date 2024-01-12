@@ -122,7 +122,7 @@ with python.pkgs; buildPythonApplication rec {
     pytest-django
     pytest-unordered
     responses
-    zope_interface
+    zope-interface
   ];
 
   fixupPhase = ''

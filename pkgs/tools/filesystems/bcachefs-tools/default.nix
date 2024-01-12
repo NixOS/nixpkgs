@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.3.3";
+  version = "1.3.5";
 
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-73vgwgBqyRLQ/Tts7bl6DhZMOs8ndIOiCke5tN89Wps=";
+    hash = "sha256-Yq631LPpWal0hsEJS0dOtiox1295tYgUWJVIw+bsbnw=";
   };
 
   nativeBuildInputs = [
@@ -81,13 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       smoke-test = nixosTests.bcachefs;
-
-      inherit (nixosTests.installer)
-        bcachefsSimple
-        bcachefsEncrypted
-        bcachefsMulti
-        bcachefsLinuxTesting
-        bcachefsUpgradeToLinuxTesting;
+      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
     updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''

@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = pname;
+    repo = "theharvester";
     rev = "refs/tags/${version}";
     hash = "sha256-tnCiI4bte2RSWSkEL2rwFz6WFjfRMMFiEBOvv3QMyos=";
   };
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     fastapi
     lxml
     netaddr
-    orjson
+    ujson
     plotly
     pyppeteer
     python-dateutil

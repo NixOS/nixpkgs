@@ -22,8 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-lIlTrAdNtBJdwiSFwpcHA2e+fRC+MbHS0PX7prAN+RY=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
