@@ -16527,17 +16527,17 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/julia { })
     julia_16-bin
-    julia_18-bin
     julia_19-bin
-    julia_18
-    julia_19;
+    julia_110-bin
+    julia_19
+    julia_110;
 
   julia-lts = julia_16-bin;
-  julia-stable = julia_19;
+  julia-stable = julia_110;
   julia = julia-stable;
 
   julia-lts-bin = julia_16-bin;
-  julia-stable-bin = julia_19-bin;
+  julia-stable-bin = julia_110-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
@@ -28126,7 +28126,9 @@ with pkgs;
 
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;
+  linux_zen = linuxPackages_zen.kernel;
   linuxPackages_lqx = linuxKernel.packages.linux_lqx;
+  linux_lqx = linuxPackages_lqx.kernel;
 
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
@@ -33083,6 +33085,8 @@ with pkgs;
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
+
+  kubevela = callPackage ../applications/networking/cluster/kubevela { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };

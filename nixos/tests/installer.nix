@@ -511,7 +511,7 @@ let
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             # make-options-doc/default.nix
-            python3.withPackages (p: [ p.mistune ])
+            (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo

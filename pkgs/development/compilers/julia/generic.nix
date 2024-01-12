@@ -1,3 +1,8 @@
+{ version
+, hash
+, patches
+}:
+
 { lib
 , stdenv
 , fetchurl
@@ -7,23 +12,21 @@
 , cmake
 , perl
 , gnum4
-, libxml2
 , openssl
+, libxml2
 }:
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.8.5";
+
+  inherit version patches;
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-NVVAgKS0085S7yICVDBr1CrA2I7/nrhVkqV9BmPbXfI=";
+    inherit hash;
   };
 
-  patches = [
-    ./patches/1.8/0001-skip-building-doc.patch
-    ./patches/1.8/0002-skip-failing-and-flaky-tests.patch
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     which
@@ -32,11 +35,11 @@ stdenv.mkDerivation rec {
     cmake
     perl
     gnum4
+    openssl
   ];
 
   buildInputs = [
     libxml2
-    openssl
   ];
 
   dontUseCmakeConfigure = true;
@@ -48,8 +51,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
-    # workaround for https://github.com/JuliaLang/julia/issues/47989
-    "USE_INTEL_JITEVENTS=0"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildbot/blob/master/master/inventory.py
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
@@ -59,17 +60,21 @@ stdenv.mkDerivation rec {
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
-    for file in libcurl.so libgmpxx.so; do
+    for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
   '';
 
-  doInstallCheck = true;
+  # tests are flaky for aarch64-linux on hydra
+  doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
+
   installCheckTarget = "testall";
 
   preInstallCheck = ''
-    export HOME="$TMPDIR"
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
+    # Some tests require read/write access to $HOME.
+    # And $HOME cannot be equal to $TMPDIR as it causes test failures
+    export HOME=$(mktemp -d)
   '';
 
   dontStrip = true;
@@ -80,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "https://julialang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickcao thomasjm ];
+    maintainers = with maintainers; [ nickcao joshniemela thomasjm ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
