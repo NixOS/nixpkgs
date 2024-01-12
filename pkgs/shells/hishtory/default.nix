@@ -16,13 +16,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-aXHqPk8iBMbe0NlsY3ZR7iozBGCAKlOOQ23FAD/5hL8=";
 
-  ldflags = [ "-X github.com/ddworken/hishtory/client/lib.Version=${version}" ];
+  ldflags = [ "-X github.com/ddworken/hishtory/client/lib.Version=${version}" "-X main.ReleaseVersion=${version}"];
 
-  excludedPackages = [ "backend/server" ];
+  excludedPackages = [];
 
   postInstall = ''
     mkdir -p $out/share/hishtory
     cp client/lib/config.* $out/share/hishtory
+    mv $out/bin/server $out/bin/hishtory-server
   '';
 
   doCheck = false;
