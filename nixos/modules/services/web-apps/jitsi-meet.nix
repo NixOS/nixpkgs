@@ -444,7 +444,29 @@ in
         Type = "simple";
         ExecStart = "${pkgs.jitsi-excalidraw}/bin/jitsi-excalidraw-backend";
         Restart = "on-failure";
+
+        DynamicUser = true;
         Group = "jitsi-meet";
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectHome = true;
+        ProtectProc = true;
+        ProtectKernelLogs = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallFilter = [ "@system-service @pkey" "~@privileged" ];
       };
     };
 
