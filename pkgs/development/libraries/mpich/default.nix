@@ -17,7 +17,7 @@ let
     withPm
   else
     builtins.filter builtins.isString (builtins.split ":" withPm);
-  withPm' = builtins.concatStringsSep ":" processManagers;
+  withPm' = if processManagers != [ ] then builtins.concatStringsSep ":" processManagers else "no";
 in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
