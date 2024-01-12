@@ -1,14 +1,22 @@
-{ autoPatchelfHook, fetchurl, lib, stdenv }:
+{ version
+, sha256
+, patches ? [ ]
+}:
+
+{ autoPatchelfHook
+, fetchurl
+, lib
+, stdenv
+}:
 
 let
   skip_tests = [
     # Test flaky on ofborg
     "channels"
-
     # Test flaky because of our RPATH patching
     # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
     "compiler/codegen"
-
+  ] ++ lib.optionals (lib.versionAtLeast version "1.10") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/52739
     "REPL"
@@ -26,26 +34,27 @@ let
     "misc"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "julia-bin";
-  version = "1.10.0";
+
+  inherit version patches;
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "a7298207f72f2b27b2ab1ce392a6ea37afbd1fbee0f1f8d190b054dcaba878fe";
+      sha256 = sha256.x86_64-linux;
     };
     aarch64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
-      sha256 = "048d96b4398efd524e94be3f49e8829cf6b30c8f3f4b46c75751a4679635e45b";
+      sha256 = sha256.aarch64-linux;
     };
     x86_64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-      sha256 = "eb1cdf2d373ee40412e8f5ee6b4681916f1ead6d794883903619c7bf147d4f46";
+      sha256 = sha256.x86_64-darwin;
     };
     aarch64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
-      sha256 = "dc4ca01b1294c02d47b33ef26d489dc288ac68655a03774870c6872b82a9a7d6";
+      sha256 = sha256.aarch64-darwin;
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -74,12 +83,14 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   doInstallCheck = true;
+
   preInstallCheck = ''
     export JULIA_TEST_USE_MULTIPLE_WORKERS=true
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
     export HOME=$(mktemp -d)
   '';
+
   installCheckPhase = ''
     runHook preInstallCheck
     # Command lifted from `test/Makefile`.
