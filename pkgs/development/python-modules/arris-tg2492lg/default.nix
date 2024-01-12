@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "arris-tg2492lg";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vanbalken";
     repo = pname;
     rev = version;
-    hash = "sha256-C1o9HWWJ/G/7Pp6I0FbRmX2PQvUJx71L9wHRkUMtnL4=";
+    hash = "sha256-MQq9jMUoJgqaY0f9YIbhME2kO+ektPqBnT9REg3qDpg=";
   };
 
   propagatedBuildInputs = [
