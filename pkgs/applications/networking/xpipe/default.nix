@@ -27,21 +27,20 @@ let
   inherit (stdenvNoCC.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
+  # Keep this setup to easily add more arch support in the future
   arch = {
     x86_64-linux = "x86_64";
-    aarch64-linux = "arm64";
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-/cumOKaWPdAruMLZP2GMUdocIhsbo59dc4Q3ngc/JOc=";
-    aarch64-linux = "sha256-xMV+9etnuFwRGIHdaXNViKd4FMOuVtugGDS1xyMwEnM=";
+    x86_64-linux = "sha256-8iQR6cWqDzjTRL6psiugQOdYqaEOgZnjcLN+90apWuY=";
   }.${system} or throwSystem;
 
   displayname = "XPipe";
 
 in stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "1.7.3";
+  version = "1.7.13";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -103,16 +102,16 @@ in stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/etc/bash_completion.d"
     ln -s "$out/opt/$pkg/cli/xpipe_completion" "$out/etc/bash_completion.d/$pkg"
 
-    substituteInPlace $out/share/applications/${displayname}.desktop --replace "Exec=" "Exec=$out"
-    substituteInPlace $out/share/applications/${displayname}.desktop --replace "Icon=" "Icon=$out"
+    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Exec=" "Exec=$out"
+    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Icon=" "Icon=$out"
 
-    mv "$out/opt/xpipe/app/bin/xpiped" "$out/opt/xpipe/app/bin/xpiped_raw"
-    mv "$out/opt/xpipe/app/lib/app/xpiped.cfg" "$out/opt/xpipe/app/lib/app/xpiped_raw.cfg"
-    mv "$out/opt/xpipe/app/scripts/xpiped_debug.sh" "$out/opt/xpipe/app/scripts/xpiped_debug_raw.sh"
+    mv "$out/opt/$pkg/app/bin/xpiped" "$out/opt/$pkg/app/bin/xpiped_raw"
+    mv "$out/opt/$pkg/app/lib/app/xpiped.cfg" "$out/opt/$pkg/app/lib/app/xpiped_raw.cfg"
+    mv "$out/opt/$pkg/app/scripts/xpiped_debug.sh" "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh"
 
-    makeShellWrapper "$out/opt/xpipe/app/bin/xpiped_raw" "$out/opt/xpipe/app/bin/xpiped" \
+    makeShellWrapper "$out/opt/$pkg/app/bin/xpiped_raw" "$out/opt/$pkg/app/bin/xpiped" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev ]}"
-    makeShellWrapper "$out/opt/xpipe/app/scripts/xpiped_debug_raw.sh" "$out/opt/xpipe/app/scripts/xpiped_debug.sh" \
+    makeShellWrapper "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh" "$out/opt/$pkg/app/scripts/xpiped_debug.sh" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev ]}"
 
     runHook postInstall
@@ -126,7 +125,7 @@ in stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/xpipe-io/${pname}/releases/tag/${version}";
     license = [ licenses.asl20 licenses.unfree ];
     maintainers = with maintainers; [ crschnick ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" ];
     mainProgram = pname;
   };
 }

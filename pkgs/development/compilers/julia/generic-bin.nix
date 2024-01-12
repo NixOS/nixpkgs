@@ -1,13 +1,25 @@
-{ autoPatchelfHook, fetchurl, lib, stdenv }:
+{ version
+, sha256
+, patches ? [ ]
+}:
+
+{ autoPatchelfHook
+, fetchurl
+, lib
+, stdenv
+}:
 
 let
   skip_tests = [
     # Test flaky on ofborg
     "channels"
-
     # Test flaky because of our RPATH patching
     # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
     "compiler/codegen"
+  ] ++ lib.optionals (lib.versionAtLeast version "1.10") [
+    # Test flaky
+    # https://github.com/JuliaLang/julia/issues/52739
+    "REPL"
   ] ++ lib.optionals stdenv.isDarwin [
     # Test flaky on ofborg
     "FileWatching"
@@ -22,33 +34,29 @@ let
     "misc"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "julia-bin";
-  version = "1.9.4";
+
+  inherit version patches;
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "07d20c4c2518833e2265ca0acee15b355463361aa4efdab858dad826cf94325c";
+      sha256 = sha256.x86_64-linux;
     };
     aarch64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
-      sha256 = "541d0c5a9378f8d2fc384bb8595fc6ffe20d61054629a6e314fb2f8dfe2f2ade";
+      sha256 = sha256.aarch64-linux;
     };
     x86_64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-      sha256 = "67eec264f6afc9e9bf72c0f62c84d91c2ebdfaed6a0aa11606e3c983d278b441";
+      sha256 = sha256.x86_64-darwin;
     };
     aarch64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
-      sha256 = "67542975e86102eec95bc4bb7c30c5d8c7ea9f9a0b388f0e10f546945363b01a";
+      sha256 = sha256.aarch64-darwin;
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  patches = [
-    # https://github.com/JuliaLang/julia/commit/f5eeba35d9bf20de251bb9160cc935c71e8b19ba
-    ./patches/1.9-bin/0001-allow-skipping-internet-required-tests.patch
-  ];
 
   postPatch = ''
     # Julia fails to pick up our Certification Authority root certificates, but
@@ -75,11 +83,14 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   doInstallCheck = true;
+
   preInstallCheck = ''
     export JULIA_TEST_USE_MULTIPLE_WORKERS=true
     # Some tests require read/write access to $HOME.
-    export HOME="$TMPDIR"
+    # And $HOME cannot be equal to $TMPDIR as it causes test failures
+    export HOME=$(mktemp -d)
   '';
+
   installCheckPhase = ''
     runHook preInstallCheck
     # Command lifted from `test/Makefile`.
