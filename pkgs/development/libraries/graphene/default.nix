@@ -16,9 +16,10 @@
 , docbook_xml_dtd_43
 , gobject-introspection
 , makeWrapper
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "graphene";
   version = "1.10.8";
 
@@ -102,6 +103,9 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.graphene;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
 
     updateScript = nix-update-script { };
@@ -113,5 +117,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
+    pkgConfigModules = ["graphene-1.0" "graphene-gobject-1.0"];
   };
-}
+})
