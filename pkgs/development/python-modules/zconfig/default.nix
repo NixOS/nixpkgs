@@ -5,14 +5,16 @@
 , fetchPypi
 , manuel
 , pygments
+, pytestCheckHook
 , pythonOlder
+, setuptools
 , zope-testrunner
 }:
 
 buildPythonPackage rec {
   pname = "zconfig";
   version = "4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,9 +26,13 @@ buildPythonPackage rec {
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   buildInputs = [
-    manuel
     docutils
+    manuel
   ];
 
   propagatedBuildInputs = [
@@ -35,6 +41,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pygments
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ZConfig"
+  ];
+
+  pytestFlagsArray = [
+    "-s"
   ];
 
   meta = with lib; {
