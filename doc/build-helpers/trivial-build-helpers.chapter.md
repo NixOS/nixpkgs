@@ -95,29 +95,43 @@ writeShellScript "evaluate-my-file.sh" ''
 
 ### `writeTextFile` {#trivial-builder-writeTextFile}
 
-`writeTextFile` takes an attribute set and expects it to contain at least two attributes: `name` and `text`.
+Writes a text file to the store
 
-`name` corresponds to the name used in the Nix store path identifier.
+`writeTextFile` takes an attribute set with the following possible attributes:
 
-`text` will be the contents of the file.
+`name`
+
+: Corresponds to the name used in the Nix store path identifier.
+
+`text`
+
+: The contents of the file.
+
+`executable` _optional_
+
+: Make this file have the executable bit set.  Defaults to `false`
+
+`destination` _optional_
+
+: Supplies a subpath under the derivation's Nix store ouput path into which to create the file.  It may contain directory path elements, these are created automatically when the derivation is realized.  Defaults to `""`, which indicates that the store path itself will be a file containing the text contents.
+
+`checkPhase` _optional_
+
+: Commands to run after generating the file, e.g. lints. It defaults to `""` (no checking).
+
+`meta` _optional_
+
+: Additional metadata for the derivation.  It defaults to `{}`.
+
+`allowSubstitutes` _optional_
+
+: Whether to allow substituting from a binary cache.  It defaults to `false`, as the operation is assumed to be faster performed locally.  You may want to set this to true if the `checkPhase` step is expensive.
+
+`preferLocalBuild` _optional_
+
+: Whether to prefer building locally, even if faster remote builders are available. It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
 The resulting store path will include some variation of the name, and it will be a file unless `destination` (see below) is used, in which case it will be a directory.
-
-Common optional attributes in the attribute set are:
-
-`executable`: make this file have the executable bit set.  Defaults to `false`
-
-`destination`: supplies a subpath under the derivation's Nix store ouput path into which to create the file.  It may contain directory path elements, these are created automatically when the derivation is realized.  Defaults to `""`, which indicates that the store path itself will be a file containing the text contents.
-
-Other less-frequently used optional attributes are:
-
-`checkPhase`: commands to run after generating the file, e.g. lints. It defaults to `""` (no checking).
-
-`meta`: Additional metadata for the derivation.  It defaults to `{}`.
-
-`allowSubstitutes`: whether to allow substituting from a binary cache.  It fefaults to `false`, as the operation is assumed to be faster performed locally.  You may want to set this to true if the `checkPhase` step is expensive.
-
-`preferLocalBuild`: whether to prefer building locally, even if faster remote builders are available. It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
 ::: {.example #ex-writeTextFile}
 # Usages of `writeTextFile`
@@ -170,9 +184,18 @@ The commands `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writ
 
 ### `writeText` {#trivial-builder-writeText}
 
-`writeText` takes two arguments: `name` and `text`.
+Writes a text file to the store
 
-`name` is the name used in the Nix store path.   `text` will be the contents of the file.
+`writeText` takes two arguments: `name` and `text`, each of which should be
+a string.
+
+`name`
+
+: the name used in the Nix store path. 
+
+`text`
+
+: will be the contents of the file.
 
 The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
 
@@ -202,9 +225,17 @@ writeTextFile {
 
 ### `writeTextDir` {#trivial-builder-writeTextDir}
 
-`writeTextDir` takes two arguments: `path` and `text`.
+Writes a text file within a subdirectory of the store.
 
-`path` is the destination within the Nix store path under which to create the file.   `text` will be the contents of the file.
+`writeTextDir` takes two arguments: `path` and `text`, each of which should be a string.
+
+`path`
+
+: the destination within the Nix store path under which to create the file.
+
+`text`
+
+: the contents of the file.
 
 The store path will be a directory. The Nix store identifier will be generated based on various elements of the path.
 
@@ -233,9 +264,19 @@ writeTextFile {
 
 ### `writeScript` {#trivial-builder-writeScript}
 
-`writeScript` takes two arguments: `name` and `text`.
+Writes a script within the store.
 
-`name` is the name used in the Nix store path.   `text` will be the contents of the file.   The created file is marked as executable.
+`writeScript` takes two arguments: `name` and `text`, each of which should be a string.
+
+`name`
+
+: the name used in the Nix store path.
+
+`text`
+
+: the contents of the file.
+
+The created file is marked as executable.
 
 The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
 
@@ -266,9 +307,19 @@ writeTextFile {
 
 ### `writeScriptBin` {#trivial-builder-writeScriptBin}
 
-`writeScriptBin` takes two arguments: `name` and `text`.
+Writes a script within a "bin" subirectory of a subdirectory of the store.
 
-`name` is the name used in the Nix store path and within the file generated under the store path.  `text` will be the contents of the file.  The created file is marked as executable.
+`writeScriptBin` takes two arguments: `name` and `text`, each of which should be a string.
+
+`name`
+
+: the name used in the Nix store path and within the file generated under the store path.
+
+`text`
+
+: the contents of the file.
+
+The created file is marked as executable.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
 
@@ -299,9 +350,21 @@ writeTextFile {
 
 ### `writeShellScript` {#trivial-builder-writeShellScript}
 
-`writeShellScript` takes two arguments: `name` and `text`.
+Writes a shell script to the store.
 
-`name` is the name used in the Nix store path.   `text` will be the contents of the file.   The created file is marked as executable.  This function is almost exactly like `writeScript`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
+`writeShellScript` takes two arguments: `name` and `text`, each of which should be a string.
+
+`name`
+
+: the name used in the Nix store path.
+
+`text`
+
+: the contents of the file.
+
+The created file is marked as executable.
+
+This function is almost exactly like `writeScript`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
 
 The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
 
@@ -331,9 +394,19 @@ writeTextFile {
 ```
 ### `writeShellScriptBin` {#trivial-builder-writeShellScriptBin}
 
-`writeShellScriptBin` takes two arguments: `name` and `text`.
+Writes a shell script to a "bin" subdirectory of subdirectory of the store.
 
-`name` is the name used in the Nix store path and within the file generated under the store path.  `text` will be the contents of the file.  This function is almost exactly like `writeScriptBin`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
+`writeShellScriptBin` takes two arguments: `name` and `text`, each of which should be a string.
+
+`name`
+
+: the name used in the Nix store path and within the file generated under the store path.
+
+`text`
+
+: the contents of the file.
+
+This function is almost exactly like `writeScriptBin`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
 
