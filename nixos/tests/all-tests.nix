@@ -910,7 +910,8 @@ in {
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
-  upnp = handleTest ./upnp.nix {};
+  upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
+  upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = handleTest ./uptermd.nix {};
   uptime-kuma = handleTest ./uptime-kuma.nix {};
   usbguard = handleTest ./usbguard.nix {};
