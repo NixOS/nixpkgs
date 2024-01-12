@@ -25,20 +25,20 @@ let
   ) deviceIds;
 
   componentHashes = {
-    "arria_lite" = "07p862i3dn2c0s3p39y23g94id59nzrpzbwdmrdnhy61ca3m0vzp";
-    "cyclone" = "0dic35j9q1ndrn8i2vdqg9176fr3kn6c8iiv0c03nni0m4ar3ykn";
-    "cyclone10lp" = "03w4f71fhhwvnkzzly9m15nrdf0jw8m0ckhhzv1vg3nd9pkk86jh";
-    "cyclonev" = "091mlg2iy452fk28idbiwi3rhcgkbhg7ggh3xvnqa9jrfffq9pjc";
-    "max" = "0r649l2n6hj6x5v6hx8k4xnvd6df6wxajx1xp2prq6dpapjfb06y";
-    "max10" = "1p5ds3cq2gq2mzq2hjwwjhw50c931kgiqxaf7ss228c6s7rv6zpk";
+    "arria_lite" = "0fg9mmncbb8vmmbc3hxgmrgvgfphn3k4glv7w2yjq66vz6nd8zql";
+    "cyclone" = "1min1hjaw8ll0c1gvl6ihp7hczw36ag8l2yzgl6avcapcw53hgyp";
+    "cyclone10lp" = "1kjjm11hjg0h6i7kilxvhmkay3v416bhwp0frg2bnwggpk29drxj";
+    "cyclonev" = "10v928qhyfqw3lszhhcdishh1875k1bki9i0czx9252jprgd1g7g";
+    "max" = "04sszzz3qnjziirisshhdqs7ks8mcvy15lc1mpp9sgm09pwlhgbb";
+    "max10" = "0dqlq477zdx4pf5hlbkl1ycxiav19vx4sk6277cpxm8y1xz70972";
   };
 
-  version = "22.1std.2.922";
+  version = "23.1std.0.991";
 
   download = {name, sha256}: fetchurl {
     inherit name sha256;
-    # e.g. "22.1std.2.922" -> "22.1std.2/922"
-    url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std.${lib.elemAt (lib.splitVersion version) 3}/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
+    # e.g. "23.1std.0.991" -> "23.1std/921"
+    url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
   };
 
 in stdenv.mkDerivation rec {
@@ -47,10 +47,10 @@ in stdenv.mkDerivation rec {
 
   src = map download ([{
     name = "QuartusLiteSetup-${version}-linux.run";
-    sha256 = "078x42pbc51n6ynrvzpwiwgi6g2sg4csv6x2vnnzjgx6bg5kq6l3";
+    sha256 = "1mg4db56rg407kdsvpzys96z59bls8djyddfzxi6bdikcklxz98h";
   } {
     name = "QuestaSetup-${version}-linux.run";
-    sha256 = "04pv5fq3kfy3xsjnj435zzpj5kf6329cbs1xgvkgmq1gpn4ji5zy";
+    sha256 = "0f9lyphk4vf4ijif3kb4iqf18jl357z9h8g16kwnzaqwfngh2ixk";
   }] ++ (map (id: {
     name = "${id}-${version}.qdz";
     sha256 = lib.getAttr id componentHashes;

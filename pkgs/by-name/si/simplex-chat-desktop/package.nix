@@ -5,11 +5,11 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "5.3.1";
+  version = "5.4.2";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-vykdi7SXKKsjYE/yixGrKQoWuUIOAjofLUn/fsdmLMc=";
+    hash = "sha256-t9wFOKGmy/mGFtETv1EkturAM4Swq1q/zoegpQ7dcrc=";
   };
 
   appimageContents = appimageTools.extract {

@@ -806,6 +806,7 @@ dont-distribute-packages:
  - chart-svg
  - chart-svg-various
  - chart-unit
+ - chassis
  - cheapskate-highlight
  - cheapskate-lucid
  - cheapskate-terminal
@@ -911,7 +912,20 @@ dont-distribute-packages:
  - comonad-random
  - compaREST
  - compact-mutable
+ - compdoc
+ - compdoc-dhall-decoder
  - complexity
+ - composite-aeson
+ - composite-aeson-cofree-list
+ - composite-aeson-throw
+ - composite-aeson-writeonly
+ - composite-binary
+ - composite-hashable
+ - composite-ix
+ - composite-lens-extra
+ - composite-tuple
+ - composite-xml
+ - composite-xstep
  - comprehensions-ghc
  - computational-algebra
  - concraft
@@ -1071,6 +1085,7 @@ dont-distribute-packages:
  - definitive-parser
  - definitive-reactive
  - definitive-sound
+ - defun
  - deka-tests
  - delaunay
  - delicious
@@ -1983,7 +1998,6 @@ dont-distribute-packages:
  - hcg-minus-cairo
  - hcheat
  - hcheckers
- - hcount
  - hcube
  - hdbi
  - hdbi-conduit
@@ -2161,6 +2175,7 @@ dont-distribute-packages:
  - hslogstash
  - hsparql
  - hspec-expectations-pretty
+ - hspec-formatter-github
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -2242,6 +2257,7 @@ dont-distribute-packages:
  - hyena
  - hylotab
  - hyloutils
+ - hyperbole
  - hyperpublic
  - i
  - iException
@@ -2529,7 +2545,6 @@ dont-distribute-packages:
  - linearscan-hoopl
  - linkchk
  - linkcore
- - linnet
  - linnet-aeson
  - linnet-conduit
  - linux-ptrace
@@ -2715,6 +2730,8 @@ dont-distribute-packages:
  - modular-prelude-classy
  - modularity
  - modulo
+ - moffy-samples-gtk4
+ - moffy-samples-gtk4-run
  - mole
  - monad-exception
  - monad-http
@@ -2745,7 +2762,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
@@ -2947,7 +2963,6 @@ dont-distribute-packages:
  - overload
  - package-o-tron
  - padKONTROL
- - pagerduty
  - pairing
  - panda
  - pandoc-highlighting-extensions
@@ -3229,7 +3244,6 @@ dont-distribute-packages:
  - quiver-interleave
  - quiver-sort
  - qux
- - rabocsv2qif
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
@@ -3281,7 +3295,6 @@ dont-distribute-packages:
  - redHandlers
  - reddit
  - redis-io
- - redis-resp
  - rediscaching-haxl
  - reduce-equations
  - refh
@@ -3524,6 +3537,7 @@ dont-distribute-packages:
  - serpentine
  - serv
  - serv-wai
+ - servant-aeson-generics-typescript
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
@@ -3540,7 +3554,6 @@ dont-distribute-packages:
  - servant-haxl-client
  - servant-http2-client
  - servant-matrix-param
- - servant-mock
  - servant-oauth2
  - servant-oauth2-examples
  - servant-openapi3
@@ -3596,12 +3609,10 @@ dont-distribute-packages:
  - silvi
  - simgi
  - simple-c-value
- - simple-cairo
  - simple-firewire
  - simple-log-syslog
  - simple-logging
  - simple-nix
- - simple-pango
  - simple-pascal
  - simple-postgresql-orm
  - simpleirc-lens
@@ -4127,7 +4138,6 @@ dont-distribute-packages:
  - wai-middleware-route
  - wai-middleware-validation
  - wai-middleware-verbs
- - wai-predicates
  - wai-route
  - wai-routing
  - wai-session-alt
@@ -4157,7 +4167,6 @@ dont-distribute-packages:
  - webcrank-wai
  - webdriver-w3c
  - webgear-openapi
- - webgear-server
  - webify
  - webserver
  - websockets-rpc

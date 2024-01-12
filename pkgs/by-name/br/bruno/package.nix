@@ -17,20 +17,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-GgXnsPEUurPHrijf966x5ldp+1lDrgS1iBinU+EkdYU=b";
+    hash = "sha256-Vf4UHN13eE9W4rekOEGAWIP3x79cVH3vI9sxuIscv8c=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-R5dEL4QbwCSE9+HHCXlf/pYLmjCaD15tmdSSLbZgmt0=";
+  npmDepsHash = "sha256-pfV9omdJiozJ9VotTImfM/DRsBPNGAEzmSdj3/C//4A=";
 
   nativeBuildInputs = [
     (writeShellScriptBin "phantomjs" "echo 2.1.1")

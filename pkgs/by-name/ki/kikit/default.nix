@@ -12,7 +12,7 @@
 , markdown2
 , pytestCheckHook
 , commentjson
-, wxPython_4_2
+, wxpython
 , pcbnew-transition
 , pybars3
 , versioneer
@@ -42,7 +42,7 @@ buildPythonApplication rec {
     markdown2
     commentjson
     # https://github.com/yaqwsx/KiKit/issues/575
-    wxPython_4_2
+    wxpython
     pcbnew-transition
     pybars3
     # https://github.com/yaqwsx/KiKit/issues/574

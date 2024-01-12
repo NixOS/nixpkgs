@@ -7,6 +7,7 @@
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
 , coreCompression ? lib.versionAtLeast version "2.2.6"
+, markRegionGC ? lib.versionAtLeast version "2.4.0"
 , texinfo
 , version
 }:
@@ -18,11 +19,11 @@ let
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.3.10" = {
-      sha256 = "sha256-NYAzMV0H5MWmyDjufyLPxNSelISOtx7BOJ1JS8Mt0qs=";
-    };
     "2.3.11" = {
       sha256 = "sha256-hL7rjXLIeJeEf8AoWtyz+k9IG9s5ECxPuat5aEGErSk=";
+    };
+    "2.4.0" = {
+      sha256 = "sha256-g9i3TwjSJUxZuXkLwfZp4JCZRXuIRyDs7L9F9LRtF3Y=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -80,8 +81,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  # There are no patches necessary for the currently enabled versions, but this
-  # code is left in place for the next potential patch.
+  patches = lib.optionals (version == "2.4.0") [
+    ./fix-2.4.0-aarch64-darwin.patch
+  ];
+
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
 
@@ -128,7 +131,8 @@ stdenv.mkDerivation rec {
     optional threadSupport "sb-thread" ++
     optional linkableRuntime "sb-linkable-runtime" ++
     optional coreCompression "sb-core-compression" ++
-    optional stdenv.isAarch32 "arm";
+    optional stdenv.isAarch32 "arm" ++
+    optional markRegionGC "mark-region-gc";
 
   disableFeatures = with lib;
     optional (!threadSupport) "sb-thread" ++

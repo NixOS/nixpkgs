@@ -10,7 +10,6 @@
   ./config/gtk/gtk-icon-cache.nix
   ./config/i18n.nix
   ./config/iproute2.nix
-  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/ldso.nix
   ./config/locale.nix
@@ -273,6 +272,7 @@
   ./programs/virt-manager.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
+  ./programs/wayland/labwc.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
@@ -308,6 +308,7 @@
   ./security/duosec.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
+  ./security/krb5
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix
@@ -497,6 +498,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
@@ -832,6 +834,7 @@
   ./services/monitoring/riemann.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
+  ./services/monitoring/snmpd.nix
   ./services/monitoring/statsd.nix
   ./services/monitoring/sysstat.nix
   ./services/monitoring/teamviewer.nix
@@ -1175,6 +1178,7 @@
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
+  ./services/security/bitwarden-directory-connector-cli.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix

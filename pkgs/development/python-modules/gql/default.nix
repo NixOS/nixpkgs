@@ -1,11 +1,13 @@
 { lib
 , aiofiles
 , aiohttp
+, anyio
 , backoff
 , botocore
 , buildPythonPackage
 , fetchFromGitHub
 , graphql-core
+, httpx
 , mock
 , parse
 , pytest-asyncio
@@ -14,6 +16,7 @@
 , pythonOlder
 , requests
 , requests-toolbelt
+, setuptools
 , urllib3
 , vcrpy
 , websockets
@@ -22,25 +25,26 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.1";
-  format = "setuptools";
+  version = "3.6.0b0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = pname;
+    repo = "gql";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/uPaRju2AJCjMCfA29IKQ4Hu71RBu/Yz8jHwk9EE1Eg=";
+    hash = "sha256-yX6NbtGxBa3lL/bS3j2ouTPku6a4obqNGx1xRzx+Skk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace \
-      "websockets>=10,<11;python_version>'3.6'" \
-      "websockets>=10,<12;python_version>'3.6'"
-  '';
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
+    anyio
     backoff
     graphql-core
     yarl
@@ -60,6 +64,7 @@ buildPythonPackage rec {
     all = [
       aiohttp
       botocore
+      httpx
       requests
       requests-toolbelt
       urllib3
@@ -67,6 +72,9 @@ buildPythonPackage rec {
     ];
     aiohttp = [
       aiohttp
+    ];
+    httpx = [
+      httpx
     ];
     requests = [
       requests

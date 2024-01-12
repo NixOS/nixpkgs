@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
 
   patches = [ ./wxpython.patch ];
 
-  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_2 ];
+  propagatedBuildInputs = with python3.pkgs; [ six wxpython ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo

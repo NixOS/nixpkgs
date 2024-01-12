@@ -12,7 +12,7 @@
 , oauthlib
 , packaging
 , qrcode
-, rich
+, cookiecutter
 , watchdog
 , websocket-client
 , websockets
@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.17.0";
+  version = "0.18.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YNa1JDoGqtpzjx+3E1Ycz2E5yZ5MVzooPo9PgHFll9s=";
+    hash = "sha256-ix9O4wBq7/gwkV+23B+dnxTYv/VL6w8RmnvbYWcWqmc=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     httpx
     packaging
     qrcode
-    rich
+    cookiecutter
   ];
 
   doCheck = false;

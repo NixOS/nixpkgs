@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gpytorch
-, linear_operator
+, linear-operator
 , multipledispatch
 , pyro-ppl
 , setuptools
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     gpytorch
-    linear_operator
+    linear-operator
     multipledispatch
     pyro-ppl
     scipy

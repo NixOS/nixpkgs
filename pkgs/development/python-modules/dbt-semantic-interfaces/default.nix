@@ -13,18 +13,19 @@
 , pyyaml
 , typing-extensions
 , hypothesis
+, dbt-postgres
 }:
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.2.2";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pnhmfj349uMjSsmdr53dY1Xur6huRKHiXWI7DXYK1gE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Q3aKUyXB+HzPCpwbJ66zDv92n04Gb0w7ivWfga3UX3s=";
   };
 
   propagatedBuildInputs = [

@@ -53,7 +53,7 @@ final: _: {
   autoAddCudaCompatRunpathHook =
     final.callPackage
       (
-        {makeSetupHook, cuda_compat}:
+        {makeSetupHook, cuda_compat ? throw "autoAddCudaCompatRunpathHook: No cuda_compat for CUDA ${final.cudaMajorMinorVersion}" }:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";

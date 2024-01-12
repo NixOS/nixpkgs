@@ -156,12 +156,6 @@ let
 
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
@@ -191,10 +185,6 @@ let
               jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin

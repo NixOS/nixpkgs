@@ -25,7 +25,7 @@
 , pyproj
 , python-dateutil
 , joblib
-, repoze_lru
+, repoze-lru
 , xmltodict
 , cloudpickle
 , scipy
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     pyproj
     python-dateutil
     joblib
-    repoze_lru
+    repoze-lru
     xmltodict
     cloudpickle
   ];
