@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.1.17";
+  version = "0.1.18";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     rev = "refs/tags/${version}";
-    hash = "sha256-huDxrhFtG2QoytJQHIikOP+LgYiKbj0XxbgS9bz6SHw=";
+    hash = "sha256-hog0oEiZMxM3lM3xFZ+c15OTOwGXZ97FmG4PpyA94Ys=";
   };
   propagatedBuildInputs = with python3Packages; [
     textual
