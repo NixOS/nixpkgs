@@ -1425,7 +1425,7 @@ with pkgs;
 
   desktopToDarwinBundle = makeSetupHook {
     name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick python3Packages.icnsutil ];
+    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick_light python3Packages.icnsutil ];
   } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook {
@@ -34215,6 +34215,10 @@ with pkgs;
   };
 
   mupdf = callPackage ../applications/misc/mupdf { };
+  mupdf-headless = mupdf.override {
+    enableX11 = false;
+    enableGL = false;
+  };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17 { };
 
   muso = callPackage ../applications/audio/muso {
