@@ -88,7 +88,7 @@ rec {
       cp -d ${gnugrep}/bin/grep $out/bin
       cp ${gawk}/bin/gawk $out/bin
       cp -d ${gawk}/bin/awk $out/bin
-      cp ${gnutar}/bin/tar $out/bin
+      cp ${gnutar}/bin/.tar-wrapped $out/bin/tar
       cp ${gzip}/bin/.gzip-wrapped $out/bin/gzip
       cp ${bzip2_.bin}/bin/bzip2 $out/bin
       ln -s bzip2 $out/bin/bunzip2

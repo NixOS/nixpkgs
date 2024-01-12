@@ -124,7 +124,7 @@ in with pkgs; rec {
         cp -d ${gnugrep.out}/bin/grep $out/bin
         cp ${gawk.out}/bin/gawk $out/bin
         cp -d ${gawk.out}/bin/awk $out/bin
-        cp ${tarMinimal.out}/bin/tar $out/bin
+        cp ${tarMinimal.out}/bin/.tar-wrapped $out/bin/tar
         cp ${gzip.out}/bin/.gzip-wrapped $out/bin/gzip
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake.out}/bin/* $out/bin
