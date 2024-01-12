@@ -44,8 +44,8 @@ stdenv.mkDerivation {
     # wrong, or perhaps there is a way to provide an assert.h.
     "-Wno-error=implicit-function-declaration"
   ] ++ lib.optionals (!haveLibc && stdenv.hostPlatform.isFreeBSD) [
-    # As per above, but in FreeBSD the assert symbol is __assert
-    "-Dassert=__assert"
+    # As per above, but in FreeBSD assert is a macro!!!!!!
+    "-Dassert=((e)?(void)0:__assert(#e,__FILE__,__LINE__))"
   ]);
 
   cmakeFlags = [
