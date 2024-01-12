@@ -58,7 +58,6 @@
 
 with lib;
 
-assert useSettings -> !libsOnly;
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
@@ -204,7 +203,7 @@ let
           })
           openSha256;
         settings =
-          if useSettings then
+          if useSettings && !libsOnly then
             (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256)
               {
                 withGtk2 = preferGtk2;
