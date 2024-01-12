@@ -19,9 +19,10 @@
 , x11Support? !stdenv.isDarwin, libXft
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "pango";
   version = "1.51.0";
 
@@ -97,6 +98,11 @@ stdenv.mkDerivation rec {
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -125,4 +131,4 @@ stdenv.mkDerivation rec {
       "pangoxft"
     ];
   };
-}
+})
