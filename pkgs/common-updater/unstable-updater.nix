@@ -80,17 +80,25 @@ let
     commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"
     last_tag=""
     if [[ -z "$hardcode_zero_version" ]]; then
-        depth=100
-        while (( $depth < 10000 )); do
-            last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
-            if [[ -n "$last_tag" ]]; then
-                break
-            fi
-            ${git}/bin/git fetch --depth="$depth" --tags
-            depth=$(( $depth * 2 ))
-        done
+        if [[ "$shallow_clone" == "1" ]]; then
+            depth=100
+            while (( $depth < 10000 )); do
+                last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
+                if [[ -n "$last_tag" ]]; then
+                    break
+                fi
+                ${git}/bin/git fetch --depth="$depth" --tags
+                depth=$(( $depth * 2 ))
+            done
+        else
+          last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
+        fi
         if [[ -z "$last_tag" ]]; then
-            echo "Cound not find a tag within last 10000 commits" > /dev/stderr
+            if [[ "$shallow_clone" == "1" ]]; then
+                echo "Cound not find a tag within last 10000 commits" > /dev/stderr
+            else
+                echo "Cound not find a tag" > /dev/stderr
+            fi
             exit 1
         fi
         if [[ -n "$tag_prefix" ]]; then
