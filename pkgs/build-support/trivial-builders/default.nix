@@ -269,6 +269,7 @@ rec {
     { name
     , text
     , runtimeInputs ? [ ]
+    , runtimeEnv ? null
     , meta ? { }
     , checkPhase ? null
     , excludeShellChecks ? [ ]
@@ -283,7 +284,15 @@ rec {
       text = ''
         #!${runtimeShell}
         ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-      '' + lib.optionalString (runtimeInputs != [ ]) ''
+      '' + lib.optionalString (runtimeEnv != null)
+        (lib.concatStrings
+          (lib.mapAttrsToList
+            (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '')
+            runtimeEnv))
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
       '' + ''
