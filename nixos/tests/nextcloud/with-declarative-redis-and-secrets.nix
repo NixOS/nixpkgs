@@ -122,5 +122,16 @@ in {
 
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+
+    # Create a backup, nuke the instance, restore the backup & check that everything works
+    nextcloud.succeed("mkdir --mode=777 /var/lib/backups")
+    nextcloud.succeed("sudo -u nextcloud nextcloud-backup /var/lib/backups")
+    nextcloud.succeed("rm -rf /var/lib/nextcloud/*")
+    nextcloud.succeed('sudo -u postgres psql -d template1 -c "DROP DATABASE \"nextcloud\" with (FORCE)"')
+    nextcloud.succeed('sudo -u postgres psql -d template1 -c "CREATE DATABASE \"nextcloud\""')
+    nextcloud.succeed('sudo -u postgres psql -d nextcloud -c "GRANT ALL ON SCHEMA public to ${adminuser}"')
+    nextcloud.systemctl("start --wait nextcloud-setup.service")
+    nextcloud.succeed("echo -e \"y\\n\" | nextcloud-restore /var/lib/backups")
+    client.succeed("${withRcloneEnv} ${diffSharedFile}")
   '';
 })) args

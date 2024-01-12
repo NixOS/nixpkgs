@@ -75,5 +75,15 @@ in {
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
+
+    # Create a backup, nuke the instance, restore the backup & check that everything works
+    nextcloud.succeed("mkdir --mode=777 /var/lib/backups")
+    nextcloud.succeed("sudo -u nextcloud nextcloud-backup /var/lib/backups")
+    nextcloud.succeed("rm -rf /var/lib/nextcloud/*")
+    nextcloud.succeed("mysql -e \"DROP DATABASE nextcloud\"")
+    nextcloud.succeed("mysql -e \"CREATE DATABASE nextcloud\"")
+    nextcloud.systemctl("start --wait nextcloud-setup.service")
+    nextcloud.succeed("echo -e \"y\\n\" | nextcloud-restore /var/lib/backups")
+    client.succeed("${withRcloneEnv} ${diffSharedFile}")
   '';
 })) args

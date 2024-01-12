@@ -116,5 +116,14 @@ in {
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
     nextcloud.succeed("grep -vE '^HBEGIN:oc_encryption_module' /var/lib/nextcloud-data/data/root/files/test-shared-file")
+
+    # Create a backup, nuke the instance, restore the backup & check that everything works
+    nextcloud.succeed("mkdir --mode=700 /var/lib/backups")
+    nextcloud.succeed("chown nextcloud /var/lib/backups")
+    nextcloud.succeed("sudo -u nextcloud nextcloud-backup /var/lib/backups")
+    nextcloud.succeed("rm -rf /var/lib/nextcloud/* /var/lib/nextcloud-data/*")
+    nextcloud.systemctl("start --wait nextcloud-setup.service")
+    nextcloud.succeed("echo -e \"y\\n\" | nextcloud-restore /var/lib/backups")
+    client.succeed("${withRcloneEnv} ${diffSharedFile}")
   '';
 })) args
