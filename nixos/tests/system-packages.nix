@@ -55,7 +55,7 @@
           "gzip".enable = false;
 
           # Disable a non-default output of a package that was included elsewhere.
-          "multi".outputs.extra = lib.mkForce false;
+          "multi".outputs.extra.enable = lib.mkForce false;
 
           # Include a package using the attrset syntax.
           "fd".package = pkgs.fd;

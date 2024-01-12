@@ -18,7 +18,13 @@ let
       inherit (lib) types;
 
       outputsFor' = drv: lib.listToAttrs (
-        map (output: lib.nameValuePair output true) (lib.outputsFor drv)
+        map
+          (output: lib.nameValuePair output ({
+            enable = true;
+          } // lib.optionalAttrs (output ? meta.priority) {
+            inherit (meta.output) priority;
+          }))
+          (lib.outputsFor drv)
       );
 
       drvToAttrs = drv: {
@@ -60,14 +66,49 @@ let
               type = types.packageByOutPath;
               description = "The derivation that will be used for this package.";
             };
-            outputs = lib.mkOption {
-              type = types.attrsOf types.bool;
-              description = "The outputs to install for this package.";
-              default = outputsFor' config.package;
-              defaultText = ''
-                If no outputs are explicitly specified, we add the default outputs of the package.
-              '';
-            };
+            outputs =
+              let
+                # config gets shadowed below, so we assign it another name here
+                # to be able to access it still.
+                outerConfig = config;
+              in
+              lib.mkOption {
+                type = types.attrsOf (types.submodule ( { name, config, lib, ... }: {
+                  options = {
+                    enable = lib.mkEnableOption "the output" // {
+                      default = true;
+                    };
+                    name = lib.mkOption {
+                      type = types.str;
+                      default = name;
+                      description = "The name of this output.";
+                    };
+                    priority = lib.mkOption {
+                      type = types.nullOr (types.int // {
+                        # If an output gets selected twice with different priorities,
+                        # we want to retain the lower priority since nix-env
+                        # considers lower numerical values to indicate higher priority.
+                        # See https://nixos.org/manual/nix/stable/command-ref/nix-env/install.html
+                        merge = loc: defs:
+                          if defs == [] then abort "This case should never happen."
+                          else if length defs == 1 then (head defs).value
+                          else
+                            lib.foldl' (sum: el: lib.min sum el.value) (head defs).value (tail defs);
+                      });
+                      default = outerConfig.package.${name}.meta.priority or null;
+                      defaultText = ''
+                        The meta.priority value of the package, or null if there is no priority assigned.
+                      '';
+                      description = "The nix-env priority for this output.";
+                    };
+                  };
+                }));
+                default = outputsFor' config.package;
+                defaultText = ''
+                  The default outputs for the package, as defined by lib.outputsFor.
+                '';
+                description = "The outputs to install for this package.";
+              };
           };
         }))
       ));
@@ -79,11 +120,51 @@ let
       enabled = lib.filterAttrs (_: p: p.enable) ps;
       setOutputs = p:
         let
-          outputsToInstall = lib.mapAttrsToList lib.const (lib.filterAttrs (_: lib.id) p.outputs);
+          # Sentinel value in case the priority is null, used as an attrset key
+          none = "none";
+
+          priorityToString = prio: if prio == null then none else toString prio;
+
+          # Construct an attrset mapping priorities to the outputs of the current
+          # package that need to be installed with that priority.
+          # So the result is something like:
+          # {
+          #   "5" = [ "out" "man" ];
+          #   "8" = [ "lib" ];
+          # }
+          outputsToInstall =
+            let
+              addOutput = acc: output: {
+                ${priorityToString output.priority} =
+                  (acc.${priorityToString output.priority} or [ ]) ++ [
+                    output.name
+                  ];
+              };
+              in lib.foldlAttrs (acc: _: output: addOutput acc output) { } (
+                lib.filterAttrs (_: output: output.enable) p.outputs
+              );
+
+          # Set the priority of the drv to the given priority.
+          # If the given priority is the string "none", then we do nothing.
+          maybeSetPriority = maybePrio: drv:
+            if maybePrio == none
+            then drv
+            else lib.setPrioRecursively (lib.toInt maybePrio) drv;
         in
-        lib.setOutputsToInstall p.package outputsToInstall;
+        # Go over the attrset mapping priorities to outputs.
+        # We create an entry in the list for every priority, setting the priority
+        # of the derivation to the given value, and setting the outputsToInstall
+        # to the outputs for that priority.
+        lib.mapAttrsToList
+          (priority: outputs:
+            maybeSetPriority
+              priority
+              (lib.setOutputsToInstall p.package outputs)
+          )
+          outputsToInstall;
     in
-    lib.mapAttrsToList (_: setOutputs) enabled;
+    # For every enabled package, call setOutputs, and concat everything together.
+    lib.concatLists (lib.mapAttrsToList (_: setOutputs) enabled);
 
   requiredPackages = mapAttrs (name: pkg: setPrioRecursively ((pkg.meta.priority or 5) + 3) pkg)
     {
