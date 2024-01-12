@@ -6,9 +6,10 @@
 , pkg-config
 , fixDarwinDylibNames
 , python3
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "fribidi";
   version = "1.0.13";
 
@@ -32,10 +33,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ python3 ];
 
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
   meta = with lib; {
     homepage = "https://github.com/fribidi/fribidi";
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     license = licenses.lgpl21;
     platforms = platforms.unix;
+    pkgConfigModules = ["fribidi"];
   };
-}
+})
