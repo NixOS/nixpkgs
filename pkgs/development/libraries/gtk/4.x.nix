@@ -54,6 +54,7 @@
 , Cocoa
 , libexecinfo
 , broadwaySupport ? true
+, testers
 }:
 
 let
@@ -66,7 +67,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "gtk4";
   version = "4.12.4";
 
@@ -258,6 +259,11 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -277,5 +283,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    pkgConfigModules = ["gtk4"];
   };
-}
+})
