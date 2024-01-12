@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, libiconv, xz, bash
-, gnulib
+{ stdenv, lib, fetchurl, libiconv, xz, bash
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -20,11 +19,7 @@ stdenv.mkDerivation rec {
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-  ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
-    name = "gettext_formatstring-ruby.patch";
-    sha256 = "sha256-6SxZObOMkQDxuKJuJY+mQ/VuJJxSeGbf97J8ZZddCV0=";
-  });
+  ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -50,6 +45,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
   '';
 
   strictDeps = true;

@@ -1342,6 +1342,8 @@ self: super: with self; {
 
   baron = callPackage ../development/python-modules/baron { };
 
+  base2048 = callPackage ../development/python-modules/base2048 { };
+
   base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
@@ -4335,6 +4337,8 @@ self: super: with self; {
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
+
+  frelatage = callPackage ../development/python-modules/frelatage { };
 
   frida-python = callPackage ../development/python-modules/frida-python { };
 
@@ -12291,7 +12295,7 @@ self: super: with self; {
 
   qudida = callPackage ../development/python-modules/qudida { };
 
-  querystring_parser = callPackage ../development/python-modules/querystring-parser { };
+  querystring-parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
 

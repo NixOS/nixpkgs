@@ -1812,7 +1812,13 @@ with pkgs;
   };
 
   gamescope = callPackage ../applications/window-managers/gamescope {
-    wlroots = wlroots_0_16;
+    enableExecutable = true;
+    enableWsi = false;
+  };
+
+  gamescope-wsi = callPackage ../applications/window-managers/gamescope {
+    enableExecutable = false;
+    enableWsi = true;
   };
 
   gay = callPackage ../tools/misc/gay {  };
@@ -18196,8 +18202,6 @@ with pkgs;
 
   rappel = callPackage ../development/misc/rappel { };
 
-  pharo = callPackage ../development/pharo { };
-
   protege-distribution = callPackage ../development/web/protege-distribution { };
 
   publii = callPackage ../development/web/publii {};
@@ -24894,6 +24898,12 @@ with pkgs;
   SDL2_image_2_0_5 = SDL2_image.override({ # Pinned for pygame, toppler
     version = "2.0.5";
     hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
+  });
+  SDL2_image_2_6 = SDL2_image.override({
+    # Pinned for hedgewars:
+    #   https://github.com/NixOS/nixpkgs/pull/274185#issuecomment-1856764786
+    version = "2.6.3";
+    hash = "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw=";
   });
 
   SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
@@ -39024,6 +39034,7 @@ with pkgs;
   trimal = callPackage ../applications/science/biology/trimal { };
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
+    jdk = pkgs.jdk11_headless;
     # Reduce closure size
     jre = pkgs.jre_minimal.override {
       modules = [ "java.base" "java.logging" ];
@@ -40452,8 +40463,6 @@ with pkgs;
   };
 
   mamba = callPackage ../applications/audio/mamba { };
-
-  martyr = callPackage ../development/libraries/martyr { };
 
   mas = callPackage ../os-specific/darwin/mas { };
 
