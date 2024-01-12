@@ -8,7 +8,6 @@
 , makeWrapper
 , requireFile
 , substituteAll
-, nixosTests
 }:
 
 let
@@ -68,12 +67,6 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
-
-  passthru = {
-    tests = {
-      inherit (nixosTests) displaylink;
-    };
-  };
 
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";

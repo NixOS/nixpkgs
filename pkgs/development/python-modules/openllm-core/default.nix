@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , accelerate
 , attrs
 , bitsandbytes
@@ -41,6 +42,17 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace "hatchling==1.18.0" "hatchling"
+  '';
+
+  pythonRelaxDeps = [
+    "cattrs"
   ];
 
   propagatedBuildInputs = [
@@ -70,9 +82,12 @@ buildPythonPackage rec {
       transformers
       # trl
     ] ++ transformers.optional-dependencies.torch
-      ++ transformers.optional-dependencies.tokenizers
-      ++ transformers.optional-dependencies.accelerate;
-    full = with passthru.optional-dependencies; ( vllm ++ bentoml ++ fine-tune );
+      ++ transformers.optional-dependencies.tokenizers;
+    full = with passthru.optional-dependencies; (
+      vllm
+      # use absolute path to disambiguate with derivbation argument
+      ++ passthru.optional-dependencies.bentoml
+      ++ fine-tune );
   };
 
   # there is no tests

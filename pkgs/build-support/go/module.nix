@@ -289,7 +289,8 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; } // { inherit (args') vendorSha256; };
+    passthru = passthru // { inherit go goModules vendorHash; }
+                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information

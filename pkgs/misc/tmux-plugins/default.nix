@@ -244,23 +244,26 @@ in rec {
 
   fingers = mkTmuxPlugin rec {
     pluginName = "fingers";
-    rtpFilePath = "tmux-fingers.tmux";
-    version = "1.0.1";
+    rtpFilePath = "load-config.tmux";
+    version = "2.1.1";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
-      rev = version;
-      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
-      fetchSubmodules = true;
+      rev = "${version}";
+      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
     };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
     postInstall = ''
-      for f in config.sh tmux-fingers.sh setup-fingers-mode-bindings.sh; do
-      wrapProgram $target/scripts/$f \
+      shards build --production
+      rm -rf $target/* $target/.*
+      cp -r bin $target/bin
+      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
+      chmod +x $target/${rtpFilePath}
+
+      wrapProgram $target/${rtpFilePath} \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
           [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
         )}
-      done
     '';
   };
 

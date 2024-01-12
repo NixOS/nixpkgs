@@ -14,7 +14,7 @@
 , tubes
 , twisted
 , werkzeug
-, zope_interface
+, zope-interface
 
 # tests
 , idna
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     twisted
     tubes
     werkzeug
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

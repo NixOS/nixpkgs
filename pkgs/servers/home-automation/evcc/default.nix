@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
+, fetchpatch
 , cacert
 , go
 , git
@@ -16,16 +17,25 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.123.2";
+  version = "0.123.7";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
-    repo = pname;
+    repo = "evcc";
     rev = version;
-    hash = "sha256-iGt3j8q8dpQLUIHHnGHCgraPETk9GL9t/ygBZtPG7yM=";
+    hash = "sha256-I8qcKrCuiUpDdsWDMiEZdo+PBkMELo5V6GW+nKFaD3Y=";
   };
 
-  vendorHash = "sha256-rhGMN5v+JzNg1p2GptomDDtqS7M4EafROXXy185qtmU=";
+  patches = [
+    (fetchpatch {
+      # https://github.com/evcc-io/evcc/pull/11547
+      name = "evcc-mockgen.patch";
+      url = "https://github.com/evcc-io/evcc/commit/5ec02a9dba79a733f71fc02a9552eb01e4e08f0b.patch";
+      hash = "sha256-uxKdtwdhUcMFCMkG756OD9aSMP9rdOL4Tg0HBWwp3kw=";
+    })
+  ];
+
+  vendorHash = "sha256-FKF6+64mjrKgzFAb+O0QCURieOoRB//QNbpMFMcNG8s=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -45,6 +55,8 @@ buildGoModule rec {
       cacert
       mockgen
     ];
+
+    inherit patches;
 
     preBuild = ''
       make assets

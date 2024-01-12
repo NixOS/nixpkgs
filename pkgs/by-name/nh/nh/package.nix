@@ -1,8 +1,9 @@
 { lib
 , rustPlatform
 , installShellFiles
-, makeWrapper
+, makeBinaryWrapper
 , fetchFromGitHub
+, nix-update-script
 , nvd
 , use-nom ? true
 , nix-output-monitor ? null
@@ -11,7 +12,7 @@
 assert use-nom -> nix-output-monitor != null;
 
 let
-  version = "3.4.12";
+  version = "3.5.1";
   runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
@@ -22,14 +23,14 @@ rustPlatform.buildRustPackage {
     owner = "ViperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V5TQ/1loQnegDjfLh61DxBWEQZivYEBq2kQpT0fn2cQ=";
+    hash = "sha256-q13oPB1fl45E+7cbV1P1VQt1GtGBaSbrHPtC0Y7q83c=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   preFixup = ''
@@ -47,7 +48,9 @@ rustPlatform.buildRustPackage {
       ${lib.optionalString use-nom "--set-default NH_NOM 1"}
   '';
 
-  cargoHash = "sha256-Ul4DM8WmKvKG32zBXzpdzHZknpTQAVvrxFcEd/C1buA=";
+  cargoHash = "sha256-Jy873l3ZRBqljzV/GwLbkk1kpO6zNqeGmuMDSKUqyzM=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Yet another nix cli helper";

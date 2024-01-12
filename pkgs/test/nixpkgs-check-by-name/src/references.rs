@@ -17,10 +17,12 @@ pub fn check_references(
 ) -> validation::Result<()> {
     // The empty argument here is the subpath under the package directory to check
     // An empty one means the package directory itself
-    check_path(relative_package_dir, absolute_package_dir, Path::new("")).context(format!(
-        "While checking the references in package directory {}",
-        relative_package_dir.display()
-    ))
+    check_path(relative_package_dir, absolute_package_dir, Path::new("")).with_context(|| {
+        format!(
+            "While checking the references in package directory {}",
+            relative_package_dir.display()
+        )
+    })
 }
 
 /// Checks for a specific path to not have references outside
@@ -62,7 +64,9 @@ fn check_path(
                 .map(|entry| {
                     let entry_subpath = subpath.join(entry.file_name());
                     check_path(relative_package_dir, absolute_package_dir, &entry_subpath)
-                        .context(format!("Error while recursing into {}", subpath.display()))
+                        .with_context(|| {
+                            format!("Error while recursing into {}", subpath.display())
+                        })
                 })
                 .collect_vec()?,
         )
@@ -70,8 +74,8 @@ fn check_path(
         // Only check Nix files
         if let Some(ext) = path.extension() {
             if ext == OsStr::new("nix") {
-                check_nix_file(relative_package_dir, absolute_package_dir, subpath).context(
-                    format!("Error while checking Nix file {}", subpath.display()),
+                check_nix_file(relative_package_dir, absolute_package_dir, subpath).with_context(
+                    || format!("Error while checking Nix file {}", subpath.display()),
                 )?
             } else {
                 Success(())
@@ -93,13 +97,12 @@ fn check_nix_file(
     subpath: &Path,
 ) -> validation::Result<()> {
     let path = absolute_package_dir.join(subpath);
-    let parent_dir = path.parent().context(format!(
-        "Could not get parent of path {}",
-        subpath.display()
-    ))?;
+    let parent_dir = path
+        .parent()
+        .with_context(|| format!("Could not get parent of path {}", subpath.display()))?;
 
-    let contents =
-        read_to_string(&path).context(format!("Could not read file {}", subpath.display()))?;
+    let contents = read_to_string(&path)
+        .with_context(|| format!("Could not read file {}", subpath.display()))?;
 
     let root = Root::parse(&contents);
     if let Some(error) = root.errors().first() {

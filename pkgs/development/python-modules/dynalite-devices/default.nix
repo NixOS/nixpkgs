@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-i88aIsRNsToSceQdwfspJg+Y5MO5zC4O6EkyhrYR27g=";
   };
+
+  patches = [
+    (fetchpatch {
+      # remove asynctest from tests
+      url = "https://github.com/ziv1234/python-dynalite-devices/commit/1729035f2b435b345b4e694aeae5d1823d732208.patch";
+      hash = "sha256-LqFXrJrZTPPjPnWT4+blHFYS3W1fD9T+iwaLUauxjNE=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg

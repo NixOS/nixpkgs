@@ -58,7 +58,9 @@ in {
     systemd.services.lxd-agent = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      before = [ "shutdown.target" ];
+      before = [ "shutdown.target" ] ++ lib.optionals config.services.cloud-init.enable [
+        "cloud-init.target" "cloud-init.service" "cloud-init-local.service"
+      ];
       conflicts = [ "shutdown.target" ];
       path = [
         pkgs.kmod
@@ -78,7 +80,6 @@ in {
         Description = "LXD - agent";
         Documentation = "https://documentation.ubuntu.com/lxd/en/latest";
         ConditionPathExists = "/dev/virtio-ports/org.linuxcontainers.lxd";
-        Before = lib.optionals config.services.cloud-init.enable [ "cloud-init.target" "cloud-init.service" "cloud-init-local.service" ];
         DefaultDependencies = "no";
         StartLimitInterval = "60";
         StartLimitBurst = "10";

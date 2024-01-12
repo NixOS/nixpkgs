@@ -1,9 +1,9 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , bazel-examples
 , stdenv
 , darwin
+, extraBazelArgs ? ""
 , lib
 , openjdk8
 , jdk11_headless
@@ -48,17 +48,20 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
+        --announce_rc \
+        ${lib.optionalString (lib.strings.versionOlder "5.0.0" bazel.version)
+          "--toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type'"
+        } \
         --distdir=${distDir} \
         --verbose_failures \
         --curses=no \
-        --sandbox_debug \
         --strict_java_deps=off \
         //:ProjectRunner \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
         --host_javabase='@local_jdk//:jdk' \
         --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
         --javabase='@local_jdk//:jdk' \
-    '';
+    '' + extraBazelArgs;
   };
 
 in testBazel

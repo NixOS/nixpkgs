@@ -66,6 +66,10 @@
 /doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
+# Nix, the package manager
+pkgs/tools/package-management/nix/                    @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
@@ -167,6 +171,8 @@
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
+/pkgs/applications/networking/browsers/chromium @emilylange
+/nixos/tests/chromium.nix @emilylange
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
@@ -336,3 +342,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
+
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq

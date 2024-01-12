@@ -1,0 +1,22 @@
+--- a/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h
++++ b/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h
+@@ -77,7 +77,7 @@ class XSLTProcessor final : public ScriptWrappable {
+ 
+   void reset();
+ 
+-  static void ParseErrorFunc(void* user_data, xmlError*);
++  static void ParseErrorFunc(void* user_data, const xmlError*);
+   static void GenericErrorFunc(void* user_data, const char* msg, ...);
+ 
+   // Only for libXSLT callbacks
+--- a/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc
++++ b/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc
+@@ -66,7 +66,7 @@ void XSLTProcessor::GenericErrorFunc(void*, const char*, ...) {
+   // It would be nice to do something with this error message.
+ }
+ 
+-void XSLTProcessor::ParseErrorFunc(void* user_data, xmlError* error) {
++void XSLTProcessor::ParseErrorFunc(void* user_data, const xmlError* error) {
+   FrameConsole* console = static_cast<FrameConsole*>(user_data);
+   if (!console)
+     return;

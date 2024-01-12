@@ -305,5 +305,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
+  meta.maintainers = lib.teams.buildbot.members;
 }

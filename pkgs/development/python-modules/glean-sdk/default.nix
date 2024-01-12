@@ -66,7 +66,7 @@ buildPythonPackage rec {
     "test_flipping_upload_enabled_respects_order_of_events"
   ];
 
-  postInstallCheck = lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf) ''
+  postInstallCheck = lib.optionalString stdenv.hostPlatform.isElf ''
     readelf -a $out/${python.sitePackages}/glean/libglean_ffi.so | grep -F 'Shared library: [liblmdb.so'
   '';
 

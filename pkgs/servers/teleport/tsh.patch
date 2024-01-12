@@ -1,10 +1,10 @@
 diff --git a/tool/tsh/tsh.go b/tool/tsh/tsh.go
-index 57379c40f..cb4d7b84c 100644
+index f73b0a4e46..6848286781 100644
 --- a/tool/tsh/tsh.go
 +++ b/tool/tsh/tsh.go
-@@ -514,10 +514,11 @@ func Run(args []string, opts ...cliOption) error {
- 		}
- 	}
+@@ -1065,10 +1065,11 @@ func Run(ctx context.Context, args []string, opts ...cliOption) error {
+ 
+ 	var err error
  
 -	cf.executablePath, err = os.Executable()
 +	tempBinaryPath, err := os.Executable()
@@ -13,5 +13,5 @@ index 57379c40f..cb4d7b84c 100644
  	}
 +	cf.executablePath = path.Dir(tempBinaryPath) + "/tsh"
  
- 	if err := client.ValidateAgentKeyOption(cf.AddKeysToAgent); err != nil {
- 		return trace.Wrap(err)
+ 	// configs
+ 	setEnvFlags(&cf)
