@@ -780,7 +780,7 @@ in {
   simple = handleTest ./simple.nix {};
   sing-box = handleTest ./sing-box.nix {};
   slimserver = handleTest ./slimserver.nix {};
-  slurm = runTest ./slurm/test.nix;
+  slurm = makeOverridable (import ./slurm/default.nix) { inherit runTest; };
   smokeping = handleTest ./smokeping.nix {};
   snmpd = handleTest ./snmpd.nix {};
   snapcast = handleTest ./snapcast.nix {};
