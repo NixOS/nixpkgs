@@ -1812,7 +1812,13 @@ with pkgs;
   };
 
   gamescope = callPackage ../applications/window-managers/gamescope {
-    wlroots = wlroots_0_16;
+    enableExecutable = true;
+    enableWsi = false;
+  };
+
+  gamescope-wsi = callPackage ../applications/window-managers/gamescope {
+    enableExecutable = false;
+    enableWsi = true;
   };
 
   gay = callPackage ../tools/misc/gay {  };
