@@ -157,6 +157,9 @@ watermelon
 
 In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
+When needed, each convention explain why it exists, so you can make a decision whether to follow it or not based on your particular case.
+Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
+You, as the writer of documentation, are still in charge of its content.
 
 - Put each sentence in its own line.
   This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
@@ -188,6 +191,57 @@ In that case, please open an issue about the particular documentation convention
   }
   ```
 
+- When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
+  This means that for a shell, you should use a format like the following:
+  ```shell
+  $ nix-build -A hello '<nixpkgs>' \
+    --option require-sigs false \
+    --option trusted-substituters file:///tmp/hello-cache \
+    --option substituters file:///tmp/hello-cache
+  /nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
+  ```
+  Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
+
+  For the Nix REPL, you should use a format like the following:
+  ```shell
+  nix-repl> builtins.attrNames { a = 1; b = 2; }
+  [ "a" "b" ]
+  ```
+  Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
+
+- When documenting functions or anything that has inputs/outputs and example usage, use nested headings to clearly separate inputs, outputs, and examples.
+  Keep examples as the last nested heading, and link to the examples wherever applicable in the documentation.
+
+  The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
+  An example:
+  ```
+  ## buildImage
+
+  Some explanation about the function here.
+  Describe a particular scenario, and point to [](#ex-dockerTools-buildImage), which is an example demonstrating it.
+
+  ### Inputs
+
+  Documentation for the inputs of `buildImage`.
+  Perhaps even point to [](#ex-dockerTools-buildImage) again when talking about something specifically linked to it.
+
+  ### Passthru outputs
+
+  Documentation for any passthru outputs of `buildImage`.
+
+  ### Examples
+
+  Note that this is the last nested heading in the `buildImage` section.
+
+  :::{.example #ex-dockerTools-buildImage}
+
+  # Using `buildImage`
+
+  Example of how to use `buildImage` goes here.
+
+  :::
+  ```
+
 - Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
   For example:
 
@@ -195,6 +249,9 @@ In that case, please open an issue about the particular documentation convention
   # pkgs.coolFunction
 
   Description of what `coolFunction` does.
+
+  ## Inputs
+
   `coolFunction` expects a single argument which should be an attribute set, with the following possible attributes:
 
   `name` (String)
