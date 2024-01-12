@@ -39,6 +39,7 @@ flutter313.buildFlutterApplication (rec {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";
     license = licenses.agpl3Plus;
+    mainProgram = "fluffychat";
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = [ sourceTypes.fromSource ];
