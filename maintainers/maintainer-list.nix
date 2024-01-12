@@ -4687,6 +4687,16 @@
     githubId = 32810399;
     name = "Diffumist";
   };
+  diogotcorreia = {
+    name = "Diogo Correia";
+    email = "me@diogotc.com";
+    matrix = "@dtc:diogotc.com";
+    github = "diogotcorreia";
+    githubId = 7467891;
+    keys = [{
+      fingerprint = "111F 91B7 5F61 99D8 985B  4C70 12CF 31FD FF17 2B77";
+    }];
+  };
   diogox = {
     name = "Diogo Xavier";
     github = "diogox";
