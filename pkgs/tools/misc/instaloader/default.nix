@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , sphinx
 , requests
 }:
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-ZxvJPDj+r7KSyXpYNQIgnda5OS77GOFM901ZHgR6c4k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

@@ -25,6 +25,8 @@ let
     buildInputs = [ libuuid zlib ];
     nativeBuildInputs = [ autoreconfHook ];
 
+    enableParallelBuilding = true;
+
     doCheck = true;
     env.AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
 

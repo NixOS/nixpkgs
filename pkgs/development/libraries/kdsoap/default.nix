@@ -1,11 +1,15 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchurl
 , cmake
 , qtbase
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+  cmakeName = if isQt6 then "KDSoap-qt6" else "KDSoap";
+in stdenv.mkDerivation rec {
   pname = "kdsoap";
   version = "2.1.1";
 
@@ -16,15 +20,17 @@ mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
   buildInputs = [ qtbase ];
 
+  cmakeFlags = [ (lib.cmakeBool "KDSoap_QT6" isQt6) ];
+
   postInstall = ''
-    moveToOutput bin/kdwsdl2cpp "$dev"
-    sed -i "$out/lib/cmake/KDSoap/KDSoapTargets.cmake" \
+    moveToOutput bin/kdwsdl2cpp* "$dev"
+    sed -i "$out/lib/cmake/${cmakeName}/KDSoapTargets.cmake" \
         -e "/^  INTERFACE_INCLUDE_DIRECTORIES/ c   INTERFACE_INCLUDE_DIRECTORIES \"$dev/include\""
-    sed -i "$out/lib/cmake/KDSoap/KDSoapTargets-release.cmake" \
+    sed -i "$out/lib/cmake/${cmakeName}/KDSoapTargets-release.cmake" \
         -e "s@$out/bin@$dev/bin@"
   '';
 

@@ -10,7 +10,6 @@
   ./config/gtk/gtk-icon-cache.nix
   ./config/i18n.nix
   ./config/iproute2.nix
-  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/ldso.nix
   ./config/locale.nix
@@ -309,6 +308,7 @@
   ./security/duosec.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
+  ./security/krb5
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix
@@ -1476,6 +1476,9 @@
   ./system/boot/systemd/initrd-secrets.nix
   ./system/boot/systemd/initrd.nix
   ./system/boot/systemd/journald.nix
+  ./system/boot/systemd/journald-gateway.nix
+  ./system/boot/systemd/journald-remote.nix
+  ./system/boot/systemd/journald-upload.nix
   ./system/boot/systemd/logind.nix
   ./system/boot/systemd/nspawn.nix
   ./system/boot/systemd/oomd.nix

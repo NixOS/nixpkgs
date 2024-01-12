@@ -8,8 +8,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.1.2";
   format = "pyproject";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   src = fetchFromGitHub {
     owner = "gilesknap";
     repo = "gphotos-sync";

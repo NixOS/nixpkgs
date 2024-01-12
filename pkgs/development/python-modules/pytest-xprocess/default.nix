@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.22.2";
+  version = "0.23.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WZ7iW5OOjyWeGNnFtNY4SIT4pqKMpR7tMtDZUmvc93w=";
+    hash = "sha256-+NQEGiChwe8ZQwVOSj33rHtD5/KR9kD0PDTp3MSzTfo=";
   };
 
   postPatch = ''

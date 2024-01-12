@@ -3,6 +3,7 @@
 , async-timeout
 , asyncio-dgram
 , buildPythonPackage
+, certifi
 , docutils
 , fetchFromGitHub
 , poetry-core
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     asyncio-dgram
+    certifi
     docutils
     voluptuous
   ];

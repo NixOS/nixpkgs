@@ -4,7 +4,7 @@
 , buildPythonPackage
 , pythonOlder
   # Mitmproxy requirements
-, aioquic
+, aioquic-mitmproxy
 , asgiref
 , blinker
 , brotli
@@ -29,7 +29,7 @@
 , setuptools
 , sortedcontainers
 , tornado
-, urwid
+, urwid-mitmproxy
 , wsproto
 , zstandard
   # Additional check requirements
@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.1.6";
+  version = "10.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,11 +53,11 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-W+gxK5bNCit1jK9ojwE/HVjUz6OJcNw6Ac1lN5FxGgw=";
+    hash = "sha256-BO7oQ4TVuZ4dCtROq2M24V6HVo0jzyBdQfb67dYA07U=";
   };
 
   propagatedBuildInputs = [
-    aioquic
+    aioquic-mitmproxy
     asgiref
     blinker
     brotli
@@ -81,7 +81,7 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid
+    urwid-mitmproxy
     wsproto
     zstandard
   ] ++ lib.optionals stdenv.isDarwin [

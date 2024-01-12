@@ -147,7 +147,7 @@ let
 
     stdenv.mkDerivation (rec {
       inherit
-        pname version nativeLibs javaLibs lispLibs systems asds
+        version nativeLibs javaLibs lispLibs systems asds
         pkg program flags faslExt
       ;
 
@@ -216,6 +216,7 @@ let
       dontStrip = true;
 
     } // (args // {
+      pname = "${args.pkg.pname}-${args.pname}";
       src = if builtins.length (args.patches or []) > 0
             then pkgs.applyPatches { inherit (args) src patches; }
             else args.src;

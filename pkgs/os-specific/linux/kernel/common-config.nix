@@ -123,6 +123,7 @@ let
     };
 
     optimization = {
+      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
@@ -296,6 +297,7 @@ let
       # At the time of writing (25-06-2023): this is only used in a "correct" way by ath drivers for initiating DFS radiation
       # for "certified devices"
       EXPERT                      = option yes; # this is needed for offering the certification option
+      RFKILL_INPUT                = option yes; # counteract an undesired effect of setting EXPERT
       CFG80211_CERTIFICATION_ONUS = option yes;
       # DFS: "Dynamic Frequency Selection" is a spectrum-sharing mechanism that allows
       # you to use certain interesting frequency when your local regulatory domain mandates it.
@@ -994,6 +996,9 @@ let
       # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
       # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
       KUNIT = whenAtLeast "5.5" no;
+
+      # Set system time from RTC on startup and resume
+      RTC_HCTOSYS = option yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

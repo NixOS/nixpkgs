@@ -28,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-AKpDXfNF2t/3F4SmMWIgfkxHgcJobYs225gIeJ31l6k=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "oauthlib~=3.1" "oauthlib" \

@@ -76,13 +76,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.2";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R21zRjEvJO+97yXJDvzDJryQ7ps9uEN62DZ0GCxdoFk=";
+    hash = "sha256-GYBGGZ2bobVYElO0WJrsQzLMdNR5AfQwgdjBtPeGH1g=";
   };
 
   nativeBuildInputs = [

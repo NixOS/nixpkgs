@@ -27,6 +27,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "wyoming"
   ];
 
   propagatedBuildInputs = with python3Packages; [

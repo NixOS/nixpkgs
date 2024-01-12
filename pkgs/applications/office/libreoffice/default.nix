@@ -13,6 +13,7 @@
 , IOCompress
 , zlib
 , libjpeg
+, liblangtag
 , expat
 , freetype
 , libwpd
@@ -225,6 +226,17 @@ in stdenv.mkDerivation (finalAttrs: {
       url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=ececb678b8362e3be8e02768ddd5e4197d87dc2a";
       hash = "sha256-TUfKlwNxUTOJ95VLqwVD+ez1xhu7bW6xZlgIaCyIiNg=";
     })
+
+    # Backport libxml 2.12 build fixes
+    # FIXME: remove in next release
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=c8f7408db73d2f2ccacb25a2b4fef8dfebdfc6cb";
+      hash = "sha256-uEgRx1eyS3Wx2ZDWEsUmpIbuKezVrIbO++qSL2QI8Lk=";
+    })
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=cbb17a548b5cc6a99b6ed7735479bb4f2bc40f26";
+      hash = "sha256-ofhif37uvQI+gidaUpyr6XlyBc3gTJUDBRb3ootrzz0=";
+    })
   ];
 
   # libreoffice tries to reference the BUILDCONFIG (e.g. PKG_CONFIG_PATH)
@@ -436,6 +448,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-libabw"
+    "--with-system-liblangtag"
     "--without-system-libcmis"
     "--with-system-libwps"
     "--with-system-openldap"
@@ -466,7 +479,6 @@ in stdenv.mkDerivation (finalAttrs: {
     "--without-system-lpsolve"
     "--without-system-libetonyek"
     "--without-system-libfreehand"
-    "--without-system-liblangtag"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
     "--without-system-libpagemaker"
@@ -566,6 +578,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libexttextcat
     libjpeg
+    liblangtag
     libmspack
     libmwaw
     libmysqlclient

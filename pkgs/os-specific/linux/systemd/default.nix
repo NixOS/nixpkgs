@@ -55,6 +55,7 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnutls
 , iptables
 , withSelinux ? false
 , libselinux
@@ -207,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -436,7 +438,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
@@ -773,7 +775,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
-      inherit (nixosTests) switchTest;
+      inherit (nixosTests)
+        switchTest
+        systemd-journal
+        systemd-journal-gateway
+        systemd-journal-upload;
       cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };

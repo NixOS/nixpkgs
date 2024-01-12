@@ -89,6 +89,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires fpdf2 which we don't package yet
     "test_compression"
+    # infinite recursion when including fpdf2
+    "test_merging_many_temporary_files"
   ];
 
   meta = with lib; {

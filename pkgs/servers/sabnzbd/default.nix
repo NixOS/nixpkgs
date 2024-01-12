@@ -2,7 +2,7 @@
 , coreutils
 , fetchFromGitHub
 , python3
-, par2cmdline
+, par2cmdline-turbo
 , unzip
 , unrar
 , p7zip
@@ -45,16 +45,16 @@ let
     tempora
     zc_lockfile
   ]);
-  path = lib.makeBinPath [ coreutils par2cmdline unrar unzip p7zip util-linux ];
+  path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "4.2.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-ub8CwFcmxfsfhR45M5lVZvCHyzN/7CK4ElS4Q0U4qu8=";
+    sha256 = "sha256-M9DvwizNeCXkV07dkgiComdjoceUACCuccZb+y9RMdw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
