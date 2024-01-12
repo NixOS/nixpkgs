@@ -1319,6 +1319,8 @@ with pkgs;
 
   replaceVars = callPackage ../build-support/replace-vars { };
 
+  replaceDirectDependencies = callPackage ../build-support/replace-direct-dependencies.nix { };
+
   nukeReferences = callPackage ../build-support/nuke-references {
     inherit (darwin) signingUtils;
   };

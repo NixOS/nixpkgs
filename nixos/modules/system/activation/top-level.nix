@@ -74,7 +74,9 @@ let
       baseSystemAssertWarn
     else
       (pkgs.replaceDependencies.override {
-        nix = config.nix.package;
+        replaceDirectDependencies = pkgs.replaceDirectDependencies.override {
+          nix = config.nix.package;
+        };
       }) {
         drv = baseSystemAssertWarn;
         inherit replacements cutoffPackages;
