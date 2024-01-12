@@ -4,30 +4,48 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   name = "pgadmin4";
   meta.maintainers = with lib.maintainers; [ mkg20001 gador ];
 
-  nodes.machine = { pkgs, ... }: {
+  nodes = {
+    machine = { pkgs, ... }: {
 
-    imports = [ ./common/user-account.nix ];
+      imports = [ ./common/user-account.nix ];
 
-    environment.systemPackages = with pkgs; [
-      wget
-      curl
-      pgadmin4-desktopmode
-    ];
+      environment.systemPackages = with pkgs; [
+        wget
+        curl
+        pgadmin4-desktopmode
+      ];
 
-    services.postgresql = {
-      enable = true;
-      authentication = ''
-        host    all             all             localhost               trust
-      '';
+      services.postgresql = {
+        enable = true;
+        authentication = ''
+          host    all             all             localhost               trust
+        '';
+      };
+
+      services.pgadmin = {
+        port = 5051;
+        enable = true;
+        initialEmail = "bruh@localhost.de";
+        initialPasswordFile = pkgs.writeText "pw" "bruh2012!";
+      };
     };
+    machine2 = { pkgs, ... }: {
 
-    services.pgadmin = {
-      port = 5051;
-      enable = true;
-      initialEmail = "bruh@localhost.de";
-      initialPasswordFile = pkgs.writeText "pw" "bruh2012!";
+      imports = [ ./common/user-account.nix ];
+
+      services.postgresql = {
+        enable = true;
+      };
+
+      services.pgadmin = {
+        enable = true;
+        initialEmail = "bruh@localhost.de";
+        initialPasswordFile = pkgs.writeText "pw" "bruh2012!";
+        minimumPasswordLength = 12;
+      };
     };
   };
+
 
   testScript = ''
     with subtest("Check pgadmin module"):
@@ -49,5 +67,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.wait_until_succeeds("curl -sS localhost:5050")
       machine.wait_until_succeeds("curl -sS localhost:5050/browser/ | grep \"<title>pgAdmin 4</title>\" > /dev/null")
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5050/browser")
+
+    with subtest("Check pgadmin minimum password length"):
+      machine2.wait_for_unit("postgresql")
+      machine2.wait_for_console_text("Password must be at least 12 characters long")
   '';
 })
