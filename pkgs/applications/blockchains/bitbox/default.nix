@@ -82,6 +82,7 @@ stdenv.mkDerivation {
     description = "Companion app for the BitBox02 hardware wallet";
     homepage = "https://bitbox.swiss/app/";
     license = licenses.asl20;
+    mainProgram = "bitbox";
     maintainers = [ maintainers.tensor5 ];
     platforms = platforms.unix;
   };
