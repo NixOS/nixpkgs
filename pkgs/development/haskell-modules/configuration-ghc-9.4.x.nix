@@ -97,14 +97,6 @@ in {
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
 
-  # requires newer versions to work with GHC 9.4
-  servant = doJailbreak super.servant;
-  servant-server = doJailbreak super.servant-server;
-  servant-auth = doJailbreak super.servant-auth;
-  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
-  servant-swagger = doJailbreak super.servant-swagger;
-  servant-client-core = doJailbreak super.servant-client-core;
-  servant-client = doJailbreak super.servant-client;
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
