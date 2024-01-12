@@ -79,6 +79,9 @@ in
         socketConfig = {
           ListenStream = "%t/monado_comp_ipc";
           RemoveOnStop = true;
+
+          # If Monado crashes while starting up, we want to close incoming OpenXR connections
+          FlushPending = true;
         };
 
         restartTriggers = [ cfg.package ];
