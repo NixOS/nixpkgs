@@ -57,6 +57,7 @@ in
     libffi
     ncurses
     readline
+    gmp
     llvmPackages_16.libllvm
     (lib.getLib bzip2)
     (lib.getLib llvmPackages_16.clang-unwrapped)
