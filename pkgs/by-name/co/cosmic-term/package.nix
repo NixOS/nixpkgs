@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rust,
   rustPlatform,
-  cmake,
   makeBinaryWrapper,
   cosmic-icons,
   just,
@@ -21,13 +19,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "unstable-2023-12-26";
+  version = "0-unstable-2024-01-12";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "bf3f507fdd73a06ab1f9b199a98dca6988aafec2";
-    hash = "sha256-c5RNrC0AZvz+O3nj7VvMQuA/U0sgxZCVHn+cc+4pIN8=";
+    rev = "c5c78b04f0eef9bbeb600272b9fba3db6e0afcc8";
+    hash = "sha256-9TesJrOXCFnc9oJqp9MQN+7MZpV/0pbT0+PeNSAPcdQ=";
   };
 
   cargoLock = {
@@ -35,9 +33,10 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-V371fmSmLIwUxtx6w+C55cBJ8oyYgN86r3FZ8rGBLEs=";
-      "cosmic-text-0.10.0" = "sha256-/4Hg+7R0LRF4paXIREkMOTtbQ1xgONym5nKb/TuyeD4=";
-      "glyphon-0.3.0" = "sha256-T7hvqtR3zi9wNemFrPPGakq2vEraLpnPkN7umtumwVg=";
+      "cosmic-config-0.1.0" = "sha256-GHjoLGF9hFJRpf5i+TwflRnh8N+oWyWZ9fqgRFLXQsw=";
+      "cosmic-text-0.10.0" = "sha256-PHz5jUecK889E88Y20XUe2adTUO8ElnoV7IIcaohMUw=";
+      "glyphon-0.3.0" = "sha256-JGkNIfj1HjOF8kGxqJPNq/JO+NhZD6XrZ4KmkXEP6Xc=";
+      "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
       "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
       "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
       "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
@@ -50,12 +49,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    just
-    pkg-config
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
   buildInputs = [
     libxkbcommon
     xorg.libX11
@@ -75,9 +69,7 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${
-      rust.lib.toRustTargetSpecShort stdenv.hostPlatform
-    }/release/cosmic-term"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
@@ -91,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun ];
+    maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;
   };
 }
