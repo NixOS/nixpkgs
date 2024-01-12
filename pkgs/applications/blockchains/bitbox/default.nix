@@ -8,31 +8,17 @@
 , wrapQtAppsHook
 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "bitbox";
   version = "4.40.0";
 
-  src = fetchFromGitHub {
+   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "bitbox-wallet-app";
     rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-kvkfz9zwleZNB+leefx+cciJCPkFSSRDxBNRKNqeODc=";
   };
-
-  web = buildNpmPackage {
-    pname = "bitbox-web";
-    inherit version;
-    inherit src;
-    sourceRoot = "source/frontends/web";
-    npmDepsHash = "sha256-bnMmeSX8UZpndHK0NMLQhX1GSunO0JSyZdUTfG+rSpY=";
-    installPhase = "cp -r build $out";
-  };
-in
-stdenv.mkDerivation {
-  pname = "bitbox";
-  inherit version;
-
-  inherit src;
 
   patches = [
     ./genassets.patch
@@ -45,10 +31,19 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
 
+  passthru.web = buildNpmPackage {
+    pname = "bitbox-web";
+    inherit version;
+    inherit src;
+    sourceRoot = "source/frontends/web";
+    npmDepsHash = "sha256-bnMmeSX8UZpndHK0NMLQhX1GSunO0JSyZdUTfG+rSpY=";
+    installPhase = "cp -r build $out";
+  };
+
   buildPhase = ''
     runHook preBuild
 
-    ln -s ${web} frontends/web/build
+    ln -s ${passthru.web} frontends/web/build
     export GOCACHE=$TMPDIR/go-cache
     make -C frontends/qt/server linux
     make -C frontends/qt base
