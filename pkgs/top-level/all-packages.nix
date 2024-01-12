@@ -41093,6 +41093,8 @@ with pkgs;
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch { };
 
+  tftui = python3Packages.callPackage ../applications/networking/cluster/tftui { };
+
   tfupdate = callPackage ../applications/networking/cluster/tfupdate { };
 
   tgswitch = callPackage ../applications/networking/cluster/tgswitch { };
