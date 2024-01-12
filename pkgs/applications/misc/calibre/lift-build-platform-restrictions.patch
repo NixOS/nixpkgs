@@ -1,0 +1,17 @@
+diff --git a/setup/install.py b/setup/install.py
+index 3691565309..cd5aa798b0 100644
+--- a/setup/install.py
++++ b/setup/install.py
+@@ -126,12 +126,6 @@ def consolidate_paths(self):
+             self.info('\tSHARE:', self.staging_sharedir)
+ 
+     def pre_sub_commands(self, opts):
+-        if not (islinux or isbsd or ishaiku):
+-            self.info('\nSetting up a source based development environment is only '
+-                    'supported on linux. On other platforms, see the User Manual'
+-                    ' for help with setting up a development environment.')
+-            raise SystemExit(1)
+-
+         if os.geteuid() == 0:
+             # We drop privileges for security, regaining them when installing
+             # files. Also ensures that any config files created as a side
