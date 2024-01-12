@@ -3,6 +3,8 @@
 , substituteAll
 , pkg-config
 , fetchurl
+, fetchpatch
+, darwin
 , python3Packages
 , gettext
 , itstool
@@ -40,6 +42,20 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       utillinux = util-linux;
     })
+
+    # Fix Darwin build
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/brailcom/speechd/pull/852.patch";
+      hash = "sha256-/+CTq96M4Qo35GRZUIoWmjjy0O/EiEhpp03YnhwDuO8=";
+    })
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/brailcom/speechd/pull/853.patch";
+      hash = "sha256-fWWE+j8ytgsH1/+0lQ9xoj2/eU9ak7/srHvSxdvZi1A=";
+    })
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/brailcom/speechd/pull/861.patch";
+      hash = "sha256-QzKw9+N0Na8rPoI0lqzLVI1/6tGO7SqNMIK4LvhWrjM=";
+    })
   ] ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
     # Replace FHS paths.
     (substituteAll {
@@ -64,8 +80,9 @@ in stdenv.mkDerivation rec {
     libsndfile
     libao
     libpulseaudio
-    alsa-lib
     python
+  ] ++ lib.optionals withAlsa [
+    alsa-lib
   ] ++ lib.optionals withEspeak [
     espeak
     sonic
@@ -74,6 +91,8 @@ in stdenv.mkDerivation rec {
     flite
   ] ++ lib.optionals withPico [
     svox
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AudioUnit
   ];
 
   pythonPath = [
@@ -118,7 +137,7 @@ in stdenv.mkDerivation rec {
       berce
       jtojnar
     ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 }
