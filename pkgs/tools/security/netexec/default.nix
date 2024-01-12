@@ -8,13 +8,18 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0.dev1";
+        version = "0.12.0.dev1-unstable-2023-11-30";
         src = fetchFromGitHub {
           owner = "Pennyw0rth";
           repo = "impacket";
           rev = "d370e6359a410063b2c9c68f6572c3b5fb178a38";
           hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
         };
+        # Fix version to be compliant with Python packaging rules
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
+        '';
       };
     };
   };
