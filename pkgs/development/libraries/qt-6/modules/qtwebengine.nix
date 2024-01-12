@@ -185,7 +185,6 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_gif=ON"
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
-    "-DQT_FEATURE_webengine_system_icu=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
     "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
@@ -195,6 +194,10 @@ qtModule {
     "-DQT_FEATURE_webengine_kerberos=ON"
   ] ++ lib.optionals stdenv.isLinux [
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.isDarwin [
