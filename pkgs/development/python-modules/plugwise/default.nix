@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "setuptools~=68.0" "setuptools" \
       --replace "wheel~=0.40.0" "wheel"
   '';
 
