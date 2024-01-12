@@ -30957,8 +30957,6 @@ with pkgs;
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
 
-  cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
-
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim { };
