@@ -10,8 +10,8 @@
 # commit.
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
-, stableVersion ? false # Use version format according to RFC 107 (i.e. LAST_TAG+date=YYYY-MM-DD)
-, tagPrefix ? "" # strip this prefix from a tag name when using stable version
+, hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when there is no previous release, or the project's tagging system is incompatible with what we expect from versions
+, tagPrefix ? "" # strip this prefix from a tag name
 , shallowClone ? true
 }:
 
@@ -21,7 +21,7 @@ let
 
     url=""
     branch=""
-    use_stable_version=""
+    hardcode_zero_version=""
     tag_prefix=""
     shallow_clone=""
 
@@ -35,8 +35,8 @@ let
           --branch=*)
             branch="''${flag#*=}"
             ;;
-          --use-stable-version)
-            use_stable_version=1
+          --hardcode-zero-version)
+            hardcode_zero_version=1
             ;;
           --tag-prefix=*)
             tag_prefix="''${flag#*=}"
@@ -78,9 +78,8 @@ let
     pushd "$tmpdir"
     commit_date="$(${git}/bin/git show -s --pretty='format:%cs')"
     commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"
-    if [[ -z "$use_stable_version" ]]; then
-        new_version="unstable-$commit_date"
-    else
+    last_tag=""
+    if [[ -z "$hardcode_zero_version" ]]; then
         depth=100
         while (( $depth < 10000 )); do
             last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
@@ -91,14 +90,20 @@ let
             depth=$(( $depth * 2 ))
         done
         if [[ -z "$last_tag" ]]; then
-            echo "Cound not found a tag within last 10000 commits" > /dev/stderr
+            echo "Cound not find a tag within last 10000 commits" > /dev/stderr
             exit 1
         fi
         if [[ -n "$tag_prefix" ]]; then
           last_tag="''${last_tag#$tag_prefix}"
         fi
-        new_version="$last_tag+date=$commit_date"
+        if [[ ! "$last_tag" =~ ^[[:digit:]] ]]; then
+            echo "Last tag '$last_tag' (after removing prefix '$tag_prefix') does not start with a digit" > /dev/stderr
+            exit 1
+        fi
+    else
+        last_tag="0"
     fi
+    new_version="$last_tag-unstable-$commit_date"
     popd
     # ${coreutils}/bin/rm -rf "$tmpdir"
 
@@ -113,11 +118,11 @@ in
 [
   updateScript
   "--url=${builtins.toString url}"
+  "--tag-prefix=${tagPrefix}"
 ] ++ lib.optionals (branch != null) [
   "--branch=${branch}"
-] ++ lib.optionals stableVersion [
-  "--use-stable-version"
-  "--tag-prefix=${tagPrefix}"
+] ++ lib.optionals hardcodeZeroVersion [
+  "--hardcode-zero-version"
 ] ++ lib.optionals shallowClone [
   "--shallow-clone"
 ]
