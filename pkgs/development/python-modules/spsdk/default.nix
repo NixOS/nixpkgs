@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-1aW5ivdpnSscTaMIRn4tlsBG6StN95gHAyRIzmAO9Uo=";
+    rev = version;
+    hash = "sha256-C6cz5jhIHI4WkCYT0rURFa4kBAu6cMcKpQHiHACIiu8=";
   };
 
   nativeBuildInputs = [
