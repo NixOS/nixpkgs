@@ -24,11 +24,9 @@ in
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';
       example = {
-        "default" = {
-          "version" = 2;
-          "auth" = {
-            "community" = "public";
-          };
+        auths.public_v2 = {
+          community = "public";
+          version = 2;
         };
       };
     };
