@@ -7007,7 +7007,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security CoreServices SystemConfiguration;
   };
 
-  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
+  gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
   kime = callPackage ../tools/inputmethods/kime { };
 
@@ -16182,8 +16182,6 @@ with pkgs;
     inherit (llvmPackages_15) llvm;
   };
 
-  gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
-
   gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 { };
   gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 { };
   gcc-arm-embedded-8 = callPackage ../development/compilers/gcc-arm-embedded/8 { };
@@ -20657,6 +20655,7 @@ with pkgs;
     boost181
     boost182
     boost183
+    boost184
   ;
 
   boost = boost181;
@@ -24169,31 +24168,13 @@ with pkgs;
   nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
   nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
 
-  mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
-    let
-      nvidia-container-toolkit = callPackage ../applications/virtualization/nvidia-container-toolkit {
-        inherit containerRuntimePath configTemplate;
-      };
-    in symlinkJoin {
-      inherit name;
-      paths = [
-        libnvidia-container
-        nvidia-container-toolkit
-      ] ++ additionalPaths;
-    };
-
-  nvidia-docker = mkNvidiaContainerPkg {
-    name = "nvidia-docker";
-    containerRuntimePath = "${docker}/libexec/docker/runc";
-    configTemplate = ../applications/virtualization/nvidia-docker/config.toml;
-    additionalPaths = [ (callPackage ../applications/virtualization/nvidia-docker { }) ];
-  };
-
-  nvidia-podman = mkNvidiaContainerPkg {
-    name = "nvidia-podman";
-    containerRuntimePath = "${runc}/bin/runc";
-    configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
-  };
+  nvidiaCtkPackages =
+    callPackage ../applications/virtualization/nvidia-container-toolkit/packages.nix
+      { };
+  inherit (nvidiaCtkPackages)
+    nvidia-docker
+    nvidia-podman
+    ;
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
@@ -31541,8 +31522,6 @@ with pkgs;
   };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
-
-  freefilesync = callPackage ../applications/networking/freefilesync { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
@@ -39022,6 +39001,7 @@ with pkgs;
   trimal = callPackage ../applications/science/biology/trimal { };
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
+    jdk = pkgs.jdk11_headless;
     # Reduce closure size
     jre = pkgs.jre_minimal.override {
       modules = [ "java.base" "java.logging" ];
@@ -40451,8 +40431,6 @@ with pkgs;
 
   mamba = callPackage ../applications/audio/mamba { };
 
-  martyr = callPackage ../development/libraries/martyr { };
-
   mas = callPackage ../os-specific/darwin/mas { };
 
   micromamba = callPackage ../tools/package-management/micromamba { };
@@ -41566,9 +41544,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb { };
 
-  sccache = callPackage ../development/tools/misc/sccache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  sccache = callPackage ../development/tools/misc/sccache { };
 
   scip = callPackage ../development/tools/misc/scip { };
 
