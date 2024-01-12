@@ -17,9 +17,10 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxkbcommon";
   version = "1.5.0";
 
@@ -48,7 +49,13 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../test/
   '';
-
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
   meta = with lib; {
     description = "A library to handle keyboard descriptions";
     longDescription = ''
@@ -69,4 +76,4 @@ stdenv.mkDerivation rec {
       "xkbregistry"
     ];
   };
-}
+})
