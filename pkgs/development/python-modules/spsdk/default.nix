@@ -26,6 +26,7 @@
 , pyocd
 , pypemicro
 , pyserial
+, requests
 , ruamel-yaml
 , setuptools
 , sly
@@ -63,6 +64,8 @@ buildPythonPackage rec {
     "pylink-square"
     "pyocd"
     "typing-extensions"
+    "click"
+    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
@@ -93,6 +96,7 @@ buildPythonPackage rec {
     pyocd
     pypemicro
     pyserial
+    requests
     ruamel-yaml
     sly
     typing-extensions
