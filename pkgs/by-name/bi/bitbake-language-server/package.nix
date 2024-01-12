@@ -26,8 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     pygls
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

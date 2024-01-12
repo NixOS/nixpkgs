@@ -2,10 +2,11 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , cmake
 , fdk_aac
-, ffmpeg_4
+, ffmpeg
 , jansson
 , libjack2
 , libxkbcommon
@@ -74,6 +75,25 @@ stdenv.mkDerivation (finalAttrs: {
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
+
+    # Backport ffmpeg 6.1 / GCC 13 build fixes
+    # FIXME: remove in next release
+    (fetchpatch {
+      url = "https://github.com/obsproject/obs-studio/commit/cd784644f5e82b9988043f229c19603289c6d32c.patch";
+      hash = "sha256-S4JE5kgr4x3uMHY2GRh0GBJpb7o/wYZb/v0CDITFNnQ=";
+    })
+    (fetchpatch {
+      url = "https://github.com/obsproject/obs-studio/commit/758b47d4ed9a25b8d64ad481d8d039990b9e57c9.patch";
+      hash = "sha256-jYpjwhx6e+dhN3kzbd6FcdjQ+WhIX0/BOu9PSkt+2yI=";
+    })
+    (fetchpatch {
+      url = "https://github.com/obsproject/obs-studio/commit/4b5be75c7e4b8cee908ed4a02fe0078285b4e8c9.patch";
+      hash = "sha256-tuOevhyxchwG42ilrplbiWoiDAKaY4HgzShlvp4VSQI=";
+    })
+    (fetchpatch {
+      url = "https://github.com/obsproject/obs-studio/commit/6e080a68067b27fe5463f0f4eee7df690451f3d7.patch";
+      hash = "sha256-nbn/q3uszoHaDvaW8Et1MS1sgQzMsJRmjGSMHzUxV70=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -87,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    ffmpeg_4
+    ffmpeg
     jansson
     libcef
     libjack2

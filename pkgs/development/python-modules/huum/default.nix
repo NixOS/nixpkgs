@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , mashumaro
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -47,5 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/frwickst/pyhuum/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

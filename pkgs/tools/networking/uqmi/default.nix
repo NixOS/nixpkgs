@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "uqmi";
-  version = "unstable-2019-06-27";
+  version = "unstable-2023-10-30";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";
-    rev = "1965c713937495a5cb029165c16acdb6572c3f87";
-    sha256 = "1gn8sdcl4lwfs3lwabmnjbvdhhk1l42bwbajwds7j4936fpbklx0";
+    rev = "eea292401c388a4eb59c0caf5d00aa046c6059f4";
+    hash = "sha256-Uz5GjGcSKatbii09CsvzsYMz8Vm+Am4RUeCZuFIK1Ag=";
   };
 
   postPatch = ''
@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
     # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
     "-Wno-error=dangling-pointer"
+    "-Wno-error=maybe-uninitialized"
   ]);
 
   meta = with lib; {

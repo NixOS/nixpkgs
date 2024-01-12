@@ -26,8 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-JQ3UDUOpuxPavXkoJqbS0T7y3kpwuJ8NvqAl3DahoLU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --benchmark-skip" ""

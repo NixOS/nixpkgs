@@ -36,8 +36,6 @@ buildPythonApplication rec {
     })
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

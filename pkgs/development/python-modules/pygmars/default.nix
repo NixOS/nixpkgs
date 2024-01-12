@@ -20,8 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     # https://github.com/nexB/pygmars/pull/9
     substituteInPlace setup.cfg \

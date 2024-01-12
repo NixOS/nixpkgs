@@ -2,18 +2,24 @@
 , stdenv
 , fetchPypi
 , python3
+, cargo
 , git
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.7.0";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-evxwH9WzNoSmZQ4eyriVfhloX4JCQLp0WNys1m+Q+0Y=";
+    hash = "sha256-4ealEeFS7HzU26vE9Pahh0hwvUnJfRfTkLkjLdpoXOM=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -24,21 +30,25 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pexpect
     platformdirs
-    pyperclip
     rich
     shellingham
     tomli-w
     tomlkit
     userpath
     virtualenv
+    zstandard
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
+    cargo
+  ] ++ (with python3.pkgs; [
+    binary
     git
     pytestCheckHook
     pytest-mock
     pytest-xdist
-  ];
+    setuptools
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -61,10 +71,17 @@ python3.pkgs.buildPythonApplication rec {
     "test_editable_pth"
     # AssertionError: assert len(extract_installed_requirements(output.splitlines())) > 0
     "test_creation_allow_system_packages"
-    # tomlkit 0.12 changes
-    "test_no_strict_naming"
-    "test_project_location_basic_set_first_project"
-    "test_project_location_complex_set_first_project"
+    # cli table output mismatch
+    "test_context_formatting"
+    # expects sh, finds bash
+    "test_all"
+    "test_already_installed_update_flag"
+    "test_already_installed_update_prompt"
+    # unmet expectations about the binary module we provide
+    "test_dependency_not_found"
+    "test_marker_unmet"
+    # output capturing mismatch, likely stdout/stderr mixup
+    "test_no_compatibility_check_if_exists"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"

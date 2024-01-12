@@ -1,15 +1,24 @@
-{ lib, fetchurl, python3 }:
+{ lib, fetchFromGitHub, python3 }:
 
 let
   pname = "scons";
   version = "3.1.2";
-  src = fetchurl {
-    url = "mirror://sourceforge/scons/scons-${version}.tar.gz";
-    hash = "sha256-eAHz9i9lRSjict94C+EMDpM36JdlC2Ldzunzn94T+Ps=";
+  src = fetchFromGitHub {
+    owner = "Scons";
+    repo = "scons";
+    rev = version;
+    hash = "sha256-C3U4N7+9vplzoJoevQe5Zeuz0TDmB6/miMwBJLzA3WA=";
   };
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
+
+  outputs = [ "out" "man" ];
+
+  preConfigure = ''
+    python bootstrap.py
+    cd build/scons
+  '';
 
   setupHook = ./setup-hook.sh;
 
@@ -36,3 +45,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+# TODO: patch to get rid of distutils and other deprecations

@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
 , fetchFromGitHub
 , setuptools
 , construct
@@ -26,6 +27,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "websockets"
   ];
 
   propagatedBuildInputs = [

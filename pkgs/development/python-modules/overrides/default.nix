@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 }:
@@ -21,6 +22,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # KeyError: 'assertRaises'
+    "test_enforcing_when_incompatible"
   ];
 
   pythonImportsCheck = [

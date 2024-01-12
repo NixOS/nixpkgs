@@ -58,5 +58,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/steamship-core/python-client/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
+    # https://github.com/steamship-core/python-client/issues/503
+    broken = versionAtLeast pydantic.version "2";
   };
 }
