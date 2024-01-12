@@ -1,6 +1,7 @@
 { stdenvNoCC
 , lib
 , fetchFromGitHub
+, nixos-icons
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-desktop-base";
@@ -24,6 +25,15 @@ stdenvNoCC.mkDerivation rec {
     mv $out/usr/* $out/
     rm -r $out/usr
     install -D ${./distribution_logo_transparent.svg} $out/share/pixmaps/distribution_logo_transparent.svg
+    cat > $out/share/deepin/distribution.info <<EOF
+    [Distribution]
+    Name=NixOS
+    WebsiteName=www.nixos.org
+    Website=https://www.nixos.org
+    Logo=${nixos-icons}/share/icons/hicolor/96x96/apps/nix-snowflake.png
+    LogoLight=${nixos-icons}/share/icons/hicolor/32x32/apps/nix-snowflake.png
+    LogoTransparent=$out/share/pixmaps/distribution_logo_transparent.svg
+    EOF
   '';
 
   meta = with lib; {

@@ -96,18 +96,10 @@ in
         "/share/dde-daemon"
         "/share/dsg"
         "/share/deepin-themes"
+        "/share/deepin"
       ];
 
       environment.etc = {
-        "distribution.info".text = ''
-          [Distribution]
-          Name=NixOS
-          WebsiteName=www.nixos.org
-          Website=https://www.nixos.org
-          Logo=${pkgs.nixos-icons}/share/icons/hicolor/96x96/apps/nix-snowflake.png
-          LogoLight=${pkgs.nixos-icons}/share/icons/hicolor/32x32/apps/nix-snowflake.png
-          LogoTransparent=${pkgs.deepin.deepin-desktop-base}/share/pixmaps/distribution_logo_transparent.svg
-        '';
         "deepin-installer.conf".text = ''
           system_info_vendor_name="Copyright (c) 2003-2023 NixOS contributors"
         '';
@@ -156,6 +148,7 @@ in
             deepin-sound-theme
             deepin-gtk-theme
             deepin-wallpapers
+            deepin-desktop-base
 
             startdde
             dde-dock
