@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , textwrap3
 }:
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "0.8.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

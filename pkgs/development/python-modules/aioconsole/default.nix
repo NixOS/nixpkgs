@@ -56,9 +56,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     description = "Asynchronous console and interfaces for asyncio";
     homepage = "https://github.com/vxgmichel/aioconsole";
-    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ catern ];
   };

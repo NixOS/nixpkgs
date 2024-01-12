@@ -52,6 +52,10 @@ buildPythonPackage rec {
     hash = "sha256-ldBn+pdZfqnBKdYkOcG47ScH/hBgeJBeIvn1hCIBw/A=";
   };
 
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
+
   nativeBuildInputs =[
     setuptools
   ] ++ lib.optionals (!isPyPy) [

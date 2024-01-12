@@ -290,6 +290,7 @@ mapAliases ({
   framework-system-tools = framework-tool; # added 2023-12-09
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   fuse2fs = if stdenv.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
+  futuresql = libsForQt5.futuresql; # added 2023-11-11
   fx_cast_bridge = fx-cast-bridge; # added 2023-07-26
 
   fcitx = throw "fcitx is deprecated, please use fcitx5 instead."; # Added 2023-03-13
@@ -446,7 +447,8 @@ mapAliases ({
   join-desktop = throw "'join-desktop' has been removed because it is unmaintained upstream"; # Added 2023-10-04
 
   # Julia
-
+  julia_18 = throw "'julia_18' has been removed from nixpkgs as it has reached end of life"; # Added 2024-01-11
+  julia_18-bin = throw "'julia_18-bin' has been removed from nixpkgs as it has reached end of life"; # Added 2024-01-11
 
   ### K ###
 
@@ -500,6 +502,7 @@ mapAliases ({
   liblastfm = libsForQt5.liblastfm; # Added 2020-06-14
   libmongo-client = throw "'libmongo-client' has been removed, upstream gone"; # Added 2023-06-22
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
+  libquotient = libsForQt5.libquotient; # Added 2023-11-11
   libraw_unstable = throw "'libraw_unstable' has been removed, please use libraw"; # Added 2023-01-30
   librdf = lrdf; # Added 2020-03-22
   libressl_3_5 = throw "'libressl_3_5' has reached end-of-life "; # Added 2023-05-07
@@ -905,6 +908,7 @@ mapAliases ({
   rtsp-simple-server = throw "rtsp-simple-server is rebranded as mediamtx, including default config path update"; # Added 2023-04-11
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
+  rustc-wasm32 = rustc; # Added 2023-12-01
   rxvt_unicode = rxvt-unicode-unwrapped; # Added 2020-02-02
   rxvt_unicode-with-plugins = rxvt-unicode; # Added 2020-02-02
 

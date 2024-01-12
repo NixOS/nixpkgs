@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
 , requests
 , django
 , boto3
@@ -13,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "10.1";
-
+  version = "10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-unmbYQFLeqfqE1uFLMPLUad1UqA+sgbTzwRfpRhM3ik=";
+    hash = "sha256-k4C82OYm2SdjxeLScrkkitumjYgWkMNFlNeGW+C1Z8o=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +42,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    CONTINUOUS_INTEGRATION=1 python runtests.py
+    CONTINUOUS_INTEGRATION=1 ${python.interpreter} runtests.py
     runHook postCheck
   '';
 

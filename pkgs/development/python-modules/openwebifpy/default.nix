@@ -1,11 +1,17 @@
 { lib
-, aiohttp
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
+
+# build-system
 , setuptools
+
+# dependencies
+, aiohttp
 , yarl
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -44,7 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides a python interface to interact with a device running OpenWebIf";
-    homepage = "https://github.com/autinerd/openwebifpy";
+    downloadPage = "https://github.com/autinerd/openwebifpy";
+    homepage = "https://openwebifpy.readthedocs.io/";
     changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

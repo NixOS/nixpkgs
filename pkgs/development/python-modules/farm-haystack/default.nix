@@ -286,5 +286,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepset-ai/haystack";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
+    # https://github.com/deepset-ai/haystack/issues/5304
+    broken = versionAtLeast pydantic.version "2";
   };
 }

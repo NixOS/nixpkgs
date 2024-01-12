@@ -77,6 +77,8 @@ buildPythonPackage rec {
     "test_unexpected_sar_error_stops_processing"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/aws/serverless-application-model";

@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    django-stubs
     requests
     types-pyyaml
     types-requests
@@ -43,7 +44,6 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     compatible-mypy = [
-      django-stubs
       mypy
     ] ++ django-stubs.optional-dependencies.compatible-mypy;
     coreapi = [

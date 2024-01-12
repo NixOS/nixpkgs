@@ -843,6 +843,8 @@ in {
   systemd-initrd-networkd-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-vlan = handleTest ./systemd-initrd-vlan.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
+  systemd-journal-gateway = handleTest ./systemd-journal-gateway.nix {};
+  systemd-journal-upload = handleTest ./systemd-journal-upload.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
@@ -858,6 +860,7 @@ in {
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-timesyncd-nscd-dnssec = handleTest ./systemd-timesyncd-nscd-dnssec.nix {};
   systemd-user-tmpfiles-rules = handleTest ./systemd-user-tmpfiles-rules.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};

@@ -43,7 +43,7 @@ let
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
-      rev = "v${version}";
+      rev = "refs/tags/v${version}";
       hash = "sha256-M18y5JBPf3DR7SlJcCf82nG2MzwILg2w1AhJMzZXslg=";
     };
 

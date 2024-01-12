@@ -1,4 +1,5 @@
-{ callPackage
+{ gcc12Stdenv # FIXME: Try removing this with a new ROCm release https://github.com/NixOS/nixpkgs/issues/271943
+, callPackage
 , recurseIntoAttrs
 , symlinkJoin
 , fetchFromGitHub
@@ -73,10 +74,11 @@ in rec {
   # Broken, too many errors
   rdc = callPackage ./rdc {
     inherit rocmUpdateScript rocm-smi rocm-runtime;
+    stdenv = gcc12Stdenv;
     # stdenv = llvm.rocmClangStdenv;
   };
 
-  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { };
+  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { stdenv = gcc12Stdenv; };
 
   hip-common = callPackage ./hip-common {
     inherit rocmUpdateScript;
@@ -106,17 +108,20 @@ in rec {
   rocprofiler = callPackage ./rocprofiler {
     inherit rocmUpdateScript clr rocm-core rocm-thunk rocm-device-libs roctracer rocdbgapi rocm-smi hsa-amd-aqlprofile-bin;
     inherit (llvm) clang;
+    stdenv = gcc12Stdenv;
   };
 
   # Needs GCC
   roctracer = callPackage ./roctracer {
     inherit rocmUpdateScript rocm-device-libs rocm-runtime clr;
+    stdenv = gcc12Stdenv;
   };
 
   # Needs GCC
   rocgdb = callPackage ./rocgdb {
     inherit rocmUpdateScript;
     elfutils = elfutils.override { enableDebuginfod = true; };
+    stdenv = gcc12Stdenv;
   };
 
   rocdbgapi = callPackage ./rocdbgapi {

@@ -42,9 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml requirements.txt --replace "opencv-python" "opencv"
   '';
 
-  # Let setuptools know deface version
-  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
-
   pythonImportsCheck = [ "deface" "onnx" "onnxruntime" ];
 
   meta = with lib; {

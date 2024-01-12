@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, urllib3
 , types-urllib3
 }:
 
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    urllib3
   ];
 
   propagatedBuildInputs = [

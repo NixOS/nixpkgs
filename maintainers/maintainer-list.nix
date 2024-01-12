@@ -917,12 +917,15 @@
     name = "Alma Cemerlic";
   };
   Alper-Celik = {
-    email = "dev.alpercelik@gmail.com";
+    email = "alper@alper-celik.dev";
     name = "Alper Çelik";
     github = "Alper-Celik";
     githubId = 110625473;
     keys = [{
       fingerprint = "6B69 19DD CEE0 FAF3 5C9F  2984 FA90 C0AB 738A B873";
+    }
+    {
+      fingerprint = "DF68 C500 4024 23CC F9C5  E6CA 3D17 C832 4696 FE70";
     }];
   };
   alternateved = {
@@ -14665,6 +14668,12 @@
     github = "PkmX";
     githubId = 610615;
     name = "Chih-Mao Chen";
+  };
+  pkosel = {
+    name = "pkosel";
+    email = "philipp.kosel@gmail.com";
+    github = "pkosel";
+    githubId = 170943;
   };
   pks = {
     email = "ps@pks.im";

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , hatchling
 # propagated
 , httpx
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
+
   disabled = pythonOlder "3.7.1";
 
   src = fetchFromGitHub {
@@ -39,6 +41,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # https://github.com/openai/openai-python/issues/921
+    "anyio"
   ];
 
   propagatedBuildInputs = [
@@ -70,6 +78,10 @@ buildPythonPackage rec {
     pytest-mock
     respx
     dirty-equals
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   OPENAI_API_KEY = "sk-foo";

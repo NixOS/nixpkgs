@@ -16,6 +16,9 @@ self: super: with self; {
     build = toPythonModule (callPackage ../development/python-modules/bootstrap/build {
       inherit (bootstrap) flit-core installer;
     });
+    packaging = toPythonModule (callPackage ../development/python-modules/bootstrap/packaging {
+      inherit (bootstrap) flit-core installer;
+    });
   };
 
   setuptools = callPackage ../development/python-modules/setuptools { };
@@ -802,6 +805,8 @@ self: super: with self; {
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
 
+  astropy-iers-data = callPackage ../development/python-modules/astropy-iers-data { };
+
   astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
 
   astroquery = callPackage ../development/python-modules/astroquery { };
@@ -1336,6 +1341,8 @@ self: super: with self; {
   barectf = callPackage ../development/python-modules/barectf { };
 
   baron = callPackage ../development/python-modules/baron { };
+
+  base2048 = callPackage ../development/python-modules/base2048 { };
 
   base36 = callPackage ../development/python-modules/base36 { };
 
@@ -2544,13 +2551,13 @@ self: super: with self; {
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
-  cython = callPackage ../development/python-modules/Cython { };
+  cython = callPackage ../development/python-modules/cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.3";
+    version = "3.0.6";
     src = old.src.override {
       inherit version;
-      hash = "sha256-MnMJMBsB9ynxc6lFEcsigMh7oDyJ7UKOiPkT93gkUDA=";
+      hash = "sha256-OZ0YVnLGZ7Juq73KQgyYVkWDeYrzvEdnCooJ6fGd1mA=";
     };
     patches = [ ];
   });
@@ -2699,7 +2706,7 @@ self: super: with self; {
 
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
-  dbus-python = callPackage ../development/python-modules/dbus {
+  dbus-python = callPackage ../development/python-modules/dbus-python {
     inherit (pkgs) dbus;
   };
 
@@ -3528,7 +3535,7 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
-  ecos = callPackage ../development/python-modules/ecos { };
+  ecos = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/ecos { });
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
@@ -3948,7 +3955,7 @@ self: super: with self; {
 
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
-  fasttext = callPackage ../development/python-modules/fasttext { };
+  fasttext = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/fasttext { });
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
 
@@ -4331,6 +4338,8 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frelatage = callPackage ../development/python-modules/frelatage { };
+
   frida-python = callPackage ../development/python-modules/frida-python { };
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
@@ -4635,9 +4644,9 @@ self: super: with self; {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmsh = toPythonModule (callPackage ../applications/science/math/gmsh {
+  gmsh = pkgs.disable-warnings-if-gcc13 (toPythonModule (callPackage ../applications/science/math/gmsh {
     enablePython = true;
-  });
+  }));
 
   gntp = callPackage ../development/python-modules/gntp { };
 
@@ -4851,6 +4860,8 @@ self: super: with self; {
   gradio = callPackage ../development/python-modules/gradio { };
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
+
+  gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
 
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
@@ -5904,6 +5915,8 @@ self: super: with self; {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  jsonschema-path = callPackage ../development/python-modules/jsonschema-path { };
+
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
@@ -6716,6 +6729,8 @@ self: super: with self; {
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
+  regress = callPackage ../development/python-modules/regress { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   makefun = callPackage ../development/python-modules/makefun { };
@@ -7084,7 +7099,7 @@ self: super: with self; {
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
-  mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
+  mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
   mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
@@ -8884,6 +8899,8 @@ self: super: with self; {
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
+  paginate = callPackage ../development/python-modules/paginate { };
+
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
   palace = callPackage ../development/python-modules/palace { };
@@ -9096,7 +9113,12 @@ self: super: with self; {
 
   pem = callPackage ../development/python-modules/pem { };
 
-  pendulum = callPackage ../development/python-modules/pendulum { };
+  pendulum = if pythonAtLeast "3.12" then
+    pendulum_3
+  else
+    callPackage ../development/python-modules/pendulum { };
+
+  pendulum_3 = callPackage ../development/python-modules/pendulum/3.nix { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
@@ -10056,7 +10078,7 @@ self: super: with self; {
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
 
-  pybind11 = callPackage ../development/python-modules/pybind11 { };
+  pybind11 = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/pybind11 { });
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
@@ -10172,7 +10194,7 @@ self: super: with self; {
 
   pycron = callPackage ../development/python-modules/pycron { };
 
-  pycrypto = callPackage ../development/python-modules/pycrypto { };
+  pycrypto = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/pycrypto { });
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
@@ -10213,6 +10235,8 @@ self: super: with self; {
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
+
+  pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
 
   pydantic-compat = callPackage ../development/python-modules/pydantic-compat { };
 
@@ -13138,6 +13162,8 @@ self: super: with self; {
 
   sigrok = callPackage ../development/python-modules/sigrok { };
 
+  sigstore = callPackage ../development/python-modules/sigstore { };
+
   sigstore-protobuf-specs = callPackage ../development/python-modules/sigstore-protobuf-specs { };
 
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
@@ -15441,6 +15467,8 @@ self: super: with self; {
 
   types-psutil = callPackage ../development/python-modules/types-psutil { };
 
+  types-psycopg2 = callPackage ../development/python-modules/types-psycopg2 { };
+
   types-pyopenssl = callPackage ../development/python-modules/types-pyopenssl { };
 
   types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
@@ -16121,6 +16149,7 @@ self: super: with self; {
     wxGTK = pkgs.wxGTK32.override {
       withWebKit = true;
     };
+    inherit (pkgs) mesa;
   };
 
   wyoming = callPackage ../development/python-modules/wyoming { };
