@@ -513,7 +513,11 @@ in
             cp ${overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig ""} $out/interface_config.js
             cp ./libs/external_api.min.js $out/external_api.js
           '';
-        in ''
+        in (optionalString cfg.excalidraw.enable ''
+          handle /socket.io/ {
+            reverse_proxy 127.0.0.1:${toString cfg.excalidraw.port}
+          }
+        '') + ''
           handle /http-bind {
             header Host ${cfg.hostName}
             reverse_proxy 127.0.0.1:5280
