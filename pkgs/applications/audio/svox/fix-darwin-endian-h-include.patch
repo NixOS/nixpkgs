@@ -1,0 +1,21 @@
+diff --git a/pico/lib/picopltf.h b/pico/lib/picopltf.h
+index e206b6a..8af8663 100644
+--- a/pico/lib/picopltf.h
++++ b/pico/lib/picopltf.h
+@@ -66,7 +66,16 @@
+ #define PICO_PLATFORM_STRING "UnknownPlatform"
+ #endif
+ 
++#if defined(__FreeBSD__)
++#define __BYTE_ORDER _BYTE_ORDER
++#define __BIG_ENDIAN _BIG_ENDIAN
++#include <sys/endian.h>
++#elif (PICO_PLATFORM == PICO_MacOSX)
++#include <machine/endian.h>
++#else
+ #include <endian.h>
++#endif
++
+ #if __BYTE_ORDER == __BIG_ENDIAN
+ #define PICO_ENDIANNESS ENDIANNESS_BIG
+ #else
