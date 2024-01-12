@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "6.1.1";
+  version = "7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vtP0TVkCMrm0CRXlpZvVTBf7yd8+3p+nRArMWyQUn4k=";
+    hash = "sha256-IyOm2MTHj2rOew/IkyGIfI4XZSFU88+Tx8KHKIRT2G4=";
   };
 
   nativeCheckInputs = [ jsonschema ];
