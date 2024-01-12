@@ -15800,6 +15800,12 @@
     githubId = 7221768;
     name = "Andika Demas Riyandi";
   };
+  rjpcasalino = {
+    email = "ryan@rjpc.net";
+    github = "rjpcasalino";
+    githubId = 12821230;
+    name = "Ryan J.P. Casalino";
+  };
   rkitover = {
     email = "rkitover@gmail.com";
     github = "rkitover";
