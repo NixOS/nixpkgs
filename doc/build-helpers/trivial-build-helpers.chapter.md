@@ -191,7 +191,7 @@ a string.
 
 `name`
 
-: the name used in the Nix store path. 
+: the name used in the Nix store path.
 
 `text`
 
