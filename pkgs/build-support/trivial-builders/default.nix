@@ -272,6 +272,7 @@ rec {
     , meta ? { }
     , checkPhase ? null
     , excludeShellChecks ? [ ]
+    , bashOptions ? [ "errexit" "nounset" "pipefail" ]
     }:
     writeTextFile {
       inherit name meta;
@@ -281,9 +282,7 @@ rec {
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        set -o errexit
-        set -o nounset
-        set -o pipefail
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       '' + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
