@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pysigma-backend-elasticsearch";
   version = "1.0.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
