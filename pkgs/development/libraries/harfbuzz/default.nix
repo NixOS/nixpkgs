@@ -18,8 +18,9 @@
 , ApplicationServices
 , CoreText
 , withCoreText ? false
-, withIcu ? false # recommended by upstream as default, but most don't needed and it's big
-, withGraphite2 ? true # it is small and major distros do include it
+, withIcu ? stdenv.hostPlatform.isMinGW # recommended by upstream as default, but most don't needed and it's big
+, withGlib ? lib.meta.availableOn stdenv.hostPlatform glib
+, withGraphite2 ? lib.meta.availableOn stdenv.hostPlatform graphite2 # it is small and major distros do include it
 , python3
 , gtk-doc
 , docbook-xsl-nons
@@ -50,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
 
   mesonFlags = [
@@ -64,7 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "coretext" withCoreText)
     (lib.mesonEnable "graphite" withGraphite2)
     (lib.mesonEnable "icu" withIcu)
+    (lib.mesonEnable "gobject" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "glib" withGlib)
   ];
 
   depsBuildBuild = [
@@ -77,22 +81,24 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     pkg-config
     python3
-    glib
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ] ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional withGlib glib;
 
-  buildInputs = [ glib freetype ]
+  buildInputs = [ freetype ]
+    ++ lib.optionals withGlib [ glib ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = lib.optional withGraphite2 graphite2
-    ++ lib.optionals withIcu [ icu harfbuzz ];
+    ++ lib.optionals withIcu [ icu ]
+    ++ lib.optionals (withIcu && !stdenv.hostPlatform.isMinGW) [ harfbuzz ];
 
   doCheck = true;
 
   # Slightly hacky; some pkgs expect them in a single directory.
-  postFixup = lib.optionalString withIcu ''
+  postFixup = lib.optionalString (withIcu && !stdenv.hostPlatform.isMinGW) ''
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
     ${lib.optionalString stdenv.isDarwin ''
@@ -115,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/harfbuzz/harfbuzz/raw/${version}/NEWS";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [
       "harfbuzz"
       "harfbuzz-gobject"
