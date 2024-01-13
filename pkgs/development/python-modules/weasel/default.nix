@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools
-, wheel
 , cloudpathlib
 , confection
 , packaging
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
