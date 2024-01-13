@@ -63,6 +63,9 @@ in {
 
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepends [
+    self.base-orphans
+  ] super.generically;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
