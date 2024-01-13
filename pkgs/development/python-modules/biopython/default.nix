@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.82";
+  version = "1.83";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qbENlZroipdEqRxs42AfTIbn7EFnm8k8KfZ5IY9hZ7s=";
+    hash = "sha256-eOa/t43mMDQDev01/nfLbgqeW2Jwa+z3in2SKxbtg/c=";
   };
 
   disabled = !isPy3k;
