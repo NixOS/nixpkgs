@@ -62,14 +62,16 @@ This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr
 
 Nixpkgs provides the following functions for producing derivations which write text into the Nix store:  `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin`.
 
-`writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`  are convenience functions over `writeTextFile`.
+`writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin` are convenience functions over `writeTextFile`.
 
 These are useful for creating files from Nix expressions, which may be scripts or non-executable text files.
 
-The result of each of these functions will be a derivation.  When you coerce the resulting derivation to text, it will evaluate to the *store path*. Importantly, it will not include the destination subpath produced by the particular function.  So, for example, given the following expression:
+Each of these functions will cause a derivation to be realized.  When you coerce the result of each of these functions to a string, it will evaluate to the *store path* of this derivation.
+
+:::: {.warning}
+Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file  For example:
 
 ```nix
-
 my-file = writeTextFile {
   name = "my-file";
   text = ''
@@ -77,23 +79,12 @@ my-file = writeTextFile {
   '';
   destination = "/share/my-file";
 }
-```
 
-If `my-file` is coerced to text, it will resolve to `/nix/store/<store path>`, like any other derivation.  It will *not* evaluate to `/nix/store/<store path>/share/my-file`.  So to use it elsewhere, as an example (in this case, within a shell script you're writing in a Nix expression via `writeShellScript`), you might do:
-
-```nix
 writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 '';
 ```
-
-This will produce the desired result.  However, the following will not, it will fail because the store path is a directory, and is not the `my-file` file.
-
-```nix
-writeShellScript "evaluate-my-file.sh" ''
-  cat ${my-file}
-'';
-```
+::::
 
 ### `writeTextFile` {#trivial-builder-writeTextFile}
 
@@ -178,10 +169,6 @@ writeTextFile {
   destination = "/bin/my-file";
 }
 ```
-:::
-
-::: {.note}
-The commands `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin` documented below are convenience functions that wrap `writeTextFile`.
 :::
 
 ### `writeText` {#trivial-builder-writeText}
