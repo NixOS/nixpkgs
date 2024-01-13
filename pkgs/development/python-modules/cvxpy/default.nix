@@ -4,6 +4,7 @@
 , cvxopt
 , ecos
 , fetchPypi
+, fetchpatch
 , numpy
 , osqp
 , pytestCheckHook
@@ -19,14 +20,25 @@
 buildPythonPackage rec {
   pname = "cvxpy";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ep7zTjxX/4yETYbwo4NPtVda8ZIzlHY53guld8YSLj4=";
   };
+
+  patches = [
+    (fetchpatch {  #https://github.com/cvxpy/cvxpy/pull/2234
+      name = "add-support-for-bounds";
+      url = "https://github.com/cvxpy/cvxpy/commit/113fd03969d95679ba2ea6eae7ffb43125ebcae8.patch";
+      hash = "sha256-zdBelWrRew0ggAEtvErqz9ILxsZDquUa6iA808qQjh0=";
+      excludes = [
+        "doc/source/tutorial/advanced/index.rst"
+      ];
+    })
+  ];
 
   # we need to patch out numpy version caps from upstream
   postPatch = ''
