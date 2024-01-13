@@ -31017,7 +31017,7 @@ with pkgs;
 
   darcs = haskell.lib.compose.overrideCabal (drv: {
     configureFlags = (lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
-  }) (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
+  }) (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.darcs);
 
   darkman = callPackage ../applications/misc/darkman { };
 

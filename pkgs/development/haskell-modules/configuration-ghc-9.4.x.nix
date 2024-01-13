@@ -100,6 +100,9 @@ in {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
+  # Broken because of unix >= 2.8 for GHC >= 9.6
+  darcs = unmarkBroken (doDistribute super.darcs);
+
   inherit
     (
       let

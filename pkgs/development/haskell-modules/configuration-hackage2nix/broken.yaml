@@ -1042,6 +1042,7 @@ broken-packages:
   - Dao # failure in job https://hydra.nixos.org/build/233207745 at 2023-09-02
   - dao # failure in job https://hydra.nixos.org/build/233240654 at 2023-09-02
   - dap # failure in job https://hydra.nixos.org/build/237239767 at 2023-10-21
+  - darcs # doesn't support unix >= 2.8, 2024-01-13
   - darcs2dot # failure in job https://hydra.nixos.org/build/233209236 at 2023-09-02
   - darcs-buildpackage # failure in job https://hydra.nixos.org/build/233213566 at 2023-09-02
   - darcs-cabalized # failure in job https://hydra.nixos.org/build/233234765 at 2023-09-02
