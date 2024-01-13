@@ -59,8 +59,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Weasel: A small and easy workflow system";
+    description = "A small and easy workflow system";
     homepage = "https://github.com/explosion/weasel/";
+    changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
   };
