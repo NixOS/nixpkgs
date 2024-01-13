@@ -13,6 +13,9 @@
 , pkg-config
 , pythran
 , wheel
+, nose
+, setuptools
+, hypothesis
 , pytestCheckHook
 , pytest-xdist
 , numpy
@@ -31,8 +34,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.11.4";
-  srcHash = "sha256-hNAZOMDFYqZpb67Pzg/WALWagFYvqYO1jOmcipDDRbE=";
+  version = "1.12.0";
+  srcHash = "sha256-PuiyYTgSegDTV9Kae5N68FOXT1jyJrNv9p2aFP70Z20=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -75,13 +78,11 @@ in buildPythonPackage {
     })
   ];
 
-  # Relax deps a bit
+  # Upstream complicated numpy version pinning is causing issues in the
+  # configurePhase, so we pass on it.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'meson-python>=0.12.1,<0.15.0' 'meson-python' \
       --replace 'numpy==' 'numpy>=' \
-      --replace "pybind11>=2.10.4,<2.11.1" "pybind11>=2.10.4,<2.12.0" \
-      --replace 'wheel<0.41.0' 'wheel'
   '';
 
   nativeBuildInputs = [
@@ -91,6 +92,7 @@ in buildPythonPackage {
     pythran
     pkg-config
     wheel
+    setuptools
   ];
 
   buildInputs = [
@@ -108,6 +110,8 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    nose
+    hypothesis
     pytestCheckHook
     pytest-xdist
   ];
