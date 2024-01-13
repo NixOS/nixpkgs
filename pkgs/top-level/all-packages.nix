@@ -25548,9 +25548,9 @@ with pkgs;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  waylandpp = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/waylandpp {
+  waylandpp = callPackage ../development/libraries/waylandpp {
     graphviz = graphviz-nox;
-  });
+  };
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
@@ -41630,12 +41630,6 @@ with pkgs;
   chrome-export = callPackage ../tools/misc/chrome-export { };
 
   chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing { };
-
-  NSPlist = callPackage ../development/libraries/NSPlist { };
-
-  PlistCpp = callPackage ../development/libraries/PlistCpp { };
-
-  xib2nib = callPackage ../development/tools/xib2nib { };
 
   linode-cli = python3Packages.callPackage ../tools/virtualization/linode-cli { };
 
