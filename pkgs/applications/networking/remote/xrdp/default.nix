@@ -1,4 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, applyPatches, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib
+, stdenv
+, applyPatches
+, fetchFromGitHub
+, pkg-config
+, which
+, perl
+, autoconf
+, automake
+, libtool
+, openssl
+, systemd
+, pam
+, fuse
+, libjpeg
+, libopus
+, nasm
+, xorg
+}:
 
 let
   version = "0.9.23.1";
@@ -45,7 +63,8 @@ let
 
     enableParallelBuilding = true;
   };
-  xrdp = stdenv.mkDerivation rec {
+
+  xrdp = stdenv.mkDerivation {
     inherit version;
     pname = "xrdp";
 
@@ -53,7 +72,17 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
 
-    buildInputs = [ openssl systemd pam fuse libjpeg libopus xorg.libX11 xorg.libXfixes xorg.libXrandr ];
+    buildInputs = [
+      fuse
+      libjpeg
+      libopus
+      openssl
+      pam
+      systemd
+      xorg.libX11
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
@@ -64,7 +93,15 @@ let
       ./bootstrap
     '';
     dontDisableStatic = true;
-    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" "--enable-pam-config=unix" ];
+    configureFlags = [
+      "--with-systemdsystemunitdir=/var/empty"
+      "--enable-fuse"
+      "--enable-ipv6"
+      "--enable-jpeg"
+      "--enable-opus"
+      "--enable-pam-config=unix"
+      "--enable-rfxcodec"
+    ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
