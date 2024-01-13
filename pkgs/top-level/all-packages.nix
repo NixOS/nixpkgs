@@ -25548,9 +25548,9 @@ with pkgs;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  waylandpp = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/waylandpp {
+  waylandpp = callPackage ../development/libraries/waylandpp {
     graphviz = graphviz-nox;
-  });
+  };
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
