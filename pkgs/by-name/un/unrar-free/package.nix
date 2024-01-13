@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , autoreconfHook
 , libarchive
 , pkg-config
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-pNcbbHFcEzXKGKUg9nLM3NuUCgZFmFjFa4dXmUuuLYo";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "move-from-glibc-error-to-own-implementation.patch";
+      url = "https://gitlab.com/bgermann/unrar-free/-/commit/03f8453cbc04400defeb87b34515a9387a7b45a4.patch";
+      hash = "sha256-ZhF6Qz5mwzw9JZf/GJIfyB7xIT/BES4ne/JAAJG8kaY=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
@@ -37,6 +46,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "unrar";
     maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
   };
 })
