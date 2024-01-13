@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     for d in libseq66/include libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/include seq_rtmidi/src Seqtool/src; do
       substituteInPlace "$d/Makefile.am" --replace '$(git_info)' '${version}'
     done
+
+    # gcc-13 headers compatibilty. TODO: try to remove with next version
+    # update
+    sed -e '1i #include <cstdint>' -i libseq66/src/os/daemonize.cpp
   '';
 
   enableParallelBuilding = true;
