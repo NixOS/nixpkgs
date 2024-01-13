@@ -3,10 +3,10 @@
 , fetchFromGitHub
 , garth
 , lxml
+, python-dotenv
 , pythonOlder
 , requests
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,12 +25,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
     garth
     lxml
+    python-dotenv
     requests
   ];
 
