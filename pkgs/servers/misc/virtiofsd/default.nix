@@ -21,6 +21,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libcap_ng libseccomp ];
 
+  postConfigure = ''
+    sed -i "s|/usr/libexec|$out/bin|g" 50-virtiofsd.json
+  '';
+
+  postInstall = ''
+    install -Dm644 50-virtiofsd.json "$out/share/qemu/vhost-user/50-virtiofsd.json"
+  '';
+
   meta = with lib; {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
     description = "vhost-user virtio-fs device backend written in Rust";

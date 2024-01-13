@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-WTVOt2TpTCyMmFYzWJMBQdwgmov7m1Sd8CwyL4ywPUY=";
+    hash = "sha256-VJXZndbmC6mAVxzvv5Wjb4adrQkP16Rt4cgjl4qGDIc=";
   };
 
   postPatch = ''
