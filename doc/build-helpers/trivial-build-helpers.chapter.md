@@ -72,6 +72,9 @@ Each of these functions will cause a derivation to be produced.  When you coerce
 Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file  For example:
 
 ```nix
+
+# if the derivation destination is a directory....
+
 my-file = writeTextFile {
   name = "my-file";
   text = ''
@@ -79,6 +82,9 @@ my-file = writeTextFile {
   '';
   destination = "/share/my-file";
 }
+
+# remember to tack on "/share/my-file" to the derivation path when
+# using it elsewhere.
 
 writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
