@@ -436,7 +436,7 @@ if [ "$action" = edit ]; then
     exit 1
 fi
 
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60 -t"
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
