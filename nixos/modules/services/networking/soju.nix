@@ -11,7 +11,8 @@ let
   logCfg = optionalString cfg.enableMessageLogging
     "log fs ${stateDir}/logs";
 
-  configFile = pkgs.writeText "soju.conf" ''
+  configFile = "/etc/soju.conf";
+  configFileUnsubstituted = pkgs.writeText "soju.conf" ''
     ${listenCfg}
     hostname ${cfg.hostName}
     ${tlsCfg}
@@ -58,6 +59,14 @@ in
       default = null;
       example = "/var/host.key";
       description = lib.mdDoc "Path to server TLS certificate key.";
+    };
+
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = lib.mdDoc ''
+        File containing environment variables to be substituted into the final configuration.
+      '';
     };
 
     enableMessageLogging = mkOption {
@@ -113,8 +122,21 @@ in
       after = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;
+        EnvironmentFile = cfg.environmentFile;
         Restart = "always";
         ExecStart = "${pkgs.soju}/bin/soju -config ${configFile}";
+        ExecStartPre = "+${pkgs.writeShellScript "soju-envsubst" ''
+          # substitute the settings file by environment variables
+          # in this case read from EnvironmentFile
+          test -f '${configFile}' && rm -f '${configFile}'
+          old_umask=$(umask)
+          umask 0177
+          ${pkgs.envsubst}/bin/envsubst \
+            -o '${configFile}' \
+            -i '${configFileUnsubstituted}'
+          umask $old_umask
+          chown soju ${configFile}
+        ''}";
         StateDirectory = "soju";
       };
     };
