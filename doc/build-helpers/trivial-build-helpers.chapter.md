@@ -66,7 +66,7 @@ Nixpkgs provides the following functions for producing derivations which write t
 
 These are useful for creating files from Nix expressions, which may be scripts or non-executable text files.
 
-Each of these functions will cause a derivation to be realized.  When you coerce the result of each of these functions to a string, it will evaluate to the *store path* of this derivation.
+Each of these functions will cause a derivation to be produced.  When you coerce the result of each of these functions to a string, it will evaluate to the *store path* of this derivation.
 
 :::: {.warning}
 Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file  For example:
