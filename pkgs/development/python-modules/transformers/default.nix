@@ -15,9 +15,11 @@
 , safetensors
 , tqdm
 # optional dependencies
+, diffusers
 , scikit-learn
 , tensorflow
 , onnxconverter-common
+, opencv4
 , tf2onnx
 , torch
 , accelerate
@@ -87,6 +89,15 @@ buildPythonPackage rec {
     vision = [ pillow ];
   in
     {
+    agents = [
+      diffusers
+      accelerate
+      datasets
+      torch
+      sentencepiece
+      opencv4
+      pillow
+    ];
     ja = [
       # fugashi
       # ipadic
