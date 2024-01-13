@@ -2008,7 +2008,13 @@ self: super: {
       texmath = self.texmath_0_12_8_6;
     };
   in {
-    pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
+    pandoc-cli = overrideCabal (old: {
+      buildTools = (old.buildTools or []) ++ [ pkgs.buildPackages.installShellFiles ];
+      postInstall = ''
+        # replace with `installManPage man/*` once pandoc ≥ 3.1.10
+        install -Dm 555 '${self.pandoc}'/share/man/man1/* -t "$out"/share/man/man1/
+      '' + (old.postInstall or "");
+    }) (super.pandoc-cli.overrideScope pandoc-cli-overlay);
     pandoc_3_1_11 = doDistribute (super.pandoc_3_1_11.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
