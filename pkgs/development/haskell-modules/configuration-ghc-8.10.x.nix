@@ -177,6 +177,7 @@ self: super: {
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
+    self.base-orphans
   ] (super.OneTuple.override {
     ghc-prim = self.hashable;
   });

@@ -143,7 +143,10 @@ self: super: {
       (_: addBuildDepends [ self.foldable1-classes-compat ])
       super)
     indexed-traversable
-    OneTuple
     these
   ;
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+    self.base-orphans
+  ] super.OneTuple;
 }
