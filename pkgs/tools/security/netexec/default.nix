@@ -84,6 +84,14 @@ python.pkgs.buildPythonApplication rec {
   version = "1.1.0";
   pyproject = true;
   pythonRelaxDeps = true;
+  pythonRemoveDeps = [
+    # Lint
+    "ruff"
+    # Windows only dependency
+    "pyreadline"
+    # Fail to detect dev version requirement
+    "neo4j"
+  ];
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
