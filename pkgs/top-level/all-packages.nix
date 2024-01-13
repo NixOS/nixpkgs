@@ -5733,8 +5733,6 @@ with pkgs;
 
   ifm = callPackage ../tools/graphics/ifm { };
 
-  iina = callPackage ../applications/video/iina { };
-
   ink = callPackage ../tools/misc/ink { };
 
   inklecate = callPackage ../development/compilers/inklecate { };
@@ -10894,6 +10892,8 @@ with pkgs;
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
+  miniupnpd-nftables = callPackage ../tools/networking/miniupnpd { firewall = "nftables"; };
+
   miniball = callPackage ../development/libraries/miniball { };
 
   minijail = callPackage ../tools/system/minijail { };
@@ -11032,7 +11032,7 @@ with pkgs;
 
   muffet = callPackage ../tools/networking/muffet { };
 
-  multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
+  multipass = qt6Packages.callPackage ../tools/virtualization/multipass { };
 
   multitime = callPackage ../tools/misc/multitime { };
 
@@ -30956,8 +30956,6 @@ with pkgs;
   convchain = callPackage ../tools/graphics/convchain { };
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
-
-  cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
