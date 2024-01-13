@@ -6,11 +6,11 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "adamcstephens";
     repo = "pnpm-lock-export";
-    rev = "cc03755d6718a9c0d268d0f375907328ac15dc92";
-    hash = "sha256-9OlFgmdKjvz4pB36Wm/fUAQDsD8zs32OSA3m2IAgrH8=";
+    rev = "a7ede6d96f9d273b6b495718b85ed40f432c34ba";
+    hash = "sha256-RQGyUQOyFZW7UbIPRRlZu8FKcZN2kO0DcPfB8uLFFg4=";
   };
 
-  npmDepsHash = "sha256-nqkH7vFD78YvYr9Klguk2o7qHr5wr3ZjaywUKRRRjJo=";
+  npmDepsHash = "sha256-1VTXzlafuI+dU4k1JyZPVI5/5h0gt/eggPPXKYxKsbs=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json

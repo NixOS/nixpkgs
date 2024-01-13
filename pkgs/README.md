@@ -114,6 +114,25 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  (pkg-name): (from -> to | init at version | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 54.0.1 -> 55.0
+
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
 ## Category Hierarchy
 [categories]: #category-hierarchy
 
@@ -335,6 +354,10 @@ There are a few naming guidelines:
 
 Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
 
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+
+Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
+
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
 - If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [versioning][versioning].
@@ -451,7 +474,7 @@ Preferred source hash type is sha256. There are several ways to get it.
 
    in the package expression, attempt build and extract correct hash from error messages.
 
-   > **Warning**
+   > [!Warning]
    > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
    > See [here][secure-hashes]
 
@@ -568,7 +591,7 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 To run the main types of tests locally:
 
 - Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
-- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTests.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
 - Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
 - See `lib/tests/NAME.nix` for instructions on running specific library tests
 
@@ -696,16 +719,16 @@ It can happen that non-trivial updates include patches or more complex changes.
 
 Reviewing process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit text fits the guidelines.
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information is correct.
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Ensure that the code contains no typos.
-- Building the package locally.
-  - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+- Build the package locally.
+  - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 
     ```ShellSession
@@ -722,7 +745,7 @@ Reviewing process:
     ```ShellSession
     $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
     ```
-- Running every binary.
+- Run every binary.
 
 Sample template for a package update review is provided below.
 
@@ -731,7 +754,7 @@ Sample template for a package update review is provided below.
 
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
@@ -748,18 +771,20 @@ New packages are a common type of pull requests. These pull requests consists in
 
 Review process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit name fits the guidelines.
-- Ensure that the meta fields contain correct information.
+- Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
+- Ensure that the package name and version [fits the guidelines](#package-naming).
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
 - Report detected typos.
 - Ensure the package source:
-  - Uses mirror URLs when available.
+  - Uses `mirror://` URLs when available.
   - Uses the most appropriate functions (e.g. packages from GitHub should use `fetchFromGitHub`).
-- Building the package locally.
-- Running every binary.
+- Build the package locally.
+- Run every binary.
 
 Sample template for a new package review is provided below.
 
@@ -769,7 +794,7 @@ Sample template for a new package review is provided below.
 - [ ] package path fits guidelines
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] `meta.description` is set and fits guidelines
 - [ ] `meta.license` fits upstream license

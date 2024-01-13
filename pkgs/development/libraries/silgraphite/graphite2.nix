@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     #   https://github.com/silnrsi/graphite/pull/74
     substituteInPlace tests/CMakeLists.txt \
       --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
+
+    # support cross-compilation by using target readelf binary:
+    substituteInPlace Graphite.cmake \
+      --replace 'readelf' "${stdenv.cc.targetPrefix}readelf"
   '';
 
   cmakeFlags = lib.optionals static [
@@ -48,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];
     mainProgram = "gr2fonttest";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

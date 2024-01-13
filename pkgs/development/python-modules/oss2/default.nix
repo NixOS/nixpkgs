@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "oss2";
-  version = "2.18.2";
+  version = "2.18.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-xbbdzuaUvFnXA5glGr/1/s1Bm28d4XbtuvCKaj8Js68=";
+    hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
 
   nativeBuildInputs = [
@@ -108,6 +108,8 @@ buildPythonPackage rec {
     "test_crypto_get_compact_deprecated_kms"
     # RuntimeError
     "test_crypto_put"
+    # Tests require network access
+    "test_write_get_object_response"
   ];
 
   meta = with lib; {

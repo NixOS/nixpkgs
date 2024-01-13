@@ -1,32 +1,39 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
 , argparse-addons
 , bitstruct
+, buildPythonPackage
 , can
 , crccheck
 , diskcache
+, fetchPypi
 , matplotlib
 , parameterized
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 , textparser
 }:
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "38.0.2";
-  format = "setuptools";
+  version = "39.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k7/m9L1lLzaXY+qRYrAnpi9CSoQA8kI9QRN5GM5oxo4=";
+    hash = "sha256-gGmo9HO7FnmZC+oJA/OiLVjfVJWuu/CfWNSfYnURthk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools_scm>=8" "setuptools_scm"
+  '';
+
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -50,8 +57,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    description = "Tools to work with CAN bus";
     homepage = "https://github.com/cantools/cantools";
-    description = "CAN bus tools.";
+    changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gray-heron ];
   };

@@ -6,16 +6,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-X8CqiikY1/S8/WxrZbcwOB+bz0PJsNpuLWLb+k3+5kw=";
+    hash = "sha256-5bCPklk9u21/9cZYisszK0Lo7is9+iFrQxve41Fy5hg=";
   };
 
-  cargoHash = "sha256-jrUH3vmTbbxod547JAE5sOSo+FR15XNgVpM15uXAsvg=";
+  cargoPatches = [
+    # Upstream Cargo.lock is not up-to-date.
+    # https://github.com/starkware-libs/cairo/issues/4530
+    ./ensure-consistency-of-cargo-lock.patch
+  ];
+  cargoHash = "sha256-YCW6nwmUXMiP65QHCH6k29672gIkuz+MCmTqI+qaOyA=";
 
   nativeCheckInputs = [
     rustfmt

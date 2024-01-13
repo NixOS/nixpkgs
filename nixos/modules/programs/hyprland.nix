@@ -23,14 +23,13 @@ in
       '';
     };
 
-    package = mkPackageOptionMD pkgs "hyprland" { };
+    package = mkPackageOption pkgs "hyprland" { };
 
     finalPackage = mkOption {
       type = types.package;
       readOnly = true;
       default = cfg.package.override {
         enableXWayland = cfg.xwayland.enable;
-        enableNvidiaPatches = cfg.enableNvidiaPatches;
       };
       defaultText = literalExpression
         "`programs.hyprland.package` with applied configuration";
@@ -39,11 +38,9 @@ in
       '';
     };
 
-    portalPackage = mkPackageOptionMD pkgs "xdg-desktop-portal-hyprland" { };
+    portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
-
-    enableNvidiaPatches = mkEnableOption (mdDoc "patching wlroots for better Nvidia support");
   };
 
   config = mkIf cfg.enable {
@@ -64,6 +61,7 @@ in
     xdg.portal = {
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
+      configPackages = mkDefault [ cfg.finalPackage ];
     };
   };
 
@@ -72,9 +70,13 @@ in
       [ "programs" "hyprland" "xwayland" "hidpi" ]
       "XWayland patches are deprecated. Refer to https://wiki.hyprland.org/Configuring/XWayland"
     )
-    (mkRenamedOptionModule
-      [ "programs" "hyprland" "nvidiaPatches" ]
+    (mkRemovedOptionModule
       [ "programs" "hyprland" "enableNvidiaPatches" ]
+      "Nvidia patches are no longer needed"
+    )
+    (mkRemovedOptionModule
+      [ "programs" "hyprland" "nvidiaPatches" ]
+      "Nvidia patches are no longer needed"
     )
   ];
 }

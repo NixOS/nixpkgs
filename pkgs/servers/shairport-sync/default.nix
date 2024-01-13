@@ -117,11 +117,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lnl7 jordanisaacs ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    mainProgram = "shairport-sync";
+    maintainers = with lib.maintainers; [ lnl7 jordanisaacs ];
+    platforms = lib.platforms.unix;
   };
 }

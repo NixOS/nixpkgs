@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/timelens/timelens/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ janik ];
+    mainProgram = "timelens";
   };
 }

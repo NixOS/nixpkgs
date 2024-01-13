@@ -55,5 +55,6 @@ buildGoModule rec {
     homepage = "https://holocm.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
+    mainProgram = "holo-build";
   };
 }

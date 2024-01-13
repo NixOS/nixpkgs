@@ -53,16 +53,30 @@ autoPatchelf() {
         esac
     done
 
-    readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
-    if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
-        echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
-             "= true;' is deprecated and will be removed in a future release." \
-             "Use 'autoPatchelfIgnoreMissingDeps = [ \"*\" ];' instead." >&2
-        ignoreMissingDepsArray=( "*" )
+    if [ -n "$__structuredAttrs" ]; then
+        local ignoreMissingDepsArray=( "${autoPatchelfIgnoreMissingDeps[@]}" )
+        local appendRunpathsArray=( "${appendRunpaths[@]}" )
+        local runtimeDependenciesArray=( "${runtimeDependencies[@]}" )
+        local patchelfFlagsArray=( "${patchelfFlags[@]}" )
+    else
+        readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
+        local appendRunpathsArray=($appendRunpaths)
+        local runtimeDependenciesArray=($runtimeDependencies)
+        local patchelfFlagsArray=($patchelfFlags)
     fi
 
-    local appendRunpathsArray=($appendRunpaths)
-    local runtimeDependenciesArray=($runtimeDependencies)
+    # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
+    # "*", printing a deprecation warning.
+    for dep in "${ignoreMissingDepsArray[@]}"; do
+        if [ "$dep" == "1" ]; then
+            echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
+                 "= true;' is deprecated and will be removed in a future release." \
+                 "Use 'autoPatchelfIgnoreMissingDeps = [ \"*\" ];' instead." >&2
+            ignoreMissingDepsArray=( "*" )
+            break
+        fi
+    done
+
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
@@ -70,7 +84,8 @@ autoPatchelf() {
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
         --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
-        --append-rpaths "${appendRunpathsArray[@]}"
+        --append-rpaths "${appendRunpathsArray[@]}"                     \
+        --extra-args "${patchelfFlagsArray[@]}"
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have

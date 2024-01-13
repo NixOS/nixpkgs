@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "stups-cli-support";
   version = "1.1.20";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

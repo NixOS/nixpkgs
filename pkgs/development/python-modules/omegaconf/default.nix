@@ -1,8 +1,10 @@
 { lib
 , antlr4
 , antlr4-python3-runtime
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , jre_minimal
 , pydevd
 , pytest-mock
@@ -15,8 +17,7 @@
 buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
-  format = "setuptools";
-
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -31,6 +32,9 @@ buildPythonPackage rec {
       src = ./antlr4.patch;
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
+
+    # https://github.com/omry/omegaconf/pull/1137
+    ./0000-add-support-for-dataclasses_missing_type.patch
   ];
 
   postPatch = ''
@@ -42,6 +46,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     jre_minimal
   ];
 
@@ -51,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    attrs
     pydevd
     pytest-mock
     pytestCheckHook

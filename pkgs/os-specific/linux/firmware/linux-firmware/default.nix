@@ -4,6 +4,8 @@ in {
   stdenvNoCC,
   fetchzip,
   lib,
+  rdfind,
+  which,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,6 +16,11 @@ stdenvNoCC.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${source.revision}.tar.gz";
     hash = source.sourceHash;
   };
+
+  nativeBuildInputs = [
+    rdfind
+    which
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 

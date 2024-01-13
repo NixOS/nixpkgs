@@ -1,52 +1,57 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 , testers
 , tbls
 }:
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.70.2";
+  version = "1.72.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     rev = "v${version}";
-    hash = "sha256-LSICkg99veFHLmdcQZmnyfTbdqx7k2XI13W7Cjuj3qA=";
+    hash = "sha256-ZkJ1+o4xWQX63/2hdhnE5hyVrZIn1O2kmaiZ1853X/8=";
   };
 
-  vendorHash = "sha256-84h+LQzk/xy/Gapy7IxB8IPvsVGRsJP7udd9HhLskew=";
+  vendorHash = "sha256-IczwqqCQeTpXiDSJxX8ErmO4Ap+coIRAQTmRoDNtdXs=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" ];
 
   CGO_CFLAGS = [ "-Wno-format-security" ];
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/k1LoW/tbls.commit=unspecified"
-    "-X github.com/k1LoW/tbls.date=unspecified"
-    "-X github.com/k1LoW/tbls.version=${src.rev}"
-    "-X github.com/k1LoW/tbls/version.Version=${src.rev}"
-  ];
 
   preCheck = ''
     # Remove tests that require additional services.
     rm -f \
-       datasource/datasource_test.go \
+       datasource/*_test.go \
        drivers/*/*_test.go
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tbls \
+      --bash <($out/bin/tbls completion bash) \
+      --fish <($out/bin/tbls completion fish) \
+      --zsh <($out/bin/tbls completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {
     package = tbls;
     command = "tbls version";
-    version = src.rev;
+    inherit version;
   };
 
   meta = with lib; {
-    description = "A tool to generate documentation based on a database";
+    description = "A tool to generate documentation based on a database structure";
     homepage = "https://github.com/k1LoW/tbls";
     changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "tbls";
   };
 }

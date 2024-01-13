@@ -11,23 +11,25 @@
 , direnv
 , Security
 , SystemConfiguration
+, rtx
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtx";
-  version = "2023.10.1";
+  version = "2023.12.35";
 
   src = fetchFromGitHub {
-    owner = "jdxcode";
+    owner = "jdx";
     repo = "rtx";
     rev = "v${version}";
-    hash = "sha256-E0jBTnfp8asLC2V8TtYSCh6fTxqkFwCMZjsjjBKEN0s=";
+    hash = "sha256-vzMjC6qIPhZm80hzYQRpF3j+s85B0nwTcgSGRATQEIg=";
   };
 
-  cargoHash = "sha256-n/GxC5wDfhPboynFu8S1f9+kNDVmcKoSHaT96khyi2Q=";
+  cargoHash = "sha256-LvW5xGVggzuXlFPhbrc93Dht3S9zaQyx9Nm+Mx/Mjh0=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl  ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   postPatch = ''
     patchShebangs --build ./test/data/plugins/**/bin/* ./src/fake_asdf.rs ./src/cli/reshim.rs
@@ -59,12 +61,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = rtx; };
   };
 
   meta = {
-    homepage = "https://github.com/jdxcode/rtx";
+    homepage = "https://github.com/jdx/rtx";
     description = "Polyglot runtime manager (asdf rust clone)";
-    changelog = "https://github.com/jdxcode/rtx/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/rtx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "rtx";

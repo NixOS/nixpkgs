@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchzip }:
+{ lib
+, stdenv
+, fetchzip
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -10,20 +13,20 @@ let
     armv7l-linux = "linux_armv7";
   }.${system} or throwSystem;
 
-  sha256 = {
-    x86_64-linux = "sha256-w3BF5Zu68e7X6vfkJhUTS6wkg7LSFZunx9dnBA2Ao5c=";
-    aarch64-linux = "sha256-hJiXDydUF750mTsFIXH6X8AjzjaG2Iaa+TzsCCCVAvs=";
-    armv7l-linux = "sha256-lEPo6Y+cqlG2QflwJdG/MNqFLMPdwQLI0+TC/VVlGV4=";
+  hash = {
+    x86_64-linux = "sha256-vAX7vx13eHyPuDe4q5b8dQD90l5bbnncMGlXnegumxM=";
+    aarch64-linux = "sha256-6x/E0uAPFOsuoJ/ePLV483M07Rqj5pkcpETOVq9RXKU=";
+    armv7l-linux = "sha256-UlpqoKfjyGLNKvSrXqqsiiq/wTlfmBmPfynDoFT/nuQ=";
   }.${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "0.4.6";
+  version = "0.4.18";
 
   src = fetchzip {
-    url = "https://github.com/openziti/zrok/releases/download/v${version}/zrok_${version}_${plat}.tar.gz";
+    url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";
     stripRoot = false;
-    inherit sha256;
+    inherit hash;
   };
 
   updateScript = ./update.sh;
@@ -31,19 +34,23 @@ stdenv.mkDerivation rec {
   installPhase = let
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
   in ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp zrok $out/bin/
     chmod +x $out/bin/zrok
     patchelf --set-interpreter "${interpreter}" "$out/bin/zrok"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Geo-scale, next-generation sharing platform built on top of OpenZiti";
     homepage = "https://zrok.io";
+    license = lib.licenses.asl20;
+    mainProgram = "zrok";
     maintainers = [ lib.maintainers.bandresen ];
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.asl20;
   };
-
-}
+})

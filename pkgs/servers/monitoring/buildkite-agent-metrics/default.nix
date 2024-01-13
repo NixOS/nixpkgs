@@ -4,7 +4,7 @@
 }:
 buildGoModule rec {
   pname = "buildkite-agent-metrics";
-  version = "5.8.0";
+  version = "5.9.3";
 
   outputs = [ "out" "lambda" ];
 
@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
     rev = "v${version}";
-    hash = "sha256-QPtjKjUGKlqgklZ0wUOJ1lXuXHhWVC83cEJ4QVtgdl4=";
+    hash = "sha256-DepIptvR4i0+/45stCMErJtDeAFIDiNbhioitQ8gYBs=";
   };
 
-  vendorHash = "sha256-KgTzaF8dFD4VwcuSqmOy2CSfLuA0rjFwtCqGNYHFFlc=";
+  vendorHash = "sha256-YEvVGtfhe/RBeuD87C2BNOFEeK40JDidX4loSLdBwhs=";
 
   postInstall = ''
     mkdir -p $lambda/bin

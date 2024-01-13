@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];
+    mainProgram = "ipget";
   };
 }

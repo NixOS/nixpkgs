@@ -34,7 +34,6 @@
 }:
 let
   python-deps = ps: with ps; [
-    pip
     boto3
     botocore
     cachetools
@@ -56,19 +55,20 @@ let
     websocket-client
     ply
   ];
-  myPy3 = (python3.withPackages python-deps);
+  py = python3.withPackages python-deps;
 in
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     rev = "syslog-ng-${version}";
-    hash = "sha256-NXwd4dyPfnHO3yjl3GPAMQYqenfpp7xFOil2G1e66w4=";
+    hash = "sha256-cWlTGACuHm8o2563Axh43Ks7EhYok6+V9mOkrYp4km8=";
+    fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl myPy3 ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl ];
 
   buildInputs = [
     libcap
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     openssl
     eventlog
     glib
-    myPy3
+    py
     systemd
     riemann_c_client
     protobufc
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "--enable-dynamic-linking"
     "--enable-systemd"
     "--enable-smtp"
-    "--with-python-packages=system"
+    "--with-python-packages=none"
     "--with-hiredis=system"
     "--with-ivykis=system"
     "--with-librabbitmq-client=system"

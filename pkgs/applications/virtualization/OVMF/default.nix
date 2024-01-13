@@ -1,5 +1,5 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
-, csmSupport ? false, seabios ? null
+, csmSupport ? false, seabios
 , fdSize2MB ? csmSupport
 , fdSize4MB ? false
 , secureBoot ? false
@@ -7,10 +7,10 @@
 , tpmSupport ? false
 , tlsSupport ? false
 , debug ? false
-, sourceDebug ? debug
+# Usually, this option is broken, do not use it except if you know what you are
+# doing.
+, sourceDebug ? false
 }:
-
-assert csmSupport -> seabios != null;
 
 let
 
@@ -20,6 +20,8 @@ let
     "OvmfPkg/OvmfPkgX64.dsc"
   else if stdenv.hostPlatform.isAarch then
     "ArmVirtPkg/ArmVirtQemu.dsc"
+  else if stdenv.hostPlatform.isRiscV then
+    "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc"
   else
     throw "Unsupported architecture";
 
@@ -29,6 +31,7 @@ let
     i686 = "FV/OVMF";
     x86_64 = "FV/OVMF";
     aarch64 = "FV/AAVMF";
+    riscv64 = "FV/RISCV_VIRT";
   };
 
 in
@@ -64,10 +67,11 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   env.PYTHON_COMMAND = "python3";
 
   postPatch = lib.optionalString csmSupport ''
-    cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
+    cp ${seabios}/share/seabios/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
 
-  postFixup = if stdenv.hostPlatform.isAarch then ''
+  postFixup = (
+    if stdenv.hostPlatform.isAarch then ''
     mkdir -vp $fd/FV
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
@@ -80,10 +84,18 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     # Also add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
     ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
     ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-  '' else ''
+  ''
+  else if stdenv.hostPlatform.isRiscV then ''
+    mkdir -vp $fd/FV
+
+    mv -v $out/FV/RISCV_VIRT_{CODE,VARS}.fd $fd/FV/
+    truncate -s 32M $fd/FV/RISCV_VIRT_CODE.fd
+    truncate -s 32M $fd/FV/RISCV_VIRT_VARS.fd
+  ''
+  else ''
     mkdir -vp $fd/FV
     mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
-  '';
+  '');
 
   dontPatchELF = true;
 
@@ -105,5 +117,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     license = lib.licenses.bsd2;
     inherit (edk2.meta) platforms;
     maintainers = with lib.maintainers; [ adamcstephens raitobezarius ];
+    broken = stdenv.isDarwin;
   };
 })

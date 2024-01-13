@@ -4,26 +4,28 @@
 , pkg-config
 , river
 , wayland
-, zig_0_9
+, wayland-protocols
+, zig_0_11
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rivercarro";
-  version = "0.1.4";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = "rivercarro";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-eATbbwIt5ytEVLPodyq9vFF9Rs5S1xShpvNYQnfwdV4=";
+    hash = "sha256-lucwn9MmyVd4pynuG/ZAXnZ384wdS0gi7JN44vNQA1I=";
   };
 
   nativeBuildInputs = [
     pkg-config
     river
     wayland
-    zig_0_9.hook
+    wayland-protocols
+    zig_0_11.hook
   ];
 
   meta = with lib; {
@@ -42,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
-    inherit (zig_0_9.meta) platforms;
+    inherit (zig_0_11.meta) platforms;
   };
 })

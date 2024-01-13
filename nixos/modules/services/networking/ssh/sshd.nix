@@ -12,22 +12,44 @@ let
     then cfgc.package
     else pkgs.buildPackages.openssh;
 
-  # reports boolean as yes / no
-  mkValueStringSshd = with lib; v:
-        if isInt           v then toString v
-        else if isString   v then v
-        else if true  ==   v then "yes"
-        else if false ==   v then "no"
-        else if isList     v then concatStringsSep "," v
-        else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
-
   # dont use the "=" operator
-  settingsFormat = (pkgs.formats.keyValue {
-      mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString = mkValueStringSshd;
-    } " ";});
+  settingsFormat =
+    let
+      # reports boolean as yes / no
+      mkValueString = with lib; v:
+            if isInt           v then toString v
+            else if isString   v then v
+            else if true  ==   v then "yes"
+            else if false ==   v then "no"
+            else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
 
-  configFile = settingsFormat.generate "sshd.conf-settings" cfg.settings;
+      base = pkgs.formats.keyValue {
+        mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
+      };
+      # OpenSSH is very inconsistent with options that can take multiple values.
+      # For some of them, they can simply appear multiple times and are appended, for others the
+      # values must be separated by whitespace or even commas.
+      # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
+      # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
+      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      commaSeparated = [ "Ciphers" "KexAlgorithms" "Macs" ];
+      spaceSeparated = [ "AuthorizedKeysFile" "AllowGroups" "AllowUsers" "DenyGroups" "DenyUsers" ];
+    in {
+      inherit (base) type;
+      generate = name: value:
+        let transformedValue = mapAttrs (key: val:
+          if isList val then
+            if elem key commaSeparated then concatStringsSep "," val
+            else if elem key spaceSeparated then concatStringsSep " " val
+            else throw "list value for unknown key ${key}: ${(lib.generators.toPretty {}) val}"
+          else
+            val
+          ) value;
+        in
+          base.generate name transformedValue;
+    };
+
+  configFile = settingsFormat.generate "sshd.conf-settings" (filterAttrs (n: v: v != null) cfg.settings);
   sshconf = pkgs.runCommand "sshd.conf-final" { } ''
     cat ${configFile} - >$out <<EOL
     ${cfg.extraConfig}
@@ -431,6 +453,42 @@ in
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
               '';
             };
+            AllowUsers = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is allowed only for the listed users.
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            DenyUsers = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is denied for all listed users. Takes
+                precedence over [](#opt-services.openssh.settings.AllowUsers).
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            AllowGroups = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is allowed only for users part of the
+                listed groups.
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            DenyGroups = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is denied for all users part of the listed
+                groups. Takes precedence over
+                [](#opt-services.openssh.settings.AllowGroups). See
+                {manpage}`sshd_config(5)` for details.
+              '';
+            };
           };
         });
       };
@@ -616,7 +674,11 @@ in
           (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
           cfg.ports}
         ${concatMapStringsSep "\n"
-          (la: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString la.port}"} -f ${sshconf} > /dev/null")
+          (la:
+            concatMapStringsSep "\n"
+              (port: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString port}"} -f ${sshconf} > /dev/null")
+              (if la.port != null then [ la.port ] else cfg.ports)
+          )
           cfg.listenAddresses}
         touch $out
       '')

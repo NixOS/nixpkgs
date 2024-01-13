@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pandas-datareader";
   version = "0.10.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

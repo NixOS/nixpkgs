@@ -12,7 +12,7 @@ in
 {
   options = {
     services.soft-serve = {
-      enable = mkEnableOption "Enable soft-serve service";
+      enable = mkEnableOption "soft-serve";
 
       package = mkPackageOption pkgs "soft-serve" { };
 
@@ -20,7 +20,7 @@ in
         type = format.type;
         default = { };
         description = mdDoc ''
-          The contents of the configuration file.
+          The contents of the configuration file for soft-serve.
 
           See <${docUrl}>.
         '';

@@ -48,5 +48,6 @@ buildPythonApplication rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ azahi lovek323 AndersonTorres peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "grc";
   };
 }

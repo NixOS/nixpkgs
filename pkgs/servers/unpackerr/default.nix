@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/davidnewhall/unpackerr";
     maintainers = with maintainers; [ nullx76 ];
     license = licenses.mit;
+    mainProgram = "unpackerr";
   };
 }

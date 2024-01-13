@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ david-sawatzke ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.isc;
+    mainProgram = "maxcso";
   };
 }

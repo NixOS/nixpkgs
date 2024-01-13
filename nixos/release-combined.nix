@@ -5,7 +5,7 @@
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedSystems ? [ ]
 }:
 
 let
@@ -90,6 +90,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootZfs")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
@@ -97,7 +98,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
-        (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-install-bootloader")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.zfsroot")
         (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-specialisations")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
@@ -165,9 +166,9 @@ in rec {
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
-        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
+        (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
         ["nixpkgs.tarball"]
 
         # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,

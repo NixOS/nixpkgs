@@ -23,6 +23,7 @@
 , monorepoSrc ? null
 , patches ? [ ]
 , enableManpages ? false
+, ...
 }:
 
 let
@@ -68,6 +69,11 @@ stdenv.mkDerivation (rec {
     libedit
     libxml2
     libllvm
+  ] ++ lib.optionals (lib.versionAtLeast release_version "16") [
+    # Starting with LLVM 16, the resource dir patch is no longer enough to get
+    # libclang into the rpath of the lldb executables. By putting it into
+    # buildInputs cc-wrapper will set up rpath correctly for us.
+    (lib.getLib libclang)
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
@@ -108,6 +114,8 @@ stdenv.mkDerivation (rec {
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+  ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
+    "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"
   ] ++ lib.optionals enableManpages ([
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
@@ -151,6 +159,10 @@ stdenv.mkDerivation (rec {
     ln -s $out/bin/*-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
+  passthru.vscodeExtName = "lldb-vscode";
+  passthru.vscodeExtPublisher = "llvm";
+  passthru.vscodeExtUniqueId = "llvm-org.lldb-vscode-0.1.0";
+
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
@@ -164,6 +176,7 @@ stdenv.mkDerivation (rec {
     broken =
       (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
         || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
+    mainProgram = "lldb";
   };
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";

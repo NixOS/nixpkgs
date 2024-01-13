@@ -4,30 +4,28 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, flit-core
 , lxml
 , pyjwt
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.3.7";
-  format = "setuptools";
+  version = "1.3.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";
-    repo = pname;
+    repo = "skodaconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-FJnByPP1hUs6ECuZh9aMJksq32xhPcWWolSFBzP7Zd8=";
+    hash = "sha256-7QDelJzyRnYNqVP9IuREpCm5s+qJ8cxSEn1YcqnYepA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools-scm
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -37,13 +35,6 @@ buildPythonPackage rec {
     lxml
     pyjwt
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest>=5,<6'," ""
-    substituteInPlace requirements.txt \
-      --replace "pytest-asyncio" ""
-  '';
 
   # Project has no tests
   doCheck = false;

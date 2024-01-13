@@ -1,18 +1,20 @@
 { lib
 , fetchFromGitHub
 , python3
+, testers
+, jrnl
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "4.0.1";
+  version = "4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NpI19NQxfDiqcfFI9kMqfMboI4fQTqCG7AoG9o8YoEI=";
+    hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -20,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    ansiwrap
     asteval
     colorama
     cryptography
@@ -50,6 +51,11 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "jrnl"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = jrnl;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";

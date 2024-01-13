@@ -8,7 +8,7 @@ in
 {
   options.programs.waybar = {
     enable = mkEnableOption (lib.mdDoc "waybar");
-    package = mkPackageOptionMD pkgs "waybar" { };
+    package = mkPackageOption pkgs "waybar" { };
   };
 
   config = mkIf cfg.enable {

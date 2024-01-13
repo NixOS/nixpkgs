@@ -3,6 +3,7 @@
 , fetchurl
 , fontutil
 , lib
+, libei
 , libGL
 , libGLU
 , libX11
@@ -45,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "23.2.1";
+  version = "23.2.3";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7rwmksOqgGF9eEKLxux7kbJUqYIU0qcOmXCYUDzW75A=";
+    sha256 = "sha256-652apyMsR0EsiDXsFal8V18DVjcmx4d1T/DAGb0H4wI=";
   };
 
   depsBuildBuild = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     egl-wayland
     libepoxy
+    libei
     fontutil
     libGL
     libGLU

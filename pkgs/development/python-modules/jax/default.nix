@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , jaxlib
 , jaxlib-bin
+, hypothesis
 , lapack
 , matplotlib
 , ml-dtypes
@@ -27,7 +28,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.19";
+  version = "0.4.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-l5uLPqhg/hqtO9oJSaioow5cH/0jKHDVziGezkfnVcc=";
+    hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   nativeCheckInputs = [
+    hypothesis
     jaxlib'
     matplotlib
     pytestCheckHook
@@ -108,6 +110,10 @@ buildPythonPackage rec {
     "test_device_put"
     "test_make_array_from_callback"
     "test_make_array_from_single_device_arrays"
+
+    # Fails on some hardware due to some numerical error
+    # See https://github.com/google/jax/issues/18535
+    "testQdwhWithOnRankDeficientInput5"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [

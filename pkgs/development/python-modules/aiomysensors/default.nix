@@ -15,24 +15,23 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.9";
-  format = "pyproject";
+  version = "0.3.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
+    hash = "sha256-uBmFJFmUClTkaAg8jTThygzmZv7UZDPSt0bXo8BLu00=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
-      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"' \
-      --replace 'awesomeversion = "^22.6"' 'awesomeversion = "*"'
+      --replace " --cov=src --cov-report=term-missing:skip-covered" ""
   '';
+
   nativeBuildInputs = [
     poetry-core
   ];

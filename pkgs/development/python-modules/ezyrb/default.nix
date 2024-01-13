@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ezyrb";
-  version = "1.3.0.post2309";
+  version = "1.3.0.post2401";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "EZyRB";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9g7FCyGZc9TDR9MummM1KJJZs31Oo50N/U6HjKM90Nw=";
+    hash = "sha256-mNpW9RSli7af0fHLh+cmBrOQaO0wlGOrcLigefMR2ww=";
   };
 
   propagatedBuildInputs = [

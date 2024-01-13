@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcstar";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
     rev = "v${version}";
-    sha256 = "1hah8ijh9mvcgbh36y3d3s6y79mzz27w24f2i29qllv7cayf6129";
+    sha256 = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

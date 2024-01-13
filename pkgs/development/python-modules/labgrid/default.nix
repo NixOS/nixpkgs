@@ -17,28 +17,30 @@
 , pyusb
 , pyyaml
 , requests
+, setuptools
 , setuptools-scm
+, wheel
 , xmodem
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.3";
+  version = "23.0.4";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-yhlBqqCLOt6liw4iv8itG6E4QfIa7cW76QJqefUM5dw=";
+    sha256 = "sha256-EEPQSIHKAmLPudv7LLm9ol3Kukgz8edYKfDi+wvERpk=";
   };
 
-  patches = [
-    # Pyserial within Nixpkgs already includes the necessary fix, remove the
-    # pyserial version check from labgrid.
-    ./0001-serialdriver-remove-pyserial-version-check.patch
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pyproject = true;
 
   propagatedBuildInputs = [
     ansicolors
@@ -54,10 +56,6 @@ buildPythonPackage rec {
     requests
     xmodem
   ];
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
 
   nativeCheckInputs = [
     mock

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hut";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "hut";
     rev = "v${version}";
-    sha256 = "sha256-kr5EWQ3zHUp/oNPZV2d3j9AyoEmHEX8/rETiMKTBi3s=";
+    sha256 = "sha256-9RSJ+SRXYBjdiuHScgFm5i0/Xi81pJfURPKAGCk+l04=";
   };
 
-  vendorHash = "sha256-aoqGb7g8UEC/ydmL3GbWGy3HDD1kfDJOMeUP4nO9waA=";
+  vendorHash = "sha256-OxnplvBx2sFctdNSVd0S0tgiRt5Yah3ga4mORT2Kz6U=";
 
   nativeBuildInputs = [
     scdoc
@@ -36,5 +36,6 @@ buildGoModule rec {
     description = "A CLI tool for Sourcehut / sr.ht";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "hut";
   };
 }

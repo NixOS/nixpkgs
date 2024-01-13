@@ -30,7 +30,7 @@ in
         };
         description = ''
           Additional configuration for FerretDB, see
-          <https://docs.ferretdb.io/flags/>
+          <https://docs.ferretdb.io/configuration/flags/>
           for supported values.
         '';
       };

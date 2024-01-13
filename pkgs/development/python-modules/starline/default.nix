@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
 , requests
 }:
 
@@ -11,10 +12,16 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "550b00ab95cf59d933f7708abab40a4e41e5790e62b653471afe86a3af3320e6";
+    hash = "sha256-VQsAq5XPWdkz93CKurQKTkHleQ5itlNHGv6Go68zIOY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

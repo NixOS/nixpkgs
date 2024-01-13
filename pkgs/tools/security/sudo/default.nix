@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , buildPackages
 , coreutils
 , pam
@@ -15,27 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.14p3";
+  version = "1.9.15p4";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-oIMYscS8hYLABNTNmuKQOrxUnn5GuoFeQf6B0cB4K2I=";
+    hash = "sha256-LiDsmGXu7qExbG9J7GrEZ4hptonU2QtEJDv0iH1t1TI=";
   };
-
-  patches = [
-    # Extra bugfix not included in 1.9.14p3 to address a bug that impacts the
-    # NixOS test suite for sudo.
-    (fetchpatch {
-      url = "https://github.com/sudo-project/sudo/commit/760c9c11074cb921ecc0da9fbb5f0a12afd46233.patch";
-      hash = "sha256-smwyoYEkaqfQYz9C4VVz59YMtKabOPpwhS+RBwXbWuE=";
-    })
-    # Fix for the patch above:
-    #   https://bugzilla.sudo.ws/show_bug.cgi?id=1057
-    (fetchpatch {
-      url = "https://github.com/sudo-project/sudo/commit/d148e7d8f9a98726dd4fde6f187c7d614e1258c7.patch";
-      hash = "sha256-3I3PnuAHlBs3JOn0Ul900aFxuUkDGV4sM3S5DNtW7bE=";
-    })
-  ];
 
   prePatch = ''
     # do not set sticky bit in nix store
@@ -87,9 +71,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) sudo; };
 
-  meta = {
+  meta = with lib; {
     description = "A command to run commands as root";
-
     longDescription =
       ''
         Sudo (su "do") allows a system administrator to delegate
@@ -97,13 +80,10 @@ stdenv.mkDerivation rec {
         to run some (or all) commands as root or another user while
         providing an audit trail of the commands and their arguments.
       '';
-
     homepage = "https://www.sudo.ws/";
-
-    license = "https://www.sudo.ws/sudo/license.html";
-
-    maintainers = with lib.maintainers; [ delroth ];
-
-    platforms = lib.platforms.linux;
+    # From https://www.sudo.ws/about/license/
+    license = with licenses; [ sudo bsd2 bsd3 zlib ];
+    maintainers = with maintainers; [ delroth ];
+    platforms = platforms.linux;
   };
 }

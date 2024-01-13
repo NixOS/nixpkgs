@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "dooit";
     rev = "v${version}";
-    hash = "sha256-ZCEBpaQHaFb09MUlN6acYB3LrfX456uRbhVh9YPz7NU=";
+    hash = "sha256-YfWfh8oDZSG1DdAV+hzchqyNSSqyeNR5SSEa9B5yGY8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -30,12 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     tzlocal
   ];
 
-  # NOTE pyproject version was bumped after release tag 2.0.1 - remove after next release.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "version = \"2.0.0\"" "version = \"2.0.1\""
-  '';
-
   # No tests available
   doCheck = false;
 
@@ -50,5 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ khaneliman wesleyjrz ];
+    mainProgram = "dooit";
   };
 }

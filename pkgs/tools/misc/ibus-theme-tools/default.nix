@@ -25,5 +25,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hollowman6 ];
     homepage = "https://github.com/openSUSE/IBus-Theme-Tools";
+    mainProgram = "ibus-theme-tools";
   };
 }

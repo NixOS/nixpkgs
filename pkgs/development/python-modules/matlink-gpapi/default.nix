@@ -10,6 +10,7 @@
 
 buildPythonPackage rec {
   version = "0.4.4.5";
+  format = "setuptools";
   pname = "matlink-gpapi";
   disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
 

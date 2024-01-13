@@ -44,7 +44,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
 
   preBuild = ''

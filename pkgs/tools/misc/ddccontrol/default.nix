@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , intltool
 , libxml2
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.6.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
     rev = version;
-    sha256 = "sha256-0mvkIW0Xsi7co/INmlNeTclBxGoqoJliFanA/RFMaLM=";
+    sha256 = "sha256-100SITpGbui/gRhFjVZxn6lZRB0najtGHd18oUpByJo=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,14 @@ stdenv.mkDerivation rec {
     pciutils
     gtk2
     ddccontrol-db
+  ];
+
+  patches = [
+    # Upstream commit, fixed the version number in v1.0.0
+    (fetchpatch {
+      url = "https://github.com/ddccontrol/ddccontrol/commit/fc8c5b5d0f2b64b08b95f4a7d8f47f2fd8ceec34.patch";
+      hash = "sha256-SB1BaolTNCUYgj38nMg1uLUqOHvnwCr8T3cnfu/7rjI=";
+    })
   ];
 
   configureFlags = [

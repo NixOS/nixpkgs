@@ -296,6 +296,18 @@ in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
+      serviceUnit = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = lib.mdDoc ''
+          The systemd unit (a service or a target) for other services to depend on if they
+          need to be started after matrix-synapse.
+
+          This option is useful as the actual parent unit for all matrix-synapse processes
+          changes when configuring workers.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         readOnly = true;
@@ -434,7 +446,7 @@ in {
         default = { };
         description = mdDoc ''
           The primary synapse configuration. See the
-          [sample configuration](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
+          [sample configuration](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
           for possible values.
 
           Secrets should be passed in by using the `extraConfigFiles` option.
@@ -737,7 +749,7 @@ in {
                     by the module, but in practice it broke on runtime and as a result, no URL
                     preview worked anywhere if this was set.
 
-                    See https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                    See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
                     on how to configure it properly.
                   ''))
                   (types.attrsOf types.str));
@@ -861,7 +873,7 @@ in {
                 Redis configuration for synapse.
 
                 See the
-                [upstream documentation](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/usage/configuration/config_documentation.md#redis)
+                [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/usage/configuration/config_documentation.md#redis)
                 for available options.
               '';
             };
@@ -874,7 +886,7 @@ in {
         description = lib.mdDoc ''
           Options for configuring workers. Worker support will be enabled if at least one worker is configured here.
 
-          See the [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
+          See the [worker documention](https://element-hq.github.io/synapse/latest/workers.html#worker-configuration)
           for possible options for each worker. Worker-specific options overriding the shared homeserver configuration can be
           specified here for each worker.
 
@@ -888,9 +900,9 @@ in {
             using [`services.matrix-synapse.configureRedisLocally`](#opt-services.matrix-synapse.configureRedisLocally).
 
             Workers also require a proper reverse proxy setup to direct incoming requests to the appropriate process. See
-            the [reverse proxy documentation](https://matrix-org.github.io/synapse/latest/reverse_proxy.html) for a
+            the [reverse proxy documentation](https://element-hq.github.io/synapse/latest/reverse_proxy.html) for a
             general reverse proxying setup and
-            the [worker documentation](https://matrix-org.github.io/synapse/latest/workers.html#available-worker-applications)
+            the [worker documentation](https://element-hq.github.io/synapse/latest/workers.html#available-worker-applications)
             for the available endpoints per worker application.
           :::
         '';
@@ -920,7 +932,7 @@ in {
                 The file for log configuration.
 
                 See the [python documentation](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
-                for the schema and the [upstream repository](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
+                for the schema and the [upstream repository](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
                 for an example.
               '';
             };
@@ -1021,6 +1033,7 @@ in {
       port = 9093;
     });
 
+    services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
 

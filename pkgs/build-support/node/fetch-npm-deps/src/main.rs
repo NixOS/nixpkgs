@@ -234,14 +234,21 @@ fn main() -> anyhow::Result<()> {
         (out_tempdir.path(), true)
     };
 
-    let packages = parse::lockfile(&lock_content, env::var("FORCE_GIT_DEPS").is_ok())?;
+    let packages = parse::lockfile(
+        &lock_content,
+        env::var("FORCE_GIT_DEPS").is_ok(),
+        env::var("FORCE_EMPTY_CACHE").is_ok(),
+    )?;
 
     let cache = Cache::new(out.join("_cacache"));
+    cache.init()?;
 
     packages.into_par_iter().try_for_each(|package| {
         eprintln!("{}", package.name);
 
-        let tarball = package.tarball()?;
+        let tarball = package
+            .tarball()
+            .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
         let integrity = package.integrity().map(ToString::to_string);
 
         cache

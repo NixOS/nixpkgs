@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.0.1";
+  version = "3.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,10 +23,8 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jcgNNraMgsqTPNCbBcqEewe3jAXer4wn0aKqiUos+k8=";
+    hash = "sha256-QsA8HZ6wIWKvtQ+f3nyRKKZRNJS56eZ1sKw+KNHxfXc=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

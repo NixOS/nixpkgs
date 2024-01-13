@@ -2,7 +2,8 @@
 , stdenv
 , buildBazelPackage
 , fetchFromGitHub
-, bazel_4
+, bazel_5
+, jdk
 , bison
 , flex
 , python3
@@ -17,17 +18,17 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-08-29";
-  GIT_VERSION = "v0.0-3410-g398a8505";
+  GIT_DATE = "2023-12-23";
+  GIT_VERSION = "v0.0-3471-g9cb45092";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = "verible";
-    rev = "${GIT_VERSION}";
-    sha256 = "sha256-qi//Dssgg5ITrL5jCpZXpSrhSm2xCqe53D9ctK7SQoU=";
+    repo  = "verible";
+    rev   = "${GIT_VERSION}";
+    hash  = "sha256-nFt5TeFv63Igx8Zer2s/ZLj5DsHeZj5V/+3burnEm9g=";
   };
 
   patches = [
@@ -37,25 +38,19 @@ buildBazelPackage rec {
     ./remove-unused-deps.patch
   ];
 
-  bazel = bazel_4;
+  bazel = bazel_5;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
-    "--javabase=@bazel_tools//tools/jdk:remote_jdk11"
-    "--host_javabase=@bazel_tools//tools/jdk:remote_jdk11"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
   ];
 
   fetchAttrs = {
-    # Fixed output derivation hash after bazel fetch.
-    # This varies per platform, probably from the JDK pulled in being part
-    # of the output derivation ? Is there a more robust way to do this ?
-    # (Hashes extracted from the ofborg build logs)
-    sha256 = {
-      aarch64-linux = "sha256-Hf/jF5Y7QS2ZNFmSx2LIb0b6gdjditE97HwWGqQJac8=";
-      x86_64-linux = "sha256-WBp5Fi5vvKLVgRWvQ3VB7sY6ySpbwCdhU5KqZH9sLy4=";
-    }.${system} or (throw "No hash for system: ${system}");
+    sha256 = "sha256-gZzrgZsHQ9zMoIDooVo9nRQbkJ41igme8wcNFj5EzWc=";
   };
 
   nativeBuildInputs = [
+    jdk        # bazel uses that.
     bison      # We use local flex and bison as WORKSPACE sources fail
     flex       # .. to compile with newer glibc
     python3

@@ -39,5 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ royneary DeeUnderscore ];
+    mainProgram = "git-bug";
   };
 }

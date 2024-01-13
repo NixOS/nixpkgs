@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "tun2socks";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "xjasonlyu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qRjVZF15CjFohv9PQO0bLAjS8ip//S7yncXOn9oS2XM=";
+    sha256 = "sha256-siAengVJXusQ5o9cTaADeRn5eW4IoCHkMMf6Bx8iWws=";
   };
 
   vendorHash = "sha256-zeiOcn33PnyoseYb0wynkn7MfGp3rHEYBStY98C6aR8=";

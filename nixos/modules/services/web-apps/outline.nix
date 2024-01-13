@@ -581,7 +581,7 @@ in
       enable = true;
       ensureUsers = [{
         name = "outline";
-        ensurePermissions."DATABASE outline" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       }];
       ensureDatabases = [ "outline" ];
     };

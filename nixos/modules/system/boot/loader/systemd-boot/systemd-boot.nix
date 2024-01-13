@@ -16,6 +16,8 @@ let
 
     systemd = config.systemd.package;
 
+    bootspecTools = pkgs.bootspec;
+
     nix = config.nix.package.out;
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
@@ -66,6 +68,8 @@ let
     ${cfg.extraInstallCommands}
   '';
 in {
+
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])

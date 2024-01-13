@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , acl
 , cowsql
 , hwdata
@@ -10,21 +11,30 @@
 , sqlite
 , udev
 , installShellFiles
-, gitUpdater
+, nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/incus-${version}";
-    hash = "sha256-DCNMhfSzIpu5Pdg2TiFQ7GgLEScqt/Xqm2X+VSdeaME=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
-  vendorHash = "sha256-Pk0/SfGCqXdXvNHbokSV8ajFHeOv0+Et0JytRCoBLU4=";
+  vendorHash = "sha256-YfUvkN1qUS3FFKb1wysg40WcJA8fT9SGDChSdT+xnkc=";
+
+  patches = [
+    # remove with > 0.4.0
+    (fetchpatch {
+      url = "https://github.com/lxc/incus/commit/c0200b455a1468685d762649120ce7e2bb25adc9.patch";
+      hash = "sha256-4fiSv6GcsKpdLh3iNbw3AGuDzcw1EadUvxtSjxRjtTA=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -35,6 +45,7 @@ buildGoModule rec {
     "cmd/incus-agent"
     "cmd/incus-migrate"
     "cmd/lxd-to-incus"
+    "test/mini-oidc"
   ];
 
   nativeBuildInputs = [
@@ -54,10 +65,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
   tags = [ "libsqlite3" ];
 
-  preBuild = ''
-    # required for go-cowsql.
-    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
-  '';
+  # required for go-cowsql.
+  CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   postBuild = ''
     make incus-agent incus-migrate
@@ -77,13 +86,23 @@ buildGoModule rec {
     '';
 
   postInstall = ''
+    # use custom bash completion as it has extra logic for e.g. instance names
     installShellCompletion --bash --name incus ./scripts/bash/incus
+
+    installShellCompletion --cmd incus \
+      --fish <($out/bin/incus completion fish) \
+      --zsh <($out/bin/incus completion zsh)
   '';
 
+
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "incus-";
-    };
+    tests.incus = nixosTests.incus;
+
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "v\(.*\)"
+       ];
+     };
   };
 
   meta = {
@@ -91,7 +110,7 @@ buildGoModule rec {
     homepage = "https://linuxcontainers.org/incus";
     changelog = "https://github.com/lxc/incus/releases/tag/incus-${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

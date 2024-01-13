@@ -22,6 +22,7 @@ use JSON::PP;
 use IPC::Cmd;
 use Sys::Syslog qw(:standard :macros);
 use Cwd qw(abs_path);
+use Fcntl ':flock';
 
 ## no critic(ControlStructures::ProhibitDeepNests)
 ## no critic(ErrorHandling::RequireCarping)
@@ -91,6 +92,8 @@ if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // ""
 }
 
 make_path("/run/nixos", { mode => oct(755) });
+open(my $stc_lock, '>>', '/run/nixos/switch-to-configuration.lock') or die "Could not open lock - $!";
+flock($stc_lock, LOCK_EX) or die "Could not acquire lock - $!";
 openlog("nixos", "", LOG_USER);
 
 # Install or update the bootloader.
@@ -985,4 +988,5 @@ if ($res == 0) {
     syslog(LOG_ERR, "switching to system configuration $toplevel failed (status $res)");
 }
 
+close($stc_lock) or die "Could not close lock - $!";
 exit($res);

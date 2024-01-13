@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, fetchzip, zstd
+, recompressTarball
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
@@ -62,7 +62,7 @@
 buildFun:
 
 let
-  python3WithPackages = python3.pythonForBuild.withPackages(ps: with ps; [
+  python3WithPackages = python3.pythonOnBuildForHost.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
   clangFormatPython3 = fetchurl {
@@ -148,35 +148,8 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
-  recompressTarball = { version, hash ? "" }: fetchzip {
-    name = "chromium-${version}.tar.zstd";
-    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    inherit hash;
-
-    nativeBuildInputs = [ zstd ];
-
-    postFetch = ''
-      echo removing unused code from tarball to stay under hydra limit
-      rm -r $out/third_party/{rust-src,llvm}
-
-      echo moving remains out of \$out
-      mv $out source
-
-      echo recompressing final contents into new tarball
-      # try to make a deterministic tarball
-      tar \
-        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
-        --sort name \
-        --mtime 1970-01-01 \
-        --owner=root --group=root \
-        --numeric-owner --mode=go=rX,u+rw,a-s \
-        -cf $out source
-    '';
-  };
-
-
   base = rec {
-    pname = "${packageName}-unwrapped";
+    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -195,7 +168,7 @@ let
       buildPlatformLlvmStdenv.cc
       pkg-config
       libuuid
-      libpng # needed for "host/generate_colors_info"
+      (libpng.override { apngSupport = false; }) # needed for "host/generate_colors_info"
     ]
     # When cross-compiling, chromium builds a huge proportion of its
     # components for both the `buildPlatform` (which it calls
@@ -237,7 +210,7 @@ let
       ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
-      ./cross-compile.patch
+      ./patches/cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
@@ -246,12 +219,22 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
-      # We need to revert this patch to build M114+ with LLVM 16:
+    ] ++ lib.optionals (chromiumVersionAtLeast "120") [
+      # We need to revert this patch to build M120+ with LLVM 17:
+      ./patches/chromium-120-llvm-17.patch
+    ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # This version is still needed for electron.
       (githubPatch {
-        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
-        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
-        hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
-        revert = true;
+        commit = "fc09363b2278893790d131c72a4ed96ec9837624";
+        hash = "sha256-l60Npgs/+0ozzuKWjwiHUUV6z59ObUjAPTfXN7eXpzw=";
+      })
+    ] ++ lib.optionals (!chromiumVersionAtLeast "121.0.6104.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5001687
+      (githubPatch {
+        commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
+        hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
     ];
 
@@ -369,9 +352,13 @@ let
       # depending on which part of the codebase you are in; see:
       # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
+      host_toolchain = "//build/toolchain/linux/unbundle:default";
+      # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
+      # end up building much more things than they need to (roughtly double the build steps and time/compute):
+    } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
       host_toolchain = "//build/toolchain/linux/unbundle:host";
       v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
-
+    } // {
       host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
       pkg_config      = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
 
@@ -437,7 +424,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python3.pythonForBuild}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
@@ -475,11 +462,11 @@ let
     '';
 
     postFixup = ''
-      # Make sure that libGLESv2 and libvulkan are found by dlopen.
+      # Make sure that libGLESv2 and libvulkan are found by dlopen in both chromium binary and ANGLE libGLESv2.so.
       # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
-      chromiumBinary="$libExecPath/$packageName"
-      origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
+      for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do
+        patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$(patchelf --print-rpath "$chromiumBinary")" "$chromiumBinary"
+      done
     '';
 
     passthru = {

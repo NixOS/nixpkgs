@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "viddy";
-  version = "0.3.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-82q73L0641d5qNmB+WLkUmDP5OHMoj2SNFc+FhknhwU=";
+    hash = "sha256-iF5b5e3HPT3GJLRDxz9wN1U5rO9Ey51Cpw4p2zjffTI=";
   };
 
-  vendorHash = "sha256-FMSgLI1W5keRnSYVyY0XuarMzLWvm9D1ufUYmZttfxk=";
+  vendorHash = "sha256-/lx2D2FIByRnK/097M4SQKRlmqtPTvbFo1dwbThJ5Fs=";
 
   ldflags = [
     "-s"
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
     maintainers = with maintainers; [ j-hui ];
+    mainProgram = "viddy";
   };
 }

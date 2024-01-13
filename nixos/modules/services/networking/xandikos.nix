@@ -11,12 +11,7 @@ in
     services.xandikos = {
       enable = mkEnableOption (lib.mdDoc "Xandikos CalDAV and CardDAV server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xandikos;
-        defaultText = literalExpression "pkgs.xandikos";
-        description = lib.mdDoc "The Xandikos package to use.";
-      };
+      package = mkPackageOption pkgs "xandikos" { };
 
       address = mkOption {
         type = types.str;

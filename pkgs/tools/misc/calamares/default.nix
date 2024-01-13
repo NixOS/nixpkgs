@@ -93,5 +93,6 @@ mkDerivation rec {
     license = with licenses; [ gpl3Plus bsd2 cc0 ];
     maintainers = with maintainers; [ manveru vlinkz ];
     platforms = platforms.linux;
+    mainProgram = "calamares";
   };
 }

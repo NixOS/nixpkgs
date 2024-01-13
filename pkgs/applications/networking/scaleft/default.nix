@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ jloyet ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sft";
   };
 }

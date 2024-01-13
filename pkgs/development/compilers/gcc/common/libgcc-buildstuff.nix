@@ -42,11 +42,12 @@ in
   #
   # No rule to make target '../../../gcc-xx.x.x/libgcc/config/loongarch/crti.S', needed by 'crti.o'.  Stop.
   #
-  # For LoongArch64, a hacky workaround is to simply touch them,
+  # For LoongArch64 and S390, a hacky workaround is to simply touch them,
   # as the platform forces .init_array support.
   #
   # https://www.openwall.com/lists/musl/2022/11/09/3
   #
-  + lib.optionalString stdenv.targetPlatform.isLoongArch64 ''
-  touch libgcc/config/loongarch/crt{i,n}.S
+  # 'parsed.cpu.family' won't be correct for every platform.
++ lib.optionalString (stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390) ''
+  touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
 ''

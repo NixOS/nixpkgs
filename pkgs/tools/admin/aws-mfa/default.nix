@@ -41,6 +41,6 @@ buildPythonApplication rec {
     description = "Manage AWS MFA Security Credentials";
     homepage = "https://github.com/broamski/aws-mfa";
     license = licenses.mit;
-    maintainers = [ maintainers.srapenne ];
+    maintainers = [ ];
   };
 }

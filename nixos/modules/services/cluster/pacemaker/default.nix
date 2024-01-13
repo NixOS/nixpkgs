@@ -9,12 +9,7 @@ in
   options.services.pacemaker = {
     enable = mkEnableOption (lib.mdDoc "pacemaker");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.pacemaker;
-      defaultText = literalExpression "pkgs.pacemaker";
-      description = lib.mdDoc "Package that should be used for pacemaker.";
-    };
+    package = mkPackageOption pkgs "pacemaker" { };
   };
 
   # implementation

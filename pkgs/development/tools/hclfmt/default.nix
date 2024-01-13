@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hclfmt";
-  version = "2.18.1";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcl";
     rev = "v${version}";
-    hash = "sha256-31Xqgzd208ypK8u1JV5Rh5cCqGr1MJkLP490nIeovsE=";
+    hash = "sha256-A7YfjXdblFGBABD/PeJMzh9WdPeIUWOWAr/UlD3ki28=";
   };
 
   vendorHash = "sha256-DA1IKaC+YSBzCfEMqHsHfwu1o5qvYFaFgDoGG0RZnoo=";

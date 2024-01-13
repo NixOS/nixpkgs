@@ -133,7 +133,17 @@ in stdenv.mkDerivation (rec {
       hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
       stripLen = 1;
     })
-  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
+  ] ++ lib.optionals enablePolly [
+    ./gnu-install-dirs-polly.patch
+    # Add missing isl header includess required to build LLVM 10 + Polly with clang 16.
+    (fetchpatch {
+      name = "polly-ppcg-isl-headers.patch";
+      url = "https://repo.or.cz/ppcg.git/patch/098ba285306114dc71497f7b51c357f69c9b4472";
+      hash = "sha256-c9L30rDROYAMbUSuaK9U/ixyFMlH/Sa1n+VgLODzSCQ=";
+      extraPrefix = "tools/polly/lib/External/ppcg/";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \

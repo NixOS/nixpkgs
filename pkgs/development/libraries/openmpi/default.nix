@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix, ucx
+, libpsm2, libfabric, pmix, ucx, ucc
 , config
 # Enable CUDA support
-, cudaSupport ? config.cudaSupport, cudatoolkit
+, cudaSupport ? config.cudaSupport, cudaPackages
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -18,18 +18,13 @@
 , fortranSupport ? true
 }:
 
-let
-  cudatoolkit_joined = symlinkJoin {
-    name = "${cudatoolkit.name}-unsplit";
-    paths = [ cudatoolkit.out cudatoolkit.lib ];
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.5";
+  version = "4.1.6";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-pkCYa8JXOJ3TeYhv2uYmTIz6VryYtxzjrj372M5h2+M=";
+    sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
   };
 
   postPatch = ''
@@ -46,13 +41,14 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
-    ++ lib.optionals cudaSupport [ cudatoolkit ]
+    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
+    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
   nativeBuildInputs = [ perl ]
+    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
     ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
@@ -67,7 +63,7 @@ in stdenv.mkDerivation rec {
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
+    ++ lib.optionals cudaSupport [ "--with-cuda=${cudaPackages.cuda_cudart}" "--enable-dlopen" ]
     ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
     ;
 
@@ -98,7 +94,8 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    inherit cudaSupport cudatoolkit;
+    inherit cudaSupport;
+    cudatoolkit = cudaPackages.cudatoolkit; # For backward compatibility only
   };
 
   meta = with lib; {

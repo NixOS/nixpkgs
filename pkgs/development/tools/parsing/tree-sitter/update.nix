@@ -75,6 +75,8 @@ let
     "tree-sitter-agda"
     # abandoned
     "tree-sitter-fluent"
+    # to unblock my update
+    "csharp-tree-sitter"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -82,6 +84,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-bitbake" = {
+      orga = "amaanq";
+      repo = "tree-sitter-bitbake";
+    };
     "tree-sitter-beancount" = {
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
@@ -174,6 +180,10 @@ let
     "tree-sitter-norg" = {
       orga = "nvim-neorg";
       repo = "tree-sitter-norg";
+    };
+    "tree-sitter-norg-meta" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg-meta";
     };
     "tree-sitter-commonlisp" = {
       orga = "thehamsta";
@@ -372,16 +382,24 @@ let
       repo = "tree-sitter-solidity";
     };
     "tree-sitter-nu" = {
-      orga = "LhKipp";
+      orga = "nushell";
       repo = "tree-sitter-nu";
     };
     "tree-sitter-cue" = {
       orga = "eonpatapon";
       repo = "tree-sitter-cue";
     };
+    "tree-sitter-uiua" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-uiua";
+    };
     "tree-sitter-wing" = {
       orga = "winglang";
       repo = "wing";
+    };
+    "tree-sitter-wgsl" = {
+      orga = "szebniok";
+      repo = "tree-sitter-wgsl";
     };
   };
 

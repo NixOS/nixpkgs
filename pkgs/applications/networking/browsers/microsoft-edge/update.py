@@ -52,7 +52,7 @@ def nix_expressions(latest: dict[str, Packages]):
               channel = "{channel}";
               version = "{version}";
               revision = "{revision}";
-              sha256 = "{sri}";
+              hash = "{sri}";
             }};'''
         )
         channel_strs.append(channel_str)

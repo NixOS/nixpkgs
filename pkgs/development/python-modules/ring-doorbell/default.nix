@@ -1,8 +1,13 @@
 { lib
+, asyncclick
 , buildPythonPackage
 , fetchPypi
+, firebase-messaging
 , oauthlib
 , poetry-core
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -13,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.7.4";
+  version = "0.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-hto3MwlC6ADjKkcB/4l/uFyw+0CgvLZM0sp3FF62XUA=";
+    hash = "sha256-WYoElfkq0/uK3GPcIwDUP9w8l5zN9G2X/KDJbJNse9s=";
   };
 
   nativeBuildInputs = [
@@ -29,13 +34,23 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    asyncclick
     oauthlib
     pytz
     requests
     requests-oauthlib
   ];
 
+  passthru.optional-dependencies = {
+    listen = [
+      firebase-messaging
+    ];
+  };
+
   nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mock
+    pytest-socket
     pytestCheckHook
     requests-mock
   ];

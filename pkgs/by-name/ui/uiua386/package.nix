@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "An Uiua font";
+    description = "A Uiua font";
     homepage = "https://uiua.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ skykanin ];

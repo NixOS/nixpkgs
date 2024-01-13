@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     "EXEDIR=$(bin)/bin"
     "DOCDIR=$(doc)/share/doc/libhugetlbfs"
     "MANDIR=$(man)/share/man"
+  ] ++ lib.optionals (stdenv.buildPlatform.system != stdenv.hostPlatform.system) [
+    # The ARCH logic defaults to querying `uname`, which will return build platform arch
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
   ];
 
   # Default target builds tests as well, and the tests want a static
@@ -40,10 +43,13 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-docs" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "library and utilities for Linux hugepages";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    badPlatforms = flatten [
+      systems.inspect.platformPatterns.isStatic
+      systems.inspect.patterns.isMusl
+    ];
   };
 }

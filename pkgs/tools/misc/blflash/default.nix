@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/spacemeowx2/blflash";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "blflash";
   };
 }

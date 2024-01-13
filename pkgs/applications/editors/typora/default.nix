@@ -22,10 +22,10 @@
 
 let
   pname = "typora";
-  version = "1.7.5";
+  version = "1.7.6";
   src = fetchurl {
     url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
-    hash = "sha256-4Q+fx1kNu98+nxnI/7hLhE6zOdNsaAiAnW6xVd+hZOI=";
+    hash = "sha256-o91elUN8sFlzVfIQj29amsiUdSBjZc51tLCO+Qfar6c=";
   };
 
   typoraBase = stdenv.mkDerivation {
@@ -100,5 +100,6 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ npulidomateo ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "typora";
   };
 }

@@ -64,5 +64,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.unix;
+    mainProgram = "thonny";
   };
 }

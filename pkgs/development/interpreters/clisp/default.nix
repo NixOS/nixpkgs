@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ autoconf269 automake libtool ];
+  nativeBuildInputs = [ autoconf269 automake libtool ];
   buildInputs = [libsigsegv]
   ++ lib.optional (gettext != null) gettext
   ++ lib.optional (ncurses != null) ncurses
@@ -81,6 +81,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -e 's@9090@64237@g' -i tests/socket.tst
     sed -i 's@/bin/pwd@${coreutils}&@' src/clisp-link.in
+    sed -i 's@1\.16\.2@${automake.version}@' src/aclocal.m4
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
 
@@ -112,6 +113,8 @@ stdenv.mkDerivation {
     sed -i -re '/ cfree /d' -i modules/bindings/glibc/linux.lisp
     cd builddir
   '';
+
+  doCheck = true;
 
   postInstall =
     lib.optionalString (withModules != [])

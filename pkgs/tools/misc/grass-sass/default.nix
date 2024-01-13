@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${replaceStrings [ "." ] [ "" ] version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "grass";
   };
 }

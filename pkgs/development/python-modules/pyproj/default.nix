@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "pyproj";
   version = "3.6.1";
+  format = "setuptools";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
@@ -100,11 +101,11 @@ buildPythonPackage rec {
     "pyproj.exceptions"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to PROJ library";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lsix dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lsix dotlambda ];
   };
 }

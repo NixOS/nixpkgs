@@ -18,8 +18,8 @@ let
 in {
   name = "lxd-virtual-machine";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [adamcstephens];
+  meta = {
+    maintainers = lib.teams.lxc.members;
   };
 
   nodes.machine = {lib, ...}: {

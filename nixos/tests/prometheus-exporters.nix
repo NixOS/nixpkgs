@@ -257,6 +257,21 @@ let
       '';
     };
 
+    exportarr-sonarr = {
+      nodeName = "exportarr_sonarr";
+      exporterConfig = {
+        enable = true;
+        url = "http://127.0.0.1:8989";
+        # testing for real data is tricky, because the api key can not be preconfigured
+        apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
+        wait_for_open_port(9707)
+        succeed("curl -sSf 'http://localhost:9707/metrics")
+      '';
+    };
+
     fastly = {
       exporterConfig = {
         enable = true;
@@ -471,7 +486,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -791,6 +806,7 @@ let
     nginx = {
       exporterConfig = {
         enable = true;
+        constLabels = [ "foo=bar" ];
       };
       metricProvider = {
         services.nginx = {
@@ -803,7 +819,7 @@ let
         wait_for_unit("nginx.service")
         wait_for_unit("prometheus-nginx-exporter.service")
         wait_for_open_port(9113)
-        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up 1'")
+        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up{foo=\"bar\"} 1'")
       '';
     };
 
@@ -969,7 +985,7 @@ let
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
 
       metricProvider = {
@@ -1034,6 +1050,50 @@ let
         wait_for_unit("phpfpm-php-fpm-exporter.service")
         wait_for_unit("prometheus-php-fpm-exporter.service")
         succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
+    ping = {
+      exporterConfig = {
+        enable = true;
+
+        settings = {
+          targets = [ {
+            "localhost" = {
+              alias = "local machine";
+              env = "prod";
+              type = "domain";
+            };
+          } {
+            "127.0.0.1" = {
+              alias = "local machine";
+              type = "v4";
+            };
+          } {
+            "::1" = {
+              alias = "local machine";
+              type = "v6";
+            };
+          } {
+            "google.com" = {};
+          } ];
+          dns = {};
+          ping = {
+            interval = "2s";
+            timeout = "3s";
+            history-size = 42;
+            payload-size = 56;
+          };
+          log = {
+            level = "warn";
+          };
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-ping-exporter.service")
+        wait_for_open_port(9427)
+        succeed("curl -sSf http://localhost:9427/metrics | grep 'ping_up{.*} 1'")
       '';
     };
 
@@ -1318,12 +1378,12 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
             )
         )
       '';

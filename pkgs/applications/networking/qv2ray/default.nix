@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "qv2ray";
-  version = "unstable-2023-06-09";
+  version = "unstable-2023-07-11";
 
   src = fetchFromGitHub {
     owner = "Qv2ray";
     repo = "Qv2ray";
-    rev = "aea9981cc28fe25de55207b93d86036b30d467d2";
-    hash = "sha256-ySXAF6fkkKsafuSa3DxkOuRjSyiCDUZRevcfJRp7LPM=";
+    rev = "b3080564809dd8aef864a54ca1b79f0984fe986b";
+    hash = "sha256-LwBjuX5x3kQcdEfPLEirWpkMqOigkhNoh/VNmBfPAzw=";
     fetchSubmodules = true;
   };
 
@@ -79,5 +79,6 @@ mkDerivation rec {
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
     broken = stdenv.isDarwin;
+    mainProgram = "qv2ray";
   };
 }

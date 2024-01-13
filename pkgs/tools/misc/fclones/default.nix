@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.32.2";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LDbunewSGqIxuy9Z87Aij85xovERuj4W2Jbf2lv2KVM=";
+    hash = "sha256-JgeajCubRz9hR6uvRAw1HXdKa6Ua+l/Im/bYXdx1gL0=";
   };
 
-  cargoHash = "sha256-uKpQ7K8e9bq/7yQdCPlfQnjvOlTRnEUcW9HWE2Vy/lY=";
+  cargoHash = "sha256-mEgFfg8I+JJuUEvj+sia2aL3BVg3HteQorZ2EOiLo64=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ cyounkins figsoda msfjarvis ];
+    mainProgram = "fclones";
   };
 }

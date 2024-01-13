@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "CLI to render Go template text files";
     inherit (src.meta) homepage;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = [];
   };
 }

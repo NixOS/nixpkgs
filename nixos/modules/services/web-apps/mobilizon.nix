@@ -8,7 +8,7 @@ let
   user = "mobilizon";
   group = "mobilizon";
 
-  settingsFormat = pkgs.formats.elixirConf { elixir = pkgs.elixir_1_14; };
+  settingsFormat = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
 
   configFile = settingsFormat.generate "mobilizon-config.exs" cfg.settings;
 
@@ -71,7 +71,7 @@ in
         '';
       };
 
-      package = mkPackageOptionMD pkgs "mobilizon" { };
+      package = mkPackageOption pkgs "mobilizon" { };
 
       settings = mkOption {
         type =
@@ -309,7 +309,7 @@ in
           genCookie = "IO.puts(Base.encode32(:crypto.strong_rand_bytes(32)))";
 
           evalElixir = str: ''
-            ${pkgs.elixir_1_14}/bin/elixir --eval '${str}'
+            ${cfg.package.elixirPackage}/bin/elixir --eval '${str}'
           '';
         in
         ''
@@ -347,12 +347,18 @@ in
 
       # Taken from here:
       # https://framagit.org/framasoft/mobilizon/-/blob/1.1.0/priv/templates/setup_db.eex
+      # TODO(to maintainers of mobilizon): the owner database alteration is necessary
+      # as PostgreSQL 15 changed their behaviors w.r.t. to privileges.
+      # See https://github.com/NixOS/nixpkgs/issues/216989 to get rid
+      # of that workaround.
       script =
         ''
           psql "${repoSettings.database}" -c "\
             CREATE EXTENSION IF NOT EXISTS postgis; \
             CREATE EXTENSION IF NOT EXISTS pg_trgm; \
             CREATE EXTENSION IF NOT EXISTS unaccent;"
+          psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
+
         '';
 
       serviceConfig = {
@@ -372,12 +378,13 @@ in
       ensureUsers = [
         {
           name = dbUser;
-          ensurePermissions = {
-            "DATABASE \"${repoSettings.database}\"" = "ALL PRIVILEGES";
-          };
+          # Given that `dbUser` is potentially arbitrarily custom, we will perform
+          # manual fixups in mobilizon-postgres.
+          # TODO(to maintainers of mobilizon): Feel free to simplify your setup by using `ensureDBOwnership`.
+          ensureDBOwnership = false;
         }
       ];
-      extraPlugins = with postgresql.pkgs; [ postgis ];
+      extraPlugins = ps: with ps; [ postgis ];
     };
 
     # Nginx config taken from support/nginx/mobilizon-release.conf

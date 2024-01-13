@@ -8,6 +8,7 @@
 , gobject-introspection
 , gettext
 , libgudev
+, libdrm
 , polkit
 , libxmlb
 , glib
@@ -18,14 +19,10 @@
 , curl
 , libjcat
 , elfutils
-, libsmbios
-, efivar
 , valgrind
 , meson
 , libuuid
-, colord
 , ninja
-, gcab
 , gnutls
 , protobufc
 , python3
@@ -124,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.6";
+  version = "1.9.11";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-9mA6gETnOmmkI+cdF0kP1moPV6DDvASq1JXarupM/tU=";
+    hash = "sha256-chPZ9nGhFcaExoJDJvFy8terIGZRU6S90RKBYkoWyGQ=";
   };
 
   patches = [
@@ -169,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     shared-mime-info
     valgrind
-    gcab
     gnutls
     protobufc # for protoc
     python
@@ -183,10 +179,10 @@ stdenv.mkDerivation (finalAttrs: {
     gusb
     sqlite
     libarchive
+    libdrm
     curl
     elfutils
     libgudev
-    colord
     libjcat
     libuuid
     json-glib
@@ -194,7 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
     pango
     tpm2-tss
-    efivar
     fwupd-efi
     protobufc
     modemmanager
@@ -202,15 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
     libcbor
     libqmi
     xz # for liblzma
-  ] ++ lib.optionals haveDell [
-    libsmbios
   ] ++ lib.optionals haveFlashrom [
     flashrom
   ];
 
   mesonFlags = [
     "-Ddocs=enabled"
-    "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
     "-Dlaunchd=disabled"

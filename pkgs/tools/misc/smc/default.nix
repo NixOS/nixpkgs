@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl11;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "smc";
   };
 }

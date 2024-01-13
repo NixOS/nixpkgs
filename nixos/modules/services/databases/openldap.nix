@@ -91,13 +91,8 @@ in {
         description = lib.mdDoc "Whether to enable the ldap server.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.openldap;
-        defaultText = literalExpression "pkgs.openldap";
-        description = lib.mdDoc ''
-          OpenLDAP package to use.
-
+      package = mkPackageOption pkgs "openldap" {
+        extraDescription = ''
           This can be used to, for example, set an OpenLDAP package
           with custom overrides to enable modules or other
           functionality.

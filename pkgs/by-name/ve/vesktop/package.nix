@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , stdenvNoCC
+, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -9,50 +10,71 @@
 , vencord
 , electron
 , pipewire
+, libpulseaudio
 , libicns
+, libnotify
 , jq
 , moreutils
+, cacert
 , nodePackages
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "0.3.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "v${version}";
-    sha256 = "sha256-Njs3tACxUyRolYUtS/q2lITIQnUBFXVXWZEfQ66HpPM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ot2O5J1wUZAWgdpJNaEUSwtbcNqDdGhzuCtx8Qg+4gg=";
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    pname = "${pname}-pnpm-deps";
-    inherit src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+  # NOTE: This requires pnpm 8.10.0 or newer
+  # https://github.com/pnpm/pnpm/pull/7214
+  pnpmDeps =
+    assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-pnpm-deps";
+      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
-    nativeBuildInputs = [
-      jq
-      moreutils
-      nodePackages.pnpm
-    ];
+      nativeBuildInputs = [
+        jq
+        moreutils
+        nodePackages.pnpm
+        cacert
+      ];
 
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
+      pnpmPatch = builtins.toJSON {
+        pnpm.supportedArchitectures = {
+          os = [ "linux" ];
+          cpu = [ "x64" "arm64" ];
+        };
+      };
 
-      pnpm config set store-dir $out
-      pnpm install --frozen-lockfile --ignore-script
+      postPatch = ''
+        mv package.json package.json.orig
+        jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+      '';
 
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
+      # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
+      installPhase = ''
+        export HOME=$(mktemp -d)
 
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-vInaSLGahRUgvwAeUcI+oV84L+tgNRCmfFpE0aUD4X4=";
-  };
+        pnpm config set store-dir $out
+        pnpm install --frozen-lockfile --ignore-script
+
+        rm -rf $out/v3/tmp
+        for f in $(find $out -name "*.json"); do
+          sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
+          jq --sort-keys . $f | sponge $f
+        done
+      '';
+
+      dontBuild = true;
+      dontFixup = true;
+      outputHashMode = "recursive";
+      outputHash = "sha256-v6ibAcfYgr1VjGK7NUF4DKd5da03mZndPUAnSl++RqE=";
+    };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -71,7 +93,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
-    cp -r ${pnpm-deps}/* "$STORE_PATH"
+    cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
@@ -92,13 +114,19 @@ stdenv.mkDerivation rec {
   # yes, upstream really packages it as "vesktop" but uses "vencorddesktop" file names
   installPhase =
     let
-      libPath = lib.makeLibraryPath [ pipewire ];
+      # this is mainly required for venmic
+      libPath = lib.makeLibraryPath [
+        libpulseaudio
+        libnotify
+        pipewire
+        gcc13Stdenv.cc.cc.lib
+      ];
     in
     ''
       runHook preInstall
 
       mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-unpacked/resources/app.asar $out/opt/Vesktop/resources
+      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
@@ -124,15 +152,20 @@ stdenv.mkDerivation rec {
       startupWMClass = "VencordDesktop";
       genericName = "Internet Messenger";
       keywords = [ "discord" "vencord" "electron" "chat" ];
+      categories = [ "Network" "InstantMessaging" "Chat" ];
     })
   ];
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+  };
 
   meta = with lib; {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
-}
+})

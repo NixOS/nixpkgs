@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/caarlos0/timer";
     license = licenses.mit;
     maintainers = with maintainers; [ zowoq caarlos0 ];
+    mainProgram = "timer";
   };
 }

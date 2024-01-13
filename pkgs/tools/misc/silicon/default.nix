@@ -60,5 +60,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Aloxaf/silicon";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ evanjs _0x4A6F ];
+    mainProgram = "silicon";
   };
 }

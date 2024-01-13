@@ -7,7 +7,7 @@ in
 {
   options = with types; {
     security.loginDefs = {
-      package = mkPackageOptionMD pkgs "shadow" { };
+      package = mkPackageOption pkgs "shadow" { };
 
       chfnRestrict = mkOption {
         description = mdDoc ''

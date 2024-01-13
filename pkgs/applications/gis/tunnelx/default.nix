@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ goatchurchprime ];
     platforms = lib.platforms.linux;
+    mainProgram = "tunnelx";
   };
 })

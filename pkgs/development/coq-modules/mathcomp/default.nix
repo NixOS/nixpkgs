@@ -19,7 +19,9 @@ let
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; lib.switch coq.coq-version [
-      { case = isGe "8.15"; out = "1.17.0"; }
+      { case = range "8.17" "8.18"; out = "1.18.0"; }
+      { case = range "8.15" "8.18"; out = "1.17.0"; }
+      { case = range "8.16" "8.18"; out = "2.1.0"; }
       { case = range "8.16" "8.18"; out = "2.0.0"; }
       { case = range "8.13" "8.18"; out = "1.16.0"; }
       { case = range "8.14" "8.16"; out = "1.15.0"; }
@@ -34,7 +36,9 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "2.1.0".sha256  = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
     "2.0.0".sha256  = "sha256-dpOmrHYUXBBS9kmmz7puzufxlbNpIZofpcTvJFLG5DI=";
+    "1.18.0".sha256 = "sha256-mJJ/zvM2WtmBZU3U4oid/zCMvDXei/93v5hwyyqwiiY=";
     "1.17.0".sha256 = "sha256-bUfoSTMiW/GzC1jKFay6DRqGzKPuLOSUsO6/wPSFwNg=";
     "1.16.0".sha256 = "sha256-gXTKhRgSGeRBUnwdDezMsMKbOvxdffT+kViZ9e1gEz0=";
     "1.15.0".sha256 = "1bp0jxl35ms54s0mdqky15w9af03f3i0n06qk12k4gw1xzvwqv21";

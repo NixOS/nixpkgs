@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/almarklein/timetagger_cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "timetagger";
   };
 }
 

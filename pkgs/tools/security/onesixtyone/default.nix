@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.fishi0x01 ];
+    mainProgram = "onesixtyone";
   };
 }
 

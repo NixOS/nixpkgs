@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "backports-zoneinfo";
   version = "0.2.1";
+  format = "setuptools";
 
   disabled = pythonAtLeast "3.9";
 

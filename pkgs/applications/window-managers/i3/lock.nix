@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, libxcb, xcbutilkeysyms, xcbutilimage,
-  xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
+  xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "i3lock";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
-    pam libX11 libev cairo libxkbcommon libxkbfile ];
+    pam libX11 libev cairo libxkbcommon libxkbfile xorg.xcbutil ];
 
   meta = with lib; {
     description = "A simple screen locker like slock";

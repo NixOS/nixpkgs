@@ -50,7 +50,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.95";
+  version = "1.0.96";
 
   src =
     let
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-      hash = "sha256-Tsi541GAMrWBl5xLo/K+uEyaoaDSWvwp5RMzZ5V6RAU=";
+      hash = "sha256-eUpxfJQ0u3bpAXTUCKlMO/ViwKcBI59YFKJ3xGzSdcg=";
     };
 
   patches = [

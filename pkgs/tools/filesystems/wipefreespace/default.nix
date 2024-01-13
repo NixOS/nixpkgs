@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wipefreespace";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/wipefreespace/wipefreespace/${version}/wipefreespace-${version}.tar.gz";
-    hash = "sha256-wymV6G4Et5TCoIztZfdb3xuzjdBHFyB5OmI4EcsJKwQ=";
+    hash = "sha256-Pt6MDQ9wSJbL4tW/qckTpFsvE9FdXIkp/QmnYSlWR/M=";
   };
 
   nativeBuildInputs = [
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ catap ];
+    mainProgram = "wipefreespace";
   };
 }

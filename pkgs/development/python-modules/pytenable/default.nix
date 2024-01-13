@@ -14,13 +14,14 @@
 , responses
 , restfly
 , semver
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.13";
-  format = "setuptools";
+  version = "1.4.16";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,8 +29,12 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-UY3AFnPplmU0jrV4LIKH4+2tcJEFkKMqO2GWVkgaHYE=";
+    hash = "sha256-K0eb9j3X5jfNEdAbpK75gbOdD8nerEwlOXUdAGUFT+8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     defusedxml
@@ -50,12 +55,20 @@ buildPythonPackage rec {
     responses
   ];
 
+  disabledTestPaths = [
+    # Disable tests that requires network access
+    "tests/io/"
+  ];
+
   disabledTests = [
     # Disable tests that requires a Docker container
     "test_uploads_docker_push_name_typeerror"
     "test_uploads_docker_push_tag_typeerror"
     "test_uploads_docker_push_cs_name_typeerror"
     "test_uploads_docker_push_cs_tag_typeerror"
+    # Test requires network access
+    "test_assets_list_vcr"
+    "test_events_list_vcr"
   ];
 
   pythonImportsCheck = [

@@ -3,24 +3,24 @@
 , fetchFromGitHub
 , cmake
 , openssl
-, protobuf3_21
+, protobuf_21
 , catch2
 , boost181
 , icu
 }:
 let
   boost = boost181.override { enableStatic = true; };
-  protobuf = protobuf3_21.override { enableShared = false; };
+  protobuf = protobuf_21.override { enableShared = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "localproxy";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "aws-iot-securetunneling-localproxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ec72bvBkRBj4qlTNfzNPeQt02OfOPA8y2PoejHpP9cY=";
+    hash = "sha256-voUKfXa43mOltePQEXgmJ2EBaN06E6R/2Zz6O09ogyY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ spalf ];
     platforms = platforms.unix;
+    mainProgram = "localproxy";
   };
 })

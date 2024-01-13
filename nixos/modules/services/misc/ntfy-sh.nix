@@ -12,12 +12,7 @@ in
   options.services.ntfy-sh = {
     enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ntfy-sh;
-      defaultText = literalExpression "pkgs.ntfy-sh";
-      description = mdDoc "The ntfy.sh package to use.";
-    };
+    package = mkPackageOption pkgs "ntfy-sh" { };
 
     user = mkOption {
       default = "ntfy-sh";
@@ -83,12 +78,6 @@ in
         attachment-cache-dir = mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
-
-      systemd.tmpfiles.rules = [
-        "f ${cfg.settings.auth-file} 0600 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.settings.attachment-cache-dir} 0700 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.settings.cache-file} 0600 ${cfg.user} ${cfg.group} - -"
-      ];
 
       systemd.services.ntfy-sh = {
         description = "Push notifications server";

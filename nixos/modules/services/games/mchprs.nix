@@ -73,12 +73,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mchprs;
-        defaultText = literalExpression "pkgs.mchprs";
-        description = mdDoc "Version of MCHPRS to run.";
-      };
+      package = mkPackageOption pkgs "mchprs" { };
 
       settings = mkOption {
         type = types.submodule {

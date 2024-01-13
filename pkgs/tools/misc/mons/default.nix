@@ -91,5 +91,6 @@ resholve.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
+    mainProgram = "mons";
   };
 }

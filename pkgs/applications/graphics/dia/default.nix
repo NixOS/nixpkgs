@@ -15,6 +15,7 @@
 , pkg-config
 , poppler
 , python3
+, wrapGAppsHook
   # Building with docs are still failing in unstable-2023-09-28
 , withDocs ? false
 }:
@@ -59,6 +60,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wrapGAppsHook
   ] ++
   lib.optionals withDocs [
     dblatex

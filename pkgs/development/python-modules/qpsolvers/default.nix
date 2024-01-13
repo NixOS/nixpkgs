@@ -14,14 +14,14 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.0.0";
+  version = "4.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KkV61pBkIh+4Qav9TVobEBUCyMa6Xqg+eygnOoQRpcQ=";
+    hash = "sha256-brniRAGwN/areB7MnaGeF7CdNku7DG/Q+8TmCXY99iU=";
   };
 
   pythonImportsCheck = [ "qpsolvers" ];

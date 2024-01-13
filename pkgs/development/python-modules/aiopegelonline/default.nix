@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiopegelonline";
-  version = "0.0.6";
+  version = "0.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mib1185";
     repo = "aiopegelonline";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UbH5S+BfXMAurEvPx0sOzNoV/yypbMCPN3Y3cSherfQ=";
+    hash = "sha256-r+5b52N/vliKHx6qOLJ4lWcQt1TPEcn5Dz7cZNhRbNg=";
   };
 
   propagatedBuildInputs = [

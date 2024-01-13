@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.5.1";
-  format = "pyproject";
+  version = "1.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koesterlab";
-    repo = pname;
+    repo = "yte";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7erT5UpejPMIoyqhpYNEON3YWE2l5SdP2olOVpkbNkY=";
+    hash = "sha256-Rm3EKxRZCdYErkyWK9+fF2W7C+v5/MXD/LkehmB6UNQ=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "YAML template engine with Python expressions";
     homepage = "https://github.com/koesterlab/yte";
+    changelog = "https://github.com/yte-template-engine/yte/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -14,7 +14,7 @@
 , linuxHeaders
 , nixosTests
 
-# v8 (upstream default), wavm, wamr, wasmtime, disabled
+  # v8 (upstream default), wavm, wamr, wasmtime, disabled
 , wasmRuntime ? "wamr"
 }:
 
@@ -83,8 +83,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-bBi+3sAwtj5qu1npFpNMK2C99Q0ZI3zaSmMsTcreD8Y=";
-      aarch64-linux = "sha256-piIekotpxB02COglAon9w7a+1jXlHX29/VkrgKFsQ3c=";
+      x86_64-linux = "sha256-OQ4vg4S3DpM+Zo+igncx3AXJnL8FkJbwh7KnBhbnCUM=";
+      aarch64-linux = "sha256-/X8i1vzQ4QvFxi1+5rc1/CGHmRhhu5F3X5A3PgbW+Mc=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;

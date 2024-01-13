@@ -36,15 +36,18 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.0.5";
+      version = "4.1.2";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-PXLmGwVjHavcKDIxdo+TioVUSyfjH6v+E8V7TfXF47s=";
+        hash = "sha256-mpuRD752i7nefHrJRPXbjyM4M/NFsuUF4W7G7zXv+7U=";
       };
+
+      # Why is this needed? https://github.com/weechat/weechat/issues/2031
+      patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
@@ -87,10 +90,10 @@ let
       meta = {
         homepage = "https://weechat.org/";
         changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
-        description = "A fast, light and extensible chat client";
+        description = "Fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
-          (eg. adding python modules for scripts that would require them, etc.)
+          (e.g. adding python modules for scripts that would require them, etc.)
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;

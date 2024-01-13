@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.3.0";
+  version = "7.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KZC6a0ZrTPn033tQxn7HeCRhZUAgO2I5rGDzLJITtpI=";
+    hash = "sha256-J6vwdOI/GM/K0TxRwIgkXibNAc+n9wVCpmMkzMhBepw=";
   };
 
   propagatedBuildInputs = [

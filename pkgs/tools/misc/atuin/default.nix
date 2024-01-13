@@ -4,6 +4,7 @@
 , installShellFiles
 , rustPlatform
 , libiconv
+, AppKit
 , Security
 , SystemConfiguration
 , nixosTests
@@ -11,24 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "16.0.0";
+  version = "17.2.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-Kh6aaWYV+ZG7Asvw5JdGsV+nxD+xvvQab5wLIedcQcQ=";
+    hash = "sha256-nXIYy8rE5FbXxg2EvZ02okpd+BIEI79Mk9W5YcroPGA=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-Ami88ScGj58jCCat4MMDvjZtV5WglmrlggpQfo+LPjs="
-    else "sha256-HQMZ9w1C6go16XGrPNniQZliIQ/5yAp2w/uUwAOQTM0=";
+    then "sha256-KKG3cJYX3lQfXY8wTdQFrdfAhlzeDuR2PYF4NWn7Swk="
+    else "sha256-VzLcMC79JYZ87ZnO0lQ/mL/5Wrnl2/6E5GblhCvh1FA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv AppKit Security SystemConfiguration ];
 
   postInstall = ''
     installShellCompletion --cmd atuin \
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
+    # No such file or directory (os error 2)
+    "--skip=sync"
   ];
 
   meta = with lib; {
@@ -51,5 +54,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/atuinsh/atuin";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
+    mainProgram = "atuin";
   };
 }

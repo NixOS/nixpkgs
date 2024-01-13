@@ -1,8 +1,9 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchpatch
+, callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf3_21
+, glog, boost, gflags, protobuf_21
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -14,8 +15,7 @@
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
-, enableCuda      ? config.cudaSupport &&
-                    stdenv.hostPlatform.isx86_64
+, enableCuda      ? config.cudaSupport
 , cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -186,7 +186,7 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
-    ++ lib.optional useSystemProtobuf protobuf3_21
+    ++ lib.optional useSystemProtobuf protobuf_21
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -289,7 +289,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = []; } // {
+    tests = lib.optionalAttrs enableCuda {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv3"; };
+    };
+  };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

@@ -42,6 +42,11 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+  disabledTestPaths = [
+    # tests requiring network
+    "tests/integration"
+  ];
+
   pythonImportsCheck = [
     "praw"
   ];

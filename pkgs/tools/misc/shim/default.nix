@@ -3,7 +3,7 @@
 
 let
 
-  inherit (stdenv.targetPlatform) system;
+  inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
   target = {

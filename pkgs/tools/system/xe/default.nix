@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
+    mainProgram = "xe";
   };
 }

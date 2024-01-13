@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cyclonedx-gomod";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JczDfNBYT/Ap2lDucEvuT8NAwuQgmavOUvtznI6Q+Zc=";
+    hash = "sha256-whAHZDUQBJaYu+OZiqcYzWxOru1GXDQ4FMDCj+ngCDs=";
   };
 
-  vendorHash = "sha256-5Mn+f+oVwbn2qGaZct5+9f6tOBXfsB/I72yD7fHUrC8=";
+  vendorHash = "sha256-FpsZonGJSzbAsnM00qq/qiTJLUN4q08dR+6rhTKvX0I=";
 
   # Tests require network access and cyclonedx executable
   doCheck = false;
@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/CycloneDX/cyclonedx-gomod/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cyclonedx-gomod";
   };
 }

@@ -15,17 +15,18 @@
 , glew
 , lua
 , mpg123
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "unstable-2022-08-15";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "1a0d25eec54f9ca2eb3667676d93fb0b6b6aea26";
-    sha256 = "sha256-mtaJr4HJbp2UnzwaLq12V69DqPYDmSNqMGiuPpMlznI=";
+    rev = "d05af4bd3a9a655dfe17d02760bab3542cc0b909";
+    sha256 = "sha256-lzTSE0WH+4fOad9E/pL3LDc4L151W0hFEmD0zsS0gpQ=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/sirjuddington/SLADE.git";
+  };
 
   meta = with lib; {
     description = "Doom editor";

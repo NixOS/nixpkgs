@@ -3,27 +3,14 @@
 , darwin
 , callPackage
 , flutter
-, supportsLinuxDesktop ? stdenv.hostPlatform.isLinux
-, supportsAndroid ? (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin)
-, supportsDarwin ? stdenv.hostPlatform.isDarwin
-, supportsIOS ? stdenv.hostPlatform.isDarwin
-, includedEngineArtifacts ? {
-    common = [
-      "flutter_patched_sdk"
-      "flutter_patched_sdk_product"
-    ];
-    platform = {
-      android = lib.optionalAttrs supportsAndroid
-        ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
-      darwin = lib.optionalAttrs supportsDarwin
-        ((lib.genAttrs [ "arm64" "x64" ] (architecture: [ "profile" "release" ])));
-      ios = lib.optionalAttrs supportsIOS
-        ((lib.genAttrs [ "" ] (architecture: [ "profile" "release" ])));
-      linux = lib.optionalAttrs supportsLinuxDesktop
-        (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
-          (architecture: [ "debug" "profile" "release" ]));
-    };
-  }
+, supportedTargetPlatforms ? [
+    "universal"
+    "web"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "linux"
+  ++ lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin) "android"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "macos" "ios" ]
+, artifactHashes ? (import ./artifacts/hashes.nix).${flutter.version}
 , extraPkgConfigPackages ? [ ]
 , extraLibraries ? [ ]
 , extraIncludes ? [ ]
@@ -57,70 +44,31 @@
 }:
 
 let
-  engineArtifacts = callPackage ./engine-artifacts {
-    inherit (flutter) engineVersion;
-    flutterVersion = flutter.version;
-  };
-  mkCommonArtifactLinkCommand = { artifact }:
-    ''
-      mkdir -p $out/artifacts/engine/common
-      lndir -silent ${artifact} $out/artifacts/engine/common
-    '';
-  mkPlatformArtifactLinkCommand = { artifact, os, architecture, variant ? null }:
-    let
-      artifactDirectory = "${os}-${architecture}${lib.optionalString (variant != null) "-${variant}"}";
-    in
-    ''
-      mkdir -p $out/artifacts/engine/${artifactDirectory}
-      lndir -silent ${artifact} $out/artifacts/engine/${artifactDirectory}
-    '';
-  engineArtifactDirectory =
-    runCommandLocal "flutter-engine-artifacts-${flutter.version}" { nativeBuildInputs = [ lndir ]; }
-      (
-        builtins.concatStringsSep "\n"
-          ((map
-            (name: mkCommonArtifactLinkCommand {
-              artifact = engineArtifacts.common.${name};
-            })
-            (includedEngineArtifacts.common or [ ])) ++
-          (builtins.foldl'
-            (commands: os: commands ++
-              (builtins.foldl'
-                (commands: architecture: commands ++
-                  (builtins.foldl'
-                    (commands: variant: commands ++
-                      (map
-                        (artifact: mkPlatformArtifactLinkCommand {
-                          inherit artifact os architecture variant;
-                        })
-                        engineArtifacts.platform.${os}.${architecture}.variants.${variant}))
-                    (map
-                      (artifact: mkPlatformArtifactLinkCommand {
-                        inherit artifact os architecture;
-                      })
-                      engineArtifacts.platform.${os}.${architecture}.base)
-                    includedEngineArtifacts.platform.${os}.${architecture}))
-                [ ]
-                (builtins.attrNames includedEngineArtifacts.platform.${os})))
-            [ ]
-            (builtins.attrNames (includedEngineArtifacts.platform or { }))))
-      );
+  supportsLinuxDesktopTarget = builtins.elem "linux" supportedTargetPlatforms;
 
-  cacheDir = symlinkJoin {
+  platformArtifacts = lib.genAttrs supportedTargetPlatforms (platform:
+    (callPackage ./artifacts/prepare-artifacts.nix {
+      src = callPackage ./artifacts/fetch-artifacts.nix {
+        inherit platform;
+        flutter = callPackage ./wrapper.nix { inherit flutter; };
+        hash = artifactHashes.${platform}.${stdenv.hostPlatform.system} or "";
+      };
+    }));
+
+  cacheDir = symlinkJoin rec {
     name = "flutter-cache-dir";
-    paths = [
-      engineArtifactDirectory
-      "${flutter}/bin/cache"
-    ];
+    paths = builtins.attrValues platformArtifacts;
+    postBuild = ''
+      mkdir -p "$out/bin/cache"
+      ln -s '${flutter}/bin/cache/dart-sdk' "$out/bin/cache"
+    '';
+    passthru.platform = platformArtifacts;
   };
 
   # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
   # Wrap it to ensure that it does not do that, preferring home directories instead.
-  # The sh file `$out/bin/internal/shared.sh` runs when launching Flutter and calls `"$FLUTTER_ROOT/bin/cache/` instead of our environment variable `FLUTTER_CACHE_DIR`.
-  # We do not patch it since the script doesn't require engine artifacts(which are the only thing not added by the unwrapped derivation), so it shouldn't fail, and patching it will just be harder to maintain.
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export FLUTTER_CACHE_DIR=${cacheDir}
     ${flutter}/bin/flutter "$@"
   '';
 
@@ -128,7 +76,7 @@ let
   tools = [ git which ];
 
   # Libraries that Flutter apps depend on at runtime.
-  appRuntimeDeps = lib.optionals supportsLinuxDesktop [
+  appRuntimeDeps = lib.optionals supportsLinuxDesktopTarget [
     atk
     cairo
     gdk-pixbuf
@@ -152,10 +100,10 @@ let
 
   # Some header files and libraries are not properly located by the Flutter SDK.
   # They must be manually included.
-  appStaticBuildDeps = (lib.optionals supportsLinuxDesktop [ libX11 xorgproto zlib ]) ++ extraLibraries;
+  appStaticBuildDeps = (lib.optionals supportsLinuxDesktopTarget [ libX11 xorgproto zlib ]) ++ extraLibraries;
 
   # Tools used by the Flutter SDK to compile applications.
-  buildTools = lib.optionals supportsLinuxDesktop [
+  buildTools = lib.optionals supportsLinuxDesktopTarget [
     pkg-config
     cmake
     ninja
@@ -174,11 +122,12 @@ in
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ]
-    ++ lib.optionals supportsLinuxDesktop [ glib wrapGAppsHook ];
+    ++ lib.optionals supportsLinuxDesktopTarget [ glib wrapGAppsHook ];
 
   passthru = flutter.passthru // {
+    inherit (flutter) version;
     unwrapped = flutter;
-    inherit engineArtifacts;
+    inherit cacheDir;
   };
 
   dontUnpack = true;

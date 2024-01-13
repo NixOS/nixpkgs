@@ -143,7 +143,7 @@ in
         RuntimeDirectory = "keyd";
 
         # Hardening
-        CapabilityBoundingSet = "";
+        CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
         DeviceAllow = [
           "char-input rw"
           "/dev/uinput rw"
@@ -152,7 +152,7 @@ in
         PrivateNetwork = true;
         ProtectHome = true;
         ProtectHostname = true;
-        PrivateUsers = true;
+        PrivateUsers = false;
         PrivateMounts = true;
         PrivateTmp = true;
         RestrictNamespaces = true;
@@ -165,9 +165,9 @@ in
         LockPersonality = true;
         ProtectProc = "invisible";
         SystemCallFilter = [
+          "nice"
           "@system-service"
           "~@privileged"
-          "~@resources"
         ];
         RestrictAddressFamilies = [ "AF_UNIX" ];
         RestrictSUIDSGID = true;

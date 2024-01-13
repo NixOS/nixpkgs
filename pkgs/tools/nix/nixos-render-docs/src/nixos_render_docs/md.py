@@ -365,7 +365,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
                 return False
             id, classes = parsed_attrs
 
-            token = state.push("attr_span_begin", "span", 1) # type: ignore[no-untyped-call]
+            token = state.push("attr_span_begin", "span", 1)
             if id:
                 token.attrs['id'] = id
             if classes:
@@ -375,7 +375,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
             state.posMax = label_end
             state.md.inline.tokenize(state)
 
-            state.push("attr_span_end", "span", -1) # type: ignore[no-untyped-call]
+            state.push("attr_span_end", "span", -1)
 
         state.pos = label_end + match.end() + 1
         state.posMax = input_end

@@ -25,8 +25,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # modernise cmake files, also fixes them for multiple outputs
+    # https://github.com/uclouvain/openjpeg/pull/1424
     (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/pull/1424.patch";
+      name = "uclouvain-openjpeg-pull-1424.patch";
+      url = "https://github.com/uclouvain/openjpeg/compare/52927287402a9f7353de8854c88f931051211e2f...9d4f70cfe99626f82f9c8dcbf45f07709e3511b2.patch";
       sha256 = "sha256-CxVRt1u4HVOMUjWiZ2plmZC29t/zshCpSY+N4Wlrlvg=";
     })
     # fix cmake files cross compilation

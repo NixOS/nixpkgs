@@ -11,30 +11,29 @@
 , tzdata
 }:
 
+assert lib.versionOlder protobuf.version "21" -> throw "Protobuf 21 or newer required";
+
 let
-  versionMajor = lib.versions.major protobuf.version;
-  versionMinor = lib.versions.minor protobuf.version;
-  versionPatch = lib.versions.patch protobuf.version;
+  protobufVersionMajor = lib.versions.major protobuf.version;
+  protobufVersionMinor = lib.versions.minor protobuf.version;
 in
 buildPythonPackage {
   inherit (protobuf) pname src;
 
-  # protobuf 3.21 corresponds with its python library 4.21
-  version =
-    if lib.versionAtLeast protobuf.version "3.21"
-    then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
-    else protobuf.version;
+  # protobuf 21 corresponds with its python library 4.21
+  version = "4.${protobufVersionMajor}.${protobufVersionMinor}";
+  format = "setuptools";
 
   sourceRoot = "${protobuf.src.name}/python";
 
-  patches = lib.optionals (lib.versionAtLeast protobuf.version "3.22") [
+  patches = lib.optionals (lib.versionAtLeast protobuf.version "22") [
     # Replace the vendored abseil-cpp with nixpkgs'
     (substituteAll {
       src = ./use-nixpkgs-abseil-cpp.patch;
       abseil_cpp_include_path = "${lib.getDev protobuf.abseil-cpp}/include";
     })
   ]
-  ++ lib.optionals (pythonAtLeast "3.11" && lib.versionOlder protobuf.version "3.22") [
+  ++ lib.optionals (pythonAtLeast "3.11" && lib.versionOlder protobuf.version "22") [
     (fetchpatch {
       name = "support-python311.patch";
       url = "https://github.com/protocolbuffers/protobuf/commit/2206b63c4649cf2e8a06b66c9191c8ef862ca519.diff";
@@ -69,14 +68,14 @@ buildPythonPackage {
 
   propagatedNativeBuildInputs = [
     # For protoc of the same version.
-    buildPackages."protobuf${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}"
+    buildPackages."protobuf_${protobufVersionMajor}"
   ];
 
   setupPyGlobalFlags = [ "--cpp_implementation" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "3.22") [
+  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [
     numpy
   ];
 
@@ -90,7 +89,7 @@ buildPythonPackage {
     "testStrictUtf8Check"
   ];
 
-  disabledTestPaths = lib.optionals (lib.versionAtLeast protobuf.version "3.23") [
+  disabledTestPaths = lib.optionals (lib.versionAtLeast protobuf.version "23") [
     # The following commit (I think) added some internal test logic for Google
     # that broke generator_test.py. There is a new proto file that setup.py is
     # not generating into a .py file. However, adding this breaks a bunch of

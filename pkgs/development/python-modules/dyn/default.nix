@@ -1,9 +1,10 @@
 { lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
-, pytest-xdist, covCore, glibcLocales }:
+, pytest-xdist, cov-core, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     pytest-cov
     mock
     pytest-xdist
-    covCore
+    cov-core
   ];
   # Disable checks because they are not stateless and require internet access.
   doCheck = false;

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "openrouteservice";
   version = "2.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GIScience";

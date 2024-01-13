@@ -1,7 +1,7 @@
 { stdenv, lib, tlpdb, bin, tlpdbxz, tl
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
-, gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
+, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, perl, python3, ruby, zip
 }:
 
 oldTlpdb:
@@ -88,6 +88,7 @@ in lib.recursiveUpdate orig rec {
   pkfix-helper.extraBuildInputs = [ ghostscript_headless ];
   ps2eps.extraBuildInputs = [ ghostscript_headless ];
   pst2pdf.extraBuildInputs = [ ghostscript_headless ];
+  tex4ebook.extraBuildInputs = [ html-tidy ];
   tex4ht.extraBuildInputs = [ ruby ];
   texlive-scripts.extraBuildInputs = [ gnused ];
   texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
@@ -126,7 +127,7 @@ in lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = (lib.last tl."texlive.infra".pkgs) + "/bin/mktexlsr";
+    texhash = tl."texlive.infra" + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {
@@ -241,6 +242,10 @@ in lib.recursiveUpdate orig rec {
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath pst2pdf.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/pst2pdf
   '';
 
+  tex4ebook.postFixup = ''
+    sed -i '2ios.setenv("PATH","${lib.makeBinPath tex4ebook.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/tex4ebook
+  '';
+
   tex4ht.postFixup = ''
     sed -i -e '2iPATH="${lib.makeBinPath tex4ht.extraBuildInputs}''${PATH:+:$PATH}"' -e 's/\\rubyCall//g;' "$out"/bin/htcontext
   '';
@@ -352,7 +357,7 @@ in lib.recursiveUpdate orig rec {
         mkdir -p support/texdoc
         touch support/texdoc/NEWS
 
-        TEXMFCNF="${lib.head tl.kpathsea.pkgs}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+        TEXMFCNF="${tl.kpathsea.tex}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
           "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
           -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
@@ -362,7 +367,7 @@ in lib.recursiveUpdate orig rec {
 
     # install zsh completion
     postFixup = ''
-      TEXMFCNF="${lib.head tl.kpathsea.pkgs}"/web2c TEXMF="$scriptsFolder/../.." \
+      TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
         --replace 'compdef __texdoc texdoc' '#compdef texdoc' \
@@ -381,14 +386,14 @@ in lib.recursiveUpdate orig rec {
     license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
 
     scriptsFolder = "texlive";
-    extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
+    extraBuildInputs = [ coreutils gnused gnupg tl.kpathsea (perl.withPackages (ps: with ps; [ Tk ])) ];
 
     # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
     postFixup = ''
       substituteInPlace "$out"/bin/tlmgr \
         --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
       sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
-      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last tl.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused tl.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';
 
     # add minimal texlive.tlpdb

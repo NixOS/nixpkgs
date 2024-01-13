@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ _0x4A6F mkf ];
     license     = licenses.isc;
     platforms   = platforms.linux;
+    mainProgram = "cwm";
   };
 }

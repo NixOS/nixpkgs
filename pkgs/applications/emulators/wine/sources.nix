@@ -69,9 +69,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "8.17";
-    url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
-    hash = "sha256-8BeFvTFix05l3rE6oK3XEeN8SERUcZvt0OjCsaNGm34=";
+    version = "9.0-rc1";
+    url = "https://dl.winehq.org/wine/source/9.0/wine-${version}.tar.xz";
+    hash = "sha256-GDd3V74ffxeGzopWqET2ZXKIH/z3RcC0yjTwmmDi8zA=";
     inherit (stable) patches;
 
     ## see http://wiki.winehq.org/Gecko
@@ -88,9 +88,9 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "8.0.0";
+      version = "8.1.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-dbP0XcodyJhX/p6TLaeHEPZMxtSe8asMcjoXcIW0cRs=";
+      hash = "sha256-DtPsUzrvebLzEhVZMc97EIAAmsDFtMK8/rZ4rJSOCBA=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
@@ -116,8 +116,8 @@ in rec {
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
-    version = "8.17.1";
-    hash = "sha256-h36NDFYsI0y8TG41IH10IdF4QEuBkBewQ3knZ9iwDpg=";
+    inherit (unstable) version;
+    hash = "sha256-jjy4r9VEJsU7FJ7RmE8+cgHTAkZVGruNUD5hzmGSB8c=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -127,12 +127,12 @@ in rec {
 
   wayland = fetchFromGitLab {
     # https://gitlab.collabora.com/alf/wine/-/tree/wayland
-    version = "8.0";
-    hash = "sha256-whRnm21UyKZ4AQufNmctzivISVobnCeidmpYz65vlyk=";
+    version = "8.2";
+    hash = "sha256-Eb2SFBIeQQ3cVZkUQcwNT5mcYe0ShFxBdMc3BlqkwTo=";
     domain = "gitlab.collabora.com";
     owner = "alf";
     repo = "wine";
-    rev = "2f80bd757739f2dd8da41abceae6b87d2c568152";
+    rev = "b2547ddf9e08cafce98cf7734d5c4ec926ef3536";
 
     inherit (unstable) gecko32 gecko64;
 

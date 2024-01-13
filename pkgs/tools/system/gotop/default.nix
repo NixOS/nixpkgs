@@ -49,5 +49,6 @@ buildGoModule rec {
     changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
+    mainProgram = "gotop";
   };
 }

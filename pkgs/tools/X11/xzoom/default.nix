@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
+    mainProgram = "xzoom";
   };
 }

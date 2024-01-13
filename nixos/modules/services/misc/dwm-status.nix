@@ -24,14 +24,8 @@ in
 
       enable = mkEnableOption (lib.mdDoc "dwm-status user service");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.dwm-status;
-        defaultText = literalExpression "pkgs.dwm-status";
-        example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = lib.mdDoc ''
-          Which dwm-status package to use.
-        '';
+      package = mkPackageOption pkgs "dwm-status" {
+        example = "dwm-status.override { enableAlsaUtils = false; }";
       };
 
       order = mkOption {

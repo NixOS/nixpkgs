@@ -14,16 +14,16 @@
 let
 
   pname = "hplip";
-  version = "3.23.3";
+  version = "3.23.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5CYKmKKx2I0h6CVi3kGaohyVvJ4qzjWDNGqA/SF+B7Y=";
+    hash = "sha256-98wF9ijAz9dQ5UrkFDHB390p6XaC8YtcW6XLLFtLG0Y=";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    sha256 = "sha256-AyZBiF1B42dGnJeoJLFSCGNK83c86ZAM2uFciuv2H4A=";
+    hash = "sha256-frsgye3f0M3HE2trKRlfFvMnDEwe+z74IumCdVPrcSY=";
   };
 
   hplipState = substituteAll {
@@ -66,6 +66,8 @@ python3Packages.buildPythonApplication {
     perl
     zlib
     avahi
+  ] ++ lib.optionals withQt5 [
+    qt5.qtwayland
   ];
 
   nativeBuildInputs = [
@@ -237,6 +239,8 @@ python3Packages.buildPythonApplication {
   # 1. Calling patchPythonProgram on the original script in $out/share/hplip
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
+  # We also avoid double wrapping in case we add qt5 support
+  dontWrapQtApps = true;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
@@ -246,7 +250,7 @@ python3Packages.buildPythonApplication {
       echo "patching \`$py'..."
       patchPythonScript "$py"
       echo "wrapping \`$bin'..."
-      makeWrapper "$py" "$bin" \
+      ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
           $makeWrapperArgs
@@ -264,10 +268,6 @@ python3Packages.buildPythonApplication {
       --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
-  '' + lib.optionalString withQt5 ''
-    for f in $out/bin/hp-*;do
-      wrapQtApp $f
-    done
   '';
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
@@ -283,6 +283,6 @@ python3Packages.buildPythonApplication {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel arthsmn ];
   };
 }

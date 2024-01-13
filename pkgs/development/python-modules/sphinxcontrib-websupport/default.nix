@@ -26,7 +26,11 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
   ];
 
+  # circular dependency on sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = {
     description = "Sphinx API for Web Apps";

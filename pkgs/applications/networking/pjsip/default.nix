@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.13.1";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-R1iKIkWyNCRV2PjQgTqKmJYUgHAZrREanD60Jz6MY1Y=";
+    hash = "sha256-PWCeIvnBAOqbcNYPhIY7hykdvLzoD9lssSViCCPNT68=";
   };
 
   patches = [
@@ -35,11 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
+  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
+    # work around https://github.com/NixOS/nixpkgs/issues/166205
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++11";
+  } // lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+  };
+
   preConfigure = ''
     export LD=$CC
   '';
-
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
 
   postBuild = lib.optionalString pythonSupport ''
     make -C pjsip-apps/src/swig/python

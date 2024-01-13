@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/INFURA/ipfs-upload-client";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "ipfs-upload-client";
   };
 }

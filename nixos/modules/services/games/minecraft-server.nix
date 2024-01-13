@@ -150,12 +150,8 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.minecraft-server;
-        defaultText = literalExpression "pkgs.minecraft-server";
-        example = literalExpression "pkgs.minecraft-server_1_12_2";
-        description = lib.mdDoc "Version of minecraft-server to run.";
+      package = mkPackageOption pkgs "minecraft-server" {
+        example = "minecraft-server_1_12_2";
       };
 
       jvmOpts = mkOption {

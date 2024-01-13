@@ -1,8 +1,14 @@
-{ buildGoModule
+{ bash
+, buildGoModule
 , fetchFromGitHub
+, getent
 , goss
-, nix-update-script
 , lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, stdenv
+, systemd
 , testers
 }:
 
@@ -10,21 +16,23 @@ buildGoModule rec {
   pname = "goss";
 
   # Don't forget to update dgoss to the same version.
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
+    hash = "sha256-dH052t30unWmrFTZK5niXNvbg1nngzWY7mwuZr4ULbM=";
   };
 
-  vendorHash = "sha256-n+k7f9e2iqf4KrcDkzX0CWk+Bq2WE3dyUEid4PTP1FA=";
+  vendorHash = "sha256-4fEEz/c/xIeWxIzyyjwgSn2/2FWLA2tIedK65jGgYhY=";
 
   CGO_ENABLED = 0;
   ldflags = [
     "-s" "-w" "-X main.version=v${version}"
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   checkFlags = [
     # Prometheus tests are skipped upstream
@@ -32,11 +40,22 @@ buildGoModule rec {
     "-skip" "^TestPrometheus"
   ];
 
+  postInstall = let
+    runtimeDependencies = [ bash getent ]
+      ++ lib.optionals stdenv.isLinux [ systemd ];
+  in ''
+    wrapProgram $out/bin/goss \
+      --prefix PATH : "${lib.makeBinPath runtimeDependencies}"
+  '';
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "goss --version";
-      package = goss;
-      version = "v${version}";
+    tests = {
+      inherit (nixosTests) goss;
+      version = testers.testVersion {
+        command = "goss --version";
+        package = goss;
+        version = "v${version}";
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -51,7 +70,8 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "goss";
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

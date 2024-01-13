@@ -10,6 +10,21 @@ let
   settingsFormat = pkgs.formats.json { };
   cleanedConfig = converge (filterAttrsRecursive (_: v: v != null && v != {})) cfg.settings;
 
+  isUnixGui = (builtins.substring 0 1 cfg.guiAddress) == "/";
+
+  # Syncthing supports serving the GUI over Unix sockets. If that happens, the
+  # API is served over the Unix socket as well.  This function returns the correct
+  # curl arguments for the address portion of the curl command for both network
+  # and Unix socket addresses.
+  curlAddressArgs = path: if isUnixGui
+    # if cfg.guiAddress is a unix socket, tell curl explicitly about it
+    # note that the dot in front of `${path}` is the hostname, which is
+    # required.
+    then "--unix-socket ${cfg.guiAddress} http://.${path}"
+    # no adjustements are needed if cfg.guiAddress is a network address
+    else "${cfg.guiAddress}${path}"
+    ;
+
   devices = mapAttrsToList (_: device: device // {
     deviceID = device.id;
   }) cfg.settings.devices;
@@ -62,14 +77,14 @@ let
       GET_IdAttrName = "deviceID";
       override = cfg.overrideDevices;
       conf = devices;
-      baseAddress = "${cfg.guiAddress}/rest/config/devices";
+      baseAddress = curlAddressArgs "/rest/config/devices";
     };
     dirs = {
       new_conf_IDs = map (v: v.id) folders;
       GET_IdAttrName = "id";
       override = cfg.overrideFolders;
       conf = folders;
-      baseAddress = "${cfg.guiAddress}/rest/config/folders";
+      baseAddress = curlAddressArgs "/rest/config/folders";
     };
   } [
     # Now for each of these attributes, write the curl commands that are
@@ -117,15 +132,14 @@ let
     builtins.attrNames
     (lib.subtractLists ["folders" "devices"])
     (map (subOption: ''
-      curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} \
-        ${cfg.guiAddress}/rest/config/${subOption}
+      curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} ${curlAddressArgs "/rest/config/${subOption}"}
     ''))
     (lib.concatStringsSep "\n")
   ]) + ''
     # restart Syncthing if required
-    if curl ${cfg.guiAddress}/rest/config/restart-required |
+    if curl ${curlAddressArgs "/rest/config/restart-required"} |
        ${jq} -e .requiresRestart > /dev/null; then
-        curl -X POST ${cfg.guiAddress}/rest/system/restart
+        curl -X POST ${curlAddressArgs "/rest/system/restart"}
     fi
   '');
 in {
@@ -545,6 +559,15 @@ in {
         '';
       };
 
+      databaseDir = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          The directory containing the database and logs.
+        '';
+        default = cfg.configDir;
+        defaultText = literalExpression "config.${opt.configDir}";
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -569,14 +592,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syncthing;
-        defaultText = literalExpression "pkgs.syncthing";
-        description = lib.mdDoc ''
-          The Syncthing package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "syncthing" { };
     };
   };
 
@@ -651,8 +667,10 @@ in {
           ExecStart = ''
             ${cfg.package}/bin/syncthing \
               -no-browser \
-              -gui-address=${cfg.guiAddress} \
-              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
+              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
+              -config=${cfg.configDir} \
+              -data=${cfg.databaseDir} \
+              ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

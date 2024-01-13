@@ -1,4 +1,4 @@
-From 8ce66fca339d9daf6bd132771c2ea582a461f31c Mon Sep 17 00:00:00 2001
+From 6088085d3074316dd74639fc6c1233e5862aff11 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 09:34:46 +0800
 Subject: [PATCH 03/11] qtbase: qmake: fix includedir in generated pkg-config

@@ -13,20 +13,20 @@
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.92.2";
+  version = "0.96.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-8h05ar16s1r1movP7zJgOsVAXJbU+Wi+wzmgVZ3nPbw=";
+    hash = "sha256-SXhva2acXIOuru8tTdRt5OU3Pce5eHm6SOn/y7N3ZIs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "datadog-profiling-4.0.0" = "sha256-HoRELMxNkxkISscBksH4wMj/cuK/XQANr2WQUKwrevg=";
+      "datadog-profiling-5.0.0" = "sha256-/Z1vGpAHpU5EO80NXnzyAHN4s3iyA1jOquBS8MH1nOo=";
     };
   };
 
@@ -47,9 +47,8 @@ buildPecl rec {
     curl
     pcre2
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.Libsystem
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Security
     libiconv
   ];
 

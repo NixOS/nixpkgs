@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , abootimg
+, acl
 , apksigcopier
 , apksigner
 , apktool
@@ -78,11 +79,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "248";
+  version = "253";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-Lub+SIr0EyY4YmPsoLXWavXJhcpmK5VRb6eEnozZ0XQ=";
+    hash = "sha256-xI+SIEUPKFxz7sk9qqE1ibSJX0WRPnJEpco0Mqv7Wp8=";
   };
 
   outputs = [
@@ -92,7 +93,6 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    ./fix-test_fit.patch
   ];
 
   postPatch = ''
@@ -113,16 +113,20 @@ python3.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
+  # Android-specific tools:
   # aapt2
   # dexdump
-  # docx2txt
-  # getfacl
+  # Darwin-specific tools:
   # lipo
   # otool
-  # r2pipe
+  # Other tools:
+  # docx2txt <- makes tests broken:
+  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+    acl
     binutils-unwrapped-all-targets
     bzip2
     cdrkit
@@ -210,6 +214,7 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
+      # docx2txt, breaks the tests.
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
@@ -289,5 +294,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
+    mainProgram = "diffoscope";
   };
 }

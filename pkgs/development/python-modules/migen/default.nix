@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "migen";
   version = "unstable-2022-09-02";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";

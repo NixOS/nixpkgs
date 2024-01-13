@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "asyncclick";
   version = "8.1.3.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -20,8 +21,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-by1clF+WAfN/gjOg/F60O1tCZ3qAhWqiiJJY04iMzQ8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

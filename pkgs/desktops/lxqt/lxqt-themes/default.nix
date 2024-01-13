@@ -14,7 +14,7 @@ mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "bmkvg62lNFRhSerKFSo2POP8MWa1ZrdSi2E9nWDQSRQ=";
+    hash = "sha256-bmkvg62lNFRhSerKFSo2POP8MWa1ZrdSi2E9nWDQSRQ=";
   };
 
   nativeBuildInputs = [

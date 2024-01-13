@@ -1,0 +1,28 @@
+diff --git a/time/chrono/+freebsd.ha b/time/chrono/+freebsd.ha
+index 26d78ab1..6861bfe8 100644
+--- a/time/chrono/+freebsd.ha
++++ b/time/chrono/+freebsd.ha
+@@ -2,7 +2,7 @@
+ // (c) Hare authors <https://harelang.org>
+ 
+ def LOCALTIME_PATH: str = "/etc/localtime";
+-def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
++def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
+ 
+ // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
+ // leap second data.
+diff --git a/time/chrono/+linux.ha b/time/chrono/+linux.ha
+index 600f606c..8d5617e2 100644
+--- a/time/chrono/+linux.ha
++++ b/time/chrono/+linux.ha
+@@ -2,8 +2,8 @@
+ // (c) Hare authors <https://harelang.org>
+ 
+ def LOCALTIME_PATH: str = "/etc/localtime";
+-def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
++def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
+ 
+ // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
+ // leap second data.
+-export def UTC_LEAPSECS_FILE: str = "/usr/share/zoneinfo/leap-seconds.list";
++export def UTC_LEAPSECS_FILE: str = "@tzdata@/share/zoneinfo/leap-seconds.list";

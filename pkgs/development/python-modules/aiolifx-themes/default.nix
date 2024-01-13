@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.4.9";
-  format = "pyproject";
+  version = "0.4.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8t0yRia/grSSEqySV57QoB3lgU9iwqiVOvVLE5Jd2pM=";
+    hash = "sha256-pldmkdkDI6RFMcBOF1MtQBddOo+uF23CMHPztEV+kf0=";
   };
 
   prePatch = ''
@@ -29,11 +29,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
       --replace "typer = " "# unused: typer = "
-  '';
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
   '';
 
   nativeBuildInputs = [

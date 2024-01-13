@@ -196,6 +196,7 @@ stdenv.mkDerivation rec {
       (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
         lib.concatStringsSep "\n" [
           (''
+            shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
@@ -235,6 +236,8 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     ''
@@ -368,7 +371,9 @@ stdenv.mkDerivation rec {
   # Recache package db which needs to happen for Hadrian bindists
   # where we modify the package db before installing
   + ''
-    "$out/bin/ghc-pkg" --package-db="$out/lib/"ghc-*/package.conf.d recache
+    shopt -s nullglob
+    package_db=("$out"/lib/ghc-*/lib/package.conf.d "$out"/lib/ghc-*/package.conf.d)
+    "$out/bin/ghc-pkg" --package-db="$package_db" recache
   '';
 
   # In nixpkgs, musl based builds currently enable `pie` hardening by default

@@ -239,19 +239,12 @@ in
       enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
         description = lib.mdDoc ''
           Enables I2Pd as a running service upon activation.
-          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          Please read <https://i2pd.readthedocs.io/en/latest/> for further
           configuration help.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.i2pd;
-        defaultText = literalExpression "pkgs.i2pd";
-        description = lib.mdDoc ''
-          i2pd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "i2pd" { };
 
       logLevel = mkOption {
         type = types.enum ["debug" "info" "warn" "error"];

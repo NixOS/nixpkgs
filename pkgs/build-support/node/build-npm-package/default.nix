@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs }:
+{ lib
+, stdenv
+, fetchNpmDeps
+, buildPackages
+, nodejs
+, darwin
+} @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -15,6 +21,9 @@
   # Whether to force the usage of Git dependencies that have install scripts, but not a lockfile.
   # Use with care.
 , forceGitDeps ? false
+  # Whether to force allow an empty dependency cache.
+  # This can be enabled if there are truly no remote dependencies, but generally an empty cache indicates something is wrong.
+, forceEmptyCache ? false
   # Whether to make the cache writable prior to installing dependencies.
   # Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 , makeCacheWritable ? false
@@ -34,16 +43,16 @@
 , npmPruneFlags ? npmInstallFlags
   # Value for npm `--workspace` flag and directory in which the files to be installed are found.
 , npmWorkspace ? null
+, nodejs ? topLevelArgs.nodejs
+, npmDeps ?  fetchNpmDeps {
+  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch;
+  name = "${name}-npm-deps";
+  hash = npmDepsHash;
+}
 , ...
 } @ args:
 
 let
-  npmDeps = fetchNpmDeps {
-    inherit forceGitDeps src srcs sourceRoot prePatch patches postPatch;
-    name = "${name}-npm-deps";
-    hash = npmDepsHash;
-  };
-
   # .override {} negates splicing, so we need to use buildPackages explicitly
   npmHooks = buildPackages.npmHooks.override {
     inherit nodejs;
@@ -54,7 +63,9 @@ in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs
+    ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook nodejs.python ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;

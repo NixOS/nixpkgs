@@ -1,25 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
+, fetchPypi
 , cmake
 , ninja
-, numpy
 , pybind11
 , scikit-build-core
-, typing-extensions
+, numpy
 }:
 
 buildPythonPackage rec {
   pname = "awkward-cpp";
-  version = "23";
-  format = "pyproject";
+  version = "27";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c+Rg8+CMIvuDaeuME6ERyfMqeaLMfQHklnXdXQiSNt4=";
+    hash = "sha256-PBllGL/M5wl2bWOHgEExekkUti+Ag+Gj4DtP1upvPI0=";
   };
 
   nativeBuildInputs = [

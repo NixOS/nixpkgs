@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitLab
+{ lib
+, stdenv
+, fetchFromGitLab
 , darwin
 , abseil-cpp
 , meson
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     abseil-cpp
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Foundation ]);
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";

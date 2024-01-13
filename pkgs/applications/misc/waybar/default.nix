@@ -39,7 +39,6 @@
 , upower
 , wayland
 , wireplumber
-, wlroots
 , wrapGAppsHook
 
 , cavaSupport ? true
@@ -68,24 +67,24 @@ let
   libcava.src = fetchFromGitHub {
     owner = "LukashonakV";
     repo = "cava";
-    rev = "0.8.5";
-    hash = "sha256-b/XfqLh8PnW018sGVKRRlFvBpo2Ru1R2lUeTR7pugBo=";
+    rev = "0.9.1";
+    hash = "sha256-FnRJJV0poRmw+y4nt1X7Z0ipX86LRK1TJhNKHFk0rTw=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.9.22";
+  version = "0.9.24";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-9LJDA+zrHF9Mn8+W9iUw50LvO+xdT7/l80KdltPrnDo=";
+    hash = "sha256-JhLKGzqZ8akWcyHTav2TGcGmXk9dy9Xj4+/oFCPeNU0=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.8.5
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.9.1
     patchShebangs .
     popd
   '';
@@ -115,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     spdlog
     wayland
-    wlroots
   ]
   ++ lib.optionals cavaSupport [
     SDL2
@@ -180,13 +178,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "waybar";
     maintainers = with lib.maintainers; [
       FlorianFranzen
-      jtbx
       lovesegfault
       minijackson
       rodrgz
       synthetica
       khaneliman
     ];
-    inherit (wlroots.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 })

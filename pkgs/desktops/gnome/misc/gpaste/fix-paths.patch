@@ -1,42 +1,15 @@
-diff --git a/src/gnome-shell/extension.js b/src/gnome-shell/extension.js
-index c8773fd6..9efbed67 100644
---- a/src/gnome-shell/extension.js
-+++ b/src/gnome-shell/extension.js
-@@ -6,6 +6,8 @@
- 
- const Config = imports.misc.config;
- 
-+imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
-+
- imports.gi.versions.Clutter = Config.LIBMUTTER_API_VERSION;
- imports.gi.versions.GLib = '2.0';
- imports.gi.versions.GPaste = '2';
-diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
-index 32244ab2..74b85572 100644
---- a/src/gnome-shell/prefs.js
-+++ b/src/gnome-shell/prefs.js
-@@ -6,6 +6,8 @@
- 
- imports.gi.versions.GPasteGtk = '4';
- 
-+imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
-+
- const ExtensionUtils = imports.misc.extensionUtils;
- 
- const { GPasteGtk } = imports.gi;
 diff --git a/src/libgpaste/gpaste/gpaste-settings.c b/src/libgpaste/gpaste/gpaste-settings.c
-index 7e53eb64..57c399fc 100644
+index 830f5e0b..c8df0e11 100644
 --- a/src/libgpaste/gpaste/gpaste-settings.c
 +++ b/src/libgpaste/gpaste/gpaste-settings.c
-@@ -1013,7 +1013,11 @@ create_g_settings (void)
+@@ -1039,7 +1039,10 @@ create_g_settings (void)
      }
      else
      {
 -        return g_settings_new (G_PASTE_SETTINGS_NAME);
 +        // library used by introspection requires schemas but we cannot set XDG_DATA_DIRS for the library
-+        GSettingsSchemaSource *schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
++        g_autoptr (GSettingsSchemaSource) schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
 +        g_autoptr (GSettingsSchema) schema = g_settings_schema_source_lookup (schema_source, G_PASTE_SETTINGS_NAME, FALSE);
-+        g_settings_schema_source_unref (schema_source);
 +        return g_settings_new_full (schema, NULL, NULL);
      }
  }

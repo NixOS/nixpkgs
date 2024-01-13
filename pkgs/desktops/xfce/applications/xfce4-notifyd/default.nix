@@ -17,10 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-notifyd";
-  version = "0.9.2";
+  version = "0.9.3";
   odd-unstable = false;
 
-  sha256 = "sha256-BHhz5LURXLeILxQ+iNQ+50yHd/oIF7twHAqxiBQ2hFE=";
+  sha256 = "sha256-kgTKJAUB/w/6vtNm2Ewb2v62t0kFK+T8e5Q3/nKwrMg=";
 
   buildInputs = [
     dbus

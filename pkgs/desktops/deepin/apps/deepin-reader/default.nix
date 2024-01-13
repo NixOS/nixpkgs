@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-reader";
-  version = "6.0.2";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-69NCxa20wp/tyyGGH/FbHhZ83LECbJWAzaLRo7iYreA=";
+    hash = "sha256-G5UZ8lBrUo5G3jMae70p/zi9kOVqHWMNCedOy45L1PA=";
   };
 
   # don't use vendored htmltopdf

@@ -16,13 +16,14 @@
 , blueprint-compiler
 , cairo
 , cmake
+, dbus
 , desktop-file-utils
-, dmidecode
 , gdk-pixbuf
 , gettext
 , glib
 , graphene
 , gtk4
+, libGL
 , libadwaita
 , libdrm
 , mesa
@@ -30,25 +31,27 @@
 , sqlite
 , udev
 , wayland
+, dmidecode
+, vulkan-loader
 }:
 
 let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "be47f8c560487efc6e6a419d59c69bfbdb819324";
-    hash = "sha256-MdaZYLxCuVX4LvbwBYNfHHoJWqZAy4J8NBK7Guh2whc=";
+    rev = "45a1796375cd617d16167869bb88e5e69c809468";
+    hash = "sha256-1P9pWXhgTHogO0DztxOsFKNwvTRRfDL3nzGmMANMC9w=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.3.3";
+  version = "0.4.3";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-xLyCLKUk21MvswtPUKm41Hr34vTzCMVQNTaAkuhSGLc=";
+    hash = "sha256-Yc3oiiD0ernuewq32hk3pDn1vQJNZFgMPPb4lArKP9w=";
   };
 
   cargoDeps = symlinkJoin {
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
       (rustPlatform.importCargoLock {
         lockFile = ./Cargo.lock;
         outputHashes = {
-          "pathfinder_canvas-0.5.0" = "sha256-k2Sj69hWA0UzRfv91aG1TAygVIuOX3gmipcDbuZxxc8=";
+          "pathfinder_canvas-0.5.0" = "sha256-qEp16TVggPtvFvDuUyWsS6rH6MeO6FW0K6BnACghaCg=";
         };
       })
       (rustPlatform.importCargoLock {
@@ -85,13 +88,14 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     cairo
     cmake
+    dbus
     desktop-file-utils
-    dmidecode
     gdk-pixbuf
     gettext
     glib
     graphene
     gtk4
+    libGL
     libadwaita
     libdrm
     mesa
@@ -102,11 +106,23 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace src/sys_info_v2/gatherer.rs \
+      --replace '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
+
+    substituteInPlace src/sys_info_v2/mem_info.rs \
+      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
+
+    substituteInPlace $cargoDepsCopy/gl_loader-*/src/glad.c \
+      --replace "libGL.so.1" "${libGL}/lib/libGL.so.1"
+
+    substituteInPlace $cargoDepsCopy/ash-*/src/entry.rs \
+      --replace '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
+
     SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
     SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
 
     substituteInPlace $SRC_GATHERER_NVTOP/nvtop.json \
-      --replace "nvtop-be47f8c560487efc6e6a419d59c69bfbdb819324" "nvtop-src"
+      --replace "nvtop-45a1796375cd617d16167869bb88e5e69c809468" "nvtop-src"
 
     GATHERER_BUILD_DEST=$NIX_BUILD_TOP/source/build/src/sys_info_v2/gatherer/src/debug/build/native
     mkdir -p $GATHERER_BUILD_DEST
@@ -121,10 +137,6 @@ stdenv.mkDerivation rec {
     popd
 
     patchShebangs data/hwdb/generate_hwdb.py
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/missioncenter --prefix PATH : $out/bin:${dmidecode}/bin
   '';
 
   meta = with lib; {

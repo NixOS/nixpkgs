@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.unix;
+    mainProgram = "facter";
   };
 }

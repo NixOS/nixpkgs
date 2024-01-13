@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bandcamp-api";
-  version = "0.2.2";
+  version = "0.2.3";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "bandcamp_api";
     inherit version;
-    hash = "sha256-v/iACVcBFC/3x4v7Q/1p+aHGhfw3AQ43eU3sKz5BskI=";
+    hash = "sha256-7/WXMo7fCDMHATp4hEB8b7fNJWisUv06hbP+O878Phs=";
   };
 
   propagatedBuildInputs = [

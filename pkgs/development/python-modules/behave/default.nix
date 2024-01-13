@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "behave";
   version = "1.2.7.dev2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "behave";

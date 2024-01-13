@@ -69,7 +69,7 @@ in
     enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
     enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
 
-    package = lib.mkPackageOptionMD pkgs "kanidm" {};
+    package = lib.mkPackageOption pkgs "kanidm" {};
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {

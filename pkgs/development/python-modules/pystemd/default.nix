@@ -4,6 +4,8 @@
 , python
 , fetchPypi
 , systemd
+, lxml
+, psutil
 , pytest
 , mock
 , pkg-config }:
@@ -11,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pystemd";
   version = "0.13.2";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
@@ -22,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  nativeCheckInputs = [ pytest mock ];
+  nativeCheckInputs = [ lxml mock psutil pytest ];
 
   checkPhase = "pytest tests";
 

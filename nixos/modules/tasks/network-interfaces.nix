@@ -498,7 +498,7 @@ in
         option will result in an evaluation error if the hostname is empty or
         no domain is specified.
 
-        Modules that accept a mere `networing.hostName` but prefer a fully qualified
+        Modules that accept a mere `networking.hostName` but prefer a fully qualified
         domain name may use `networking.fqdnOrHostName` instead.
       '';
     };
@@ -1396,6 +1396,8 @@ in
       "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      # allow all users to do ICMP echo requests (ping)
+      "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
     } // listToAttrs (forEach interfaces
@@ -1406,18 +1408,14 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
-    # Set the host and domain names in the activation script.  Don't
-    # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname = let
-        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
-      in optionalString (effectiveHostname != "") ''
-        hostname "${effectiveHostname}"
-      '';
-    system.activationScripts.domain =
-      optionalString (cfg.domain != null) ''
-        domainname "${cfg.domain}"
-      '';
+    systemd.services.domainname = lib.mkIf (cfg.domain != null) {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
+      serviceConfig.Type = "oneshot";
+    };
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };

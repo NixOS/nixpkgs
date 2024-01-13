@@ -27,12 +27,7 @@ in
               description = lib.mdDoc "Enable or disable this network.";
             };
 
-            package = mkOption {
-              type = types.package;
-              default = pkgs.nebula;
-              defaultText = literalExpression "pkgs.nebula";
-              description = lib.mdDoc "Nebula derivation to use.";
-            };
+            package = mkPackageOption pkgs "nebula" { };
 
             ca = mkOption {
               type = types.path;
@@ -201,7 +196,7 @@ in
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig = {
-              Type = "simple";
+              Type = "notify";
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
               UMask = "0027";

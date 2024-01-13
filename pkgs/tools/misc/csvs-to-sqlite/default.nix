@@ -57,5 +57,6 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://github.com/simonw/csvs-to-sqlite";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    mainProgram = "csvs-to-sqlite";
   };
 }

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "tadasets";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

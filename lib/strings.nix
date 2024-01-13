@@ -144,6 +144,20 @@ rec {
   */
   concatLines = concatMapStrings (s: s + "\n");
 
+  /*
+    Replicate a string n times,
+    and concatenate the parts into a new string.
+
+    Type: replicate :: int -> string -> string
+
+    Example:
+      replicate 3 "v"
+      => "vvv"
+      replicate 5 "hello"
+      => "hellohellohellohellohello"
+  */
+  replicate = n: s: concatStrings (lib.lists.replicate n s);
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 
@@ -701,12 +715,12 @@ rec {
        getName pkgs.youtube-dl
        => "youtube-dl"
   */
-  getName = x:
-   let
-     parse = drv: (parseDrvName drv).name;
-   in if isString x
-      then parse x
-      else x.pname or (parse x.name);
+  getName = let
+    parse = drv: (parseDrvName drv).name;
+  in x:
+    if isString x
+    then parse x
+    else x.pname or (parse x.name);
 
   /* This function takes an argument that's either a derivation or a
      derivation's "name" attribute and extracts the version part from that
@@ -718,12 +732,12 @@ rec {
        getVersion pkgs.youtube-dl
        => "2016.01.01"
   */
-  getVersion = x:
-   let
-     parse = drv: (parseDrvName drv).version;
-   in if isString x
-      then parse x
-      else x.version or (parse x.name);
+  getVersion = let
+    parse = drv: (parseDrvName drv).version;
+  in x:
+    if isString x
+    then parse x
+    else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
@@ -757,12 +771,13 @@ rec {
        cmakeOptionType "string" "ENGINE" "sdl2"
        => "-DENGINE:STRING=sdl2"
   */
-  cmakeOptionType = type: feature: value:
-    assert (lib.elem (lib.toUpper type)
-      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    "-D${feature}:${lib.toUpper type}=${value}";
+  cmakeOptionType = let
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+  in type: feature: value:
+    assert (elem (toUpper type) types);
+    assert (isString feature);
+    assert (isString value);
+    "-D${feature}:${toUpper type}=${value}";
 
   /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
      CMake invocations.
@@ -963,9 +978,11 @@ rec {
      Many types of value are coercible to string this way, including int, float,
      null, bool, list of similarly coercible values.
   */
-  isConvertibleWithToString = x:
+  isConvertibleWithToString = let
+    types = [ "null" "int" "float" "bool" ];
+  in x:
     isStringLike x ||
-    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    elem (typeOf x) types ||
     (isList x && lib.all isConvertibleWithToString x);
 
   /* Check whether a value can be coerced to a string.

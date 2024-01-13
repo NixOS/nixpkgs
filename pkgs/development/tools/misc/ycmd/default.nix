@@ -9,15 +9,15 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "unstable-2022-08-15";
+  version = "unstable-2023-11-06";
   disabled = !python.isPy3k;
 
   # required for third_party directory creation
   src = fetchFromGitHub {
     owner = "ycm-core";
     repo = "ycmd";
-    rev = "323d4b60f077bd07945f25a60c4584843ca851fb";
-    sha256 = "sha256-5IpXMQc3QIkKJkUrOPSRzciLvL1nhQw6wlP+pVnIucE=";
+    rev = "0607eed2bc211f88f82657b7781f4fe66579855b";
+    hash = "sha256-SzEcMQ4lX7NL2/g9tuhA6CaZ8pX/DGs7Fla/gr+RcOU=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
-    ${python.pythonForBuild.interpreter} build.py --system-libclang --clang-completer --ninja
+    ${python.pythonOnBuildForHost.interpreter} build.py --system-libclang --clang-completer --ninja
   '';
 
   dontConfigure = true;

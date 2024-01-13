@@ -2,7 +2,6 @@
 , rustPlatform
 , pkg-config
 , python3
-, openssl
 , cmake
 , libmysqlclient
 , makeBinaryWrapper
@@ -21,13 +20,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-HGX4uLiOqIRjluMLL0QY7YjVYVCkQLe8IiuYdkmAjBQ=";
+    hash = "sha256-7lIFHK0XSOtfDEy6N9jcPGOd5Por5i1CBdDZQBiHm8c=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libmysqlclient
-    openssl
   ];
 
   preFixup = ''
@@ -64,5 +62,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
     platforms = lib.platforms.linux;
+    mainProgram = "syncserver";
   };
 }

@@ -10,12 +10,7 @@ in
     services.agate = {
       enable = mkEnableOption (lib.mdDoc "Agate Server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.agate;
-        defaultText = literalExpression "pkgs.agate";
-        description = lib.mdDoc "The package to use";
-      };
+      package = mkPackageOption pkgs "agate" { };
 
       addresses = mkOption {
         type = types.listOf types.str;

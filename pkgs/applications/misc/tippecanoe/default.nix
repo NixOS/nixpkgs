@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.19.0";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-FWdAMIAoj3/+SQLIan++UpmWH1o3v92FsDw//b5RorM=";
+    hash = "sha256-zp0+I+Se9spYPEHlxYeYuLaV8EMw80y88zqvfAD9ZsU=";
   };
 
   buildInputs = [ sqlite zlib ];
@@ -17,7 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
-  doCheck = true;
+
+  # https://github.com/felt/tippecanoe/issues/148
+  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

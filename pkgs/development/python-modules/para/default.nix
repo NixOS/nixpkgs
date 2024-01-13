@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "para";
   version = "0.0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

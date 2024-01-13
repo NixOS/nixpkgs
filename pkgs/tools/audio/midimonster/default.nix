@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [keldu];
+    mainProgram = "midimonster";
   };
 }

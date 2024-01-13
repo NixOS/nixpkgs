@@ -78,7 +78,13 @@ let
   mkName = name: "kanata-${name}";
 
   mkDevices = devices:
-    optionalString ((length devices) > 0) "linux-dev ${concatStringsSep ":" devices}";
+    let
+      devicesString = pipe devices [
+        (map (device: "\"" + device + "\""))
+        (concatStringsSep " ")
+      ];
+    in
+    optionalString ((length devices) > 0) "linux-dev (${devicesString})";
 
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
@@ -146,16 +152,11 @@ in
 {
   options.services.kanata = {
     enable = mkEnableOption (mdDoc "kanata");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.kanata;
-      defaultText = literalExpression "pkgs.kanata";
-      example = literalExpression "pkgs.kanata-with-cmd";
-      description = mdDoc ''
-        The kanata package to use.
-
+    package = mkPackageOption pkgs "kanata" {
+      example = "kanata-with-cmd";
+      extraDescription = ''
         ::: {.note}
-        If `danger-enable-cmd` is enabled in any of the keyboards, the
+        If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
         `kanata-with-cmd` package should be used.
         :::
       '';

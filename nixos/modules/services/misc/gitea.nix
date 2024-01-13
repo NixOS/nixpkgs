@@ -51,12 +51,7 @@ in
         description = lib.mdDoc "Enable Gitea Service.";
       };
 
-      package = mkOption {
-        default = pkgs.gitea;
-        type = types.package;
-        defaultText = literalExpression "pkgs.gitea";
-        description = lib.mdDoc "gitea derivation to use";
-      };
+      package = mkPackageOption pkgs "gitea" { };
 
       useWizard = mkOption {
         default = false;
@@ -239,6 +234,13 @@ in
         description = lib.mdDoc "Path to the git repositories.";
       };
 
+      camoHmacKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/camoHmacKey";
+        description = lib.mdDoc "Path to a file containing the camo HMAC key.";
+      };
+
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -394,6 +396,14 @@ in
       { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.database.createDatabase && usePostgresql -> cfg.database.user == cfg.database.name;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.gitea.createDatabase` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.gitea.settings = {
@@ -424,6 +434,10 @@ in
       server = mkIf cfg.lfs.enable {
         LFS_START_SERVER = true;
         LFS_JWT_SECRET = "#lfsjwtsecret#";
+      };
+
+      camo = mkIf (cfg.camoHmacKeyFile != null) {
+        HMAC_KEY = "#hmackey#";
       };
 
       session = {
@@ -461,7 +475,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -565,6 +579,10 @@ in
 
             ${lib.optionalString cfg.lfs.enable ''
               ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
             ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''

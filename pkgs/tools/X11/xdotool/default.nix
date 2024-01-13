@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
+    mainProgram = "xdotool";
   };
 }

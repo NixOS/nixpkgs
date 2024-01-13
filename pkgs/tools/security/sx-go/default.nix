@@ -41,5 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/v-byte-cpu/sx";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sx-go";
   };
 }

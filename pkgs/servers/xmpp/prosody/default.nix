@@ -2,7 +2,6 @@
 , icu
 , lua
 , nixosTests
-, withLibevent ? true
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
@@ -16,7 +15,6 @@ let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
     ]
-    ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
     ++ withExtraLuaPackages p
   );
@@ -86,6 +84,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pagelabels";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

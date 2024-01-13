@@ -116,7 +116,7 @@ in stdenv.mkDerivation {
       # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
       (fetchpatch {
         name = "Fix fmt10 compat";
-        url = "https://github.com/xbmc/xbmc/pull/23453.patch";
+        url = "https://github.com/xbmc/xbmc/compare/acca69baa2eae65123e78ee2f77249181725ef5d...26c164a28cfd18ceef7a1f2bbba5bf8a4a5a750c.patch";
         hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
       })
     ];

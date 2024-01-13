@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Yet another telephony engine";
-    homepage = "http://yate.ro/";
+    homepage = "https://yate.ro/";
     # Yate's license is GPL with an exception for linking with
     # OpenH323 and PWlib (licensed under MPL).
     license = lib.licenses.gpl2Only;

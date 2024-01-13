@@ -9,31 +9,35 @@ rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.10.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-ZQLxZzWVGwFtU68ASlzBDMz8RHrA0h925u6UDk7vPe4=";
+    hash = "sha256-7T5BxAq67mHve2FeYCN0L63e+2LE7agG1LgmKy5y1bc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.8.0" = "sha256-q2b/PoNwpzarJbIPzokYgZRD2/Oe/XB40C4VXdwL/NA=";
+      "typst-0.10.0" = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
       "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
-      "typstfmt_lib-0.2.5" = "sha256-+iQOS+WPCWevUFurLfuC5mhuRdJ/1ZsekFoFDzZviag=";
+      "typstfmt_lib-0.2.6" = "sha256-UUVbnxIj7kQVpZvSbbB11i6wAvdTnXVk5cNSNoGBeRM=";
     };
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   checkFlags = [
     # requires internet access
     "--skip=workspace::package::external::remote_repo::test::full_download"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # both tests fail on darwin with 'Attempted to create a NULL object.'
+    "--skip=workspace::fs::local::test::read"
+    "--skip=workspace::package::external::manager::test::local_package"
   ];
 
   # workspace::package::external::manager::test::local_package tries to access the data directory

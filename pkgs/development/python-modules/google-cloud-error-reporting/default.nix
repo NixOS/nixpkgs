@@ -10,19 +10,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+,setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.9.2";
-  format = "setuptools";
+  version = "1.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S+7x6gIxJDfV7Xe6DOBVbJNMREYlRFLyGo8BEpIdIow=";
+    hash = "sha256-OyfMbjxwtrYLrXrjCVS+DFjGdGGsMsfHBrGzg66crkU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -42,12 +47,19 @@ buildPythonPackage rec {
     # Tests require credentials
     "test_report_error_event"
     "test_report_exception"
+    # Import is already tested
+    "test_namespace_package_compat"
   ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
   '';
+
+  pythonImportsCheck = [
+    "google.cloud.error_reporting"
+    "google.cloud.errorreporting_v1beta1"
+  ];
 
   meta = with lib; {
     description = "Stackdriver Error Reporting API client library";

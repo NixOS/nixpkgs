@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "avogadrolibs";
-  version = "1.97.0";
+  version = "1.98.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = pname;
     rev = version;
-    hash = "sha256-ZGFyUlFyI403aw/6GVze/gronT67XlEOKuw5sfHeVy8=";
+    hash = "sha256-BuBMWW7N5Cu9tw5Vpwk+aoIaMWwHViRzLtIG7XDWjN4=";
   };
 
   postUnpack = ''
@@ -53,9 +53,13 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  postFixup = ''
+  # Fix the broken CMake files to use the correct paths
+  postInstall = ''
     substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
-      --replace "''${AvogadroLibs_INSTALL_PREFIX}/$out" "''${AvogadroLibs_INSTALL_PREFIX}"
+      --replace "$out/" ""
+
+    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
+      --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
   meta = with lib; {

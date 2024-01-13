@@ -24,15 +24,16 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2022.2.2";
+  version = "2023.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
+    hash = "sha256-F1/2dfDPEOOOmtwD7V3z7Y2Kv32lE0yNzOx1LooKPpE=";
   };
 
   preConfigure = with lib.versions; ''
-    ${python.pythonForBuild.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+    ${python.pythonOnBuildForHost.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \

@@ -7,8 +7,8 @@ import ./make-test-python.nix (
       {
         name = "iscsi";
         meta = {
-          maintainers = pkgs.lib.teams.deshaw.members
-          ++ (with pkgs.lib.maintainers; [ ajs124 ]);
+          maintainers = lib.teams.deshaw.members
+            ++ lib.teams.helsinki-systems.members;
         };
 
         nodes = {

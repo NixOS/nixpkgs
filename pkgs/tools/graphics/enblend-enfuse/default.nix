@@ -13,7 +13,7 @@
 , help2man
 , pkg-config
 , perl
-, texlive
+, texliveSmall
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra ];
 
-  nativeBuildInputs = [ autoreconfHook help2man perl pkg-config texlive.combined.scheme-small ];
+  nativeBuildInputs = [ autoreconfHook help2man perl pkg-config texliveSmall ];
 
   preConfigure = ''
     patchShebangs src/embrace

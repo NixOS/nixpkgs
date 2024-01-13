@@ -1,31 +1,21 @@
 From 104572dc7ebb75061b867158ce3d4311d8cf4594 Mon Sep 17 00:00:00 2001
 From: Euan Kemp <euank@euank.com>
 Date: Thu, 6 Jul 2023 10:05:15 +0900
-Subject: [PATCH] Skip formatting python code
+Subject: [PATCH] Skip formatting Python code.
 
+Co-authored-by: Pavel Sobolev <paveloom@riseup.net>
 ---
- pylib/tools/hookslib.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ pylib/tools/hookslib.py | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/pylib/tools/hookslib.py b/pylib/tools/hookslib.py
-index 6361c633e..95ecb64a2 100644
+index 6361c633e..6b16d3ec1 100644
 --- a/pylib/tools/hookslib.py
 +++ b/pylib/tools/hookslib.py
-@@ -82,7 +82,7 @@ class Hook:
-         code = f"""\
- class {self.classname()}:
- {classdoc}{self.list_code()}
--    
-+
-     def append(self, callback: {self.callable()}) -> None:
-         '''{appenddoc}'''
-         self._hooks.append(callback)
-@@ -208,4 +208,4 @@ def write_file(path: str, hooks: list[Hook], prefix: str, suffix: str):
+@@ -208,4 +208,3 @@ def write_file(path: str, hooks: list[Hook], prefix: str, suffix: str):
          os.environ["USERPROFILE"] = os.environ["HOME"]
      with open(path, "wb") as file:
          file.write(code.encode("utf8"))
 -    subprocess.run([sys.executable, "-m", "black", "-q", path], check=True)
-+    # subprocess.run([sys.executable, "-m", "black", "-q", path], check=True)
--- 
-2.40.1
-
+--
+2.42.0

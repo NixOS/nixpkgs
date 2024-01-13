@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubevpn";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner  = "KubeNetworks";
     repo   = "kubevpn";
     rev    = "v${version}";
-    sha256 = "sha256-fXRzo68d65FISW+m/BTmwOXlJiCmMm9Az1qsGGsbPIA=";
+    sha256 = "sha256-n65z7L82qQE4Xao5W99zIkXGEx2BFM4n/6C1cuTJXsk=";
   };
 
-  vendorHash = "sha256-EcHHSOAr93M2kPhEaZSpvpZCq4pi1NCedo9hw1Mn0a4=";
+  vendorHash = null;
 
   # TODO investigate why some config tests are failing
   doCheck = false;

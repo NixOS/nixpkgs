@@ -15,20 +15,15 @@
 
 stdenv.mkDerivation rec {
   pname = "xpano";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "krupkat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f95spf7bbbdvbr4gqfyrs161049jj1wnkvf5wgsd0ga3vb15mcj";
+    sha256 = "aKO9NYHFjb69QopseNOJvUvvVT1povP9tyGSOHJFWVo=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # force install desktop + icon files
-    ./skip_prefix_check.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +37,7 @@ stdenv.mkDerivation rec {
     SDL2
     gtk3
     spdlog
-    # exiv2 # TODO: enable when 0.28.0 is available
+    exiv2
   ];
 
   checkInputs = [
@@ -53,6 +48,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
+    "-DXPANO_INSTALL_DESKTOP_FILES=ON"
   ];
 
   meta = with lib; {

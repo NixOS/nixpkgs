@@ -24,14 +24,12 @@ lib.makeScope
     };
 
     binutils = callPackage ./binutils {
-      bash = bash_2_05;
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
     };
 
     bzip2 = callPackage ./bzip2 {
-      bash = bash_2_05;
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
@@ -53,7 +51,6 @@ lib.makeScope
     };
 
     findutils = callPackage ./findutils {
-      bash = bash_2_05;
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
@@ -166,7 +163,7 @@ lib.makeScope
 
     ln-boot = callPackage ./ln-boot { };
 
-    mes = lib.recurseIntoAttrs (callPackage ./mes { });
+    mes = callPackage ./mes { };
     mes-libc = callPackage ./mes/libc.nix { };
 
     musl11 = callPackage ./musl/1.1.nix {

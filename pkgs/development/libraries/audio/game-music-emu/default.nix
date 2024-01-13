@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, removeReferencesTo }:
+{ lib, stdenv, fetchurl, cmake, removeReferencesTo, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
     sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
-  cmakeFlags = lib.optionals (stdenv.isDarwin || stdenv.hostPlatform.isMusl) [ "-DENABLE_UBSAN=OFF" ];
+  cmakeFlags = [ "-DENABLE_UBSAN=OFF" ];
   nativeBuildInputs = [ cmake removeReferencesTo ];
+  buildInputs = [ zlib ];
 
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.

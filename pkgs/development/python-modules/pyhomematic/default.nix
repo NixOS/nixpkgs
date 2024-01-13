@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyhomematic";
   version = "0.1.77";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

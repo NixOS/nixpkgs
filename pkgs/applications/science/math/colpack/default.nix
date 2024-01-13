@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A package comprising of implementations of algorithms for
     vertex coloring and derivative computation";
-    homepage = "http://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
+    homepage = "https://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ edwtjo ];

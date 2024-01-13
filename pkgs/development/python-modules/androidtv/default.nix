@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.72";
+  version = "0.0.73";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    hash = "sha256-oDC5NWmdo6Ijxz2ER9CjtCZxWkancUNyxVe2ofH4c+Q=";
+    hash = "sha256-FJUTJfS9jiC7KDf6XcGVRNXf75bVUOBPZe8y9M39Uak=";
   };
 
   propagatedBuildInputs = [

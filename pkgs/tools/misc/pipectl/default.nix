@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     description = "a simple named pipe management utility";
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "pipectl";
   };
 }

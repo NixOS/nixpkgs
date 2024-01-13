@@ -16,7 +16,7 @@ in
       enable = mkEnableOption
         (mdDoc "dae, a Linux high-performance transparent proxy solution based on eBPF");
 
-      package = mkPackageOptionMD pkgs "dae" { };
+      package = mkPackageOption pkgs "dae" { };
 
 
       assets = mkOption {

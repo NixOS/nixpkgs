@@ -31,13 +31,37 @@ stdenv.mkDerivation (finalAttrs: {
   # newlib expects CC to build for build platform, not host platform
   preConfigure = ''
     export CC=cc
+  '' +
+  # newlib tries to disable itself when building for Linux *except*
+  # when native-compiling.  Unfortunately the check for "is cross
+  # compiling" was written when newlib was part of GCC and newlib
+  # was built along with GCC (therefore newlib was built to execute
+  # on the targetPlatform, not the hostPlatform).  Unfortunately
+  # when newlib was extracted from GCC, this "is cross compiling"
+  # logic was not fixed.  So we must disable it.
+  ''
+    substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
+    substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
   '';
+
 
   configurePlatforms = [ "build" "target" ];
   # flags copied from https://community.arm.com/support-forums/f/compilers-and-libraries-forum/53310/gcc-arm-none-eabi-what-were-the-newlib-compilation-options
   # sort alphabetically
   configureFlags = [
-    "--host=${stdenv.buildPlatform.config}"
+    "--with-newlib"
+
+    # The newlib configury uses `host` to refer to the platform
+    # which is being used to compile newlib.  Ugh.  It does this
+    # because of its history: newlib used to be distributed with and
+    # built as part of gcc.
+    #
+    # To prevent nixpkgs from going insane, this package presents the
+    # "normal" view to the outside world: the binaries in $out will
+    # execute on `stdenv.hostPlatform`.  We then fool newlib's build
+    # process into doing the right thing.
+    "--host=${stdenv.targetPlatform.config}"
+
   ] ++ (if !nanoizeNewlib then [
     "--disable-newlib-supplied-syscalls"
     "--disable-nls"

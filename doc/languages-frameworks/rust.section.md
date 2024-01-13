@@ -939,3 +939,67 @@ Fenix also has examples with `buildRustPackage`,
 [crane](https://github.com/ipetkov/crane),
 [naersk](https://github.com/nix-community/naersk),
 and cross compilation in its [Examples](https://github.com/nix-community/fenix#examples) section.
+
+## Using `git bisect` on the Rust compiler {#using-git-bisect-on-the-rust-compiler}
+
+Sometimes an upgrade of the Rust compiler (`rustc`) will break a
+downstream package.  In these situations, being able to `git bisect`
+the `rustc` version history to find the offending commit is quite
+useful.  Nixpkgs makes it easy to do this.
+
+First, roll back your nixpkgs to a commit in which its `rustc` used
+*the most recent one which doesn't have the problem.*  You'll need
+to do this because of `rustc`'s extremely aggressive
+version-pinning.
+
+Next, add the following overlay, updating the Rust version to the
+one in your rolled-back nixpkgs, and replacing `/git/scratch/rust`
+with the path into which you have `git clone`d the `rustc` git
+repository:
+
+```nix
+ (final: prev: /*lib.optionalAttrs prev.stdenv.targetPlatform.isAarch64*/ {
+   rust_1_72 =
+     lib.updateManyAttrsByPath [{
+       path = [ "packages" "stable" ];
+       update = old: old.overrideScope(final: prev: {
+         rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
+           src = lib.cleanSource /git/scratch/rust;
+           # do *not* put passthru.isReleaseTarball=true here
+         });
+       });
+     }]
+       prev.rust_1_72;
+ })
+```
+
+If the problem you're troubleshooting only manifests when
+cross-compiling you can uncomment the `lib.optionalAttrs` in the
+example above, and replace `isAarch64` with the target that is
+having problems.  This will speed up your bisect quite a bit, since
+the host compiler won't need to be rebuilt.
+
+Now, you can start a `git bisect` in the directory where you checked
+out the `rustc` source code.  It is recommended to select the
+endpoint commits by searching backwards from `origin/master` for the
+*commits which added the release notes for the versions in
+question.*  If you set the endpoints to commits on the release
+branches (i.e. the release tags), git-bisect will often get confused
+by the complex merge-commit structures it will need to traverse.
+
+The command loop you'll want to use for bisecting looks like this:
+
+```bash
+git bisect {good,bad}  # depending on result of last build
+git submodule update --init
+CARGO_NET_OFFLINE=false cargo vendor \
+  --sync ./src/tools/cargo/Cargo.toml \
+  --sync ./src/tools/rust-analyzer/Cargo.toml \
+  --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
+  --sync ./src/bootstrap/Cargo.toml
+nix-build $NIXPKGS -A package-broken-by-rust-changes
+```
+
+The `git submodule update --init` and `cargo vendor` commands above
+require network access, so they can't be performed from within the
+`rustc` derivation, unfortunately.

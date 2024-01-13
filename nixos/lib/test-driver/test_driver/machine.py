@@ -447,8 +447,7 @@ class Machine:
         """
 
         def check_active(_: Any) -> bool:
-            info = self.get_unit_info(unit, user)
-            state = info["ActiveState"]
+            state = self.get_unit_property(unit, "ActiveState", user)
             if state == "failed":
                 raise Exception(f'unit "{unit}" reached state "{state}"')
 
@@ -490,6 +489,35 @@ class Machine:
             for line in lines.split("\n")
             if line_pattern.match(line)
         )
+
+    def get_unit_property(
+        self,
+        unit: str,
+        property: str,
+        user: Optional[str] = None,
+    ) -> str:
+        status, lines = self.systemctl(
+            f'--no-pager show "{unit}" --property="{property}"',
+            user,
+        )
+        if status != 0:
+            raise Exception(
+                f'retrieving systemctl property "{property}" for unit "{unit}"'
+                + ("" if user is None else f' under user "{user}"')
+                + f" failed with exit code {status}"
+            )
+
+        invalid_output_message = (
+            f'systemctl show --property "{property}" "{unit}"'
+            f"produced invalid output: {lines}"
+        )
+
+        line_pattern = re.compile(r"^([^=]+)=(.*)$")
+        match = line_pattern.match(lines)
+        assert match is not None, invalid_output_message
+
+        assert match[1] == property, invalid_output_message
+        return match[2]
 
     def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
         """
@@ -1278,3 +1306,19 @@ class Machine:
     def run_callbacks(self) -> None:
         for callback in self.callbacks:
             callback()
+
+    def switch_root(self) -> None:
+        """
+        Transition from stage 1 to stage 2. This requires the
+        machine to be configured with `testing.initrdBackdoor = true`
+        and `boot.initrd.systemd.enable = true`.
+        """
+        self.wait_for_unit("initrd.target")
+        self.execute(
+            "systemctl isolate --no-block initrd-switch-root.target 2>/dev/null >/dev/null",
+            check_return=False,
+            check_output=False,
+        )
+        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
+        self.connected = False
+        self.connect()

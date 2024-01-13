@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
 , gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aria2";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "aria2";
     repo = "aria2";
     rev = "release-${version}";
-    sha256 = "sha256-ErjFfSJDIgZq0qy0Zn5uZ9bZS2AtJq4FuBVuUuQgPTI=";
+    sha256 = "sha256-xbiNSg/Z+CA0x0DQfMNsWdA+TATyX6dCeW2Nf3L3Kfs=";
   };
 
   strictDeps = true;

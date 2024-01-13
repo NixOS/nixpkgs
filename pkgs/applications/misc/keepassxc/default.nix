@@ -88,7 +88,14 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    wrapQtAppsHook
+    qttools
+    pkg-config
+  ]
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
 
   dontWrapGApps = true;
   preFixup = ''
@@ -135,7 +142,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonafato srapenne blankparticle ];
+    maintainers = with maintainers; [ jonafato blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -23,12 +23,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      default = pkgs.coredns;
-      defaultText = literalExpression "pkgs.coredns";
-      type = types.package;
-      description = lib.mdDoc "Coredns package to use.";
-    };
+    package = mkPackageOption pkgs "coredns" { };
 
     extraArgs = mkOption {
       default = [];

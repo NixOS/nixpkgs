@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
-, wheel
+, importlib-metadata
 , pytestCheckHook
 }:
 
@@ -23,12 +23,13 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pytest.ini
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
+  ];
+
+  propagatedBuildInputs = [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [ "mockfs" ];

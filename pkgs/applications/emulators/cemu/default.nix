@@ -16,6 +16,7 @@
 , hidapi
 , imgui
 , libpng
+, libusb1
 , libzip
 , libXrender
 , pugixml
@@ -32,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-47";
+  version = "2.0-61";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-0N/bJJHWMHF+ZlVxNHV8t/1jFr3ER3GNF8CPAHVSsak=";
+    hash = "sha256-oKVVBie3Q3VtsHbh0wJfdlx1YnF424hib8mFRYnbgXY=";
   };
 
   patches = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     hidapi
     imgui
     libpng
+    libusb1
     libzip
     libXrender
     pugixml

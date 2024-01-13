@@ -26,7 +26,6 @@
 , perl
 , python3
 , prometheus-cpp
-, re2
 , zlib
 , texinfo
 }:
@@ -117,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
           { f = "prometheus-cpp"; p = prometheus-cpp; }
-          { f = "re2"; p = re2; }
         ]
       )}
 
@@ -165,12 +163,12 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
     homepage = "https://proxysql.com/";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ ajs124 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ gpl3Only ];
+    maintainers = teams.helsinki-systems.members;
+    platforms = platforms.unix;
   };
 })

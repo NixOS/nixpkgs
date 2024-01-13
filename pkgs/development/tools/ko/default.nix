@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-z0VemNdN35p5fA+cenXil7Vonl+ryu1ruKxzWFwMPfI=";
+    hash = "sha256-BEKsa5mzJplcyR65/4T0MizrYxEk8/ON8SDFt8ZxqMU=";
   };
 
   vendorHash = null;

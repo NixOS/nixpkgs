@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "deepdish";
   version = "0.3.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,69 +1,8 @@
-From 47a700c64329f76ab91ac01d83a93f43bebe638b Mon Sep 17 00:00:00 2001
-From: rewine <lhongxu@outlook.com>
-Date: Sun, 9 Apr 2023 17:14:00 +0800
-Subject: [PATCH] avoid use hardcode path
-
----
- display/wayland.go            |  4 ++--
- main.go                       | 10 +++++-----
- misc/auto_launch/chinese.json |  4 ++--
- session.go                    | 15 +++++++++------
- 4 files changed, 18 insertions(+), 15 deletions(-)
-
-diff --git a/display/wayland.go b/display/wayland.go
-index b980425..e44342a 100644
---- a/display/wayland.go
-+++ b/display/wayland.go
-@@ -556,7 +556,7 @@ func (mm *kMonitorManager) applyByWLOutput(monitorMap map[uint32]*Monitor) error
- 	
- 	if len(args_enable) > 0 {
- 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
--		cmdline := exec.CommandContext(ctx, "/usr/bin/dde_wloutput", "set")
-+		cmdline := exec.CommandContext(ctx, "dde_wloutput", "set")
- 		cmdline.Args = append(cmdline.Args, args_enable...)
- 		logger.Info("cmd line args_enable:", cmdline.Args)
- 
-@@ -572,7 +572,7 @@ func (mm *kMonitorManager) applyByWLOutput(monitorMap map[uint32]*Monitor) error
- 	}
- 	if len(args_disable) > 0 {
- 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
--		cmdline := exec.CommandContext(ctx, "/usr/bin/dde_wloutput", "set")
-+		cmdline := exec.CommandContext(ctx, "dde_wloutput", "set")
- 		cmdline.Args = append(cmdline.Args, args_disable...)
- 		logger.Info("cmd line args_disable:", cmdline.Args)
- 
-diff --git a/main.go b/main.go
-index 77b4e78..30aa3fd 100644
---- a/main.go
-+++ b/main.go
-@@ -96,17 +96,17 @@ func shouldUseDDEKWin() bool {
- 	}
- 
- end:
--	_, err = os.Stat("/usr/bin/kwin_no_scale")
-+        _, err = exec.LookPath("kwin_no_scale")
- 	return err == nil
- }
- 
- const (
--	cmdKWin                = "/usr/bin/kwin_no_scale"
-+	cmdKWin                = "kwin_no_scale"
- 	cmdDdeSessionDaemon    = "/usr/lib/deepin-daemon/dde-session-daemon"
--	cmdDdeDock             = "/usr/bin/dde-dock"
--	cmdDdeDesktop          = "/usr/bin/dde-desktop"
-+	cmdDdeDock             = "dde-dock"
-+	cmdDdeDesktop          = "dde-desktop"
- 	cmdLoginReminderHelper = "/usr/libexec/deepin/login-reminder-helper"
--	cmdDdeHintsDialog      = "/usr/bin/dde-hints-dialog"
-+	cmdDdeHintsDialog      = "dde-hints-dialog"
- 
- 	loginReminderTimeout    = 5 * time.Second
- 	loginReminderTimeFormat = "2006-01-02 15:04:05"
 diff --git a/misc/auto_launch/chinese.json b/misc/auto_launch/chinese.json
-index 079a521..1856ab1 100644
+index 14b8bff..2b2c412 100644
 --- a/misc/auto_launch/chinese.json
 +++ b/misc/auto_launch/chinese.json
-@@ -13,7 +13,7 @@
+@@ -3,7 +3,7 @@
      "Priority": 9,
      "Group": [
        {
@@ -72,7 +11,7 @@ index 079a521..1856ab1 100644
          "Wait": false,
          "Args": [
            "-d"
-@@ -39,7 +39,7 @@
+@@ -25,7 +25,7 @@
      "Priority": 7,
      "Group": [
        {
@@ -82,39 +21,27 @@ index 079a521..1856ab1 100644
          "Args": [
            "-d"
 diff --git a/session.go b/session.go
-index 26f89ef..f412ca4 100644
+index da76626..bf9a2c4 100644
 --- a/session.go
 +++ b/session.go
-@@ -18,6 +18,7 @@ import (
+@@ -14,6 +14,7 @@ import (
+ 	"sync"
  	"syscall"
  	"time"
++	"strings"
  
-+	"github.com/adrg/xdg"
- 	"github.com/godbus/dbus"
- 	"github.com/linuxdeepin/dde-api/soundutils"
- 	daemon "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.daemon"
-@@ -53,8 +54,10 @@ const (
- 
- 	xsKeyQtFontName     = "Qt/FontName"
- 	xsKeyQtMonoFontName = "Qt/MonoFontName"
-+)
- 
--	ddeLockDesktopFile = "/usr/share/applications/dde-lock.desktop"
-+var (
-+	ddeLockDesktopFile, _ = xdg.SearchDataFile("applications/dde-lock.desktop");
- )
- 
- type SessionManager struct {
-@@ -90,7 +93,7 @@ type SessionManager struct {
+ 	"github.com/adrg/xdg"
+ 	"github.com/godbus/dbus/v5"
+@@ -85,7 +86,7 @@ type SessionManager struct {
  }
  
  const (
 -	cmdShutdown      = "/usr/bin/dde-shutdown"
 +	cmdShutdown      = "dde-shutdown"
- 	lockFrontDest    = "com.deepin.dde.lockFront"
+ 	lockFrontDest    = "org.deepin.dde.LockFront1"
  	lockFrontIfc     = lockFrontDest
- 	lockFrontObjPath = "/com/deepin/dde/lockFront"
-@@ -471,7 +474,7 @@ func (m *SessionManager) SetLocked(sender dbus.Sender, value bool) *dbus.Error {
+ 	lockFrontObjPath = "/org/deepin/dde/LockFront1"
+@@ -458,7 +459,7 @@ func (m *SessionManager) SetLocked(sender dbus.Sender, value bool) *dbus.Error {
  		return dbusutil.ToError(err)
  	}
  
@@ -123,7 +50,7 @@ index 26f89ef..f412ca4 100644
  		m.setLocked(value)
  		return nil
  	}
-@@ -491,7 +494,7 @@ func (m *SessionManager) SetLocked(sender dbus.Sender, value bool) *dbus.Error {
+@@ -478,7 +479,7 @@ func (m *SessionManager) SetLocked(sender dbus.Sender, value bool) *dbus.Error {
  		return dbusutil.ToError(fmt.Errorf("desktop file %q is invalid", desktopFile))
  	}
  	exe = info.GetExecutable()
@@ -132,22 +59,3 @@ index 26f89ef..f412ca4 100644
  		return dbusutil.ToError(fmt.Errorf("exe %q of desktop file %q is invalid", exe, desktopFile))
  	}
  
-@@ -798,7 +801,7 @@ func setupEnvironments2() {
- 	// man gnome-keyring-daemon:
- 	// The daemon will print out various environment variables which should be set
- 	// in the user's environment, in order to interact with the daemon.
--	gnomeKeyringOutput, err := exec.Command("/usr/bin/gnome-keyring-daemon", "--start",
-+	gnomeKeyringOutput, err := exec.Command("gnome-keyring-daemon", "--start",
- 		"--components=secrets,pkcs11,ssh").Output()
- 	if err == nil {
- 		lines := bytes.Split(gnomeKeyringOutput, []byte{'\n'})
-@@ -1389,4 +1392,4 @@ func initXEventMonitor() {
- 			setDPMSMode(true)
- 		}
- 	})
--}
-\ No newline at end of file
-+}
--- 
-2.39.2
-

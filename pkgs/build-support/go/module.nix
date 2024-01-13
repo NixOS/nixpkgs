@@ -289,7 +289,8 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; } // { inherit (args') vendorSha256; };
+    passthru = passthru // { inherit go goModules vendorHash; }
+                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information
@@ -297,6 +298,7 @@ let
     } // meta;
   });
 in
+lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

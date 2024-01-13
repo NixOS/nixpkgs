@@ -21,10 +21,11 @@ mkDerivation rec {
   ];
 
   meta = {
-    description = "ISO Image Writer is a tool to write a .iso file to a USB disk.";
+    description = "A program to write hybrid ISO files onto USB disks";
     homepage = "https://invent.kde.org/utilities/isoimagewriter";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ k900 ];
+    mainProgram = "isoimagewriter";
   };
 }

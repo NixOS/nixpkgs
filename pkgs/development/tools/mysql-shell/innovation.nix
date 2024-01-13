@@ -5,7 +5,6 @@
 , fetchurl
 , git
 , cctools
-, developer_cmds
 , DarwinTools
 , makeWrapper
 , CoreServices
@@ -36,8 +35,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.1.1";
-  mysqlServerVersion = "8.1.0";
+  mysqlShellVersion = "8.2.1";
+  mysqlServerVersion = "8.2.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -46,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-PdAXqUBzSqkHlqTGXhJeZxL2S7u+M4jTZGneqoe1mes=";
+      hash = "sha256-itPj8cWuIVS+Y4rPVW6JgfcC0FKsxZV+d23xciwhGXk=";
     })
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-X7A2h9PWgQgNg7h64oD+Th/KsqP3UGpJ2etaP2B0VuY=";
+      hash = "sha256-m6WdFow28bxW52q+m8PniZCU/1Ej4secdPQi8GKlziE=";
     })
   ];
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.isDarwin [ cctools developer_cmds DarwinTools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
     boost

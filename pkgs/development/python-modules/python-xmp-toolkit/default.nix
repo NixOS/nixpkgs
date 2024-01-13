@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "python-xmp-toolkit";
   version = "2.0.2";
+  format = "setuptools";
 
   # PyPi has version 2.0.1; the tests fail
   # There are commits for a 2.0.2 release that was never published

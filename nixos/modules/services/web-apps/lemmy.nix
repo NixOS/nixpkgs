@@ -17,11 +17,11 @@ in
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
     server = {
-      package = mkPackageOptionMD pkgs "lemmy-server" {};
+      package = mkPackageOption pkgs "lemmy-server" {};
     };
 
     ui = {
-      package = mkPackageOptionMD pkgs "lemmy-ui" {};
+      package = mkPackageOption pkgs "lemmy-ui" {};
 
       port = mkOption {
         type = types.port;
@@ -146,7 +146,7 @@ in
         ensureDatabases = [ cfg.settings.database.database ];
         ensureUsers = [{
           name = cfg.settings.database.user;
-          ensurePermissions."DATABASE ${cfg.settings.database.database}" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }];
       };
 

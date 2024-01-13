@@ -1,48 +1,51 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, authlib
-, requests
-, nose
+, cryptography
+, fetchFromGitHub
+, more-itertools
+, pendulum
 , pyjwt
+, pytestCheckHook
 , pythonOlder
 , pytz
+, requests
 , responses
+, setuptools
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
   version = "1.12.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "simple-salesforce";
+    repo = "simple-salesforce";
     rev = "refs/tags/v${version}";
     hash = "sha256-mj7lbBGEybsEzWo4TYmPrN3mBXItdo/JomVIYmzIDAY=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    authlib
+    cryptography
+    more-itertools
+    pendulum
     pyjwt
     requests
     zeep
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     pytz
     responses
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests -v
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [
     "simple_salesforce"

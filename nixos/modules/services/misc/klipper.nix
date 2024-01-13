@@ -16,12 +16,7 @@ in
     services.klipper = {
       enable = mkEnableOption (lib.mdDoc "Klipper, the 3D printer firmware");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.klipper;
-        defaultText = literalExpression "pkgs.klipper";
-        description = lib.mdDoc "The Klipper package.";
-      };
+      package = mkPackageOption pkgs "klipper" { };
 
       logFile = mkOption {
         type = types.nullOr types.path;

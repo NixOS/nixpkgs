@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "basemap-data";
+  format = "setuptools";
   inherit (basemap) version src;
 
   sourceRoot = "${src.name}/packages/basemap_data";

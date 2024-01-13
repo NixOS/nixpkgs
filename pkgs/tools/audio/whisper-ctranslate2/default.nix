@@ -5,7 +5,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.3.1";
+  version = "0.3.6";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     rev = version;
-    hash = "sha256-dUmQNKgH+SIlLhUEiaEGXUHZQDr3fidsAU2vATJiXBU=";
+    hash = "sha256-lKzv33mFuXOmKNSOJJViS9VWCxJ+UQu8GXsswoIgdwE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -45,5 +45,6 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/Softcatala/whisper-ctranslate2/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "whisper-ctranslate2";
   };
 }

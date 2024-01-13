@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nikolassv/bartib";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "bartib";
   };
 }

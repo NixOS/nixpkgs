@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , runtimeShell, nixosTests
 , autoreconfHook, bison, flex
 , docbook_xml_dtd_45, docbook_xsl
@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.14.0";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = pname;
     rev = version;
-    hash = "sha256-zopJevCv7ot8RLp/rSQGKO05eF4FjkLaOEMo9aq9Afo=";
+    hash = "sha256-8sFXxP4MPFzKfBHzlKlsibj0lVQKJbC/Z7pWCy3WEuc=";
   };
 
   outputs = [ "out" "su" "dev" "man" ];
@@ -47,6 +47,13 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     ./runtime-shell.patch
     ./fix-install-with-tcb.patch
+    # Fix build against `clang-16` and upcoming `gcc-14`:
+    #   https://github.com/shadow-maint/shadow/pull/857
+    (fetchpatch {
+      name = "fix-implicit-getdef_bool.patch";
+      url = "https://github.com/shadow-maint/shadow/commit/5abe0811b880208600f646356549b7e5cad89060.patch";
+      hash = "sha256-XqvVv8mYY58uXJBKRwncHQRSI45PUkp3dQNn44gzezU=";
+    })
   ];
 
   # The nix daemon often forbids even creating set[ug]id files.

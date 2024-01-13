@@ -1,23 +1,17 @@
 { lib
 , stdenv
 , fetchurl
+, callPackage
 , dpkg
 }:
 
-let
-  prefix = "hsa-amd-aqlprofile";
-  version = "5.7.0";
-  major = lib.versions.major version;
-  minor = lib.versions.minor version;
-  patch = lib.versions.patch version;
-  magic = lib.strings.concatStrings (lib.strings.intersperse "0" (lib.versions.splitVersion version));
-in stdenv.mkDerivation (finalAttrs: {
-  inherit version;
-  pname = "${prefix}-bin";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hsa-amd-aqlprofile-bin";
+  version = "5.7.1";
 
   src = fetchurl {
-    url = "https://repo.radeon.com/rocm/apt/${major}.${minor}/pool/main/h/${prefix}/${prefix}_1.0.0.${magic}.${magic}-63~22.04_amd64.deb";
-    hash = "sha256-FQ25eXkhnvOmcf0sGW3GYu9kZj69bVvZrh0jVx/G/kI=";
+    url = "https://repo.radeon.com/rocm/apt/5.7.1/pool/main/h/hsa-amd-aqlprofile/hsa-amd-aqlprofile_1.0.0.50701.50701-98~22.04_amd64.deb";
+    hash = "sha256-LWAtZ0paJW8lhE+QAMwq2l8wM+96bxk5rNWyQXTc9Vo=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -29,10 +23,14 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-    cp -a opt/rocm-${version}/* $out
+    cp -a opt/rocm-${finalAttrs.version}/* $out
+    chmod +x $out/lib/libhsa-amd-aqlprofile64.so.1.*
+    chmod +x $out/lib/hsa-amd-aqlprofile/librocprofv2_att.so
 
     runHook postInstall
   '';
+
+  passthru.updateScript = (callPackage ./update.nix { }) { inherit (finalAttrs) version; };
 
   meta = with lib; {
     description = "AQLPROFILE library for AMD HSA runtime API extension support";
@@ -40,6 +38,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ unfree ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-Icz6oIXLnLe75zuB8Q862I1ado5GpGZBJezrH7F7EJs=";
+    hash = "sha256-nzaYa4h+UZcP6jqFHxVjgQ/F3q9aOeOPgVKFWBy6Fag=";
   };
 
-  vendorHash = "sha256-iT/QMm6RM6kvw69Az+aLTtBuaCX7ELAiYlj5wXAtBd4=";
+  vendorHash = "sha256-JLght6bOrtc/VP3tfQboASa68VL2GGBTdK02DOC5EQk=";
 
   nativeBuildInputs = [
     installShellFiles

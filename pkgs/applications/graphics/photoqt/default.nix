@@ -7,34 +7,30 @@
 , wrapQtAppsHook
 , exiv2
 , graphicsmagick
-, kimageformats
 , libarchive
 , libraw
 , mpv
 , poppler
 , pugixml
 , qtbase
+, qtcharts
 , qtdeclarative
-, qtgraphicaleffects
+, qtimageformats
+, qtlocation
 , qtmultimedia
-, qtquickcontrols
-, qtquickcontrols2
+, qtpositioning
+, qtsvg
+, qtwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "3.4";
+  version = "4.1";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-kVf9+zI9rtEMmS0N4qrN673T/1fnqfcV3hQPnMXMLas=";
+    hash = "sha256-vxQZFlS4C+Dg9I6BKeMUFOYHz74d28gbhJlIpxSKTvs=";
   };
-
-  # error: no member named 'setlocale' in namespace 'std'; did you mean simply 'setlocale'?
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cplusplus/main.cpp \
-      --replace "std::setlocale" "setlocale"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -46,18 +42,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     exiv2
     graphicsmagick
-    kimageformats
     libarchive
     libraw
     mpv
     poppler
     pugixml
     qtbase
+    qtcharts
     qtdeclarative
-    qtgraphicaleffects
+    qtimageformats
+    qtlocation
     qtmultimedia
-    qtquickcontrols
-    qtquickcontrols2
+    qtpositioning
+    qtsvg
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   cmakeFlags = [
@@ -69,6 +68,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/photoqt.app $out/Applications
+    makeWrapper $out/{Applications/photoqt.app/Contents/MacOS,bin}/photoqt
   '';
 
   meta = {

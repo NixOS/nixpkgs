@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/FrameworkComputer/qmk_hid";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ janik ];
+    mainProgram = "qmk_hid";
   };
 }

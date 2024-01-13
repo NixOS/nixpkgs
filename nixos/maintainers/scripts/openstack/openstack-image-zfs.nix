@@ -20,6 +20,12 @@ in
       default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
+    ramMB = mkOption {
+      type = types.int;
+      default = 1024;
+      description = lib.mdDoc "RAM allocation for build VM";
+    };
+
     sizeMB = mkOption {
       type = types.int;
       default = 8192;
@@ -64,7 +70,7 @@ in
       includeChannel = copyChannel;
 
       bootSize = 1000;
-
+      memSize = cfg.ramMB;
       rootSize = cfg.sizeMB;
       rootPoolProperties = {
         ashift = 12;

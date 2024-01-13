@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdbus-cpp";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "kistler-group";
     repo = "sdbus-cpp";
     rev = "v${version}";
-    hash = "sha256-S/8/I2wmWukpP+RGPxKbuO44wIExzeYZL49IO+KOqg4=";
+    hash = "sha256-AOqwC7CABvQsG9P1PnUg2DIhNmHqYpgbKzm9C2gWNIQ=";
   };
 
   nativeBuildInputs = [

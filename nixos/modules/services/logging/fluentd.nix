@@ -20,12 +20,7 @@ in {
         description = lib.mdDoc "Fluentd config.";
       };
 
-      package = mkOption {
-        type = types.path;
-        default = pkgs.fluentd;
-        defaultText = literalExpression "pkgs.fluentd";
-        description = lib.mdDoc "The fluentd package to use.";
-      };
+      package = mkPackageOption pkgs "fluentd" { };
 
       plugins = mkOption {
         type = types.listOf types.path;

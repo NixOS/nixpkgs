@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         ensureDatabases = [ "vikunja-api" ];
         ensureUsers = [
           { name = "vikunja-api";
-            ensurePermissions = { "DATABASE \"vikunja-api\"" = "ALL PRIVILEGES"; };
+            ensureDBOwnership = true;
           }
         ];
       };

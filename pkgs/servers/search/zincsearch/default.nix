@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "0.4.7";
+  version = "0.4.9";
   src = fetchFromGitHub {
     owner = "zinclabs";
     repo = "zincsearch";
     rev = "v${version}";
-    hash = "sha256-6ZwEH9Xm+iIZ0SDa8qb82lIN3KU6DMe2wt0q9doKgkE=";
+    hash = "sha256-NIrLhbtpk1mFbWRFPxkH1r4mBiwT488MYBjRgIV7igE=";
   };
 
   webui = buildNpmPackage {
@@ -40,7 +40,7 @@ buildGoModule rec {
     cp -r ${webui}/share/zinc-ui web/dist
   '';
 
-  vendorHash = "sha256-/uZh50ImKWW7vYMfRqTbTAMUoRTZ9jXMbc3K16wYJkE=";
+  vendorHash = "sha256-kP7QlES7VpZrOS4TGOFB9qciXGBEUVqzVLhz+2KiK98=";
   subPackages = [ "cmd/zincsearch" ];
 
   ldflags = [

@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/technosophos/dashing";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "dashing";
   };
 }

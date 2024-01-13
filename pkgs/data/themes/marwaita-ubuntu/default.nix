@@ -1,20 +1,22 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
 , gtk_engines
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-ubuntu";
-  version = "1.7";
+  version = "17.0";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = version;
-    sha256 = "024b0817jilvi5ilq9sbwg19ql5i2x3jfgc1awk7zzv6sqii639x";
+    rev = "481aae16034e0321bcabd14270639b8bd8b9aa73";
+    hash = "sha256-Ze2nR+77qe0TfwcvXP9eheB7mXSSVdejk11GS0fx7LY=";
   };
 
   buildInputs = [
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -a Marwaita* $out/share/themes
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Ubuntu Style of Marwaita GTK theme";

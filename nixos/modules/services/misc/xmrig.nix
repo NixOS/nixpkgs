@@ -15,12 +15,8 @@ with lib;
     services.xmrig = {
       enable = mkEnableOption (lib.mdDoc "XMRig Mining Software");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xmrig;
-        defaultText = literalExpression "pkgs.xmrig";
-        example = literalExpression "pkgs.xmrig-mo";
-        description = lib.mdDoc "XMRig package to use.";
+      package = mkPackageOption pkgs "xmrig" {
+        example = "xmrig-mo";
       };
 
       settings = mkOption {
@@ -59,8 +55,8 @@ with lib;
       after = [ "network.target" ];
       description = "XMRig Mining Software Service";
       serviceConfig = {
-        ExecStartPre = "${cfg.package}/bin/xmrig --config=${configFile} --dry-run";
-        ExecStart = "${cfg.package}/bin/xmrig --config=${configFile}";
+        ExecStartPre = "${lib.getExe cfg.package} --config=${configFile} --dry-run";
+        ExecStart = "${lib.getExe cfg.package} --config=${configFile}";
         # https://xmrig.com/docs/miner/randomx-optimization-guide/msr
         # If you use recent XMRig with root privileges (Linux) or admin
         # privileges (Windows) the miner configure all MSR registers

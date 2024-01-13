@@ -9,7 +9,7 @@
 , libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , alsa-lib
-, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11
 , xorgproto
 , libICE
@@ -49,20 +49,22 @@
 , audiofile
 , libiconv
 , withStatic ? false
+# passthru.tests
+, testers
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.28.3";
+  version = "2.28.5";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
-    rev = "release-${version}";
-    hash = "sha256-/kQ2IyvAfmZ+zIUt1WuEIeX0nYPGXDlAQk2qDsQnFFs=";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-YcM7bfLo+KkWx8LdtG4z2UwJvzlEkvIkm+M5aMSztwU=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals x11Support [ libX11 ];
 
   propagatedBuildInputs = lib.optionals x11Support [ xorgproto ]
-    ++ dlopenPropagatedBuildInputs;
+    ++ finalAttrs.dlopenPropagatedBuildInputs;
 
   dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
     ++ lib.optional dbusSupport dbus
@@ -109,7 +111,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
-    ++ dlopenBuildInputs
+    ++ finalAttrs.dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
     ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
@@ -120,7 +122,7 @@ stdenv.mkDerivation rec {
     "--disable-oss"
   ] ++ lib.optional (!x11Support) "--without-x"
   ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-  ++ lib.optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
+  ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
   ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
@@ -156,7 +158,7 @@ stdenv.mkDerivation rec {
   # list the symbols used in this way.
   postFixup =
     let
-      rpath = lib.makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+      rpath = lib.makeLibraryPath (finalAttrs.dlopenPropagatedBuildInputs ++ finalAttrs.dlopenBuildInputs);
     in
     lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
       for lib in $out/lib/*.so* ; do
@@ -171,6 +173,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit openglSupport;
     updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -180,5 +185,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];
+    pkgConfigModules = [ "sdl2" ];
   };
-}
+})

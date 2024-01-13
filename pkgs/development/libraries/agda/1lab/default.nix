@@ -2,14 +2,13 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2023-03-07";
+  version = "unstable-2023-12-04";
 
   src = fetchFromGitHub {
     owner = "plt-amy";
     repo = pname;
-    # Last commit that compiles with Agda 2.6.3
-    rev = "c6ee57a2da327def241324b4775ec2c67cdab2af";
-    hash = "sha256-zDqFaDZxAdFxYM6l2zc7ZTi4XwMThw1AQwHfvhOxzdg=";
+    rev = "47c2a96220b4d14419e5ddb973bc1fa06933e723";
+    hash = "sha256-0U6s6sXdynk2IWRBDXBJCf7Gc+gE8AhR1PXZl0DS4yU=";
   };
 
   # We don't need anything in support; avoid installing LICENSE.agda
@@ -17,7 +16,7 @@ mkDerivation rec {
     rm -rf support
   '';
 
-  libraryName = "cubical-1lab";
+  libraryName = "1lab";
   libraryFile = "1lab.agda-lib";
   everythingFile = "src/index.lagda.md";
 

@@ -21,6 +21,7 @@
 buildPythonPackage rec {
   pname = "clldutils";
   version = "3.19.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

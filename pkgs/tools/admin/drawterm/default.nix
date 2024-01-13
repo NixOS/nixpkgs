@@ -14,17 +14,18 @@
 , wlr-protocols
 , pulseaudio
 , config
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "unstable-2023-08-22";
+  version = "unstable-2023-12-23";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "c91c6fac9d725716ca6ecc3002053f941137f24f";
-    hash = "sha256-oGcKRx1tP2jeshHhaCHPRKmwKQ3WPYK1tHGGt1/3oDU=";
+    rev = "f9ae0c837bf8351037689f1985c1a52c1570ba30";
+    hash = "sha256-wJWMdD9OmGybIwgBNJ8LxxV21L4SaV22OxAILsDWG3U=";
   };
 
   enableParallelBuilding = true;
@@ -56,10 +57,13 @@ stdenv.mkDerivation {
     installManPage drawterm.1
   '';
 
-  passthru.updateScript = unstableGitUpdater { shallowClone = false; };
+  passthru = {
+    updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = nixosTests.drawterm;
+  };
 
   meta = with lib; {
-    description = "Connect to Plan 9 CPU servers from other operating systems.";
+    description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r moody ];

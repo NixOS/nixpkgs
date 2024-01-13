@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
+# depends on rust-cpython which won't support python312
+# https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
+, rustSupport ? (stdenv.hostPlatform.isLinux && python3Packages.pythonOlder "3.12"), cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -21,11 +23,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.5.2";
+    version = "6.6.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-r8OdcGeXZZPIMyuOl6Eq/Tk7VQN8X7nDyrGkLHVg9go=";
+      sha256 = "sha256-opRlo/5Ao+jUm6g0MTSsKrooa2g//rg42gz25FIflpU=";
     };
 
     format = "other";
@@ -35,7 +37,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-dcyHmLkRadNK30Vv0XsCEaZGTIcF/L29lLe58ggB3Lg=";
+      sha256 = "sha256-wLV0qdCfMgGpZRxnZik/lRwZHm/66p0sJn/mYVRvRkQ=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -43,7 +45,7 @@ let
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
+    nativeBuildInputs = [ makeWrapper gettext installShellFiles python3Packages.setuptools ]
       ++ lib.optionals rustSupport [
            rustPlatform.cargoSetupHook
            cargo
@@ -94,6 +96,7 @@ let
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
+      mainProgram = "hg";
     };
   };
 

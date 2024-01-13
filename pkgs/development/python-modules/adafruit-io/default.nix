@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-io";
-  version = "2.7.0";
+  version = "2.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,10 +19,8 @@ buildPythonPackage rec {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
     rev = "refs/tags/${version}";
-    hash = "sha256-BIquSrhtRv2NEOn/G6TTfYMrL2OBwwJQYZ455fznwdU=";
+    hash = "sha256-vfjyU+czLtUA0WDEvc0iYmJ2Tn75o/OsX909clfDsUE=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

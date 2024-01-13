@@ -1,8 +1,8 @@
 diff --git a/conftest.py b/conftest.py
-index da37e19b..d9f850d8 100644
+index dacb730a..149c6702 100644
 --- a/conftest.py
 +++ b/conftest.py
-@@ -32,16 +32,3 @@ def temp_media_dir(tmpdir, monkeypatch, request):
+@@ -33,17 +33,3 @@ def temp_media_dir(tmpdir, monkeypatch, request):
          with tempconfig({"media_dir": str(tmpdir)}):
              assert config.media_dir == str(tmpdir)
              yield tmpdir
@@ -13,6 +13,7 @@ index da37e19b..d9f850d8 100644
 -    info = ctx.info
 -    ctx.release()
 -    return (
+-        f"\nCairo Version: {cairo.cairo_version()}",
 -        "\nOpenGL information",
 -        "------------------",
 -        f"vendor: {info['GL_VENDOR'].strip()}",

@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/MiSawa/xq";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "xq";
   };
 }

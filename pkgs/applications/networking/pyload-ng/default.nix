@@ -1,13 +1,13 @@
 { lib, fetchPypi, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev72";
+  version = "0.5.0b3.dev75";
   pname = "pyload-ng";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pcbJc23Fylh/JoWRmbZmC8xUzUqh2ej6gT+B2w8DHFQ=";
+    hash = "sha256-1lPIKkZESonDaVCnac0iUu/gCqXVDBhNZrk5S0eC6F0=";
   };
 
   postPatch = ''
@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pyload/pyload";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ruby0b ];
+    mainProgram = "pyload";
   };
 }

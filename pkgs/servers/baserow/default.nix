@@ -122,7 +122,7 @@ with python.pkgs; buildPythonApplication rec {
     pytest-django
     pytest-unordered
     responses
-    zope_interface
+    zope-interface
   ];
 
   fixupPhase = ''
@@ -154,5 +154,6 @@ with python.pkgs; buildPythonApplication rec {
     homepage = "https://baserow.io";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "baserow";
   };
 }

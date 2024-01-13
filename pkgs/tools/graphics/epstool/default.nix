@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.asppsa ];
     platforms = platforms.all;
+    mainProgram = "epstool";
   };
 }

@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://s-tech.elsat.net.pl/fbv/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "fbv";
   };
 }

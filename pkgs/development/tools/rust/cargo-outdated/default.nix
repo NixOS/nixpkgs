@@ -6,26 +6,28 @@
 , stdenv
 , curl
 , CoreFoundation
+, CoreServices
 , Security
 , SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-u8VMVW2LJcwDRv43705aOcP0WMRfB3hakdgufYuI7I4=";
+    sha256 = "sha256-rbfCrq9AwjrynNSklR1un3BUGv0kblwIxy72lTjEDVc=";
   };
 
-  cargoHash = "sha256-rXLgNzbzMZG+nviAnK9n7ISWuNOPMugubHNMwJRKRZc=";
+  cargoHash = "sha256-kBolewLzKGq3rmSeWlLMDqKb4QQfWf3J6DnXTB0SV54=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     curl
     CoreFoundation
+    CoreServices
     Security
     SystemConfiguration
   ];

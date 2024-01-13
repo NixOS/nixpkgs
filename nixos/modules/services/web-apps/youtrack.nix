@@ -54,14 +54,7 @@ in
       type = types.attrsOf types.str;
     };
 
-    package = mkOption {
-      description = lib.mdDoc ''
-        Package to use.
-      '';
-      type = types.package;
-      default = pkgs.youtrack;
-      defaultText = literalExpression "pkgs.youtrack";
-    };
+    package = mkPackageOption pkgs "youtrack" { };
 
     port = mkOption {
       description = lib.mdDoc ''

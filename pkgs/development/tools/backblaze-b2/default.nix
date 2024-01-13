@@ -1,14 +1,14 @@
-{ lib, python3Packages, fetchPypi, installShellFiles }:
+{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.9.0";
+  version = "3.15.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "b2";
-    hash = "sha256-Z9LQapWl0zblcAyMOfKhn5/O1H6+tmgiPQfAB241jqU=";
+    hash = "sha256-10c2zddALy7+CGxhjUC6tMLQcZ3WmLeRY1bNKWunAys=";
   };
 
   postPatch = ''
@@ -30,11 +30,13 @@ python3Packages.buildPythonApplication rec {
     arrow
     b2sdk
     phx-class-registry
-    setuptools
     docutils
     rst2ansi
     tabulate
     tqdm
+    platformdirs
+    packaging
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -63,6 +65,7 @@ python3Packages.buildPythonApplication rec {
 
     # it's hard to make it work on nix
     "test/integration/test_autocomplete.py"
+    "test/unit/console_tool"
   ];
 
   postInstall = ''
@@ -72,6 +75,15 @@ python3Packages.buildPythonApplication rec {
       --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2) \
       --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2)
   '';
+
+  passthru.tests.version = (testers.testVersion {
+    package = backblaze-b2;
+    command = "backblaze-b2 version --short";
+  }).overrideAttrs (old: {
+    # workaround the error: Permission denied: '/homeless-shelter'
+    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+    HOME = "$(mktemp -d)";
+  });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";

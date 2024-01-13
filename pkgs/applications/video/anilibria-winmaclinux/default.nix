@@ -10,17 +10,18 @@
 , wrapQtAppsHook
 , makeDesktopItem
 , copyDesktopItems
+, libvlc
 }:
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.10";
+  version = "1.2.12";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    sha256 = "sha256-mCDw8V/Uzewm32rj+mkkm5atS5nJAFJ3ry1boTn+gqI=";
+    sha256 = "sha256-J9MBnHrVnDaJ8Ykf/n8OkWKbK/JfMxorH9E+mKe3T8k=";
   };
 
   sourceRoot = "source/src";
@@ -30,11 +31,13 @@ mkDerivation rec {
   patches = [
     ./0001-fix-installation-paths.patch
     ./0002-disable-version-check.patch
+    ./0003-build-with-vlc.patch
   ];
 
   preConfigure = ''
     substituteInPlace AniLibria.pro \
-      --replace "\$\$PREFIX" '${placeholder "out"}'
+      --replace "\$\$PREFIX" '${placeholder "out"}' \
+      --replace '@VLC_PATH@' '${libvlc}/include'
   '';
 
   qtWrapperArgs = [
@@ -58,6 +61,7 @@ mkDerivation rec {
     qtquickcontrols2
     qtwebsockets
     qtmultimedia
+    libvlc
   ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-good

@@ -18,7 +18,7 @@ in
 {
   basic = makeTest {
     name = "systemd-boot";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = common;
 
@@ -42,7 +42,7 @@ in
   # Check that specialisations create corresponding boot entries.
   specialisation = makeTest {
     name = "systemd-boot-specialisation";
-    meta.maintainers = with pkgs.lib.maintainers; [ lukegb ];
+    meta.maintainers = with pkgs.lib.maintainers; [ lukegb julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -65,7 +65,7 @@ in
   # Boot without having created an EFI entry--instead using default "/EFI/BOOT/BOOTX64.EFI"
   fallback = makeTest {
     name = "systemd-boot-fallback";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -91,7 +91,7 @@ in
 
   update = makeTest {
     name = "systemd-boot-update";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = common;
 
@@ -113,7 +113,7 @@ in
 
   memtest86 = makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -128,7 +128,7 @@ in
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -143,7 +143,7 @@ in
 
   entryFilename = makeTest {
     name = "systemd-boot-entry-filename";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -160,7 +160,7 @@ in
 
   extraEntries = makeTest {
     name = "systemd-boot-extra-entries";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -179,7 +179,7 @@ in
 
   extraFiles = makeTest {
     name = "systemd-boot-extra-files";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -196,7 +196,7 @@ in
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes = {
       inherit common;
@@ -252,11 +252,40 @@ in
     '';
   };
 
+  garbage-collect-entry = makeTest {
+    name = "systemd-boot-garbage-collect-entry";
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+    nodes = {
+      inherit common;
+      machine = { pkgs, nodes, ... }: {
+        imports = [ common ];
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+        ];
+      };
+    };
+
+    testScript = { nodes, ... }:
+      let
+        baseSystem = nodes.common.system.build.toplevel;
+      in
+      ''
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${baseSystem}")
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 1")
+        machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+        machine.fail("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
+      '';
+  };
+
   # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
   # itself, systems with such firmware won't boot without this fix
   uefiLargeFileWorkaround = makeTest {
     name = "uefi-large-file-workaround";
-
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
     nodes.machine = { pkgs, ... }: {
       imports = [common];
       virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
@@ -277,4 +306,20 @@ in
       machine.wait_for_unit("multi-user.target")
     '';
   };
+
+  no-bootspec = makeTest
+    {
+      name = "systemd-boot-no-bootspec";
+      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.bootspec.enable = false;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+      '';
+    };
 }

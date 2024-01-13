@@ -25,7 +25,7 @@ with lib;
     systemd.services.growpart = {
       wantedBy = [ "-.mount" ];
       after = [ "-.mount" ];
-      before = [ "systemd-growfs-root.service" ];
+      before = [ "systemd-growfs-root.service" "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {

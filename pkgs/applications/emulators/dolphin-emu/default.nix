@@ -26,7 +26,6 @@
 , libXrandr
 , lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
@@ -38,7 +37,6 @@
 , vulkan-loader
 , xxHash
 , xz
-, zlib-ng
 
   # Used in passthru
 , common-updater-scripts
@@ -77,6 +75,8 @@ stdenv.mkDerivation rec {
     # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
     ./find-minizip-ng.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     stdenv.cc
@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
     sfml
     xxHash
     xz # LibLZMA
-    zlib-ng
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
@@ -175,6 +174,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''

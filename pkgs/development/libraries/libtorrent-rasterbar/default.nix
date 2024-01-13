@@ -42,6 +42,11 @@ in stdenv.mkDerivation {
     moveToOutput "lib/${python.libPrefix}" "$python"
   '';
 
+  postFixup = ''
+    substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+  '';
+
   outputs = [ "out" "dev" "python" ];
 
   cmakeFlags = [

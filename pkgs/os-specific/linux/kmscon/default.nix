@@ -16,6 +16,7 @@
 , libxslt
 , mesa
 , ninja
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +30,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8owyyzCrZVbWXcCR+RA+m0MOrdzW+efI+rIMWEVEZ1o=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   buildInputs = [
     libGLU
     libGL
     libdrm
     libtsm
     libxkbcommon
-    libxslt
     pango
     pixman
     systemd
@@ -47,6 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     docbook_xsl
     pkg-config
+    libxslt # xsltproc
   ];
 
   patches = [
@@ -72,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KMS/DRM based System Console";
-    homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
+    homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;
     maintainers = with maintainers; [ omasanori ];
     platforms = platforms.linux;

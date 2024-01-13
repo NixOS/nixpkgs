@@ -18,9 +18,9 @@ In the following is an example expression using `buildGoModule`, the following a
 
   To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`
 
-  To obtain the actual hash, set `vendorHash = lib.fakeSha256;` and run the build ([more details here](#sec-source-hashes)).
+  To obtain the actual hash, set `vendorHash = lib.fakeHash;` and run the build ([more details here](#sec-source-hashes)).
 - `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
-- `modPostBuild`: Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash` (or `vendorSha256`). Note that if you change this attribute, you need to update `vendorHash` (or `vendorSha256`) attribute.
+- `modPostBuild`: Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash`. Note that if you change this attribute, you need to update `vendorHash` attribute.
 
 ```nix
 pet = buildGoModule rec {
@@ -132,7 +132,6 @@ Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build
 
 ```nix
   ldflags = [
-    "-s" "-w"
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];

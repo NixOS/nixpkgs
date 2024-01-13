@@ -1,10 +1,9 @@
 { lib, stdenvNoCC, texlive }:
 
-stdenvNoCC.mkDerivation {
-  pname = "iwona";
-  version = "0.995b";
+stdenvNoCC.mkDerivation rec {
+  inherit (src) pname version;
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.iwona.pkgs);
+  src = texlive.pkgs.iwona;
 
   installPhase = ''
     runHook preInstall
@@ -20,7 +19,7 @@ stdenvNoCC.mkDerivation {
     # "[...] GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public # License (LPPL), version 1.3c or
     # later." - GUST website
-    license = licenses.lppl13c;
+    license = src.meta.license;
     maintainers = with maintainers; [ siddharthist ];
     platforms = platforms.all;
   };

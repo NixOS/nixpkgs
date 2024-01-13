@@ -9,7 +9,7 @@
 , perl
 , zlib
 , expat
-, libffi
+, libffi_3_3
 , libselinux
 , libdrm
 , udev
@@ -27,7 +27,7 @@ let
       "i386-linux-gnu"
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64-linux-gnu"
-    else throw "amdgpu-pro is Linux only. Sorry.";
+    else throw "amdgpu-pro is Linux only. Sorry ${stdenv.hostPlatform.system}.";
 
 in stdenv.mkDerivation rec {
 
@@ -119,7 +119,7 @@ in stdenv.mkDerivation rec {
     libxshmfence
     elfutils
     expat
-    libffi
+    libffi_3_3
     libselinux
     # libudev is not listed in any dependencies, but is loaded dynamically
     udev

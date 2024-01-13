@@ -15,17 +15,24 @@
 , libyaml
 , rpm
 , zchunk
+, cppunit
+, python
+, swig
+, glib
+, sphinx
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.71.0";
+  version = "0.72.0";
+
+  outputs = [ "out" "dev" "py" ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kRpB80ntb5CbqnWpc3M3i7w06CkstPlJfo2X3WsuME8=";
+    hash = "sha256-Ou7cXJz4g8cx2KjeX+IFRA2m158PGKcb9jCXFuAOKqU=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +43,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     check
+    cppunit
     openssl
     json_c
     libsmartcols
     libyaml
     libmodulemd
     zchunk
+    python
+    swig
+    sphinx
   ];
 
   propagatedBuildInputs = [
@@ -56,22 +67,31 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
-  postPatch = ''
-    # See https://github.com/NixOS/nixpkgs/issues/107428
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" "" \
-      --replace "add_subdirectory(tests)" ""
+  patches = [
+    ./fix-python-install-dir.patch
+  ];
 
+  postPatch = ''
     # https://github.com/rpm-software-management/libdnf/issues/1518
     substituteInPlace libdnf/libdnf.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+    substituteInPlace cmake/modules/FindPythonInstDir.cmake \
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
   '';
 
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DWITH_BINDINGS=OFF"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString ["."] python.version)}"
   ];
+
+  postInstall = ''
+    rm -r $out/${python.sitePackages}/hawkey/test
+  '';
+
+  postFixup = ''
+    moveToOutput "lib/${python.libPrefix}" "$py"
+  '';
 
   meta = with lib; {
     description = "Package management library";
@@ -79,6 +99,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k ];
+    maintainers = with maintainers; [ rb2k katexochen ];
   };
 }

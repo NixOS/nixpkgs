@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.11";
+  version = "6.8.0";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Nwyh6CxcuVmSTHIeEd1DUfk/c2k/jYrUUr47dZVtGk=";
+    hash = "sha256-LtGQSCDLZhtyB+sdzPrr7BpUY9ytkDukSK0ZRVAtCJw=";
   };
 
   nativeBuildInputs = [

@@ -1,39 +1,39 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "lxd-to-incus";
-  version = "0.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    # use commit which fixes 0.1 versioning, use tags for > 0.1
-    rev = "253a06bd8506bf42628d32ccbca6409d051465ec";
-    hash = "sha256-LXCTrZEDnFTJpqVH+gnG9HaV1wcvTFsVv2tAWabWYmg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
   modRoot = "cmd/lxd-to-incus";
 
-  vendorHash = "sha256-Kk5sx8UYuip/qik5ez/pxi+DmzjkPIHNYUHVvBm9f9g=";
+  vendorHash = "sha256-cBAqJz3Y4CqyxTt7u/4mXoQPKmKgQ3gYJV1NiC/H+TA=";
 
-  # required for go-cowsql.
-  CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+  CGO_ENABLED = 0;
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "incus-";
-    };
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "v\(.*\)"
+       ];
+     };
   };
 
   meta = {
     description = "LXD to Incus migration tool";
     homepage = "https://linuxcontainers.org/incus";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

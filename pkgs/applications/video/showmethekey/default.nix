@@ -7,19 +7,20 @@
 , json-glib
 , libinput
 , gtk4
+, libadwaita
 , wrapGAppsHook4
 , libxkbcommon
 , pkg-config
 }:
 stdenv.mkDerivation rec {
   pname = "showmethekey";
-  version = "1.8.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IfegYHHFbZbMTA8JWXAun9Gl3BpykH/5RqUIrlYlLhk=";
+    hash = "sha256-eeObomb4Gv/vpvViHsi3+O0JR/rYamrlZNZaXKL6KJw=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
+    libadwaita
     libevdev
     libinput
     libxkbcommon

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-common";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-common";
     rev = finalAttrs.version;
-    hash = "sha256-IBLJPgi+dKZKbR0Yjr2aNjCdpY+PE1k9QLSsk++6Wqo=";
+    hash = "sha256-qi3xsnZjqSz3I7O+xPxDnI91qDIA0XFJ3tCQQF84vIg=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-DENABLE_LOMIRI_FEATURES=OFF"
     "-DGSETTINGS_LOCALINSTALL=ON"
     "-DGSETTINGS_COMPILE=ON"

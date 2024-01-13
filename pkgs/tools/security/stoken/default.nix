@@ -5,7 +5,7 @@
 , pkg-config
 , libxml2
 , nettle
-, withGTK3 ? true
+, withGTK3 ? !stdenv.hostPlatform.isStatic
 , gtk3
 }:
 

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.9";
+  version = "3.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -41,10 +41,8 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     rev = "refs/tags/${version}";
-    hash = "sha256-lNa6GiX0hCZFVyiokBzEKGsvimSkUkgR1bkQMhxUbDw=";
+    hash = "sha256-6y+p+Ulc1Viu5s1AL/ecVtO4YRnmem/ZleY8xC4CJrU=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

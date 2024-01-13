@@ -103,12 +103,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      description = lib.mdDoc "The zookeeper package to use";
-      default = pkgs.zookeeper;
-      defaultText = literalExpression "pkgs.zookeeper";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "zookeeper" { };
 
     jre = mkOption {
       description = lib.mdDoc "The JRE with which to run Zookeeper";

@@ -214,6 +214,13 @@ let
           '';
         };
 
+        hostname = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = lib.mdDoc "The hostname of the container.";
+          example = "hello-world";
+        };
+
         extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -239,6 +246,25 @@ let
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
     escapedName = escapeShellArg name;
+    preStartScript = pkgs.writeShellApplication {
+      name = "pre-start";
+      runtimeInputs = [ ];
+      text = ''
+        ${cfg.backend} rm -f ${name} || true
+        ${optionalString (isValidLogin container.login) ''
+          ${cfg.backend} login \
+          ${container.login.registry} \
+          --username ${container.login.username} \
+          --password-stdin < ${container.login.passwordFile}
+        ''}
+        ${optionalString (container.imageFile != null) ''
+          ${cfg.backend} load -i ${container.imageFile}
+        ''}
+        ${optionalString (cfg.backend == "podman") ''
+          rm -f /run/podman-${escapedName}.ctr-id
+        ''}
+      '';
+    };
   in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
     after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
@@ -253,23 +279,6 @@ let
       else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
       else throw "Unhandled backend: ${cfg.backend}";
 
-    preStart = ''
-      ${cfg.backend} rm -f ${name} || true
-      ${optionalString (isValidLogin container.login) ''
-        cat ${container.login.passwordFile} | \
-          ${cfg.backend} login \
-            ${container.login.registry} \
-            --username ${container.login.username} \
-            --password-stdin
-        ''}
-      ${optionalString (container.imageFile != null) ''
-        ${cfg.backend} load -i ${container.imageFile}
-        ''}
-      ${optionalString (cfg.backend == "podman") ''
-        rm -f /run/podman-${escapedName}.ctr-id
-        ''}
-      '';
-
     script = concatStringsSep " \\\n  " ([
       "exec ${cfg.backend} run"
       "--rm"
@@ -277,6 +286,8 @@ let
       "--log-driver=${container.log-driver}"
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
+      ++ optional (container.hostname != null)
+      "--hostname=${escapeShellArg container.hostname}"
       ++ lib.optionals (cfg.backend == "podman") [
         "--cidfile=/run/podman-${escapedName}.ctr-id"
         "--cgroups=no-conmon"
@@ -318,7 +329,7 @@ let
       ###
       # ExecReload = ...;
       ###
-
+      ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
       TimeoutStartSec = 0;
       TimeoutStopSec = 120;
       Restart = "always";

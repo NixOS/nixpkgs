@@ -19,5 +19,6 @@ buildNpmPackage rec {
     changelog = "https://github.com/HitomaruKonpaku/twspace-crawler/blob/${src.rev}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "twspace-crawler";
   };
 }

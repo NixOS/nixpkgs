@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmake";
-  version = "2.8.3";
+  version = "2.8.6";
 
   src = fetchurl {
     url = "https://github.com/xmake-io/xmake/releases/download/v${version}/xmake-v${version}.tar.gz";
-    hash = "sha256-BC6RazVbT1sr4RLQ1ZR4hHZGXDqFSvuqpt5vPyMDylA=";
+    hash = "sha256-DmKE6v1RoyNgmCE8CVI39WrK+umoilBAa4gszl6iaz0=";
   };
 
   nativeBuildInputs = [

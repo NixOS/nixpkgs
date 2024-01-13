@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, pythonPackages, opencv3 }:
+{ lib, fetchFromGitHub, pythonPackages, opencv4 }:
 
 let
-  opencv3_ = pythonPackages.toPythonModule (opencv3.override {
+  opencv4_ = pythonPackages.toPythonModule (opencv4.override {
     inherit pythonPackages;
     enablePython = true;
     enableFfmpeg = true;
@@ -19,7 +19,7 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "0qzrxqhsxn0h71nfrsi9g78hx3pqm3b8sr6fjq01k4k6dd2nwfam";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ opencv3_ midiutil pygame pyopengl ];
+  propagatedBuildInputs = with pythonPackages; [ opencv4_ midiutil pygame pyopengl ];
 
   installPhase = ''
     install -Dm755 v2m.py $out/bin/v2m.py
@@ -31,5 +31,6 @@ in pythonPackages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "v2m.py";
   };
 }

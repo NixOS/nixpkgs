@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ zaninime ];
     platforms = platforms.linux;
+    mainProgram = "icon-slicer";
   };
 }

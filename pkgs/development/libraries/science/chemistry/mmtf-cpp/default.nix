@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmtf-cpp";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub  {
     owner = "rcsb";
     repo = pname;
     rev = "v${version}";
-    sha256= "17ylramda69plf5w0v5hxbl4ggkdi5s15z55cv0pljl12yvyva8l";
+    hash = "sha256-8JrNobvekMggS8L/VORKA32DNUdXiDrYMObjd29wQmc=";
   };
 
   nativeBuildInputs = [ cmake ];

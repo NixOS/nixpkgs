@@ -3,24 +3,19 @@
 , fetchPypi
 , groff
 , less
+, nix-update-script
+, testers
+, awscli
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.29.9"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.31.6"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8SmOu79FZESL1Hd15wdd1m1Uewswqaum2y8LOZAl9P8=";
+    hash = "sha256-PINiNkP2vopPgc9bH0x7mifeUt7gdXi3/i2Ye96RANg=";
   };
-
-  # https://github.com/aws/aws-cli/issues/4837
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
-      --replace "colorama>=0.2.5,<0.4.5" "colorama>=0.2.5,<0.5" \
-      --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
-  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     botocore
@@ -44,10 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru = {
-    python = python3; # for aws_shell
-  };
-
   doInstallCheck = true;
 
   installCheckPhase = ''
@@ -59,12 +50,25 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
+  passthru = {
+    python = python3; # for aws_shell
+    updateScript = nix-update-script {
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(1\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli;
+      command = "aws --version";
+      inherit version;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     mainProgram = "aws";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

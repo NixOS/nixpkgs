@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
       It works similar to xargs, but starts several processes simultaneously
       and gives only one line of arguments to each utility call.
     '';
+    mainProgram = "xjobs";
   };
 }

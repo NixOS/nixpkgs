@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-pkcs11";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "danni";
@@ -17,8 +18,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0kncbipfpsb7m7mhv5s5b9wk604h1j08i2j26fn90pklgqll0xhv";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     cython

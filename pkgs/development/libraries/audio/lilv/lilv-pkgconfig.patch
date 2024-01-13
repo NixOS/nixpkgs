@@ -1,6 +1,0 @@
---- a/lilv.pc.in
-+++ b/lilv.pc.in
-@@ -9 +9,2 @@ Description: Simple C library for hosting LV2 plugins
--Requires: @LILV_PKG_DEPS@
-+Requires: lv2
-+Requires.private: @LILV_PKG_DEPS@

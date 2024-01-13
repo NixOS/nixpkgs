@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N9lUAhfYLlEAIaWSNS3Ecq+aBTz+f7Z22Sclwj9rp6w=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs ];
 
   configurePhase = ''
     runHook preConfigure
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$PWD/tmp
     mkdir -p $HOME
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $offlineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

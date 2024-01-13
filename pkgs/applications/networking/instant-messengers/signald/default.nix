@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
-, makeWrapper, fetchpatch, substituteAll, jre_minimal
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
+gradle, git, perl, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
@@ -15,6 +15,8 @@ let
     rev = version;
     sha256 = "sha256-EofgwZSDp2ZFhlKL2tHfzMr3EsidzuY4pkRZrV2+1bA=";
   };
+
+  gradleWithJdk = gradle.override { java = jdk17_headless; };
 
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
@@ -39,7 +41,7 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradleWithJdk perl ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -112,13 +114,13 @@ in stdenv.mkDerivation {
     mkdir -p $out
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
+      --prefix PATH : ${lib.makeBinPath [ coreutils findutils gnused ]} \
       --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle makeWrapper ];
+  nativeBuildInputs = [ git gradleWithJdk makeWrapper ];
 
   doCheck = true;
 

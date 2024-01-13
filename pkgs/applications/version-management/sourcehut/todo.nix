@@ -3,24 +3,27 @@
 , buildGoModule
 , buildPythonPackage
 , srht
-, redis
 , alembic
-, pystache
 , pytest
 , factory-boy
 , python
 , unzip
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.72.2";
+  version = "0.74.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-FLjVO8Y/9s2gFfMXwcY7Rj3WNzPEBYs1AEjiVZFWsT8=";
+    sha256 = "sha256-j12pCGfKf6+9R8NOBIrH2V4OuSMuncU6S1AMWFVoHts=";
   };
 
   postPatch = ''
@@ -32,14 +35,16 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorHash = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+    vendorHash = "sha256-rvfG5F6ez8UM0dYVhKfzwtb7ZEJlaKMBAfKDbo3Aofc=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht
-    redis
     alembic
-    pystache
   ];
 
   preBuild = ''

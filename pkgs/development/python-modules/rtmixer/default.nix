@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "rtmixer";
   version = "0.1.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

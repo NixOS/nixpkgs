@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ exlevan kamilchm ];
     platforms = platforms.linux;
+    mainProgram = "pasystray";
   };
 }

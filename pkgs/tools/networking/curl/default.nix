@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -58,7 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./7.79.1-darwin-no-systemconfiguration.patch
+    # fix ipv6 autodetect compile error in configure script
+    # remove once https://github.com/curl/curl/pull/12607 released (8.6.0)
+    ./configure-ipv6-autodetect.diff
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -90,7 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     optional wolfsslSupport wolfssl ++
     optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
-    optional zstdSupport zstd;
+    optional zstdSupport zstd ++
+    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ]);
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''

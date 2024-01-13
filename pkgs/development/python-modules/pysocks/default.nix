@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pysocks";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PySocks";

@@ -11,13 +11,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.0.5";
+  version = "2.2.4.3";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    hash = "sha256-oMH4FutgI5mLz2sxDdPFUyDd80xT32r51HEQYhhnvcU=";
+    hash = "sha256-6643sdKVHOHrGRocTm881GCHoON4tlrKcNfOFMHwnQY=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
   guiSrc = "${src}/gui";
@@ -30,17 +30,20 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-hVtETKhG9kX/4a4uO/aQ9sN2eTF6aAYaKDSHJIa0eWQ=";
+      sha256 = "sha256-rZIcVLolTMdtN27W6gCw9uk9m4N5v9SZn2563+aN/gs=";
     };
 
     buildPhase = ''
-      export NODE_OPTIONS=--openssl-legacy-provider
+      runHook preBuild
       OUTPUT_DIR=$out yarn --offline build
+      runHook postBuild
     '';
 
     configurePhase = ''
+      runHook preConfigure
       cp -r $node_modules node_modules
       chmod +w node_modules
+      runHook postConfigure
     '';
 
     distPhase = "true";
@@ -59,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorHash = "sha256-nI+nqftJybAGcHCTMVjYPuLHxqE/kyjUzkspnkzUi+g=";
+  vendorHash = "sha256-wwDv2ThHwtnUpAnQoc0Ms0mGC44jRvABcE4K5MrF8S4=";
 
   ldflags = [
     "-s"

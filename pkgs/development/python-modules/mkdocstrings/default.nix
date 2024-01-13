@@ -1,35 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , jinja2
 , markdown
 , markupsafe
 , mkdocs
 , mkdocs-autorefs
+, pdm-backend
 , pymdown-extensions
 , pytestCheckHook
-, pdm-backend
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "0.24.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "mkdocstrings";
     rev = "refs/tags/${version}";
-    hash = "sha256-t7wxm600XgYl1jsqjOpZdWcmqR9qafdKTaz/xDPdDPY=";
+    hash = "sha256-UqX2jNNYwDNhb71qGdjHNoo2MmSxjf/bZiUoSxlE2XQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}'
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
@@ -43,6 +44,9 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
   ];
 
   nativeCheckInputs = [

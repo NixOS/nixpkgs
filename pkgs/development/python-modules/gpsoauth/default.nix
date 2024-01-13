@@ -1,23 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pycryptodomex
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
   pname = "gpsoauth";
+  version = "1.0.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-68rnLrMlp/BsvqlbnV5kvsJTcDEtsV6OLkbE1U5ynno=";
+    hash = "sha256-SWYXNYrnzK8P4oK9f7bmOiVdWUQHp8WvhNzIS7Y0msg=";
   };
 
-  propagatedBuildInputs = [ pycryptodomex requests ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    pycryptodomex
+    requests
+  ];
 
   # upstream tests are not very comprehensive
   doCheck = false;

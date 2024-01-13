@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/anthraxx/dfrs";
     license = licenses.mit;
     maintainers = with maintainers; [ wamserma ];
+    mainProgram = "dfrs";
   };
 }

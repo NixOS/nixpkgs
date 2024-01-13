@@ -63,16 +63,16 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-    "-DPython3_EXECUTABLE=${python.pythonForBuild.interpreter}"
+    "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
   ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
     pkg-config
-    python.pythonForBuild
+    python.pythonOnBuildForHost
     swig4
     unzip
-  ] ++ (with python.pythonForBuild.pkgs; [
+  ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip
     mypy-protobuf
   ]);

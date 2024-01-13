@@ -9,8 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-pytestrail";
   version = "0.10.5";
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tolstislon";

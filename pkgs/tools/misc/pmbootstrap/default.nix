@@ -1,21 +1,20 @@
 { stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab, sudo }:
+, fetchPypi, fetchFromSourcehut, sudo }:
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "1.50.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2S3I3J3wmRkVSUshyQCUTuYgHLsDMnXZQHt7KySBzIY=";
+    hash = "sha256-buCfQsi10LezDzYeplArmFRSc3vbjtl+FuTm/VUS2us=";
   };
 
-  repo = fetchFromGitLab {
-    domain = "gitlab.com";
-    owner = "postmarketOS";
+  repo = fetchFromSourcehut {
+    owner = "~postmarketos";
     repo = pname;
     rev = version;
-    hash = "sha256-UkgCNob4nazFO8xXyosV+11Sj4yveYBfgh7aw+/6Rlg=";
+    hash = "sha256-3GZ4PeMnG/a46WwvWPQFeYbJPp+NGU7A98QasnlMIL0=";
   };
 
   pmb_test = "${repo}/test";
@@ -45,6 +44,7 @@ buildPythonApplication rec {
     "test_chroot_arguments"
     "test_chroot_interactive_shell"
     "test_chroot_interactive_shell_user"
+    "test_chroot_mount"
     "test_clean_worktree"
     "test_config_user"
     "test_cross_compile_distcc"
@@ -87,6 +87,12 @@ buildPythonApplication rec {
     "test_skip_already_built"
     "test_switch_to_channel_branch"
     "test_version"
+    "test_build_abuild_leftovers"
+    "test_get_all_component_names"
+    "test_check_config"
+    "test_extract_arch"
+    "test_extract_version"
+    "test_check"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
@@ -96,5 +102,6 @@ buildPythonApplication rec {
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "pmbootstrap";
   };
 }

@@ -10,7 +10,7 @@
 , setuptools
 , six
 , testtools
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pyrsistent
     setuptools
     six
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

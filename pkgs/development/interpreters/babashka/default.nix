@@ -1,26 +1,26 @@
 { lib
 , buildGraalvmNativeImage
 , graalvmCEPackages
-, removeReferencesTo
 , fetchurl
 , writeScript
+, installShellFiles
 }:
 
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.3.184";
+    version = "1.3.186";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-O3pLELYmuuB+Bf1vHTWQ+u7Ymi3qYiMRpCwvEq+GeBQ=";
+      sha256 = "sha256-T7inTJHSnUySituU0fcgZ0xWjIY3yb8BlSakqym67ew=";
     };
 
     graalvmDrv = graalvmCEPackages.graalvm-ce;
 
     executable = "bb";
 
-    nativeBuildInputs = [ removeReferencesTo ];
+    nativeBuildInputs = [ installShellFiles ];
 
     extraNativeImageBuildArgs = [
       "-H:+ReportExceptionStackTraces"
@@ -32,16 +32,16 @@ let
     doInstallCheck = true;
 
     installCheckPhase = ''
-      $out/bin/bb --version | grep '${version}'
-      $out/bin/bb '(+ 1 2)' | grep '3'
-      $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
+      $out/bin/bb --version | fgrep '${version}'
+      $out/bin/bb '(+ 1 2)' | fgrep '3'
+      $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | fgrep '[1 2]'
+      $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
     '';
 
-    # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,
-    # not sure the implications of this but this file is not available in
-    # graalvm-ce anyway.
     postInstall = ''
-      remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+      installShellCompletion --cmd bb --bash ${./completions/bb.bash}
+      installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
+      installShellCompletion --cmd bb --fish ${./completions/bb.fish}
     '';
 
     passthru.updateScript = writeScript "update-babashka" ''

@@ -13,7 +13,7 @@ let
     genericName = "Quartus Prime";
     categories = [ "Development" ];
   };
-# I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
+# I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSEnv rec {
   name = "quartus-prime-lite"; # wrapped
 
@@ -27,7 +27,13 @@ in buildFHSEnv rec {
     glib
     xorg.libICE
     xorg.libSM
-    zlib
+    xorg.libXau
+    xorg.libXdmcp
+    libudev0-shim
+    bzip2
+    brotli
+    expat
+    dbus
     # qsys requirements
     xorg.libXtst
     xorg.libXi
@@ -42,7 +48,7 @@ in buildFHSEnv rec {
     fontconfig = pkgs.fontconfig.override { inherit freetype; };
     libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
   in [
-    # modelsim requirements
+    # questa requirements
     libxml2
     ncurses5
     unixODBC
@@ -53,21 +59,19 @@ in buildFHSEnv rec {
     xorg.libX11
     xorg.libXext
     xorg.libXrender
-    libudev0-shim
     libxcrypt-legacy
   ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/icons/128x128
+    mkdir -p $out/share/applications $out/share/icons/hicolor/64x64/apps
     ln -s ${desktopItem}/share/applications/* $out/share/applications
-    ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
+    ln -s ${unwrapped}/quartus/adm/quartusii.png $out/share/icons/hicolor/64x64/apps/quartus.png
 
     progs_to_wrap=(
       "${unwrapped}"/quartus/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
-      # Should we install all executables?
-      "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib,vcom,vdel,vmap}
-      "${unwrapped}"/modelsim_ase/linuxaloem/lmutil
+      "${unwrapped}"/questa_fse/bin/*
+      "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
     wrapper=$out/bin/${name}
@@ -79,8 +83,8 @@ in buildFHSEnv rec {
         mkdir -p "$(dirname "$wrapped")"
         echo "#!${runtimeShell}" >> "$wrapped"
         case "$relname" in
-            modelsim_ase/*)
-                echo "export NIXPKGS_IS_MODELSIM_WRAPPER=1" >> "$wrapped"
+            questa_fse/*)
+                echo "export NIXPKGS_IS_QUESTA_WRAPPER=1" >> "$wrapped"
                 ;;
         esac
         echo "$wrapper $prog \"\$@\"" >> "$wrapped"
@@ -96,15 +100,14 @@ in buildFHSEnv rec {
     # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
     # starting most operations in many containerized environments, including WSL2, Docker, and LXC
     # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
-    # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
     # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
     #
     # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
-    # compiling encrypted device libraries in ModelSim (with error
+    # compiling encrypted device libraries in Questa (with error
     # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
-    # for non-ModelSim wrappers.
-    if [ "$NIXPKGS_IS_MODELSIM_WRAPPER" != 1 ]; then
-        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}libudev.so.0
+    # for non-Questa wrappers.
+    if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
+        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
     fi
   '';
 
@@ -114,8 +117,39 @@ in buildFHSEnv rec {
   passthru = {
     inherit unwrapped;
     tests = {
-      modelsimEncryptedModel = runCommand "quartus-prime-lite-test-modelsim-encrypted-model" {} ''
-        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/modelsim_ase/altera/verilog/src/arriav_atoms_ncrypt.v"
+      buildSof = runCommand "quartus-prime-lite-test-build-sof"
+        { nativeBuildInputs = [ quartus-prime-lite ];
+        }
+        ''
+          cat >mydesign.vhd <<EOF
+          library ieee;
+          use ieee.std_logic_1164.all;
+
+          entity mydesign is
+          port (
+              in_0: in std_logic;
+              in_1: in std_logic;
+              out_1: out std_logic
+          );
+          end mydesign;
+
+          architecture dataflow of mydesign is
+          begin
+              out_1 <= in_0 and in_1;
+          end dataflow;
+          EOF
+
+          quartus_sh --flow compile mydesign
+
+          if ! [ -f mydesign.sof ]; then
+              echo "error: failed to produce mydesign.sof" >&2
+              exit 1
+          fi
+
+          touch "$out"
+        '';
+      questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model" {} ''
+        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
         touch "$out"
       '';
     };

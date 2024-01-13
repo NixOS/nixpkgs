@@ -10,14 +10,10 @@
 
 buildPythonPackage rec {
   pname = "python-csxcad";
-  version = "unstable-2020-02-18";
+  version = csxcad.version;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "thliebig";
-    repo = "CSXCAD";
-    rev = "ef6e40931dbd80e0959f37c8e9614c437bf7e518";
-    sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
-  };
+  src = csxcad.src;
 
   sourceRoot = "${src.name}/python";
 

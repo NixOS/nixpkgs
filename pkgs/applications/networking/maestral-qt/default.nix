@@ -1,8 +1,11 @@
 { lib
 , fetchFromGitHub
 , python3
-, qt6
+, qtbase
+, qtsvg
+, qtwayland
 , nixosTests
+, wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -28,12 +31,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg  # Needed for the systray icon
+    qtwayland
+    qtbase
+    qtsvg  # Needed for the systray icon
   ];
 
   nativeBuildInputs = [
-    qt6.wrapQtAppsHook
+    wrapQtAppsHook
   ];
 
   dontWrapQtApps = true;
