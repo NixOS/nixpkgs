@@ -790,8 +790,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    # Musl is broken for systemd at 2024-01-13, tracking issue:
+    # https://github.com/NixOS/nixpkgs/issues/280738
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
-    broken = stdenv.hostPlatform.isStatic;
+    broken = stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isMusl;
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk ];
   };
