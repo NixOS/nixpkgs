@@ -17,16 +17,17 @@
 buildPythonPackage rec {
   pname = "ariadne";
   version = "0.21.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mirumee";
-    repo = pname;
+    repo = "ariadne";
     rev = "refs/tags/${version}";
     hash = "sha256-T5J0xAF33PDkC8sDOzHADpQJxwdXwKary0y/jaUJ9Fk=";
   };
+
   patches = [
     ./remove-opentracing.patch
   ];
