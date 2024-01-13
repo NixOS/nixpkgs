@@ -35,6 +35,10 @@ buildPythonPackage rec {
     "mobi"
   ];
 
+  prePatch = ''
+    sed -i 's#loguru = ".*"#loguru = "*"#' pyproject.toml
+  '';
+
   meta = with lib; {
     description = "Library for unpacking unencrypted mobi files";
     homepage = "https://github.com/iscc/mobi";
