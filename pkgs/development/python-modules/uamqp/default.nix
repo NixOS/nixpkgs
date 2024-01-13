@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cython
 , certifi
 , CFNetwork
@@ -29,6 +30,13 @@ buildPythonPackage rec {
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     ./darwin-azure-c-shared-utility-corefoundation.patch
   ] ++ [
+    (fetchpatch {
+      name = "CVE-2024-21646.patch";
+      url = "https://github.com/Azure/azure-uamqp-c/commit/12ddb3a31a5a97f55b06fa5d74c59a1d84ad78fe.patch";
+      stripLen = 1;
+      extraPrefix = "src/vendor/azure-uamqp-c/";
+      hash = "sha256-9o3TNKFeJvZRZeS6qo2Zl+JVFrrqAGYWDQbusz4Ou+g=";
+    })
     # Fix incompatible function pointer conversion error with clang 16.
     ./clang-fix-incompatible-function-pointer-conversion.patch
   ];
