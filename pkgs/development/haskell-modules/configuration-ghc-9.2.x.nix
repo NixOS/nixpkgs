@@ -138,4 +138,8 @@ self: super: {
     OneTuple
     these
   ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

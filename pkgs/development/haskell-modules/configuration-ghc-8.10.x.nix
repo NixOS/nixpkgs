@@ -59,9 +59,6 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
-  # Additionally depends on OneTuple for GHC < 9.0
-  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
-
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
@@ -173,6 +170,10 @@ self: super: {
     indexed-traversable
     these
   ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [

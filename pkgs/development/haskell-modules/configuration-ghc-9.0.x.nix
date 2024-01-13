@@ -145,6 +145,10 @@ self: super: {
     indexed-traversable
     these
   ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
     self.base-orphans
