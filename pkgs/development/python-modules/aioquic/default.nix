@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "0.9.23";
+  version = "0.9.25";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UsnaYO0IN/6LimoNfc8N++vsjpoCfhDr9yBPBWnFj6g=";
+    hash = "sha256-cHlceJBTJthVwq5SQHIjSq5YbHibgSkuJy0CHpsEMKM=";
   };
 
   nativeBuildInputs = [
