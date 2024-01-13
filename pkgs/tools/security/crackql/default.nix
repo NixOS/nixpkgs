@@ -5,20 +5,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "crackql";
-  version = "unstable-20220821";
-  format = "pyproject";
+  version = "unstable-20230818";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nicholasaleks";
     repo = "CrackQL";
     # rev = "refs/tags/${version}";
     # Switch to tag with the next update
-    rev = "5bcf92f4520a4dd036baf9f47c5ebbf18e6a032a";
+    rev = "ac26a44c2dd201f65da0d1c3f95eaf776ed1b2dd";
     hash = "sha256-XlHbGkwdOV1nobjtQP/M3IIEuzXHBuwf52EsXf3MWoM=";
   };
 
+  pythonRelaxDeps = [
+    "graphql-core"
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
