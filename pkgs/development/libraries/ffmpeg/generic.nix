@@ -447,7 +447,7 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     # FIXME: see if jellyfin-ffmpeg is already on a version >= 6.1 to use enableFeature
-    (optionalString withAribcaption "--enable-libaribcaption")
+    (optionalString (versionAtLeast version "6.1" && withAribcaption) "--enable-libaribcaption")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCelt "libcelt")
     (enableFeature withCuda "cuda")
