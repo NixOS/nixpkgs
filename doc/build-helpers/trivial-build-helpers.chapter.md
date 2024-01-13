@@ -186,7 +186,7 @@ a string.
 
 : will be the contents of the file.
 
-The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+The store path will include the the name, and it will be a file.
 
 Here is an example.
 
@@ -267,7 +267,7 @@ Writes a script within the store.
 
 The created file is marked as executable.
 
-The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+The store path will include the the name, and it will be a file.
 
 Here is an example.
 
@@ -312,7 +312,7 @@ The created file is marked as executable.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
 
-The store path will include the the name, and it will be a directory. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+The store path will include the the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
 # Usage of `writeScriptBin`
@@ -355,7 +355,7 @@ The created file is marked as executable.
 
 This function is almost exactly like `writeScript`, but it prepends a shebang line that points to the runtime shell (usually bash) at the top of the file contents.
 
-The store path will include the the name, and it will be a file. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+The store path will include the the name, and it will be a file.
 
 Here is an example.
 
@@ -399,7 +399,7 @@ This function is almost exactly like `writeScriptBin`, but it prepends a shebang
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
 
-The store path will include the the name, and it will be a directory. Any path separators and shell-reserved elements in the name are escaped to create the store path identifier.
+The store path will include the the name, and it will be a directory.
 
 ::: {.example #ex-writeShellScriptBin}
 # Usage of `writeShellScriptBin`
