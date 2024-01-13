@@ -103,6 +103,7 @@ self: super: {
   #
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
+  hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
 
   #
   # Other build fixes
