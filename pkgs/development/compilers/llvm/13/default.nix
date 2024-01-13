@@ -213,6 +213,7 @@ in let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+        echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
