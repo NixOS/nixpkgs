@@ -27,13 +27,15 @@
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
 
+# for checks
+, python3
+
 # for passthru.tests
 , coeurl
 , curlpp
 , haskellPackages
 , ocamlPackages
 , phpExtensions
-, python3
 , tests
 , testers
 , fetchpatch
@@ -150,6 +152,11 @@ stdenv.mkDerivation (finalAttrs: {
   # they cannot be run concurrently and are a bottleneck
   # tests are available in passthru.tests.withCheck
   doCheck = false;
+  checkInputs = [
+    python3
+    # nghttpx binary needed in PATH for http2 tests
+    nghttp2
+  ];
   preCheck = ''
     patchShebangs tests/
   '' + lib.optionalString stdenv.isDarwin ''

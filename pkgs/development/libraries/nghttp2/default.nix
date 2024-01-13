@@ -17,7 +17,7 @@
 , enableTests ? stdenv.hostPlatform.isGnu, cunit, tzdata
 
 # downstream dependencies, for testing
-, curl
+, curlFull
 , libsoup
 }:
 
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit curl libsoup;
+    inherit libsoup;
+    curl = curlFull.tests.withCheck;
   };
 
   meta = with lib; {
