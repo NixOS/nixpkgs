@@ -946,7 +946,10 @@ rec {
     , patches ? [ ]
     , postPatch ? ""
     , ...
-    }@args: stdenvNoCC.mkDerivation
+    }@args:
+    if patches == [ ] && postPatch == ""
+    then src # nothing to do, so use original src to avoid additional drv
+    else stdenvNoCC.mkDerivation
       {
         inherit name src patches postPatch;
         preferLocalBuild = true;
