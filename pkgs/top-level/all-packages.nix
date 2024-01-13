@@ -31015,9 +31015,8 @@ with pkgs;
 
   daktilo = callPackage ../tools/misc/daktilo { };
 
-  darcs = haskell.lib.compose.overrideCabal (drv: {
-    configureFlags = (lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
-  }) (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.darcs);
+  darcs = haskell.lib.compose.disableCabalFlag "library"
+    (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.darcs);
 
   darkman = callPackage ../applications/misc/darkman { };
 
