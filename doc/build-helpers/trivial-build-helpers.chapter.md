@@ -1,6 +1,6 @@
 # Trivial build helpers {#chap-trivial-builders}
 
-`nixpkgs` provides a variety of wrapper functions that help build very simple derivations. Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these builders creates and returns a derivation, but the composition of the arguments passed to each are different (usually simpler) than the arguments that must be passed to `stdenv.mkDerivation`.
+Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations. Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these builders creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
 ## `runCommand` {#trivial-builder-runCommand}
 
@@ -60,9 +60,11 @@ This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr
 
 ## `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, `writeShellScriptBin` {#trivial-builder-textwriting}
 
-`nixpkgs` provides a number of functions that produce derivations which write text into the Nix store.  These include `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin`, each of which is documented below.
+Nixpkgs provides the following functions for producing derivations which write text into the Nix store:  `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin`, `writeShellScript`, and `writeShellScriptBin`.
 
-These are useful for creating files from Nix expressions, which may be scripts or non-executable text files, depending on which of the functions is used and the arguments it takes.
+`writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`  are convenience functions over `writeTextFile`.
+
+These are useful for creating files from Nix expressions, which may be scripts or non-executable text files.
 
 The result of each of these functions will be a derivation.  When you coerce the resulting derivation to text, it will evaluate to the *store path*. Importantly, it will not include the destination subpath produced by the particular function.  So, for example, given the following expression:
 
@@ -212,7 +214,7 @@ writeText "my-file"
 ```
 :::
 
-This example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
@@ -250,7 +252,7 @@ writeTextDir "share/my-file"
 ```
 :::
 
-The example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
@@ -293,7 +295,7 @@ writeScript "my-file"
 ```
 :::
 
-The example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
@@ -335,7 +337,7 @@ writeScriptBin "my-script"
 ```
 :::
 
-The example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
@@ -380,7 +382,7 @@ writeShellScript "my-script"
 ```
 :::
 
-The example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
@@ -422,7 +424,7 @@ writeShellScriptBin "my-script"
 ```
 :::
 
-The example is a simpler way to spell:
+This example is equivalent to:
 
 ```nix
 writeTextFile {
