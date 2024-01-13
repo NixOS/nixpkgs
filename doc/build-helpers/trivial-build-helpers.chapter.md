@@ -226,7 +226,7 @@ Writes a text file within a subdirectory of the store.
 
 : the contents of the file.
 
-The store path will be a directory. The Nix store identifier will be generated based on various elements of the path.
+The store path will be a directory.
 
 ::: {.example #ex-writeTextDir}
 # Usage of `writeTextDir`
