@@ -4974,6 +4974,8 @@ self: super: with self; {
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
 
+  gto = callPackage ../development/python-modules/gto { };
+
   gtts = callPackage ../development/python-modules/gtts { };
 
   gtts-token = callPackage ../development/python-modules/gtts-token { };
