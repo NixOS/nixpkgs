@@ -282,7 +282,6 @@ let
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
       # 2) Patch python path in the compiler driver.
       preBuild = lib.optionalString cudaSupport ''
-        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
