@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/KSXGitHub/parallel-disk-usage";
     license = licenses.asl20;
     maintainers = [maintainers.peret];
+    mainProgram = "pdu";
   };
 }
