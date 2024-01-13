@@ -617,6 +617,7 @@ in {
   nscd = handleTest ./nscd.nix {};
   nsd = handleTest ./nsd.nix {};
   ntfy-sh = handleTest ./ntfy-sh.nix {};
+  ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
@@ -910,7 +911,8 @@ in {
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
-  upnp = handleTest ./upnp.nix {};
+  upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
+  upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = handleTest ./uptermd.nix {};
   uptime-kuma = handleTest ./uptime-kuma.nix {};
   usbguard = handleTest ./usbguard.nix {};

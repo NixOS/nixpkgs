@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];
     mainProgram = "gr2fonttest";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

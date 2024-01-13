@@ -11437,6 +11437,12 @@
     githubId = 458783;
     name = "Martin Gammelsæter";
   };
+  martinjlowm = {
+    email = "martin@martinjlowm.dk";
+    github = "martinjlowm";
+    githubId = 110860;
+    name = "Martin Jesper Low Madsen";
+  };
   martinramm = {
     email = "martin-ramm@gmx.de";
     github = "MartinRamm";
@@ -15805,6 +15811,12 @@
     github = "Rizary";
     githubId = 7221768;
     name = "Andika Demas Riyandi";
+  };
+  rjpcasalino = {
+    email = "ryan@rjpc.net";
+    github = "rjpcasalino";
+    githubId = 12821230;
+    name = "Ryan J.P. Casalino";
   };
   rkitover = {
     email = "rkitover@gmail.com";
