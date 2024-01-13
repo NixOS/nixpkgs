@@ -1,18 +1,19 @@
 { lib
 , buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
 , cloudpathlib
 , confection
+, fetchFromGitHub
 , packaging
 , pydantic
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , requests
+, setuptools
 , smart-open
 , srsly
 , typer
 , wasabi
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
   };
 
+  pythonRelaxDeps = [
+    "cloudpathlib"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
