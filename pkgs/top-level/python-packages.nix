@@ -14145,6 +14145,13 @@ self: super: with self; {
     grpc = compat.grpcTF;
     grpcio = compat.grpcioTF;
     tensorboard = compat.tensorboardTF;
+
+    # Tensorflow 2.13 doesn't support gcc13:
+    # https://github.com/tensorflow/tensorflow/issues/61289
+    #
+    # We use the nixpkgs' default libstdc++ to stay compatible with other
+    # python modules
+    stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
   };
 
   tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };
