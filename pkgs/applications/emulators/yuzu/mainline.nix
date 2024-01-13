@@ -180,7 +180,7 @@ stdenv.mkDerivation(finalAttrs: {
       Using the early-access branch is recommended if you would like to try out experimental features, with a cost of stability.
     '';
     mainProgram = "yuzu";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux"];
     license = with licenses; [
       gpl3Plus
       # Icons
