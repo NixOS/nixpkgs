@@ -165,6 +165,7 @@ let
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
+      "-Dgstreamer-device-provider=${mesonEnableFeature gstreamerSupport}"
       "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
       "-Dudev=${mesonEnableFeature (!enableSystemd)}"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
