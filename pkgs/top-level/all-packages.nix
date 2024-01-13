@@ -22162,6 +22162,8 @@ with pkgs;
 
   intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
 
+  intel-ipsec-mb = callPackage ../development/libraries/intel-ipsec-mb { };
+
   intel-media-driver = callPackage ../development/libraries/intel-media-driver { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
@@ -22590,6 +22592,8 @@ with pkgs;
   };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
+
+  libdaq = callPackage ../development/libraries/libdaq { };
 
   libdatovka = callPackage ../development/libraries/libdatovka { };
 
@@ -27442,6 +27446,8 @@ with pkgs;
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
   vmagent = callPackage ../servers/monitoring/vmagent { };
+
+  vpp = callPackage ../servers/vpp { };
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
