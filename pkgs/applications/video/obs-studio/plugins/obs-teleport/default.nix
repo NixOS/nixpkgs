@@ -47,7 +47,7 @@ buildGoModule rec {
   meta = {
     description = "An OBS Studio plugin for an open NDI-like replacement";
     homepage = "https://github.com/fzwoch/obs-teleport";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = obs-studio.meta.platforms;
   };
