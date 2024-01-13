@@ -4,7 +4,9 @@
 , lib
 }:
 
-ffmpeg_6-full.overrideAttrs (old: rec {
+(ffmpeg_6-full.override{
+  withAribcaption = false; # FIXME remove when updating past version 6.1
+}).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
   version = "6.0.1-1";
 
