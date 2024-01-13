@@ -4,12 +4,12 @@
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "bloodhound-py";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchPypi {
     inherit version;
     pname = "bloodhound";
-    hash = "sha256-BryByUo9FCSrrJgXoXoVPBjpmh32I0xRoeKBsYj8nSE=";
+    hash = "sha256-USZU19dLppoq19+JMFtiojyJk6bj96nP2JQDq7JFkHM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
