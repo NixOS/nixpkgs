@@ -33,11 +33,6 @@ stdenv.mkDerivation rec {
       --replace 'DESTINATION usr/share' "DESTINATION share"
   '';
 
-  postConfigure = ''
-    substituteInPlace cmake_install.cmake \
-      --replace "/var/empty" "/usr"
-  '';
-
   meta = with lib; {
     description = "A full configuration manager for JWM";
     homepage = "https://joewing.net/projects/jwm";

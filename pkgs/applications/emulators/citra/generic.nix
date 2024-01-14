@@ -96,10 +96,6 @@ stdenv.mkDerivation {
   postPatch = let
     branchCaptialized = (lib.toUpper (lib.substring 0 1 branch) + lib.substring 1 (-1) branch);
   in ''
-    # Fix file not found when looking in var/empty instead of opt
-    mkdir externals/dynarmic/src/dynarmic/ir/var
-    ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
-
     # Prep compatibilitylist
     ln -s ${compat-list} ./dist/compatibility_list/compatibility_list.json
 

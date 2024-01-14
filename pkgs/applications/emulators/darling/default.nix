@@ -150,10 +150,6 @@ in stdenv.mkDerivation {
     stdenv.cc.libc.linuxHeaders
   ];
 
-  # Breaks valid paths like
-  # Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
-  dontFixCmake = true;
-
   # src/external/objc4 forces OBJC_IS_DEBUG_BUILD=1, which conflicts with NDEBUG
   # TODO: Fix in a better way
   cmakeBuildType = " ";
