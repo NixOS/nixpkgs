@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "bitbox";
   version = "4.40.0";
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "bitbox-wallet-app";
     rev = "v${version}";
