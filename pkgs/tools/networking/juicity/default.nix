@@ -1,8 +1,8 @@
 { lib
 , fetchFromGitHub
-, buildGo121Module
+, buildGoModule
 }:
-buildGo121Module rec {
+buildGoModule rec {
   pname = "juicity";
   version = "0.3.0";
 
