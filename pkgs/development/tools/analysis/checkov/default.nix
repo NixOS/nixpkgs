@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication rec {
     termcolor
     tqdm
     typing-extensions
-    update_checker
+    update-checker
   ];
 
   nativeCheckInputs = with python3.pkgs; [
