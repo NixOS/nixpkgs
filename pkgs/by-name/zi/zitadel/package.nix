@@ -1,5 +1,5 @@
 { stdenv
-, buildGo121Module
+, buildGoModule
 , callPackage
 , fetchFromGitHub
 , lib
@@ -25,7 +25,7 @@ let
   goModulesHash = "sha256-IVf1YVnhyEYgZqM31Cv3aBFnPG7v5WW6fCEvlN+sTIE=";
 
   buildZitadelProtocGen = name:
-    buildGo121Module {
+    buildGoModule {
       pname = "protoc-gen-${name}";
       inherit version;
 
@@ -94,7 +94,7 @@ let
     hash = "sha256-xrEF1B4pMoCZs1WO9F6IoqHnSyt5BhPVTIABMWK/q2E=";
   };
 in
-buildGo121Module rec {
+buildGoModule rec {
   name = "zitadel";
   inherit version;
 
