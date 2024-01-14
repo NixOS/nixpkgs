@@ -11011,7 +11011,7 @@ self: super: with self; {
 
   pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
 
-  pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
+  pyqt5-sip = callPackage ../development/python-modules/pyqt/sip.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
     withMultimedia = true;
@@ -13240,7 +13240,7 @@ self: super: with self; {
 
   sip = callPackage ../development/python-modules/sip { };
 
-  sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
+  sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 

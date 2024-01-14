@@ -342,6 +342,7 @@ mapAliases ({
   pymyq = python-myq; # added 2023-10-20
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
+  pyqt5_sip = pyqt5-sip; # added 2024-01-07
   pyqt5_with_qtwebkit = pyqt5-webkit; # added 2024-01-07
   pyramid_beaker = pyramid-beaker; # added 2023-08-23
   pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
@@ -445,6 +446,7 @@ mapAliases ({
   setuptools_scm = setuptools-scm; # added 2021-06-03
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
+  sip_4 = sip4; # added 2024-01-07
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
