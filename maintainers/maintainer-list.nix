@@ -7732,6 +7732,12 @@
       fingerprint = "DF90 9D58 BEE4 E73A 1B8C  5AF3 35D3 9F9A 9A1B C8DA";
     }];
   };
+  iamanaws = {
+    email = "nixpkgs.yjzaw@slmail.me";
+    github = "Iamanaws";
+    githubId = 78835633;
+    name = "Angel J";
+  };
   iammrinal0 = {
     email = "nixpkgs@mrinalpurohit.in";
     matrix = "@iammrinal0:nixos.dev";
