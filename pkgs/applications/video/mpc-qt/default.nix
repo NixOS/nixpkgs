@@ -7,6 +7,7 @@
 , qtx11extras
 , qttools
 , mpv
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -34,6 +35,8 @@ mkDerivation rec {
   qmakeFlags = [
     "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate"
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Media Player Classic Qute Theater";
