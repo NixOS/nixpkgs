@@ -21,6 +21,7 @@
 , enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
 }:
 
 let
@@ -33,7 +34,7 @@ in
   assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
 
 let
-libxml = stdenv.mkDerivation rec {
+libxml = stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
   version = "2.12.3-unstable-2023-12-14";
 
@@ -127,6 +128,11 @@ libxml = stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "none";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -135,8 +141,9 @@ libxml = stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
+    pkgConfigModules = ["libxml-2.0"];
   };
-};
+});
 in
 if oldVer then
   libxml.overrideAttrs (attrs: rec {
