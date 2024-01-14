@@ -4,7 +4,6 @@
 , gitUpdater
 , cmake
 , glew
-, freeimage
 , liblockfile
 , openal
 , libtheora
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glew
-    freeimage
     liblockfile
     openal
     libtheora
