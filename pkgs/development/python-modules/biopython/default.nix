@@ -1,25 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, setuptools
 , numpy
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "biopython";
   version = "1.83";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-eOa/t43mMDQDev01/nfLbgqeW2Jwa+z3in2SKxbtg/c=";
   };
 
-  disabled = !isPy3k;
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ numpy ];
-  # Checks try to write to $HOME, which does not work with nix
-  doCheck = false;
+
+  pythonImportsCheck = [
+    "Bio"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    cd Tests
+    python run_tests.py --offline
+
+    runHook postCheck
+  '';
+
   meta = {
     description = "Python library for bioinformatics";
     longDescription = ''
