@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zc.lockfile";
+  pname = "zc-lockfile";
   version = "3.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zc.lockfile";
+    inherit version;
     hash = "sha256-5Y/9ndYsbUMuhoK/oZbJDKw+XB4/JNrjuJ1ggihV14g=";
   };
 
