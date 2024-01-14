@@ -11,28 +11,32 @@
 , direnv
 , Security
 , SystemConfiguration
-, rtx
+, mise
 , testers
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rtx";
-  version = "2023.12.35";
+  pname = "mise";
+  version = "2024.1.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
-    repo = "rtx";
+    repo = "mise";
     rev = "v${version}";
-    hash = "sha256-vzMjC6qIPhZm80hzYQRpF3j+s85B0nwTcgSGRATQEIg=";
+    hash = "sha256-ELC+IpcWMHBDIGPAg8v1LJUUIXEmzJzCeJt2TkqXs7s=";
   };
 
-  cargoHash = "sha256-LvW5xGVggzuXlFPhbrc93Dht3S9zaQyx9Nm+Mx/Mjh0=";
+  cargoHash = "sha256-hZ8B3CVaTpIt3GudN/TWxI/xox724Prk8Uc8wA3Wd6Q=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   postPatch = ''
-    patchShebangs --build ./test/data/plugins/**/bin/* ./src/fake_asdf.rs ./src/cli/reshim.rs
+    patchShebangs --build \
+      ./test/data/plugins/**/bin/* \
+      ./src/fake_asdf.rs \
+      ./src/cli/reshim.rs \
+      ./test/cwd/.mise/tasks/filetask
 
     substituteInPlace ./src/env_diff.rs \
       --replace '"bash"' '"${bash}/bin/bash"'
@@ -51,25 +55,25 @@ rustPlatform.buildRustPackage rec {
   dontUseCargoParallelTests = true;
 
   postInstall = ''
-    installManPage ./man/man1/rtx.1
+    installManPage ./man/man1/mise.1
 
     installShellCompletion \
-      --bash ./completions/rtx.bash \
-      --fish ./completions/rtx.fish \
-      --zsh ./completions/_rtx
+      --bash ./completions/mise.bash \
+      --fish ./completions/mise.fish \
+      --zsh ./completions/_mise
   '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = rtx; };
+    tests.version = testers.testVersion { package = mise; };
   };
 
   meta = {
-    homepage = "https://github.com/jdx/rtx";
-    description = "Polyglot runtime manager (asdf rust clone)";
-    changelog = "https://github.com/jdx/rtx/releases/tag/v${version}";
+    homepage = "https://mise.jdx.dev";
+    description = "The front-end to your dev env";
+    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
-    mainProgram = "rtx";
+    mainProgram = "mise";
   };
 }

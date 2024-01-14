@@ -18216,7 +18216,7 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
-  rtx = callPackage ../tools/misc/rtx {
+  mise = callPackage ../tools/misc/mise {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 

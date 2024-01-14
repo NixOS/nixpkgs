@@ -911,6 +911,7 @@ mapAliases ({
   rr-unstable = rr; # Added 2022-09-17
   rtl8723bs-firmware = throw "rtl8723bs-firmware was added in mainline kernel version 4.12"; # Added 2023-07-03
   rtsp-simple-server = throw "rtsp-simple-server is rebranded as mediamtx, including default config path update"; # Added 2023-04-11
+  rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
   rustc-wasm32 = rustc; # Added 2023-12-01
