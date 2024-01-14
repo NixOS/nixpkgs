@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) cacert fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchpatch2 fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -955,6 +955,13 @@ let
     });
 
     xml2 = old.xml2.overrideAttrs (attrs: {
+      patches = [
+        (fetchpatch2 {
+          url = "https://github.com/r-lib/xml2/commit/e4a54aeb0fc1898933e99260499a5c9e8b9b626b.patch";
+          hash = "sha256-/NFZGnZlnArr/Bchr0XQhoKQBL14oRc8V+yNplM2chM=";
+          excludes = [ "NEWS.md" ];
+        })
+      ];
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
