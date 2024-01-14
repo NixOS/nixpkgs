@@ -13240,7 +13240,7 @@ self: super: with self; {
 
   sip = callPackage ../development/python-modules/sip { };
 
-  sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
+  sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
