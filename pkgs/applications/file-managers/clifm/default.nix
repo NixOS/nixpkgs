@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/leo-arch/clifm";
     description = "CliFM is a CLI-based, shell-like, and non-curses terminal file manager written in C: simple, fast, extensible, and lightweight as hell";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nadir-ishiguro ];
     platforms = platforms.unix;
   };
 }
