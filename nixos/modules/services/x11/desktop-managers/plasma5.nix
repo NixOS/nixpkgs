@@ -331,6 +331,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
+      programs.gnupg.agent.pinentryFlavor = "qt";
       programs.ssh.askPassword = mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.

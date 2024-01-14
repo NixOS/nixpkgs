@@ -66,6 +66,7 @@ in
       services.upower.enable = mkDefault config.powerManagement.enable;
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
+      programs.gnupg.agent.pinentryFlavor = "qt";
 
       fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;

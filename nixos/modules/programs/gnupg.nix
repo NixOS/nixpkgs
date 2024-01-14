@@ -10,22 +10,7 @@ let
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
   };
 
-  xserverCfg = config.services.xserver;
-
-  defaultPinentryFlavor =
-    if xserverCfg.desktopManager.lxqt.enable
-    || xserverCfg.desktopManager.plasma5.enable
-    || xserverCfg.desktopManager.deepin.enable then
-      "qt"
-    else if xserverCfg.desktopManager.xfce.enable then
-      "gtk2"
-    else if xserverCfg.enable || config.programs.sway.enable then
-      "gnome3"
-    else
-      "curses";
-
 in
-
 {
 
   options.programs.gnupg = {
@@ -68,8 +53,8 @@ in
     agent.pinentryFlavor = mkOption {
       type = types.nullOr (types.enum pkgs.pinentry.possibleFlavors);
       example = "gnome3";
-      default = defaultPinentryFlavor;
-      defaultText = literalMD ''matching the configured desktop environment'';
+      default = "curses";
+      defaultText = literalMD ''matching the configured desktop environment or curses'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
         pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
