@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://valhalla.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.Thra11 ];
+    pkgConfigModules = [ "libvalhalla" ];
     platforms = platforms.linux;
   };
 })
