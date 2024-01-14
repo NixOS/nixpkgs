@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage rec {
     "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-greeter"
   ];
 
+  postInstall = ''
+    install -m644 -D cosmic-greeter.toml $out/etc/greetd/cosmic-greeter.toml
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
