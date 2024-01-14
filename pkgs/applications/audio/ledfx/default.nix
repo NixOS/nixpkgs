@@ -21,7 +21,7 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -50,13 +50,14 @@ python3.pkgs.buildPythonPackage rec {
     sacn
     samplerate
     sentry-sdk
+    setuptools
     sounddevice
     uvloop
     voluptuous
     zeroconf
   ];
 
-  # has no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
