@@ -1016,6 +1016,7 @@ broken-packages:
   - csv-sip # failure in job https://hydra.nixos.org/build/233211292 at 2023-09-02
   - ctemplate # failure in job https://hydra.nixos.org/build/233257909 at 2023-09-02
   - ctkl # failure in job https://hydra.nixos.org/build/233219516 at 2023-09-02
+  - cubical # failure in job https://hydra.nixos.org/build/246186233 at 2024-01-13
   - cuboid # failure in job https://hydra.nixos.org/build/234462220 at 2023-09-13
   - cuckoo # failure in job https://hydra.nixos.org/build/233210915 at 2023-09-02
   - cuckoo-filter # failure in job https://hydra.nixos.org/build/233226484 at 2023-09-02
