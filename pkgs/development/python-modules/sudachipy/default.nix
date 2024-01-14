@@ -47,6 +47,10 @@ buildPythonPackage rec {
     "sudachipy"
   ];
 
+  passthru = {
+    inherit (sudachi-rs) updateScript;
+  };
+
   meta = sudachi-rs.meta // {
     homepage = "https://github.com/WorksApplications/sudachi.rs/tree/develop/python";
     mainProgram = "sudachipy";

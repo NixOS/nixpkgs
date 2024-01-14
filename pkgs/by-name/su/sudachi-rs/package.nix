@@ -4,6 +4,7 @@
 , sudachidict
 , runCommand
 , sudachi-rs
+, writeScript
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,12 +31,22 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 resources/* -t $out/share/resources
   '';
 
-  passthru.tests = {
-    # detects an error that sudachidict is not found
-    cli = runCommand "${pname}-cli-test" { } ''
-      mkdir $out
-      echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix-update
+
+      set -eu -o pipefail
+      nix-update sudachi-rs
+      nix-update --version=skip python3Packages.sudachipy
     '';
+    tests = {
+      # detects an error that sudachidict is not found
+      cli = runCommand "${pname}-cli-test" { } ''
+        mkdir $out
+        echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
+      '';
+    };
   };
 
   meta = with lib; {
