@@ -40,6 +40,12 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
   nativeBuildInputs = [ xorg.lndir flutter' unzip ];
 
   NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_FLUTTER_OPERATING_SYSTEM = {
+    "x86_64-linux" = "linux";
+    "aarch64-linux" = "linux";
+    "x86_64-darwin" = "macos";
+    "aarch64-darwin" = "macos";
+  }.${systemPlatform};
 
   outputHash = hash;
   outputHashMode = "recursive";
