@@ -20,6 +20,11 @@
 , skia-pathops
 , uharfbuzz
 , pytestCheckHook
+
+# for passthru.tests
+, afdko
+, fpdf2
+, weasyprint
 }:
 
 buildPythonPackage rec {
@@ -90,6 +95,15 @@ buildPythonPackage rec {
     "Tests/pens"
     "Tests/ufoLib"
   ];
+
+  passthru.tests = {
+    inherit
+      afdko
+      fpdf2
+      matplotlib
+      weasyprint
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
