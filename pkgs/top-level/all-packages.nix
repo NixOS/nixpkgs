@@ -29028,6 +29028,8 @@ with pkgs;
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
+  antu-icon-theme = callPackage ../data/icons/antu-icon-theme { };
+
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
 
   arc-kde-theme = callPackage ../data/themes/arc-kde { };
