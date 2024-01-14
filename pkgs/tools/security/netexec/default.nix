@@ -1,8 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3
-, buildPythonPackage
-, fetchPypi
 }:
 let
   python = python3.override {
@@ -23,68 +21,20 @@ let
       };
     };
   };
-
-  python-easyconfig = buildPythonPackage rec {
-    pname = "python-easyconfig";
-    version = "0.1.7";
-    src = fetchPypi {
-      inherit version;
-      pname = "Python-EasyConfig";
-      hash = "sha256-tUjxmrhQtVFU9hFi8xTj27J24R47JpUbio+gaDwGuyk=";
-    };
-    propagatedBuildInputs = with python.pkgs; [
-      six
-      pyyaml
-    ];
-  };
-
-  jsonform = buildPythonPackage rec {
-    pname = "jsonform";
-    version = "0.0.2";
-    doCheck = false;
-    src = fetchPypi {
-      inherit version;
-      pname = "JsonForm";
-      hash = "sha256-cfi3ohU44wyphLad3gTwKYDNbNwhg6GKp8oC2VCZiOY=";
-    };
-    propagatedBuildInputs = with python.pkgs; [
-      jsonschema
-    ];
-  };
-
-  jsonsir = buildPythonPackage rec {
-    pname = "jsonsir";
-    version = "0.0.2";
-    doCheck = false;
-    src = fetchPypi {
-      inherit version;
-      pname = "JsonSir";
-      hash = "sha256-QBRHxekx94h4Uc6b8kB/401aqwsUZ7sku787dg5b0/s=";
-    };
-  };
-
-  resource = buildPythonPackage rec {
-    pname = "resource";
-    version = "0.2.1";
-    doCheck = false;
-    src = fetchPypi {
-      inherit version;
-      pname = "Resource";
-      hash = "sha256-mDVKvY7+c9WhDyEJnYC774Xs7ffKIqQW/yAlClGs2RY=";
-    };
-    propagatedBuildInputs = with python.pkgs; [
-      python-easyconfig
-      jsonform
-      jsonsir
-    ];
-  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "netexec";
   version = "1.1.0";
   pyproject = true;
   pythonRelaxDeps = true;
+  # TODO: remove those once upstream merge this PR and release a new version:
+  # https://github.com/Pennyw0rth/NetExec/pull/162
   pythonRemoveDeps = [
+    # Upstream incorrectly includes the wrong package as dependency.
+    # Should be `resource` from stdlib (https://docs.python.org/3/library/resource.html),
+    # not `RussellLuo/resource` (a repo not maintained in 4 years)
+    # See: https://github.com/Pennyw0rth/NetExec/commit/483dc69a2a7aa8f364adfc46096a8b5114c0a31a
+    "resource"
     # Lint
     "ruff"
     # Windows only dependency
@@ -141,7 +91,6 @@ python.pkgs.buildPythonApplication rec {
     pyasn1-modules
     rich
     python-libnmap
-    resource
     oscrypto
   ];
 
