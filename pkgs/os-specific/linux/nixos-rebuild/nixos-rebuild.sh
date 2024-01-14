@@ -177,20 +177,34 @@ runCmd() {
 }
 
 buildHostCmd() {
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
+    else
+        c=()
+    fi
+
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${useSudo:+${sudoCommand[@]}}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${useSudo:+${sudoCommand[@]}}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
-    if [ -z "$targetHost" ]; then
-        runCmd "${useSudo:+${sudoCommand[@]}}" "$@"
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${useSudo:+${sudoCommand[@]}}" "$@"
+        c=()
+    fi
+
+    if [ -z "$targetHost" ]; then
+        runCmd "${c[@]}" "$@"
+    else
+        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
     fi
 }
 
