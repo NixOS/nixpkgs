@@ -9,6 +9,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       passphraseFile = builtins.toFile "pwfile" "hunter2"; # don't do this on real deployments
       settings = {
         verbose = 3; # debug
+        # make sure multiple freeform options evaluate
+        allow-new-accounts = true;
+        auto-approve-new-accounts = true;
       };
     };
     environment = {

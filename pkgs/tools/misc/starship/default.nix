@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CrD65nHE40n83HO+4QM1sLHvdFaqTvOb96hPBgXKuwk=";
+    hash = "sha256-Hf9tW1oBAw8/1KIRZpIpyVaEitLkVr2v6ilTHREzwvU=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     cp docs/.vuepress/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-ZHHrpepKZnSGufyEAjNDozaIKAt2GFRt+hU2ej7LceA=";
+  cargoHash = "sha256-OENey+brI3B2CThNm1KOxuX/OO8tHb7i5X0jXit7FrU=";
 
   nativeCheckInputs = [ git ];
 
