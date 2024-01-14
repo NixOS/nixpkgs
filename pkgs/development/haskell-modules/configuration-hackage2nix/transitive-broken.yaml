@@ -3140,7 +3140,6 @@ dont-distribute-packages:
  - proto-lens-combinators
  - proto-lens-descriptors
  - proto-lens-protobuf-types
- - proto-lens-protoc
  - proto-lens-setup
  - proto3-suite
  - protobuf-native

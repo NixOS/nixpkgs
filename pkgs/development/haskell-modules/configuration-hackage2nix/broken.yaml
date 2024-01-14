@@ -1858,7 +1858,6 @@ broken-packages:
   - ghc-plugin-non-empty # failure in job https://hydra.nixos.org/build/233229023 at 2023-09-02
   - ghc-proofs # failure in job https://hydra.nixos.org/build/233230633 at 2023-09-02
   - ghc-simple # failure in job https://hydra.nixos.org/build/233201423 at 2023-09-02
-  - ghc-source-gen # failure in job https://hydra.nixos.org/build/233223566 at 2023-09-02
   - ghc-srcspan-plugin # failure in job https://hydra.nixos.org/build/233231564 at 2023-09-02
   - ghc-syb # failure in job https://hydra.nixos.org/build/233236783 at 2023-09-02
   - ghc-syb-utils # failure in job https://hydra.nixos.org/build/233229196 at 2023-09-02
