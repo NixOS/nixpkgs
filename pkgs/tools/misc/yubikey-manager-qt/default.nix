@@ -9,7 +9,7 @@
 , qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
-, yubikey-manager4
+, yubikey-manager
 , yubikey-personalization
 }:
 
@@ -41,7 +41,7 @@ mkDerivation rec {
   ];
 
   pythonPath = [
-    (yubikey-manager4.override { python3Packages = python3.pkgs; })
+    (yubikey-manager.override { python3Packages = python3.pkgs; })
   ];
 
   postInstall = ''
