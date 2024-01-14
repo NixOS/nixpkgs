@@ -6,7 +6,7 @@ let
   cfg = config.services.c2fmzq-server;
 
   argsFormat = {
-    type = with lib.types; nullOr (oneOf [ bool int str ]);
+    type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
     generate = lib.cli.toGNUCommandLineShell { };
   };
 in {
