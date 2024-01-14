@@ -110,6 +110,7 @@ let
   withExtraAttrs = configuration: configuration // {
     inherit extraArgs;
     inherit (configuration._module.args) pkgs;
+    inherit lib;
     extendModules = args: withExtraAttrs (configuration.extendModules args);
   };
 in
