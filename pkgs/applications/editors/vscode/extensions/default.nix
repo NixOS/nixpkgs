@@ -3509,6 +3509,23 @@ let
         meta.license = lib.licenses.mit;
       };
 
+      thorerik.hacker-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hacker-theme";
+          publisher = "thorerik";
+          version = "3.0.1";
+          sha256 = "sha256-Ugk9kTJxW1kbD+X6PF96WBc1k7x4KaGu5WbCYPGQ3qE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/thorerik.hacker-theme/changelog";
+          description = "The perfect theme for writing IP tracers in Visual Basic and reverse-proxying a UNIX-system firewall";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=thorerik.hacker-theme";
+          homepage = "https://github.com/thorerik/vscode-hacker-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       tiehuis.zig = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "zig";
