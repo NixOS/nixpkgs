@@ -221,6 +221,8 @@ let
 in
 
 {
+  meta.buildDocsInSandbox = false;
+
   ###### interface
 
   options = {
