@@ -7,7 +7,11 @@ let
 
   argsFormat = {
     type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
-    generate = lib.cli.toGNUCommandLineShell { };
+    generate = lib.cli.toGNUCommandLineShell {
+      mkBool = k: v: [
+        "--${k}=${if v then "true" else "false"}"
+      ];
+    };
   };
 in {
   options.services.c2fmzq-server = {
