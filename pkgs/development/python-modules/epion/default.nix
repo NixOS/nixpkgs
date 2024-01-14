@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to access Epion sensor data";
     homepage = "https://github.com/devenzo-com/epion_python";
+    changelog = "https://github.com/devenzo-com/epion_python/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
