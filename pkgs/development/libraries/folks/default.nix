@@ -86,7 +86,9 @@ stdenv.mkDerivation rec {
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  doCheck = stdenv.isLinux;
+  # Checks last re-enabled in https://github.com/NixOS/nixpkgs/pull/279843, but timeouts in tests still
+  # occur inconsistently
+  doCheck = false;
 
   # Prevents e-d-s add-contacts-stress-test from timing out
   checkPhase = ''
