@@ -33329,7 +33329,7 @@ with pkgs;
       });
   });
   libreoffice-collabora-unwrapped = libreoffice-collabora.unwrapped;
-
+  collabora  = callPackage ../applications/office/collabora {};
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     unwrapped = libsForQt5.callPackage ../applications/office/libreoffice

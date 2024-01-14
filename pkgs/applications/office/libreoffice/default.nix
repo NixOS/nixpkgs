@@ -410,10 +410,16 @@ in stdenv.mkDerivation (finalAttrs: {
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
     mkdir -p $out/share
-    ln -s $out/lib/libreoffice/share/xdg $out/share/applications
 
     cp -r sysui/desktop/icons  "$out/share"
+  '' + optionalString (variant != "collabora") ''
+    ln -s $out/lib/libreoffice/share/xdg $out/share/applications
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+  '' + optionalString (variant == "collabora") ''
+    ln -s $out/lib/collabora/share/xdg $out/share/applications
+    #sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
+    mkdir $dev
+    cp -r $src/include $dev
   '';
 
   # Wrapping is done in ./wrapper.nix
