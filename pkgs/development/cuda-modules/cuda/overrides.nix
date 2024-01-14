@@ -85,7 +85,20 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   );
 
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (
-    oldAttrs: {
+    oldAttrs:
+    let
+      # This replicates the logic in stdenvAdapters.useLibsFrom, except we use
+      # gcc from pkgsHostTarget and not from buildPackages.
+      ccForLibs-wrapper = final.pkgs.stdenv.cc;
+      gccMajorVersion = final.nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
+      cc = final.pkgs.wrapCCWith {
+        cc = final.pkgs."gcc${gccMajorVersion}".cc;
+        useCcForLibs = true;
+        gccForLibs = ccForLibs-wrapper.cc;
+      };
+      cxxStdlibDir = ccForLibs-wrapper.cxxStdlib.solib;
+    in
+    {
 
       outputs = oldAttrs.outputs ++ lists.optionals (!(builtins.elem "lib" oldAttrs.outputs)) [ "lib" ];
 
@@ -119,8 +132,8 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           cat << EOF >> bin/nvcc.profile
 
           # Fix a compatible backend compiler
-          PATH += ${lib.getBin final.backendStdenv.cc}/bin:
-          LIBRARIES += "-L${lib.getLib final.backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
+          PATH += ${lib.getBin cc}/bin:
+          LIBRARIES += "-L${cxxStdlibDir}/lib"
 
           # Expose the split-out nvvm
           LIBRARIES =+ -L''${!outputBin}/nvvm/lib

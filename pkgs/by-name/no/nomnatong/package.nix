@@ -2,17 +2,18 @@
 , stdenvNoCC
 , fetchFromGitHub
 , python3Packages
+, nix-update-script
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nomnatong";
-  version = "5.07";
+  version = "5.08";
 
   src = fetchFromGitHub {
     owner = "nomfoundation";
     repo = "font";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31sqjOIrJByfTx4Ez6KvQDApCeVYMQnGeiM9INMR3zI=";
+    hash = "sha256-WtAxnTFrgXdG2T1vqfRc31tNKbZagDSO9lycKxn8dKg=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://nomfoundation.org/nom-tools/Nom-Font";

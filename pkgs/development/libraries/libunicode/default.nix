@@ -10,14 +10,17 @@ let
   };
 in stdenv.mkDerivation (final: {
   pname = "libunicode";
-  version = "0.3.0-unstable-2023-03-05";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
-    rev = "65e0c6ddf9648b94aa9bc7dda0718401efa9ef8e";
-    hash = "sha256-F4CVU5MImkM571mD4iFxqTnNbk2GXKTGksqO4LH2uEk=";
+    rev = "v${final.version}";
+    hash = "sha256-Us3T4fnGsArdsVB7IUhwdex43C+H1+lfL8yK9enhf2c=";
   };
+
+  # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.
+  patches = [ ./remove-target-properties.diff ];
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ catch2 fmt ];

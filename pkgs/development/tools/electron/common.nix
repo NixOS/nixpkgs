@@ -48,10 +48,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       src = ./version.patch;
       inherit (info) version;
     })
-
-  # we remove the web_tests directory in the chromium src FOD to reduce the output size, but this backported patch includes patches on web_tests
-  ++ lib.optional (lib.versions.major info.version == "26")
-    ./electron-26-remove-web_tests-patch.patch
   ;
 
   unpackPhase = ''
@@ -122,10 +118,10 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       for key in $(jq -r "keys[]" $config)
       do
         value=$(jq -r ".\"$key\"" $config)
-        echo patching $value
         for patch in $(cat $key/.patches)
         do
-          git apply -p1 --directory=$value $key/$patch
+          echo applying in $value: $patch
+          git apply -p1 --directory=$value --exclude='src/third_party/blink/web_tests/*' $key/$patch
         done
       done
     )

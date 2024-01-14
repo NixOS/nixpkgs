@@ -5,15 +5,15 @@ let
   # ./update-zen.py zen
   zenVariant = {
     version = "6.7"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "005m4qjhbvn4jmm37sad9bmrrk2qfkxlaq3s7k296hjfkrqnbvlw"; #zen
+    suffix = "zen2"; #zen
+    sha256 = "1f50s9zjxrhq656h88b89hdccxp68xczw2w3nd0nx8p7ipxa7agn"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.6.10"; #lqx
+    version = "6.6.11"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "1rfia3cbs81gjvr8r1w4kgi3ghr3plqyzaiglifbdr1zkxjias44"; #lqx
+    sha256 = "0vsfpbkkj73hcncrihviqbmy20id1hx08c537by1a6hfc0f9y55z"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {

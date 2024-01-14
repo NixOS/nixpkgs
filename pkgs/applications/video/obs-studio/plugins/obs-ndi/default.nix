@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
-  version = "4.10.0";
+  version = "4.13.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ndi ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Palakis";
     repo = "obs-ndi";
     rev = "dummy-tag-${version}";
-    sha256 = "sha256-eQ/hQ2AnwyBNOotqlUZq07m4FXoeir2f7cTVq594obc=";
+    sha256 = "sha256-ugAMSTXbbIZ61oWvoggVJ5kZEgp/waEcWt89AISrSdE=";
   };
 
   patches = [
