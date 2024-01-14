@@ -1,29 +1,34 @@
 { lib
-, stdenv
-, fetchurl
 , darwin
+, fetchurl
 , openssl
-
-# major and only downstream dependency
+, stdenv
 , vlc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
   version = "2023.05.10";
 
   src = fetchurl {
     urls = [
-      "http://www.live555.com/liveMedia/public/live.${version}.tar.gz"
-      "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
-      "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
+      "http://www.live555.com/liveMedia/public/live.${finalAttrs.version}.tar.gz"
+      "https://src.rrz.uni-hamburg.de/files/src/live555/live.${finalAttrs.version}.tar.gz"
+      "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
+      "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-6ph9x4UYELkkJVIE9r25ycc5NOYbPcgAy9LRZebvGFY=";
+    hash = "sha256-6ph9x4UYELkkJVIE9r25ycc5NOYbPcgAy9LRZebvGFY=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    darwin.cctools
+  ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ];
+
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
@@ -33,43 +38,45 @@ stdenv.mkDerivation rec {
     sed -i \
       -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
       config.linux
-  '' # condition from icu/base.nix
-    + lib.optionalString (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") ''
+  ''
+  # condition from icu/base.nix
+  + lib.optionalString (stdenv.hostPlatform.libc == "glibc"
+                        || stdenv.hostPlatform.libc == "musl") ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
 
-  configurePhase = ''
+  configurePhase = let
+    platform = if stdenv.isLinux
+               then "linux"
+               else if stdenv.isDarwin
+               then "macosx-catalina"
+               else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+  in ''
     runHook preConfigure
 
-    ./genMakefiles ${
-      if stdenv.isLinux then
-        "linux"
-      else if stdenv.isDarwin then
-        "macosx-catalina"
-      else
-        throw "Unsupported platform ${stdenv.hostPlatform.system}"}
+    ./genMakefiles ${platform}
 
     runHook postConfigure
   '';
 
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "PREFIX="
+    "PREFIX=${placeholder "out"}"
   ];
 
   enableParallelBuilding = true;
 
   passthru.tests = {
+    # Downstream dependency
     inherit vlc;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ lgpl21Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
