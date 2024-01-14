@@ -21,6 +21,15 @@ mkDerivation rec {
     inherit hash;
   };
 
+  patches = [
+    # Fixes build with SIP 6.8
+    (fetchpatch {
+      name = "bump-SIP-ABI-version-to-12.8.patch";
+      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
+      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip makeWrapper ];
 
   buildInputs = [

@@ -6,8 +6,12 @@ let
   cfg = config.services.c2fmzq-server;
 
   argsFormat = {
-    type = with lib.types; nullOr (oneOf [ bool int str ]);
-    generate = lib.cli.toGNUCommandLineShell { };
+    type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
+    generate = lib.cli.toGNUCommandLineShell {
+      mkBool = k: v: [
+        "--${k}=${if v then "true" else "false"}"
+      ];
+    };
   };
 in {
   options.services.c2fmzq-server = {

@@ -110,6 +110,9 @@ let
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
+  # Analogously to cc_solib and gccForLibs_solib
+  libcxx_solib = "${lib.getLib libcxx}/lib";
+
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
   # (`-march` or `-mtune`) is accepted by one compiler but rejected
@@ -218,6 +221,8 @@ let
        then guess
        else null;
 
+  defaultHardeningFlags = bintools.defaultHardeningFlags or [];
+
   darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
@@ -259,6 +264,25 @@ stdenv.mkDerivation {
     inherit bintools;
     inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
 
+    # Expose the C++ standard library we're using. See the comments on "General
+    # libc++ support". This is also relevant when using older gcc than the
+    # stdenv's, as may be required e.g. by CUDAToolkit's nvcc.
+    cxxStdlib =
+      let
+        givenLibcxx = libcxx.isLLVM or false;
+        givenGccForLibs = useGccForLibs && gccForLibs.langCC or false;
+      in
+      if (!givenLibcxx) && givenGccForLibs then
+        { kind = "libstdc++"; package = gccForLibs; solib = gccForLibs_solib; }
+      else if givenLibcxx then
+        { kind = "libc++"; package = libcxx;  solib = libcxx_solib;}
+      else
+      # We're probably using the `libstdc++` that came with our `gcc`.
+      # TODO: this is maybe not always correct?
+      # TODO: what happens when `nativeTools = true`?
+        { kind = "libstdc++"; package = cc; solib = cc_solib; }
+    ;
+
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
       (mapc
@@ -271,6 +295,8 @@ stdenv.mkDerivation {
     inherit expand-response-params;
 
     inherit nixSupport;
+
+    inherit defaultHardeningFlags;
   };
 
   dontBuild = true;
@@ -436,6 +462,13 @@ stdenv.mkDerivation {
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
+    # The above "fix" may be incorrect; gcc.cc.lib doesn't contain a
+    # `target-triple` dir but the correct fix may be to just remove the above?
+    #
+    # For clang it's not necessary (see `--gcc-toolchain` below) and for other
+    # situations adding in the above will bring in lots of other gcc libraries
+    # (i.e. sanitizer libraries, `libatomic`, `libquadmath`) besides just
+    # `libstdc++`; this may actually break clang.
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
     # because `libcxxStdenv` on linux still needs this. Maybe someday we'll
@@ -560,7 +593,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -706,6 +739,7 @@ stdenv.mkDerivation {
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
   };
 
   meta =

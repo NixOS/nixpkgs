@@ -1,19 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pyutil
 , twisted
 }:
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.5.7.2";
-  format = "setuptools";
+  version = "1.5.7.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TuUZvg3MfaLohIK8/Av5d6Ql4dfoJ4z1u7uNAPiir7Y=";
+    hash = "sha256-EGmFchj4ur5AhEOXEnIIA6Ef6RsU8gvHepak5vThER8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ pyutil ];
 

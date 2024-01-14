@@ -10,12 +10,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.20";
+  version = "1.1.21";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-Nc39wPVW+GpmT8X8q/VbrPhPxO/PgFBPTOCWAkkUfDY=";
+    sha256 = "sha256-ucCRm1w3ON3Qh7qt1Pf5/3kvXVGP+dJwjSuwYGcDMcs=";
   };
 
   postPatch = ''

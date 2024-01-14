@@ -21792,6 +21792,9 @@ with self; {
       description = "GNU C library compatible strftime for loggers and servers";
       homepage = "https://github.com/kazeburo/POSIX-strftime-Compiler";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      broken = stdenv.hostPlatform.isMusl; # Broken for Musl at 2023-01-14, reports:
+               # Nixpkgs: https://github.com/NixOS/nixpkgs/issues/210749
+               # Upstream: https://github.com/kazeburo/POSIX-strftime-Compiler/issues/8
     };
   };
 

@@ -52,7 +52,7 @@ _pythonRelaxDeps() {
     else
         for dep in $pythonRelaxDeps; do
             sed -i "$metadata_file" -r \
-                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/"
+                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
         done
     fi
 }

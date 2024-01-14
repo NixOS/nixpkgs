@@ -1,4 +1,4 @@
-{ version, sha256, extraPatches ? [] }:
+{ version, hash, extraPatches ? [] }:
 
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 
@@ -27,6 +27,7 @@
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
 , withAom ? withFullDeps # AV1 reference encoder
+, withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -179,8 +180,8 @@
  */
 , alsa-lib
 , bzip2
-, clang
 , celt
+, clang
 , dav1d
 , fdk_aac
 , fontconfig
@@ -188,27 +189,32 @@
 , frei0r
 , fribidi
 , game-music-emu
+, glslang
 , gnutls
 , gsm
-, libjack2
+, intel-media-sdk
 , ladspaH
 , lame
-, libass
 , libaom
+, libaribcaption
+, libass
 , libbluray
 , libbs2b
 , libcaca
 , libdc1394
-, libraw1394
 , libdrm
+, libGL
+, libGLU
 , libiconv
-, intel-media-sdk
+, libjack2
 , libmodplug
 , libmysofa
 , libogg
 , libopenmpt
 , libopus
 , libplacebo
+, libpulseaudio
+, libraw1394
 , librsvg
 , libssh
 , libtensorflow
@@ -223,41 +229,37 @@
 , libwebp
 , libX11
 , libxcb
-, libXv
 , libXext
 , libxml2
-, xz
+, libXv
 , nv-codec-headers
-, nv-codec-headers-11
-, openal
+, nv-codec-headers-12
 , ocl-icd # OpenCL ICD
+, openal
 , opencl-headers  # OpenCL headers
 , opencore-amr
-, libGL
-, libGLU
 , openh264
 , openjpeg
-, libpulseaudio
 , rav1e
-, svt-av1
 , rtmpdump
 , samba
 , SDL2
 , soxr
 , speex
 , srt
+, svt-av1
 , vid-stab
 , vo-amrwbenc
+, vulkan-headers
+, vulkan-loader
 , x264
 , x265
 , xavs
 , xvidcore
+, xz
 , zeromq4
 , zimg
 , zlib
-, vulkan-headers
-, vulkan-loader
-, glslang
 /*
  *  Darwin frameworks
  */
@@ -334,7 +336,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://git.ffmpeg.org/ffmpeg.git";
     rev = "n${finalAttrs.version}";
-    inherit sha256;
+    inherit hash;
   };
 
   postPatch = ''
@@ -344,10 +346,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
-  '' + lib.optionalString withVulkan ''
-    # FIXME: horrible hack, remove for next release
-    substituteInPlace libavutil/hwcontext_vulkan.c \
-      --replace VK_EXT_VIDEO_DECODE VK_KHR_VIDEO_DECODE
   '';
 
   patches = map (patch: fetchpatch patch) (extraPatches
@@ -356,6 +354,13 @@ stdenv.mkDerivation (finalAttrs: {
         name = "fix_aacps_tablegen";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
+      }
+    )
+    ++ (lib.optional (stdenv.isDarwin && lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+      { # this can be removed post 6.1
+        name = "fix_build_failure_due_to_PropertyKey_EncoderID";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
+        hash = "sha256-Ittka0mId1N/BwJ0FQ0ygpTSS6Y11u2SjWDpbGN+KXo=";
       }
     ));
 
@@ -441,6 +446,8 @@ stdenv.mkDerivation (finalAttrs: {
      *  External libraries
      */
     (enableFeature withAlsa "alsa")
+    # FIXME: see if jellyfin-ffmpeg is already on a version >= 6.1 to use enableFeature
+    (optionalString (withAribcaption && lib.versionAtLeast finalAttrs.version "6.1") "--enable-libaribcaption")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCelt "libcelt")
     (enableFeature withCuda "cuda")
@@ -553,9 +560,10 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO This was always in buildInputs before, why?
   buildInputs = optionals withFullDeps [ libdc1394 ]
   ++ optionals (withFullDeps && !stdenv.isDarwin) [ libraw1394 ] # TODO where does this belong to
-  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-11 else nv-codec-headers) ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
+  ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
@@ -698,7 +706,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ optional withUnfree unfreeRedistributable;
     pkgConfigModules = [ "libavutil" ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ atemu ];
+    maintainers = with maintainers; [ atemu arthsmn ];
     mainProgram = "ffmpeg";
   };
 })

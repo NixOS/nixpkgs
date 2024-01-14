@@ -357,19 +357,27 @@
 , mypy-boto3-workspaces
 , mypy-boto3-workspaces-web
 , mypy-boto3-xray
+, pythonOlder
+, setuptools
 , types-s3transfer
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.34.11";
-  format = "setuptools";
+  version = "1.34.18";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GE8NvJAbr/H1slIhjVf7ylt1UhwGQa2aTX+jSqIM+3o=";
+    hash = "sha256-6U+2eed5mRbhWekT9J3VyCRw3x0eVmx7Uj9wPi7VzsE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     botocore-stubs

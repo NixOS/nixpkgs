@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , c-ares
 , cmake
 , crc32c
@@ -18,6 +19,7 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
+  # defined in cmake/GoogleapisConfig.cmake
   googleapisRev = "85f8c758016c279fb7fa8f0d51ddc7ccc0dd5e05";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
@@ -38,6 +40,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-0SoOaAqvk8cVC5W3ejTfe4O/guhrro3uAzkeIpAkCpg=";
   };
+
+  patches = [
+    # https://github.com/googleapis/google-cloud-cpp/pull/12554, tagged in 2.16.0
+    (fetchpatch {
+      name = "prepare-for-GCC-13.patch";
+      url = "https://github.com/googleapis/google-cloud-cpp/commit/ae30135c86982c36e82bb0f45f99baa48c6a780b.patch";
+      hash = "sha256-L0qZfdhP8Zt/gYBWvJafteVgBHR8Kup49RoOrLDtj3k=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace external/googleapis/CMakeLists.txt \
@@ -69,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://hydra.nixos.org/build/222679737/nixlog/3/tail
-  NIX_CFLAGS_COMPILE = if stdenv.isAarch64 then "-Wno-error=maybe-uninitialized" else null;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-error=maybe-uninitialized";
 
   doInstallCheck = true;
 

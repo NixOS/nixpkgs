@@ -10,8 +10,8 @@
 , cleo
 , crashtest
 , dulwich
+, fastjsonschema
 , installer
-, jsonschema
 , keyring
 , packaging
 , pexpect
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # only pinned to avoid dependency on Rust
-    "jsonschema"
+    # platformdirs 4.x is backwards compatible; https://github.com/python-poetry/poetry/commit/eb80d10846f7336b0b2a66ce2964e72dffee9a1c
+    "platformdirs"
   ];
 
   propagatedBuildInputs = [
@@ -69,8 +69,8 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
+    fastjsonschema
     installer
-    jsonschema
     keyring
     packaging
     pexpect

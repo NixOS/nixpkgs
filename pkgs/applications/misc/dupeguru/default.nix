@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonPath = with python3Packages; [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
     send2trash
     sphinx
     polib

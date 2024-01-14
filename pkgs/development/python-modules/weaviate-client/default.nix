@@ -20,8 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-7oCb8tH1pQDJpoxe3C6xdKtRQqNoAuJ0qySv5nX/sos=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "validators>=0.18.2,<=0.21.0" "validators>=0.18.2" \
