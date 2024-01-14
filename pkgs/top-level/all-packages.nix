@@ -32860,7 +32860,7 @@ with pkgs;
 
   bip = callPackage ../applications/networking/irc/bip { };
 
-  j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop { };
+  j4-dmenu-desktop = pin-to-gcc12-if-gcc13 (callPackage ../applications/misc/j4-dmenu-desktop { });
 
   jabcode = callPackage ../development/libraries/jabcode { };
 
