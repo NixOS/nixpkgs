@@ -3037,6 +3037,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.libs) utmp;
     inherit (darwin) sigtool;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    catch2 = catch2_3;
     fmt = fmt_9;
   };
 
@@ -4447,8 +4448,6 @@ with pkgs;
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
-
-  bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
 
   bmon = callPackage ../tools/misc/bmon { };
 
@@ -23612,7 +23611,10 @@ with pkgs;
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
 
-  libunicode = callPackage ../development/libraries/libunicode { fmt = fmt_8; };
+  libunicode = callPackage ../development/libraries/libunicode {
+    catch2 = catch2_3;
+    fmt = fmt_9;
+  };
 
   libunwind =
     if stdenv.isDarwin then darwin.libunwind
@@ -34673,6 +34675,8 @@ with pkgs;
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
+  plugdata = callPackage ../applications/audio/plugdata { };
+
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   poke = callPackage ../applications/editors/poke { };
@@ -39357,6 +39361,8 @@ with pkgs;
   dawncut = callPackage ../applications/science/physics/dawncut { };
 
   elmerfem = callPackage ../applications/science/physics/elmerfem { };
+
+  fasthenry = callPackage ../applications/science/physics/fasthenry { };
 
   mcfm = callPackage ../applications/science/physics/MCFM {
     stdenv = gccStdenv;
