@@ -9,16 +9,16 @@
 , xdg-utils
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
   version = "2023-1.5";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
   src = let
-    year = lib.head (lib.splitVersion version);
+    year = lib.head (lib.splitVersion finalAttrs.version);
   in fetchzip {
-    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
+    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
     hash = "sha256-L1X+xysQSJ43TO8NSdO+T4aalampd4REL+5Uv33kYUI=";
   };
 
@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = "irpf";
+      exec = "irpf";
       icon = "rfb64";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    BASEDIR="$out/share/${pname}"
+    BASEDIR="$out/share/irpf"
     mkdir -p "$BASEDIR"
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
@@ -46,10 +46,10 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk11}/bin/java $out/bin/irpf \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
-      --add-flags "-jar $BASEDIR/${pname}.jar" \
+      --add-flags "-jar $BASEDIR/irpf.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
@@ -73,4 +73,4 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ atila ];
   };
-}
+})
