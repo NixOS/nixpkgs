@@ -23,6 +23,7 @@
 , flufl_lock
 , funcy
 , grandalf
+, gto
 , hydra-core
 , importlib-metadata
 , importlib-resources
@@ -56,11 +57,11 @@
 buildPythonPackage rec {
   pname = "dvc";
   version = "3.38.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc";
     rev = "refs/tags/${version}";
     hash = "sha256-P3N9wCmua0kS9vli+QUjJPZSeQXO9t8m1Ei+CeN2tEU=";
   };
@@ -96,6 +97,7 @@ buildPythonPackage rec {
     flufl_lock
     funcy
     grandalf
+    gto
     hydra-core
     iterative-telemetry
     networkx
@@ -130,16 +132,27 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    azure = [ dvc-azure ];
-    gs = [ dvc-gs ];
-    s3 = [ dvc-s3 ];
-    ssh = [ dvc-ssh ];
+    azure = [
+      dvc-azure
+    ];
+    gs = [
+      dvc-gs
+    ];
+    s3 = [
+      dvc-s3
+    ];
+    ssh = [
+      dvc-ssh
+    ];
   };
 
   # Tests require access to real cloud services
   doCheck = false;
 
-  pythonImportsCheck = [ "dvc" "dvc.api" ];
+  pythonImportsCheck = [
+    "dvc"
+    "dvc.api"
+  ];
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
