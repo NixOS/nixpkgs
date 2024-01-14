@@ -138,7 +138,7 @@ buildNpmPackage rec {
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 ];
+    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
     mainProgram = "bruno";
   };
 }

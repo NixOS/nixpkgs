@@ -11603,6 +11603,12 @@
     githubId = 279868;
     name = "Matti Kariluoma";
   };
+  mattpolzin = {
+    email = "matt.polzin@gmail.com";
+    github = "mattpolzin";
+    githubId = 2075353;
+    name = "Matt Polzin";
+  };
   matt-snider = {
     email = "matt.snider@protonmail.com";
     github = "matt-snider";
