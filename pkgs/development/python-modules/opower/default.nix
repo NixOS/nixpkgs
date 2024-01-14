@@ -6,14 +6,13 @@
 , pyotp
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "opower";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -24,13 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-OT+QCbHQbL3vCfPuyzxBKqUJ2EtFn+PslrKGlrC6Ip8=";
   };
 
-  pythonRemoveDeps = [
-    # https://github.com/tronikos/opower/pull/4
-    "asyncio"
-  ];
-
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
