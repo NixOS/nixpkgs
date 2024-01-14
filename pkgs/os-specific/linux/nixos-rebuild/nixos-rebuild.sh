@@ -567,7 +567,7 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
-                  inherit (configuration.pkgs) lib;
+                  lib = configuration.lib or configuration.pkgs.lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope
