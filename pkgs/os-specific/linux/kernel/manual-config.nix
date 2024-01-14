@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
+, libelf, cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 , rustc, rust-bindgen, rustPlatform
 }:
@@ -111,6 +111,7 @@ let
                           ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
                           ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
                           ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+                          ++ optional  (lib.versionAtLeast version "6.1")  hexdump
                           ++ optionals withRust [ rustc rust-bindgen ];
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
@@ -270,7 +271,7 @@ let
       installTargets = [
         (kernelConf.installTarget or (
           /**/ if kernelConf.target == "uImage" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" || kernelConf.target == "vmlinuz.efi" then "zinstall"
           else "install"))
       ];
 
