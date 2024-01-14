@@ -3215,6 +3215,23 @@ let
         };
       };
 
+      silofy.hackthebox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hackthebox";
+          publisher = "silofy";
+          version = "0.2.9";
+          sha256 = "sha256-WSPuEh+osu0DpXgPAzMU5Fw0Sh8sZFst7kx26s2BsyQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/silofy.hackthebox/changelog";
+          description = "A Visual Studio Code theme built for hackers by hackers";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=silofy.hackthebox";
+          homepage = "https://github.com/silofy/hackthebox";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       skellock.just = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "just";
