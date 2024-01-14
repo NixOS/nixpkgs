@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for creating and manipulating HTML documents using an elegant DOM API";
     homepage = "https://github.com/Knio/dominate/";
+    changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];
   };
