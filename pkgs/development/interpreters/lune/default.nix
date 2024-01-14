@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.7.11";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-5agoAXeO16/CihsgvUHt+pgA+/ph6PualTY6xqDQbeU=";
+    hash = "sha256-ZVETw+GdkrR2V8RrHAWBR+avAuN0158DlJkYBquju8E=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-kPBPxlsicoFDyOsuJWhvQHDC2uwYQqpd7S+kQPRd8DY=";
+  cargoHash = "sha256-zOjDT8Sn/p3YaG+dWyYxSWUOo11p9/WG3EyNagZRtQQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A standalone Luau script runtime";
-    homepage = "https://github.com/filiptibell/lune";
-    changelog = "https://github.com/filiptibell/lune/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/lune-org/lune";
+    changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
   };
