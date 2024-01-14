@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "epion";
-  version = "0.0.2";
+  version = "0.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "devenzo-com";
     repo = "epion_python";
     rev = "refs/tags/${version}";
-    hash = "sha256-XyYjbr0EPRrwWsXhZT2oWcoDPZoZCuT9aZ2UHSSt0E8=";
+    hash = "sha256-9tE/SqR+GHZXeE+bOtXkLu+4jy1vO8WoiLjb6MJazxQ=";
   };
 
   nativeBuildInputs = [
