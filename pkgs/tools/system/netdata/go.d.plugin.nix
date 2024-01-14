@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildGo121Module, nixosTests }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "netdata-go-plugins";
   version = "0.57.2";
 
