@@ -54,7 +54,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_unit("io.elementary.files.xdg-desktop-portal.service", "${user.name}")
 
     with subtest("Check if various environment variables are set"):
-        cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/gala)/environ"
+        cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.gala}/bin/gala)/environ"
         machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Pantheon'")
         # Hopefully from the sessionPath option.
         machine.succeed(f"{cmd} | grep 'XDG_DATA_DIRS' | grep 'gsettings-schemas/pantheon-agent-geoclue2'")
