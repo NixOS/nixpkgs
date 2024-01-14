@@ -18,8 +18,8 @@ mkDerivation rec {
   version = "1.2.5";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
+    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/yubikey-manager-qt-${version}.tar.gz";
+    hash = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
   };
 
   nativeBuildInputs = [
