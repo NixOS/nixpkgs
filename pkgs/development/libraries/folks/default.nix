@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
     sha256 = "Eg8hnvYyEsqpWuf2rrZOKZKLCxqLlFIFQwSgDQ80eHE=";
   };
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "folks";
       versionPolicy = "none";
     };
   };
