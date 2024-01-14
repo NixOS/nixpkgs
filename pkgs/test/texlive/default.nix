@@ -70,7 +70,10 @@ rec {
       \end{document}
     '';
   } ''
-    chktex -v -nall -w1 "$input" 2>&1 | tee "$out"
+    # chktex is supposed to return 2 when it (successfully) finds warnings, but no errors,
+    # see http://git.savannah.nongnu.org/cgit/chktex.git/commit/?id=ec0fb9b58f02a62ff0bfec98b997208e9d7a5998
+    (set +e; chktex -v -nall -w1 "$input" 2>&1; [ $? = 2 ] || exit 1; set -e)  | tee "$out"
+    # also check that the output does indeed contain "One warning printed"
     grep "One warning printed" "$out"
   '';
 
@@ -427,6 +430,12 @@ rec {
         # crossrefware: require bibtexperllibs under TEXMFROOT
         "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "checkcites" "ltx2crossrefxml"
 
+        # epstopdf: requires kpsewhich
+        "epstopdf" "repstopdf"
+
+        # requires kpsewhich
+        "memoize-extract.pl" "memoize-extract.py"
+
         # require other texlive binaries in PATH
         "allcm" "allec" "chkweb" "fontinst" "ht*" "installfont-tl" "kanji-config-updmap-sys" "kanji-config-updmap-user"
         "kpse*" "latexfileversion" "mkocp" "mkofm" "mtxrunjit" "pdftex-quiet" "pslatex" "rumakeindex" "texconfig"
@@ -434,7 +443,7 @@ rec {
 
         # misc luatex binaries searching for luatex in PATH
         "citeproc-lua" "context" "contextjit" "ctanbib" "digestif" "epspdf" "l3build" "luafindfont" "luaotfload-tool"
-        "luatools" "make4ht" "pmxchords" "tex4ebook" "texdoc" "texlogsieve" "xindex"
+        "luatools" "make4ht" "pmxchords" "tex4ebook" "texblend" "texdoc" "texfindpkg" "texlogsieve" "xindex"
 
         # requires full TEXMFROOT (e.g. for config)
         "mktexfmt" "mktexmf" "mktexpk" "mktextfm" "psnup" "psresize" "pstops" "tlmgr" "updmap" "webquiz"
@@ -513,6 +522,13 @@ rec {
           args=
           ignoreExitCode=
           binCount=$((binCount + 1))
+
+          # ignore non-executable files (such as context.lua)
+          if [[ ! -x "$bin" ]] ; then
+            ignoredCount=$((ignoredCount + 1))
+            continue
+          fi
+
           case "$base" in
             ${lib.concatStringsSep "|" ignored})
               ignoredCount=$((ignoredCount + 1))
@@ -585,6 +601,7 @@ rec {
         (pkg: ''
           for bin in '${pkg.outPath}'/bin/* ; do
             grep -I -q . "$bin" || continue  # ignore binary files
+            [[ -x "$bin" ]] || continue # ignore non-executable files (such as context.lua)
             scriptCount=$((scriptCount + 1))
             read -r cmdline < "$bin"
             read -r interp <<< "$cmdline"

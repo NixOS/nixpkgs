@@ -168,7 +168,7 @@ let
         ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
       nativeBuildInputs = extraNativeBuildInputs;
       # absolute scripts folder
-      scriptsFolder = lib.optionalString (tex ? outPath) (tex.outPath + "/scripts/" + args.scriptsFolder or pname);
+      scriptsFolder = lib.optionals (tex ? outPath) (builtins.map (f: tex.outPath + "/scripts/" + f) (lib.toList args.scriptsFolder or pname));
       # binaries info
       inherit (args) binfiles;
       binlinks = builtins.attrNames (args.binlinks or { });
