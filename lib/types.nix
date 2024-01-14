@@ -906,8 +906,14 @@ rec {
            then functor.type mt1 mt2
            else null;
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
+      getSubOptions = prefix: (t1.getSubOptions prefix) // (t2.getSubOptions prefix);
       nestedTypes.left = t1;
       nestedTypes.right = t2;
+    };
+
+    # Handle recursive leaf types, avoiding an infinite recursion
+    eitherRecursive = t1: t2: (either t1 t2) // {
+      getSubOptions = _: {};
     };
 
     # Any of the types in the given list
@@ -916,6 +922,13 @@ rec {
         head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
         tail' = tail ts;
       in foldl' either head' tail';
+
+    # Handle recursive leaf types, avoiding an infinite recursion
+    oneOfRecursive = ts:
+      let
+        head' = if ts == [] then throw "types.oneOfRecursive needs to get at least one type in its argument" else head ts;
+        tail' = tail ts;
+      in foldl' eitherRecursive head' tail';
 
     # Either value of type `coercedType` or `finalType`, the former is
     # converted to `finalType` using `coerceFunc`.
