@@ -138,33 +138,7 @@ let
     # the control flow.
     ''
       plugin {
-        ${concatStringsSep "\n" (mapAttrsToList (to: from: "sieve_${to} = ${stateDir}/sieve/${to}") cfg.sieve.scripts)}
-        sieve_plugins = ${concatStringsSep " " cfg.sieve.plugins}
-        sieve_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions)}
-        sieve_global_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions)}
-        ${concatStringsSep "\n" (mapAttrsToList (key: value: "${key} = ${value}") cfg.sieve.extraPluginSettings)}
-    ''
-    (optionalString (cfg.imapsieve.mailbox != []) ''
-      ${
-        concatStringsSep "\n" (flatten (imap1 (
-            idx: el:
-              singleton "imapsieve_mailbox${toString idx}_name = ${el.name}"
-              ++ optional (el.from != null) "imapsieve_mailbox${toString idx}_from = ${el.from}"
-              ++ optional (el.causes != null) "imapsieve_mailbox${toString idx}_causes = ${el.causes}"
-              ++ optional (el.before != null) "imapsieve_mailbox${toString idx}_before = file:${stateDir}/imapsieve/before/${baseNameOf el.before}"
-              ++ optional (el.after != null) "imapsieve_mailbox${toString idx}_after = file:${stateDir}/imapsieve/after/${baseNameOf el.after}"
-          )
-          cfg.imapsieve.mailbox))
-      }
-    '')
-    (optionalString (cfg.sieve.pipeBins != []) ''
-        sieve_pipe_bin_dir = ${pkgs.linkFarm "sieve-pipe-bins" (map (el: {
-          name = builtins.unsafeDiscardStringContext (baseNameOf el);
-          path = el;
-        })
-        cfg.sieve.pipeBins)}
-    '')
-    ''
+        ${concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
       }
     ''
 
@@ -442,14 +416,14 @@ in
           };
 
           causes = mkOption {
-            default = null;
+            default = [ ];
             description = ''
               Only execute the administrator Sieve scripts for the mailbox configured with services.dovecot2.imapsieve.mailbox.<name>.name when one of the listed IMAPSIEVE causes apply.
 
               This has no effect on the user script, which is always executed no matter the cause.
             '';
-            example = "COPY";
-            type = types.nullOr (types.enum [ "APPEND" "COPY" "FLAG" ]);
+            example = [ "COPY" "APPEND" ];
+            type = types.listOf (types.enum [ "APPEND" "COPY" "FLAG" ]);
           };
 
           before = mkOption {
