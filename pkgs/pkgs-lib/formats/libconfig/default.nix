@@ -37,7 +37,7 @@ in
 
     type = with lib.types;
       let
-        valueType = (oneOf [
+        valueType = (oneOfRecursive [
           bool
           int
           float

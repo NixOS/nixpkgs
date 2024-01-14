@@ -91,7 +91,7 @@ in {
 
       instance = mkOption {
         type =  with types; let
-          valueType = nullOr (oneOf [
+          valueType = nullOr (oneOfRecursive [
             bool
             int
             float
