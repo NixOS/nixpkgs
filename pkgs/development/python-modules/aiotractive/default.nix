@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.5.6";
+  version = "0.5.7";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "zhulik";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jJw1L1++Z/r+E12tA6zoyyy4MmTpaaVVzKwfI6xcDBQ=";
+    hash = "sha256-fIdIFG1OpAN1R2L2RryTzYZyqGLo3tqAAkRC8UUFM4k=";
   };
 
   propagatedBuildInputs = [
