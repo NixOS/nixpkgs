@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sVeR6+pDIhhUOhcC12rkXS/5X/mU5SAUuGhqadrXcv0=";
+    hash = "sha256-VYKEaH2biq4ZBOPWBRrRMt1KjAz1UbN+pOfkKjHRncQ=";
   };
 
   nativeBuildInputs = [
