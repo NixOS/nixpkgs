@@ -2768,6 +2768,22 @@ let
         };
       };
 
+      nur.just-black = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "just-black";
+          publisher = "nur";
+          version = "3.1.1";
+          sha256 = "sha256-fatJZquCDsLDFGVzBol2D6LIZUbZ6GzqcVEFAwLodW0=";
+        };
+        meta = {
+          description = "A dark theme designed specifically for syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nur.just-black";
+          homepage = "https://github.com/nurmohammed840/extension.vsix/tree/Just-Black";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
