@@ -185,6 +185,46 @@ rec {
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
 
+  # Like writeScript but the first line is a shebang to nu
+  #
+  # Example:
+  #   writeNu "example" ''
+  #     echo hello world
+  #   ''
+  writeNu = makeScriptWriter {
+    interpreter = "${pkgs.nushell}/bin/nu --no-config-file";
+  };
+
+  # Like writeScriptBin but the first line is a shebang to nu
+  writeNuBin = name:
+    writeNu "/bin/${name}";
+
+  # Like writeScript but the first line is a shebang to ruby
+  #
+  # Example:
+  #   writeRuby "example" ''
+  #    puts "hello world"
+  #   ''
+  writeRuby = makeScriptWriter {
+    interpreter = "${pkgs.ruby}/bin/ruby";
+  };
+
+  writeRubyBin = name:
+    writeRuby "/bin/${name}";
+
+  # Like writeScript but the first line is a shebang to lua
+  #
+  # Example:
+  #   writeLua "example" ''
+  #    print("hello world")
+  #   ''
+  writeLua = makeScriptWriter {
+    interpreter = "${pkgs.lua}/bin/lua";
+  };
+
+  writeLuaBin = name:
+    writeLua "/bin/${name}";
+
   writeRust = name: {
       rustc ? pkgs.rustc,
       rustcArgs ? [],
