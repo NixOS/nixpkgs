@@ -196,9 +196,11 @@ targetHostCmd() {
 
 targetHostSudoCmd() {
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
     else
-        targetHostCmd "$@"
+        # While a tty might not be necessary, we apply it to be consistent with
+        # sudo usage, and an experience that is more consistent with local deployment.
+        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
     fi
 }
 
