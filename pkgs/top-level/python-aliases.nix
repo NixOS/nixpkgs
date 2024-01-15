@@ -342,6 +342,7 @@ mapAliases ({
   pymyq = python-myq; # added 2023-10-20
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
+  pyqt5_sip = pyqt5-sip; # added 2024-01-07
   pyqt5_with_qtwebkit = pyqt5-webkit; # added 2024-01-07
   pyramid_beaker = pyramid-beaker; # added 2023-08-23
   pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
@@ -445,6 +446,7 @@ mapAliases ({
   setuptools_scm = setuptools-scm; # added 2021-06-03
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
+  sip_4 = sip4; # added 2024-01-07
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
@@ -488,6 +490,7 @@ mapAliases ({
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
+  update_checker = update-checker; # added 2024-01-07
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
   validictory = throw "validictory has been removed, since it abandoned"; # added 2023-07-07
@@ -511,8 +514,9 @@ mapAliases ({
   Yapsy = yapsy; # added 2023-02-19
   z3 = z3-solver; # added 2023-12-03
   zake = throw "zake has been removed because it is abandoned"; # added 2023-06-20
-  zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
+  zc-buildout221 = zc-buildout; # added 2021-07-21
+  zc_lockfile = zc-lockfile; # added 2024-01-06
   zipstream-new = throw "zipstream-new has been removed, because it  was packaged as a dependency for octoprint, which has switched to zipstream-ng since."; # added 2024-01-05
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28

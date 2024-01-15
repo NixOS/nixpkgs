@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.34.0";
+  version = "1.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "casbin";
     repo = "pycasbin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SlXM97rLRGZvqpzkYlrL+SClWYtw6xAKotaeQ7kVpjM=";
+    hash = "sha256-XVFuRmeQwm+3kyO71F8nxB+VdaPS+5oTAk5XqcjvkCM=";
   };
 
   nativeBuildInputs = [

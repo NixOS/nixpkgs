@@ -47,7 +47,7 @@
 , tqdm
 , typing-extensions
 , voluptuous
-, zc_lockfile
+, zc-lockfile
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
@@ -56,14 +56,14 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.38.1";
+  version = "3.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-P3N9wCmua0kS9vli+QUjJPZSeQXO9t8m1Ei+CeN2tEU=";
+    hash = "sha256-sFrbG9CKt8PaW9qdXBxEa516lnRWzFdTEbdCW6VFUuQ=";
   };
 
   pythonRelaxDeps = [
@@ -119,7 +119,7 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     voluptuous
-    zc_lockfile
+    zc-lockfile
   ]
   ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
   ++ lib.optionals enableAWS passthru.optional-dependencies.s3

@@ -4447,8 +4447,6 @@ with pkgs;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
-  bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
-
   bmon = callPackage ../tools/misc/bmon { };
 
   boca = callPackage ../development/libraries/boca { };
@@ -13730,8 +13728,6 @@ with pkgs;
 
   target-isns = callPackage ../os-specific/linux/target-isns { };
 
-  tarlz = callPackage ../tools/archivers/tarlz { };
-
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
@@ -18222,7 +18218,7 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
-  rtx = callPackage ../tools/misc/rtx {
+  mise = callPackage ../tools/misc/mise {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 

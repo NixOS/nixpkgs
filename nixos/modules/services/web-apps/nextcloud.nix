@@ -107,30 +107,9 @@ let
 in {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpass" ] ''
-      Please use `services.nextcloud.config.adminpassFile' instead!
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbpass" ] ''
-      Please use `services.nextcloud.config.dbpassFile' instead!
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
-      The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
-      support other reverse-proxies officially.
-
-      However it's possible to use an alternative reverse-proxy by
-
-        * disabling nginx
-        * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
-
-      Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
-      (which can be opened e.g. by running `nixos-help`).
-    '')
     (mkRemovedOptionModule [ "services" "nextcloud" "enableBrokenCiphersForSSE" ] ''
       This option has no effect since there's no supported Nextcloud version packaged here
       using OpenSSL for RC4 SSE.
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
-      Use services.nextcloud.enableImagemagick instead.
     '')
     (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
       Add port to services.nextcloud.config.dbhost instead.
