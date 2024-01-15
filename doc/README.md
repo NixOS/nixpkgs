@@ -196,16 +196,15 @@ In that case, please open an issue about the particular documentation convention
   Description of what `coolFunction` does.
   `coolFunction` expects a single argument which should be an attribute set, with the following possible attributes:
 
-  `name`
+  `name` (String)
 
   : The name of the resulting image.
 
-  `tag` _optional_
+  `tag` (String, _optional_)
 
   : Tag of the generated image.
 
-    _Default value:_ the output path's hash.
-
+    _Default:_ the output path's hash.
   ```
 
 ## Getting help
