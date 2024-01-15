@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0sj3f2daz6l5mckparpnp5pywmy1mxv973l7nbqsp3s6qixkj8xc",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.1/calendar-v4.6.1.tar.gz",
-    "version": "4.6.1",
+    "sha256": "0lz1sly8p2lhr425ggj3dacz0i28xg32041zdg3nl916yayvqj2p",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.3/calendar-v4.6.3.tar.gz",
+    "version": "4.6.3",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0pbl4fmpg1jxwjj141gqnmwzgm3ji1z686kr11rmldfkjvhjss2x",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.0/contacts-v5.5.0.tar.gz",
-    "version": "5.5.0",
+    "sha256": "1wq6xj9r1f2raqhpj222269y8dkn5zx9mnw7zrbxwpz8c67s3h6n",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.1/contacts-v5.5.1.tar.gz",
+    "version": "5.5.1",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -59,6 +59,16 @@
       "agpl"
     ]
   },
+  "end_to_end_encryption": {
+    "sha256": "19vp0ggllplm84hwaqwn95122hsgfglmlk2lbwlgsjv8d36fv1wr",
+    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.12.5/end_to_end_encryption-v1.12.5.tar.gz",
+    "version": "1.12.5",
+    "description": "Provides the necessary endpoint to enable end-to-end encryption.\n\n**Notice:** E2EE is currently not compatible to be used together with server-side encryption",
+    "homepage": "https://github.com/nextcloud/end_to_end_encryption",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_markdown": {
     "sha256": "0p97ha6x3czzbflavmjn4jmz3z706h5f84spg4j7dwq3nc9bqrf7",
     "url": "https://github.com/icewind1991/files_markdown/releases/download/v2.4.1/files_markdown-v2.4.1.tar.gz",
@@ -80,9 +90,9 @@
     ]
   },
   "forms": {
-    "sha256": "1mipdri1flhkdwknsp72k87y7xfis72bzsnw1alzr1cbp8d6ardm",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v3.4.3/forms-v3.4.3.tar.gz",
-    "version": "3.4.3",
+    "sha256": "0rx3kcbachs3pk56cmzrc2iy5wg5cwvs8n6myxbgz86qm0pbxmzk",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v3.4.4/forms-v3.4.4.tar.gz",
+    "version": "3.4.4",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -113,16 +123,16 @@
     "sha256": "11q15ajg1357y5y5a640dvsy6hhvvar7wp34zfsb07n7hqlmyci0",
     "url": "https://github.com/jhass/nextcloud-keeweb/releases/download/v0.6.13/keeweb-0.6.13.tar.gz",
     "version": "0.6.13",
-    "description": "Open Keepass stores inside Nextcloud with Keeweb just by clicking on an *.kdbx file in your Nextcloud.",
+    "description": "Open Keepass stores inside Nextcloud with Keeweb just by clicking on an *.kdbx file in your\n        Nextcloud.",
     "homepage": "https://github.com/jhass/nextcloud-keeweb",
     "licenses": [
       "agpl"
     ]
   },
   "mail": {
-    "sha256": "0ycyj5ydnvnf5cjnxkpxd489rymlag8df67n5lawp43cvgg2jn2d",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.0/mail-v3.5.0.tar.gz",
-    "version": "3.5.0",
+    "sha256": "1r4vqxmzfzv9g29smqj14a3k97hwxb9dswg7z501wgq901959bx2",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.2/mail-v3.5.2.tar.gz",
+    "version": "3.5.2",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -140,9 +150,9 @@
     ]
   },
   "memories": {
-    "sha256": "1rz0pkis0vz6hjyj53jbz7dcmd9yxbh1h9p4nhg4a2p7yyd5092m",
-    "url": "https://github.com/pulsejet/memories/releases/download/v6.1.5/memories.tar.gz",
-    "version": "6.1.5",
+    "sha256": "1j3296d3arkr9344zzv6ynhg842ym36a1bp1r3y6m8wp552m5gay",
+    "url": "https://github.com/pulsejet/memories/releases/download/v6.2.2/memories.tar.gz",
+    "version": "6.2.2",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
