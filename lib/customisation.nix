@@ -250,6 +250,8 @@ rec {
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
             outputSpecified = true;
+            # unsafeDiscardOutputDependency: see below
+            derivation = assert condition; drv.${outputName}.derivation or (builtins.unsafeDiscardOutputDependency drv.${outputName}.drvPath);
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           } //
@@ -264,6 +266,24 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
     in commonAttrs // {
+      # unsafeDiscardOutputDependency:
+      # Not unsafe.
+      # Nix has two kinds of string contexts for derivation paths:
+      # - Regular store path dependency. It makes the `.drv` and the closure
+      #   of `.drvs` as well as all referenced input sources available.
+      # - DrvDeep, which causes all outputs of all derivations in the closure
+      #   to be added as dependencies. This behavior is rarely what you want,
+      #   unless, say, you're building a 25GB+ image containing everything to
+      #   rebuild each package in the closure of build dependencies for an
+      #   otherwise empty NixOS system. It'd be so big because it includes all
+      #   dependencies, all the way up to the bootstrap binaries.
+      # drvPath was traditionally a DrvDeep dependency, which makes it unsuitable
+      # for many use cases, including usage from a well-behaved Nix CLI.
+      # - `nix build foo.drvPath` _should_ mean: realise all those 25+ GB!
+      # - `nix build foo.derivation` does not realise anything, because it only
+      #   needs to instantiate a normal `.drv` closure, and that already constitutes
+      #   a valid store path.
+      derivation = assert condition; drv.derivation or (builtins.unsafeDiscardOutputDependency drv.drvPath);
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
