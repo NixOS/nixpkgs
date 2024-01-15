@@ -11,13 +11,13 @@
 
 let
   pname = "pydicom";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PF4iA/FPxPYD8OfgWqKRndwi2vURuzh6tlEwduxs/3E=";
+    hash = "sha256-iJE1horEmdL7bKPn+NlZLgmtCbLZCZWQ8NjDBQPzXk8=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
