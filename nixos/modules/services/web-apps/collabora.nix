@@ -43,7 +43,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.nginx = mkIf cfg.nginx.enable {
+    services.nginx.virtualHosts = mkIf cfg.nginx.enable {
       "${cfg.hostName}" = {
         locations = {
           # WOPI discovery URL
@@ -54,13 +54,13 @@ in {
 
           # Capabilities
           "^~ /hosting/capabilities" = {
-            proxxyPass = url;
+            proxyPass = url;
             recommendedProxySettings = true;
           };
 
           # main websocket
           "~ ^/cool/(.*)/ws$" = {
-            proxxyPass = url;
+            proxyPass = url;
             proxyWebsockets = true;
             recommendedProxySettings = true;
             extraConfig = ''
@@ -71,13 +71,13 @@ in {
           # download, presentation and image upload
           # we accept 'lool' to be backward compatible
           "~ ^/(c|l)ool" = {
-            proxxyPass = url;
+            proxyPass = url;
             recommendedProxySettings = true;
           };
 
           # Admin Console websocket
           "^~ /cool/adminws" = {
-            proxxyPass = url;
+            proxyPass = url;
             proxyWebsockets = true;
             recommendedProxySettings = true;
             extraConfig = ''
@@ -107,7 +107,7 @@ in {
         fi
 
         ${cfg.package}/bin/coolwsd --unattended \
-          --port=${cfg.port} \
+          --port=${builtins.toString cfg.port} \
           "--config-file=path=${config_file}" \
           "--o:file_server_root_path=${cfg.package}/share/coolwsd" \
           "--o:sys_template_path=${cfg.dataDir}/template" \
