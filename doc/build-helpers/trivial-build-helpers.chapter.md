@@ -69,7 +69,7 @@ These are useful for creating files from Nix expressions, which may be scripts o
 Each of these functions will cause a derivation to be produced.  When you coerce the result of each of these functions to a string, it will evaluate to the *store path* of this derivation.
 
 :::: {.warning}
-Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file  For example:
+Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file. For example:
 
 
 If the derivation destination is a directory...
