@@ -68,11 +68,9 @@ These are useful for creating files from Nix expressions, which may be scripts o
 
 Each of these functions will cause a derivation to be produced.  When you coerce the result of each of these functions to a string, it will evaluate to the *store path* of this derivation.
 
-:::: {.warning}
-Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file. For example:
+:::: {.note}
+Some of these functions will put the resulting files within a directory inside the derivation output.  If you need to refer to the resulting files somewhere else in Nix code, remember to append the path to the file. For example, if the derivation destination is a directory:
 
-
-If the derivation destination is a directory...
 ```nix
 
 my-file = writeTextFile {
@@ -82,14 +80,16 @@ my-file = writeTextFile {
   '';
   destination = "/share/my-file";
 }
+```
 
+Remember to append "/share/my-file" to the derivation path when using it elsewhere:
+
+```nix
 writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 '';
 ```
-::: {.note}
-Remember to tack on "/share/my-file" to the derivation path when using it elsewhere.
-:::
+
 ::::
 
 ### `writeTextFile` {#trivial-builder-writeTextFile}
@@ -130,46 +130,59 @@ Writes a text file to the store
 
 : Whether to prefer building locally, even if faster remote builders are available. It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
-The resulting store path will include some variation of the name, and it will be a file unless `destination` (see below) is used, in which case it will be a directory.
+The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
 
 ::: {.example #ex-writeTextFile}
-# Usages of `writeTextFile`
+# Usage 1 of `writeTextFile`
+
+Writes my-file to `/nix/store/<store path>/some/subpath/my-cool-script`, making it executable.  It also runs a check on the resulting file in a `checkPhase`, and supplies values for the less-used options.
+
 ```nix
-# Writes my-file to /nix/store/<store path>/some/subpath/my-cool-script,
-# making it executable and also supplies values for the less-used options
-writeTextFile rec {
+writeTextFile {
   name = "my-cool-script";
   text = ''
     #!/bin/sh
     echo "This is my cool script!"
   '';
   executable = true;
-  destination = "some/subpath/my-cool-script";
+  destination = "/some/subpath/my-cool-script";
   checkPhase = ''
-    ${pkgs.shellcheck}/bin/shellcheck $out/${destination}
+    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
   '';
   meta = {
     license = pkgs.lib.licenses.cc0;
   };
   allowSubstitutes = true;
   preferLocalBuild = false;
-}
+};
+```
+:::
 
-# Writes my-file to /nix/store/<store path>
-# See also the `writeText` helper function below.
+::: {.example #ex2-writeTextFile}
+# Usage 2 of `writeTextFile`
+
+Writes `Contents of File` to `/nix/store/<store path>`.  See also the `writeText` helper function below.
+
+```nix
 writeTextFile {
   name = "my-file";
   text = ''
     Contents of File
   '';
 }
+```
+:::
 
-# Writes executable my-file to /nix/store/<store path>/bin/my-file
-# see also the `writeScriptBin` helper function below.
+::: {.example #ex3-writeTextFile}
+# Usage 3 of `writeTextFile`
+
+Writes an executable `my-file` to `/nix/store/<store path>/bin/my-file`. See also the `writeScriptBin` helper function below.
+
+```nix
 writeTextFile {
   name = "my-file";
   text = ''
-    Contents of File
+    echo "hi"
   '';
   executable = true;
   destination = "/bin/my-file";
@@ -198,8 +211,10 @@ Here is an example.
 
 ::: {.example #ex-writeText}
 # Usage of `writeText`
+
+Writes `Contents of File` to `/nix/store/<store path>`
+
 ```nix
-# Writes my-file to /nix/store/<store path>
 writeText "my-file"
   ''
   Contents of File
@@ -236,8 +251,10 @@ The store path will be a directory.
 
 ::: {.example #ex-writeTextDir}
 # Usage of `writeTextDir`
+
+Writes `Contents of File` to `/nix/store/<store path>/share/my-file`.
+
 ```nix
-# Writes contents of file to /nix/store/<store path>/share/my-file
 writeTextDir "share/my-file"
   ''
   Contents of File
@@ -279,8 +296,10 @@ Here is an example.
 
 ::: {.example #ex-writeScript}
 # Usage of `writeScript`
+
+Writes `Contents of File` to `/nix/store/<store path>` and makes the store path executable.
+
 ```nix
-# Writes my-file to /nix/store/<store path> and makes executable
 writeScript "my-file"
   ''
   Contents of File
