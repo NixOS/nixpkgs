@@ -188,7 +188,8 @@ In that case, please open an issue about the particular documentation convention
   }
   ```
 
-- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments. For example:
+- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+  For example:
 
   ```markdown
   # pkgs.coolFunction
