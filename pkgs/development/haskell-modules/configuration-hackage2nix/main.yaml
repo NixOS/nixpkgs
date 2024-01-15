@@ -770,6 +770,7 @@ supported-platforms:
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
+  tcod-haskell:                                 [ platforms.linux ] # limited by pkgs.libtcod
   udev:                                         [ platforms.linux ]
   vty-windows:                                  [ platforms.windows ] # depends on Win32
   Win32-console:                                [ platforms.windows ]
