@@ -9,6 +9,7 @@
 }:
 let
   runtimeExprPath = ./src/eval.nix;
+  nixpkgsLibPath = ../../../lib;
   package =
     rustPlatform.buildRustPackage {
       name = "nixpkgs-check-by-name";
@@ -30,6 +31,8 @@ let
         export NIX_STATE_DIR=$TEST_ROOT/var/nix
         export NIX_STORE_DIR=$TEST_ROOT/store
 
+        export NIXPKGS_LIB_PATH=${nixpkgsLibPath}
+
         # Ensure that even if tests run in parallel, we don't get an error
         # We'd run into https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
         nix-store --init
@@ -44,6 +47,7 @@ let
       '';
       passthru.shell = mkShell {
         env.NIX_CHECK_BY_NAME_EXPR_PATH = toString runtimeExprPath;
+        env.NIXPKGS_LIB_PATH = toString nixpkgsLibPath;
         inputsFrom = [ package ];
       };
     };

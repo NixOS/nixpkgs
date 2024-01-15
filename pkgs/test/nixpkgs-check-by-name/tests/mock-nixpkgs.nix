@@ -25,7 +25,7 @@ It returns a Nixpkgs-like function that can be auto-called and evaluates to an a
 let
 
   # Simplified versions of lib functions
-  lib = import ../../../../lib;
+  lib = import <test-nixpkgs/lib>;
 
   # The base fixed-point function to populate the resulting attribute set
   pkgsFun = self: {

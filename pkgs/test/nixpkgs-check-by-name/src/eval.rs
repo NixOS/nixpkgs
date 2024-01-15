@@ -2,6 +2,8 @@ use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
 use crate::structure;
 use crate::validation::{self, Validation::Success};
+use std::collections::HashMap;
+use std::ffi::OsString;
 use std::path::Path;
 
 use anyhow::Context;
@@ -71,7 +73,7 @@ enum CallPackageVariant {
 pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
-    eval_accessible_paths: &[&Path],
+    eval_nix_path: &HashMap<String, PathBuf>,
 ) -> validation::Result<ratchet::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
@@ -120,9 +122,13 @@ pub fn check_values(
         .arg(nixpkgs_path);
 
     // Also add extra paths that need to be accessible
-    for path in eval_accessible_paths {
+    for (name, path) in eval_nix_path {
         command.arg("-I");
-        command.arg(path);
+        let mut name_value = OsString::new();
+        name_value.push(name);
+        name_value.push("=");
+        name_value.push(path);
+        command.arg(name_value);
     }
     command.args(["-I", &expr_path]);
     command.arg(expr_path);
