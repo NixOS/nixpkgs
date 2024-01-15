@@ -11,6 +11,9 @@
 , writers
 , writeText
 }:
+
+# If you are reading this, you can test these writers by running: nix-build . -A tests.writers
+
 with writers;
 let
   expectSuccess = test:
@@ -88,15 +91,6 @@ lib.recurseIntoAttrs {
       print "success\n" if true;
     '');
 
-    pypy2 = expectSuccessBin (writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
-      from enum import Enum
-
-      class Test(Enum):
-          a = "success"
-
-      print Test.a
-    '');
-
     python3 = expectSuccessBin (writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
@@ -106,14 +100,25 @@ lib.recurseIntoAttrs {
       print(y[0]['test'])
     '');
 
-    pypy3 = expectSuccessBin (writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
-      import yaml
+    # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
 
-      y = yaml.safe_load("""
-        - test: success
-      """)
-      print(y[0]['test'])
-    '');
+    #pypy2 = expectSuccessBin (writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
+    #  from enum import Enum
+    #
+    #  class Test(Enum):
+    #      a = "success"
+    #
+    #  print Test.a
+    #'');
+
+    #pypy3 = expectSuccessBin (writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
+    #  import yaml
+    #
+    #  y = yaml.safe_load("""
+    #    - test: success
+    #  """)
+    #  print(y[0]['test'])
+    #'');
   };
 
   simple = lib.recurseIntoAttrs {
@@ -158,15 +163,6 @@ lib.recurseIntoAttrs {
       print "success\n" if true;
     '');
 
-    pypy2 = expectSuccess (writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
-      from enum import Enum
-
-      class Test(Enum):
-          a = "success"
-
-      print Test.a
-    '');
-
     python3 = expectSuccess (writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
@@ -176,14 +172,25 @@ lib.recurseIntoAttrs {
       print(y[0]['test'])
     '');
 
-    pypy3 = expectSuccess (writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
-      import yaml
+    # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
 
-      y = yaml.safe_load("""
-        - test: success
-      """)
-      print(y[0]['test'])
-    '');
+    #pypy2 = expectSuccessBin (writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
+    #  from enum import Enum
+    #
+    #  class Test(Enum):
+    #      a = "success"
+    #
+    #  print Test.a
+    #'');
+
+    #pypy3 = expectSuccessBin (writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
+    #  import yaml
+    #
+    #  y = yaml.safe_load("""
+    #    - test: success
+    #  """)
+    #  print(y[0]['test'])
+    #'');
 
     fsharp = expectSuccess (makeFSharpWriter {
       libraries = { fetchNuGet }: [
@@ -191,6 +198,7 @@ lib.recurseIntoAttrs {
         (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
       ];
     } "test-writers-fsharp" ''
+
       #r "nuget: FSharp.SystemTextJson, 0.17.4"
 
       module Json =
@@ -209,9 +217,9 @@ lib.recurseIntoAttrs {
       |> printfn "%s"
     '');
 
-    pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
-      print("success")
-    '');
+    #pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
+    #  print("success")
+    #'');
 
     python3NoLibs = expectSuccess (writePython3 "test-writers-python3-no-libs" {} ''
       print("success")

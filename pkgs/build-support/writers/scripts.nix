@@ -13,7 +13,7 @@ let
 in
 rec {
   # Base implementation for non-compiled executables.
-  # Takes an interpreter, for example `${pkgs.bash}/bin/bash`
+  # Takes an interpreter, for example `${lib.getExe pkgs.bash}`
   #
   # Examples:
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
@@ -116,7 +116,7 @@ rec {
   #     echo hello world
   #   ''
   writeBash = makeScriptWriter {
-    interpreter = "${pkgs.bash}/bin/bash";
+    interpreter = "${lib.getExe pkgs.bash}";
   };
 
   # Like writeScriptBin but the first line is a shebang to bash
@@ -130,7 +130,7 @@ rec {
   #     echo hello world
   #   ''
   writeDash = makeScriptWriter {
-    interpreter = "${pkgs.dash}/bin/dash";
+    interpreter = "${lib.getExe pkgs.dash}";
   };
 
   # Like writeScriptBin but the first line is a shebang to dash
@@ -144,8 +144,8 @@ rec {
   #     echo hello world
   #   ''
   writeFish = makeScriptWriter {
-    interpreter = "${pkgs.fish}/bin/fish --no-config";
-    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
+    interpreter = "${lib.getExe pkgs.fish} --no-config";
+    check = "${lib.getExe pkgs.fish} --no-config --no-execute";  # syntax check only
   };
 
   # Like writeScriptBin but the first line is a shebang to fish
@@ -175,7 +175,7 @@ rec {
     in makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (_: libraries ))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit strip;
@@ -192,7 +192,7 @@ rec {
   #     echo hello world
   #   ''
   writeNu = makeScriptWriter {
-    interpreter = "${pkgs.nushell}/bin/nu --no-config-file";
+    interpreter = "${lib.getExe pkgs.nushell} --no-config-file";
   };
 
   # Like writeScriptBin but the first line is a shebang to nu
@@ -206,7 +206,7 @@ rec {
   #    puts "hello world"
   #   ''
   writeRuby = makeScriptWriter {
-    interpreter = "${pkgs.ruby}/bin/ruby";
+    interpreter = "${lib.getExe pkgs.ruby}";
   };
 
   writeRubyBin = name:
@@ -219,7 +219,7 @@ rec {
   #    print("hello world")
   #   ''
   writeLua = makeScriptWriter {
-    interpreter = "${pkgs.lua}/bin/lua";
+    interpreter = "${lib.getExe pkgs.lua}";
   };
 
   writeLuaBin = name:
@@ -236,7 +236,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp "$contentPath" tmp.rs
-        PATH=${lib.makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
+        PATH=${lib.makeBinPath [pkgs.gcc]} ${rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
       '';
       inherit strip;
     } name;
@@ -265,7 +265,7 @@ rec {
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
+    exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
@@ -300,7 +300,7 @@ rec {
   #   ''
   writePerl = name: { libraries ? [] }:
     makeScriptWriter {
-      interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
+      interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
     } name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
@@ -316,9 +316,11 @@ rec {
   in
   makeScriptWriter {
     interpreter =
-      if libraries == []
-      then python.interpreter
-      else (python.withPackages (ps: libraries)).interpreter
+      if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
+        if libraries == []
+        then python.interpreter
+        else (python.withPackages (ps: libraries)).interpreter
+      else python.interpreter
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
@@ -398,7 +400,7 @@ rec {
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
       export DOTNET_NOLOGO=1
       script="$1"; shift
-      ${dotnet-sdk}/bin/dotnet fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
+      ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
     '';
 
   in content: makeScriptWriter {
