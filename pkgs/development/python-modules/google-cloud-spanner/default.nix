@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, deprecated
 , fetchPypi
 , google-api-core
 , google-cloud-core
@@ -13,21 +14,27 @@
 , pytestCheckHook
 , pythonOlder
 , sqlparse
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.40.1";
-  format = "setuptools";
+  version = "3.41.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YWsHyGza5seLrSe4qznYznonNRHyuR/iYPFw2SZlPC4=";
+    hash = "sha256-jK2hHdYdxwsEmk/aDp7ArXZwZbhEloqIuLJ2ZwMs9YI=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    deprecated
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
