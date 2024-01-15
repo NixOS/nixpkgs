@@ -1300,11 +1300,6 @@ self: super: {
   dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ] (doJailbreak super.dhall-nixpkgs);
   dhall-yaml = self.generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
 
-  crypton-connection = super.crypton-connection.override {
-    # requires tls >= 1.7
-    tls = self.tls_1_9_0;
-  };
-
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
@@ -2342,8 +2337,6 @@ self: super: {
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_11_0_0;
   };
-
-  nix-tree = super.nix-tree;
 
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
