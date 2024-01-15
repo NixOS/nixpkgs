@@ -26,6 +26,8 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
@@ -33,7 +35,12 @@ buildPythonPackage {
     hash = "sha256-xDUT9GSOn6ZNDFRsFws3NLxBsILKDHPKeEANwM8NXj8=";
   };
 
-  disabled = pythonOlder "3.8";
+  patches = [
+    # The extra dependencies dictionary contains an illegally named entry '_tests'.
+    # The build fails because of this.
+    # Issue has been opened upstream: https://github.com/Lightning-AI/torchmetrics/issues/2305
+    ./0001-remove-illegal-name-from-extra-dependencies.patch
+  ];
 
   propagatedBuildInputs = [
     numpy
