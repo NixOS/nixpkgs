@@ -126,13 +126,6 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  hiedb = overrideCabal (drv: {
-    version = lib.warnIf (lib.versionAtLeast drv.version "0.5.0.0") "hiedb override is obsolete" "0.5.0.0";
-    sha256 = "0szydd6rs2wzir4w60ay7z5lhh8li5rm246w4y2mb068955yjan6";
-    revision = null;
-    editedCabalFile = null;
-  }) super.hiedb;
-
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
