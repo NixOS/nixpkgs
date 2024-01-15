@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ifreund/waylock";
     description = "A small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ jordanisaacs ];
+    maintainers = with lib.maintainers; [ adamcstephens jordanisaacs ];
     mainProgram = "waylock";
     platforms = lib.platforms.linux;
   };
