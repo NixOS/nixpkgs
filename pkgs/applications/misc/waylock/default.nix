@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Q1FlahawsnJ77gP6QVs9AR058rhMU92iueRPudPf+sE=";
+    hash = "sha256-RSAUSlsBB9IphvdSiFqJIvyhhJoAKKb+KyGhdoTa3vs=";
   };
 
   nativeBuildInputs = [

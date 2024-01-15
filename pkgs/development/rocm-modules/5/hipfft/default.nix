@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipFFT";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-fuYRKdlTrRMwxr3cgMeT3YniPzs4nuvF8YCzr3LLPFM=";
@@ -101,10 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "FFT marshalling library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipFFT";
+    homepage = "https://github.com/ROCm/hipFFT";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

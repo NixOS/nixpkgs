@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
   };
 
+  postPatch = ''
+    # not strictly required, causes circular dependency cycle
+    sed -i '/importlib-metadata >= 4.6/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     flit-core
   ];

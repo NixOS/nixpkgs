@@ -14,6 +14,7 @@ let
     cudaVersion
     flags
     libcublas
+    setupCudaHook
     ;
 in
 backendStdenv.mkDerivation {
@@ -35,7 +36,9 @@ backendStdenv.mkDerivation {
   buildInputs =
     lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [
-      libcublas
+      libcublas.dev
+      libcublas.lib
+      libcublas.static
       cuda_cudart
     ]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [cuda_cccl];

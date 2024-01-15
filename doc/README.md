@@ -106,6 +106,19 @@ The following are supported:
 - [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
 - [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
 - [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
+- [`example`](https://tdg.docbook.org/tdg/5.0/example.html)
+
+Example admonitions require a title to work.
+If you don't provide one, the manual won't be built.
+
+```markdown
+::: {.example #ex-showing-an-example}
+
+# Title for this example
+
+Text for the example.
+:::
+```
 
 #### [Definition lists](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md)
 
@@ -139,3 +152,54 @@ watermelon
     Closes #216321.
 
 - If the commit contains more than just documentation changes, follow the commit message format relevant for the rest of the changes.
+
+## Documentation conventions
+
+In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
+In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
+
+- Put each sentence in its own line.
+  This makes reviewing documentation much easier, since GitHub's review system is based on lines.
+
+- Use the admonitions syntax for any callouts and examples (see [section above](#admonitions)).
+
+- If you provide an example involving Nix code, make your example into a fully-working package (something that can be passed to `pkgs.callPackage`).
+  This will help others quickly test that the example works, and will also make it easier if we start automatically testing all example code to make sure it works.
+  For example, instead of providing something like:
+
+  ```
+  pkgs.dockerTools.buildLayeredImage {
+    name = "hello";
+    contents = [ pkgs.hello ];
+  }
+  ```
+
+  Provide something like:
+
+  ```
+  { dockerTools, hello }:
+  dockerTools.buildLayeredImage {
+    name = "hello";
+    contents = [ hello ];
+  }
+  ```
+
+- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments. For example:
+
+  ```markdown
+  # pkgs.coolFunction
+
+  Description of what `coolFunction` does.
+  `coolFunction` expects a single argument which should be an attribute set, with the following possible attributes:
+
+  `name`
+
+  : The name of the resulting image.
+
+  `tag` _optional_
+
+  : Tag of the generated image.
+
+      _Default value:_ the output path's hash.
+
+  ```

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "flet-core";
-  version = "0.15.0";
+  version = "0.18.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "flet_core";
     inherit version;
-    hash = "sha256-nmQHWyLlyo6CVzn+dlTSnA10XRoSFBLEeYdcWpfoGBo=";
+    hash = "sha256-PbAzbDK9DkQBdrym9H3uBvPeeK8Qocq+t8veF+7izOQ=";
   };
 
   nativeBuildInputs = [

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, zlib }:
 stdenv.mkDerivation rec {
-  version = "0.5.1";
+  version = "0.5.3";
   pname = "wiiload";
 
   nativeBuildInputs = [ autoconf automake ];
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "devkitPro";
     repo  = "wiiload";
     rev = "v${version}";
-    sha256 = "0dffy603zggkqv7g1a2jninmi64vy519gpgkdfhjnijhdm9gs5m3";
+    sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
 
   preConfigure = "./autogen.sh";

@@ -618,7 +618,7 @@ let
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = [ pkgs.mpfr.dev ];
+    multibridge = with pkgs; [ pkg-config mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
@@ -1384,6 +1384,13 @@ let
     httpuv = old.httpuv.overrideAttrs (_: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    tesseract = old.tesseract.overrideAttrs (_: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
       '';
     });
 

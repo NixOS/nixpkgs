@@ -4,7 +4,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
-, withKTLS ? false
+, withKTLS ? true
 , withStream ? true
 , withMail ? false
 , withPerl ? true
@@ -204,6 +204,6 @@ stdenv.mkDerivation {
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ fpletz ajs124 raitobezarius ];
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
   };
 }

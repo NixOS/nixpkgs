@@ -20,16 +20,16 @@
 , duplicity
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "45.1";
+  version = "45.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
-    rev = version;
-    hash = "sha256-2vNAppy8fYYcxH3ci4B6bUIl2sO5NC6yA13y9iU4V/A=";
+    rev = finalAttrs.version;
+    hash = "sha256-nscswpWX6UB1zuv6TXcT3YE1wkREJYDGQrEPryyUYUM=";
   };
 
   patches = [
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "deja-dup";
   };
-}
+})

@@ -112,12 +112,11 @@ There's some limitations as to which packages can be defined using this structur
 
 CI performs [certain checks](../test/nixpkgs-check-by-name/README.md#validity-checks) on the `pkgs/by-name` structure.
 This is done using the [`nixpkgs-check-by-name` tool](../test/nixpkgs-check-by-name).
-The version of this tool used is the one that corresponds to the NixOS channel of the PR base branch.
-See [here](../../.github/workflows/check-by-name.yml) for details.
 
-The tool can be run locally using
+You can locally emulate the CI check using
 
-```bash
-nix-build -A tests.nixpkgs-check-by-name
-result/bin/nixpkgs-check-by-name .
 ```
+$ ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh master
+```
+
+See [here](../../.github/workflows/check-by-name.yml) for more info.

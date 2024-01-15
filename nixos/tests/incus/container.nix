@@ -56,6 +56,10 @@ in
           retry(instance_is_up)
         machine.succeed("echo true | incus exec container /run/current-system/sw/bin/bash -")
 
+    with subtest("Container mounts lxcfs overlays"):
+        machine.succeed("incus exec container mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
+        machine.succeed("incus exec container mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
+
     with subtest("Container CPU limits can be managed"):
         set_container("limits.cpu 1")
         cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()

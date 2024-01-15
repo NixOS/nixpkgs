@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  pkgs,
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
@@ -17,13 +16,13 @@ let
   nodejs = nodejs_18;
 
   pname = "audiobookshelf";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lifvfh9dF3Hbgm5NHrzS9zQdv+INSByNkqMWTxTpUMo=";
+    sha256 = "sha256-ROxVAevnxCyND/h1yyXfUeK9v5SEULL8gkR3flTmmW8=";
   };
 
   client = buildNpmPackage {
@@ -37,7 +36,7 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = "sha256-FxP1Kysx3ngk3napZ5uvKSabeOypBtA0kjhyAKpcdo8=";
+    npmDepsHash = "sha256-2t/+IpmgTZglh3SSuYZNUvT1RZCDZGVT2gS57KU1mqA=";
   };
 
   wrapper = import ./wrapper.nix {
@@ -52,7 +51,7 @@ in buildNpmPackage {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
-  npmDepsHash = "sha256-NcurZee1Z8Rvm2UcjvckbdirfgiIkXMx9GKbr4x/HqE=";
+  npmDepsHash = "sha256-1VVFGc4RPE0FHQX1PeRnvU3cAq9eRYGfJ/0GzMy7Fh4=";
 
   installPhase = ''
     mkdir -p $out/opt/client
@@ -69,6 +68,7 @@ in buildNpmPackage {
   meta = with lib; {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${version}";
     license = licenses.gpl3;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;

@@ -15,7 +15,7 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.30.2";
+    version = "0.31.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
@@ -25,10 +25,8 @@ let
       repo = "referencing";
       rev = "refs/tags/v${version}";
       fetchSubmodules = true;
-      hash = "sha256-C2gKjoaMcUWz/QOsqpv4TkozQyI+zEIQf3GMf5w40aw=";
+      hash = "sha256-6Kol8TdOxImRq0aff+aAR/jbDrkHX/EPrIv1ZEMRWZU=";
     };
-
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
     nativeBuildInputs = [
       hatch-vcs

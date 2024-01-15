@@ -12,19 +12,19 @@
 , copyDesktopItems
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
   version = "3.1.45";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI=";
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
         dimensions=''${img#favicon-}
         dimensions=''${dimensions%.png}
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+        cp $img $out/share/icons/hicolor/$dimensions/apps/r2modman.png
       done
     )
 
@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = pname;
-      comment = meta.description;
+      name = "r2modman";
+      exec = "r2modman";
+      icon = "r2modman";
+      desktopName = "r2modman";
+      comment = finalAttrs.meta.description;
       categories = [ "Game" ];
       keywords = [ "launcher" "mod manager" "thunderstore" ];
     })
@@ -107,13 +107,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
     description = "Unofficial Thunderstore mod manager";
     homepage = "https://github.com/ebkr/r2modmanPlus";
-    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aidalgol huantian ];
+    license = lib.licenses.mit;
+    mainProgram = "r2modman";
+    maintainers = with lib.maintainers; [ aidalgol huantian ];
     inherit (electron.meta) platforms;
-    mainProgram = pname;
   };
-}
+})

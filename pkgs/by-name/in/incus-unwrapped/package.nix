@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , acl
 , cowsql
 , hwdata
@@ -16,16 +17,24 @@
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oPBrIN4XUc9GnBszEWAAnEcNahV4hfB48XSKvkpq5Kk=";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
-  vendorHash = "sha256-TwrHWjBd6Hn7CQMxFhHobopeefCvYeDz8fAPYmTKV9M=";
+  vendorHash = "sha256-YfUvkN1qUS3FFKb1wysg40WcJA8fT9SGDChSdT+xnkc=";
+
+  patches = [
+    # remove with > 0.4.0
+    (fetchpatch {
+      url = "https://github.com/lxc/incus/commit/c0200b455a1468685d762649120ce7e2bb25adc9.patch";
+      hash = "sha256-4fiSv6GcsKpdLh3iNbw3AGuDzcw1EadUvxtSjxRjtTA=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -77,8 +86,14 @@ buildGoModule rec {
     '';
 
   postInstall = ''
+    # use custom bash completion as it has extra logic for e.g. instance names
     installShellCompletion --bash --name incus ./scripts/bash/incus
+
+    installShellCompletion --cmd incus \
+      --fish <($out/bin/incus completion fish) \
+      --zsh <($out/bin/incus completion zsh)
   '';
+
 
   passthru = {
     tests.incus = nixosTests.incus;

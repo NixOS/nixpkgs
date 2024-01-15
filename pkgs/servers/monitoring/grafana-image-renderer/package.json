@@ -52,7 +52,7 @@
     "@types/node": "^18.7.18",
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
-    "axios": "0.27.2",
+    "axios": "1.6.0",
     "cross-env": "7.0.3",
     "eslint": "8.23.1",
     "eslint-config-prettier": "8.5.0",

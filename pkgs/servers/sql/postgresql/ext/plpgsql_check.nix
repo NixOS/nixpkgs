@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
 
 stdenv.mkDerivation rec {
-  pname = "plpgsql_check";
-  version = "2.7.0";
+  pname = "plpgsql-check";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "okbob";
-    repo = pname;
+    repo = "plpgsql_check";
     rev = "v${version}";
-    hash = "sha256-DSBr2pmJD/kW1b4nqCTS4KwAAH6eojDmE/RVwvSIAa0=";
+    hash = "sha256-2SOBisIElNqqg5NwFk+pp7sE/+OvTifJUKMWOaOvO3k=";
   };
 
   buildInputs = [ postgresql ];
@@ -18,6 +18,22 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
   '';
+
+  passthru.tests.extension = stdenv.mkDerivation {
+    name = "plpgsql-check-test";
+    dontUnpack = true;
+    doCheck = true;
+    buildInputs = [ postgresqlTestHook ];
+    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.plpgsql_check ])) ];
+    postgresqlTestUserOptions = "LOGIN SUPERUSER";
+    failureHook = "postgresqlStop";
+    checkPhase = ''
+      runHook preCheck
+      psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION plpgsql_check;"
+      runHook postCheck
+    '';
+    installPhase = "touch $out";
+  };
 
   meta = with lib; {
     description = "Linter tool for language PL/pgSQL";

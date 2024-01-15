@@ -522,11 +522,16 @@ let format' = format; in let
     chmod 0644 $efiVars
   '';
 
+  createHydraBuildProducts = ''
+    mkdir -p $out/nix-support
+    echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = moveOrConvertImage + postVM;
+      postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
@@ -616,5 +621,5 @@ let format' = format; in let
 in
   if onlyNixStore then
     pkgs.runCommand name {}
-      (prepareImage + moveOrConvertImage + postVM)
+      (prepareImage + moveOrConvertImage + createHydraBuildProducts + postVM)
   else buildImage

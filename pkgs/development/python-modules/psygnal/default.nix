@@ -11,6 +11,7 @@
 , toolz
 , typing-extensions
 , wrapt
+, attrs
 }:
 
 buildPythonPackage rec {
@@ -26,8 +27,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-eDfGWmTKJrkkzRy1I3wl3WYPCxtPHSRzqAoOiO7QQ9Y=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     hatch-vcs
@@ -45,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     toolz
     wrapt
+    attrs
   ];
 
   pythonImportsCheck = [

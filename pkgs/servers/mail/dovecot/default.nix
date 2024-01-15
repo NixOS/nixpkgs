@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
     mainProgram = "dovecot";
-    maintainers = with maintainers; [ fpletz globin ajs124 ];
+    maintainers = with maintainers; [ fpletz globin ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
   passthru.tests = {

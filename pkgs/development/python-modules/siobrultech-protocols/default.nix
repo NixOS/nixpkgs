@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "siobrultech-protocols";
-  version = "0.13.0";
+  version = "0.14.0";
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6BGhelyv0FoPyGwzgIX5Gbbu9Ks19MtL1AZQRZWKzhM=";
+    hash = "sha256-8tls2wlLA3wQ78gK4JvvhSWZS5oHRzzsKE73M4i1eyg=";
   };
 
   nativeCheckInputs = [

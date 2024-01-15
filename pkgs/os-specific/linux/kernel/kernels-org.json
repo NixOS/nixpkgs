@@ -1,38 +1,38 @@
 {
     "testing": {
-        "version": "6.7-rc6",
-        "hash": "sha256:164jik11lv35jxfbci3vdb413qi241w51jrisilvfqy8ap0ccs4k"
+        "version": "6.7-rc8",
+        "hash": "sha256:02drhwl3f53y97gimgclz61zsa57v29vphkbrzr4cwmz4sh1vngk"
     },
     "6.5": {
         "version": "6.5.13",
         "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.68",
-        "hash": "sha256:1qc4cwqlfni9i6mzh6arghdsd842hp9lb7s832dxw1p261mg4prn"
+        "version": "6.1.72",
+        "hash": "sha256:09h9kzv2xfrn369ynl09dfnjl9025b9vpkcxg75gyp63fy8fdp4q"
     },
     "5.15": {
-        "version": "5.15.143",
-        "hash": "sha256:00lyv7zsj97mkg9i7dkb1a6km22mnr0qr687d9zz4ckjq1pb2sq9"
+        "version": "5.15.146",
+        "hash": "sha256:14nijbspmzd4r38l8cpl4vn9dhawzcfnhyc0gnaxl2m8l9gpm02s"
     },
     "5.10": {
-        "version": "5.10.204",
-        "hash": "sha256:1vnamiyr378q52xgkg7kvpx80zck729dim77vp06a3q6n580g5gz"
+        "version": "5.10.206",
+        "hash": "sha256:0ns8qxcrxj9i76b93xcghl002l8vbkg7ksd435sikig62qr62gf4"
     },
     "5.4": {
-        "version": "5.4.264",
-        "hash": "sha256:1c5n47dq9khb15hz24a000k3hj913vv1dda6famnm8wpjbfr176k"
+        "version": "5.4.266",
+        "hash": "sha256:1dmcn9i3nvf1gldm1a32gnl5ybwbk2lizb3wa4gc06g7dxz2y1ys"
     },
     "4.19": {
-        "version": "4.19.302",
-        "hash": "sha256:1kkkpm34p5rq0iijzrzwaq0cb62w543argargw5p1wzg8803rlsk"
-    },
-    "4.14": {
-        "version": "4.14.333",
-        "hash": "sha256:0j5nrankrhi56qzmyjg1pznqx1zgk5f7cfa154smjbn3zlm7lcv6"
+        "version": "4.19.304",
+        "hash": "sha256:165mljr8v1cf4vf4a4b44hx089rprkssvi2azq5wbxxg3basbind"
     },
     "6.6": {
-        "version": "6.6.7",
-        "hash": "sha256:0hfqdyxl4nqmm4pspfm1ang8616dbsaj0d968c0186ch0738xrhc"
+        "version": "6.6.11",
+        "hash": "sha256:0lhyczcj1fhh52fjf06ikp5yh7kxc1qymsw44rv6v25vc6kfbqmg"
+    },
+    "6.7": {
+        "version": "6.7",
+        "hash": "sha256:0s8hbcsg7fdvspqam8kzcxygjsznr4zfi60nqgc81l3n4m518cgg"
     }
 }

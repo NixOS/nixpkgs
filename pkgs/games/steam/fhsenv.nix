@@ -7,6 +7,11 @@
 , extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap (real default is at usage site)
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
+
+# steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
+# https://github.com/ValveSoftware/steam-for-linux/issues/9121
+, privateTmp ? true # Whether to separate steam's /tmp from the host system
+
 , withGameSpecificLibraries ? true # include game specific libraries
 }@args:
 
@@ -285,9 +290,7 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  # steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
-  # https://github.com/ValveSoftware/steam-for-linux/issues/9121
-  privateTmp = true;
+  inherit privateTmp;
 
   extraPreBwrapCmds = ''
     install -m 1777 -d /tmp/dumps

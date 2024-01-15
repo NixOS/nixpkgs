@@ -25,7 +25,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    go generate ./runtime
+    GOOS= GOARCH= go generate ./runtime
   '';
 
   postInstall = ''

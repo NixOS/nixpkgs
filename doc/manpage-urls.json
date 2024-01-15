@@ -1,5 +1,5 @@
 {
-  "gnunet.conf(5)": "https://docs.gnunet.org/users/configuration.html",
+  "gnunet.conf(5)": "https://docs.gnunet.org/latest/users/configuration.html",
   "mpd(1)": "https://mpd.readthedocs.io/en/latest/mpd.1.html",
   "mpd.conf(5)": "https://mpd.readthedocs.io/en/latest/mpd.conf.5.html",
   "nix.conf(5)": "https://nixos.org/manual/nix/stable/command-ref/conf-file.html",

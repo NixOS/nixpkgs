@@ -1,41 +1,34 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , perl
+, which
 , boost
 , rdkafka
 , jansson
 , curl
 , avro-c
-, avro-cpp }:
+, avro-cpp
+, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "6.2.0";
+  version = "7.5.3";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "194ras18xw5fcnjgg1isnb24ydx9040ndciniwcbdb7w7wd901gc";
+    hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl which ];
 
   buildInputs = [ boost rdkafka jansson curl avro-c avro-cpp ];
 
   makeFlags = [ "GEN_PKG_CONFIG=y" ];
-
-  patches = [
-    # Fix compatibility with Avro master branch
-    (fetchpatch {
-      url = "https://github.com/confluentinc/libserdes/commit/d7a355e712ab63ec77f6722fb5a9e8056e7416a2.patch";
-      sha256 = "14bdx075n4lxah63kp7phld9xqlz3pzs03yf3wbq4nmkgwac10dh";
-    })
-  ];
 
   postPatch = ''
     patchShebangs configure lds-gen.pl
@@ -64,6 +57,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     chmod -x ''${!outputInclude}/include/libserdes/*.h
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";

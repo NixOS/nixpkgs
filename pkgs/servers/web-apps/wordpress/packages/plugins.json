@@ -1,9 +1,9 @@
 {
   "add-widget-after-content": {
-    "path": "add-widget-after-content/tags/2.4.5",
-    "rev": "2844985",
-    "sha256": "17h55fzmssaqv5k2s2a2n5rz49flhzg9gflnps1qpr62apki5156",
-    "version": "2.4.5"
+    "path": "add-widget-after-content/tags/2.4.6",
+    "rev": "3003516",
+    "sha256": "1nqhx66fy82mwcnfg0r9v2mb6q2nnmhxy9j2451rphxhlxxjf1bf",
+    "version": "2.4.6"
   },
   "akismet": {
     "path": "akismet/tags/5.3",
@@ -24,10 +24,10 @@
     "version": "2.21.08.31"
   },
   "breeze": {
-    "path": "breeze/tags/2.0.32",
-    "rev": "2995658",
-    "sha256": "0c0sh7l6cwz6hbc54gjaasdldrv8h6ynx4b75zzkj2arrmyhjjxg",
-    "version": "2.0.32"
+    "path": "breeze/tags/2.1.2",
+    "rev": "3011880",
+    "sha256": "164sf180j99icn39215s997qqmqddyqnkf7k29fwpkgz5ww0zkkd",
+    "version": "2.1.2"
   },
   "co-authors-plus": {
     "path": "co-authors-plus/tags/3.5.15",
@@ -42,10 +42,10 @@
     "version": "3.1.1"
   },
   "cookie-notice": {
-    "path": "cookie-notice/tags/2.4.11.1",
-    "rev": "2974733",
-    "sha256": "0bq6i4s7zkx0x5qb65d93h0sdkd17vka10k8xicfin7qdy5fdcf6",
-    "version": "2.4.11.1"
+    "path": "cookie-notice/tags/2.4.13",
+    "rev": "3002920",
+    "sha256": "0rw511zygmg1i8zp388s4fc526wr4pgszsqxw0bmwia6sjz0a9pn",
+    "version": "2.4.13"
   },
   "disable-xml-rpc": {
     "path": "disable-xml-rpc/tags/1.0.1",
@@ -60,10 +60,10 @@
     "version": "1.4.0"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/17.0.2",
-    "rev": "2995211",
-    "sha256": "07c1smvapzm0gzkjzjk5irnp47x6hl2d4zcmlfprzj17igdqwa5s",
-    "version": "17.0.2"
+    "path": "gutenberg/tags/17.3.0",
+    "rev": "3012944",
+    "sha256": "0n51lldbbk0sfzcjk8mcjnaj6dmhhbg45kc9a03igl6cnppw6g53",
+    "version": "17.3.0"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
@@ -72,16 +72,16 @@
     "version": "1.7.2"
   },
   "hkdev-maintenance-mode": {
-    "path": "hkdev-maintenance-mode/tags/2.4.5",
-    "rev": "2971903",
-    "sha256": "1nq3f0qv8zkws490h86m57972wp7vcngr62x90m8bcq4v6r110wd",
-    "version": "2.4.5"
+    "path": "hkdev-maintenance-mode/trunk",
+    "rev": "3003933",
+    "sha256": "1mfn9njy7sp23hgpd597y74gs52gi9lm8qajv7xbgza82920mlgd",
+    "version": "2.5.0"
   },
   "jetpack": {
-    "path": "jetpack/tags/12.8.1",
-    "rev": "2995420",
-    "sha256": "1i59npwwk29rsq5myl0axr1vsyfw19dyx22ckc2szkc3a4my8h40",
-    "version": "12.8.1"
+    "path": "jetpack/tags/12.9.3",
+    "rev": "3013460",
+    "sha256": "1lgkd3bgaqf155a39zfxx7ikmfxpzfsfak71mrlga12sfmyrrw74",
+    "version": "12.9.3"
   },
   "jetpack-lite": {
     "path": "jetpack-lite/tags/3.0.3",
@@ -90,28 +90,28 @@
     "version": "3.0.3"
   },
   "lightbox-photoswipe": {
-    "path": "lightbox-photoswipe/tags/5.0.44",
-    "rev": "2968868",
-    "sha256": "0nbs05lxdf85ig373l3k558ncw0li1zrqnajq5mw9vkw15mxgy90",
-    "version": "5.0.44"
+    "path": "lightbox-photoswipe/tags/5.1.0",
+    "rev": "3001652",
+    "sha256": "1mdrxc15skbg8gm18b88hj97mps668in7xvyvymfn5sgpf843glz",
+    "version": "5.1.0"
   },
   "login-lockdown": {
-    "path": "login-lockdown/tags/2.06",
-    "rev": "2951219",
-    "sha256": "0sl1pydylz1xpp3404nv2rdw8y2ccjvwglncj8flhjmgiwkjf47x",
-    "version": "2.06"
+    "path": "login-lockdown/tags/2.08",
+    "rev": "3007562",
+    "sha256": "0s9ahqbqcl0rlbbszrbdggyhnqw8k60xzlwq3nzsh2dxaphnmbi5",
+    "version": "2.08"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.36.0",
-    "rev": "2995974",
-    "sha256": "1782z2b1bwg7mx9qzvyzpiymmkqiafd5ymb31q11i7ks19gxlmbw",
-    "version": "4.36.0"
+    "path": "mailpoet/tags/4.40.0",
+    "rev": "3008786",
+    "sha256": "18604065zjwdrr63ad0a8zqy0cdfh8f5i3jyq5na5iayspgmy0lz",
+    "version": "4.40.0"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
-    "rev": "2997367",
-    "sha256": "158i9pqn4qqa5mzn57pg4m9gsln35c0gfb8v7sg1y02hp9876shg",
-    "version": "2.2"
+    "rev": "3007859",
+    "sha256": "1f9ppjkpza5h6z23ma7x9lrpqsq5qxc0n8zfffs44njf086n7k4f",
+    "version": "2.7"
   },
   "opengraph": {
     "path": "opengraph/tags/1.11.2",
@@ -124,6 +124,12 @@
     "rev": "2988106",
     "sha256": "1byq8f5qkxxnhjc4dk1ab7h8vzcr01y1nid81wwj2k1i03z9llqa",
     "version": "1.3.5"
+  },
+  "simple-mastodon-verification": {
+    "path": "simple-mastodon-verification/tags/1.1.3",
+    "rev": "2998678",
+    "sha256": "0ikymrf21l86gpdcjfawadqg1nbfsm6gggcc1g2g553pjg277grz",
+    "version": "1.1.3"
   },
   "static-mail-sender-configurator": {
     "path": "static-mail-sender-configurator/tags/0.10.0",
@@ -138,10 +144,10 @@
     "version": "1.2.3"
   },
   "webp-converter-for-media": {
-    "path": "webp-converter-for-media/tags/5.11.4",
-    "rev": "2995294",
-    "sha256": "0grlszp00rw63psv21n70alapkw1pgaq8cp9c0b1klk50jcnnx8q",
-    "version": "5.11.4"
+    "path": "webp-converter-for-media/tags/5.11.5",
+    "rev": "3006520",
+    "sha256": "1mkfki9148w43r3h8afp1j8vkrljsch68y8l4m6i8w5jsjvb5c18",
+    "version": "5.11.5"
   },
   "webp-express": {
     "path": "webp-express/tags/0.25.8",
@@ -150,16 +156,16 @@
     "version": "0.25.8"
   },
   "wordpress-seo": {
-    "path": "wordpress-seo/tags/21.5",
-    "rev": "2986840",
-    "sha256": "1a1mnsh4imy7ab0b7hp0nis46ixwvj47wgibifa90qndbkv2mwsn",
-    "version": "21.5"
+    "path": "wordpress-seo/tags/21.7",
+    "rev": "3008568",
+    "sha256": "1iigdycbxhdzrprnajw54b1jjmp8akig72z9v78infaf2sjawmgh",
+    "version": "21.7"
   },
   "worker": {
-    "path": "worker/tags/4.9.17",
-    "rev": "2894123",
-    "sha256": "067zx6b8fl87g901vglci870z38kg8igrdxlrcra4xwrll2c01si",
-    "version": "4.9.17"
+    "path": "worker/tags/4.9.18",
+    "rev": "3010154",
+    "sha256": "1wkkabw0g2c9bfqwqddjqrc13wwf39h508bb25cxwz2yi5fdhp9v",
+    "version": "4.9.18"
   },
   "wp-change-email-sender": {
     "path": "wp-change-email-sender/trunk",
@@ -180,22 +186,22 @@
     "version": "2.0.22"
   },
   "wp-mail-smtp": {
-    "path": "wp-mail-smtp/tags/3.10.0",
-    "rev": "2992136",
-    "sha256": "0py4ns4vsy9rpqq5gjyfc2p1lvf2gy28klw9ixkm6gdiim8pvl61",
-    "version": "3.10.0"
+    "path": "wp-mail-smtp/tags/3.11.0",
+    "rev": "3009463",
+    "sha256": "1vk6bdchqka5nmiakq9s8kj7psk2nq2yxln377bidqyqj0q9kqmk",
+    "version": "3.11.0"
   },
   "wp-statistics": {
-    "path": "wp-statistics/tags/14.2",
-    "rev": "2976338",
-    "sha256": "0vcw6qp5w2whbpwcd9m0dpxf4ah0i7snygszp211lqg4g53qbyyv",
-    "version": "14.2"
+    "path": "wp-statistics/tags/14.3.2",
+    "rev": "3013471",
+    "sha256": "03iahbjnyyy1lxvxmfgzzzin0sfng0dyagx0q0bvfa9bqx4pi37h",
+    "version": "14.3.2"
   },
   "wp-swiper": {
     "path": "wp-swiper/trunk",
-    "rev": "2978937",
-    "sha256": "0pn3l5v43hc572bym15pcdirq9n64mdgshacnr92hryq4vagyvzb",
-    "version": "1.0.34"
+    "rev": "3013138",
+    "sha256": "1h5l99m73z7fn0l5sa4qbdpi3r8nanvrbciix5756qj4qbzb51li",
+    "version": "1.1.0"
   },
   "wp-user-avatars": {
     "path": "wp-user-avatars/trunk",
@@ -204,9 +210,9 @@
     "version": "1.4.1"
   },
   "wpforms-lite": {
-    "path": "wpforms-lite/tags/1.8.4.1",
-    "rev": "2982999",
-    "sha256": "08yl41kxxdq36wcrypjrrbmckkpx464sqcarbk7pkzz83933z2pv",
-    "version": "1.8.4.1"
+    "path": "wpforms-lite/tags/1.8.5.3",
+    "rev": "3009465",
+    "sha256": "1xj4wn1zfdjqxh1h6k9xa316276k8n26nmgjfcapwss452qajwkm",
+    "version": "1.8.5.3"
   }
 }

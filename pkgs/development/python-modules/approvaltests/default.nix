@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.1.0";
+  version = "10.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t+Vxo6Pn3b2H3yAg5LGsGTjrZr4MXeGOY2BF9eFFAdE=";
+    hash = "sha256-2NaqqgrHXJovoVExvbr0s86eRbcxy+DUrsdRH/vak3E=";
   };
 
   nativeBuildInputs = [

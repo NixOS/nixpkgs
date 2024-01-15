@@ -6,6 +6,10 @@
 , bubblewrap
 , systemd
 , pandoc
+, kmod
+, gnutar
+, util-linux
+, cpio
 
   # Python packages
 , setuptools
@@ -84,8 +88,12 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    systemdForMkosi
     bubblewrap
+    cpio
+    gnutar
+    kmod
+    systemdForMkosi
+    util-linux
   ] ++ lib.optional withQemu [
     qemu
   ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprint";
-  version = "5.8.1";
+  version = "5.8.3";
 
   src = fetchurl {
     url = "http://www.ishare3d.com/3dapp/public/FlashPrint-5/FlashPrint/flashprint5_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-X5CsJmJa3qGQxdZ1xg3xoVnIaChzxZ/GaLZFqBE2dIk=";
+    hash = "sha256-6vBEthQD0HM2D+l+2dwWmdU+XPJpcvZQM+2GMuaf5Pw=";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapQtAppsHook ];

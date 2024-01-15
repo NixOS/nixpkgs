@@ -9,6 +9,10 @@ What follows is a (very incomplete) overview of available scripts.
 
 ## Metadata
 
+### `check-by-name.sh`
+
+An alias for `pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh`, see [documentation](../../pkgs/test/nixpkgs-check-by-name/scripts/README.md).
+
 ### `get-maintainer.sh`
 
 `get-maintainer.sh [selector] value` returns a JSON object describing

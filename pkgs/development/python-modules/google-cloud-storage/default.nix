@@ -11,20 +11,31 @@
 , protobuf
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.10.0";
-  format = "setuptools";
+  version = "2.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k0sx6tXzmU5TYPn/V1CYLFtrEWBNwHK8RSwlll4Hbcc=";
+    hash = "sha256-9i3Ex7bNQ2DQcuPesoA1+9rUkaw9mwsYFaEtrqEPN8c=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "google-auth"
+  ];
 
   propagatedBuildInputs = [
     google-auth

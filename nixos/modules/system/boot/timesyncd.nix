@@ -46,6 +46,13 @@ with lib;
       wantedBy = [ "sysinit.target" ];
       aliases = [ "dbus-org.freedesktop.timesync1.service" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
+      # systemd-timesyncd disables DNSSEC validation in the nss-resolve module by setting SYSTEMD_NSS_RESOLVE_VALIDATE to 0 in the unit file.
+      # This is required in order to solve the chicken-and-egg problem when DNSSEC validation needs the correct time to work, but to set the
+      # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
+      # In order for nss-resolve to be able to read this environment variable we patch systemd-timesyncd to disable NSCD and use NSS modules directly.
+      # This means that systemd-timesyncd needs to have NSS modules path in LD_LIBRARY_PATH. When systemd-resolved is disabled we still need to set
+      # NSS module path so that systemd-timesyncd keeps using other NSS modules that are configured in the system.
+      environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
       preStart = (
         # Ensure that we have some stored time to prevent

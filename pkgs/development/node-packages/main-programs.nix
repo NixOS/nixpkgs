@@ -9,7 +9,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@antora/cli" = "antora";
   "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";

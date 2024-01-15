@@ -82,7 +82,6 @@ let
             "email" = "someone@nixos.org";
             "phone" = "+31 71 452 5670";
             "country" = "nl";
-            "street" = "Hogeweide 346";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
             "product" = PRODUCT;

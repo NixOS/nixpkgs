@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   libqb,
@@ -22,6 +23,16 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     hash = "sha256-gWvCGSbOuey2ELAPD2WCG4q77IClL0S7rE2RaUJDc1I=";
   };
+
+  patches = [
+    # gcc-13 compatibility upstream fix:
+    #   https://github.com/Cropi/usbguard-notifier/pull/74
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/Cropi/usbguard-notifier/commit/f4586b732c8a7379aacbc9899173beeacfd54793.patch";
+      hash = "sha256-2q/qD6yEQUPxA/UutGIZKFJ3hHJ8ZlGMZI1wJyMRbmo=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
   buildInputs = [ libqb usbguard librsvg libnotify ];

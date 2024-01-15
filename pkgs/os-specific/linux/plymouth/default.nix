@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "unstable-2023-06-17";
+  version = "23.360.11";
 
   outputs = [ "out" "dev" ];
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = "b1d5aa9d2a6033bba52cf63643e5878f8a9b68a0";
-    hash = "sha256-8DXcwt8CZTni5Ma+I63LzNejlIB0Cr1ATA7Nl3z9z6I=";
+    rev = finalAttrs.version;
+    hash = "sha256-Uun4KtrbkFCiGq3WpZlZ8NKKCOnM+jcgYa8qoqAYdaw=";
   };
 
   patches = [

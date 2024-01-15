@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nPk//1MMvtWf2iLZZ/2vJoBdFEJBmy8RBMwSFzfnNT8=";
+    hash = "sha256-Bs/m9Iyr8x+sMUVXt1whk2E4EJ5bpitMsEWZtmCyIf8=";
   };
 
   nativeBuildInputs = [

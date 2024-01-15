@@ -17,7 +17,7 @@ in stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-ARxs/yqyVoIUWliJkINzitumF+64/5u3fbB0tHB5hPU=";
@@ -41,10 +41,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
-    homepage = "https://github.com/RadeonOpenCompute/ROCm-Device-Libs";
+    homepage = "https://github.com/ROCm/ROCm-Device-Libs";
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -19,13 +19,13 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "45.2";
+  version = "45.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/loupe/${lib.versions.major version}/loupe-${version}.tar.xz";
-    hash = "sha256-uLP/rzZXAmsX4E8Z4EDLqNUetNDKtU5CKVsOWlJxwKs=";
+    url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9l8tEgjQhatf+pmN1DyS/pUictTVm1HP7MEevf/KLYY=";
   };
 
   patches = [
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "loupe";
   };
-}
+})

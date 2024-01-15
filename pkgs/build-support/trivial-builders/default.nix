@@ -9,31 +9,41 @@ in
 
 rec {
 
-  /* Run the shell command `buildCommand' to produce a store path named
-   `name'.  The attributes in `env' are added to the environment
-   prior to running the command. By default `runCommand` runs in a
-   stdenv with no compiler environment. `runCommandCC` uses the default
-   stdenv, `pkgs.stdenv`.
+  /*
+    Run the shell command `buildCommand' to produce a store path named `name'.
 
-   Example:
+    The attributes in `env' are added to the environment prior to running the command.
+    Environment variables set by `stdenv.mkDerivation` take precedence.
 
+    By default `runCommand` runs in a stdenv with no compiler environment.
+    `runCommandCC` uses the default stdenv, `pkgs.stdenv`.
 
-   runCommand "name" {envVariable = true;} ''echo hello > $out''
-   runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+    Example:
 
+    ```nix
+    runCommand "name" {envVariable = true;} ''echo hello > $out'';
+    ```
 
-   The `*Local` variants force a derivation to be built locally,
-   it is not substituted.
+    ```nix
+    runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+    ```
 
-   This is intended for very cheap commands (<1s execution time).
-   It saves on the network roundrip and can speed up a build.
+    The `*Local` variants force a derivation to be built locally,
+    it is not substituted.
 
-   It is the same as adding the special fields
+    This is intended for very cheap commands (<1s execution time).
+    It saves on the network roundrip and can speed up a build.
 
-   `preferLocalBuild = true;`
-   `allowSubstitutes = false;`
+    It is the same as adding the special fields
 
-   to a derivation’s attributes.
+    ```nix
+    {
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ```
+
+    to a derivation’s attributes.
   */
   runCommand = name: env: runCommandWith {
     stdenv = stdenvNoCC;
@@ -57,7 +67,8 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
-  /* Generalized version of the `runCommand`-variants
+  /*
+    Generalized version of the `runCommand`-variants
     which does customized behavior via a single
     attribute set passed as the first argument
     instead of having a lot of variants like
@@ -72,36 +83,37 @@ rec {
       defaultStdenv = stdenv;
     in
     {
-    # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
+      # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
       stdenv ? defaultStdenv
-    # whether to build this derivation locally instead of substituting
+      # whether to build this derivation locally instead of substituting
     , runLocal ? false
-    # extra arguments to pass to stdenv.mkDerivation
-    , derivationArgs ? {}
-    # name of the resulting derivation
+      # extra arguments to pass to stdenv.mkDerivation
+    , derivationArgs ? { }
+      # name of the resulting derivation
     , name
-    # TODO(@Artturin): enable strictDeps always
+      # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
-    stdenv.mkDerivation ({
-      enableParallelBuilding = true;
-      inherit buildCommand name;
-      passAsFile = [ "buildCommand" ]
-        ++ (derivationArgs.passAsFile or []);
-    }
-    // lib.optionalAttrs (! derivationArgs?meta) {
-      pos = let args = builtins.attrNames derivationArgs; in
-        if builtins.length args > 0
-        then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
-        else null;
-    }
-    // (lib.optionalAttrs runLocal {
-          preferLocalBuild = true;
-          allowSubstitutes = false;
-       })
-    // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
+      stdenv.mkDerivation ({
+        enableParallelBuilding = true;
+        inherit buildCommand name;
+        passAsFile = [ "buildCommand" ]
+          ++ (derivationArgs.passAsFile or [ ]);
+      }
+      // lib.optionalAttrs (! derivationArgs?meta) {
+        pos = let args = builtins.attrNames derivationArgs; in
+          if builtins.length args > 0
+          then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
+          else null;
+      }
+      // (lib.optionalAttrs runLocal {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+      })
+      // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
 
 
-  /* Writes a text file to the nix store.
+  /*
+    Writes a text file to the nix store.
     The contents of text is added to the file in the store.
 
     Example:
@@ -145,11 +157,13 @@ rec {
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+      {
+        inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        meta = lib.optionalAttrs (executable && matches != null) {
-          mainProgram = lib.head matches;
-        } // meta;
+        meta = lib.optionalAttrs (executable && matches != null)
+          {
+            mainProgram = lib.head matches;
+          } // meta;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -169,20 +183,20 @@ rec {
       '';
 
   /*
-   Writes a text file to nix store with no optional parameters available.
+     Writes a text file to nix store with no optional parameters available.
 
-   Example:
+     Example:
 
 
-   # Writes contents of file to /nix/store/<store path>
-   writeText "my-file"
+     # Writes contents of file to /nix/store/<store path>
+     writeText "my-file"
      ''
      Contents of File
      '';
 
 
   */
-  writeText = name: text: writeTextFile {inherit name text;};
+  writeText = name: text: writeTextFile { inherit name text; };
 
   /*
     Writes a text file to nix store in a specific directory with no
@@ -224,7 +238,7 @@ rec {
 
 
   */
-  writeScript = name: text: writeTextFile {inherit name text; executable = true;};
+  writeScript = name: text: writeTextFile { inherit name text; executable = true; };
 
   /*
     Writes a text file to /nix/store/<store path>/bin/<name> and
@@ -270,7 +284,7 @@ rec {
       text = ''
         #!${runtimeShell}
         ${text}
-        '';
+      '';
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
@@ -292,7 +306,7 @@ rec {
 
 
   */
-  writeShellScriptBin = name : text :
+  writeShellScriptBin = name: text:
     writeTextFile {
       inherit name;
       executable = true;
@@ -300,7 +314,7 @@ rec {
       text = ''
         #!${runtimeShell}
         ${text}
-        '';
+      '';
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
@@ -340,7 +354,7 @@ rec {
     , runtimeInputs ? [ ]
     , meta ? { }
     , checkPhase ? null
-    , excludeShellChecks ? [  ]
+    , excludeShellChecks ? [ ]
     }:
     writeTextFile {
       inherit name meta;
@@ -366,7 +380,7 @@ rec {
         # but we still want to use writeShellApplication on those platforms
         let
           shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
-          excludeOption = lib.optionalString (excludeShellChecks != [  ]) "--exclude '${lib.concatStringsSep "," excludeShellChecks}'";
+          excludeOption = lib.optionalString (excludeShellChecks != [ ]) "--exclude '${lib.concatStringsSep "," excludeShellChecks}'";
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
@@ -385,23 +399,23 @@ rec {
   # Create a C binary
   writeCBin = pname: code:
     runCommandCC pname
-    {
-      inherit pname code;
-      executable = true;
-      passAsFile = ["code"];
-      # Pointless to do this on a remote machine.
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      meta = {
-        mainProgram = pname;
-      };
-    }
-    ''
-      n=$out/bin/${pname}
-      mkdir -p "$(dirname "$n")"
-      mv "$codePath" code.c
-      $CC -x c code.c -o "$n"
-    '';
+      {
+        inherit pname code;
+        executable = true;
+        passAsFile = [ "code" ];
+        # Pointless to do this on a remote machine.
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        meta = {
+          mainProgram = pname;
+        };
+      }
+      ''
+        n=$out/bin/${pname}
+        mkdir -p "$(dirname "$n")"
+        mv "$codePath" code.c
+        $CC -x c code.c -o "$n"
+      '';
 
 
   /* concat a list of files to the nix store.
@@ -532,19 +546,20 @@ rec {
    */
   symlinkJoin =
     args_@{ name
-         , paths
-         , preferLocalBuild ? true
-         , allowSubstitutes ? false
-         , postBuild ? ""
-         , ...
-         }:
+    , paths
+    , preferLocalBuild ? true
+    , allowSubstitutes ? false
+    , postBuild ? ""
+    , ...
+    }:
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
-          inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
-    in runCommand name args
+        inherit preferLocalBuild allowSubstitutes;
+        passAsFile = [ "paths" ];
+      }; # pass the defaults
+    in
+    runCommand name args
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
@@ -584,27 +599,30 @@ rec {
     See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
    */
   linkFarm = name: entries:
-  let
-    entries' =
-      if (lib.isAttrs entries) then entries
-      # We do this foldl to have last-wins semantics in case of repeated entries
-      else if (lib.isList entries) then lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
-      else throw "linkFarm entries must be either attrs or a list!";
+    let
+      entries' =
+        if (lib.isAttrs entries) then entries
+        # We do this foldl to have last-wins semantics in case of repeated entries
+        else if (lib.isList entries) then lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+        else throw "linkFarm entries must be either attrs or a list!";
 
-    linkCommands = lib.mapAttrsToList (name: path: ''
-      mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-      ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
-    '') entries';
-  in
-  runCommand name {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    passthru.entries = entries';
-   } ''
-    mkdir -p $out
-    cd $out
-    ${lib.concatStrings linkCommands}
-  '';
+      linkCommands = lib.mapAttrsToList
+        (name: path: ''
+          mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
+          ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        '')
+        entries';
+    in
+    runCommand name
+      {
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        passthru.entries = entries';
+      } ''
+      mkdir -p $out
+      cd $out
+      ${lib.concatStrings linkCommands}
+    '';
 
   /*
     Easily create a linkFarm from a set of derivations.
@@ -639,7 +657,7 @@ rec {
     bin output and other contents of the package's output (e.g. setup
     hooks) cause trouble when used in your environment.
   */
-  onlyBin = drv: runCommand "${drv.name}-only-bin" {} ''
+  onlyBin = drv: runCommand "${drv.name}-only-bin" { } ''
     mkdir -p $out
     ln -s ${lib.getBin drv}/bin $out/bin
   '';
@@ -675,14 +693,14 @@ rec {
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
           // optionalAttrs (substitutions?passthru)
-            (warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly."
-              substitutions.passthru);
+          (warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly."
+            substitutions.passthru);
       })
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
         recordPropagatedDependencies
-      '' + lib.optionalString (substitutions != {}) ''
+      '' + lib.optionalString (substitutions != { }) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
@@ -691,7 +709,7 @@ rec {
 
   writeReferencesToFile = path: runCommand "runtime-deps"
     {
-      exportReferencesGraph = ["graph" path];
+      exportReferencesGraph = [ "graph" path ];
     }
     ''
       touch $out
@@ -710,7 +728,7 @@ rec {
    */
   writeDirectReferencesToFile = path: runCommand "runtime-references"
     {
-      exportReferencesGraph = ["graph" path];
+      exportReferencesGraph = [ "graph" path ];
       inherit path;
     }
     ''
@@ -744,17 +762,17 @@ rec {
    */
   writeStringReferencesToFile = string:
     /*
-     The basic operation this performs is to copy the string context
-     from `string' to a second string and wrap that string in a
-     derivation. However, that alone is not enough, since nothing in the
-     string refers to the output paths of the derivations/paths in its
-     context, meaning they'll be considered build-time dependencies and
-     removed from the wrapper derivation's closure. Putting the
-     necessary output paths in the new string is however not very
-     straightforward - the attrset returned by `getContext' contains
-     only references to derivations' .drv-paths, not their output
-     paths. In order to "convert" them, we try to extract the
-     corresponding paths from the original string using regex.
+       The basic operation this performs is to copy the string context
+       from `string' to a second string and wrap that string in a
+       derivation. However, that alone is not enough, since nothing in the
+       string refers to the output paths of the derivations/paths in its
+       context, meaning they'll be considered build-time dependencies and
+       removed from the wrapper derivation's closure. Putting the
+       necessary output paths in the new string is however not very
+       straightforward - the attrset returned by `getContext' contains
+       only references to derivations' .drv-paths, not their output
+       paths. In order to "convert" them, we try to extract the
+       corresponding paths from the original string using regex.
     */
     let
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
@@ -798,21 +816,21 @@ rec {
               if lib.elem "out" value.outputs then
                 lib.filter
                   (x: lib.isList x &&
-                      # If the matched path is in `namedOutputPaths`,
-                      # it's a partial match of an output path where
-                      # the output name isn't `out`
-                      lib.all (o: !lib.hasPrefix (lib.head x) o) namedOutputPaths)
+                    # If the matched path is in `namedOutputPaths`,
+                    # it's a partial match of an output path where
+                    # the output name isn't `out`
+                    lib.all (o: !lib.hasPrefix (lib.head x) o) namedOutputPaths)
                   (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name})" string)
               else
-                [])
+                [ ])
             packages);
       allPaths = lib.concatStringsSep "\n" (lib.unique (sources ++ namedOutputPaths ++ outputPaths));
       allPathsWithContext = builtins.appendContext allPaths context;
     in
-      if builtins ? getContext then
-        writeText "string-references" allPathsWithContext
-      else
-        writeDirectReferencesToFile (writeText "string-file" string);
+    if builtins ? getContext then
+      writeText "string-references" allPathsWithContext
+    else
+      writeDirectReferencesToFile (writeText "string-file" string);
 
 
   /* Print an error message if the file with the specified name and
@@ -830,55 +848,59 @@ rec {
     }
 
    */
-  requireFile = { name ? null
-                , sha256 ? null
-                , sha1 ? null
-                , hash ? null
-                , url ? null
-                , message ? null
-                , hashMode ? "flat"
-                } :
-    assert (message != null) || (url != null);
-    assert (sha256 != null) || (sha1 != null) || (hash != null);
-    assert (name != null) || (url != null);
-    let msg =
-      if message != null then message
-      else ''
-        Unfortunately, we cannot download file ${name_} automatically.
-        Please go to ${url} to download it yourself, and add it to the Nix store
-        using either
-          nix-store --add-fixed ${hashAlgo} ${name_}
-        or
-          nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
-      '';
-      hashAlgo = if hash != null then (builtins.head (lib.strings.splitString "-" hash))
-            else if sha256 != null then "sha256"
-            else "sha1";
-      hashAlgo_ = if hash != null then "" else hashAlgo;
-      hash_ = if hash != null then hash
-         else if sha256 != null then sha256
-         else sha1;
-      name_ = if name == null then baseNameOf (toString url) else name;
-    in
-    stdenvNoCC.mkDerivation {
-      name = name_;
-      outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo_;
-      outputHash = hash_;
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      builder = writeScript "restrict-message" ''
-        source ${stdenvNoCC}/setup
-        cat <<_EOF_
+  requireFile =
+    { name ? null
+    , sha256 ? null
+    , sha1 ? null
+    , hash ? null
+    , url ? null
+    , message ? null
+    , hashMode ? "flat"
+    }:
+      assert (message != null) || (url != null);
+      assert (sha256 != null) || (sha1 != null) || (hash != null);
+      assert (name != null) || (url != null);
+      let
+        msg =
+          if message != null then message
+          else ''
+            Unfortunately, we cannot download file ${name_} automatically.
+            Please go to ${url} to download it yourself, and add it to the Nix store
+            using either
+              nix-store --add-fixed ${hashAlgo} ${name_}
+            or
+              nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
+          '';
+        hashAlgo =
+          if hash != null then (builtins.head (lib.strings.splitString "-" hash))
+          else if sha256 != null then "sha256"
+          else "sha1";
+        hashAlgo_ = if hash != null then "" else hashAlgo;
+        hash_ =
+          if hash != null then hash
+          else if sha256 != null then sha256
+          else sha1;
+        name_ = if name == null then baseNameOf (toString url) else name;
+      in
+      stdenvNoCC.mkDerivation {
+        name = name_;
+        outputHashMode = hashMode;
+        outputHashAlgo = hashAlgo_;
+        outputHash = hash_;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        builder = writeScript "restrict-message" ''
+          source ${stdenvNoCC}/setup
+          cat <<_EOF_
 
-        ***
-        ${msg}
-        ***
+          ***
+          ${msg}
+          ***
 
-        _EOF_
-        exit 1
-      '';
-    };
+          _EOF_
+          exit 1
+        '';
+      };
 
 
   /*
@@ -915,39 +937,42 @@ rec {
   applyPatches =
     { src
     , name ? (if builtins.typeOf src == "path"
-              then builtins.baseNameOf src
-              else
-                if builtins.isAttrs src && builtins.hasAttr "name" src
-                then src.name
-                else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
-             ) + "-patched"
-    , patches   ? []
+      then builtins.baseNameOf src
+      else
+        if builtins.isAttrs src && builtins.hasAttr "name" src
+        then src.name
+        else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+      ) + "-patched"
+    , patches ? [ ]
     , postPatch ? ""
     , ...
-    }@args: stdenvNoCC.mkDerivation {
-      inherit name src patches postPatch;
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      phases = "unpackPhase patchPhase installPhase";
-      installPhase = "cp -R ./ $out";
-    }
+    }@args: stdenvNoCC.mkDerivation
+      {
+        inherit name src patches postPatch;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        phases = "unpackPhase patchPhase installPhase";
+        installPhase = "cp -R ./ $out";
+      }
     # Carry `meta` information from the underlying `src` if present.
     // (optionalAttrs (src?meta) { inherit (src) meta; })
     // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
 
   /* An immutable file in the store with a length of 0 bytes. */
-  emptyFile = runCommand "empty-file" {
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
-    preferLocalBuild = true;
-  } "touch $out";
+  emptyFile = runCommand "empty-file"
+    {
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      outputHash = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
+      preferLocalBuild = true;
+    } "touch $out";
 
   /* An immutable empty directory in the store. */
-  emptyDirectory = runCommand "empty-directory" {
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
-    preferLocalBuild = true;
-  } "mkdir $out";
+  emptyDirectory = runCommand "empty-directory"
+    {
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+      preferLocalBuild = true;
+    } "mkdir $out";
 }

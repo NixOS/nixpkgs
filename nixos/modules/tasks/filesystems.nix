@@ -409,7 +409,8 @@ in
             ConditionVirtualization = "!container";
             DefaultDependencies = false; # needed to prevent a cycle
           };
-          before = [ "systemd-pstore.service" ];
+          before = [ "systemd-pstore.service" "shutdown.target" ];
+          conflicts = [ "shutdown.target" ];
           wantedBy = [ "systemd-pstore.service" ];
         };
       };

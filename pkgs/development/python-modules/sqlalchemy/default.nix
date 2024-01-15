@@ -17,7 +17,7 @@
 , aiosqlite
 , asyncmy
 , asyncpg
-, cx_oracle
+, cx-oracle
 , mariadb
 , mypy
 , mysql-connector
@@ -51,6 +51,10 @@ buildPythonPackage rec {
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-ldBn+pdZfqnBKdYkOcG47ScH/hBgeJBeIvn1hCIBw/A=";
   };
+
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
 
   nativeBuildInputs =[
     setuptools
@@ -89,7 +93,7 @@ buildPythonPackage rec {
       mariadb
     ];
     oracle = [
-      cx_oracle
+      cx-oracle
     ];
     oracle_oracledb = [
       oracledb

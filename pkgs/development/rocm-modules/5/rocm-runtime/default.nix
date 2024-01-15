@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-D7Ahan5cxDhqPtV5iDDNys0A4FlxQ9oVRa2EeMoY5Qk=";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'hsa/include/hsa' 'include/hsa'
 
     # We compile clang before rocm-device-libs, so patch it in afterwards
-    # Replace object version: https://github.com/RadeonOpenCompute/ROCR-Runtime/issues/166 (TODO: Remove on LLVM update?)
+    # Replace object version: https://github.com/ROCm/ROCR-Runtime/issues/166 (TODO: Remove on LLVM update?)
     substituteInPlace image/blit_src/CMakeLists.txt \
       --replace '-cl-denorms-are-zero' '-cl-denorms-are-zero --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode' \
       --replace '-mcode-object-version=4' '-mcode-object-version=5'
@@ -69,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Platform runtime for ROCm";
-    homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
+    homepage = "https://github.com/ROCm/ROCR-Runtime";
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -35,7 +35,7 @@
 
 let
   pname = "vector";
-  version = "0.34.1";
+  version = "0.34.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
+    hash = "sha256-XaX6C1kl908MG8SndT2sUDR09qbFCar4G7U7TYlLBR4=";
   };
 
   patches = [ ./vector-pr19075.patch ];

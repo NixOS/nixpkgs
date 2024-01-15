@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "shellingham";
-  version = "1.5.1";
+  version = "1.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7hMlKw9oSGp57FQmbxdAgUsm5cFRr1oTW1ymJyYsgOg=";
+    hash = "sha256-xeBo3Ok+XPrHN4nQd7M8/11leSV/8z1f7Sj33+HFVtQ=";
   };
 
   nativeBuildInputs = [

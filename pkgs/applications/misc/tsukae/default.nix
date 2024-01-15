@@ -17,7 +17,7 @@ buildGoModule rec {
     description = "Show off your most used shell commands.";
     homepage = "https://github.com/irevenko/tsukae";
     license = licenses.mit;
-    mainProgram = pname;
+    mainProgram = "tsukae";
     maintainers = with maintainers; [ l3af ];
   };
 }

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt6";
-  version = "6.6.0";
+  version = "6.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1BUS1mBEwt+cX1FaVqkiFw1oo3s0Bv/dyLStxXGBtXY=";
+    hash = "sha256-nxWKop0gUULFbw810HeEuN8L4oN40gqXvNqL1k/9A3k=";
   };
 
   patches = [

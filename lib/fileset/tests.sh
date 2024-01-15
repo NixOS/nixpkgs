@@ -43,29 +43,17 @@ crudeUnquoteJSON() {
     cut -d \" -f2
 }
 
-prefixExpression() {
-    echo 'let
-      lib =
-        (import <nixpkgs/lib>)
-    '
-    if [[ "${1:-}" == "--simulate-pure-eval" ]]; then
-        echo '
-        .extend (final: prev: {
-          trivial = prev.trivial // {
-            inPureEvalMode = true;
-          };
-        })'
-    fi
-    echo '
-      ;
-      internal = import <nixpkgs/lib/fileset/internal.nix> {
-        inherit lib;
-      };
-    in
-    with lib;
-    with internal;
-    with lib.fileset;'
-}
+prefixExpression='
+  let
+    lib = import <nixpkgs/lib>;
+    internal = import <nixpkgs/lib/fileset/internal.nix> {
+      inherit lib;
+    };
+  in
+  with lib;
+  with internal;
+  with lib.fileset;
+'
 
 # Check that two nix expression successfully evaluate to the same value.
 # The expressions have `lib.fileset` in scope.
@@ -74,7 +62,7 @@ expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
     if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
-        --expr "$(prefixExpression) ($actualExpr)"); then
+        --expr "$prefixExpression ($actualExpr)"); then
         actualExitCode=$?
     else
         actualExitCode=$?
@@ -82,7 +70,7 @@ expectEqual() {
     actualStderr=$(< "$tmp"/actualStderr)
 
     if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
-        --expr "$(prefixExpression) ($expectedExpr)"); then
+        --expr "$prefixExpression ($expectedExpr)"); then
         expectedExitCode=$?
     else
         expectedExitCode=$?
@@ -110,7 +98,7 @@ expectEqual() {
 expectStorePath() {
     local expr=$1
     if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp"/stderr \
-        --expr "$(prefixExpression) ($expr)"); then
+        --expr "$prefixExpression ($expr)"); then
         cat "$tmp/stderr" >&2
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
@@ -123,16 +111,10 @@ expectStorePath() {
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
-    if [[ "$1" == "--simulate-pure-eval" ]]; then
-        maybePure="--simulate-pure-eval"
-        shift
-    else
-        maybePure=""
-    fi
     local expr=$1
     local expectedErrorRegex=$2
     if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
-        --expr "$(prefixExpression $maybePure) $expr"); then
+        --expr "$prefixExpression $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
     stderr=$(<"$tmp/stderr")
@@ -149,12 +131,12 @@ expectTrace() {
     local expectedTrace=$2
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
-        --expr "$(prefixExpression) trace ($expr)" || true
+        --expr "$prefixExpression trace ($expr)" || true
 
     actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
-        --expr "$(prefixExpression) traceVal ($expr)" || true
+        --expr "$prefixExpression traceVal ($expr)" || true
 
     actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
 
@@ -1331,7 +1313,7 @@ expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the 
 expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
 
 # recurseSubmodules = true is not supported on all Nix versions
-if [[ "$(nix-instantiate --eval --expr "$(prefixExpression) (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
+if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
     fetchGitSupportsSubmodules=1
 else
     fetchGitSupportsSubmodules=
@@ -1401,10 +1383,60 @@ createGitRepo() {
     git -C "$1" commit -q --allow-empty -m "Empty commit"
 }
 
-# Check the error message for pure eval mode
+# Check that gitTracked[With] works as expected when evaluated out-of-tree
+
+## First we create a git repositories (and a subrepository) with `default.nix` files referring to their local paths
+## Simulating how it would be used in the wild
 createGitRepo .
-expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTracked ./.; }' 'lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
-expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTrackedWith {} ./.; }' 'lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > default.nix
+git add .
+
+## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./.).outPath'
+
+## We can also evaluate when importing from fetched store paths
+storePath=$(expectStorePath 'builtins.fetchGit ./.')
+expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePath"\"
+
+## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
+expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*\) is a store path within a working tree of a Git repository.
+\s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+\s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+\s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+\s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+
+## Even with submodules
+if [[ -n "$fetchGitSupportsSubmodules" ]]; then
+    ## Both the main repo with the submodule
+    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTrackedWith { recurseSubmodules = true; } ./.; }' > default.nix
+    createGitRepo sub
+    git submodule add ./sub sub >/dev/null
+    ## But also the submodule itself
+    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > sub/default.nix
+    git -C sub add .
+
+    ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
+    expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit { url = ./.; submodules = true; }).outPath'
+    expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./sub).outPath'
+
+    ## We can also evaluate when importing from fetched store paths
+    storePathWithSub=$(expectStorePath 'builtins.fetchGit { url = ./.; submodules = true; }')
+    expectEqual '(import '"$storePathWithSub"' { fs = lib.fileset; }).outPath' \""$storePathWithSub"\"
+    storePathSub=$(expectStorePath 'builtins.fetchGit ./sub')
+    expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$storePathSub"\"
+
+    ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
+    expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
+    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+    expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
+    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+fi
 rm -rf -- *
 
 # Go through all stages of Git files

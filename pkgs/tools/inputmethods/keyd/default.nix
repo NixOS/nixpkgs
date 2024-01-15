@@ -37,7 +37,7 @@ let
       install -Dm555 -t $out/bin scripts/${pname}
     '';
 
-    meta.mainProgram = pname;
+    meta.mainProgram = "keyd-application-mapper";
   };
 
 in
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   passthru.tests.keyd = nixosTests.keyd;
 
   meta = with lib; {
-    description = "A key remapping daemon for linux.";
+    description = "A key remapping daemon for Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
