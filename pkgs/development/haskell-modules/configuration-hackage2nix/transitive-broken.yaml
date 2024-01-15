@@ -984,6 +984,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
+ - crackNum_3_5
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -993,8 +994,6 @@ dont-distribute-packages:
  - crf-chain1-constrained
  - crf-chain2-generic
  - crf-chain2-tiers
- - criu-rpc
- - criu-rpc-types
  - cron-compat
  - crypto-classical
  - crypto-conduit
@@ -1361,7 +1360,6 @@ dont-distribute-packages:
  - flatbuffers
  - flexiwrap
  - flexiwrap-smallcheck
- - flink-statefulfun
  - flite
  - flower
  - flowsim
@@ -3137,11 +3135,7 @@ dont-distribute-packages:
  - prolude
  - proplang
  - prosidyc
- - proto-lens-combinators
  - proto-lens-descriptors
- - proto-lens-protobuf-types
- - proto-lens-protoc
- - proto-lens-setup
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor
@@ -3436,7 +3430,6 @@ dont-distribute-packages:
  - sbv-program
  - sbvPlugin
  - sc2-lowlevel
- - sc2-proto
  - sc2-support
  - sc2hs
  - sc3-rdu
@@ -3516,7 +3509,6 @@ dont-distribute-packages:
  - servant-oauth2-examples
  - servant-openapi3
  - servant-postgresql
- - servant-proto-lens
  - servant-pushbullet-client
  - servant-queryparam-openapi3
  - servant-rate-limit
@@ -3561,7 +3553,6 @@ dont-distribute-packages:
  - sibe
  - sigma-ij
  - signable
- - signable-haskell-protoc
  - signals
  - signature
  - silvi
@@ -3837,8 +3828,6 @@ dont-distribute-packages:
  - telegram-raw-api
  - ten-lens
  - ten-unordered-containers
- - tensorflow-opgen
- - tensorflow-proto
  - terminal-text
  - terrahs
  - test-sandbox-compose
