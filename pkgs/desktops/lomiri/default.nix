@@ -7,6 +7,9 @@ let
   packages = self: let
     inherit (self) callPackage;
   in {
+    #### Core Apps
+    lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
+
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
     suru-icon-theme = callPackage ./data/suru-icon-theme { };

@@ -1,0 +1,63 @@
+From b02fd5f9074d449bd0a60ce18c77735643f35e00 Mon Sep 17 00:00:00 2001
+From: Puna2608 <opna2608@protonmail.com>
+Date: Tue, 14 Mar 2023 18:11:04 +0100
+Subject: [PATCH] Drop deprecated qt5_use_modules
+
+Isn't even getting included correctly here:
+  Unknown CMake command "qt5_use_modules".
+---
+ app/CMakeLists.txt               | 7 ++++++-
+ tests/qtquicktest/CMakeLists.txt | 8 ++++++--
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index 3570b25..e0a7371 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -1,5 +1,10 @@
+ file(GLOB_RECURSE QML_SRCS *.qml *.js *.json *.png)
+ 
++find_package(Qt5Gui REQUIRED)
++find_package(Qt5Qml REQUIRED)
++find_package(Qt5Quick REQUIRED)
++find_package(Qt5Widgets REQUIRED)
++
+ set(terminal_SRCS
+     main.cpp
+     fileio.cpp
+@@ -11,7 +16,7 @@ set(terminal_SRCS
+ 
+ add_executable(lomiri-terminal-app ${terminal_SRCS})
+ 
+-qt5_use_modules(lomiri-terminal-app Gui Qml Quick Widgets)
++target_link_libraries(lomiri-terminal-app Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Widgets)
+ target_link_libraries(lomiri-terminal-app stdc++)
+ 
+ if(NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+diff --git a/tests/qtquicktest/CMakeLists.txt b/tests/qtquicktest/CMakeLists.txt
+index 3feec36..f370fa1 100644
+--- a/tests/qtquicktest/CMakeLists.txt
++++ b/tests/qtquicktest/CMakeLists.txt
+@@ -5,7 +5,11 @@
+ #set(XVFB_RUN_CMD ${XVFB_RUN_BIN} -a -s "-screen 0 1024x768x24")
+ 
+ include(FindPkgConfig)
+-find_package(Qt5Core)
++find_package(Qt5Core REQUIRED)
++find_package(Qt5Qml REQUIRED)
++find_package(Qt5Quick REQUIRED)
++find_package(Qt5Test REQUIRED)
++find_package(Qt5QuickTest REQUIRED)
+ 
+ # copy qml test files to build directory
+ if(NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+@@ -16,5 +20,5 @@ endif(NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+ 
+ set(QTQUICK_TEST tst_qtquicktest)
+ add_executable(${QTQUICK_TEST} qtquicktest.cpp)
+-qt5_use_modules(${QTQUICK_TEST} Core Qml Quick Test QuickTest)
++target_link_libraries(${QTQUICK_TEST} Qt5::Core Qt5::Qml Qt5::Quick Qt5::Test Qt5::QuickTest)
+ #add_test(${QTQUICK_TEST} ${XVFB_RUN_CMD} ${CMAKE_CURRENT_BINARY_DIR}/${QTQUICK_TEST})
+-- 
+2.39.2
+
