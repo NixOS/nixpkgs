@@ -64,6 +64,11 @@ buildPythonPackage rec {
     ./use-dynamic-system-antlr4-runtime.patch
   ];
 
+  # Happy new year
+  postPatch = ''
+    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
+  '';
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-error=incompatible-function-pointer-types"
     "-Wno-error=int-conversion"
