@@ -92,7 +92,7 @@ To use your custom kernel package in your NixOS configuration, set
 boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
 ```
 
-## Rust
+## Rust {#sec-linux-rust}
 
 The Linux kernel does not have Rust language support enabled by
 default. For kernel versions 6.7 or newer, experimental Rust support
