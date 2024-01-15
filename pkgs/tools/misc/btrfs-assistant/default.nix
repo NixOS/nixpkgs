@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-assistant";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitLab {
     owner = "btrfs-assistant";
     repo = "btrfs-assistant";
     rev = finalAttrs.version;
-    hash = "sha256-Ay2wxDVue+tG09RgAo4Zg2ktlq6dk7GdIwAlbuVULB4=";
+    hash = "sha256-a854WI8f9/G/BRU5rn1FKC6WRZyXNYsUL4p258C8ppw=";
   };
 
   nativeBuildInputs = [
