@@ -99,6 +99,8 @@ rustPlatform.buildRustPackage {
     "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
   ];
 
+  patches = [ ./vector-pr19518.patch ];
+
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
   # vector.dev during the checkPhase, which obviously isn't going to work.
   # these tests in the DNS module are trivial though, so stubbing them out is
