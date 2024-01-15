@@ -28,8 +28,8 @@
         "hash": "sha256:165mljr8v1cf4vf4a4b44hx089rprkssvi2azq5wbxxg3basbind"
     },
     "6.6": {
-        "version": "6.6.11",
-        "hash": "sha256:0lhyczcj1fhh52fjf06ikp5yh7kxc1qymsw44rv6v25vc6kfbqmg"
+        "version": "6.6.12",
+        "hash": "sha256:01a6czk6xz9syxvkb2yhbn3vypqy2mnjq7ni84x4nklw7n6frmqz"
     },
     "6.7": {
         "version": "6.7",
