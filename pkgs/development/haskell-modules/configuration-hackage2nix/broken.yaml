@@ -543,7 +543,6 @@ broken-packages:
   - Buster # failure in job https://hydra.nixos.org/build/233214182 at 2023-09-02
   - butter # failure in job https://hydra.nixos.org/build/233212117 at 2023-09-02
   - buttplug-hs-core # failure in job https://hydra.nixos.org/build/233223928 at 2023-09-02
-  - bv-little # failure in job https://hydra.nixos.org/build/233253839 at 2023-09-02
   - bv-sized-lens # failure in job https://hydra.nixos.org/build/233237486 at 2023-09-02
   - byline # failure in job https://hydra.nixos.org/build/233231017 at 2023-09-02
   - bytearray-parsing # failure in job https://hydra.nixos.org/build/233244355 at 2023-09-02
