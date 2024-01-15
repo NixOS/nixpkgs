@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20";
+  version = "2.9.21.20240106";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c7rqaJV1v1uxuRW3g/sFJARMYkKSiu7xrlqeMvB4DT0=";
+    hash = "sha256-DQo1BElxS6KESMTxCgo67Dbp4+/RRQcw4ifhe3BKS+o=";
   };
 
   nativeBuildInputs = [
