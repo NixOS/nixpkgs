@@ -456,6 +456,33 @@
       },
       "name": "netbeans-6-5-keymap"
     },
+    "22282": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-ultimate",
+        "phpstorm",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.11799.306": "https://plugins.jetbrains.com/files/22282/456352/ml-llm-233.11799.306.zip",
+        "233.13135.100": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.103": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.104": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.108": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.68": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.91": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.92": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.93": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip",
+        "233.13135.95": "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip"
+      },
+      "name": "ai-assistant"
+    },
     "22407": {
       "compatible": [
         "clion",
@@ -483,6 +510,8 @@
     "https://plugins.jetbrains.com/files/164/442850/IdeaVim-2.7.5-signed.zip": "sha256-MiF8MVWBEQqupoYyI+QOyXhSvJcoSgptePENByURphI=",
     "https://plugins.jetbrains.com/files/17718/454005/github-copilot-intellij-1.4.5.4049.zip": "sha256-5v8S7j05e7jxpJAqvJbv8MYMDP6ueBQFnXxIjAkBVpg=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/22282/456352/ml-llm-233.11799.306.zip": "sha256-Y7mwWhpo54qVBiQUBplG2f0EB/E+TZ5Ss9Ceyh5TBik=",
+    "https://plugins.jetbrains.com/files/22282/464476/ml-llm-233.13135.116.zip": "sha256-bZJ6eCGhC/d7lzCyB+7T/9YNt/c9WMHiZ5szbZFomwc=",
     "https://plugins.jetbrains.com/files/22407/452893/intellij-rust-233.21799.284.zip": "sha256-NKKCWf0g1k/20f2ZUAWlCT9EojXwUdo8wkozTLKgT14=",
     "https://plugins.jetbrains.com/files/631/456899/python-233.13135.103.zip": "sha256-Y72+0CFzvzZQ2CSYVfT+thFO873hzEyd8nZhG2++x+E=",
     "https://plugins.jetbrains.com/files/6954/459286/kotlin-plugin-232-1.9.22-release-704-IJ10072.27.zip": "sha256-3I/wmEkK+iL0VpwoqRlotI+G8G+sqcGN1MCcab+HX5E=",
