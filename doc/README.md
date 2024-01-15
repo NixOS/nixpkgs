@@ -203,3 +203,7 @@ In that case, please open an issue about the particular documentation convention
       _Default value:_ the output path's hash.
 
   ```
+
+## Getting help
+
+If you need documentation-specific help or reviews, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on your pull request.
