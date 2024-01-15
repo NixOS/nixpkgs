@@ -79,7 +79,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
       maintainers = with maintainers; [ angaz wucke13 ];
-      platforms = platforms.all;
+      platforms = [ "x86_64-linux" ];
     };
   };
   in
