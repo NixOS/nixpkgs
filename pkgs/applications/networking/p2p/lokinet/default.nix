@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGIT_VERSION=v${version}"
-    "-DWITH_BOOTSTRAP=OFF" # we provide bootstrap files manually
+    "-DWITH_BOOTSTRAP=OFF" # already bundled in the executable
     "-DWITH_SETCAP=OFF"
   ];
 

@@ -33387,7 +33387,7 @@ with pkgs;
     portaudio = null;
   };
 
-  lokinet = callPackage ../applications/networking/p2p/lokinet { };
+  lokinet = pin-to-gcc12-if-gcc13 (callPackage ../applications/networking/p2p/lokinet { });
 
   losslesscut-bin = callPackage ../applications/video/losslesscut-bin { };
 

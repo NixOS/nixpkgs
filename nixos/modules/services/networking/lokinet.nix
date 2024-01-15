@@ -110,7 +110,6 @@ in with lib; {
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ln -sf ${cfg.package}/share/bootstrap.signed ${dataDir}
         ${pkgs.coreutils}/bin/install -m 600 ${configFile} ${dataDir}/lokinet.ini
 
         ${optionalString (cfg.settings.network.keyfile != null) ''
