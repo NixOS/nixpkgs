@@ -83,6 +83,11 @@ stdenv.mkDerivation rec {
 
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
 
+    # make the install path match the rpath
+    if [[ -d ''${!outputLib}/lib64 ]]; then
+      mv ''${!outputLib}/lib64 ''${!outputLib}/lib
+      ln -s lib ''${!outputLib}/lib64
+    fi
     fixupPhase
   '';
 
@@ -93,13 +98,5 @@ stdenv.mkDerivation rec {
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;
-    # Downstream we experience:
-    #
-    # https://github.com/NixOS/nixpkgs/issues/239424
-    #
-    # Upstream doesn't have a contact page / Bug tracker, so it's not easy to
-    # notify them about it. Using firejail might help, as some commented
-    # downstream.
-    broken = true;
   };
 }
