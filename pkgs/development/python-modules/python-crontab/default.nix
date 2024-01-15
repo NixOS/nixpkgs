@@ -37,6 +37,7 @@ buildPythonPackage rec {
     "test_03_usage"
     # Test is assuming $CURRENT_YEAR is not a leap year
     "test_19_frequency_at_month"
+    "test_20_frequency_at_year"
   ];
 
   pythonImportsCheck = [
