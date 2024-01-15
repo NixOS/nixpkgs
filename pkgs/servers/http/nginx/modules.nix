@@ -233,14 +233,14 @@ let self = {
 
   echo = rec {
     name = "echo";
-    version = "0.62";
+    version = "0.63";
 
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
       rev = "v${version}";
-      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
+      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
     };
 
     meta = with lib; {
