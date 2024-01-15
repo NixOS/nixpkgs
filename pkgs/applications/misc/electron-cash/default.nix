@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook
-, secp256k1 }:
+, secp256k1, qtwayland }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
@@ -47,6 +47,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
+
+  buildInputs = [ ] ++ lib.optional stdenv.isLinux qtwayland;
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
