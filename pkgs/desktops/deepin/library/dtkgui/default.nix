@@ -12,8 +12,6 @@
 , qtimageformats
 , lxqt
 , librsvg
-, freeimage
-, libraw
 }:
 
 stdenv.mkDerivation rec {
@@ -50,8 +48,6 @@ stdenv.mkDerivation rec {
     qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
