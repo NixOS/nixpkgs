@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, installShellFiles
 }:
 buildGoModule rec {
   pname = "uplosi";
@@ -18,6 +19,15 @@ buildGoModule rec {
   CGO_ENABLED = "0";
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
   flags = [ "-trimpath" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd uplosi \
+      --bash <($out/bin/uplosi completion bash) \
+      --fish <($out/bin/uplosi completion fish) \
+      --zsh <($out/bin/uplosi completion zsh)
+  '';
 
   meta = with lib; {
     description = "Upload OS images to cloud provider";
