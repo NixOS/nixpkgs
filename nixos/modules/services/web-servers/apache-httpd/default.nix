@@ -406,14 +406,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "the Apache HTTP Server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.apacheHttpd;
-        defaultText = literalExpression "pkgs.apacheHttpd";
-        description = lib.mdDoc ''
-          Overridable attribute of the Apache HTTP Server package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "apacheHttpd" { };
 
       configFile = mkOption {
         type = types.path;
@@ -557,14 +550,7 @@ in
         description = lib.mdDoc "Whether to enable the PHP module.";
       };
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = lib.mdDoc ''
-          Overridable attribute of the PHP package to use.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
       enablePerl = mkOption {
         type = types.bool;

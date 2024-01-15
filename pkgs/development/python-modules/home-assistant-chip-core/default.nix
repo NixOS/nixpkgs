@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.6.0";
+  version = "2023.12.0";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -37,11 +37,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-fR+ea25SqOMksBJXgSjuVvv2xSBoadZmPWP0IwxpiMA=";
+        hash = "sha256-mWJ3/IKm/kcNztr7+Q9Rhjka9niGOshLvGShS3ugR6g=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-bRP82jTVSJS46WuO8MVWFvte+2mCOSsGFDBaXdmdPHI=";
+        hash = "sha256-wRJWgT+uycCwNKMgHaiACv1y+AvOLrPOpcm2I8hVAxk=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -78,12 +78,17 @@ buildPythonPackage rec {
     pygobject3
   ];
 
+  pythonNamespaces = [
+    "chip"
+    "chip.clusters"
+  ];
+
   pythonImportsCheck = [
     "chip"
     "chip.ble"
-    # https://github.com/project-chip/connectedhomeip/pull/24376
-    #"chip.configuration"
+    "chip.configuration"
     "chip.discovery"
+    "chip.exceptions"
     "chip.native"
     "chip.storage"
   ];

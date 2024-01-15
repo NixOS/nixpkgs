@@ -463,9 +463,9 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.61+curl-8.0.1"
+version = "0.4.67+curl-8.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14d05c10f541ae6f3bc5b3d923c20001f47db7d5f0b2bc6ad16490133842db79"
+checksum = "3cc35d066510b197a0f72de863736641539957628c8a42e70e27c66849e77c34"
 dependencies = [
  "cc",
  "libc",
@@ -473,7 +473,7 @@ dependencies = [
  "openssl-sys",
  "pkg-config",
  "vcpkg",
- "winapi",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -1772,7 +1772,7 @@ dependencies = [
 
 [[package]]
 name = "rye"
-version = "0.15.2"
+version = "0.16.0"
 dependencies = [
  "age",
  "anyhow",

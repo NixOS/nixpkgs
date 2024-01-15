@@ -67,6 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # Remove support for window shading.
+    # The corresponding key was removed in gsettings-desktop-schemas 45.alpha.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2884
+    #
+    # Fetch the patch from magpie as they share same code base and this feature
+    # is never supported on wayland (note that magpie 0.9.x won't support wayland).
+    # https://github.com/BuddiesOfBudgie/magpie/issues/9
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/magpie/commit/4177c466375462ca8ed8fdb60913df4422f19144.patch";
+      sha256 = "NVx40WDnlUL050D529KVohvNBdVrheXxmJ73U3+KSeQ=";
+    })
   ];
 
   mesonFlags = [
@@ -136,6 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3187
+    substituteInPlace meson.build \
+      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postInstall = ''

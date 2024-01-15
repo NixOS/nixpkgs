@@ -3,6 +3,7 @@
 buildPythonPackage {
   pname = "ptable";
   version = "unstable-2019-06-14";
+  format = "setuptools";
 
   # https://github.com/kxxoling/PTable/issues/27
   src = fetchFromGitHub {

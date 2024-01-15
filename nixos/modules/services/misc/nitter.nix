@@ -54,12 +54,7 @@ in
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
 
-      package = mkOption {
-        default = pkgs.nitter;
-        type = types.package;
-        defaultText = literalExpression "pkgs.nitter";
-        description = lib.mdDoc "The nitter derivation to use.";
-      };
+      package = mkPackageOption pkgs "nitter" { };
 
       server = {
         address = mkOption {
@@ -309,6 +304,23 @@ in
         '';
       };
 
+      guestAccounts = mkOption {
+        type = types.path;
+        default = "/var/lib/nitter/guest_accounts.jsonl";
+        description = lib.mdDoc ''
+          Path to the guest accounts file.
+
+          This file contains a list of guest accounts that can be used to
+          access the instance without logging in. The file is in JSONL format,
+          where each line is a JSON object with the following fields:
+
+          {"oauth_token":"some_token","oauth_token_secret":"some_secret_key"}
+
+          See https://github.com/zedeus/nitter/wiki/Guest-Account-Branch-Deployment
+          for more information on guest accounts and how to generate them.
+        '';
+      };
+
       redisCreateLocally = mkOption {
         type = types.bool;
         default = true;
@@ -338,8 +350,12 @@ in
         after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
+          LoadCredential="guestAccountsFile:${cfg.guestAccounts}";
           StateDirectory = "nitter";
-          Environment = [ "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf" ];
+          Environment = [
+            "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf"
+            "NITTER_ACCOUNTS_FILE=%d/guestAccountsFile"
+          ];
           # Some parts of Nitter expect `public` folder in working directory,
           # see https://github.com/zedeus/nitter/issues/414
           WorkingDirectory = "${cfg.package}/share/nitter";

@@ -16,16 +16,16 @@
 , qemu
 , qemu-utils
 , qtbase
-, qtx11extras
+, qtwayland
+, wrapQtAppsHook
 , slang
 , stdenv
-, wrapQtAppsHook
 , xterm
 }:
 
 let
   pname = "multipass";
-  version = "1.12.1";
+  version = "1.13.0";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
@@ -33,8 +33,8 @@ let
   grpc_src = fetchFromGitHub {
     owner = "CanonicalLtd";
     repo = "grpc";
-    rev = "ba8e7f72a57b9e0b25783a4d3cea58c79379f194";
-    hash = "sha256-DS1UNLCUdbipn5w4p2aVa8LgHHhdJiAfzfEdIXNO69o=";
+    rev = "e3acf245";
+    hash = "sha256-tDc2iGxIV68Yi4RL8ES4yglJNlu8yH6FlpVvZoWjoXk=";
     fetchSubmodules = true;
   };
 in
@@ -46,13 +46,20 @@ stdenv.mkDerivation
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8wRho/ECWxiE6rNqjBzaqFaIdhXzOzFuCcQ4zzfSmb4=";
+    hash = "sha256-DMyIvhlkMuUyOlUw8b4312NUtpK0n8rI8nhoV6Dscyo=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      # Workaround for https://github.com/NixOS/nixpkgs/issues/8567
+      cd $out
+      rm -rf .git
+    '';
   };
 
   patches = [
     ./lxd_socket_path.patch
     ./cmake_no_fetch.patch
+    ./cmake_warning.patch
   ];
 
   postPatch = ''
@@ -97,7 +104,7 @@ stdenv.mkDerivation
     libxml2
     openssl
     qtbase
-    qtx11extras
+    qtwayland
   ];
 
   nativeBuildInputs = [
@@ -127,7 +134,7 @@ stdenv.mkDerivation
   };
 
   meta = with lib; {
-    description = "Ubuntu VMs on demand for any workstation.";
+    description = "Ubuntu VMs on demand for any workstation";
     homepage = "https://multipass.run";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jnsgruk ];

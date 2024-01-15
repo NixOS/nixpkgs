@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
 , cairo, gd, libcerf, pango, readline, zlib
-, withTeXLive ? false, texlive
+, withTeXLive ? false, texliveSmall
 , withLua ? false, lua
 , withCaca ? false, libcaca
 , libX11 ? null
@@ -21,18 +21,18 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.9";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oyigIfU9wFRZvmBmAg6acejqtiVdM4HiJpYSDUZcapc=";
+    sha256 = "sha256-Y1oo8Jk/arDRF54HKtObgTnQf1Ejf4Qdk8bC/0sXWOw=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
-    ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
+    ++ lib.optional withTeXLive texliveSmall
     ++ lib.optional withLua lua
     ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
@@ -88,5 +88,6 @@ in
       url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
     maintainers = with maintainers; [ lovek323 ];
+    mainProgram = "gnuplot";
   };
 }

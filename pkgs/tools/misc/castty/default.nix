@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ iblech ];
     platforms = platforms.unix;
+    mainProgram = "castty";
   };
 }

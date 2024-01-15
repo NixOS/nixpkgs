@@ -1,32 +1,33 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , libxkbcommon
 , pam
 , pkg-config
 , scdoc
 , wayland
 , wayland-protocols
-, zig_0_10
+, zig_0_11
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "0.6.2";
+  version = "0.6.4";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ifreund";
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jl4jSDWvJB6OfBbVXfVQ7gv/aDkN6bBy+/yK+AQDQL0=";
+    hash = "sha256-RSAUSlsBB9IphvdSiFqJIvyhhJoAKKb+KyGhdoTa3vs=";
   };
 
   nativeBuildInputs = [
     pkg-config
     scdoc
     wayland
-    zig_0_10.hook
+    zig_0_11.hook
   ];
 
   buildInputs = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ifreund/waylock";
     description = "A small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ jordanisaacs ];
+    maintainers = with lib.maintainers; [ adamcstephens jordanisaacs ];
     mainProgram = "waylock";
     platforms = lib.platforms.linux;
   };

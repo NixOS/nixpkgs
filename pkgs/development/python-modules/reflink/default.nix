@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "reflink";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

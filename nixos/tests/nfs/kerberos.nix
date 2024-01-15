@@ -1,15 +1,17 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
 let
-  krb5 =
-    { enable = true;
-      domain_realm."nfs.test"   = "NFS.TEST";
+  security.krb5 = {
+    enable = true;
+    settings = {
+      domain_realm."nfs.test" = "NFS.TEST";
       libdefaults.default_realm = "NFS.TEST";
-      realms."NFS.TEST" =
-        { admin_server = "server.nfs.test";
-          kdc = "server.nfs.test";
-        };
+      realms."NFS.TEST" = {
+        admin_server = "server.nfs.test";
+        kdc = "server.nfs.test";
+      };
     };
+  };
 
   hosts =
     ''
@@ -32,7 +34,7 @@ in
 
   nodes = {
     client = { lib, ... }:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -48,7 +50,7 @@ in
       };
 
     server = { lib, ...}:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -128,4 +130,6 @@ in
           expected = ["alice", "users"]
           assert ids == expected, f"ids incorrect: got {ids} expected {expected}"
     '';
+
+  meta.maintainers = [ lib.maintainers.dblsaiko ];
 })

@@ -88,10 +88,10 @@ buildDotnetModule rec {
       binaryNativeCode
     ];
     license = with licenses; [
-      # dotnet code
+      # dotnet code and worldline resampler binary
       mit
-      # worldline resampler
-      unfree
+      # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
+      unfreeRedistributable
     ];
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];

@@ -13,16 +13,17 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , zlib
 , openssl
 , libedit
+, ldns
 , pkg-config
 , pam
 , libredirect
 , etcDir ? null
 , withKerberos ? true
+, withLdns ? true
 , libkrb5
 , libfido2
 , hostname
@@ -64,6 +65,7 @@ stdenv.mkDerivation {
   buildInputs = [ zlib openssl libedit ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos libkrb5
+    ++ lib.optional withLdns ldns
     ++ lib.optional withPAM pam;
 
   preConfigure = ''
@@ -87,6 +89,7 @@ stdenv.mkDerivation {
     ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
     ++ lib.optional stdenv.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
+    ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];

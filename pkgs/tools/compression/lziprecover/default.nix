@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
+    mainProgram = "lziprecover";
   };
 }

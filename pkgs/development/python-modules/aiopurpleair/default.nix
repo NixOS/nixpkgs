@@ -2,8 +2,8 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pydantic
 , pytest-aiohttp
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
-  version = "2022.12.1";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,27 +23,8 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+    hash = "sha256-2Ngo2pvzwcgQvpyW5Q97VQN/tGSVhVJwRj0DMaPn+O4=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/aiopurpleair/pull/207
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/aiopurpleair/commit/8c704c51ea50da266f52a7f53198d29d643b30c5.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pydantic = "^1.10.2"' 'pydantic = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -52,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     pydantic
+    certifi
   ];
 
   __darwinAllowLocalNetworking = true;

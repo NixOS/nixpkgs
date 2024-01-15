@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, buildGoModule
+, buildGo120Module
 , git
 , nodejs
 , protobuf
@@ -25,7 +25,7 @@
 , CoreFoundation
 }:
 let
-  version = "1.10.13";
+  version = "1.10.16";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
@@ -38,7 +38,7 @@ let
     inherit src version;
     cargoBuildFlags = [ "--package" "turborepo-ffi" ];
 
-    cargoHash = "sha256-CIKuW8qKJiqgDBPfuCIBcWUP41BHwAa1m9vmcQ9ZmAY=";
+    cargoHash = "sha256-Mj46yNOYTqt732d7SJ3sAeXbgDkoh7o7S23lKVgpvKY=";
 
     RUSTC_BOOTSTRAP = 1;
     nativeBuildInputs = [
@@ -59,7 +59,7 @@ let
   };
 
 
-  go-turbo = buildGoModule {
+  go-turbo = buildGo120Module {
     inherit src version;
     pname = "go-turbo";
     modRoot = "cli";
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoHash = "sha256-rKdonANA6WvXPMpK8sC95hsX9Yb5zedeBezY4LWzsZE=";
+  cargoHash = "sha256-F+mEDkP7GismosXj+ICJCE4SHhCpWK7FiSyqjJM6LJ4=";
 
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [

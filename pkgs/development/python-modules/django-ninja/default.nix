@@ -13,15 +13,16 @@
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "0.22.2";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
     rev = "v${version}";
-    hash = "sha256-oeisurp9seSn3X/5jFF9DMm9nU6uDYIU1b6/J3o2be0=";
+    hash = "sha256-hF6Z8i8M4mQtVPIupTSEIkJh0i/oMFFuE9PpODxq4fw=";
   };
 
   propagatedBuildInputs = [ django pydantic ];
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/vitalik/django-ninja/releases/tag/v${version}";
     description = "Web framework for building APIs with Django and Python type hints";
-    homepage = "https://django-ninja.rest-framework.com/";
+    homepage = "https://django-ninja.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

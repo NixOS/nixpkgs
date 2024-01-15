@@ -20,7 +20,7 @@ let haskellPackagesOverride = haskellPackages.override {
             hash = "sha256-H6oURBGoQWSOuPhBB+UKg2UarVzXgv1tmfDBLnOtdhU=";
           };
           libraryHaskellDepends = oa.libraryHaskellDepends
-                                  ++ (with haskellPackages;[githash witch]);
+                                  ++ (with haskellPackages;[githash witch tuple]);
         });
       };
     };

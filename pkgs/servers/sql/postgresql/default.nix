@@ -5,6 +5,7 @@ let
       { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
+      , linux-pam
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -23,6 +24,10 @@ let
       , jitSupport ? false
       , nukeReferences, patchelf, llvmPackages
       , makeRustPlatform, buildPgxExtension, cargo, rustc
+
+      # PL/Python
+      , pythonSupport ? false
+      , python3
 
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
@@ -62,7 +67,9 @@ let
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
+      ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
+      ++ lib.optionals stdenv'.isLinux [ linux-pam ]
       ++ lib.optionals (!stdenv'.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [
@@ -95,8 +102,10 @@ let
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
+      ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals stdenv'.hostPlatform.isRiscV [ "--disable-spinlocks" ]
-      ++ lib.optionals jitSupport [ "--with-llvm" ];
+      ++ lib.optionals jitSupport [ "--with-llvm" ]
+      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 
     patches = [
       (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
@@ -105,6 +114,17 @@ let
       ./patches/hardcode-pgxs-path.patch
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
+
+      # Fix build with libxml2 2.12.0 and -Wincompatible-function-pointer-types
+      (if atLeast "16" then
+        # https://www.postgresql.org/message-id/CACpMh%2BDMZVHM%2BiDSyqdcpK8sr7jd_HxxLJRNvGTzcLBE0W07QA%40mail.gmail.com
+        fetchurl {
+          url = "https://www.postgresql.org/message-id/attachment/152769/v1-0001-Make-PostgreSQL-work-with-newer-version-of-libxml.patch";
+          hash = "sha256-1j5mtG++hFmYwfS98PdN1SmNI4T86q4FXvKLz2VeJyg=";
+        }
+      else
+        ./patches/libxml2.12-15.patch
+      )
 
       (substituteAll {
         src = ./locale-binary-path.patch;
@@ -296,6 +316,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
+      changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
@@ -344,57 +365,46 @@ let
   };
 
   mkPackages = self: {
-    # TODO: remove ahead of 23.11 branchoff
-    # "PostgreSQL 11 will stop receiving fixes on November 9, 2023"
-    postgresql_11 = self.callPackage generic {
-      version = "11.21";
-      psqlSchema = "11.1"; # should be 11, but changing it is invasive
-      hash = "sha256-B7CDdHHV3XeyUWazRxjzuhCBa2rWHmkeb8VHzz/P+FA=";
-      this = self.postgresql_11;
-      thisAttr = "postgresql_11";
-      inherit self;
-    };
-
     postgresql_12 = self.callPackage generic {
-      version = "12.16";
+      version = "12.17";
       psqlSchema = "12";
-      hash = "sha256-xfH/96D5Ph7DdGQXsFlCkOzmF7SZXtlbjVJ68LoOOPM=";
+      hash = "sha256-k+jhsjmB1fA8bFdj93soGEwc5NtxlPpGbi7bZdnBxfY=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.12";
+      version = "13.13";
       psqlSchema = "13";
-      hash = "sha256-DaHtzuNRS3vHum268MAEmeisFZBmjoeJxQJTpiSfIYs=";
+      hash = "sha256-ivacJZkEeirSRlZ9aOxBMa7xFpVNjD5GnpeJCAs3pHQ=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.9";
+      version = "14.10";
       psqlSchema = "14";
-      hash = "sha256-sf47qbGn86ljfdFlbf2tKIkBYHP9TTXxO1AUPLu2qO8=";
+      hash = "sha256-yZQxxI6dRwsNCrlG6yFBo80ZEwwvtNxLMoSnd07Mg5k=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.4";
+      version = "15.5";
       psqlSchema = "15";
-      hash = "sha256-uuxaS9xENzNmU7bLXZ7Ym+W9XAxYuU4L7O4KmZ5jyPk=";
+      hash = "sha256-j1OqldeOuOglNupGtoGHeTtCu6O09lqjQvVAsjybEKY=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;
     };
 
     postgresql_16 = self.callPackage generic {
-      version = "16.0";
+      version = "16.1";
       psqlSchema = "16";
-      hash = "sha256-356CPrIjMEROHUjlLMZRNaZSpv2zzjJePwhUkzn1G5k=";
+      hash = "sha256-zjxNhdGbASH+DT+O8fpgH3GYnob4pm99w61UbdVWT+w=";
       this = self.postgresql_16;
       thisAttr = "postgresql_16";
       inherit self;

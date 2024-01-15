@@ -4,33 +4,31 @@ let
   inherit (gdal) pname version;
 
 in
-runCommand "${pname}-tests" {
-  nativeBuildInputs = [ gdal ];
-  meta.timeout = 60;
-} ''
+runCommand "${pname}-tests" { meta.timeout = 60; }
+  ''
     # test version
-    ogrinfo --version \
+    ${gdal}/bin/ogrinfo --version \
       | grep 'GDAL ${version}'
 
-    gdalinfo --version \
+    ${gdal}/bin/gdalinfo --version \
       | grep 'GDAL ${version}'
 
 
     # test formats
-    ogrinfo --formats \
+    ${gdal}/bin/ogrinfo --formats \
       | grep 'GPKG.*GeoPackage'
 
-    gdalinfo --formats \
+    ${gdal}/bin/gdalinfo --formats \
       | grep 'GTiff.*GeoTIFF'
 
 
     # test vector file
     echo -e "Latitude,Longitude,Name\n48.1,0.25,'Test point'" > test.csv
-    ogrinfo ./test.csv
+    ${gdal}/bin/ogrinfo ./test.csv
 
 
     # test raster file
-    gdal_create \
+    ${gdal}/bin/gdal_create \
       -a_srs "EPSG:4326" \
       -of GTiff \
       -ot UInt16 \
@@ -40,7 +38,7 @@ runCommand "${pname}-tests" {
       -co COMPRESS=LZW \
       test.tif
 
-    gdalinfo ./test.tif
+    ${gdal}/bin/gdalinfo ./test.tif
 
     touch $out
   ''

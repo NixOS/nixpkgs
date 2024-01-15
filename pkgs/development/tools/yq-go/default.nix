@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.35.2";
+  version = "4.40.5";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    hash = "sha256-iQJx++MeyXT7hS4NATvzYq+YErTEKYCajAzcn1QIWDU=";
+    hash = "sha256-CCgertXgnA6q259Ngmy4EBD6GDuvSb0bREDddR2ht8E=";
   };
 
-  vendorHash = "sha256-nh7boYBNYvNe+uMxV460bkmWQ61VYuvFYQ5CIaNEv98=";
+  vendorHash = "sha256-SQGJj5syay4LllqmK/cRoZbprgDQhLGdQM3T1m/dZsI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';

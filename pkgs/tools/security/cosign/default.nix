@@ -13,13 +13,13 @@
 }:
 buildGoModule rec {
   pname = "cosign";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VE/rm85KZs3JWMsidIlUGJ9JrtZ4VBI+Go1yujq7z1s=";
+    hash = "sha256-QZWF0ysZFu3rt8dIXb5uddyDhT2FfWUyder8YR2BtQc=";
   };
 
   buildInputs =
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorHash = "sha256-mpT4/BS/NofMueBbwhh4v6pNEONEpWM9RDKuYZ+9BtA=";
+  vendorHash = "sha256-WeNRg3Nw2b6NiV8z7tGZIlWUHZxXuTG7MPF9DgfdmUQ=";
 
   subPackages = [
     "cmd/cosign"
@@ -52,6 +52,7 @@ buildGoModule rec {
     rm pkg/cosign/ctlog_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
     rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
 
   postInstall = ''

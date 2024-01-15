@@ -9,7 +9,6 @@
 , gcr_4
 , libadwaita
 , meson
-, mutter
 , ninja
 , pango
 , pkg-config
@@ -19,14 +18,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "44.1";
+  version = "45";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-c/q8VTzFOz8nzidPB3qnYw9+AkdKfTdUD4AcxyHKrqo=";
+    sha256 = "sha256-MpoeLXGdLfas/E3x5ojJW5Dd3H8XZORtFaBHgRGJXxg=";
   };
 
   patches = [
@@ -36,10 +35,6 @@ stdenv.mkDerivation rec {
   # TODO: switch to substituteAll with placeholder
   # https://github.com/NixOS/nix/issues/1846
   postPatch = ''
-    substituteInPlace src/gnome-shell/extension.js \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
-    substituteInPlace src/gnome-shell/prefs.js \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
@@ -61,7 +56,6 @@ stdenv.mkDerivation rec {
     gtk4
     gcr_4
     libadwaita
-    mutter
     pango
   ];
 
@@ -70,6 +64,20 @@ stdenv.mkDerivation rec {
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
+
+  postInstall = ''
+    # We do not have central location to install typelibs to,
+    # let’s ensure GNOME Shell can still find them.
+    extensionDir="$out/share/gnome-shell/extensions/GPaste@gnome-shell-extensions.gnome.org"
+    mv "$extensionDir/"{extension,.extension-wrapped}.js
+    mv "$extensionDir/"{prefs,.prefs-wrapped}.js
+    substitute "${./wrapper.js}" "$extensionDir/extension.js" \
+      --subst-var-by originalName "extension" \
+      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+    substitute "${./wrapper.js}" "$extensionDir/prefs.js" \
+      --subst-var-by originalName "prefs" \
+      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";

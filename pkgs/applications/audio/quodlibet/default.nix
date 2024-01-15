@@ -66,6 +66,7 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ (with python3.pkgs; [
     sphinx-rtd-theme
     sphinxHook
+    setuptools
   ]);
 
   buildInputs = [

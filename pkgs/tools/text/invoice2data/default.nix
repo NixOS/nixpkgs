@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
-  version = "0.4.2";
+  version = "0.4.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "invoice-x";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ss2h8cg0sga+lzJyQHckrZB/Eb63Oj3FkqmGqWCzCQ8=";
+    hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
   };
 
   patches = [
@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer-six
     pillow
     pyyaml
+    setuptools
   ];
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [

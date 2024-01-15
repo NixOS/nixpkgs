@@ -30,5 +30,6 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "nbxplorer";
   };
 }

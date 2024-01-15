@@ -4,7 +4,7 @@
 , hdf5
 , numpy
 , onnx
-, opencv3
+, opencv4
 , pillow
 , pyaml
 , pyclipper
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     hdf5
     numpy
-    opencv3
+    opencv4
     pillow
     pyaml
     pyclipper

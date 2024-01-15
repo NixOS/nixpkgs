@@ -1,28 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sd";
-  version = "0.7.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c5bsqs6c55x4j640vhzlmbiylhp5agr7lx0jrwcjazfyvxihc01";
+    hash = "sha256-hC4VKEgrAVuqOX7b24XhtrxrnJW5kmlX4E6QbY9H8OA=";
   };
 
-  cargoSha256 = "1iwgy9zzdxay6hb9pz47jchy03jrsy5csxijlq4i228qhqnvq1lr";
+  cargoHash = "sha256-IhCuWCaSU7c7Tot4uvxE7oabY69wDLstuBN35OzkQcU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  preFixup = ''
-    installManPage $releaseDir/build/sd-*/out/sd.1
+  postInstall = ''
+    installManPage gen/sd.1
 
-    installShellCompletion $releaseDir/build/sd-*/out/sd.{bash,fish}
-    installShellCompletion --zsh $releaseDir/build/sd-*/out/_sd
+    installShellCompletion gen/completions/sd.{bash,fish}
+    installShellCompletion --zsh gen/completions/_sd
   '';
 
   meta = with lib; {

@@ -25,9 +25,7 @@ flutter.buildFlutterApplication rec {
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  pubspecLockFile = ./pubspec.lock;
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-RV7NoXJnd1jYGcU5YE0VV7VlMM7bz2JTMJTImOY3m38=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   postPatch = ''
     rm -f pubspec.lock

@@ -6,7 +6,6 @@
 # build-system
 , setuptools
 , setuptools-git-versioning
-, wheel
 
 # dependencies
 , async-timeout
@@ -27,20 +26,19 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.14";
-  format = "pyproject";
+  version = "0.0.15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     rev = "v${version}";
-    hash = "sha256-0c9b571gJXFOAe5ct8O/qy7D6rDosmBHDYEv6odLQ2s=";
+    hash = "sha256-5hA1i2XzKzQDRrZfOaA6I3X7hU+nSd7HpcHHNIzZO7g=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-git-versioning
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -65,6 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
   meta = with lib; {
+    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
     license = licenses.gpl3Only;

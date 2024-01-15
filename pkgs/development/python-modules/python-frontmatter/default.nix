@@ -2,13 +2,14 @@
 
 buildPythonPackage rec {
   pname = "python-frontmatter";
-  version = "1.0.0";
+  version = "1.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eyeseast";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0flyh2pb0z4lq66dmmsgyakvg11yhkp4dk7qnzanl34z7ikp97bx";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lkBCKZ1fZF580+4TnHYkfaGJjsWk7/Ksnk7VagZuef8=";
   };
 
   propagatedBuildInputs = [

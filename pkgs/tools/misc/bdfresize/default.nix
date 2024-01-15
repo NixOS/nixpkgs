@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ malte-v ];
+    mainProgram = "bdfresize";
   };
 }

@@ -12,7 +12,7 @@ in {
       description = lib.mdDoc "User account under which Kavita runs.";
     };
 
-    package = lib.mkPackageOptionMD pkgs "kavita" { };
+    package = lib.mkPackageOption pkgs "kavita" { };
 
     dataDir = lib.mkOption {
       default = "/var/lib/kavita";

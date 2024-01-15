@@ -193,8 +193,12 @@ in
         source = "${pkgs.duo-unix.out}/bin/login_duo";
       };
 
-    system.activationScripts = {
-      login_duo = mkIf cfg.ssh.enable ''
+    systemd.services.login-duo = lib.mkIf cfg.ssh.enable {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      script = ''
         if test -f "${cfg.secretKeyFile}"; then
           mkdir -m 0755 -p /etc/duo
 
@@ -209,7 +213,14 @@ in
           mv -fT "$conf" /etc/duo/login_duo.conf
         fi
       '';
-      pam_duo = mkIf cfg.pam.enable ''
+    };
+
+    systemd.services.pam-duo = lib.mkIf cfg.ssh.enable {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      script = ''
         if test -f "${cfg.secretKeyFile}"; then
           mkdir -m 0755 -p /etc/duo
 

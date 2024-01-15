@@ -28,9 +28,7 @@ buildDartApplication rec {
     hash = "sha256-kn3cwi1k2CkzbS+Q/JaYy8Nq3Ej0GyWifG1Bq5ZEVHA=";
   };
 
-  pubspecLockFile = ./pubspec.lock;
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-PQvY+qFXovSXH5wuc60wCrt5RiooKcaGKYzbjKSvqso=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   nativeBuildInputs = [
     buf
@@ -64,17 +62,18 @@ buildDartApplication rec {
       expected = writeText "expected" ''
         body h1{color:#123}
       '';
-      actual = runCommand "actual" {
-        nativeBuildInputs = [ dart-sass ];
-        base = writeText "base" ''
-          body {
-            $color: #123;
-            h1 {
-              color: $color;
+      actual = runCommand "actual"
+        {
+          nativeBuildInputs = [ dart-sass ];
+          base = writeText "base" ''
+            body {
+              $color: #123;
+              h1 {
+                color: $color;
+              }
             }
-          }
-        '';
-      } ''
+          '';
+        } ''
         dart-sass --style=compressed $base > $out
       '';
     };

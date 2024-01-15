@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dlanger/inlinestyler";
     changelog = "https://github.com/dlanger/inlinestyler/blob/${src.rev}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

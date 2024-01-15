@@ -47,12 +47,8 @@ in {
   options.services.dockerRegistry = {
     enable = mkEnableOption (lib.mdDoc "Docker Registry");
 
-    package = mkOption {
-      type = types.package;
-      description = mdDoc "Which Docker registry package to use.";
-      default = pkgs.docker-distribution;
-      defaultText = literalExpression "pkgs.docker-distribution";
-      example = literalExpression "pkgs.gitlab-container-registry";
+    package = mkPackageOption pkgs "docker-distribution" {
+      example = "gitlab-container-registry";
     };
 
     listenAddress = mkOption {

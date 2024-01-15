@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "A fast and simple multimedia fileserver";
     license = licenses.mit;
     maintainers = with maintainers; [ dsymbol ];
+    mainProgram = "gossa";
   };
 }

@@ -71,4 +71,7 @@
   # mismatching expecation on the new commandline
   "test_manim_new_command"
 
+  # This tests checks if the manim executable is a python script. In our case it is not.
+  # It is a wrapper shell script instead.
+  "test_manim_checkhealth_subcommand"
 ]

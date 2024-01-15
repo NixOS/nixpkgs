@@ -9,9 +9,10 @@
     "lint": "vue-cli-service lint"
   },
   "resolutions": {
-    "@achrinza/node-ipc": "^10.1.9"
+    "@achrinza/node-ipc": "^10.1.10"
   },
   "dependencies": {
+    "@achrinza/node-ipc": "^10.1.10",
     "@mdi/font": "^5.8.55",
     "@nuintun/qrcode": "^3.3.0",
     "@vue/babel-preset-app": "^4.2.2",

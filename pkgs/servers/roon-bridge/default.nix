@@ -78,5 +78,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "RoonBridge";
   };
 }

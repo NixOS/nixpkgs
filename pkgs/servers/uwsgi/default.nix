@@ -24,13 +24,13 @@ let
   };
 
   pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-    interpreter = pkg.pythonForBuild.interpreter;
+    interpreter = pkg.pythonOnBuildForHost.interpreter;
     path = "plugins/python";
     inputs = [ pkg ncurses ];
     install = ''
       install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-      ${pkg.pythonForBuild.executable} -m compileall $out/${pkg.sitePackages}/
-      ${pkg.pythonForBuild.executable} -O -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -O -m compileall $out/${pkg.sitePackages}/
     '';
   };
 
@@ -71,13 +71,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.22";
+  version = "2.0.23";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     rev = finalAttrs.version;
-    hash = "sha256-pfy3EDXq3KVY2mC3BMAp/87IUiP4NhdTWZo+zVBJ+Pc=";
+    hash = "sha256-gyYsgPF6eGa3D7bjmhhVER+uM0yPLfZiwSUzZ2mGcHg=";
   };
 
   patches = [
@@ -168,5 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ abbradar schneefux globin ];
     platforms = lib.platforms.unix;
+    mainProgram = "uwsgi";
   };
 })

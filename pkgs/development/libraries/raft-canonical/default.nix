@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wucke13 adamcstephens ];
+    maintainers = teams.lxc.members;
   };
 }

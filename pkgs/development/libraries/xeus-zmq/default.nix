@@ -13,13 +13,13 @@
 
 clangStdenv.mkDerivation rec {
   pname = "xeus-zmq";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
     repo = "xeus-zmq";
     rev = "${version}";
-    hash = "sha256-sfGXo6CPJu5TJrkecLLoaQxrGaJbeQG+QiCkltAwuI8=";
+    hash = "sha256-xavomnqQh5aMrBEyeuwoxrTjsw8wRof3+qxKOsrXqiQ=";
   };
 
   nativeBuildInputs = [ cmake ];

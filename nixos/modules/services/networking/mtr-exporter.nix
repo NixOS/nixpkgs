@@ -5,7 +5,7 @@ let
     maintainers types literalExpression
     escapeShellArg escapeShellArgs
     mkEnableOption mkOption mkRemovedOptionModule mkIf mdDoc
-    optionalString concatMapStrings concatStringsSep;
+    mkPackageOption optionalString concatMapStrings concatStringsSep;
 
   cfg = config.services.mtr-exporter;
 
@@ -44,19 +44,9 @@ in {
           '';
         };
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.mtr-exporter;
-          defaultText = literalExpression "pkgs.mtr-exporter";
-          description = mdDoc "The MTR exporter package to use.";
-        };
+        package = mkPackageOption pkgs "mtr-exporter" { };
 
-        mtrPackage = mkOption {
-          type = types.package;
-          default = pkgs.mtr;
-          defaultText = literalExpression "pkgs.mtr";
-          description = mdDoc "The MTR package to use.";
-        };
+        mtrPackage = mkPackageOption pkgs "mtr" { };
 
         jobs = mkOption {
           description = mdDoc "List of MTR jobs. Will be added to /etc/mtr-exporter.conf";

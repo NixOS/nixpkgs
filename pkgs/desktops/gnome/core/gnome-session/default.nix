@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , substituteAll
@@ -32,13 +31,13 @@
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "44.0";
+  version = "45.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "zPgpqWUmE16en5F1JlFdNqUJK9+jFvNzfdjFpSTb8sY=";
+    sha256 = "cG0v/KysOFU6PAGFeT9aK0qslAu154nZU8mAgWO+8vE=";
   };
 
   patches = [
@@ -47,12 +46,6 @@ stdenv.mkDerivation rec {
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       bash = "${bash}/bin/bash";
-    })
-    # See #226355. Can be removed on update to v45.
-    (fetchpatch {
-      name = "fix-gnome-boxes-crash.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-session/commit/fab1a3b91677035d541de2c141f8073c4057342c.patch";
-      hash = "sha256-2xeoNgV8UDexkufXDqimAplX0GC99tUWUqjw3kfN+5Q=";
     })
   ];
 

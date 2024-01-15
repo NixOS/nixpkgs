@@ -2,6 +2,7 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
+, fetchpatch
 , appdirs
 , cffi
 , decorator
@@ -33,6 +34,14 @@ in buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-IgF078qQDp1d5a7yqht3pvJVBQHekrA1qRATrq5NTF4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-conditions-for-CL_UNORM_INT24-availability.patch";
+      url = "https://github.com/inducer/pyopencl/pull/706.patch";
+      hash = "sha256-31aiqYlhbEw3F2k/x3W2rbOX0A90cHwIlfXMivFucMA=";
+    })
+  ];
 
   nativeBuildInputs = [
     oldest-supported-numpy

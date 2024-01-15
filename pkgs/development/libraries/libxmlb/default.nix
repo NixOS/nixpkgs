@@ -13,11 +13,12 @@
 , shared-mime-info
 , nixosTests
 , xz
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.10";
+  version = "0.3.14";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "sha256-uitnVqR2VVNAf8H1Q/u6LezhvfQJ/G2bE0Dv9dyP8+A=";
+    hash = "sha256-lpVXl/n/ecDLbbLQg9T+o4GdGZM7pNXGYTyVogNCl2E=";
   };
 
   patches = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     xz
+    zstd
   ];
 
   mesonFlags = [

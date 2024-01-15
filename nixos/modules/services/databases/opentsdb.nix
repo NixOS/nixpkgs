@@ -17,14 +17,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "OpenTSDB");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentsdb;
-        defaultText = literalExpression "pkgs.opentsdb";
-        description = lib.mdDoc ''
-          OpenTSDB package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "opentsdb" { };
 
       user = mkOption {
         type = types.str;

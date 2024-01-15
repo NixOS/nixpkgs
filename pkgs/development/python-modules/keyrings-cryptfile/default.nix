@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/frispete/keyrings.cryptfile";
     changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = teams.chia.members;
+    maintainers = [ maintainers.lourkeur ];
   };
 }

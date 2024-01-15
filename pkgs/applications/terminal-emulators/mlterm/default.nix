@@ -165,6 +165,10 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "-m 4755 -o root" " "
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types";
+  };
+
   configureFlags = [
     (withFeaturesList "type-engines" enableTypeEngines)
     (withFeaturesList "tools" enableTools)

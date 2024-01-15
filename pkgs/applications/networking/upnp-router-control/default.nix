@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upnp-router-control";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchzip {
     url = "https://launchpad.net/upnp-router-control/trunk/${version}/+download/upnp-router-control-${version}.tar.xz";
-    hash = "sha256-d5NmA1tOQtYPjGXYfH0p9CCnWM+aVTX2KuV36QCDxd8=";
+    hash = "sha256-28F/OB2fHemn7HLVFEDmefRA5AsEaQKy+Qbcv75z9w0=";
   };
 
   nativeBuildInputs = [
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "upnp-router-control";
   };
 }

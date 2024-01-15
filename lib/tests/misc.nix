@@ -191,6 +191,11 @@ runTests {
     expected = "a\nb\nc\n";
   };
 
+  testReplicateString = {
+    expr = strings.replicate 5 "hello";
+    expected = "hellohellohellohellohello";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -645,6 +650,28 @@ runTests {
     expected = [2 30 40 42];
   };
 
+  testSortOn = {
+    expr = sortOn stringLength [ "aa" "b" "cccc" ];
+    expected = [ "b" "aa" "cccc" ];
+  };
+
+  testSortOnEmpty = {
+    expr = sortOn (throw "nope") [ ];
+    expected = [ ];
+  };
+
+  testSortOnIncomparable = {
+    expr =
+      map
+        (x: x.f x.ok)
+        (sortOn (x: x.ok) [
+          { ok = 1; f = x: x; }
+          { ok = 3; f = x: x + 3; }
+          { ok = 2; f = x: x; }
+        ]);
+    expected = [ 1 2 6 ];
+  };
+
   testReplicate = {
     expr = replicate 3 "a";
     expected = ["a" "a" "a"];
@@ -668,6 +695,51 @@ runTests {
   testHasAttrByPathFalse = {
     expr = hasAttrByPath ["a" "b"] { a = { c = "yey"; }; };
     expected = false;
+  };
+
+  testHasAttrByPathNonStrict = {
+    expr = hasAttrByPath [] (throw "do not use");
+    expected = true;
+  };
+
+  testLongestValidPathPrefix_empty_empty = {
+    expr = attrsets.longestValidPathPrefix [ ] { };
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_empty_nonStrict = {
+    expr = attrsets.longestValidPathPrefix [ ] (throw "do not use");
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero = {
+    expr = attrsets.longestValidPathPrefix [ "a" (throw "do not use") ] { d = null; };
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero_b = {
+    expr = attrsets.longestValidPathPrefix [ "z" "z" ] "remarkably harmonious";
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_one = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a = null; };
+    expected = [ "a" ];
+  };
+
+  testLongestValidPathPrefix_two = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b = null; };
+    expected = [ "a" "b" ];
+  };
+
+  testLongestValidPathPrefix_three = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c = null; };
+    expected = [ "a" "b" "c" ];
+  };
+
+  testLongestValidPathPrefix_three_extra = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c.d = throw "nope"; };
+    expected = [ "a" "b" "c" ];
   };
 
   testFindFirstIndexExample1 = {
@@ -719,6 +791,15 @@ runTests {
   testFindFirstExample2 = {
     expr = lists.findFirst (x: x > 9) 7 [ 1 6 4 ];
     expected = 7;
+  };
+
+  testAllUnique_true = {
+    expr = allUnique [ 3 2 4 1 ];
+    expected = true;
+  };
+  testAllUnique_false = {
+    expr = allUnique [ 3 2 3 4 ];
+    expected = false;
   };
 
 # ATTRSETS
@@ -815,6 +896,26 @@ runTests {
       bar = 3;     # 'bar' from the first set
       baz = 4;     # 'baz' from the second set
     };
+  };
+
+  testMatchAttrsMatchingExact = {
+    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMismatch = {
+    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expected = false;
+  };
+
+  testMatchAttrsMatchingImplicit = {
+    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMissingAttrs = {
+    expr = matchAttrs { cpu = {}; } { };
+    expected = false;
   };
 
   testOverrideExistingEmpty = {
@@ -1858,6 +1959,18 @@ runTests {
     expr = (with types; int).description;
     expected = "signed integer";
   };
+  testTypeDescriptionIntsPositive = {
+    expr = (with types; ints.positive).description;
+    expected = "positive integer, meaning >0";
+  };
+  testTypeDescriptionIntsPositiveOrEnumAuto = {
+    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
+  };
+  testTypeDescriptionListOfPositive = {
+    expr = (with types; listOf ints.positive).description;
+    expected = "list of (positive integer, meaning >0)";
+  };
   testTypeDescriptionListOfInt = {
     expr = (with types; listOf int).description;
     expected = "list of signed integer";
@@ -1905,5 +2018,86 @@ runTests {
   testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
+  };
+
+# Meta
+  testGetExe'Output = {
+    expr = getExe' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "executable";
+    expected = "somelonghash/bin/executable";
+  };
+
+  testGetExeOutput = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExe'FailureFirstArg = testingThrow (
+    getExe' "not a derivation" "executable"
+  );
+
+  testGetExe'FailureSecondArg = testingThrow (
+    getExe' { type = "derivation"; } "dir/executable"
+  );
+
+  testPlatformMatch = {
+    expr = meta.platformMatch { system = "x86_64-linux"; } "x86_64-linux";
+    expected = true;
+  };
+
+  testPlatformMatchAttrs = {
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expected = true;
+  };
+
+  testPlatformMatchNoMatch = {
+    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expected = false;
+  };
+
+  testPlatformMatchMissingSystem = {
+    expr = meta.platformMatch { } "x86_64-linux";
+    expected = false;
+  };
+
+  testPackagesFromDirectoryRecursive = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
+  # Check that `packagesFromDirectoryRecursive` can process a directory with a
+  # top-level `package.nix` file into a single package.
+  testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory/c;
+    };
+    expected = "c";
   };
 }

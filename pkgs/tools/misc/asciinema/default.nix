@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "asciinema";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     rev = "v${version}";
-    hash = "sha256-1B2A2lfLeDHgD4tg3M5IIyHxBQ0cHuWDrQ3bUKAIFlc=";
+    hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,6 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ eclairevoyant ];
     platforms = lib.platforms.all;
-    mainProgram = pname;
+    mainProgram = "asciinema";
   };
 }

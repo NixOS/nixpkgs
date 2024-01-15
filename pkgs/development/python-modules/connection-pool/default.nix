@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "connection-pool";
   version = "0.0.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

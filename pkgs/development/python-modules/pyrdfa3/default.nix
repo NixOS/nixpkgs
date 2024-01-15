@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pyrdfa3";
   version = "3.5.3";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

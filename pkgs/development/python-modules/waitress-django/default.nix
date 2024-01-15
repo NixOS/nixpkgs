@@ -3,6 +3,7 @@
 buildPythonPackage {
   pname = "waitress-django";
   version = "1.0.0";
+  format = "setuptools";
 
   src = ./.;
   pythonPath = [ django waitress ];

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
   version = "1.14.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";

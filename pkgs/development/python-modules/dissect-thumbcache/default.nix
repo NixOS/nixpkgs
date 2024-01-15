@@ -12,9 +12,9 @@
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
   version = "1.6";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -22,8 +22,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-q35VL3BUZrxNBB5mHegqVObG76BYG4FAk/KIAvdm6B8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

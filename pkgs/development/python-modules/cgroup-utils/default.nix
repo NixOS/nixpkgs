@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.8";
+  format = "setuptools";
   pname = "cgroup-utils";
 
   buildInputs = [ pep8 nose ];

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , flit-core
-, z3
+, z3-solver
 , astroid
 , pytestCheckHook
 , hypothesis
@@ -28,9 +28,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Use upstream z3 implementation
     substituteInPlace pyproject.toml \
-      --replace "\"z3-solver\"," "" \
       --replace "\"--cov=deal_solver\"," "" \
       --replace "\"--cov-report=html\"," "" \
       --replace "\"--cov-report=xml\"," "" \
@@ -39,9 +37,9 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    z3
+    z3-solver
     astroid
-  ] ++ z3.requiredPythonModules;
+  ] ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -41,5 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/openconfig/gnmic/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ vincentbernat ];
+    mainProgram = "gnmic";
   };
 }

@@ -12,9 +12,9 @@
 buildPythonPackage rec {
   pname = "dissect-evidence";
   version = "3.7";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
@@ -22,8 +22,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-b7Ls3Xfd0scMe/gccjvRfuADITnz5QpJNLUaIgmZtpI=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

@@ -143,17 +143,6 @@ index 710e070b..fd1352f6 100644
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../serial_exposer.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../registry_counters_reset.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../fix_old_distros.patch
-@@ -321,10 +289,6 @@ prometheus-cpp: prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a
- 
- 
- re2/re2/obj/libre2.a:
--	cd re2 && rm -rf re2-*/ || true
--	cd re2 && tar -zxf re2-*.tar.gz
--#	cd re2/re2 && sed -i -e 's/-O3 -g /-O3 -fPIC /' Makefile
--#	cd re2/re2 && patch util/mutex.h < ../mutex.h.patch
- 	cd re2/re2 && patch re2/onepass.cc < ../onepass.cc-multiplication-overflow.patch
- ifeq ($(UNAME_S),Darwin)
- 	cd re2/re2 && sed -i '' -e 's/-O3 -g/-O3 -g -std=c++11 -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' Makefile
 @@ -339,8 +303,6 @@ re2: re2/re2/obj/libre2.a
  
  

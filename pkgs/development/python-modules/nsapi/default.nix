@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "nsapi";
   version = "3.0.5";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

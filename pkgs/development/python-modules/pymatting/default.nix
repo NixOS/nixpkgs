@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "pymatting";
-  version = "1.1.2";
+  version = "1.1.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    rev = "v${version}";
-    hash = "sha256-9eRpsWwXAkp6aw1ZWJsUFf0BMIN0UBFc2rW1lltL2cw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
   };
 
   patches = [ ./01-kdtree-signature.patch ];

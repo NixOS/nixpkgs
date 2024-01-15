@@ -62,5 +62,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "git-dive";
   };
 }

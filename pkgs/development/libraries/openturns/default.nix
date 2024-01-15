@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openturns";
-  version = "1.21";
+  version = "1.21.2";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${version}";
-    sha256 = "sha256-zWCwuxJEiyhnllVCsfm3zNz2Xorvuj2Vl2fufS3qixY=";
+    sha256 = "sha256-Zq+Z3jLjdba3566H4RdwztqbRRID5K5yHvoGmgzq8QM=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional enablePython python3Packages.sphinx;

@@ -493,6 +493,9 @@ in {
           RuntimeDirectory = "mailman";
           LogsDirectory = "mailman";
           PIDFile = "/run/mailman/master.pid";
+          Restart = "on-failure";
+          TimeoutStartSec = 180;
+          TimeoutStopSec = 180;
         };
       };
 
@@ -596,6 +599,7 @@ in {
           User = cfg.webUser;
           Group = "mailman";
           RuntimeDirectory = "mailman-uwsgi";
+          Restart = "on-failure";
         };
       });
 
@@ -620,6 +624,7 @@ in {
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";
+          Restart = "on-failure";
         };
       };
     } // flip lib.mapAttrs' {

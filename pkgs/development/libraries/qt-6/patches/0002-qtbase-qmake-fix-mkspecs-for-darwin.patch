@@ -1,4 +1,4 @@
-From 8d3f5ee63ed29fe41927b904aa1e2b40f90c8ef4 Mon Sep 17 00:00:00 2001
+From a804a9b1efdab0a71b9947e5c2bf9f6f5e316e0e Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 21:43:04 +0800
 Subject: [PATCH 02/11] qtbase: qmake: fix mkspecs for darwin

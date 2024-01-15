@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "epson-projector";
   version = "0.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "epson_projector";

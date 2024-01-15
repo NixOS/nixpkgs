@@ -36,12 +36,12 @@
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  mkPlugin = { enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ ], wrapperBins ? [ ] }: {
-    inherit enable builtin propagatedBuildInputs testPaths wrapperBins;
+  mkPlugin = { name, enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ "test/test_${name}.py" ], wrapperBins ? [ ] }: {
+    inherit name enable builtin propagatedBuildInputs testPaths wrapperBins;
   };
 
   basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
-  allPlugins = lib.mapAttrs (_: mkPlugin) (lib.recursiveUpdate basePlugins pluginOverrides);
+  allPlugins = lib.mapAttrs (n: a: mkPlugin { name = n; } // a) (lib.recursiveUpdate basePlugins pluginOverrides);
   builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
@@ -102,7 +102,7 @@ python3Packages.buildPythonApplication {
     responses
   ] ++ pluginWrapperBins;
 
-  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (n: v: v.testPaths ++ [ "test/test_${n}.py" ]) disabledPlugins));
+  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
   inherit disabledTests;
 
   # Perform extra "sanity checks", before running pytest tests.

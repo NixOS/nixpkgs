@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/coreos/ignition";
-    description = "This is a small utility, typically used in conjunction with Ignition, which reads metadata from a given cloud-provider and applies it to the system.";
+    description = "A one-shot cloud provider agent";
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
     platforms = platforms.linux;

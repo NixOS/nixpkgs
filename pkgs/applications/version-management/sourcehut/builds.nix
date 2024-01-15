@@ -8,41 +8,53 @@
 , pyyaml
 , markdown
 , ansi2html
+, lxml
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 let
-  version = "0.83.0";
+  version = "0.86.10";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-u/y+sYu/09LypWI/ngghbge5SvkuLQpray10j0SjlOo=";
+    hash = "sha256-frwJgwJst2/NWd8VR0KbsVwm8JfWuekkY2oIIAdh3Fw=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-DfVWr/4J4ZrhHpy9CXPaAQcbag/9FmDgiexcNo0lEsk=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.20"; });
+    vendorHash = "sha256-2khk7j22KON4MsuvFUNKSUpouJtVIOxE0hkh63iaxZ4=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.29"; });
 
   buildsrht-worker = buildGoModule {
     inherit src version;
     sourceRoot = "${src.name}/worker";
     pname = "buildsrht-worker";
-    vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
+    vendorHash = "sha256-obdaeRwMhuiCV2kVwDo1c+rU/hmsbiL1IgAf7AcIpoc=";
   };
 in
 buildPythonPackage rec {
   inherit src version;
   pname = "buildsrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api worker" ""
   '';
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht
@@ -50,7 +62,9 @@ buildPythonPackage rec {
     celery
     pyyaml
     markdown
+    # Unofficial dependencies
     ansi2html
+    lxml
   ];
 
   preBuild = ''

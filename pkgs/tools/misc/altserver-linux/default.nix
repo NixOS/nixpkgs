@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/NyaMisty/AltServer-Linux";
-    description = "AltServer for AltStore, but on-device. Requires root privileges as well as running a custom anisette server currently.";
+    description = "AltServer for AltStore, but on-device. Requires root privileges as well as running a custom anisette server currently";
     license = licenses.agpl3;
     mainProgram = "alt-server";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

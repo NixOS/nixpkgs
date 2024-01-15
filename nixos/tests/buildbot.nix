@@ -104,5 +104,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = pkgs.lib.teams.buildbot.members;
 })

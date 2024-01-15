@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , glib
 , glibc
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.1.8";
+  version = "2.1.10";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gdMNAU+w4u+9DZL9x96OAZihShkQdvSiqPCA+eNf600=";
+    hash = "sha256-WUXyx5OWIJDamzHUahN+0/rcn2pxQgCgYAE/d0mxk2A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -45,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
+    mainProgram = "conmon";
   };
 }

@@ -38,6 +38,13 @@ in mkLicense lset) ({
     redistributable = false;
   };
 
+  activision = {
+    # https://doomwiki.org/wiki/Raven_source_code_licensing
+    fullName = "Activision EULA";
+    url = "https://www.doomworld.com/eternity/activision_eula.txt";
+    free = false;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -97,6 +104,7 @@ in mkLicense lset) ({
   };
 
   arphicpl = {
+    spdxId = "Arphic-1999";
     fullName = "Arphic Public License";
     url = "https://www.freedesktop.org/wiki/Arphic_Public_License/";
   };
@@ -229,6 +237,7 @@ in mkLicense lset) ({
   };
 
   cal10 = {
+    spdxId = "CAL-1.0";
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";
   };
@@ -422,6 +431,7 @@ in mkLicense lset) ({
   };
 
   elastic20 = {
+    spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
     url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
@@ -516,17 +526,17 @@ in mkLicense lset) ({
 
   generaluser = {
     fullName = "GeneralUser GS License v2.0";
-    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+    url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
   };
 
   gfl = {
     fullName = "GUST Font License";
-    url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt";
+    url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
   };
 
   gfsl = {
     fullName = "GUST Font Source License";
-    url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-SOURCE-LICENSE.txt";
+    url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
   };
 
   gpl1Only = {
@@ -591,6 +601,7 @@ in mkLicense lset) ({
 
   # Intel's license, seems free
   iasl = {
+    spdxId = "Intel-ACPI";
     fullName = "iASL";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
@@ -602,7 +613,7 @@ in mkLicense lset) ({
 
   imagemagick = {
     fullName = "ImageMagick License";
-    spdxId = "imagemagick";
+    spdxId = "ImageMagick";
   };
 
   imlib2 = {
@@ -613,7 +624,7 @@ in mkLicense lset) ({
   info-zip = {
     spdxId = "Info-ZIP";
     fullName = "Info-ZIP License";
-    url = "http://www.info-zip.org/pub/infozip/license.html";
+    url = "https://infozip.sourceforge.net/license.html";
   };
 
   inria-compcert = {
@@ -796,6 +807,7 @@ in mkLicense lset) ({
   };
 
   miros = {
+    spdxId = "MirOS";
     fullName = "MirOS License";
     url = "https://opensource.org/licenses/MirOS";
   };
@@ -875,6 +887,21 @@ in mkLicense lset) ({
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
+  };
+
+  nvidiaCuda = {
+    shortName = "CUDA EULA";
+    fullName = "CUDA Toolkit End User License Agreement (EULA)";
+    url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+    free = false;
+  };
+
+  nvidiaCudaRedist = {
+    shortName = "CUDA EULA";
+    fullName = "CUDA Toolkit End User License Agreement (EULA)";
+    url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+    free = false;
+    redistributable = true;
   };
 
   obsidian = {
@@ -1046,6 +1073,12 @@ in mkLicense lset) ({
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
   };
 
+  sudo = {
+    shortName = "sudo";
+    fullName = "Sudo License (ISC-style)";
+    url = "https://www.sudo.ws/about/license/";
+  };
+
   sustainableUse = {
     shortName = "sustainable";
     fullName = "Sustainable Use License";
@@ -1110,6 +1143,7 @@ in mkLicense lset) ({
   };
 
   upl = {
+    spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
     url = "https://oss.oracle.com/licenses/upl/";
   };
@@ -1166,8 +1200,9 @@ in mkLicense lset) ({
   };
 
   xfig = {
+    spdxId = "Xfig";
     fullName = "xfig";
-    url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
+    url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
   zlib = {

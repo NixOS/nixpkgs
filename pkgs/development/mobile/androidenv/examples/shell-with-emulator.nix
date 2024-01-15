@@ -78,6 +78,7 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidEmulator = androidEnv.emulateApp {
     name = "android-sdk-emulator-demo";
+    configOptions = { "hw.keyboard" = "yes"; };
     sdkExtraArgs = sdkArgs;
   };
   androidSdk = androidComposition.androidsdk;

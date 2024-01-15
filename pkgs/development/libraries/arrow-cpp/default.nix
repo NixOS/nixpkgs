@@ -78,11 +78,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "13.0.0";
+  version = "14.0.1";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-Nd/aGRJip1a+k07viv7o0JdiytJQIdqmJuskniUayeY=";
+    hash = "sha256-XHDq+xAR+dEkuvsyiv5U9izFuSgLcIDh49Zo94wOQH4=";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -115,14 +115,9 @@ stdenv.mkDerivation rec {
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.20.0";
-    hash = "sha256-71hAwJ0cGvpwK/ibeeQt82e9uqxcu9sM1rPtPENMPfs=";
+    rev = "v0.27.0";
+    hash = "sha256-wptEAXembah04pzqAz6UHeUxp+jMf6Lh/IdyuIhy/a8=";
   };
-
-  patches = [
-    # Protobuf switched to lower case project name.
-    ./cmake-find-protobuf.patch
-  ];
 
   nativeBuildInputs = [
     cmake

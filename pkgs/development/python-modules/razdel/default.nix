@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "razdel" ];
-  pythonImportCheck = [ "razdel" ];
+  pythonImportsCheck = [ "razdel" ];
 
   meta = with lib; {
     description = "Rule-based system for Russian sentence and word tokenization";

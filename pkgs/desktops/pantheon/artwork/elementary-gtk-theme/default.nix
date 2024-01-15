@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , gettext
 , meson
@@ -12,23 +11,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-ZR0FJ8DkPlO1Zatvxv3NghAVBPo2j+1m0k4C+gvYPVA=";
+    sha256 = "sha256-KrpeDQH43n7seeSPVYKETxy1g0JuUowZerjgktLQg/4=";
   };
-
-  patches = [
-    # Headerbars: fix missing default-decoration
-    # https://github.com/elementary/stylesheet/pull/1258
-    (fetchpatch {
-      url = "https://github.com/elementary/stylesheet/commit/9cea2383bec8f90d25f1e9b854b5221737487521.patch";
-      sha256 = "sha256-6komROS4+nxwoGoKoiDmnrTfLNZAvnTU6hIEOQQfmxc=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext

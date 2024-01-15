@@ -1,9 +1,11 @@
-{ config, options, lib, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
 let
   luks = config.boot.initrd.luks;
+  clevis = config.boot.initrd.clevis;
+  systemd = config.boot.initrd.systemd;
   kernelPackages = config.boot.kernelPackages;
   defaultPrio = (mkOptionDefault {}).priority;
 
@@ -511,7 +513,7 @@ let
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
 
-  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: let
+  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatLines (lib.mapAttrsToList (n: v: let
     opts = v.crypttabExtraOpts
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
@@ -537,7 +539,7 @@ in
       description = lib.mdDoc ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information is available at <http://en.wikipedia.org/wiki/DMA_attack>.
+        More information is available at <https://en.wikipedia.org/wiki/DMA_attack>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!
@@ -594,7 +596,7 @@ in
       '';
 
       type = with types; attrsOf (submodule (
-        { name, ... }: { options = {
+        { config, name, ... }: { options = {
 
           name = mkOption {
             visible = false;
@@ -894,6 +896,19 @@ in
             '';
           };
         };
+
+        config = mkIf (clevis.enable && (hasAttr name clevis.devices)) {
+          preOpenCommands = mkIf (!systemd.enable) ''
+            mkdir -p /clevis-${name}
+            mount -t ramfs none /clevis-${name}
+            clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+          '';
+          keyFile = "/clevis-${name}/decrypted";
+          fallbackToPassword = !systemd.enable;
+          postOpenCommands = mkIf (!systemd.enable) ''
+            umount /clevis-${name}
+          '';
+        };
       }));
     };
 
@@ -1080,6 +1095,35 @@ in
     boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;
     boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands);
     boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands);
+
+    boot.initrd.systemd.services = let devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices; in
+      mkIf (clevis.enable && systemd.enable) (
+        (mapAttrs'
+          (name: _: nameValuePair "cryptsetup-clevis-${name}" {
+            wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
+            before = [
+              "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
+              "initrd-switch-root.target"
+              "shutdown.target"
+            ];
+            wants = [ "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            script = ''
+              mkdir -p /clevis-${name}
+              mount -t ramfs none /clevis-${name}
+              umask 277
+              clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+            '';
+            conflicts = [ "initrd-switch-root.target" "shutdown.target" ];
+            unitConfig.DefaultDependencies = "no";
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
+            };
+          })
+          devicesWithClevis)
+      );
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };

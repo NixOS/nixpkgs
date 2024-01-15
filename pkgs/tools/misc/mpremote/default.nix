@@ -19,7 +19,6 @@ buildPythonApplication rec {
   };
   sourceRoot = "source/tools/mpremote";
   format = "pyproject";
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
@@ -39,5 +38,6 @@ buildPythonApplication rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ _999eagle ];
+    mainProgram = "mpremote";
   };
 }

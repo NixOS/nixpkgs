@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.20.0";
+  version = "6.21.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-csJfmjKm/uAlINhijeqUsDVTemchlzWqJg/YHtmNlAk=";
+    hash = "sha256-7OHfFo8+MUNSI3vpOIODKQH41jmraHDJOyqfLBp/v9o=";
   };
 
   patches = [
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kim0 ];
   };

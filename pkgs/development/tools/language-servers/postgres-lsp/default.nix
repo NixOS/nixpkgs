@@ -6,25 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
-  version = "unstable-2023-09-21";
+  version = "unstable-2024-01-11";
 
-  src = (fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "supabase";
     repo = "postgres_lsp";
-    rev = "f25f23a683c4e14dea52e3e423584588ab349081";
-    hash = "sha256-z8WIUfgnPYdzhBit1V6A5UktjoYCblTKXxwpbHOmFJA=";
+    rev = "bbc24cc541cd1619997193ed81ad887252c7e467";
+    hash = "sha256-llVsHSEUDRsqjSTGr3hGUK6jYlKPX60rpjngBk1TG2Y=";
     fetchSubmodules = true;
-  }).overrideAttrs {
-    # workaround to be able to fetch git@github.com submodules
-    # https://github.com/NixOS/nixpkgs/issues/195117
-    env = {
-      GIT_CONFIG_COUNT = 1;
-      GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-      GIT_CONFIG_VALUE_0 = "git@github.com:";
-    };
   };
 
-  cargoHash = "sha256-Nyxiere6/e5Y7YcgHitVkaiS1w3JXkbohIcBNc00YXY=";
+  cargoHash = "sha256-Npx/sSbMr4PKnNPslvjpOyKH0bpQLzW6cLNW+7H/TQ0=";
 
   nativeBuildInputs = [
     protobuf
@@ -33,6 +25,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p=postgres_lsp" ];
   cargoTestFlags = cargoBuildFlags;
+
+  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
   meta = with lib; {
     description = "A Language Server for Postgres";

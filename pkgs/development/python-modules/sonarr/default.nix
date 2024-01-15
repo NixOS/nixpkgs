@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "sonarr";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ctalkington";

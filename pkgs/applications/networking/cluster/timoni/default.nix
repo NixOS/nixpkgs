@@ -6,16 +6,16 @@
 
 buildGo121Module rec {
   pname = "timoni";
-  version = "0.14.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     rev = "v${version}";
-    hash = "sha256-45OIj57gb8njYoks7SgIlcMjz07ShEz2G/EECaTRTQg=";
+    hash = "sha256-KhDig31BGMmKVrLVFcTXNKjsyAUTb6KEX5PJV2rkMgM=";
   };
 
-  vendorHash = "sha256-lRZFRnft8vEntVxiLOBcR00FP8AXexLyo3h2LCNWN00=";
+  vendorHash = "sha256-3RbWHLQLLh/omGttY2wWv2nsuuTE8ALAqgQaiJY/EjI=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];

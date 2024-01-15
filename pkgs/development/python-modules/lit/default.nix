@@ -1,17 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , python
 }:
 
 buildPythonPackage rec {
   pname = "lit";
-  version = "17.0.1";
+  version = "17.0.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RIZ65Xa1eQVnsSC8Pw2fAh2slCTRsIQMdazYX0YQrAQ=";
+    hash = "sha256-36mvm1X8RQmla+e/I0bwedf0okLVg7ny4LB4/Qq64xs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   passthru = {
     inherit python;

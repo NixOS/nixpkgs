@@ -155,7 +155,7 @@ composerInstallInstallHook() {
     cp -r . "$out"/share/php/"${pname}"/
 
     # Create symlinks for the binaries.
-    jq -r -c 'try .bin[]' composer.json | while read -r bin; do
+    jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
         mkdir -p "$out"/share/php/"${pname}" "$out"/bin
         makeWrapper "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
     done

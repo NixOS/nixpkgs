@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.33.0";
+  version = "0.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bzsJnWw4rLjl1VrjmfNq4PudrnWPB1FzIuWAc9WmT6M=";
+    hash = "sha256-nEWrfCd2MQCcIM6dLkVYc/cWT5wcT/pvYaY2V3wfuto=";
   };
 
   propagatedBuildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   dontUnpack = true;
   buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
-    with stdenv.targetPlatform;
+    with stdenv.hostPlatform;
     if isx86 then "X86"
     else if isAarch then "ARM"
     else if isPower then "POWER"

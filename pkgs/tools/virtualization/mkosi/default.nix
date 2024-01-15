@@ -5,6 +5,11 @@
 , python3
 , bubblewrap
 , systemd
+, pandoc
+, kmod
+, gnutar
+, util-linux
+, cpio
 
   # Python packages
 , setuptools
@@ -29,10 +34,10 @@ let
         url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
         hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
       })
-      # Propagate SOURCE_DATE_EPOCH to mcopy. Remove when upgrading to systemd 255.
+      # repart: make sure rewinddir() is called before readdir() when performing rm -rf. Remove when upgrading to systemd 255.
       (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/4947de275a5553399854cc748f4f13e4ae2ba069.patch";
-        hash = "sha256-YIZZyc3f8pQO9fMAxiNhDdV8TtL4pXoh+hwHBzRWtfo=";
+        url = "https://github.com/systemd/systemd/commit/6bbb893b90e2dcb05fb310ba4608f9c9dc587845.patch";
+        hash = "sha256-A6cF2QAeYHGc0u0V1JMxIcV5shzf5x3Q6K+blZOWSn4=";
       })
     ];
   })).override {
@@ -50,14 +55,16 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "18";
+  version = "19";
   format = "pyproject";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-bnd2P6lq1XqKed3m4hDYrR9IcdrPaJxNBL2Z6jCruV4=";
+    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
   };
 
   # Fix ctypes finding library
@@ -74,29 +81,43 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    pandoc
     setuptools
     setuptools-scm
     wheel
   ];
 
-  makeWrapperArgs = [
-    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
-  ];
-
   propagatedBuildInputs = [
-    systemdForMkosi
     bubblewrap
+    cpio
+    gnutar
+    kmod
+    systemdForMkosi
+    util-linux
   ] ++ lib.optional withQemu [
     qemu
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/mkosi \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+  postBuild = ''
+    ./tools/make-man-page.sh
   '';
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mkosi"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    mv mkosi/resources/mkosi.1 $out/share/man/man1/
+  '';
+
+  makeWrapperArgs = [
+    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
+    "--prefix PYTHONPATH : \"$PYTHONPATH\""
   ];
 
   meta = with lib; {

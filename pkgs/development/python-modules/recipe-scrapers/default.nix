@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.46.0";
+  version = "14.52.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-XCcunwqmcvPC5AVxR9mit06BRDTYfu/CeTXg3IH7Dy0=";
+    hash = "sha256-VdJZnwo+DwVDZuuuqk0X26CXs7ZrUFXqC8qEYaX74Zc=";
   };
 
   nativeBuildInputs = [

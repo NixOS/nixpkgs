@@ -100,4 +100,9 @@ in {
     version = "3.7.3";
     hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
   };
+
+  libressl_3_8 = generic {
+    version = "3.8.2";
+    hash = "sha256-bUuNW7slofgzZjnlbsUIgFLUOpUlZpeoXEzpEyPCWVQ=";
+  };
 }

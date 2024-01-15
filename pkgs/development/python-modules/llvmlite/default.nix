@@ -2,33 +2,36 @@
 , stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, python
-, llvm
-, pythonOlder
 , isPyPy
-, enum34
-, isPy3k
+, pythonAtLeast
+
+# build-system
+, llvm
+, setuptools
+
+# tests
+, python
 }:
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  # The main dependency of llvmlite is numba, which we currently package an
-  # untagged version of it (for numpy>1.25 support). That numba version
-  # requires at least this version of llvmlite (also not yet officially
-  # released, but at least tagged).
-  version = "0.41.0dev0";
+  version = "0.41.1";
+  pyproject = true;
 
-  disabled = isPyPy || !isPy3k;
+  # uses distutils in setup.py
+  disabled = isPyPy || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
-    rev = "v${version}";
-    hash = "sha256-fsH+rqouweNENU+YlWr7m0bC0YdreQLNp1n2rwrOiFw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RBgs8L5kOJ8BhEDLB8r8/iVhwuVIPT/rUSmwmBWm4D0=";
   };
 
-  nativeBuildInputs = [ llvm ];
-  propagatedBuildInputs = lib.optional (pythonOlder "3.4") enum34;
+  nativeBuildInputs = [
+    llvm
+    setuptools
+  ];
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
@@ -44,7 +47,9 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
     ${python.executable} runtests.py
+    runHook postCheck
   '';
 
   __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
@@ -52,7 +57,9 @@ buildPythonPackage rec {
   passthru.llvm = llvm;
 
   meta = with lib; {
+    changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
     description = "A lightweight LLVM python binding for writing JIT compilers";
+    downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fridh ];

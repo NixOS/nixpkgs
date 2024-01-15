@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cargo
 , cmake
+, deltachat-desktop
+, deltachat-repl
 , openssl
 , perl
 , pkg-config
@@ -17,30 +19,33 @@
 , libiconv
 }:
 
-stdenv.mkDerivation rec {
+let
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "email-0.0.21" = "sha256-u4CsK/JqFgq5z3iJGxxGtb7QbSkOAqmOvrmagsqfXIU=";
+      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
+      "imap-proto-0.16.3" = "sha256-okIHA8MQ1K/tcKHZYGh83zom1ULGHZ/KGxgcwiE1+sE=";
+      "iroh-0.4.2" = "sha256-VXNMmj+AvlY/W2JRWMICoNOqpFEahsUDxypHRg185Ao=";
+      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
+    };
+  };
+in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.121.0";
+  version = "1.131.9";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-QefBchXitDcbn1o7jgmvWdacLT8OP+W/dL32+pYsaEA=";
+    hash = "sha256-xZai5RsrfT6bYzMpNdKncmDzBzcAcEtZZmh7f+3g5Hs=";
   };
 
   patches = [
     ./no-static-lib.patch
   ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
-      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
-      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
-      "quinn-proto-0.9.2" = "sha256-N1gD5vMsBEHO4Fz4ZYEKZA8eE/VywXNXssGcK6hjvpg=";
-    };
-  };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   nativeBuildInputs = [
     cmake
@@ -67,8 +72,20 @@ stdenv.mkDerivation rec {
     cargoCheckHook
   ];
 
-  passthru.tests = {
-    python = python3.pkgs.deltachat;
+  # Sometimes -fmacro-prefix-map= can redirect __FILE__ to non-existent
+  # paths. This breaks packages like `python3.pkgs.deltachat`. We embed
+  # absolute path to headers by expanding `__FILE__`.
+  postInstall = ''
+    substituteInPlace $out/include/deltachat.h \
+      --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
+  '';
+
+  passthru = {
+    inherit cargoLock;
+    tests = {
+      inherit deltachat-desktop deltachat-repl;
+      python = python3.pkgs.deltachat;
+    };
   };
 
   meta = with lib; {
@@ -76,7 +93,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda srapenne ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;
   };
 }

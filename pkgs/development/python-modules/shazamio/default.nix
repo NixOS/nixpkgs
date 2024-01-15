@@ -72,5 +72,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nhentai";
   version = "0.5.3";
+
   src = fetchFromGitHub {
     owner = "RicterZ";
     repo = pname;
@@ -18,6 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     requests
+    img2pdf
     iso8601
     beautifulsoup4
     soupsieve
@@ -25,10 +27,11 @@ python3Packages.buildPythonApplication rec {
     future
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RicterZ/nhentai";
     description = "nHentai is a CLI tool for downloading doujinshi from <http://nhentai.net>";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    mainProgram = "nhentai";
   };
 }

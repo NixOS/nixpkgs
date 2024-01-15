@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.20.0";
-  format = "pyproject";
+  version = "1.23.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J2kz8PcR6f7u9+pI1jGAYCakSwj0/WKskQLWuYC5+Hs=";
+    hash = "sha256-c2EXgUs+6GA5zHHF7Cx21LIsZ+jbmQFFUwLft2q5M30=";
   };
 
   pythonRelaxDeps = true;
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [
     git
   ] ++ (with python3.pkgs; [
+    jsonschema
     pyfakefs
     pytest-mock
     pytest-voluptuous

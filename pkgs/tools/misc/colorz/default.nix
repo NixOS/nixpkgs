@@ -20,5 +20,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/metakirby5/colorz";
     license = licenses.mit;
     maintainers = with maintainers; [ skykanin ];
+    mainProgram = "colorz";
   };
 }

@@ -3,7 +3,7 @@
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
-, zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, zstd, fftw, fftwFloat, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , hipSupport ? false, rocmPackages # comes with a significantly larger closure size
@@ -18,24 +18,31 @@
 , openpgl
 , mesa
 , runCommand
+, callPackage
 }:
 
 let
-  python = python310Packages.python;
+  pythonPackages = python310Packages;
+  inherit (pythonPackages) python;
+  buildEnv = callPackage ./wrapper.nix {};
   optix = fetchzip {
     # url taken from the archlinux blender PKGBUILD
     url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
     sha256 = "0max1j4822mchj0xpz9lqzh91zkmvsn4py0r174cvqfz8z8ykjk8";
   };
+  libdecor' = libdecor.overrideAttrs (old: {
+    # Blender uses private APIs, need to patch to expose them
+    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
+  });
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "3.6.5";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-QAHA/pn22HLsfH6VX4Sp7r25raFxAPS1Gergjez38kM=";
+    hash = "sha256-qqDnKdp1kc+/RXcq92NFl32qp7EaCvNdmPkxPiRgd6M=";
   };
 
   patches = [
@@ -45,12 +52,15 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs =
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
     ]
-    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
+    ++ lib.optionals cudaSupport [
+      addOpenGLRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimageio openjpeg python zlib zstd fftw jemalloc
+      opencolorio openexr openimageio openjpeg python zlib zstd fftw fftwFloat jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -62,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       openpgl
     ]
     ++ lib.optionals waylandSupport [
-      wayland wayland-protocols libffi libdecor libxkbcommon dbus
+      wayland wayland-protocols libffi libdecor' libxkbcommon dbus
     ]
     ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
@@ -80,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests zstandard ];
@@ -189,7 +199,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = {
-    inherit python;
+    inherit python pythonPackages;
+
+    withPackages = f: let packages = f pythonPackages; in buildEnv.override { blender = finalAttrs.finalPackage; extraModules = packages; };
 
     tests = {
       render = runCommand "${pname}-test" { } ''

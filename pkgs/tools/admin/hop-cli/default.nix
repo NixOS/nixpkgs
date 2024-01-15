@@ -6,20 +6,21 @@
 , stdenv
 , CoreServices
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hop-cli";
-  version = "0.2.54";
+  version = "0.2.61";
 
   src = fetchFromGitHub {
     owner = "hopinc";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-0BIPN4+XYZgUdxygpKpWZq6VkWWNCFD8v5egXOYfC64=";
+    hash = "sha256-omKLUe4JxF3SN4FHbO6YpIRt97f8wWY3oy7VHfvONRc=";
   };
 
-  cargoHash = "sha256-KE7AAyArRang/EZrpgv+vlNZaAP/Y2pCltiPMgZ5vFA=";
+  cargoHash = "sha256-yZKTVF810v27CnjwocEE2KYtrXggdEFPbKH5/4MMMhQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices Security
+    CoreServices Security SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;

@@ -347,5 +347,6 @@ in stdenv.mkDerivation rec {
       binaryBytecode  # maven dependencies
     ];
     maintainers = [ ];
+    mainProgram = "tsdb";
   };
 }

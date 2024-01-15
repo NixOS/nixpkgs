@@ -11,7 +11,7 @@ in
         default = true;
       };
 
-      package = lib.mkPackageOptionMD pkgs "nano" { };
+      package = lib.mkPackageOption pkgs "nano" { };
 
       nanorc = lib.mkOption {
         type = lib.types.lines;

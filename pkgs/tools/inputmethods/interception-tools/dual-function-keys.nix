@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/dual-function-keys";
-    description = "Tap for one key, hold for another.";
+    description = "Tap for one key, hold for another";
     license = licenses.mit;
     maintainers = with maintainers; [ svend ];
     platforms = platforms.linux;

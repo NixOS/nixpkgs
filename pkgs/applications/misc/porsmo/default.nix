@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "porsmo";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ColorCookie-dev";
     repo = "porsmo";
     rev = version;
-    hash = "sha256-NOMEfS6RvB9513ZkcQi6cxBuhmALqqcI3onhua2MD+0=";
+    hash = "sha256-bYPUSrGJKoNLFkIiGuXraYoaYn/HKSP8IiH3gtyWfmw=";
   };
 
-  cargoHash = "sha256-6RV1RUkWLaxHqvs2RqSe/2tDw+aPDoRBYUW1GxN18Go=";
+  cargoHash = "sha256-EVo8iewKs4D7H2GP/T5oFO6LlTSzuIUqEdpwgjCKtJ8=";
 
   nativeBuildInputs = [
     pkg-config

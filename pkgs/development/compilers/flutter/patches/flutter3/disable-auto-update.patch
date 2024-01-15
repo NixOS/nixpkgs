@@ -11,18 +11,19 @@ index 3532c23114..25dfcae4c7 100644
    BIN_NAME="$(basename "$PROG_NAME")"
    case "$BIN_NAME" in
      flutter*)
-diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
-index 13efbde879..467b3a7cbf 100644
---- a/packages/flutter_tools/lib/src/cache.dart
-+++ b/packages/flutter_tools/lib/src/cache.dart
-@@ -664,6 +664,7 @@ class Cache {
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command.dart b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+index b7e624b4e2..edfdde118b 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+@@ -1554,7 +1554,7 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and
  
-   /// Update the cache to contain all `requiredArtifacts`.
-   Future<void> updateAll(Set<DevelopmentArtifact> requiredArtifacts, {bool offline = false}) async {
-+    return;
-     if (!_lockEnabled) {
-       return;
-     }
+     // Populate the cache. We call this before pub get below so that the
+     // sky_engine package is available in the flutter cache for pub to find.
+-    if (shouldUpdateCache) {
++    if (false) {
+       // First always update universal artifacts, as some of these (e.g.
+       // ios-deploy on macOS) are required to determine `requiredArtifacts`.
+       final bool offline;
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 index 5d6d78639f..90a4dfa555 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart

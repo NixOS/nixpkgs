@@ -4,7 +4,7 @@
 # TODO: LWP/Pg perl libs aren't recognized
 
 # TODO: support fastcgi
-# http://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
+# https://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
 # spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
 # spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
@@ -147,7 +147,7 @@ in
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <http://guide.munin-monitoring.org/en/latest/architecture/index.html>.
+          See <https://guide.munin-monitoring.org/en/latest/architecture/index.html>.
         '';
       };
 
@@ -156,7 +156,7 @@ in
         type = types.lines;
         description = lib.mdDoc ''
           {file}`munin-node.conf` extra configuration. See
-          <http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
+          <https://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
       };
 
@@ -165,7 +165,7 @@ in
         type = types.lines;
         description = lib.mdDoc ''
           {file}`plugin-conf.d` extra plugin configuration. See
-          <http://guide.munin-monitoring.org/en/latest/plugin/use.html>
+          <https://guide.munin-monitoring.org/en/latest/plugin/use.html>
         '';
         example = ''
           [fail2ban_*]
@@ -273,9 +273,9 @@ in
         type = types.lines;
         description = lib.mdDoc ''
           {file}`munin.conf` extra global configuration.
-          See <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
+          See <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
           Useful to setup notifications, see
-          <http://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
+          <https://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -288,7 +288,7 @@ in
         description = lib.mdDoc ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
-          <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
+          <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
         '';
         example = literalExpression ''
           '''

@@ -1,24 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, CoreServices, Security, SystemConfiguration }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, perl, CoreServices, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kak-lsp";
-  version = "14.2.0";
+  version = "15.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U4eqIzvYzUfwprVpPHV/OFPKiBXK4/5z2p8kknX2iME=";
+    sha256 = "sha256-W4z2YtOEBCTM+NsL1HBHSYCXJXN459chE4RW0CPMjD4=";
   };
 
-  cargoSha256 = "sha256-g63Kfi4xJZO/+fq6eK2iB1dUGoSGWIIRaJr8BWO/txM=";
+  cargoHash = "sha256-tAA9eu4y1h6huNmEgY3L6v29itP5I4a8UZgoA+ANoq0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+
+  patches = [ ./0001-Use-full-Perl-path.patch ];
+
+  postPatch = ''
+    substituteInPlace rc/lsp.kak \
+      --subst-var-by perlPath ${lib.getBin perl}
+  '';
 
   meta = with lib; {
     description = "Kakoune Language Server Protocol Client";
     homepage = "https://github.com/kak-lsp/kak-lsp";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = [ maintainers.spacekookie ];
+    maintainers = with maintainers; [ spacekookie poweredbypie ];
+    mainProgram = "kak-lsp";
   };
 }

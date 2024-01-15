@@ -197,8 +197,9 @@ in
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
 
-    system.activationScripts.spiped = optionalString (cfg.config != {})
-      "mkdir -p /var/lib/spiped";
+    systemd.tmpfiles.rules = lib.mkIf (cfg.config != { }) [
+      "d /var/lib/spiped -"
+    ];
 
     # Setup spiped config files
     environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"

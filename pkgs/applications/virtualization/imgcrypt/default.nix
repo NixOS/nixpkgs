@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "imgcrypt";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FLqFzEEfgsKcjAevhF6+8mR3zOUjfXyfWwWsxVOcdJU=";
+    hash = "sha256-EStyi6RDK1G6kuaDGumZaHB4OrSrhhx/F5GsLe0amyA=";
   };
 
   vendorHash = null;

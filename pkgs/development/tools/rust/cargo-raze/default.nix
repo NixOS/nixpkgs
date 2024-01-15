@@ -31,6 +31,12 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optional stdenv.isDarwin Security;
 
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Darwin issue: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
+    # https://github.com/google/cargo-raze/issues/544
+    ulimit -n 1024
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {

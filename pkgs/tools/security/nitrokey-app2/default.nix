@@ -1,13 +1,12 @@
 { lib
 , python3
 , fetchFromGitHub
-, pynitrokey
 , wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.2";
+  version = "2.1.4";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.9";
@@ -16,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-VyhIFNXxH/FohgjhBeZXoQYppP7PEz+ei0qzsWz1xhk=";
+    hash = "sha256-loOCa6XlLx1YEfqR0SUUalVIEPCoYsNEHFo2MIKexeA=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -63,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    maintainers = with maintainers; [ _999eagle panicgh ];
     mainProgram = "nitrokeyapp";
   };
 }

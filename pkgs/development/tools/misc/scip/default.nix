@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "scip";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     rev = "v${version}";
-    hash = "sha256-8CH5rIWvCXZGspAyF6c8Qs/gntpfdpPrxrvxW3bZ/ww=";
+    hash = "sha256-lZ3W2Z69P5QQN+PgF9+Apj/uEXWaTS+5QOg17m1mGPU=";
   };
 
   vendorHash = "sha256-3Tq2cexcxHjaH6WIz2hneE1QeBSGoMINBncKbqxODxQ=";

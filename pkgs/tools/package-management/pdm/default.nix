@@ -2,6 +2,7 @@
 , stdenv
 , python3
 , fetchFromGitHub
+, fetchpatch
 , fetchPypi
 , nix-update-script
 , runtimeShell
@@ -31,13 +32,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.9.3";
+  version = "2.10.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CxGVtR6WMLWgsGPyffywEgy26ihPGkzZdaOibwhW0lM=";
+    hash = "sha256-bf2dTLWQQ+3sstC0fSCOVdidMzunGX3rBcyi37x6S/s=";
   };
 
   nativeBuildInputs = [
@@ -101,10 +102,11 @@ buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://pdm.fming.dev";
+    homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "pdm";
   };
 }

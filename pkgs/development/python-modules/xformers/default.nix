@@ -2,12 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pythonRelaxDepsHook
 , which
 # runtime dependencies
 , numpy
 , torch
-, pyre-extensions
 # check dependencies
 , pytestCheckHook
 , pytest-cov
@@ -52,18 +50,12 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     which
-  ];
-
-  pythonRelaxDeps = [
-    "pyre-extensions"
   ];
 
   propagatedBuildInputs = [
     numpy
     torch
-    pyre-extensions
   ];
 
   pythonImportsCheck = [ "xformers" ];

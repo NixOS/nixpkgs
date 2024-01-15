@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonBuildType = "release";
 
   mesonFlags = [
+    (lib.mesonBool "werror" false)
     (lib.mesonEnable "backend-x11" x11Support)
     (lib.mesonEnable "backend-wayland" waylandSupport)
   ];

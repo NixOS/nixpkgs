@@ -32,11 +32,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.3";
+  version = "9.4";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
+    hash = "sha256-6mE6TPRGEjJukXIBu7zfvTAd4h/8O1m25cB+BAsnXlI=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
-    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
 
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
@@ -77,10 +77,8 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
   ])) + (optionalString stdenv.isAarch64 ''
-    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
-
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
 
   outputs = [ "out" "info" ];

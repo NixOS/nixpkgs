@@ -166,7 +166,6 @@
 , "markdown-link-check"
 , "mastodon-bot"
 , "mathjax"
-, "mathjax-node-cli"
 , "meat"
 , "mocha"
 , "multi-file-swagger"
@@ -214,7 +213,6 @@
 , "sass"
 , "semver"
 , "serve"
-, "serverless"
 , "shout"
 , "sloc"
 , "smartdc"
@@ -310,5 +308,4 @@
 , "@yaegassy/coc-nginx"
 , "yalc"
 , "yarn"
-, "@zwave-js/server"
 ]

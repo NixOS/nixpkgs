@@ -1,16 +1,29 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, pkg-config
 , cmake
+, doxygen
+, graphviz
 , gtest
 , valgrind
+# One of "11" or "17"; default in source is CXX 11
+, cxxStandard ? "11"
+, buildDocs ? true
+, buildTests ? !stdenv.hostPlatform.isStatic && !stdenv.isDarwin
+, buildExamples ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidjson";
   version = "unstable-2023-09-28";
+
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildDocs [
+    "doc"
+  ] ++ lib.optionals buildExamples [
+    "example"
+  ];
 
   src = fetchFromGitHub {
     owner = "Tencent";
@@ -19,26 +32,44 @@ stdenv.mkDerivation rec {
     hash = "sha256-rl7iy14jn1K2I5U2DrcZnoTQVEGEDKlxmdaOCF/3hfY=";
   };
 
+  patches = lib.optionals buildTests [
+    ./0000-unstable-use-nixpkgs-gtest.patch
+    # https://github.com/Tencent/rapidjson/issues/2214
+    ./0001-unstable-valgrind-suppress-failures.patch
+  ];
+
   nativeBuildInputs = [
-    pkg-config
     cmake
+  ] ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "do-not-include-gtest-src-dir.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch?id=9e5eefc7a5fcf5938a8dc8a3be8c75e9e6809909";
-      hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
-    })
+  cmakeFlags = [
+    (lib.cmakeBool "RAPIDJSON_BUILD_DOC" buildDocs)
+    (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" buildTests)
+    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" buildExamples)
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" (cxxStandard == "11"))
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" (cxxStandard == "17"))
+  ] ++ lib.optionals buildTests [
+    (lib.cmakeFeature "GTEST_INCLUDE_DIR" "${lib.getDev gtest}")
   ];
 
-  # for tests, adding gtest to checkInputs does not work
-  # https://github.com/NixOS/nixpkgs/pull/212200
-  buildInputs = [ gtest ];
-  cmakeFlags = [ "-DGTEST_SOURCE_DIR=${gtest.dev}/include" ];
+  doCheck = buildTests;
 
-  nativeCheckInputs = [ valgrind ];
-  doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;
+  nativeCheckInputs = [
+    gtest
+    valgrind
+  ];
+
+  postInstall = lib.optionalString buildExamples ''
+    mkdir -p $example/bin
+
+    find bin -type f -executable \
+      -not -name "perftest" \
+      -not -name "unittest" \
+      -exec cp -a {} $example/bin \;
+  '';
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
@@ -46,5 +77,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Madouura ];
+    broken = (cxxStandard != "11" && cxxStandard != "17");
   };
-}
+})

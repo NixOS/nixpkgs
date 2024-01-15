@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pytest-xdist
 , pytestCheckHook
 , absl-py
 , cvxpy
@@ -16,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.8.1";
+  version = "0.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "jaxopt";
     rev = "refs/tags/jaxopt-v${version}";
-    hash = "sha256-5+GfRFzXyc1Ukp86NeK0qstTq9fkx+eDb4iXvxzRoKs=";
+    hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     cvxpy
     optax
@@ -50,11 +52,6 @@ buildPythonPackage rec {
     "jaxopt.linear_solve"
     "jaxopt.loss"
     "jaxopt.tree_util"
-  ];
-
-  disabledTests = [
-    # Stack frame issue
-    "test_bisect"
   ];
 
   meta = with lib; {

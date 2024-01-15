@@ -102,7 +102,7 @@ in
         options = {
           enable = mkEnableOption (mdDoc "cgit");
 
-          package = mkPackageOptionMD pkgs "cgit" {};
+          package = mkPackageOption pkgs "cgit" {};
 
           nginx.virtualHost = mkOption {
             description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";

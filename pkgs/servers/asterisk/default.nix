@@ -36,25 +36,6 @@
 }:
 
 let
-  # remove when upgrading to pjsip >2.13
-  pjsip_2_13_patches = [
-    (fetchpatch {
-      name = "CVE-2022-23537.patch";
-      url = "https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1.patch";
-      sha256 = "sha256-7ueQCHIiJ7MLaWtR4+GmBc/oKaP+jmEajVnEYqiwLRA=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-23547.patch";
-      url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
-      sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-27585.patch";
-      url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
-      hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
-    })
-  ];
-
   common = { version, sha256, externals, pjsip_patches ? [ ] }: stdenv.mkDerivation {
     inherit version;
     pname = "asterisk"
@@ -161,12 +142,12 @@ let
     };
   };
 
-  pjproject_2_13 = fetchurl
+  pjproject_2_13_1 = fetchurl
     {
-      url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.13/pjproject-2.13.tar.bz2";
-      hash = "sha256-Zj93PUAct13KVR5taOWEbQdKq76wicaBTNHpHC0rICY=";
+      url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.13.1/pjproject-2.13.1.tar.bz2";
+      hash = "sha256-cOBRvO+B9fGt4UVYAHQQwBsc2cUF7Pu1GRsjAF7BE1g=";
     } // {
-    pjsip_patches = pjsip_2_13_patches;
+    pjsip_patches = [ ];
   };
 
   mp3-202 = fetchsvn {
@@ -187,7 +168,7 @@ let
   versions = lib.mapAttrs
     (_: { version, sha256 }:
       let
-        pjsip = pjproject_2_13;
+        pjsip = pjproject_2_13_1;
       in
       common {
         inherit version sha256;

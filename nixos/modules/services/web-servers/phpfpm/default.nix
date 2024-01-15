@@ -179,14 +179,7 @@ in {
         '';
       };
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = lib.mdDoc ''
-          The PHP package to use for running the PHP-FPM service.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
       phpOptions = mkOption {
         type = types.lines;

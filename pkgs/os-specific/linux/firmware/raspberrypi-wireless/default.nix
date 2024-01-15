@@ -2,22 +2,22 @@
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "unstable-2023-05-04";
+  version = "unstable-2023-11-15";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "9556b08ace2a1735127894642cc8ea6529c04c90";
-      hash = "sha256-gKGK0XzNrws5REkKg/JP6SZx3KsJduu53SfH3Dichkc=";
+      rev = "d9d4741caba7314d6500f588b1eaa5ab387a4ff5";
+      hash = "sha256-CjbZ3t3TW/iJ3+t9QKEtM9NdQU7SwcUCDYuTmFEwvhU=";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "2b465a10b04555b7f45b3acb85959c594922a3ce";
-      hash = "sha256-9UgB8f2AaxG7S5Px46jOP9wUeO1VXKB0uJiPWh32oDI=";
+      rev = "88aa085bfa1a4650e1ccd88896f8343c22a24055";
+      hash = "sha256-Yynww79LPPkau4YDSLI6IMOjH64nMpHUdGjnCfIR2+M=";
     })
   ];
 
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation {
     cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/debian/firmware/broadcom/." "$out/lib/firmware/brcm"
 
     # brcmfmac43455-stdio.bin is a symlink to the non-existent path: ../cypress/cyfmac43455-stdio.bin.
     # See https://github.com/RPi-Distro/firmware-nonfree/issues/26
@@ -43,8 +43,6 @@ stdenvNoCC.mkDerivation {
 
     pushd $out/lib/firmware/brcm &>/dev/null
     # Symlinks for Zero 2W
-    ln -s "./brcmfmac43436-sdio.bin" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.bin"
-    ln -s "./brcmfmac43436-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.txt"
     ln -s "./brcmfmac43436-sdio.clm_blob" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.clm_blob"
     popd &>/dev/null
 

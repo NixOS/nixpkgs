@@ -22,13 +22,16 @@
 , aprutil
 , makeDesktopItem
 , copyDesktopItems
+, jq
+
+, studioVariant ? false
 }:
 
 let
   davinci = (
     stdenv.mkDerivation rec {
-      pname = "davinci-resolve";
-      version = "18.5.1";
+      pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      version = "18.6.4";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
@@ -47,22 +50,27 @@ let
         rec {
           outputHashMode = "recursive";
           outputHashAlgo = "sha256";
-          outputHash = "sha256-AZ869hA/WeCf3sxhdDOzD/q30P1NaD18TheBtS1ammQ=";
+          outputHash =
+            if studioVariant
+            then "sha256-Us8DsxdGwBxUL+yUHT9DNJFIV7EO+J9CSN2Juyf8VQ4="
+            else "sha256-yPdfmS42ID7MOTB3XlGXfOqp46kRLR8martJ9gWqDjA=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-          nativeBuildInputs = [ curl ];
+          nativeBuildInputs = [ curl jq ];
 
           # ENV VARS
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
-          DOWNLOADID = "defc1c6789b7475b9ee4a42daf9ba61d";
           REFERID = "263d62f31cbb49e0868005059abcb0c9";
-          SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
+          DOWNLOADSURL = "https://www.blackmagicdesign.com/api/support/us/downloads.json";
+          SITEURL = "https://www.blackmagicdesign.com/api/register/us/download";
+          PRODUCT = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
+          VERSION = version;
 
           USERAGENT = builtins.concatStringsSep " " [
-            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.targetPlatform.linuxArch})"
+            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.hostPlatform.linuxArch})"
             "AppleWebKit/537.36 (KHTML, like Gecko)"
             "Chrome/77.0.3865.75"
             "Safari/537.36"
@@ -74,13 +82,18 @@ let
             "email" = "someone@nixos.org";
             "phone" = "+31 71 452 5670";
             "country" = "nl";
-            "street" = "Hogeweide 346";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
-            "product" = "DaVinci Resolve";
+            "product" = PRODUCT;
           };
 
         } ''
+        DOWNLOADID=$(
+          curl --silent --compressed "$DOWNLOADSURL" \
+            | jq --raw-output '.downloads[] | select(.name | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .urls.Linux[0].downloadId'
+        )
+        echo "downloadid is $DOWNLOADID"
+        test -n "$DOWNLOADID"
         RESOLVEURL=$(curl \
           --silent \
           --header 'Host: www.blackmagicdesign.com' \
@@ -95,7 +108,7 @@ let
           --header 'Cookie: _ga=GA1.2.1849503966.1518103294; _gid=GA1.2.953840595.1518103294' \
           --data-ascii "$REQJSON" \
           --compressed \
-          "$SITEURL")
+          "$SITEURL/$DOWNLOADID")
 
         curl \
           --retry 3 --retry-delay 3 \
@@ -111,14 +124,17 @@ let
       # The unpack phase won't generate a directory
       sourceRoot = ".";
 
-      installPhase = ''
+      installPhase = let
+        appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${version}_Linux.run";
+      in ''
         runHook preInstall
 
         export HOME=$PWD/home
         mkdir -p $HOME
 
         mkdir -p $out
-        appimage-run ./DaVinci_Resolve_${version}_Linux.run -i -y -n -C $out
+        test -e ${lib.escapeShellArg appimageName}
+        appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
 
         mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
         runHook postInstall
@@ -162,7 +178,9 @@ let
   );
 in
 buildFHSEnv {
-  name = "davinci-resolve";
+  inherit (davinci) pname version;
+  name = null;
+
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
     aprutil
@@ -201,6 +219,7 @@ buildFHSEnv {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXrender
+    xorg.libXt
     xorg.libXtst
     xorg.libXxf86vm
     xorg.libxcb
@@ -213,15 +232,21 @@ buildFHSEnv {
     zlib
   ];
 
+  extraBwrapArgs = lib.optionals studioVariant [
+    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
+  ];
+
   runScript = "${bash}/bin/bash ${
     writeText "davinci-wrapper"
     ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
     export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${davinci}/libs
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
     ${davinci}/bin/resolve
     ''
   }";
+
+  passthru = { inherit davinci; };
 
   meta = with lib; {
     description = "Professional video editing, color, effects and audio post-processing";
@@ -230,5 +255,6 @@ buildFHSEnv {
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "davinci-resolve";
   };
 }

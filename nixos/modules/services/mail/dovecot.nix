@@ -1,8 +1,11 @@
 { options, config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) any attrValues concatMapStringsSep concatStrings
+    concatStringsSep flatten imap1 isList literalExpression mapAttrsToList
+    mkEnableOption mkIf mkOption mkRemovedOptionModule optional optionalAttrs
+    optionalString singleton types;
+
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
 
@@ -112,6 +115,36 @@ let
         }
       ''
     )
+
+    ''
+      plugin {
+        sieve_plugins = ${concatStringsSep " " cfg.sieve.plugins}
+        sieve_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions)}
+        sieve_global_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions)}
+    ''
+    (optionalString (cfg.imapsieve.mailbox != []) ''
+      ${
+        concatStringsSep "\n" (flatten (imap1 (
+            idx: el:
+              singleton "imapsieve_mailbox${toString idx}_name = ${el.name}"
+              ++ optional (el.from != null) "imapsieve_mailbox${toString idx}_from = ${el.from}"
+              ++ optional (el.causes != null) "imapsieve_mailbox${toString idx}_causes = ${el.causes}"
+              ++ optional (el.before != null) "imapsieve_mailbox${toString idx}_before = file:${stateDir}/imapsieve/before/${baseNameOf el.before}"
+              ++ optional (el.after != null) "imapsieve_mailbox${toString idx}_after = file:${stateDir}/imapsieve/after/${baseNameOf el.after}"
+          )
+          cfg.imapsieve.mailbox))
+      }
+    '')
+    (optionalString (cfg.sieve.pipeBins != []) ''
+        sieve_pipe_bin_dir = ${pkgs.linkFarm "sieve-pipe-bins" (map (el: {
+          name = builtins.unsafeDiscardStringContext (baseNameOf el);
+          path = el;
+        })
+        cfg.sieve.pipeBins)}
+    '')
+    ''
+      }
+    ''
 
     cfg.extraConfig
   ];
@@ -343,6 +376,104 @@ in
       description = lib.mdDoc "Quota limit for the user in bytes. Supports suffixes b, k, M, G, T and %.";
     };
 
+    imapsieve.mailbox = mkOption {
+      default = [];
+      description = "Configure Sieve filtering rules on IMAP actions";
+      type = types.listOf (types.submodule ({ config, ... }: {
+        options = {
+          name = mkOption {
+            description = ''
+              This setting configures the name of a mailbox for which administrator scripts are configured.
+
+              The settings defined hereafter with matching sequence numbers apply to the mailbox named by this setting.
+
+              This setting supports wildcards with a syntax compatible with the IMAP LIST command, meaning that this setting can apply to multiple or even all ("*") mailboxes.
+            '';
+            example = "Junk";
+            type = types.str;
+          };
+
+          from = mkOption {
+            default = null;
+            description = ''
+              Only execute the administrator Sieve scripts for the mailbox configured with services.dovecot2.imapsieve.mailbox.<name>.name when the message originates from the indicated mailbox.
+
+              This setting supports wildcards with a syntax compatible with the IMAP LIST command, meaning that this setting can apply to multiple or even all ("*") mailboxes.
+            '';
+            example = "*";
+            type = types.nullOr types.str;
+          };
+
+          causes = mkOption {
+            default = null;
+            description = ''
+              Only execute the administrator Sieve scripts for the mailbox configured with services.dovecot2.imapsieve.mailbox.<name>.name when one of the listed IMAPSIEVE causes apply.
+
+              This has no effect on the user script, which is always executed no matter the cause.
+            '';
+            example = "COPY";
+            type = types.nullOr (types.enum [ "APPEND" "COPY" "FLAG" ]);
+          };
+
+          before = mkOption {
+            default = null;
+            description = ''
+              When an IMAP event of interest occurs, this sieve script is executed before any user script respectively.
+
+              This setting each specify the location of a single sieve script. The semantics of this setting is similar to sieve_before: the specified scripts form a sequence together with the user script in which the next script is only executed when an (implicit) keep action is executed.
+            '';
+            example = literalExpression "./report-spam.sieve";
+            type = types.nullOr types.path;
+          };
+
+          after = mkOption {
+            default = null;
+            description = ''
+              When an IMAP event of interest occurs, this sieve script is executed after any user script respectively.
+
+              This setting each specify the location of a single sieve script. The semantics of this setting is similar to sieve_after: the specified scripts form a sequence together with the user script in which the next script is only executed when an (implicit) keep action is executed.
+            '';
+            example = literalExpression "./report-spam.sieve";
+            type = types.nullOr types.path;
+          };
+        };
+      }));
+    };
+
+    sieve = {
+      plugins = mkOption {
+        default = [];
+        example = [ "sieve_extprograms" ];
+        description = "Sieve plugins to load";
+        type = types.listOf types.str;
+      };
+
+      extensions = mkOption {
+        default = [];
+        description = "Sieve extensions for use in user scripts";
+        example = [ "notify" "imapflags" "vnd.dovecot.filter" ];
+        type = types.listOf types.str;
+      };
+
+      globalExtensions = mkOption {
+        default = [];
+        example = [ "vnd.dovecot.environment" ];
+        description = "Sieve extensions for use in global scripts";
+        type = types.listOf types.str;
+      };
+
+      pipeBins = mkOption {
+        default = [];
+        example = literalExpression ''
+          map lib.getExe [
+            (pkgs.writeShellScriptBin "learn-ham.sh" "exec ''${pkgs.rspamd}/bin/rspamc learn_ham")
+            (pkgs.writeShellScriptBin "learn-spam.sh" "exec ''${pkgs.rspamd}/bin/rspamc learn_spam")
+          ]
+        '';
+        description = "Programs available for use by the vnd.dovecot.pipe extension";
+        type = types.listOf types.path;
+      };
+    };
   };
 
 
@@ -353,14 +484,23 @@ in
       enable = true;
       params.dovecot2 = {};
     };
-    services.dovecot2.protocols =
-      optional cfg.enableImap "imap"
-      ++ optional cfg.enablePop3 "pop3"
-      ++ optional cfg.enableLmtp "lmtp";
 
-    services.dovecot2.mailPlugins = mkIf cfg.enableQuota {
-      globally.enable = [ "quota" ];
-      perProtocol.imap.enable = [ "imap_quota" ];
+    services.dovecot2 = {
+      protocols =
+        optional cfg.enableImap "imap"
+        ++ optional cfg.enablePop3 "pop3"
+        ++ optional cfg.enableLmtp "lmtp";
+
+      mailPlugins = mkIf cfg.enableQuota {
+        globally.enable = [ "quota" ];
+        perProtocol.imap.enable = [ "imap_quota" ];
+      };
+
+      sieve.plugins =
+        optional (cfg.imapsieve.mailbox != []) "sieve_imapsieve"
+        ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms";
+
+      sieve.globalExtensions = optional (cfg.sieve.pipeBins != []) "vnd.dovecot.pipe";
     };
 
     users.users = {
@@ -415,7 +555,7 @@ in
       # (should be 0) so that the compiled sieve script is newer than
       # the source file and Dovecot won't try to compile it.
       preStart = ''
-        rm -rf ${stateDir}/sieve
+        rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
       '' + optionalString (cfg.sieveScripts != {}) ''
         mkdir -p ${stateDir}/sieve
         ${concatStringsSep "\n" (
@@ -432,6 +572,29 @@ in
         ) cfg.sieveScripts
       )}
         chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
+      ''
+      + optionalString (cfg.imapsieve.mailbox != []) ''
+        mkdir -p ${stateDir}/imapsieve/{before,after}
+
+        ${
+          concatMapStringsSep "\n"
+            (el:
+              optionalString (el.before != null) ''
+                cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
+                ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
+              ''
+              + optionalString (el.after != null) ''
+                cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
+                ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
+              ''
+            )
+            cfg.imapsieve.mailbox
+        }
+
+        ${
+          optionalString (cfg.mailUser != null && cfg.mailGroup != null)
+            "chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/imapsieve'"
+        }
       '';
     };
 
@@ -459,4 +622,5 @@ in
 
   };
 
+  meta.maintainers = [ lib.maintainers.dblsaiko ];
 }

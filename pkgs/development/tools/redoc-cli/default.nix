@@ -30,5 +30,7 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "redoc-cli";
     maintainers = with lib.maintainers; [ veehaitch ];
+    # https://github.com/NixOS/nixpkgs/issues/272217
+    broken = true;
   };
 }

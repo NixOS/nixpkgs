@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.12";
+  version = "3.1.15";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2fd21aSCjwSwk8G0uS3cPGzLZfPVoJl2V5dG+akfCrE=";
+    hash = "sha256-8M2Rm9AtOvZwZhKGuR96XiOOmllqcWAZJuEmUXxzsRw=";
   };
 
   patches = [
@@ -180,12 +180,13 @@ buildPythonPackage rec {
   env = {
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
+    PGDATABASE = "psycopg";
   };
 
   preCheck = ''
     cd ..
   '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
   disabledTests = [
@@ -205,7 +206,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
-    "-m" "'not timing'"
+    "-m" "'not refcount and not timing'"
   ];
 
   postCheck = ''

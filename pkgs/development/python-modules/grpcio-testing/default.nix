@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.58.0";
+  version = "1.60.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ABZMp+VTsyf2HE50cnHf9wdCOeGlAqpbuMWlbsWE/qY=";
+    hash = "sha256-XF+za8O9x4m/8ewEBQG5reoPiK64vh7VyA1oic0Jq0A=";
   };
 
   postPatch = ''

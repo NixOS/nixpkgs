@@ -63,14 +63,15 @@ let
     name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "2b3968deaa1a28791b2901dbbcc9bfd3d2f23e9b";
-    hash = "sha256-q1b5IcOl5oIFXP7/P5RufncjHEVrWp4NjoU2uo/BE9U=";
+    # https://github.com/ibis-project/ibis/blob/7.1.0/nix/overlay.nix#L20-L26
+    rev = "2c6a4bb5d5d525058d8d5b2312a9fee5dafc5476";
+    hash = "sha256-Lq503bqh9ESZJSk6yVq/uZwkAubzmSmoTBZSsqMm0DY=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "6.1.0";
+  version = "7.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -80,7 +81,7 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-+AtXgRNxPryP/fd/GQlLNxWbP6ozikqG2yBCp3dE0tY=";
+    hash = "sha256-E7jryoidw6+CjTIex4wcTXcU+8Kg8LDwg7wJvcwj+7Q=";
   };
 
   nativeBuildInputs = [

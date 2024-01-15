@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 /* or */ mpl20 ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
+    mainProgram = "rvvm";
   };
 }

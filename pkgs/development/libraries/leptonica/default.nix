@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "leptonica";
-  version = "1.83.1";
+  version = "1.84.0";
 
   src = fetchurl {
     url = "https://github.com/DanBloomberg/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-jxhhXgdDr3339QmFxzDfzwyTVIBz0fVmIeQVaotU090=";
+    hash = "sha256-QqApMSod8M1WQBlal5voG/ZiMOFTFkysRWR4RU5yBtU=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

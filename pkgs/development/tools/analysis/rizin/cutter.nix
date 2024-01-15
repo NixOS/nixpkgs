@@ -1,18 +1,27 @@
-{ fetchFromGitHub, lib, mkDerivation
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, stdenv
 # for passthru.plugins
 , pkgs
 # nativeBuildInputs
-, qmake, pkg-config, cmake
+, cmake
+, pkg-config
+, wrapQtAppsHook
 # Qt
-, qtbase, qtsvg, qtwebengine, qttools
+, qt5compat
+, qtbase
+, qtwayland
+, qtsvg
+, qttools
+, qtwebengine
 # buildInputs
 , graphviz
-, rizin
 , python3
-, wrapQtAppsHook
+, rizin
 }:
 
-let cutter = mkDerivation rec {
+let cutter = stdenv.mkDerivation rec {
   pname = "cutter";
   version = "2.3.2";
 
@@ -24,15 +33,45 @@ let cutter = mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qmake pkg-config python3 wrapQtAppsHook ];
-  propagatedBuildInputs = [ python3.pkgs.pyside2 ];
-  buildInputs = [ graphviz qtbase qttools qtsvg qtwebengine rizin python3 ];
+  patches = [
+    # tracking: https://github.com/rizinorg/cutter/pull/3268
+    (fetchpatch {
+      name = "cutter-simplify-python-binding-include-handling.patch";
+      url = "https://github.com/rizinorg/cutter/compare/7256fbb00e92ab12a24d14a92364db482ed295cb..ca5949d9d7c907185cf3d062d9fa71c34c5960d4.diff";
+      hash = "sha256-bqV2FTA8lMNpHBDXdenNx+1cLYa7MH47XKo1YatmLV4=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    wrapQtAppsHook
+  ];
+
+  propagatedBuildInputs = [
+    python3.pkgs.pyside6
+  ];
+
+  buildInputs = [
+    graphviz
+    python3
+    qt5compat
+    qtbase
+    qtsvg
+    qttools
+    qtwebengine
+    rizin
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
+  ];
 
   cmakeFlags = [
     "-DCUTTER_USE_BUNDLED_RIZIN=OFF"
     "-DCUTTER_ENABLE_PYTHON=ON"
     "-DCUTTER_ENABLE_PYTHON_BINDINGS=ON"
     "-DCUTTER_ENABLE_GRAPHVIZ=ON"
+    "-DCUTTER_QT6=ON"
   ];
 
   preBuild = ''
@@ -59,5 +98,6 @@ let cutter = mkDerivation rec {
     license = licenses.gpl3;
     mainProgram = "cutter";
     maintainers = with maintainers; [ mic92 dtzWill ];
+    inherit (rizin.meta) platforms;
   };
 }; in cutter

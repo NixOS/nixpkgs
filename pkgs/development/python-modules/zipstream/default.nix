@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "zipstream";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -18,7 +18,7 @@ pkgs.runCommand "nixpkgs-release-checks"
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>.
-    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
+    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs/' || true)
     if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
         echo "The offending files: $badFiles"

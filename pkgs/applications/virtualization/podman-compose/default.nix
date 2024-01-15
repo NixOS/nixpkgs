@@ -19,5 +19,6 @@ buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
+    mainProgram = "podman-compose";
   };
 }

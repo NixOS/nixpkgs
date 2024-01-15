@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, removeReferencesTo
+{ lib, stdenv, fetchurl, fetchpatch
 , file, openssl, perl, perlPackages, nettools
 , withPerlTools ? false }: let
 
@@ -45,7 +45,14 @@ in stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ nettools removeReferencesTo file ];
+  postConfigure = ''
+    # libraries contain configure options. Mangle store paths out from
+    # ./configure-generated file.
+    sed -i include/net-snmp/net-snmp-config.h \
+      -e "/NETSNMP_CONFIGURE_OPTIONS/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
+  '';
+
+  nativeBuildInputs = [ nettools file ];
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs;
 
@@ -61,9 +68,6 @@ in stdenv.mkDerivation rec {
     done
     mkdir $dev/bin
     mv $bin/bin/net-snmp-config $dev/bin
-    # libraries contain configure options
-    find $lib/lib -type f -exec remove-references-to -t $bin '{}' +
-    find $lib/lib -type f -exec remove-references-to -t $dev '{}' +
   '';
 
   meta = with lib; {

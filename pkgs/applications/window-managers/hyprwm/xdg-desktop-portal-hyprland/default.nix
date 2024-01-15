@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.2.3";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "v${self.version}";
-    hash = "sha256-y8q4XUwx+gVK7i2eLjfR32lVo7TYvEslyzrmzYEaPZU=";
+    hash = "sha256-VRr5Xc4S/VPr/gU3fiOD3vSIL2+GJ+LUrmFTWTwnTz4=";
   };
 
   nativeBuildInputs = [

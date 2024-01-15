@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pygtail";
   version = "0.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bgreenlee";

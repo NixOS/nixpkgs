@@ -68,8 +68,9 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
-, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
+, libselinux
 }:
 
 # Bluetooth codec only makes sense if general bluetooth enabled
@@ -80,12 +81,10 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.80";
+    version = "1.0.0";
 
     outputs = [
       "out"
-      "lib"
-      "pulse"
       "jack"
       "dev"
       "doc"
@@ -98,30 +97,14 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-6Ka83Bqd/nsfp8rv0GTBerpGP226MeZvC5u/j62FzP0=";
+      sha256 = "sha256-mfnMluxJAxDbB6JlIM6HJ0zg7e1q3ia3uFbht6zeHCk=";
     };
 
     patches = [
-      # Break up a dependency cycle between outputs.
-      ./0040-alsa-profiles-use-libdir.patch
-      # Change the path of the pipewire-pulse binary in the service definition.
-      ./0050-pipewire-pulse-path.patch
       # Load libjack from a known location
       ./0060-libjack-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
-      # Add option for changing the config install directory
-      ./0080-pipewire-config-dir.patch
-      # Remove output paths from the comments in the config templates to break dependency cycles
-      ./0090-pipewire-config-template-paths.patch
-      # Place SPA data files in lib output to avoid dependency cycles
-      ./0095-spa-data-dir.patch
-
-      # backport fix for building with webrtc-audio-processing 0.3 on platforms where we don't have 1.x
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1f1c308c9766312e684f0b53fc2d1422c7414d31.patch";
-        hash = "sha256-ECM7/84G99yzXsg5A2DkFnXFGJSV9lz3vD0IRSzR8vU=";
-      })
     ];
 
     strictDeps = true;
@@ -142,6 +125,7 @@ let
       glib
       libjack2
       libusb1
+      libselinux
       libsndfile
       lilv
       ncurses
@@ -174,9 +158,7 @@ let
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
-      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Dlibffado=${mesonEnableFeature ffadoSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
@@ -185,7 +167,6 @@ let
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
       "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
       "-Dudev=${mesonEnableFeature (!enableSystemd)}"
-      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
@@ -198,7 +179,6 @@ let
       "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-codec-ldac=${mesonEnableFeature ldacbtSupport}"
       "-Dsysconfdir=/etc"
-      "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
       "-Dsession-managers="
       "-Dvulkan=enabled"
@@ -209,6 +189,7 @@ let
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
       "-Drlimits-install=false" # installs to /etc, we won't use this anyway
       "-Dcompress-offload=enabled"
+      "-Dman=enabled"
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -217,20 +198,11 @@ let
     doCheck = true;
 
     postUnpack = ''
-      patchShebangs source/doc/input-filter.sh
+      patchShebangs source/doc/*.py
       patchShebangs source/doc/input-filter-h.sh
     '';
 
     postInstall = ''
-      ${lib.optionalString enableSystemd ''
-        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
-        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
-      ''}
-
-      rm $out/bin/pipewire-pulse
-      mkdir -p $pulse/bin
-      ln -sf $out/bin/pipewire $pulse/bin/pipewire-pulse
-
       moveToOutput "bin/pw-jack" "$jack"
     '';
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Galera 3 wsrep provider library";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ ajs124 izorkin ];
+    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
     broken = stdenv.isDarwin;
   };

@@ -33,14 +33,16 @@ stdenv.mkDerivation rec {
     python
   ];
 
+  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+
   postBuild = ''
-    pushd /build/source/api/python
+    pushd ../api/python
     ${pyEnv.interpreter} setup.py build --parallel=$NIX_BUILD_CORES
     popd
   '';
 
   postInstall = ''
-    pushd /build/source/api/python
+    pushd ../api/python
     ${pyEnv.interpreter} setup.py install --skip-build --root=/ --prefix=$py
     popd
   '';

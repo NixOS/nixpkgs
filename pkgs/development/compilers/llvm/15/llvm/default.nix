@@ -30,7 +30,7 @@
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
-} @args:
+}:
 
 let
   inherit (lib) optional optionals optionalString;

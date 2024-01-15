@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-rfc2136";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";

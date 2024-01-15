@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 }:
 
@@ -119,10 +119,6 @@ let
       postPatch = ''
         # Ensure that depmod gets resolved through PATH
         sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
-
-        # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
-        # FIXME: remove when no longer needed
-        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
         # This way kernels can be bit-by-bit reproducible depending on settings
@@ -368,8 +364,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
       ++ optional  (lib.versionOlder version "5.8") libelf
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]

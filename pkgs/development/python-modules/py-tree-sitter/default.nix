@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "py-tree-sitter";
-  version = "0.20.1";
+  version = "0.20.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    rev = "v${version}";
-    hash = "sha256-mdV5zGvVI1MltmOD1BtXxsKB/yigk8d56WwLlX6Uizg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-R97WcsHQMcuEOCg/QQ9YbGTRD30G9PRv0xAbxuoFyC4=";
     fetchSubmodules = true;
   };
 

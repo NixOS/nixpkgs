@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.3.3";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4WXY7XfZVYaJD63y7fPB6tCsc+wGAsgnFlgtFbX5IK0=";
+    hash = "sha256-bQKcS8vktvD62zvSeaBtoJw36TSpo0gEpKm0HI3AuXg=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     awkward
     pytestCheckHook
@@ -64,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

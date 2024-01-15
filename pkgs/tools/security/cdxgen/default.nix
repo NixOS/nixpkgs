@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "cdxgen";
-  version = "6.0.14";
+  version = "9.10.2";
 
   src = fetchFromGitHub {
     owner = "AppThreat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ddeX2EwA2g6wgfsNxf/5ZVsQOHlINGhxif/y6368wCw=";
+    sha256 = "sha256-d4abSPP0dLi5xzq1CYxi1MSKogrQ+YcZjmlUEr5+oBQ=";
   };
 
-  npmDepsHash = "sha256-CJ939wT9dKUzMDH2yHKgT056F2AVBevJlS/NhUBjx0E=";
+  npmDepsHash = "sha256-KLI6wJrP2s2UWkSC5zmFuC2sa2owRgAhnR4UVrI0ThY=";
 
   dontNpmBuild = true;
 

@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pystemd";
   version = "0.13.2";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "valeronoi";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ccoors";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4BTBF6h/BEVr0E3E0EvvKOQGHZ4wCtdXgKBWLSfOcOI=";
+    sha256 = "sha256-7z967y1hWpitZfXNlHHM8qEBdyuBQSFlJElS4ldsAaE=";
   };
 
   buildInputs = [
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nova-madeline maeve ];
+    mainProgram = "valeronoi";
   };
 }

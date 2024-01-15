@@ -21,20 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "1.5.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "diebahn";
     rev = version;
-    hash = "sha256-WEjMtRXRmcbgCIQNJRlGYGQhem9W8nb/lsjft0oWxAk=";
+    hash = "sha256-IKQaCdUpLbZwySpaywGbbLtBGljNR+ltQkbCcJwQ/K4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "hafas-rs-0.1.0" = "sha256-9YmWiief8Nux1ZkPTZjzer/qKAa5hORVn8HngMtKDxM=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${src}";
+    inherit src;
+    hash = "sha256-FlXAWMHrWnYXIWuG0wXDkxiJfNHlZmJFkYRfOxzIg1g=";
   };
 
   nativeBuildInputs = [
@@ -70,9 +69,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "GTK4 frontend for the travel information of the german railway";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
+    description = "Travel with all your train information in one place";
     homepage = "https://gitlab.com/schmiddi-on-mobile/diebahn";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "diebahn";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage    = "https://commons.apache.org/proper/commons-daemon";
-    description = "JSVC is part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes.";
+    description = "A part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes";
     maintainers = with lib.maintainers; [ rsynnest ];
     license     = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
+    mainProgram = "jsvc";
   };
 }

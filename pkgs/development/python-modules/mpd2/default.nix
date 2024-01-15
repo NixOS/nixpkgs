@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "3.1.0";
+  version = "3.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8zws2w1rqnSjZyTzjBxKCZp84sjsSiu3GSFQpYVd9HY=";
+    hash = "sha256-S67DWEzEPtmUjVVZB5+vwmebBrKt4nPpCbNYJlSys/U=";
   };
 
   passthru.optional-dependencies = {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "A Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ rvl mic92 hexa ];
+    maintainers = with maintainers; [ mic92 hexa ];
   };
 
 }

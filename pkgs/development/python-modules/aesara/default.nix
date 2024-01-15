@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.9.2";
+  version = "2.9.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-6SZHr81OiqzKh977RrJtrDvFlAIjguK+1imP3bjxhS8=";
+    hash = "sha256-aO0+O7Ts9phsV4ghunNolxfAruGBbC+tHjVkmFedcCI=";
   };
 
   nativeBuildInputs = [

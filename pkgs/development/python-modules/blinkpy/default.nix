@@ -14,17 +14,23 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.22.0";
+  version = "0.22.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-r8kf5L6bvtivqd9dSi8om1wIi8IHmipKFckNMPT515I=";
+    hash = "sha256-u6FurFaAbkBOT2F+nTL/rGNdUhOpLq+nVKPF3ohuXEs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "wheel~=0.40.0"' "" \
+      --replace "setuptools~=68.0" "setuptools"
+  '';
 
   nativeBuildInputs = [
     setuptools

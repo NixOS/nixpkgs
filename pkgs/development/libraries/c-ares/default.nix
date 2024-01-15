@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.19.1";
 
   src = fetchurl {
-    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
+    url = "https://c-ares.org/download/${pname}-${version}.tar.gz";
     sha256 = "sha256-MhcAOZty7Q4DfQB0xinndB9rLsLdqSlWq+PpZx0+Jo4=";
   };
 

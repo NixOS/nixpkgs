@@ -11,23 +11,22 @@
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.5.4";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XOp8kdF5UcmWrU43WfHk0EI8E+dPxgR2Ck5yC2ANcWI=";
+    hash = "sha256-gz0kfrpRz1OgruNBkpO6N80nmK4iAS+KlK9LYQZpRUQ=";
   };
 
-  vendorHash = "sha256-ng+6fxmwjRIXuH6xDY9JFefMtlMJqaNlfCET9YRuK3k=";
+  vendorHash = "sha256-NgtZ0z/9X+GWaZqQJMecF/Bxq9u8JKCewgQGSru+EJc=";
 
   tags = [
     "with_quic"
     "with_grpc"
     "with_dhcp"
     "with_wireguard"
-    "with_shadowsocksr"
     "with_ech"
     "with_utls"
     "with_reality_server"
@@ -69,5 +68,6 @@ buildGoModule rec {
     description = "The universal proxy platform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "sing-box";
   };
 }

@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/ayoisaiah/f2";
     license = licenses.mit;
     maintainers = with maintainers; [ zendo ];
+    mainProgram = "f2";
   };
 }

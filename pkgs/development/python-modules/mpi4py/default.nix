@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "mpi4py";
   version = "3.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

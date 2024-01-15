@@ -5,7 +5,7 @@ mkCoqDerivation {
   owner   = "uwplse";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.14" "8.18"; out = "20230107"; }
+    { case = range "8.14" "8.19"; out = "20230107"; }
     { case = range "8.6"  "8.16"; out = "20200201"; }
   ] null;
   release."20230107".rev    = "bad8ad2476e14df6b5a819b7aaddc27a7c53fb69";
@@ -14,9 +14,4 @@ mkCoqDerivation {
   release."20200201".sha256 = "1h55s6lk47bk0lv5ralh81z55h799jbl9mhizmqwqzy57y8wqgs1";
 
   propagatedBuildInputs = [ StructTact ];
-  preConfigure = ''
-    if [ -f ./configure ]; then
-      patchShebangs ./configure
-    fi
-  '';
 }

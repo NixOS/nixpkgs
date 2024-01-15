@@ -11,7 +11,5 @@ buildDartApplication rec {
     sha256 = "038yfa22q7lzz85czmny3c1lkv8mjv4pq62cbmh054fqvgf3k3s4";
   };
 
-  pubspecLockFile = ./pubspec.lock;
-  depsListFile = ./deps.json;
-  vendorHash = "16z3paq1nxlnzs20qlljnwa2ff6xfhdqzcq8d8izkl7w1j4hyxgn";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 }

@@ -2,7 +2,6 @@
 , stdenv
 , aplpy
 , astropy
-, astropy-helpers
 , buildPythonPackage
 , casa-formats-io
 , dask
@@ -11,23 +10,21 @@
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
-, radio_beam
+, radio-beam
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.2";
+  version = "0.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Fr9PvUShi04z8SUsZE7zHuXZWg4rxt6gwSBb6lr2Pc=";
+    hash = "sha256-gJzrr3+/FsQN/HHDERxf/NECArwOaTqFwmI/Q2Z9HTM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astropy
     casa-formats-io
-    radio_beam
+    radio-beam
     joblib
     dask
   ];
@@ -46,6 +43,11 @@ buildPythonPackage rec {
     pytest-astropy
     pytestCheckHook
   ];
+
+  # Tests must be run in the build directory.
+  preCheck = ''
+    cd build/lib
+  '';
 
   # On x86_darwin, this test fails with "Fatal Python error: Aborted"
   # when sandbox = true.
@@ -63,7 +65,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
-    # Tests fail to start, according to Hydra
-    broken = true;
   };
 }

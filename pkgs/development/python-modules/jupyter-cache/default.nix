@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
-  version = "0.6.1";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Jvg5ARQ+30ry8/9akeLSrSmORuLO4DyAcdN6I6Y8y/w=";
+    inherit version;
+    pname = "jupyter_cache";
+    hash = "sha256-0Pp9dTPNV5gZjYiJMYJpqME4LtOyL2IsCak1ZSH0hoc=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A defined interface for working with a cache of jupyter notebooks";
     homepage = "https://github.com/executablebooks/jupyter-cache";
+    changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "pylxd";
   version = "2.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lxc";

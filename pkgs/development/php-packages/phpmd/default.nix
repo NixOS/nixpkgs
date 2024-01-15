@@ -2,14 +2,14 @@
 
 let
   pname = "phpmd";
-  version = "2.14.1";
+  version = "2.15.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
-    sha256 = "sha256-C5VDs0G21EyUVlldg05cbrSYG4/fk01VKE7Eq/zODu8=";
+    sha256 = "sha256-aijvVd4MdTsHDR0VgLsIoNFGAW+J8O3c72CsT8EINUQ=";
   };
 
   dontUnpack = true;

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tldextract";
-  version = "5.0.1";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,10 +24,8 @@ buildPythonPackage rec {
     owner = "john-kurkowski";
     repo = "tldextract";
     rev = "refs/tags/${version}";
-    hash = "sha256-+JZnSIjG1avQ14NxbYF5on2ukJtTWTq+hVIqYCvPjsQ=";
+    hash = "sha256-/VBbU8FuB8MEuX6MgGO44+gfqVjl1aHHDHncHY2Jo38=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

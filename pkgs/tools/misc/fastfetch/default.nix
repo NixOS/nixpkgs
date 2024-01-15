@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , chafa
 , cmake
+, darwin
 , dbus
 , dconf
 , ddcutil
@@ -27,28 +28,17 @@
 , xfce
 , yyjson
 , zlib
-, AppKit
-, Cocoa
-, CoreDisplay
-, CoreVideo
-, CoreWLAN
-, DisplayServices
-, Foundation
-, IOBluetooth
-, MediaRemote
-, OpenCL
-, moltenvk
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.1.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-v/dFynTESqRWAxu5Wz0/EroXuwmNj3EEPJxzpfTGKtk=";
+    hash = "sha256-W/6Ye7IJi46SKPY9gnvHNRYwTwxGCJ6oY3KVPzcFvNM=";
   };
 
   nativeBuildInputs = [
@@ -82,23 +72,29 @@ stdenv.mkDerivation (finalAttrs: {
     xfce.xfconf
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+    Apple80211
     AppKit
     Cocoa
     CoreDisplay
     CoreVideo
     CoreWLAN
     DisplayServices
-    Foundation
     IOBluetooth
     MediaRemote
     OpenCL
-    moltenvk
-  ];
+    SystemConfiguration
+    darwin.moltenvk
+  ]);
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DENABLE_SYSTEM_YYJSON=YES"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=uninitialized"
   ];
 
   postInstall = ''

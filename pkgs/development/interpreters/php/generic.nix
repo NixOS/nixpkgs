@@ -33,10 +33,12 @@ let
     , jq
 
     , version
-    , hash
+    , phpSrc ? null
+    , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
+    , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
     , cgiSupport ? true
@@ -51,7 +53,10 @@ let
     , argon2Support ? true
     , cgotoSupport ? false
     , embedSupport ? false
+    , staticSupport ? false
     , ipv6Support ? true
+    , zendSignalsSupport ? true
+    , zendMaxExecutionTimersSupport ? false
     , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
@@ -192,6 +197,11 @@ let
 
       mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
         mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
+
+      defaultPhpSrc = fetchurl {
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+        inherit hash;
+      };
     in
     stdenv.mkDerivation (
       let
@@ -229,7 +239,6 @@ let
             # PCRE
             ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
-
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
@@ -243,11 +252,14 @@ let
             ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
             ++ lib.optional argon2Support "--with-password-argon2=${libargon2}"
             ++ lib.optional cgotoSupport "--enable-re2c-cgoto"
-            ++ lib.optional embedSupport "--enable-embed"
+            ++ lib.optional embedSupport "--enable-embed${lib.optionalString staticSupport "=static"}"
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
+            ++ lib.optional staticSupport "--enable-static"
+            ++ lib.optional (!zendSignalsSupport) ["--disable-zend-signals"]
+            ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
 
             # Sendmail
@@ -278,6 +290,15 @@ let
               substituteInPlace configure --replace "-lstdc++" "-lc++"
             '';
 
+          # When compiling PHP sources from Github, this file is missing and we
+          # need to install it ourselves.
+          # On the other hand, a distribution includes this file by default.
+          preInstall = ''
+            if [[ ! -f ./pear/install-pear-nozlib.phar ]]; then
+              cp ${pearInstallPhar} ./pear/install-pear-nozlib.phar
+            fi
+          '';
+
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
             cp php.ini-production $out/etc/php.ini
@@ -291,10 +312,7 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit hash;
-          };
+          src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 

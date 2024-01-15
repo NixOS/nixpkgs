@@ -1,61 +1,79 @@
-{ lib
-, cudaPackages
-, fetchFromGitHub
-, fetchpatch
-, addOpenGLRunpath
-, cudatoolkit
-, pkg-config
-, sha256
-, glfw3
-, freeimage
+{
+  autoAddOpenGLRunpathHook,
+  backendStdenv,
+  cmake,
+  cudatoolkit,
+  cudaVersion,
+  fetchFromGitHub,
+  fetchpatch,
+  freeimage,
+  glfw3,
+  hash,
+  lib,
+  pkg-config,
 }:
-cudaPackages.backendStdenv.mkDerivation rec {
-  pname = "cuda-samples";
-  version = lib.versions.majorMinor cudatoolkit.version;
+let
+  inherit (lib) lists strings;
+in
+backendStdenv.mkDerivation (
+  finalAttrs: {
+    strictDeps = true;
 
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = pname;
-    rev = "v${version}";
-    inherit sha256;
-  };
+    pname = "cuda-samples";
+    version = cudaVersion;
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
+    src = fetchFromGitHub {
+      owner = "NVIDIA";
+      repo = finalAttrs.pname;
+      rev = "v${finalAttrs.version}";
+      inherit hash;
+    };
 
-  buildInputs = [ cudatoolkit ];
+    nativeBuildInputs =
+      [
+        autoAddOpenGLRunpathHook
+        pkg-config
+      ]
+      # CMake has to run as a native, build-time dependency for libNVVM samples.
+      # However, it's not the primary build tool -- that's still make.
+      # As such, we disable CMake's build system.
+      ++ lists.optionals (strings.versionAtLeast finalAttrs.version "12.2") [cmake];
 
-  # See https://github.com/NVIDIA/cuda-samples/issues/75.
-  patches = lib.optionals (version == "11.3") [
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
-      sha256 = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
-    })
-  ];
+    dontUseCmakeConfigure = true;
 
-  enableParallelBuilding = true;
+    buildInputs = [
+      cudatoolkit
+      freeimage
+      glfw3
+    ];
 
-  preConfigure = ''
-    export CUDA_PATH=${cudatoolkit}
-  '';
+    # See https://github.com/NVIDIA/cuda-samples/issues/75.
+    patches = lib.optionals (finalAttrs.version == "11.3") [
+      (fetchpatch {
+        url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
+        hash = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
+      })
+    ];
 
-  installPhase = ''
-    runHook preInstall
+    enableParallelBuilding = true;
 
-    install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+    preConfigure = ''
+      export CUDA_PATH=${cudatoolkit}
+    '';
 
-    runHook postInstall
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  postFixup = ''
-    for exe in $out/bin/*; do
-      addOpenGLRunpath $exe
-    done
-  '';
+      install -Dm755 -t $out/bin bin/${backendStdenv.hostPlatform.parsed.cpu.name}/${backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
-  meta = {
-    description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
-    # CUDA itself is proprietary, but these sample apps are not.
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
-  };
-}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
+      # CUDA itself is proprietary, but these sample apps are not.
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [obsidian-systems-maintenance] ++ lib.teams.cuda.members;
+    };
+  }
+)

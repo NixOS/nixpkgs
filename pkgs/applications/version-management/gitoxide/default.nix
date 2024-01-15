@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.30.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    hash = "sha256-VJZwNLFePUNIRHEyiEr1tiLaB2tuL6Ah81LNuM/1H14=";
+    hash = "sha256-mqPaSUBb10LIo95GgqAocD9kALzcSlJyQaimb6xfMLs=";
   };
 
-  cargoHash = "sha256-vEp0wLxmmmv33oRO7eOxOoOsV87/7DQ8db5RUfqUb88=";
+  cargoHash = "sha256-JOl/hhyuc6vqeK6/oXXMB3fGRapBsuOTaUG+BQ9QSnk=";
 
   nativeBuildInputs = [ cmake pkg-config ];
 

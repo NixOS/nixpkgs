@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bingo";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
     rev = "v${version}";
-    hash = "sha256-YvBRI1i7ICnacYQv7rNDuUnqhuLXJ4eAZhT0ce3vFuU=";
+    hash = "sha256-bzh6P+J8EoewjOofwWXMgtSXAhESetD3y9EiqLNOT54=";
   };
 
-  vendorHash = "sha256-28p1g+p+guJ0x4/5QDGsGN6gDnZkE4AKF/2cFgNjPDM=";
+  vendorHash = "sha256-cDeeRkTwuwEKNTqK/6ZEKANrjTIUTeR3o5oClkJQ4AE=";
 
   postPatch = ''
     rm get_e2e_test.go get_e2e_utils_test.go

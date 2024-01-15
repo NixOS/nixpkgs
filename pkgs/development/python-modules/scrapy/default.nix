@@ -14,6 +14,7 @@
 , lxml
 , packaging
 , parsel
+, pexpect
 , protego
 , pydispatcher
 , pyopenssl
@@ -26,7 +27,7 @@
 , tldextract
 , twisted
 , w3lib
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,18 @@ buildPythonPackage rec {
     pname = "Scrapy";
     hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
+
+  patches = [
+    # Fix compatiblity with Twisted>=23.8. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/scrapy/scrapy/commit/aa95ada42cdf570f840f55c463375f8a81b303f8.patch";
+      hash = "sha256-LuhA5BqtjSUgkotplvUCtvGNYOTrl0MJRCXiSBMDFzY=";
+      excludes = [
+        "tests/CrawlerProcess/sleeping.py"
+        "tests/test_crawler.py"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -62,13 +75,14 @@ buildPythonPackage rec {
     tldextract
     twisted
     w3lib
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
+    pexpect
     pytestCheckHook
     sybil
     testfixtures

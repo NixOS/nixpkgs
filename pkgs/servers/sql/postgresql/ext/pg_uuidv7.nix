@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_uuidv7";
-  version = "1.3.0";
+  version = "1.4.1";
 
   buildInputs = [ postgresql ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "fboulnois";
     repo = "pg_uuidv7";
     rev = "v${version}";
-    hash = "sha256-kHxS9tL7fpKhjJ8Xx5tee1fv10zVcTt2FgUQSaRdNZo=";
+    hash = "sha256-1qEsDCcULceMqvR3DIC5rOfpzn2PYbFGq0H8p2+9GR4=";
   };
 
   installPhase = ''

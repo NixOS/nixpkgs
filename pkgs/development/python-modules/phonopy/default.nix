@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.20.0";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-peL50b1u+tBRxt/U2SloRvS9LTeMXEjrF5F3ZWhJmZ4=";
+    hash = "sha256-WAWxgLwChQrwutpRsJtDUoNnwek6RpZB+9JtUFdr/pw=";
   };
 
   propagatedBuildInputs = [

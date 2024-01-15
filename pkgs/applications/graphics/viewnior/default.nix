@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
          in mind (follows Gnome HIG2).
       '';
     license = licenses.gpl3;
-    homepage = "http://siyanpanayotov.com/project/viewnior/";
+    homepage = "https://siyanpanayotov.com/project/viewnior/";
     maintainers = with maintainers; [ smironov artturin ];
     platforms = platforms.gnu ++ platforms.linux;
   };

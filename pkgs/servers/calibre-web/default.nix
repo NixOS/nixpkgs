@@ -2,36 +2,24 @@
 , fetchFromGitHub
 , nixosTests
 , python3
-, fetchPypi
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-        version = "1.4.46";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-        disabledTestPaths = [
-           "test/aaa_profiling"
-           "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.20";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-0lArY1aTpO4sgIVDSqClYMGlip92f9hE/L2UouTLK8Q=";
+    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -64,8 +52,6 @@ python.pkgs.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
-    # environ in tornado.wsgi.WSGIContainer no longer a static method from 6.3 version
-    ./static_environ.patch
   ];
 
   # calibre-web doesn't follow setuptools directory structure. The following is taken from the script
@@ -105,5 +91,6 @@ python.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
+    mainProgram = "calibre-web";
   };
 }

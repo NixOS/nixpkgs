@@ -35,8 +35,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     # https://github.com/vanstinator/raincloudy/pull/60
     substituteInPlace setup.py \

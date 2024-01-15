@@ -1,16 +1,17 @@
+/*
+  A partial and basic implementation of GVariant formatted strings.
+  See [GVariant Format Strings](https://docs.gtk.org/glib/gvariant-format-strings.html) for details.
+
+  :::{.warning}
+  This API is not considered fully stable and it might therefore
+  change in backwards incompatible ways without prior notice.
+  :::
+*/
+
 # This file is based on https://github.com/nix-community/home-manager
 # Copyright (c) 2017-2022 Home Manager contributors
-#
-
-
 { lib }:
 
-/* A partial and basic implementation of GVariant formatted strings.
-   See https://docs.gtk.org/glib/gvariant-format-strings.html for detauls.
-
-   Note, this API is not considered fully stable and it might therefore
-   change in backwards incompatible ways without prior notice.
-*/
 let
   inherit (lib)
     concatMapStringsSep concatStrings escape head replaceStrings;

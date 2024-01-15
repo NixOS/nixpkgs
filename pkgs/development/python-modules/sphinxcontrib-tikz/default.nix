@@ -3,12 +3,13 @@
 , fetchPypi
 , sphinx
 , pdf2svg
-, texLive
+, texliveSmall
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
   version = "0.4.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace sphinxcontrib/tikz.py \
-      --replace "config.latex_engine" "'${texLive}/bin/pdflatex'" \
+      --replace "config.latex_engine" "'${texliveSmall.withPackages (ps: with ps; [ standalone pgfplots ])}/bin/pdflatex'" \
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sphinxcontrib.tikz" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "TikZ extension for Sphinx";

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
   version = "0.2.2";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

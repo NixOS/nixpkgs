@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , mkDerivation
 , substituteAll
@@ -12,6 +11,7 @@
 
 , bison
 , cmake
+, draco
 , exiv2
 , fcgi
 , flex
@@ -64,8 +64,8 @@ let
     owslib
     psycopg2
     pygments
-    pyqt-builder
     pyqt5
+    pyqt-builder
     python-dateutil
     pytz
     pyyaml
@@ -77,14 +77,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.32.3";
+  version = "3.34.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ge5ne22sDLKbrJk2vYQxpu3iRXSoOk9924c/RdtD3Nc=";
+    hash = "sha256-RKxIJpp0lmRqyMYJuX2U4/GJh0FTnklFOcUft6LsuHc=";
   };
 
   passthru = {
@@ -104,6 +104,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
+    draco
     exiv2
     fcgi
     geos
@@ -142,11 +143,6 @@ in mkDerivation rec {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
-    (fetchpatch {
-      name = "exiv2-0.28.patch";
-      url = "https://github.com/qgis/QGIS/commit/32f5418fc4f7bb2ee986dee1824ff2989c113a94.patch";
-      hash = "sha256-zWyf+kLro4ZyUJLX/nDjY0nLneTaI1DxHvRsvwoWq14=";
-    })
   ];
 
   # Add path to Qt platform plugins
@@ -156,8 +152,9 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
+    "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "lrcalc-python";
   version = "2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

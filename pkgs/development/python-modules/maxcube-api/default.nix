@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "eQ-3/ELV MAX! Cube Python API";
     homepage = "https://github.com/hackercowboy/python-maxcube-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

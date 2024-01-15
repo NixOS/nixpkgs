@@ -26,7 +26,7 @@ echo "Latest release is $upstream_version from $last_updated."
 #
 
 nixpkgs="$(git rev-parse --show-toplevel)"
-tradingview_nix="$nixpkgs/pkgs/applications/finance/tradingview/default.nix"
+tradingview_nix="$nixpkgs/pkgs/by-name/tr/tradingview/package.nix"
 current_nix_version=$(
   grep 'version\s*=' "$tradingview_nix" \
   | sed -Ene 's/.*"(.*)".*/\1/p'
@@ -44,10 +44,10 @@ fi
 #
 
 echo "Updating from ${current_nix_version} to ${upstream_version}, released ${last_updated}"
-
+echo 's/hash\s*=\s*"[^"]*"\s*;/hash = "'"${sri}"'";/'
 sed --regexp-extended \
   -e 's/revision\s*=\s*"[0-9]+"\s*;/revision = "'"${revision}"'";/' \
-  -e 's/hash\s*=\s*"[^"]*"\s*;/hash = "'"${sri}"'";/' \
+  -e 's#hash\s*=\s*"[^"]*"\s*;#hash = "'"${sri}"'";#' \
   -e 's/version\s*=\s*".*"\s*;/version = "'"${upstream_version}"'";/' \
   -i "$tradingview_nix"
 

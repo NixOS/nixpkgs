@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , python3
+, testers
 }:
 
 let self = with python3.pkgs; buildPythonApplication rec {

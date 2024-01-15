@@ -86,6 +86,10 @@ in stdenv.mkDerivation rec {
     qtsvg
   ];
 
+  patches = [
+    ./dont-redefine-strlcat.patch
+  ];
+
   postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
     lib.optionalString withDocs ''
       mkdir -p ${docDir};

@@ -1,13 +1,14 @@
 { lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
-, fetchYarnDeps, fixup_yarn_lock
+, yarn, callPackage, ruby, writeShellScript
+, fetchYarnDeps, prefetch-yarn-deps
 , brotli
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
 , version ? srcOverride.version
+, patches ? []
   # src is a package
-, srcOverride ? callPackage ./source.nix {}
+, srcOverride ? callPackage ./source.nix { inherit patches; }
 , gemset ? ./. + "/gemset.nix"
 , yarnHash ? srcOverride.yarnHash
 }:
@@ -19,8 +20,7 @@ stdenv.mkDerivation rec {
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
-    inherit version gemset;
-    ruby = ruby_3_0;
+    inherit version gemset ruby;
     gemdir = src;
     # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
     # symlinks with directories, resolving this error when running rake:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [ prefetch-yarn-deps nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       # This option is needed for openssl-3 compatibility
       # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
       export NODE_OPTIONS=--openssl-legacy-provider
-      fixup_yarn_lock ~/yarn.lock
+      fixup-yarn-lock ~/yarn.lock
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
@@ -96,7 +96,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
+  nativeBuildInputs = [ brotli ];
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''

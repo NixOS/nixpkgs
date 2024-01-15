@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "health-check";
-  version = "0.03.11";
+  version = "0.03.12";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-QLa/7kA0juefzOba7ELopDmOVfiGJReo4LCfhnxW1tk=";
+    hash = "sha256-LuUCs6GLaxI5ywv6dr8dlvAXfcLbr1t7y6s/pb6JDpg=";
   };
 
   buildInputs = [ json_c libbsd ];

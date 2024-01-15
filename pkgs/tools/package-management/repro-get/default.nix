@@ -69,5 +69,6 @@ buildGoModule rec {
     homepage = "https://github.com/reproducible-containers/repro-get";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "repro-get";
   };
 }

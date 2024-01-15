@@ -7,9 +7,9 @@
 }:
 
 let
-  version = "2.1.2";
-  sha256 = "1k47wjfyhkfn4v5cpfwfgb8ypcsiaml2cxwbwasis926wda37gzk";
-  manifestsSha256 = "1imwvm85p5m9s05vmjvqql2hbkrj4m5cy87212ghybaricklcx6a";
+  version = "2.2.2";
+  sha256 = "0d4sf1b0dddcarngr4dllhbbyjajpf1byv9cf7nx9040i80vk56p";
+  manifestsSha256 = "1ixdzgaw3mrkwbazfbx0vc04z4rsyyyj5dsck15dv5kkvhi304lg";
 
   manifests = fetchzip {
     url =
@@ -29,7 +29,7 @@ in buildGoModule rec {
     inherit sha256;
   };
 
-  vendorHash = "sha256-4srEYBI/Qay9F0JxEIT0HyOtF29V9dzdB1ei4tZYJbs=";
+  vendorHash = "sha256-jbhxSeLjgNmj2wCZao4DkQ57GvpYKlUyy7xdNKN1nWc=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests

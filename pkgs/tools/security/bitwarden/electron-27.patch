@@ -1,0 +1,69 @@
+From e2c15e826fe9d4d2d12868ef5409e423e3191b58 Mon Sep 17 00:00:00 2001
+From: Daniel James Smith <2670567+djsmith85@users.noreply.github.com>
+Date: Fri, 8 Dec 2023 13:07:46 +0100
+Subject: [PATCH] Bump electron to v27.1.3 (#7134)
+
+Co-authored-by: Daniel James Smith <djsmith85@users.noreply.github.com>
+
+(cherry picked from commit d76602343f36d8e17a9b0204e0290488456c96d5)
+---
+ apps/desktop/electron-builder.json | 2 +-
+ package-lock.json                  | 8 ++++----
+ package.json                       | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/apps/desktop/electron-builder.json b/apps/desktop/electron-builder.json
+index 69d1c0074f..a12870bd96 100644
+--- a/apps/desktop/electron-builder.json
++++ b/apps/desktop/electron-builder.json
+@@ -19,7 +19,7 @@
+     "**/node_modules/@bitwarden/desktop-native/index.js",
+     "**/node_modules/@bitwarden/desktop-native/desktop_native.${platform}-${arch}*.node"
+   ],
+-  "electronVersion": "25.9.1",
++  "electronVersion": "27.1.3",
+   "generateUpdatesFilesForAllChannels": true,
+   "publish": {
+     "provider": "generic",
+diff --git a/package-lock.json b/package-lock.json
+index 3f0afde95b..9b7b2dbcd9 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -125,7 +125,7 @@
+         "cross-env": "7.0.3",
+         "css-loader": "6.8.1",
+         "del": "6.1.1",
+-        "electron": "25.9.1",
++        "electron": "27.1.3",
+         "electron-builder": "23.6.0",
+         "electron-log": "5.0.0",
+         "electron-reload": "2.0.0-alpha.1",
+@@ -20173,9 +20173,9 @@
+       }
+     },
+     "node_modules/electron": {
+-      "version": "25.9.1",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-25.9.1.tgz",
+-      "integrity": "sha512-Uo/Fh7igjoUXA/f90iTATZJesQEArVL1uLA672JefNWTLymdKSZkJKiCciu/Xnd0TS6qvdIOUGuJFSTQnKskXQ==",
++      "version": "27.1.3",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-27.1.3.tgz",
++      "integrity": "sha512-7eD8VMhhlL5J531OOawn00eMthUkX1e3qN5Nqd7eMK8bg5HxQBrn8bdPlvUEnCano9KhrVwaDnGeuzWoDOGpjQ==",
+       "dev": true,
+       "hasInstallScript": true,
+       "dependencies": {
+diff --git a/package.json b/package.json
+index 9ee884b31d..4a5c3513fd 100644
+--- a/package.json
++++ b/package.json
+@@ -88,7 +88,7 @@
+     "cross-env": "7.0.3",
+     "css-loader": "6.8.1",
+     "del": "6.1.1",
+-    "electron": "25.9.1",
++    "electron": "27.1.3",
+     "electron-builder": "23.6.0",
+     "electron-log": "5.0.0",
+     "electron-reload": "2.0.0-alpha.1",
+-- 
+2.42.0
+

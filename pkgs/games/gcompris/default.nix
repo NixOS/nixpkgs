@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
+    url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
     hash = "sha256-8hqiq1wYw4irbOXCrwcJqTMuLISzSmSqPuw2Rn8XzQA=";
   };
 

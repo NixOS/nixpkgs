@@ -9,11 +9,9 @@ buildNpmPackage {
 
   sourceRoot = "${src.name}/web";
 
-  patches = [
-    ./change-web-out-dir.patch
-  ];
-
   postPatch = ''
+    substituteInPlace ./vite.config.ts \
+      --replace 'outDir: "../internal/server/public_html"' 'outDir: "dist"'
     cp ${./package-lock.json} ./package-lock.json
   '';
 

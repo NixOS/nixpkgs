@@ -35,10 +35,13 @@ in {
         else package-darwin;
     in {
       inherit package-linux package-darwin;
+      __attrsFailEvaluation = true;
 
       jdk-hotspot = callPackage package.jdk-hotspot {};
       jre-hotspot = callPackage package.jre-hotspot {};
+    } // lib.optionalAttrs (package?jdk-openj9) {
       jdk-openj9  = callPackage package.jdk-openj9  {};
+    } // lib.optionalAttrs (package?jre-openj9) {
       jre-openj9  = callPackage package.jre-openj9  {};
     };
 
@@ -93,6 +96,10 @@ in {
     adoptopenjdk-17 = mkAdoptopenjdk
       ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix;
+
+    corretto11 = callPackage ../development/compilers/corretto/11.nix { };
+    corretto17 = callPackage ../development/compilers/corretto/17.nix { };
+    corretto19 = callPackage ../development/compilers/corretto/19.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
@@ -215,7 +222,7 @@ in {
       ../development/compilers/openjdk/21.nix
       ../development/compilers/zulu/21.nix
       {
-        openjdk21-bootstrap = temurin-bin.jdk-20;
+        openjdk21-bootstrap = temurin-bin.jdk-21;
         openjfx = openjfx21;
       };
 

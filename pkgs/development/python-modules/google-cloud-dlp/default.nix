@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.12.3";
+  version = "3.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c4gPKov6YASVdvuU2FaYqiNn0yrJAbdieP5Qt1ZjRAs=";
+    hash = "sha256-mFqptqEvHQAKNevzawDOfQsH0SCn9EanJ2js4vIpCGo=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires credentials
     "test_inspect_content"
+    "test_list_dlp_jobs"
   ];
 
   pythonImportsCheck = [

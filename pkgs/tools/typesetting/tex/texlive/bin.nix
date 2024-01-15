@@ -310,11 +310,29 @@ chktex = stdenv.mkDerivation {
 };
 
 
-dvisvgm = stdenv.mkDerivation rec {
+dvisvgm = stdenv.mkDerivation {
   pname = "texlive-dvisvgm.bin";
   inherit version;
 
   inherit (common) src;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mgieseki/dvisvgm/commit/629544928877362d0c6d64f20695f7df3073c5eb.patch";
+      stripLen = 1;
+      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
+      hash = "sha256-CBCbc/woaFeLw7aBG/kSVYc3a5Q56zbAB64kK6mRy4g=";
+    })
+
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/mgieseki/dvisvgm/commit/d5df85b403602c927fe56a1f692af91182a1facd.patch";
+      stripLen = 1;
+      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
+      hash = "sha256-U5m9jPmfAXOQKaU+aO/h6hEAzHRPqKcdj5k8f5gU9JQ=";
+      excludes = [ "texk/dvisvgm/dvisvgm-src/src/ttf/TTFTable.hpp" ];
+    })
+  ];
 
   preConfigure = "cd texk/dvisvgm";
 
@@ -355,7 +373,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
+  src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -436,7 +454,7 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (lib.head texlive.xpdfopen.pkgs) version;
+  inherit (texlive.pkgs.xpdfopen) version;
 
   inherit (common) src;
 

@@ -1,27 +1,22 @@
-{ lib, stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
-  docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
+{ lib, stdenv, fetchgit, asciidoc, asciidoctor, cmake, pkg-config,
+  fftw, fftwFloat, gfortran, hamlib_4, libtool, libusb1, qtbase,
   qtmultimedia, qtserialport, qttools, boost, texinfo, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
   version = "2.6.1";
 
-  # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
-  src = fetchurl {
-    url = "https://sourceforge.net/projects/wsjt/files/wsjtx-${version}/wsjtx-${version}.tgz";
-    sha256 = "sha256-YNDiy0WkmmrVhbCQiCGp/yw6wlZNYQQmIP82wt3Mdl8=";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/wsjt/wsjtx";
+    rev = "wsjtx-${version}";
+    hash = "sha256-fELx3B9JqCCL5vaIHab3of5ah9qdu5lemqjUnvY5DdM=";
   };
 
-  # Hamlib builds with autotools, wsjtx builds with cmake
-  # Omitting pkg-config because it causes issues locating the built hamlib
   nativeBuildInputs = [
-    asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
-    qttools texinfo wrapQtAppsHook
+    asciidoc asciidoctor cmake gfortran libtool
+    pkg-config qttools texinfo wrapQtAppsHook
   ];
-  buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport boost ];
-
-  # Remove Git dependency from superbuild since sources are included
-  patches = [ ./super.patch ];
+  buildInputs = [ fftw fftwFloat hamlib_4 libusb1 qtbase qtmultimedia qtserialport boost ];
 
   meta = with lib; {
     description = "Weak-signal digital communication modes for amateur radio";
@@ -33,9 +28,8 @@ stdenv.mkDerivation rec {
       contacts under extreme weak-signal conditions.
     '';
     homepage = "https://physics.princeton.edu/pulsar/k1jt/wsjtx.html";
-    # Older licenses are for the statically-linked hamlib
-    license = with licenses; [ gpl3Plus gpl2Plus lgpl21Plus ];
+    license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lasandell numinit ];
+    maintainers = with maintainers; [ lasandell numinit melling ];
   };
 }

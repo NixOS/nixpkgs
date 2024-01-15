@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.6.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     rev = finalAttrs.version;
-    hash = "sha256-nQLxE2Q4GiLUjkag/yqctzmkKKWFw1XNFjotE8MMgBA=";
+    hash = "sha256-/z2Wo9zhuEVIpk8jHYwg2JbBqkX7tfDP2KTZ9yzj454=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonEnable "xwayland" true)
   ];
+
+  passthru = {
+    providedSessions = [ "labwc" ];
+  };
 
   meta = {
     homepage = "https://github.com/labwc/labwc";

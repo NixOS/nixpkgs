@@ -4,6 +4,7 @@ import ./make-test-python.nix (
   let
     remoteRepository = "/root/restic-backup";
     remoteFromFileRepository = "/root/restic-backup-from-file";
+    remoteNoInitRepository = "/root/restic-backup-no-init";
     rcloneRepository = "rclone:local:/root/restic-rclone-backup";
 
     backupPrepareCommand = ''
@@ -54,6 +55,7 @@ import ./make-test-python.nix (
               inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
               repository = remoteRepository;
               initialize = true;
+              timerConfig = null; # has no effect here, just checking that it doesn't break the service
             };
             remote-from-file-backup = {
               inherit passwordFile exclude pruneOpts;
@@ -63,6 +65,11 @@ import ./make-test-python.nix (
               dynamicFilesFrom = ''
                 find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
               '';
+            };
+            remote-noinit-backup = {
+              inherit passwordFile exclude pruneOpts paths;
+              initialize = false;
+              repository = remoteNoInitRepository;
             };
             rclonebackup = {
               inherit passwordFile paths exclude pruneOpts;
@@ -114,6 +121,7 @@ import ./make-test-python.nix (
           "cp -rT ${testDir} /opt",
           "touch /opt/excluded_file_1 /opt/excluded_file_2",
           "mkdir -p /root/restic-rclone-backup",
+          "restic-remote-noinit-backup init",
 
           # test that remotebackup runs custom commands and produces a snapshot
           "timedatectl set-time '2016-12-13 13:45'",
@@ -129,6 +137,10 @@ import ./make-test-python.nix (
           # test that remote-from-file-backup produces a snapshot
           "systemctl start restic-backups-remote-from-file-backup.service",
           'restic-remote-from-file-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+
+          # test that remote-noinit-backup produces a snapshot
+          "systemctl start restic-backups-remote-noinit-backup.service",
+          'restic-remote-noinit-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that restoring that snapshot produces the same directory
           "mkdir /tmp/restore-2",

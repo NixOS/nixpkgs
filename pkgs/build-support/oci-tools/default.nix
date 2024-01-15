@@ -42,7 +42,7 @@
       "/sys/fs/cgroup" = {
         type = "cgroup";
         source = "cgroup";
-        options = [ "nosuid" "noexec" "nodev" "realatime" "ro" ];
+        options = [ "nosuid" "noexec" "nodev" "relatime" "ro" ];
       };
     };
     config = writeText "config.json" (builtins.toJSON {

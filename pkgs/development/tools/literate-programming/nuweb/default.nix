@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, tex}:
+{lib, stdenv, fetchurl, texliveMedium}:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 
-  buildInputs = [ tex ];
+  buildInputs = [ texliveMedium ];
 
   patchPhase = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile

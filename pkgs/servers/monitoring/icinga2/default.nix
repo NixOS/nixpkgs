@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

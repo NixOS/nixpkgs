@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "pgrok";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     rev = "v${version}";
-    hash = "sha256-2k3XLXmf1Xnx4HvS7sD/aq+78Z4I7uY4djV958n5TX4=";
+    hash = "sha256-P36rpFi5J+dF6FrVaPhqupG00h4kwr0qumt4ehL/7vU=";
   };
 
-  vendorHash = "sha256-M0xVHRh9NKPxmUEmx1dDQUZc8aXcdAfHisQAnt72RdY=";
+  vendorHash = "sha256-X5FjzliIJdfJnNaUXBjv1uq5tyjMVjBbnLCBH/P0LFM=";
 
   outputs = [ "out" "server" ];
 

@@ -22,12 +22,7 @@ in {
           lib.mdDoc "Open ports in the firewall for the NZBHydra2 web interface.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nzbhydra2;
-        defaultText = literalExpression "pkgs.nzbhydra2";
-        description = lib.mdDoc "NZBHydra2 package to use.";
-      };
+      package = mkPackageOption pkgs "nzbhydra2" { };
     };
   };
 

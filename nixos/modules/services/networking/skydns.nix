@@ -55,12 +55,7 @@ in {
       example = ["8.8.8.8:53" "8.8.4.4:53"];
     };
 
-    package = mkOption {
-      default = pkgs.skydns;
-      defaultText = literalExpression "pkgs.skydns";
-      type = types.package;
-      description = lib.mdDoc "Skydns package to use.";
-    };
+    package = mkPackageOption pkgs "skydns" { };
 
     extraConfig = mkOption {
       default = {};

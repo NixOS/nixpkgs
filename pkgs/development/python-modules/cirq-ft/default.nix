@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-ft";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";

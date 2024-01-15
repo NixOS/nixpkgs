@@ -21,12 +21,12 @@ let
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.48.1";
+  version = "7.50.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    hash = "sha256-3PFplTR/L2xJjQ5GEz2ow28SEHWafOmiLjIQHQqAaso=";
+    hash = "sha256-03+ofnS8ecx2SRAWb0KX6TxRd0SDEOCd4+EBVgoMFZk=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -43,7 +43,7 @@ in buildGoModule rec {
 
   doCheck = false;
 
-  vendorHash = "sha256-o7CTw7IIS5xueW20O1wKDV1Yji7PhGhp+6+i2ymKhxE=";
+  vendorHash = "sha256-X+QLz45kWg12ls1dkGzThbNxPw7WEJ1odRYkuhOyhk8=";
 
   subPackages = [
     "cmd/agent"
@@ -64,6 +64,7 @@ in buildGoModule rec {
     "process"
     "log"
     "secrets"
+    "zlib"
   ]
   ++ lib.optionals withSystemd [ "systemd" ]
   ++ extraTags;
@@ -117,7 +118,7 @@ in buildGoModule rec {
     '';
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
+    maintainers = with maintainers; [ thoughtpolice domenkozar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

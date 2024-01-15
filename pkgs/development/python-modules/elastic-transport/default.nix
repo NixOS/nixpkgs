@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.4.1";
+  version = "8.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hrI8GJaI3K/3B0Vng0WvoabDP2Y8/60/tHNKo/Xq6JM=";
+    hash = "sha256-4W9p9niHf2EMY+sS1RCdqWndzvpz8pKrIlLo3NxJ8mk=";
   };
 
   postPatch = ''

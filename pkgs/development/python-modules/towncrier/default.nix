@@ -1,38 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
 , click
-, click-default-group
+, fetchPypi
+, git # shells out to git
+, hatchling
+, importlib-resources
 , incremental
 , jinja2
 , mock
 , pytestCheckHook
-, toml
+, pythonOlder
+, tomli
 , twisted
-, setuptools
-, git # shells out to git
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "23.6.0";
-  format = "setuptools";
+  version = "23.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/Cm9WrRyfI2s++Y29/tdxTuZgFti2hyWshSDYVn/cME=";
+    hash = "sha256-E5N8JH4/iuIKxE2JXPX5amCtRs/cwWcXWVMNeDfZ7l0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "hatchling ~= 1.17.1" "hatchling"
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     click
-    click-default-group
     incremental
     jinja2
-    toml
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   preCheck = ''

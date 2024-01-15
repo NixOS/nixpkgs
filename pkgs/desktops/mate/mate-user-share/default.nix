@@ -9,14 +9,16 @@
 , libnotify
 , libxml2
 , libcanberra-gtk3
-, mod_dnssd
-, apacheHttpd
+, apacheHttpdPackages
 , hicolor-icon-theme
 , mate
 , wrapGAppsHook
 , mateUpdateScript
 }:
 
+let
+  inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
+in
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
   version = "1.26.0";

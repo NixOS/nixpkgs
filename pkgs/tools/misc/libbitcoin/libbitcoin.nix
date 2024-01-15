@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbitcoin";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rppyp3zpb6ymwangjpblwf6qh4y3d1hczrjx8aavmrq7hznnrhq";
+    hash = "sha256-7fxj2hnuGRUS4QSQ1w0s3looe9pMvE2U50/yhNyBMf0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ secp256k1 ];
 
   enableParallelBuilding = true;
-
-  patches = [ ./fix-gcc11-compilation.patch ];
 
   configureFlags = [
     "--with-tests=no"

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework-guardian";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rpkilby";

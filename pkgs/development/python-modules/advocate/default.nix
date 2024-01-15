@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "advocate";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JordanMilne";

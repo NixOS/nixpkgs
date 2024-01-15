@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "sqlglot";
   version = "17.14.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -19,8 +20,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-aImshQ5jf0k62ucpK4X8G7uHGAFQkhGgjMYo4mvSvew=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ setuptools-scm ];
 

@@ -3,7 +3,7 @@
 let
   inherit (lib) mkOption mkIf types length attrNames;
   cfg = config.services.kerberos_server;
-  kerberos = config.krb5.kerberos;
+  kerberos = config.security.krb5.package;
 
   aclEntry = {
     options = {

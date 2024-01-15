@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.6.14";
-  format = "setuptools";
+  version = "3.8.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dFXmylelRMG/3YtWrOCMHBzkxlcqiquPG9NR3CWhC2s=";
+    hash = "sha256-Sdf2+K1TTlpuc/uPX9OJhmBvF7Ru5V9+vuB6VcZ3ygE=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,6 @@ buildPythonPackage rec {
     decopatch
     makefun
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   # Tests have dependencies (pytest-harvest, pytest-steps) which
   # are not available in Nixpkgs. Most of the packages (decopatch,

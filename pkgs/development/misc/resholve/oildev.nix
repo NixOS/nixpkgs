@@ -10,7 +10,7 @@
   git
 , # oil deps
   file
-, glibcLocales
+, pkgsBuildBuild
 , six
 , typing
 }:
@@ -42,6 +42,10 @@ rec {
       hash = "sha256-H3GKN0Pq1VFD5+SWxm8CXUVO7zAyj/ngKVmDaG/aRT4=";
       fetchSubmodules = true;
     };
+    patches = [
+      # Fixes several incompatible function pointer conversions, which are errors in clang 16.
+      ./0014-clang_incompatible_function_pointer_conversions.patch
+    ];
     # just for submodule IIRC
     nativeBuildInputs = [ git ];
   };
@@ -119,7 +123,7 @@ rec {
     '';
 
     # See earlier note on glibcLocales TODO: verify needed?
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${pkgsBuildBuild.glibcLocales}/lib/locale/locale-archive";
 
     # not exhaustive; sample what resholve uses as a sanity check
     pythonImportsCheck = [

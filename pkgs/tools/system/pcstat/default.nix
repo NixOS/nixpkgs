@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/tobert/pcstat";
     license = licenses.asl20;
     maintainers = with maintainers; [ aminechikhaoui ];
+    mainProgram = "pcstat";
   };
 }

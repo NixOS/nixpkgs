@@ -14,14 +14,14 @@
 }:
 
 let
-  version = "14.1.2";
+  version = "15.0.2";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "sha256-UQ4PwO4D1kw7JOMf6xSaRBfT822KwrvWBPDmaQjkRVQ=";
+    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
   };
 
   pythonEnv =

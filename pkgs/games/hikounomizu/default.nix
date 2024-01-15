@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hikounomizu";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "http://download.tuxfamily.org/hnm/${version}/hikounomizu-${version}-src.tar.bz2";
-    hash = "sha256-Hw/BA7jOW9KGdde1NLDh4SfQXxvZkNGx/sHXukgFZ5M=";
+    hash = "sha256-3wRhe6CDq1dD0SObAygfqslYJx+EM3LM3rj6HI0whYU=";
   };
 
   nativeBuildInputs = [

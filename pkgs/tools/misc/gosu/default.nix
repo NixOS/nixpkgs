@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gosu";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "tianon";
     repo = "gosu";
     rev = version;
-    hash = "sha256-UfrhrwsnDT7pfizQtQzqv/1FTMBTrk3qmtiR7ffwwhc=";
+    hash = "sha256-ziviUXqCpCGECewyZNLDKSjnpmz/3i5DKrIKZlLwl4o=";
   };
 
-  vendorHash = "sha256-3HIAPI1bbfwE2/cUsQnp2Vz2uvlvSFDUrp2xuGNr8Gk=";
+  vendorHash = "sha256-fygLYSO0kpMFJd6WQp/uLYkELkyaOPZ9V8BrJcIcMuU=";
 
   ldflags = [ "-d" "-s" "-w" ];
 

@@ -125,7 +125,8 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests = {
       all-terminfo = nixosTests.allTerminfo;
-      terminal-emulators = nixosTests.terminal-emulators.wezterm;
+      # the test is commented out in nixos/tests/terminal-emulators.nix
+      #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
     terminfo = runCommand "wezterm-terminfo"
       {

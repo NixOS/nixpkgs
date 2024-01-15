@@ -19,6 +19,8 @@ It returns a Nixpkgs-like function that can be auto-called and evaluates to an a
   overlays ? [],
   # Passed by the checker to make sure a real Nixpkgs isn't influenced by impurities
   config ? {},
+  # Passed by the checker to make sure a real Nixpkgs isn't influenced by impurities
+  system ? null,
 }:
 let
 

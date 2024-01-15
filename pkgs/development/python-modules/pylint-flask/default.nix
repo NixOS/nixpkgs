@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pylint-flask";
   version = "0.6";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

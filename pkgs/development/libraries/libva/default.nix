@@ -9,17 +9,18 @@
 , mpv
 , intel-vaapi-driver
 , vlc
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.19.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
-    rev    = version;
-    sha256 = "sha256-M6mAHvGl4d9EqdkDBSxSbpZUCUcrkpnf+hfo16L3eHs=";
+    rev    = finalAttrs.version;
+    sha256 = "sha256-ENAsytjqvS8xHZyZLPih3bzBgQ1f/j+s3dWZs1GTWHs=";
   };
 
   outputs = [ "dev" "out" ];
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
     inherit intel-compute-runtime intel-media-driver intel-vaapi-driver mpv vlc;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -52,9 +54,12 @@ stdenv.mkDerivation rec {
       driver-specific acceleration backends for each supported hardware vendor.
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
-    changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    pkgConfigModules = [ "libva" "libva-drm" ] ++ lib.optionals (!minimal) [
+      "libva-glx" "libva-wayland" "libva-x11"
+    ];
     platforms = platforms.unix;
   };
-}
+})

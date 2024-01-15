@@ -24,17 +24,16 @@ stdenv.mkDerivation rec {
   buildInputs = buildInputs_libraries;
 
   postPatch = ''
-    echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm ;
     patchShebangs . ;
     grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
     done ;
-    substituteInPlace ./configure --replace 'set -e' 'set -e ; git () { echo "v${git-version}" ;}' ;
-    substituteInPlace ./src/build/build-version.scm --replace "with-exception-catcher" '(lambda _ "v${git-version}")' ;
-    #rmdir src/gambit
-    #cp -a ${pkgs.gambit-unstable.src} ./src/gambit
-    chmod -R u+w ./src/gambit
-    ( cd src/gambit ; ${gambit-params.fixStamp gambit-git-version gambit-stampYmd gambit-stampHms} )
+    cat > MANIFEST <<EOF
+    gerbil_stamp_version=v${git-version}
+    gambit_stamp_version=v${gambit-git-version}
+    gambit_stamp_ymd=${gambit-stampYmd}
+    gambit_stamp_hms=${gambit-stampHms}
+    EOF
     for f in src/bootstrap/gerbil/compiler/driver__0.scm \
              src/build/build-libgerbil.ss \
              src/gerbil/compiler/driver.ss ; do
@@ -58,8 +57,7 @@ stdenv.mkDerivation rec {
     "--enable-zlib"
     "--enable-sqlite"
     "--enable-shared"
-    "--disable-deprecated"
-    "--enable-march=" # Avoid non-portable invalid instructions
+    "--enable-march=" # Avoid non-portable invalid instructions. Use =native if local build only.
   ];
 
   configurePhase = ''
@@ -70,15 +68,7 @@ stdenv.mkDerivation rec {
            LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld \
            XMKMF=${coreutils}/bin/false
     unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
-    (cd src/gambit ; ${gambit-params.fixStamp gambit-git-version gambit-stampYmd gambit-stampHms})
     ./configure ${builtins.concatStringsSep " " configureFlags}
-    (cd src/gambit ;
-    substituteInPlace config.status \
-      ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
-         ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
-        --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
-    ./config.status
-    )
   '';
 
   extraLdOptions = [
@@ -116,6 +106,9 @@ stdenv.mkDerivation rec {
     ./install.sh
     (cd $out/bin ; ln -s ../gerbil/bin/* .)
     runHook postInstall
+  '' + lib.optionalString stdenv.isDarwin ''
+    libgerbil="$(realpath "$out/gerbil/lib/libgerbil.so")"
+    install_name_tool -id "$libgerbil" "$libgerbil"
   '';
 
   dontStrip = true;

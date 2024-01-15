@@ -8,15 +8,14 @@
 , makeWrapper
 , requireFile
 , substituteAll
-, nixosTests
 }:
 
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
+  bins =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x64-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "i686-linux" then "x86-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64-linux-gnu"
     else throw "Unsupported architecture";
-  bins = "${arch}-ubuntu-1604";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
 
 in
@@ -69,18 +68,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) displaylink;
-    };
-  };
-
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     hydraPlatforms = [];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

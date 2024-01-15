@@ -21,14 +21,14 @@ assert lib.asserts.assertMsg (usePipewire != usePulseaudio) "You need to enable 
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jamesdsp";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
     rev = finalAttrs.version;
-    hash = "sha256-XYJl94/PstWG5qaBQ2rXc/nG9bDeP3Q62zDYHmZvPaw=";
+    hash = "sha256-eVndqIqJ3DRceuFMT++g2riXq0CL5r+TWbvzvaYIfZ8=";
   };
 
   nativeBuildInputs = [

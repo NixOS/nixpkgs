@@ -1,12 +1,13 @@
 diff --git a/dlls/winemac.drv/cocoa_display.m b/dlls/winemac.drv/cocoa_display.m
+index fbbe16efcbf..2db375ff3d5 100644
 --- a/dlls/winemac.drv/cocoa_display.m
 +++ b/dlls/winemac.drv/cocoa_display.m
-@@ -354,7 +354,7 @@ static int macdrv_get_gpu_info_from_display_id_using_metal(struct macdrv_gpu* gp
+@@ -387,7 +387,7 @@ static int macdrv_get_gpu_info_from_display_id_using_metal(struct macdrv_gpu* gp
  
      device = [CGDirectDisplayCopyCurrentMetalDevice(display_id) autorelease];
      if (device && [device respondsToSelector:@selector(registryID)])
--        ret = macdrv_get_gpu_info_from_registry_id(gpu, device.registryID);
-+        ret = macdrv_get_gpu_info_from_registry_id(gpu, [device registryID]);
- 
- done:
-     [pool release];
+-        return macdrv_get_gpu_info_from_registry_id(gpu, device.registryID);
++        return macdrv_get_gpu_info_from_registry_id(gpu, [device registryID]);
+     else
+         return -1;
+ }

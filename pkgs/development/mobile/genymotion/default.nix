@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
-  version = "3.5.0";
+  version = "3.6.0";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-rZyTdVn0mnNLrGPehah62/AvTgUpNEtzn+Di1O3G3Sg=";
+    sha256 = "sha256-CS1A9udt47bhgnYJqqkCG3z4XaPVHmz417VTsY2ccOA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

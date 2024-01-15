@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.3.0";
+  version = "3.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-RH5RQHLpfrI9fRg6OfPZ7/BPHQuHCrkJlwW/EJitdPo=";
+    hash = "sha256-J257Y8Y0mVtlFHiHju5lxPyV0yx3IAYH8ikbmZlI3fY=";
   };
 
   nativeBuildInputs = [

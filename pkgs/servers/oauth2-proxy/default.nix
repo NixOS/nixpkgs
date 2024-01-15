@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = licenses.mit;
     maintainers = teams.serokell.members;
+    mainProgram = "oauth2-proxy";
   };
 }

@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "emailthreads";
   version = "0.1.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   # pypi is missing files for tests

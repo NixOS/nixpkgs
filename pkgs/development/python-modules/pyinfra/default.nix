@@ -5,6 +5,7 @@
 , configparser
 , distro
 , fetchFromGitHub
+, fetchpatch
 , gevent
 , jinja2
 , paramiko
@@ -29,6 +30,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-BYd2UYQJD/HsmpnlQjZvjfg17ShPuA3j4rtv6fTQK/A=";
   };
+
+  patches = [
+    # https://github.com/Fizzadar/pyinfra/pull/1018
+    (fetchpatch {
+      name = "bump-paramiko-major-version.patch";
+      url = "https://github.com/Fizzadar/pyinfra/commit/62a8f081279779c4f1eed246139f615cf5fed642.patch";
+      hash = "sha256-aT9SeSqXOD76LFzf6R/MWTtavcW6fZT7chkVg9aXiBg=";
+    })
+  ];
 
   propagatedBuildInputs = [
     click

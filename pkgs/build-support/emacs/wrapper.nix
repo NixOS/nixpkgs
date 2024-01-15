@@ -36,8 +36,8 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 self:
 let
   inherit (self) emacs;
-  withNativeCompilation = emacs.withNativeCompilation or emacs.nativeComp or false;
-  withTreeSitter = emacs.withTreeSitter or emacs.treeSitter or false;
+  withNativeCompilation = emacs.withNativeCompilation or false;
+  withTreeSitter = emacs.withTreeSitter or false;
 in
 packagesFun: # packages explicitly requested by the user
 let

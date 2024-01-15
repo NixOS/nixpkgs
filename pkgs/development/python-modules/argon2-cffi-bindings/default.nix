@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "argon2-cffi-bindings";
   version = "21.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

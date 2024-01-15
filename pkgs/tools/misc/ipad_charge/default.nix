@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "ipad_charge";
   };
 }

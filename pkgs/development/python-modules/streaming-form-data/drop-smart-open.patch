@@ -1,0 +1,40 @@
+diff --git a/streaming_form_data/targets.py b/streaming_form_data/targets.py
+index a399f3a..b816714 100644
+--- a/streaming_form_data/targets.py
++++ b/streaming_form_data/targets.py
+@@ -1,6 +1,5 @@
+ import hashlib
+ from pathlib import Path
+-import smart_open  # type: ignore
+ from typing import Callable, List, Optional
+ 
+ 
+@@ -164,6 +163,7 @@ class S3Target(BaseTarget):
+     S3Target enables chunked uploads to S3 buckets (using smart_open)"""
+ 
+     def __init__(self, file_path, mode, transport_params=None, **kwargs):
++        raise Exception("Nixpkgs: disabled")
+         super().__init__(**kwargs)
+ 
+         self._file_path = file_path
+diff --git a/tests/test_targets.py b/tests/test_targets.py
+index 0cc79ab..78ab40b 100644
+--- a/tests/test_targets.py
++++ b/tests/test_targets.py
+@@ -2,8 +2,6 @@ import os.path
+ import tempfile
+ 
+ import pytest
+-from moto import mock_s3
+-import boto3
+ 
+ from streaming_form_data.targets import (
+     BaseTarget,
+@@ -271,6 +269,7 @@ def mock_client():
+         yield client
+ 
+ 
++@pytest.mark.skip
+ def test_s3_upload(mock_client):
+     test_key = "test.txt"
+     path = f"s3://{BUCKET_NAME}/{test_key}"

@@ -13,6 +13,9 @@
 
       networking.firewall.allowedTCPPorts = [ 5000 ];
       system.extraDependencies = [ pkgs.emptyFile ];
+
+      # check that extra-allowed-users is effective for harmonia
+      nix.settings.allowed-users = [];
     };
 
     client01 = {

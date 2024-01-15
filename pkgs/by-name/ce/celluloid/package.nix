@@ -5,6 +5,7 @@
 , desktop-file-utils
 , glib
 , gtk4
+, libGL
 , libepoxy
 , libadwaita
 , meson
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk4
+    libGL
     libadwaita
     libepoxy
     mpv

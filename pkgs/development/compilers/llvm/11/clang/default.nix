@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -50,7 +50,7 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
+        src = ../../clang-11-15-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];

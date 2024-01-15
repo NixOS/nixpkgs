@@ -6,49 +6,124 @@
 with lib;
 
 let
+  cfg = config.testing;
+
   qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+
+  backdoorService = {
+    requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
+    after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
+    script =
+      ''
+        export USER=root
+        export HOME=/root
+        export DISPLAY=:0.0
+
+        if [[ -e /etc/profile ]]; then
+            source /etc/profile
+        fi
+
+        # Don't use a pager when executing backdoor
+        # actions. Because we use a tty, commands like systemctl
+        # or nix-store get confused into thinking they're running
+        # interactively.
+        export PAGER=
+
+        cd /tmp
+        exec < /dev/hvc0 > /dev/hvc0
+        while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
+        echo "connecting to host..." >&2
+        stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
+        # The following line is essential since it signals to
+        # the test driver that the shell is ready.
+        # See: the connect method in the Machine class.
+        echo "Spawning backdoor root shell..."
+        # Passing the terminal device makes bash run non-interactively.
+        # Otherwise we get errors on the terminal because bash tries to
+        # setup things like job control.
+        # Note: calling bash explicitly here instead of sh makes sure that
+        # we can also run non-NixOS guests during tests.
+        PS1= exec /usr/bin/env bash --norc /dev/hvc0
+      '';
+      serviceConfig.KillSignal = "SIGHUP";
+  };
+
 in
 
 {
 
+  options.testing = {
+
+    initrdBackdoor = lib.mkEnableOption (lib.mdDoc ''
+      enable backdoor.service in initrd. Requires
+      boot.initrd.systemd.enable to be enabled. Boot will pause in
+      stage 1 at initrd.target, and will listen for commands from the
+      Machine python interface, just like stage 2 normally does. This
+      enables commands to be sent to test and debug stage 1. Use
+      machine.switch_root() to leave stage 1 and proceed to stage 2.
+    '');
+
+  };
+
   config = {
 
-    systemd.services.backdoor =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-        after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-        script =
-          ''
-            export USER=root
-            export HOME=/root
-            export DISPLAY=:0.0
+    assertions = [
+      {
+        assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
+        message = ''
+          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+        '';
+      }
+    ];
 
-            source /etc/profile
+    systemd.services.backdoor = lib.mkMerge [
+      backdoorService
+      {
+        wantedBy = [ "multi-user.target" ];
+      }
+    ];
 
-            # Don't use a pager when executing backdoor
-            # actions. Because we use a tty, commands like systemctl
-            # or nix-store get confused into thinking they're running
-            # interactively.
-            export PAGER=
+    boot.initrd.systemd = lib.mkMerge [
+      {
+        contents."/etc/systemd/journald.conf".text = ''
+          [Journal]
+          ForwardToConsole=yes
+          MaxLevelConsole=debug
+        '';
 
-            cd /tmp
-            exec < /dev/hvc0 > /dev/hvc0
-            while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
-            echo "connecting to host..." >&2
-            stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-            # The following line is essential since it signals to
-            # the test driver that the shell is ready.
-            # See: the connect method in the Machine class.
-            echo "Spawning backdoor root shell..."
-            # Passing the terminal device makes bash run non-interactively.
-            # Otherwise we get errors on the terminal because bash tries to
-            # setup things like job control.
-            # Note: calling bash explicitly here instead of sh makes sure that
-            # we can also run non-NixOS guests during tests.
-            PS1= exec /usr/bin/env bash --norc /dev/hvc0
-          '';
-        serviceConfig.KillSignal = "SIGHUP";
-      };
+        extraConfig = config.systemd.extraConfig;
+      }
+
+      (lib.mkIf cfg.initrdBackdoor {
+        # Implemented in machine.switch_root(). Suppress the unit by
+        # making it a noop without removing it, which would break
+        # initrd-parse-etc.service
+        services.initrd-cleanup.serviceConfig.ExecStart = [
+          # Reset
+          ""
+          # noop
+          "/bin/true"
+        ];
+
+        services.backdoor = lib.mkMerge [
+          backdoorService
+          {
+            # TODO: Both stage 1 and stage 2 should use these same
+            # settings. But a lot of existing tests rely on
+            # backdoor.service having default orderings,
+            # e.g. systemd-boot.update relies on /boot being mounted
+            # as soon as backdoor starts. But it can be useful for
+            # backdoor to start even earlier.
+            wantedBy = [ "sysinit.target" ];
+            unitConfig.DefaultDependencies = false;
+            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+            before = [ "shutdown.target" "initrd-switch-root.target" ];
+          }
+        ];
+
+        contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
+      })
+    ];
 
     # Prevent agetty from being instantiated on the serial device, since it
     # interferes with the backdoor (writes to it will randomly fail
@@ -104,12 +179,6 @@ in
         MaxLevelConsole=debug
       '';
 
-    boot.initrd.systemd.contents."/etc/systemd/journald.conf".text = ''
-      [Journal]
-      ForwardToConsole=yes
-      MaxLevelConsole=debug
-    '';
-
     systemd.extraConfig = ''
       # Don't clobber the console with duplicate systemd messages.
       ShowStatus=no
@@ -122,8 +191,6 @@ in
       DefaultTimeoutStartSec=300
       DefaultDeviceTimeoutSec=300
     '';
-
-    boot.initrd.systemd.extraConfig = config.systemd.extraConfig;
 
     boot.consoleLogLevel = 7;
 

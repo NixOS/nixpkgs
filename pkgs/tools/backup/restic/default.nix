@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-sMxOZEnZr2UdhmwLXQnggQzw+pXcoWmqqADlQ0yDhj8=";
+    hash = "sha256-Qrbg8/f1ne+7c+mnUc/8CoZBjiGLohJXnu0cnc0pT4g=";
   };
 
   patches = [
@@ -48,5 +48,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
     maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
+    mainProgram = "restic";
   };
 }

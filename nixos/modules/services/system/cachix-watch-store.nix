@@ -23,6 +23,14 @@ in
       '';
     };
 
+    signingKeyFile = mkOption {
+      type = types.nullOr types.path;
+      description = lib.mdDoc ''
+        Optional file containing a self-managed signing key to sign uploaded store paths.
+      '';
+      default = null;
+    };
+
     compressionLevel = mkOption {
       type = types.nullOr types.int;
       description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
@@ -47,13 +55,7 @@ in
       default = false;
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
-    };
-
+    package = mkPackageOption pkgs "cachix" { };
   };
 
   config = mkIf cfg.enable {
@@ -75,7 +77,8 @@ in
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ];
+        ]
+        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
@@ -86,6 +89,7 @@ in
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"
+          ${lib.optionalString (cfg.signingKeyFile != null) ''export CACHIX_SIGNING_KEY="$(<"$CREDENTIALS_DIRECTORY/signing-key")"''}
           ${lib.escapeShellArgs command}
         '';
     };

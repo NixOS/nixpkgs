@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , sphinx
 , requests
 }:
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     sha256 = "sha256-ZxvJPDj+r7KSyXpYNQIgnda5OS77GOFM901ZHgR6c4k=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     requests
     sphinx
@@ -32,5 +37,6 @@ buildPythonPackage rec {
     description = "Download pictures (or videos) along with their captions and other metadata from Instagram";
     maintainers = with maintainers; [ creator54 ];
     license = licenses.mit;
+    mainProgram = "instaloader";
   };
 }

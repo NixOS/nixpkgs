@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "kiss-headers";
-  version = "2.3.1";
+  version = "2.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xPjw/uJTmvmQZDrI3i1KTUeAZuDF1mc13hvFBl8Erh0=";
+    hash = "sha256-WeAzlC1yT+0nPSuB278z8T0XvPjbre051f/Rva5ujAk=";
   };
 
   propagatedBuildInputs = [ requests ];

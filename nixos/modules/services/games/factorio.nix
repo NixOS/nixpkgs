@@ -37,7 +37,8 @@ let
     autosave_only_on_server = true;
     non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
-  serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
+  serverSettingsString = builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings);
+  serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
   serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
@@ -115,6 +116,23 @@ in
           customizations.
         '';
       };
+      extraSettingsFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          File, which is dynamically applied to server-settings.json before
+          startup.
+
+          This option should be used for credentials.
+
+          For example a settings file could contain:
+          ```json
+          {
+            "game-password": "hunter1"
+          }
+          ```
+        '';
+      };
       stateDirName = mkOption {
         type = types.str;
         default = "factorio";
@@ -186,22 +204,20 @@ in
         default = null;
         description = lib.mdDoc ''
           Your factorio.com login credentials. Required for games with visibility public.
+
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.factorio-headless;
-        defaultText = literalExpression "pkgs.factorio-headless";
-        example = literalExpression "pkgs.factorio-headless-experimental";
-        description = lib.mdDoc ''
-          Factorio version to use. This defaults to the stable channel.
-        '';
+      package = mkPackageOption pkgs "factorio-headless" {
+        example = "factorio-headless-experimental";
       };
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = lib.mdDoc ''
           Your factorio.com login credentials. Required for games with visibility public.
+
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
       token = mkOption {
@@ -216,6 +232,8 @@ in
         default = null;
         description = lib.mdDoc ''
           Game password.
+
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
       requireUserVerification = mkOption {
@@ -251,14 +269,18 @@ in
       wantedBy      = [ "multi-user.target" ];
       after         = [ "network.target" ];
 
-      preStart = toString [
-        "test -e ${stateDir}/saves/${cfg.saveName}.zip"
-        "||"
-        "${cfg.package}/bin/factorio"
+      preStart =
+        (toString [
+          "test -e ${stateDir}/saves/${cfg.saveName}.zip"
+          "||"
+          "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-      ];
+        ])
+        + (optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
+          + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
+          + " > ${stateDir}/server-settings.json"));
 
       serviceConfig = {
         Restart = "always";
@@ -272,7 +294,11 @@ in
           "--port=${toString cfg.port}"
           "--bind=${cfg.bind}"
           (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
-          "--server-settings=${serverSettingsFile}"
+          "--server-settings=${
+            if (cfg.extraSettingsFile != null)
+            then "${stateDir}/server-settings.json"
+            else serverSettingsFile
+          }"
           (optionalString cfg.loadLatestSave "--start-server-load-latest")
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
           (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")

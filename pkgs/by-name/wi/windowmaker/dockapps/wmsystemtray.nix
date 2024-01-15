@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A system tray for Windowmaker";
     homepage = "http://wmsystemtray.sourceforge.net";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

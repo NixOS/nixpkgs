@@ -14,14 +14,29 @@
 , fetchPypi
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3Packages.python.override {
+    packageOverrides = self: super: {
+      msgpack = super.msgpack.overrideAttrs (oldAttrs: rec {
+        version ="1.0.4";
+
+        src = fetchPypi {
+          pname = "msgpack";
+          inherit version;
+          hash = "sha256-9dhpwY8DAgLrQS8Iso0q/upVPWYTruieIA16yn7wH18=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.6";
+  version = "1.2.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
+    hash = "sha256-9j8oozg8BBlxzsh7BhyjmoFbX9RF2ySqgXLKxBfZQRo=";
   };
 
   postPatch = ''
@@ -30,7 +45,7 @@ python3Packages.buildPythonApplication rec {
       --replace "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
@@ -55,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -72,7 +87,7 @@ python3Packages.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
     py
     python-dateutil

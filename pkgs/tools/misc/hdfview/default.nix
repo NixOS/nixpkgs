@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://portal.hdfgroup.org/display/HDFVIEW/HDFView";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ jiegec ];
+    mainProgram = "HDFView";
   };
 }

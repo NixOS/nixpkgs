@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/psibi/rucredstash";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];
+    mainProgram = "rucredstash";
   };
 }

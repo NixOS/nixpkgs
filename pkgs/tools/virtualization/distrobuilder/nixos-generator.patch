@@ -1,0 +1,113 @@
+diff --git a/distrobuilder/lxc.generator b/distrobuilder/lxc.generator
+index 0ad81d1..69dbfe7 100644
+--- a/distrobuilder/lxc.generator
++++ b/distrobuilder/lxc.generator
+@@ -25,16 +25,6 @@ is_incus_vm() {
+ 	[ -e /dev/virtio-ports/org.linuxcontainers.incus ]
+ }
+ 
+-# is_in_path succeeds if the given file exists in on of the paths
+-is_in_path() {
+-	# Don't use $PATH as that may not include all relevant paths
+-	for path in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin; do
+-		[ -e "${path}/$1" ] && return 0
+-	done
+-
+-	return 1
+-}
+-
+ ## Fix functions
+ # fix_ro_paths avoids udevd issues with /sys and /proc being writable
+ fix_ro_paths() {
+@@ -45,35 +35,6 @@ BindReadOnlyPaths=/sys /proc
+ EOF
+ }
+ 
+-# fix_nm_link_state forces the network interface to a DOWN state ahead of NetworkManager starting up
+-fix_nm_link_state() {
+-	[ -e "/sys/class/net/$1" ] || return 0
+-	ip_path=
+-	if [ -f /sbin/ip ]; then
+-		ip_path=/sbin/ip
+-	elif [ -f /bin/ip ]; then
+-		ip_path=/bin/ip
+-	else
+-		return 0
+-	fi
+-	cat <<-EOF > /run/systemd/system/network-device-down.service
+-[Unit]
+-Description=Turn off network device
+-Before=NetworkManager.service
+-Before=systemd-networkd.service
+-[Service]
+-# do not turn off if there is a default route to 169.254.0.1, i.e. the device is a routed nic
+-ExecCondition=/bin/sh -c '! /usr/bin/grep -qs 00000000.0100FEA9 /proc/net/route'
+-ExecStart=-${ip_path} link set $1 down
+-Type=oneshot
+-RemainAfterExit=true
+-[Install]
+-WantedBy=default.target
+-EOF
+-	mkdir -p /run/systemd/system/default.target.wants
+-	ln -sf /run/systemd/system/network-device-down.service /run/systemd/system/default.target.wants/network-device-down.service
+-}
+-
+ # fix_systemd_override_unit generates a unit specific override
+ fix_systemd_override_unit() {
+ 	dropin_dir="/run/systemd/${1}.d"
+@@ -112,16 +73,7 @@ fix_systemd_mask() {
+ # fix_systemd_udev_trigger overrides the systemd-udev-trigger.service to match the latest version
+ # of the file which uses "ExecStart=-" instead of "ExecStart=".
+ fix_systemd_udev_trigger() {
+-	cmd=
+-	if [ -f /usr/bin/udevadm ]; then
+-		cmd=/usr/bin/udevadm
+-	elif [ -f /sbin/udevadm ]; then
+-		cmd=/sbin/udevadm
+-	elif [ -f /bin/udevadm ]; then
+-		cmd=/bin/udevadm
+-	else
+-		return 0
+-	fi
++	cmd=udevadm
+ 
+ 	mkdir -p /run/systemd/system/systemd-udev-trigger.service.d
+ 	cat <<-EOF > /run/systemd/system/systemd-udev-trigger.service.d/zzz-lxc-override.conf
+@@ -145,24 +97,12 @@ EOF
+ }
+ 
+ ## Main logic
+-# Nothing to do in Incus VM but deployed in case it is later converted to a container
+-is_incus_vm || is_lxd_vm && exit 0
+ 
+ # Exit immediately if not an Incus/LXC container
+ is_lxc_container || exit 0
+ 
+-# Check for NetworkManager
+-nm_exists=0
+-
+-is_in_path NetworkManager && nm_exists=1
+-
+ # Determine systemd version
+-for path in /usr/lib/systemd/systemd /lib/systemd/systemd; do
+-	[ -x "${path}" ] || continue
+-
+-	systemd_version="$("${path}" --version | head -n1 | cut -d' ' -f2)"
+-	break
+-done
++systemd_version="$(systemd --version | head -n1 | cut -d' ' -f2)"
+ 
+ # Determine distro name and release
+ ID=""
+@@ -222,11 +162,6 @@ ACTION=="add|change|move", ENV{ID_NET_DRIVER}=="veth", ENV{INTERFACE}=="eth[0-9]
+ EOF
+ fi
+ 
+-# Workarounds for NetworkManager in containers
+-if [ "${nm_exists}" -eq 1 ]; then
+-	fix_nm_link_state eth0
+-fi
+-
+ # Allow masking units created by the lxc system-generator.
+ for d in /etc/systemd/system /usr/lib/systemd/system /lib/systemd/system; do
+ 	if ! [ -d "${d}" ]; then

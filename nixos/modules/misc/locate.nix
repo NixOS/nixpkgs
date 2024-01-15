@@ -26,14 +26,8 @@ in
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.findutils.locate;
-      defaultText = literalExpression "pkgs.findutils.locate";
-      example = literalExpression "pkgs.mlocate";
-      description = lib.mdDoc ''
-        The locate implementation to use
-      '';
+    package = mkPackageOption pkgs [ "findutils" "locate" ] {
+      example = "mlocate";
     };
 
     interval = mkOption {

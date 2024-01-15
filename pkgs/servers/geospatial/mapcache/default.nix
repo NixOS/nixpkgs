@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.unix;
   };
 }

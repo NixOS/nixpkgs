@@ -4,7 +4,9 @@ lib.makeScope pkgs.newScope (self:
   let
     gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.isDarwin
+             then pkgs.darwin.apple_sdk_11_0.stdenv
+             else pkgs.stdenv;
     inheritedArgs = {
       inherit gconf;
       inherit stdenv;
@@ -16,7 +18,10 @@ lib.makeScope pkgs.newScope (self:
         Quartz QuartzCore UniformTypeIdentifiers WebKit;
       gnutls =
         if pkgs.stdenv.isDarwin
-        then pkgs.gnutls.override { inherit stdenv; inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security; }
+        then pkgs.gnutls.override {
+          inherit stdenv;
+          inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
+        }
         else pkgs.gnutls;
     };
   in {

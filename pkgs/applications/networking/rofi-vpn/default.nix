@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
+    mainProgram = "rofi-vpn";
   };
 }

@@ -23,6 +23,12 @@ in {
     '' + optionalString (def.vlanConfig != { }) ''
       [VLAN]
       ${attrsToSection def.vlanConfig}
+    '' + optionalString (def.ipvlanConfig != { }) ''
+      [IPVLAN]
+      ${attrsToSection def.ipvlanConfig}
+    '' + optionalString (def.ipvtapConfig != { }) ''
+      [IPVTAP]
+      ${attrsToSection def.ipvtapConfig}
     '' + optionalString (def.macvlanConfig != { }) ''
       [MACVLAN]
       ${attrsToSection def.macvlanConfig}

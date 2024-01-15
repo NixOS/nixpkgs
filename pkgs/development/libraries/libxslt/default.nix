@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.38";
+  version = "1.1.39";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HzJFBCWBmgmsr/Krelp/ii7HlW5QXXvutF6EPQ4eyrE=";
+    hash = "sha256-KiCtYhFIM5sHWcTU6WcZNi3uZMmgltu6YlugU4RjSfA=";
   };
 
   strictDeps = true;
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--without-mem-debug"
     "--without-debugger"
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];

@@ -1,13 +1,13 @@
-{ lib, buildPythonPackage, fetchgit, six }:
+{ lib, buildPythonPackage, fetchzip, six }:
 
 buildPythonPackage rec {
   pname = "python-linux-procfs";
   version = "0.6.3";
+  format = "setuptools";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/libs/python/${pname}/${pname}.git";
-    rev = "v${version}";
-    hash = "sha256-PPgMlL9oj4HYUsr444ZrGo1LSZBl9hL5SE98IASUpbc=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${version}.tar.gz";
+    hash = "sha256-iaKL7CWJbIvvcUCah7bKdwKZoZJehbQpZ7n0liO8N64=";
   };
 
   propagatedBuildInputs = [ six ];

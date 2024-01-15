@@ -2,7 +2,6 @@
 , pkgsBuildBuild
 , monorepoSrc
 , runCommand
-, fetchpatch
 , cmake
 , darwin
 , ninja
@@ -31,7 +30,7 @@
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
-} @args:
+}:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -326,7 +325,8 @@ in
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (false) [
+  ] ++ optionals enableGoldPlugin [
+    # For LLVMgold plugin
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"

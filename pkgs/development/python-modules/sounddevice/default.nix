@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "sounddevice";
   version = "0.4.6";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

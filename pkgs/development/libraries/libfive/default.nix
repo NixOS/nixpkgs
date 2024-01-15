@@ -10,6 +10,7 @@
 , libpng
 , boost
 , guile
+, python
 , qtbase
 , darwin
 }:
@@ -25,8 +26,8 @@ stdenv.mkDerivation {
     hash = "sha256-OITy3fJx+Z6856V3D/KpSQRJztvOdJdqUv1c65wNgCc=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
-  buildInputs = [ eigen zlib libpng boost guile qtbase ]
+  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];
+  buildInputs = [ eigen zlib libpng boost guile python qtbase ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
 
   preConfigure = ''
@@ -42,6 +43,14 @@ stdenv.mkDerivation {
       --replace "LIBFIVE_STDLIB_DIR=$<TARGET_FILE_DIR:libfive-stdlib>" \
                 "LIBFIVE_STDLIB_DIR=$out/lib"
 
+    substituteInPlace libfive/bind/python/CMakeLists.txt \
+      --replace ' ''${PYTHON_SITE_PACKAGES_DIR}' \
+                " $out/${python.sitePackages}" \
+
+    substituteInPlace libfive/bind/python/libfive/ffi.py \
+      --replace "os.path.join('libfive', folder)" \
+                "os.path.join('$out/${python.sitePackages}/libfive', folder)" \
+
     export XDG_CACHE_HOME=$(mktemp -d)/.cache
   '';
 
@@ -51,6 +60,10 @@ stdenv.mkDerivation {
     # warning: 'aligned_alloc' is only available on macOS 10.15 or newer
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=enum-constexpr-conversion";
+  };
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     # No rules to install the mac app, so do it manually.
@@ -63,12 +76,29 @@ stdenv.mkDerivation {
   '' + ''
     # Link "Studio" binary to "libfive-studio" to be more obvious:
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
+
+    # Create links since libfive looks for the library in a specific path.
+    mkdir -p "$out/${python.sitePackages}/libfive/src"
+    ln -s "$out"/lib/libfive.* "$out/${python.sitePackages}/libfive/src/"
+    mkdir -p "$out/${python.sitePackages}/libfive/stdlib"
+    ln -s "$out"/lib/libfive-stdlib.* "$out/${python.sitePackages}/libfive/stdlib/"
+
+    # Create links so Studio can find the bindings.
+    mkdir -p "$out/libfive/bind"
+    ln -s "$out/${python.sitePackages}" "$out/libfive/bind/python"
   '';
+
+  pythonImportsCheck = [
+    "libfive"
+    "libfive.runner"
+    "libfive.shape"
+    "libfive.stdlib"
+  ];
 
   meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
     homepage = "https://libfive.com/";
-    maintainers = with maintainers; [ hodapp kovirobi ];
+    maintainers = with maintainers; [ hodapp kovirobi wulfsta ];
     license = with licenses; [ mpl20 gpl2Plus ];
     platforms = with platforms; all;
   };

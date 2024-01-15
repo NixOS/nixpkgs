@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , cmake
 , ninja
 , p7zip
@@ -47,22 +46,12 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.3.5";
+  version  = "4.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-AdYI9vljjhTXyFffQK0znBv8IHoF2q/nFXrYZSo0BcM=";
+    url = "mirror://sourceforge/project/warzone2100/releases/${version}/warzone2100_src.tar.xz";
+    hash = "sha256-O5Yqxqp1vKYr8uvAZ1SdsI/kocOzg0KRCirCqqvLrN4=";
   };
-
-  patches = [
-    # Upstream patch for curl-8.4 support,
-    # TODO: remove on next release.
-    (fetchpatch {
-      name = "curl-8.4.patch";
-      url = "https://github.com/Warzone2100/warzone2100/commit/db1cf70950d4fa6630f37a7bf85f548b48ed53cd.patch";
-      hash = "sha256-/jRan5pi7CamZaCaRdfugFmtCbWTKmCt63q0NBuTrFk=";
-    })
-  ];
 
   buildInputs = [
     SDL2
@@ -99,9 +88,6 @@ stdenv.mkDerivation rec {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
-    # https://github.com/Warzone2100/warzone2100/pull/3353
-    substituteInPlace lib/ivis_opengl/gfx_api_vk.cpp \
-      --replace vk::throwResultException vk::detail::throwResultException
   '';
 
   cmakeFlags = [

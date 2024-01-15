@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , flit-core
@@ -33,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ];
+
+  # On darwin: Too many open files
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
 
   disabledTests = [
     # these tests raise circus.tests.support.TimeoutException

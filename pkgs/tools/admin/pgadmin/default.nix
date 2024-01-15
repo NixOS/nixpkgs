@@ -7,21 +7,21 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , server-mode ? true
 }:
 
 let
   pname = "pgadmin";
-  version = "7.7";
-  yarnHash = "sha256-8EbbyZHodrYz4a2IYuIWYGutqvrjauSv34o9KFvR/6c=";
+  version = "8.1";
+  yarnHash = "sha256-KAiY5TX2O8mxP7PjIJstYEzCBbqDgT+CpEhreuAGW/U=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-+KD05hzghNFpuw2xW3NUVyKwspCUO9fyJgMPzYk1Xt8=";
+    hash = "sha256-zzS/fydNOXpIWdyLtWQhY+hVpneca+3wD88DmZEkS8s=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -59,17 +59,8 @@ pythonPackages.buildPythonApplication rec {
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
       --replace "code_snippets" ""
-    patchShebangs .
-
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
-    substituteInPlace requirements.txt \
-      --replace "boto3>=1.28.*" "boto3>=1.26.*"
-    substituteInPlace requirements.txt \
-      --replace "botocore>=1.31.*" "botocore>=1.29.*"
-    substituteInPlace requirements.txt \
-      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
@@ -110,7 +101,7 @@ pythonPackages.buildPythonApplication rec {
     rm yarn.lock
     cp ${./yarn.lock} yarn.lock
     chmod +w yarn.lock
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     yarn webpacker
@@ -134,7 +125,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup_yarn_lock nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel

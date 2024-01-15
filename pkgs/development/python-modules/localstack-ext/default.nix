@@ -1,14 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, setuptools
+, plux
+
+# dependencies
+, cachetools
+, click
+, cryptography
 , dill
 , dnslib
 , dnspython
-, plux
-, pyaes
-, python-jose
+, psutil
+, python-dotenv
+, pyyaml
 , requests
-, tabulate
+, rich
+, semver
+, stevedore
+, tailer
 
 # Sensitive downstream dependencies
 , localstack
@@ -16,11 +28,12 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "2.2.0";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BLK41TRaYNtpeeDeGZhlvnvkQwWo0uGB19g34waRqFk=";
+    hash = "sha256-KNM/HjSWVwenLqtXbaRP70k7b7YXk//aKGEkBxPp1fA=";
   };
 
   postPatch = ''
@@ -37,15 +50,27 @@ buildPythonPackage rec {
       --replace "requests>=2.20.0,<2.26" "requests~=2.20"
   '';
 
+  nativeBuildInputs = [
+    plux
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    cachetools
+    click
+    cryptography
     dill
     dnslib
     dnspython
     plux
-    pyaes
-    python-jose
+    psutil
+    python-dotenv
+    pyyaml
+    rich
     requests
-    tabulate
+    semver
+    stevedore
+    tailer
   ];
 
   pythonImportsCheck = [ "localstack_ext" ];

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdoctor";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
-    url = "https://github.com/Kotlin/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/kdoctor_${finalAttrs.version}+92.zip";
-    hash = "sha256-rGK5U1JeXID9OcT8uzO3oO6f9MZgrW69LUHbEtj0SSQ=";
+    url = "https://github.com/Kotlin/${finalAttrs.pname}/releases/download/v${finalAttrs.version}/kdoctor_${finalAttrs.version}+97.zip";
+    hash = "sha256-H4lpdMf1AIU8BC+6DlvcwM1wLuEl+Hd9xBli/TGFMV4=";
   };
 
   nativeBuildInputs = [ unzip ];

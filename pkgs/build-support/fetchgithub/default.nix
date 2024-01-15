@@ -19,7 +19,7 @@ let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
-
+  } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };

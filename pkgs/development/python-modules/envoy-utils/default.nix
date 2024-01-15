@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "envoy-utils";
   version = "0.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

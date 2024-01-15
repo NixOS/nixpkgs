@@ -9,7 +9,6 @@
 , future
 , numpy
 , autoPatchelfHook
-, patchelf
 , pyyaml
 , requests
 , setuptools
@@ -25,7 +24,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.0.1";
+  version = "2.1.2";
 in buildPythonPackage {
   inherit version;
 
@@ -69,7 +68,7 @@ in buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
     openai-triton
   ];
 

@@ -12,20 +12,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys-synlig";
-  version = "2023.10.12";  # Currently no tagged versions upstream
   plugin = "synlig";
 
+  # The module has automatic regular releases, with date + short git hash
+  GIT_VERSION = "2023-11-28-b8ed72d";
+
+  # Derive our package version from GIT_VERSION, remove hash, just keep date.
+  version = builtins.concatStringsSep "-" (
+    lib.take 3 (builtins.splitVersion finalAttrs.GIT_VERSION));
+
   src = fetchFromGitHub {
-    owner  = "chipsalliance";
-    repo   = "synlig";
-    rev    = "c5bd73595151212c61709d69a382917e96877a14";
-    sha256 = "sha256-WJhf5gdZTCs3EeNocP9aZAh6EZquHgYOG/xiTo8l0ao=";
+    owner = "chipsalliance";
+    repo  = "synlig";
+    rev   = "${finalAttrs.GIT_VERSION}";
+    hash  = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
-
-  patches = [
-    ./synlig-makefile-for-nix.patch  # Remove assumption submodules available.
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -42,16 +44,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    make -j $NIX_BUILD_CORES build@systemverilog-plugin
+
+    # Remove assumptions that submodules are available.
+    rm -f third_party/Build.*.mk
+
+    # Create a stub makefile include that delegates the parameter-gathering
+    # to yosys-config
+    cat > third_party/Build.yosys.mk << "EOF"
+    t  := yosys
+    ts := ''$(call GetTargetStructName,''${t})
+
+    ''${ts}.src_dir   := ''$(shell yosys-config --datdir/include)
+    ''${ts}.mod_dir   := ''${TOP_DIR}third_party/yosys_mod/
+    EOF
+
+    make -j $NIX_BUILD_CORES build@systemverilog-plugin \
+            LDFLAGS="''$(yosys-config --ldflags --ldlibs)"
     runHook postBuild
   '';
 
-  # Very simple litmus test that the plugin can be loaded successfully.
+  # Check that the plugin can be loaded successfully and parse simple file.
   doCheck = true;
   checkPhase = ''
      runHook preCheck
+     echo "module litmustest(); endmodule;" > litmustest.sv
      yosys -p "plugin -i build/release/systemverilog-plugin/systemverilog.so;\
-               help read_systemverilog" | grep "Read SystemVerilog files using"
+               read_systemverilog litmustest.sv"
      runHook postCheck
   '';
 

@@ -3,6 +3,7 @@
 , cached-property
 , click
 , fetchFromGitHub
+, fetchpatch
 , packaging
 , pydantic
 , pytest-timeout
@@ -13,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "2.0.5";
-  format = "pyproject";
+  version = "2.0.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,11 +23,20 @@ buildPythonPackage rec {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-L/+6w5lLqHO5c9CThoUPOHXRPVxBlOWFDAmfoYxRw5g=";
+    hash = "sha256-C/Em8Vmv7q030hmH3jU/apBRSSC9QFK9mbBWjBjJHXg=";
   };
 
+  patches = [
+    # https://github.com/sarugaku/pythonfinder/issues/142
+    (fetchpatch {
+      name = "pydantic_2-compatibility.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/python-pythonfinder/-/raw/2.0.6-1/python-pythonfinder-2.0.6-pydantic2.patch";
+      hash = "sha256-mON1MeA+pj6VTB3zpBjF3LfB30wG0QH9nU4bD1djWwg=";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace " --cov" ""
   '';
 
@@ -35,9 +45,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cached-property
     packaging
     pydantic
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    cached-property
   ];
 
   passthru.optional-dependencies = {

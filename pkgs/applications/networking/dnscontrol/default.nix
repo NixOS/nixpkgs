@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "4.6.0";
+  version = "4.7.3";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
-    repo = pname;
+    repo = "dnscontrol";
     rev = "v${version}";
-    sha256 = "sha256-CyQKQNuCJLtm73ngrGtUmVUfiseXEp2fcKVGvQ1ET5A=";
+    hash = "sha256-xxcoh7x6OvziVNCaCLnjqTfJCn2JOR0n23lfNUbZ2cg=";
   };
 
-  vendorHash = "sha256-Q8Xw2vuxiYpkY0/gQlUVWO7WQszv2x1cvbV03Wi1GNg=";
+  vendorHash = "sha256-fRK2ZFoqugZ9lb6VxZZHBQjTa2ZQs5NFBx6Z6NX3eWw=";
 
   subPackages = [ "." ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://dnscontrol.org/";
     changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "dnscontrol";
   };
 }

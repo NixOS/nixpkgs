@@ -138,7 +138,9 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
+  nugetDeps = ./deps.nix;
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 

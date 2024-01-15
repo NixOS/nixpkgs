@@ -323,7 +323,7 @@ $ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
 ```
 
 :::{.note}
-`nix-prefetch-git` has to be in `$PATH` for `dhall-to-nixpkgs` to work.
+`nix-prefetch-git` is added to the `nix-shell -p` invocation above, because it has to be in `$PATH` for `dhall-to-nixpkgs` to work.
 :::
 
 The utility takes care of automatically detecting remote imports and converting

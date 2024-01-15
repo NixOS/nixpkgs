@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
   version = "1.1.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

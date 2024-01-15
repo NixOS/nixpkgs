@@ -12,7 +12,7 @@
   zlibSupport ? true, zlib,
   libuniqueSupport ? true, libunique,
   libpngSupport ? true, libpng,
-  openglSupport ? !stdenv.isDarwin
+  openglSupport ? !stdenv.isDarwin, libGL
 }:
 
 let
@@ -21,17 +21,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.63";
+   version = "2.64";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-FSs/Dbnr1shEw/W51DhUFPb61tM+0atc6wxY81EiTdM=";
+    sha256 = "sha256-FDL4XDHH6WYF47OsnhxpM7s7YadutiCDjcJKCF8ZlCw=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
 
   buildInputs = with lib;
     [ gtk2 fftw ] ++
-    optional openglSupport gnome2.gtkglext ++
+    optionals openglSupport [ gnome2.gtkglext libGL ] ++
     optional openexrSupport openexr ++
     optional libXmuSupport xorg.libXmu ++
     optional fitsSupport cfitsio ++

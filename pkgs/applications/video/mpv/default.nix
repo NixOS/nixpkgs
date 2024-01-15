@@ -4,21 +4,23 @@
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
+, bash
 , docutils
 , meson
 , ninja
 , pkg-config
 , python3
-, ffmpeg_5
+, ffmpeg
 , freefont_ttf
 , freetype
 , libass
 , libpthreadstubs
-, nv-codec-headers
+, nv-codec-headers-11
 , lua
 , libuchardet
 , libiconv
 , xcbuild
+, sigtool
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -152,19 +154,20 @@ in stdenv'.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    python3
   ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg_5
+    bash
+    ffmpeg
     freetype
     libass
     libpthreadstubs
     libuchardet
     luaEnv
+    python3
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -195,7 +198,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]
-    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
+    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers-11 ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
     ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
@@ -203,6 +206,11 @@ in stdenv'.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
+    # Swap binary and bundle symlink to sign bundle executable as symlinks cannot be signed
+    rm build/mpv.app/Contents/MacOS/mpv-bundle
+    mv build/mpv.app/Contents/MacOS/mpv build/mpv.app/Contents/MacOS/mpv-bundle
+    ln -s mpv-bundle build/mpv.app/Contents/MacOS/mpv
+    codesign --force --sign - build/mpv.app/Contents/MacOS/mpv-bundle
     popd
   '';
 
@@ -225,6 +233,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   # See the explanation in addOpenGLRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/bin/mpv
+    patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
   passthru = {
@@ -250,6 +259,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
+    mainProgram = "mpv";
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;
   };

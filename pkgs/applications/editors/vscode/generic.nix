@@ -247,7 +247,11 @@ in
   );
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed ${libglvnd}/lib/libGLESv2.so.2 $out/lib/vscode/${executableName}
+    patchelf \
+      --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
+      --add-needed ${libglvnd}/lib/libGL.so.1 \
+      --add-needed ${libglvnd}/lib/libEGL.so.1 \
+      $out/lib/vscode/${executableName}
   '';
 
   inherit meta;

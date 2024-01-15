@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.geeqie.org/";
 
-    maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
+    maintainers = with maintainers; [ pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

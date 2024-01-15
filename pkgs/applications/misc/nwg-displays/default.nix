@@ -14,13 +14,13 @@
 
 python310Packages.buildPythonApplication rec {
   pname = "nwg-displays";
-  version = "0.3.8";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
     rev = "v${version}";
-    hash = "sha256-9v5TQTliUEnynoGDf1UXsQ9Ym7x2gPmx4QiRJH5BId4=";
+    hash = "sha256-clL34Ewzf0sJEWiye4L4e1RrPFIHkmotLpPaibGvVY4=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,11 @@ python310Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = true;
+
+  postInstall = ''
+    install -Dm444 nwg-displays.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm444 nwg-displays.desktop -t $out/share/applications
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}");

@@ -21,7 +21,7 @@ buildPythonApplication {
     make libconstants.gen.c libsyscalls.gen.c
     ${targetClang}/bin/${targetClang.targetPrefix}cc -S -emit-llvm \
         libconstants.gen.c libsyscalls.gen.c
-    ${python.pythonForBuild.interpreter} tools/generate_constants_json.py \
+    ${python.pythonOnBuildForHost.interpreter} tools/generate_constants_json.py \
         --output constants.json \
         libconstants.gen.ll libsyscalls.gen.ll
   '';

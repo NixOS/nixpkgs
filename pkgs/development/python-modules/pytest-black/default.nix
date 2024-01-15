@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pytest-black";
   version = "0.3.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -21,7 +21,8 @@ buildNpmPackage {
   # Remove after next release
   patches = [
     (fetchpatch {
-      url = "https://github.com/OpenAsar/arrpc/pull/50.patch";
+      # https://github.com/OpenAsar/arrpc/pull/50
+      url = "https://github.com/OpenAsar/arrpc/commit/7fa6c90204450eb3952ce9cddfecb0a5ba5e4313.patch";
       hash = "sha256-qFlrbe2a4x811wpmWUcGDe2CPlt9x3HI+/t0P2v4kPc=";
     })
   ];

@@ -19,6 +19,7 @@ buildGoModule {
   # use make instead of default checks because e2e does not work with `buildGoDir`
   checkPhase = ''
     runHook preCheck
+    HOME="$(mktemp -d)"
     # We do not set trimpath for tests, in case they reference test assets
     export GOFLAGS=''${GOFLAGS//-trimpath/}
 

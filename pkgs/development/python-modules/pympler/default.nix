@@ -19,9 +19,10 @@ buildPythonPackage rec {
   patches = [
     # Fixes a TypeError on Python 3.11
     # (see https://github.com/pympler/pympler/issues/148)
+    # https://github.com/pympler/pympler/pull/149
     (fetchpatch {
       name = "${pname}-python-3.11-compat.patch";
-      url = "https://github.com/pympler/pympler/pull/149.patch";
+      url = "https://github.com/pympler/pympler/commit/0fd8ad8da39207bd0dcb28bdac0407e04744c965.patch";
       hash = "sha256-6MK0AuhVhQkUzlk29HUh1+mSbfsVTBJ1YBtYNIFhh7U=";
     })
   ];

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "jsonconversion";
   version = "0.2.13";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

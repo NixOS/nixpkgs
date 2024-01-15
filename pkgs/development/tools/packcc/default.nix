@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
     # Disable a failing test.
     rm -rf ../../tests/style.d
+  '' + lib.optionalString stdenv.cc.isClang ''
+    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
   '';
 
   installPhase = ''

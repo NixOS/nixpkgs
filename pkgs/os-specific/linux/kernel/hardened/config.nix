@@ -34,7 +34,7 @@ assert (versionAtLeast version "4.9");
   STRICT_KERNEL_RWX = yes;
 
   # Perform additional validation of commonly targeted structures.
-  DEBUG_CREDENTIALS     = yes;
+  DEBUG_CREDENTIALS     = whenOlder "6.6" yes;
   DEBUG_NOTIFIERS       = yes;
   DEBUG_PI_LIST         = whenOlder "5.2" yes; # doesn't BUG()
   DEBUG_PLIST           = whenAtLeast "5.2" yes;

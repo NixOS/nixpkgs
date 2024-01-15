@@ -1,10 +1,11 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_22
+, electron_26
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, jq
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -15,17 +16,19 @@
 , sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.14.54";
+      version = "0.19.8";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
+        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -33,18 +36,26 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.40.4";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-cNCM0McWBmHUUutMDa/Cy0qOxhx4NJnhjrW++HRl/nU=";
+    hash = "sha256-c8eK6YpxCP+Ga/VcqbbOUYuL1h4xspjglCZ1wiEAags=";
   };
 
-  npmDepsHash = "sha256-CoWa0l2If+SGqD47nP91qsvUlTzOEWP5or5zNUdV7P0=";
+  npmDepsHash = "sha256-7xMSsKESK9BqQrMvxceEhsETwDFue0/viCNULtzzwGo=";
+
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
 
   nativeBuildInputs = [
+    jq
     makeWrapper
     pkg-config
     python3
@@ -92,7 +103,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_26}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
@@ -115,6 +126,12 @@ buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

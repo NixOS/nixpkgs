@@ -43,6 +43,7 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
+, fetchpatch2
 , nixosTests
 }:
 
@@ -123,16 +124,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-08-23";
+  version = "2023-12-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "00d30874da759eb0f44f446415b2469920ff41b5";
-    sha256 = "sha256-e+68WCN1e1h2rf1pmwNNukTt5EBtF9KQNXhqJtoyJzo=";
+    rev = "02e453fc8c39751843220eaecdeaf7d539b7e765";
+    hash = "sha256-hIXRgu2MGqFYCALDKAiP+8lE859zftRe4OVIgGOTkvc=";
   };
 
+  patches = [
+    # hydra-eval-jobs: don't use restrict-eval for Flakes
+    # https://github.com/NixOS/hydra/pull/1257
+    # should be removed when https://github.com/NixOS/nix/pull/9547
+    # lands in the nix version used by hydra
+    (fetchpatch2 {
+      url = "https://github.com/NixOS/hydra/commit/9370b0ef977bff7e84ac07a81a0e31e75989276b.patch";
+      hash = "sha256-BRenC0lpWPgzfx42MPJBQ9VBamh5hZXuuVe6TXYKkdE=";
+    })
+  ];
+
   buildInputs = [
+    unzip
     libpqxx
     top-git
     mercurial
@@ -179,7 +192,6 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     mdbook
-    unzip
     nukeReferences
   ];
 
@@ -248,6 +260,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi das_j ];
+    maintainers = with maintainers; [ lheckemann mindavi ] ++ teams.helsinki-systems.members;
   };
 }

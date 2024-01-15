@@ -2,18 +2,12 @@
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
 , enableCuda ? config.cudaSupport
-, cudatoolkit
-, enableRocm ? false
+, cudaPackages
+, enableRocm ? config.rocmSupport
 , rocmPackages
 }:
 
 let
-  # Needed for configure to find all libraries
-  cudatoolkit' = symlinkJoin {
-    inherit (cudatoolkit) name meta;
-    paths = [ cudatoolkit cudatoolkit.lib ];
-  };
-
   rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
 
   rocm = symlinkJoin {
@@ -35,7 +29,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
   buildInputs = [
     libbfd
@@ -44,8 +46,16 @@ stdenv.mkDerivation rec {
     perl
     rdma-core
     zlib
-  ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optionals enableRocm rocmList;
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvml_dev
+
+  ] ++ lib.optionals enableRocm rocmList;
+
+  LDFLAGS = lib.optionals enableCuda [
+    # Fake libnvidia-ml.so (the real one is deployed impurely)
+    "-L${cudaPackages.cuda_nvml_dev}/lib/stubs"
+  ];
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"
@@ -53,7 +63,7 @@ stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
-  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
+  ] ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   postInstall = ''

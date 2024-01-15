@@ -29,6 +29,8 @@ buildPythonPackage rec {
     "sphinxcontrib.nwdiag"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx nwdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-nwdiag";

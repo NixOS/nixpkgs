@@ -364,12 +364,12 @@
 
 buildPythonPackage rec {
   pname = "types-aiobotocore";
-  version = "2.6.0";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GF3YDuyhnEx0JpOxU/tRAnFu+98p0TF5NCU1CXnR2bE=";
+    hash = "sha256-QSZDFXiVEXFHTE7FrLZVUeLOOyPTG96PIMg9lziiwDc=";
   };
 
   nativeBuildInputs = [

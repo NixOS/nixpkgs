@@ -18,10 +18,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Software to identify the different types of hashes used to encrypt data and especially passwords.";
+    description = "Identify the different types of hashes used to encrypt data and especially passwords";
     homepage = "https://github.com/blackploit/hash-identifier";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ethancedwards8 ];
+    mainProgram = "hash-identifier";
   };
 }

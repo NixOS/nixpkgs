@@ -5,26 +5,24 @@
 , setuptools
 , setuptools-scm
 , py
-, pytestCheckHook }:
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "simpy";
-  version = "4.0.2";
-  format = "setuptools";
+  version = "4.1.1";
+  pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bYrcAinfawL7fibc0TOHA7T09j8WelrCpyE8uAq6RIQ=";
+    hash = "sha256-BtB1CniEsR4OjiDOC8fG1O1fF0PUVmlTQNE/3/lQAaY=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
@@ -33,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    downloadPage = "https://github.com/simpx/simpy";
     homepage = "https://simpy.readthedocs.io/en/${version}/";
     description = "Process-based discrete-event simulation framework based on standard Python";
     license = [ licenses.mit ];

@@ -37,6 +37,11 @@
 "6.topic: fetch":
   - pkgs/build-support/fetch*/**/*
 
+"6.topic: flakes":
+  - '**/flake.nix'
+  - lib/systems/flake-systems.nix
+  - nixos/modules/config/nix-flakes.nix
+
 "6.topic: GNOME":
   - doc/languages-frameworks/gnome.section.md
   - nixos/modules/services/desktops/gnome/**/*
@@ -59,6 +64,13 @@
   - pkgs/test/haskell/**/*
   - pkgs/top-level/haskell-packages.nix
   - pkgs/top-level/release-haskell.nix
+
+"6.topic: jupyter":
+  - pkgs/development/python-modules/jupyter*/**/*
+  - pkgs/development/python-modules/mkdocs-jupyter/*
+  - nixos/modules/services/development/jupyter/**/*
+  - pkgs/applications/editors/jupyter-kernels/**/*
+  - pkgs/applications/editors/jupyter/**/*
 
 "6.topic: kernel":
   - pkgs/build-support/kernel/**/*

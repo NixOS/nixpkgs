@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://git.lcomrade.su/root/lenpaste";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vector1dev ];
+    mainProgram = "lenpaste";
   };
 }

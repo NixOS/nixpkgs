@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Tests need to be able to check locale
-  LC_ALL = lib.optionalString finalAttrs.doCheck "en_US.UTF-8";
+  LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
   nativeCheckInputs = [
     glibcLocales
   ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWANT_DOC=${lib.boolToString withDocumentation}"
     "-DWANT_DEMO=${lib.boolToString withExamples}"
-    "-DWANT_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DWANT_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     # Keeps finding & using glib-compile-resources from buildInputs otherwise
     "-DCMAKE_PROGRAM_PATH=${lib.makeBinPath [ buildPackages.glib.dev ]}"
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

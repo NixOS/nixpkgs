@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/wfxr/code-minimap";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ bsima ];
+    mainProgram = "code-minimap";
   };
 }

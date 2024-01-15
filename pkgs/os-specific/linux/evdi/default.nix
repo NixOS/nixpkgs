@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-em3Y56saB7K3Wr31Y0boc38xGb57gdveN0Cstgy8y20=";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error"
+    "-Wno-error=discarded-qualifiers" # for Linux 4.19 compatibility
+    "-Wno-error=sign-compare"
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -43,6 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
+    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.6";
   };
 }

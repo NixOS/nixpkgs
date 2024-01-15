@@ -444,6 +444,7 @@ let
     units = [ pkgs.udunits ];
     V8 = [ pkgs.v8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
+    XLConnect = [ pkgs.jdk ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
@@ -489,6 +490,7 @@ let
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     RcppCWB = [ pkgs.pkg-config ];
+    redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
@@ -546,7 +548,7 @@ let
     AMOUNTAIN = [ pkgs.gsl ];
     Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
     tcltk2 = with pkgs; [ tcl tk ];
-    tikzDevice = with pkgs; [ which texlive.combined.scheme-medium ];
+    tikzDevice = with pkgs; [ which texliveMedium ];
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [ which xorg.xdpyinfo ];
     rsvg = [ pkgs.librsvg.dev ];
@@ -616,8 +618,9 @@ let
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = [ pkgs.mpfr.dev ];
+    multibridge = with pkgs; [ pkg-config mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
@@ -1376,6 +1379,19 @@ let
 
     textshaping = old.textshaping.overrideAttrs (attrs: {
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
+
+    httpuv = old.httpuv.overrideAttrs (_: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    tesseract = old.tesseract.overrideAttrs (_: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+      '';
     });
 
     ijtiff = old.ijtiff.overrideAttrs (_: {

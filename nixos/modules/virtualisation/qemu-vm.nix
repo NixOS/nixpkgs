@@ -899,7 +899,7 @@ in
     virtualisation.tpm = {
       enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
 
-      package = mkPackageOptionMD cfg.host.pkgs "swtpm" { };
+      package = mkPackageOption cfg.host.pkgs "swtpm" { };
 
       deviceModel = mkOption {
         type = types.str;
@@ -997,7 +997,7 @@ in
               virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
             '';
           }
-          { assertion = cfg.directBoot.initrd != options.virtualisation.directBoot.initrd.default -> cfg.directBoot.enable;
+          { assertion = cfg.directBoot.enable || cfg.directBoot.initrd == options.virtualisation.directBoot.initrd.default;
             message =
               ''
                 You changed the default of `virtualisation.directBoot.initrd` but you are not
@@ -1256,6 +1256,8 @@ in
         unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig = {
           DefaultDependencies = false;
           RequiresMountsFor = "/sysroot/nix/.rw-store";

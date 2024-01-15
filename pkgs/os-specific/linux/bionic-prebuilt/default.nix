@@ -5,7 +5,7 @@
 let
 
   choosePlatform =
-    let pname = stdenv.targetPlatform.parsed.cpu.name; in
+    let pname = stdenv.hostPlatform.parsed.cpu.name; in
     pset: pset.${pname} or (throw "bionic-prebuilt: unsupported platform ${pname}");
 
   prebuilt_crt = choosePlatform {
@@ -66,7 +66,7 @@ in
 stdenvNoCC.mkDerivation rec {
   pname = "bionic-prebuilt";
   version = "ndk-release-r23";
-  name = "${stdenv.targetPlatform.parsed.cpu.name}-${pname}-${version}";
+  name = "${stdenv.hostPlatform.parsed.cpu.name}-${pname}-${version}";
 
   src = fetchzip {
     url = "https://android.googlesource.com/platform/bionic/+archive/00e8ce1142d8823b0d2fc8a98b40119b0f1f02cd.tar.gz";

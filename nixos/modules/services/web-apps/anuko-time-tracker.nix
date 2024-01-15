@@ -58,7 +58,7 @@ in
   options.services.anuko-time-tracker = {
     enable = lib.mkEnableOption (lib.mdDoc "Anuko Time Tracker");
 
-    package = lib.mkPackageOptionMD pkgs "anuko-time-tracker" {};
+    package = lib.mkPackageOption pkgs "anuko-time-tracker" {};
 
     database = {
       createLocally = lib.mkOption {

@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/raphlinus/pulldown-cmark";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ CobaltCause ];
+    mainProgram = "pulldown-cmark";
   };
 }

@@ -6,22 +6,23 @@
 , nodejs
 , prefetch-yarn-deps
 , yarn
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitmoji-cli";
-  version = "8.5.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "carloscuesta";
     repo = "gitmoji-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZM6jOi0FnomkIZeK6ln1Z0d6R5cjav67qyly3yqR1HQ=";
+    hash = "sha256-cIc0AaP1AwhoVJLnonC9qvDWNZW4L6/jsQ3Q6z5VXI0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-HSAWFVOTlXlG7N5591hpfPAYaSrP413upW5u/HN9X2o=";
+    hash = "sha256-HXMRCTiUti/GZ1dzd+XbFOao3+QLC1t7H0TT9MS5lz4=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --production install
 
     mkdir -p "$out/lib/node_modules/gitmoji-cli"
-    cp -r lib node_modules "$out/lib/node_modules/gitmoji-cli"
+    cp -r lib node_modules package.json "$out/lib/node_modules/gitmoji-cli"
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/gitmoji" \
       --add-flags "$out/lib/node_modules/gitmoji-cli/lib/cli.js"
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Gitmoji client for using emojis on commit messages";

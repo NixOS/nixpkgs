@@ -2,14 +2,20 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scipy
-, cython
+
+# build-system
+, setuptools
+
+# dependencies
+, apricot-select
 , networkx
-, joblib
-, pandas
-, nose
-, pyyaml
+, numpy
+, scikit-learn
+, scipy
+, torch
+
+# tests
+, pytestCheckHook
 }:
 
 
@@ -26,9 +32,22 @@ buildPythonPackage rec {
     sha256 = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
   };
 
-  propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
+  propagatedBuildInputs = [
+    apricot-select
+    networkx
+    numpy
+    scikit-learn
+    scipy
+    torch
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

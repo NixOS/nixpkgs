@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Pass extension for auditing your password repository.";
+    description = "Pass extension for auditing your password repository";
     homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

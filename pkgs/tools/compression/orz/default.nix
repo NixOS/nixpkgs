@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/richox/orz";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "orz";
   };
 }

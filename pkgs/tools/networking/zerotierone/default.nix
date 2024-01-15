@@ -14,13 +14,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-430wdPrSNohM3sXewusjsW3tbE7EFGISGxABZF21yRc=";
+    sha256 = "sha256-p0zrYgbHTLefj5GTrMnYLytCXZ/nRuqTL+6dEeC+uVw=";
   };
 
 in stdenv.mkDerivation {

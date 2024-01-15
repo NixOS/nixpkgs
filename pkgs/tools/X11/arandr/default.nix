@@ -13,11 +13,11 @@ let
 in
 buildPythonApplication rec {
   pname = "arandr";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchurl {
     url = "https://christian.amsuess.com/tools/arandr/files/${pname}-${version}.tar.gz";
-    sha256 = "135q0llvm077jil2fr92ssw3p095m4r8jfj0lc5rr3m71n4srj6v";
+    hash = "sha256-5Mu+Npi7gSs5V3CHAXS+AJS7rrOREFqBH5X0LrGCrgI=";
   };
 
   preBuild = ''
@@ -31,10 +31,10 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.domenkozar ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ gepbird ];
   };
 }

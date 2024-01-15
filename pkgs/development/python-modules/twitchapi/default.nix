@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.0.1";
+  version = "4.1.0";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WrZb734K51NYqlcMCRr8HO8E7XByioltd4vanTN8HUg=";
+    hash = "sha256-aYYuHyILd3nT0jG59wJcRgSeri26YsC3NpwuQ9dsI1I=";
   };
 
   nativeBuildInputs = [

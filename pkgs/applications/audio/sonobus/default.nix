@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonobus";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
     rev = version;
-    sha256 = "sha256-/Pb+PYmoCYA6Qcy/tR1Ejyt+rZ3pfJeWV4j7bQWYE58=";
+    sha256 = "sha256-zOPQK5X1E6t53DOjV7qSelyep4+m9aL4tRHqwyeuFQA=";
     fetchSubmodules = true;
   };
 

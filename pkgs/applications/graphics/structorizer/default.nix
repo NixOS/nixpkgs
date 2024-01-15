@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-12";
+  version = "3.32-15";
 
   desktopItems = [
     (makeDesktopItem {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-DZktq07MoXBg2AwHOoPLTbON/giSqDZOfmaMkZl1w1g=";
+    hash = "sha256-ZCVvMvbXMQIcZRk1F7QiRtNeuLicHe/aEvwp4FvhwoM=";
   };
 
   patches = [ ./makeStructorizer.patch ./makeBigJar.patch ];

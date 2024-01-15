@@ -4,7 +4,7 @@
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
-, texLive, texinfo
+, texliveSmall, texinfo
 , darwin
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl qtbase qtsvg boost
-    texLive
+    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]))
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
   ];
 

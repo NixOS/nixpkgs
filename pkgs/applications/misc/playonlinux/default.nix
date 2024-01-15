@@ -61,7 +61,7 @@ let
   libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
   python = python3.withPackages(ps: with ps; [
-    wxPython_4_2
+    wxpython
     setuptools
     natsort
   ]);

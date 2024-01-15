@@ -6,11 +6,11 @@
 , python-dateutil
 , pytz
 , hypothesis
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "5.0.7";
+  version = "5.0.10";
   pname = "icalendar";
   format = "setuptools";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fblcbyctnvd7DOc+tMWzg+90NHzZvH5xiY6BfJakQVo=";
+    hash = "sha256-sRsUjNClJ58kmCRiwSe7oq20eamj95Vwy/o0xPU8qPw=";
   };
 
   propagatedBuildInputs = [
@@ -30,8 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
   ];
+
+  pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
     changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";

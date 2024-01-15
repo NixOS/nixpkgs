@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.7.7";
-  format = "pyproject";
+  version = "0.7.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = pname;
+    repo = "sigma-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qqe9nJZfCb7xh93ERrV3XpqdtfeRECt7RDca9eQU3eQ=";
+    hash = "sha256-cNrI+YWwLK9sgvVYPOcTXW29omVRqnhh/458FuaoODo=";
   };
 
   postPatch = ''
@@ -50,6 +50,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_install_notexisting"
     "test_plugin_install"
     "test_plugin_uninstall"
+    # Tests require network access
+    "test_check_with_issues"
+    "test_plugin_show_identifier"
+    "test_plugin_show_nonexisting"
+    "test_plugin_show_uuid"
+    # Tests compare STDOUT results
+    "test_check_valid"
+    "test_check_stdin"
+    "test_check_exclude"
   ];
 
   pythonImportsCheck = [
@@ -59,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
+    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";

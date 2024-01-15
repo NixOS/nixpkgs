@@ -24,7 +24,7 @@ buildGoModule rec {
   vendorHash = "sha256-UX366UWROeorwYV4l1A3R03J10Gm7EajM+wEczIJEJM=";
 
   meta = with lib; {
-    description = "Control mouse and keyboard from the webbrowser of a smartphone.";
+    description = "Control mouse and keyboard from the web browser of a smartphone";
     homepage = "https://github.com/unrud/remote-touchpad";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ schnusch ];

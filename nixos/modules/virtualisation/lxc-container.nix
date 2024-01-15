@@ -1,26 +1,18 @@
 { lib, config, pkgs, ... }:
 
-let
-  cfg = config.virtualisation.lxc;
-in {
+{
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-instance-common.nix
+
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxc" "nestedContainer" ] "")
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxc" "privilegedContainer" ] "")
   ];
 
-  options = {
-    virtualisation.lxc = {
-      nestedContainer = lib.mkEnableOption (lib.mdDoc ''
-        Whether this container is configured as a nested container. On LXD containers this is recommended
-        for all containers and is enabled with `security.nesting = true`.
-      '');
-
-      privilegedContainer = lib.mkEnableOption (lib.mdDoc ''
-        Whether this LXC container will be running as a privileged container or not. If set to `true` then
-        additional configuration will be applied to the `systemd` instance running within the container as
-        recommended by [distrobuilder](https://linuxcontainers.org/distrobuilder/introduction/).
-      '');
-    };
-  };
+  options = { };
 
   config = {
     boot.isContainer = true;
@@ -85,34 +77,10 @@ in {
       ${pkgs.coreutils}/bin/ln -fs "$1/init" /sbin/init
     '';
 
-    systemd.additionalUpstreamSystemUnits = lib.mkIf cfg.nestedContainer ["systemd-udev-trigger.service"];
+    # networkd depends on this, but systemd module disables this for containers
+    systemd.additionalUpstreamSystemUnits = ["systemd-udev-trigger.service"];
 
-    # Add the overrides from lxd distrobuilder
-    # https://github.com/lxc/distrobuilder/blob/05978d0d5a72718154f1525c7d043e090ba7c3e0/distrobuilder/main.go#L630
-    systemd.packages = [
-      (pkgs.writeTextFile {
-        name = "systemd-lxc-service-overrides";
-        destination = "/etc/systemd/system/service.d/zzz-lxc-service.conf";
-        text = ''
-          [Service]
-          ProcSubset=all
-          ProtectProc=default
-          ProtectControlGroups=no
-          ProtectKernelTunables=no
-          NoNewPrivileges=no
-          LoadCredential=
-        '' + lib.optionalString cfg.privilegedContainer ''
-          # Additional settings for privileged containers
-          ProtectHome=no
-          ProtectSystem=no
-          PrivateDevices=no
-          PrivateTmp=no
-          ProtectKernelLogs=no
-          ProtectKernelModules=no
-          ReadWritePaths=
-        '';
-      })
-    ];
+    systemd.packages = [ pkgs.distrobuilder.generator ];
 
     system.activationScripts.installInitScript = lib.mkForce ''
       ln -fs $systemConfig/init /sbin/init

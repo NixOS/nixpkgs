@@ -1,10 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.power-profiles-daemon;
-  package = pkgs.power-profiles-daemon;
 in
 
 {
@@ -15,14 +12,16 @@ in
 
     services.power-profiles-daemon = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           Whether to enable power-profiles-daemon, a DBus daemon that allows
           changing system behavior based upon user-selected power profiles.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "power-profiles-daemon" { };
 
     };
 
@@ -31,7 +30,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = !config.services.tlp.enable;
@@ -42,13 +41,13 @@ in
       }
     ];
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ package ];
+    services.dbus.packages = [ cfg.package ];
 
-    services.udev.packages = [ package ];
+    services.udev.packages = [ cfg.package ];
 
-    systemd.packages = [ package ];
+    systemd.packages = [ cfg.package ];
 
   };
 

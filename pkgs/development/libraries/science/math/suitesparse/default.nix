@@ -8,7 +8,7 @@
 , mpfr
 , config
 , enableCuda ? config.cudaSupport
-, cudatoolkit
+, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   # Use compatible indexing for lapack and blas used
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
@@ -34,7 +38,12 @@ stdenv.mkDerivation rec {
     gfortran.cc.lib
     gmp
     mpfr
-  ] ++ lib.optional enableCuda cudatoolkit;
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart.dev
+    cudaPackages.cuda_cudart.lib
+    cudaPackages.libcublas.dev
+    cudaPackages.libcublas.lib
+  ];
 
   preConfigure = ''
     # Mongoose and GraphBLAS are packaged separately
@@ -49,9 +58,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals blas.isILP64 [
     "CFLAGS=-DBLAS64"
   ] ++ lib.optionals enableCuda [
-    "CUDA_PATH=${cudatoolkit}"
-    "CUDART_LIB=${cudatoolkit.lib}/lib/libcudart.so"
-    "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
+    "CUDA_PATH=${cudaPackages.cuda_nvcc}"
+    "CUDART_LIB=${cudaPackages.cuda_cudart.lib}/lib/libcudart.so"
+    "CUBLAS_LIB=${cudaPackages.libcublas.lib}/lib/libcublas.so"
   ] ++ lib.optionals stdenv.isDarwin [
     # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
     # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
@@ -59,6 +68,12 @@ stdenv.mkDerivation rec {
     "LAPACK=-llapack"
   ]
   ;
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
+    # update the install names of the output dylibs.
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   buildFlags = [
     # Build individual shared libraries, not demos

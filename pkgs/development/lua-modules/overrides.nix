@@ -2,6 +2,11 @@
 { stdenv
 , cargo
 , cmake
+
+# plenary utilities
+, which
+, findutils
+, coreutils
 , curl
 , cyrus_sasl
 , dbus
@@ -117,18 +122,22 @@ with prev;
       '';
   });
 
-  cyrussasl = prev.cyrussasl.overrideAttrs (drv: {
-    externalDeps = [
-      { name = "LIBSASL"; dep = cyrus_sasl; }
-    ];
-  });
-
   fennel = prev.fennel.overrideAttrs(oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
     ];
     postInstall = ''
       installManPage fennel.1
+    '';
+  });
+
+  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
+  # we have to invoke busted manually
+  fzy = prev.fzy.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = [ prev.busted ];
+    checkPhase = ''
+      busted test/test.lua
     '';
   });
 
@@ -322,7 +331,7 @@ with prev;
     externalDeps = [
       { name = "EVENT"; dep = libevent; }
     ];
-    disabled = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   luaexpat = prev.luaexpat.overrideAttrs (_: {
@@ -386,6 +395,11 @@ with prev;
     ];
   });
 
+  # lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
+  #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
+  #   meta.broken = true;
+  # });
+
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       yajl
@@ -400,6 +414,17 @@ with prev;
 
   lua-subprocess = prev.lua-subprocess.overrideAttrs (oa: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  });
+
+  lua-rtoml = prev.lua-rtoml.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-EcP4eYsuOVeEol+kMqzsVHd8F2KoBdLzf6K0KsYToUY=";
+    };
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -428,6 +453,32 @@ with prev;
     };
   });
 
+
+  plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+
+    # disabled for now because too flaky
+    doCheck = false;
+    # for env/find/ls
+    checkInputs = [
+      which
+      neovim-unwrapped
+      coreutils
+      findutils
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      # remove failing tests, need internet access for instance
+      rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
+      export HOME="$TMPDIR"
+      make test
+      runHook postCheck
+    '';
+  });
 
   # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components
@@ -491,7 +542,7 @@ with prev;
 
     postPatch = ''
       substituteInPlace magick/wand/lib.lua \
-        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
 
     # Requires ffi
@@ -514,8 +565,21 @@ with prev;
     '';
   });
 
-  readline = prev.readline.overrideAttrs (oa: {
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ readline.out ];
+  readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
+  buildLuarocksPackage ({
+    pname = "readline";
+    version = "3.2-0";
+    knownRockspec = (fetchurl {
+      url    = "mirror://luarocks/readline-3.2-0.rockspec";
+      sha256 = "1r0sgisxm4xd1r6i053iibxh30j7j3rcj4wwkd8rzkj8nln20z24";
+    }).outPath;
+    src = fetchurl {
+      # the rockspec url doesn't work because 'www.' is not covered by the certificate so
+      # I manually removed the 'www' prefix here
+      url    = "http://pjb.com.au/comp/lua/readline-3.2.tar.gz";
+      sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
+    };
+
     extraVariables = rec {
       READLINE_INCDIR = "${readline.dev}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
@@ -524,9 +588,19 @@ with prev;
       unzip "$curSrc"
       tar xf *.tar.gz
     '';
-    # Without this, source root is wrongly set to ./readline-2.6/doc
-    sourceRoot = "readline-${lib.versions.majorMinor oa.version}";
-  });
+
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+    propagatedBuildInputs = [ lua luaposix
+      readline.out
+    ];
+
+    meta = {
+      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      description = "Interface to the readline library";
+      license.fullName = "MIT/X11";
+    };
+  })) {};
+
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
 
@@ -575,7 +649,7 @@ with prev;
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-pLAisfnSDoAToQO/kdKTdic6vEug7/WFNtgOfj0bRAE=";
+      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
     };
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];

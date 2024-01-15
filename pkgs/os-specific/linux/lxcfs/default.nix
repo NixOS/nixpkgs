@@ -1,42 +1,58 @@
-{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, fuse
-, util-linux, makeWrapper
-, enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse3,
+  help2man,
+  makeWrapper,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  python3,
+  util-linux,
+}:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "4.0.12";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "sha256-+wp29GD+toXGfQbPGYbDJ7/P+FY1uQY4uK3OQxTE9GM=";
+    sha256 = "sha256-vusxbFV7cnQVBOOo7E+fSyaE63f5QiE2xZhYavc8jJU=";
   };
 
-  postPatch = ''
-    sed -i -e '1i #include <sys/pidfd.h>' src/bindings.c
-  '';
+  patches = [
+    # skip RPM spec generation
+    ./no-spec.patch
 
-  nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];
-  buildInputs = [ fuse ];
+    # skip installing systemd files
+    ./skip-init.patch
 
-  preConfigure = lib.optionalString enableDebugBuild ''
-    sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
-  '';
-
-  configureFlags = [
-    "--with-init-script=systemd"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
+    # fix pidfd checks and include
+    ./pidfd.patch
   ];
 
-  installFlags = [ "SYSTEMD_UNIT_DIR=\${out}/lib/systemd" ];
+
+  nativeBuildInputs = [
+    meson
+    help2man
+    makeWrapper
+    ninja
+    (python3.withPackages (p: [ p.jinja2 ]))
+    pkg-config
+  ];
+  buildInputs = [ fuse3 ];
+
+  preConfigure = ''
+    patchShebangs tools/
+  '';
 
   postInstall = ''
     # `mount` hook requires access to the `mount` command from `util-linux`:
-    wrapProgram "$out/share/lxcfs/lxc.mount.hook" \
-      --prefix PATH : "${util-linux}/bin"
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : "${util-linux}/bin"
   '';
 
   postFixup = ''
@@ -44,12 +60,16 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath "$out/bin/lxcfs"):$out/lib" "$out/bin/lxcfs"
   '';
 
+  passthru.tests = {
+    incus-container = nixosTests.incus.container;
+  };
+
   meta = {
     description = "FUSE filesystem for LXC";
     homepage = "https://linuxcontainers.org/lxcfs";
     changelog = "https://linuxcontainers.org/lxcfs/news/";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.lxc.members;
   };
 }

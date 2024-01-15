@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rkvm";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "htrefil";
     repo = pname;
     rev = version;
-    hash = "sha256-3IdwBMN+VZBrcoT5vF7pF6xoNWZBn4k/jRJqADlpM7k=";
+    hash = "sha256-bWDVc5pWc5gtwGF3vwUgjDhqZP7E79nteKiuAEEbw6E=";
   };
 
-  cargoHash = "sha256-/SZKJI4gMkike2m8UVzbwfMqj697A8zbJEKAnnbSx3s=";
+  cargoHash = "sha256-FUaycVxW7QJ5gTZ/8bWjqSaMSepRF5iqlBNJLaDRNxc=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook makeWrapper ];
   buildInputs = [ libevdev ];

@@ -1,12 +1,14 @@
-{ mkDerivation, lib, fetchurl, qmake }:
+{ mkDerivation, lib, qmake, fetchsvn }:
 
 mkDerivation rec {
   pname = "xflr5";
-  version = "6.47";
+  version = "6.61";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xflr5/${pname}_v${version}_src.tar.gz";
-    sha256 = "02x3r9iv3ndwxa65mxn9m5dlhcrnjiq7cffi6rmb456gs3v3dnav";
+  sourceRoot = "${src.name}/xflr5";
+  src = fetchsvn {
+    url = "https://svn.code.sf.net/p/xflr5/code/trunk";
+    rev = "1480";
+    sha256 = "sha256-Uj6R15OT5i5tAJEYWqyFyN5Z51Wz5RjO26mWC3Y6QAI=";
   };
 
   nativeBuildInputs = [ qmake ];

@@ -1,13 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
 , pkg-config
 , python3
-, doxygen
-, libxslt
 , boost
 , egl-wayland
 , freetype
@@ -40,14 +39,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IEGeZVNxwzHn5GASCyjNuQsnCzzfQBHdC33MWVMeZws=";
+    hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
   };
+
+  patches = [
+    # Fix gbm-kms tests
+    # Remove when version > 2.15.0
+    (fetchpatch {
+      name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
+      url = "https://github.com/MirServer/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
+      hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
+    })
+  ];
 
   postPatch = ''
     # Fix scripts that get run in tests
@@ -73,26 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/platform/graphics/CMakeLists.txt \
       --replace "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
       --replace "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-
-    # Fix date in generated docs not honouring SOURCE_DATE_EPOCH
-    # Install docs to correct dir
-    substituteInPlace cmake/Doxygen.cmake \
-      --replace '"date"' '"date" "--date=@'"$SOURCE_DATE_EPOCH"'"' \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/share/doc/mir-doc" "\''${CMAKE_INSTALL_DOCDIR}"
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
     glib # gdbus-codegen
-    libxslt
     lttng-ust # lttng-gen-tp
     pkg-config
     (python3.withPackages (ps: with ps; [
       pillow
-    ] ++ lib.optionals finalAttrs.doCheck [
+    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
       pygobject3
       python-dbusmock
     ]))
@@ -137,11 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
     wlcs
   ];
 
-  buildFlags = [ "all" "doc" ];
-
   cmakeFlags = [
+    "-DBUILD_DOXYGEN=OFF"
     "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
-    "-DMIR_ENABLE_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DMIR_ENABLE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
     "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_RUNTIME_DIR=/tmp
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

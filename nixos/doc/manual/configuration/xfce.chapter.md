@@ -28,7 +28,7 @@ manually (system wide), put them into your
 
 Thunar (the Xfce file manager) is automatically enabled when Xfce is
 enabled. To enable Thunar without enabling Xfce, use the configuration
-option [](#opt-programs.thunar.enable) instead of simply adding
+option [](#opt-programs.thunar.enable) instead of adding
 `pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
 
 If you'd like to add extra plugins to Thunar, add them to

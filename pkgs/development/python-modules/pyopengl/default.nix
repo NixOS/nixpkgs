@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyopengl";
-  version = "3.1.6";
+  version = "3.1.7";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyOpenGL";
     inherit version;
-    hash = "sha256-jqbIdzkn7adAW//G9buTvoFWmnsFyMrFDNlOlp3OXic=";
+    hash = "sha256-7vMaOIjmmE/U2ObJlhsYTJgTyoJgTTf+PagOsACnbIY=";
   };
 
   propagatedBuildInputs = [ pillow ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
       Python 2.5) ctypes library, and is provided under an extremely
       liberal BSD-style Open-Source license.
     '';
-    license = "BSD-style";
+    license = licenses.bsd3;
     platforms = platforms.mesaPlatforms;
   };
 

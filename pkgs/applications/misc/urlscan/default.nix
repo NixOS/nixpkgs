@@ -15,8 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-OzcoOIgEiadWrsUPIxBJTuZQYjScJBYKyqCu1or6fz8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = with python3.pkgs; [
     hatchling
     hatch-vcs
@@ -38,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/firecat53/urlscan";
     changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dpaetzel jfrankenau ];
+    maintainers = with maintainers; [ dpaetzel ];
+    mainProgram = "urlscan";
   };
 }

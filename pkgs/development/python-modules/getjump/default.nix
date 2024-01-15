@@ -4,29 +4,22 @@
 , fetchPypi
 , pillow
 , poetry-core
-, pythonRelaxDepsHook
 , requests
 , rich
 }:
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gu6h9Yb0xdfvdmoeZGQPFCJhBJxuQ4iWlQquig1ljnY=";
+    hash = "sha256-rNMhyUqrliKf6CPhZfyUwN00D4TgOWjPCoqihOB0PDE=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    # remove after https://github.com/eggplants/getjump/pull/123 is released
-    "pillow"
   ];
 
   propagatedBuildInputs = [

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, perl, perlPackages, which }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, perlPackages
+, postgresql
+, postgresqlTestHook
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "pgtap";
@@ -14,8 +22,35 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
 
   installPhase = ''
+    install -D src/pgtap.so -t $out/lib
     install -D {sql/pgtap--${version}.sql,pgtap.control} -t $out/share/postgresql/extension
   '';
+
+  passthru.tests.extension = stdenv.mkDerivation {
+    name = "pgtap-test";
+    dontUnpack = true;
+    doCheck = true;
+    buildInputs = [ postgresqlTestHook ];
+    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.pgtap ])) ];
+    postgresqlTestUserOptions = "LOGIN SUPERUSER";
+    passAsFile = [ "sql" ];
+    sql = ''
+      CREATE EXTENSION pgtap;
+
+      BEGIN;
+      SELECT plan(1);
+      SELECT pass('Test passed');
+      SELECT * FROM finish();
+      ROLLBACK;
+    '';
+    failureHook = "postgresqlStop";
+    checkPhase = ''
+      runHook preCheck
+      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
+      runHook postCheck
+    '';
+    installPhase = "touch $out";
+  };
 
   meta = with lib; {
     description = "A unit testing framework for PostgreSQL";

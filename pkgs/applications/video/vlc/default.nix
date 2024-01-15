@@ -102,11 +102,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.18";
+  version = "3.0.20";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
+    hash = "sha256-rccoW00nIc3fQOtScMraKqoQozTLVG/VWgY1NEe6KbU=";
   };
 
   nativeBuildInputs = [
@@ -219,12 +219,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
-    })
-    # patch to build with recent libplacebo
-    # https://code.videolan.org/videolan/vlc/-/merge_requests/3027
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/-/commit/65ea8d19d91ac1599a29e8411485a72fe89c45e2.patch";
-      hash = "sha256-Zz+g75V6X9OZI3sn614K9Uenxl3WtRHKSdLkWP3b17w=";
     })
   ];
 

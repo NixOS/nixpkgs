@@ -2,7 +2,7 @@
 , stdenv
 , yarn
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , electron
 , fetchFromGitHub
@@ -12,19 +12,19 @@
 , copyDesktopItems
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.44";
+  version = "3.1.45";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
-    rev = "v${version}";
-    hash = "sha256-jiYrJtdM2LPwYDAgoGa0hGJcYNRiAKIuDuKZmSZ7OR4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     makeWrapper
     copyDesktopItems
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS="--openssl-legacy-provider"
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
         dimensions=''${img#favicon-}
         dimensions=''${dimensions%.png}
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+        cp $img $out/share/icons/hicolor/$dimensions/apps/r2modman.png
       done
     )
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/r2modman" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/r2modman" \
       --inherit-argv0 \
       --add-flags "$out/share/r2modman" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -93,11 +93,11 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = pname;
-      comment = meta.description;
+      name = "r2modman";
+      exec = "r2modman";
+      icon = "r2modman";
+      desktopName = "r2modman";
+      comment = finalAttrs.meta.description;
       categories = [ "Game" ];
       keywords = [ "launcher" "mod manager" "thunderstore" ];
     })
@@ -107,12 +107,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
     description = "Unofficial Thunderstore mod manager";
     homepage = "https://github.com/ebkr/r2modmanPlus";
-    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aidalgol huantian ];
+    license = lib.licenses.mit;
+    mainProgram = "r2modman";
+    maintainers = with lib.maintainers; [ aidalgol huantian ];
     inherit (electron.meta) platforms;
   };
-}
+})

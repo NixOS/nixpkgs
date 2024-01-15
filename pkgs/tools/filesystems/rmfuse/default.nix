@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
       in the reMarkable Cloud using the same tools you use on your local
       system.
     '';
-    maintainers = with lib.maintainers; [ adisbladis ];
+    maintainers = with lib.maintainers; [ ];
+    mainProgram = "rmfuse";
   };
 }

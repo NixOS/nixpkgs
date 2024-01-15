@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
@@ -66,12 +66,7 @@ in
   options.services.moodle = {
     enable = mkEnableOption (lib.mdDoc "Moodle web application");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.moodle;
-      defaultText = literalExpression "pkgs.moodle";
-      description = lib.mdDoc "The Moodle package to use.";
-    };
+    package = mkPackageOption pkgs "moodle" { };
 
     initialPassword = mkOption {
       type = types.str;
@@ -194,7 +189,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
         message = "services.moodle.database.user must be set to ${user} if services.moodle.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -220,7 +215,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

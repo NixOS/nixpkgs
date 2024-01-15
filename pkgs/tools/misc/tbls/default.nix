@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.70.2";
+  version = "1.72.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     rev = "v${version}";
-    hash = "sha256-LSICkg99veFHLmdcQZmnyfTbdqx7k2XI13W7Cjuj3qA=";
+    hash = "sha256-ZkJ1+o4xWQX63/2hdhnE5hyVrZIn1O2kmaiZ1853X/8=";
   };
 
-  vendorHash = "sha256-84h+LQzk/xy/Gapy7IxB8IPvsVGRsJP7udd9HhLskew=";
+  vendorHash = "sha256-IczwqqCQeTpXiDSJxX8ErmO4Ap+coIRAQTmRoDNtdXs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,5 +52,6 @@ buildGoModule rec {
     changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "tbls";
   };
 }

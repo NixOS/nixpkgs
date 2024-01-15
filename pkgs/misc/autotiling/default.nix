@@ -20,6 +20,7 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];
+    mainProgram = "autotiling";
   };
 }
 

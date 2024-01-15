@@ -13,6 +13,7 @@
 , libiconv
 , coreutils
 , CoreServices
+, SystemConfiguration
 , tzdata
 , cmake
 , perl
@@ -27,14 +28,14 @@
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
 , nixosTests
 , nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.33.0";
+  version = "0.34.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -43,8 +44,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZhRvQQ0MxEd0Ry6sfEWUzYpEN80GhBOzpbEG5ZhCA2E=";
+    hash = "sha256-XaX6C1kl908MG8SndT2sUDR09qbFCar4G7U7TYlLBR4=";
   };
+
+  patches = [ ./vector-pr19075.patch ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -60,8 +63,9 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  buildInputs =
+    [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

@@ -13,7 +13,7 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: origArgs:
+  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
     let
       args = lib.fix (lib.extends
         (_: previousAttrs: {
@@ -30,7 +30,7 @@ let
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
         __functor = self: result;
       }
-      else result;
+      else result);
 
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
@@ -46,9 +46,6 @@ let
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));
-
-  # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -92,13 +89,11 @@ let
   disabledIf = x: drv: if x then disabled drv else drv;
 
 in {
-
   inherit lib pkgs stdenv;
   inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
-  inherit buildSetupcfg;
 
   python = toPythonModule python;
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions

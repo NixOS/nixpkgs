@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "bt-proximity";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "bt_proximity";

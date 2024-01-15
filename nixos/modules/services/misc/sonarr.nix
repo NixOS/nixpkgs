@@ -36,14 +36,7 @@ in
         description = lib.mdDoc "Group under which Sonaar runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sonarr;
-        defaultText = literalExpression "pkgs.sonarr";
-        description = lib.mdDoc ''
-          Sonarr package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "sonarr" { };
     };
   };
 

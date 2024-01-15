@@ -15,15 +15,15 @@
 , cacert
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.3.0";
+  version = "9.3.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
-    rev = version;
-    hash = "sha256-M1KUXzht4qIjPfHxvzPr7XUnisMwtbegKp18XQjNYHg=";
+    rev = finalAttrs.version;
+    hash = "sha256-M8Zgy5xnmZu7mzxXXGqaIfe7o7iMf/1sOJVOBsTvtdQ=";
   };
 
   patches = [
@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     "-DNLOHMANN_JSON_ORIGIN=external"
     "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
+  CXXFLAGS = [
+    # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+    "-include cstdint"
+  ];
 
   preCheck =
     let
@@ -64,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.rev}/NEWS";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;

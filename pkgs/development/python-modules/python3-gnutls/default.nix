@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "python3-gnutls";
   version = "3.1.9";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

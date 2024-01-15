@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DMSGPACK_BUILD_DOCS=OFF" # docs are not installed even if built
-  ] ++ lib.optional finalAttrs.doCheck "-DMSGPACK_BUILD_TESTS=ON";
+  ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DMSGPACK_BUILD_TESTS=ON";
 
   checkInputs = [
     zlib

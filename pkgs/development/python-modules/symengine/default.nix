@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
 , cython
 , cmake
@@ -12,23 +11,15 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-03lHip0iExfptrUe5ObA6xXrsfS4QJPrh1Z0v7q2lDI=";
+    hash = "sha256-uUMcNnynE2itIwc7IGFwxveqLRL8f4dAAcaD6FUWJaY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # setuptools 61 compat
-      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
-      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -1,21 +1,16 @@
-diff --git a/tools/cpanfile b/tools/cpanfile
-index 359c61fe..ca3b7ec7 100755
---- a/tools/cpanfile
-+++ b/tools/cpanfile
-@@ -20,7 +20,7 @@ requires 'Sort::Naturally',     1.03;
- requires 'Authen::Passphrase',  0.008;
- requires 'File::ReadBackwards', 1.05;
- requires 'URI::Escape',         1.74;
--requires 'URI',                 5.09;
-+requires 'URI',                 5.05;
- 
- # Used by Installer
- requires 'IPC::Cmd', 1.02;
 diff --git a/tools/install.pl b/tools/install.pl
-index 0cbb847d..1bd61fa0 100755
+index dbeb7c11..06e4c675 100755
 --- a/tools/install.pl
 +++ b/tools/install.pl
-@@ -91,32 +91,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -9,6 +9,7 @@ use Config;
+ 
+ use feature    qw(say);
+ use File::Path qw(make_path);
++use File::Copy qw(copy);
+ 
+ #Vendor dependencies
+ my @vendor_css = (
+@@ -91,32 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -48,16 +43,60 @@ index 0cbb847d..1bd61fa0 100755
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -154,12 +128,6 @@ if ( $back || $full ) {
+@@ -136,36 +111,11 @@ if ($@) {
+     say("OK!");
+ }
+ 
+-#Build & Install CPAN Dependencies
+-if ( $back || $full ) {
+-    say("\r\nInstalling Perl modules... This might take a while.\r\n");
+-
+-    if ( $Config{"osname"} ne "darwin" ) {
+-        say("Installing Linux::Inotify2 for non-macOS systems... (This will do nothing if the package is there already)");
+-
+-        install_package( "Linux::Inotify2", $cpanopt );
+-    }
+-
+-    if ( system( "cpanm --installdeps ./tools/. --notest" . $cpanopt ) != 0 ) {
+-        die "Something went wrong while installing Perl modules - Bailing out.";
+-    }
+-}
+-
  #Clientside Dependencies with Provisioning
  if ( $front || $full ) {
  
 -    say("\r\nObtaining remote Web dependencies...\r\n");
 -
--    if ( system("npm install") != 0 ) {
+-    if ( system("npm ci") != 0 ) {
 -        die "Something went wrong while obtaining node modules - Bailing out.";
 -    }
 -
      say("\r\nProvisioning...\r\n");
  
-     #Load File::Copy
+-    #Load File::Copy
+-    install_package( "File::Copy", $cpanopt );
+-    File::Copy->import("copy");
+-
+     make_path getcwd . "/public/css/vendor";
+     make_path getcwd . "/public/css/webfonts";
+     make_path getcwd . "/public/js/vendor";
+@@ -212,19 +162,3 @@ sub cp_node_module {
+ 
+ }
+ 
+-sub install_package {
+-
+-    my $package = $_[0];
+-    my $cpanopt = $_[1];
+-
+-    ## no critic
+-    eval "require $package";    #Run-time evals are needed here to check if the package has been properly installed.
+-    ## use critic
+-
+-    if ($@) {
+-        say("$package not installed! Trying to install now using cpanm$cpanopt");
+-        system("cpanm $package $cpanopt");
+-    } else {
+-        say("$package package installed, proceeding...");
+-    }
+-}

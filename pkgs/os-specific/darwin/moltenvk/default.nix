@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVKShaderConverter.xcodeproj \
       -scheme MoltenVKShaderConverter \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     declare -A products=( [MoltenVKShaderConverter]=bin [libMoltenVKShaderConverter.a]=lib )
     for product in "''${!products[@]}"; do
       cp MoltenVKShaderConverter-*/Build/Products/Release/$product "$build/''${products[$product]}/$product"
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVK.xcodeproj \
       -scheme MoltenVK-macOS \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     cp MoltenVK-*/Build/Products/Release/dynamic/libMoltenVK.dylib "$build/lib/libMoltenVK.dylib"
     popd
   '';

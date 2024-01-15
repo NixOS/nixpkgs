@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5, gitUpdater }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.2.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VAn4zXypOugPIVyXQ/8Yt0rCDM7hVdIY+jpmoTHqssU=";
+    rev = "v${version}";
+    hash = "sha256-PtV2mzxOfZ88THiFD4K+qtOi41GeLF1GcdiFFhUR8Ak=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
   propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
-  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm gettext qt5.wrapQtAppsHook ];
   nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];
 
   disabledTestPaths = [
@@ -26,6 +26,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";

@@ -3,17 +3,11 @@
 }:
 
 rec {
-  version = "0.9.0";
-  rSrc =
-    # local build -> `make ci`; `make clean` to restore
-    # return to remote source
-    # if builtins.pathExists ./.local
-    # then ./.
-    # else
-      fetchFromGitHub {
-        owner = "abathur";
-        repo = "resholve";
-        rev = "v${version}";
-        hash = "sha256-FRdCeeC2c3bMEXekEyilgW0PwFfUWGstZ5mXdmRPM5w=";
-      };
+  version = "0.9.1";
+  rSrc = fetchFromGitHub {
+    owner = "abathur";
+    repo = "resholve";
+    rev = "v${version}";
+    hash = "sha256-hkLKQKhEMD1UQ9EunPmx5Tsh44q4+tYj820OXF2ueUo=";
+  };
 }

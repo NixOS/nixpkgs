@@ -119,11 +119,6 @@ let
                 package = elk.elasticsearch;
               };
 
-              kibana = {
-                enable = true;
-                package = elk.kibana;
-              };
-
               elasticsearch-curator = {
                 enable = true;
                 actionYAML = ''
@@ -217,13 +212,6 @@ let
           one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
           one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
 
-      with subtest("Kibana is healthy"):
-          one.wait_for_unit("kibana.service")
-          one.wait_until_succeeds(
-              "curl --silent --show-error --fail-with-body 'http://localhost:5601/api/status'"
-              + " | jq -es 'if . == [] then null else .[] | .status.overall.state == \"green\" end'"
-          )
-
       with subtest("Metricbeat is running"):
           one.wait_for_unit("metricbeat.service")
 
@@ -274,7 +262,6 @@ in {
   #   name = "elk-7";
   #   elasticsearch = pkgs.elasticsearch7-oss;
   #   logstash      = pkgs.logstash7-oss;
-  #   kibana        = pkgs.kibana7-oss;
   #   filebeat      = pkgs.filebeat7;
   #   metricbeat    = pkgs.metricbeat7;
   # };
@@ -282,7 +269,6 @@ in {
     ELK-7 = mkElkTest "elk-7" {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
-      kibana        = pkgs.kibana7;
       filebeat      = pkgs.filebeat7;
       metricbeat    = pkgs.metricbeat7;
     };

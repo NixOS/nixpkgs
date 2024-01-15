@@ -4,9 +4,8 @@
 , autoreconfHook
 , pkg-config
 , glib
-, i2c-tools
+, jansson
 , udev
-, kmod
 , libgudev
 , libusb1
 , libdrm
@@ -15,23 +14,23 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.4.2";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-wGwTZheRHi5pGf6WB9hGd8m/pLOmnlYYrS5dd+QItAQ=";
+    hash = "sha256-CunFRQHKk3q8CU60TSRnRoCW7+9X1+JpJHm773HhmZs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     glib
-    i2c-tools
-    kmod
+    jansson
     libdrm
     libgudev
     libusb1
     udev
+    xorg.libXext
     xorg.libXrandr
   ];
 
@@ -44,6 +43,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
     changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
+    mainProgram = "ddcutil";
   };
 }
 

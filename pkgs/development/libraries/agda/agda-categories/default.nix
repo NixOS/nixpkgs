@@ -1,14 +1,14 @@
 { lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
-  version = "0.1.7.1a";
+  version = "0.2.0";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "sha256-VlxRDxXg+unzYlACUU58JQUHXxtg0fI5dEQvlBRxJtU=";
+    sha256 = "sha256-GQuQxzYSQxAIVSJ1vf0blRC0juoxAqD1AHW66H/6NSk=";
   };
 
   postPatch = ''
@@ -25,6 +25,10 @@ mkDerivation rec {
     # be a valid Git working directory.
     find src -name '*.agda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.agda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda
   '';
+
+  # agda: Heap exhausted;
+  # agda: Current maximum heap size is 4294967296 bytes (4096 MB).
+  GHCRTS = "-M5G";
 
   buildInputs = [ standard-library ];
 

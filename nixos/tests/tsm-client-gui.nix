@@ -18,9 +18,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       defaultServername = "testserver";
       servers.testserver = {
         # 192.0.0.8 is a "dummy address" according to RFC 7600
-        server = "192.0.0.8";
-        node = "SOME-NODE";
-        passwdDir = "/tmp";
+        tcpserveraddress = "192.0.0.8";
+        nodename = "SOME-NODE";
+        passworddir = "/tmp";
       };
     };
   };

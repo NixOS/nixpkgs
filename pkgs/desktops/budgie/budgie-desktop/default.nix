@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-menus
     gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
+    gnome.mutter
     gnome.zenity
     graphene
     gtk3

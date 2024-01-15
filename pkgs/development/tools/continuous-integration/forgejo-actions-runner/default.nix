@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "forgejo-actions-runner";
-  version = "3.0.1";
+  version = "3.3.0";
 
   src = fetchFromGitea {
-    domain = "codeberg.org";
+    domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-idA74R6kbI7Bk0XvT7BOyctT0IKymsJoFCWgYrtZstU=";
+    hash = "sha256-ZpsHytsIp+ZW4DI7X9MmI7nZRnXVHvx905YdZGS6WMY=";
   };
 
-  vendorHash = "sha256-HE//SD/doMf42y2KF10JAuUe86hpFhCUM61da2NC5CE=";
+  vendorHash = "sha256-5GnGXpMy1D7KpVAVroX07Vw5QKYYtwdIhQsk23WCLgc=";
 
   ldflags = [
     "-s"

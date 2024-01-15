@@ -4,28 +4,29 @@
 , openssl
 , pkg-config
 , stdenv
+, CoreServices
 , Security
 , SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "2.21.2";
+  version = "2.23.2";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    sha256 = "sha256-2CNV1y2/D2KrQylWqd5DDQYOAhR7pGeBFva1wysGZRw=";
+    sha256 = "sha256-txxDA/8pQDiZsoxrdWz6JZmjpyeILWHl1rUHzPacJN8=";
   };
   doCheck = false;
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ pkg-config ];
 
-  cargoHash = "sha256-jZUL2/iLOITIfonXzJS/K6wRSPPb2aY9ASbq1KTf+kM=";
+  cargoHash = "sha256-KytXqILji1pbiMz7OX+O5B2bw5MMlKf/MYh13+nd+bg=";
 
   meta = with lib; {
     homepage = "https://docs.sentry.io/cli/";

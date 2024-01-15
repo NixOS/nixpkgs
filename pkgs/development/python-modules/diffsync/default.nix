@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "diffsync";
-  version = "1.8.0";
+  version = "1.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2OhckgJK1qimF0AcYSa8L+AkzfiN5VojWj0x6kwbgyk=";
+    hash = "sha256-p7aML6dTDkF4hx67bwI29nhEHi7LIEZ5RlHPgtyQMbo=";
   };
 
   nativeBuildInputs = [

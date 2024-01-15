@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mullvad-api";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "mullvad_api";

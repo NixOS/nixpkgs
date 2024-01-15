@@ -1,6 +1,7 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
 , flock, autoreconfHook
+, gawk
 , nixosTests
 , withMysql ? false
 , withPgsql ? false
@@ -9,13 +10,14 @@
 , withZlib ? true, zlib
 , withTools ? false
 , withRedis ? false
+, withImagemagick ? false, imagemagick
 }:
 
 let
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep gawk coreutils util-linux procps ];
 in stdenv.mkDerivation rec {
   pname = "ejabberd";
-  version = "23.01";
+  version = "23.10";
 
   nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
@@ -27,7 +29,8 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
-    sha256 = "sha256-K4P+A2u/Hbina4b3GP8T3wmPoQxiv88GuB4KZOb2+cA=";
+    hash = "sha256-DW5/DYLZHNqJ4lddmag1B0E9ov/eObIVGASUeioPolg=";
+    # remember to update the deps FOD hash & its pinned ejabberd-po commit
   };
 
   passthru.tests = {
@@ -38,6 +41,15 @@ in stdenv.mkDerivation rec {
     pname = "ejabberd-deps";
 
     inherit src version;
+
+    # pin ejabberd-po dep
+    # update: curl -L api.github.com/repos/processone/ejabberd-po/branches/main | jq .commit.sha -r
+    postPatch = ''
+      substituteInPlace rebar.config \
+        --replace \
+          '{git, "https://github.com/processone/ejabberd-po", {branch, "main"}}' \
+          '{git, "https://github.com/processone/ejabberd-po", {tag, "26d6463386588d39f07027dabff3cb8dd938bf6b"}}'
+    '';
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
@@ -55,9 +67,10 @@ in stdenv.mkDerivation rec {
           git reset --hard
           git clean -ffdx
           git describe --always --tags > .rev
-          rm -rf .git
+          rm -rf .git .github
         )
       done
+      # not a typo; comes from `make deps`
       rm deps/.got
 
       cp -r deps $out
@@ -70,7 +83,7 @@ in stdenv.mkDerivation rec {
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-Lj4YSPOiiJQ6uN4cAR+1s/eVSfoIsuvWR7gGkVYrOfc=";
+    outputHash = "sha256-HrLu3wTF+cUxpGX0yK3nbB57SRM2ND3Crlxs5/8FIwI=";
   };
 
   configureFlags = [
@@ -99,6 +112,7 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"''}
     rm $out/bin/{mix,iex,elixir}
   '';
 
