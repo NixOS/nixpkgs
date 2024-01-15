@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation, buildPackages }:
 
 stdenv.mkDerivation rec {
-  pname = "phonenumber";
+  pname = "libphonenumber";
   version = "8.12.37";
 
   src = fetchFromGitHub {
