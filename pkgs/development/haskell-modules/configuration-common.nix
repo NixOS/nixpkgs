@@ -542,10 +542,11 @@ self: super: {
   lzma-conduit = doJailbreak super.lzma-conduit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = dontCheck (super.hnix.override {
+  # 2024-01-15: too strict bound on free < 5.2
+  hnix = doJailbreak (dontCheck (super.hnix.override {
     # 2023-12-11: Needs older core due to remote
     hnix-store-core = self.hnix-store-core_0_6_1_0;
-  });
+  }));
 
 
   # Too strict bounds on algebraic-graphs
