@@ -197,7 +197,7 @@ core = stdenv.mkDerivation rec {
 inherit (core-big) metafont mflua metapost luatex luahbtex xetex;
 luajittex = core.big.luajittex or null;
 core-big = stdenv.mkDerivation {
-  pname = "texlive-core-big.bin";
+  pname = "texlive-bin-big";
   inherit version;
 
   __structuredAttrs = true;
@@ -282,7 +282,7 @@ core-big = stdenv.mkDerivation {
 
 
 chktex = stdenv.mkDerivation {
-  pname = "texlive-chktex.bin";
+  pname = "chktex";
   inherit (texlive.pkgs.chktex) version;
 
   inherit (common) src;
@@ -303,7 +303,7 @@ chktex = stdenv.mkDerivation {
 # the sources used by TL are stored in the source TL repo
 # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
 context = stdenv.mkDerivation rec {
-  pname = "texlive-context.bin";
+  pname = "luametatex";
   version = "2.10.08";
 
   src = fetchurl {
@@ -323,7 +323,7 @@ context = stdenv.mkDerivation rec {
 };
 
 dvisvgm = stdenv.mkDerivation {
-  pname = "texlive-dvisvgm.bin";
+  pname = "dvisvgm";
   inherit (texlive.pkgs.dvisvgm) version;
 
   inherit (common) src;
@@ -368,7 +368,7 @@ dvisvgm = stdenv.mkDerivation {
 
 
 dvipng = stdenv.mkDerivation {
-  pname = "texlive-dvipng.bin";
+  pname = "dvipng";
   inherit (texlive.pkgs.dvipng) version;
 
   inherit (common) src;
@@ -432,7 +432,7 @@ inherit biber;
 inherit biber-ms;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
-  pname = "texlive-bibtex-x.bin";
+  pname = "bibtex-x";
   inherit (texlive.pkgs.bibtexu) version;
 
   inherit (common) src;
@@ -450,7 +450,7 @@ bibtex8 = stdenv.mkDerivation {
 
 
 xdvi = stdenv.mkDerivation {
-  pname = "texlive-xdvi.bin";
+  pname = "xdvi";
   inherit (texlive.pkgs.xdvi) version;
 
   inherit (common) src;
@@ -474,7 +474,7 @@ xdvi = stdenv.mkDerivation {
 };
 
 xpdfopen = stdenv.mkDerivation {
-  pname = "texlive-xpdfopen.bin";
+  pname = "xpdfopen";
   inherit (texlive.pkgs.xpdfopen) version;
 
   inherit (common) src;
@@ -492,7 +492,7 @@ xpdfopen = stdenv.mkDerivation {
 {
 
 xindy = stdenv.mkDerivation {
-  pname = "texlive-xindy.bin";
+  pname = "xindy";
   inherit (texlive.pkgs.xindy) version;
 
   inherit (common) src;
