@@ -22,6 +22,10 @@ in
         Restart = "on-failure";
         RestartSec = "15s";
       };
+
+      # required for detection of available firewall, then using node as Ingress/Egress hosts
+      # see https://github.com/gravitl/netclient/blob/51f4458db0a5560d102d337a342567cb347399a6/config/config.go#L430-L443
+      path = let fw = config.networking.firewall; in lib.optionals fw.enable [ fw.package ];
     };
   };
 }
