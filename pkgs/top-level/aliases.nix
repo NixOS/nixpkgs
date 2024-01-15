@@ -70,6 +70,7 @@ mapAliases ({
   amtk = throw "amtk has been renamed to libgedit-amtk and is now maintained by Gedit Technology"; # Added 2023-12-31
   angelfish = libsForQt5.kdeGear.angelfish; # Added 2021-10-06
   ansible_2_12 = throw "Ansible 2.12 goes end of life in 2023/05 and can't be supported throughout the 23.05 release cycle"; # Added 2023-05-16
+  ansible_2_13 = throw "Ansible 2.13 goes end of life in 2023/11"; # Added 2023-12-30
   apacheAnt_1_9 = throw "Ant 1.9 has been removed since it's not used in nixpkgs anymore"; # Added 2023-11-12
   antimicroX = antimicrox; # Added 2021-10-31
   arcanPackages = throw "arcanPackages was removed and its sub-attributes were promoted to top-level"; # Added 2023-11-26
@@ -147,6 +148,7 @@ mapAliases ({
   chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chia-plotter = throw "chia-plotter has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
+  chkservice = throw "chkservice has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-01-08
   chocolateDoom = chocolate-doom; # Added 2023-05-01
   chrome-gnome-shell = gnome-browser-connector; # Added 2022-07-27
   chromiumBeta = throw "'chromiumBeta' has been removed due to the lack of maintenance in nixpkgs. Consider using 'chromium' instead."; # Added 2023-10-18

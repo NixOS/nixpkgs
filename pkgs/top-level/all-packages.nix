@@ -225,8 +225,6 @@ with pkgs;
       }
     '');
 
-  chkservice = callPackage ../tools/admin/chkservice { };
-
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
@@ -18255,20 +18253,20 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_15;
-  ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_16;
+  ansible_2_16 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.15.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-jMU5y41DSa8//ZAccHIvenogOuZCfdrJX/31RqbkFgI=";
+    };
+  }));
   ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
     version = "2.14.13";
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-ThuzNPDDImq0jFme/knNX+A/JdRVi8BsJ0reK6PiV2o=";
-    };
-  }));
-  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.13.10";
-    src = oldAttrs.src.override {
-      inherit version;
-      hash = "sha256-1LQKSq+GDe9sLJ6K1SAfhoPj59fY4hRjxtWepPixLfc=";
     };
   }));
 
@@ -38074,7 +38072,11 @@ with pkgs;
 
   openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
-  openxray = callPackage ../games/openxray { };
+  openxray = callPackage ../games/openxray {
+    # Builds with Clang, but hits an assertion failure unless GCC is used
+    # https://github.com/OpenXRay/xray-16/issues/1224
+    stdenv = gccStdenv;
+  };
 
   orthorobot = callPackage ../games/orthorobot { love = love_0_10; };
 
