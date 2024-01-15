@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withQT [ qttools qtbase ]
     ++ lib.optional withVPX libvpx;
 
+  dontWrapQtApps = true;
+
   buildCommand = let
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
