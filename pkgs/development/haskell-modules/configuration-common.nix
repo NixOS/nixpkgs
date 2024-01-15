@@ -117,10 +117,18 @@ self: super: {
   hls-test-utils = doJailbreak super.hls-test-utils;
   hls-alternate-number-format-plugin = doJailbreak super.hls-alternate-number-format-plugin;
   hls-cabal-plugin = doJailbreak super.hls-cabal-plugin;
-  hls-call-hierarchy-plugin = doJailbreak super.hls-call-hierarchy-plugin;
   hls-explicit-fixity-plugin = doJailbreak super.hls-explicit-fixity-plugin;
   hls-floskell-plugin = doJailbreak super.hls-floskell-plugin;
   hls-gadt-plugin = doJailbreak super.hls-gadt-plugin;
+
+  hls-call-hierarchy-plugin = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/haskell/haskell-language-server/pull/3943.patch";
+    relative = "plugins/hls-call-hierarchy-plugin";
+    hash = "sha256-TOIn4/AGQr8o3r6gI6/vQsdWw/UGyO/599X0pCTYJjE=";
+  }) (doJailbreak super.hls-call-hierarchy-plugin);
+
+  # 2024-01-15: allow hiedb 0.5 https://github.com/haskell/haskell-language-server/pull/3943
+  ghcide = doJailbreak super.ghcide;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
