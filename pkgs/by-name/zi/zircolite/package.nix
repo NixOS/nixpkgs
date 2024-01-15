@@ -6,15 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zircolite";
-  version = "2.9.9";
+  version = "2.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "wagga40";
     repo = "Zircolite";
     rev = "refs/tags/${version}";
-    hash = "sha256-De1FLeYZY9eiBW18AVAMtYysC0b8AzO5HtFKxyzK9GY=";
+    hash = "sha256-r5MIoP+6CnAGsOtK4YLshLBVSZN2NVrwnkuHHDdLZrQ=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     makeWrapper
