@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "7.11.0";
+  version = "7.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vf8IJ/jZNopMXoOIdv+dwdXhYVsFrJirRQyB6589MDU=";
+    hash = "sha256-EhlxvvJ6eaIMPwZ29NTM8SB9BLd1gyezcl5pS/UxBrY=";
   };
 
   nativeBuildInputs = [
