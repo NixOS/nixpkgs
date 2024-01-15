@@ -1,0 +1,24 @@
+From 3ae04e8b9be879cf25fb5b51a48c8a1263a4844d Mon Sep 17 00:00:00 2001
+From: Gaetan Lepage <gaetan@glepage.com>
+Date: Mon, 15 Jan 2024 10:05:40 +0100
+Subject: [PATCH] remove-illegal-name-from-extra-dependencies
+
+---
+ setup.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/setup.py b/setup.py
+index 968c32d6..c98ee9f8 100755
+--- a/setup.py
++++ b/setup.py
+@@ -190,6 +190,7 @@ def _prepare_extras(skip_pattern: str = "^_", skip_files: Tuple[str] = ("base.tx
+     # create an 'all' keyword that install all possible dependencies
+     extras_req["all"] = list(chain([pkgs for k, pkgs in extras_req.items() if k not in ("_test", "_tests")]))
+     extras_req["dev"] = extras_req["all"] + extras_req["_tests"]
++    extras_req.pop("_tests")
+     return extras_req
+ 
+ 
+-- 
+2.42.0
+
