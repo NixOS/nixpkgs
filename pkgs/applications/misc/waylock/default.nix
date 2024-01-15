@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , libxkbcommon
 , pam
 , pkg-config
@@ -14,7 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
   version = "0.6.4";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ifreund";
     repo = "waylock";
     rev = "v${finalAttrs.version}";
