@@ -219,7 +219,7 @@ python3.pkgs.buildPythonApplication rec {
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
-    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+    ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
