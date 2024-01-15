@@ -7,8 +7,6 @@
 with lib;
 
 let
-  sysroot = "/sysroot";
-
   targetArch =
     if config.boot.loader.grub.forcei686 then
       "ia32"
@@ -189,17 +187,53 @@ in
       {
         where = "/sysroot";
         what = "tmpfs";
+        wantedBy = ["initrd-fs.target"];
         mountConfig = {
           Type = "tmpfs";
           Options = [ "mode=0755" ];
         };
       }
+      {
+        where = "/sysroot/run";
+        what = "/run";
+        wantedBy = ["initrd-fs.target"];
+        mountConfig = {
+          Options = ["rbind"];
+        };
+      }
+      {
+        where = "/run/iso";
+        what = "/dev/disk/by-label/${config.isoImage.volumeID}";
+        mountConfig = {
+          Type = "iso9660";
+        };
+      }
+      # Workaround for https://github.com/systemd/systemd/issues/30943
+      # If this is fixed in the way I currently think it should be fixed,
+      # the fstab entry generated via fileSystems should be enough.
+      {
+        where = "/sysroot/nix/store";
+        what = "overlay";
+        unitConfig.RequiresMountsFor = [
+          "/sysroot/run/nix/.ro-store"
+          "/sysroot/run/nix/.rw-store/store"
+          "/sysroot/run/nix/.rw-store/work"
+        ];
+        mountConfig = {
+          Type = "overlay";
+          Options = lib.concatStringsSep "," [
+            "lowerdir=/sysroot/run/nix/.ro-store"
+            "upperdir=/sysroot/run/nix/.rw-store/store"
+            "workdir=/sysroot/run/nix/.rw-store/work"
+          ];
+        };
+      }
     ];
     boot.initrd.systemd.services.verify-squashfs = {
-      requiredBy = [ "sysroot-nix-.ro\\x2dstore.mount" ];
-      before = [ "sysroot-nix-.ro\\x2dstore.mount" ];
-      requires = [ "sysroot-iso.mount" ];
-      after = [ "sysroot-iso.mount" ];
+      requiredBy = [ "run-nix-.ro\\x2dstore.mount" ];
+      before = [ "run-nix-.ro\\x2dstore.mount" ];
+      requires = [ "run-iso.mount" ];
+      after = [ "run-iso.mount" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {
         Type = "oneshot";
@@ -219,7 +253,7 @@ in
           false
         fi
         sha256sum -c <<EOF
-        $hash ${config.fileSystems."/nix/.ro-store".device}
+        $hash ${config.fileSystems."/run/nix/.ro-store".device}
         EOF
       '';
     };
@@ -227,28 +261,28 @@ in
     # won't create them by itself.
     boot.initrd.systemd.services.mkdir-rw-store = {
       description = "Store Overlay Mutable Directories";
-      wantedBy = [ "sysroot-nix-store.mount" ];
+      requiredBy = [ "sysroot-nix-store.mount" ];
       before = [ "sysroot-nix-store.mount" ];
-      unitConfig.RequiresMountsFor = "/sysroot/nix/.rw-store";
+      unitConfig.RequiresMountsFor = "/run/nix/.rw-store";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
       script = ''
-        mkdir -p /sysroot/nix/.rw-store/{work,store}
+        mkdir -p /run/nix/.rw-store/{work,store}
       '';
     };
 
     boot.loader.grub.enable = false;
 
-    fileSystems = mkImageMediaOverride {
+    lib.isoFileSystems = mkImageMediaOverride {
       "/" = mkImageMediaOverride
         {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
         };
 
-      "/iso" = mkImageMediaOverride
+      "/run/iso" = mkImageMediaOverride
         {
           label = config.isoImage.volumeID;
           fsType = "auto";
@@ -258,15 +292,16 @@ in
 
       # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
       # image) to make this a live CD.
-      "/nix/.ro-store" = mkImageMediaOverride
+      "/run/nix/.ro-store" = mkImageMediaOverride
         {
           fsType = "squashfs";
-          device = "${sysroot}/iso/nix-store.squashfs";
+          device = "/run/iso/nix-store.squashfs";
           options = [ "loop" ];
           neededForBoot = true;
+          depends = ["/run/iso"];
         };
 
-      "/nix/.rw-store" = mkImageMediaOverride
+      "/run/nix/.rw-store" = mkImageMediaOverride
         {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
@@ -278,16 +313,18 @@ in
           fsType = "overlay";
           device = "overlay";
           options = [
-            "lowerdir=${sysroot}/nix/.ro-store"
-            "upperdir=${sysroot}/nix/.rw-store/store"
-            "workdir=${sysroot}/nix/.rw-store/work"
+            "lowerdir=/run/nix/.ro-store"
+            "upperdir=/run/nix/.rw-store/store"
+            "workdir=/run/nix/.rw-store/work"
           ];
           depends = [
-            "${sysroot}/nix/.ro-store"
-            "${sysroot}/nix/.rw-store/store"
-            "${sysroot}/nix/.rw-store/work"
+            "/run/nix/.ro-store"
+            "/run/nix/.rw-store/store"
+            "/run/nix/.rw-store/work"
           ];
+          neededForBoot = true;
         };
+
     };
 
     isoImage.efiBootImage = config.boot.secureboot.signFile config.boot.secureboot.shim;
