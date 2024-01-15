@@ -2526,6 +2526,10 @@ self: super: {
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
 
+  # tar-conduit-0.4.0 has a correctness bug that is fixed in 0.4.1:
+  # https://github.com/snoyberg/tar-conduit/issues/37
+  tar-conduit = assert super.tar-conduit.version == "0.4.0"; super.tar-conduit_0_4_1;
+
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
