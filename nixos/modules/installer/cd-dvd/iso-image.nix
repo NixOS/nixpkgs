@@ -820,9 +820,8 @@ in
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
 
-    # TODO: restore this label, at least when not secure-booting
-    boot.kernelParams =
-      [ #"root=LABEL=${config.isoImage.volumeID}"
+    boot.kernelParams = lib.mkIf (!config.boot.initrd.systemd.enable)
+      [ "root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
       ];
 
