@@ -1,0 +1,38 @@
+diff --git a/gam/__init__.py b/gam/__init__.py
+index 1c187ce..b2de793 100755
+--- a/gam/__init__.py
++++ b/gam/__init__.py
+@@ -549,22 +549,16 @@ def SetGlobalVariables():
+     _getOldEnvVar(GC_TLS_MIN_VERSION, 'GAM_TLS_MIN_VERSION')
+     _getOldEnvVar(GC_TLS_MAX_VERSION, 'GAM_TLS_MAX_VERSION')
+     _getOldEnvVar(GC_CA_FILE, 'GAM_CA_FILE')
+-    _getOldSignalFile(GC_DEBUG_LEVEL,
+-                      'debug.gam',
+-                      filePresentValue=4,
+-                      fileAbsentValue=0)
+-    _getOldSignalFile(GC_NO_BROWSER, 'nobrowser.txt')
+-    _getOldSignalFile(GC_NO_TDEMAIL, 'notdemail.txt')
+-    _getOldSignalFile(GC_OAUTH_BROWSER, 'oauthbrowser.txt')
++    _getOldEnvVar(GC_DEBUG_LEVEL, 'GAM_DEBUG')
++    _getOldEnvVar(GC_NO_BROWSER, 'GAM_NO_BROWSER')
++    _getOldEnvVar(GC_NO_TDEMAIL, 'GAM_NO_TDEMAIL')
++    _getOldEnvVar(GC_OAUTH_BROWSER, 'GAM_OAUTH_BROWSER')
+     #  _getOldSignalFile(GC_NO_CACHE, u'nocache.txt')
+     #  _getOldSignalFile(GC_CACHE_DISCOVERY_ONLY, u'allcache.txt', filePresentValue=False, fileAbsentValue=True)
+-    _getOldSignalFile(GC_NO_CACHE,
+-                      'allcache.txt',
+-                      filePresentValue=False,
+-                      fileAbsentValue=True)
+-    _getOldSignalFile(GC_NO_SHORT_URLS, 'noshorturls.txt')
+-    _getOldSignalFile(GC_NO_UPDATE_CHECK, 'noupdatecheck.txt')
+-    _getOldSignalFile(GC_ENABLE_DASA, FN_ENABLEDASA_TXT)
++    _getOldEnvVar(GC_NO_CACHE, 'GAM_NO_CACHE')
++    _getOldEnvVar(GC_NO_SHORT_URLS, 'GAM_NO_SHORT_URLS')
++    GC_Defaults[GC_NO_UPDATE_CHECK] = True
++    _getOldEnvVar(GC_ENABLE_DASA, FN_ENABLEDASA_TXT)
+     # Assign directories first
+     for itemName in GC_VAR_INFO:
+         if GC_VAR_INFO[itemName][GC_VAR_TYPE] == GC_TYPE_DIRECTORY:
+--
+2.36.0
+

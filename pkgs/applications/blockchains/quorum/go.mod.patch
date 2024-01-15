@@ -1,0 +1,12 @@
+diff --git a/go.mod b/go.mod
+index ace412f41..3336c1e08 100644
+--- a/go.mod
++++ b/go.mod
+@@ -89,6 +89,7 @@ require (
+ 	golang.org/x/text v0.3.7
+ 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324
+ 	google.golang.org/grpc v1.46.0
++	google.golang.org/protobuf v1.28.0
+ 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
+ 	gopkg.in/karalabe/cookiejar.v2 v2.0.0-20150724131613-8dcd6a7f4951
+ 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce

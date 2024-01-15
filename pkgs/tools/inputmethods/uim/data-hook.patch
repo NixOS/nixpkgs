@@ -1,0 +1,38 @@
+--- a/gtk2/immodule/Makefile.in	2015-11-24 16:21:08.967087208 +0900
++++ b/gtk2/immodule/Makefile.in	2015-11-24 16:22:53.316095150 +0900
+@@ -928,7 +928,6 @@
+ 
+ install-data-am: install-moduleLTLIBRARIES
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+ install-dvi: install-dvi-am
+ 
+ install-dvi-am:
+@@ -993,7 +992,7 @@
+ 	distclean-compile distclean-generic distclean-libtool \
+ 	distclean-tags distdir dvi dvi-am html html-am info info-am \
+ 	install install-am install-data install-data-am \
+-	install-data-hook install-dvi install-dvi-am install-exec \
++	install-dvi install-dvi-am install-exec \
+ 	install-exec-am install-html install-html-am install-info \
+ 	install-info-am install-man install-moduleLTLIBRARIES \
+ 	install-pdf install-pdf-am install-ps install-ps-am \
+--- a/gtk3/immodule/Makefile.in	2015-11-24 16:21:08.971087209 +0900
++++ b/gtk3/immodule/Makefile.in	2015-11-24 16:23:28.251097832 +0900
+@@ -896,7 +896,6 @@
+ 
+ install-data-am: install-moduleLTLIBRARIES
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+ install-dvi: install-dvi-am
+ 
+ install-dvi-am:
+@@ -959,7 +958,7 @@
+ 	cscopelist-am ctags ctags-am distclean distclean-compile \
+ 	distclean-generic distclean-libtool distclean-tags distdir dvi \
+ 	dvi-am html html-am info info-am install install-am \
+-	install-data install-data-am install-data-hook install-dvi \
++	install-data install-data-am install-dvi \
+ 	install-dvi-am install-exec install-exec-am install-html \
+ 	install-html-am install-info install-info-am install-man \
+ 	install-moduleLTLIBRARIES install-pdf install-pdf-am \

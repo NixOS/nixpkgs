@@ -1,0 +1,76 @@
+From b6c36624f04cd388873785c0631df3f2f9ac4bf0 Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <ossi@users.sf.net>
+Date: Mon, 6 Jun 2022 11:55:37 +0200
+Subject: [PATCH] work around "unexpected EOF" error messages at end of SSL
+ connections
+
+gmail apparently doesn't send a close notification (SSL_shutdown())
+before closing the TCP socket.
+---
+ src/drv_imap.c | 7 +++++--
+ src/socket.c   | 9 +++++++++
+ src/socket.h   | 1 +
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/src/drv_imap.c b/src/drv_imap.c
+index fb8d165..6286045 100644
+--- a/src/drv_imap.c
++++ b/src/drv_imap.c
+@@ -1620,6 +1620,7 @@ imap_socket_read( void *aux )
+ 					error( "IMAP error: unexpected BYE response: %s\n", cmd );
+ 					/* We just wait for the server to close the connection now. */
+ 					ctx->expectEOF = 1;
++					socket_expect_eof( &ctx->conn );
+ 				} else {
+ 					/* We still need to wait for the LOGOUT's tagged OK. */
+ 				}
+@@ -1882,10 +1883,12 @@ static void
+ imap_cleanup_p2( imap_store_t *ctx,
+                  imap_cmd_t *cmd ATTR_UNUSED, int response )
+ {
+-	if (response == RESP_NO)
++	if (response == RESP_NO) {
+ 		imap_cancel_store( &ctx->gen );
+-	else if (response == RESP_OK)
++	} else if (response == RESP_OK) {
+ 		ctx->expectEOF = 1;
++		socket_expect_eof( &ctx->conn );
++	}
+ }
+ 
+ /******************* imap_open_store *******************/
+diff --git a/src/socket.c b/src/socket.c
+index ac3c847..892cece 100644
+--- a/src/socket.c
++++ b/src/socket.c
+@@ -810,6 +810,15 @@ socket_expect_activity( conn_t *conn, int expect )
+ 		conf_wakeup( &conn->fd_timeout, expect ? conn->conf->timeout : -1 );
+ }
+ 
++void
++socket_expect_eof( conn_t *sock )
++{
++#ifdef SSL_OP_IGNORE_UNEXPECTED_EOF  // implies HAVE_LIBSSL
++	if (sock->ssl)
++		SSL_set_options( sock->ssl, SSL_OP_IGNORE_UNEXPECTED_EOF );
++#endif
++}
++
+ int
+ socket_read( conn_t *conn, char *buf, uint len )
+ {
+diff --git a/src/socket.h b/src/socket.h
+index 5b1edd0..af679aa 100644
+--- a/src/socket.h
++++ b/src/socket.h
+@@ -142,6 +142,7 @@ void socket_start_tls(conn_t *conn, void (*cb)( int ok, void *aux ) );
+ void socket_start_deflate( conn_t *conn );
+ void socket_close( conn_t *sock );
+ void socket_expect_activity( conn_t *sock, int expect );
++void socket_expect_eof( conn_t *sock );
+ int socket_read( conn_t *sock, char *buf, uint len ); /* never waits */
+ char *socket_read_line( conn_t *sock ); /* don't free return value; never waits */
+ typedef enum { KeepOwn = 0, GiveOwn } ownership_t;
+-- 
+2.38.0
+

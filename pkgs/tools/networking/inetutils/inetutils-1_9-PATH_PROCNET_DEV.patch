@@ -1,0 +1,26 @@
+inetutils: define PATH_PROCNET_DEV if not already defined
+
+this prevents the following compilation error :
+system/linux.c:401:15: error: 'PATH_PROCNET_DEV' undeclared (first use in this function)
+
+this patch comes from :
+ http://repository.timesys.com/buildsources/i/inetutils/inetutils-1.9/
+
+Upstream-Status: Inappropriate [not author]
+
+Signed-of-by: Eric Bénard <eric@eukrea.com>
+---
+diff -Naur inetutils-1.9.orig/ifconfig/system/linux.c inetutils-1.9/ifconfig/system/linux.c
+--- inetutils-1.9.orig/ifconfig/system/linux.c	2012-01-04 16:31:36.000000000 -0500
++++ inetutils-1.9/ifconfig/system/linux.c	2012-01-04 16:40:53.000000000 -0500
+@@ -49,6 +49,10 @@
+ #include "../ifconfig.h"
+ 
+ 
++#ifndef PATH_PROCNET_DEV
++  #define PATH_PROCNET_DEV "/proc/net/dev"
++#endif
++
+ /* ARPHRD stuff.  */
+ 
+ static void

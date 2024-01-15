@@ -1,0 +1,257 @@
+From 001549503eed364d4baaa5804242f67c6236f6c2 Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:55:05 +0100
+Subject: [PATCH] Fix with new dependency versions
+
+- cookie_jar is private in werkzeug 2.3, so recreate the client instead
+- set_cookie does not take a hostname argument anymore, use domain instead
+- Headers need to specify a content type
+---
+ test_seasurf.py | 63 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 31 insertions(+), 32 deletions(-)
+
+diff --git a/test_seasurf.py b/test_seasurf.py
+index 517b2d7..501f82d 100644
+--- a/test_seasurf.py
++++ b/test_seasurf.py
+@@ -71,18 +71,18 @@ class SeaSurfTestCase(BaseTestCase):
+         self.assertEqual(type(token), str)
+ 
+     def test_exempt_view(self):
+-        rv = self.app.test_client().post('/foo')
++        rv = self.app.test_client().post('/foo', content_type='application/json')
+         self.assertIn(b('bar'), rv.data)
+ 
+-        rv = self.app.test_client().post(u'/foo/\xf8')
++        rv = self.app.test_client().post(u'/foo/\xf8', content_type='application/json')
+         self.assertIn(b('bar'), rv.data)
+ 
+     def test_token_validation(self):
+         # should produce a logger warning
+-        rv = self.app.test_client().post('/bar')
++        rv = self.app.test_client().post('/bar', content_type='application/json')
+         self.assertIn(b('403 Forbidden'), rv.data)
+ 
+-        rv = self.app.test_client().post(u'/bar/\xf8')
++        rv = self.app.test_client().post(u'/bar/\xf8', content_type='application/json')
+         self.assertIn(b('403 Forbidden'), rv.data)
+ 
+     def test_json_token_validation_bad(self):
+@@ -107,7 +107,7 @@ class SeaSurfTestCase(BaseTestCase):
+         data = {'_csrf_token': token}
+         with self.app.test_client() as client:
+             with client.session_transaction() as sess:
+-                client.set_cookie('www.example.com', self.csrf._csrf_name, token)
++                client.set_cookie(self.csrf._csrf_name, token, domain='www.example.com')
+                 sess[self.csrf._csrf_name] = token
+ 
+             rv = client.post('/bar', data=data)
+@@ -121,7 +121,7 @@ class SeaSurfTestCase(BaseTestCase):
+             with client.session_transaction() as sess:
+                 token = self.csrf._generate_token()
+ 
+-                client.set_cookie('www.example.com', self.csrf._csrf_name, token)
++                client.set_cookie(self.csrf._csrf_name, token, domain='www.example.com')
+                 sess[self.csrf._csrf_name] = token
+ 
+             # once this is reached the session was stored
+@@ -144,7 +144,7 @@ class SeaSurfTestCase(BaseTestCase):
+             with client.session_transaction() as sess:
+                 token = self.csrf._generate_token()
+ 
+-                client.set_cookie('www.example.com', self.csrf._csrf_name, token)
++                client.set_cookie(self.csrf._csrf_name, token, domain='www.example.com')
+                 sess[self.csrf._csrf_name] = token
+ 
+             # once this is reached the session was stored
+@@ -167,7 +167,7 @@ class SeaSurfTestCase(BaseTestCase):
+             with client.session_transaction() as sess:
+                 token = self.csrf._generate_token()
+ 
+-                client.set_cookie('www.example.com', self.csrf._csrf_name, token)
++                client.set_cookie(self.csrf._csrf_name, token, domain='www.example.com')
+                 sess[self.csrf._csrf_name] = token
+ 
+             rv = client.post('/bar',
+@@ -187,10 +187,10 @@ class SeaSurfTestCase(BaseTestCase):
+                 self.csrf._csrf_header_name: token,
+             }
+ 
+-            rv = client.post('/bar', headers=headers)
++            rv = client.post('/bar', headers=headers, content_type='application/json')
+             self.assertEqual(rv.status_code, 200, rv)
+ 
+-            rv = client.post(u'/bar/\xf8', headers=headers)
++            rv = client.post(u'/bar/\xf8', headers=headers, content_type='application/json')
+             self.assertEqual(rv.status_code, 200, rv)
+ 
+     def test_token_in_form_data(self):
+@@ -280,14 +280,14 @@ class SeaSurfTestCaseExemptViews(BaseTestCase):
+ 
+     def test_exempt_view(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/foo')
++            rv = c.post('/foo', content_type='application/json')
+             self.assertIn(b('bar'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             self.assertEqual(cookie, None)
+ 
+     def test_token_validation(self):
+         # should produce a logger warning
+-        rv = self.app.test_client().post('/bar')
++        rv = self.app.test_client().post('/bar', content_type='application/json')
+         self.assertIn(b('403 Forbidden'), rv.data)
+ 
+ 
+@@ -319,18 +319,18 @@ class SeaSurfTestCaseIncludeViews(BaseTestCase):
+             return 'foo'
+ 
+     def test_include_view(self):
+-        rv = self.app.test_client().post('/foo')
++        rv = self.app.test_client().post('/foo', content_type='application/json')
+         self.assertIn(b('403 Forbidden'), rv.data)
+ 
+-        rv = self.app.test_client().post(u'/foo/\xf8')
++        rv = self.app.test_client().post(u'/foo/\xf8', content_type='application/json')
+         self.assertIn(b('403 Forbidden'), rv.data)
+ 
+     def test_token_validation(self):
+         # should produce a logger warning
+-        rv = self.app.test_client().post('/bar')
++        rv = self.app.test_client().post('/bar', content_type='application/json')
+         self.assertIn(b('foo'), rv.data)
+ 
+-        rv = self.app.test_client().post(u'/bar/\xf8')
++        rv = self.app.test_client().post(u'/bar/\xf8', content_type='application/json')
+         self.assertIn(b('foo'), rv.data)
+ 
+ 
+@@ -363,10 +363,10 @@ class SeaSurfTestCaseExemptUrls(BaseTestCase):
+             return 'foo'
+ 
+     def test_exempt_view(self):
+-        rv = self.app.test_client().post('/foo/baz')
++        rv = self.app.test_client().post('/foo/baz', content_type='application/json')
+         self.assertIn(b('bar'), rv.data)
+         with self.app.test_client() as c:
+-            rv = c.post('/foo/quz')
++            rv = c.post('/foo/quz', content_type='application/json')
+             self.assertIn(b('bar'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             self.assertEqual(cookie, None)
+@@ -374,7 +374,7 @@ class SeaSurfTestCaseExemptUrls(BaseTestCase):
+     def test_token_validation(self):
+         with self.app.test_client() as c:
+             # should produce a logger warning
+-            rv = c.post('/bar')
++            rv = c.post('/bar', content_type='application/json')
+             self.assertIn(b('403 Forbidden'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             token = self.csrf._get_token()
+@@ -434,7 +434,7 @@ class SeaSurfTestCaseDisableCookie(unittest.TestCase):
+ 
+     def test_no_csrf_cookie_even_after_manually_validated(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/manual')
++            rv = c.post('/manual', content_type='application/json')
+             self.assertIn(b('403 Forbidden'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             self.assertEqual(cookie, None)
+@@ -474,14 +474,14 @@ class SeaSurfTestCaseEnableCookie(unittest.TestCase):
+ 
+     def test_has_csrf_cookie(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/exempt_with_cookie')
++            rv = c.post('/exempt_with_cookie', content_type='application/json')
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             token = self.csrf._get_token()
+             self.assertEqual(cookie, token)
+ 
+     def test_has_csrf_cookie_but_doesnt_validate(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/exempt_with_cookie')
++            rv = c.post('/exempt_with_cookie', content_type='application/json')
+             self.assertIn(b('exempt_with_cookie'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             token = self.csrf._get_token()
+@@ -530,7 +530,7 @@ class SeaSurfTestCaseSkipValidation(unittest.TestCase):
+ 
+     def test_skips_validation(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/foo/quz')
++            rv = c.post('/foo/quz', content_type='application/json')
+             self.assertIn(b('bar'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             token = self.csrf._get_token()
+@@ -538,20 +538,20 @@ class SeaSurfTestCaseSkipValidation(unittest.TestCase):
+ 
+     def test_enforces_validation_reject(self):
+         with self.app.test_client() as c:
+-            rv = c.delete('/foo/baz')
++            rv = c.delete('/foo/baz', content_type='application/json')
+             self.assertIn(b('403 Forbidden'), rv.data)
+ 
+     def test_enforces_validation_accept(self):
+         with self.app.test_client() as c:
+             # GET generates CSRF token
+             c.get('/foo/baz')
+-            rv = c.delete('/foo/baz',
++            rv = c.delete('/foo/baz', content_type='application/json',
+                           headers={'X-CSRFToken': self.csrf._get_token()})
+             self.assertIn(b('bar'), rv.data)
+ 
+     def test_manual_validation(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/manual')
++            rv = c.post('/manual', content_type='application/json')
+             self.assertIn(b('403 Forbidden'), rv.data)
+ 
+ 
+@@ -578,7 +578,7 @@ class SeaSurfTestManualValidation(unittest.TestCase):
+ 
+     def test_can_manually_validate_exempt_views(self):
+         with self.app.test_client() as c:
+-            rv = c.post('/manual')
++            rv = c.post('/manual', content_type='application/json')
+             self.assertIn(b('403 Forbidden'), rv.data)
+             cookie = get_cookie(rv, self.csrf._csrf_name)
+             token = self.csrf._get_token()
+@@ -651,7 +651,7 @@ class SeaSurfTestCaseReferer(BaseTestCase):
+             with client.session_transaction() as sess:
+                 token = self.csrf._generate_token()
+ 
+-                client.set_cookie('www.example.com', self.csrf._csrf_name, token)
++                client.set_cookie(self.csrf._csrf_name, token, domain='www.example.com')
+                 sess[self.csrf._csrf_name] = token
+ 
+             # once this is reached the session was stored
+@@ -728,8 +728,7 @@ class SeaSurfTestCaseSetCookie(BaseTestCase):
+                           res3.headers.get('Set-Cookie', ''),
+                           'CSRF cookie always be re-set if a token is requested by the template')
+ 
+-            client.cookie_jar.clear()
+-
++        with self.app.test_client() as client:
+             res4 = client.get('/foo')
+ 
+             self.assertIn(self.csrf._csrf_name,
+@@ -739,14 +738,14 @@ class SeaSurfTestCaseSetCookie(BaseTestCase):
+     def test_header_set_on_post(self):
+         with self.app.test_client() as client:
+             headers = {}
+-            res1 = client.post('/bar', headers=headers)
++            res1 = client.post('/bar', headers=headers, content_type='application/json')
+             self.assertEqual(res1.status_code, 403)
+ 
+             for cookie in client.cookie_jar:
+                 if cookie.name == self.csrf._csrf_name:
+                     headers[self.csrf._csrf_header_name] = cookie.value
+ 
+-            res2 = client.post('/bar', headers=headers)
++            res2 = client.post('/bar', headers=headers, content_type='application/json')
+             self.assertEqual(res2.status_code, 200)
+ 
+     def test_header_set_cookie_samesite(self):
+-- 
+2.42.0
+

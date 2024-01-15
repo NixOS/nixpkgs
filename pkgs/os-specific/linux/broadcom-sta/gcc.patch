@@ -1,0 +1,11 @@
+--- a/Makefile	2014-06-26 10:42:08.000000000 +0000
++++ b/Makefile	2014-07-17 22:44:01.662297228 +0000
+@@ -126,6 +126,8 @@
+ EXTRA_CFLAGS       += -I$(src)/src/shared/bcmwifi/include
+ #EXTRA_CFLAGS       += -DBCMDBG_ASSERT -DBCMDBG_ERR
+ 
++EXTRA_CFLAGS       += -Wno-date-time
++
+ EXTRA_LDFLAGS      := $(src)/lib/wlc_hybrid.o_shipped
+ 
+ KBASE              ?= /lib/modules/`uname -r`

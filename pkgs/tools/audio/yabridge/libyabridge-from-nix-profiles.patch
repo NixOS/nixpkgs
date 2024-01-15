@@ -1,0 +1,71 @@
+diff --git a/src/chainloader/utils.cpp b/src/chainloader/utils.cpp
+index c43e5693..b8352adf 100644
+--- a/src/chainloader/utils.cpp
++++ b/src/chainloader/utils.cpp
+@@ -29,8 +29,10 @@
+ namespace fs = ghc::filesystem;
+ 
+ void* find_plugin_library(const std::string& name) {
++    Logger logger = Logger::create_exception_logger();
++
+     // Just using a goto for this would probably be cleaner, but yeah...
+-    const auto impl = [&name]() -> void* {
++    const auto impl = [&name, &logger]() -> void* {
+         // If `name` exists right next to the Wine plugin host binary, then
+         // we'll try loading that. Otherwise we'll fall back to regular
+         // `dlopen()` for distro packaged versions of yabridge
+@@ -52,27 +54,28 @@ void* find_plugin_library(const std::string& name) {
+             }
+         }
+ 
+-        if (void* handle = dlopen(name.c_str(), RTLD_LAZY | RTLD_LOCAL)) {
+-            return handle;
++        auto nix_profiles = getenv("NIX_PROFILES");
++        if (!nix_profiles || nix_profiles[0] == '\0') {
++            logger.log("");
++            logger.log("ERROR: 'NIX_PROFILES' environment variable is not set");
++            logger.log("");
++            return nullptr;
+         }
+ 
+-        // One last Hail Mary, in case ldconfig was not set up correctly. This
+-        // might be relevant for some of the `/usr/local/*` locations (although
+-        // you really, really shouldn't install yabridge there, please, thank
+-        // you). Yabridgectl searches through these same directories.
+-        for (const auto& lib_dir : {
+-                 "/usr/lib",
+-                 "/usr/lib/x86_64-linux-gnu",
+-                 "/usr/lib64",
+-                 "/usr/local/lib",
+-                 "/usr/local/lib/x86_64-linux-gnu",
+-                 "/usr/local/lib64",
+-             }) {
+-            const fs::path candidate = fs::path(lib_dir) / name;
+-            if (void* handle =
+-                    dlopen(candidate.c_str(), RTLD_LAZY | RTLD_LOCAL)) {
++        // NIX_PROFILES is iterated in reverse from the most specific (the
++        // user profile) to the least specific (the system profile).
++        const std::string_view nix_profiles_view = nix_profiles;
++        auto segment_end = nix_profiles_view.size();
++        while (segment_end != std::string::npos) {
++            const auto next_segment_end = nix_profiles_view.rfind(' ', segment_end - 1);
++            const auto segment_begin = next_segment_end + 1;
++            const auto profile = nix_profiles_view.substr(segment_begin, segment_end - segment_begin);
++            const auto candidate = fs::path(profile) / "lib" / name;
++            if (auto handle = dlopen(candidate.c_str(), RTLD_LAZY | RTLD_LOCAL)) {
+                 return handle;
+             }
++
++            segment_end = next_segment_end;
+         }
+ 
+         return nullptr;
+@@ -82,8 +85,6 @@ void* find_plugin_library(const std::string& name) {
+     if (!handle) {
+         const fs::path this_plugin_path = get_this_file_location();
+ 
+-        Logger logger = Logger::create_exception_logger();
+-
+         logger.log("");
+         logger.log("Could not find '" + name + "'");
+         logger.log("");

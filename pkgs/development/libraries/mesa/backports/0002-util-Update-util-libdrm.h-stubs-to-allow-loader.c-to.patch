@@ -1,0 +1,103 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "duncan.hopkins" <duncan.hopkins@foundry.com>
+Date: Tue, 17 Oct 2023 14:36:39 +0100
+Subject: [PATCH] util: Update util/libdrm.h stubs to allow loader.c to compile
+ on MacOS.
+
+MacOS does not have the libdrm libraries so is missing xf86drm.h.
+util/libdrm.h already has a collection of stubs for systems that do not support the libraries.
+
+A compile on MacOS will fail with the source that uses newer drm functions and structures.
+Update adds in missing items that MacOS code needs to compile and run.
+New code is copied from the public repository: https://gitlab.freedesktop.org/mesa/drm/-/blob/main/xf86drm.h
+
+Reviewed-by: Adam Jackson <ajax@redhat.com>
+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25992>
+---
+ src/util/libdrm.h | 57 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/src/util/libdrm.h b/src/util/libdrm.h
+index cc153cf88ab..e3af494b8d1 100644
+--- a/src/util/libdrm.h
++++ b/src/util/libdrm.h
+@@ -44,22 +44,79 @@
+ #define DRM_BUS_PLATFORM  2
+ #define DRM_BUS_HOST1X    3
+ 
++typedef struct _drmPciDeviceInfo {
++    uint16_t vendor_id;
++    uint16_t device_id;
++    uint16_t subvendor_id;
++    uint16_t subdevice_id;
++    uint8_t revision_id;
++} drmPciDeviceInfo, *drmPciDeviceInfoPtr;
++
++#define DRM_PLATFORM_DEVICE_NAME_LEN 512
++
++typedef struct _drmPlatformBusInfo {
++    char fullname[DRM_PLATFORM_DEVICE_NAME_LEN];
++} drmPlatformBusInfo, *drmPlatformBusInfoPtr;
++
++typedef struct _drmPlatformDeviceInfo {
++    char **compatible; /* NULL terminated list of compatible strings */
++} drmPlatformDeviceInfo, *drmPlatformDeviceInfoPtr;
++
++#define DRM_HOST1X_DEVICE_NAME_LEN 512
++
++typedef struct _drmHost1xBusInfo {
++    char fullname[DRM_HOST1X_DEVICE_NAME_LEN];
++} drmHost1xBusInfo, *drmHost1xBusInfoPtr;
++
++typedef struct _drmPciBusInfo {
++   uint16_t domain;
++   uint8_t bus;
++   uint8_t dev;
++   uint8_t func;
++} drmPciBusInfo, *drmPciBusInfoPtr;
++
+ typedef struct _drmDevice {
+     char **nodes; /* DRM_NODE_MAX sized array */
+     int available_nodes; /* DRM_NODE_* bitmask */
+     int bustype;
++    union {
++       drmPciBusInfoPtr pci;
++       drmPlatformBusInfoPtr platform;
++       drmHost1xBusInfoPtr host1x;
++    } businfo;
++    union {
++        drmPciDeviceInfoPtr pci;
++    } deviceinfo;
+     /* ... */
+ } drmDevice, *drmDevicePtr;
+ 
++static inline int
++drmGetDevice2(int fd, uint32_t flags, drmDevicePtr *device)
++{
++   return -ENOENT;
++}
++
+ static inline int
+ drmGetDevices2(uint32_t flags, drmDevicePtr devices[], int max_devices)
+ {
+    return -ENOENT;
+ }
+ 
++static inline int
++drmGetDeviceFromDevId(dev_t dev_id, uint32_t flags, drmDevicePtr *device)
++{
++   return -ENOENT;
++}
++
++static inline void
++drmFreeDevice(drmDevicePtr *device) {}
++
+ static inline void
+ drmFreeDevices(drmDevicePtr devices[], int count) {}
+ 
++static inline char*
++drmGetDeviceNameFromFd2(int fd) { return NULL;}
++
+ typedef struct _drmVersion {
+     int     version_major;        /**< Major version */
+     int     version_minor;        /**< Minor version */

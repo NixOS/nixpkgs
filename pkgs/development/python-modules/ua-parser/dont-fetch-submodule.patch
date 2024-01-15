@@ -1,0 +1,17 @@
+diff --git a/setup.py b/setup.py
+index a976eee..6919795 100644
+--- a/setup.py
++++ b/setup.py
+@@ -64,12 +64,6 @@ class build_regexes(Command):
+ 
+     def run(self):
+         work_path = self.work_path
+-        if not os.path.exists(os.path.join(work_path, ".git")):
+-            return
+-
+-        log.info("initializing git submodules")
+-        check_output(["git", "submodule", "init"], cwd=work_path)
+-        check_output(["git", "submodule", "update"], cwd=work_path)
+ 
+         yaml_src = os.path.join(work_path, "uap-core", "regexes.yaml")
+         if not os.path.exists(yaml_src):
