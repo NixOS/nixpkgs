@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-terminal-app";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-terminal-app";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WYPP4sZisZMJmRs+QtILh1TELqrJxE+RarkXI58GIKc=";
+    hash = "sha256-mXbPmVcl5dL78QUp+w3o4im5ohUQCPTKWLSVqlNO0yo=";
   };
 
   patches = [
