@@ -9,4 +9,5 @@ in
   hare-ev = callPackage ../development/hare-third-party/hare-ev { };
   hare-json = callPackage ../development/hare-third-party/hare-json { };
   hare-toml = callPackage ../development/hare-third-party/hare-toml { };
+  hare-png = callPackage ../development/hare-third-party/hare-png { };
 })

@@ -1580,6 +1580,7 @@
       dbus-fast
       esphome-dashboard-api
       fnv-hash-fast
+      gardena-bluetooth
       ha-ffmpeg
       habluetooth
       hassil
@@ -1592,7 +1593,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: gardena-bluetooth
+    ];
     "gaviota" = ps: with ps; [
     ];
     "gc100" = ps: with ps; [
@@ -5927,6 +5928,7 @@
     "frontier_silicon"
     "fully_kiosk"
     "garages_amsterdam"
+    "gardena_bluetooth"
     "gdacs"
     "generic"
     "generic_hygrostat"
