@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-De1FLeYZY9eiBW18AVAMtYysC0b8AzO5HtFKxyzK9GY=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [
     makeWrapper
   ];
