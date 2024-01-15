@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ elfutils ];
 
   env.NIX_CFLAGS_COMPILE = toString ([
-    "-I${toString elfutils.dev}/include"
+    "-I${elfutils.dev}/include"
     ]
   # Somehow the define doesn't end up in DEFINES for the scope of lib/,
   # so security_policy.c gets built without it, and that means it
