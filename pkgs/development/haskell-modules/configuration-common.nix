@@ -279,6 +279,10 @@ self: super: {
   # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
   ghc-debug-brick = doJailbreak super.ghc-debug-brick;
 
+  # Test failure.  Tests also disabled in Stackage:
+  # https://github.com/jtdaugherty/brick/issues/499
+  brick = dontCheck super.brick;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
