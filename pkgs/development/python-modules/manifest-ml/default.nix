@@ -30,7 +30,7 @@ buildPythonPackage rec {
   version = "0.1.8";
   format = "setuptools";
 
-  disalbed = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "HazyResearch";
@@ -38,6 +38,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [
     numpy
