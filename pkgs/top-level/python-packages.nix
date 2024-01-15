@@ -6572,6 +6572,8 @@ self: super: with self; {
 
   lizard = callPackage ../development/python-modules/lizard { };
 
+  llama-index = callPackage ../development/python-modules/llama-index { };
+
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
   };
@@ -6940,6 +6942,8 @@ self: super: with self; {
   meld3 = callPackage ../development/python-modules/meld3 { };
 
   memestra = callPackage ../development/python-modules/memestra { };
+
+  memgpt = callPackage ../development/python-modules/memgpt { };
 
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
