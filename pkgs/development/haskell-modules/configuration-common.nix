@@ -2861,4 +2861,9 @@ self: super: {
     #   repa-query, repa-scalar, repa-store, repa-stream
   ;
 
+  # 2024-01-15: needs safe >= 0.3.20
+  hoogle = super.hoogle.override {
+    safe = self.safe_0_3_20;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
