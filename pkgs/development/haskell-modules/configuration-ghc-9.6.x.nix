@@ -136,27 +136,10 @@ self: super: {
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin
-    algebraic-graphs
-    co-log-core
-    lens
-    cryptohash-sha1
-    cryptohash-md5
     ghc-trace-events
-    tasty-hspec
-    constraints-extras
-    tree-diff
-    implicit-hie-cradle
-    focus
-    hie-compat
-    dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
     gi-cairo-connector          # mtl <2.3
-    haskintex                   # text <2
     lens-family-th              # template-haskell <2.19
     ghc-prof                    # base <4.18
-    profiteur                   # vector <0.13
-    mfsolve                     # mtl <2.3
-    cubicbezier                 # mtl <2.3
-    dhall                       # template-haskell <2.20
     env-guard                   # doctest <0.21
     package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;

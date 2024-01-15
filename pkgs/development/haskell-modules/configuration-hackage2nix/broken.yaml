@@ -2208,7 +2208,6 @@ broken-packages:
   - hask # failure in job https://hydra.nixos.org/build/233215974 at 2023-09-02
   - haskheap # failure in job https://hydra.nixos.org/build/233231657 at 2023-09-02
   - haskhol-core # failure in job https://hydra.nixos.org/build/233232550 at 2023-09-02
-  - haskintex # failure in job https://hydra.nixos.org/build/233238166 at 2023-09-02
   - haskmon # failure in job https://hydra.nixos.org/build/233228390 at 2023-09-02
   - haskoin # failure in job https://hydra.nixos.org/build/233201668 at 2023-09-02
   - haskoin-store # failure in job https://hydra.nixos.org/build/238048371 at 2023-10-21
@@ -4389,7 +4388,6 @@ broken-packages:
   - product-isomorphic # failure in job https://hydra.nixos.org/build/233230736 at 2023-09-02
   - prof2pretty # failure in job https://hydra.nixos.org/build/233240665 at 2023-09-02
   - prof-flamegraph # failure in job https://hydra.nixos.org/build/233254675 at 2023-09-02
-  - profiteur # failure in job https://hydra.nixos.org/build/233216916 at 2023-09-02
   - profunctor-monad # failure in job https://hydra.nixos.org/build/233190940 at 2023-09-02
   - progression # failure in job https://hydra.nixos.org/build/233256355 at 2023-09-02
   - progressive # failure in job https://hydra.nixos.org/build/233228075 at 2023-09-02
