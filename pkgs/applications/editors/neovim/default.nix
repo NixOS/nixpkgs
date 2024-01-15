@@ -68,6 +68,8 @@ in {
     pname = "neovim-unwrapped";
     version = "0.9.5";
 
+    __structuredAttrs = true;
+
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
@@ -84,7 +86,7 @@ in {
 
     dontFixCmake = true;
 
-    inherit lua;
+    inherit lua treesitter-parsers;
 
     buildInputs = [
       gperf
@@ -171,7 +173,7 @@ in {
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')
-      treesitter-parsers);
+      finalAttrs.treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
