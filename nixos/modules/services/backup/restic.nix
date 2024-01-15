@@ -378,19 +378,23 @@ in
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let
       extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+      envVars = lib.filterAttrs (n: v: v != null && n != "PATH") config.systemd.services."restic-backups-${name}".environment;
       resticCmd = "${backup.package}/bin/restic${extraOptions}";
     in pkgs.writeShellScriptBin "restic-${name}" ''
       set -a  # automatically export variables
       ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
       # set same environment variables as the systemd service
-      ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-        (lib.filterAttrs (n: v: v != null && n != "PATH"))
+      ${lib.pipe envVars [
         (lib.mapAttrsToList (n: v: "${n}=${v}"))
         (lib.concatStringsSep "\n")
       ]}
       PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-      exec ${resticCmd} $@
+      sudo=exec
+      ${lib.optionalString (config.security.sudo.enable && backup.user != "root") ''
+        sudo='exec /run/wrappers/bin/sudo -u ${backup.user} --preserve-env=${lib.concatStringsSep "," ((lib.attrNames envVars) ++ [ "PATH" ])}'
+      ''}
+      $sudo ${resticCmd} $@
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
