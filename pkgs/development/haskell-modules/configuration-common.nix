@@ -77,12 +77,13 @@ self: super: {
 
   # Extensions wants the latest version of Cabal for its list of Haskell
   # language extensions.
-  extensions = super.extensions.override {
+  # 2024-01-15: jailbreak to allow hspec-hedgehog 0.1.1.0 https://github.com/kowainik/extensions/pull/92
+  extensions = doJailbreak (super.extensions.override {
     Cabal =
       if versionOlder self.ghc.version "9.6"
       then self.Cabal_3_10_2_1
       else null; # use GHC bundled version
-  };
+  });
 
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
