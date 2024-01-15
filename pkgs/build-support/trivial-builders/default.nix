@@ -182,101 +182,32 @@ rec {
         eval "$checkPhase"
       '';
 
-  /*
-     Writes a text file to nix store with no optional parameters available.
-
-     Example:
-
-
-     # Writes contents of file to /nix/store/<store path>
-     writeText "my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText = name: text: writeTextFile { inherit name text; };
 
-  /*
-    Writes a text file to nix store in a specific directory with no
-    optional parameters available.
-
-    Example:
-
-
-    # Writes contents of file to /nix/store/<store path>/share/my-file
-    writeTextDir "share/my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeTextDir = path: text: writeTextFile {
     inherit text;
     name = builtins.baseNameOf path;
     destination = "/${path}";
   };
 
-  /*
-    Writes a text file to /nix/store/<store path> and marks the file as
-    executable.
-
-    If passed as a build input, will be used as a setup hook. This makes setup
-    hooks more efficient to create: you don't need a derivation that copies
-    them to $out/nix-support/setup-hook, instead you can use the file as is.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable
-    writeScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScript = name: text: writeTextFile { inherit name text; executable = true; };
 
-  /*
-    Writes a text file to /nix/store/<store path>/bin/<name> and
-    marks the file as executable.
-
-    Example:
-
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScriptBin = name: text: writeTextFile {
     inherit name text;
     executable = true;
     destination = "/bin/${name}";
   };
 
-  /*
-    Similar to writeScript. Writes a Shell script and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable.
-    writeShellScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScript = name: text:
     writeTextFile {
       inherit name;
@@ -290,22 +221,8 @@ rec {
       '';
     };
 
-  /*
-    Similar to writeShellScript and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeShellScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScriptBin = name: text:
     writeTextFile {
       inherit name;
