@@ -17230,6 +17230,11 @@
     githubId = 3789764;
     name = "skykanin";
   };
+  slam-bert = {
+    github = "slam-bert";
+    githubId = 106779009;
+    name = "Slambert";
+  };
   slbtty = {
     email = "shenlebantongying@gmail.com";
     github = "shenlebantongying";
