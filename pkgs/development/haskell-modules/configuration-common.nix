@@ -533,11 +533,49 @@ self: super: {
   # 2023-04-20: Restrictive bytestring bound in tests.
   storablevector = doJailbreak super.storablevector;
 
-  # 2023-04-20: Pretends to need brick 1.6 but the commit history here
-  # https://github.com/matterhorn-chat/matterhorn/commits/master/matterhorn.cabal
-  # makes very clear that 1.4 is equally fine.
-  # Generally a slightly packaging hostile bound practice.
-  matterhorn = doJailbreak super.matterhorn;
+  # Need following changes from develop branch:
+  # - crypton-connection over connection (abandoned)
+  # - vty >= 6 (& pals) support
+  # Unreasonably difficult to apply as patches
+  matterhorn = lib.pipe
+    (super.matterhorn.override {
+        connection = self.crypton-connection;
+    })
+    [
+      doJailbreak
+      # vty >= 6 support
+      (addBuildDepends [ self.vty-crossplatform ])
+      (overrideSrc {
+        version = "unstable-2024-01-11";
+        src = pkgs.fetchFromGitHub {
+          owner = "matterhorn-chat";
+          repo = "matterhorn";
+          rev = lib.warnIf
+            (super.matterhorn.version != "50200.19.0")
+            "matterhorn on Hackage may have caught up with our pinned commit"
+            "66d23291a1c748e568908b91b1109ed17b6d86e9";
+          sha256 = "0djawpp0zvvc2v020k6p4chvd1dlmcs0fa3d4wlr0cmkha40flpb";
+        };
+      })
+    ];
+  # Switch to crypton-connection over abandoned connection
+  # To add insult to injury, mattermost-api had a breaking change on its develop
+  # branch, so we also need to bump it to an unstable commit. Luckily, matterhorn
+  # is its only consumer on Hackage.
+  mattermost-api = overrideSrc {
+    version = lib.warnIf
+      (super.mattermost-api.version != "50200.15.0")
+      "mattermost-api on Hackage may have caught up with our pinned commit"
+      "unstable-2024-01-11";
+    src = pkgs.fetchFromGitHub {
+      owner = "matterhorn-chat";
+      repo = "mattermost-api";
+      rev = "8df809df4d96930cf8b39d0d8f54cdb6d8f42b59";
+      sha256 = "154p4yi941l9ga2c3vw8yhgq0g1wn4jhmg3yhzgwgca1c5d1vydi";
+    };
+  } (super.mattermost-api.override {
+    connection = self.crypton-connection;
+  });
 
   # Too strict bounds on transformers and resourcet
   # https://github.com/alphaHeavy/lzma-conduit/issues/23
