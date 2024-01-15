@@ -2495,8 +2495,24 @@ self: super: {
 
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
-  irc-conduit = doJailbreak super.irc-conduit;
-  irc-client = doJailbreak super.irc-client;
+  # Use crypton-connection instead of connection
+  # https://github.com/barrucadu/irc-conduit/pull/60 https://github.com/barrucadu/irc-client/pull/101
+  irc-conduit = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/barrucadu/irc-conduit/pull/60/commits/58f6b5ee0c23a0615e43292dbbacf40636dcd7a6.patch";
+    hash = "sha256-d08tb9iL07mBWdlZ7PCfTLVFJLgcxeGVPzJ+jOej8io=";
+  }) (doJailbreak (super.irc-conduit.override {
+    connection = self.crypton-connection;
+    x509-validation = self.crypton-x509-validation;
+  }));
+  irc-client = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/barrucadu/irc-client/pull/101/commits/0440b7e2ce943d960234c50957a55025771f567a.patch";
+    hash = "sha256-iZyZMrodgViXFCMH9y2wIJZRnjd6WhkqInAdykqTdkY=";
+  }) (doJailbreak (super.irc-client.override {
+    connection = self.crypton-connection;
+    x509 = self.crypton-x509;
+    x509-store = self.crypton-x509-store;
+    x509-validation = self.crypton-x509-validation;
+  }));
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
