@@ -373,14 +373,14 @@ let self = {
 
   lua = rec {
     name = "lua";
-    version = "0.10.22";
+    version = "0.10.26";
 
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
       rev = "v${version}";
-      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
+      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
     };
 
     inputs = [ luajit ];
