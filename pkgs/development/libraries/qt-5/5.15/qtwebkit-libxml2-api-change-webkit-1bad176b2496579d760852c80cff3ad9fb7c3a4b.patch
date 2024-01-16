@@ -1,0 +1,56 @@
+From 1bad176b2496579d760852c80cff3ad9fb7c3a4b Mon Sep 17 00:00:00 2001
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 20 Nov 2023 07:42:30 -0800
+Subject: [PATCH] Build fails with libxml2 version 2.12.0 due to API change
+ https://bugs.webkit.org/show_bug.cgi?id=265128
+
+Reviewed by Philippe Normand.
+
+Starting with libxml2 2.12.0, the API has changed the const-ness of the
+xmlError pointers, which results in a build error due to a mismatched
+type in the parsing error callback. This papers over the difference by
+using preprocessor conditionals.
+
+* Source/WebCore/xml/XSLTProcessor.h: Use const when building against
+  libxml2 2.12.0 or newer.
+* Source/WebCore/xml/XSLTProcessorLibxslt.cpp:
+(WebCore::XSLTProcessor::parseErrorFunc): Ditto.
+
+Canonical link: https://commits.webkit.org/270977@main
+---
+ Source/WebCore/xml/XSLTProcessor.h          | 4 ++++
+ Source/WebCore/xml/XSLTProcessorLibxslt.cpp | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/Source/WebCore/xml/XSLTProcessor.h b/Source/WebCore/xml/XSLTProcessor.h
+index 21bb45b5cbe16..5cf20557918fa 100644
+--- a/Source/WebCore/xml/XSLTProcessor.h
++++ b/Source/WebCore/xml/XSLTProcessor.h
+@@ -61,7 +61,11 @@ class XSLTProcessor : public RefCounted<XSLTProcessor> {
+ 
+     void reset();
+ 
++#if LIBXML_VERSION >= 21200
++    static void parseErrorFunc(void* userData, const xmlError*);
++#else
+     static void parseErrorFunc(void* userData, xmlError*);
++#endif
+     static void genericErrorFunc(void* userData, const char* msg, ...);
+     
+     // Only for libXSLT callbacks
+diff --git a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
+index a65691087e3c5..9f6b363dfc6c9 100644
+--- a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
++++ b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
+@@ -59,7 +59,11 @@ void XSLTProcessor::genericErrorFunc(void*, const char*, ...)
+     // It would be nice to do something with this error message.
+ }
+ 
++#if LIBXML_VERSION >= 21200
++void XSLTProcessor::parseErrorFunc(void* userData, const xmlError* error)
++#else
+ void XSLTProcessor::parseErrorFunc(void* userData, xmlError* error)
++#endif
+ {
+     PageConsoleClient* console = static_cast<PageConsoleClient*>(userData);
+     if (!console)

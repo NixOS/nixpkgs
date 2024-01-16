@@ -212,6 +212,7 @@ let
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
       ./qtwebkit-cstdint.patch
+      ./qtwebkit-libxml2-api-change-webkit-1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
