@@ -561,19 +561,9 @@ let
         compilerNames.ghc981
       ] released;
       primitive = released;
-      weeder = [
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
-        compilerNames.ghc928
-        compilerNames.ghc945
-        compilerNames.ghc946
-        compilerNames.ghc947
-        compilerNames.ghc948
-        compilerNames.ghc963
-      ];
+      weeder = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
