@@ -29718,6 +29718,8 @@ with pkgs;
 
   office-code-pro = callPackage ../data/fonts/office-code-pro { };
 
+  _0xproto = callPackage ../data/fonts/0xproto { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
