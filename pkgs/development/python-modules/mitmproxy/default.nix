@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
   # Mitmproxy requirements
-, aioquic-mitmproxy
+, aioquic
 , asgiref
 , blinker
 , brotli
@@ -56,8 +57,16 @@ buildPythonPackage rec {
     hash = "sha256-BO7oQ4TVuZ4dCtROq2M24V6HVo0jzyBdQfb67dYA07U=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aioquic"
+  ];
+
   propagatedBuildInputs = [
-    aioquic-mitmproxy
+    aioquic
     asgiref
     blinker
     brotli
