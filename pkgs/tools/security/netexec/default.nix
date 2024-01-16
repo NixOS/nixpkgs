@@ -25,21 +25,10 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "netexec";
-  version = "1.1.0";
+  version = "1.1.0-unstable-2024-01-15";
   pyproject = true;
   pythonRelaxDeps = true;
-  # TODO: remove those once upstream merge this PR and release a new version:
-  # https://github.com/Pennyw0rth/NetExec/pull/162
   pythonRemoveDeps = [
-    # Upstream incorrectly includes the wrong package as dependency.
-    # Should be `resource` from stdlib (https://docs.python.org/3/library/resource.html),
-    # not `RussellLuo/resource` (a repo not maintained in 4 years)
-    # See: https://github.com/Pennyw0rth/NetExec/commit/483dc69a2a7aa8f364adfc46096a8b5114c0a31a
-    "resource"
-    # Lint
-    "ruff"
-    # Windows only dependency
-    "pyreadline"
     # Fail to detect dev version requirement
     "neo4j"
   ];
@@ -47,15 +36,13 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cNkZoIdfrKs5ZvHGKGBybCWGwA6C4rqjCOEM+pX70S8=";
+    rev = "9df72e2f68b914dfdbd75b095dd8f577e992615f";
+    hash = "sha256-oQHtTE5hdlxHX4uc412VfNUrN0UHVbwI0Mm9kmJpNW4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"'
-
-    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"' \
       --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
   '';
 
@@ -65,34 +52,35 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    requests
+    aardwolf
+    aioconsole
+    aiosqlite
+    argcomplete
+    asyauth
     beautifulsoup4
+    bloodhound-py
+    dploot
+    dsinternals
+    impacket
     lsassy
-    termcolor
+    masky
+    minikerberos
     msgpack
     neo4j
+    oscrypto
+    paramiko
+    pyasn1-modules
     pylnk3
     pypsrp
-    paramiko
-    impacket
-    dsinternals
-    xmltodict
-    terminaltables
-    aioconsole
-    pywerview
-    minikerberos
     pypykatz
-    aardwolf
-    dploot
-    bloodhound-py
-    asyauth
-    masky
-    sqlalchemy
-    aiosqlite
-    pyasn1-modules
-    rich
     python-libnmap
-    oscrypto
+    pywerview
+    requests
+    rich
+    sqlalchemy
+    termcolor
+    terminaltables
+    xmltodict
   ];
 
   nativeCheckInputs = with python.pkgs; [
