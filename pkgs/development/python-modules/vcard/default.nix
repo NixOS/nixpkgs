@@ -8,9 +8,13 @@
   pythonAtLeast,
   pythonOlder,
 }:
-buildPythonPackage rec {
-  pname = "vcard";
+let
   version = "0.15.4";
+in
+buildPythonPackage {
+  inherit version;
+
+  pname = "vcard";
   format = "setuptools";
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
