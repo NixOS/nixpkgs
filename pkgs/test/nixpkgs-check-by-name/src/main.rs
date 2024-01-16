@@ -12,6 +12,7 @@ use crate::validation::Validation::Success;
 use anyhow::Context;
 use clap::Parser;
 use colored::Colorize;
+use std::collections::HashMap;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -44,7 +45,12 @@ pub struct Args {
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(&args.base, &args.nixpkgs, &[], &mut io::stderr()) {
+    match process(
+        &args.base,
+        &args.nixpkgs,
+        &HashMap::new(),
+        &mut io::stderr(),
+    ) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -77,15 +83,15 @@ fn main() -> ExitCode {
 pub fn process<W: io::Write>(
     base_nixpkgs: &Path,
     main_nixpkgs: &Path,
-    eval_accessible_paths: &[&Path],
+    eval_nix_path: &HashMap<String, PathBuf>,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
     // Check the main Nixpkgs first
-    let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths, error_writer)?;
+    let main_result = check_nixpkgs(main_nixpkgs, eval_nix_path, error_writer)?;
     let check_result = main_result.result_map(|nixpkgs_version| {
         // If the main Nixpkgs doesn't have any problems, run the ratchet checks against the base
         // Nixpkgs
-        check_nixpkgs(base_nixpkgs, eval_accessible_paths, error_writer)?.result_map(
+        check_nixpkgs(base_nixpkgs, eval_nix_path, error_writer)?.result_map(
             |base_nixpkgs_version| {
                 Ok(ratchet::Nixpkgs::compare(
                     base_nixpkgs_version,
@@ -113,7 +119,7 @@ pub fn process<W: io::Write>(
 /// ratchet check against another result.
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
-    eval_accessible_paths: &[&Path],
+    eval_nix_path: &HashMap<String, PathBuf>,
     error_writer: &mut W,
 ) -> validation::Result<ratchet::Nixpkgs> {
     Ok({
@@ -134,7 +140,7 @@ pub fn check_nixpkgs<W: io::Write>(
         } else {
             check_structure(&nixpkgs_path)?.result_map(|package_names|
                 // Only if we could successfully parse the structure, we do the evaluation checks
-                eval::check_values(&nixpkgs_path, package_names, eval_accessible_paths))?
+                eval::check_values(&nixpkgs_path, package_names, eval_nix_path))?
         }
     })
 }
@@ -144,8 +150,10 @@ mod tests {
     use crate::process;
     use crate::utils;
     use anyhow::Context;
+    use std::collections::HashMap;
     use std::fs;
     use std::path::Path;
+    use std::path::PathBuf;
     use tempfile::{tempdir_in, TempDir};
 
     #[test]
@@ -226,7 +234,19 @@ mod tests {
     }
 
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
-        let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
+        let eval_nix_path = HashMap::from([
+            (
+                "test-nixpkgs".to_string(),
+                PathBuf::from("tests/mock-nixpkgs.nix"),
+            ),
+            (
+                "test-nixpkgs/lib".to_string(),
+                PathBuf::from(
+                    std::env::var("NIXPKGS_LIB_PATH")
+                        .with_context(|| "Could not get environment variable NIXPKGS_LIB_PATH")?,
+                ),
+            ),
+        ]);
 
         let base_path = path.join("base");
         let base_nixpkgs = if base_path.exists() {
@@ -238,7 +258,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(base_nixpkgs, &path, &[&extra_nix_path], &mut writer)
+            process(base_nixpkgs, &path, &eval_nix_path, &mut writer)
                 .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

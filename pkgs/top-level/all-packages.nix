@@ -1757,6 +1757,8 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
+  bonsai = callPackage ../tools/misc/bonsai { };
+
   cie-middleware-linux = callPackage ../tools/security/cie-middleware-linux { };
 
   cidrgrep = callPackage ../tools/text/cidrgrep { };
@@ -3954,8 +3956,6 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
-  gtklp = callPackage ../tools/misc/gtklp { };
-
   google-amber = callPackage ../tools/graphics/amber {
     inherit (darwin) cctools;
   };
@@ -5105,8 +5105,6 @@ with pkgs;
   discocss = callPackage ../tools/misc/discocss { };
 
   disfetch = callPackage ../tools/misc/disfetch { };
-
-  disk-filltest = callPackage ../tools/system/disk-filltest { };
 
   disk-inventory-x = callPackage ../tools/filesystems/disk-inventory-x { };
 
@@ -13367,8 +13365,6 @@ with pkgs;
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
   sqlboiler = callPackage ../development/tools/sqlboiler { };
-
-  ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshed = callPackage ../tools/networking/sshed { };
 

@@ -45,6 +45,8 @@ The current ratchets are:
 
 - New manual definitions of `pkgs.${name}` (e.g. in `pkgs/top-level/all-packages.nix`) with `args = { }`
   (see [nix evaluation checks](#nix-evaluation-checks)) must not be introduced.
+- New top-level packages defined using `pkgs.callPackage` must be defined with a package directory.
+  - Once a top-level package uses `pkgs/by-name`, it also can't be moved back out of it.
 
 ## Development
 
