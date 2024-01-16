@@ -511,11 +511,9 @@ let
         compilerNames.ghc902
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc963
         compilerNames.ghc981
       ] released;
       hlint = lib.subtractLists [
-        compilerNames.ghc963
         compilerNames.ghc981
       ] released;
       hpack = lib.subtractLists [
