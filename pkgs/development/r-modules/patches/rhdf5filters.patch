@@ -1,33 +1,13 @@
 diff --git a/src/Makevars.in b/src/Makevars.in
-index 3e55470..e87daf6 100644
+index 3e55470..656eae4 100644
 --- a/src/Makevars.in
 +++ b/src/Makevars.in
-@@ -21,12 +21,12 @@ export PKG_LDFLAGS=@LDFLAGS@
+@@ -15,7 +15,7 @@ export PKG_CXXPICFLAGS=@CXXPICFLAGS@
+ export RANLIB=@RANLIB@
+ export MAKE=@MAKE@
+ export AR=@AR@
+-export PKG_CPPFLAGS=@CPPFLAGS@ -I"@RHDF5_INCLUDE@"
++export PKG_CPPFLAGS=@CPPFLAGS@
+ export PKG_LDFLAGS=@LDFLAGS@
+ 
  all: copying $(SHLIB)
- 
- #copy hdf5 library headers to package include
--copying: libH5Zblosc.so libH5Zbz2.so libH5Zlzf.so @USE_VBZ@
-+copying: libH5Zbz2.so libH5Zlzf.so @USE_VBZ@ libH5Zzstd.so
- 	mkdir -p "${USER_LIB_DIR}"
--	cp ${BZIP2_LIB} ${BLOSC_LIB} ${LZF_LIB} ${ZSTD_LIB} @VBZ_F_LIB@ "${USER_LIB_DIR}"
--	
-+	cp ${BZIP2_LIB} ${LZF_LIB} ${ZSTD_LIB} @VBZ_F_LIB@ "${USER_LIB_DIR}"
-+
- libH5Zvbz.so: libH5Zzstd.so
- 	$(MAKE) -C vbz
- 
- libH5Zblosc.so: libH5Zzstd.so
- 	$(MAKE) -C blosc
-diff --git a/src/lzf/H5Zlzf.c b/src/lzf/H5Zlzf.c
-index f71caa4..87965cd 100644
---- a/src/lzf/H5Zlzf.c
-+++ b/src/lzf/H5Zlzf.c
-@@ -37,7 +37,7 @@
- #include <H5PLextern.h>
- #include "hdf5.h"
- 
--#include "lzf.h"
-+#include "./lzf/lzf.h"
- 
- #define H5Z_FILTER_LZF_VERSION 4
- #define H5Z_FILTER_LZF 32000
