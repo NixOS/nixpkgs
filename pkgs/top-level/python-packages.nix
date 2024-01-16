@@ -2806,6 +2806,8 @@ self: super: with self; {
 
   denonavr = callPackage ../development/python-modules/denonavr { };
 
+  dep-logic = callPackage ../development/python-modules/dep-logic { };
+
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   deploykit = callPackage ../development/python-modules/deploykit { };
