@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       XMLWriter
     ]}:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+    --prefix PATH : "$out/bin" \
     --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
