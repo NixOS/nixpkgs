@@ -6099,6 +6099,8 @@ with pkgs;
 
   ngadmin = callPackage ../applications/networking/ngadmin { };
 
+  nezha-agent = callPackage ../servers/monitoring/nezha-agent { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
