@@ -8,6 +8,7 @@ let
 in
 
 rec {
+this is not valid nix;
 
   /*
     Run the shell command `buildCommand` to produce a store path named `name`.
