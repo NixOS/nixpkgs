@@ -55,6 +55,41 @@ runTests {
     expected = { a = false; b = false; c = true; };
   };
 
+  testExtendDerivationSimple = {
+    expr =
+      let actual = extendDerivation
+            # assertion condition: all good
+            true
+            # "passthru"
+            { tests = { nixos.foo = { }; }; }
+            # result of derivation or mkDerivation
+            (fix (d: {
+              type = "derivation";
+              drvPath = "/foo/bar.drv";
+              outPath = "/foo/bar";
+              out = d;
+              all = [ d ];
+              outputName = "out";
+            }));
+      in
+        {
+          inherit (actual) type drvPath outPath derivation;
+          # TODO test more attrs
+          out_derivation = actual.out.derivation;
+          all_derivation = (head actual.all).derivation;
+        };
+    expected = rec {
+      type = "derivation";
+      drvPath = "/foo/bar.drv";
+      outPath = "/foo/bar";
+      derivation = {
+        path = "/foo/bar.drv";
+      };
+      out_derivation = derivation;
+      all_derivation = derivation;
+    };
+  };
+
 # TRIVIAL
 
   testId = {
