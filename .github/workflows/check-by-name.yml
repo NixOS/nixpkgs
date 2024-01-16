@@ -91,8 +91,12 @@ jobs:
           git worktree add "$base" "$(git rev-parse HEAD^1)"
           echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
-      - name: Fetching the tool
-        run: pkgs/test/nixpkgs-check-by-name/scripts/fetch-pinned-tool.sh result
+      - name: Fetching the pinned tool
+        run: |
+          # Get the direct /nix/store path from the pin to avoid having to evaluate Nixpkgs
+          toolPath=$(jq -r .ci-path pkgs/test/nixpkgs-check-by-name/scripts/pinned-tool.json)
+          # This asks the substituter for the path, which should be there because Hydra will have pre-built and pushed it
+          nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
         run: |
           if result/bin/nixpkgs-check-by-name --base "$base" .; then
