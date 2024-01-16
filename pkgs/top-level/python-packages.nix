@@ -12578,7 +12578,7 @@ self: super: with self; {
 
   retry = callPackage ../development/python-modules/retry { };
 
-  retry_decorator = callPackage ../development/python-modules/retry_decorator { };
+  retry-decorator = callPackage ../development/python-modules/retry-decorator { };
 
   retrying = callPackage ../development/python-modules/retrying { };
 

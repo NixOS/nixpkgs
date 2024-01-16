@@ -20,7 +20,7 @@ buildDotnetGlobalTool rec {
     homepage = "https://github.com/razzmatazz/csharp-language-server";
     changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ GaetanLepage ];
   };
 }
