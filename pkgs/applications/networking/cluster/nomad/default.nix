@@ -65,10 +65,10 @@ rec {
 
   nomad_1_5 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.5.12";
-    sha256 = "sha256-BhKetWtwysWTYI0ruEp/Ixh4eoGxDX0Geup2PCXfsZY=";
-    vendorHash = "sha256-X4pBxKWr5QFRxh9tw5QDpytyuVNXQvV1LHm5IbPELY0=";
-    license = lib.licenses.mpl20;
+    version = "1.5.13";
+    sha256 = "sha256-SFPjcr3W6Sj1n+1ooi1HDMQEapgGapVy4HtqxSIVi9U=";
+    vendorHash = "sha256-F9lzO3jMVbDq8sA4rBo81vmIoOhK2N8d4HXX58HOw18=";
+    license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
