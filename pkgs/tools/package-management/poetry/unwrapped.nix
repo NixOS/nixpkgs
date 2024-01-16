@@ -37,6 +37,7 @@
 , pytest-mock
 , pytest-xdist
 , pythonAtLeast
+, darwin
 }:
 
 buildPythonPackage rec {
@@ -110,6 +111,8 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
 
   preCheck = (''
