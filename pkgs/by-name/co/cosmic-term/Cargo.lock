@@ -871,6 +871,7 @@ dependencies = [
  "fork",
  "i18n-embed",
  "i18n-embed-fl",
+ "indexmap",
  "lazy_static",
  "libcosmic",
  "log",
