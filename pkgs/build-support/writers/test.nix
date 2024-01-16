@@ -6,6 +6,8 @@
 , pypy2Packages
 , python3Packages
 , pypy3Packages
+, luaPackages
+, rubyPackages
 , runCommand
 , testers
 , writers
@@ -119,6 +121,28 @@ lib.recurseIntoAttrs {
     #  """)
     #  print(y[0]['test'])
     #'');
+
+    # Could not test this because of external package issues :(
+    #lua = writeLuaBin "test-writers-lua-bin" { libraries = [ pkgs.luaPackages.say ]; } ''
+    #  s = require("say")
+    #  s:set_namespace("en")
+
+    #  s:set('money', 'I have %s dollars')
+    #  s:set('wow', 'So much money!')
+
+    #  print(s('money', {1000})) -- I have 1000 dollars
+
+    #  s:set_namespace("fr") -- switch to french!
+    #  s:set('wow', "Tant d'argent!")
+
+    #  print(s('wow')) -- Tant d'argent!
+    #  s:set_namespace("en")  -- switch back to english!
+    #  print(s('wow')) -- So much money!
+    #'';
+
+    #ruby = expectSuccessBin (writeRubyBin "test-writers-ruby-bin" { libraries = [ rubyPackages.rubocop ]; } ''
+    #puts "This should work!"
+    #'');
   };
 
   simple = lib.recurseIntoAttrs {
@@ -134,6 +158,10 @@ lib.recurseIntoAttrs {
       if test "test" = "test"
         echo "success"
       end
+    '');
+
+    nu = expectSuccess (writeNu "test-writers-nushell" ''
+      echo "success"
     '');
 
     haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -231,6 +259,14 @@ lib.recurseIntoAttrs {
 
     fsharpNoNugetDeps = expectSuccess (writeFSharp "test-writers-fsharp-no-nuget-deps" ''
       printfn "success"
+      '');
+
+    luaNoLibs = expectSuccess (writeLua "test-writers-lua-no-libs" {} ''
+      print("success")
+      '');
+
+    rubyNoLibs = expectSuccess (writeRuby "test-writers-ruby-no-libs" {} ''
+      puts "success"
     '');
   };
 

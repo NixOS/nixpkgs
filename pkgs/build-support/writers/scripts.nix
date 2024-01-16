@@ -181,7 +181,7 @@ rec {
       inherit strip;
     } name;
 
-  # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
+  # writeHaskellBin takes the same arguments as kell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
 
@@ -199,28 +199,67 @@ rec {
   writeNuBin = name:
     writeNu "/bin/${name}";
 
+  # makeRubyWriter takes ruby and compatible rubyPackages and produces ruby script writer,
+  # If any libraries are specified, ruby.withPackages is used as interpreter, otherwise the "bare" ruby is used.
+  makeRubyWriter = ruby: rubyPackages: buildRubyPackages: name: { libraries ? [], }:
+  makeScriptWriter {
+    interpreter =
+      if libraries == []
+      then "${ruby}/bin/ruby"
+      else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
+    # Rubocop doesnt seem to like running in this fashion.
+    #check = (writeDash "rubocop.sh" ''
+    #  exec ${lib.getExe buildRubyPackages.rubocop} "$1"
+    #'');
+  } name;
+
   # Like writeScript but the first line is a shebang to ruby
   #
   # Example:
   #   writeRuby "example" ''
   #    puts "hello world"
   #   ''
-  writeRuby = makeScriptWriter {
-    interpreter = "${lib.getExe pkgs.ruby}";
-  };
+  writeRuby = makeRubyWriter pkgs.ruby pkgs.rubyPackages buildPackages.rubyPackages;
 
   writeRubyBin = name:
     writeRuby "/bin/${name}";
 
-  # Like writeScript but the first line is a shebang to lua
+  # makeLuaWriter takes lua and compatible luaPackages and produces lua script writer,
+  # which validates the script with luacheck at build time. If any libraries are specified,
+  # lua.withPackages is used as interpreter, otherwise the "bare" lua is used.
+  makeLuaWriter = lua: luaPackages: buildLuaPackages: name: { libraries ? [], }:
+  makeScriptWriter {
+    interpreter = lua.interpreter;
+      # if libraries == []
+      # then lua.interpreter
+      # else (lua.withPackages (ps: libraries)).interpreter
+      # This should support packages! I just cant figure out why some dependency collision happens whenever I try to run this.
+    check = (writeDash "luacheck.sh" ''
+      exec ${buildLuaPackages.luacheck}/bin/luacheck "$1"
+    '');
+  } name;
+
+  # writeLua takes a name an attributeset with libraries and some lua source code and
+  # returns an executable (should also work with luajit)
   #
   # Example:
-  #   writeLua "example" ''
-  #    print("hello world")
-  #   ''
-  writeLua = makeScriptWriter {
-    interpreter = "${lib.getExe pkgs.lua}";
-  };
+  # writeLua "test_lua" { libraries = [ pkgs.luaPackages.say ]; } ''
+  #   s = require("say")
+  #   s:set_namespace("en")
+  #
+  #   s:set('money', 'I have %s dollars')
+  #   s:set('wow', 'So much money!')
+  #
+  #   print(s('money', {1000})) -- I have 1000 dollars
+  #
+  #   s:set_namespace("fr") -- switch to french!
+  #   s:set('wow', "Tant d'argent!")
+  #
+  #   print(s('wow')) -- Tant d'argent!
+  #   s:set_namespace("en")  -- switch back to english!
+  #   print(s('wow')) -- So much money!
+  # ''
+  writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
 
   writeLuaBin = name:
     writeLua "/bin/${name}";
