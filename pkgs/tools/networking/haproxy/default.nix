@@ -24,11 +24,11 @@ assert !useQuicTls -> openssl != null;
 let sslPkg = if useQuicTls then quictls else openssl;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1YAcdyqrnEP0CWS3sztDiNFLW0V1C+TSZxeFhjzbnxw=";
+    hash = "sha256-hRrugw7CjBeRJGqf1EePZD0RWlY92Qf2YSzDgalSqzw=";
   };
 
   buildInputs = [ sslPkg zlib libxcrypt ]

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.19.4";
+  version = "0.20.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bK/Cg+ZFhf9TrTVlDU35cLMDuTmdH4bN/QuPVeUVDsI=";
+    hash = "sha256-LYfkZVoQ+Jph7cyJYOIaAjtH8+fC/w8V+IWAqc1lHp4=";
   };
 
   propagatedBuildInputs = [
