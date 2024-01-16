@@ -118,22 +118,14 @@ buildPythonPackage rec {
     "test_get_version"
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
-    "test_integration"
+    "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
-    # ValueError: Exceeds the limit (4300) for integer string conversion
-    "test_roundtrip_big_integer"
-    "test_wireguard"
-    "test_commands_exist"
+    "test_integration"
     "test_statusbar"
-    # AssertionError: Playbook mismatch!
-    "test_untrusted_cert"
-    "test_mitmproxy_ca_is_untrusted"
-  ];
-
-  disabledTestPaths = [
-    # teardown of half the tests broken
-    "test/mitmproxy/addons/test_onboarding.py"
+    # FileNotFoundError: [Errno 2] No such file or directory
+    # likely wireguard is also not working in the sandbox
+    "test_wireguard"
   ];
 
   dontUsePytestXdist = true;
