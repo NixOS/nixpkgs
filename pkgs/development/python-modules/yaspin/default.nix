@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , termcolor
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
