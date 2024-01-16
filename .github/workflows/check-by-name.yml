@@ -4,8 +4,8 @@
 # When you make changes to this workflow, also update pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh adequately
 name: Check pkgs/by-name
 
-# The pre-built tool is fetched from a channel,
-# making it work predictable on all PRs.
+# The tool is pinned to a pre-built version on Hydra,
+# see pkgs/test/nixpkgs-check-by-name/scripts/README.md
 on:
   # Using pull_request_target instead of pull_request avoids having to approve first time contributors
   pull_request_target
@@ -92,6 +92,7 @@ jobs:
           echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
       - name: Fetching the pinned tool
+        # Update the pinned version using pkgs/test/nixpkgs-check-by-name/scripts/update-pinned-tool.sh
         run: |
           # Get the direct /nix/store path from the pin to avoid having to evaluate Nixpkgs
           toolPath=$(jq -r '."ci-path"' pkgs/test/nixpkgs-check-by-name/scripts/pinned-tool.json)
