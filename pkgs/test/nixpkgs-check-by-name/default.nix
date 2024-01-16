@@ -11,6 +11,7 @@
 let
   runtimeExprPath = ./src/eval.nix;
   nixpkgsLibPath = ../../../lib;
+  testNixpkgsPath = ./tests/mock-nixpkgs.nix;
 
   # Needed to make Nix evaluation work inside nix builds
   initNix = ''
@@ -48,7 +49,7 @@ let
         makeWrapper
       ];
       env.NIX_CHECK_BY_NAME_EXPR_PATH = "${runtimeExprPath}";
-      env.NIXPKGS_LIB_PATH = "${nixpkgsLibPath}";
+      env.NIX_PATH = "test-nixpkgs=${testNixpkgsPath}:test-nixpkgs/lib=${nixpkgsLibPath}";
       preCheck = initNix;
       postCheck = ''
         cargo fmt --check
@@ -60,7 +61,7 @@ let
       '';
       passthru.shell = mkShell {
         env.NIX_CHECK_BY_NAME_EXPR_PATH = toString runtimeExprPath;
-        env.NIXPKGS_LIB_PATH = toString nixpkgsLibPath;
+        env.NIX_PATH = "test-nixpkgs=${toString testNixpkgsPath}:test-nixpkgs/lib=${toString nixpkgsLibPath}";
         inputsFrom = [ package ];
       };
 
