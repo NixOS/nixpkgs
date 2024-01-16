@@ -3,7 +3,7 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter
+, flutter313
 , pulseaudio
 , makeDesktopItem
 , gnome
@@ -12,7 +12,7 @@
 let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
 in
-flutter.buildFlutterApplication rec {
+flutter313.buildFlutterApplication rec {
   pname = "fluffychat";
   version = "1.14.1";
 
