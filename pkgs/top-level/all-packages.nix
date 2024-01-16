@@ -31828,8 +31828,6 @@ with pkgs;
 
   gscreenshot = callPackage ../applications/graphics/gscreenshot { };
 
-  gtkpod = callPackage ../applications/audio/gtkpod { };
-
   guacamole-client = callPackage ../servers/guacamole-client { };
 
   guacamole-server = callPackage ../servers/guacamole-server { };
