@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , ziafont
 , pytestCheckHook
 , nbval
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-Bbwq4Ods3P/724KO94jSmMLD1ubfaMHP/gTlOL/2pnE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ziafont
