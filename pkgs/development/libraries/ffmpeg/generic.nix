@@ -125,6 +125,11 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
+, withStatic ? stdenv.hostPlatform.isStatic
+, withShared ? !stdenv.hostPlatform.isStatic
+, withPic ? true
+, withThumb ? false # On some ARM platforms
+
 /*
  *  Program options
  */
@@ -381,9 +386,10 @@ stdenv.mkDerivation (finalAttrs: {
     /*
      *  Build flags
      */
-    # On some ARM platforms --enable-thumb
-    "--enable-shared"
-    "--enable-pic"
+    (enableFeature withStatic "static")
+    (enableFeature withShared "shared")
+    (enableFeature withPic "pic")
+    (enableFeature withThumb "thumb")
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
