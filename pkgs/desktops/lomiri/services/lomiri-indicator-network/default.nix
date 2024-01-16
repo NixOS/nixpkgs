@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , nixosTests
 , testers
@@ -45,17 +46,28 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch = ''
-    # Patch FHS paths
-    # DBUS_SESSION_BUS_SERVICES_DIR queried via pkg-config, prefix output path
-    substituteInPlace data/CMakeLists.txt \
-      --replace '/usr/lib/systemd/user' "$out/lib/systemd/user" \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace 'DESTINATION "''${DBUS_SESSION_BUS_SERVICES_DIR}"' 'DESTINATION "''${CMAKE_INSTALL_PREFIX}/''${DBUS_SESSION_BUS_SERVICES_DIR}"'
+  patches = [
+    # Remove when version > 1.0.1
+    (fetchpatch {
+      name = "0001-lomiri-indicator-network-Make-less-assumptions-about-where-files-will-end-up.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/065212b22ab9aa8d25a61b5482ad6511e4c8510b.patch";
+      hash = "sha256-WrDTBKusK1808W8LZRGWaTOExu7gKpYBvkQ8hzoHoHk=";
+    })
 
-    # Don't disregard GNUInstallDirs requests, {DOCDIR}/../<different-name> to preserve preferred name
-    substituteInPlace doc/CMakeLists.txt \
-      --replace 'INSTALL_DOCDIR ''${CMAKE_INSTALL_DATAROOTDIR}/doc/lomiri-connectivity-doc' 'INSTALL_DOCDIR ''${CMAKE_INSTALL_DOCDIR}/../lomiri-connectivity-doc'
+    # Remove when version > 1.0.1
+    (fetchpatch {
+      name = "0002-lomiri-indicator-network-Honour-CMAKE_INSTALL_DOCDIR_fordocumentation-installation.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/79b9e12313f765ab6e95b4d4dfefbdbca50ef3c6.patch";
+      hash = "sha256-vRfdegEi892UlrC9c1+5Td7CHLh7u0foPggLNBfc8lw=";
+    })
+  ];
+
+  postPatch = ''
+    # Queried via pkg-config, would need to override a prefix variable
+    # Needs CMake 3.28 or higher to do as part of the call, https://github.com/NixOS/nixpkgs/pull/275284
+    substituteInPlace data/CMakeLists.txt \
+      --replace 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'set(DBUS_SESSION_BUS_SERVICES_DIR "''${CMAKE_INSTALL_SYSCONFDIR}/dbus-1/services")' \
+      --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
   '';
 
   strictDeps = true;
@@ -98,11 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DGSETTINGS_LOCALINSTALL=ON"
-    "-DGSETTINGS_COMPILE=ON"
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
-    "-DENABLE_UBUNTU_COMPAT=ON" # in case
-    "-DBUILD_DOC=ON" # lacks QML docs, needs qdoc: https://github.com/NixOS/nixpkgs/pull/245379
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
+    (lib.cmakeBool "BUILD_DOC" true) # lacks QML docs, needs qdoc: https://github.com/NixOS/nixpkgs/pull/245379
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
