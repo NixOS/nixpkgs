@@ -38,5 +38,7 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ avaq carlsverre np rvolosatovs Br1ght0ne shofius ];
     license = licenses.bsd3;
+
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
