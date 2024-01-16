@@ -225,8 +225,6 @@ with pkgs;
       }
     '');
 
-  chkservice = callPackage ../tools/admin/chkservice { };
-
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
@@ -1041,7 +1039,7 @@ with pkgs;
 
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
-  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
+  inherit (callPackages ../build-support/node/fetch-yarn-deps { })
     prefetch-yarn-deps
     fetchYarnDeps;
 
@@ -1759,6 +1757,8 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
+  bonsai = callPackage ../tools/misc/bonsai { };
+
   cie-middleware-linux = callPackage ../tools/security/cie-middleware-linux { };
 
   cidrgrep = callPackage ../tools/text/cidrgrep { };
@@ -1919,7 +1919,7 @@ with pkgs;
 
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
-  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+  inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
 
@@ -3956,8 +3956,6 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
-  gtklp = callPackage ../tools/misc/gtklp { };
-
   google-amber = callPackage ../tools/graphics/amber {
     inherit (darwin) cctools;
   };
@@ -4406,7 +4404,7 @@ with pkgs;
   buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
 
   charles = charles4;
-  inherit (callPackage ../applications/networking/charles {})
+  inherit (callPackages ../applications/networking/charles {})
     charles3
     charles4
   ;
@@ -4759,7 +4757,7 @@ with pkgs;
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  inherit (callPackage ../tools/misc/coreboot-utils { })
+  inherit (callPackages ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
     ifdtool
@@ -5107,8 +5105,6 @@ with pkgs;
   discocss = callPackage ../tools/misc/discocss { };
 
   disfetch = callPackage ../tools/misc/disfetch { };
-
-  disk-filltest = callPackage ../tools/system/disk-filltest { };
 
   disk-inventory-x = callPackage ../tools/filesystems/disk-inventory-x { };
 
@@ -6878,7 +6874,7 @@ with pkgs;
 
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
-  inherit (callPackage ../applications/networking/remote/citrix-workspace { })
+  inherit (callPackages ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_02_0
     citrix_workspace_23_07_0
     citrix_workspace_23_09_0
@@ -8469,7 +8465,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackage ../tools/filesystems/garage {
+  inherit (callPackages ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
@@ -11136,7 +11132,7 @@ with pkgs;
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
-  inherit (callPackage ../servers/web-apps/netbox { })
+  inherit (callPackages ../servers/web-apps/netbox { })
     netbox netbox_3_5 netbox_3_6;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
@@ -11199,7 +11195,7 @@ with pkgs;
 
   grocy = callPackage ../servers/grocy { };
 
-  inherit (callPackage ../servers/nextcloud {})
+  inherit (callPackages ../servers/nextcloud {})
     nextcloud26 nextcloud27 nextcloud28;
 
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
@@ -11232,7 +11228,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  inherit (callPackage ../applications/networking/cluster/nomad { })
+  inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
     nomad_1_4
     nomad_1_5
@@ -12142,7 +12138,7 @@ with pkgs;
 
   plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
 
-  inherit (callPackage ../servers/plik { })
+  inherit (callPackages ../servers/plik { })
     plik plikd;
 
   plex = callPackage ../servers/plex { };
@@ -13369,8 +13365,6 @@ with pkgs;
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
   sqlboiler = callPackage ../development/tools/sqlboiler { };
-
-  ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshed = callPackage ../tools/networking/sshed { };
 
@@ -18257,20 +18251,20 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_15;
-  ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_16;
+  ansible_2_16 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.15.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-jMU5y41DSa8//ZAccHIvenogOuZCfdrJX/31RqbkFgI=";
+    };
+  }));
   ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
     version = "2.14.13";
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-ThuzNPDDImq0jFme/knNX+A/JdRVi8BsJ0reK6PiV2o=";
-    };
-  }));
-  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.13.10";
-    src = oldAttrs.src.override {
-      inherit version;
-      hash = "sha256-1LQKSq+GDe9sLJ6K1SAfhoPj59fY4hRjxtWepPixLfc=";
     };
   }));
 
@@ -38075,7 +38069,11 @@ with pkgs;
 
   openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
-  openxray = callPackage ../games/openxray { };
+  openxray = callPackage ../games/openxray {
+    # Builds with Clang, but hits an assertion failure unless GCC is used
+    # https://github.com/OpenXRay/xray-16/issues/1224
+    stdenv = gccStdenv;
+  };
 
   orthorobot = callPackage ../games/orthorobot { love = love_0_10; };
 

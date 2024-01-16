@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "3.1.0";
+  version = "3.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8zws2w1rqnSjZyTzjBxKCZp84sjsSiu3GSFQpYVd9HY=";
+    hash = "sha256-S67DWEzEPtmUjVVZB5+vwmebBrKt4nPpCbNYJlSys/U=";
   };
 
   passthru.optional-dependencies = {

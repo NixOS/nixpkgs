@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "2023.12.0";
+  version = "2024.1.0";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-S98Yqi0PEpMF+enP/J3x/kPEe0VhErY8BNphOXmsijg=";
+    hash = "sha256-pR5fgpLcxnqURouandGIHRIfc3sn3QcfpU6mF6AxpeA=";
   };
 in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
@@ -23,10 +23,10 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-eAwj7cWR/ojAMAvYg2/vtNWYTwVBCOnBJPy9mC5Td40=";
+    hash = "sha256-lDDy1b1yfw3nZrwEEkpvh6xYucgn20XHsGACc45eb2w=";
   };
 
-  npmDepsHash = "sha256-VW1pGG/pc2tdSs5+HfypZv9fnQu04qkoFBTJxaYvBZo=";
+  npmDepsHash = "sha256-RR8Ua41D9SXymiPuabOnIab3byu8DR63rOfdeTaQpy4=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -47,6 +47,8 @@ in buildNpmPackage rec {
   npmBuildFlags = [
     "--workspace" "apps/web"
   ];
+
+  npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
     runHook preInstall
