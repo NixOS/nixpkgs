@@ -14,6 +14,8 @@
 , ncurses
 , SDL2
 , bash-completion
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -r $out/lib
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A userspace debugging and diagnostic tool for AMD GPUs";
