@@ -28,9 +28,10 @@
 , systemd
 , dbus
 , writeText
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "tracker";
   version = "3.6.0";
 
@@ -164,6 +165,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
     };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -172,5 +176,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    pkgConfigModules = ["tracker-sparql-3.0" "tracker-testutils-3.0"];
   };
-}
+})
