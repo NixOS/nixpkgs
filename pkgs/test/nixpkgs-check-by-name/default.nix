@@ -26,10 +26,20 @@ let
     nix-store --init
   '';
 
+  fs = lib.fileset;
+
   package =
     rustPlatform.buildRustPackage {
       name = "nixpkgs-check-by-name";
-      src = lib.cleanSource ./.;
+      src = fs.toSource {
+        root = ./.;
+        fileset = fs.unions [
+          ./Cargo.lock
+          ./Cargo.toml
+          ./src
+          ./tests
+        ];
+      };
       cargoLock.lockFile = ./Cargo.lock;
       nativeBuildInputs = [
         nix
