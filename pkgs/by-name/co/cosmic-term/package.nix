@@ -7,34 +7,25 @@
   cosmic-icons,
   just,
   pkg-config,
+  libglvnd,
   libxkbcommon,
-  glib,
-  gtk3,
   libinput,
   fontconfig,
   freetype,
+  xwayland,
   wayland,
-  xorg
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-<<<<<<< HEAD
-  version = "unstable-2024-01-12";
-=======
   version = "0-unstable-2024-01-12";
->>>>>>> b915af606b84e78e44170e954f8fb2c47b45d2e0
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-<<<<<<< HEAD
     rev = "4e0e84a4b11cab5c9bd965e6abd6bca55269db1d";
     hash = "sha256-LqMMgj2Pv80oln2vNRidShyGyxWFeFB01aYqUXsIln0=";
-=======
-    rev = "c5c78b04f0eef9bbeb600272b9fba3db6e0afcc8";
-    hash = "sha256-9TesJrOXCFnc9oJqp9MQN+7MZpV/0pbT0+PeNSAPcdQ=";
->>>>>>> b915af606b84e78e44170e954f8fb2c47b45d2e0
   };
 
   cargoLock = {
@@ -61,13 +52,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
   buildInputs = [
     libxkbcommon
-    xorg.libX11
     libinput
+    libglvnd
     fontconfig
     freetype
+    xorg.libX11
     wayland
-    glib
-    gtk3
   ];
 
   dontUseJustBuild = true;
@@ -81,22 +71,31 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client, which is always dlopen()ed except by the
+  # obscure winit backend.
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-Wl,--pop-state"
+  ];
+
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 wayland libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+      ]} \
+      --prefix PATH : ${lib.makeBinPath [ xwayland ]} \
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-<<<<<<< HEAD
     maintainers = with maintainers; [ ahoneybun nyabinary ];
-=======
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
->>>>>>> b915af606b84e78e44170e954f8fb2c47b45d2e0
     platforms = platforms.linux;
   };
 }
