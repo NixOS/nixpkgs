@@ -23,6 +23,7 @@
 , typst-preview
 , autoPatchelfHook
 , zlib
+, libxcrypt-legacy
 , stdenv
 }:
 
@@ -3215,6 +3216,32 @@ let
           sha256 = "sha256-zWgITdvUS9fq1uT6A4Gs3fSTBwCXoEIQ/tVcC7Eigfs=";
         };
         meta.license = lib.licenses.lgpl3Only;
+      };
+
+      sourcery.sourcery = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sourcery";
+          publisher = "sourcery";
+          version = "1.15.0";
+          sha256 = "sha256-aRUg/MZfMj9ZbuGy5CZGZ1LGHC5KMAVYWQAbe0scHYQ=";
+        };
+
+        postPatch = ''
+          pushd sourcery_binaries/install
+          rm -r win ${if stdenv.isLinux then "mac" else "linux"}
+          popd
+        '';
+
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+        buildInputs = [
+          stdenv.cc.cc.lib
+          libxcrypt-legacy
+        ];
+        meta = {
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.tomasajt ];
+          platforms = [ "x86_64-linux" "x86_64-darwin" ];
+        };
       };
 
       spywhere.guides = buildVscodeMarketplaceExtension {
