@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitLab
 , lib
+, nix-update-script
 , pytestCheckHook
 , python-dateutil
 , pythonAtLeast
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "vcard" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.com/engmark/vcard";
