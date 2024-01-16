@@ -2279,6 +2279,9 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   }));
 
+  # Too strict bound on hspec (<2.11)
+  utf8-light = doJailbreak super.utf8-light;
+
   large-hashable = lib.pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
     utf8-light = null;
