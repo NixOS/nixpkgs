@@ -13,11 +13,7 @@
 } :
 
 let
-  processManagers = if builtins.isList withPm then
-    withPm
-  else
-    builtins.filter builtins.isString (builtins.split ":" withPm);
-  withPm' = if processManagers != [ ] then builtins.concatStringsSep ":" processManagers else "no";
+  withPmStr = if withPm != [ ] then builtins.concatStringsSep ":" withPm else "no";
 in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
@@ -35,7 +31,7 @@ stdenv.mkDerivation  rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-pm=${withPm'}"
+    "--with-pm=${withPmStr}"
   ] ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
     "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
     "FCFLAGS=-fallow-argument-mismatch"
@@ -60,7 +56,7 @@ stdenv.mkDerivation  rec {
 
   meta = with lib; {
     # As far as we know, --with-pmix silently disables all of `--with-pm`
-    broken = pmixSupport && processManagers != [ ];
+    broken = pmixSupport && withPm != [ ];
 
     description = "Implementation of the Message Passing Interface (MPI) standard";
 
