@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , prompt-toolkit
 , pyparsing
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-depdendencies);
 
