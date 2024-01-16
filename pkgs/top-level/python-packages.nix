@@ -9445,6 +9445,8 @@ self: super: with self; {
 
   pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
 
+  pyisemail = callPackage ../development/python-modules/pyisemail { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };

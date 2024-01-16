@@ -6179,7 +6179,6 @@ with pkgs;
 
   optar = callPackage ../tools/graphics/optar { };
 
-  oni2 = callPackage ../applications/editors/oni2 { };
 
   obinskit = callPackage ../applications/misc/obinskit { };
 
@@ -24049,6 +24048,8 @@ with pkgs;
     ch4backend = libfabric;
   };
 
+  mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
+
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
   mtdev = callPackage ../development/libraries/mtdev { };
@@ -31998,6 +31999,8 @@ with pkgs;
   inherit (xorg) xlsfonts;
 
   xrdp = callPackage ../applications/networking/remote/xrdp { };
+
+  pulseaudio-module-xrdp = callPackage ../applications/networking/remote/xrdp/pulseaudio-module-xrdp { };
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
