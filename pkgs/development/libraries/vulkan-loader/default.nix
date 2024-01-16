@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libxcb
-, libXrandr, wayland, moltenvk, vulkan-headers, addOpenGLRunpath }:
+, libXrandr, wayland, moltenvk, vulkan-headers, addOpenGLRunpath
+, testers}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "vulkan-loader";
   version = "1.3.268.0";
 
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
   meta = with lib; {
     description = "LunarG Vulkan loader";
     homepage    = "https://www.lunarg.com";
@@ -41,5 +47,8 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
     broken = (version != vulkan-headers.version);
+    pkgConfigModules = [
+      "vulkan"
+    ];
   };
-}
+})
