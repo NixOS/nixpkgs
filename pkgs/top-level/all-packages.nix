@@ -847,6 +847,7 @@ with pkgs;
 
   octodns-providers = recurseIntoAttrs {
     bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
+    gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
   };
