@@ -18203,9 +18203,7 @@ with pkgs;
 
   publii = callPackage ../development/web/publii {};
 
-  umr = callPackage ../development/misc/umr {
-    llvmPackages = llvmPackages_14;
-  };
+  umr = callPackage ../development/misc/umr { };
 
   refurb = callPackage ../development/tools/refurb { };
 
