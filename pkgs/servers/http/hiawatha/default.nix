@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
+, callPackage
 
 , cmake
 , ninja
@@ -16,14 +17,14 @@
 , enableToolkit   ? true     # The URL Toolkit.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hiawatha";
   version = "10.11";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "10a7dqj37zrbmgnhwsw0mqm5x25kasl8p95g01rzakviwxkdrkid";
   };
 
@@ -46,12 +47,18 @@ stdenv.mkDerivation rec {
     ( if enableToolkit   then "-DENABLE_TOOLKIT=on"     else "-DENABLE_TOOLKIT=off"     )
   ];
 
+  passthru.tests.serve-static-files = callPackage ./test.nix {
+    hiawatha = finalAttrs.finalPackage;
+    inherit enableTls;
+  };
+
   meta = with lib; {
     homepage = "https://www.hiawatha-webserver.org";
     description = "Advanced and secure webserver";
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
+    mainProgram = "hiawatha";
     maintainers = [];
   };
 
-}
+})
