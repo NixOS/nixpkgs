@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
         "fs_event_watch_dir_recursive" "fs_event_watch_file"
         "fs_event_watch_file_current_dir" "fs_event_watch_file_exact_path"
         "process_priority" "udp_create_early_bad_bind"
+    ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+        # fail on macos < 10.15 (starting in libuv 1.47.0)
+        "fs_write_alotof_bufs_with_offset" "fs_write_multiple_bufs" "fs_read_bufs"
     ] ++ lib.optionals stdenv.isAarch32 [
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
