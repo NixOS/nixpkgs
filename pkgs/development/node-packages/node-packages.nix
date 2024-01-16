@@ -99638,10 +99638,10 @@ in
   "@withgraphite/graphite-cli" = nodeEnv.buildNodePackage {
     name = "_at_withgraphite_slash_graphite-cli";
     packageName = "@withgraphite/graphite-cli";
-    version = "1.0.9";
+    version = "1.1.2";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-1.0.9.tgz";
-      sha512 = "RQj9MouC+o746pXW7p9IvYg2iehYQsd1xxi42BCR5MvSEPf7TQNmmAuxDsB1pthkL40e+bXktitXUtRFeKg/9g==";
+      url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-1.1.2.tgz";
+      sha512 = "nkD9JYrfOtG+xYO1lvMKCRNZ0G2tF4Zv7AcA9OxLYZSr7kRQRfYjmmieiTtju7jrhorMrFfdg5yh0lwVxM7eow==";
     };
     dependencies = [
       sources."ansi-regex-5.0.1"
