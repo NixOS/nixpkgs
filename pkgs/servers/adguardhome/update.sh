@@ -13,8 +13,11 @@ version=$(jq -r '.tag_name' <<<"$latest_release")
 
 echo "got version $version"
 
-schema_version=$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/home/upgrade.go" \
-    | grep -Po '(?<=const currentSchemaVersion = )[[:digit:]]+$')
+
+# this is already changed in current master, next release will probably have to get schema from
+# https://github.com/AdguardTeam/AdGuardHome/blob/master/internal/configmigrate/configmigrate.go
+schema_version="$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/confmigrate/migrator.go" \
+    | grep -Po '(?<=const LastSchemaVersion uint = )[[:digit:]]+$')"
 
 echo "got schema_version $schema_version"
 
