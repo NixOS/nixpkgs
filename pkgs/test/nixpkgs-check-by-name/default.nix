@@ -6,6 +6,7 @@
   clippy,
   mkShell,
   makeWrapper,
+  runCommand,
 }:
 let
   runtimeExprPath = ./src/eval.nix;
@@ -52,6 +53,19 @@ let
         env.NIXPKGS_LIB_PATH = toString nixpkgsLibPath;
         inputsFrom = [ package ];
       };
+
+      # Tests the tool on the current Nixpkgs tree, this is a good sanity check
+      passthru.tests.nixpkgs = runCommand "test-nixpkgs-check-by-name" {
+        nativeBuildInputs = [
+          package
+          nix
+        ];
+        nixpkgsPath = lib.cleanSource ../../..;
+      } ''
+        ${initNix}
+        nixpkgs-check-by-name --base "$nixpkgsPath" "$nixpkgsPath"
+        touch $out
+      '';
     };
 in
 package
