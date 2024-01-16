@@ -1288,6 +1288,7 @@
   a-n-n-a-l-e-e = {
     github = "a-n-n-a-l-e-e";
     githubId = 150648636;
+    matrix = "@a-n-n-a-l-e-e:matrix.org";
     name = "annalee";
   };
   anoa = {
