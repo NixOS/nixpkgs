@@ -11291,6 +11291,8 @@ self: super: with self; {
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
+  pysnmpcrypto = callPackage ../development/python-modules/pysnmpcrypto { };
+
   pysnmp-pyasn1 = callPackage ../development/python-modules/pysnmp-pyasn1 { };
 
   pysnmp-pysmi = callPackage ../development/python-modules/pysnmp-pysmi { };
