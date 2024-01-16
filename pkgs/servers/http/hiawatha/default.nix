@@ -4,7 +4,7 @@
 
 , cmake
 , ninja
-, mbedtls_2
+, mbedtls
 , libxcrypt
 
 , enableCache     ? true     # Internal cache support.
@@ -19,17 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiawatha";
-  version = "10.11";
+  version = "11.5";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
     rev = "v${finalAttrs.version}";
-    sha256 = "10a7dqj37zrbmgnhwsw0mqm5x25kasl8p95g01rzakviwxkdrkid";
+    hash = "sha256-kswVBVL/QUQmCwH74qWwSwLz4uwDymuHIr8NokrrgEM=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ mbedtls_2 libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
+  buildInputs = [ mbedtls libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace SETUID ""
