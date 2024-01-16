@@ -10,6 +10,7 @@
 , CoreServices
 , Security
 , zig
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -63,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Cargo subcommand to help you work with AWS Lambda";
