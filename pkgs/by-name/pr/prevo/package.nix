@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
+{ lib, symlinkJoin, man, prevo-tools, prevo-data, makeWrapper }:
 
 symlinkJoin rec {
   name = "prevo-${version}";
@@ -10,18 +10,20 @@ symlinkJoin rec {
 
   postBuild = ''
     wrapProgram $out/bin/prevo \
-      --prefix XDG_DATA_DIRS : "${prevo-data}/share"
+      --prefix PATH ":" "${lib.makeBinPath [ man ]}" \
+      --suffix XDG_DATA_DIRS : "${prevo-data}/share" \
+
   '';
 
-  meta = with lib; {
+  meta = {
     description = "offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.
     '';
     homepage = "https://github.com/bpeel/prevodb";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.das-g ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "prevo";
+    maintainers = with lib.maintainers; [ das-g ehmry ];
   };
 }
