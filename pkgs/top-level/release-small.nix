@@ -66,7 +66,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   idutils = all;
   inetutils = linux;
   iputils = linux;
-  kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
   lapack-reference = linux;
