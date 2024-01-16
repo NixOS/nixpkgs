@@ -19275,6 +19275,16 @@
       fingerprint = "50D4 8796 0B86 3F05 4B6A  12F9 7426 06DE 766A C60C";
     }];
   };
+  unidealisticraccoon = {
+    name = "Unidealistic Raccoon";
+    email = "me@ursuslotor.xyz";
+    matrix = "@unidealisticraccoon:gitter.im";
+    github = "UnidealisticRaccoon";
+    githubId = 147833293;
+    keys = [{
+      fingerprint = "2764 AA78 791D 69DF 7E89  16D6 4080 2D09 19B2 FB7D";
+    }];
+  };
   uniquepointer = {
     email = "uniquepointer@mailbox.org";
     matrix = "@uniquepointer:matrix.org";
