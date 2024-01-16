@@ -2,6 +2,7 @@
 , clangStdenv
 , fetchFromGitHub
 , fetchpatch
+, fetchurl
 , runCommand
 , libuuid
 , python3
@@ -40,6 +41,19 @@ edk2 = stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
       hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+    })
+    (fetchurl { # Patch format does not play well with fetchpatch, it should be fine this is a static attachment in a ticket
+      name = "CVE-2023-45229_CVE-2023-45230_CVE-2023-45231_CVE-2023-45232_CVE-2023-45233_CVE-2023-45234_CVE-2023-45235.patch";
+      url = "https://bugzilla.tianocore.org/attachment.cgi?id=1457";
+      hash = "sha256-CF41lbjnXbq/6DxMW6q1qcLJ8WAs+U0Rjci+jRwJYYY=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-36764.patch";
+      url = "https://bugzilla.tianocore.org/attachment.cgi?id=1436";
+      hash = "sha256-czku8DgElisDv6minI67nNt6BS+vH6txslZdqiGaQR4=";
+      excludes = [
+        "SecurityPkg/Test/SecurityPkgHostTest.dsc"
+      ];
     })
   ];
 
