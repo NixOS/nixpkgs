@@ -251,7 +251,10 @@ rec {
             inherit (drv.${outputName}) type outputName;
             outputSpecified = true;
             # unsafeDiscardOutputDependency: see below
-            derivation = assert condition; drv.${outputName}.derivation or (builtins.unsafeDiscardOutputDependency drv.${outputName}.drvPath);
+            derivation = assert condition; drv.${outputName}.derivation or {
+              # NOTE: keep lean and align with https://github.com/NixOS/nix/issues/9774
+              path = builtins.unsafeDiscardOutputDependency drv.${outputName}.drvPath;
+            };
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           } //
@@ -283,7 +286,10 @@ rec {
       # - `nix build foo.derivation` does not realise anything, because it only
       #   needs to instantiate a normal `.drv` closure, and that already constitutes
       #   a valid store path.
-      derivation = assert condition; drv.derivation or (builtins.unsafeDiscardOutputDependency drv.drvPath);
+      derivation = assert condition; drv.derivation or {
+        # NOTE: keep lean and align with https://github.com/NixOS/nix/issues/9774
+        path = builtins.unsafeDiscardOutputDependency drv.drvPath;
+      };
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
