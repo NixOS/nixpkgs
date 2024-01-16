@@ -77,12 +77,21 @@ let
     else
       [ ];
 
+  # A list optionally containing the `aliases.nix` file from the test case as an overlay
+  # But only if config.allowAliases is not false
+  optionalAliasesOverlay =
+    if (config.allowAliases or true) && builtins.pathExists (root + "/aliases.nix") then
+      [ (import (root + "/aliases.nix")) ]
+    else
+      [ ];
+
   # All the overlays in the right order, including the user-supplied ones
   allOverlays =
     [
       autoCalledPackages
     ]
     ++ optionalAllPackagesOverlay
+    ++ optionalAliasesOverlay
     ++ overlays;
 
   # Apply all the overlays in order to the base fixed-point function pkgsFun
