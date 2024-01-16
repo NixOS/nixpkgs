@@ -795,6 +795,7 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
+
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
     # where non-GNU coreutils are used by default.
@@ -805,6 +806,19 @@ self: super: builtins.intersectAttrs super {
     buildTools = [
       pkgs.buildPackages.makeWrapper
     ] ++ (drv.buildTools or []);
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
+
+    # Install man pages which is no longer done by Setup.hs
+    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
+    # and run that, too.
+    postInstall = drv.postInstall or "" + ''
+      make install-mans "DESTDIR=$out" PREFIX=
+    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;

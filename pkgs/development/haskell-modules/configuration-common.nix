@@ -365,16 +365,7 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-
-    # Git annex provides a restricted login shell. Setting
-    # passthru.shellPath here allows a user's login shell to be set to
-    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
-    # https://git-annex.branchable.com/git-annex-shell/
-    passthru.shellPath = "/bin/git-annex-shell";
-  }) (super.git-annex.overrideScope (self: _: {
-    # https://github.com/haskell-pkg-janitors/unix-compat/issues/3
-    unix-compat = self.unix-compat_0_6;
-  }));
+  }) super.git-annex;
 
   # Too strict bounds on servant
   # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
