@@ -44,6 +44,11 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
   cuda_cudart = prev.cuda_cudart.overrideAttrs (
     prevAttrs: {
+      # Remove once cuda-find-redist-features has a special case for libcuda
+      outputs =
+        prevAttrs.outputs
+        ++ lists.optionals (!(builtins.elem "stubs" prevAttrs.outputs)) [ "stubs" ];
+
       allowFHSReferences = false;
 
       # The libcuda stub's pkg-config doesn't follow the general pattern:
@@ -63,6 +68,14 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]] ; then
             ln -s libcuda.so lib/stubs/libcuda.so.1
           fi
+        '';
+
+      postFixup =
+        prevAttrs.postFixup or ""
+        + ''
+          moveToOutput lib/stubs "$stubs"
+          ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
+          ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
         '';
     }
   );
