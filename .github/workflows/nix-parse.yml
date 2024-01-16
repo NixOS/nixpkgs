@@ -19,7 +19,7 @@ jobs:
       run: |
         gh api \
           repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
-          | jq '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
+          | jq --raw-output '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
           > "$HOME/changed_files"
         if [[ -s "$HOME/changed_files" ]]; then
           echo "CHANGED_FILES=$HOME/changed_files" > "$GITHUB_ENV"
