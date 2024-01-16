@@ -9,6 +9,7 @@ let
   in {
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
+    lomiri-sounds = callPackage ./data/lomiri-sounds { };
     suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
     #### Development tools / libraries
