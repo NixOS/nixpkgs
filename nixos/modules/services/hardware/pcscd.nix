@@ -46,7 +46,7 @@ in
   config = mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ package.out ];
     systemd.packages = [ (getBin package) ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
