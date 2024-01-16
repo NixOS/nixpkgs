@@ -182,5 +182,7 @@ self: super: {
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
   # for these sorts of situations even on 9.2 and 9.4).
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
+  # TODO(@sternenseemann): after ghc963, with ghc964 these can be disabled
   tls = if pkgs.stdenv.hostPlatform.isAarch64 then self.forceLlvmCodegenBackend super.tls else super.tls;
+  mmark = if pkgs.stdenv.hostPlatform.isAarch64 then self.forceLlvmCodegenBackend super.mmark else super.mmark;
 }
