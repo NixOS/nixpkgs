@@ -33,10 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/pavdmyt/yaspin/pull/212
-    substituteInPlace pyproject.toml \
-      --replace 'termcolor-whl = "1.1.2"' 'termcolor = "*"'
+  # tests assert for \033 which gets turned off in termcolor when TERM dumb is used which is used by nix
+  preCheck = ''
+    export FORCE_COLOR=1
   '';
 
   pythonImportsCheck = [
