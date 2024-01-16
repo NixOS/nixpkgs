@@ -6,12 +6,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
   version = "0.10.2";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ep1cman";
-    repo = pname;
+    repo = "unifi-protect-backup";
     rev = "refs/tags/v${version}";
     hash = "sha256-EQCI7TkkOhDASMo5yKfAca/gB4ayyPOaDVK6WEaAIgc=";
   };
@@ -30,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocron
+    aiolimiter
     aiorun
     aiosqlite
     apprise
