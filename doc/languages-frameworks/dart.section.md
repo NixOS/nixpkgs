@@ -103,6 +103,9 @@ flutter.buildFlutterApplication {
   pname = "firmware-updater";
   version = "unstable-2023-04-30";
 
+  # To build for the Web, use the flutterHostPlatform argument.
+  # flutterHostPlatform = "web";
+
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
