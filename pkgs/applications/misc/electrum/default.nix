@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "4.4.6";
+  version = "4.5.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.{v}"
@@ -29,7 +29,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-nd435CgF0a6JOni/OXcxkciVCR1aQqzfGfDSg1gPQ8Q=";
+    sha256 = "sha256-IEKuHUlH+dg+8w+n7XV7hdDOPOFZ/lpUsIlYldwR44Y=";
 
     postFetch = ''
       mv $out ./all
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-BxxC1xVKToUjgBo4mEeK9Tdhbd/+doHcTTJsXDtaELg=";
+    sha256 = "sha256-s4FH8FtPg4wepU/5XI062dAN9fCYR1xJGwrxftCSKzw=";
   };
 
   postUnpack = ''
@@ -73,6 +73,7 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     certifi
+    jsonpatch
     # plugins
     btchip-python
     ledger-bitcoin
