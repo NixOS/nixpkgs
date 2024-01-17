@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perl
-, enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, xorg
+, imlib2
+, libjpeg
+, libpng
+, curl
+, libexif
+, jpegexiforient
+, perl
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "feh";
   version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "derf";
-    repo = pname;
-    rev = version;
+    repo = "feh";
+    rev = finalAttrs.version;
     hash = "sha256-378rhZhpcua3UbsY0OcGKGXdMIQCuG84YjJ9vfJhZVs=";
   };
 
@@ -21,9 +31,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libXt xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}" "exif=1"
+    "PREFIX=${placeholder "out"}"
+    "exif=1"
   ] ++ lib.optional stdenv.isDarwin "verscmp=0"
-    ++ lib.optional enableAutoreload "inotify=1";
+  ++ lib.optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
@@ -44,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "feh";
   };
-}
+})
