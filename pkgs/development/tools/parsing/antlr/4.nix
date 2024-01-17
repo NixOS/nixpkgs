@@ -96,6 +96,18 @@ let
 
         cmakeFlags = extraCppCmakeFlags;
 
+        # Fix CMake paths caused by multiple outputs
+        preFixup = lib.optionalString
+          # v4.9 has a bug where the files are not installed
+          (builtins.compareVersions version "4.10" != -1
+          || builtins.compareVersions version "4.9" == -1)
+          ''
+            subdir="antlr4${lib.optionalString (builtins.compareVersions version "4.8" != 0) "-runtime"}"
+            substituteInPlace $out/lib/cmake/$subdir/antlr4-runtime-config.cmake \
+              --replace $dev/include/antlr4-runtime $\{PACKAGE_PREFIX_DIR}/include/antlr4-runtime \
+              --replace $\{PACKAGE_PREFIX_DIR}/lib $out/lib
+          '';
+
         meta = with lib; {
           description = "C++ target for ANTLR 4";
           homepage = "https://www.antlr.org/";
