@@ -9,6 +9,14 @@ let
     mkIf
     types
     ;
+
+  Step = lib.types.submodule {
+    options.script = lib.mkOption { type = types.str; };
+    options.enable = lib.mkOption {
+      type = types.bool;
+      default = true;
+    };
+  };
 in
 {
   name = "slurm";
@@ -36,6 +44,10 @@ in
           type = types.str;
           internal = true;
           default = "${toString testCfg.firstNodeId}-${toString testCfg.lastNodeId}";
+        };
+        steps = mkOption {
+          type = types.attrsOf Step;
+          description = "Lexicographically-ordered parts of the testScript";
         };
       };
       config.nodes =
@@ -117,6 +129,10 @@ in
                   nativeBuildInputs = [ cmake ];
                   buildInputs = [ mpi ];
 
+                  passthru = {
+                    inherit mpi;
+                  };
+
                   meta.mainProgram = "cpi";
                 }
               )
@@ -172,6 +188,8 @@ in
           };
 
           environment.systemPackages = [
+            (lib.getBin pkgs.mpi) # mpiexec
+            (pkgs.writeShellScriptBin "mpirun-cpi" "${lib.getExe' pkgs.mpi "mpirun"} ${lib.getExe nodeCfg.cpi.package}")
             nodeCfg.mpitest.package
             nodeCfg.cpi.package
           ];
@@ -190,70 +208,95 @@ in
     dbd.slurmTestNode.roles = [ "dbd" ];
   };
 
-  testScript = ''
-  from sys import stderr
+  slurmTest.steps = {
+    "20-start-all".script = ''
+      from sys import stderr
+      start_all()
+    '';
+    "21-broken-startup".script = ''
+      # The automatic startup of munge, slurmd, slurmctld, and slurmdbd is mostly
+      # broken. E.g. slurmctld errors out if it can't reach slurmdbd immediately,
+      # etc. They appear to work in practice because they are restarted by systemd.
+      #
+      # We'll fix this in the later commits
+      with subtest("Demonstrate broken startup"):
+          try:
+            # Fails with `unit "slurmd.service" is inactive and there are no pending jobs'
+            submit.wait_for_unit("slurmd.service")
+          except Exception as e:
+            print(e, file=stderr)
+          else:
+            raise RuntimeError("slurmd.service no longer fails to start")
 
-  start_all()
+          submit.fail("srun -N 3 --mpi=pmix mpitest | grep size=3")
+    '';
 
-  # The automatic startup of munge, slurmd, slurmctld, and slurmdbd is mostly
-  # broken. E.g. slurmctld errors out if it can't reach slurmdbd immediately,
-  # etc. They appear to work in practice because they are restarted by systemd.
-  #
-  # We'll fix this in the later commits
-  with subtest("Demonstrate broken startup"):
-      try:
-        # Fails with `unit "slurmd.service" is inactive and there are no pending jobs'
-        submit.wait_for_unit("slurmd.service")
-      except Exception as e:
-        print(e, file=stderr)
-      else:
-        raise RuntimeError("slurmd.service no longer fails to start")
+    "22-systemctl-restart".script = ''
+      # Make sure DBD is up after DB initialzation
+      with subtest("can_start_slurmdbd"):
+          dbd.succeed("systemctl restart slurmdbd")
+          dbd.wait_for_unit("slurmdbd.service")
+          dbd.wait_for_open_port(6819)
 
-      submit.fail("srun -N 3 --mpi=pmix mpitest | grep size=3")
+      # there needs to be an entry for the current
+      # cluster in the database before slurmctld is restarted
+      with subtest("add_account"):
+          control.succeed("sacctmgr -i add cluster default")
+          # check for cluster entry
+          control.succeed("sacctmgr list cluster | awk '{ print $1 }' | grep default")
 
-  # Make sure DBD is up after DB initialzation
-  with subtest("can_start_slurmdbd"):
-      dbd.succeed("systemctl restart slurmdbd")
-      dbd.wait_for_unit("slurmdbd.service")
-      dbd.wait_for_open_port(6819)
+      with subtest("can_start_slurmctld"):
+          control.succeed("systemctl restart slurmctld")
+          control.wait_for_unit("slurmctld.service")
 
-  # there needs to be an entry for the current
-  # cluster in the database before slurmctld is restarted
-  with subtest("add_account"):
-      control.succeed("sacctmgr -i add cluster default")
-      # check for cluster entry
-      control.succeed("sacctmgr list cluster | awk '{ print $1 }' | grep default")
+      with subtest("can_start_slurmd"):
+          for node in [node1, node2, node3]:
+              node.succeed("systemctl restart slurmd.service")
+              node.wait_for_unit("slurmd")
+    '';
 
-  with subtest("can_start_slurmctld"):
-      control.succeed("systemctl restart slurmctld")
-      control.wait_for_unit("slurmctld.service")
+    # Test that the cluster works and can distribute jobs;
+    "23-srun-hostname".script = ''
+      with subtest("run_distributed_command"):
+          # Run `hostname` on 3 nodes of the partition (so on all the 3 nodes).
+          # The output must contain the 3 different names
+          submit.succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq")
 
-  with subtest("can_start_slurmd"):
-      for node in [node1, node2, node3]:
-          node.succeed("systemctl restart slurmd.service")
-          node.wait_for_unit("slurmd")
+          with subtest("check_slurm_dbd"):
+              # find the srun job from above in the database
+              control.succeed("sleep 5")
+              control.succeed("sacct | grep hostname")
+    '';
+    "30-srun-pmix".script = ''
+      with subtest("Test PMIx (verifies the ranks and world size, but performs no actual communication)"):
+          submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
+    '';
+    # Another failure case to be fixed
+    "30-srun-pmix-cpi-asan".script = ''
+      with subtest("Demonstrate that pmix breaks with address sanitizers"):
+          submit.fail("srun -N 3 --mpi=pmix cpi-asan")
+    '';
+    "30-srun-cpi-asan".enable = lib.mkDefault false; # openmpi not built with pmi2.h
+    "30-srun-cpi-asan".script = ''
+      with subtest("Demonstrate that cpi w/o pmix succeeds satisfies asan"):
+          submit.succeed("srun -N 3 cpi-asan")
+    '';
+    # Works without asan though
+    "30-srun-cpi".script = ''
+      with subtest("Run the cpi example from mpich (test communication)"):
+          submit.succeed("srun -N 3 --mpi=pmix cpi")
+    '';
 
-  # Test that the cluster works and can distribute jobs;
-
-  with subtest("run_distributed_command"):
-      # Run `hostname` on 3 nodes of the partition (so on all the 3 nodes).
-      # The output must contain the 3 different names
-      submit.succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq")
-
-      with subtest("check_slurm_dbd"):
-          # find the srun job from above in the database
-          control.succeed("sleep 5")
-          control.succeed("sacct | grep hostname")
-
-  with subtest("Test PMIx (verifies the ranks and world size, but performs no actual communication)"):
-      submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
-
-  # Another failure case to be fixed
-  with subtest("Demonstrate that cpi breaks with address sanitizers"):
-      submit.fail("srun -N 3 --mpi=pmix cpi-asan")
-
-  # Works without asan though
-  with subtest("Run the cpi example from mpich (test communication)"):
-      submit.succeed("srun -N 3 --mpi=pmix cpi")
-  '';
+    # To be used with the overrides, e.g. by mpich
+    "30-mpirun-cpi".enable = lib.mkDefault false;
+    "30-mpirun-cpi".script = ''
+      with subtest("Run the cpi example from mpich (test communication)"):
+          submit.succeed("sbatch --wait -n 3 mpirun-cpi")
+    '';
+  };
+  testScript = lib.pipe config.slurmTest.steps [
+    (lib.filterAttrs (name: { enable, ... }: enable))
+    lib.attrValues
+    (lib.concatMapStringsSep "\n" ({ script, ... }: script))
+  ];
 }
