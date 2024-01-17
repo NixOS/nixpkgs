@@ -265,7 +265,7 @@ in
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
     system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
-      (mkBefore [ "mdns_minimal [NOTFOUND=return]" ]) # before resolve
+      (mkBefore [ "mdns4_minimal [NOTFOUND=return] mdns6_minimal [NOTFOUND=return]" ]) # before resolve
       (mkAfter [ "mdns" ]) # after dns
     ]);
 
