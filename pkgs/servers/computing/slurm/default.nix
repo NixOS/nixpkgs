@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
+
+    # Autoconf does not support split packages for pmix (libs and headers).
+    # Fix the path to the pmix libraries, so dlopen can find it.
+    substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
+        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+
   '' + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
       "--with-yaml=${lib.getDev libyaml}"
       "--with-ofed=${lib.getDev rdma-core}"
       "--sysconfdir=/etc/slurm"
-      "--with-pmix=${pmix}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
       "--without-rpath" # Required for configure to pick up the right dlopen path
     ] ++ (optional enableGtk2  "--disable-gtktest")
