@@ -6,10 +6,26 @@
   clippy,
   mkShell,
   makeWrapper,
+  runCommand,
 }:
 let
   runtimeExprPath = ./src/eval.nix;
   nixpkgsLibPath = ../../../lib;
+
+  # Needed to make Nix evaluation work inside nix builds
+  initNix = ''
+    export TEST_ROOT=$(pwd)/test-tmp
+    export NIX_CONF_DIR=$TEST_ROOT/etc
+    export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
+    export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
+    export NIX_STATE_DIR=$TEST_ROOT/var/nix
+    export NIX_STORE_DIR=$TEST_ROOT/store
+
+    # Ensure that even if tests run in parallel, we don't get an error
+    # We'd run into https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
+    nix-store --init
+  '';
+
   package =
     rustPlatform.buildRustPackage {
       name = "nixpkgs-check-by-name";
@@ -22,21 +38,8 @@ let
         makeWrapper
       ];
       env.NIX_CHECK_BY_NAME_EXPR_PATH = "${runtimeExprPath}";
-      # Needed to make Nix evaluation work inside the nix build
-      preCheck = ''
-        export TEST_ROOT=$(pwd)/test-tmp
-        export NIX_CONF_DIR=$TEST_ROOT/etc
-        export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
-        export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
-        export NIX_STATE_DIR=$TEST_ROOT/var/nix
-        export NIX_STORE_DIR=$TEST_ROOT/store
-
-        export NIXPKGS_LIB_PATH=${nixpkgsLibPath}
-
-        # Ensure that even if tests run in parallel, we don't get an error
-        # We'd run into https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
-        nix-store --init
-      '';
+      env.NIXPKGS_LIB_PATH = "${nixpkgsLibPath}";
+      preCheck = initNix;
       postCheck = ''
         cargo fmt --check
         cargo clippy -- -D warnings
@@ -50,6 +53,19 @@ let
         env.NIXPKGS_LIB_PATH = toString nixpkgsLibPath;
         inputsFrom = [ package ];
       };
+
+      # Tests the tool on the current Nixpkgs tree, this is a good sanity check
+      passthru.tests.nixpkgs = runCommand "test-nixpkgs-check-by-name" {
+        nativeBuildInputs = [
+          package
+          nix
+        ];
+        nixpkgsPath = lib.cleanSource ../../..;
+      } ''
+        ${initNix}
+        nixpkgs-check-by-name --base "$nixpkgsPath" "$nixpkgsPath"
+        touch $out
+      '';
     };
 in
 package
