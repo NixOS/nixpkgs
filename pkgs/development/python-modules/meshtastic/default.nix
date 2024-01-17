@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "meshtastic";
   version = "2.2.18";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,6 +32,10 @@ buildPythonPackage rec {
     hash = "sha256-r3Hs3oD6CyYa/Ew0wMiLeUj/R4aa8Wc/W65EXMrPGmw=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     dotmap
     pexpect
@@ -41,8 +45,8 @@ buildPythonPackage rec {
     pyqrcode
     pyserial
     pyyaml
-    setuptools
     requests
+    setuptools
     tabulate
     timeago
   ];
