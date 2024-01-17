@@ -10,7 +10,7 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "HyperKitty";
   version = "1.3.7";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +18,6 @@ buildPythonPackage rec {
   };
 
   patches = [
-    ./0001-Disable-broken-test_help_output-testcase.patch
     (fetchpatch {
       url = "https://gitlab.com/mailman/hyperkitty/-/commit/5bb394662882bfc73c3e877458da44343aa06922.patch";
       hash = "sha256-9vcY6nu3txDftH6aYpdh9qSrLzZceGjVFxuD1Ux18gw=";
@@ -28,9 +27,6 @@ buildPythonPackage rec {
   postPatch = ''
     # isort is a development dependency
     sed -i '/isort/d' setup.py
-    # Fix mistune imports for mistune >= 2.0.0
-    # https://gitlab.com/mailman/hyperkitty/-/merge_requests/379
-    sed -i 's/mistune.scanner/mistune.util/' hyperkitty/lib/renderer.py
   '';
 
   propagatedBuildInputs = [
