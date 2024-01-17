@@ -47,7 +47,7 @@ in buildPythonPackage rec {
     ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
-  preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
+  preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
     cython
