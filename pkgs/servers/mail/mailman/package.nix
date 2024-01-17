@@ -61,9 +61,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
-
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
