@@ -26838,6 +26838,8 @@ with pkgs;
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
+  unFTP = callPackage ../servers/unftp { };
+
   # PulseAudio daemons
 
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
