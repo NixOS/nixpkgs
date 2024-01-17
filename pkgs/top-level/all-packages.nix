@@ -23368,6 +23368,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  libplacebo_5 = callPackage ../development/libraries/libplacebo/5.nix { };
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
   libpng = callPackage ../development/libraries/libpng { };
