@@ -24,6 +24,12 @@ let
       inherit sha256;
     };
 
+    postPatch = ''
+      # Starting in 0.9.x series, Garage is using mold in local development
+      # and this leaks in this packaging, we remove it to use the default linker.
+      rm .cargo/config.toml || true
+    '';
+
     inherit cargoSha256;
 
     nativeBuildInputs = [ protobuf pkg-config ];
@@ -90,20 +96,13 @@ rec {
 
   garage_0_8 = garage_0_8_5;
 
-  garage_0_9_0 = (generic {
-    version = "0.9.0";
-    sha256 = "sha256-Bw7ohMAfnbkhl43k8KxYu2OJd5689PqDS0vAcgU09W8=";
-    cargoSha256 = "sha256-JqCt/8p24suQMRzEyTE2OkbzZCGUDLuGq32kCq3eZ7o=";
-  }).overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      (fetchpatch {
-        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/c7f5dcd953ff1fdfa002a8bccfb43eafcc6fddd4.patch";
-        sha256 = "sha256-q7E6gtPjnj5O/K837LMP6LPEFcgdkifxRFrYzBuqkk0=";
-      })
-    ];
-  });
+  garage_0_9_1 = generic {
+    version = "0.9.1";
+    sha256 = "sha256-AXLaifVmZU4j5D/wKn/0TzhjHZBzZW1+tMyhsAo2eBU=";
+    cargoSha256 = "sha256-4/+OsM73TroBB1TGqare2xASO5KhqVyNkkss0Y0JZXg=";
+  };
 
-  garage_0_9 = garage_0_9_0;
+  garage_0_9 = garage_0_9_1;
 
   garage = garage_0_9;
 }
