@@ -46,6 +46,18 @@ let
         echo 'runAsRoot has run.'
       '';
     };
+
+  chownTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "chown-test";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        touch /testfile
+        chown 12345:12345 /testfile
+      '';
+      config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -549,6 +561,12 @@ in {
         docker.succeed(
             "${examples.nix-shell-build-derivation} | docker load",
             "docker run --rm -it nix-shell-build-derivation"
+        )
+
+    with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
+        docker.succeed(
+            "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
 })
