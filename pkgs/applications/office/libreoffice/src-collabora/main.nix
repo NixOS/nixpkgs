@@ -1,8 +1,9 @@
 {fetchFromGitHub, ...}:
 fetchFromGitHub {
-  hash = "sha256-W+sYXH8cxiFoEHCyg4yTK78JrPoVPsPXi88WtcUuovs=";
+  hash = "sha256-UdQVUICPjHuz+dUvQoKuPZFy8NZ1AaZOOiV8/Rn21Fw=";
   owner = "LibreOffice";
   repo = "core";
-  rev = "058f614e11f900235be7419e98030535979436de";
+  rev = "refs/tags/cp-23.05.7-2"; #23.05.7.2
   fetchSubmodules = true;
+
 }
