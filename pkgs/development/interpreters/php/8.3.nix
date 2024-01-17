@@ -1,4 +1,4 @@
-{ callPackage, ... }@_args:
+{ callPackage, lib, stdenv, ... }@_args:
 
 let
   base = callPackage ./generic.nix (_args // {
@@ -17,7 +17,6 @@ base.withExtensions ({ all, ... }: with all; ([
   filter
   ftp
   gd
-  gettext
   gmp
   iconv
   imap
@@ -26,7 +25,6 @@ base.withExtensions ({ all, ... }: with all; ([
   mbstring
   mysqli
   mysqlnd
-  opcache
   openssl
   pcntl
   pdo
@@ -49,4 +47,10 @@ base.withExtensions ({ all, ... }: with all; ([
   xmlwriter
   zip
   zlib
-]))
+] ++
+  # Broken for Musl: https://github.com/NixOS/nixpkgs/issues/281584
+  lib.optionals stdenv.hostPlatform.isMusl [
+    gettext
+    opcache
+  ]
+))
