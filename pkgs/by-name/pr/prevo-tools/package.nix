@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash src/prevo-completion
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "CLI tools for the offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
       database for this application or for the Android app of the same name.
     '';
     homepage = "https://github.com/bpeel/prevodb";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.das-g ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "prevo";
+    maintainers = with lib.maintainers; [ das-g ehmry ];
+    platforms = lib.platforms.unix;
   };
 }

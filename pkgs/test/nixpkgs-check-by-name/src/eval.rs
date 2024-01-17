@@ -168,14 +168,23 @@ pub fn check_values(
                         // so the UsesByName ratchet is already as tight as it can be
                         NonAttributeSet => Success(Tight),
                         NonCallPackage => Success(Tight),
-                        // This is an odd case when _internalCallByNamePackageFile is used to define a package.
+                        // This is the case when the `pkgs/by-name`-internal _internalCallByNamePackageFile
+                        // is used for a package outside `pkgs/by-name`
                         CallPackage(CallPackageInfo {
                             call_package_variant: Auto,
                             ..
-                        }) => NixpkgsProblem::InternalCallPackageUsed {
-                            attr_name: attribute_name.clone(),
+                        }) => {
+                            // With the current detection mechanism, this also triggers for aliases
+                            // to pkgs/by-name packages, and there's no good method of
+                            // distinguishing alias vs non-alias.
+                            // Using `config.allowAliases = false` at least currently doesn't work
+                            // because there's nothing preventing people from defining aliases that
+                            // are present even with that disabled.
+                            // In the future we could kind of abuse this behavior to have better
+                            // enforcement of conditional aliases, but for now we just need to not
+                            // give an error.
+                            Success(Tight)
                         }
-                        .into(),
                         // Only derivations can be in pkgs/by-name,
                         // so this attribute doesn't qualify
                         CallPackage(CallPackageInfo {
