@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, buildGo120Module
 , buildGo121Module
 , fetchFromGitHub
 , nixosTests
@@ -54,14 +53,7 @@ rec {
 
   nomad = nomad_1_7;
 
-  nomad_1_4 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.4.12";
-    sha256 = "sha256-dO98FOaO5MB5pWzeF705s/aBDTaF0OyWnVxWGB91suI=";
-    vendorHash = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
-    license = lib.licenses.mpl20;
-    passthru.tests.nomad = nixosTests.nomad;
-  };
+  nomad_1_4 = throw "nomad_1_4 was removed - you can use nomad_1_5 or an older nixpkgs revision";
 
   nomad_1_5 = generic {
     buildGoModule = buildGo121Module;
