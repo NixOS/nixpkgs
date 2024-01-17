@@ -560,7 +560,6 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
- - autodocodec-openapi3
  - automata
  - autonix-deps-kf5
  - avers
@@ -1093,7 +1092,6 @@ dont-distribute-packages:
  - deptrack-dot
  - dequeue
  - derive-IG
- - deriving-openapi3
  - descript-lang
  - detour-via-uom
  - devtools
@@ -1300,7 +1298,6 @@ dont-distribute-packages:
  - family-tree
  - fast-arithmetic
  - fast-bech32
- - fastcdc
  - fastirc
  - fastparser
  - fault-tree
@@ -1447,7 +1444,6 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
- - gearhash
  - gedcom
  - geek
  - geek-server
@@ -2663,12 +2659,6 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-types
  - midimory
- - mig
- - mig-client
- - mig-extra
- - mig-server
- - mig-swagger-ui
- - mig-wai
  - mighttpd
  - minecraft-data
  - minesweeper
@@ -3507,10 +3497,8 @@ dont-distribute-packages:
  - servant-matrix-param
  - servant-oauth2
  - servant-oauth2-examples
- - servant-openapi3
  - servant-postgresql
  - servant-pushbullet-client
- - servant-queryparam-openapi3
  - servant-rate-limit
  - servant-reason
  - servant-serialization
@@ -3521,8 +3509,6 @@ dont-distribute-packages:
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
- - servant-util
- - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -4079,7 +4065,6 @@ dont-distribute-packages:
  - wai-middleware-content-type
  - wai-middleware-rollbar
  - wai-middleware-route
- - wai-middleware-validation
  - wai-middleware-verbs
  - wai-route
  - wai-routing
@@ -4109,7 +4094,6 @@ dont-distribute-packages:
  - web3-solidity
  - webcrank-wai
  - webdriver-w3c
- - webgear-openapi
  - webify
  - webserver
  - websockets-rpc
