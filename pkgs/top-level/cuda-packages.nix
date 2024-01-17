@@ -51,6 +51,13 @@ let
         cudaOlder = strings.versionOlder cudaVersion;
         cudaAtLeast = strings.versionAtLeast cudaVersion;
 
+        # Allow for cuda packages to attempt to grab packages if they exist.
+        # This is useful when using old Cuda package sets which may not have certain packages available.
+        # For example:
+        # cudaPackages_10_0.getPackages [ "cuda_cudart" ] -> [ ]
+        # cudaPackages_12_0.getPackages [ "cuda_cudart" ] -> [ <drv:...> ]
+        getPackages = attrs: lib.attrValues (lib.filterAttrs (name: _: builtins.elem name attrs) final);
+
         # Maintain a reference to the final cudaPackages.
         # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
         # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
