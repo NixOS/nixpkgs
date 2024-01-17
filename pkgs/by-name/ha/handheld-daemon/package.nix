@@ -3,18 +3,17 @@
 , hidapi
 , lib
 , python3
-,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "0.2.7";
+  version = "1.0.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
-    rev = "ccae6b207cadfbdaef292270c4fc6c855f71ba03";
-    hash = "sha256-+tyiXOvZXLbomhgFRKUNKGbkkkOxQKdk/kjeWZ4pvO0=";
+    rev = "6cb83a9833eebc81bd27bed57eb68ece15cdd7a6";
+    hash = "sha256-YfBi5UKaB+v+eDI8rcvqkogAYRU2kTc0NqvakhKxBOE=";
   };
 
   pythonPath = with python3.pkgs; [
