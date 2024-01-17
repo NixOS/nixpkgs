@@ -23,6 +23,7 @@
 , pythonOlder
 , pyvex
 , rich
+, sqlalchemy
 , rpyc
 , sortedcontainers
 , sqlalchemy
@@ -71,6 +72,12 @@ buildPythonPackage rec {
     sympy
     unicorn
   ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [
+      sqlalchemy
+    ];
+  };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
     "--plat-name"
