@@ -2848,8 +2848,6 @@ with pkgs;
     withGtk = true;
   };
 
-  stella = callPackage ../applications/emulators/stella { };
-
   tamatool = callPackage ../applications/emulators/tamatool { };
 
   termtekst = callPackage ../applications/emulators/termtekst { };
