@@ -29,11 +29,12 @@ python3.override {
       });
 
       # django-q tests fail with redis 5.0.0.
+      # https://gitlab.com/mailman/hyperkitty/-/issues/493
       redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
-        version = "4.5.4";
+        version = "4.6.0";
         src = fetchPypi {
           inherit pname version;
-          hash = "sha256-c+w12k2iZ9aEfkf2hzD91fYuLKaePvWIXGp4qTdMOJM=";
+          hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
         };
       });
     })
