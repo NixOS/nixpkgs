@@ -65,7 +65,7 @@ buildPythonPackage rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [ heyimnova lucasew ];
     mainProgram = "flet";
   };
 }
