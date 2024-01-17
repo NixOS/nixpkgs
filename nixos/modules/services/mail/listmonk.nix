@@ -201,13 +201,12 @@ in {
         DynamicUser = true;
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
-        SystemCallArchitecture = "native";
+        SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
-        ProtectDevices = true;
+        PrivateDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;
         ProtectHome = true;
-        DeviceAllow = false;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         UMask = "0027";
