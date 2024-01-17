@@ -11,6 +11,7 @@
 let
   runtimeExprPath = ./src/eval.nix;
   nixpkgsLibPath = ../../../lib;
+  testNixpkgsPath = ./tests/mock-nixpkgs.nix;
 
   # Needed to make Nix evaluation work inside nix builds
   initNix = ''
@@ -26,10 +27,20 @@ let
     nix-store --init
   '';
 
+  fs = lib.fileset;
+
   package =
     rustPlatform.buildRustPackage {
       name = "nixpkgs-check-by-name";
-      src = lib.cleanSource ./.;
+      src = fs.toSource {
+        root = ./.;
+        fileset = fs.unions [
+          ./Cargo.lock
+          ./Cargo.toml
+          ./src
+          ./tests
+        ];
+      };
       cargoLock.lockFile = ./Cargo.lock;
       nativeBuildInputs = [
         nix
@@ -38,7 +49,7 @@ let
         makeWrapper
       ];
       env.NIX_CHECK_BY_NAME_EXPR_PATH = "${runtimeExprPath}";
-      env.NIXPKGS_LIB_PATH = "${nixpkgsLibPath}";
+      env.NIX_PATH = "test-nixpkgs=${testNixpkgsPath}:test-nixpkgs/lib=${nixpkgsLibPath}";
       preCheck = initNix;
       postCheck = ''
         cargo fmt --check
@@ -50,7 +61,7 @@ let
       '';
       passthru.shell = mkShell {
         env.NIX_CHECK_BY_NAME_EXPR_PATH = toString runtimeExprPath;
-        env.NIXPKGS_LIB_PATH = toString nixpkgsLibPath;
+        env.NIX_PATH = "test-nixpkgs=${toString testNixpkgsPath}:test-nixpkgs/lib=${toString nixpkgsLibPath}";
         inputsFrom = [ package ];
       };
 
