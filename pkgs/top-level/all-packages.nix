@@ -11137,7 +11137,11 @@ with pkgs;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
-  netcat = libressl.nc;
+  netcat = libressl.nc.overrideAttrs (old: {
+    meta = old.meta // {
+      mainProgram = "nc";
+    };
+  });
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
 
