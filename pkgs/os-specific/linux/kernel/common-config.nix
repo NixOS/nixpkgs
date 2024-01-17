@@ -478,7 +478,6 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      # FIXME: Make these by default 'yes' when LTS kernel (default) is at least version 6.7
       BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
       BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
 
