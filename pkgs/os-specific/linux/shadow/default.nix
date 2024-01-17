@@ -5,7 +5,7 @@
 , itstool, libbsd, libxml2, libxslt
 , libxcrypt, pkg-config
 , glibcCross ? null
-, pam ? null
+, linux-pam ? null
 , withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
 }:
 let
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libbsd libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.isLinux) pam
+    ++ lib.optional (linux-pam != null && stdenv.isLinux) linux-pam
     ++ lib.optional withTcb tcb;
 
   patches = [

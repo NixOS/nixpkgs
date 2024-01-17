@@ -5,7 +5,7 @@
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
-, pam
+, linux-pam
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , nlsSupport ? true
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals translateManpages [ po4a ];
 
   buildInputs = [ zlib libxcrypt ]
-    ++ lib.optionals pamSupport [ pam ]
+    ++ lib.optionals pamSupport [ linux-pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
     ++ lib.optionals systemdSupport [ systemd ]
