@@ -1,0 +1,19 @@
+diff --git a/core/tauri-utils/src/platform.rs b/core/tauri-utils/src/platform.rs
+index 248c5aa6..46d134a0 100644
+--- a/core/tauri-utils/src/platform.rs
++++ b/core/tauri-utils/src/platform.rs
+@@ -206,6 +206,14 @@ pub fn target_triple() -> crate::Result<String> {
+ /// On MacOS, it's `${exe_dir}../Resources` (inside .app).
+ #[allow(unused_variables)]
+ pub fn resource_dir(package_info: &PackageInfo, env: &Env) -> crate::Result<PathBuf> {
++  if let Some(dir) = option_env!("TAURI_RESOURCE_DIR") {
++    return Ok(PathBuf::from(format!(
++      "{}/{}",
++      dir,
++      package_info.package_name()
++    )));
++  }
++
+   let exe = current_exe()?;
+   let exe_dir = exe.parent().expect("failed to get exe directory");
+   let curr_dir = exe_dir.display().to_string();
