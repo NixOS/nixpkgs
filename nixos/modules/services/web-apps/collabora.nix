@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.services.collabora;
-  config_file = "/etc//collabora/coolwsd.xml";
+  config_file = "/etc/collabora/coolwsd.xml";
   url = "http://${cfg.host}:${builtins.toString cfg.port}";
   inherit (lib) mkOption mkEnableOption mkIf types;
 in {
@@ -39,6 +39,14 @@ in {
       type = types.str;
       description = "Data directory for the collabora instance";
       default = "/var/lib/collabora";
+    };
+    extraCLIArgs = mkOption {
+      type = types.listOf types.str;
+      description = "Extra CLI arguments when starting the collabora instance";
+      default = [];
+      example = lib.literalExpression ''
+        [ "-o:ssl.enable=false" "--o:ssl.termination=true"]
+      '';
     };
   };
 
@@ -94,29 +102,35 @@ in {
       path = [pkgs.cpio pkgs.coreutils pkgs.libreoffice-collabora-unwrapped];
       script = ''
         mkdir -p ${cfg.dataDir}/jail
-        if ! test -f "${cfg.dataDir}/template/.${cfg.package.version}"; then
-          if test -d "${cfg.dataDir}/template"; then
-            rm -rf ${cfg.dataDir}/template
-          fi
-          ${cfg.package}/bin/coolwsd-systemplate-setup "${cfg.dataDir}/template" "${pkgs.libreoffice-collabora-unwrapped}"
-          touch ${cfg.dataDir}/template/.${cfg.package.version}
-        fi
-
+        #if ! test -f "${cfg.dataDir}/template/.${cfg.package.version}"; then
+        #  if test -d "${cfg.dataDir}/template"; then
+        #    rm -rf ${cfg.dataDir}/template
+        #  fi
+        #  ${cfg.package}/bin/coolwsd-systemplate-setup "${cfg.dataDir}/template" "${pkgs.libreoffice-collabora-unwrapped}"
+        #  touch ${cfg.dataDir}/template/.${cfg.package.version}
+        #fi
         if ! test -f ${config_file}; then
-          cp ${cfg.package}/share/coolwsd/coolwsd.xml ${config_file}
+          cp ${cfg.package}/etc/coolwsd/coolwsd.xml ${config_file}
         fi
 
         ${cfg.package}/bin/coolwsd --unattended \
+          ${lib.concatStringsSep " " cfg.extraCLIArgs} \
           --port=${builtins.toString cfg.port} \
-          "--config-file=path=${config_file}" \
+          "--config-file=${config_file}" \
           "--o:file_server_root_path=${cfg.package}/share/coolwsd" \
-          "--o:sys_template_path=${cfg.dataDir}/template" \
+          --disable-cool-user-checking \
           "--o:child_root_path=${cfg.dataDir}/jail"
+
+          #"--o:sys_template_path=${cfg.dataDir}/template" \
+
       '';
+      environment = {HOME = "/var/lib/collabora";};
       serviceConfig = {
         DynamicUser = true;
-        RuntimeDirectory = "collabora";
+        ConfigurationDirectory = "collabora";
         StateDirectory = "collabora";
+        WorkingDirectory = "/var/lib/collabora";
+        CapabilityBoundingSet = ["CAP_FOWNER" "CAP_MKNOD" "CAP_SYS_CHROOT"];
       };
     };
   };
