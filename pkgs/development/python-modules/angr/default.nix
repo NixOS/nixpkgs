@@ -25,6 +25,7 @@
 , pythonRelaxDepsHook
 , pyvex
 , rich
+, sqlalchemy
 , rpyc
 , setuptools
 , sortedcontainers
@@ -86,6 +87,12 @@ buildPythonPackage rec {
     unicorn
     unique-log-filter
   ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [
+      sqlalchemy
+    ];
+  };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
     "--plat-name"
