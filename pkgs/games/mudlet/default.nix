@@ -20,6 +20,7 @@
 , qtmultimedia
 , discord-rpc
 , yajl
+, AppKit
 }:
 
 let
@@ -64,6 +65,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
   };
 
+  patches = [
+    ./darwin-AppKit.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     git
@@ -87,6 +92,8 @@ stdenv.mkDerivation rec {
     qtmultimedia
     yajl
     discord-rpc
+  ] ++ lib.optional stdenv.isDarwin [
+    AppKit
   ];
 
   cmakeFlags = [
@@ -97,7 +104,29 @@ stdenv.mkDerivation rec {
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  installPhase = ''
+  installPhase = if stdenv.isDarwin then ''
+    runHook preInstall
+
+    mkdir -p $out/Applications
+    cp -r src/mudlet.app/ $out/Applications/mudlet.app
+    mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
+    makeQtWrapper $out/Applications/Mudlet.app/Contents/MacOS/mudlet-unwrapped $out/Applications/Mudlet.app/Contents/MacOS/mudlet \
+      --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH : "$NIX_LUA_PATH" \
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsForQt5.qtkeychain discord-rpc ]}:$out/lib" \
+      --chdir "$out";
+
+    mkdir -pv $out/lib
+    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.dylib $out/lib
+
+    mkdir -pv $out/share/mudlet
+    cp -r ../src/mudlet-lua/lua $out/share/mudlet/
+    mkdir -pv $out/share/pixmaps
+    cp -r ../mudlet.png $out/share/pixmaps/
+    cp -r ../translations $out/share/
+
+    runHook postInstall
+  '' else ''
     runHook preInstall
 
     mkdir -pv $out/lib
@@ -127,8 +156,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Crossplatform mud client";
     homepage = "https://www.mudlet.org/";
-    maintainers = with maintainers; [ wyvie pstn cpu ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ wyvie pstn cpu felixalbrigtsen ];
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2Plus;
     mainProgram = "mudlet";
   };
