@@ -38,9 +38,9 @@
 , enableContrib ? true
 
 , enableCuda ? config.cudaSupport
-, enableCublas ? enableCuda
+, enableCublas ? enableCuda && (cudaPackages ? libcublas)
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
-, enableCufft ? enableCuda
+, enableCufft ? enableCuda && (cudaPackages ? libcufft)
 , cudaPackages ? {}
 , nvidia-optical-flow-sdk
 
@@ -235,6 +235,7 @@ let
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
   #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
+  getCudaPackages = cudaPackages.getPackages;
 
   inherit (cudaPackages) cudaFlags cudaVersion;
   inherit (cudaFlags) cudaCapabilities;
@@ -330,41 +331,29 @@ effectiveStdenv.mkDerivation {
       bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
     ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
-    ++ lib.optionals enableCuda (with cudaPackages; [
-      cuda_cudart.lib
-      cuda_cudart.dev
-      cuda_cccl.dev # <thrust/*>
-      libnpp.dev # npp.h
-      libnpp.lib
-      libnpp.static
-      nvidia-optical-flow-sdk
-    ] ++ lib.optionals enableCublas [
-      # May start using the default $out instead once
-      # https://github.com/NixOS/nixpkgs/issues/271792
-      # has been addressed
-      libcublas.static
-      libcublas.lib
-      libcublas.dev # cublas_v2.h
-    ] ++ lib.optionals enableCudnn [
-      cudnn.dev # cudnn.h
-      cudnn.lib
-      cudnn.static
-    ] ++ lib.optionals enableCufft [
-      libcufft.dev # cufft.h
-      libcufft.lib
-      libcufft.static
-    ]);
+    ++ lib.optionals enableCuda (with cudaPackages;
+      (if cudaPackages.cudaOlder "12"
+      # Unfortunately, cuda detection fails in older versions of cuda packages
+      then [ cudatoolkit ]
+      else getCudaPackages [
+        "cuda_cudart"
+        "cuda_cccl" # <thrust/*>
+        "libnpp" # npp.h
+      ])
+      ++ lib.optionals enableCublas [ libcublas ] # cublas_v2.h
+      ++ lib.optionals enableCudnn [ cudnn ] # cudnn.h
+      ++ lib.optionals enableCufft [ libcufft ] # cufft.h
+    );
 
-  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
+  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ]
+    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
-  ] ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
-  ];
+  ] ++ lib.optionals enableCuda (getCudaPackages [ "cuda_nvcc" ]);
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
