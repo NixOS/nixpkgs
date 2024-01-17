@@ -36,6 +36,10 @@ let
     };
     in elmPkgs // {
       inherit elmPkgs;
+
+      ansi-wl-pprint = overrideCabal (drv: {
+        jailbreak = true;
+      }) (self.callPackage ./packages/ansi-wl-pprint.nix {});
     };
   };
 
