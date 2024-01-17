@@ -44,6 +44,11 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
   cuda_cudart = prev.cuda_cudart.overrideAttrs (
     prevAttrs: {
+      # Remove once cuda-find-redist-features has a special case for libcuda
+      outputs =
+        prevAttrs.outputs
+        ++ lists.optionals (!(builtins.elem "stubs" prevAttrs.outputs)) [ "stubs" ];
+
       allowFHSReferences = false;
 
       # The libcuda stub's pkg-config doesn't follow the general pattern:
@@ -63,6 +68,14 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]] ; then
             ln -s libcuda.so lib/stubs/libcuda.so.1
           fi
+        '';
+
+      postFixup =
+        prevAttrs.postFixup or ""
+        + ''
+          moveToOutput lib/stubs "$stubs"
+          ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
+          ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
         '';
     }
   );
@@ -200,20 +213,63 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
   );
 
   nsight_systems = prev.nsight_systems.overrideAttrs (
-    prevAttrs: {
-      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [final.pkgs.qt5.wrapQtAppsHook];
+    prevAttrs:
+    let
+      qt = if lib.versionOlder prevAttrs.version "2022.4.2.1" then final.pkgs.qt5 else final.pkgs.qt6;
+      qtwayland =
+        if lib.versions.major qt.qtbase.version == "5" then
+          lib.getBin qt.qtwayland
+        else
+          lib.getLib qt.qtwayland;
+      qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+    in
+    {
+      # An ad hoc replacement for
+      # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
+      env.rmPatterns = toString [
+        "nsight-systems/*/*/libQt*"
+        "nsight-systems/*/*/libstdc*"
+        "nsight-systems/*/*/libboost*"
+        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
+        "nsight-systems/*/*/lib{arrow,jpeg}*"
+        "nsight-systems/*/*/Mesa"
+        "nsight-systems/*/*/python/bin/python"
+        "nsight-systems/*/*/libexec"
+        "nsight-systems/*/*/Plugins"
+      ];
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          for path in $rmPatterns ; do
+            rm -r "$path"
+          done
+        '';
+      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
+        final.cuda_cudart.stubs
         final.pkgs.alsa-lib
+        final.pkgs.boost178
         final.pkgs.e2fsprogs
+        final.pkgs.gst_all_1.gst-plugins-base
+        final.pkgs.gst_all_1.gstreamer
         final.pkgs.nss
         final.pkgs.numactl
         final.pkgs.pulseaudio
+        final.pkgs.rdma-core
+        final.pkgs.ucx
         final.pkgs.wayland
         final.pkgs.xorg.libXcursor
         final.pkgs.xorg.libXdamage
         final.pkgs.xorg.libXrandr
         final.pkgs.xorg.libXtst
+        qt.qtbase
+        (qt.qtdeclarative or qt.full)
+        (qt.qtsvg or qt.full)
+        qtWaylandPlugins
       ];
+
+      # Older releases require boost 1.70 deprecated in Nixpkgs
+      meta.broken = prevAttrs.meta.broken or false || lib.versionOlder final.cudaVersion "11.8";
     }
   );
 
