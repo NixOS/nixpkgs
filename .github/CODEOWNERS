@@ -220,6 +220,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
+/pkgs/tools/networking/octodns @Janik-Haag
 /pkgs/tools/networking/kea/default.nix @mweinelt
 /pkgs/tools/networking/babeld/default.nix @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
