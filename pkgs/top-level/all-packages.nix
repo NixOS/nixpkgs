@@ -40073,7 +40073,7 @@ with pkgs;
 
   beep = callPackage ../misc/beep { };
 
-  bees = pin-to-gcc12-if-gcc13 (callPackage ../tools/filesystems/bees { });
+  bees = callPackage ../tools/filesystems/bees { };
 
   blahaj = callPackage ../tools/misc/blahaj { };
 
