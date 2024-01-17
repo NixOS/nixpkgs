@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "haversine";
-  version = "2.8.0";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mapado";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cwvTs/91eJhjmeuCQAUBgfnKuCiLEg1jSnrXfx9VWkI=";
+    hash = "sha256-MKOg2awpamupvuXstiH7VoIY4ax+hy2h2cFXDFKJ2mA=";
   };
 
   nativeCheckInputs = [
