@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkg-config, which
-, libnl, protobuf, protobufc, shadow, installShellFiles
+, libnl, protobuf, protobufc, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
+  # newuidmap and newgidmap must be setuid root, so they can't be referenced
+  # directly from the shadow package. Instead, use execvpe() to find them on
+  # PATH.
   preBuild = ''
-    makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
+    substituteInPlace subproc.cc --replace 'execve(' 'execvpe('
+    makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=newuidmap -DNEWGIDMAP_PATH=newgidmap')
   '';
 
   installPhase = ''
