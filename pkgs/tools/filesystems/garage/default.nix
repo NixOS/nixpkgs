@@ -74,6 +74,7 @@ let
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
+      changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
