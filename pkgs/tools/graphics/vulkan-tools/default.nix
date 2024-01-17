@@ -14,6 +14,7 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkan-volk
 , wayland
 , wayland-protocols
 , moltenvk
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.268.0";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
+    hash = "sha256-0sAwO8gXzpMst+7l7LS1oiDLo9E6otDktCti+v8jwDw=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     glslang
     vulkan-headers
     vulkan-loader
+    vulkan-volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11

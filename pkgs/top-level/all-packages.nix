@@ -25530,6 +25530,7 @@ with pkgs;
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-utility-libraries = callPackage ../development/libraries/vulkan-utility-libraries { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
+  vulkan-volk = callPackage ../development/libraries/vulkan-volk { };
 
   vxl = callPackage ../development/libraries/vxl { };
 
