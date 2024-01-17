@@ -63,6 +63,21 @@ let
         ];
       });
 
+      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
+        version = "2022.12.1";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aiopurpleair";
+          rev = "refs/tags/${version}";
+          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace \
+            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
+            '"poetry-core"'
+        '';
+      });
+
       aiopvapi = super.aiopvapi.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.4";
         src = fetchFromGitHub {
@@ -180,16 +195,6 @@ let
           repo = "justnimbus";
           rev = "refs/tags/${version}";
           hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
-        };
-      });
-
-      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.0";
-        src = fetchFromGitHub {
-          owner = "py-mine";
-          repo = "mcstatus";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-1jPIsFEJ17kjtCBiX4IvSf2FxYw9DkH3MrrJ85N71tc=";
         };
       });
 
@@ -433,7 +438,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.1.2";
+  hassVersion = "2024.1.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -451,13 +456,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-FlGSVYgKDw0x4l1z1qe+cUAuzFH0XrE2o7LC2ByY5Bo=";
+    hash = "sha256-Yrv7THolGNylSK1BKUvEzxL8uAQWkOBOWAX00fJBAuQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-ijs9RNx17JI0nSHCBB3ysgrM4OdOtcH/96O9DcrTtFQ=";
+    hash = "sha256-Mj00aTkummsPpUtQ5iUG9xOJ4ra6Sfu8uklwroMXoy0=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -469,6 +474,7 @@ in python.pkgs.buildPythonApplication rec {
     "awesomeversion"
     "ciso8601"
     "cryptography"
+    "home-assistant-bluetooth"
     "httpx"
     "lru-dict"
     "orjson"

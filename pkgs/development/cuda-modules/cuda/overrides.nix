@@ -23,9 +23,9 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         final.pkgs.rdma-core
       ];
       # Before 11.7 libcufile depends on itself for some reason.
-      env.autoPatchelfIgnoreMissingDeps =
-        prevAttrs.env.autoPatchelfIgnoreMissingDeps
-        + strings.optionalString (cudaVersionOlder "11.7") " libcufile.so.0";
+      autoPatchelfIgnoreMissingDeps =
+        prevAttrs.autoPatchelfIgnoreMissingDeps
+        ++ lists.optionals (cudaVersionOlder "11.7") [ "libcufile.so.0" ];
     }
   );
 
@@ -69,8 +69,11 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
   cuda_compat = prev.cuda_compat.overrideAttrs (
     prevAttrs: {
-      env.autoPatchelfIgnoreMissingDeps =
-        prevAttrs.env.autoPatchelfIgnoreMissingDeps + " libnvrm_gpu.so libnvrm_mem.so libnvdla_runtime.so";
+      autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
+        "libnvrm_gpu.so"
+        "libnvrm_mem.so"
+        "libnvdla_runtime.so"
+      ];
       # `cuda_compat` only works on aarch64-linux, and only when building for Jetson devices.
       badPlatformsConditions = prevAttrs.badPlatformsConditions // {
         "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" =
