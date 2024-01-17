@@ -1,53 +1,64 @@
 { lib
 , python3
 , fetchFromGitHub
-, semgrep
 }:
-let
-  version = "0.1.11";
-in
-python3.pkgs.buildPythonApplication {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "open-interpreter";
-  format = "pyproject";
-  inherit version;
+  version = "0.2.0";
+  pyproject = true;
+
+  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
-    repo = "open-interpreter";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-viUMGUBy5UNWag6P8tXE4TcJIx53Q/tASNV3bmCCK0g=";
+    hash = "sha256-XeJ6cADtyXtqoTXwYJu+i9d3NYbJCLpYOeZYmdImtwI=";
   };
+
+  # Remove unused dependency
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace 'git-python = "^1.0.3"' ""
+  '';
+
+  pythonRelaxDeps = [
+    "tiktoken"
+  ];
 
   nativeBuildInputs = [
     python3.pkgs.poetry-core
+    python3.pkgs.pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
     astor
-    gitpython
-    huggingface-hub
     inquirer
-    jinja2
     litellm
-    openai
-    # pyreadline3 # this is a windows deps
-    python-dotenv
     pyyaml
     rich
     six
     tiktoken
-    tokenizers
     tokentrim
     wget
-    yaspin
-  ] ++ [
-    semgrep
+    psutil
+    html2image
+    ipykernel
+    jupyter-client
+    matplotlib
+    toml
+    posthog
+    openai
+
+    # Not explicitly in pyproject.toml but required due to use of `pkgs_resources`
+    setuptools
   ];
 
-  # the import check phase fails trying to do a network request to openai
-  # because of litellm
-  # pythonImportsCheck = [ "interpreter" ];
+  pythonImportsCheck = [ "interpreter" ];
+
+  # Most tests required network access
+  doCheck = false;
 
   meta = with lib; {
     description = "OpenAI's Code Interpreter in your terminal, running locally";
