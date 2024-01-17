@@ -324,6 +324,7 @@ def main():
       else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
+    epoch = int(datetime.fromisoformat("1970-01-01T00:00:01Z").timestamp())
     store_dir = conf["store_dir"]
 
     from_image = load_from_image(conf["from_image"])
@@ -336,7 +337,7 @@ def main():
         for num, store_layer in enumerate(conf["store_layers"], start=start):
             print("Creating layer", num, "from paths:", store_layer,
                   file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
+            info = add_layer_dir(tar, store_layer, store_dir, mtime=epoch)
             layers.append(info)
 
         print("Creating layer", len(layers) + 1, "with customisation...",
