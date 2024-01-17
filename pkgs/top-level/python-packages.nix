@@ -2806,6 +2806,8 @@ self: super: with self; {
 
   denonavr = callPackage ../development/python-modules/denonavr { };
 
+  dep-logic = callPackage ../development/python-modules/dep-logic { };
+
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   deploykit = callPackage ../development/python-modules/deploykit { };
@@ -15651,6 +15653,8 @@ self: super: with self; {
   unify = callPackage ../development/python-modules/unify { };
 
   unifiled = callPackage ../development/python-modules/unifiled { };
+
+  unique-log-filter = callPackage ../development/python-modules/unique-log-filter { };
 
   units = callPackage ../development/python-modules/units { };
 

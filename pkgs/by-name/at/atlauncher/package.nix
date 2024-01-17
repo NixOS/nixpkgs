@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.35.3";
+  version = "3.4.35.4";
 
   src = fetchurl {
     url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-2080rVGBBM3YZmmBVBfMhnCErLzxuRDDi4zmCniJYFY=";
+    hash = "sha256-M8ygN70yizJM6VEffBh/lH/DneKAzQ5UFzc3g51dja0=";
   };
 
   env.ICON = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/java
     cp $src $out/share/java/ATLauncher.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+    makeWrapper ${jre}/bin/java $out/bin/atlauncher \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm udev ]}" \
       --add-flags "-jar $out/share/java/ATLauncher.jar" \
       --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.getpsyched ];
     platforms = platforms.all;
     mainProgram = "atlauncher";
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 })

@@ -5234,7 +5234,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_27;
+    electron = electron_28;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -16317,12 +16317,12 @@ with pkgs;
   inherit (callPackage ../development/compilers/haxe {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
-    haxe_4_2
+    haxe_4_3
     haxe_4_1
     haxe_4_0
     ;
 
-  haxe = haxe_4_2;
+  haxe = haxe_4_3;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
@@ -25700,7 +25700,6 @@ with pkgs;
 
   yubihsm-connector = callPackage ../tools/security/yubihsm-connector { };
 
-  yubikey-manager4 = callPackage ../tools/misc/yubikey-manager/4.nix { };
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
@@ -31354,6 +31353,10 @@ with pkgs;
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
   espeakup = callPackage ../applications/accessibility/espeakup { };
+
+  espflash = callPackage ../development/embedded/espflash {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   etebase-server = with python3Packages; toPythonApplication etebase-server;
 
@@ -37231,8 +37234,6 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
-  atlauncher = callPackage ../games/atlauncher { };
-
   augustus = callPackage ../games/augustus { };
 
   ballerburg = callPackage ../games/ballerburg { } ;
@@ -39673,6 +39674,8 @@ with pkgs;
 
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
+  simulide = libsForQt5.callPackage ../applications/science/electronics/simulide { };
+
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
@@ -40074,7 +40077,7 @@ with pkgs;
 
   beep = callPackage ../misc/beep { };
 
-  bees = pin-to-gcc12-if-gcc13 (callPackage ../tools/filesystems/bees { });
+  bees = callPackage ../tools/filesystems/bees { };
 
   blahaj = callPackage ../tools/misc/blahaj { };
 
