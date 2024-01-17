@@ -4,7 +4,6 @@
 , cachetools
 , decorator
 , fetchFromGitHub
-, future
 , pysmt
 , pythonOlder
 , pytestCheckHook
@@ -25,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-jMACLZN7hYukUgavtdpdVjV1WmPF9UupaNi/FE2Y2aM=";
   };
 
+  postPatch = ''
+    # The detection doesn't seem to work for z3-solver
+    substituteInPlace setup.cfg \
+      --replace "z3-solver==4.10.2.0" ""
+  '';
+
   nativeBuildInputs = [
     setuptools
   ];
@@ -32,7 +37,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cachetools
     decorator
-    future
     pysmt
     z3-solver
   ];
