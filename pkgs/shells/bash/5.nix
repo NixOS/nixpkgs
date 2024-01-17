@@ -22,11 +22,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${lib.optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
-  version = "5.2";
+  pname = "bash${lib.optionalString interactive "-interactive"}";
+  version = "5.2${patch_suffix}";
+  patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/bash-${version}.tar.gz";
+    url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
     sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
   };
 
