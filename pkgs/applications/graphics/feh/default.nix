@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
     license = licenses.mit-feh;
-    maintainers = with maintainers; [ viric willibutz globin ];
+    maintainers = with maintainers; [ gepbird globin viric willibutz ];
     platforms = platforms.unix;
     mainProgram = "feh";
   };
