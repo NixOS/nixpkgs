@@ -955,6 +955,7 @@ let
     });
 
     xml2 = old.xml2.overrideAttrs (attrs: {
+      patches = [ ./patches/xml2.patch ];
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure

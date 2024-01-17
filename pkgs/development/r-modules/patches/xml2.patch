@@ -1,0 +1,26 @@
+diff --git a/src/xml2_init.cpp b/src/xml2_init.cpp
+index b89c64a..146d802 100644
+--- a/src/xml2_init.cpp
++++ b/src/xml2_init.cpp
+@@ -10,7 +10,7 @@
+ #include <string>
+ #include "xml2_utils.h"
+ 
+-void handleStructuredError(void* userData, xmlError* error) {
++void handleStructuredError(void* userData, const xmlError* error) {
+ 
+   BEGIN_CPP
+   std::string message = std::string(error->message);
+diff --git a/src/xml2_schema.cpp b/src/xml2_schema.cpp
+index 345ca50..60b4463 100644
+--- a/src/xml2_schema.cpp
++++ b/src/xml2_schema.cpp
+@@ -9,7 +9,7 @@
+ #include "xml2_types.h"
+ #include "xml2_utils.h"
+ 
+-void handleSchemaError(void* userData, xmlError* error) {
++void handleSchemaError(void* userData, const xmlError* error) {
+   std::vector<std::string> * vec = (std::vector<std::string> *) userData;
+   std::string message = std::string(error->message);
+   message.resize(message.size() - 1);
