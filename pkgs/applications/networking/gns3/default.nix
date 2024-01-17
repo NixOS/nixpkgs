@@ -12,14 +12,14 @@ in {
 
   guiStable = mkGui {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-Ae1Yij81/rhZOMMfLYaQKR4Dxx1gDGZBpBj0gLCSToI=";
+    version = "2.2.45";
+    hash = "sha256-SMnhPz5zTPtidy/BIvauDM60WgDLG+NIr9rdUrQhz0A=";
   };
 
   guiPreview = mkGui {
     channel = "stable";
-    version = "2.2.44.1";
-    hash = "sha256-Ae1Yij81/rhZOMMfLYaQKR4Dxx1gDGZBpBj0gLCSToI=";
+    version = "2.2.45";
+    hash = "sha256-SMnhPz5zTPtidy/BIvauDM60WgDLG+NIr9rdUrQhz0A=";
   };
 
   serverStable = mkServer {
