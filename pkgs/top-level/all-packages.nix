@@ -31357,6 +31357,10 @@ with pkgs;
 
   espeakup = callPackage ../applications/accessibility/espeakup { };
 
+  espflash = callPackage ../development/embedded/espflash {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   etebase-server = with python3Packages; toPythonApplication etebase-server;
 
   etesync-dav = callPackage ../applications/misc/etesync-dav { };
