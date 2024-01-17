@@ -97,6 +97,7 @@
 , "diff2html-cli"
 , "dotenv-cli"
 , "dotenv-vault"
+, "dot-language-server"
 , "elasticdump"
 , "@electron-forge/cli"
 , "eas-cli"
