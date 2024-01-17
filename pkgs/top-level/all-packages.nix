@@ -36362,8 +36362,6 @@ with pkgs;
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
   };
 
-  websploit = callPackage ../tools/security/websploit { };
-
   webssh = with python3Packages; toPythonApplication webssh;
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {
