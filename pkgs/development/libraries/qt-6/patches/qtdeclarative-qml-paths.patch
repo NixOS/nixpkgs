@@ -1,0 +1,12 @@
+diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
+index a7d1a3f77f..aac7392d4f 100644
+--- a/src/qml/qml/qqmlimport.cpp
++++ b/src/qml/qml/qqmlimport.cpp
+@@ -1515,6 +1515,7 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+     };
+ 
+     // env import paths
++    addEnvImportPath("NIXPKGS_QT6_QML_IMPORT_PATH");
+     addEnvImportPath("QML_IMPORT_PATH");
+     addEnvImportPath("QML2_IMPORT_PATH");
+ 
