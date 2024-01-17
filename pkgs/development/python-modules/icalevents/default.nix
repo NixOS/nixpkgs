@@ -4,6 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , poetry-core
+, pythonRelaxDepsHook
 , datetime
 , httplib2
 , icalendar
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -35,6 +37,13 @@ buildPythonPackage rec {
     icalendar
     python-dateutil
     pytz
+  ];
+
+  pythonRelaxDeps = [
+    "datetime"
+    "httplib2"
+    "icalendar"
+    "pytz"
   ];
 
   nativeCheckInputs = [
