@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--includedir=${placeholder "out"}/include/security"
     "--enable-sconfigdir=/etc/security"
+    # The module is deprecated. We re-enable it explicitly until NixOS
+    # module stops using it.
+    "--enable-lastlog"
   ];
 
   installFlags = [
