@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
-  version = "2023.09";
+  version = "2024.01";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-9xavU9jRisZekPqC87EyiLXtZCGu/9QeGzq6BJGt1+Y=";
+    hash = "sha256-UYDoVMi5TtYxgPq5nkp/oRtcMcHl2p7KAG8ptvuOL5U=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
