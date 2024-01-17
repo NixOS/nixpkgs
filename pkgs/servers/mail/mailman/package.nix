@@ -11,12 +11,12 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.8";
+  version = "3.3.9";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g6wH7lXqK0yJ8AxO1HFxMvBicBJ9NGWlPePFyxl9Qc4=";
+    hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -51,11 +51,6 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch";
       sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/mailman/mailman/-/commit/5e4431af6bb7d672a7ed7e3329f8fac7812d47f8.patch";
-      excludes = [ ".gitlab-ci.yml" ];
-      hash = "sha256-y2AE9hU4Z1BpBlJywxMWiuRvltWkk+R9YgMkpemvlIo=";
     })
     ./log-stderr.patch
   ];
