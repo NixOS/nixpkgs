@@ -245,7 +245,6 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       buildInputs = prevAttrs.buildInputs ++ [
         final.cuda_cudart.stubs
         final.pkgs.alsa-lib
-        # final.pkgs.boost170 # cudaPackages_11_4
         final.pkgs.boost178
         final.pkgs.e2fsprogs
         final.pkgs.gst_all_1.gst-plugins-base
@@ -266,7 +265,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         qtWaylandPlugins
       ];
 
-      # Require boost 1.70 deprecated in Nixpkgs
+      # Older releases require boost 1.70 deprecated in Nixpkgs
       meta.broken = prevAttrs.meta.broken or false || lib.versionOlder final.cudaVersion "11.8";
     }
   );
