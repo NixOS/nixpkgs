@@ -5,7 +5,6 @@
 , flit-core
 , flask
 , marshmallow
-, packaging
 , pytestCheckHook
 , flask-sqlalchemy
 , marshmallow-sqlalchemy
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-xFIvTJBp3V4VLex8bvlbLIgLsyiwrVzrW1z9uNuOsCY=";
+    hash = "sha256-+5L4OfBRMkS6WRXT7dI/uuqloc/PZgu+DFvOCinByh8=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     marshmallow
-    packaging
   ];
 
   nativeCheckInputs = [
