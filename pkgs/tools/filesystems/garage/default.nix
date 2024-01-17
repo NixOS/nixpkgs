@@ -82,13 +82,13 @@ rec {
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
 
-  garage_0_8_4 = generic {
-    version = "0.8.4";
-    sha256 = "sha256-YgMw41ofM59h7OnHK1H8+Se5mZEdYypPIdkqbyX9qfs=";
-    cargoSha256 = "sha256-dEtksOVqy5wAPoqCuXJj3c4TB6UbR8PTaB70fbL6iR8=";
+  garage_0_8_5 = generic {
+    version = "0.8.5";
+    sha256 = "sha256-YRxkjETSmI1dcHP9qTPLcOMqXx9B2uplVR3bBjJWn3I=";
+    cargoSha256 = "sha256-VOcymlvqqQRdT1MFzRcMuD+Xo3fc3XTuRA12tW7ZjdI=";
   };
 
-  garage_0_8 = garage_0_8_4;
+  garage_0_8 = garage_0_8_5;
 
   garage_0_9_0 = (generic {
     version = "0.9.0";
