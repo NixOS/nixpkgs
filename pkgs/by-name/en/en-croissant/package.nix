@@ -42,6 +42,18 @@ stdenv.mkDerivation rec {
       cacert
     ];
 
+    pnpmPatch = builtins.toJSON {
+      pnpm.supportedArchitectures = {
+        os = [ "linux" ];
+        cpu = [ "x64" "arm64" ];
+      };
+    };
+
+    postPatch = ''
+      mv package.json package.json.orig
+      jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+    '';
+
     installPhase = ''
       export HOME=$(mktemp -d)
       pnpm config set store-dir $out
@@ -58,7 +70,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-DTsT30o2BcXqqQW7uKtIexGoPT1KTxqPgDxOh+16olY=";
+    outputHash = "sha256-VfX5333MYqjCI2+8cTlr6313TojDFSYlytYb0Us2olA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
