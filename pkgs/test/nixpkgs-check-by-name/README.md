@@ -73,7 +73,7 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
 - `default.nix`:
   Always contains
   ```nix
-  import ../mock-nixpkgs.nix { root = ./.; }
+  import <test-nixpkgs> { root = ./.; }
   ```
   which makes
   ```
