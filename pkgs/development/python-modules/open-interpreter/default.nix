@@ -1,14 +1,37 @@
 { lib
-, python3
 , fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, pythonRelaxDepsHook
+, poetry-core
+
+, appdirs
+, astor
+, inquirer
+, litellm
+, pyyaml
+, rich
+, six
+, tiktoken
+, tokentrim
+, wget
+, psutil
+, html2image
+, ipykernel
+, jupyter-client
+, matplotlib
+, toml
+, posthog
+, openai
+, setuptools
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "open-interpreter";
   version = "0.2.0";
   pyproject = true;
 
-  disabled = python3.pkgs.pythonOlder "3.9";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
@@ -27,11 +50,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    python3.pkgs.poetry-core
-    python3.pkgs.pythonRelaxDepsHook
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     appdirs
     astor
     inquirer
