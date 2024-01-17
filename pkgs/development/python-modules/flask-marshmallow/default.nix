@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, flit-core
 , flask
 , marshmallow
 , packaging
@@ -12,17 +13,21 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "0.15.0";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-N21M/MzcvOaDh5BgbbZtNcpRAULtWGLTMberCfOUoEM=";
+    hash = "sha256-xFIvTJBp3V4VLex8bvlbLIgLsyiwrVzrW1z9uNuOsCY=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     flask
