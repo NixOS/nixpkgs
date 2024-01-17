@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     # Although not always needed, it is needed if cmakeFlags include
     # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   passthru = {

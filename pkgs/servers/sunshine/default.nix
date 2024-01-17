@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [

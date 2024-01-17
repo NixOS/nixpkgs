@@ -338,7 +338,7 @@ in buildPythonPackage rec {
     pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
     cuda_nvcc
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];

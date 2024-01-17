@@ -86,10 +86,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ninja pkg-config git ]
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
-
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs

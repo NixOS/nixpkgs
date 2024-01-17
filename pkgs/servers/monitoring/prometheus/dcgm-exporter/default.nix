@@ -48,7 +48,7 @@ buildGoModule rec {
   vendorHash = "sha256-Fjvx15e/psxoqoS6c6GhiQfe7g2aI40EmPR26xLhrzg=";
 
   nativeBuildInputs = [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   # Tests try to interact with running DCGM service.

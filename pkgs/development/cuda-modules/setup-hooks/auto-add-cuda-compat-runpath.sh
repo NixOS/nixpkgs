@@ -3,25 +3,25 @@
 # coming from the cuda_compat package by adding it to the RUNPATH.
 echo "Sourcing auto-add-cuda-compat-runpath-hook"
 
-elfHasDynamicSection() {
-    patchelf --print-rpath "$1" >& /dev/null
+addCudaCompatRunpath() {
+  local libPath
+  local origRpath
+
+  if [[ $# -eq 0 ]]; then
+    echo "addCudaCompatRunpath: no library path provided" >&2
+    exit 1
+  elif [[ $# -gt 1 ]]; then
+    echo "addCudaCompatRunpath: too many arguments" >&2
+    exit 1
+  elif [[ "$1" == "" ]]; then
+    echo "addCudaCompatRunpath: empty library path" >&2
+    exit 1
+  else
+    libPath="$1"
+  fi
+
+  origRpath="$(patchelf --print-rpath "$libPath")"
+  patchelf --set-rpath "@libcudaPath@:$origRpath" "$libPath"
 }
 
-autoAddCudaCompatRunpathPhase() (
-  local outputPaths
-  mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "${!o}"; done)
-  find "${outputPaths[@]}" -type f -print0  | while IFS= read -rd "" f; do
-    if isELF "$f"; then
-      # patchelf returns an error on statically linked ELF files
-      if elfHasDynamicSection "$f" ; then
-        echo "autoAddCudaCompatRunpathHook: patching $f"
-        local origRpath="$(patchelf --print-rpath "$f")"
-        patchelf --set-rpath "@libcudaPath@:$origRpath" "$f"
-      elif (( "${NIX_DEBUG:-0}" >= 1 )) ; then
-        echo "autoAddCudaCompatRunpathHook: skipping a statically-linked ELF file $f"
-      fi
-    fi
-  done
-)
-
-postFixupHooks+=(autoAddCudaCompatRunpathPhase)
+postFixupHooks+=("autoFixElfFiles addCudaCompatRunpath")
