@@ -1171,6 +1171,8 @@ let
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
+    msat = callPackage ../development/ocaml-modules/msat { };
+
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 

@@ -52,7 +52,7 @@ let
 
   multiaddrsToListenStreams = addrIn:
     let
-      addrs = if builtins.typeOf addrIn == "list"
+      addrs = if builtins.isList addrIn
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenStream addrs;
     in
@@ -60,7 +60,7 @@ let
 
   multiaddrsToListenDatagrams = addrIn:
     let
-      addrs = if builtins.typeOf addrIn == "list"
+      addrs = if builtins.isList addrIn
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenDatagram addrs;
     in
@@ -99,7 +99,12 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
+      enable = mkEnableOption (lib.mdDoc ''
+        the Interplanetary File System (WARNING: may cause severe network degradation).
+        NOTE: after enabling this option and rebuilding your system, you need to log out
+        and back in for the `IPFS_PATH` environment variable to be present in your shell.
+        Until you do that, the CLI tools won't be able to talk to the daemon by default
+      '');
 
       package = mkOption {
         type = types.package;
@@ -279,8 +284,8 @@ in
       {
         assertion = !((lib.versionAtLeast cfg.package.version "0.21") && (builtins.hasAttr "Experimental" cfg.settings) && (builtins.hasAttr "AcceleratedDHTClient" cfg.settings.Experimental));
         message = ''
-    The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
-  '';
+          The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
+        '';
       }
     ];
 
