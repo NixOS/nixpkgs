@@ -5701,6 +5701,10 @@ with pkgs;
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
+  hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
+    stdenv = gcc13Stdenv;
+  };
+
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
@@ -31716,7 +31720,7 @@ with pkgs;
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) google-drive-ocamlfuse;
+  inherit (ocamlPackages) google-drive-ocamlfuse;
 
   googler = callPackage ../applications/misc/googler {
     python = python3;
@@ -34112,10 +34116,6 @@ with pkgs;
   portfolio = callPackage ../applications/office/portfolio {
     jre = openjdk17;
   };
-
-  prevo = callPackage ../applications/misc/prevo { };
-  prevo-data = callPackage ../applications/misc/prevo/data.nix { };
-  prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
 
   psi-notify = callPackage ../applications/misc/psi-notify { };
 

@@ -4,6 +4,7 @@
 , bison
 , flex
 , perl
+, curl
 , libpng
 , giflib
 , alsa-lib
@@ -25,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vice";
-  version = "3.7.1";
+  version = "3.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "sha256-fjgR5gJNsGmL+8MhuzJFckRriFPQG0Bz8JhllXsMq5g=";
+    sha256 = "sha256-HX3E0PK7zCqHG7lU/0pd9jBI3qnBb18em8gmD6QaEAQ=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
+    curl
     giflib
     gtk3
     glew

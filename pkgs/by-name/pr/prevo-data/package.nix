@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, prevo-tools }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "prevo-data";
   version = "2020-03-08";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp prevo.db $out/share/prevo/
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "data for offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
       This package provides the ReVo database for the prevo command line application.
     '';
     homepage = "https://github.com/bpeel/revo";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.das-g ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ das-g ehmry ];
   };
 }
