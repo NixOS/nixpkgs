@@ -6,7 +6,6 @@ pkgs/by-name/aa: This is a file, but it should be a directory.
 pkgs/by-name/ba/bar: This path is a file, but it should be a directory.
 pkgs/by-name/ba/baz: "package.nix" must be a file.
 pkgs/by-name/ba/foo: Incorrect directory location, should be pkgs/by-name/fo/foo instead.
-pkgs/by-name/ba/foo: File invalid.nix could not be parsed by rnix: unexpected token at 28..29
 pkgs/by-name/ba/foo: File package.nix at line 2 contains the path expression "/bar" which cannot be resolved: No such file or directory (os error 2).
 pkgs/by-name/ba/foo: File package.nix at line 3 contains the path expression "../." which may point outside the directory of that package.
 pkgs/by-name/ba/foo: File package.nix at line 4 contains the nix search path expression "<nixpkgs>" which may point outside the directory of that package.
