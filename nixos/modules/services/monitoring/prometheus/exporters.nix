@@ -310,7 +310,7 @@ in
       '';
     } {
       assertion = cfg.snmp.enable -> (
-        (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
+        ((cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)) != ((cfg.snmp.generator.configurationPath == null) != (cfg.snmp.generator.configuration == null))
       );
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
