@@ -1635,6 +1635,12 @@
     githubId = 10285250;
     name = "Artur E. Ruuge";
   };
+  asaph = {
+    email = "contato@asaph.casa";
+    github = "asaph96";
+    githubId = 20308482;
+    name = "Asaph Diniz";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
