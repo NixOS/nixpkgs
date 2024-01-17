@@ -248,6 +248,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_non_unicode_filename"
     "test_listing"
     "test_symlink_root"
+
+    # Appears to be a sandbox related issue
+    "test_trim_stderr_in_command"
+    # Seems to be a bug caused by having different versions of rdata than
+    # expected. Will file upstream.
+    "test_item_rdb"
+    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+    # setup, could be upstream bug. Will file upstream.
+    "test_libmix_differences"
   ];
 
   disabledTestPaths = [
