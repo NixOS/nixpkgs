@@ -373,7 +373,7 @@ See [](#ex-dockerTools-buildLayeredImage-hello) to see how to do that.
 # Building a layered Docker image
 
 The following package builds a layered Docker image that runs the `hello` executable from the `hello` package.
-The Docker image will have name `hello` and tag `latest`.
+The Docker image will have name `hello` and tag `latest`. The created image can have a current timestamp when setting the `created` parameter to "now" - this will only affect the image, not the individual layers.
 
 ```nix
 { dockerTools, hello }:
