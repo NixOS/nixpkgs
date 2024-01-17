@@ -847,6 +847,7 @@ with pkgs;
 
   octodns-providers = recurseIntoAttrs {
     bind = python3Packages.callPackage ../tools/networking/octodns/providers/bind { };
+    gandi = python3Packages.callPackage ../tools/networking/octodns/providers/gandi { };
     hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
     powerdns = python3Packages.callPackage ../tools/networking/octodns/providers/powerdns { };
   };
@@ -6179,7 +6180,6 @@ with pkgs;
 
   optar = callPackage ../tools/graphics/optar { };
 
-  oni2 = callPackage ../applications/editors/oni2 { };
 
   obinskit = callPackage ../applications/misc/obinskit { };
 
@@ -15788,10 +15788,10 @@ with pkgs;
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
-  flutterPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/flutter { });
-  flutter-unwrapped = flutterPackages.stable;
-  flutter = flutterPackages.wrapFlutter flutter-unwrapped;
+  flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutter = flutterPackages.stable;
+  flutter316 = flutterPackages.v3_16;
+  flutter313 = flutterPackages.v3_13;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -16381,7 +16381,9 @@ with pkgs;
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
-  idris2 = callPackage ../development/compilers/idris2 { };
+  idris2Packages = recurseIntoAttrs (callPackage ../development/compilers/idris2 { });
+
+  inherit (idris2Packages) idris2;
 
   inherit (callPackage ../development/tools/database/indradb { })
     indradb-server
@@ -24049,6 +24051,8 @@ with pkgs;
     ch4backend = libfabric;
   };
 
+  mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
+
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
   mtdev = callPackage ../development/libraries/mtdev { };
@@ -29717,6 +29721,8 @@ with pkgs;
 
   office-code-pro = callPackage ../data/fonts/office-code-pro { };
 
+  _0xproto = callPackage ../data/fonts/0xproto { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
@@ -31997,6 +32003,8 @@ with pkgs;
   inherit (xorg) xlsfonts;
 
   xrdp = callPackage ../applications/networking/remote/xrdp { };
+
+  pulseaudio-module-xrdp = callPackage ../applications/networking/remote/xrdp/pulseaudio-module-xrdp { };
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
@@ -39548,6 +39556,8 @@ with pkgs;
   minisat = callPackage ../applications/science/logic/minisat { };
 
   monosat = callPackage ../applications/science/logic/monosat { };
+
+  msat = callPackage ../applications/science/logic/msat { };
 
   nusmv = callPackage ../applications/science/logic/nusmv { };
 

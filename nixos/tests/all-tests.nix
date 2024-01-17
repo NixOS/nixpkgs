@@ -958,6 +958,7 @@ in {
   xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
   xpadneo = handleTest ./xpadneo.nix {};
   xrdp = handleTest ./xrdp.nix {};
+  xrdp-with-audio-pulseaudio = handleTest ./xrdp-with-audio-pulseaudio.nix {};
   xscreensaver = handleTest ./xscreensaver.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   xterm = handleTest ./xterm.nix {};

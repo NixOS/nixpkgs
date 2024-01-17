@@ -10,9 +10,9 @@ in
 rec {
 
   /*
-    Run the shell command `buildCommand' to produce a store path named `name'.
+    Run the shell command `buildCommand` to produce a store path named `name`.
 
-    The attributes in `env' are added to the environment prior to running the command.
+    The attributes in `env` are added to the environment prior to running the command.
     Environment variables set by `stdenv.mkDerivation` take precedence.
 
     By default `runCommand` runs in a stdenv with no compiler environment.
@@ -409,7 +409,7 @@ rec {
 
 
   /*
-    Create a forest of symlinks to the files in `paths'.
+    Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
     of all the input paths.
@@ -622,7 +622,7 @@ rec {
       '');
 
 
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+  # Write the references (i.e. the runtime dependencies in the Nix store) of `path` to a file.
 
   writeReferencesToFile = path: runCommand "runtime-deps"
     {
@@ -680,13 +680,13 @@ rec {
   writeStringReferencesToFile = string:
     /*
        The basic operation this performs is to copy the string context
-       from `string' to a second string and wrap that string in a
+       from `string` to a second string and wrap that string in a
        derivation. However, that alone is not enough, since nothing in the
        string refers to the output paths of the derivations/paths in its
        context, meaning they'll be considered build-time dependencies and
        removed from the wrapper derivation's closure. Putting the
        necessary output paths in the new string is however not very
-       straightforward - the attrset returned by `getContext' contains
+       straightforward - the attrset returned by `getContext` contains
        only references to derivations' .drv-paths, not their output
        paths. In order to "convert" them, we try to extract the
        corresponding paths from the original string using regex.

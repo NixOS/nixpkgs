@@ -7,6 +7,7 @@
 , zbar
 , secp256k1
 , enableQt ? true
+, qtwayland
 }:
 
 let
@@ -70,6 +71,7 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
+    certifi
     # plugins
     btchip-python
     ckcc-protocol
@@ -110,6 +112,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 

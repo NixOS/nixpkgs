@@ -92,7 +92,7 @@ jobs:
           echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
       - name: Fetching the tool
-        run: pkgs/test/nixpkgs-check-by-name/scripts/fetch-tool.sh "$GITHUB_BASE_REF" result
+        run: pkgs/test/nixpkgs-check-by-name/scripts/fetch-pinned-tool.sh result
       - name: Running nixpkgs-check-by-name
         run: |
           if result/bin/nixpkgs-check-by-name --base "$base" .; then

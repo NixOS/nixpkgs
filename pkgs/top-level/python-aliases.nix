@@ -421,6 +421,7 @@ mapAliases ({
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
+  retry_decorator = retry-decorator; # added 2024-01-07
   retworkx = rustworkx; # added 2023-05-14
   repeated_test = repeated-test; # added 2022-11-15
   repoze_lru = repoze-lru; # added 2023-11-11

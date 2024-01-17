@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p jq
 
 set -o pipefail -o errexit -o nounset
 
@@ -61,7 +62,7 @@ trace -n "Merging base branch into the HEAD commit in $tmp/merged.. "
 git -C "$tmp/merged" merge -q --no-edit "$baseSha"
 trace -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
 
-"$tmp/merged/pkgs/test/nixpkgs-check-by-name/scripts/fetch-tool.sh" "$baseBranch" "$tmp/tool"
+"$tmp/merged/pkgs/test/nixpkgs-check-by-name/scripts/fetch-pinned-tool.sh" "$tmp/tool"
 
 trace "Running nixpkgs-check-by-name.."
 "$tmp/tool/bin/nixpkgs-check-by-name" --base "$tmp/base" "$tmp/merged"

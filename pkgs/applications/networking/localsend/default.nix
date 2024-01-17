@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, flutter
+, flutter313
 , makeDesktopItem
 , pkg-config
 , libayatana-appindicator
@@ -13,7 +13,7 @@ let
   pname = "localsend";
   version = "1.12.0";
 
-  linux = flutter.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication {
     inherit pname version;
 
     src = fetchFromGitHub {
