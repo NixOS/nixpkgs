@@ -181,7 +181,7 @@ rec {
       inherit strip;
     } name;
 
-  # writeHaskellBin takes the same arguments as kell but outputs a directory (like writeScriptBin)
+  # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
 
