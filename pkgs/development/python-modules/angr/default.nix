@@ -23,12 +23,13 @@
 , pythonOlder
 , pyvex
 , rich
-, sqlalchemy
 , rpyc
+, setuptools
 , sortedcontainers
 , sqlalchemy
 , sympy
 , unicorn
+, unique-log-filter
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-6e77O4gt+td2dTzwwnH+nbPMMU5ZGdAOFgi1Yn26CVc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ailment
@@ -68,9 +73,9 @@ buildPythonPackage rec {
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
     unicorn
+    unique-log-filter
   ];
 
   passthru.optional-dependencies = {
