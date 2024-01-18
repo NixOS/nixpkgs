@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
-  buildInputs = lib.optional stdenv.isLinux qtwayland;
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
