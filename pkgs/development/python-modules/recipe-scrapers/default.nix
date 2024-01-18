@@ -9,12 +9,15 @@
 , pytestCheckHook
 , responses
 , setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
   version = "14.52.0";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hhursev";
@@ -45,11 +48,14 @@ buildPythonPackage rec {
     "templates/test_scraper.py"
   ];
 
-  pythonImportsCheck = [ "recipe_scrapers" ];
+  pythonImportsCheck = [
+    "recipe_scrapers"
+  ];
 
   meta = with lib; {
-    description = "Python package for scraping recipes data ";
+    description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
   };
