@@ -2863,6 +2863,9 @@ self: super: {
   # Too strict bounds on base
   kewar = doJailbreak super.kewar;
 
+  # Too strict bounds on mtl, servant and servant-client
+  unleash-client-haskell = doJailbreak super.unleash-client-haskell;
+
   # Tests rely on (missing) submodule
   unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
 
