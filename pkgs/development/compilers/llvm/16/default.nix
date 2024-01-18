@@ -93,7 +93,7 @@ if bootBintools == null
 then tools.bintools
 else bootBintools;
 
-in {
+  in rec {
 
 libllvm = callPackage ./llvm {
 inherit llvm_meta;
@@ -277,29 +277,35 @@ nixSupport.cc-cflags = [
 ];
 };
 
-clangNoLibcWithBasicRt = wrapCCWith rec {
-cc = tools.clang-unwrapped;
-libcxx = null;
-bintools = bintoolsNoLibc';
-extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
-extraBuildCommands = mkExtraBuildCommandsNoLibc cc;
-nixSupport.cc-cflags = [
-  "-rtlib=compiler-rt"
-  "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-  "-nostdlib++"
-];
-};
+      clangWithLibcAndNoRt = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintools';
+        extraBuildCommands = mkExtraBuildCommands0 cc;
+        nixSupport.cc-cflags = [
+          "-nostdlib++"
+        ];
+      };
 
-clangNoLibcNoRt = wrapCCWith rec {
-cc = tools.clang-unwrapped;
-libcxx = null;
-bintools = bintoolsNoLibc';
-extraPackages = [ ];
-extraBuildCommands = mkExtraBuildCommands0 cc;
-nixSupport.cc-cflags = [
-  "-nostartfiles"
-];
-};
+      clangNoLibcNoRt = wrapCCWith rec {
+        cc = tools.clang-unwrapped;
+        libcxx = null;
+        bintools = bintoolsNoLibc';
+        extraPackages = [ ];
+        extraBuildCommands = mkExtraBuildCommands0 cc;
+        nixSupport.cc-cflags = [
+          "-nostartfiles"
+        ];
+      };
+
+      clangNoCompilerRtWithLibc = clangWithLibcAndNoRt;
+    # Has to be in tools despite mostly being a library,
+    # because we use a native helper executable from a
+    # non-cross build in cross builds.
+    libclc = callPackage ../common/libclc.nix {
+      inherit buildLlvmTools;
+    };
+  });
 
 # Has to be in tools despite mostly being a library,
 # because we use a native helper executable from a
