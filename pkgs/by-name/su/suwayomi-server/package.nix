@@ -3,6 +3,7 @@
 , fetchurl
 , makeWrapper
 , jdk17_headless
+, nixosTests
 }:
 
 let
@@ -33,6 +34,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postBuild
   '';
+
+  passthru.tests = {
+    suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
+    suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+  };
 
   meta = with lib; {
     description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
