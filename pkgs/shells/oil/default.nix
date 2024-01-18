@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
+  # As of 0.19.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
+  # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
+  # work just fine though, so we disable the error here.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
   configureFlags = [
     "--datarootdir=${placeholder "out"}"
   ] ++ lib.optionals withReadline [
