@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     textual
     typing-extensions
     xdg-base-dirs
+    xdg
   ];
 
   pythonRelaxDeps = [
