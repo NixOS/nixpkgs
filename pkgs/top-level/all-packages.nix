@@ -13351,7 +13351,7 @@ with pkgs;
 
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
-    openjdk = openjdk.override { enableJavaFX = true; };
+    openjdk = openjdk21.override { enableJavaFX = true; };
   };
 
   sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
