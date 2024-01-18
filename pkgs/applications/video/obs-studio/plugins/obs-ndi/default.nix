@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "obs-ndi";
   version = "4.13.0";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake qtbase ];
   buildInputs = [ obs-studio qtbase ndi ];
 
   src = fetchFromGitHub {
@@ -28,12 +28,7 @@ stdenv.mkDerivation rec {
     ln -s ${ndi}/include lib/ndi
   '';
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    rm -rf $out/obs-plugins
-    mv $out/data $out/share/obs
-  '';
+  cmakeFlags = [ "-DENABLE_QT=ON" ];
 
   dontWrapQtApps = true;
 

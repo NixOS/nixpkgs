@@ -10,7 +10,7 @@ index 0d94add..617af73 100644
 -	locations << "/usr/lib";
 -	locations << "/usr/local/lib";
 -#endif
-+	locations << "@NDI@/lib"
++	locations << "@NDI@/lib";
  	for (QString location : locations) {
  		path = QDir::cleanPath(
  			QDir(location).absoluteFilePath(NDILIB_LIBRARY_NAME));
