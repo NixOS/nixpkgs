@@ -10,8 +10,6 @@
   just,
   pkg-config,
   libxkbcommon,
-  glib,
-  gtk3,
   libinput,
   fontconfig,
   freetype,
@@ -63,8 +61,6 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     freetype
     wayland
-    glib
-    gtk3
   ];
 
   dontUseJustBuild = true;
@@ -84,7 +80,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 wayland libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland libxkbcommon ]}
   '';
 
   meta = with lib; {

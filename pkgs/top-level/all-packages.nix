@@ -12503,10 +12503,6 @@ with pkgs;
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
-  qgrep = pin-to-gcc12-if-gcc13 (callPackage ../tools/text/qgrep {
-    inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
-  });
-
   qhull = callPackage ../development/libraries/qhull { };
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
@@ -36366,8 +36362,6 @@ with pkgs;
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
   };
-
-  websploit = python3Packages.callPackage ../tools/security/websploit { };
 
   webssh = with python3Packages; toPythonApplication webssh;
 
