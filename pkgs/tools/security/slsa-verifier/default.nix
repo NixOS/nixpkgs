@@ -27,7 +27,6 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-buildid="
     "-X sigs.k8s.io/release-utils/version.gitVersion=${version}"
   ];
 

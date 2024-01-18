@@ -213,6 +213,7 @@
 , libopenmpt
 , libopus
 , libplacebo
+, libplacebo_5
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -356,7 +357,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
       }
     )
-    ++ (lib.optional (stdenv.isDarwin && lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+    ++ (lib.optional (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
@@ -584,7 +585,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
-  ++ optionals withLibplacebo [ libplacebo vulkan-headers ]
+  ++ optionals withLibplacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]

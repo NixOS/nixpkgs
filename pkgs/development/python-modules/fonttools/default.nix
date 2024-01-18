@@ -60,7 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.concatLists (lib.attrVals ([
     "woff"
-    "interpolatable"
+    # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
     "ufo"
   ] ++ lib.optionals (!skia-pathops.meta.broken) [
     "pathops" # broken

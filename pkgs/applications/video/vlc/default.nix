@@ -44,7 +44,7 @@
 , libmtp
 , liboggz
 , libopus
-, libplacebo
+, libplacebo_5
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmtp
     liboggz
     libopus
-    libplacebo
+    libplacebo_5
     libpulseaudio
     libraw1394
     librsvg
