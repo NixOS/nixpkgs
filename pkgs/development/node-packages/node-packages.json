@@ -7,6 +7,7 @@
 , "@commitlint/config-conventional"
 , "@microsoft/rush"
 , "@shopify/cli"
+, "@sunodo/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
 , "@tailwindcss/language-server"

@@ -29,6 +29,11 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  "@sunodo/cli" = prev."@sunodo/cli".override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.libusb1 ];
+  };
+
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
