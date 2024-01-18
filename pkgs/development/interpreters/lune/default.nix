@@ -6,6 +6,9 @@
 , darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
   version = "0.8.0";
@@ -25,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    Security
+    SystemConfiguration
   ];
 
   checkFlags = [
