@@ -44,7 +44,7 @@ let
     };
   }));
 in lib.mapAttrs
-  (name: plugnames: withPlugins (ps: map (k: builtins.getAttr k ps) plugnames) )
+  (name: plugnames: withPlugins (ps: map (k: ps.${k}) plugnames) )
   {
     minimal      = [];
     aws          = [ "nixops-aws" ];
