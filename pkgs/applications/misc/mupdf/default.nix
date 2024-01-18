@@ -60,12 +60,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.23.5";
+  version = "1.23.6";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-blZ5zfqu+cfoniljlSIM4sEz7T3K1RpHhmczbG6uxwY=";
+    sha256 = "sha256-rBHrhZ3UBEiOUVPNyWUbtDQeW6r007Pyfir8gvmq3Ck=";
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch
@@ -165,10 +165,14 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + lib.optionalString (enableX11 || enableGL) ''
+  '' + (lib.optionalString (stdenv.isDarwin) ''
+    for exe in $bin/bin/*; do
+      install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
+    done
+  '') + (lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
     cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
-  '' + (if enableGL then ''
+  '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"

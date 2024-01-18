@@ -646,6 +646,7 @@ mapAliases ({
   noto-fonts-cjk = noto-fonts-cjk-sans; # Added 2021-12-16
   noto-fonts-emoji = noto-fonts-color-emoji; # Added 2023-09-09
   noto-fonts-extra = noto-fonts; # Added 2023-04-08
+  nvidia-thrust = throw "nvidia-thrust has been removed because the project was deprecated; use cudaPackages.cuda_cccl";
 
   ### O ###
 

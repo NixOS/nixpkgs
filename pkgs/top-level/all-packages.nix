@@ -7328,6 +7328,10 @@ with pkgs;
   cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
   cudaPackages_12 = cudaPackages_12_0;
 
+  # Use the older cudaPackages for tensorflow and jax, as determined by cudnn
+  # compatibility: https://www.tensorflow.org/install/source#gpu
+  cudaPackagesGoogle = cudaPackages_11;
+
   # TODO: try upgrading once there is a cuDNN release supporting CUDA 12. No
   # such cuDNN release as of 2023-01-10.
   cudaPackages = recurseIntoAttrs cudaPackages_11;
@@ -11285,16 +11289,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  nvidia-thrust = callPackage ../development/libraries/nvidia-thrust { };
-
-  nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
-    hostSystem = "TBB";
-    deviceSystem = if config.cudaSupport then "CUDA" else "TBB";
-  };
-
-  nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
-    deviceSystem = "CUDA";
-  };
 
   miller = callPackage ../tools/text/miller { };
 
@@ -20820,6 +20814,9 @@ with pkgs;
     # catboost requires clang 12+ for build
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     inherit (llvmPackages_12) stdenv;
+
+    # https://github.com/catboost/catboost/issues/2540
+    cudaPackages = cudaPackages_11;
   };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
@@ -28019,16 +28016,16 @@ with pkgs;
 
   iproute2 = callPackage ../os-specific/linux/iproute { };
 
-  ipu6-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
+  ipu6-camera-bins = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {};
 
   ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {};
 
-  ipu6ep-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {
+  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
     ipuVersion = "ipu6ep";
   };
 
-  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
-    ipu6-camera-bin = ipu6ep-camera-bin;
+  ipu6epmtl-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+    ipuVersion = "ipu6epmtl";
   };
 
   ivsc-firmware = callPackage ../os-specific/linux/firmware/ivsc-firmware { };
@@ -39497,7 +39494,6 @@ with pkgs;
     singlePrec = true;
     enableMpi = true;
     enableCuda = true;
-    cudatoolkit = cudatoolkit_11;
     fftw = fftwSinglePrec;
   });
 
@@ -40039,7 +40035,6 @@ with pkgs;
 
   faissWithCuda = faiss.override {
     cudaSupport = true;
-    nvidia-thrust = nvidia-thrust-cuda;
   };
 
   fityk = callPackage ../applications/science/misc/fityk { };

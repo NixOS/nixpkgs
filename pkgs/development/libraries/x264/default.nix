@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+  ''
+  # Darwin uses `llvm-strip`, which results in a crash at runtime in assembly-based routines when `-x` is specified.
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
   enableParallelBuilding = true;

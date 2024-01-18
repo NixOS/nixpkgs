@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  pname = "oxygen-icons5";
+  pname = "oxygen-icons";
   meta.license = lib.licenses.lgpl3Plus;
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];

@@ -29,11 +29,11 @@
 , stdenv
   # Options:
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackagesGoogle
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn;
+  inherit (cudaPackagesGoogle) cudatoolkit cudnn;
 
   version = "0.4.20";
 
@@ -210,8 +210,8 @@ buildPythonPackage {
     maintainers = with maintainers; [ samuela ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
     broken =
-      !(cudaSupport -> (cudaPackages ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
-      || !(cudaSupport -> (cudaPackages ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
+      !(cudaSupport -> (cudaPackagesGoogle ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
+      || !(cudaSupport -> (cudaPackagesGoogle ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
       || !(cudaSupport -> stdenv.isLinux);
   };
 }

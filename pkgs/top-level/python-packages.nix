@@ -2451,7 +2451,8 @@ self: super: with self; {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy { };
+  # cupy 12.2.0 possibly incompatible with cutensor 2.0 that comes with cudaPackages_12
+  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_11; };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -13840,7 +13841,6 @@ self: super: with self; {
   callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
     inherit (pkgs.config) cudaSupport;
-    inherit (self.tensorflow-bin) cudaPackages;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
@@ -13873,7 +13873,7 @@ self: super: with self; {
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 
-  tensorrt = callPackage ../development/python-modules/tensorrt { };
+  tensorrt = callPackage ../development/python-modules/tensorrt { cudaPackages = pkgs.cudaPackages_11; };
 
   tensorstore = callPackage ../development/python-modules/tensorstore { };
 

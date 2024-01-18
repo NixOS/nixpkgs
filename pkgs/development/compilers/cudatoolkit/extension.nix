@@ -47,13 +47,16 @@ final: prev: let
         ./hooks/mark-for-cudatoolkit-root-hook.sh)
     { });
 
-  # Normally propagated by cuda_nvcc or cudatoolkit through their depsHostHostPropagated
+  # Currently propagated by cuda_nvcc or cudatoolkit, rather than used directly
   setupCudaHook = (final.callPackage
     ({ makeSetupHook, backendStdenv }:
       makeSetupHook
         {
           name = "setup-cuda-hook";
 
+          substitutions.setupCudaHook = placeholder "out";
+
+          # Point NVCC at a compatible compiler
           substitutions.ccRoot = "${backendStdenv.cc}";
 
           # Required in addition to ccRoot as otherwise bin/gcc is looked up

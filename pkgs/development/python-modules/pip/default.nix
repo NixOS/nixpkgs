@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , mock
 , scripttest
@@ -28,6 +29,19 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-mUlzfYmq1FE3X1/2o7sYJzMgwHRI4ib4EMhpg83VvrI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-5752.part-1.patch";
+      url = "https://github.com/pypa/pip/commit/1082eb12622b20d101d2864111dd9a591dd6c2f5.patch";
+      hash = "sha256-aYdFaEmJW5kFTSz7w/05XhWW1gQSs+XgA3zdhsF3Xfg=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-5752.part-2.patch";
+      url = "https://github.com/pypa/pip/commit/6dbd9c68f085c5bf304247bf7c7933842092efb2.patch";
+      hash = "sha256-CV4b52u7gD0XbTRxYSLrWBw4h/3iHzQ6Z768rbtIjrk=";
+    })
+  ];
 
   postPatch = ''
     # Remove vendored Windows PE binaries

@@ -134,27 +134,15 @@ self = stdenv.mkDerivation {
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/44734d1fe98ef47019fe2c56d867d1645c526e4e.diff";
-      hash = "sha256-ipaISEY5xcnGvrwFxNY80JVlYWddfiHofkYEBuPkyDY=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/d2a46afbfc44121aa491a2b4d1a3249d26fc6a11.diff";
-      hash = "sha256-i00s9oUhZXXf/A4cHwWN6uRDP70cHjz+kgVpiDM/eMw=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/17cde1ee87cc0cbb896ca81949b8f192d5496271.diff";
-      hash = "sha256-ao2pWQwMBskOjWJsjWqwFYAeqpTWAyJbEtSryDO+xyo=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/robclark/mesa/-/commit/4489d737d5c12eb0a3441ed0b303f9f1100a7166.diff";
-      hash = "sha256-WxqwEngd79NHLedQOWMjjroaN0gr6Upd96uteSvr4Yw=";
-    })
-    # fixes a linking error
+    # Fix build on macOS
+    # Last two commits from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25992
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/c8b64452c076c1768beb23280de25faf2bcbe2c8.diff";
       hash = "sha256-mqivdzyoLtkfkAb+r57gjPwg8d7whgFAahiUhGVOOvo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/96d55d784cb4f047a4b58cd08330f42208641ea7.diff";
+      hash = "sha256-SkWdvqltfByFiKlhr9YILA6qWQxuyKz/YTanVp/NMzg=";
     })
   ];
 
