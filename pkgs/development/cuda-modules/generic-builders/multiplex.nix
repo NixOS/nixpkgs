@@ -63,11 +63,12 @@ let
   # computeName :: Package -> String
   computeName = {version, ...}: mkVersionedPackageName pname version;
 
-  # Check whether a package supports our CUDA version
+  # Check whether a package supports our CUDA version and platform.
   # isSupported :: Package -> Bool
   isSupported =
     package:
-    !(strings.hasPrefix "unsupported" package.platform)
+    # The `platform` attribute of the package is NVIDIA's name for a redistributable architecture.
+    redistArch == package.platform
     && strings.versionAtLeast cudaVersion package.minCudaVersion
     && strings.versionAtLeast package.maxCudaVersion cudaVersion;
 
