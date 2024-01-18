@@ -103,11 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     command = "searchd --version";
   };
 
-  postFixup = ''
-    # Remove references to nix store in dist config file
-    sed -i 's|/nix/store/.*/var|/var|' $out/etc/manticoresearch/manticore.conf
-  '';
-
   meta = {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
