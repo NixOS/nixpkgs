@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.87.0";
+  version = "0.96.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-b1TCj3aKupqUMQ74O58O5WJfQM9tj1G0ny5YeeilFAM=";
+    sha256 = "sha256-eQau6PcslY/Bzghmndv1lq5fb+Q+x9guouKzLw5sJTg=";
   };
 
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-o/51Z2Zmdza3pNZa0u3j4uG46orE9S7pUsZOXjHKrnI=";
+  vendorHash = "sha256-aMxOu6eCskTlphMjM/CBs0lN6UkLDgSidS9qwlSUUiU=";
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
@@ -41,9 +41,12 @@ buildGoModule rec {
 
   preCheck = "export CGO_ENABLED=1";
 
-  # This test fails on darwin for mysterious reasons.
-  checkFlags = lib.optionals stdenv.isDarwin
-    [ "-skip" "TestDefaultExtensions/memory_ballast" ];
+  checkFlags = [
+    # collectd test tries and fails to bind to port 8081
+    # mezo test tries to reach external service
+    # memory_ballast test fails on darwin for mysterious reasons.
+    "-skip=TestDefaultReceivers/collectd|TestDefaultExporters/mezmo${lib.optionalString stdenv.isDarwin "|TestDefaultExtensions/memory_ballast"}"
+  ];
 
   ldflags = [
     "-s"
