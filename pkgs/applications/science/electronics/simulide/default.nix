@@ -109,4 +109,13 @@ in
       cp bin/simulide $out/bin/simulide
     '';
   };
+
+  simulide_1_0_0 = generic {
+    version = "1.0.0";
+    release = "SR2";
+    branch = "1.0.0";
+    rev = "1449";
+    sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
+    extraBuildInputs = [ qtscript ];
+  };
 }
