@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.52.0";
+  version = "14.53.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-VdJZnwo+DwVDZuuuqk0X26CXs7ZrUFXqC8qEYaX74Zc=";
+    hash = "sha256-uYUzn3JlsZmzzbk740aD3PW3OuGqdsAfU7HlYX5kPrY=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
     responses
   ];
 
-  disabledTestPaths = [
-    # This is not actual code, just some pre-written boiler-plate template
-    "templates/test_scraper.py"
+  disabledTests = [
+    # Fixture is broken
+    "test_instructions"
   ];
 
   pythonImportsCheck = [
