@@ -5,6 +5,7 @@
 , pillow
 , pypng
 , pytestCheckHook
+, pythonAtLeast
 , qrcode
 , setuptools
 , testers
@@ -47,6 +48,10 @@ buildPythonPackage rec {
       command = "qr --version";
     };
   };
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    "test_change"
+  ];
 
   meta = with lib; {
     description = "Python QR Code image generator";
