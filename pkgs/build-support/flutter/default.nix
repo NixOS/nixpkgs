@@ -23,7 +23,7 @@
 }@args:
 
 let
-  hostPlatforms = rec {
+  builderArgs = rec {
     universal = args // {
       sdkSetupScript = ''
         # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
@@ -170,7 +170,10 @@ let
         runHook postInstall
       '';
     };
-  };
+  }.${flutterHostPlatform} or (throw "Unsupported Flutter host platform: ${flutterHostPlatform}");
+
+  minimalFlutter = flutter.override { supportedTargetFlutterPlatforms = [ "universal" flutterHostPlatform ]; };
+
+  buildAppWith = flutter: buildDartApplication.override { dart = flutter; };
 in
-(buildDartApplication.override { dart = flutter.override { supportedTargetFlutterPlatforms = [ "universal" flutterHostPlatform ]; }; })
-  hostPlatforms.${flutterHostPlatform} or (throw "Unsupported Flutter host platform: ${flutterHostPlatform}")
+buildAppWith minimalFlutter (builderArgs // { passthru = builderArgs.passthru or { } // { multiShell = buildAppWith flutter builderArgs; }; })
