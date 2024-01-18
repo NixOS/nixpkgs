@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/NetworkConfiguration/dhcpcd/commit/38befd4e867583002b96ec39df733585d74c4ff5.patch";
       hash = "sha256-nS2zmLuQBYhLfoPp0DOwxF803Hh32EE4OUKGBTTukE0=";
     })
+    # allow madvise syscall (required by scudo memory allocator)
+    (fetchpatch {
+      url = "https://github.com/NetworkConfiguration/dhcpcd/commit/ac400150d44d2e8c10badd2ce0255ab14cd16f41.patch";
+      hash = "sha256-1XeyxIoQTOQjixtM+xUjpgPH6IHRfs5wUMwt6IKQwXg=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
