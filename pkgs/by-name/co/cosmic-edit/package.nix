@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rust,
   rustPlatform,
   cmake,
   makeBinaryWrapper,
@@ -21,13 +20,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2024-01-12";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "4a3dd101f35eb3c1c585f104d78ed4ee31d393d3";
-    hash = "sha256-pk+4u13oWZ4fgXy1tlDgq+E4J+UddjTNSexMm4dgBSo=";
+    rev = "c1944f9c15812ce842c91a77e228cc22a0f49f18";
+    hash = "sha256-wJnBfBQKYmpJBSboGKtlwew17clE60ac2AismIe1XaA=";
   };
 
   cargoLock = {
@@ -35,8 +34,10 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-wBliqZbRHYiwZmu0vHeIP5DFzg/1IeQP3aMxiYC88bo=";
-      "cosmic-text-0.10.0" = "sha256-fE5HkhITLw0OBfFLFMsKEJw5idO265i4S7qylHTt7C0=";
+      "cosmic-config-0.1.0" = "sha256-GHjoLGF9hFJRpf5i+TwflRnh8N+oWyWZ9fqgRFLXQsw=";
+      "cosmic-syntax-theme-0.1.0" = "sha256-9Vf2s5Ry2hco80EbXOuVLwvOWygRiuaRD4tTImWooSg=";
+      "cosmic-text-0.10.0" = "sha256-PHz5jUecK889E88Y20XUe2adTUO8ElnoV7IIcaohMUw=";
+      "glyphon-0.3.0" = "sha256-JGkNIfj1HjOF8kGxqJPNq/JO+NhZD6XrZ4KmkXEP6Xc=";
       "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
       "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
       "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
@@ -50,12 +51,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    just
-    pkg-config
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
   buildInputs = [
     libxkbcommon
     xorg.libX11
@@ -75,9 +71,7 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${
-      rust.lib.toRustTargetSpecShort stdenv.hostPlatform
-    }/release/cosmic-edit"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-edit"
   ];
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
@@ -91,7 +85,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun ];
+    maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;
   };
 }
