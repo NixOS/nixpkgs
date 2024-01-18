@@ -1772,7 +1772,6 @@ broken-packages:
   - gemstone # failure in job https://hydra.nixos.org/build/233202246 at 2023-09-02
   - gender # failure in job https://hydra.nixos.org/build/233235712 at 2023-09-02
   - genders # failure in job https://hydra.nixos.org/build/233238566 at 2023-09-02
-  - general-allocate # failure in job https://hydra.nixos.org/build/233214648 at 2023-09-02
   - general-prelude # failure in job https://hydra.nixos.org/build/233248628 at 2023-09-02
   - GeneralTicTacToe # failure in job https://hydra.nixos.org/build/233207939 at 2023-09-02
   - generator # failure in job https://hydra.nixos.org/build/233213384 at 2023-09-02
