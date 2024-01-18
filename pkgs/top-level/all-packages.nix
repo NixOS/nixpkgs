@@ -8806,7 +8806,7 @@ with pkgs;
   goreplay = callPackage ../tools/networking/goreplay { };
 
   gost = callPackage ../tools/networking/gost {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
+    buildGoModule = buildGo120Module; # go 1.21 build failure
   };
 
   gource = callPackage ../applications/version-management/gource { };
