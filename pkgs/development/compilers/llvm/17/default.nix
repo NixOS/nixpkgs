@@ -314,8 +314,10 @@ in let
         }).overrideAttrs (old: {
           configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
         });
-      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
-               then overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+      then  overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+      else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
+      then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt
                else stdenv;
     };
 
