@@ -51,5 +51,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    # Support for pydantic > 2, https://github.com/stravalib/stravalib/issues/379
+    broken = versionAtLeast pydantic.version "2";
   };
 }
