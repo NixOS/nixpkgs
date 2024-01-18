@@ -65,6 +65,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
+  RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
@@ -99,6 +101,10 @@ in stdenv.mkDerivation (finalAttrs: {
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
       stdenv.targetPlatform.rust.rustcTargetSpec
+
+    # Other targets that don't need any extra dependencies to build.
+    ] ++ optionals (!fastCross) [
+      "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
@@ -154,12 +160,12 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
-    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
-    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
-    ln -s ${rustc}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
+    ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
+    ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
     touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
-    python ./x.py --keep-stage=0 --stage=1 build library/std
+    python ./x.py --keep-stage=0 --stage=1 build library
 
     runHook postBuild
   " else null;
@@ -169,9 +175,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
-    makeWrapper ${rustc}/bin/rustc $out/bin/rustc --add-flags "--sysroot $out"
-    makeWrapper ${rustc}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
-    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+    ln -s ${rustc.unwrapped}/bin/rustc $out/bin
+    makeWrapper ${rustc.unwrapped}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
     lndir ${rustc.man} $man
@@ -201,7 +207,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # to do this when rustc's target platform is dynamically linked musl.
     #
     # [1]: https://github.com/rust-lang/compiler-team/issues/422
-    substituteInPlace compiler/rustc_target/src/spec/linux_musl_base.rs \
+    substituteInPlace compiler/rustc_target/src/spec/base/linux_musl.rs \
         --replace "base.crt_static_default = true" "base.crt_static_default = false"
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997

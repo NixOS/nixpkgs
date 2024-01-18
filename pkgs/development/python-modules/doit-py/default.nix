@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "doit-py";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pydoit";

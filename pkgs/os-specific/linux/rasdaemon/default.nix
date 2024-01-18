@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook
+, autoreconfHook, pkg-config
 , glibcLocales, kmod, coreutils, perl
-, dmidecode, hwdata, sqlite
+, dmidecode, hwdata, sqlite, libtraceevent
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "rasdaemon";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     rev = "v${version}";
-    sha256 = "sha256-oLwR+bNgKceVgLTOLYiKHNUkRmLouaQshdp/8UJnfqg=";
+    sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     coreutils
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     hwdata
     kmod
     sqlite
+    libtraceevent
     (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
   ]
   ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
@@ -32,20 +33,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
-    "--enable-sqlite3"
-    "--enable-aer"
-    "--enable-mce"
-    "--enable-extlog"
-    "--enable-non-standard"
-    "--enable-abrt-report"
-    "--enable-hisi-ns-decode"
-    "--enable-devlink"
-    "--enable-diskerror"
-    "--enable-memory-failure"
-    "--enable-memory-ce-pfa"
-    "--enable-amp-ns-decode"
-  ]
-  ++ lib.optionals (stdenv.isAarch64) [ "--enable-arm" ];
+    "--enable-all"
+  ];
 
   # The installation attempts to create the following directories:
   # /var/lib/rasdaemon

@@ -30,8 +30,6 @@ buildPythonPackage rec {
     uhi
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   checkInputs = [
     pytestCheckHook
   ];

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
-    repo = finalAttrs.pname;
+    repo = "rpi-imager";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-+8jSKYy3w+S7BP7q+K5UYXa8Fp6uNEya47ssYkVCHH4=";
+    sha256 = "sha256-ZuS/fhPpVlLSdaD+t+qIw6fdEbi7c82X+BxcgWlPntg=";
   };
 
   nativeBuildInputs = [
@@ -72,9 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
-    homepage = "https://www.raspberrypi.com/software/";
+    homepage = "https://github.com/raspberrypi/rpi-imager/";
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
     mainProgram = "rpi-imager";
     maintainers = with maintainers; [ ymarkus anthonyroussel ];

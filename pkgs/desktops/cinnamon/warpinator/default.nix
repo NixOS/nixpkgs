@@ -29,17 +29,20 @@ let
     cryptography
     pynacl
     netifaces
+    netaddr
+    ifaddr
+    qrcode
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.6.4";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-BKptTQbSBTQyc5V6WWdsPdC76sH0CFMXOyahfRmvQzc=";
+    hash = "sha256-qtz8/vO6LJ19NcuFf9p3DWNy41kkoBWlgZGChlnTOvI=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dbundle-grpc=false"
     "-Dbundle-zeroconf=false"
   ];
 

@@ -49,5 +49,6 @@ buildGoModule rec {
     description = "A lightweight, self-hosted memo hub";
     maintainers = with maintainers; [ indexyz ];
     license = licenses.mit;
+    mainProgram = "memos";
   };
 }

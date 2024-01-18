@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ davidak ];
+    mainProgram = "dit";
   };
 }

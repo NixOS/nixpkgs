@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sbruder schnusch ];
     platforms = platforms.unix;
+    mainProgram = "httpdirfs";
   };
 }

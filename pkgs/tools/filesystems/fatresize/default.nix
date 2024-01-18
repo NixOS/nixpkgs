@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ya-mouse/fatresize";
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "fatresize";
   };
 }

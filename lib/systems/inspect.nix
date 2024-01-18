@@ -98,6 +98,9 @@ rec {
       { cpu = { family = "riscv"; }; }
       { cpu = { family = "x86"; }; }
     ];
+
+    isElf          = { kernel.execFormat = execFormats.elf; };
+    isMacho        = { kernel.execFormat = execFormats.macho; };
   };
 
   # given two patterns, return a pattern which is their logical AND.

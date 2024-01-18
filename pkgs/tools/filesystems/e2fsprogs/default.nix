@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, fuse
+, withFuse ? stdenv.isLinux, fuse
 , shared ? !stdenv.hostPlatform.isStatic
 , e2fsprogs, runCommand
 }:
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   # fuse2fs adds 14mb of dependencies
   outputs = [ "bin" "dev" "out" "man" "info" ]
-    ++ lib.optionals stdenv.isLinux [ "fuse2fs" ];
+    ++ lib.optionals withFuse [ "fuse2fs" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [ libuuid gettext ]
-    ++ lib.optionals stdenv.isLinux [ fuse ];
+    ++ lib.optionals withFuse [ fuse ];
 
   patches = [
     (fetchpatch { # avoid using missing __GNUC_PREREQ(X,Y)
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
       mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
     fi
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString withFuse ''
     mkdir -p $fuse2fs/bin
     mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
   '';

@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-sLNO4vkmlirsqJmCV9YWpyNnIiigU1KMls7rOgWgSmQ=";
   };
-  sourceRoot = "${src.name}/desktop_version";
+
+  patches = [
+    ./utf8cpp.patch
+  ];
+
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";
@@ -51,7 +55,12 @@ stdenv.mkDerivation rec {
   # Help CMake find SDL_mixer.h
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_mixer}/include/SDL2";
 
-  cmakeFlags = [ "-DBUNDLE_DEPENDENCIES=OFF" ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
+  cmakeDir = "../desktop_version";
+
+  cmakeFlags = [
+    "-DBUNDLE_DEPENDENCIES=OFF"
+    "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
+  ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
 
   desktopItems = [
     (makeDesktopItem {

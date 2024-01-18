@@ -23,6 +23,7 @@ buildNpmPackage rec {
     license = licenses.unfree; # upstream has no license
     maintainers = [ maintainers.malo ];
     platforms = platforms.all;
+    mainProgram = "github-copilot-cli";
   };
 }
 

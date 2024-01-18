@@ -39,7 +39,6 @@
 , upower
 , wayland
 , wireplumber
-, wlroots
 , wrapGAppsHook
 
 , cavaSupport ? true
@@ -115,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     spdlog
     wayland
-    wlroots
   ]
   ++ lib.optionals cavaSupport [
     SDL2
@@ -180,13 +178,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "waybar";
     maintainers = with lib.maintainers; [
       FlorianFranzen
-      jtbx
       lovesegfault
       minijackson
       rodrgz
       synthetica
       khaneliman
     ];
-    inherit (wlroots.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 })

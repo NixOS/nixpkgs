@@ -38,6 +38,7 @@ substituteAll {
     install-bootloader = nixosTests.nixos-rebuild-install-bootloader;
     simple-installer = nixosTests.installer.simple;
     specialisations = nixosTests.nixos-rebuild-specialisations;
+    target-host = nixosTests.nixos-rebuild-target-host;
   };
 
   meta = {

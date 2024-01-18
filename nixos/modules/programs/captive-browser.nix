@@ -5,7 +5,8 @@ let
 
   inherit (lib)
     concatStringsSep escapeShellArgs optionalString
-    literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
+    literalExpression mkEnableOption mkPackageOption mkIf mkOption
+    mkOptionDefault types;
 
   requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
 
@@ -50,12 +51,7 @@ in
     programs.captive-browser = {
       enable = mkEnableOption (lib.mdDoc "captive browser");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.captive-browser;
-        defaultText = literalExpression "pkgs.captive-browser";
-        description = lib.mdDoc "Which package to use for captive-browser";
-      };
+      package = mkPackageOption pkgs "captive-browser" { };
 
       interface = mkOption {
         type = types.str;

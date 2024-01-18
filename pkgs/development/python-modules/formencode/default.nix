@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "formencode";
   version = "2.1.0";
+  format = "setuptools";
 
   disabled = isPy27;
 

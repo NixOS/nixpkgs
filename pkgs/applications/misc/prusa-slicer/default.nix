@@ -10,7 +10,7 @@
 , wrapGAppsHook
 , boost
 , cereal
-, cgal_5
+, cgal
 , curl
 , dbus
 , eigen
@@ -32,7 +32,9 @@
 , tbb_2021_8
 , wxGTK32
 , xorg
-, fetchpatch
+, libbgcode
+, heatshrink
+, catch2
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
 }:
@@ -68,7 +70,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.6.1";
+  version = "2.7.1";
+
+  src = fetchFromGitHub {
+    owner = "prusa3d";
+    repo = "PrusaSlicer";
+    hash = "sha256-hSHeh3qJroCFnzeoVz6LKtCK8r0ealWSFz9cW4xvSb8=";
+    rev = "version_${finalAttrs.version}";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -80,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     binutils
     boost
     cereal
-    cgal_5
+    cgal
     curl
     dbus
     eigen
@@ -102,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     tbb_2021_8
     wxGTK-override'
     xorg.libX11
+    libbgcode
+    heatshrink
+    catch2
   ] ++ lib.optionals withSystemd [
     systemd
   ];
@@ -142,21 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/PrusaSlicer.cpp \
       --replace "#ifdef __APPLE__" "#if 0"
   '';
-
-  patches = [
-    # wxWidgets: CheckResizerFlags assert fix
-    (fetchpatch {
-      url = "https://github.com/prusa3d/PrusaSlicer/commit/24a5ebd65c9d25a0fd69a3716d079fd1b00eb15c.patch";
-      hash = "sha256-MNGtaI7THu6HEl9dMwcO1hkrCtIkscoNh4ulA2cKtZA=";
-    })
-  ];
-
-  src = fetchFromGitHub {
-    owner = "prusa3d";
-    repo = "PrusaSlicer";
-    hash = "sha256-t5lnBL7SZVfyR680ZK29YXgE3pag+uVv4+BGJZq40/A=";
-    rev = "version_${finalAttrs.version}";
-  };
 
   cmakeFlags = [
     "-DSLIC3R_STATIC=0"

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "babelfish";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

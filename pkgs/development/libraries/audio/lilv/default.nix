@@ -18,20 +18,24 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.20";
+  version = "0.24.22";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-T7CCubiyhuqSu7cb3mt1Ykzsq23wzGOe51oqCWIS7rw=";
+    hash = "sha256-dvlJ0OWfyDNjQJtexeFcEEb7fdZYnTwbkgzsH9Kfn/M=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
   buildInputs = [ libsndfile serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 
-  mesonFlags = [ "-Ddocs=disabled" ];
+  mesonFlags = [
+    "-Ddocs=disabled"
+    # Tests require building a shared library.
+    (lib.mesonEnable "tests" (!stdenv.hostPlatform.isStatic))
+  ];
 
   passthru = {
     tests = {

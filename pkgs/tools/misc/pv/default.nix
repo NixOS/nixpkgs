@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.all;
+    mainProgram = "pv";
   };
 }

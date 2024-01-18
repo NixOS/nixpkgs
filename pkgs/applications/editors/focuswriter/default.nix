@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "focuswriter";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
     rev = "v${version}";
-    hash = "sha256-6wvTlC/NCCcN2jpwqtoOsCln3ViY/vj7NpMsbYHBGiI=";
+    hash = "sha256-z3DQaMgaTjzj2Oh1QI7A5v9G7GxjlGj/7jInxH/tDaY=";
   };
 
   nativeBuildInputs = [ pkg-config cmake qttools wrapQtAppsHook ];
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ madjar kashw2 ];
     platforms = platforms.linux;
     homepage = "https://gottcode.org/focuswriter/";
+    mainProgram = "focuswriter";
   };
 }

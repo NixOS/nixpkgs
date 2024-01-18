@@ -84,5 +84,6 @@ stdenv.mkDerivation rec {
       for X11, focused on delivering frames from the window to the
       framebuffer as quickly as possible.
     '';
+    mainProgram = "neocomp";
   };
 }

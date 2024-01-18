@@ -14,23 +14,35 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, pytz
 , semver
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.35.1";
-  format = "setuptools";
+  version = "0.36.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "plugwise";
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eHJQXLiuWmJo/Eo4B8gEo44rwpPA7ASjxKSmdu6Tv9M=";
+    hash = "sha256-3TTrfvhTQIhig0QUP56+IkciiboXZD4025FvotAZgzo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=68.0" "setuptools" \
+      --replace "wheel~=0.40.0" "wheel"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,7 +52,6 @@ buildPythonPackage rec {
     munch
     pyserial
     python-dateutil
-    pytz
     semver
   ];
 

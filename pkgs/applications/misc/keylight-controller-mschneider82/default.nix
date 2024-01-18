@@ -37,7 +37,7 @@ buildGoModule rec {
     longDescription = ''
       Requires having:
       * Elgato's Keylight paired to local wifi network.
-      * Service avahi with nssmdns enabled.
+      * Service avahi with nssmdns4 enabled.
     '';
     license = licenses.mit;
     homepage = "https://github.com/mschneider82/keylight-control";

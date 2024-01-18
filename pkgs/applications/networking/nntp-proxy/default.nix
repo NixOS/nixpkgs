@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.fadenb ];
     platforms = lib.platforms.all;
+    mainProgram = "nntp-proxy";
   };
 }

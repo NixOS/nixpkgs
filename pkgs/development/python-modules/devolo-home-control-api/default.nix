@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
   version = "0.18.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -21,8 +22,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-4AyC1DDYtKl8SwJf75BbzoOAhbZXmBZ05ma9YmLzksM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+    mainProgram = "althttpd";
   };
 }

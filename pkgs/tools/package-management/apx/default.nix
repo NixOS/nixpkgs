@@ -2,34 +2,37 @@
 , buildGoModule
 , fetchFromGitHub
 , distrobox
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
-    repo = pname;
+    repo = "apx";
     rev = "v${version}";
-    hash = "sha256-3CelqEntpfld0n+Ewg7NCkowVjgCf5b6StfSkYbgV5k=";
+    hash = "sha256-/RGL2mCfJiJInnt5zgc1xXPqZxXCAcoWIbky99okvL0=";
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
   postPatch = ''
     substituteInPlace config/apx.json \
-      --replace "/usr/share/apx/distrobox" "${distrobox}/bin/distrobox" \
+      --replace "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
       --replace "/usr/share/apx" "$out/bin/apx"
     substituteInPlace settings/config.go \
       --replace "/usr/share/apx/" "$out/share/apx/"
   '';
 
   postInstall = ''
-    install -D config/apx.json -t $out/share/apx/
-    install -D man/man1/apx.1 -t $out/man/man1/
+    install -m 444 -D config/apx.json -t $out/share/apx/
+    installManPage man/man1/*
   '';
 
   meta = with lib; {
@@ -37,6 +40,7 @@ buildGoModule rec {
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya jgarcia ];
+    maintainers = with maintainers; [ dit7ya chewblacka ];
+    mainProgram = "apx";
   };
 }

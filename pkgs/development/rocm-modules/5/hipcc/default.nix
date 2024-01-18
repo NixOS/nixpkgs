@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "HIPCC";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-lJX6nF1V4YmK5ai7jivXlRnG3doIOf6X9CWLHVdRuVg=";
@@ -37,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Compiler driver utility that calls clang or nvcc";
-    homepage = "https://github.com/ROCm-Developer-Tools/HIPCC";
+    homepage = "https://github.com/ROCm/HIPCC";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

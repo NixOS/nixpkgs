@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libkcapi";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "libkcapi";
     rev = "v${version}";
-    hash = "sha256-G/4G8179Gc8RfQfQImOCsBC8WXKK7jQJfUSXm0hYLJ0=";
+    hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

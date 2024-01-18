@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "aiosyncthing";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zhulik";

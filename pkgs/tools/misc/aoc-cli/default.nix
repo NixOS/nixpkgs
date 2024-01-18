@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/scarvalhojr/aoc-cli/";
     license = licenses.mit;
     maintainers = with maintainers; [ jordanisaacs ];
+    mainProgram = "aoc";
   };
 }

@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DeterminateSystems/zpool-auto-expand-partitions";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
+    mainProgram = "zpool_part_disks";
   };
 }

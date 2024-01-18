@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nomino";
   };
 }

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "codepy";
   version = "2019.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "inducer";

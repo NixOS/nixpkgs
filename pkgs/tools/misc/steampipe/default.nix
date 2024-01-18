@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "0.20.12";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
     rev = "v${version}";
-    sha256 = "sha256-/vcxK/tX4kvDnQCqO8olHZodAbPDDvz1domJZ1WJqPU=";
+    hash = "sha256-baZF1qrRCAF3MjwDb43ejHSFsqVFrIULOsopRRaUZPs=";
   };
 
-  vendorHash = "sha256-VuUzo+afUazXH7jaR4Qm5Kfr6qiyHqdGLJWS3MX8oOA=";
+  vendorHash = "sha256-XwFBXQw6OfxIQWYidTj+TLn0TrVTrfVry6MgiQWIoV4=";
   proxyVendor = true;
 
   patchPhase = ''
@@ -26,6 +26,9 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
+
+  # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
+  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     INSTALL_DIR=$(mktemp -d)

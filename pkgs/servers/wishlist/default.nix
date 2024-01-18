@@ -23,5 +23,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ caarlos0 penguwin ];
+    mainProgram = "wishlist";
   };
 }

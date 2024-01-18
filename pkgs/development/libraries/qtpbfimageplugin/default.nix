@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "2.6";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
-    sha256 = "sha256-tTpCbHiZTb/xmm3oRXsYAUWl1sYyAlGP9ss4xVQgPVo=";
+    sha256 = "sha256-RYZnuHjK6/ygFsjjnOTz7glYnibTwDNlou/4cQ7HfKM=";
   };
 
   nativeBuildInputs = [ qmake ];

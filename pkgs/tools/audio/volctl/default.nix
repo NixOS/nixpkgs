@@ -53,5 +53,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
+    mainProgram = "volctl";
   };
 }

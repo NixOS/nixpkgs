@@ -19,7 +19,7 @@ let
     mkIf
     mkMerge
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     optional
     optionalAttrs
     optionalString
@@ -394,9 +394,8 @@ let
         Maximum number of queries processed concurrently by query node.
       '';
 
-      query.replica-labels = mkAttrsParam "query.replica-label" ''
+      query.replica-labels = mkListParam "query.replica-label" ''
         Labels to treat as a replica indicator along which data is
-
         deduplicated.
 
         Still you will be able to query without deduplication using
@@ -682,7 +681,7 @@ in {
 
   options.services.thanos = {
 
-    package = mkPackageOptionMD pkgs "thanos" {};
+    package = mkPackageOption pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption

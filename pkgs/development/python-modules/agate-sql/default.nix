@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "agate-sql";
   version = "0.7.0";
+  format = "setuptools";
 
   disabled = isPy27;
 

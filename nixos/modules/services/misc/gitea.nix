@@ -51,12 +51,7 @@ in
         description = lib.mdDoc "Enable Gitea Service.";
       };
 
-      package = mkOption {
-        default = pkgs.gitea;
-        type = types.package;
-        defaultText = literalExpression "pkgs.gitea";
-        description = lib.mdDoc "gitea derivation to use";
-      };
+      package = mkPackageOption pkgs "gitea" { };
 
       useWizard = mkOption {
         default = false;
@@ -237,6 +232,13 @@ in
         default = "${cfg.stateDir}/repositories";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = lib.mdDoc "Path to the git repositories.";
+      };
+
+      camoHmacKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/camoHmacKey";
+        description = lib.mdDoc "Path to a file containing the camo HMAC key.";
       };
 
       mailerPasswordFile = mkOption {
@@ -434,6 +436,10 @@ in
         LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
+      camo = mkIf (cfg.camoHmacKeyFile != null) {
+        HMAC_KEY = "#hmackey#";
+      };
+
       session = {
         COOKIE_NAME = lib.mkDefault "session";
       };
@@ -573,6 +579,10 @@ in
 
             ${lib.optionalString cfg.lfs.enable ''
               ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
             ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''

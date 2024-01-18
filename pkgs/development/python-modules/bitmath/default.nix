@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "bitmath";
   version = "1.3.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

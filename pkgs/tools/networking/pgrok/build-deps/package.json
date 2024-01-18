@@ -5,7 +5,7 @@
     "build": "tsc && vite build --outDir=dist --emptyOutDir",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
-  "version": "1.4.0",
+  "version": "1.4.1",
   "dependencies": {
     "axios": "~1.4.0",
     "react": "~18.2.0",

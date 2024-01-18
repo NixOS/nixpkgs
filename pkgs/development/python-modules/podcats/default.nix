@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "podcats";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";

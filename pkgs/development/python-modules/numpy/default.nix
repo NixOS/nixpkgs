@@ -11,6 +11,7 @@
 , cython_3
 , gfortran
 , meson-python
+, mesonEmulatorHook
 , pkg-config
 , xcbuild
 
@@ -52,17 +53,20 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.1";
+  version = "1.26.2";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-yMbHLUqfgx8yjvsTEmQqHK+vqoiYHZq3Y2jVDQfZPL4=";
+    hash = "sha256-9lc4RHZ2q1d38R5ru9uM4Rt4XhBfaQvEWWZXSBa20+o=";
   };
 
   patches = [
+    # Remove last usage of distutils to enable numpy on Python 3.12
+    ./0001-BLD-remove-last-usage-of-distutils-in-_core-code_gen.patch
+
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
@@ -83,6 +87,10 @@ in buildPythonPackage rec {
     rm numpy/core/tests/test_cython.py
 
     patchShebangs numpy/_build_utils/*.py
+
+    # remove needless reference to full Python path stored in built wheel
+    substituteInPlace numpy/meson.build \
+      --replace 'py.full_path()' "'python'"
   '';
 
   nativeBuildInputs = [
@@ -92,6 +100,8 @@ in buildPythonPackage rec {
     pkg-config
   ] ++ lib.optionals (stdenv.isDarwin) [
     xcbuild.xcrun
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -108,6 +118,11 @@ in buildPythonPackage rec {
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
+  '';
+
+  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
+  postConfigure = ''
+    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   preBuild = ''

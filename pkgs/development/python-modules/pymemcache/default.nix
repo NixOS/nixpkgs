@@ -5,6 +5,7 @@
 , mock
 , six
 , pytestCheckHook
+, python-memcached
 , pythonOlder
 , zstd
 , stdenv
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     faker
     mock
     pytestCheckHook
+    python-memcached
     zstd
   ];
 
@@ -39,10 +41,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" setup.cfg
   '';
 
-  disabledTests = [
-    # python-memcached is not available (last release in 2017)
-    "TestClientSocketConnect"
-  ] ++ lib.optionals stdenv.is32bit [
+  disabledTests = lib.optionals stdenv.is32bit [
     # test_compressed_complex is broken on 32-bit platforms
     # this can be removed on the next version bump
     # see also https://github.com/pinterest/pymemcache/pull/480

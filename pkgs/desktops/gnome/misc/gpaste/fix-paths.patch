@@ -1,40 +1,8 @@
-diff --git a/src/gnome-shell/extension.js b/src/gnome-shell/extension.js
-index cb862a30..2bd41363 100644
---- a/src/gnome-shell/extension.js
-+++ b/src/gnome-shell/extension.js
-@@ -10,6 +10,10 @@ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/ex
- import checkerBypass from './checkerBypass.js';
- import { GPasteIndicator } from './indicator.js';
- 
-+import GIRepository from 'gi://GIRepository';
-+
-+GIRepository.Repository.prepend_search_path('@typelibDir@');
-+
- export default class GPasteExtension extends Extension {
-     enable() {
-         checkerBypass();
-diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
-index 4c0d9bde..5740d8f6 100644
---- a/src/gnome-shell/prefs.js
-+++ b/src/gnome-shell/prefs.js
-@@ -5,8 +5,11 @@
-  */
- 
- import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-+import GIRepository from 'gi://GIRepository';
- 
--import GPasteGtk from 'gi://GPasteGtk?version=4';
-+GIRepository.Repository.prepend_search_path('@typelibDir@');
-+
-+const {default: GPasteGtk} = await import('gi://GPasteGtk?version=4');
- 
- export default class GPastePreferences extends ExtensionPreferences {
-     getPreferencesWidget() {
 diff --git a/src/libgpaste/gpaste/gpaste-settings.c b/src/libgpaste/gpaste/gpaste-settings.c
-index 7e53eb64..ee620070 100644
+index 830f5e0b..c8df0e11 100644
 --- a/src/libgpaste/gpaste/gpaste-settings.c
 +++ b/src/libgpaste/gpaste/gpaste-settings.c
-@@ -1013,7 +1013,10 @@ create_g_settings (void)
+@@ -1039,7 +1039,10 @@ create_g_settings (void)
      }
      else
      {

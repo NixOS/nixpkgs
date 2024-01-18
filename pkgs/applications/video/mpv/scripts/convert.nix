@@ -1,14 +1,22 @@
-{ lib, fetchgit, buildLua
-, yad, mkvtoolnix-cli, libnotify }:
+{ lib
+, fetchgit
+, unstableGitUpdater
+
+, buildLua
+, libnotify
+, mkvtoolnix-cli
+, yad
+}:
 
 buildLua {
   pname = "mpv-convert-script";
-  version = "2016-03-18";
+  version = "unstable-2015-07-02";
   src = fetchgit {
     url = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
     rev = "f95cee43e390e843a47e8ec9d1711a12a8cd343d";
     sha256 = "13m7l4sy2r8jv2sfrb3vvqvnim4a9ilnv28q5drlg09v298z3mck";
   };
+  passthru.updateScript = unstableGitUpdater {};
 
   patches = [ ./convert.patch ];
 

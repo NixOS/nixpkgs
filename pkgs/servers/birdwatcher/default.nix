@@ -24,5 +24,6 @@ buildGoModule rec {
     changelog = "https://github.com/alice-lg/birdwatcher/blob/master/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "birdwatcher";
   };
 }

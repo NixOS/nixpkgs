@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "unicode-slugify";
   version = "0.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

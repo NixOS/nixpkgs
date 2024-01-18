@@ -584,7 +584,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python-docs-theme ];
     };
 
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = passthru.tests // {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   enableParallelBuilding = true;

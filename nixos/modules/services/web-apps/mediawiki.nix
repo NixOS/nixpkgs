@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
 
   cfg = config.services.mediawiki;
@@ -20,21 +20,21 @@ let
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
-    version = src.version;
+    inherit (src) version;
     src = cfg.package;
 
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
 
-      rm -rf $out/share/mediawiki/skins/*
-      rm -rf $out/share/mediawiki/extensions/*
-
+      # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/skins/${k}
         ln -s ${v} $out/share/mediawiki/skins/${k}
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
@@ -194,12 +194,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "MediaWiki");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mediawiki;
-        defaultText = literalExpression "pkgs.mediawiki";
-        description = lib.mdDoc "Which MediaWiki package to use.";
-      };
+      package = mkPackageOption pkgs "mediawiki" { };
 
       finalPackage = mkOption {
         type = types.package;
@@ -230,11 +225,8 @@ in
             "${if hasSSL config.services.nginx.virtualHosts.${cfg.nginx.hostName} then "https" else "http"}://${cfg.nginx.hostName}"
           else
             "http://localhost";
-        defaultText = literalExpression ''
-          if cfg.webserver == "apache" then
-            "''${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://''${cfg.httpd.virtualHost.hostName}"
-          else
-            "http://localhost";
+        defaultText = ''
+          if "mediawiki uses ssl" then "{"https" else "http"}://''${cfg.hostName}" else "http://localhost";
         '';
         example = "https://wiki.example.org";
         description = lib.mdDoc "URL of the wiki.";
@@ -310,7 +302,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql" "postgres" "sqlite" "mssql" "oracle" ];
+          type = types.enum [ "mysql" "postgres" "mssql" "oracle" ];
           default = "mysql";
           description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
@@ -543,9 +535,8 @@ in
         locations = {
           "~ ^/w/(index|load|api|thumb|opensearch_desc|rest|img_auth)\\.php$".extraConfig = ''
             rewrite ^/w/(.*) /$1 break;
-            include ${config.services.nginx.package}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi.conf;
             fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             fastcgi_pass unix:${config.services.phpfpm.pools.mediawiki.socket};
           '';
           "/w/images/".alias = withTrailingSlash cfg.uploadsDir;
@@ -576,7 +567,7 @@ in
 
           # Explicit access to the root website, redirect to main page (adapt as needed)
           "= /".extraConfig = ''
-            return 301 /wiki/Main_Page;
+            return 301 /wiki/;
           '';
 
           # Every other entry point will be disallowed.
@@ -611,15 +602,15 @@ in
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
-          --dbserver "${dbAddr}" \
+          --dbserver ${lib.escapeShellArg dbAddr} \
           --dbport ${toString cfg.database.port} \
-          --dbname ${cfg.database.name} \
-          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${cfg.database.tablePrefix}"} \
-          --dbuser ${cfg.database.user} \
-          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${cfg.database.passwordFile}"} \
-          --passfile ${cfg.passwordFile} \
+          --dbname ${lib.escapeShellArg cfg.database.name} \
+          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"} \
+          --dbuser ${lib.escapeShellArg cfg.database.user} \
+          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"} \
+          --passfile ${lib.escapeShellArg cfg.passwordFile} \
           --dbtype ${cfg.database.type} \
-          ${cfg.name} \
+          ${lib.escapeShellArg cfg.name} \
           admin
 
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
@@ -637,7 +628,7 @@ in
       ++ optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
-      group = group;
+      inherit group;
       isSystemUser = true;
     };
     users.groups.${group} = {};

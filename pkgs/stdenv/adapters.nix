@@ -83,7 +83,10 @@ rec {
     in
     overrideCC stdenv (stdenv.cc.override {
       inherit libcxx;
-      extraPackages = [ cxxabi pkgs.pkgsTargetTarget."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt ];
+      extraPackages = [
+        cxxabi
+        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+      ];
     });
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -233,6 +236,30 @@ rec {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     });
+
+  useLibsFrom = modelStdenv: targetStdenv:
+    let
+      ccForLibs = modelStdenv.cc.cc;
+      cc = pkgs.wrapCCWith {
+        /* NOTE: cc.cc is the unwrapped compiler. Should we respect the old
+         * wrapper instead? */
+        cc = targetStdenv.cc.cc;
+
+        /* NOTE(originally by rrbutani):
+         * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+         * clang based `cc` to use `libstdc++` (from gcc).
+         *
+         * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+         * `cc`.
+         *
+         * Note that this does not inhibit our `cc`'s lib dir from being added to
+         * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+         * `gccForLibs`'s paths should take precedence. */
+        useCcForLibs = true;
+        gccForLibs = ccForLibs;
+      };
+    in
+    overrideCC targetStdenv cc;
 
   useMoldLinker = stdenv: let
     bintools = stdenv.cc.bintools.override {
@@ -416,5 +443,19 @@ rec {
         "propagatedNativeBuildInputs"
         "propagatedBuildInputs"
       ]);
+    });
+
+  withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
+    bintools = let
+      bintools' = stdenv.cc.bintools;
+    in if bintools' ? override then (bintools'.override {
+      inherit defaultHardeningFlags;
+    }) else bintools';
+  in
+    stdenv.override (old: {
+      cc = if stdenv.cc == null then null else stdenv.cc.override {
+        inherit bintools;
+      };
+      allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
     });
 }

@@ -253,7 +253,7 @@ in
   };
 
   garbage-collect-entry = makeTest {
-    name = "systemd-boot-switch-test";
+    name = "systemd-boot-garbage-collect-entry";
     meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes = {

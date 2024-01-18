@@ -23,5 +23,6 @@ python3Packages.buildPythonApplication rec {
     description = "Small python tool for visualizing the preCICE xml configuration ";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
+    mainProgram = "precice-config-visualizer";
   };
 }

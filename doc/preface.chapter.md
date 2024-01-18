@@ -6,11 +6,15 @@ The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 Packages are available for several platforms, and can be used with the Nix
 package manager on most GNU/Linux distributions as well as [NixOS](https://nixos.org/nixos).
 
-This manual primarily describes how to write packages for the Nix Packages collection
-(Nixpkgs). Thus it’s mainly for packagers and developers who want to add packages to
-Nixpkgs. If you like to learn more about the Nix package manager and the Nix
-expression language, then you are kindly referred to the [Nix manual](https://nixos.org/nix/manual/).
-The NixOS distribution is documented in the [NixOS manual](https://nixos.org/nixos/manual/).
+This document is the user [_reference_](https://nix.dev/contributing/documentation/diataxis#reference) manual for Nixpkgs.
+It describes entire public interface of Nixpkgs in a concise and orderly manner, and all relevant behaviors, with examples and cross-references.
+
+To discover other kinds of documentation:
+- [nix.dev](https://nix.dev/): Tutorials and guides for getting things done with Nix
+- [NixOS **Option Search**](https://search.nixos.org/options) and reference documentation
+- [Nixpkgs **Package Search**](https://search.nixos.org/packages)
+- [**NixOS** manual](https://nixos.org/manual/nixos/stable/): Reference documentation for the NixOS Linux distribution
+- [`CONTRIBUTING.md`](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md): Contributing to Nixpkgs, including this manual
 
 ## Overview of Nixpkgs {#overview-of-nixpkgs}
 

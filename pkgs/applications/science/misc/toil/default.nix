@@ -6,20 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "toil";
-  version = "5.7.1";
+  version = "5.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "DataBiosphere";
     repo = pname;
     rev = "refs/tags/releases/${version}";
-    hash = "sha256-m+XvNyzd0ly2YqKhgxezgGaCXLs3CmupJMnp5RIZqNI=";
+    hash = "sha256-cTpbQo9tPZifUO59vbnIa3XUinFJ2/5Slfe4yszglFM=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "docker>=3.7.2, <6" "docker"
-  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     addict
@@ -42,7 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     boto
     botocore
     flask
-    mypy-boto3-s3
     pytestCheckHook
     stubserver
   ]);
@@ -63,6 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     "src/toil/test/src"
     "src/toil/test/wdl"
     "src/toil/test/utils/utilsTest.py"
+    "src/toil/test/cwl/cwlTest.py"
+    "src/toil/test/lib/test_ec2.py"
+    "src/toil/test/lib/aws/test_iam.py"
+    "src/toil/test/lib/aws/test_s3.py"
   ];
 
   disabledTests = [

@@ -11,7 +11,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
-      package = mkPackageOptionMD pkgs "navidrome" { };
+      package = mkPackageOption pkgs "navidrome" { };
 
       settings = mkOption rec {
         type = settingsFormat.type;

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fastjsonschema";
-  version = "2.16.2";
+  version = "2.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "python-fastjsonschema";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Gojayel/xQ5gRI0nbwsroeSMdRndjb+8EniX1Qs4nbg=";
+    hash = "sha256-t6JnqQgsWAL8oL8+LO0xrXMYsZOlTF3DlXkRiqUzYtU=";
   };
 
   nativeCheckInputs = [

@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ teto ];
     platforms = platforms.linux;
+    mainProgram = "memento";
   };
 })
 

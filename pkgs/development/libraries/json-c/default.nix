@@ -1,23 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json-c";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "json-c";
     repo = "json-c";
-    rev = "json-c-0.16-20220414";
-    sha256 = "sha256-KbnUWLgpg6/1wvXhUoYswyqDcgiwEcvgaWCPjNcX20o=";
+    rev = "json-c-0.17-20230812";
+    hash = "sha256-R5KIJ0xVgGqffjzJaZvvvhAneJ+ZBuanyF6KYTTxb58=";
   };
-
-  patches = [
-    # needed for emscripten, which uses LLVM 15+
-    (fetchpatch {
-      url = "https://github.com/json-c/json-c/commit/6eca65617aacd19f4928acd5766b8dd20eda0b34.patch";
-      sha256 = "sha256-fyugX+HgYlt/4AVtfNDaKS+blyUt8JYTNqkmhURb9dk=";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 
@@ -31,9 +27,10 @@ stdenv.mkDerivation rec {
       and parse JSON formatted strings back into the C representation of JSON
       objects.
     '';
-    homepage    = "https://github.com/json-c/json-c/wiki";
+    homepage = "https://github.com/json-c/json-c/wiki";
+    changelog = "https://github.com/json-c/json-c/blob/${finalAttrs.src.rev}/ChangeLog";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
-}
+})

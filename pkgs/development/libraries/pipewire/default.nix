@@ -68,7 +68,7 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
-, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
 , libselinux
 }:
@@ -81,7 +81,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.85";
+    version = "1.0.1";
 
     outputs = [
       "out"
@@ -97,7 +97,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-V7I+HXC9558RaHfpWQbo4aOjpMzPqgWHoPyg9OUq6/g=";
+      sha256 = "sha256-rvf0sZRgDDLcqroLg7hcMUqXD/4JT+3lBRX6/m+3Ry8=";
     };
 
     patches = [
@@ -189,6 +189,7 @@ let
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
       "-Drlimits-install=false" # installs to /etc, we won't use this anyway
       "-Dcompress-offload=enabled"
+      "-Dman=enabled"
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -197,7 +198,7 @@ let
     doCheck = true;
 
     postUnpack = ''
-      patchShebangs source/doc/input-filter.sh
+      patchShebangs source/doc/*.py
       patchShebangs source/doc/input-filter-h.sh
     '';
 

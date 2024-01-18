@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "2.0.0";
+  format = "setuptools";
   pname = "azure-mgmt-botservice";
   disabled = isPy27;
 

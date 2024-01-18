@@ -135,14 +135,7 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.lighttpd;
-        defaultText = lib.literalExpression "pkgs.lighttpd";
-        type = types.package;
-        description = lib.mdDoc ''
-          lighttpd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "lighttpd" { };
 
       port = mkOption {
         default = 80;

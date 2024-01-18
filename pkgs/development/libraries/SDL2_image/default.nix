@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl
 , pkg-config
 , SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
-, version ? "2.6.3"
-, hash ? "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw="
+, version ? "2.8.2"
+, hash ? "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw="
 }:
 
 let

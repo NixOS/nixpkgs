@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fw";
-  version = "2.18.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
     rev = "v${version}";
-    hash = "sha256-8PcIaSXmk6/p5N6L2/nLrFS6JUZRRJsN2mKQYtevS6s=";
+    hash = "sha256-fG1N/3Er7BvXOJTMGooaIMa5I9iNwnH+1om2jcWkI68=";
   };
 
-  cargoHash = "sha256-l6mRjVk3qNAxfNqcKGo2dceD2Xb+hk+xMvdh/U1jZXw=";
+  cargoHash = "sha256-1d2uX/A1HZAmAI3d0iet1NkG0IFuJpVnhWxpY0jVVUI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "fw";
   };
 }

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "typing-inspect";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

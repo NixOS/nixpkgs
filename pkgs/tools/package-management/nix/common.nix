@@ -6,7 +6,7 @@
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 , maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
-}:
+}@args:
 assert (hash == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
@@ -182,8 +182,6 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals atLeast214 [
-    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
   ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
@@ -215,6 +213,11 @@ self = stdenv.mkDerivation {
   preInstallCheck = lib.optionalString stdenv.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
+  # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
+  # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
+  + lib.optionalString stdenv.isDarwin ''
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=yes
+  ''
   # See https://github.com/NixOS/nix/issues/5687
   + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
@@ -234,6 +237,9 @@ self = stdenv.mkDerivation {
     };
   };
 
+  # point 'nix edit' and ofborg at the file that defines the attribute,
+  # not this common file.
+  pos = builtins.unsafeGetAttrPos "version" args;
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''

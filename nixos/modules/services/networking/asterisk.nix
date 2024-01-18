@@ -163,12 +163,7 @@ in
           Additional command line arguments to pass to Asterisk.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.asterisk;
-        defaultText = literalExpression "pkgs.asterisk";
-        description = lib.mdDoc "The Asterisk package to use.";
-      };
+      package = mkPackageOption pkgs "asterisk" { };
     };
   };
 

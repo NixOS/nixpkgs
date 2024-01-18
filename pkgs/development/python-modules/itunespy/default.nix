@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "itunespy";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sleepyfran";

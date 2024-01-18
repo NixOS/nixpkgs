@@ -98,5 +98,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ ];
+    mainProgram = "meteor";
   };
 }

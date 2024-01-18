@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "remotezip";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -17,8 +17,8 @@ buildPythonPackage {
     repo = "python-remotezip";
     # upstream does not tag releases, determined with git blame
     # pypi archive lacks files for tests
-    rev = "da62e115bdb2071ad08a8c91f7ae48f2c1827e0c";
-    hash = "sha256-su4dlV8KZuewf/yGdTnGHK9hNLHwGe10ditmFcne4Us=";
+    rev = "3723724d6d877d3166d52f4528ffa7bd5bf6627f";
+    hash = "sha256-iYxHW8RdLFrpjkcEvpfF/NWBnw7Dd5cx2ghpof2XFn4=";
   };
 
   propagatedBuildInputs = [

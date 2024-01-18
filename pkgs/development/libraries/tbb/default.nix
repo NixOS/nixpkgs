@@ -34,6 +34,16 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/866.patch";
       hash = "sha256-e44Yv84Hfl5xoxWWTnLJLSGeNA1RBbah4/L43gPLS+c=";
     })
+
+    # Fix build with GCC 13
+    (fetchpatch {
+      url = "https://github.com/oneapi-src/oneTBB/commit/154cc73ca4d359621202399cc0c3c91058e56e79.patch";
+      hash = "sha256-BVQQXgBg8T19DGw2gmFkm3KKOuzzJJNOTf/iNIcnHag=";
+    })
+    (fetchpatch {
+      url = "https://github.com/oneapi-src/oneTBB/commit/e131071769ee3df51b56b053ba6bfa06ae9eff25.patch";
+      hash = "sha256-IfV/DDb0luxE1l6TofAbQIeJEVxCxZfZqcONGwQEndY=";
+    })
   ];
 
   # Fix build with modern gcc

@@ -3,11 +3,17 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
-, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap
+, extraPreBwrapCmds ? "" # extra commands to run before calling bubblewrap (real default is at usage site)
+, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap (real default is at usage site)
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
+
+# steamwebhelper deletes unrelated electron programs' singleton cookies from /tmp on startup:
+# https://github.com/ValveSoftware/steam-for-linux/issues/9121
+, privateTmp ? true # Whether to separate steam's /tmp from the host system
+
 , withGameSpecificLibraries ? true # include game specific libraries
-}:
+}@args:
 
 let
   commonTargetPkgs = pkgs: with pkgs; [
@@ -16,6 +22,8 @@ let
     lsb-release
     # Errors in output without those
     pciutils
+    # run.sh wants ldconfig
+    glibc.bin
     # Games' dependencies
     xorg.xrandr
     which
@@ -57,7 +65,10 @@ let
     fi
   '';
 
-  envScript = lib.toShellVars extraEnv;
+  envScript = ''
+    # prevents various error messages
+    unset GIO_EXTRA_MODULES
+  '' + lib.toShellVars extraEnv;
 
 in buildFHSEnv rec {
   name = "steam";
@@ -279,7 +290,15 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  inherit extraBwrapArgs;
+  inherit privateTmp;
+
+  extraPreBwrapCmds = ''
+    install -m 1777 -d /tmp/dumps
+  '' + args.extraPreBwrapCmds or "";
+
+  extraBwrapArgs = [
+    "--bind-try /tmp/dumps /tmp/dumps"
+  ] ++ args.extraBwrapArgs or [];
 
   meta =
     if steam != null

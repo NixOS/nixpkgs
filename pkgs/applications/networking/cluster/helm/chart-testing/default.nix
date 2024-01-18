@@ -13,13 +13,13 @@
 
 buildGoModule rec {
   pname = "chart-testing";
-  version = "3.10.0";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2h1Pc313JZ/2NkFOOQnIrhe1Pm8FJ/BvxjAQhs/eSK0=";
+    hash = "sha256-btrnfL9U8k7jwo6ltVfbiSJFCX52zjfgf4E+IsWTYi4=";
   };
 
   vendorHash = "sha256-E+7ndvXWzsU896/eWyupbvqkLed2ly91osptZKT79fk=";

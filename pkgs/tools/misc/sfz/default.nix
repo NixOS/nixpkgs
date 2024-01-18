@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/weihanglo/sfz";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "sfz";
   };
 }

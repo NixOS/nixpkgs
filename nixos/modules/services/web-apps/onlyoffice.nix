@@ -26,12 +26,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.onlyoffice-documentserver;
-      defaultText = lib.literalExpression "pkgs.onlyoffice-documentserver";
-      description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
-    };
+    package = mkPackageOption pkgs "onlyoffice-documentserver" { };
 
     port = mkOption {
       type = types.port;

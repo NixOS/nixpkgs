@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
+, setuptools
 , icalendar
 , pytz
 , python-dateutil
@@ -13,16 +15,22 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "2.1.0";
+  version = "2.1.2";
 
-  format = "setuptools";
+  disabled = pythonOlder "3.7";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-HNImooD6+hsMIfJX8LuHw1YyFIQNbY7dAjqdupPbhEE=";
+    hash = "sha256-6qFUw5xfZvDuM/UBEGtoiHON15/6oq1S8H0Z1qk3k8s=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     icalendar

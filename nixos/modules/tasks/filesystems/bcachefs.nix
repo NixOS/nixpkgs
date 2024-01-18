@@ -57,7 +57,15 @@ let
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
-  openCommand = name: fs: ''
+  openCommand = name: fs: if config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices) then ''
+    if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
+    then
+      printf "unlocked ${name} using clevis\n"
+    else
+      printf "falling back to interactive unlocking...\n"
+      tryUnlock ${name} ${firstDevice fs}
+    fi
+  '' else ''
     tryUnlock ${name} ${firstDevice fs}
   '';
 
@@ -70,9 +78,10 @@ let
     value = {
       description = "Unlock bcachefs for ${fs.mountPoint}";
       requiredBy = [ mountUnit ];
-      before = [ mountUnit ];
-      bindsTo = [ deviceUnit ];
       after = [ deviceUnit ];
+      before = [ mountUnit "shutdown.target" ];
+      bindsTo = [ deviceUnit ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {
         Type = "oneshot";
@@ -114,15 +123,8 @@ in
       inherit assertions;
       # needed for systemd-remount-fs
       system.fsPackages = [ pkgs.bcachefs-tools ];
-
-      # FIXME: Replace this with `linuxPackages_testing` after NixOS 23.11 is released
-      # FIXME: Replace this with `linuxPackages_latest` when 6.7 is released, remove this line when the LTS version is at least 6.7
-      boot.kernelPackages = lib.mkDefault (
-        # FIXME: Remove warning after NixOS 23.11 is released
-        lib.warn "Please upgrade to Linux 6.7-rc1 or later: 'linuxPackages_testing_bcachefs' is deprecated. Use 'boot.kernelPackages = pkgs.linuxPackages_testing;' to silence this warning"
-        pkgs.linuxPackages_testing_bcachefs
-      );
-
+      # FIXME: Remove this line when the default kernel has bcachefs
+      boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
     }
 

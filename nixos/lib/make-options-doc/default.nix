@@ -120,7 +120,7 @@ in rec {
     { meta.description = "List of NixOS options in JSON format";
       nativeBuildInputs = [
         pkgs.brotli
-        pkgs.python3Minimal
+        pkgs.python3
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));

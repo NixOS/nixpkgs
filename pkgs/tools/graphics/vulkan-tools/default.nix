@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , pkg-config
 , python3
@@ -13,6 +14,7 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkan-volk
 , wayland
 , wayland-protocols
 , moltenvk
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.268.0";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
+    hash = "sha256-0sAwO8gXzpMst+7l7LS1oiDLo9E6otDktCti+v8jwDw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
     glslang
     vulkan-headers
     vulkan-loader
+    vulkan-volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
@@ -72,12 +75,14 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
+
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
+    "-DPKG_CONFIG_EXECUTABLE=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"

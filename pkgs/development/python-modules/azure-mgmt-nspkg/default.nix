@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "3.0.2";
+  format = "setuptools";
   pname = "azure-mgmt-nspkg";
 
   src = fetchPypi {

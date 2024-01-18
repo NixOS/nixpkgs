@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ sebtm ];
+    mainProgram = "swayrbar";
   };
 }

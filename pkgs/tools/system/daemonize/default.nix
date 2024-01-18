@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "http://software.clapper.org/daemonize/";
     license = licenses.bsd3;
     platforms = with platforms; linux ++ freebsd ++ darwin;
+    mainProgram = "daemonize";
   };
 }

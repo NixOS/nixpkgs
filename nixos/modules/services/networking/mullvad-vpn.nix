@@ -23,12 +23,10 @@ with lib;
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.mullvad;
-      defaultText = literalExpression "pkgs.mullvad";
-      description = lib.mdDoc ''
-        The Mullvad package to use. `pkgs.mullvad` only provides the CLI tool, `pkgs.mullvad-vpn` provides both the CLI and the GUI.
+    package = mkPackageOption pkgs "mullvad" {
+      example = "mullvad-vpn";
+      extraDescription = ''
+        `pkgs.mullvad` only provides the CLI tool, `pkgs.mullvad-vpn` provides both the CLI and the GUI.
       '';
     };
   };

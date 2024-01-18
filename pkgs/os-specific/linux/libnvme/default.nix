@@ -11,14 +11,13 @@
 , stdenv
 , swig
 , systemd
-, fetchpatch
 # ImportError: cannot import name 'mlog' from 'mesonbuild'
 , withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.6";
+  version = "1.7.1";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -26,16 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7bvjsmt16/6RycSDKIECtJ4ES7NTaspU6IMpUw0sViA=";
+    hash = "sha256-hCR/K8bPXj8HthayrnwwGfI+wxpUwcWkcx3S/8h+3m8=";
   };
-
-  patches = [
-    # included in next release
-    (fetchpatch {
-      url = "https://github.com/linux-nvme/libnvme/commit/ff742e792725c316ba6de0800188bf36751bd1d1.patch";
-      hash = "sha256-IUjPUBmGQC4oAKFFlBrjonqD2YdyNPC9siK4t/t2slE=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs scripts
@@ -60,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=man"
-    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "docs-build" withDocs)
   ];
 

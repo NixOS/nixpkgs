@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, linear_operator
+, linear-operator
 , scikit-learn
 , setuptools
 , setuptools-scm
@@ -22,8 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -31,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    linear_operator
+    linear-operator
     scikit-learn
     torch
   ];

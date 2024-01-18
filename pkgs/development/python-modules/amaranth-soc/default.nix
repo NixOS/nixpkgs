@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "amaranth-soc";
   version = "unstable-2023-09-15";
+  format = "setuptools";
   # python setup.py --version
   realVersion = "0.1.dev70+g${lib.substring 0 7 src.rev}";
 

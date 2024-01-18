@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/jpeddicord/askalono/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "askalono";
   };
 }

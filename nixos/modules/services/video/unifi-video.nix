@@ -103,31 +103,12 @@ in
       '';
     };
 
-    jrePackage = mkOption {
-      type = types.package;
-      default = pkgs.jre8;
-      defaultText = literalExpression "pkgs.jre8";
-      description = lib.mdDoc ''
-        The JRE package to use. Check the release notes to ensure it is supported.
-      '';
-    };
+    jrePackage = mkPackageOption pkgs "jre8" { };
 
-    unifiVideoPackage = mkOption {
-      type = types.package;
-      default = pkgs.unifi-video;
-      defaultText = literalExpression "pkgs.unifi-video";
-      description = lib.mdDoc ''
-        The unifi-video package to use.
-      '';
-    };
+    unifiVideoPackage = mkPackageOption pkgs "unifi-video" { };
 
-    mongodbPackage = mkOption {
-      type = types.package;
-      default = pkgs.mongodb-4_4;
-      defaultText = literalExpression "pkgs.mongodb";
-      description = lib.mdDoc ''
-        The mongodb package to use.
-      '';
+    mongodbPackage = mkPackageOption pkgs "mongodb" {
+      default = "mongodb-4_4";
     };
 
     logDir = mkOption {

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "django-csp";
   version = "3.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

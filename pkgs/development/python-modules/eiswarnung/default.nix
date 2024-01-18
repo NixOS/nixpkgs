@@ -13,23 +13,25 @@
 
 buildPythonPackage rec {
   pname = "eiswarnung";
-  version = "1.2.0";
+  version = "2.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PVFAy34+UfNQNdzVdfvNiySrCTaKGuepnTINZYkOsuo=";
+    hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace '"0.0.0"' '"${version}"' \
       --replace 'addopts = "--cov"' "" \
-      --replace 'pytz = "^2022.7.1"' 'pytz = "*"'
+      --replace 'pytz = ">=2022.7.1,<2024.0.0"' 'pytz = "*"'
   '';
 
   nativeBuildInputs = [

@@ -15,11 +15,8 @@ in
   options = {
     services.xserver.windowManager.dwm = {
       enable = mkEnableOption (lib.mdDoc "dwm");
-      package = mkOption {
-        type        = types.package;
-        default     = pkgs.dwm;
-        defaultText = literalExpression "pkgs.dwm";
-        example     = literalExpression ''
+      package = mkPackageOption pkgs "dwm" {
+        example = ''
           pkgs.dwm.overrideAttrs (oldAttrs: rec {
             patches = [
               (super.fetchpatch {
@@ -28,9 +25,6 @@ in
               })
             ];
           })
-        '';
-        description = lib.mdDoc ''
-          dwm package to use.
         '';
       };
     };

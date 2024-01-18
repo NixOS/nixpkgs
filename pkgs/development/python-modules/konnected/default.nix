@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "konnected";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

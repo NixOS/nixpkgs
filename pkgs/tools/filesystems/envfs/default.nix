@@ -1,14 +1,14 @@
 { rustPlatform, lib, fetchFromGitHub, nixosTests }:
 rustPlatform.buildRustPackage rec {
   pname = "envfs";
-  version = "1.0.1";
+  version = "1.0.3";
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
     rev = version;
-    hash = "sha256-ttW1NUCtwnjAoiu7QgLGrlAB2PyY4oXm91LpWhbz8qk=";
+    hash = "sha256-WbMqh/MzEMfZmKl/DNBGnzG3l8unFmAYbG6feSiMz+Y=";
   };
-  cargoHash = "sha256-BgXKwKD6w/GraBQEq61D7S7m2Q9TnkXNFJEIgDYo9L4=";
+  cargoHash = "sha256-RoreNBZvTsVY87nbVibJBy4gsafFwAMctVncAhhiaP8=";
 
   passthru.tests = {
     envfs = nixosTests.envfs;
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     ln -s envfs $out/bin/mount.fuse.envfs
   '';
   meta = with lib; {
-    description = "Fuse filesystem that returns symlinks to executables based on the PATH of the requesting process.";
+    description = "Fuse filesystem that returns symlinks to executables based on the PATH of the requesting process";
     homepage = "https://github.com/Mic92/envfs";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

@@ -20,7 +20,7 @@ let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.1";
+  version = "1.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
   };
 
   nativeBuildInputs = [

@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     description = "Collect, organize, cite, and share your research sources";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ i077 ];
   };
 }

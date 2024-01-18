@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "dodgy";
   version = "0.2.1";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

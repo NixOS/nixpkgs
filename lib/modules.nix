@@ -275,6 +275,8 @@ let
                 "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
+              # No options were declared at all (`_module` is built in)
+              # but we do have unmatched definitions, and no freeformType (earlier conditions)
               then
                 let
                   optionName = showOption prefix;

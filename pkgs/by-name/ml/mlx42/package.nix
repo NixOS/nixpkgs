@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
-    rev = "refs/tags/v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JCBV8NWibSugqXkbgP0v3gDfaaMNFYztWpBRfHJUG8E=";
   };
 
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/${finalAttrs.src.rev}";
     description = "A simple cross-platform graphics library that uses GLFW and OpenGL";
     homepage = "https://github.com/codam-coding-college/MLX42";
     license = lib.licenses.gpl2Only;

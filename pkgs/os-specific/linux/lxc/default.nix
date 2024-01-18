@@ -1,106 +1,84 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, perl, docbook2x
-, docbook_xml_dtd_45, python3Packages, pam, fetchpatch
-
-# Optional Dependencies
-, libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
-, libcap ? null, systemd ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook2x,
+  libapparmor,
+  libcap,
+  libseccomp,
+  libselinux,
+  meson,
+  ninja,
+  nix-update-script,
+  nixosTests,
+  openssl,
+  pam,
+  pkg-config,
+  systemd,
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "lxc";
-  version = "4.0.12";
+  version = "5.0.3";
 
-  src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1vyk2j5w9gfyh23w3ar09cycyws16mxh3clbb33yhqzwcs1jy96v";
+  src = fetchFromGitHub {
+    owner = "lxc";
+    repo = "lxc";
+    rev = "refs/tags/lxc-${version}";
+    hash = "sha256-lnLmLgWXt3pI2S+4OeHRlPP5gui7S7ZXXClFt+n/8sY=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config perl docbook2x python3Packages.wrapPython
+    docbook2x
+    meson
+    ninja
+    pkg-config
   ];
+
   buildInputs = [
-    pam libapparmor gnutls libselinux libseccomp libcap
-    python3Packages.python python3Packages.setuptools systemd
+    libapparmor
+    libcap
+    libseccomp
+    libselinux
+    openssl
+    pam
+    systemd
   ];
 
-  patches = [
-    ./support-db2x.patch
+  patches = [ ./add-meson-options.patch ];
 
-    # Backport of https://github.com/lxc/lxc/pull/4179 for glibc-2.36 build
-    (fetchpatch {
-      url = "https://github.com/lxc/lxc/commit/c1115e1503bf955c97f4cf3b925a6a9f619764c3.patch";
-      sha256 = "sha256-aC1XQesRJfkyQnloB3NvR4p/1WITrqkGYzw50PDxDrs=";
-      excludes = [ "meson.build" ];
-    })
+  mesonFlags = [
+    "-Dinstall-init-files=false"
+    "-Dinstall-state-dirs=false"
+    "-Dspecfile=false"
   ];
 
-  postPatch = ''
-    sed -i '/chmod u+s/d' src/lxc/Makefile.am
-  '';
+  enableParallelBuilding = true;
 
-  XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  doCheck = true;
 
-  configureFlags = [
-    "--enable-pam"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--disable-api-docs"
-    "--with-init-script=none"
-    "--with-distro=nixos" # just to be sure it is "unknown"
-  ] ++ optional (libapparmor != null) "--enable-apparmor"
-    ++ optional (libselinux != null) "--enable-selinux"
-    ++ optional (libseccomp != null) "--enable-seccomp"
-    ++ optional (libcap != null) "--enable-capabilities"
-    ++ [
-    "--disable-examples"
-    "--enable-python"
-    "--disable-lua"
-    "--enable-bash"
-    (if doCheck then "--enable-tests" else "--disable-tests")
-    "--with-rootfs-path=/var/lib/lxc/rootfs"
-  ];
-
-  doCheck = false;
-
-  installFlags = [
-    "localstatedir=\${TMPDIR}"
-    "sysconfdir=\${out}/etc"
-    "sysconfigdir=\${out}/etc/default"
-    "bashcompdir=\${out}/share/bash-completion/completions"
-    "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
-    "LXCPATH=\${TMPDIR}/var/lib/lxc"
-  ];
-
-  postInstall = ''
-    wrapPythonPrograms
-
-    completions=(
-      lxc-attach lxc-cgroup lxc-console lxc-destroy lxc-device lxc-execute
-      lxc-freeze lxc-info lxc-monitor lxc-snapshot lxc-stop lxc-unfreeze
-    )
-    pushd $out/share/bash-completion/completions/
-      mv lxc lxc-start
-      for completion in ''${completions[@]}; do
-        ln -sfn lxc-start $completion
-      done
-    popd
-  '';
+  passthru = {
+    tests.incus = nixosTests.incus.container;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-vr"
+        "lxc-(.*)"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.gpl2;
 
     longDescription = ''
-      LXC is the userspace control package for Linux Containers, a
-      lightweight virtual system mechanism sometimes described as
-      "chroot on steroids". LXC builds up from chroot to implement
-      complete virtual systems, adding resource management and isolation
-      mechanisms to Linux’s existing process management infrastructure.
+      LXC containers are often considered as something in the middle between a chroot and a
+      full fledged virtual machine. The goal of LXC is to create an environment as close as
+      possible to a standard Linux installation but without the need for a separate kernel.
     '';
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.lxc.members;
   };
 }

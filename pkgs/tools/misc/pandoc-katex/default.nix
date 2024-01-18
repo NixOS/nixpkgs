@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xu-cheng/pandoc-katex";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ minijackson pacien ];
+    mainProgram = "pandoc-katex";
   };
 }

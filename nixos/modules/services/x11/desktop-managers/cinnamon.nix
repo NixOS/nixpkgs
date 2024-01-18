@@ -79,20 +79,19 @@ in
           package = mkDefault pkgs.cinnamon.mint-cursor-themes;
         };
       };
-      services.xserver.displayManager.sessionCommands = ''
-        if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
-            true
-            ${concatMapStrings (p: ''
-              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-              fi
 
-              if [ -d "${p}/lib/girepository-1.0" ]; then
-                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-              fi
-            '') cfg.sessionPath}
-        fi
+      # Have to take care of GDM + Cinnamon on Wayland users
+      environment.extraInit = ''
+        ${concatMapStrings (p: ''
+          if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+          fi
+
+          if [ -d "${p}/lib/girepository-1.0" ]; then
+            export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+          fi
+        '') cfg.sessionPath}
       '';
 
       # Default services
@@ -200,8 +199,7 @@ in
         })
       ];
 
-      # https://salsa.debian.org/cinnamon-team/cinnamon/-/commit/f87c64f8d35ba406eb11ad442989a0716f6620cf#
-      xdg.portal.config.x-cinnamon.default = mkDefault [ "xapp" "gtk" ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

@@ -66,7 +66,7 @@ let
       deprecatedNativeMessagingHost = option: pkg:
         if (cfg.${option} or false)
           then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts.packages` instead"
             [pkg]
           else [];
 
@@ -416,6 +416,7 @@ let
 
       meta = browser.meta // {
         inherit (browser.meta) description;
+        mainProgram = launcherName;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };

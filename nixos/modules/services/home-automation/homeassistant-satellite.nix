@@ -14,7 +14,7 @@ let
     mdDoc
     mkEnableOption
     mkIf
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -38,7 +38,7 @@ in
   options.services.homeassistant-satellite = with types; {
     enable = mkEnableOption (mdDoc "Home Assistant Satellite");
 
-    package = mkPackageOptionMD pkgs "homeassistant-satellite" { };
+    package = mkPackageOption pkgs "homeassistant-satellite" { };
 
     user = mkOption {
       type = str;

@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "clboss";
   };
 }

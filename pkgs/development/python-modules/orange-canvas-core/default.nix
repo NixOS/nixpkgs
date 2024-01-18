@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "orange-canvas-core";
   version = "0.1.35";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,6 +2,7 @@ self: dontUse: with self;
 
 let
   inherit (python) pythonOnBuildForHost;
+  inherit (pkgs) runCommand;
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
@@ -67,7 +68,7 @@ in {
       # Such conflicts don't happen within the standard nixpkgs python package
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
-      passthru.tests = import ./pypa-build-hook-tests.nix {
+      passthru.tests = import ./pypa-build-hook-test.nix {
         inherit pythonOnBuildForHost runCommand;
       };
     } ./pypa-build-hook.sh) {
@@ -107,7 +108,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = let
-        useLegacyHook = lib.versionOlder python.version "3.10";
+        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
       in {
         inherit pythonInterpreter pythonSitePackages;
         catchConflicts = if useLegacyHook then
@@ -171,6 +172,16 @@ in {
         inherit pythonSitePackages;
       };
     } ./python-remove-tests-dir-hook.sh) {};
+
+  pythonRuntimeDepsCheckHook = callPackage ({ makePythonHook, packaging }:
+    makePythonHook {
+      name = "python-runtime-deps-check-hook.sh";
+      propagatedBuildInputs = [ packaging ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        hook = ./python-runtime-deps-check-hook.py;
+      };
+    } ./python-runtime-deps-check-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {

@@ -131,6 +131,10 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
+
+    # Cherry-pick libxml 2.12 build fix
+    # FIXME: remove for 6.7
+    ../patches/qtwebengine-libxml-2.12.patch
   ];
 
   postPatch = ''
@@ -308,7 +312,7 @@ qtModule {
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
-    platforms = platforms.unix;
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

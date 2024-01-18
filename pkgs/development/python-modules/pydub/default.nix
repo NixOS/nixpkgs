@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

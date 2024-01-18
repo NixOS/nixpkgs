@@ -65,15 +65,15 @@
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "45.1";
+  version = "45.3";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "FfykvWEpqLP5kBl/vR7ljXS2QVEK+q8Igqf6NmNPxfI=";
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
+    sha256 = "OhlyRyDYJ03GvO1o4N1fx2aKBM15l4y7uCI0dMzdqas=";
   };
 
   patches = [
@@ -231,4 +231,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 
-}
+})

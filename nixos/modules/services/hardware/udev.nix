@@ -112,7 +112,8 @@ let
       echo "OK"
 
       filesToFixup="$(for i in "$out"/*; do
-        grep -l '\B\(/usr\)\?/s\?bin' "$i" || :
+        # list all files referring to (/usr)/bin paths, but allow references to /bin/sh.
+        grep -P -l '\B(?!\/bin\/sh\b)(\/usr)?\/bin(?:\/.*)?' "$i" || :
       done)"
 
       if [ -n "$filesToFixup" ]; then
@@ -222,6 +223,9 @@ in
         description = lib.mdDoc ''
           Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
+
+          coreutils, gnu{sed,grep}, util-linux and config.systemd.package are
+          automatically included.
         '';
       };
 

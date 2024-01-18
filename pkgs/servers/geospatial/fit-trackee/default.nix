@@ -8,19 +8,8 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.49";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-Bv8ly64ww5bEt3N0ZPKn/Deme32kCZk7GCsCTOyArtk=";
-        };
-        # Remove "test/typing" that does not exist
-        disabledTestPaths = [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
+
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.5";
 

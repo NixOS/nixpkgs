@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "viv-utils";
   version = "0.7.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "williballenthin";

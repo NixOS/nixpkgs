@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-axolotl-curve25519";
   version = "0.4.1.post2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

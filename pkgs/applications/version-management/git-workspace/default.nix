@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orf/git-workspace";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "git-workspace";
   };
 }

@@ -12,7 +12,6 @@
 , colorlog
 , distributed
 , fakeredis
-, fastai
 , google-cloud-storage
 , lightgbm
 , matplotlib
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "3.4.0";
+  version = "3.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     owner = "optuna";
     repo = "optuna";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WUjO13NxX0FneOPS4nn6aHq48X95r+GJR/Oxir6n8Pk=";
+    hash = "sha256-lNurMkZZKpKXXQoqhuRUv8LCbdSi1ryj3kYYioYZPF0=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +76,6 @@ buildPythonPackage rec {
       catboost
       cma
       distributed
-      fastai
       lightgbm
       mlflow
       pandas

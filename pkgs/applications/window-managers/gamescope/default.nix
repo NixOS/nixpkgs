@@ -8,7 +8,6 @@
 , vulkan-loader
 , vulkan-headers
 , wayland
-, wayland-scanner
 , wayland-protocols
 , libxkbcommon
 , glm
@@ -16,11 +15,8 @@
 , libcap
 , SDL2
 , pipewire
-, udev
 , pixman
 , libinput
-, seatd
-, xwayland
 , glslang
 , hwdata
 , openvr
@@ -30,31 +26,50 @@
 , libdisplay-info
 , lib
 , makeBinaryWrapper
+, enableExecutable ? true
+, enableWsi ? true
 }:
 let
-  pname = "gamescope";
-  version = "3.12.5";
-
-  vkroots = fetchFromGitHub {
+  joshShaders = fetchFromGitHub {
     owner = "Joshua-Ashton";
-    repo = "vkroots";
-    rev = "26757103dde8133bab432d172b8841df6bb48155";
-    hash = "sha256-eet+FMRO2aBQJcCPOKNKGuQv5oDIrgdVPRO00c5gkL0=";
+    repo = "GamescopeShaders";
+    rev = "v0.1";
+    hash = "sha256-gR1AeAHV/Kn4ntiEDUSPxASLMFusV6hgSGrTbMCBUZA=";
   };
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gamescope";
+  version = "3.13.19";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
-    rev = "refs/tags/${version}";
-    hash = "sha256-u4pnKd5ZEC3CS3E2i8E8Wposd8Tu4ZUoQXFmr0runwE=";
+    rev = "refs/tags/${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-WKQgVbuHvTbZnvTU5imV35AKZ4AF0EDsdESBZwVH7+M=";
   };
 
   patches = [
+    # Unvendor dependencies
     ./use-pkgconfig.patch
+
+    # Make it look for shaders in the right place
+    ./shaders-path.patch
   ];
+
+  # We can't substitute the patch itself because substituteAll is itself a derivation,
+  # so `placeholder "out"` ends up pointing to the wrong place
+  postPatch = ''
+    substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+  '';
+
+  mesonFlags = [
+    (lib.mesonBool "enable_gamescope" enableExecutable)
+    (lib.mesonBool "enable_gamescope_wsi_layer" enableWsi)
+  ];
+
+  # don't install vendored vkroots etc
+  mesonInstallFlags = ["--skip-subprojects"];
 
   strictDeps = true;
 
@@ -66,69 +81,62 @@ stdenv.mkDerivation {
     meson
     pkg-config
     ninja
-    wayland-scanner
-    glslang
+  ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
+    glslang
   ];
 
   buildInputs = [
-    xorg.libXdamage
-    xorg.libXcomposite
-    xorg.libXrender
-    xorg.libXext
-    xorg.libXxf86vm
-    xorg.libXtst
-    xorg.libXres
-    xorg.libXi
-    xorg.libXmu
-    libdrm
-    libliftoff
-    vulkan-loader
-    vulkan-headers
-    SDL2
+    pipewire
+    hwdata
+    xorg.libX11
     wayland
     wayland-protocols
+    vulkan-loader
+    openvr
+    glm
+  ] ++ lib.optionals enableWsi [
+    vulkan-headers
+  ] ++ lib.optionals enableExecutable [
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXi
+    xorg.libXmu
+    xorg.libXrender
+    xorg.libXres
+    xorg.libXtst
+    xorg.libXxf86vm
+    libdrm
+    libliftoff
+    SDL2
     wlroots
-    xwayland
-    seatd
     libinput
     libxkbcommon
-    glm
     gbenchmark
-    udev
     pixman
-    pipewire
     libcap
     stb
-    hwdata
-    openvr
-    vkroots
     libdisplay-info
   ];
 
-  outputs = [ "out" "lib" ];
-
-  postUnpack = ''
-    rm -rf source/subprojects/vkroots
-    ln -s ${vkroots} source/subprojects/vkroots
-  '';
-
-  # --debug-layers flag expects these in the path
-  postInstall = ''
+  postInstall = lib.optionalString enableExecutable ''
+    # --debug-layers flag expects these in the path
     wrapProgram "$out/bin/gamescope" \
       --prefix PATH : ${with xorg; lib.makeBinPath [xprop xwininfo]}
 
-    # Install Vulkan layer in lib output
-    install -d $lib/share/vulkan
-    mv $out/share/vulkan/implicit_layer.d $lib/share/vulkan
-    rm -r $out/share/vulkan
+    # Install ReShade shaders
+    mkdir -p $out/share/gamescope/reshade
+    cp -r ${joshShaders}/* $out/share/gamescope/reshade/
   '';
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";
     homepage = "https://github.com/ValveSoftware/gamescope";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli ];
+    maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli k900 ];
     platforms = platforms.linux;
+    mainProgram = "gamescope";
   };
-}
+})

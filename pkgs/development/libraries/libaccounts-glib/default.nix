@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
-  version = "1.24";
+  version = "1.26";
 
   outputs = [ "out" "dev" "devdoc" "py" ];
 
@@ -11,11 +11,8 @@ stdenv.mkDerivation rec {
     owner = "accounts-sso";
     repo = "libaccounts-glib";
     rev = version;
-    sha256 = "0y8smg1rd279lrr9ad8b499i8pbkajmwd4xn41rdh9h93hs9apn7";
+    sha256 = "sha256-KVKylt+XjLfidsS2KzT7oFXP6rTR528lYAUP8dffu7k=";
   };
-
-  # See: https://gitlab.com/accounts-sso/libaccounts-glib/merge_requests/22
-  patches = [ ./py-override.patch ];
 
   nativeBuildInputs = [
     check

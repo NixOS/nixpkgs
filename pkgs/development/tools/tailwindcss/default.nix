@@ -18,16 +18,16 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    aarch64-darwin = "sha256-VAJypHejh3ZW2x3fPNvuFw3VkmBbsSTnmBHuqU3hXVY=";
-    aarch64-linux = "sha256-Yxw6DIP8j3JANgvN870socG0aNX76d3c0z12ePbuFSs=";
-    armv7l-linux = "sha256-yS8LDmUit5pM4WrMjhqUJD4e0fWKWf8cr4w1PACj+8g=";
-    x86_64-darwin = "sha256-cTIp7HesR9Ae6yFpUy0H1hrqtHSSReIKZmKE06XCsWU=";
-    x86_64-linux = "sha256-Z3Co095akfV/11UWvpc0WAp3gdUrpjVskUw1v01Eifs=";
+    aarch64-darwin = "sha256-QHOOWezvBvlVJDFU59HG6vETcAN8vu5KMsMTg4fi2l0=";
+    aarch64-linux = "sha256-EXjD6LRLnrQ/QOeG7iVmTJPYP20FsGLA2cr0ENZNVYc=";
+    armv7l-linux = "sha256-OOAEsUQARJXNFIYhrbhSwh1dNQ5mMIyP+eL9kKFXJvU=";
+    x86_64-darwin = "sha256-WU0BsDISUZnbEFxmH+I95MBpAGkhuW9/7pjuT7wV+AA=";
+    x86_64-linux = "sha256-poFMyPtuVz3WNzUgk/O46SfFyGKLH/h4JmUpNa8UMLE=";
   }.${system} or throwSystem;
 in
 stdenv.mkDerivation rec {
   pname = "tailwindcss";
-  version = "3.3.5";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v${version}/tailwindcss-${plat}";

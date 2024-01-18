@@ -1,4 +1,4 @@
-{ channel, version, revision, sha256 }:
+{ channel, version, revision, hash }:
 
 { stdenv
 , fetchurl
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [
@@ -94,9 +94,6 @@ stdenv.mkDerivation rec {
       libGLESv2 = lib.makeLibraryPath [
         xorg.libX11 xorg.libXext xorg.libxcb wayland
       ];
-      libsmartscreenn = lib.makeLibraryPath [
-        libuuid
-      ];
       liboneauth = lib.makeLibraryPath [
         libuuid xorg.libX11
       ];
@@ -116,11 +113,6 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/msedge_crashpad_handler
 
     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath.naclHelper}" \
-      opt/microsoft/${shortName}/nacl_helper
-
-    patchelf \
       --set-rpath "${libPath.libwidevinecdm}" \
       opt/microsoft/${shortName}/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
 
@@ -129,12 +121,13 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/libGLESv2.so
 
     patchelf \
-      --set-rpath "${libPath.libsmartscreenn}" \
-      opt/microsoft/${shortName}/libsmartscreenn.so
-
-    patchelf \
       --set-rpath "${libPath.liboneauth}" \
       opt/microsoft/${shortName}/liboneauth.so
+  '' + lib.optionalString (lib.versionOlder version "121") ''
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${libPath.naclHelper}" \
+      opt/microsoft/${shortName}/nacl_helper
   '';
 
   installPhase = ''

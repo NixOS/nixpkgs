@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , gtest, fmt
 , cmake, ninja, installShellFiles
 }:
@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
     ln -s ${gtest.src} googletest
     popd
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ericwa/ericw-tools/commit/c9570260fa895dde5a21272d76f9a3b05d59efdd.patch";
+      hash = "sha256-dZr2LWuJBAIT//XHXYEz2vhaK2mxtxkSJ4IQla8OXKI=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ninja installShellFiles ];
 
@@ -44,5 +51,6 @@ stdenv.mkDerivation rec {
     description = "Map compile tools for Quake and Hexen 2";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ astro ];
+    platforms = platforms.unix;
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
-  version = "2023.10.0";
+  version = "2023.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "pyoutbreaksnearme";
     rev = "refs/tags/${version}";
-    hash = "sha256-G+/ooNhiYOaV0kjfr8Z1d31XxRYFArQnt1oIuMQfXdY=";
+    hash = "sha256-oR/DApOxNSSczrBeH4sytd/vasbD4rA1poW4zNoeAnU=";
   };
 
   nativeBuildInputs = [

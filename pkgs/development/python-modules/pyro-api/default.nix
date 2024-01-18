@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.1.2";
+  format = "setuptools";
   pname = "pyro-api";
 
   src = fetchPypi {

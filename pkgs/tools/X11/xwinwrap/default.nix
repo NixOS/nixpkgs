@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;
+    mainProgram = "xwinwrap";
   };
 }

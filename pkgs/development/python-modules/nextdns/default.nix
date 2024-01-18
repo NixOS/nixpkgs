@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "nextdns";
     rev = "refs/tags/${version}";
-    hash = "sha256-NJjnk/FadD4QUqPYxbbS7gsIKVxwR5tpnBth1HFLkr0=";
+    hash = "sha256-haw6t7pepMN77LFVgDFBbV4StRqcRMvnCaup8K38kEg=";
   };
 
   propagatedBuildInputs = [

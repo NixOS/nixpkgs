@@ -22,12 +22,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.offlineimap;
-      defaultText = literalExpression "pkgs.offlineimap";
-      description = lib.mdDoc "Offlineimap derivation to use.";
-    };
+    package = mkPackageOption pkgs "offlineimap" { };
 
     path = mkOption {
       type = types.listOf types.path;

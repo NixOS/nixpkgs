@@ -230,12 +230,7 @@ in
 
       openFirewall = mkEnableOption (lib.mdDoc "opening of the relay port(s) in the firewall");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tor;
-        defaultText = literalExpression "pkgs.tor";
-        description = lib.mdDoc "Tor package to use.";
-      };
+      package = mkPackageOption pkgs "tor" { };
 
       enableGeoIP = mkEnableOption (lib.mdDoc ''use of GeoIP databases.
         Disabling this will disable by-country statistics for bridges and relays
@@ -859,7 +854,7 @@ in
           BridgeRelay = true;
           ExtORPort.port = mkDefault "auto";
           ServerTransportPlugin.transports = mkDefault ["obfs4"];
-          ServerTransportPlugin.exec = mkDefault "${pkgs.obfs4}/bin/obfs4proxy managed";
+          ServerTransportPlugin.exec = mkDefault "${lib.getExe pkgs.obfs4} managed";
         } // optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
           PublishServerDescriptor = false;

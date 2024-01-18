@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "clickhouse-driver";
   version = "0.2.5";
+  format = "setuptools";
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {

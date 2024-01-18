@@ -4,7 +4,6 @@
 , apache-beam
 , asttokens
 , blinker
-, botocore
 , bottle
 , buildPythonPackage
 , celery
@@ -15,13 +14,11 @@
 , falcon
 , fetchFromGitHub
 , flask
-, flask-login
 , gevent
 , httpx
 , jsonschema
 , mock
 , pure-eval
-, pyramid
 , pyrsistent
 , pyspark
 , pysocks
@@ -32,17 +29,16 @@
 , pythonOlder
 , rq
 , sanic
+, setuptools
 , sqlalchemy
 , tornado
-, trytond
 , urllib3
-, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.36.0";
-  format = "setuptools";
+  version = "1.39.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -50,8 +46,12 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-4NncvZtBwAyMkfZBm44IubFA+f2bXrGy5HOYr70SoSg=";
+    hash = "sha256-tYfnQ6L91KrRCR32dgzcDtA7eO+LHRAHBklxU8cXkK8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     certifi

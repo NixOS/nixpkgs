@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "remi";
   version = "2022.7.27";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rawpython";

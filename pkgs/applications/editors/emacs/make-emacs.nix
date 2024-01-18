@@ -329,15 +329,16 @@ mkDerivation (finalAttrs: {
     "--with-xml2=yes"
   ]
   ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
-  ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
-  ++ lib.optional withNativeCompilation "--with-native-compilation"
-  ++ lib.optional withImageMagick "--with-imagemagick"
-  ++ lib.optional withTreeSitter "--with-tree-sitter"
-  ++ lib.optional withXinput2 "--with-xinput2"
-  ++ lib.optional withXwidgets "--with-xwidgets"
-  ++ lib.optional withSmallJaDic "--with-small-ja-dic"
-  ++ lib.optional (!withCompressInstall) "--without-compress-install"
-  ;
+  ++ [
+    (lib.withFeature withCompressInstall "compress-install")
+    (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
+    (lib.withFeature withNativeCompilation "native-compilation")
+    (lib.withFeature withImageMagick "imagemagick")
+    (lib.withFeature withSmallJaDic "small-ja-dic")
+    (lib.withFeature withTreeSitter "tree-sitter")
+    (lib.withFeature withXinput2 "xinput2")
+    (lib.withFeature withXwidgets "xwidgets")
+  ];
 
   env = lib.optionalAttrs withNativeCompilation {
     NATIVE_FULL_AOT = "1";

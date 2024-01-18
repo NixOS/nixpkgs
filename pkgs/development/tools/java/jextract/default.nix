@@ -5,7 +5,7 @@
 , writeText
 , makeWrapper
 , gradle
-, jdk20
+, jdk21
 , llvmPackages
 }:
 
@@ -38,13 +38,13 @@ in
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2023-04-14";
+  version = "unstable-2023-11-27";
 
   src = fetchFromGitHub {
     owner = "openjdk";
     repo = "jextract";
-    rev = "cf3afe9ca71592c8ebb32f219707285dd1d5b28a";
-    hash = "sha256-8qRD1Xg39vxtFAdguD8XvkQ8u7YzFU55MhyyJozVffo=";
+    rev = "8730fcf05c229d035b0db52ee6bd82622e9d03e9"; # Update jextract 21 with latest fixes
+    hash = "sha256-Wct/yx5C0EjDtDyXNYDH5LRmrfq7islXbPVIGBR6x5Y=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   env = {
     ORG_GRADLE_PROJECT_llvm_home = llvmPackages.libclang.lib;
-    ORG_GRADLE_PROJECT_jdk20_home = jdk20;
+    ORG_GRADLE_PROJECT_jdk21_home = jdk21;
   };
 
   buildPhase = ''

@@ -21,11 +21,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
 
     makeWrapper $mueval/bin/mueval $out/bin/mueval \
-      --prefix PATH ":" "$out/bin"
-
-    makeWrapper $mueval/bin/mueval-core $out/bin/mueval \
       --set "NIX_GHC_LIBDIR" "${libDir}"
-
   '';
 
   passthru = { inherit defaultPkgs; };

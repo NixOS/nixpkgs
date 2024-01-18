@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vgmstream";
-  version = "1879";
+  version = "1896";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
     rev = "refs/tags/r${version}";
-    sha256 = "sha256-m7M9oIEym/jzuw2HAbjdF6fZsfTew1KK0g1D4SePiiE=";
+    sha256 = "sha256-1BWJgV631MxxzdUtK8f+XRb9cqfhjlwN2LgWI0VmIHE=";
   };
 
   passthru.updateScript = nix-update-script {

@@ -717,6 +717,10 @@ in makeScopeWithSplicing' {
     buildInputs = with self; [ include csu ];
     env.NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
 
+    # Suppress lld >= 16 undefined version errors
+    # https://github.com/freebsd/freebsd-src/commit/2ba84b4bcdd6012e8cfbf8a0d060a4438623a638
+    env.NIX_LDFLAGS = lib.optionalString (stdenv.targetPlatform.linker == "lld") "--undefined-version";
+
     makeFlags = [
       "STRIP=-s" # flag to install, not command
       # lib/libc/gen/getgrent.c has sketchy cast from `void *` to enum

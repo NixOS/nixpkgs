@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "django-sekizai";
   version = "4.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

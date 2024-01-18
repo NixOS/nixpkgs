@@ -7,7 +7,7 @@ in
   options = {
     services.spice-autorandr = {
       enable = lib.mkEnableOption (lib.mdDoc "spice-autorandr service that will automatically resize display to match SPICE client window size.");
-      package = lib.mkPackageOptionMD pkgs "spice-autorandr" { };
+      package = lib.mkPackageOption pkgs "spice-autorandr" { };
     };
   };
 

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, flutter
+, flutter313
 , makeDesktopItem
 , pkg-config
 , libayatana-appindicator
@@ -13,7 +13,7 @@ let
   pname = "localsend";
   version = "1.12.0";
 
-  linux = flutter.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication {
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -24,8 +24,13 @@ let
     };
 
     sourceRoot = "source/app";
-    depsListFile = ./deps.json;
-    vendorHash = "sha256-fXzxT7KBi/WT2A5PEIx+B+UG4HWEbMPMsashVQsXdmU=";
+
+    pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+    gitHashes = {
+      "permission_handler_windows" = "sha256-a7bN7/A65xsvnQGXUvZCfKGtslbNWEwTWR8fAIjMwS0=";
+      "tray_manager" = "sha256-eF14JGf5jclsKdXfCE7Rcvp72iuWd9wuSZ8Bej17tjg=";
+    };
 
     nativeBuildInputs = [ pkg-config ];
 

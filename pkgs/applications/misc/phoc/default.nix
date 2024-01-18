@@ -17,6 +17,7 @@
 , libxkbcommon
 , wlroots
 , xorg
+, gitUpdater
 , nixosTests
 }:
 
@@ -71,7 +72,13 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
-  passthru.tests.phosh = nixosTests.phosh;
+  passthru = {
+    tests.phosh = nixosTests.phosh;
+    updateScript = gitUpdater {
+      url = "https://gitlab.gnome.org/World/Phosh/phoc";
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";

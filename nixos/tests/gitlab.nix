@@ -34,7 +34,7 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
-      virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
+      virtualisation.memorySize = 6144;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;

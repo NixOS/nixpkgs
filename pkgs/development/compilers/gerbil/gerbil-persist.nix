@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, gerbilPackages, ... }:
 {
   pname = "gerbil-persist";
-  version = "unstable-2023-10-07";
-  git-version = "0.1.1-1-g3ce1d4a";
+  version = "unstable-2023-11-29";
+  git-version = "0.2-6-g8a5e40d";
   softwareName = "Gerbil-persist";
   gerbil-package = "clan/persist";
   version-path = "version";
@@ -13,8 +13,8 @@
     fun = fetchFromGitHub;
     owner = "mighty-gerbils";
     repo = "gerbil-persist";
-    rev = "3ce1d4a4b1d7be290e54f884d780c02ceee8f10e";
-    sha256 = "1kzvgpqkpq4wlc0hlfxy314fbv6215aksrrlrrpq9w97wdibmv7x";
+    rev = "8a5e40deb01140b9c8d03c6cc985e47a9d7123d8";
+    sha256 = "1c1h1yp7gf23r3asxppgga4j4jmy4l9rlbb7vw9jcwvl8d30yrab";
   };
 
   meta = with lib; {

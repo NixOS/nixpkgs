@@ -1,10 +1,10 @@
 # Manually packaged until it is upstreamed to melpa
 # See https://github.com/devonsparks/wat-mode/issues/1
-{ lib, trivialBuild, fetchFromGitHub, fetchpatch, emacs }:
+{ lib, melpaBuild, fetchFromGitHub, writeText }:
 
-trivialBuild rec {
+melpaBuild rec {
   pname = "wat-mode";
-  version = "unstable-2022-07-13";
+  version = "20220713.1";
 
   src = fetchFromGitHub {
     owner = "devonsparks";
@@ -13,11 +13,16 @@ trivialBuild rec {
     hash = "sha256-jV5V3TRY+D3cPSz3yFwVWn9yInhGOYIaUTPEhsOBxto=";
   };
 
-  meta = with lib; {
+  commit = "46b4df83e92c585295d659d049560dbf190fe501";
+
+  recipe = writeText "recipe" ''
+    (wat-mode :repo "devonsparks/wat-mode" :fetcher github)
+  '';
+
+  meta = {
     homepage = "https://github.com/devonsparks/wat-mode";
     description = "An Emacs major mode for WebAssembly's text format";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nagy ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nagy ];
   };
 }

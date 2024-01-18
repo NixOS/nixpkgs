@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "before-after";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "before_after";

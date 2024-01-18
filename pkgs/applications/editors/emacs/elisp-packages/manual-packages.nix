@@ -17,9 +17,13 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
+
+  copilot = callPackage ./manual-packages/copilot { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
@@ -35,7 +39,7 @@ in
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
+  ghc-mod = callPackage ./manual-packages/ghc-mod { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
 
@@ -93,6 +97,8 @@ in
 
   wat-mode = callPackage ./manual-packages/wat-mode { };
 
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
+
   yes-no = callPackage ./manual-packages/yes-no { };
 
   youtube-dl = callPackage ./manual-packages/youtube-dl { };
@@ -111,4 +117,6 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+
+  __attrsFailEvaluation = true;
 }

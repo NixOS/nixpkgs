@@ -21,6 +21,8 @@ else if stdenv.isAarch32 then
   "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
+else if stdenv.hostPlatform.isRiscV64 then
+  "RISCV64"
 else
   throw "Unsupported architecture";
 
@@ -31,7 +33,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = stdenv.mkDerivation rec {
   pname = "edk2";
-  version = "202308";
+  version = "202311";
 
   patches = [
     # pass targetPrefix as an env var
@@ -46,7 +48,7 @@ edk2 = stdenv.mkDerivation rec {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-Eoi1xf/hw/Knr7n0f0rgVof7wTgrHkmvV4eJjJV1NhM=";
+    hash = "sha256-gC/If8U9qo70rGvNl3ld/mmZszwY0w/5Ge/K21mhzYw=";
   };
 
   # We don't want EDK2 to keep track of OpenSSL,
@@ -60,11 +62,12 @@ edk2 = stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pythonEnv ];
-  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.util-linux buildPackages.bash ];
+  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
+  depsHostHost = [ libuuid ];
   strictDeps = true;
 
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
-  ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
+  ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
 
   makeFlags = [ "-C BaseTools" ];
 
@@ -91,7 +94,7 @@ edk2 = stdenv.mkDerivation rec {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
   };
 
   passthru = {

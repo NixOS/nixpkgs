@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-cJEJ8V9lDbNb07eY3nWmNcT7ULGlcmOeyb9UDOLGWfI=";
+    hash = "sha256-ppNzc6ojxF9FkgsqSWBSbtmI9aRc+RGN1R1RQLwCtv0=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
     changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
+    mainProgram = "cagebreak";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

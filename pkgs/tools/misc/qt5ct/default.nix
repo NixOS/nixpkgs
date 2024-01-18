@@ -27,5 +27,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ ralith ];
+    mainProgram = "qt5ct";
   };
 }

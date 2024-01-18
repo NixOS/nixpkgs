@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "flask-principal";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Principal";

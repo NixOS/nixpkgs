@@ -37,6 +37,11 @@ mkDerivation rec {
     "-DALGLIB_DIR:PATH=${alglib}"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
+  ];
+
   patches = [
     # https://github.com/jcelaya/hdrmerge/pull/222
     (fetchpatch {

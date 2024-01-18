@@ -15,12 +15,7 @@ in
     services.libreddit = {
       enable = mkEnableOption (lib.mdDoc "Private front-end for Reddit");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.libreddit;
-        defaultText = literalExpression "pkgs.libreddit";
-        description = lib.mdDoc "Libreddit package to use.";
-      };
+      package = mkPackageOption pkgs "libreddit" { };
 
       address = mkOption {
         default = "0.0.0.0";

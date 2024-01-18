@@ -55,6 +55,7 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnutls
 , iptables
 , withSelinux ? false
 , libselinux
@@ -105,6 +106,8 @@
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # can't find gnu/stubs-32.h
+    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -144,13 +147,14 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
+, withLogTrace ? false
 }:
 
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 # passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
@@ -204,6 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -245,7 +251,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/ukify/ukify.py \
       --replace \
       "'readelf'" \
-      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -430,7 +439,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
@@ -560,6 +569,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withKmod [
     "-Dkmod=true"
     "-Dkmod-path=${kmod}/bin/kmod"
+  ] ++ lib.optionals withLogTrace [
+    "-Dlog-trace=true"
   ];
   preConfigure =
     let
@@ -765,7 +776,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
-      inherit (nixosTests) switchTest;
+      inherit (nixosTests)
+        switchTest
+        systemd-journal
+        systemd-journal-gateway
+        systemd-journal-upload;
       cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };

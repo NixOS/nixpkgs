@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "rocm-core";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-jFAHLqf/AR27Nbuq8aypWiKqApNcTgG5LWESVjVCKIg=";
@@ -29,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utility for getting the ROCm release version";
-    homepage = "https://github.com/RadeonOpenCompute/rocm-core";
+    homepage = "https://github.com/ROCm/rocm-core";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

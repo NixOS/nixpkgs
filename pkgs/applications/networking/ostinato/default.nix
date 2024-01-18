@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "ostinato";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub  {
     owner  = "pstavirs";
     repo   = "ostinato";
     rev    = "v${version}";
-    sha256 = "sha256-yhfhNfkiZulF0FxNT+3CeGqUTXLmwPQntl2TLdCcMTQ=";
+    sha256 = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
   };
 
   ostinatoIcon = fetchurl {

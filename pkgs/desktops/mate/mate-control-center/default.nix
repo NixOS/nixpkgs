@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
     mate.libmatekbd
     mate.mate-menus
+    mate.mate-panel # for org.mate.panel schema, see m-c-c#678
     mate.marco
     mate.mate-settings-daemon
   ];

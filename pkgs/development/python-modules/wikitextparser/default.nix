@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
+, setuptools
 , pytestCheckHook
 , regex
 , wcwidth
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-cmzyRbq4tCbuyrNnT0UYxoxuwXrFkIcWdrogSTfxSys=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     wcwidth

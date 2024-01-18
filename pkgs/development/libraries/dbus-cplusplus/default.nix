@@ -45,5 +45,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
+    # Broken for Musl at 2023-12-28:
+    # https://github.com/NixOS/nixpkgs/issues/277198
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

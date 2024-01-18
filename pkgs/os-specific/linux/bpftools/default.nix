@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage    = "https://github.com/libbpf/bpftool";
     description = "Debugging/program analysis tools for the eBPF subsystem";
     license     = [ licenses.gpl2 licenses.bsd2 ];
     platforms   = platforms.linux;

@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         enableUserService = true;
         port = 20123;
         environmentFile = pkgs.writeText "livebook.env" ''
-          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         '';
         options = {
           cookie = "chocolate chip";
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       sudo = lib.concatStringsSep " " [
         "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
         "sudo"

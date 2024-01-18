@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "bc-jsonpath-ng";
-  version = "1.5.9";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "jsonpath-ng";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uho+slKmKkTrcJBKi+9GJv1JrvDrTP4/6uqmMn3qptU=";
+    hash = "sha256-FWP4tzlacAWVXG3YnPwl5MKc12geaCxZ2xyKx9PSarU=";
   };
 
   propagatedBuildInputs = [

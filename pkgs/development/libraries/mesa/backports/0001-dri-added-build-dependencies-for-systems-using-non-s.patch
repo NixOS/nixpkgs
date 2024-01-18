@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "duncan.hopkins" <duncan.hopkins@foundry.com>
+Date: Tue, 17 Oct 2023 09:34:31 +0100
+Subject: [PATCH] dri: added build dependencies for systems using non-standard
+ prefixed X11 libs.
+
+To get MacOS to build, some extra dependencies need to be added to a couple of build targets.
+This mainly shows up when not installing the dependencies in the default prefix locations.
+On MacOS, this happens when using a custom build of brew to install the dependencies to 'odd' locations.
+
+Reviewed-by: Adam Jackson <ajax@redhat.com>
+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25992>
+---
+ src/gallium/targets/dri/meson.build | 2 +-
+ src/glx/meson.build                 | 2 +-
+ src/loader/meson.build              | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/gallium/targets/dri/meson.build b/src/gallium/targets/dri/meson.build
+index 66619bba0db..6d3ef197e74 100644
+--- a/src/gallium/targets/dri/meson.build
++++ b/src/gallium/targets/dri/meson.build
+@@ -49,7 +49,7 @@ libgallium_dri = shared_library(
+   link_depends : gallium_dri_link_depends,
+   link_with : [
+     libdri, libmesa, libgalliumvl,
+-    libgallium, libglapi, libpipe_loader_static, libws_null, libwsw, libswdri,
++    libgallium, libglapi, libloader, libpipe_loader_static, libws_null, libwsw, libswdri,
+     libswkmsdri,
+   ],
+   dependencies : [
+diff --git a/src/glx/meson.build b/src/glx/meson.build
+index 7ec3e3e0d88..1a5e9833956 100644
+--- a/src/glx/meson.build
++++ b/src/glx/meson.build
+@@ -136,7 +136,7 @@ libglx = static_library(
+   ],
+   dependencies : [
+     idep_mesautil, idep_xmlconfig,
+-    dep_libdrm, dep_dri2proto, dep_glproto, dep_x11, dep_glvnd, dep_xxf86vm, dep_xshmfence
++    dep_libdrm, dep_dri2proto, dep_glproto, dep_x11, dep_xext, dep_glvnd, dep_xxf86vm, dep_xshmfence
+   ],
+ )
+ 
+diff --git a/src/loader/meson.build b/src/loader/meson.build
+index 35f9991ba2f..043cc852112 100644
+--- a/src/loader/meson.build
++++ b/src/loader/meson.build
+@@ -47,6 +47,6 @@ libloader = static_library(
+   c_args : loader_c_args,
+   gnu_symbol_visibility : 'hidden',
+   include_directories : [inc_include, inc_src, inc_util],
+-  dependencies : [dep_libdrm, dep_thread, dep_xcb_xrandr],
++  dependencies : [dep_libdrm, dep_thread, dep_xcb, dep_xcb_xrandr],
+   build_by_default : false,
+ )

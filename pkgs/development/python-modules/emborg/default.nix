@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.37";
+  version = "1.38";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bHYs+vlNku/T5Hb9u77Xml9/FNj5vgqPeXSzcilsS+I=";
+    hash = "sha256-dK/6y1cjegomiy3fta2grUm4T0ZrylmstXfkJo4mDCE=";
   };
 
   nativeBuildInputs = [

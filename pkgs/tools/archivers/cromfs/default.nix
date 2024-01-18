@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse perl ];
 
+  makeFlags = [ "CXXFLAGS=-std=c++03" ];
+
   meta = with lib; {
     description = "FUSE Compressed ROM filesystem with lzma";
     homepage = "https://bisqwit.iki.fi/source/cromfs.html";

@@ -102,8 +102,6 @@ in stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    patchShebangs ./configure
-
     substituteInPlace src/config.c \
       --replace /usr/bin/tar ${gnutar}/bin/tar
 
@@ -131,5 +129,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ simonvandel ];
+    mainProgram = "tvheadend";
   };
 }

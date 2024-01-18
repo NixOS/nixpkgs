@@ -30,10 +30,6 @@ stdenv.mkDerivation rec {
     libselinux
   ];
 
-  postPatch = ''
-    patchShebangs ./configure
-  '';
-
   postInstall = ''
     wrapProgram $out/bin/vis \
       --prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \

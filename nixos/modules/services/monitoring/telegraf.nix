@@ -13,12 +13,7 @@ in {
     services.telegraf = {
       enable = mkEnableOption (lib.mdDoc "telegraf server");
 
-      package = mkOption {
-        default = pkgs.telegraf;
-        defaultText = literalExpression "pkgs.telegraf";
-        description = lib.mdDoc "Which telegraf derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "telegraf" { };
 
       environmentFiles = mkOption {
         type = types.listOf types.path;
@@ -53,6 +48,10 @@ in {
 
   ###### implementation
   config = mkIf config.services.telegraf.enable {
+    services.telegraf.extraConfig = {
+      inputs = {};
+      outputs = {};
+    };
     systemd.services.telegraf = let
       finalConfigFile = if config.services.telegraf.environmentFiles == []
                         then configFile
@@ -61,6 +60,7 @@ in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])

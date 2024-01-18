@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
-  version = "0.6.7";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ote/arHCU6qiTXdK2RXv9848aeW6rcBsrb6nfxIzQLs=";
+    hash = "sha256-S7oxtd5DMFaChUhemcCOfoD1E0DbZ68r+1eVMq4vqZc=";
   };
 
   nativeBuildInputs = [

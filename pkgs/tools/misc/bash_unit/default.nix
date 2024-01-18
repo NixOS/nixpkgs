@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pamplemousse ];
     platforms = platforms.all;
     license = licenses.gpl3Plus;
+    mainProgram = "bash_unit";
   };
 }

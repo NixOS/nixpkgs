@@ -7,17 +7,18 @@
 , openssl ? pkgs.openssl
 , zlib ? pkgs.zlib
 , hostPlatform ? stdenv.hostPlatform
+, nix-update-script ? stdenv.nix-update-script
 }:
 
 buildDotnetModule rec {
   pname = "pocket-updater-utility";
-  version = "2.31.0";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-z90YITAW2Nv+Mq2q56As4PoHqGPEnvDUPH73bhz/xnw=";
+    hash = "sha256-mizKR3hS8s1we+jJ1bQQpFzRMjHFv4UAiINUpfnWnwI=";
   };
 
   buildInputs = [
@@ -47,6 +48,10 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mattpannella/pocket-updater-utility";

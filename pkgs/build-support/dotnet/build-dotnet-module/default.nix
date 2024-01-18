@@ -37,7 +37,7 @@
 
   # The path to publish the project to. When unset, the directory "$out/lib/$pname" is used.
 , installPath ? null
-  # The binaries that should get installed to `$out/bin`, relative to `$out/lib/$pname/`. These get wrapped accordingly.
+  # The binaries that should get installed to `$out/bin`, relative to `$installPath/`. These get wrapped accordingly.
   # Unfortunately, dotnet has no method for doing this automatically.
   # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null
@@ -165,7 +165,7 @@ stdenvNoCC.mkDerivation (args // {
     components = lib.pipe args.version [
       lib.splitVersion
       (lib.filter (x: (lib.strings.match "[0-9]+" x) != null))
-      (lib.filter (x: (lib.toInt x) < 65535)) # one version component in dotnet has to fit in 16 bits
+      (lib.filter (x: (lib.toIntBase10 x) < 65535)) # one version component in dotnet has to fit in 16 bits
     ];
   in if (lib.length components) == 0
   then null

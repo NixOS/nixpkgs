@@ -6,20 +6,23 @@
 , installShellFiles
 }:
 
+let
+  version = "2.5.0";
+in
 stdenv.mkDerivation rec {
   pname = "nikto";
-  version = "2.2.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "sullo";
     repo = "nikto";
-    rev = "c83d0461edd75c02677dea53da2896644f35ecab";
-    sha256 = "0vwq2zdxir67cn78ls11qf1smd54nppy266v7ajm5rqdc47q7fy2";
+    rev = version;
+    sha256 = "sha256-lWiDbWc2BWAUgyaIm0tvZytja02WogYRoc7na4sHiNM=";
   };
 
   # Nikto searches its configuration file based on its current path
   # This fixes the current path regex for the wrapped executable.
-  patches = [ ./NIKTODIR-nix-wrapper-fix.patch ];
+  patches = [ ./nix-wrapper-fix.patch ];
 
   postPatch = ''
     # EXECDIR needs to be changed to the path where we copy the programs stuff
@@ -31,10 +34,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  propagatedBuildInputs = [ perlPackages.NetSSLeay ];
-
   buildInputs = [
     perlPackages.perl
+    perlPackages.NetSSLeay
   ];
 
   installPhase = ''
@@ -44,7 +46,6 @@ stdenv.mkDerivation rec {
     install -Dm 755 "program/nikto.pl" "$out/bin/nikto"
     install -Dm 644 program/nikto.conf.default "$out/etc/nikto.conf"
     installManPage documentation/nikto.1
-    install -Dm 644 program/docs/nikto_manual.html "$out/share/doc/${pname}/manual.html"
     install -Dm 644 README.md "$out/share/doc/${pname}/README"
     runHook postInstall
   '';
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     description = "Web server scanner";
     license = licenses.gpl2Plus;
     homepage = "https://cirt.net/Nikto2";
+    changelog = "https://github.com/sullo/nikto/releases/tag/${version}";
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.unix;
   };

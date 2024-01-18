@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   version = "0.20.0";
+  format = "setuptools";
   pname = "azure-mgmt-common";
 
   src = fetchPypi {

@@ -25,8 +25,14 @@
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
 /lib/asserts.nix            @infinisil @Profpatsch
-/lib/path.*                 @infinisil @fricklerhandwerk
+/lib/path.*                 @infinisil
 /lib/fileset                @infinisil
+## Libraries / Module system
+/lib/modules.nix            @infinisil @roberth
+/lib/types.nix              @infinisil @roberth
+/lib/options.nix            @infinisil @roberth
+/lib/tests/modules.sh       @infinisil @roberth
+/lib/tests/modules          @infinisil @roberth
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -60,6 +66,10 @@
 /doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
+# Nix, the package manager
+pkgs/tools/package-management/nix/                    @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
@@ -67,13 +77,14 @@
 # Contributor documentation
 /CONTRIBUTING.md @infinisil
 /.github/PULL_REQUEST_TEMPLATE.md @infinisil
-/doc/contributing/ @fricklerhandwerk @infinisil
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/doc/contributing/ @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @infinisil
 /lib/README.md @infinisil
 /doc/README.md @infinisil
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
 /maintainers/README.md @infinisil
+/maintainers/* @piegamesde @Janik-Haag
 
 # User-facing development documentation
 /doc/development.md @infinisil
@@ -98,6 +109,9 @@
 /nixos/modules/system/boot/systemd          @NixOS/systemd
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
 /pkgs/os-specific/linux/systemd             @NixOS/systemd
+
+# Systemd-boot
+/nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Images and installer media
 /nixos/modules/installer/cd-dvd/            @samueldr
@@ -157,6 +171,8 @@
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
+/pkgs/applications/networking/browsers/chromium @emilylange
+/nixos/tests/chromium.nix @emilylange
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
@@ -204,6 +220,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
+/pkgs/tools/networking/octodns @Janik-Haag
 /pkgs/tools/networking/kea/default.nix @mweinelt
 /pkgs/tools/networking/babeld/default.nix @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
@@ -257,13 +274,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-
-# Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @adisbladis
-/nixos/modules/virtualisation/cri-o.nix      @adisbladis
-/nixos/modules/virtualisation/podman         @adisbladis
-/nixos/tests/cri-o.nix                       @adisbladis
-/nixos/tests/podman                          @adisbladis
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
@@ -322,15 +332,19 @@ pkgs/applications/version-management/forgejo @bendlas @emilylange
 /pkgs/development/ocaml-modules     @ulrikstrid
 
 # ZFS
-pkgs/os-specific/linux/zfs                @raitobezarius
-nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
-nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
+pkgs/os-specific/linux/zfs/2_1.nix        @raitobezarius
+pkgs/os-specific/linux/zfs/generic.nix    @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
 
 # Zig
-/pkgs/development/compilers/zig @AndersonTorres @figsoda
-/doc/hooks/zig.section.md @AndersonTorres @figsoda
+/pkgs/development/compilers/zig @figsoda
+/doc/hooks/zig.section.md       @figsoda
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
+
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq

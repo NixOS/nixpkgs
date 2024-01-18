@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     pyopengl
-    wxPython_4_2
+    wxpython
   ];
 
   meta = with lib; {

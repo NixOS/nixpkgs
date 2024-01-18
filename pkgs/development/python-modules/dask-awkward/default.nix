@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.11.2";
+  version = "2024.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,10 +22,8 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-yx0B31x+BMS4alHro+hAPeVB6YK9B7Tg+3sSCMCYjKs=";
+    hash = "sha256-8nha0h1f/pLl7YmUc5HzlqwNRE/gRpRV2PudkddMHqg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "awkward"

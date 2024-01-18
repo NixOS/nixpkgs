@@ -87,5 +87,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ mpickering sikmir ];
     platforms = with platforms; unix;
     broken = stdenv.isDarwin;
+    mainProgram = "Mapper";
   };
 }

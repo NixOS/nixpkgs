@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "nix-universal-prefetch";
   };
 }

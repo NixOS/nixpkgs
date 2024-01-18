@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   pname = "tinyobjloader-py";
+  format = "setuptools";
   inherit (tinyobjloader) version src;
 
   # Build needs headers from ${src}, setting sourceRoot or fetching from pypi won't work.

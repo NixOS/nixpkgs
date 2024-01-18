@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "hydrawiser";
   version = "0.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

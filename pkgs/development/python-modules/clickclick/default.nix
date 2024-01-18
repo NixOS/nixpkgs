@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "clickclick";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hjacobs";

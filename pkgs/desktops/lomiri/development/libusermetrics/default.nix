@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace "\''${CMAKE_INSTALL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Only needed by tests
     sed -i -e '/QTDBUSTEST/d' CMakeLists.txt
   '';
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DGSETTINGS_LOCALINSTALL=ON"
     "-DGSETTINGS_COMPILE=ON"
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

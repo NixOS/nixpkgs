@@ -1,99 +1,83 @@
 { stdenv
 , lib
+, buildGoModule
 , fetchFromGitHub
-, buildGoPackage
-, pkg-config
-, go-dbus-factory
-, go-gir-generator
-, go-lib
 , gettext
-, dde-api
+, pkg-config
+, jq
+, wrapGAppsHook
+, glib
 , libgnome-keyring
 , gtk3
 , alsa-lib
-, libpulseaudio
+, pulseaudio
 , libgudev
 , libsecret
-, jq
-, wrapGAppsHook
 , runtimeShell
-, dde-polkit-agent
+, dbus
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "startdde";
-  version = "5.10.1";
-
-  goPackagePath = "github.com/linuxdeepin/startdde";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dbTcYS7dEvT0eP45jKE8WiG9Pm4LU6jvR8hjMQv/yxU=";
+    hash = "sha256-B2B8QlA1Ps/ybVzionngtwDwTLd7H02RKJwcXymGlJM=";
   };
 
   patches = [
     ./0001-avoid-use-hardcode-path.patch
   ];
 
+  vendorHash = "sha256-5BEOazAygYL1N+CaGAbUwdpHZ1EiHr6yNW27/bXNdZg=";
+
   postPatch = ''
     substituteInPlace display/manager.go session.go \
       --replace "/bin/bash" "${runtimeShell}"
-    substituteInPlace display/manager.go main.go utils.go session.go \
+
+    substituteInPlace misc/systemd_task/dde-display-task-refresh-brightness.service \
+       --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
+
+    substituteInPlace display/manager.go utils.go session.go \
       --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
-    substituteInPlace misc/xsessions/deepin.desktop.in --subst-var-by PREFIX $out
-    substituteInPlace watchdog/dde_polkit_agent.go misc/auto_launch/{default.json,chinese.json} \
-      --replace "/usr/lib/polkit-1-dde/dde-polkit-agent" "${dde-polkit-agent}/lib/polkit-1-dde/dde-polkit-agent"
-    substituteInPlace startmanager.go launch_group.go memchecker/config.go \
-      --replace "/usr/share/startdde" "$out/share/startdde"
+
     substituteInPlace misc/lightdm.conf --replace "/usr" "$out"
   '';
-
-  goDeps = ./deps.nix;
 
   nativeBuildInputs = [
     gettext
     pkg-config
     jq
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
-    go-dbus-factory
-    go-gir-generator
-    go-lib
-    dde-api
     libgnome-keyring
     gtk3
     alsa-lib
-    libpulseaudio
+    pulseaudio
     libgudev
     libsecret
   ];
 
   buildPhase = ''
     runHook preBuild
-    addToSearchPath GOPATH "${go-dbus-factory}/share/gocode"
-    addToSearchPath GOPATH "${go-gir-generator}/share/gocode"
-    addToSearchPath GOPATH "${go-lib}/share/gocode"
-    addToSearchPath GOPATH "${dde-api}/share/gocode"
-    make -C go/src/${goPackagePath}
+    make GO_BUILD_FLAGS="$GOFLAGS"
     runHook postBuild
   '';
 
   installPhase = ''
-    make install DESTDIR="$out" PREFIX="/" -C go/src/${goPackagePath}
+    runHook preInstall
+    make install DESTDIR="$out" PREFIX="/"
+    runHook postInstall
   '';
-
-  passthru.providedSessions = [ "deepin" ];
 
   meta = with lib; {
     description = "Starter of deepin desktop environment";
-    longDescription = ''
-      Startdde is used for launching DDE components and invoking user's
-      custom applications which compliant with xdg autostart specification
-    '';
     homepage = "https://github.com/linuxdeepin/startdde";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

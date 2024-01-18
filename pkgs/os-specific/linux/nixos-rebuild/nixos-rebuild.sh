@@ -49,7 +49,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
+      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
@@ -82,7 +82,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      -j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
+      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
@@ -157,8 +157,10 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
-    maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
+sudoCommand=(sudo --preserve-env="$preservedSudoVars" --)
+
+if [[ -n "$SUDO_USER" ]]; then
+    useSudo=1
 fi
 
 # log the given argument to stderr if verbose mode is on
@@ -175,20 +177,44 @@ runCmd() {
 }
 
 buildHostCmd() {
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
+    else
+        c=()
+    fi
+
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
-    if [ -z "$targetHost" ]; then
-        runCmd "${maybeSudo[@]}" "$@"
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
+        c=()
+    fi
+
+    if [ -z "$targetHost" ]; then
+        runCmd "${c[@]}" "$@"
+    else
+        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
+    fi
+}
+
+targetHostSudoCmd() {
+    if [ -n "$remoteSudo" ]; then
+        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+    else
+        # While a tty might not be necessary, we apply it to be consistent with
+        # sudo usage, and an experience that is more consistent with local deployment.
+        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
     fi
 }
 
@@ -511,6 +537,68 @@ if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
 fi
 
+if [ "$action" = repl ]; then
+    # This is a very end user command, implemented using sub-optimal means.
+    # You should feel free to improve its behavior, as well as resolve tech
+    # debt in "breaking" ways. Humans adapt quite well.
+    if [[ -z $flake ]]; then
+        exec nix repl '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+    else
+        if [[ -n "${lockFlags[0]}" ]]; then
+            # nix repl itself does not support locking flags
+            log "nixos-rebuild repl does not support locking flags yet"
+            exit 1
+        fi
+        d='$'
+        q='"'
+        bold="$(echo -e '\033[1m')"
+        blue="$(echo -e '\033[34;1m')"
+        attention="$(echo -e '\033[35;1m')"
+        reset="$(echo -e '\033[0m')"
+        # This nix repl invocation is impure, because usually the flakeref is.
+        # For a solution that preserves the motd and custom scope, we need
+        # something like https://github.com/NixOS/nix/issues/8679.
+        exec nix repl --impure --expr "
+          let flake = builtins.getFlake ''$flake'';
+              configuration = flake.$flakeAttr;
+              motd = ''
+                $d{$q\n$q}
+                Hello and welcome to the NixOS configuration
+                    $flakeAttr
+                    in $flake
+
+                The following is loaded into nix repl's scope:
+
+                    - ${blue}config${reset}   All option values
+                    - ${blue}options${reset}  Option data and metadata
+                    - ${blue}pkgs${reset}     Nixpkgs package set
+                    - other module arguments
+
+                    - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
+
+                Use tab completion to browse around ${blue}config${reset}.
+
+                Use ${bold}:r${reset} to ${bold}reload${reset} everything after making a change in the flake.
+                  (assuming $flake is a mutable flake ref)
+
+                See ${bold}:?${reset} for more repl commands.
+
+                ${attention}warning:${reset} nixos-rebuild repl does not currently enforce pure evaluation.
+              '';
+              scope =
+                assert configuration._type or null == ''configuration'';
+                assert configuration.class or ''nixos'' == ''nixos'';
+                configuration._module.args //
+                configuration._module.specialArgs //
+                {
+                  inherit (configuration) config options;
+                  inherit flake;
+                };
+          in builtins.seq scope builtins.trace motd scope
+        " "${extraBuildFlags[@]}"
+    fi
+fi
+
 if [ "$action" = list-generations ]; then
     if [ ! -L "$profile" ]; then
         log "No profile \`$(basename "$profile")' found"
@@ -605,7 +693,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
+        targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
@@ -633,7 +721,7 @@ if [ -z "$rollback" ]; then
     fi
 else # [ -n "$rollback" ]
     if [[ "$action" = switch || "$action" = boot ]]; then
-        targetHostCmd nix-env --rollback -p "$profile"
+        targetHostSudoCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
     elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
@@ -678,7 +766,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
         log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
         cmd=()
-    elif ! targetHostCmd "${cmd[@]}" true &>/dev/null; then
+    elif ! targetHostSudoCmd "${cmd[@]}" true; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
         cmd=(
             "env"
@@ -700,7 +788,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         fi
     fi
 
-    if ! targetHostCmd "${cmd[@]}" "$action"; then
+    if ! targetHostSudoCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

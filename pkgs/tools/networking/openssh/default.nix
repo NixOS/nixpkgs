@@ -5,15 +5,15 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "9.5p1";
+    version = "9.6p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-8Cbnt5un+1QPdRgq+W3IqPHbOV+SK7yfbKYDZyaGCGs=";
+      hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
-    extraMeta.maintainers = with lib.maintainers; [ das_j ];
+    extraMeta.maintainers = lib.teams.helsinki-systems.members;
   };
 
   openssh_hpn = common rec {

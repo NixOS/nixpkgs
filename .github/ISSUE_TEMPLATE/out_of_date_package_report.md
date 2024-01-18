@@ -27,7 +27,7 @@ There's a high chance that you'll have the new version right away while helping 
 
 Note for maintainers: Please tag this issue in your PR.
 
-**Priorities**
+---
 
 Add a :+1: [reaction] to [issues you find important].
 

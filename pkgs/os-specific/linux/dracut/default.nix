@@ -61,10 +61,6 @@ stdenv.mkDerivation rec {
     echo 'DRACUT_VERSION=${version}' >dracut-version.sh
   '';
 
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/dracut --prefix PATH : ${lib.makeBinPath [
       coreutils

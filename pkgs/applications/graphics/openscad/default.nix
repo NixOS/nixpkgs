@@ -11,7 +11,7 @@
 , libGLU, libGL
 , glew
 , opencsg
-, cgal
+, cgal_4
 , mpfr
 , gmp
 , glib
@@ -60,7 +60,7 @@ mkDerivation rec {
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
-    eigen boost glew opencsg cgal mpfr gmp glib
+    eigen boost glew opencsg cgal_4 mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla cairo
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]

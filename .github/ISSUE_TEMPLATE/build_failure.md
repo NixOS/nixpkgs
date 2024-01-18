@@ -38,7 +38,7 @@ Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
 output here
 ```
 
-### Priorities
+---
 
 Add a :+1: [reaction] to [issues you find important].
 

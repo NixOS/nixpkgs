@@ -40,14 +40,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.scollector;
-        defaultText = literalExpression "pkgs.scollector";
-        description = lib.mdDoc ''
-          scollector binary to use.
-        '';
-      };
+      package = mkPackageOption pkgs "scollector" { };
 
       user = mkOption {
         type = types.str;

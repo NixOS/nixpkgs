@@ -16,7 +16,7 @@ import ./make-test-python.nix {
     cfg = { ... }: {
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish.addresses = true;
         publish.domain = true;
         publish.enable = true;

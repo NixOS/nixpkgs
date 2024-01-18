@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "sipyco";
   version = "1.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

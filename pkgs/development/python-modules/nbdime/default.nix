@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "3.2.1";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MUCaMPhI/8azJUBpfoLVoKG4TcwycWynTni8xLRXxFM=";
+    hash = "sha256-8adgwLAMG6m0lFwWzpJXfzk/tR0YTzUbdoW6boUCCY4=";
   };
 
   nativeBuildInputs = [

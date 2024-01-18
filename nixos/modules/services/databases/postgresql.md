@@ -258,7 +258,7 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```
 services.postgresql.package = pkgs.postgresql_12;
-services.postgresql.extraPlugins = with pkgs.postgresql_12.pkgs; [
+services.postgresql.extraPlugins = ps: with ps; [
   pg_repack
   postgis
 ];

@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "plaster";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

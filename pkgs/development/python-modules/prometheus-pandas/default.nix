@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "prometheus-pandas";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zysdlYPjvhextAfW4vvGN6mSPVUbWLV+AvQ1hGWCAbw=";
+    hash = "sha256-1eaTmNui3cAisKEhBMEpOv+UndJZwb4GGK2M76xiy7k=";
   };
 
   nativeBuildInputs = [

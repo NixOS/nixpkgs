@@ -6,19 +6,19 @@ let
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    rev = "3b8a86cc37e988b043d1503d2f11068389b0aca3";
-    sha256 = "9wLY7/EJyIZYnlUAMsViCwD5kGc1vCNbk8vUhb90LMQ=";
+    rev = "7eef0b83ded6221a3ddb85c0118cc26f9a35375c";
+    hash = "sha256-AR/y70zeYR9xBzWDB5JXjJdDM+NLOX6yxCQte2lYN/U=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.97.0";
+  version = "1.98.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    hash = "sha256-gZpMgFSPz70QNfd8gH5Jb9RTxQfQalWx33LkgXLEqOQ=";
+    hash = "sha256-N35WGYZbgfjKnorzGKCnbBvlrlt9Vr04YIG2R3k+b8A=";
   };
 
   postUnpack = ''

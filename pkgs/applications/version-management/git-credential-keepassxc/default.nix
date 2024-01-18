@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Frederick888/git-credential-keepassxc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "git-credential-keepassxc";
   };
 }

@@ -1,34 +1,69 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel-yaml
-, lz4, cloudpickle
+{ lib
+, stdenv
+, arrow
+, buildPythonPackage
+, cloudpickle
+, cryptography
+, fetchFromGitHub
+, lz4
+, numpy
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, setuptools
 }:
 
 buildPythonPackage rec {
-  pname   = "construct";
-  version = "2.10.68";
+  pname = "construct";
+  version = "2.10.70";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  # no tests in PyPI tarball
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    hash = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
+    owner = "construct";
+    repo = "construct";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5otjjIyje0+z/Y/C2ivmu08PNm0oJcSSvZkQfGxHDuQ=";
   };
 
-  # not an explicit dependency, but it's imported by an entrypoint
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    # Not an explicit dependency, but it's imported by an entrypoint
     lz4
   ];
 
-  nativeCheckInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
+  passthru.optional-dependencies = {
+    extras = [
+      arrow
+      cloudpickle
+      cryptography
+      numpy
+      ruamel-yaml
+    ];
+  };
 
-  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "construct"
+  ];
+
+  disabledTests = [
+    "test_benchmarks"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_multiprocessing"
+  ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";
     homepage = "https://construct.readthedocs.org/";
+    changelog = "https://github.com/construct/construct/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

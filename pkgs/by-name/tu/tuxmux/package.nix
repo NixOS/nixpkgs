@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tmux session manager";
     homepage = "https://github.com/edeneast/tuxmux";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ edeneast ];
     mainProgram = "tm";
   };

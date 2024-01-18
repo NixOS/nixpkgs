@@ -43,14 +43,14 @@ in
     };
   };
   serviceOpts = mkMerge ([{
+    environment.CONST_LABELS = concatStringsSep "," cfg.constLabels;
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
           --nginx.scrape-uri='${cfg.scrapeUri}' \
-          --nginx.ssl-verify=${boolToString cfg.sslVerify} \
+          --${lib.optionalString (!cfg.sslVerify) "no-"}nginx.ssl-verify \
           --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path=${cfg.telemetryPath} \
-          --prometheus.const-labels=${concatStringsSep "," cfg.constLabels} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

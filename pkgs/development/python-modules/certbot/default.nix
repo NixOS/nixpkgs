@@ -10,13 +10,13 @@
 , distro
 , josepy
 , parsedatetime
-, pyRFC3339
+, pyrfc3339
 , pyopenssl
 , pytz
 , requests
 , six
 , zope-component
-, zope_interface
+, zope-interface
 , setuptools
 , dialog
 , gnureadline
@@ -27,13 +27,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.6.0";
+  version = "2.7.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CbYamk1+NvcyS6w7pOjpD5lqWHCk+VJqF9R3xYxzpQk=";
+    hash = "sha256-BZ7JqAciwbmkpbzR/qZHAraLJWWXNRN3Er4XvfU5kYs=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -46,13 +47,13 @@ buildPythonPackage rec {
     distro
     josepy
     parsedatetime
-    pyRFC3339
+    pyrfc3339
     pyopenssl
     pytz
     requests
     six
     zope-component
-    zope_interface
+    zope-interface
     setuptools # for pkg_resources
   ];
 

@@ -8,9 +8,9 @@
 , pretend
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , simplejson
+, twisted
 , typing-extensions
 }:
 
@@ -28,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-KSHKgkv+kObKCdWZDg5o6QYe0AMND9VLdEuseY/GyDY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
@@ -46,6 +44,12 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     simplejson
+    twisted
+  ];
+
+  disabledTests = [
+    # _pickle.PicklingError: Only BytesLoggers to sys.stdout and sys.stderr can be pickled.
+    "test_pickle"
   ];
 
   pythonImportsCheck = [

@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "objax";
   version = "1.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";

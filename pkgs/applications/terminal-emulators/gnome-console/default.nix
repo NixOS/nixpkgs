@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ zhaofengli ]);
     platforms = platforms.unix;
+    mainProgram = "kgx";
   };
 }

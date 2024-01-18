@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vuimuich ];
     platforms = lib.platforms.linux;
+    mainProgram = "gobble";
   };
 }

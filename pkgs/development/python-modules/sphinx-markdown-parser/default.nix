@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "sphinx-markdown-parser";
   version = "0.2.4";
+  format = "setuptools";
 
   # PyPi release does not include requirements.txt
   src = fetchFromGitHub {

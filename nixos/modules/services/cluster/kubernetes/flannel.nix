@@ -13,6 +13,13 @@ in
   ###### interface
   options.services.kubernetes.flannel = {
     enable = mkEnableOption (lib.mdDoc "flannel networking");
+
+    openFirewallPorts = mkOption {
+      description = lib.mdDoc ''
+        Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
+      type = types.bool;
+      default = true;
+    };
   };
 
   ###### implementation
@@ -38,7 +45,7 @@ in
     };
 
     networking = {
-      firewall.allowedUDPPorts = [
+      firewall.allowedUDPPorts = mkIf cfg.openFirewallPorts [
         8285  # flannel udp
         8472  # flannel vxlan
       ];

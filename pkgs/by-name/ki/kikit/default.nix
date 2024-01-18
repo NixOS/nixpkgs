@@ -12,17 +12,14 @@
 , markdown2
 , pytestCheckHook
 , commentjson
-, wxPython_4_2
+, wxpython
 , pcbnew-transition
 , pybars3
 , versioneer
+, shapely_1_8
 }:
 let
   solidpython = callPackage ./solidpython { };
-
-  # https://github.com/yaqwsx/KiKit/issues/574
-  # copy-pasted from nixpkgs#8d8e62e74f511160a599471549a98bc9e4f4818d
-  shapely = callPackage ./shapely { };
 in
 buildPythonApplication rec {
   pname = "kikit";
@@ -45,10 +42,11 @@ buildPythonApplication rec {
     markdown2
     commentjson
     # https://github.com/yaqwsx/KiKit/issues/575
-    wxPython_4_2
+    wxpython
     pcbnew-transition
     pybars3
-    shapely
+    # https://github.com/yaqwsx/KiKit/issues/574
+    shapely_1_8
     # https://github.com/yaqwsx/KiKit/issues/576
     solidpython
   ];

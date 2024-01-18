@@ -1,18 +1,15 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, libbitcoin-client, libbitcoin-network }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libbitcoin-explorer";
-  version = "3.5.0";
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "033nrdzrha4kypxk4biixjsbjd16r4m2mjvpid4gdj5hzbbj1p93";
+    hash = "sha256-NUAtjrfRbZg5ewQo4PZ1HEoG8GRrsPcNb78UYMHqdyo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

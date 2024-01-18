@@ -69,7 +69,9 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
+  noExtraAttrs = set:
+    lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
+    // { __attrsFailEvaluation = true; };
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
@@ -79,6 +81,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   kdeApplications = kdeGear;
 
   ### LIBRARIES
+
+  accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -95,6 +99,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   drumstick = callPackage ../development/libraries/drumstick { };
 
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+
+  futuresql = callPackage ../development/libraries/futuresql { };
 
   qgpgme = callPackage ../development/libraries/gpgme { };
 
@@ -140,13 +146,13 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
+  libopenshot = callPackage ../development/libraries/libopenshot {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-  libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
+  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
@@ -158,9 +164,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqtav = callPackage ../development/libraries/libqtav { };
 
-  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+  libquotient = callPackage ../development/libraries/libquotient { };
 
-  kpmcore = callPackage ../development/libraries/kpmcore { };
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
   mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
 
@@ -171,7 +177,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
   mlt = pkgs.mlt.override {
-    enableQt = true;
+    qt = qt5;
   };
 
   phonon = callPackage ../development/libraries/phonon { };
@@ -192,10 +198,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 {
+  qca = callPackage ../development/libraries/qca {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
+  qca-qt5 = self.qca;
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
@@ -246,6 +253,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
+  qzxing = callPackage ../development/libraries/qzxing { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
@@ -266,8 +275,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
-  # remove after 23.11 branch-off and backport removal to 23.11
-  # 23.11 will have a warning for this in `makeScope` itself
+  # Convert to a throw on 01-01-2023.
+  # Warnings show up in various cli tool outputs, throws do not.
+  # Remove completely before 24.05
   overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
 }));
 }

@@ -30,7 +30,7 @@ assignees: ''
 [open documentation issues]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+label%3A%229.needs%3A+documentation%22
 [open documentation pull requests]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%228.has%3A+documentation%22%2C%226.topic%3A+documentation%22
 
-### Priorities
+---
 
 Add a :+1: [reaction] to [issues you find important].
 

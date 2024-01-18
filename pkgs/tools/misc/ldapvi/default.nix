@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "ldapvi";
   };
 }

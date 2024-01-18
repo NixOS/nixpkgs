@@ -9,16 +9,46 @@
 , nixosTests
 }:
 
-let
-  perlEnv = perl.withPackages (_: cpanDeps);
+buildNpmPackage rec {
+  pname = "lanraragi";
+  version = "0.9.0";
 
-  cpanDeps = with perl.pkgs; [
+  src = fetchFromGitHub {
+    owner = "Difegue";
+    repo = "LANraragi";
+    rev = "v.${version}";
+    hash = "sha256-euZotpXTUSmxlA5rbTUhHpHH0Ojd3AZjGasxYZ+L7NY=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-redis-auth.patch";
+      url = "https://github.com/Difegue/LANraragi/commit/1711b39759ad02ab2a8863ce1f35f6479c9a2917.patch";
+      hash = "sha256-WfKeieysIlS64qgVEc75JFKjxXuvZN85M6US/gwjTzw=";
+    })
+    (fetchpatch {
+      name = "fix-ghostscript-device.patch";
+      url = "https://github.com/Difegue/LANraragi/commit/087d63b11c89fda8cb3a30cdb2e86ecd6be66bb7.patch";
+      hash = "sha256-Cu9d/dDlO0yuFCTKOyg5A0gIuiA+FcWD9PjexB/BK0U=";
+    })
+    ./install.patch
+    ./fix-paths.patch
+    ./expose-password-hashing.patch # Used by the NixOS module
+  ];
+
+  npmDepsHash = "sha256-/F/lhQIVGbbFxFuQXXwHUVlV2jhHt0hFf94v0FrTKt8=";
+
+  nativeBuildInputs = [ perl makeBinaryWrapper ];
+
+  buildInputs = with perl.pkgs; [
+    perl
     ImageMagick
     locallib
     Redis
     Encode
     ArchiveLibarchiveExtract
     ArchiveLibarchivePeek
+    ListMoreUtils
     NetDNSNative
     SortNaturally
     AuthenPassphrase
@@ -39,49 +69,16 @@ let
     FileChangeNotify
     ModulePluggable
     TimeLocal
+    YAMLSyck
+    StringSimilarity
   ] ++ lib.optional stdenv.isLinux LinuxInotify2;
-in
-buildNpmPackage rec {
-  pname = "lanraragi";
-  version = "0.8.90";
-
-  src = fetchFromGitHub {
-    owner = "Difegue";
-    repo = "LANraragi";
-    rev = "v.${version}";
-    hash = "sha256-ljnREUGCKvUJvcQ+aJ6XqiMTkVmfjt/0oC47w3PCj/k=";
-  };
-
-  patches = [
-    (fetchpatch {
-      name = "add-package-lock-json.patch"; # Can be removed when updating to 0.9.0
-      url = "https://github.com/Difegue/LANraragi/commit/c5cd8641795bf7e40deef4ae955ea848dde44050.patch";
-      hash = "sha256-XKxRzeugkIe6N4XRN6+O1wEZpxo6OzU0OaG0ywKFv38=";
-    })
-    ./install.patch
-    ./fix-paths.patch
-    ./expose-password-hashing.patch
-    ./fix-minion-redis-password.patch # Should be upstreamed
-  ];
-
-  npmFlags = [ "--legacy-peer-deps" ];
-
-  npmDepsHash = "sha256-UQsChPU5b4+r5Kv6P/3rJCGUzssiUNSKo3w4axNyJew=";
-
-  nativeBuildInputs = [
-    perl
-    makeBinaryWrapper
-    perl.pkgs.Appcpanminus
-  ] ++ cpanDeps;
-
-  nativeCheckInputs = with perl.pkgs; [
-    TestMockObject
-    TestTrap
-    TestDeep
-  ];
 
   buildPhase = ''
     runHook preBuild
+
+    # Check if every perl dependency was installed
+    # explicitly call cpanm with perl because the shebang is broken on darwin
+    perl ${perl.pkgs.Appcpanminus}/bin/cpanm --installdeps ./tools --notest
 
     perl ./tools/install.pl install-full
     rm -r node_modules public/js/vendor/*.map public/css/vendor/*.map
@@ -90,6 +87,12 @@ buildNpmPackage rec {
   '';
 
   doCheck = true;
+
+  nativeCheckInputs = with perl.pkgs; [
+    TestMockObject
+    TestTrap
+    TestDeep
+  ];
 
   checkPhase = ''
     runHook preCheck
@@ -104,19 +107,23 @@ buildNpmPackage rec {
     runHook preInstall
 
     mkdir -p $out/share/lanraragi
-    cp -r lib public script templates package.json $out/share/lanraragi
+    chmod +x script/launcher.pl
+    cp -r lib public script templates package.json lrr.conf $out/share/lanraragi
 
-    makeWrapper ${perlEnv}/bin/perl $out/bin/lanraragi \
+    makeWrapper $out/share/lanraragi/script/launcher.pl $out/bin/lanraragi \
+      --prefix PERL5LIB : $PERL5LIB \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]} \
-      --add-flags "$out/share/lanraragi/script/launcher.pl -f $out/share/lanraragi/script/lanraragi"
+      --run "cp -n --no-preserve=all $out/share/lanraragi/lrr.conf ./lrr.conf 2>/dev/null || true" \
+      --add-flags "-f $out/share/lanraragi/script/lanraragi"
+
+    makeWrapper ${lib.getExe perl} $out/bin/helpers/lrr-make-password-hash \
+      --prefix PERL5LIB : $out/share/lanraragi/lib:$PERL5LIB \
+      --add-flags "-e 'use LANraragi::Controller::Config; print LANraragi::Controller::Config::make_password_hash(@ARGV[0])' 2>/dev/null"
 
     runHook postInstall
   '';
 
-  passthru = {
-    inherit perlEnv;
-    tests = { inherit (nixosTests) lanraragi; };
-  };
+  passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
     changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.rev}";
@@ -128,3 +135,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.unix;
   };
 }
+

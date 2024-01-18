@@ -41,6 +41,12 @@ rustPlatform.buildRustPackage rec {
     AppKit
   ];
 
+  postInstall = ''
+    install -Dm444 assets/epick.desktop -t $out/share/applications
+    install -Dm444 assets/icon.svg $out/share/icons/hicolor/scalable/apps/epick.svg
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/48x48/apps/epick.png
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';

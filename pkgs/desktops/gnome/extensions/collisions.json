@@ -32,10 +32,6 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
-    ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
@@ -99,10 +95,6 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
-    ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
@@ -164,10 +156,6 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
-    ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
@@ -231,9 +219,9 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
     ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
@@ -292,6 +280,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
     ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",

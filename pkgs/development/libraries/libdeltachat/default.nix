@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cargo
 , cmake
+, deltachat-desktop
 , deltachat-repl
 , openssl
 , perl
@@ -24,19 +25,20 @@ let
     outputHashes = {
       "email-0.0.21" = "sha256-u4CsK/JqFgq5z3iJGxxGtb7QbSkOAqmOvrmagsqfXIU=";
       "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
-      "iroh-0.4.1" = "sha256-oLvka1nV2yQPzlcaq5CXqXRRu7GkbMocV6GoIlxQKlo=";
+      "imap-proto-0.16.3" = "sha256-okIHA8MQ1K/tcKHZYGh83zom1ULGHZ/KGxgcwiE1+sE=";
+      "iroh-0.4.2" = "sha256-VXNMmj+AvlY/W2JRWMICoNOqpFEahsUDxypHRg185Ao=";
       "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
     };
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.131.6";
+  version = "1.131.9";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-/LWWqa8f+ODP4LDIx9U9kRCFYI+5N6KztFDPbc2TiF0=";
+    hash = "sha256-xZai5RsrfT6bYzMpNdKncmDzBzcAcEtZZmh7f+3g5Hs=";
   };
 
   patches = [
@@ -81,7 +83,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit cargoLock;
     tests = {
-      inherit deltachat-repl;
+      inherit deltachat-desktop deltachat-repl;
       python = python3.pkgs.deltachat;
     };
   };

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorriso";
-  version = "1.5.7";
+  version = "1.5.7-unstable-2023-12-06";
 
   src = fetchurl {
-    url = "https://www.gnu.org/software/xorriso/xorriso-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hnV3w4f2tKmjIk60Qd7Y+xY432y8Bg+NGh5dAPMY9QI=";
+    url = "https://web.archive.org/web/20231206123448/https://www.gnu.org/software/xorriso/xorriso-1.5.7.tar.gz";
+    hash = "sha256-B7lV3n3e1aF7yJsLxwi8C8m3sBmUUePpCV9KfWRuTm0=";
   };
 
   buildInputs = [

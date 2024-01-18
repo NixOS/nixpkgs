@@ -68,5 +68,6 @@ in (rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/target/lorri";
     license = licenses.asl20;
     maintainers = with maintainers; [ grahamc Profpatsch ];
+    mainProgram = "lorri";
   };
 })

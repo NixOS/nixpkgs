@@ -69,7 +69,7 @@
 }:
 
 let
-  version = "1.1.9";
+  version = "1.1.11";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -105,7 +105,7 @@ buildPythonPackage {
     owner = "bentoml";
     repo = "BentoML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+5enRlk05IGdsNY6KIzYgh7vGRua0duI57o/AIevcdM=";
+    hash = "sha256-2EjltGfmLalgPD9XNYYduYGzqbumqoglVVL+AbRzMJE=";
   };
 
   # https://github.com/bentoml/BentoML/pull/4227 should fix this test
@@ -204,5 +204,7 @@ buildPythonPackage {
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada natsukium ];
+    # https://github.com/bentoml/BentoML/issues/3885
+    broken = versionAtLeast pydantic.version "2";
   };
 }

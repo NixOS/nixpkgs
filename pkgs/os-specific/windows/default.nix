@@ -45,7 +45,5 @@ lib.makeScope newScope (self: with self; {
 
   pthreads = callPackage ./pthread-w32 { };
 
-  wxMSW = callPackage ./wxMSW-2.8 { };
-
   libgnurx = callPackage ./libgnurx { };
 })

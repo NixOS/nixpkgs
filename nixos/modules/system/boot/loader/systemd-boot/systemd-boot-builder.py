@@ -20,13 +20,13 @@ from dataclasses import dataclass
 class BootSpec:
     init: str
     initrd: str
-    initrdSecrets: str
     kernel: str
     kernelParams: List[str]
     label: str
     system: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
+    initrdSecrets: str | None = None
 
 
 
@@ -131,9 +131,8 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         specialisation=" (%s)" % specialisation if specialisation else "")
 
     try:
-        subprocess.check_call([bootspec.initrdSecrets, "@efiSysMountPoint@%s" % (initrd)])
-    except FileNotFoundError:
-        pass
+        if bootspec.initrdSecrets is not None:
+            subprocess.check_call([bootspec.initrdSecrets, "@efiSysMountPoint@%s" % (initrd)])
     except subprocess.CalledProcessError:
         if current:
             print("failed to create initrd secrets!", file=sys.stderr)

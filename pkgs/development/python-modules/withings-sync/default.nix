@@ -3,15 +3,15 @@
 , fetchFromGitHub
 , garth
 , lxml
+, python-dotenv
 , pythonOlder
 , requests
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,17 +20,17 @@ buildPythonPackage rec {
     owner = "jaroslawhartman";
     repo = "withings-sync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6igjUmgIA077/1SQMt10tRpnLVKxGFNJN1GeLhQLROg=";
+    hash = "sha256-p1coGTbMQ+zptFKVLW5qgSdoudo2AggGT8Xu+cSCCs4=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
     garth
     lxml
+    python-dotenv
     requests
   ];
 

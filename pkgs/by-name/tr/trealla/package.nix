@@ -17,13 +17,13 @@
 assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.30.7";
+  version = "2.32.13";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W0hcIeWbgORWBYuNbVJRA8NNnuBEG8HMLeVBxXtd2VQ=";
+    hash = "sha256-Meyy6muzJt/Lg76sa+nwZXCOhfeMTwO4VYTXO/o20XI=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableSSL openssl
     ++ lib.optional (lineEditingLibrary == "readline") readline;
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [ valgrind ];
 
   strictDeps = true;
 

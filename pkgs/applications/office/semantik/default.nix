@@ -2,7 +2,6 @@
 , lib
 , mkDerivation
 , fetchFromGitLab
-, fetchpatch
 , wafHook
 , pkg-config
 , cmake
@@ -26,21 +25,16 @@
 
 mkDerivation rec {
   pname = "semantik";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "semantik";
     rev = "semantik-${version}";
-    sha256 = "sha256-aXOokji6fYTpaeI/IIV+5RnTE2Cm8X3WfADf4Uftkss=";
+    hash = "sha256-qJ6MGxnxXcibF2qXZ2w7Ey/aBIEIx8Gg0dM2PnCl09Y=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-kdelibs4support.patch";
-      url = "https://gitlab.com/ita1024/semantik/-/commit/a991265bd6e3ed6541f8ec099420bc08cc62e30c.patch";
-      sha256 = "sha256-E4XjdWfUnqhmFJs9ORznHoXMDS9zHWNXvQIKKkN4AAo=";
-    })
     ./qt5.patch
   ];
 
@@ -90,11 +84,11 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A mind-mapping application for KDE";
     license = licenses.mit;
     homepage = "https://waf.io/semantik.html";
     maintainers = [ maintainers.shamilton ];
     platforms = platforms.linux;
+    mainProgram = "semantik";
   };
 }

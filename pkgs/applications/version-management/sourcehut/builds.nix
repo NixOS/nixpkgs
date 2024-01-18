@@ -11,6 +11,9 @@
 , lxml
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 let
   version = "0.86.10";
@@ -39,11 +42,19 @@ in
 buildPythonPackage rec {
   inherit src version;
   pname = "buildsrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api worker" ""
   '';
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht

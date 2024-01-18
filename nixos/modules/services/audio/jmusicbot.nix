@@ -9,12 +9,7 @@ in
     services.jmusicbot = {
       enable = mkEnableOption (lib.mdDoc "jmusicbot, a Discord music bot that's easy to set up and run yourself");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.jmusicbot;
-        defaultText = literalExpression "pkgs.jmusicbot";
-        description = lib.mdDoc "JMusicBot package to use";
-      };
+      package = mkPackageOption pkgs "jmusicbot" { };
 
       stateDir = mkOption {
         type = types.path;

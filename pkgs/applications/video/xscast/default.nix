@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
     maintainers = with maintainers; [ ];
+    mainProgram = "xscast";
   };
 }

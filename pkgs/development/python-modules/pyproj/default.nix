@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "pyproj";
   version = "3.6.1";
+  format = "setuptools";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {

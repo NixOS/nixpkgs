@@ -32,8 +32,8 @@ diff '--color=auto' -ru goredo-2.0.0/t/goredo-double-consideration.t goredo-2.0.
  redo-stamp <"\$3"
  EOF
 diff '--color=auto' -ru goredo-2.0.0/t/redo-sh.tests/clean.do goredo-2.0.0.new/t/redo-sh.tests/clean.do
---- goredo-2.0.0/t/redo-sh.tests/clean.do	2023-10-08 18:50:45.000000000 +0200
-+++ goredo-2.0.0.new/t/redo-sh.tests/clean.do	2023-10-08 20:19:29.213465244 +0200
+--- goredo-2.0.0/t/redo-sh.tests/clean	2023-10-08 18:50:45.000000000 +0200
++++ goredo-2.0.0.new/t/redo-sh.tests/clean	2023-10-08 20:19:29.213465244 +0200
 @@ -1,4 +1,4 @@
  for f in * ; do
      [ -d $f ] || continue

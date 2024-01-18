@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "py-expression-eval";
   version = "0.3.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axiacore";

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ florentc ];
+    mainProgram = "xob";
   };
 }

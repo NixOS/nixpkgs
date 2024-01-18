@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/x-motemen/ghq";
     maintainers = with lib.maintainers; [ sigma ];
     license = lib.licenses.mit;
+    mainProgram = "ghq";
   };
 }

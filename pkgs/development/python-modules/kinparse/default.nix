@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "kinparse";
   version = "unstable-2019-12-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";

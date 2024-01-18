@@ -1,5 +1,5 @@
 { lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby, writeShellScript
+, yarn, callPackage, ruby, writeShellScript
 , fetchYarnDeps, prefetch-yarn-deps
 , brotli
 
@@ -96,7 +96,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
+  nativeBuildInputs = [ brotli ];
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''

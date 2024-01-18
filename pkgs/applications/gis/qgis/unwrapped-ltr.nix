@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , fetchFromGitHub
 , fetchpatch
 , makeWrapper
@@ -24,7 +25,7 @@
 , netcdf
 , ninja
 , openssl
-, pdal
+# , pdal
 , postgresql
 , proj
 , protobuf
@@ -46,6 +47,10 @@
 }:
 
 let
+
+  # replace with global pdal version once
+  # https://github.com/qgis/QGIS/pull/54940 is backported
+  pdal = callPackage ./pdal-2_5.nix { };
 
   py = python3.override {
     packageOverrides = self: super: {
@@ -76,14 +81,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.28.12";
+  version = "3.28.14";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-C80ZrQW7WFXz8UMXSt3FJcK2gDd292H24Ic3pJD/yqI=";
+    hash = "sha256-BiBrnma6HlaRF2kC/AwbdhRaZOYrJ7lzDLdJfjkDmfk=";
   };
 
   passthru = {

@@ -5,22 +5,27 @@
 , getmac
 , pythonOlder
 , requests
+, setuptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.77";
-  format = "setuptools";
+  version = "0.2.88";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tschamm";
-    repo = pname;
-    rev = version;
-    hash = "sha256-VakHBxTd6Nug/022HYc986LDIsVnTcsMtxBV7zJf+PY=";
+    repo = "boschshcpy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tyx7VJGsU9YYNJQy1mly0AgwKULZ1BWeRzz1BDgXrUU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

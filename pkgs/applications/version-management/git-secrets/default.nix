@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/git-secrets";
     license = licenses.asl20;
     platforms = platforms.all;
+    mainProgram = "git-secrets";
   };
 }

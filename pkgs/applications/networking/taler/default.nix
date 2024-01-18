@@ -9,22 +9,25 @@ let
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${version}";
-    sha256 = "sha256-uwbgIzSjLN+KQCY134VfnCuBEtvCO3a6mEw++HoZDHs=";
+    sha256 = "sha256-oL8vi8gxPjKxRpioMs0GLvkzlTkrm1kyvhsXOgrtvVQ=";
   };
-in rec {
-  taler-exchange = stdenv.mkDerivation rec {
+
+  taler-exchange = stdenv.mkDerivation {
     pname = "taler-exchange";
     inherit version;
 
     src = fetchgit {
       url = "https://git.taler.net/exchange.git";
       rev = "v${version}";
-      # REMOVEME: this should only be a problem for specifically v0.9.3
-      # When fetching submodules without deep clone we get the following error:
-      # "Server does not allow request for unadvertised object"
-      deepClone = true;
       fetchSubmodules = true;
-      sha256 = "sha256-txWwW5vqTblNgVIXdDkpNNZOXpY0udMaz4Wog1GobzE=";
+      sha256 = "sha256-NgDZF6LNeJI4ZuXEwoRdFG6g0S9xNTVhszzlfAnzVOs=";
+
+      # When fetching submodules without the .git folder we get the following error:
+      # "Server does not allow request for unadvertised object"
+      leaveDotGit = true;
+      postFetch = ''
+        rm -rf $out/.git
+      '';
     };
 
     nativeBuildInputs = [
@@ -76,7 +79,7 @@ in rec {
     };
   };
 
-  taler-merchant = stdenv.mkDerivation rec {
+  taler-merchant = stdenv.mkDerivation {
     pname = "taler-merchant";
     inherit version;
 
@@ -133,4 +136,6 @@ in rec {
       platforms = platforms.linux;
     };
   };
+in {
+  inherit taler-exchange taler-merchant;
 }

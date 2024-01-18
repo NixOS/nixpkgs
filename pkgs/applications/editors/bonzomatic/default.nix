@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = [ maintainers.ilian ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    mainProgram = "bonzomatic";
   };
 }

@@ -164,7 +164,8 @@ in
         "local-fs.target"
         "systemd-journald-audit.socket"
       ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       wantedBy = [ "multi-user.target" ];
       unitConfig = {
         Description="Load AppArmor policies";

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "minesweep-rs";
-  version = "6.0.39";
+  version = "6.0.47";
 
   src = fetchFromGitHub {
     owner = "cpcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gV+16gxXfogHFFAXz/aG+D/uaXbZTgVjYK24QQizQ0c=";
+    hash = "sha256-6BrFWJ7YGALdKaPAX8Z1W2Eyyj0kbegybmwdnNUmOYo=";
   };
 
-  cargoHash = "sha256-D6HnpXxixmVugbjr5pMYZiVeGLgje41k3n3xic6Ecps=";
+  cargoHash = "sha256-ju4tIie0Jrm9hh5Xoy4dqfPS8mqdN9Y0J1Nw4T9aN3Y=";
 
   meta = with lib; {
     description = "Sweep some mines for fun, and probably not for profit";

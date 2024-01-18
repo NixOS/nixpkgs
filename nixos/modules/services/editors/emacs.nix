@@ -63,14 +63,7 @@ in
     };
 
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.emacs;
-      defaultText = literalExpression "pkgs.emacs";
-      description = lib.mdDoc ''
-        emacs derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "emacs" { };
 
     defaultEditor = mkOption {
       type = types.bool;

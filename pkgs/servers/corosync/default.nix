@@ -4,6 +4,7 @@
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
+, nixosTests
 }:
 
 with lib;

@@ -36,13 +36,76 @@ The [module system](https://nixos.org/manual/nixpkgs/#module-system) spans multi
 - [`options.nix`](options.nix): `lib.options` for anything relating to option definitions
 - [`types.nix`](types.nix): `lib.types` for module system types
 
+## PR Guidelines
+
+Follow these guidelines for proposing a change to the interface of `lib`.
+
+### Provide a Motivation
+
+Clearly describe why the change is necessary and its use cases.
+
+Make sure that the change benefits the user more than the added mental effort of looking it up and keeping track of its definition.
+If the same can reasonably be done with the existing interface,
+consider just updating the documentation with more examples and links.
+This is also known as the [Fairbairn Threshold](https://wiki.haskell.org/Fairbairn_threshold).
+
+Through this principle we avoid the human cost of duplicated functionality in an overly large library.
+
+### Make one PR for each change
+
+Don't have multiple changes in one PR, instead split it up into multiple ones.
+
+This keeps the conversation focused and has a higher chance of getting merged.
+
+### Name the interface appropriately
+
+When introducing new names to the interface, such as new function, or new function attributes,
+make sure to name it appropriately.
+
+Names should be self-explanatory and consistent with the rest of `lib`.
+If there's no obvious best name, include the alternatives you considered.
+
+### Write documentation
+
+Update the [reference documentation](#reference-documentation) to reflect the change.
+
+Be generous with links to related functionality.
+
+### Write tests
+
+Add good test coverage for the change, including:
+
+- Tests for edge cases, such as empty values or lists.
+- Tests for tricky inputs, such as a string with string context or a path that doesn't exist.
+- Test all code paths, such as `if-then-else` branches and returned attributes.
+- If the tests for the sub-library are written in bash,
+  test messages of custom errors, such as `throw` or `abortMsg`,
+
+  At the time this is only not necessary for sub-libraries tested with [`tests/misc.nix`](./tests/misc.nix).
+
+See [running tests](#running-tests) for more details on the test suites.
+
+### Write tidy code
+
+Name variables well, even if they're internal.
+The code should be as self-explanatory as possible.
+Be generous with code comments when appropriate.
+
+As a baseline, follow the [Nixpkgs code conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#code-conventions).
+
+### Write efficient code
+
+Nix generally does not have free abstractions.
+Be aware that seemingly straightforward changes can cause more allocations and a decrease in performance.
+That said, don't optimise prematurely, especially in new code.
+
 ## Reference documentation
 
 Reference documentation for library functions is written above each function as a multi-line comment.
 These comments are processed using [nixdoc](https://github.com/nix-community/nixdoc) and [rendered in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-functions).
 The nixdoc README describes the [comment format](https://github.com/nix-community/nixdoc#comment-format).
 
-See the [chapter on contributing to the Nixpkgs manual](https://nixos.org/manual/nixpkgs/#chap-contributing) for how to build the manual.
+See [doc/README.md](../doc/README.md) for how to build the manual.
 
 ## Running tests
 

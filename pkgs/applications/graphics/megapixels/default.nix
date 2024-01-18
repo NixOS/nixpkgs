@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/postmarketOS/megapixels";
     changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
   };
 }

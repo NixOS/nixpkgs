@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "djlint";
-  version = "1.32.1";
-  format = "pyproject";
+  version = "1.34.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
     rev = "v${version}";
-    hash = "sha256-///ZEkVohioloBJn6kxpEK5wmCzMp9ZYeAH1mONOA0E=";
+    hash = "sha256-p9RIzX9zoZxBrhiNaIeCX9OgfQm/lXNwYsh6IcsnIVk=";
   };
 
   nativeBuildInputs = [

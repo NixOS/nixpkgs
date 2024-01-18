@@ -6,10 +6,24 @@
 # , nix-prefetch-git
 , nix-prefetch-scripts
 , luarocks-nix
+, lua5_1
+, lua5_2
+, lua5_3
+, lua5_4
 }:
 let
 
-    path = lib.makeBinPath [ nix nix-prefetch-scripts luarocks-nix ];
+  path = lib.makeBinPath [
+    nix nix-prefetch-scripts luarocks-nix
+  ];
+
+  luaversions = [
+    lua5_1
+    lua5_2
+    lua5_3
+    lua5_4
+  ];
+
 in
 buildPythonApplication {
   pname = "luarocks-packages-updater";
@@ -34,7 +48,12 @@ buildPythonApplication {
     cp ${../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
 
     # wrap python scripts
-    makeWrapperArgs+=( --prefix PATH : "${path}" --prefix PYTHONPATH : "$out/lib" )
+    makeWrapperArgs+=( --prefix PATH : "${path}" --prefix PYTHONPATH : "$out/lib" \
+      --set LUA_51 ${lua5_1} \
+      --set LUA_52 ${lua5_2} \
+      --set LUA_53 ${lua5_3} \
+      --set LUA_54 ${lua5_4}
+    )
     wrapPythonProgramsIn "$out"
   '';
 

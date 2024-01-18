@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "unstable-2023-09-05"; # 2.4.4 does not support networkmanager 1.44
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "3b69132788ff8734a481d498b49207e05a4f7d70";
-    hash = "sha256-XWiihU/FK6oeWQWRYsc/IxqafuvwA89ZE3o/WzaxudE=";
+    rev = version;
+    hash = "sha256-Dd7sZ66iyfuoHeQYrhlx9G9g4ylGq1IBlkTF5zFlVBQ=";
   };
 
   patches = [

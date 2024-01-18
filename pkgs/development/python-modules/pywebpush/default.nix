@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "pywebpush";
   version = "1.14.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

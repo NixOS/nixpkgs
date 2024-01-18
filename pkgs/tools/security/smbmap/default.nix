@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbmap";
-  version = "1.9.2";
+  version = "1.10.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ShawnDEvans";
     repo = "smbmap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n0cLj1K9Xt/1TlHOh9Kp/xIXYaUhmGSxrHL/yxDbfk4=";
+    hash = "sha256-6+kO2Wfz3gGABS4fGxoebCubzvFAaJIGnMPA+k1mckc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

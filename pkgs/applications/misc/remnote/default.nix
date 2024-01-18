@@ -6,11 +6,11 @@ stdenv.mkDerivation (finalAttrs: let
 in
 {
   pname = "remnote";
-  version = "1.12.64";
+  version = "1.13.34";
 
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    hash = "sha256-Pvz3bBpv4wN2NXxuKNNraCuOqvvtYOyg5PTSwMpL3cw=";
+    hash = "sha256-QOfU1pZWQfShq8bQPh9ZiGKxzIV6LH8S/sQk3MQVKD0=";
   };
   appexec = appimageTools.wrapType2 {
     inherit pname version src;
@@ -36,15 +36,15 @@ in
     runHook preInstall
 
     install -D ${appexec}/bin/remnote-${version} $out/bin/remnote
-    install -D "${desktopItem}/share/applications/"* -t $out/share/applications/
-    install -D ${icon} $out/share/pixmaps/remnote.png
+    install -m 444 -D "${desktopItem}/share/applications/"* -t $out/share/applications/
+    install -m 444 -D ${icon} $out/share/pixmaps/remnote.png
 
     runHook postInstall
   '';
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ max-niederman jgarcia ];
+    maintainers = with maintainers; [ max-niederman chewblacka ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";

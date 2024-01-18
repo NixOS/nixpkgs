@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

@@ -1,24 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
+, setuptools
 , mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-memcached";
-  version = "1.59";
+  version = "1.61";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linsomniac";
     repo = "python-memcached";
     rev = version;
-    hash = "sha256-tHqkwNloPTXOrEGtuDLu1cTw4SKJ4auv8UUbqdNp698=";
+    hash = "sha256-7bUCVAmOJ6znVmTZg9AJokOuym07NHL12gZgQ2uhfNo=";
   };
 
-  propagatedBuildInputs = [
-    six
+  nativeBuildInputs = [
+    setuptools
   ];
 
   nativeCheckInputs = [

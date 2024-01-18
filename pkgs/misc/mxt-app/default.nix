@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.colemickens ];
     platforms = platforms.linux;
+    mainProgram = "mxt-app";
   };
 }

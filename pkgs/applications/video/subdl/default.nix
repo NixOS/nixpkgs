@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.exfalso ];
+    mainProgram = "subdl";
   };
 }

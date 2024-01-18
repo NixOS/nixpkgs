@@ -8,10 +8,10 @@
 , wrapGAppsHook
 , gsettings-desktop-schemas
 , gspell
-, gtksourceview4
+, libgedit-amtk
+, libgedit-gtksourceview
 , libgee
 , tepl
-, amtk
 , gnome
 , glib
 , pkg-config
@@ -21,12 +21,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.44.0";
+  version = "3.46.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "iL1TQL0ox+0Bx5ZqOgBzK72QJ3PfWsZZvmrRGAap50Q=";
+    sha256 = "1nVVY5sqFaiuvVTzNTVORP40MxQ648s8ynqOJvgRKto=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    amtk
     gnome.adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell
-    gtksourceview4
+    libgedit-amtk
+    libgedit-gtksourceview
     libgee
     libxml2
     tepl
@@ -68,8 +68,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
     description = "A LaTeX editor for the GNOME desktop";
-    maintainers = [ maintainers.manveru ];
+    maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-latex";
   };
 }

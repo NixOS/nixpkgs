@@ -31,10 +31,11 @@ buildPythonPackage rec {
     gunicorn
     lazr-config
     passlib
+    python-dateutil
     requests
     sqlalchemy
     zope-component
-    zope_configuration
+    zope-configuration
   ];
 
   checkInputs = [

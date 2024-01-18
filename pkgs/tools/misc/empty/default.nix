@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
       - can easily be ported to almost all UNIX-like systems
     '';
     maintainers = [ maintainers.djwf ];
+    mainProgram = "empty";
   };
 }

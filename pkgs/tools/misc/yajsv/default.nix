@@ -29,5 +29,6 @@ buildGoModule {
     homepage = "https://github.com/neilpa/yajsv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
+    mainProgram = "yajsv";
   };
 }

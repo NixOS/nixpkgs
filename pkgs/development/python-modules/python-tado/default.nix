@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.17.2";
+  version = "0.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "PyTado";
     # https://github.com/wmalgadey/PyTado/issues/62
     rev = "refs/tags/${version}";
-    hash = "sha256-w1qtSEpnZCs7+M/0Gywz9AeMxUzz2csHKm9SxBKzmz4=";
+    hash = "sha256-whpNYiAb2cqKI4m0HJN2lPt51FLuEzrkrRTSWs6uznU=";
   };
 
   propagatedBuildInputs = [

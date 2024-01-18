@@ -22,7 +22,6 @@
 , valgrind
 , meson
 , libuuid
-, colord
 , ninja
 , gnutls
 , protobufc
@@ -122,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.9";
+  version = "1.9.11";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -133,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-UUrG3CMCAC5hyy2U5I4zqvJoSP/+zuiq1P+2Pdb3QD0=";
+    hash = "sha256-chPZ9nGhFcaExoJDJvFy8terIGZRU6S90RKBYkoWyGQ=";
   };
 
   patches = [
@@ -184,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     elfutils
     libgudev
-    colord
     libjcat
     libuuid
     json-glib

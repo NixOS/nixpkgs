@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.14";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-hYBD5XFjM2AEsQm7yKEHkfjwLZmXTxkY/6S3hs1uBPw=";
+    hash = "sha256-iMv80UKktYOhNfVA3mW6kKv8TwLZaP6MQt24t3Rchk4=";
   };
 
   postPatch = ''
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=v${version}"
-    "CFLAGS=-Wno-error=format-security"
   ];
 
   passthru.tests.version = testers.testVersion {

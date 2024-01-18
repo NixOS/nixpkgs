@@ -13,12 +13,7 @@ in
     services.uptime-kuma = {
       enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.uptime-kuma;
-        defaultText = literalExpression "pkgs.uptime-kuma";
-        description = lib.mdDoc "Uptime Kuma package to use.";
-      };
+      package = mkPackageOption pkgs "uptime-kuma" { };
 
       appriseSupport = mkEnableOption (mdDoc "apprise support for notifications");
 

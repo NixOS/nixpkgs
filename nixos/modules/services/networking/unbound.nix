@@ -42,12 +42,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Unbound domain name server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.unbound-with-systemd;
-        defaultText = literalExpression "pkgs.unbound-with-systemd";
-        description = lib.mdDoc "The unbound package to use";
-      };
+      package = mkPackageOption pkgs "unbound-with-systemd" { };
 
       user = mkOption {
         type = types.str;

@@ -116,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ panda2134 ];
     inherit (electron.meta) platforms;
+    mainProgram = "podman-desktop";
   };
 })

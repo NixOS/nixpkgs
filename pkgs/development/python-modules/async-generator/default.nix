@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "async-generator";
   version = "1.10";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -19,6 +21,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    "test_aclose_on_unstarted_generator"
   ];
 
   pythonImportsCheck = [ "async_generator" ];

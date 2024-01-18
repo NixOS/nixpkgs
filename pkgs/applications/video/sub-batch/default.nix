@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
     broken = stdenv.isDarwin;
+    mainProgram = "sub-batch";
   };
 }

@@ -12,14 +12,8 @@ in
         Whether to install Singularity/Apptainer with system-level overriding such as SUID support.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.singularity;
-      defaultText = literalExpression "pkgs.singularity";
-      example = literalExpression "pkgs.apptainer";
-      description = mdDoc ''
-        Singularity/Apptainer package to override and install.
-      '';
+    package = mkPackageOption pkgs "singularity" {
+      example = "apptainer";
     };
     packageOverriden = mkOption {
       type = types.nullOr types.package;
@@ -67,7 +61,12 @@ in
     };
     enableSuid = mkOption {
       type = types.bool;
-      default = true;
+      # SingularityCE requires SETUID for most things. Apptainer prefers user
+      # namespaces, e.g. `apptainer exec --nv` would fail if built
+      # `--with-suid`:
+      # > `FATAL: nvidia-container-cli not allowed in setuid mode`
+      default = cfg.package.projectName != "apptainer";
+      defaultText = literalExpression ''config.services.singularity.package.projectName != "apptainer"'';
       example = false;
       description = mdDoc ''
         Whether to enable the SUID support of Singularity/Apptainer.

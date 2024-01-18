@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "fuse-python";
   version = "1.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

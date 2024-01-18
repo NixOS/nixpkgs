@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # Fix implicit function declarations (clang-16 build failure):
+    #     https://github.com/libffi/libffi/pull/764
+    ./fix-implicit-fun-decl.patch
   ];
 
   strictDeps = true;

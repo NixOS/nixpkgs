@@ -64,6 +64,10 @@ self: let
         '';
       });
 
+      pq = super.pq.overrideAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.postgresql ];
+      });
+
       xeft = super.xeft.overrideAttrs (old: let
         libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
       in {
@@ -85,4 +89,4 @@ self: let
 
   in elpaDevelPackages // { inherit elpaBuild; });
 
-in generateElpa { }
+in (generateElpa { }) // { __attrsFailEvaluation = true; }

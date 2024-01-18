@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.16";
+  version = "1.2.17";
   pname = "zlog";
 
   src = fetchFromGitHub {
     owner = "HardySimpson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wpaMbFKSwTIFe3p65pMJ6Pf2qKp1uYZCyyinGU4AxrQ=";
+    sha256 = "sha256-ckpDMRLxObpl8N539DC5u2bPpmD7jM+KugurUfta6tg=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

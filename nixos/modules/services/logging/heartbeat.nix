@@ -20,14 +20,8 @@ in
 
       enable = mkEnableOption (lib.mdDoc "heartbeat");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.heartbeat;
-        defaultText = literalExpression "pkgs.heartbeat";
-        example = literalExpression "pkgs.heartbeat7";
-        description = lib.mdDoc ''
-          The heartbeat package to use.
-        '';
+      package = mkPackageOption pkgs "heartbeat" {
+        example = "heartbeat7";
       };
 
       name = mkOption {

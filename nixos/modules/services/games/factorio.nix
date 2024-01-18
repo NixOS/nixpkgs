@@ -208,14 +208,8 @@ in
           This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.factorio-headless;
-        defaultText = literalExpression "pkgs.factorio-headless";
-        example = literalExpression "pkgs.factorio-headless-experimental";
-        description = lib.mdDoc ''
-          Factorio version to use. This defaults to the stable channel.
-        '';
+      package = mkPackageOption pkgs "factorio-headless" {
+        example = "factorio-headless-experimental";
       };
       password = mkOption {
         type = types.nullOr types.str;

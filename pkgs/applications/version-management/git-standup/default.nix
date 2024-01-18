@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
+    mainProgram = "git-standup";
   };
 }

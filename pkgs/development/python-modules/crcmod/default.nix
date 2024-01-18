@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "crcmod";
   version = "1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

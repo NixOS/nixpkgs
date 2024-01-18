@@ -24,5 +24,6 @@ buildDunePackage rec {
       conflicts by leveraging code formatters.
     '';
     maintainers = [ maintainers.alizter ];
+    mainProgram = "merge-fmt";
   };
 }

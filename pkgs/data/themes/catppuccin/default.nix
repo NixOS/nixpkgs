@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -38,6 +38,14 @@ let
       repo = "btop";
       rev = "1.0.0";
       hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
+    };
+
+    grub = fetchFromGitHub {
+      name = "grub";
+      owner = "catppuccin";
+      repo = "grub";
+      rev = "v1.0.0";
+      hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
     };
 
     hyprland = fetchFromGitHub {
@@ -80,6 +88,14 @@ let
       hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
     };
 
+    qt5ct = fetchFromGitHub {
+      name = "qt5ct";
+      owner = "catppuccin";
+      repo = "qt5ct";
+      rev = "89ee948e72386b816c7dad72099855fb0d46d41e";
+      hash = "sha256-t/uyK0X7qt6qxrScmkTU2TvcVJH97hSQuF0yyvSO/qQ=";
+    };
+
     refind = fetchFromGitHub {
       name = "refind";
       owner = "catppuccin";
@@ -94,6 +110,14 @@ let
       repo = "rofi";
       rev = "5350da41a11814f950c3354f090b90d4674a95ce";
       hash = "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=";
+    };
+
+    starship = fetchFromGitHub {
+      name = "starship";
+      owner = "catppuccin";
+      repo = "starship";
+      rev = "5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+      hash = "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=";
     };
 
     waybar = fetchFromGitHub {
@@ -140,6 +164,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bottom
     cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
 
+  '' + lib.optionalString (lib.elem "grub" themeList) ''
+    mkdir -p $out/grub
+    cp -r ${sources.grub}/src/catppuccin-${variant}-grub-theme/* "$out/grub/"
+
   '' + lib.optionalString (lib.elem "hyprland" themeList) ''
     mkdir -p $out/hyprland
     cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
@@ -162,6 +190,10 @@ stdenvNoCC.mkDerivation {
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
 
+  '' + lib.optionalString (lib.elem "qt5ct" themeList) ''
+    mkdir -p $out/qt5ct
+    cp ${sources.qt5ct}/themes/Catppuccin-"$capitalizedVariant".conf $out/qt5ct/
+
   '' + lib.optionalString (lib.elem "rofi" themeList) ''
     mkdir -p $out/rofi
     cp ${sources.rofi}/basic/.local/share/rofi/themes/catppuccin-${variant}.rasi $out/rofi/
@@ -170,6 +202,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/refind/assets
     cp ${sources.refind}/${variant}.conf $out/refind/
     cp -r ${sources.refind}/assets/${variant} $out/refind/assets/
+
+  '' + lib.optionalString (lib.elem "starship" themeList) ''
+    mkdir -p $out/starship
+    cp ${sources.starship}/palettes/${variant}.toml $out/starship/
 
   '' + lib.optionalString (lib.elem "waybar" themeList) ''
     mkdir -p $out/waybar

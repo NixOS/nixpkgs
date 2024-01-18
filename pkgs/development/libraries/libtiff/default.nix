@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
-    maintainers = with maintainers; [ qyliss ];
     license = licenses.libtiff;
     platforms = platforms.unix;
   };

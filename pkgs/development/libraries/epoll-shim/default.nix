@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PKGCONFIGDIR=${placeholder "out"}/lib/pkgconfig"
-    "-DBUILD_TESTING=${lib.boolToString finalAttrs.doCheck}"
+    "-DBUILD_TESTING=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   # https://github.com/jiixyj/epoll-shim/issues/41

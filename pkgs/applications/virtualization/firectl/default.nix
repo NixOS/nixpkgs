@@ -24,5 +24,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "firectl";
   };
 }

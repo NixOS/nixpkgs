@@ -15,7 +15,7 @@ in {
       type = types.bool;
     };
 
-    package = mkPackageOptionMD pkgs "etcd" { };
+    package = mkPackageOption pkgs "etcd" { };
 
     name = mkOption {
       description = lib.mdDoc "Etcd unique node name.";

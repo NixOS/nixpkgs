@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "sphinx-markdown-tables";
   version = "0.0.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

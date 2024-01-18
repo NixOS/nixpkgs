@@ -24,7 +24,7 @@
 , srcs
 
 # provided as callPackage input to enable easier overrides through overlays
-, cargoSha256 ? "sha256-YR7d8F1LWDHY+h2ZQe52u3KWIeEMTnrbU4DO+hpIOec="
+, cargoSha256 ? "sha256-EXsAvI8dKgCGmLbGr9fdk/F9UwtSfd/aIyqAy5tvFSI="
 }:
 
 mkDerivation rec {

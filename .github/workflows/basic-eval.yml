@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:
-    - uses: actions/checkout@v4
-    - uses: cachix/install-nix-action@v23
-    - uses: cachix/cachix-action@v12
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+    - uses: cachix/install-nix-action@7ac1ec25491415c381d9b62f0657c7a028df52a7 # v24
+    - uses: cachix/cachix-action@6a2e08b5ebf7a9f285ff57b1870a4262b06e0bee # v13
       with:
         # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
         name: nixpkgs-ci

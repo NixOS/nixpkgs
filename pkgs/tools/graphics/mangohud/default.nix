@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.doCheck ''
+    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
       cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
     ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
-    "-Dtests=${if finalAttrs.doCheck then "enabled" else "disabled"}"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
   ] ++ lib.optionals gamescopeSupport [
     "-Dmangoapp=true"
     "-Dmangoapp_layer=true"
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
   '' + lib.optionalString gamescopeSupport ''
     addOpenGLRunpath "$out/bin/mangoapp"
-  '' + lib.optionalString finalAttrs.doCheck ''
+  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     # libcmocka.so is only used for tests
     rm "$out/lib/libcmocka.so"
   '';

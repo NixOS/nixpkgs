@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight GTK2-based systray for UNIX desktop";
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "trayer";
   };
 }
 

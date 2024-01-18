@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ yuka ];
     platforms = platforms.linux;
+    mainProgram = "wf-recorder";
   };
 }

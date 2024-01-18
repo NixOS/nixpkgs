@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+    mainProgram = "multitail";
   };
 }

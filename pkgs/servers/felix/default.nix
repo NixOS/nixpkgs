@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.sander ];
+    mainProgram = "felix.jar";
   };
 }

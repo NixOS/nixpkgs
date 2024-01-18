@@ -6,29 +6,25 @@
 
 buildGoModule rec {
   pname = "lxd-to-incus";
-  version = "0.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/incus-${version}";
-    hash = "sha256-WhprzGzTeB8sEMMTYN5j1Zrwg0GiGLlXTqCkcPq0XVo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
-
-  patches = [
-    ./d7f7ae55a54437616174f80fb8faa80ae4ffcda4.patch
-  ];
 
   modRoot = "cmd/lxd-to-incus";
 
-  vendorHash = "sha256-J95b4fm+VwndoxS8RQF8V8ufI3RjclqzAskEd3ut4bU=";
+  vendorHash = "sha256-cBAqJz3Y4CqyxTt7u/4mXoQPKmKgQ3gYJV1NiC/H+TA=";
 
   CGO_ENABLED = 0;
 
   passthru = {
     updateScript = nix-update-script {
        extraArgs = [
-        "-vr" "incus-\(.*\)"
+        "-vr" "v\(.*\)"
        ];
      };
   };
@@ -37,7 +33,7 @@ buildGoModule rec {
     description = "LXD to Incus migration tool";
     homepage = "https://linuxcontainers.org/incus";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

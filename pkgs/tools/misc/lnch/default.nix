@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/oem/lnch";
     description = "Launches a process and moves it out of the process group";
     license = licenses.mit;
+    mainProgram = "lnch";
   };
 }
