@@ -7,14 +7,15 @@
 }:
 
 let
-  version = "2024.1.0";
+  version = "2024.1.1";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-pR5fgpLcxnqURouandGIHRIfc3sn3QcfpU6mF6AxpeA=";
+    hash = "sha256-xtfpxcJLP0C4FdnO45gsaecOWJ/cKC++Abm7iatTH1Y=";
   };
+
 in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
@@ -23,13 +24,13 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-lDDy1b1yfw3nZrwEEkpvh6xYucgn20XHsGACc45eb2w=";
+    hash = "sha256-695iCkFhPEyyI4ekbjsdWpxgPy+bX392/X30HyL4F4Y=";
   };
 
-  npmDepsHash = "sha256-RR8Ua41D9SXymiPuabOnIab3byu8DR63rOfdeTaQpy4=";
+  npmDepsHash = "sha256-IJ5JVz9hHu3NOzFJAyzfhsMfPQgYQGntDEDuBMI/iZc=";
 
   postPatch = ''
-    ln -s ${bw_web_builds}/{patches,resources} ..
+    cp -r ${bw_web_builds}/{patches,resources} ..
     PATH="${git}/bin:$PATH" VAULT_VERSION="${lib.removePrefix "web-" src.rev}" \
       bash ${bw_web_builds}/scripts/apply_patches.sh
   '';

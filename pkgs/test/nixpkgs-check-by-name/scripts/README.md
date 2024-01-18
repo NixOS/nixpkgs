@@ -19,15 +19,20 @@ Arguments:
 ## `./update-pinned-tool.sh`
 
 Updates the pinned CI tool in [`./pinned-tool.json`](./pinned-tool.json) to the
-[latest version from the `nixos-unstable` channel](https://hydra.nixos.org/job/nixos/trunk-combined/nixpkgs.tests.nixpkgs-check-by-name.x86_64-linux)
+[latest version from the `nixos-unstable` channel](https://hydra.nixos.org/job/nixos/trunk-combined/nixpkgs.tests.nixpkgs-check-by-name.x86_64-linux).
 
-This script is called manually once the CI tooling needs to be updated.
+This script needs to be called manually when the CI tooling needs to be updated.
 
-## `./fetch-pinned-tool.sh OUTPUT_PATH`
+The `pinned-tool.json` file gets populated with both:
+- The `/nix/store` path for `x86_64-linux`, such that CI doesn't have to evaluate Nixpkgs and can directly fetch it from the cache instead.
+- The Nixpkgs revision, such that the `./run-local.sh` script can be used to run the checks locally on any system.
 
-Fetches the pinned tooling specified in [`./pinned-tool.json`](./pinned-tool.json).
+To ensure that the tool is always pre-built for `x86_64-linux` in the `nixos-unstable` channel,
+it's included in the `tested` jobset description in [`nixos/release-combined.nix`](../../../nixos/release-combined.nix).
 
-This script is used both by [`./run-local.sh`](#run-local-sh-base-branch-repository) and CI.
+Why not just build the tooling right from the PRs Nixpkgs version?
+- Because it allows CI to check all PRs, even if they would break the CI tooling.
+- Because it makes the CI check very fast, since no Nix builds need to be done, even for mass rebuilds.
+- Because it improves security, since we don't have to build potentially untrusted code from PRs.
+  The tool only needs a very minimal Nix evaluation at runtime, which can work with [readonly-mode](https://nixos.org/manual/nix/stable/command-ref/opt-common.html#opt-readonly-mode) and [restrict-eval](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-restrict-eval).
 
-Arguments:
-- `OUTPUT_PATH`: The output symlink path for the tool

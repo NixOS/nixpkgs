@@ -171,8 +171,8 @@ in rec {
         (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
         ["nixpkgs.tarball"]
 
-        # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,
-        # so that a pre-built version can be used in CI for PR's on the corresponding development branches.
+        # Ensure that nixpkgs-check-by-name is available in nixos-unstable,
+        # so that a pre-built version can be used in CI for PR's
         # See ../pkgs/test/nixpkgs-check-by-name/README.md
         (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
       ];

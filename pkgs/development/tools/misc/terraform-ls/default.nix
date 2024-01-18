@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.32.4";
+  version = "0.32.5";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+z7Jg55BP9E7fwEYVnLY1lw06tizjaUPguKmqrfJ8jY=";
+    hash = "sha256-ywqxme/dsMwREvgLa2iLaibYzXHqgXR4OO8V8UiSSjw=";
   };
 
-  vendorHash = "sha256-v0dESbGsafT+4C6pWhmNb4NT4m+kmtV+ZBld4x2TfJI=";
+  vendorHash = "sha256-+6yO4gQmMNzl/rMWWQnyhepEI5miSCyolOQxQXWqGng=";
 
   ldflags = [ "-s" "-w" ];
 
