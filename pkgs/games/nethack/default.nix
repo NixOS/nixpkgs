@@ -2,6 +2,7 @@
 , less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
+, gameName ? "nethack" # for jnethack
 }:
 
 let
@@ -15,14 +16,14 @@ let
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
     # We probably want something different for Darwin
     else "unix";
-  userDir = "~/.config/nethack";
+  userDir = "~/.config/${gameName}";
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
   version = "3.6.7";
-  pname = if x11Mode then "nethack-x11"
-         else if qtMode then "nethack-qt"
-         else "nethack";
+  pname = if x11Mode then "${gameName}-x11"
+         else if qtMode then "${gameName}-qt"
+         else gameName;
 
   src = fetchurl {
     url = "https://nethack.org/download/${version}/nethack-${lib.replaceStrings ["."] [""] version}-src.tgz";
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
     # run the ones we've built here.
     ''
     ${buildPackages.perl}/bin/perl -p \
-      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.${gameName}}/libexec/${gameName}/\1,g' \
       -i sys/unix/Makefile.*
     ''}
     sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
@@ -101,23 +102,23 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = lib.optionalString qtMode ''
-    wrapQtApp "$out/games/nethack"
+    wrapQtApp "$out/games/${gameName}"
   '';
 
   postInstall = ''
-    mkdir -p $out/games/lib/nethackuserdir
+    mkdir -p $out/games/lib/${gameName}userdir
     for i in xlogfile logfile perm record save; do
-      mv $out/games/lib/nethackdir/$i $out/games/lib/nethackuserdir
+      mv $out/games/lib/${gameName}dir/$i $out/games/lib/${gameName}userdir
     done
 
     mkdir -p $out/bin
-    cat <<EOF >$out/bin/nethack
+    cat <<EOF >$out/bin/${gameName}
     #! ${stdenv.shell} -e
     PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
       mkdir -p ${userDir}
-      cp -r $out/games/lib/nethackuserdir/* ${userDir}
+      cp -r $out/games/lib/${gameName}userdir/* ${userDir}
       chmod -R +w ${userDir}
     fi
 
@@ -132,16 +133,16 @@ in stdenv.mkDerivation rec {
     for i in ${userDir}/*; do
       ln -s \$i \$(basename \$i)
     done
-    for i in $out/games/lib/nethackdir/*; do
+    for i in $out/games/lib/${gameName}dir/*; do
       ln -s \$i \$(basename \$i)
     done
-    $out/games/nethack
+    $out/games/${gameName}
     EOF
-    chmod +x $out/bin/nethack
-    ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
-    ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
-    install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
-    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
+    chmod +x $out/bin/${gameName}
+    ${lib.optionalString x11Mode "mv $out/bin/${gameName} $out/bin/${gameName}-x11"}
+    ${lib.optionalString qtMode "mv $out/bin/${gameName} $out/bin/${gameName}-qt"}
+    install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/${gameName}/
+    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/${gameName}/"}
   '';
 
   meta = with lib; {
@@ -149,6 +150,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
+    mainProgram = gameName;
     maintainers = with maintainers; [ abbradar ];
   };
 }
