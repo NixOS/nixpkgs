@@ -93,6 +93,7 @@ rec {
     version = "0.8.5";
     sha256 = "sha256-YRxkjETSmI1dcHP9qTPLcOMqXx9B2uplVR3bBjJWn3I=";
     cargoSha256 = "sha256-VOcymlvqqQRdT1MFzRcMuD+Xo3fc3XTuRA12tW7ZjdI=";
+    broken = stdenv.isDarwin;
   };
 
   garage_0_8 = garage_0_8_5;
