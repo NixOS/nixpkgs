@@ -12716,3 +12716,8 @@ zustand@^4.4.1:
   resolved "https://github.com/pgadmin-org/react-data-grid.git#200d2f5e02de694e3e9ffbe177c279bc40240fb8"
   dependencies:
     "clsx" "^1.1.1"
+"react-data-grid@https://github.com/pgadmin-org/react-data-grid.git#200d2f5e02de694e3e9ffbe177c279bc40240fb8":
+  version "7.0.0-beta.14"
+  resolved "https://github.com/pgadmin-org/react-data-grid.git#200d2f5e02de694e3e9ffbe177c279bc40240fb8"
+  dependencies:
+    "clsx" "^1.1.1"

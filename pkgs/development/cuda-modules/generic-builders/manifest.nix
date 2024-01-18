@@ -276,11 +276,10 @@ backendStdenv.mkDerivation (
     '';
 
     # libcuda needs to be resolved during runtime
-    # NOTE: Due to the use of __structuredAttrs, we can't use a list for autoPatchelfIgnoreMissingDeps, since it
-    # will take only the first value. Instead, we produce a string with the values separated by spaces.
-    # Using the `env` attribute ensures that the value is representable as one of the primitives allowed by
-    # bash's environment variables.
-    env.autoPatchelfIgnoreMissingDeps = "libcuda.so libcuda.so.*";
+    autoPatchelfIgnoreMissingDeps = [
+      "libcuda.so"
+      "libcuda.so.*"
+    ];
 
     # The out output leverages the same functionality which backs the `symlinkJoin` function in
     # Nixpkgs:

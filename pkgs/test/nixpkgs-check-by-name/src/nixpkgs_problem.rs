@@ -88,9 +88,6 @@ pub enum NixpkgsProblem {
         text: String,
         io_error: io::Error,
     },
-    InternalCallPackageUsed {
-        attr_name: String,
-    },
     MovedOutOfByName {
         package_name: String,
         call_package_path: Option<PathBuf>,
@@ -226,11 +223,6 @@ impl fmt::Display for NixpkgsProblem {
                     relative_package_dir.display(),
                     subpath.display(),
                     text,
-                ),
-            NixpkgsProblem::InternalCallPackageUsed { attr_name } =>
-                write!(
-                    f,
-                    "pkgs.{attr_name}: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.",
                 ),
             NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg } => {
                 let call_package_arg =

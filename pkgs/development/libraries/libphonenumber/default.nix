@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Submitted upstream: https://github.com/google/libphonenumber/pull/2921
+    # An earlier version of this patch was submitted upstream but did not get
+    # any interest there - https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
   ];
 

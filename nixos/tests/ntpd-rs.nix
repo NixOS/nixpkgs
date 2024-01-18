@@ -41,9 +41,11 @@ import ./make-test-python.nix ({ lib, ... }:
 
   testScript = { nodes, ... }: ''
     start_all()
-    server.wait_for_unit('multi-user.target')
-    client.wait_for_unit('multi-user.target')
-    server.succeed('systemctl is-active ntpd-rs.service')
-    client.succeed('systemctl is-active ntpd-rs.service')
+
+    for machine in (server, client):
+      machine.wait_for_unit('multi-user.target')
+      machine.succeed('systemctl is-active ntpd-rs.service')
+      machine.succeed('systemctl is-active ntpd-rs-metrics.service')
+      machine.succeed('curl http://localhost:9975/metrics | grep ntp_uptime_seconds')
   '';
 })

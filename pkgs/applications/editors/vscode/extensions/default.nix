@@ -2306,14 +2306,14 @@ let
         };
       };
 
-      # Keep pkgs/tools/typesetting/typst-preview/default.nix in sync with this
+      # Keep pkgs/by-name/ty/typst-preview/package.nix in sync with this
       # extension
       mgt19937.typst-preview = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.9.2";
-          sha256 = "sha256-/2ZD5LOQ1vTIKab2qX+5AqNqaRs90MNz1jUMDaV1wUY=";
+          version = "0.10.5";
+          sha256 = "sha256-cR5Pyokzmf8dNlsUkcwwfPx3jtJCQHRwTpYk78ovgrM=";
         };
 
         buildInputs = [

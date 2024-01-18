@@ -2,8 +2,6 @@ use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
 use crate::structure;
 use crate::validation::{self, Validation::Success};
-use std::collections::HashMap;
-use std::ffi::OsString;
 use std::path::Path;
 
 use anyhow::Context;
@@ -73,7 +71,7 @@ enum CallPackageVariant {
 pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
-    eval_nix_path: &HashMap<String, PathBuf>,
+    keep_nix_path: bool,
 ) -> validation::Result<ratchet::Nixpkgs> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
@@ -99,8 +97,6 @@ pub fn check_values(
     command
         // Inherit stderr so that error messages always get shown
         .stderr(process::Stdio::inherit())
-        // Clear NIX_PATH to be sure it doesn't influence the result
-        .env_remove("NIX_PATH")
         .args([
             "--eval",
             "--json",
@@ -121,15 +117,12 @@ pub fn check_values(
         .arg("-I")
         .arg(nixpkgs_path);
 
-    // Also add extra paths that need to be accessible
-    for (name, path) in eval_nix_path {
-        command.arg("-I");
-        let mut name_value = OsString::new();
-        name_value.push(name);
-        name_value.push("=");
-        name_value.push(path);
-        command.arg(name_value);
+    // Clear NIX_PATH to be sure it doesn't influence the result
+    // But not when requested to keep it, used so that the tests can pass extra Nix files
+    if !keep_nix_path {
+        command.env_remove("NIX_PATH");
     }
+
     command.args(["-I", &expr_path]);
     command.arg(expr_path);
 
@@ -168,14 +161,23 @@ pub fn check_values(
                         // so the UsesByName ratchet is already as tight as it can be
                         NonAttributeSet => Success(Tight),
                         NonCallPackage => Success(Tight),
-                        // This is an odd case when _internalCallByNamePackageFile is used to define a package.
+                        // This is the case when the `pkgs/by-name`-internal _internalCallByNamePackageFile
+                        // is used for a package outside `pkgs/by-name`
                         CallPackage(CallPackageInfo {
                             call_package_variant: Auto,
                             ..
-                        }) => NixpkgsProblem::InternalCallPackageUsed {
-                            attr_name: attribute_name.clone(),
+                        }) => {
+                            // With the current detection mechanism, this also triggers for aliases
+                            // to pkgs/by-name packages, and there's no good method of
+                            // distinguishing alias vs non-alias.
+                            // Using `config.allowAliases = false` at least currently doesn't work
+                            // because there's nothing preventing people from defining aliases that
+                            // are present even with that disabled.
+                            // In the future we could kind of abuse this behavior to have better
+                            // enforcement of conditional aliases, but for now we just need to not
+                            // give an error.
+                            Success(Tight)
                         }
-                        .into(),
                         // Only derivations can be in pkgs/by-name,
                         // so this attribute doesn't qualify
                         CallPackage(CallPackageInfo {
