@@ -347,12 +347,14 @@ stdenv =  overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx;
     # stdenv's compiler.
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+      stdenv = if stdenv.hostPlatform.isDarwin
+      then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
     };
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+      stdenv = if stdenv.hostPlatform.isDarwin
+      then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
     };
 
     openmp = callPackage ./openmp {
