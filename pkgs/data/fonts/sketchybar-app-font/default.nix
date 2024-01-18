@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
-  version = "1.0.21";
+  version = "1.0.23";
 
   src = fetchurl {
     url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${finalAttrs.version}/sketchybar-app-font.ttf";
-    hash = "sha256-k3Ok5qizXQvRCzW0oRilLWNJelYI0BGQ6qLbjhxosTA=";
+    hash = "sha256-9ELXLlYZyffXD0zomcJsG1Adb/Gu6oRTQZyzwK5lZ6I=";
   };
 
   dontUnpack = true;
