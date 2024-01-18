@@ -173,4 +173,4 @@ let
   };
 in
 (buildDartApplication.override { dart = flutter.override { supportedTargetFlutterPlatforms = [ "universal" flutterHostPlatform ]; }; })
-  hostPlatforms.${flutterHostPlatform} or "Unsupported Flutter host platform: ${flutterHostPlatform}"
+  hostPlatforms.${flutterHostPlatform} or (throw "Unsupported Flutter host platform: ${flutterHostPlatform}")
