@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
+{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook271, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
 
 let base = {
   pname = "firebird";
@@ -13,7 +13,7 @@ let base = {
     maintainers = with maintainers; [ marcweber ];
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook271 ];
 
   buildInputs = [ libedit icu ];
 

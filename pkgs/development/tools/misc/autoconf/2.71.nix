@@ -7,13 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
-  version = "2.72";
+  version = "2.71";
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
-    hash = "sha256-uohcExlXjWyU1G6bDc60AUyq/iSQ5Deg28o/JwoiP1o=";
+    sha256 = "197sl23irn6s9pd54rxj5vcp5y8dv65jb9yfqgr2g56cxg7q6k7i";
   };
+  patches = [
+    # fix stale autom4te cache race condition:
+    #  https://savannah.gnu.org/support/index.php?110521
+    ./2.71-fix-race.patch
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [ m4 perl texinfo ];

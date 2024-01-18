@@ -184,6 +184,9 @@ with pkgs;
   autoreconfHook269 = autoreconfHook.override {
     autoconf = autoconf269;
   };
+  autoreconfHook271 = autoreconfHook.override {
+    autoconf = autoconf271;
+  };
 
   autorestic = callPackage ../tools/backup/autorestic { };
 
@@ -18470,14 +18473,13 @@ with pkgs;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = autoconf271;
-
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
+  autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
   autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
-  autoconf271 = callPackage ../development/tools/misc/autoconf { };
+  autoconf271 = callPackage ../development/tools/misc/autoconf/2.71.nix { };
 
   acr  = callPackage ../development/tools/misc/acr { };
 

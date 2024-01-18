@@ -5,7 +5,7 @@
 , fetchpatch
 , isPy27
 , pytestCheckHook
-, autoconf
+, autoconf271
 , automake
 , cmake
 , gcc
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  nativeBuildInputs = [ autoconf automake cmake libtool perl setuptools ];
+  nativeBuildInputs = [ autoconf271 automake cmake libtool perl setuptools ];
 
   buildInputs = [ gcc ];
 
