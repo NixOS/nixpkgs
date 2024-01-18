@@ -6,7 +6,7 @@
 , fetchYarnDeps
 , nixosTests
 , brotli
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , jq
 , nodejs
 , which
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
   };
 
-  nativeBuildInputs = [ brotli prefetch-yarn-deps jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli fixup-yarn-lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules

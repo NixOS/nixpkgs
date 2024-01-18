@@ -7,7 +7,7 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , electron
 , libpulseaudio
 , pipewire
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure

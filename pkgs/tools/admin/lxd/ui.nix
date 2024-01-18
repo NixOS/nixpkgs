@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
 , nixosTests
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
   ];
 

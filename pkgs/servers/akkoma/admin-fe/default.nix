@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
+, fixup-yarn-lock, yarn, nodejs
 , python3, pkg-config, libsass
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
     nodejs
     pkg-config

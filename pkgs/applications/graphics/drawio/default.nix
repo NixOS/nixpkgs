@@ -4,7 +4,7 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , makeWrapper
 , nodejs
 , yarn
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     makeWrapper
     nodejs
     yarn

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , yarn
 , nixosTests
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-u4WDD0HRaNHdknHaoPYprebUaHt8EmESjBG0N6NZpIk=";
   };
 
-  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
+  nativeBuildInputs = [ makeWrapper fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
