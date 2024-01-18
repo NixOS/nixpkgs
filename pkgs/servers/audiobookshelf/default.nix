@@ -15,19 +15,19 @@
 let
   nodejs = nodejs_18;
 
+  source = builtins.fromJSON (builtins.readFile ./source.json);
   pname = "audiobookshelf";
-  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ROxVAevnxCyND/h1yyXfUeK9v5SEULL8gkR3flTmmW8=";
+    rev = "refs/tags/v${source.version}";
+    inherit (source) hash;
   };
 
   client = buildNpmPackage {
     pname = "${pname}-client";
-    inherit version;
+    inherit (source) version;
 
     src = runCommand "cp-source" {} ''
       cp -r ${src}/client $out
@@ -36,7 +36,7 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = "sha256-2t/+IpmgTZglh3SSuYZNUvT1RZCDZGVT2gS57KU1mqA=";
+    npmDepsHash = source.clientDepsHash;
   };
 
   wrapper = import ./wrapper.nix {
@@ -44,14 +44,15 @@ let
   };
 
 in buildNpmPackage {
-  inherit pname version src;
+  inherit pname src;
+  inherit (source) version;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
-  npmDepsHash = "sha256-1VVFGc4RPE0FHQX1PeRnvU3cAq9eRYGfJ/0GzMy7Fh4=";
+  npmDepsHash = source.depsHash;
 
   installPhase = ''
     mkdir -p $out/opt/client
@@ -65,10 +66,12 @@ in buildNpmPackage {
     chmod +x $out/bin/${pname}
   '';
 
+  passthru.updateScript = ./update.nu;
+
   meta = with lib; {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
-    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${version}";
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${source.version}";
     license = licenses.gpl3;
     maintainers = [ maintainers.jvanbruegge maintainers.adamcstephens ];
     platforms = platforms.linux;
