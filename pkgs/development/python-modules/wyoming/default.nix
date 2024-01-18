@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming";
     rev = "refs/tags/${version}";
-    hash = "sha256-59/6tRHHAu31VFuKhj2LCEUqkdVi81fu5POuGJmw9bw=";
+    hash = "sha256-sXnBwX1FJp4/HruzI7lDkLULxoalaGZhzCPIzxrXTxM=";
   };
 
   nativeBuildInputs = [
