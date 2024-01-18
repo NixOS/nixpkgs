@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
-  version = "5.10";
+  version = "5.11";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Bachmann1234";
     repo = "marshmallow-polyfield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oF5LBuDK4kqsAcKwidju+wFjigjy4CNbJ6bfWpGO1yQ=";
+    hash = "sha256-jbpeyih2Ccw1Rk+QcXRO9AfN5B/DhZmxa/M6FzXHqqs=";
   };
 
   postPatch = ''
