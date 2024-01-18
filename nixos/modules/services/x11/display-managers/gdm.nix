@@ -97,6 +97,14 @@ in
         type = types.bool;
       };
 
+      disableUserList = mkOption {
+        default = false;
+        description = lib.mdDoc ''
+          Disable the user list shown on the on the GNOME Display Manager login screen.
+        '';
+        type = types.bool;
+      };
+
       banner = mkOption {
         type = types.nullOr types.lines;
         default = null;
@@ -255,6 +263,10 @@ in
       settings."org/gnome/login-screen" = {
         banner-message-enable = true;
         banner-message-text = cfg.gdm.banner;
+      };
+    }] ++ lib.optionals (cfg.gdm.disableUserList != null) [{
+      settings."org/gnome/login-screen" = {
+        disable-user-list = cfg.gdm.disableUserList;
       };
     }] ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 
