@@ -40523,7 +40523,9 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  nixops_unstable = callPackage ../applications/networking/cluster/nixops { };
+  nixops_plugged = callPackage ../applications/networking/cluster/nixops { };
+
+  nixops_unstable = nixops_plugged.full;
 
   /*
     Evaluate a NixOS configuration using this evaluation of Nixpkgs.

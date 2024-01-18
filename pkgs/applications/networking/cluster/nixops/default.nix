@@ -1,4 +1,4 @@
-{ python3 }:
+{ lib, python3 }:
 
 let
   python = python3.override {
@@ -43,14 +43,26 @@ let
       inherit withPlugins python;
     };
   }));
-in withPlugins (ps: [
-  ps.nixops-aws
-  ps.nixops-digitalocean
-  ps.nixops-encrypted-links
-  ps.nixops-gce
-  ps.nixops-hercules-ci
-  ps.nixops-hetzner
-  ps.nixops-hetznercloud
-  ps.nixops-libvirtd
-  ps.nixops-vbox
-])
+in lib.mapAttrs
+  (name: plugnames: withPlugins (ps: map (k: builtins.getAttr k ps) plugnames) )
+  {
+    minimal      = [];
+    aws          = [ "nixops-aws" ];
+    digitalocean = [ "nixops-digitalocean" ];
+    gce          = [ "nixops-gce" ];
+    hercules-ci  = [ "nixops-hercules-ci" ];
+    hetzner      = [ "nixops-hetzner" "nixops-hetznercloud" ];
+    libvirtd     = [ "nixops-libvirtd" ];
+    vbox         = [ "nixops-vbox" ];
+    full         = [
+      "nixops-aws"
+      "nixops-digitalocean"
+      "nixops-encrypted-links"
+      "nixops-gce"
+      "nixops-hercules-ci"
+      "nixops-hetzner"
+      "nixops-hetznercloud"
+      "nixops-libvirtd"
+      "nixops-vbox"
+    ];
+  }
