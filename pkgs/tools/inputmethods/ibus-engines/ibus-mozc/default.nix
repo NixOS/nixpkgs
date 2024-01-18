@@ -20,8 +20,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
-  postUnpack = lib.optionalString stdenv.isLinux ''
-    sed -i 's/-lc++/-lstdc++/g' $sourceRoot/src/gyp/common.gypi
+  postPatch = ''
+    substituteInPlace src/gyp/common.gypi \
+      --replace "'-stdlib=libc++'," "" \
+      --replace "-lc++" "-lstdc++"
+
+    pushd src/third_party/abseil-cpp/absl/strings/internal/str_format
+    cp extension.h extension.h_bak
+    cat <(echo "#include <stdint.h>") extension.h_bak > extension.h # prepend stdint
+    popd
   '';
 
   configurePhase = ''
