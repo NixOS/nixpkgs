@@ -56,6 +56,31 @@ let
     };
   };
 
+  osdActivationService =
+    let inherit (cfg.global) clusterName;
+    in
+    {
+      "ceph-osd-device-activation" =
+      {
+        enable = true;
+        description = "Ceph OSD activation service";
+        after = [ "network-online.target" "time-sync.target" "ceph-mon.target" ];
+        wants = [ "network-online.target" "time-sync.target" ];
+        path = with pkgs; [ lvm2 util-linux ];
+        serviceConfig = {
+          Environment = "CLUSTER=${clusterName}";
+          User = "root";
+          Group = "root";
+          ExecStart = ''
+            ${pkgs.ceph}/bin/ceph-volume lvm activate --all --no-systemd
+          '';
+          PrivateDevices = "no"; # osd needs disk access
+          RemainAfterExit = "yes";
+          Type = "oneshot";
+        };
+      };
+    };
+
   makeTarget = daemonType:
     {
       "ceph-${daemonType}" = {
@@ -379,7 +404,8 @@ in
         ++ optional cfg.mds.enable (makeServices "mds" cfg.mds.daemons)
         ++ optional cfg.osd.enable (makeServices "osd" cfg.osd.daemons)
         ++ optional cfg.rgw.enable (makeServices "rgw" cfg.rgw.daemons)
-        ++ optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons);
+        ++ optional cfg.mgr.enable (makeServices "mgr" cfg.mgr.daemons)
+        ++ optional cfg.osd.enable osdActivationService;
       in
         mkMerge services;
 
