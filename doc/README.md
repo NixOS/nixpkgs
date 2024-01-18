@@ -201,7 +201,7 @@ In that case, please open an issue about the particular documentation convention
 
   : The name of the resulting image.
 
-  `tag` (String, _optional_)
+  `tag` (String; _optional_)
 
   : Tag of the generated image.
 
