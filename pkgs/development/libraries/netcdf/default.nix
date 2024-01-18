@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
       "--disable-dap-remote-tests"
       "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
-  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${lib.getDev mpi}/bin/mpicc" ]);
 
   enableParallelBuilding = true;
 
