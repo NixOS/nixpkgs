@@ -1,6 +1,7 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxcrypt
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -69,9 +70,13 @@ in let
       ln -s "${cc.lib}/lib/clang/${major}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
+    mkExtraBuildCommandsNoLibc = cc: mkExtraBuildCommands0 cc + ''
+      ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
+      ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/share" "$rsrc/share"
+    '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-      ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+      ln -s "${targetLlvmLibraries.compiler-rt-libc.out}/lib" "$rsrc/lib"
+      ln -s "${targetLlvmLibraries.compiler-rt-libc.out}/share" "$rsrc/share"
     '';
 
   bintoolsNoLibc' =
@@ -198,7 +203,8 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.compiler-rt
+        libcxx.cxxabi
+        targetLlvmLibraries.compiler-rt-libc
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
       ];
@@ -206,7 +212,7 @@ in let
       nixSupport.cc-cflags =
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
-          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-B${targetLlvmLibraries.compiler-rt-libc}/lib"
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -215,61 +221,67 @@ in let
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoLibcxx = wrapCCWith rec {
+    clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = targetLlvmLibraries.libcxx;
+      bintools = bintools';
+      extraPackages = [
+        libcxx.cxxabi
+        targetLlvmLibraries.compiler-rt-no-libc
+      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
+        targetLlvmLibraries.libunwind
+      ];
+      extraBuildCommands = mkExtraBuildCommandsNoLibc cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-Wno-unused-command-line-argument"
+        "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+      ]
+      ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
+      ++ lib.optional
+      (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
+      "-lunwind"
+      ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+    };
+
+    clangWithLibcAndBasicRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.compiler-rt
+        targetLlvmLibraries.compiler-rt-no-libc
       ];
-      extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags =
-        [
-          "-rtlib=compiler-rt"
-          "-B${targetLlvmLibraries.compiler-rt}/lib"
-          "-nostdlib++"
-        ]
-        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      extraBuildCommands = mkExtraBuildCommandsNoLibc cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-Wno-unused-command-line-argument"
+        "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+        "-nostdlib++"
+      ];
     };
-
-    clangNoLibc = wrapCCWith rec {
+    clangNoLibcWithBasicRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintoolsNoLibc';
-      extraPackages = [
-        targetLlvmLibraries.compiler-rt
+      extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+      extraBuildCommands = mkExtraBuildCommandsNoLibc cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+        "-nostdlib++"
       ];
-      extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags =
-        [
-          "-rtlib=compiler-rt"
-          "-B${targetLlvmLibraries.compiler-rt}/lib"
-        ]
-        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoCompilerRt = wrapCCWith rec {
+    clangNoLibcNoRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-      nixSupport.cc-cflags =
-        [
-          "-nostartfiles"
-        ]
-        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-cflags = [
+        "-nostartfiles"
+      ];
     };
-
-    clangNoCompilerRtWithLibc = wrapCCWith (rec {
-      cc = tools.clang-unwrapped;
-      libcxx = null;
-      bintools = bintools';
-      extraPackages = [ ];
-      extraBuildCommands = mkExtraBuildCommands0 cc;
-    } // lib.optionalAttrs stdenv.targetPlatform.isWasm {
-      nixSupport.cc-cflags = [ "-fno-exceptions" ];
-    });
 
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
@@ -285,38 +297,39 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
+      libxcrypt = (libxcrypt.override {
+          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx;
+        }).overrideAttrs (old: {
+          configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
+        });
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
-               then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
+               then overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
                else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
+               then overrideCC stdenv buildLlvmTools.clangNoLibcNoRt
                else stdenv;
     };
 
-    # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid || stdenv.hostPlatform.isDarwin
-      then libraries.compiler-rt-libc
-      else libraries.compiler-rt-no-libc;
+    compiler-rt = libraries.compiler-rt-libc;
 
     stdenv = overrideCC stdenv buildLlvmTools.clang;
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
     };
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
     };
 
     openmp = callPackage ./openmp {
