@@ -969,9 +969,28 @@
     dependencies = with self; [ nvim-lspconfig ];
   };
 
-  nvim-spectre = super.nvim-spectre.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
+  nvim-spectre = super.nvim-spectre.overrideAttrs (old:
+    let
+      spectre_oxi = rustPlatform.buildRustPackage {
+        pname = "spectre_oxi";
+        inherit (old) version src;
+        sourceRoot = "source/spectre_oxi";
+
+        cargoHash = "sha256-y2ZIgOApIShkIesXmItPKDO6XjFrG4GS5HCPncJUmN8=";
+
+
+        preCheck = ''
+          mkdir tests/tmp/
+        '';
+      };
+    in
+    (lib.optionalAttrs stdenv.isLinux {
+      dependencies = with self;
+        [ plenary-nvim ];
+      postInstall = ''
+        ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
+      '';
+    }));
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''

@@ -150,10 +150,12 @@ in
       after = [
         "network-online.target"
         "lxcfs.service"
-      ] ++ (lib.optional cfg.socketActivation "incus.socket");
+        "incus.socket"
+      ];
       requires = [
         "lxcfs.service"
-      ] ++ (lib.optional cfg.socketActivation "incus.socket");
+        "incus.socket"
+      ];
       wants = [
         "network-online.target"
       ];
@@ -183,7 +185,7 @@ in
       };
     };
 
-    systemd.sockets.incus = lib.mkIf cfg.socketActivation {
+    systemd.sockets.incus = {
       description = "Incus UNIX socket";
       wantedBy = [ "sockets.target" ];
 
@@ -191,7 +193,6 @@ in
         ListenStream = "/var/lib/incus/unix.socket";
         SocketMode = "0660";
         SocketGroup = "incus-admin";
-        Service = "incus.service";
       };
     };
 
