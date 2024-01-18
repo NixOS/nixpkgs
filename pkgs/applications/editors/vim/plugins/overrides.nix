@@ -284,6 +284,10 @@
     dependencies = with self; [ nvim-cmp nvim-snippy ];
   };
 
+  cmp-tabby = super.cmp-tabby.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+  };
+
   cmp-tabnine = super.cmp-tabnine.overrideAttrs {
     buildInputs = [ tabnine ];
 
