@@ -70,7 +70,7 @@ in buildNpmPackage {
     description = "Self-hosted audiobook and podcast server";
     changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${version}";
     license = licenses.gpl3;
-    maintainers = [ maintainers.jvanbruegge ];
+    maintainers = [ maintainers.jvanbruegge maintainers.adamcstephens ];
     platforms = platforms.linux;
     mainProgram = "audiobookshelf";
   };
