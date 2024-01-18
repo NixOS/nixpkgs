@@ -24,6 +24,12 @@ let
       }
     }
   '';
+
+  # In case we want/need to evaluate packages or the assertions or whatever,
+  # we want to have a linux system.
+  # TODO: make the non-flake test use thise.
+  linuxSystem = lib.replaceStrings ["darwin"] ["linux"] stdenv.hostPlatform.system;
+
 in
 runCommand "test-nixos-rebuild-repl" {
   nativeBuildInputs = [
@@ -88,7 +94,7 @@ runCommand "test-nixos-rebuild-repl" {
   EOF
 
   # Make the config pure
-  echo '{ nixpkgs.hostPlatform = "${stdenv.hostPlatform.system}"; }' > ~/hardware-configuration.nix
+  echo '{ nixpkgs.hostPlatform = "${linuxSystem}"; }' > ~/hardware-configuration.nix
 
   cat >~/flake.nix <<EOF
   {
