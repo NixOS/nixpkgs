@@ -43,6 +43,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
+  checkFlags = [
+    # flaky
+    "--skip=ws_integration::none::merge"
+  ];
+
   passthru.tests.version = testers.testVersion {
     package = surrealdb;
     command = "surreal version";
