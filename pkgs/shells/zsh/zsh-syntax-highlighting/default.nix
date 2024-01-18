@@ -23,6 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ loskutov ];
+    maintainers = with maintainers; [ gepbird loskutov ];
   };
 })
