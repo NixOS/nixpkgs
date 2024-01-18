@@ -17254,6 +17254,12 @@
     githubId = 3789764;
     name = "skykanin";
   };
+  skyrina = {
+    email = "sorryu02@gmail.com";
+    github = "skyrina";
+    githubId = 116099351;
+    name = "Skylar";
+  };
   slam-bert = {
     github = "slam-bert";
     githubId = 106779009;
