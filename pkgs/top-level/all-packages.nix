@@ -39674,7 +39674,7 @@ with pkgs;
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
   inherit (libsForQt5.callPackage ../applications/science/electronics/simulide { })
-    simulide_0_4_15 simulide_1_0_0;
+    simulide_0_4_15 simulide_1_0_0 simulide_1_1_0;
 
   simulide = simulide_1_0_0;
 
