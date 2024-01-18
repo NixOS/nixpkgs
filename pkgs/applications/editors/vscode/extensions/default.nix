@@ -390,7 +390,7 @@ let
           description = "Standard ML support for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=azdavis.millet";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.smasher164 ];
+          maintainers = with lib.maintainers; [ smasher164 ratsclub ];
         };
       };
 
