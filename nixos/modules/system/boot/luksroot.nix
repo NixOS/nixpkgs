@@ -152,6 +152,9 @@ let
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
+    # Custom device activation commands
+    ${dev.activationCommands}
+
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
     wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
@@ -858,6 +861,20 @@ in
                 };
               };
             });
+          };
+
+          activationCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              integritysetup open /dev/sda integ-left
+              integritysetup open /dev/sdb integ-right
+              $${systemd}/bin/udevadm trigger /dev/md126
+              $${systemd}/bin/udevadm settle
+            '';
+            description = ''
+              Commands that should be run to activate our LUKS device, before we wait for it to appear.
+            '';
           };
 
           preOpenCommands = mkOption {
