@@ -85,6 +85,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DLLAMA_NATIVE=OFF"
     "-DLLAMA_BUILD_SERVER=ON"
+    "-DBUILD_SHARED_LIBS=ON"
   ]
   ++ lib.optionals metalSupport [
     "-DCMAKE_C_FLAGS=-D__ARM_FEATURE_DOTPROD=1"
@@ -110,7 +111,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/{bin,lib,share/models}
 
     for f in bin/*; do
       test -x "$f" || continue
@@ -118,6 +119,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     done
 
     ${lib.optionalString metalSupport "cp ./bin/ggml-metal.metal $out/bin/ggml-metal.metal"}
+
+    cp libggml_shared${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libggml_shared${stdenv.hostPlatform.extensions.sharedLibrary}
+    cp libllama${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libllama${stdenv.hostPlatform.extensions.sharedLibrary}
+
+    cp $src/models/* $out/share/models
 
     runHook postInstall
   '';

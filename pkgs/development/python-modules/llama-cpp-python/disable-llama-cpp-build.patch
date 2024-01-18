@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 6c10225..eaf2b6e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,6 +1,5 @@
+-[build-system]
+-requires = ["scikit-build-core[pyproject]>=0.5.1"]
+-build-backend = "scikit_build_core.build"
++[tool.setuptools]
++packages = ["llama_cpp"]
+ 
+ [project]
+ name = "llama_cpp_python"
