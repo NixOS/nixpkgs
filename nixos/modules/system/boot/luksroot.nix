@@ -867,8 +867,8 @@ in
             type = types.lines;
             default = "";
             example = ''
-              integritysetup open /dev/sda integ-left
-              integritysetup open /dev/sdb integ-right
+              $${cryptsetup}/bin/integritysetup open /dev/sda integ-left
+              $${cryptsetup}/bin/integritysetup open /dev/sdb integ-right
               $${systemd}/bin/udevadm trigger /dev/md126
               $${systemd}/bin/udevadm settle
             '';
@@ -934,6 +934,14 @@ in
       type = types.bool;
       description = lib.mdDoc ''
         Enables support for authenticating with a GPG encrypted password.
+      '';
+    };
+
+    boot.initrd.luks.withIntegritySetup = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Include the dm-integrity's integritysetup control binary into the initramfs.
       '';
     };
 
@@ -1030,6 +1038,9 @@ in
     in
     mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
+      ${optionalString luks.withIntegritySetup ''
+        copy_bin_and_libs ${pkgs.cryptsetup}/bin/integritysetup
+        ''}
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
