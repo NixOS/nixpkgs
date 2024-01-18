@@ -88,7 +88,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -272,6 +272,16 @@ in let
       ];
     };
 
+    clangWithLibcAndNoRt = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      bintools = bintools';
+      extraBuildCommands = mkExtraBuildCommands0 cc;
+      nixSupport.cc-cflags = [
+        "-nostdlib++"
+      ];
+    };
+
     clangNoLibcNoRt = wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
@@ -283,6 +293,7 @@ in let
       ];
     };
 
+    clangNoCompilerRtWithLibc = clangWithLibcAndNoRt;
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
     # non-cross build in cross builds.
