@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
 
     wrapProgram $out/share/starsector/starsector.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
+      --prefix PATH : ${lib.makeBinPath [ openjdk xorg.xrandr ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
       --chdir "$out/share/starsector"
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fractalsoftworks.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras rafaelrc ];
   };
 
   passthru.updateScript = writeScript "starsector-update-script" ''
