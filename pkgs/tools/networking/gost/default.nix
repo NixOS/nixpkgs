@@ -49,8 +49,9 @@ buildGoModule rec {
       --replace '{url.UserPassword("AES-256-GCM", "123456"), url.UserPassword("AES-256-GCM", "123456"), true},' ""
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A simple tunnel written in golang";
     homepage = "https://github.com/ginuerzh/gost";
     license = licenses.mit;
