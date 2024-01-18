@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices;
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
 in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
+    SystemConfiguration
   ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
