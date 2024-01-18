@@ -17,6 +17,8 @@
 , moreutils
 , cacert
 , nodePackages
+, speechd
+, withTTS ? true
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
@@ -114,12 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       # this is mainly required for venmic
-      libPath = lib.makeLibraryPath [
+      libPath = lib.makeLibraryPath ([
         libpulseaudio
         libnotify
         pipewire
         gcc13Stdenv.cc.cc.lib
-      ];
+      ] ++ lib.optional withTTS speechd);
     in
     ''
       runHook preInstall
@@ -137,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
         --prefix LD_LIBRARY_PATH : ${libPath} \
         --add-flags $out/opt/Vesktop/resources/app.asar \
+        ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
       runHook postInstall
