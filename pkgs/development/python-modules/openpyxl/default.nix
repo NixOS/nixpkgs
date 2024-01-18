@@ -6,6 +6,7 @@
 , pandas
 , pillow
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 }:
@@ -59,6 +60,11 @@ buildPythonPackage rec {
     "test_rgb_colors"
     "test_named_styles"
     "test_read_ole_link"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "test_broken_sheet_ref"
+    "test_name_invalid_index"
+    "test_defined_names_print_area"
+    "test_no_styles"
   ];
 
   pythonImportsCheck = [
