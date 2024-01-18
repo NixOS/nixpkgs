@@ -135,6 +135,7 @@ let
     pkgs.pkgsLLVM.stdenv
     pkgs.pkgsStatic.bash
     #pkgs.pkgsCross.gnu64_simplekernel.bash   # https://github.com/NixOS/nixpkgs/issues/264989
+    pkgs.pkgsCross.alpha-unknown-linux-gnu.stdenv
     pkgs.pkgsCross.arm-embedded.stdenv
     pkgs.pkgsCross.sheevaplug.stdenv  # for armv5tel
     pkgs.pkgsCross.raspberryPi.stdenv  # for armv6l
