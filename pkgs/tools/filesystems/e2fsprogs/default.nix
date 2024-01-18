@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
-  buildInputs = [ libuuid gettext ]
+  buildInputs = [ gettext ]
+    ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [ libuuid ]
     ++ lib.optionals withFuse [ fuse ];
 
   patches = [
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
     })
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e 's/^  #if defined _SORT_R_BSD$/#if defined _DOES_NOT_EXIST/g' lib/support/sort_r.h
+    sed -E -i -e 's/^  #if defined _SORT_R_GNU$/#if defined _DOES_NOT_EXIST/g' lib/support/sort_r.h
+  '';
 
   configureFlags =
     if stdenv.isLinux then [

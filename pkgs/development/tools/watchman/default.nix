@@ -12,6 +12,7 @@
 , fizz
 , fmt_8
 , folly
+, freebsd
 , glog
 , gtest
 , lib
@@ -83,7 +84,10 @@ stdenv.mkDerivation rec {
     lz4
     zstd
     libiconv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libexecinfo freebsd.libkvm freebsd.libmemstat freebsd.libprocstat freebsd.libdevstat
+  ];
 
   cargoRoot = "watchman/cli";
 

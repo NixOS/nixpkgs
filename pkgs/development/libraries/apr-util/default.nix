@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e 's/crypt\.h/unistd.h/g' **/*.c **/*.h
+  '';
+
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
     ++ lib.optional (!stdenv.isCygwin) "--with-crypto"
     ++ lib.optional sslSupport "--with-openssl=${openssl.dev}"
@@ -55,7 +59,8 @@ stdenv.mkDerivation rec {
         --replace "-ldb-6.9" "-ldb"
   '';
 
-  propagatedBuildInputs = [ apr expat libiconv libxcrypt ]
+  propagatedBuildInputs = [ apr expat libiconv ]
+    ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) libxcrypt
     ++ lib.optional sslSupport openssl
     ++ lib.optional bdbSupport db
     ++ lib.optional ldapSupport openldap

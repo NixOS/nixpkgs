@@ -45,6 +45,8 @@ buildPythonPackage rec {
     -    static constexpr int kMaxCapacity = SkToInt(std::min(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
     +    static constexpr int kMaxCapacity = SkToInt(std::min<size_t>(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
     EOF
+  '' + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+    sed -E -i -e '/SkOSFile_stdio/a \    "src/ports/SkDebug_stdio.cpp",' src/cpp/skia-builder/skia/BUILD.gn
   '';
 
   nativeBuildInputs = [ cython ninja setuptools-scm ]

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, freebsd
 , glib
 , flex
 , bison
@@ -80,7 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
     # can't use canExecute, we need prebuilt when cross
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ]
+  ++ lib.optionals (stdenv.hostPlatform.isFreeBSD) [ freebsd.ldd ];
 
   buildInputs = [
     (python3.withPackages pythonModules)

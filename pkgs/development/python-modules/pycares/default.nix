@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiodns
 , buildPythonPackage
 , c-ares
@@ -7,6 +8,7 @@
 , idna
 , pythonOlder
 , tornado
+, freebsd
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     c-ares
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libkvm
   ];
 
   propagatedBuildInputs = [

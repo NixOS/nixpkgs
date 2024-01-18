@@ -22,6 +22,7 @@
 , rustPlatform
 , Security
 , setuptoolsRustBuildHook
+, freebsd
 }:
 
 let
@@ -70,7 +71,9 @@ buildPythonPackage rec {
     libiconv
   ] ++ lib.optionals (pythonOlder "3.9") [
     libxcrypt
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD (with freebsd; [
+    libexecinfo libkvm libmemstat libprocstat libdevstat
+  ]);
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi

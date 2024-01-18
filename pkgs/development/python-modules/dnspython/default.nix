@@ -79,6 +79,11 @@ buildPythonPackage rec {
     # 6 tests fail with: dns.resolver.LifetimeTimeout: The resolution lifetime expired after ...
     "testResolveCacheHit"
     "testResolveTCP"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # no sandbox means these actually try to do network connections, which touch 1.1.1.1, which is blocked by some isps?
+    "test_basic_ddr_sync"
+    "test_basic_ddr_async"
+    "testResolveNXDOMAIN" # flaky, touches host dns settings in an unpredictable way?
   ];
 
   pythonImportsCheck = [

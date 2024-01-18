@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     FILE *testfp;
     int testfd;
     struct stat testsb;
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
     struct stat64 testsb64;
 #endif
 #if defined(__linux__) && defined(STATX_TYPE)
@@ -93,11 +93,11 @@ int main(int argc, char *argv[])
     assert(access(TESTPATH, X_OK) == 0);
 
     assert(stat(TESTPATH, &testsb) != -1);
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
     assert(stat64(TESTPATH, &testsb64) != -1);
 #endif
     assert(fstatat(123, TESTPATH, &testsb, 0) != -1);
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
     assert(fstatat64(123, TESTPATH, &testsb64, 0) != -1);
 #endif
 #if defined(__linux__) && defined(STATX_TYPE)
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
     assert(mkdir(TESTDIR "/dir-mkdir", 0777) == 0);
     assert(unlink(TESTDIR "/dir-mkdir") == -1); // it's a directory!
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
     assert(errno == EISDIR);
 #endif
     assert(rmdir(TESTDIR "/dir-mkdir") == 0);
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     assert(mkdirat(123, TESTDIR "/dir-mkdirat", 0777) == 0);
     assert(unlinkat(123, TESTDIR "/dir-mkdirat", 0) == -1); // it's a directory!
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
     assert(errno == EISDIR);
 #endif
     assert(unlinkat(123, TESTDIR "/dir-mkdirat", AT_REMOVEDIR) == 0);

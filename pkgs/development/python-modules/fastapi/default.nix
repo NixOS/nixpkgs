@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -111,6 +112,14 @@ buildPythonPackage rec {
     # databases is incompatible with SQLAlchemy 2.0
     "tests/test_tutorial/test_async_sql_databases"
     "tests/test_tutorial/test_sql_databases"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # bcrypt: no backend found
+    "tests/test_tutorial/test_security/test_tutorial005.py"
+    "tests/test_tutorial/test_security/test_tutorial005_py39.py"
+    "tests/test_tutorial/test_security/test_tutorial005_py310.py"
+    "tests/test_tutorial/test_security/test_tutorial005_an.py"
+    "tests/test_tutorial/test_security/test_tutorial005_an_py39.py"
+    "tests/test_tutorial/test_security/test_tutorial005_an_py310.py"
   ];
 
   disabledTests = [

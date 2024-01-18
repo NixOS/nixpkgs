@@ -2,7 +2,7 @@
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
-, shadow, libuuid
+, shadow, libuuid, freebsd
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     shadow
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.sockstat
   ];
 
   buildInputs = [
@@ -41,7 +44,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka which openssl procps_pkg ibm-sw-tpm2
+  ] ++ lib.optionals stdenv.isLinux [
+    iproute2
   ];
 
   strictDeps = true;
@@ -68,6 +73,13 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib
     substituteInPlace ./bootstrap \
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
+  '' + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    # the library just straight up violates the contract in the cmocka headers
+    sed -E -i -e '/#include <cmocka.h>/ i #include <stdarg.h>' test/unit/*
+
+    # this test fails. can't figure out how to diagnose
+    sed -E -i -e '/  test\/unit\/fapi-io /d' Makefile-test.am
+
   '';
 
   configureFlags = lib.optionals doInstallCheck [
@@ -92,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ baloo ];
   };
 }

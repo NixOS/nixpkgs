@@ -160,6 +160,9 @@ let
           "--with-out-ext=tk"
           # on yosemite, "generating encdb.h" will hang for a very long time without this flag
           "--with-setjmp-type=setjmp"
+        ] ++ ops stdenv.hostPlatform.isFreeBSD [
+          "rb_cv_gnu_qsort_r=no"
+          "rb_cv_bsd_qsort_r=yes"
         ];
 
         preConfigure = opString docSupport ''

@@ -137,6 +137,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   vtfontcvt = callPackage ./vtfontcvt.nix {};
   sed = callPackage ./sed.nix {};
   ldd = callPackage ./ldd.nix {};
+  sockstat = callPackage ./sockstat.nix {};
+  libstdthreads = callPackage ./libstdthreads.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
@@ -144,4 +146,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   # bootloader
   stand = callPackage ./stand.nix {};
   stand-efi = callPackage ./stand-efi.nix {};
+
+  # haha funny linux headers
+  v4l-compat = callPackage ./v4l-compat {};
 })

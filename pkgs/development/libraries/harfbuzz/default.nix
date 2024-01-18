@@ -6,6 +6,7 @@
 , glib
 , freetype
 , fontconfig
+, freebsd
 , libintl
 , meson
 , ninja
@@ -85,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ] ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD freebsd.ldd;
 
   buildInputs = [ glib freetype ]
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];

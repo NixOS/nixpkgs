@@ -244,7 +244,7 @@ WRAPPER(int, stat)(const char * path, struct stat * st)
 WRAPPER_DEF(stat)
 
 // In musl libc, stat64 is simply a macro for stat
-#if !defined(__APPLE__) && !defined(stat64)
+#if !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(stat64)
 WRAPPER(int, stat64)(const char * path, struct stat64 * st)
 {
     int (*stat64_real) (const char *, struct stat64 *) = LOOKUP_REAL(stat64);

@@ -84,6 +84,9 @@ buildPythonPackage rec {
     "--deselect=ests/test_fsevents.py::test_recursive_check_accepts_relative_paths"
     # gets stuck
     "--deselect=tests/test_fsevents.py::test_converting_cfstring_to_pyunicode"
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # fails to stop process in teardown
+    "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
   ];
 
   disabledTestPaths = [

@@ -97,7 +97,7 @@ buildPythonPackage rec {
     "test_gethostbyname"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals (stdenv.isDarwin || stdenv.isFreeBSD) [
     "tests/main/test_redis.py"
   ];
 

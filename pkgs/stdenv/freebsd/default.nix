@@ -316,6 +316,15 @@ in
         freebsd = super.freebsd.overrideScope (self: super: {
           stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
         });
+        haskellPackages = super.haskellPackages.override {
+          overrides = (self: super: {
+            digest = super.digest.overrideAttrs {
+              postPatch = ''
+                sed -E -i -e 's/ && !os\(freebsd\)//' digest.cabal
+              '';
+            };
+          });
+        };
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

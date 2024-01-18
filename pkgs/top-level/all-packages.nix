@@ -20990,7 +20990,7 @@ with pkgs;
   cypress = callPackage ../development/web/cypress { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
+    #libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
   };
 
   cyrus-sasl-xoauth2 = callPackage ../development/libraries/cyrus-sasl-xoauth2 { };
@@ -27836,8 +27836,8 @@ with pkgs;
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
-  libuuid = if stdenv.isLinux
-    then util-linuxMinimal
+  libuuid = if stdenv.isLinux then util-linuxMinimal
+    else if stdenv.isFreeBSD then e2fsprogs
     else null;
 
   light = callPackage ../os-specific/linux/light { };

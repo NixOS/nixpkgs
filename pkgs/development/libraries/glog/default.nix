@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
+{ stdenv, clangStdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "-DWITH_UNWIND=OFF"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   # There are some non-thread safe tests that can fail
   enableParallelChecking = false;

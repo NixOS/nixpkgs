@@ -91,6 +91,9 @@ let
   # null check for Minimal
   openssl' = if openssl != null then openssl_legacy else null;
 
+  # mixes libcc and libxcrypt headers and libs and causes segfautlts on importing crypt
+  libxcrypt = if stdenv.hostPlatform.isFreeBSD then null else inputs.libxcrypt;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
@@ -433,8 +436,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out") libxcrypt
-    ] ++ optionals tzdataSupport [
+      (placeholder "out") ] ++ ((optional (libxcrypt != null)) libxcrypt)
+    ++ optionals tzdataSupport [
       tzdata
     ]);
   in lib.optionalString enableFramework ''

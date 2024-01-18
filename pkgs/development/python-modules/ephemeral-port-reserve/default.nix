@@ -27,6 +27,9 @@ buildPythonPackage {
   disabledTests = lib.optionals stdenv.isDarwin [
     # can't find hostname in our darwin build environment
     "test_fqdn"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "test_fqdn"
+    "test_localhost"  # possibly something to do with bsd/linux networking wrt REUSEADDR
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -43,9 +43,6 @@ stdenv.mkDerivation {
     # be able to #include <assert.h> in the first place; perhaps it's in the
     # wrong, or perhaps there is a way to provide an assert.h.
     "-Wno-error=implicit-function-declaration"
-  ] ++ lib.optionals (!haveLibc && stdenv.hostPlatform.isFreeBSD) [
-    # As per above, but in FreeBSD assert is a macro!!!!!!
-    "-Dassert=((e)?(void)0:__assert(#e,__FILE__,__LINE__))"
   ]);
 
   cmakeFlags = [
@@ -123,10 +120,17 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM && !haveLibc) ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
+  '' + lib.optionalString (useLLVM && !haveLibc && !stdenv.hostPlatform.isFreeBSD) ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model.c \
       --replace "#include <assert.h>" ""
+  '' + lib.optionalString (useLLVM && !haveLibc && stdenv.hostPlatform.isFreeBSD) ''
+    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
+    substituteInPlace lib/builtins/clear_cache.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
+    substituteInPlace lib/builtins/cpu_model.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
   '';
 
   # Hack around weird upsream RPATH bug

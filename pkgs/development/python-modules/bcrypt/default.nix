@@ -16,6 +16,7 @@
 , fastapi
 , paramiko
 , twisted
+, freebsd
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,8 @@ buildPythonPackage rec {
   ];
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.isDarwin libiconv
+  ++ lib.optionals stdenv.isFreeBSD (with freebsd; [libexecinfo libkvm libmemstat libprocstat libdevstat]);
 
   nativeCheckInputs = [
     pytestCheckHook

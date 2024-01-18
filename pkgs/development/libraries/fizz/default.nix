@@ -15,6 +15,7 @@
 , libsodium
 , gtest
 , zlib
+, freebsd
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,8 @@ stdenv.mkDerivation rec {
     openssl
     zlib
     zstd
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libexecinfo
   ];
 
   meta = with lib; {

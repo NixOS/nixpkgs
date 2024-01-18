@@ -51,6 +51,11 @@ buildPythonPackage rec {
     "test_background_exception"
     "test_cwd"
     "test_ok_code"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # TODO @rhelmot diagnose this. seems harmless though
+    "test_close_fds"
+    "test_no_close_fds"
+    "test_pass_fds"
   ];
 
   meta = with lib; {

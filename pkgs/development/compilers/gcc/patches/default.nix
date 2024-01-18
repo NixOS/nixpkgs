@@ -158,6 +158,20 @@ in
   (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
 
 
+## FreeBSD
+
+# Mess with libgcc linkage to avoid symbol versioning errors
+++ optionals (hostPlatform.isFreeBSD && langFortran) [
+  (fetchpatch {
+    url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/ea308913cacbad2f36a695c1a5e6b7ab4d2d095a/lang/gcc13/files/patch-gfortran-libgcc";
+    hash = "sha256-2GZETXCpLRvJNEUxEl1joLZ3XaBA6uz6CvjfrU6n/Nc=";
+    extraPrefix = "";
+    postFetch = ''
+      sed -E -i -e 's/\.orig//g' $out
+    '';
+  })
+]
+
 
 
 ##############################################################################

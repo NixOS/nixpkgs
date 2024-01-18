@@ -58,6 +58,10 @@ else stdenv.mkDerivation rec {
     $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
       -Wl,-install_name,$out/lib/$libName \
       -shared -o "$libName"
+    '' else if stdenv.isFreeBSD then ''
+    sed -E -i -e 's/ap, mode_t/ap, int/g' libredirect.c
+    $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
+      -shared -o "$libName"
     '' else ''
     $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"

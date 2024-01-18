@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  # Some CBLAS related tests fail on Darwin:
+  # Some CBLAS related tests fail on Darwin/FreeBSD:
   #  14 - CBLAS-xscblat2 (Failed)
   #  15 - CBLAS-xscblat3 (Failed)
   #  17 - CBLAS-xdcblat2 (Failed)
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Upstream issue to track:
   # * https://github.com/Reference-LAPACK/lapack/issues/440
-  ctestArgs = lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
+  ctestArgs = lib.optionalString (stdenv.isDarwin || stdenv.hostPlatform.isFreeBSD) "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
 
   checkPhase = ''
     runHook preCheck

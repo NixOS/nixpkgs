@@ -84,6 +84,13 @@ buildPythonPackage rec {
     "test_sendall_timeout"
     # broken on aarch64 and when using march in gcc
     "test_fork_after_monkey_patch"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # python freebsd really REALLY doesn't like fd -1 in select
+    "test_repeated_select_bad_fd"
+    # message boundaries not preserved
+    "test_getting_messages_from_websocket_75"
+    "test_getting_messages_from_websocket_76"
+    "test_wrapped_wsgi"
   ];
 
   disabledTestPaths = [

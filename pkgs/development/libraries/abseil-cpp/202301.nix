@@ -24,6 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-core-foundation.patch
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e /ENOSTR/d absl/status/status.cc
+    sed -E -i -e /ETIME/d absl/status/status.cc
+    sed -E -i -e /ENODATA/d absl/status/status.cc
+    sed -E -i -e /ENOSR/d absl/status/status.cc
+  '';
+
   cmakeFlags = [
     "-DABSL_BUILD_TEST_HELPERS=ON"
     "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"

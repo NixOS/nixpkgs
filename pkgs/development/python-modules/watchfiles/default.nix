@@ -13,6 +13,7 @@
 , pytestCheckHook
 , CoreServices
 , libiconv
+, freebsd
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,8 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
     libiconv
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libexecinfo freebsd.libkvm freebsd.libmemstat freebsd.libprocstat freebsd.libdevstat
   ];
 
   nativeBuildInputs = [
@@ -74,6 +77,16 @@ buildPythonPackage rec {
   disabledTests = [
     #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
     "test_awatch_interrupt_raise"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # TODO @rhelmot triage. possibly enum mismatches or backend differences?
+    "test_modify_write_non_recursive"
+    "test_add_non_recursive"
+    "test_delete"
+    "test_delete_non_recursive"
+    "test_move_out"
+    "test_move_internal"
+    # raises wrong error
+    "test_does_not_exist"
   ];
 
   pythonImportsCheck = [

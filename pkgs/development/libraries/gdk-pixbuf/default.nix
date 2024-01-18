@@ -8,6 +8,7 @@
 , gettext
 , python3
 , docutils
+, freebsd
 , gi-docgen
 , glib
 , libtiff
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
+  ] ++ lib.optionals stdenv.buildPlatform.isFreeBSD [
+    freebsd.ldd
   ];
 
   propagatedBuildInputs = [

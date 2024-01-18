@@ -259,7 +259,7 @@ stdenv.mkDerivation rec {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ lheckemann mindavi ] ++ teams.helsinki-systems.members;
   };
 }

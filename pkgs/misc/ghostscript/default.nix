@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
     libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
     libiconv ijs lcms2 bash openjpeg
   ]
-  ++ lib.optionals x11Support [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
+  # the FreeBSD build seems to include xlib headers even without --with-x
+  ++ lib.optionals (x11Support || stdenv.hostPlatform.isFreeBSD) [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
   ++ lib.optional cupsSupport cups
   ;
 

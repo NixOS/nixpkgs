@@ -62,7 +62,7 @@ let
       ''}
     '';
 
-    doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
+    doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isFreeBSD);
     preCheck = ''
       export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
       export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"

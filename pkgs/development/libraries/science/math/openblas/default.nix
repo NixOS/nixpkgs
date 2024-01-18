@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
+{ lib, stdenv, clangStdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -113,6 +113,14 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    x86_64-freebsd14 = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -137,9 +145,10 @@ let
   mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
+  stdenv' = if stdenv.hostPlatform.isFreeBSD then clangStdenv else stdenv;
 
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "openblas";
   version = "0.3.25";
 

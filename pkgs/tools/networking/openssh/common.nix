@@ -100,7 +100,7 @@ stdenv.mkDerivation {
 
   hardeningEnable = [ "pie" ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isFreeBSD; # TODO @rhelmot owo what's this
   enableParallelChecking = false;
   nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''

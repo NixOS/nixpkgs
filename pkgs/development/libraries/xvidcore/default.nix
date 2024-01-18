@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ ]
     # Undocumented darwin hack (assembly is probably disabled due to an
     # issue with nasm, however yasm is now used)
-    ++ lib.optional stdenv.isDarwin "--enable-macosx_module --disable-assembly";
+    ++ lib.optional stdenv.isDarwin "--enable-macosx_module --disable-assembly"
+    # even with yasm, FreeBSD asm build produces relocations which cannot be linked into a shared object
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD "--disable-assembly";
 
   nativeBuildInputs = [ ]
     ++ lib.optional (!stdenv.isDarwin) yasm;

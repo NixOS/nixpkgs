@@ -81,6 +81,9 @@ buildPythonPackage rec {
     "test_recalc_timestamp_ttf"
     "test_recalc_timestamp_otf"
     "test_ttcompile_timestamp_calcs"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # absolute nightmare. freebsd log(9, 3) == 2.0000000000000004
+    "test_build_n_ary_tree"
   ];
 
   disabledTestPaths = [

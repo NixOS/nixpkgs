@@ -57,8 +57,8 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
-, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && !isFreeBSD && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && !isFreeBSD && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
@@ -82,7 +82,7 @@
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
-, withV4l2M2m ? withV4l2
+, withV4l2M2m ? withV4l2 && !stdenv.isFreeBSD
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
 , withVidStab ? withFullDeps # Video stabilization

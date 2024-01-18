@@ -12,6 +12,7 @@
 , libuv
 , CoreServices
 , ApplicationServices
+, freebsd
 
 # tests
 , aiohttp
@@ -44,6 +45,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
     ApplicationServices
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    freebsd.libkvm
   ];
 
   nativeCheckInputs = [
@@ -65,6 +68,10 @@ buildPythonPackage rec {
     "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+  ] ++ lib.optionals (stdenv.hostPlatform.isFreeBSD) [
+    # Segmentation fault
+    "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
+    "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_CHANGE::test_fs_event_change"
   ];
 
   disabledTestPaths = [

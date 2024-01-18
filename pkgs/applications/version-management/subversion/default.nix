@@ -116,7 +116,7 @@ let
       homepage = "https://subversion.apache.org/";
       mainProgram = "svn";
       maintainers = with maintainers; [ eelco lovek323 ];
-      platforms = platforms.linux ++ platforms.darwin;
+      platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     };
 
   } // lib.optionalAttrs stdenv.isDarwin {

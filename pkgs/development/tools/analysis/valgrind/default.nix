@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, clangStdenv, fetchurl, fetchpatch
 , autoreconfHook, perl
 , gdb, cctools, xnu, bootstrap_cmds
 , writeScript
 }:
-
-stdenv.mkDerivation rec {
+let stdenv' = if stdenv.hostPlatform.isFreeBSD then clangStdenv else stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "valgrind";
   version = "3.22.0";
 

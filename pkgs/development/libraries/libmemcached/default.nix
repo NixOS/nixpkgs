@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     })
     ++ lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e 's/alloca.h/stdlib.h/g' **/*.h **/*.c
+    sed -E -i -e '/pragma/ a #include <stdarg.h>' libtest/exception.hpp
+  '';
+
   buildInputs = [ libevent ];
   propagatedBuildInputs = [ cyrus_sasl ];
 
@@ -30,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libmemcached.org";
     description = "Open source C/C++ client library and tools for the memcached server";
     license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
   };
 }

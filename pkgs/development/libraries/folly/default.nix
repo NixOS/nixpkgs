@@ -5,6 +5,7 @@
 , cmake
 , double-conversion
 , fmt_8
+, freebsd
 , gflags
 , glog
 , libevent
@@ -51,7 +52,8 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ] ++ lib.optional stdenv.isLinux jemalloc;
+  ] ++ lib.optional stdenv.isLinux jemalloc
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libexecinfo;
 
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
@@ -69,6 +71,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  # FreeBSD and gcc seem to be treated as mutex but we use gcc on FreeBSD.
+  postPatch = lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+    sed -E -i -e 's/^#if defined\(__FreeBSD__\)$/#if defined(__DOES_NOT_EXIST__)/g' folly/lang/Exception.cpp
+  '';
 
   # split outputs to reduce downstream closure sizes
   outputs = [ "out" "dev" ];
@@ -92,7 +99,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "x86_64-freebsd14" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
 }

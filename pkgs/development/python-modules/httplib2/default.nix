@@ -63,6 +63,9 @@ buildPythonPackage rec {
     # fails with HTTP 408 Request Timeout, instead of expected 200 OK
     "test_timeout_subsequent"
     "test_connection_close"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # fails with HTTP 408 Request Timeout, instead of expected 200 OK
+    "test_timeout_subsequent"
   ];
 
   pytestFlagsArray = [

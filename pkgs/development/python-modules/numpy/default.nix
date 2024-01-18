@@ -25,6 +25,7 @@
 , pytestCheckHook
 , setuptools
 , typing-extensions
+, freebsd
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -107,6 +108,8 @@ in buildPythonPackage rec {
   buildInputs = [
     blas
     lapack
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libstdthreads  # needed to compile some stuff inside testcases. feel free to promote to propagatedBuildInput if numpy complains about threads.h on FreeBSD
   ];
 
   # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.

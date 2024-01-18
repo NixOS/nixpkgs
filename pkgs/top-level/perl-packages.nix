@@ -2472,7 +2472,7 @@ with self; {
     };
     propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
-    doCheck = !stdenv.isDarwin; # t/02-realms_api.t and t/50.auth.case.sensitivity.t
+    doCheck = (!stdenv.isDarwin && !stdenv.isFreeBSD); # t/02-realms_api.t and t/50.auth.case.sensitivity.t
     meta = {
       description = "Authenticate Users against LDAP Directories";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5161,6 +5161,10 @@ with self; {
       hash = "sha256-TOtPi1SsM/PYHJq0euTPoejDbzhJ76ghcDycMH46T8c=";
     };
     propagatedBuildInputs = [ CryptURandom ];
+    postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      # FreeBSD system crypt uses a different scheme so the preset hash doesn't fly
+      sed -E -i -e '/test1234/d' t/30-system.t
+    '';
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11537,6 +11541,13 @@ with self; {
       hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
     };
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-mno-outline-atomics";
+    # shared object links via ld instead of cc (can't figure out how to change this)
+    # -> does not explicitly link against libc (NIX_LDFLAGS fixes this)
+    # -> links against unversioned symbols
+    # -> at runtime, resolves fstat to oldest version in libc, a compatibility routine from freebsd11
+    # -> still compiled with the freebsd12+ macros to do e.g. S_ISDIR
+    # -> gets garbage results from fstat
+    env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-L${lib.getLib stdenv.cc.libc}/lib -lc";
     buildInputs = [ ScalarString ];
     meta = {
       description = "Efficient shared mutable hash";
@@ -20676,6 +20687,10 @@ with self; {
     patches = [
       ../development/perl-modules/Plack-test-replace-DES-hash-with-bcrypt.patch
     ];
+    postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      # uses hardcoded system-crypt hash which does not hash the same
+      rm t/Plack-Middleware/auth_basic_simple.t
+    '';
     meta = {
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       homepage = "https://github.com/plack/Plack";
@@ -24493,6 +24508,8 @@ with self; {
       hash = "sha256-Hvi/euDKALaHu24RXzq4yVBI5ICsmuUylzabxpSkc4s=";
     };
 
+    doCheck = !stdenv.hostPlatform.isFreeBSD;  # incredibly flaky
+
     checkPhase = ''
       patchShebangs ./t ./scripts/yath
       export AUTOMATED_TESTING=1
@@ -28013,11 +28030,15 @@ with self; {
       # printf SYS_getrandom | gcc -include sys/syscall.h -E -
       substituteInPlace lib/UUID4/Tiny.pm \
         --replace "syscall( 318" "syscall( 278"
+    '' + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+      sed -E -i -e '/os_unsupported/d' Makefile.PL
+      substituteInPlace lib/UUID4/Tiny.pm \
+        --replace "syscall( 318" "syscall( 563"
     '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = lib.platforms.linux; # configure phase fails with "OS unsupported"
+      platforms = lib.platforms.linux ++ lib.platforms.freebsd; # configure phase fails with "OS unsupported"
     };
   };
 

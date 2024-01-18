@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkg-config, perl
+{ stdenv, lib, fetchurl, pkg-config, perl, freebsd
 , argp-standalone, libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
@@ -37,12 +37,15 @@ in stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!stdenv.isFreeBSD) [ udev ]
     ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
-    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ]
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.v4l-compat;
 
   propagatedBuildInputs = [ libjpeg ];
 
   postPatch = ''
     patchShebangs utils/
+  '' + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e /sysmacros/d lib/libv4lconvert/control/libv4lcontrol.c
   '';
 
   enableParallelBuilding = true;

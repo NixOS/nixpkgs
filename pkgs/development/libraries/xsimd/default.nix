@@ -23,9 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/xtensor-stack/xsimd/issues/807
     ./disable-test_error_gamma-test.patch
-  ] ++ lib.optionals (stdenv.isDarwin || stdenv.hostPlatform.isMusl) [
+  ] ++ lib.optionals (stdenv.isDarwin || stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isFreeBSD) [
     # - Darwin report: https://github.com/xtensor-stack/xsimd/issues/917
     # - Musl   report: https://github.com/xtensor-stack/xsimd/issues/798
+    # Also manifests on FreeBSD
     ./disable-exp10-test.patch
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # https://github.com/xtensor-stack/xsimd/issues/798

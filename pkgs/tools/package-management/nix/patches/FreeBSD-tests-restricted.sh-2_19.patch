@@ -1,0 +1,11 @@
+--- source/tests/functional/restricted.sh.bak	2023-09-12 14:19:45.950024000 +0000
++++ source/tests/functional/restricted.sh	2023-09-12 14:20:35.139368000 +0000
+@@ -4,7 +4,7 @@
+ 
+ nix-instantiate --restrict-eval --eval -E '1 + 2'
+ (! nix-instantiate --eval --restrict-eval ./restricted.nix)
+-(! nix-instantiate --eval --restrict-eval <(echo '1 + 2'))
++TMPFILE=$(mktemp) && echo '1 + 2' >$TMPFILE && (! nix-instantiate --eval --restrict-eval $TMPFILE)
+ nix-instantiate --restrict-eval ./simple.nix -I src=.
+ nix-instantiate --restrict-eval ./simple.nix -I src1=simple.nix -I src2=config.nix -I src3=./simple.builder.sh
+ 
