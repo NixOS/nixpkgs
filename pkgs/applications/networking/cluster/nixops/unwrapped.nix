@@ -25,6 +25,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace nixops/args.py --replace "@version@" "${version}-pre-${lib.substring 0 7 src.rev or "dirty"}"
+    substituteInPlace pyproject.toml --replace 'PrettyTable = "^0.7.2"' 'PrettyTable = "^3"'
   '';
 
   nativeBuildInputs = [
