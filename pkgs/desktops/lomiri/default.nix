@@ -34,6 +34,7 @@ let
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
+    content-hub = callPackage ./services/content-hub { };
     hfd-service = callPackage ./services/hfd-service { };
     history-service = callPackage ./services/history-service { };
     lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
