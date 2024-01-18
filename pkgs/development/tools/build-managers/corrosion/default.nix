@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-eE3RNLK5xKOjXeA+vDQmM1hvw92TbmPEDLdeqimgwcA=";
+    hash = "sha256-WPMxewswSRc1ULBgGTrdZmWeFDWVzHk2jzqGChkRYKE=";
   };
 
   cargoRoot = "generator";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-j9tsRho/gWCGwXUYZSbs3rudT6nYHh0FSfBCAemZHmw=";
+    hash = "sha256-R09sgCjwqc22zXg1T7iMx9qmyMz9xlnEuOelPB4O7jw=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;

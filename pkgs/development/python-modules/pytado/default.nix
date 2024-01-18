@@ -4,12 +4,13 @@
 , pytestCheckHook
 , requests
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytado";
-  version = "0.17.3";
-  format = "setuptools";
+  version = "0.17.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,12 @@ buildPythonPackage rec {
     owner = "wmalgadey";
     repo = "PyTado";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-whpNYiAb2cqKI4m0HJN2lPt51FLuEzrkrRTSWs6uznU=";
+    hash = "sha256-Wdd9HdsQjaYlL8knhMuO87+dom+aTsmrLRK0UdrpsbQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
