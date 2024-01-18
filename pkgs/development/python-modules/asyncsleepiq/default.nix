@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FDGNRBa45Q/L8468C3mZLEPduo9EpHWczO5z3Fe7Nwc=";
+    hash = "sha256-zvIEuPsko2CaImcdY55qwl+rAzrRT8gjLAovlpOR8Gk=";
   };
 
   nativeBuildInputs = [

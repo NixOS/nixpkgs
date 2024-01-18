@@ -3,6 +3,8 @@
 , python3
 }:
 
+let cln' = cln.override { gccStdenv = stdenv; }; in
+
 stdenv.mkDerivation rec {
   pname = "cvc4";
   version = "1.6";
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   # Build fails with GNUmake 4.4
   nativeBuildInputs = [ autoreconfHook gnumake42 pkg-config ];
   buildInputs = [ gmp swig libantlr3c boost python3 ]
-    ++ lib.optionals stdenv.isLinux [ cln ];
+    ++ lib.optionals stdenv.isLinux [ cln' ];
 
   configureFlags = [
     "--enable-language-bindings=c"

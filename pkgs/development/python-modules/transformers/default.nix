@@ -15,9 +15,11 @@
 , safetensors
 , tqdm
 # optional dependencies
+, diffusers
 , scikit-learn
 , tensorflow
 , onnxconverter-common
+, opencv4
 , tf2onnx
 , torch
 , accelerate
@@ -51,7 +53,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.36.1";
+  version = "4.36.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -60,7 +62,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sVWDpChLjiSZQXyXsZtTUZMF/CckTaJzitk3hpagM64=";
+    hash = "sha256-sasaqgQ+CM344qJeD6PU9wbAmuZRpaSSvUjSNw5DQRk=";
   };
 
   propagatedBuildInputs = [
@@ -87,6 +89,15 @@ buildPythonPackage rec {
     vision = [ pillow ];
   in
     {
+    agents = [
+      diffusers
+      accelerate
+      datasets
+      torch
+      sentencepiece
+      opencv4
+      pillow
+    ];
     ja = [
       # fugashi
       # ipadic

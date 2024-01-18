@@ -1,0 +1,35 @@
+diff --git a/src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibRuntimeXF86.cpp b/src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibRuntimeXF86.cpp
+index 8a9d15c0..260ebc5c 100644
+--- a/src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibRuntimeXF86.cpp
++++ b/src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibRuntimeXF86.cpp
+@@ -46,6 +46,9 @@
+ #if defined(VBOX_VBGLR3_XFREE86)
+ extern "C" {
+ # define XFree86LOADER
++# ifdef RT_GNUC_PREREQ(13,0) /* cmath gets dragged in and the c++/13/cmath header is allergic to -ffreestanding.  */
++#  define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
++# endif
+ # include <xf86_ansic.h>
+ # undef size_t
+ }
+diff --git a/src/libs/dxvk-native-1.9.2a/src/util/util_matrix.cpp b/src/libs/dxvk-native-1.9.2a/src/util/util_matrix.cpp
+index 2c5e9314..64890169 100644
+--- a/src/libs/dxvk-native-1.9.2a/src/util/util_matrix.cpp
++++ b/src/libs/dxvk-native-1.9.2a/src/util/util_matrix.cpp
+@@ -1,3 +1,5 @@
++#include <cstdint>
++
+ #include "util_matrix.h"
+ 
+ namespace dxvk {
+diff --git a/src/libs/dxvk-native-1.9.2a/src/util/util_vector.h b/src/libs/dxvk-native-1.9.2a/src/util/util_vector.h
+index 77cdf294..9dcb4bf9 100644
+--- a/src/libs/dxvk-native-1.9.2a/src/util/util_vector.h
++++ b/src/libs/dxvk-native-1.9.2a/src/util/util_vector.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <cstdint>
+ #include <iostream>
+ 
+ #include "util_bit.h"

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h3mXoGRYgPg0wKQ1u6uFP7wlEUMQd5uIBt4Hr7vjNtA=";
   };
 
+  patches = [ ./fix-openssl-detection.patch ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
 

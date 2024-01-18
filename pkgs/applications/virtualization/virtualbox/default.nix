@@ -101,6 +101,8 @@ in stdenv.mkDerivation {
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
+    ./libxml-2.12.patch
+    ./gcc-13.patch
   ];
 
   postPatch = ''

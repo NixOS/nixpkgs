@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, clarabel
 , cvxopt
 , ecos
 , fetchPypi
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    clarabel
     cvxopt
     ecos
     numpy

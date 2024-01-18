@@ -73,14 +73,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  pythonPath = with python3Packages; [
-    pygobject3
-    pycairo
-  ];
-
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+  postFixup = ''
+    buildPythonPath ${python3Packages.pycairo}
+    patchPythonScript $out/lib/liferea/plugins/trayicon.py
   '';
 
   passthru.updateScript = gitUpdater {

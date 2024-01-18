@@ -451,6 +451,21 @@ in
         cfg.services
     );
 
+    assertions = concatLists (
+      mapAttrsToList
+        (name: service:
+          map (message: {
+            assertion = false;
+            inherit message;
+          }) (concatLists [
+            (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
+              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
+            )
+          ])
+        )
+        cfg.services
+    );
+
     system.build.units = cfg.units;
 
     system.nssModules = [ cfg.package.out ];
@@ -553,6 +568,13 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
+
+    # This target only exists so that services ordered before sysinit.target
+    # are restarted in the correct order, notably BEFORE the other services,
+    # when switching configurations.
+    systemd.targets.sysinit-reactivation = {
+      description = "Reactivate sysinit units";
+    };
 
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths

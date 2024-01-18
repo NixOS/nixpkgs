@@ -176,6 +176,7 @@ stdenv.mkDerivation (rec {
     broken =
       (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
         || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
+    mainProgram = "lldb";
   };
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";

@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
@@ -19,6 +19,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tzlocal"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

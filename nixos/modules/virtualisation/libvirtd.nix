@@ -116,6 +116,15 @@ let
           QEMU's swtpm options.
         '';
       };
+
+      vhostUserPackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.virtiofsd ]";
+        description = lib.mdDoc ''
+          Packages containing out-of-tree vhost-user drivers.
+        '';
+      };
     };
   };
 
@@ -501,6 +510,14 @@ in
 
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
+
+    systemd.tmpfiles.rules = let
+      vhostUserCollection = pkgs.buildEnv {
+        name = "vhost-user";
+        paths = cfg.qemu.vhostUserPackages;
+        pathsToLink = [ "/share/qemu/vhost-user" ];
+      };
+    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
 
     security.polkit = {
       enable = true;

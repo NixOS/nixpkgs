@@ -297,6 +297,7 @@ let
       # At the time of writing (25-06-2023): this is only used in a "correct" way by ath drivers for initiating DFS radiation
       # for "certified devices"
       EXPERT                      = option yes; # this is needed for offering the certification option
+      RFKILL_INPUT                = option yes; # counteract an undesired effect of setting EXPERT
       CFG80211_CERTIFICATION_ONUS = option yes;
       # DFS: "Dynamic Frequency Selection" is a spectrum-sharing mechanism that allows
       # you to use certain interesting frequency when your local regulatory domain mandates it.

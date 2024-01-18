@@ -2,20 +2,23 @@
 , buildGoModule
 , fetchFromGitHub
 , distrobox
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
     rev = "v${version}";
-    hash = "sha256-0xQfbnLvNB1X1B8440CYHZWFGSQV319IU5tgXS3lyUI=";
+    hash = "sha256-/RGL2mCfJiJInnt5zgc1xXPqZxXCAcoWIbky99okvL0=";
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
@@ -28,8 +31,8 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -D config/apx.json -t $out/share/apx/
-    install -D man/man1/apx.1 -t $out/man/man1/
+    install -m 444 -D config/apx.json -t $out/share/apx/
+    installManPage man/man1/*
   '';
 
   meta = with lib; {

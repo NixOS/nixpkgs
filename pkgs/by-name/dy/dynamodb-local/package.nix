@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ shyim martinjlowm ];
     platforms = platforms.all;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

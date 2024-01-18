@@ -25,14 +25,14 @@
 
 # TODO: enable more folks backends
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
   version = "0.15.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
     sha256 = "Eg8hnvYyEsqpWuf2rrZOKZKLCxqLlFIFQwSgDQ80eHE=";
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
-    "-Dtests=${lib.boolToString stdenv.isLinux}"
+    "-Dtests=${lib.boolToString (finalAttrs.doCheck && stdenv.isLinux)}"
   ];
 
   # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:
@@ -86,7 +86,9 @@ stdenv.mkDerivation rec {
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  doCheck = stdenv.isLinux;
+  # Checks last re-enabled in https://github.com/NixOS/nixpkgs/pull/279843, but timeouts in tests still
+  # occur inconsistently
+  doCheck = false;
 
   # Prevents e-d-s add-contacts-stress-test from timing out
   checkPhase = ''
@@ -101,7 +103,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "folks";
       versionPolicy = "none";
     };
   };
@@ -113,4 +115,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

@@ -5,6 +5,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , urllib3
 }:
 
@@ -24,6 +25,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "urllib3"
   ];
 
   propagatedBuildInputs = [

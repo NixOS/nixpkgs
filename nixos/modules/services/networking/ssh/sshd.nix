@@ -600,7 +600,11 @@ in
           { description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
             socketConfig.ListenStream = if cfg.listenAddresses != [] then
-              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+              concatMap
+                ({ addr, port }:
+                  if port != null then [ "${addr}:${toString port}" ]
+                  else map (p: "${addr}:${toString p}") cfg.ports)
+                cfg.listenAddresses
             else
               cfg.ports;
             socketConfig.Accept = true;

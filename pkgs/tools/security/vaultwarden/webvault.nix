@@ -7,14 +7,15 @@
 }:
 
 let
-  version = "2023.12.0";
+  version = "2024.1.1";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-S98Yqi0PEpMF+enP/J3x/kPEe0VhErY8BNphOXmsijg=";
+    hash = "sha256-xtfpxcJLP0C4FdnO45gsaecOWJ/cKC++Abm7iatTH1Y=";
   };
+
 in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
@@ -23,13 +24,13 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-eAwj7cWR/ojAMAvYg2/vtNWYTwVBCOnBJPy9mC5Td40=";
+    hash = "sha256-695iCkFhPEyyI4ekbjsdWpxgPy+bX392/X30HyL4F4Y=";
   };
 
-  npmDepsHash = "sha256-VW1pGG/pc2tdSs5+HfypZv9fnQu04qkoFBTJxaYvBZo=";
+  npmDepsHash = "sha256-IJ5JVz9hHu3NOzFJAyzfhsMfPQgYQGntDEDuBMI/iZc=";
 
   postPatch = ''
-    ln -s ${bw_web_builds}/{patches,resources} ..
+    cp -r ${bw_web_builds}/{patches,resources} ..
     PATH="${git}/bin:$PATH" VAULT_VERSION="${lib.removePrefix "web-" src.rev}" \
       bash ${bw_web_builds}/scripts/apply_patches.sh
   '';
@@ -47,6 +48,8 @@ in buildNpmPackage rec {
   npmBuildFlags = [
     "--workspace" "apps/web"
   ];
+
+  npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
     runHook preInstall

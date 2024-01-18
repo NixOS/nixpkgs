@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "0.7.0";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiocomelit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xUtLRHNsv1q6QV6dYsS2OBQj/HsiZDfPhqMPDwNKS7A=";
+    hash = "sha256-rtMR3j/DwHVgf4RYXx1Y+W/N8U5pSaLnRwnRmuLbFEY=";
   };
 
   postPatch = ''

@@ -159,24 +159,28 @@ In an effort to keep the Nixpkgs manual in a consistent style, please follow the
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
 
 - Put each sentence in its own line.
-  This makes reviewing documentation much easier, since GitHub's review system is based on lines.
+  This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
+  It also helps identifying long sentences at a glance.
 
-- Use the admonitions syntax for any callouts and examples (see [section above](#admonitions)).
+- Use the [admonition syntax](#admonitions) for callouts and examples.
 
-- If you provide an example involving Nix code, make your example into a fully-working package (something that can be passed to `pkgs.callPackage`).
-  This will help others quickly test that the example works, and will also make it easier if we start automatically testing all example code to make sure it works.
-  For example, instead of providing something like:
+- Provide at least one example per function, and make examples self-contained.
+  This is easier to understand for beginners.
+  It also helps with testing that it actually works – especially once we introduce automation.
 
-  ```
+  Example code should be such that it can be passed to `pkgs.callPackage`.
+  Instead of something like:
+
+  ```nix
   pkgs.dockerTools.buildLayeredImage {
     name = "hello";
     contents = [ pkgs.hello ];
   }
   ```
 
-  Provide something like:
+  Write something like:
 
-  ```
+  ```nix
   { dockerTools, hello }:
   dockerTools.buildLayeredImage {
     name = "hello";
@@ -200,6 +204,10 @@ In that case, please open an issue about the particular documentation convention
 
   : Tag of the generated image.
 
-      _Default value:_ the output path's hash.
+    _Default value:_ the output path's hash.
 
   ```
+
+## Getting help
+
+If you need documentation-specific help or reviews, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on your pull request.
