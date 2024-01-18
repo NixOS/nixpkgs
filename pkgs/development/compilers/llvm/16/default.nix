@@ -298,6 +298,7 @@ nixSupport.cc-cflags = [
         ];
       };
 
+      clangNoLibc = clangNoLibcNoRt;
       clangNoCompilerRtWithLibc = clangWithLibcAndNoRt;
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
