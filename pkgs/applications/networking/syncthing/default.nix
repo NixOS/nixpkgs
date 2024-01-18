@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , nixosTests
 , autoSignDarwinBinariesHook
+, brotli
 }:
 
 let
@@ -24,7 +25,9 @@ let
 
       vendorHash = "sha256-xVSSFFTqU7jww8YTeXKfa3096c2FmEgkcXvuqFHb12E=";
 
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+      outputs = [ "out" "data" ];
+
+      nativeBuildInputs = [ brotli ] ++ lib.optionals stdenv.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
         # run from Launch Agents/Daemons, even on x86 devices where it has a
         # more lax code signing policy compared to Apple Silicon. So just sign
@@ -52,6 +55,18 @@ let
       installPhase = ''
         runHook preInstall
         install -Dm755 ${target} $out/bin/${target}
+        mkdir -p $data/share/syncthing/html
+        cp -r ./gui/default/{assets,syncthing,vendor,index.html,modal.html} $data/share/syncthing/html
+        mkdir -p $data/share/syncthing/html/theme-assets/{black,dark,light}/assets/css
+        cp ./gui/black/assets/css/theme.css $data/share/syncthing/html/theme-assets/black/assets/css
+        cp ./gui/dark/assets/css/theme.css $data/share/syncthing/html/theme-assets/dark/assets/css
+        cp ./gui/light/assets/css/theme.css $data/share/syncthing/html/theme-assets/light/assets/css
+        # Remove execute permissions
+        find -L $data/share/syncthing/html -type f ! -perm 4440 -print0 | xargs -0 -r chmod 444
+        # Create static gzip and brotli files
+        find -L $data/share/syncthing/html -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|ttf)' \
+          -exec gzip --best --keep --force {} ';' \
+          -exec brotli --best --keep --no-copy-stat {} ';'
         runHook postInstall
       '';
 
