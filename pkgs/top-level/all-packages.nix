@@ -1026,6 +1026,7 @@ with pkgs;
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
   inherit (callPackages ../build-support/node/fetch-yarn-deps { })
+    fixup-yarn-lock
     prefetch-yarn-deps
     fetchYarnDeps;
 
