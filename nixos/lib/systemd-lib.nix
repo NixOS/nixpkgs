@@ -435,11 +435,10 @@ in rec {
 
   automountToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Automount]
-          ${attrsToSection def.automountConfig}
-        '';
+      text = commonUnitText def ''
+        [Automount]
+        ${attrsToSection def.automountConfig}
+      '';
     };
 
   sliceToUnit = name: def:
