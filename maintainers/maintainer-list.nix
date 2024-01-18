@@ -6880,6 +6880,12 @@
     email = "nix@quidecco.pl";
     name = "Isidor Zeuner";
   };
+  gmacon = {
+    name = "George Macon";
+    matrix = "@gmacon:matrix.org";
+    github = "gmacon";
+    githubId = 238853;
+  };
   gmemstr = {
     email = "git@gmem.ca";
     github = "gmemstr";
