@@ -39673,7 +39673,10 @@ with pkgs;
 
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
-  simulide = libsForQt5.callPackage ../applications/science/electronics/simulide { };
+  inherit (libsForQt5.callPackage ../applications/science/electronics/simulide { })
+    simulide_0_4_15;
+
+  simulide = simulide_0_4_15;
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
