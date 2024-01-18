@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kubernetes-helm }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, kubernetes-helm
+}:
 
 buildGoModule rec {
   pname = "kubernetes-helm";
@@ -18,6 +24,32 @@ buildGoModule rec {
     "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
     "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
+  ];
+
+  /* tests have v1.20.0 hardcoded.
+     since we *only* need it for tests and checkFlags comes last
+     this effectivly overrides it only for tests.
+   */
+
+  # this sets k8sVersionMajor/Minor based on the k8s.io/client-go version
+  # ref https://github.com/helm/helm/blob/276121c8693b48978eae5c09602b1e74d9a2a7e6/Makefile#L62
+  postConfigure = ''
+    K8S_MODULES_VER=$(go list -f '{{.Version}}' -m k8s.io/client-go)
+    K8S_MODULES_VER=''${K8S_MODULES_VER//"."/" "}
+    K8S_MODULES_VER=''${K8S_MODULES_VER//"v"/""}
+    K8S_MODULES_MAJOR_VER=$(( $(echo "$K8S_MODULES_VER" | cut -d" " -f1) + 1 ))
+    K8S_MODULES_MINOR_VER=$(echo "$K8S_MODULES_VER" | cut -d" " -f2)
+    ldflags="$ldflags -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="$ldflags -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="$ldflags -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="$ldflags -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+  '';
+
+  checkFlags = [
+    "-X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=20"
+    "-X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=0"
+    "-X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=20"
+    "-X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=0"
   ];
 
   __darwinAllowLocalNetworking = true;
