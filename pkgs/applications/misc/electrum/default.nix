@@ -137,5 +137,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];
+    mainProgram = "electrum";
   };
 }
