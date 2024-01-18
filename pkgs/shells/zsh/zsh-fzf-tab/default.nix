@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
-    sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
+    hash = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
   };
 
   strictDeps = true;
