@@ -475,11 +475,11 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   ```nix
   passthru.updateScript = writeScript "update-zoom-us" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
     set -eu -o pipefail
 
-    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
+    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
     update-source-version zoom-us "$version"
   '';
   ```
