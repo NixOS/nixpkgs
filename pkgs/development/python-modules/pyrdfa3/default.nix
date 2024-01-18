@@ -34,6 +34,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "'html = pyRdfa.rdflibparsers:StructuredDataParser'" "'html = pyRdfa.rdflibparsers:StructuredDataParser'," \
       --replace "'hturtle = pyRdfa.rdflibparsers:HTurtleParser'" "'hturtle = pyRdfa.rdflibparsers:HTurtleParser',"
+    # https://github.com/RDFLib/pyrdfa3/issues/31
+    substituteInPlace pyRdfa/utils.py \
+      --replace "imp," ""
   '';
 
   nativeBuildInputs = [
