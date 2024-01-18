@@ -14073,8 +14073,6 @@ with pkgs;
 
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
 
-  transifex-client = python39.pkgs.callPackage ../tools/text/transifex-client { };
-
   transifex-cli = callPackage ../applications/misc/transifex-cli { };
 
   translatelocally = callPackage ../applications/misc/translatelocally { };
