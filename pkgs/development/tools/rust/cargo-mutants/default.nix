@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-mutants";
-  version = "24.1.0";
+  version = "24.1.1";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
     rev = "v${version}";
-    hash = "sha256-hWM8QtzWUrhWHTAv4Fgq9F3ZIZS2HVP4R8J/HIh8T+0=";
+    hash = "sha256-n7fpfgbDvLMMA834BUSAEYD+mXVxGGFPLlLjDxpKuSA=";
   };
 
-  cargoHash = "sha256-dKhxyhLWeaP9/qYZLMDFGF2DmKhzPXOT5qXHP3D3MjY=";
+  cargoHash = "sha256-lEeNIwNvq6K+xRCUTXs9Sh7o8q3u5GcBKntVMhPQqMU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
