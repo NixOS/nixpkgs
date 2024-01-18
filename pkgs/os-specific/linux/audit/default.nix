@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "3.1.2";
+  version = "4.0";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wLF5LR8KiMbxgocQUJy7mHBZ/GhxLJdmnKkOrhA9KH0=";
+    hash = "sha256-v0ItQSard6kqTDrDneVHPyeNw941ck0lGKSMe+FdVNg=";
   };
 
   postPatch = ''
