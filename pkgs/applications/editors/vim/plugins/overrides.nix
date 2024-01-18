@@ -1136,12 +1136,12 @@
 
   sniprun =
     let
-      version = "1.3.10";
+      version = "1.3.11";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-7tDREZ8ZXYySHrXVOh+ANT23CknJQvZJ8WtU5r0pOOQ=";
+        hash = "sha256-f/EifFvlHr41wP0FfkwSGVdXLyz739st/XtnsSbzNT4=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1151,7 +1151,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-n/HW+q4Xrme/ssS9Th5uFEUsDgkxRxKt2wSR8k08uHY=";
+        cargoHash = "sha256-SmhfjOnw89n/ATGvmyvd5clQSucIh7ky3v9JsSjtyfI=";
 
         nativeBuildInputs = [ makeWrapper ];
 

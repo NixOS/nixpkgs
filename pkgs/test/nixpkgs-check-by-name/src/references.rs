@@ -106,6 +106,10 @@ fn check_nix_file(
 
     let root = Root::parse(&contents);
     if let Some(error) = root.errors().first() {
+        // NOTE: There's now another Nixpkgs CI check to make sure all changed Nix files parse
+        // correctly, though that uses mainline Nix instead of rnix, so it doesn't give the same
+        // errors. In the future we should unify these two checks, ideally moving the other CI
+        // check into this tool as well and checking for both mainline Nix and rnix.
         return Ok(NixpkgsProblem::CouldNotParseNix {
             relative_package_dir: relative_package_dir.to_path_buf(),
             subpath: subpath.to_path_buf(),
