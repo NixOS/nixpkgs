@@ -378,8 +378,8 @@ let
         mktplcRef = {
           name = "Millet";
           publisher = "azdavis";
-          version = "0.13.5";
-          sha256 = "sha256-sWM7N+axgu1zOGWexR4JVupVmYhZrd4cZz3pmLxRj8Q=";
+          version = "0.14.2";
+          sha256 = "sha256-taa9tdi2eSi0eoFxCVQ5E2fDtivwCF+bn+QQHRXxtEo=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
