@@ -1,5 +1,5 @@
 diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
-index 289f11d006..80c422403c 100644
+index 289f11d006..9b0a48c6c7 100644
 --- a/src/qml/qml/qqmlimport.cpp
 +++ b/src/qml/qml/qqmlimport.cpp
 @@ -1897,17 +1897,22 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
@@ -26,8 +26,8 @@ index 289f11d006..80c422403c 100644
 +        }
 +    };
 +
-+    addEnvImportPath("NIXPKGS_QT5_QML_IMPORT_PATH");
 +    addEnvImportPath("QML2_IMPORT_PATH");
++    addEnvImportPath("NIXPKGS_QT5_QML_IMPORT_PATH");
  
      addImportPath(QStringLiteral("qrc:/qt-project.org/imports"));
      addImportPath(QCoreApplication::applicationDirPath());
