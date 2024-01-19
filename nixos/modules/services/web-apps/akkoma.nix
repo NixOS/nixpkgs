@@ -974,7 +974,7 @@ in {
       # This service depends on network-online.target and is sequenced after
       # it because it requires access to the Internet to function properly.
       bindsTo = [ "akkoma-config.service" ];
-      wants = [ "network-online.service" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [
         "akkoma-config.target"

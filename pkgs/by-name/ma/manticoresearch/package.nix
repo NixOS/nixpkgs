@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "manticoresearch";
-  version = "6.2.0";
+  version = "6.2.12";
 
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
-    rev = finalAttrs.version;
-    hash = "sha256-KmBIQa5C71Y/1oa3XiPfmb941QDU2rWo7Bl5QlAo+yA=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_MYSQL=1"
     "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
+    "-DCONFDIR=${placeholder "out"}/etc"
+    "-DLOGDIR=/var/lib/manticoresearch/log"
+    "-DRUNDIR=/var/run/manticoresearch"
   ];
+
+  postFixup = ''
+    mkdir -p $out/lib/systemd/system
+    cp ${finalAttrs.src}/dist/deb/manticore.service.in $out/lib/systemd/system/manticore.service
+    substituteInPlace $out/lib/systemd/system/manticore.service \
+      --replace "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
+      --replace "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
+      --replace "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+  '';
 
   passthru.tests.version = testers.testVersion {
     inherit (finalAttrs) version;
@@ -103,13 +115,13 @@ stdenv.mkDerivation (finalAttrs: {
     command = "searchd --version";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
     changelog = "https://github.com/manticoresoftware/manticoresearch/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     mainProgram = "searchd";
-    maintainers = [ lib.maintainers.jdelStrother ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.jdelStrother ];
+    platforms = platforms.all;
   };
 })

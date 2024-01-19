@@ -59,6 +59,7 @@ in
         server.succeed("curl --fail localhost:${toString uiPort}")
 
     with subtest("Lemmy-UI responds through the caddy reverse proxy"):
+        server.systemctl("start network-online.target")
         server.wait_for_unit("network-online.target")
         server.wait_for_unit("caddy.service")
         server.wait_for_open_port(80)
@@ -66,6 +67,7 @@ in
         assert "Lemmy" in body, f"String Lemmy not found in response for ${lemmyNodeName}: \n{body}"
 
     with subtest("the server is exposed externally"):
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
         client.succeed("curl -v --fail ${lemmyNodeName}")
 

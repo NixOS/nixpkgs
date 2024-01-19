@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha kashw2 paveloom ];
+    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
   };
 }

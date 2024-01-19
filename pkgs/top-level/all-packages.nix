@@ -23862,8 +23862,6 @@ with pkgs;
     };
   };
 
-  manticoresearch = callPackage ../servers/search/manticoresearch { };
-
   marisa = callPackage ../development/libraries/marisa { };
 
   mathgl = callPackage ../development/libraries/mathgl { };

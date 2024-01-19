@@ -435,6 +435,7 @@ in {
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
 
