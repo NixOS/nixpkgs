@@ -15931,6 +15931,8 @@ self: super: with self; {
 
   vulture = callPackage ../development/python-modules/vulture { };
 
+  vunit = callPackage ../development/python-modules/vunit { };
+
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   vyper = callPackage ../development/compilers/vyper { };
