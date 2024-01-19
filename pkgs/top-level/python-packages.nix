@@ -10068,6 +10068,8 @@ self: super: with self; {
     inherit (pkgs) arrow-cpp cmake;
   };
 
+  pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
+
   pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
