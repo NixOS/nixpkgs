@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "kcolorpicker";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kColorPicker";
     rev = "v${version}";
-    sha256 = "sha256-ahmMj/yzQiRP9oJwDuhJGxe849kxNsoGFDZ2CGQNhKs=";
+    sha256 = "sha256-gkjlIiLB3/074EEFrQUa0djvVt/C44O3afqqNis64P0=";
   };
 
   nativeBuildInputs = [ cmake ];
