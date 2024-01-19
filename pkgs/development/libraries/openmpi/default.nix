@@ -46,7 +46,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ]
     ++ lib.optionals (withPmi == "slurm") [ (lib.getLib slurm) ]
-    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
+    ++ lib.optionals stdenv.isLinux [
+      libnl
+      numactl
+      pmix
+      (lib.getDev ucc)
+      (lib.getLib ucc)
+      (lib.getDev ucx)
+      (lib.getLib ucx)
+    ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
@@ -64,7 +72,6 @@ stdenv.mkDerivation rec {
       (lib.withFeature true "ucc")
       (lib.withFeature true "ucx")
 
-      (lib.enableFeature (!cudaSupport) "mca-dso")
       (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
       (lib.withFeatureAs cudaSupport "cuda-libdir" (lib.getLib cudaPackages.cuda_cudart))
       (lib.enableFeature cudaSupport "dlopen")
