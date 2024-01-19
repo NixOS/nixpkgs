@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    # these all require internet access
+    # require internet access
     "--skip=tests::net_request_codes"
     "--skip=tests::net_request_compression"
     "--skip=tests::net_request_methods"
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::roblox_instance_custom_async"
     "--skip=tests::serde_json_decode"
 
-    # this tries to use the root directory as the CWD
+    # uses root as the CWD
     "--skip=tests::process_spawn_cwd"
   ];
 
