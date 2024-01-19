@@ -9,6 +9,7 @@
 , dvc-data
 , dvc-gdrive
 , dvc-gs
+, dvc-hdfs
 , dvc-http
 , dvc-render
 , dvc-s3
@@ -144,6 +145,9 @@ buildPythonPackage rec {
     ];
     gs = [
       dvc-gs
+    ];
+    hdfs = [
+      dvc-hdfs
     ];
     s3 = [
       dvc-s3
