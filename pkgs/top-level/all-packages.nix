@@ -23765,8 +23765,6 @@ with pkgs;
 
   yas = callPackage ../development/libraries/yas { };
 
-  libyang = callPackage ../development/libraries/libyang { };
-
   libcyaml = callPackage ../development/libraries/libcyaml { };
 
   rang = callPackage ../development/libraries/rang { };
