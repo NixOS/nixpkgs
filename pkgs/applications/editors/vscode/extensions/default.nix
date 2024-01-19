@@ -591,8 +591,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.10.1";
-          sha256 = "sha256-VZQ3dpwj4RWZuyMba8DM7+JcIBSYB8zimZOkP5mJbms=";
+          version = "1.10.2";
+          sha256 = "sha256-he/aPcsxfqYWI/RJ51d5V0reaTPTATci34xPm93qxGs=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -1101,6 +1101,12 @@ let
       };
 
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "githistory";
+          publisher = "donjayamanne";
+          version = "0.6.20";
+          sha256 = "sha256-nEdYS9/cMS4dcbFje23a47QBZr9eDK3dvtkFWqA+OHU=";
+        };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/donjayamanne.githistory/changelog";
           description = "View git log, file history, compare branches or commits";
@@ -1108,12 +1114,6 @@ let
           homepage = "https://github.com/DonJayamanne/gitHistoryVSCode/";
           license = lib.licenses.mit;
           maintainers = [ ];
-        };
-        mktplcRef = {
-          name = "githistory";
-          publisher = "donjayamanne";
-          version = "0.6.20";
-          sha256 = "sha256-nEdYS9/cMS4dcbFje23a47QBZr9eDK3dvtkFWqA+OHU=";
         };
       };
 
@@ -1580,8 +1580,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.143.601";
-          sha256 = "sha256-Ge/q1fAfhI5EuJFLHZqZyuPahHSgES7G0ns9FbS9vzA=";
+          version = "1.151.659";
+          sha256 = "sha256-6jz7Nb9SGON7AXL4KJwC4H03la9JqLCX+AyBEvxD4HA=";
         };
 
         meta = {
@@ -1597,8 +1597,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.11.2023111001";
-          sha256 = "sha256-sBDvqqyq0R0ZyS81G61fI9Vd860RIjhNzCqY0bdz1mg=";
+          version = "0.11.2023120102";
+          sha256 = "sha256-EUegM4sVP/vDikNr4LwnWzhDBSgfxYe6mxnrhSdXhIQ=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -1630,8 +1630,8 @@ let
         mktplcRef = {
           name = "vscode-github-actions";
           publisher = "github";
-          version = "0.25.6";
-          sha256 = "sha256-HRj/AQI9E6HDkZ2ok/h/+c9HHq1wVXQPAt5mb/Ij+BI=";
+          version = "0.26.2";
+          sha256 = "sha256-sEc6Fbn4XpK8vNK32R4fjnx/R+1xYOwcuhKlo7sPd5o=";
         };
         meta = {
           description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
@@ -1651,8 +1651,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.75.2023101209";
-          sha256 = "1saz4brd5k1wyy7pz1h3jcl4kq35f78s2q8drjd7v2k97jhy8la1";
+          version = "0.78.1";
+          sha256 = "sha256-T9oW6o4ItZfR8E1qrcH3nhMvVB6ihi4kpiDz7YGHOcI=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -2376,8 +2376,8 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.15.2";
-          sha256 = "06lp4qgnksklgc6nvx1l9z38y7apbx0a6v886nd15aq9rq8my0ka";
+          version = "0.16.0";
+          sha256 = "sha256-u2AFjvhm3zio1ygW9yD9ZwbywLrEssd0O7/0AtfCvMo=";
         };
 
         meta = {
