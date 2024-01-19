@@ -6,6 +6,7 @@
 , flit-core
 , id
 , importlib-resources
+, pretend
 , pydantic
 , pyjwt
 , pyopenssl
@@ -16,12 +17,15 @@
 , sigstore-protobuf-specs
 , sigstore-rekor-types
 , tuf
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-python";
   version = "2.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sigstore";
@@ -51,11 +55,29 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pretend
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   pythonImportsCheck = [
     "sigstore"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_fail_init_url"
+    "test_get_identity_token_bad_code"
+    "test_identity_proof_claim_lookup"
+    "test_init_url"
+    "test_production"
+    "test_sct_verify_keyring"
+    "test_sign_rekor_entry_consistent"
+    "test_verification_materials_retrieves_rekor_entry"
+    "test_verifier"
   ];
 
   meta = with lib; {
