@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-SbpfHKD4QJuCe3QG0GTvsffkuFiGPLEUXOVW9f1gyTI=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
