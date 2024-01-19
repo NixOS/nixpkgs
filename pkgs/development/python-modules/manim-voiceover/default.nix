@@ -9,7 +9,7 @@
 , humanhash3
 , sox
 , pip
-, python-dotenv
+, python-dotenv-0_21
 , gtts
 , pynput
 , pyaudio
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     mutagen
     pydub
     humanhash3
-    python-dotenv
+    python-dotenv-0_21
     sox
     pygobject3
     intltool

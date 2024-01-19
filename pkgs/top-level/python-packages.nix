@@ -11730,6 +11730,8 @@ self: super: with self; {
 
   python-dotenv = callPackage ../development/python-modules/python-dotenv { };
 
+  python-dotenv-0_21 = callPackage ../development/python-modules/python-dotenv-0_21 { };
+
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
