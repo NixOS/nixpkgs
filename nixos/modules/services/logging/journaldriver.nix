@@ -84,6 +84,7 @@ in {
     systemd.services.journaldriver = {
       description = "Stackdriver Logging journal forwarder";
       script      = "${pkgs.journaldriver}/bin/journaldriver";
+      wants       = [ "network-online.target" ];
       after       = [ "network-online.target" ];
       wantedBy    = [ "multi-user.target" ];
 

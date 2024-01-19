@@ -460,6 +460,7 @@ in {
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       wantedBy = ["multi-user.target"];
       restartTriggers = [configFile];

@@ -2553,6 +2553,12 @@
     githubId = 52386117;
     name = "Blusk";
   };
+  bmanuel = {
+    name = "Benjamin Manuel";
+    email = "ben@benmanuel.com";
+    github = "bmanuel";
+    githubId = 3662307;
+  };
   bmilanov = {
     name = "Biser Milanov";
     email = "bmilanov11+nixpkgs@gmail.com";
@@ -10714,7 +10720,7 @@
     github = "LoCrealloc";
     githubId = 64095253;
     name = "LoC";
-    key = [{
+    keys = [{
       fingerprint = "DCCE F73B 209A 6024 CAE7  F926 5563 EB4A 8634 4F15";
     }];
   };
