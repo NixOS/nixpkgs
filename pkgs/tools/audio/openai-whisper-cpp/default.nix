@@ -57,6 +57,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       CoreVideo
       MetalKit
     ] ++ lib.optionals cudaSupport ( with cudaPackages; [
+      cuda_cccl.dev # <nv/target>
 
       # A temporary hack for reducing the closure size, remove once cudaPackages
       # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
