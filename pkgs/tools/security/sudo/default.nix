@@ -12,12 +12,12 @@
 , withSssd ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
   version = "1.9.15p5";
 
   src = fetchurl {
-    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
+    url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
     hash = "sha256-VY0QuaGZH7O5+n+nsH7EQFt677WzywsIcdvIHjqI5Vg=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
   };
-}
+})
