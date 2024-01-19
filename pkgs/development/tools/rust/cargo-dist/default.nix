@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.5.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-Km/vaEOna+RvckNawIQTSp+FW49P5jx9euKeMaLuOsw=";
+    hash = "sha256-K+pqyH3Ajfp+tPhAuK7XCNfGdXa15oNqfsQcogvmQ8o=";
   };
 
-  cargoHash = "sha256-ccVflBHwEAuG0Y9Mmit1X6FLsM4bbt8Kd7fB6zBwKMc=";
+  cargoHash = "sha256-ZJdVhSznznnF1P28XkwtoeWoeymtPNaAZgOaKby+gnk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,9 +45,10 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  # remove tests that require internet access
+  # remove tests that require internet access and a git repo
   postPatch = ''
     rm cargo-dist/tests/integration-tests.rs
+    rm cargo-dist/tests/cli-tests.rs
   '';
 
   meta = with lib; {
