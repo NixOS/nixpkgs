@@ -250,6 +250,7 @@ in
         path = [ config.services.postgresql.package ];
       })
       {
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         script = let
