@@ -1040,7 +1040,7 @@ with pkgs;
 
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
-  inherit (callPackages ../build-support/node/fetch-yarn-deps { })
+  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
     prefetch-yarn-deps
     fetchYarnDeps;
 
@@ -1920,7 +1920,7 @@ with pkgs;
 
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
-  inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
 
@@ -4405,7 +4405,7 @@ with pkgs;
   buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
 
   charles = charles4;
-  inherit (callPackages ../applications/networking/charles {})
+  inherit (callPackage ../applications/networking/charles {})
     charles3
     charles4
   ;
@@ -4758,7 +4758,7 @@ with pkgs;
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  inherit (callPackages ../tools/misc/coreboot-utils { })
+  inherit (callPackage ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
     ifdtool
@@ -6880,7 +6880,7 @@ with pkgs;
 
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
-  inherit (callPackages ../applications/networking/remote/citrix-workspace { })
+  inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_02_0
     citrix_workspace_23_07_0
     citrix_workspace_23_09_0
@@ -8469,7 +8469,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackages ../tools/filesystems/garage {
+  inherit (callPackage ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
@@ -11136,7 +11136,7 @@ with pkgs;
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
-  inherit (callPackages ../servers/web-apps/netbox { })
+  inherit (callPackage ../servers/web-apps/netbox { })
     netbox netbox_3_5 netbox_3_6;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
@@ -11199,7 +11199,7 @@ with pkgs;
 
   grocy = callPackage ../servers/grocy { };
 
-  inherit (callPackages ../servers/nextcloud {})
+  inherit (callPackage ../servers/nextcloud {})
     nextcloud26 nextcloud27 nextcloud28;
 
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
@@ -11232,7 +11232,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  inherit (callPackages ../applications/networking/cluster/nomad { })
+  inherit (callPackage ../applications/networking/cluster/nomad { })
     nomad
     nomad_1_4
     nomad_1_5
@@ -12142,7 +12142,7 @@ with pkgs;
 
   plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
 
-  inherit (callPackages ../servers/plik { })
+  inherit (callPackage ../servers/plik { })
     plik plikd;
 
   plex = callPackage ../servers/plex { };
