@@ -1,0 +1,26 @@
+{
+    "3_3": {
+        "version": "3.3.14",
+        "isLTS": true,
+        "hashes": {
+            "blender": "sha256-hhRLkKvIr6AtgjqKb38cWaIAxrWT49eTRl24sKqQCAY=",
+            "addons": "sha256-zrdVR1QuKoUdgZpOuQQgpjn2ehKqJ38KfJ0meFR/92s="
+        }
+    },
+    "3_6": {
+        "version": "3.6.7",
+        "isLTS": true,
+        "hashes": {
+            "blender": "sha256-tSBnolfZHciH1HTbXL+p9DfGS42Rq0zD7G+IWxcFG/E=",
+            "addons": "sha256-K4jbWuWaXtSjEqbmZC+7SnsNUJCcru1U1HuI4LCuuGM="
+        }
+    },
+    "4_0": {
+      "version": "4.0.2",
+      "isLTS": false,
+      "hashes": {
+          "blender": "sha256-DLSiXfi+4F3a+mb96T9SWvM0dld5DQvQpHhFgePuwuQ=",
+          "addons": "sha256-tJhI4d8drU0uRb4HLarRuihQ9FNs35e+ewclcuqB8jo="
+      }
+    }
+}

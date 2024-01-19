@@ -1,17 +1,3 @@
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -898,11 +898,6 @@ set_and_warn_dependency(WITH_PYTHON WITH_CYCLES        OFF)
- set_and_warn_dependency(WITH_PYTHON WITH_DRACO         OFF)
- set_and_warn_dependency(WITH_PYTHON WITH_MOD_FLUID     OFF)
- 
--if(WITH_DRACO AND NOT WITH_PYTHON_INSTALL)
--  message(STATUS "WITH_DRACO requires WITH_PYTHON_INSTALL to be ON, disabling WITH_DRACO for now")
--  set(WITH_DRACO OFF)
--endif()
--
- # enable boost for cycles, audaspace or i18n
- # otherwise if the user disabled
- 
 --- a/scripts/addons/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
 +++ b/scripts/addons/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
 @@ -17,7 +17,7 @@ def dll_path() -> Path:
