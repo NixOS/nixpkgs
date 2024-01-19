@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "budgie-media-player-applet";
-  version = "unstable-2023-12-31";
+  version = "1.0.0-unstable-2023-12-31";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
