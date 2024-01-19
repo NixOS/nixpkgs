@@ -317,13 +317,6 @@ self: super: {
     })
   ]) super.memory;
 
-  # Waiting for the commit being fetched as a patch to get a release.
-  espial = appendPatch (fetchpatch {
-    url = "https://github.com/jonschoning/espial/commit/70375db7e245207b3572779288eade3252c4d9e3.patch";
-    sha256 = "sha256-fto8fdFbZkzn7dwCCsGw+j+5HSvEvyvU5VzYDn4F2G8=";
-    excludes = ["*.yaml" "*.lock" "*.json"];
-  }) super.espial;
-
   # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
 
