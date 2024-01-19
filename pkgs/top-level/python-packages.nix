@@ -6587,6 +6587,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lmcloud = callPackage ../development/python-modules/lmcloud { };
+
   lmdb = callPackage ../development/python-modules/lmdb {
     inherit (pkgs) lmdb;
   };
