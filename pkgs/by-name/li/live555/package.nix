@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2023.05.10";
+  version = "2023.06.08";
 
   src = fetchurl {
     urls = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-6ph9x4UYELkkJVIE9r25ycc5NOYbPcgAy9LRZebvGFY=";
+    hash = "sha256-2wSFscP41idx21a+Q8WPkHCLGd+fLnwwpTToOtiwxb8=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
