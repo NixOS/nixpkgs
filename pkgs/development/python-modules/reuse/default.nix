@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZiBuPXNWBjZB4LGkUKipDtbuRlyx2znxVVjUWr66E+I=";
+    hash = "sha256-hDvOT9BP/E95FTa8rvtdxQoEDYgfMAkCSbX5KKV3qbQ=";
   };
 
   nativeBuildInputs = [
