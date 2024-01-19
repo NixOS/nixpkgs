@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-UpwIzwOl1yKqK8KxFDXAWoZFkQ+1r1sUcDfx6AxRdNw=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [
     poetry-core
   ];
