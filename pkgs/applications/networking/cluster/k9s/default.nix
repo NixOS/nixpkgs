@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.31.6";
+  version = "0.31.7";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     rev = "v${version}";
-    hash = "sha256-xMG0vhECho999WFMcmzGanAAueMggDdqtVE+IEh+1g8=";
+    hash = "sha256-DRxS2zhDLAC1pfsHiOEU9Xi7DhKcPwzdI3yw5JbbT18=";
   };
 
   ldflags = [
