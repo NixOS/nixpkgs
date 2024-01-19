@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xarray-einstats";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TXuNqXsny7VpJqV5/3riKzXLheZl+qF+zf4SCMipzmw=";
+    hash = "sha256-aljjwgBJp341aQN3g1PoZPj+46x21Eu+svG1yzURhJE=";
   };
 
   nativeBuildInputs = [

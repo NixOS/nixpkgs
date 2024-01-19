@@ -405,6 +405,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3362992a0d9f1dd7c3d0e89e0ab2bb540b7a95fea8cd798090e758fda2899b5e"
 dependencies = [
  "codespan-reporting",
+ "serde",
 ]
 
 [[package]]
@@ -424,6 +425,7 @@ version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3538270d33cc669650c4b093848450d380def10c331d38c768e34cac80576e6e"
 dependencies = [
+ "serde",
  "termcolor",
  "unicode-width",
 ]
@@ -1642,7 +1644,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-cli"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "clap 4.4.7",
  "clap_complete",
@@ -1660,7 +1662,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-core"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "ansi_term",
  "assert_matches",
@@ -1706,7 +1708,7 @@ dependencies = [
  "toml",
  "topiary",
  "topiary-queries",
- "tree-sitter-nickel 0.1.0",
+ "tree-sitter-nickel",
  "typed-arena",
  "unicode-segmentation",
  "void",
@@ -1715,7 +1717,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-lsp"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1760,7 +1762,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-wasm-repl"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "nickel-lang-core",
 ]
@@ -2106,7 +2108,7 @@ dependencies = [
 
 [[package]]
 name = "pyckel"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "codespan-reporting",
  "nickel-lang-core",
@@ -2984,8 +2986,8 @@ dependencies = [
 
 [[package]]
 name = "topiary"
-version = "0.2.3"
-source = "git+https://github.com/tweag/topiary.git?rev=8299a04bf83c4a2774cbbff7a036c022efa939b3#8299a04bf83c4a2774cbbff7a036c022efa939b3"
+version = "0.3.0"
+source = "git+https://github.com/tweag/topiary.git?rev=9ae9ef49c2fa968d15107b817864ff6627e0983e#9ae9ef49c2fa968d15107b817864ff6627e0983e"
 dependencies = [
  "clap 4.4.7",
  "futures",
@@ -3001,7 +3003,7 @@ dependencies = [
  "tree-sitter-bash",
  "tree-sitter-facade",
  "tree-sitter-json",
- "tree-sitter-nickel 0.0.1",
+ "tree-sitter-nickel",
  "tree-sitter-ocaml",
  "tree-sitter-ocamllex",
  "tree-sitter-query",
@@ -3013,8 +3015,8 @@ dependencies = [
 
 [[package]]
 name = "topiary-queries"
-version = "0.2.3"
-source = "git+https://github.com/tweag/topiary.git?rev=8299a04bf83c4a2774cbbff7a036c022efa939b3#8299a04bf83c4a2774cbbff7a036c022efa939b3"
+version = "0.3.0"
+source = "git+https://github.com/tweag/topiary.git?rev=9ae9ef49c2fa968d15107b817864ff6627e0983e#9ae9ef49c2fa968d15107b817864ff6627e0983e"
 
 [[package]]
 name = "tree-sitter"
@@ -3058,18 +3060,8 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-nickel"
-version = "0.0.1"
-source = "git+https://github.com/nickel-lang/tree-sitter-nickel?rev=b1a4718601ebd29a62bf3a7fd1069a99ccf48093#b1a4718601ebd29a62bf3a7fd1069a99ccf48093"
-dependencies = [
- "cc",
- "tree-sitter",
-]
-
-[[package]]
-name = "tree-sitter-nickel"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e95267764f0648c768e4da3e4c31b96bc5716446497dfa8b6296924b149f64a"
+source = "git+https://github.com/nickel-lang/tree-sitter-nickel?rev=091b5dcc7d138901bcc162da9409c0bb626c0d27#091b5dcc7d138901bcc162da9409c0bb626c0d27"
 dependencies = [
  "cc",
  "tree-sitter",
@@ -3078,7 +3070,7 @@ dependencies = [
 [[package]]
 name = "tree-sitter-ocaml"
 version = "0.20.4"
-source = "git+https://github.com/tree-sitter/tree-sitter-ocaml.git#694c57718fd85d514f8b81176038e7a4cfabcaaf"
+source = "git+https://github.com/tree-sitter/tree-sitter-ocaml.git#4abfdc1c7af2c6c77a370aee974627be1c285b3b"
 dependencies = [
  "cc",
  "tree-sitter",
@@ -3105,7 +3097,7 @@ dependencies = [
 [[package]]
 name = "tree-sitter-rust"
 version = "0.20.4"
-source = "git+https://github.com/tree-sitter/tree-sitter-rust.git#48e053397b587de97790b055a1097b7c8a4ef846"
+source = "git+https://github.com/tree-sitter/tree-sitter-rust.git#79456e6080f50fc1ca7c21845794308fa5d35a51"
 dependencies = [
  "cc",
  "tree-sitter",
@@ -3197,9 +3189,9 @@ checksum = "e1766d682d402817b5ac4490b3c3002d91dfa0d22812f341609f97b08757359c"
 
 [[package]]
 name = "unsafe-libyaml"
-version = "0.2.9"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f28467d3e1d3c6586d8f25fa243f544f5800fec42d97032474e17222c2b75cfa"
+checksum = "ab4c90930b95a82d00dc9e9ac071b4991924390d46cbd0dfe566148667605e4b"
 
 [[package]]
 name = "url"
@@ -3566,18 +3558,18 @@ checksum = "09041cd90cf85f7f8b2df60c646f853b7f535ce68f85244eb6731cf89fa498ec"
 
 [[package]]
 name = "zerocopy"
-version = "0.7.18"
+version = "0.7.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ede7d7c7970ca2215b8c1ccf4d4f354c4733201dfaaba72d44ae5b37472e4901"
+checksum = "1c4061bedbb353041c12f413700357bec76df2c7e2ca8e4df8bac24c6bf68e3d"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.7.18"
+version = "0.7.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b27b1bb92570f989aac0ab7e9cbfbacdd65973f7ee920d9f0e71ebac878fd0b"
+checksum = "b3c129550b3e6de3fd0ba67ba5c81818f9805e58b8d7fee80a3a59d2c9fc601a"
 dependencies = [
  "proc-macro2 1.0.69",
  "quote 1.0.33",
