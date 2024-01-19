@@ -105,6 +105,14 @@ let
       ./0060-libjack-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
+
+      # Remove for release post 1.0.1:
+      (fetchpatch {
+        # https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/1750
+        name = "pipewire-spa-libcamera-use-cameraconfiguration-orientation-pr1750.patch";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/1750.patch ";
+        hash = "sha256-Ugg913KZDKELnYLwpDEgYh92YPxccw61l6kAJulBbIA=";
+      })
     ];
 
     strictDeps = true;
