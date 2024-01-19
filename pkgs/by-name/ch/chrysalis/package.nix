@@ -38,6 +38,8 @@ in appimageTools.wrapType2 rec {
     install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
