@@ -15,13 +15,13 @@
 buildPythonPackage rec {
   pname = "aiogithubapi";
   version = "23.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
+    repo = "aiogithubapi";
     rev = "refs/tags/${version}";
     hash = "sha256-SbpfHKD4QJuCe3QG0GTvsffkuFiGPLEUXOVW9f1gyTI=";
   };
@@ -31,7 +31,8 @@ buildPythonPackage rec {
     # are not in their focus
     substituteInPlace pyproject.toml \
       --replace 'version = "0"' 'version = "${version}"' \
-      --replace 'backoff = "^1.10.0"' 'backoff = "*"'
+      --replace 'backoff = "^1.10.0"' 'backoff = "*"' \
+      --replace 'sigstore = "<2"' 'sigstore = "*"'
   '';
 
   nativeBuildInputs = [
@@ -55,8 +56,17 @@ buildPythonPackage rec {
     "--asyncio-mode=auto"
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   pythonImportsCheck = [
     "aiogithubapi"
+  ];
+
+  disabledTests = [
+    # sigstore.errors.TUFError: Failed to refresh TUF metadata
+    "test_sigstore"
   ];
 
   meta = with lib; {
