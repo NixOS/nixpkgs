@@ -120,8 +120,8 @@ let
       plugin {
         sieve_plugins = ${concatStringsSep " " cfg.sieve.plugins}
     ''
-    (optionalString (cfg.sieve.extensions != []) ''sieve_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions)}'')
-    (optionalString (cfg.sieve.globalExtensions != []) ''sieve_global_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions)}'')
+    (optionalString (cfg.sieve.extensions != []) ''sieve_extensions = ${concatMapStringsSep " " (el: "+${el}") cfg.sieve.extensions}'')
+    (optionalString (cfg.sieve.globalExtensions != []) ''sieve_global_extensions = ${concatMapStringsSep " " (el: "+${el}") cfg.sieve.globalExtensions}'')
 
     (optionalString (cfg.imapsieve.mailbox != []) ''
       ${
