@@ -3478,6 +3478,8 @@ self: super: with self; {
 
   dvc-gs = callPackage ../development/python-modules/dvc-gs { };
 
+  dvc-hdfs = callPackage ../development/python-modules/dvc-hdfs {  };
+
   dvc-http = callPackage ../development/python-modules/dvc-http {  };
 
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
