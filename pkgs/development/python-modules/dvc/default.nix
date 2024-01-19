@@ -36,6 +36,7 @@
 , pydot
 , pygtrie
 , pyparsing
+, pythonOlder
 , requests
 , rich
 , ruamel-yaml
@@ -59,6 +60,8 @@ buildPythonPackage rec {
   version = "3.40.1";
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
@@ -72,7 +75,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace dvc/analytics.py --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
+    substituteInPlace dvc/analytics.py \
+      --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
