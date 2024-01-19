@@ -19,6 +19,8 @@
 , openblas
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, patchelf
+, static ? true # if false will build the shared objects as well
 }:
 
 let
@@ -29,13 +31,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1848";
+  version = "1892";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-KuomiKU9c06Ux/ZcqctFdPQykGtjDzArN+tElPJVQ60=";
+    hash = "sha256-FNyl8bR0rg6cixcqidqzk9rG62+CI/0BNvzHuUkBq1E=";
   };
 
   postPatch = ''
@@ -105,15 +107,26 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals blasSupport [
     "-DLLAMA_BLAS=ON"
     "-DLLAMA_BLAS_VENDOR=OpenBLAS"
+  ]
+  ++ lib.optionals (!static) [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+    ${lib.optionalString (!static) ''
+      mkdir $out/lib
+      cp libggml_shared.so $out/lib
+      cp libllama.so $out/lib
+    ''}
 
     for f in bin/*; do
       test -x "$f" || continue
+      ${lib.optionalString (!static) ''
+        ${patchelf}/bin/patchelf "$f" --set-rpath "$out/lib"
+      ''}
       cp "$f" $out/bin/llama-cpp-"$(basename "$f")"
     done
 
