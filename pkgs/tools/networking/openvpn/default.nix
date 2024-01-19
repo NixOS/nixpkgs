@@ -62,6 +62,7 @@ let
 
         meta = with lib; {
           description = "A robust and highly flexible tunneling application";
+          mainProgram = "openvpn";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";
           license = licenses.gpl2Only;
