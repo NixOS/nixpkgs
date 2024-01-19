@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
   ];
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   checkFlags = [
     # require internet access
     "--skip=tests::net_request_codes"
