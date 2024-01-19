@@ -54,7 +54,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   gnused = all;
   gnutar = all;
   gnutls = linux;
-  grub = linux;
   grub2 = linux;
   guile = linux;  # tests fail on Cygwin
   gzip = all;
@@ -67,7 +66,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   idutils = all;
   inetutils = linux;
   iputils = linux;
-  kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
   lapack-reference = linux;
