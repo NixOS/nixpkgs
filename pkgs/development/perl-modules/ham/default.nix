@@ -5,24 +5,24 @@
 , openssh
 , GitRepository
 , URI
-, XMLMini
+, XMLParser
 }:
 
 buildPerlPackage {
   pname = "ham-unstable";
-  version = "2022-10-26";
+  version = "2023-10-06";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";
     repo = "ham";
-    rev = "f2f10516177d00a79fe81701351632df2544ba4e";
-    hash = "sha256-cxlZh1x8ycpZIwSeOwqB6BtwYaMoWtSPaeiyW41epdk=";
+    rev = "90d104ce481ee8f9b770be4b37d97f34eef5f82f";
+    hash = "sha256-DeHH7k9K7CmQW6eOyf8TCV/HNYS30oFnI1b8ztBDk/o=";
   };
 
   outputs = [ "out" ];
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ openssh GitRepository URI XMLMini ];
+  propagatedBuildInputs = [ openssh GitRepository URI XMLParser ];
 
   preConfigure = ''
     patchShebangs .
@@ -37,8 +37,6 @@ buildPerlPackage {
     makeWrapper $out/lib/ham/ham $out/bin/ham --argv0 ham \
       --prefix PATH : ${openssh}/bin
   '';
-
-  doCheck = false;
 
   meta = with lib; {
     description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
