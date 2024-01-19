@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ sudo bsd2 bsd3 zlib ];
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
+    mainProgram = "sudo";
   };
 })
