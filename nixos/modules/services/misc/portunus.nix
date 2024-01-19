@@ -231,7 +231,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${cfg.package.out}/bin/portunus-orchestrator";
+          ExecStart = "${cfg.package}/bin/portunus-orchestrator";
           Restart = "on-failure";
         };
         environment = {
