@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     echo /share/man > conf-man
   '';
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
   DESTDIR = placeholder "out";
 
   meta = with lib; {
