@@ -56,7 +56,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
     ++ lib.optionals fortranSupport [ gfortran ];
 
-  configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
+  configureFlags =
+    [
+      "--with-ucc=${lib.getDev ucc}"
+      "--with-ucx=${lib.getDev ucx}"
+      "--with-ucx-libdir=${lib.getLib ucx}/lib"
+    ]
+    ++ lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
     ++ lib.optionals stdenv.isLinux  [
       "--with-libnl=${lib.getDev libnl}"
@@ -69,7 +75,10 @@ stdenv.mkDerivation rec {
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    ++ lib.optionals cudaSupport [ "--with-cuda=${cudaPackages.cuda_cudart}" "--enable-dlopen" ]
+    ++ lib.optionals cudaSupport [
+      "--with-cuda=${cudaPackages.cuda_cudart}"
+      "--enable-dlopen"
+    ]
     ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
     ;
 
