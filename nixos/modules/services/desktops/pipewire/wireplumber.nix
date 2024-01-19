@@ -23,51 +23,68 @@ in
         defaultText = lib.literalExpression "pkgs.wireplumber";
         description = lib.mdDoc "The WirePlumber derivation to use.";
       };
+
+      configPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        description = lib.mdDoc ''
+          List of packages that provide WirePlumber configuration, in the form of
+          `share/wireplumber/*/*.lua` files.
+        '';
+      };
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !config.hardware.bluetooth.hsphfpd.enable;
-        message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
-      }
-    ];
+  config =
+    let
+      configPackages = cfg.configPackages;
 
-    environment.systemPackages = [ cfg.package ];
-
-    environment.etc."wireplumber/main.lua.d/80-nixos.lua" = lib.mkIf (!pwUsedForAudio) {
-      text = ''
+      pwNotForAudioConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-pw-not-for-audio.lua" ''
         -- PipeWire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
       '';
-    };
-    environment.etc."wireplumber/main.lua.d/80-systemwide.lua" = lib.mkIf config.services.pipewire.systemWide {
-      text = ''
+      systemwideConfigPkg = pkgs.writeTextDir "wireplumber/main.lua.d/80-systemwide.lua" ''
         -- When running system-wide, these settings need to be disabled (they
         -- use functions that aren't available on the system dbus).
         alsa_monitor.properties["alsa.reserve"] = false
         default_access.properties["enable-flatpak-portal"] = false
       '';
-    };
-    environment.etc."wireplumber/bluetooth.lua.d/80-systemwide.lua" = lib.mkIf config.services.pipewire.systemWide {
-      text = ''
+      systemwideBluetoothConfigPkg = pkgs.writeTextDir "wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
         -- When running system-wide, logind-integration needs to be disabled.
         bluez_monitor.properties["with-logind"] = false
       '';
+
+      configs = pkgs.buildEnv {
+        name = "wireplumber-configs";
+        paths = configPackages
+          ++ lib.optional (!pwUsedForAudio) pwNotForAudioConfigPkg
+          ++ lib.optionals config.services.pipewire.systemWide [ systemwideConfigPkg systemwideBluetoothConfigPkg ];
+        pathsToLink = [ "/share/wireplumber" ];
+      };
+    in
+    lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = !config.hardware.bluetooth.hsphfpd.enable;
+          message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
+        }
+      ];
+
+      environment.systemPackages = [ cfg.package ];
+
+      environment.etc.wireplumber.source = "${configs}/share/wireplumber";
+
+      systemd.packages = [ cfg.package ];
+
+      systemd.services.wireplumber.enable = config.services.pipewire.systemWide;
+      systemd.user.services.wireplumber.enable = !config.services.pipewire.systemWide;
+
+      systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
+      systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
+
+      systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
+        # Force WirePlumber to use system dbus.
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+      };
     };
-
-    systemd.packages = [ cfg.package ];
-
-    systemd.services.wireplumber.enable = config.services.pipewire.systemWide;
-    systemd.user.services.wireplumber.enable = !config.services.pipewire.systemWide;
-
-    systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
-    systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
-
-    systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
-      # Force WirePlumber to use system dbus.
-      DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
-    };
-  };
 }
