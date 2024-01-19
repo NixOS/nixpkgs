@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
+  separateDebugInfo = true;
   setOutputFlags = false;
 
   setupHooks = [
