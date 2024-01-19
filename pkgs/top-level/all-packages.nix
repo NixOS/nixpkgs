@@ -1040,7 +1040,7 @@ with pkgs;
 
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
-  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
+  inherit (callPackages ../build-support/node/fetch-yarn-deps { })
     prefetch-yarn-deps
     fetchYarnDeps;
 
@@ -1918,7 +1918,7 @@ with pkgs;
 
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
-  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+  inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
 
@@ -4403,7 +4403,7 @@ with pkgs;
   buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
 
   charles = charles4;
-  inherit (callPackage ../applications/networking/charles {})
+  inherit (callPackages ../applications/networking/charles {})
     charles3
     charles4
   ;
@@ -4756,7 +4756,7 @@ with pkgs;
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  inherit (callPackage ../tools/misc/coreboot-utils { })
+  inherit (callPackages ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
     ifdtool
@@ -8467,7 +8467,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackage ../tools/filesystems/garage {
+  inherit (callPackages ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
@@ -11201,7 +11201,7 @@ with pkgs;
 
   grocy = callPackage ../servers/grocy { };
 
-  inherit (callPackage ../servers/nextcloud {})
+  inherit (callPackages ../servers/nextcloud {})
     nextcloud26 nextcloud27 nextcloud28;
 
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
@@ -11234,7 +11234,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  inherit (callPackage ../applications/networking/cluster/nomad { })
+  inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
     nomad_1_4
     nomad_1_5
