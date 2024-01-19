@@ -2,11 +2,11 @@
 
 melpaBuild rec {
   pname = "ebuild-mode";
-  version = "1.67";
+  version = "1.70";
 
   src = fetchurl {
     url = "https://dev.gentoo.org/~ulm/emacs/ebuild-mode-${version}.tar.xz";
-    hash = "sha256-5qxHpu1BLtI8LFnL/sAoqmo80zeyElxIdFtAsfMefUE=";
+    hash = "sha256-nq6KX3gF0mDiNBQxS/Y7cSlO6w/aE1VqqOoV6KEonpE=";
   };
 
   # not used but needs to be set; why?
