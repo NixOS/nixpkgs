@@ -53,7 +53,7 @@ rec {
 
   nomad = nomad_1_7;
 
-  nomad_1_4 = throw "nomad_1_4 was removed - you can use nomad_1_5 or an older nixpkgs revision";
+  nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
 
   nomad_1_5 = generic {
     buildGoModule = buildGo121Module;
