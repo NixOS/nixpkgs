@@ -212,6 +212,19 @@ in {
       default = [];
     };
 
+    root = lib.mkOption {
+      type = lib.types.enum [ "fstab" "gpt-auto" ];
+      default = "fstab";
+      example = "gpt-auto";
+      description = ''
+        Controls how systemd will interpret the root FS in initrd. See
+        {manpage}`kernel-command-line(7)`. NixOS currently does not
+        allow specifying the root file system itself this
+        way. Instead, the `fstab` value is used in order to interpret
+        the root file system specified with the `fileSystems` option.
+      '';
+    };
+
     emergencyAccess = mkOption {
       type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       description = lib.mdDoc ''
@@ -342,7 +355,12 @@ in {
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
-    assertions = map (name: {
+    assertions = [
+      {
+        assertion = cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+        message = "The ‘fileSystems’ option does not specify your root file system.";
+      }
+    ] ++ map (name: {
       assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
       message = ''
         systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
@@ -371,7 +389,12 @@ in {
       "autofs"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
-    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
+    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
+    ++ lib.optional cfg.package.withEfi "efivarfs";
+
+    boot.kernelParams = [
+      "root=${config.boot.initrd.systemd.root}"
+    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];
@@ -554,7 +577,5 @@ in {
         serviceConfig.Type = "oneshot";
       };
     };
-
-    boot.kernelParams = lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ];
   };
 }
