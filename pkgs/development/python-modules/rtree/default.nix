@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rtree";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Rtree";
     inherit version;
-    hash = "sha256-b47lBN3l0AWyWwiq9b4LNASvOtX+zm4d3N41kIp5ipU=";
+    hash = "sha256-9RRfeFK/f5XBJvsWvxpMLKkwCuFRsH+KD3CD6keRJnU=";
   };
 
   postPatch = ''
