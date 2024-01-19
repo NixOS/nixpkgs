@@ -360,11 +360,11 @@ fi
 # build from the flake.
 if [[ -n $flake ]]; then
     if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
-       flake="${BASH_REMATCH[1]}"
-       flakeAttr="${BASH_REMATCH[2]}"
+        flake="${BASH_REMATCH[1]}"
+        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
-        read -r hostname < /proc/sys/kernel/hostname
+        read -r hostname <<< targetHostCmd cat /proc/sys/kernel/hostname
         if [[ -z $hostname ]]; then
             hostname=default
         fi
