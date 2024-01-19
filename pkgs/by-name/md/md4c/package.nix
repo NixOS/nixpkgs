@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so
     # prefix and exec_prefix cannot be $out, too
     # Use CMake's _FULL_ variables instead of `prefix` concatenation.
-    ./fix-pkgconfig.patch
+    ./0001-fix-pkgconfig.patch
   ];
 
   nativeBuildInputs = [

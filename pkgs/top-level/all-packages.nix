@@ -23872,8 +23872,6 @@ with pkgs;
 
   mdctags = callPackage ../development/tools/misc/mdctags { };
 
-  md4c = callPackage ../development/libraries/md4c { };
-
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = libsForQt5.callPackage ../development/libraries/mediastreamer { };
