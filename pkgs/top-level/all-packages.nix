@@ -15367,7 +15367,9 @@ with pkgs;
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
-  flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });
+  flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
   flutter323 = flutterPackages.v3_23;
   flutter322 = flutterPackages.v3_22;
