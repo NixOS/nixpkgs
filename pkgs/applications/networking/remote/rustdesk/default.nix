@@ -9,6 +9,7 @@
 , dbus
 , gdk-pixbuf
 , glib
+, glibc
 , gst_all_1
 , gtk3
 , libayatana-appindicator
@@ -21,7 +22,6 @@
 , libopus
 , libaom
 , libxkbcommon
-, libsciter
 , xdotool
 , pam
 , pango
@@ -31,6 +31,8 @@
 , darwin
 , alsa-lib
 , makeDesktopItem
+, flutter313
+, cmake
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -85,9 +87,22 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook
+    cmake
   ];
 
-  buildFeatures = lib.optionals stdenv.isLinux [ "linux-pkg-config" ];
+  buildFeatures = lib.optionals stdenv.isLinux [
+    "linux-pkg-config"
+    "use_samplerate"
+    "use_rubato"
+    "use_dasp"
+    "default"
+    "hwcodec"
+    "mediacodec"
+    "linux_headless"
+    "virtual_display_driver"
+    "flutter"
+    "flutter_texture_render"
+  ];
 
   # Checks require an active X server
   doCheck = false;
@@ -97,8 +112,10 @@ rustPlatform.buildRustPackage rec {
     bzip2
     cairo
     dbus
+    flutter313
     gdk-pixbuf
     glib
+    glibc
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     gtk3
@@ -129,17 +146,12 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
   ];
 
-  # Add static ui resources and libsciter to same folder as binary so that it
-  # can find them.
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace ", \"staticlib\", \"rlib\"" ""
+  '';
+
   postInstall = ''
     mkdir -p $out/{share/src,lib/rustdesk}
-
-    # .so needs to be next to the executable
-    mv $out/bin/rustdesk $out/lib/rustdesk
-    ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk
-
-    makeWrapper $out/lib/rustdesk/rustdesk $out/bin/rustdesk \
-      --chdir "$out/share"
 
     cp -a $src/src/ui $out/share/src
 
