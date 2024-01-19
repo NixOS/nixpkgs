@@ -1,6 +1,7 @@
 { lib
 , darwin
 , fetchurl
+, fetchpatch
 , openssl
 , stdenv
 , vlc
@@ -8,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2023.06.14";
+  version = "2023.06.16";
 
   src = fetchurl {
     urls = [
@@ -17,8 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-PaXSJwz8LwezgXWVga9g2S5kK+YPSRVnrhaH/5UT0mE=";
+    hash = "sha256-DBtKTklgj3AUA2lU0xsF14EmJtSR3iFL24I6nQTE9T8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cflags-when-darwin.patch";
+      url = "https://github.com/rgaufman/live555/commit/16701af5486bb3a2d25a28edaab07789c8a9ce57.patch?full_index=1";
+      hash = "sha256-IDSdByBu/EBLsUTBe538rWsDwH61RJfAEhvT68Nb9rU=";
+    })
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     darwin.cctools
@@ -29,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  # Since NIX_CFLAGS_COMPILE does not differentiate C and C++ toolchains, we
+  # set CXXFLAGS directly
+  env.CXXFLAGS = "-std=c++20";
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
