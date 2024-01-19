@@ -1,21 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , distro
+, fetchPypi
 , pysnmp
+, pytestCheckHook
 , python-gnupg
+, pythonOlder
 , qrcode
 , requests
+, setuptools
 , sseclient-py
 , zfec
-, pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
   version = "0.4.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-uANAMNoAC4HUoUuR5ldxoiy+LLzZVpKosU5JttXLnqg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     distro
@@ -61,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
+    changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ prusnak ];
   };
