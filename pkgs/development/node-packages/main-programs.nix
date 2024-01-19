@@ -52,6 +52,7 @@
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
   purty = "purty";
+  pscid = "pscid";
   remod-cli = "remod";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
