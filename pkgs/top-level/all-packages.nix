@@ -1721,8 +1721,6 @@ with pkgs;
 
   audible-cli = callPackage ../tools/misc/audible-cli { };
 
-  audiobookshelf = callPackage ../servers/audiobookshelf { };
-
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
