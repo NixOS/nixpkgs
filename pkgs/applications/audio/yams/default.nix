@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yams";
-  version = "0.7.3";
+  version = "0.69";
 
   src = fetchFromGitHub {
     owner = "Berulacks";
     repo = "yams";
-    rev = version;
-    sha256 = "1zkhcys9i0s6jkaz24an690rvnkv1r84jxpaa84sf46abi59ijh8";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-LjT5BizDFL1gFHCdaDU2eIeyxEIsMzEL0emdjxadTdc=";
   };
 
   propagatedBuildInputs = with python3Packages; [
