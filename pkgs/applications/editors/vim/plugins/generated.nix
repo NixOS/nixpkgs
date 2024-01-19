@@ -7067,6 +7067,18 @@ final: prev:
     meta.homepage = "https://github.com/theHamsta/nvim-dap-virtual-text/";
   };
 
+  nvim-docs-view = buildVimPlugin {
+    pname = "nvim-docs-view";
+    version = "2023-10-19";
+    src = fetchFromGitHub {
+      owner = "amrbashir";
+      repo = "nvim-docs-view";
+      rev = "74a5e989e3fdcfd9418bb9dfec0ace308e00a5a0";
+      sha256 = "sha256-EmQbnleqxE+VHO5bMI9U/gMpwbJbPdNhrEWE7357MCE=";
+    };
+    meta.homepage = "https://github.com/amrbashir/nvim-docs-view/";
+  };
+
   nvim-expand-expr = buildVimPlugin {
     pname = "nvim-expand-expr";
     version = "2021-08-14";
@@ -9711,6 +9723,18 @@ final: prev:
       sha256 = "07aa2gfc73lznyi7w7cybzanspza3p67cv5hxr21g43zhs5k9izd";
     };
     meta.homepage = "https://github.com/vim-scripts/taglist.vim/";
+  };
+
+  tailwindcss-colors-nvim = buildVimPlugin {
+    pname = "tailwindcss-colors.nvim";
+    version = "2021-12-24";
+    src = fetchFromGitHub {
+      owner = "themaxmarchuk";
+      repo = "tailwindcss-colors.nvim";
+      rev = "ccb5be2f84673c1a0ef90a0c0a76733e85e5265b";
+      sha256 = "sha256-2eUr4rB8gpax0xJ8U4O2O93UXUxF+HZV6Co8LwPZ3JE=";
+    };
+    meta.homepage = "https://github.com/themaxmarchuk/tailwindcss-colors.nvim/";
   };
 
   targets-vim = buildVimPlugin {
@@ -15756,6 +15780,18 @@ final: prev:
       sha256 = "1hqnczyyg21lsv4j3kvp0w84xm0fxzvdmgakwx2q1wg3x1g4ybcf";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
+  };
+
+  vscode-nvim = buildVimPlugin {
+    pname = "vscode.nvim";
+    version = "2023-12-21";
+    src = fetchFromGitHub {
+      owner = "Mofiqul";
+      repo = "vscode.nvim";
+      rev = "39841d05ab4a5c03ea0985196b9f3dfa48d83411";
+      sha256 = "1xnfvyc1996c0vkpvqc1f4ys0wklq4f4k0lv557zfwmp96dl6x8f";
+    };
+    meta.homepage = "https://github.com/Mofiqul/vscode.nvim/";
   };
 
   wal-vim = buildVimPlugin {

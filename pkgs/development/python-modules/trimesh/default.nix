@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.0.8";
+  version = "4.0.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FvMFC1h3gu61jZPSPmxYHQmxnxYKmtYAecc/0IT9E8I=";
+    hash = "sha256-NuM7EUXl1QW0HyUPGAyeVDI5Dht4CMu/ufULKNW0bNw=";
   };
 
   nativeBuildInputs = [ setuptools ];
