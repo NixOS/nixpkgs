@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2023.10.30";
+  version = "2023.11.07";
 
   src = fetchurl {
     urls = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-9R5fLWrgG8CWFrXcOUZOKLKt+zgy9G+ioLAhxatOwOs=";
+    hash = "sha256-jd1cpRRAqcmrHZBuF6euA3YPtU08yZCdz/smfSvO+RE=";
   };
 
   patches = [
