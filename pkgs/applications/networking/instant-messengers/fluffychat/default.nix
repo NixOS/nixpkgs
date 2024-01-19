@@ -9,14 +9,14 @@
 , makeDesktopItem
 , gnome
 
-, flutterHostPlatform ? "linux"
+, targetFlutterPlatform ? "linux"
 }:
 
 let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
 in
 flutter313.buildFlutterApplication (rec {
-  pname = "fluffychat-${flutterHostPlatform}";
+  pname = "fluffychat-${targetFlutterPlatform}";
   version = "1.14.1";
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ flutter313.buildFlutterApplication (rec {
     wakelock_windows = "sha256-Dfwe3dSScD/6kvkP67notcbb+EgTQ3kEYcH7wpra2dI=";
   };
 
-  inherit flutterHostPlatform;
+  inherit targetFlutterPlatform;
 
   meta = with lib; {
     description = "Chat with your friends (matrix client)";
@@ -43,7 +43,7 @@ flutter313.buildFlutterApplication (rec {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = [ sourceTypes.fromSource ];
   };
-} // lib.optionalAttrs (flutterHostPlatform == "linux") {
+} // lib.optionalAttrs (targetFlutterPlatform == "linux") {
   nativeBuildInputs = [ imagemagick ];
 
   runtimeDependencies = [ pulseaudio ];
@@ -78,7 +78,7 @@ flutter313.buildFlutterApplication (rec {
 
     patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
-} // lib.optionalAttrs (flutterHostPlatform == "web") {
+} // lib.optionalAttrs (targetFlutterPlatform == "web") {
   prePatch =
     # https://github.com/krille-chan/fluffychat/blob/v1.17.1/scripts/prepare-web.sh
     let

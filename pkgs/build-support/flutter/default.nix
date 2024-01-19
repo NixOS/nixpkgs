@@ -17,7 +17,7 @@
 
 { pubGetScript ? "flutter pub get"
 , flutterBuildFlags ? [ ]
-, flutterHostPlatform ? "linux"
+, targetFlutterPlatform ? "linux"
 , extraWrapProgramArgs ? ""
 , ...
 }@args:
@@ -170,9 +170,9 @@ let
         runHook postInstall
       '';
     };
-  }.${flutterHostPlatform} or (throw "Unsupported Flutter host platform: ${flutterHostPlatform}");
+  }.${targetFlutterPlatform} or (throw "Unsupported Flutter host platform: ${targetFlutterPlatform}");
 
-  minimalFlutter = flutter.override { supportedTargetFlutterPlatforms = [ "universal" flutterHostPlatform ]; };
+  minimalFlutter = flutter.override { supportedTargetFlutterPlatforms = [ "universal" targetFlutterPlatform ]; };
 
   buildAppWith = flutter: buildDartApplication.override { dart = flutter; };
 in

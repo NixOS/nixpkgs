@@ -105,8 +105,8 @@ flutter.buildFlutterApplication {
   pname = "firmware-updater";
   version = "unstable-2023-04-30";
 
-  # To build for the Web, use the flutterHostPlatform argument.
-  # flutterHostPlatform = "web";
+  # To build for the Web, use the targetFlutterPlatform argument.
+  # targetFlutterPlatform = "web";
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -126,7 +126,7 @@ Flutter-specific `nix-shell` usage notes are included here. See the [Dart docume
 
 #### Entering the shell {#ssec-dart-flutter-nix-shell-enter}
 
-By default, dependencies for only the `flutterHostPlatform` are available in the
+By default, dependencies for only the `targetFlutterPlatform` are available in the
 build environment. This is useful for keeping closures small, but be problematic
 during development. It's common, for example, to build Web apps for Linux during
 development to take advantage of native features such as stateful hot reload.
