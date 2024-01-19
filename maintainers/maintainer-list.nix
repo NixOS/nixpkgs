@@ -3406,8 +3406,7 @@
   };
   chuangzhu = {
     name = "Chuang Zhu";
-    email = "chuang@melty.land";
-    matrix = "@chuangzhu:matrix.org";
+    email = "nixos@chuang.cz";
     github = "chuangzhu";
     githubId = 31200881;
     keys = [{
@@ -4669,6 +4668,12 @@
     github = "DieracDelta";
     githubId = 13730968;
     name = "Justin Restivo";
+  };
+  dietmarw = {
+    name = "Dietmar Winkler";
+    email = "dietmar.winkler@dwe.no";
+    github = "dietmarw";
+    githubId = 9332;
   };
   diffumist = {
     email = "git@diffumist.me";
@@ -6773,6 +6778,12 @@
     github = "ghuntley";
     githubId = 127353;
     name = "Geoffrey Huntley";
+  };
+  gigahawk = {
+    email = "Jasper Chan";
+    name = "jasperchan515@gmail.com";
+    github = "Gigahawk";
+    githubId = 10356230;
   };
   gigglesquid = {
     email = "jack.connors@protonmail.com";
@@ -12064,6 +12075,12 @@
     github = "michaelBelsanti";
     githubId = 62124625;
   };
+  michaelBrunner = {
+    email = "michael.brunn3r@gmail.com";
+    name = "Michael Brunner";
+    github = "MichaelBrunn3r";
+    githubId = 19626539;
+  };
   michaelCTS = {
     email = "michael.vogel@cts.co";
     name = "Michael Vogel";
@@ -17255,6 +17272,12 @@
     githubId = 3789764;
     name = "skykanin";
   };
+  skyrina = {
+    email = "sorryu02@gmail.com";
+    github = "skyrina";
+    githubId = 116099351;
+    name = "Skylar";
+  };
   slam-bert = {
     github = "slam-bert";
     githubId = 106779009;
@@ -20919,6 +20942,12 @@
     github = "zopieux";
     githubId = 81353;
     name = "Alexandre Macabies";
+  };
+  zoriya = {
+    email = "zoe.roux@zoriya.dev";
+    github = "zoriya";
+    githubId = 32224410;
+    name = "Zoe Roux";
   };
   zowoq = {
     github = "zowoq";

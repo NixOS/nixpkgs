@@ -569,6 +569,13 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
+    # This target only exists so that services ordered before sysinit.target
+    # are restarted in the correct order, notably BEFORE the other services,
+    # when switching configurations.
+    systemd.targets.sysinit-reactivation = {
+      description = "Reactivate sysinit units";
+    };
+
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services

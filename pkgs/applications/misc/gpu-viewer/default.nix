@@ -19,15 +19,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "2.26";
+  version = "2.32";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3GYJq76g/pU8dt+OMGBeDcw47z5Xv3AGkLsACcBCELs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zv53tvFQ0NAqFPYp7qZVmbuM1fBJwC4t43YJDZdqSPU=";
   };
 
   nativeBuildInputs = [
