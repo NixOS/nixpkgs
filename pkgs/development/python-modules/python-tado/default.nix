@@ -29,9 +29,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description =
-      "Python binding for Tado web API. Pythonize your central heating!";
+    description = "Python binding for Tado web API. Pythonize your central heating!";
     homepage = "https://github.com/wmalgadey/PyTado";
+    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jamiemagee ];
   };
