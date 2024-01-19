@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 with lib; let
   cfg = config.services.yuzu;
 in {
@@ -129,7 +129,7 @@ in {
           type = types.bool;
           default = false;
           description = mdDoc ''
-            Allow yuzu Community Moderators to moderate on your room
+            Allow yuzu Community Moderators to moderate on your room.
           '';
         };
       };
