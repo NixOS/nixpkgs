@@ -1,17 +1,13 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools-scm
 , appdirs
+, buildPythonPackage
 , colorama
 , configobj
 , distro
 , dpath
 , dvc-azure
 , dvc-data
+, dvc-gdrive
 , dvc-gs
 , dvc-http
 , dvc-render
@@ -19,6 +15,8 @@
 , dvc-ssh
 , dvc-studio-client
 , dvc-task
+, fetchFromGitHub
+, fetchpatch
 , flatten-dict
 , flufl_lock
 , funcy
@@ -37,10 +35,12 @@
 , pygtrie
 , pyparsing
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , rich
 , ruamel-yaml
 , scmrepo
+, setuptools-scm
 , shortuuid
 , shtab
 , tabulate
@@ -138,6 +138,9 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     azure = [
       dvc-azure
+    ];
+    gdrive = [
+      dvc-gdrive
     ];
     gs = [
       dvc-gs
