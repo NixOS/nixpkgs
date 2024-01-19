@@ -5,6 +5,7 @@
 , openssl
 , libiconv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 
