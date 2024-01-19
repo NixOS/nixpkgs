@@ -44,7 +44,8 @@ in with src; {
   };
   wineWow64 = callPackage ./base.nix {
     pname = "wine-wow64";
-    inherit src version supportFlags patches moltenvk;
+    inherit src version patches moltenvk;
+    supportFlags = supportFlags // { mingwSupport = true; };  # Required because we request "--enable-archs=x86_64"
     pkgArches = [ pkgs ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
     geckos = [ gecko64 ];
