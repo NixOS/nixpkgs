@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1gxpgifzy0hnpd0ymw3r32amzr32z3bgb90ldjzl438p6h1q0i26";
   };
 
+  patches = [
+    ./cstdint.patch
+  ];
+
   postPatch = ''
     sed -e 's,dmenu -i,${dmenu}/bin/dmenu -i,g' -i ./src/Main.hh
   '';

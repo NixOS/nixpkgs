@@ -1,0 +1,12 @@
+diff --git a/src/Application.hh b/src/Application.hh
+index d4118ec..e969eca 100644
+--- a/src/Application.hh
++++ b/src/Application.hh
+@@ -19,6 +19,7 @@
+ #define APPLICATION_DEF
+ 
+ #include <algorithm>
++#include <cstdint>
+ #include <string.h>
+ #include <unistd.h>
+ 
