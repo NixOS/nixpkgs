@@ -47,6 +47,7 @@
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
   prettier = "prettier";
+  purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
   remod-cli = "remod";
