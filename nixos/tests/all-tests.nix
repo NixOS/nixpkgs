@@ -588,6 +588,7 @@ in {
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
+  nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};

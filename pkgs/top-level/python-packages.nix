@@ -3474,7 +3474,11 @@ self: super: with self; {
 
   dvc-data = callPackage ../development/python-modules/dvc-data {  };
 
+  dvc-gdrive = callPackage ../development/python-modules/dvc-gdrive {  };
+
   dvc-gs = callPackage ../development/python-modules/dvc-gs { };
+
+  dvc-hdfs = callPackage ../development/python-modules/dvc-hdfs {  };
 
   dvc-http = callPackage ../development/python-modules/dvc-http {  };
 
@@ -10927,6 +10931,8 @@ self: super: with self; {
   pyosmium = callPackage ../development/python-modules/pyosmium {
     inherit (pkgs) lz4;
   };
+
+  pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
 
   pyotgw = callPackage ../development/python-modules/pyotgw { };
 

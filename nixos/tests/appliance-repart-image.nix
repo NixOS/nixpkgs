@@ -8,6 +8,9 @@
 let
   rootPartitionLabel = "root";
 
+  imageId = "nixos-appliance";
+  imageVersion = "1-rc1";
+
   bootLoaderConfigPath = "/loader/entries/nixos.conf";
   kernelPath = "/EFI/nixos/kernel.efi";
   initrdPath = "/EFI/nixos/initrd.efi";
@@ -28,6 +31,9 @@ in
     # Disable boot loaders because we install one "manually".
     # TODO(raitobezarius): revisit this when #244907 lands
     boot.loader.grub.enable = false;
+
+    system.image.id = imageId;
+    system.image.version = imageVersion;
 
     virtualisation.fileSystems = lib.mkForce {
       "/" = {
@@ -99,7 +105,7 @@ in
       "-f",
       "qcow2",
       "-b",
-      "${nodes.machine.system.build.image}/image.raw",
+      "${nodes.machine.system.build.image}/${nodes.machine.image.repart.imageFile}",
       "-F",
       "raw",
       tmp_disk_image.name,
@@ -107,6 +113,10 @@ in
 
     # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
     os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+
+    os_release = machine.succeed("cat /etc/os-release")
+    assert 'IMAGE_ID="${imageId}"' in os_release
+    assert 'IMAGE_VERSION="${imageVersion}"' in os_release
 
     bootctl_status = machine.succeed("bootctl status")
     assert "${bootLoaderConfigPath}" in bootctl_status
