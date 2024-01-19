@@ -37646,6 +37646,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  flight-core = callPackage ../games/flight-core { };
+
   fltrator = callPackage ../games/fltrator {
     fltk = fltk-minimal;
   };
