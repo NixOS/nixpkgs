@@ -675,6 +675,22 @@ let
         };
       };
 
+      carrie999.cyberpunk-2020 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cyberpunk-2020";
+          publisher = "carrie999";
+          version = "0.1.4";
+          sha256 = "sha256-tVbd+j9+90Z07+jGAiT0gylZN9YWHdJmq2sh1wf2oGE=";
+        };
+        meta = {
+          description = "A cyberpunk-inspired colour theme to satisfy your neon dreams";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=carrie999.cyberpunk-2020";
+          homepage = "https://github.com/Carrie999/cyberpunk";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       catppuccin = {
         catppuccin-vsc = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -1071,6 +1087,23 @@ let
           sha256 = "1zin7s827bpf9yvzpxpr5n6mv0b5rhh3civsqzmj52mdq365d2js";
         };
         meta = { license = lib.licenses.mit; };
+      };
+
+      dhedgecock.radical-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "radical-vscode";
+          publisher = "dhedgecock";
+          version = "3.3.1";
+          sha256 = "sha256-VvFQovuE+I0lqXU9fHrmk7nWMpuuWafqm9Acwb0+QYg=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/dhedgecock.radical-vscode/changelog";
+          description = "A dark theme for radical hacking inspired by retro futuristic design";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dhedgecock.radical-vscode";
+          homepage = "https://github.com/dhedgecock/radical-vscode";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
       };
 
       disneystreaming.smithy = buildVscodeMarketplaceExtension {
@@ -2743,6 +2776,22 @@ let
         };
       };
 
+      nur.just-black = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "just-black";
+          publisher = "nur";
+          version = "3.1.1";
+          sha256 = "sha256-fatJZquCDsLDFGVzBol2D6LIZUbZ6GzqcVEFAwLodW0=";
+        };
+        meta = {
+          description = "A dark theme designed specifically for syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nur.just-black";
+          homepage = "https://github.com/nurmohammed840/extension.vsix/tree/Just-Black";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
@@ -3166,6 +3215,23 @@ let
         };
       };
 
+      silofy.hackthebox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hackthebox";
+          publisher = "silofy";
+          version = "0.2.9";
+          sha256 = "sha256-WSPuEh+osu0DpXgPAzMU5Fw0Sh8sZFst7kx26s2BsyQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/silofy.hackthebox/changelog";
+          description = "A Visual Studio Code theme built for hackers by hackers";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=silofy.hackthebox";
+          homepage = "https://github.com/silofy/hackthebox";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       skellock.just = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "just";
@@ -3441,6 +3507,23 @@ let
           sha256 = "sha256-7v4q0OEqv7q2ejHp4lph2Dsqg0GWE65pxyz9goQEm8g=";
         };
         meta.license = lib.licenses.mit;
+      };
+
+      thorerik.hacker-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hacker-theme";
+          publisher = "thorerik";
+          version = "3.0.1";
+          sha256 = "sha256-Ugk9kTJxW1kbD+X6PF96WBc1k7x4KaGu5WbCYPGQ3qE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/thorerik.hacker-theme/changelog";
+          description = "The perfect theme for writing IP tracers in Visual Basic and reverse-proxying a UNIX-system firewall";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=thorerik.hacker-theme";
+          homepage = "https://github.com/thorerik/vscode-hacker-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
       };
 
       tiehuis.zig = buildVscodeMarketplaceExtension {
