@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.2.11";
+  version = "4.2.13";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LaYtUuqnZd/idiySDwqIpY86CeBFgckduWfZL67ISPE=";
+    hash = "sha256-Aa72pImnJcjXJb09xvcP8b7a7j4mQXUuS0cf8O3ktNc=";
   };
 
   nativeBuildInputs = [
