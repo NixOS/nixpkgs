@@ -23,7 +23,7 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.311.0";
+  version = "2.312.0";
 
   src = fetchFromGitHub {
     owner = "actions";
