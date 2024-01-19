@@ -401,6 +401,12 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adamjedrzejewski = {
+    email = "adamjedrzejewski@icloud.com";
+    github = "adamjedrzejewski";
+    githubId = 59581316;
+    name = "Adam Jedrzejewski";
+  };
   adamlwgriffiths = {
     email = "adam.lw.griffiths@gmail.com";
     github = "adamlwgriffiths";
