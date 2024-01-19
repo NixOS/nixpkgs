@@ -174,6 +174,17 @@ runTests {
     expected = { x = false; };
   };
 
+  testNixpkgsStorePathString = {
+    # We expect that in all usages, this string will always have context.
+    #
+    # Although pretty much any version of C++Nix has a builtins.getContext,
+    # some alternate Nix implementations do not, and thus this test is
+    # meaningless for them (since they simply scan strings for store paths); it
+    # is thus bypassed in such cases.
+    expr = (builtins ? getContext) -> builtins.getContext trivial.nixpkgsStorePathString != { };
+    expected = true;
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
