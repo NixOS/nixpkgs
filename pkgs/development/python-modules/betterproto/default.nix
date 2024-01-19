@@ -69,6 +69,15 @@ buildPythonPackage rec {
     ${python.interpreter} -m tests.generate
   '';
 
+  disabledTestPaths = [
+    # https://github.com/danielgtaylor/python-betterproto/issues/530
+    "tests/inputs/oneof/test_oneof.py"
+  ];
+
+  disabledTests = [
+    "test_pydantic_no_value"
+  ];
+
   meta = with lib; {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     longDescription = ''
