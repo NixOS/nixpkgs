@@ -3848,7 +3848,7 @@ with pkgs;
 
   fluffychat = callPackage  ../applications/networking/instant-messengers/fluffychat { };
 
-  fluffychat-web = fluffychat.override { flutterHostPlatform = "web"; };
+  fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
