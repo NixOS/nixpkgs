@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
-, grpcio
+, fetchFromGitHub
 , googleapis-common-protos
+, grpcio
+, pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -11,9 +12,11 @@ buildPythonPackage rec {
   version = "0.13.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+tMYYIueCTJY+/ElKRgPQA0cREU2mKM1CcxuzwBbKU4=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-grpc-google-iam-v1";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pmwHDzOaXrgqXZiaxIn01CtiAG+XRBGr8BgzbG/F1uw=";
   };
 
   nativeBuildInputs = [
@@ -25,17 +28,24 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
-  # no tests run
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.iam"
     "google.iam.v1"
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
     description = "GRPC library for the google-iam-v1 service";
-    homepage = "https://github.com/googleapis/googleapis";
+    homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
+    changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
