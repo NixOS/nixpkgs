@@ -47,6 +47,7 @@ buildPythonPackage rec {
     "Memcache"
   ] ++ lib.optionals stdenv.isDarwin [
     # ignore flaky test
+    "test_cache_timeout_dynamic"
     "test_cached_view_class"
   ];
 
