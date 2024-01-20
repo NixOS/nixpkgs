@@ -24,6 +24,7 @@ let
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
     lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
+    qtmir = callPackage ./development/qtmir { };
     trust-store = callPackage ./development/trust-store { };
     u1db-qt = callPackage ./development/u1db-qt { };
 
