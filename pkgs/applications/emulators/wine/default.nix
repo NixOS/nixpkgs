@@ -36,7 +36,7 @@
   sdlSupport ? false,
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
-  waylandSupport ? wineRelease == "wayland",
+  waylandSupport ? stdenv.isLinux,
   x11Support ? stdenv.isLinux,
   embedInstallers ? false, # The Mono and Gecko MSI installers
   moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
