@@ -2849,8 +2849,6 @@ with pkgs;
     withGtk = true;
   };
 
-  stella = callPackage ../applications/emulators/stella { };
-
   tamatool = callPackage ../applications/emulators/tamatool { };
 
   termtekst = callPackage ../applications/emulators/termtekst { };
@@ -3836,7 +3834,7 @@ with pkgs;
   flavours = callPackage ../applications/misc/flavours { };
 
   flirc = libsForQt5.callPackage ../applications/video/flirc {
-    readline = readline63;
+    readline = readline70;
   };
 
   flood = callPackage ../applications/networking/p2p/flood { };
@@ -10188,7 +10186,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
   };
 
   memtester = callPackage ../tools/system/memtester { };

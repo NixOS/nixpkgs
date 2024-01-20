@@ -39,6 +39,7 @@ flutter313.buildFlutterApplication (rec {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";
     license = licenses.agpl3Plus;
+    mainProgram = "fluffychat";
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = [ sourceTypes.fromSource ];
@@ -54,7 +55,7 @@ flutter313.buildFlutterApplication (rec {
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
-    exec = "@out@/bin/fluffychat";
+    exec = "fluffychat";
     icon = "fluffychat";
     desktopName = "Fluffychat";
     genericName = "Chat with your friends (matrix client)";
@@ -73,8 +74,6 @@ flutter313.buildFlutterApplication (rec {
       mkdir -p $D
       convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
-    substituteInPlace $out/share/applications/*.desktop \
-      --subst-var out
 
     patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
