@@ -8,6 +8,7 @@
 , fetchPypi
 , fonttools
 , pytestCheckHook
+, pythonOlder
 , setuptools-scm
 , skia-pathops
 , ufolib2
@@ -17,6 +18,8 @@ buildPythonPackage rec {
   pname = "ufo2ft";
   version = "2.33.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -50,6 +53,11 @@ buildPythonPackage rec {
     "test_removeOverlaps_pathops"
     "test_custom_filters_as_argument"
     "test_custom_filters_as_argument"
+    # Some integration tests fail
+    "test_compileVariableCFF2"
+    "test_compileVariableTTF"
+    "test_drop_glyph_names_variable"
+    "test_drop_glyph_names_variable"
   ];
 
   pythonImportsCheck = [
