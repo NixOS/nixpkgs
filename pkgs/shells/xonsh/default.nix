@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.14.0";
+  version = "0.14.4";
   format = "pyproject";
 
   # fetch from github because the pypi package ships incomplete tests
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
+    hash = "sha256-7qOEc4RSdOO059LietKnrxY7cy9MfgmfJjdqZZ5ENLU=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
