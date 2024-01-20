@@ -6631,9 +6631,7 @@ with pkgs;
 
   bbe = callPackage ../tools/misc/bbe { };
 
-  bkcrack = callPackage ../tools/security/bkcrack {
-    inherit (llvmPackages) openmp;
-  };
+  bkcrack = callPackage ../tools/security/bkcrack { };
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
