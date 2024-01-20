@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-check";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 
@@ -29,10 +29,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "pytest_check"
+  ];
+
   meta = with lib; {
     description = "pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
+    changelog = "https://github.com/okken/pytest-check/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }
