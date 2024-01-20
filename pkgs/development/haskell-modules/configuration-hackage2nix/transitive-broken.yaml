@@ -727,6 +727,7 @@ dont-distribute-packages:
  - cabal-bounds
  - cabal-cache
  - cabal-cargs
+ - cabal-fix
  - cabal-query
  - cabal-test
  - cabal2arch
@@ -1270,11 +1271,6 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
- - eventuo11y
- - eventuo11y-batteries
- - eventuo11y-json
- - eventuo11y-otel
- - eventuo11y-prometheus
  - every-bit-counts
  - exference
  - exist
@@ -1871,6 +1867,7 @@ dont-distribute-packages:
  - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
+ - haskell-language-server
  - haskell-lsp
  - haskell-lsp-client
  - haskell-pdf-presenter
@@ -2062,6 +2059,7 @@ dont-distribute-packages:
  - hledger-api
  - hls
  - hls-exactprint-utils
+ - hls-semantic-tokens-plugin
  - hmark
  - hmatrix-sundials
  - hmeap
