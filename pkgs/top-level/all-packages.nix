@@ -15415,8 +15415,6 @@ with pkgs;
 
   rush = callPackage ../shells/rush { };
 
-  xonsh = callPackage ../shells/xonsh/wrapper.nix { };
-
   zsh = callPackage ../shells/zsh { };
 
   nix-zsh-completions = callPackage ../shells/zsh/nix-zsh-completions { };
