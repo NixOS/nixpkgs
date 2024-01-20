@@ -645,14 +645,7 @@ with pkgs;
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
   ebpf-verifier = callPackage ../tools/networking/ebpf-verifier {
-    # Replace this to `catch2 = catch2_3` when catch2 3.4.0 is merged
-    # https://github.com/NixOS/nixpkgs/pull/243485
-    catch2.src = fetchFromGitHub {
-      owner = "catchorg";
-      repo = "Catch2";
-      rev = "v3.4.0";
-      hash = "sha256-DqGGfNjKPW9HFJrX9arFHyNYjB61uoL6NabZatTWrr0=";
-    };
+    catch2 = catch2_3;
   };
 
   edgedb = callPackage ../tools/networking/edgedb {
