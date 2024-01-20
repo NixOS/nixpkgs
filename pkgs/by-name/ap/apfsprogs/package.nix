@@ -35,6 +35,8 @@ stdenv.mkDerivation {
     apfs = nixosTests.apfs;
   };
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "Experimental APFS tools for linux";
     homepage = "https://github.com/linux-apfs/apfsprogs";
