@@ -6,11 +6,7 @@
 let
   pname = "csvkit";
   version = "1.2.0";
-  pythonEnv = python3.override {
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-    };
-  };
+  pythonEnv = python3;
 in
 pythonEnv.pkgs.buildPythonApplication {
   inherit pname version;
