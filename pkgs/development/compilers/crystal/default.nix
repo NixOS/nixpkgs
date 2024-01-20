@@ -148,7 +148,7 @@ let
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
-      '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
+      '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null) && stdenv.cc.libcxx?cxxabi.libName) ''
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
         substituteInPlace src/llvm/lib_llvm.cr \
