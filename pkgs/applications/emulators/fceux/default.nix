@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6";
+  version = "2.6.6-unstable-2024-01-19";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Wp23oLapMqQtL2DCkm2xX1vodtEr/XNSOErf3nrFRQs=";
+    rev = "2fce5ffe745bb89be471e450d9cd6284cd5614d9";
+    hash = "sha256-5uUTw7ZkmBrGuntSQFNAp1Xz69ANmmIxNGd0/enPoW8=";
   };
 
   nativeBuildInputs = [
