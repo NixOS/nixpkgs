@@ -3455,6 +3455,21 @@ let
         };
       };
 
+      tim-koehler.helm-intellisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "helm-intellisense";
+          publisher = "Tim-Koehler";
+          version = "0.14.3";
+          sha256 = "sha256-TcXn8n6mKEFpnP8dyv+nXBjsyfUfJNgdL9iSZwA5eo0=";
+        };
+        meta = {
+          description = "Extension to help writing Helm-Templates by providing intellisense";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tim-Koehler.helm-intellisense";
+          homepage = "https://github.com/tim-koehler/Helm-Intellisense";
+          license = lib.licenses.mit;
+        };
+      };
+
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "shellcheck";
