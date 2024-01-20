@@ -118,7 +118,7 @@ let
     else null;
 
   # Analogously to cc_solib
-  libcxx_solib = "${lib.getLib libcxx_args}/lib";
+  libcxx_solib = "${lib.getLib libcxx}/lib";
 
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
