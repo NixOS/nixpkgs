@@ -104,9 +104,20 @@ stdenv.mkDerivation rec {
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = ''
     runHook preInstall
 
+    mkdir -pv $out/lib
+    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
+    mkdir -pv $out/share/mudlet
+    cp -r ../src/mudlet-lua/lua $out/share/mudlet/
+
+    mkdir -pv $out/share/pixmaps
+    cp -r ../mudlet.png $out/share/pixmaps/
+
+    cp -r ../translations $out/share/
+
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r src/mudlet.app/ $out/Applications/mudlet.app
     mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
@@ -116,40 +127,19 @@ stdenv.mkDerivation rec {
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsForQt5.qtkeychain discord-rpc ]}:$out/lib" \
       --chdir "$out";
 
-    mkdir -pv $out/lib
-    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.dylib $out/lib
-
-    mkdir -pv $out/share/mudlet
-    cp -r ../src/mudlet-lua/lua $out/share/mudlet/
-    mkdir -pv $out/share/pixmaps
-    cp -r ../mudlet.png $out/share/pixmaps/
-    cp -r ../translations $out/share/
-
-    runHook postInstall
-  '' else ''
-    runHook preInstall
-
-    mkdir -pv $out/lib
-    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     mkdir -pv $out/bin
-    cp src/mudlet $out
-    mkdir -pv $out/share/mudlet
-    cp -r ../src/mudlet-lua/lua $out/share/mudlet/
-
-    mkdir -pv $out/share/applications
-    cp ../mudlet.desktop $out/share/applications/
-
-    mkdir -pv $out/share/pixmaps
-    cp -r ../mudlet.png $out/share/pixmaps/
-
-    cp -r ../translations $out/share/
-
-    makeQtWrapper $out/mudlet $out/bin/mudlet \
+    cp src/mudlet $out/bin/mudlet-unwrapped
+    makeQtWrapper $out/bin/mudlet-unwrapped $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsForQt5.qtkeychain discord-rpc ]}" \
       --chdir "$out";
 
+    mkdir -pv $out/share/applications
+    cp ../mudlet.desktop $out/share/applications/
+
+  '' + ''
     runHook postInstall
   '';
 
