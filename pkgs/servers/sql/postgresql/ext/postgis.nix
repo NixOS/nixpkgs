@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # postgis config directory assumes /include /lib from the same root for json-c library
   NIX_LDFLAGS = "-L${lib.getLib json_c}/lib"
     # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null && stdenv.cc.libcxx?cxxabi.libName) " -l${stdenv.cc.libcxx.cxxabi.libName}";
 
 
   preConfigure = ''
