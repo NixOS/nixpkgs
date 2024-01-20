@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , hatchling
 , textual
 , universal-pathlib
@@ -26,6 +27,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FL2bwPGqBmDn33Rhj7+VEpuqB4znEAw+GGAODTs25oo=";
   };
+
+  patches = [
+    # universal-pathlib upgrade, https://github.com/juftin/textual-universal-directorytree/pull/2
+    (fetchpatch {
+      name = "universal-pathlib-upgrade.patch";
+      url = "https://github.com/juftin/textual-universal-directorytree/commit/e445aff21ddf756e3f180c8308a75c41487667c3.patch";
+      hash = "sha256-Fftx8rrLPb6lQ+HBdB5Ai55LHMWEO6XftmFfZXbXIyk=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling
