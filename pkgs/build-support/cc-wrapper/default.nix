@@ -264,25 +264,6 @@ stdenv.mkDerivation {
     inherit bintools;
     inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
 
-    # Expose the C++ standard library we're using. See the comments on "General
-    # libc++ support". This is also relevant when using older gcc than the
-    # stdenv's, as may be required e.g. by CUDAToolkit's nvcc.
-    cxxStdlib =
-      let
-        givenLibcxx = libcxx.isLLVM or false;
-        givenGccForLibs = useGccForLibs && gccForLibs.langCC or false;
-      in
-      if (!givenLibcxx) && givenGccForLibs then
-        { kind = "libstdc++"; package = gccForLibs; solib = gccForLibs_solib; }
-      else if givenLibcxx then
-        { kind = "libc++"; package = libcxx;  solib = libcxx_solib;}
-      else
-      # We're probably using the `libstdc++` that came with our `gcc`.
-      # TODO: this is maybe not always correct?
-      # TODO: what happens when `nativeTools = true`?
-        { kind = "libstdc++"; package = cc; solib = cc_solib; }
-    ;
-
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
       (mapc
