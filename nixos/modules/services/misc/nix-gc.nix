@@ -19,7 +19,7 @@ in
       };
 
       dates = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.singleLineStr;
         default = "03:15";
         example = "weekly";
         description = lib.mdDoc ''
@@ -33,7 +33,7 @@ in
 
       randomizedDelaySec = lib.mkOption {
         default = "0";
-        type = lib.types.str;
+        type = lib.types.singleLineStr;
         example = "45min";
         description = lib.mdDoc ''
           Add a randomized delay before each garbage collection.
@@ -62,7 +62,7 @@ in
       options = lib.mkOption {
         default = "";
         example = "--max-freed $((64 * 1024**3))";
-        type = lib.types.str;
+        type = lib.types.singleLineStr;
         description = lib.mdDoc ''
           Options given to {file}`nix-collect-garbage` when the
           garbage collector is run automatically.
