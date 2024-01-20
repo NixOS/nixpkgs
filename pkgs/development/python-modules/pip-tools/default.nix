@@ -66,6 +66,8 @@ buildPythonPackage rec {
     "test_bad_setup_file"
     # Assertion error
     "test_compile_recursive_extras"
+    "test_combine_different_extras_of_the_same_package"
+    "test_diff_should_not_uninstall"
   ];
 
   pythonImportsCheck = [

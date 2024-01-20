@@ -2,6 +2,7 @@
 , python3
 , fetchPypi
 , fetchpatch
+, nixosTests
 }:
 
 with python3.pkgs;
@@ -65,6 +66,8 @@ buildPythonPackage rec {
     PYTHONPATH=.:$PYTHONPATH python example_project/manage.py test \
       --settings=hyperkitty.tests.settings_test hyperkitty
   '';
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
