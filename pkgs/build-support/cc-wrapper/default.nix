@@ -109,8 +109,6 @@ let
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
-  gccForLibs_solib = getLib gccForLibs
-    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   libcxx =
     if libcxx_args != null
@@ -119,7 +117,7 @@ let
     then getLib gccForLibs
     else null;
 
-  # Analogously to cc_solib and gccForLibs_solib
+  # Analogously to cc_solib
   libcxx_solib = "${lib.getLib libcxx_args}/lib";
 
   # The following two functions, `isGccArchSupported` and
@@ -451,7 +449,7 @@ stdenv.mkDerivation {
     ''
     + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
+      echo "-L${libcxx_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
