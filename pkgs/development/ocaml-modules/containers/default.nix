@@ -8,6 +8,8 @@ buildDunePackage rec {
   version = "3.13.1";
   pname = "containers";
 
+  minimalOCamlVersion = "4.08";
+
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
