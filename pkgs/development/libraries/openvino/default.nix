@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , substituteAll
 , cudaSupport ? opencv.cudaSupport or false
 
@@ -80,6 +81,15 @@ stdenv.mkDerivation rec {
       src = ./cmake.patch;
       inherit (lib) version;
     })
+    # fix build with gcc 13 (missing cstdint import)
+    (fetchpatch {
+      url = "https://github.com/opencv/ade/commit/6532154e3c49cf978231bcc5f79c9980f0c93ea5.diff";
+      hash = "sha256-RC/h2jQRcFvu7OOe+4+zz2ZBq2I0n8iZ7L7PuOhkgHQ=";
+      stripLen = 1;
+      extraPrefix = "thirdparty/ade/";
+    })
+
+    ./0001-fix-for-gcc-13.patch
   ];
 
   postPatch = ''
