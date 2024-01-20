@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , git
 , pkg-config
@@ -66,7 +67,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./darwin-AppKit.patch
+    (fetchpatch {
+      name = "darwin-AppKit.patch";
+      url = "https://github.com/Mudlet/Mudlet/commit/68cdd404f81a6d16c80068c45fe0f10802f08d9e.patch";
+      hash = "sha256-74FtcjOR/lu9ohtcoup0+gUfCQRznO48zMmb97INhdY=";
+    })
   ];
 
   nativeBuildInputs = [
