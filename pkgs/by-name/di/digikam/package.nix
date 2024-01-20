@@ -1,4 +1,4 @@
-{ stdenv, config, lib, fetchpatch, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -18,6 +18,7 @@
 , libgphoto2
 , liblqr1
 , libusb1
+, libheif
 , libGL
 , libGLU
 , opencv
@@ -36,20 +37,16 @@
 
 stdenv.mkDerivation rec {
   pname   = "digikam";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    hash = "sha256-BQPANORF/0JPGKZxXAp6eb5KXgyCs+vEYaIc7DdFpbM=";
+    hash = "sha256-L3/LVZsSPtnsrlpa729FYO7l9JIG2dF0beyatsj7OL8=";
   };
 
-  # Fix build against exiv2 0.28.1
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/graphics/digikam/-/commit/f5ea91a7f6c1926815ec68f3e0176d6c15b83051.patch";
-      hash = "sha256-5g2NaKKNKVfgW3dTO/IP/H/nZ0YAIOmdPAumy3NEaNg=";
-    })
-  ];
+  strictDeps = true;
+
+  depsBuildBuild = [ cmake ];
 
   nativeBuildInputs = [
     cmake
@@ -74,6 +71,7 @@ stdenv.mkDerivation rec {
     lcms2
     lensfun
     libgphoto2
+    libheif
     liblqr1
     libusb1
     libGL
