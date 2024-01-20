@@ -1,28 +1,22 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-
-# build
-, setuptools-scm
-
-# runtime
 , booleanoperations
+, buildPythonPackage
 , cffsubr
 , compreffor
 , cu2qu
 , defcon
+, fetchPypi
 , fonttools
+, pytestCheckHook
+, setuptools-scm
 , skia-pathops
 , ufolib2
-
-# tests
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
   version = "2.33.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -50,19 +44,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  disabledTests = [
     # Do not depend on skia.
-    "--deselect=tests/integration_test.py::IntegrationTest::test_removeOverlaps_CFF_pathops"
-    "--deselect=tests/integration_test.py::IntegrationTest::test_removeOverlaps_pathops"
-    "--deselect=tests/preProcessor_test.py::TTFPreProcessorTest::test_custom_filters_as_argument"
-    "--deselect=tests/preProcessor_test.py::TTFInterpolatablePreProcessorTest::test_custom_filters_as_argument"
+    "test_removeOverlaps_CFF_pathops"
+    "test_removeOverlaps_pathops"
+    "test_custom_filters_as_argument"
+    "test_custom_filters_as_argument"
   ];
 
-  pythonImportsCheck = [ "ufo2ft" ];
+  pythonImportsCheck = [
+    "ufo2ft"
+  ];
 
   meta = with lib; {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
+    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
