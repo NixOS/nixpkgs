@@ -197,8 +197,10 @@ let
       fi
       exclude+='\)'
 
-      buildGoDir() {
-        local cmd="$1" dir="$2"
+      buildGoDirs() {
+        local cmd="$1"
+        shift
+        local dirs=("$@")
 
         . $TMPDIR/buildFlagsArray
 
@@ -214,7 +216,7 @@ let
         fi
 
         local OUT
-        if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
+        if ! OUT="$(go $cmd "''${flags[@]}" "''${dirs[@]}" 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -226,13 +228,19 @@ let
         return 0
       }
 
-      getGoDirs() {
-        local type;
-        type="$1"
+      getPackagesToBuild() {
         if [ -n "$subPackages" ]; then
-          echo "$subPackages" | sed "s,\(^\| \),\1./,g"
+          local subpkgs
+          subpkgs=$(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
+          go list \
+              -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
+              -deps "$subpkgs" | \
+              xargs echo
         else
-          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
+          # Make Go recurse all packages of the module.
+          go list \
+            -f '{{ .Dir }}' ./... | \
+            xargs echo
         fi
       }
 
@@ -248,10 +256,7 @@ let
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
-      for pkg in $(getGoDirs ""); do
-        echo "Building subPackage $pkg"
-        buildGoDir install "$pkg"
-      done
+      buildGoDirs install $(getPackagesToBuild)"
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
@@ -273,9 +278,23 @@ let
       # We do not set trimpath for tests, in case they reference test assets
       export GOFLAGS=''${GOFLAGS//-trimpath/}
 
-      for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
-      done
+      getPackagesToTest() {
+        if [ -n "$subPackages" ]; then
+          # Find all packages belonging to this Go module that are dependencies
+          # of the targeted subPackages.
+          go list \
+              -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
+              -deps "$subPackages" | \
+              xargs echo
+        else
+          # Make Go recurse all packages of the module.
+          go list \
+            -f '{{ .Dir }}' ./... | \
+            xargs echo
+        fi
+      }
+
+      buildGoDirs test $(getPackagesToTest)
 
       runHook postCheck
     '';
