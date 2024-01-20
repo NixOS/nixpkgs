@@ -15,25 +15,6 @@ let
     fi
   '';
 
-  desktopApplicationFile = pkgs.writeTextFile {
-    name = "emacsclient.desktop";
-    destination = "/share/applications/emacsclient.desktop";
-    text = ''
-      [Desktop Entry]
-      Name=Emacsclient
-      GenericName=Text Editor
-      Comment=Edit text
-      MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
-      Exec=emacseditor %F
-      Icon=emacs
-      Type=Application
-      Terminal=false
-      Categories=Development;TextEditor;
-      StartupWMClass=Emacs
-      Keywords=Text;Editor;
-    '';
-  };
-
 in
 {
 
@@ -109,7 +90,7 @@ in
       wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
     };
 
-    environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
+    environment.systemPackages = [ cfg.package editorScript ];
 
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
   };
