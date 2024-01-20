@@ -96,7 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Fix libobs.pc for plugins on non-x86 systems
-    ./fix-arm64-cmake.patch
+    (fetchpatch {
+      name = "fix-arm64-cmake.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
+      hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
+      includes = [ "*/CompilerConfig.cmake" ];
+    })
   ];
 
   nativeBuildInputs = [
