@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  libinput,
-  fontconfig,
-  freetype,
-  mesa,
-  wayland,
-  xorg,
-  vulkan-loader,
+{ lib
+, cosmic-icons
+, fetchFromGitHub
+, fontconfig
+, freetype
+, just
+, libglvnd
+, libinput
+, libxkbcommon
+, makeBinaryWrapper
+, mesa
+, pkg-config
+, rustPlatform
+, stdenv
+, vulkan-loader
+, wayland
+, xorg
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,8 +37,8 @@ rustPlatform.buildRustPackage rec {
       "glyphon-0.4.1" = "sha256-mwJXi63LTBIVFrFcywr/NeOJKfMjQaQkNl3CSdEgrZc=";
       "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
       "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
       "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
+      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
     };
@@ -49,16 +48,21 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
+
   buildInputs = [
-    libxkbcommon
-    libinput
-    libglvnd
     fontconfig
     freetype
-    xorg.libX11
-    wayland
+    libglvnd
+    libinput
+    libxkbcommon
     vulkan-loader
+    wayland
+    xorg.libX11
   ];
 
   dontUseJustBuild = true;
@@ -87,7 +91,13 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr libxkbcommon vulkan-loader mesa.drivers
+        libxkbcommon
+        mesa.drivers
+        vulkan-loader
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
       ]}
   '';
 
@@ -97,5 +107,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;
+    mainProgram = "cosmic-term";
   };
 }
