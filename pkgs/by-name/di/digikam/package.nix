@@ -1,25 +1,9 @@
-{ mkDerivation, config, lib, fetchpatch, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ stdenv, config, lib, fetchpatch, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
 
-, qtbase
-, qtxmlpatterns
-, qtsvg
-, qtwebengine
-, qtnetworkauth
-
-, akonadi-contacts
-, kcalendarcore
-, kconfigwidgets
-, kcoreaddons
-, kdoctools
-, kfilemetadata
-, knotifications
-, knotifyconfig
-, ktextwidgets
-, kwidgetsaddons
-, kxmlgui
+, libsForQt5
 
 , bison
 , boost
@@ -32,17 +16,12 @@
 , lcms2
 , lensfun
 , libgphoto2
-, libkipi
-, libksane
 , liblqr1
-, libqtav
 , libusb1
-, marble
 , libGL
 , libGLU
 , opencv
 , pcre
-, threadweaver
 , x265
 , jasper
 
@@ -51,14 +30,11 @@
 , hugin
 , gnumake
 
-, breeze-icons
-, oxygen
-
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname   = "digikam";
   version = "8.1.0";
 
@@ -79,7 +55,8 @@ mkDerivation rec {
     cmake
     doxygen
     extra-cmake-modules
-    kdoctools
+    libsForQt5.kdoctools
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
@@ -97,10 +74,7 @@ mkDerivation rec {
     lcms2
     lensfun
     libgphoto2
-    libkipi
-    libksane
     liblqr1
-    libqtav
     libusb1
     libGL
     libGLU
@@ -108,6 +82,10 @@ mkDerivation rec {
     pcre
     x265
     jasper
+  ] ++ (with libsForQt5; [
+    libkipi
+    libksane
+    libqtav
 
     qtbase
     qtxmlpatterns
@@ -130,7 +108,7 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+  ]) ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cudart
   ]);
 
@@ -140,7 +118,7 @@ mkDerivation rec {
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
     "-DENABLE_APPSTYLES=on"
-    "-DCMAKE_CXX_FLAGS=-I${libksane}/include/KF5" # fix `#include <ksane_version.h>`
+    "-DCMAKE_CXX_FLAGS=-I${libsForQt5.libksane}/include/KF5" # fix `#include <ksane_version.h>`
   ];
 
   dontWrapGApps = true;
@@ -148,7 +126,7 @@ mkDerivation rec {
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
     qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
-    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
+    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
