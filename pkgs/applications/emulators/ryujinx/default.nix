@@ -6,6 +6,7 @@
 , libX11
 , libgdiplus
 , ffmpeg
+, gamemode
 , openal
 , libsoundio
 , sndio
@@ -28,13 +29,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1102"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1154"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "f11d663df73f68350820dfa65aa51a8a9b9ffd0f";
-    sha256 = "15yai8zwwy2537ng6iqyg2jhv0q2w1c9rahkdkbvgkwiycsl7rjy";
+    rev = "c94f0fbb8307873f68df982c100d3fb01aa6ccf5";
+    sha256 = "13i3ghssj000pirkjxqf7fpclb7g1hgn35xz5hd0sp7vjs4yq42w";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -62,6 +63,7 @@ buildDotnetModule rec {
     pulseaudio
     vulkan-loader
     ffmpeg
+    gamemode
 
     # Avalonia UI
     libICE
@@ -108,14 +110,52 @@ buildDotnetModule rec {
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
     pushd ${src}/distribution/linux
 
+    # Ryujinx
+    cat << EOF > $out/bin/Ryujinx.Wrapper
+    #!/bin/sh
+    exec env DOTNET_EnableAlternateStackCheck=1 ${gamemode}/bin/gamemoderun $out/bin/Ryujinx "\$@"
+    EOF
+
+    # Ryujinx.Ava
+    cat << EOF > $out/bin/Ryujinx.Ava.Wrapper
+    #!/bin/sh
+    exec env DOTNET_EnableAlternateStackCheck=1 ${gamemode}/bin/gamemoderun $out/bin/Ryujinx.Ava "\$@"
+    EOF
+
+    # Ryujinx.Headless.SDL2
+    cat << EOF > $out/bin/Ryujinx.Headless.SDL2.Wrapper
+    #!/bin/sh
+    exec env DOTNET_EnableAlternateStackCheck=1 ${gamemode}/bin/gamemoderun $out/bin/Ryujinx.Headless.SDL2 "\$@"
+    EOF
+
+    # Ryujinx
     install -D ./Ryujinx.desktop $out/share/applications/Ryujinx.desktop
+    substituteInPlace $out/share/applications/Ryujinx.desktop \
+      --replace-fail "Exec=Ryujinx.sh" "Exec=$out/bin/Ryujinx.Wrapper"
+
+    # Ryujinx.Ava
+    install -D ./Ryujinx.desktop $out/share/applications/Ryujinx.Ava.desktop
+    substituteInPlace $out/share/applications/Ryujinx.Ava.desktop \
+      --replace-fail "Name=Ryujinx" "Name=Ryujinx.Ava" \
+      --replace-fail "Exec=Ryujinx.sh" "Exec=$out/bin/Ryujinx.Ava.Wrapper"
+
+    # Ryujinx.Ava.Headless.SDL2
+    # [intentionally left blank]
+
+    # Others
+    chmod +x $out/bin/Ryujinx.Wrapper
+    chmod +x $out/bin/Ryujinx.Ava.Wrapper
+    chmod +x $out/bin/Ryujinx.Headless.SDL2.Wrapper
+
+    ln -s $out/bin/Ryujinx.Wrapper $out/bin/ryujinx
+    ln -s $out/bin/Ryujinx.Ava.Wrapper $out/bin/ryujinx.ava
+    ln -s $out/bin/Ryujinx.Headless.SDL2.Wrapper $out/bin/ryujinx.headless.sdl2
+
+    # Pick Ryujinx.Wrapper if created with Application Shortcuts
+    ln -s $out/bin/Ryujinx.Wrapper $out/lib/ryujinx/Ryujinx.sh
+
     install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
-
-    substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Ryujinx %f" "$out/bin/Ryujinx %f"
-
-    ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';
