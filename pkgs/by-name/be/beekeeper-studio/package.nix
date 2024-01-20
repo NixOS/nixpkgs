@@ -7,7 +7,7 @@
 
 let
   pname = "beekeeper-studio";
-  version = "4.0.3";
+  version = "4.1.13";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -16,7 +16,7 @@ let
 
   hash = {
     aarch64-linux = "sha256-PdRGZedNMZtGPI6Za2T94yKXvk6JoMoAot/kFKsBqQs=";
-    x86_64-linux = "sha256-P2HlCb0dai4cJlKcT9LLQ+njViD+oHS3KI2YdR5jR44=";
+    x86_64-linux = "sha256-Yfpm6//hhYVKX3YipzmFj3NgEsL2h3eW+9yC0yYiDgk=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
