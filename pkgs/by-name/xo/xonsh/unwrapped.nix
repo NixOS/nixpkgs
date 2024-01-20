@@ -1,16 +1,20 @@
 { lib
-, fetchFromGitHub
-, python3
-, glibcLocales
 , coreutils
+, fetchFromGitHub
 , git
 , gitUpdater
+, glibcLocales
+, python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
   pname = "xonsh";
   version = "0.14.0";
-  format = "pyproject";
+in
+python3.pkgs.buildPythonApplication {
+  inherit pname version;
+
+  pyproject = true;
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
@@ -19,6 +23,17 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/${version}";
     hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    ply
+    prompt-toolkit
+    pygments
+  ];
 
   env.LC_ALL = "en_US.UTF-8";
 
@@ -32,11 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
 
   disabledTests = [
     # fails on sandbox
@@ -65,26 +75,32 @@ python3.pkgs.buildPythonApplication rec {
     "tests/completers/test_bash_completer.py"
   ];
 
+  nativeCheckInputs = [
+    git
+    glibcLocales
+  ] ++ (with python3.pkgs; [
+    pip
+    pyte
+    pytest-mock
+    pytest-subprocess
+    pytestCheckHook
+  ]);
+
   preCheck = ''
-    HOME=$TMPDIR
+    export HOME=$TMPDIR
   '';
-
-  nativeCheckInputs = [ glibcLocales git ] ++
-    (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
-
-  propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
-
-  meta = with lib; {
-    description = "A Python-ish, BASHwards-compatible shell";
-    homepage = "https://xon.sh/";
-    changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vrthra ];
-  };
 
   passthru = {
     shellPath = "/bin/xonsh";
-    python = python3;
+    python = python3; # To the wrapper
     updateScript = gitUpdater { };
+  };
+
+  meta =  {
+    homepage = "https://xon.sh/";
+    description = "A Python-ish, BASHwards-compatible shell";
+    changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
