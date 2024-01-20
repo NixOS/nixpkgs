@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , makeBinaryWrapper
@@ -13,6 +14,8 @@
 , wayland
 , xorg
 , useXWayland ? true
+, systemd
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 rustPlatform.buildRustPackage {
@@ -42,7 +45,18 @@ rustPlatform.buildRustPackage {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
-  buildInputs = [ libglvnd libinput libxkbcommon mesa seatd udev wayland ];
+  buildInputs = [
+      libglvnd
+      libinput
+      libxkbcommon
+      mesa
+      seatd
+      udev
+      wayland
+    ] ++ lib.optional useSystemd systemd;
+
+  # Only default feature is systemd
+  buildNoDefaultFeatures = !useSystemd;
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client, which is always dlopen()ed except by the
