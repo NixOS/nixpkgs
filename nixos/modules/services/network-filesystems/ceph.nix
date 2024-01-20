@@ -56,30 +56,22 @@ let
     };
   };
 
-  osdActivationService =
-    let inherit (cfg.global) clusterName;
-    in
-    {
-      "ceph-osd-device-activation" =
-      {
-        enable = true;
-        description = "Ceph OSD activation service";
-        after = [ "network-online.target" "time-sync.target" "ceph-mon.target" ];
-        wants = [ "network-online.target" "time-sync.target" ];
-        path = with pkgs; [ lvm2 util-linux ];
-        serviceConfig = {
-          Environment = "CLUSTER=${clusterName}";
-          User = "root";
-          Group = "root";
-          ExecStart = ''
-            ${pkgs.ceph}/bin/ceph-volume lvm activate --all --no-systemd
-          '';
-          PrivateDevices = "no"; # osd needs disk access
-          RemainAfterExit = "yes";
-          Type = "oneshot";
-        };
-      };
+  osdActivationService."ceph-osd-device-activation" = {
+    enable = true;
+    description = "Ceph OSD activation service";
+    after = [ "network-online.target" "time-sync.target" "ceph-mon.target" ];
+    wants = [ "network-online.target" "time-sync.target" ];
+    path = with pkgs; [ lvm2 util-linux ];
+    serviceConfig = {
+      Environment = "CLUSTER=${cfg.global.clusterName}";
+      User = "root";
+      Group = "root";
+      ExecStart = "${pkgs.ceph}/bin/ceph-volume lvm activate --all --no-systemd";
+      PrivateDevices = "no"; # osd needs disk access
+      RemainAfterExit = "yes";
+      Type = "oneshot";
     };
+  };
 
   makeTarget = daemonType:
     {
