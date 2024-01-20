@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "dict2xml";
   version = "1.7.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
