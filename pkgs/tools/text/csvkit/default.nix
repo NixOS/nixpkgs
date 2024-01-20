@@ -12,12 +12,12 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "csvkit";
-  version = "1.1.1";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vt23t49rIq2+1urVrV3kv7Md0sVfMhGyorO2VSkEkiM=";
+    hash = "sha256-uC5q4tK7QWUXEA7Lro1dhWoN/65CtxIIiBSityAeGvg=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
