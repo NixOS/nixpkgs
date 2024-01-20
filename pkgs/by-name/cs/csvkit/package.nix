@@ -5,7 +5,7 @@
 
 let
   pname = "csvkit";
-  version = "1.1.1";
+  version = "1.2.0";
   pythonEnv = python3.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
@@ -18,7 +18,7 @@ pythonEnv.pkgs.buildPythonApplication {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vt23t49rIq2+1urVrV3kv7Md0sVfMhGyorO2VSkEkiM=";
+    hash = "sha256-+Sc3O5e3TQ4XlXhXpdUdRCEnR15CpR5iFXKxujGgGNk=";
   };
 
   propagatedBuildInputs = with pythonEnv.pkgs; [
