@@ -20243,6 +20243,12 @@
     githubId = 81353;
     name = "Alexandre Macabies";
   };
+  zoriya = {
+    email = "zoe.roux@zoriya.dev";
+    github = "zoriya";
+    githubId = 32224410;
+    name = "Zoe Roux";
+  };
   zowoq = {
     github = "zowoq";
     githubId = 59103226;
