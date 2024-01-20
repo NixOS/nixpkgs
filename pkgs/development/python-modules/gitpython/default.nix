@@ -5,6 +5,7 @@
 , gitdb
 , pkgs
 , pythonOlder
+, setuptools
 , substituteAll
 , typing-extensions
 }:
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "gitpython";
   version = "3.1.41";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-vVfY0/4NekysOUplj8xvyXRE8dJVQG0T83xISrNioE0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ddt
@@ -46,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
-    changelog = "https://github.com/gitpython-developers/GitPython/blob/${version}/doc/source/changes.rst";
+    changelog = "https://github.com/gitpython-developers/GitPython/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
