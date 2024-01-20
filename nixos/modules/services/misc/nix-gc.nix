@@ -87,6 +87,7 @@ in
     systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      serviceConfig.Type = "oneshot";
       startAt = lib.optional cfg.automatic cfg.dates;
     };
 
