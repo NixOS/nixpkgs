@@ -81,7 +81,14 @@ let
 
   # All the supported packages we can build for our platform.
   # perSystemReleases :: List Package
-  perSystemReleases = releaseSets.${redistArch} or [ ];
+  perSystemReleases = lib.pipe (releaseSets.${redistArch} or [ ])
+    [
+      (builtins.groupBy (p: lib.versions.majorMinor p.version))
+      (builtins.mapAttrs (_: builtins.sort preferable))
+      (builtins.mapAttrs (_: lib.take 1))
+      (builtins.attrValues)
+      (builtins.concatMap lib.trivial.id)
+    ];
 
   preferable =
     p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
