@@ -4,22 +4,27 @@
 , pylint
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
   version = "0.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = version;
+    repo = "pylint-plugin-utils";
+    rev = "refs/tags/${version}";
     hash = "sha256-uDsSSUWdlzuQz6umoYLbIotOYNEnLQu041ZZVMRd2ww=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pylint
