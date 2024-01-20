@@ -9,7 +9,7 @@
 
 let
   pname = "xonsh";
-  version = "0.14.0";
+  version = "0.14.1";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
+    hash = "sha256-/ZA9GwvCnCogesG7XYHuWb8f0i0P7utX1T8ei/bhrBI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
