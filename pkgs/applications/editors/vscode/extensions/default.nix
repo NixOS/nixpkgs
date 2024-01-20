@@ -1848,6 +1848,21 @@ let
         };
       };
 
+      iliazeus.vscode-ansi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-ansi";
+          publisher = "iliazeus";
+          version = "1.1.6";
+          sha256 = "sha256-ZPV8zd/GkXOGf6s8fz9ZPmC3i1jO0wFAqV0E67lW0do=";
+        };
+        meta = {
+          description = "ANSI color styling for text documents";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=iliazeus.vscode-ansi";
+          homepage = "https://github.com/iliazeus/vscode-ansi";
+          license = lib.licenses.mit;
+        };
+      };
+
       influxdata.flux = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "influxdata";
