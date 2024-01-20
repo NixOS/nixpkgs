@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , pylint
 , pytestCheckHook
 , pythonOlder
-, setuptools
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
-  version = "0.7";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,11 +19,11 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pylint-plugin-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-uDsSSUWdlzuQz6umoYLbIotOYNEnLQu041ZZVMRd2ww=";
+    hash = "sha256-xuPU1txfB+6+zJjtlfvNA950S5n7/PWPPFn1F3RtvCc=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs = [
