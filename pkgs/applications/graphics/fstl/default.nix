@@ -6,7 +6,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/Applications
