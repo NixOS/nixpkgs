@@ -31,6 +31,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = ''
     start_all()
 
+    client.systemctl("start network-online.target")
+    server.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
     server.wait_for_unit("network-online.target")
     server.wait_for_unit("owncast.service")

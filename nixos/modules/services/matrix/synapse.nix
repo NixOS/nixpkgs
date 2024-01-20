@@ -1056,6 +1056,7 @@ in {
 
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
     };
@@ -1071,6 +1072,7 @@ in {
             requires = optional hasLocalPostgresDB "postgresql.service";
           }
           else {
+            wants = [ "network-online.target" ];
             after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
             requires = optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];

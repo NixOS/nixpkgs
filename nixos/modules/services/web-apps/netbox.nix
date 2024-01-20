@@ -267,6 +267,7 @@ in {
     systemd.targets.netbox = {
       description = "Target for all NetBox services";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "redis-netbox.service" ];
     };
 
