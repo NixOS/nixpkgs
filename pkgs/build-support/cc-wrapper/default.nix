@@ -56,6 +56,24 @@
 }:
 
 let libcxx_args = libcxx; in
+let
+  stdenv = stdenvNoCC;
+
+  useGccForLibs = useCcForLibs
+    && libcxx_args == null
+    && !stdenv.targetPlatform.isDarwin
+    && !(stdenv.targetPlatform.useLLVM or false)
+    && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+    && !(stdenv.targetPlatform.isiOS or false)
+    && gccForLibs != null;
+
+  libcxx =
+    if libcxx_args != null
+    then libcxx_args
+    else if useGccForLibs
+    then lib.getLib gccForLibs
+    else null;
+in
 
 with lib;
 
@@ -66,7 +84,6 @@ assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
 let
-  stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
   includeFortifyHeaders' = if includeFortifyHeaders != null
@@ -101,21 +118,6 @@ let
 
   expand-response-params =
     lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
-
-  useGccForLibs = useCcForLibs
-    && libcxx_args == null
-    && !stdenv.targetPlatform.isDarwin
-    && !(stdenv.targetPlatform.useLLVM or false)
-    && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
-    && !(stdenv.targetPlatform.isiOS or false)
-    && gccForLibs != null;
-
-  libcxx =
-    if libcxx_args != null
-    then libcxx_args
-    else if useGccForLibs
-    then getLib gccForLibs
-    else null;
 
   # Analogously to cc_solib
   libcxx_solib = "${lib.getLib libcxx}/lib";
