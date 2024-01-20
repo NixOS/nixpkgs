@@ -15,7 +15,7 @@ let
   }.${stdenv.hostPlatform.system};
 
   hash = {
-    aarch64-linux = "sha256-PdRGZedNMZtGPI6Za2T94yKXvk6JoMoAot/kFKsBqQs=";
+    aarch64-linux = "sha256-8gcxYQ6ZvYC42V/vShFgalJtm8SGZRwtUfwUF9ZirBo=";
     x86_64-linux = "sha256-Yfpm6//hhYVKX3YipzmFj3NgEsL2h3eW+9yC0yYiDgk=";
   }.${stdenv.hostPlatform.system};
 
