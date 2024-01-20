@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs configure lds-gen.pl
-  '' + lib.optionalString (stdenv.cc.libcxx != null) ''
+  '' + lib.optionalString (stdenv.cc.libcxx != null && stdenv.cc.libcxx?cxxabi.libName) ''
     # fix for https://github.com/NixOS/nixpkgs/issues/166205
     # llvm12+ isn't adding libc++abi
     substituteInPlace src-cpp/Makefile \
