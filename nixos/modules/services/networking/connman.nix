@@ -112,6 +112,7 @@ in {
           "--nodaemon"
         ] ++ lib.optional enableIwd "--wifi=iwd_agent"
           ++ cfg.extraFlags);
+        RuntimeDirectory = "connman";
         StandardOutput = "null";
       };
     };
