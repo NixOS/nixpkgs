@@ -1,24 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pip
 , pretend
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "pip-api";
   version = "0.0.30";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oF3yx6qbcVc3S89Cc1RCAaDHuuYKnGW8+E85We84lvM=";
+  src = fetchFromGitHub {
+    owner = "di";
+    repo = "pip-api";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vl3CeVE0QdX2LsknpNg79s9IT0Qux63BreSXYLoDEcQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pip
@@ -46,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Importable pip API";
     homepage = "https://github.com/di/pip-api";
+    changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
