@@ -16,6 +16,7 @@
 , pythonRelaxDepsHook
 , pyyaml
 , requests
+, setuptools
 , six
 , toml
 , xlrd
@@ -25,19 +26,20 @@
 buildPythonPackage rec {
   pname = "python-benedict";
   version = "0.33.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
+    repo = "python-benedict";
     rev = "refs/tags/${version}";
     hash = "sha256-SJBU7jMnyLBdWQPQ/UGbVklKUOrCM3fMnOkXKHQnyPI=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -70,6 +72,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_from_base64_with_valid_url_valid_content"
+    "test_from_html_with_valid_file_valid_content"
+    "test_from_html_with_valid_url_valid_content"
     "test_from_json_with_valid_url_valid_content"
     "test_from_pickle_with_valid_url_valid_content"
     "test_from_plist_with_valid_url_valid_content"
