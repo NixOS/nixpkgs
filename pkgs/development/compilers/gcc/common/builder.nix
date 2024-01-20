@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , enableMultilib
+, targetConfig
 }:
 
 let
@@ -195,6 +196,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   preInstall = ''
     mkdir -p "$out/''${targetConfig}/lib"
     mkdir -p "''${!outputLib}/''${targetConfig}/lib"
+  '' +
+  # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
+  # since native-compiles have $lib/lib as a directory (not a
+  # symlink), this ensures that in every case we can assume that
+  # $lib/lib contains the .so files
+  lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
+    ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
   '' +
   # Make `lib64` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
