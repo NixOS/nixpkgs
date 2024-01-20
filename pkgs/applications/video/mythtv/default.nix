@@ -43,6 +43,8 @@ mkDerivation rec {
   configureFlags =
     [ "--dvb-path=${linuxHeaders}/include" ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
