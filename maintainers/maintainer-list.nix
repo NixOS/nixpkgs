@@ -11363,6 +11363,12 @@
     githubId = 1651325;
     name = "maralorn";
   };
+  marble = {
+    email = "nixpkgs@computer-in.love";
+    github = "cyber-murmel";
+    githubId = 30078229;
+    name = "marble";
+  };
   marcovergueira = {
     email = "vergueira.marco@gmail.com";
     github = "marcovergueira";

@@ -6634,9 +6634,7 @@ with pkgs;
 
   bbe = callPackage ../tools/misc/bbe { };
 
-  bkcrack = callPackage ../tools/security/bkcrack {
-    inherit (llvmPackages) openmp;
-  };
+  bkcrack = callPackage ../tools/security/bkcrack { };
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
@@ -22708,11 +22706,9 @@ with pkgs;
 
   libfido2 = callPackage ../development/libraries/libfido2 {};
 
-  libfilezilla =
-    pin-to-gcc12-if-gcc13
-      (darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
-        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
-      });
+  libfilezilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
+    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
+  };
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
 
