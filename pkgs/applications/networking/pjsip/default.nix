@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
-  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
+  env = lib.optionalAttrs (stdenv.cc.libcxx != null && stdenv.cc.libcxx?cxxabi.libName) {
     # work around https://github.com/NixOS/nixpkgs/issues/166205
     NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   } // lib.optionalAttrs stdenv.cc.isClang {
