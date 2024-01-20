@@ -127,8 +127,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # Not compatible with pyarrow13 yet.
-    broken = true;
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
