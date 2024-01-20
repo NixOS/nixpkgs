@@ -4,23 +4,24 @@
 }:
 
 let
-  python = python3.override {
+  pname = "csvkit";
+  version = "1.1.1";
+  pythonEnv = python3.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
-  pname = "csvkit";
-  version = "1.1.1";
-  format = "setuptools";
+pythonEnv.pkgs.buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-vt23t49rIq2+1urVrV3kv7Md0sVfMhGyorO2VSkEkiM=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with pythonEnv.pkgs; [
     agate
     agate-excel
     agate-dbf
@@ -28,7 +29,7 @@ python.pkgs.buildPythonApplication rec {
     setuptools # csvsql imports pkg_resources
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with pythonEnv.pkgs; [
     pytestCheckHook
   ];
 
@@ -37,15 +38,15 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Test is comparing CLI output
+    # Tries to compare CLI output - and fails!
     "test_decimal_format"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
-    description = "A suite of command-line tools for converting to and working with CSV";
+  meta = {
     homepage = "https://github.com/wireservice/csvkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    description = "A suite of command-line tools for converting to and working with CSV";
+    changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
