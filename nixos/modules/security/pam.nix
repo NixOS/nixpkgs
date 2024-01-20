@@ -813,7 +813,7 @@ let
             skel = config.security.pam.makeHomeDir.skelDirectory;
             inherit (config.security.pam.makeHomeDir) umask;
           }; }
-          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_lastlog.so"; settings = {
+          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${pkgs.pam_lastlog2}/lib/security/pam_lastlog2.so"; settings = {
             silent = true;
           }; }
           { name = "ecryptfs"; enable = config.security.pam.enableEcryptfs; control = "optional"; modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"; }
@@ -1519,6 +1519,10 @@ in
     };
 
     environment.etc = mapAttrs' makePAMService config.security.pam.services;
+
+    systemd.packages = optionals config.security.pam.services.login.updateWtmp [ pkgs.pam_lastlog2 ];
+    systemd.services.lastlog2-import.enable = config.security.pam.services.login.updateWtmp;
+    systemd.tmpfiles.packages = optionals config.security.pam.services.login.updateWtmp [ pkgs.pam_lastlog2 ];
 
     security.pam.services =
       { other.text =
