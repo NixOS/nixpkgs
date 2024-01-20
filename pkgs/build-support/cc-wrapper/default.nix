@@ -462,13 +462,6 @@ stdenv.mkDerivation {
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
-    # The above "fix" may be incorrect; gcc.cc.lib doesn't contain a
-    # `target-triple` dir but the correct fix may be to just remove the above?
-    #
-    # For clang it's not necessary (see `--gcc-toolchain` below) and for other
-    # situations adding in the above will bring in lots of other gcc libraries
-    # (i.e. sanitizer libraries, `libatomic`, `libquadmath`) besides just
-    # `libstdc++`; this may actually break clang.
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
     # because `libcxxStdenv` on linux still needs this. Maybe someday we'll
