@@ -445,10 +445,10 @@ stdenv.mkDerivation {
     ##
     + optionalString (useGccForLibs && isClang) ''
 
-      echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
+      echo "-B${libcxx}/lib/gcc/${targetPlatform.config}/${libcxx.version}" >> $out/nix-support/cc-cflags
     ''
     + optionalString useGccForLibs ''
-      echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
+      echo "-L${libcxx}/lib/gcc/${targetPlatform.config}/${libcxx.version}" >> $out/nix-support/cc-ldflags
       echo "-L${libcxx_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
