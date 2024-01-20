@@ -9484,6 +9484,13 @@
     githubId = 22116767;
     name = "Kritnich";
   };
+  krloer = {
+    email = "kriloneri@gmail.com";
+    github = "krloer";
+    githubId = 45591621;
+    name = "Kristoffer Longva Eriksen";
+    matrix = "@krisleri:pvv.ntnu.no";
+  };
   kroell = {
     email = "nixosmainter@makroell.de";
     github = "rokk4";
