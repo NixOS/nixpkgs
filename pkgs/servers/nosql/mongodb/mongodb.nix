@@ -9,6 +9,8 @@
 , zlib
 , yaml-cpp
 , sasl
+, net-snmp
+, openldap
 , openssl
 , libpcap
 , python3
@@ -95,6 +97,8 @@ in stdenv.mkDerivation rec {
     libpcap
     yaml-cpp
     openssl
+    net-snmp
+    openldap
     pcre-cpp
     variants.python
     sasl
