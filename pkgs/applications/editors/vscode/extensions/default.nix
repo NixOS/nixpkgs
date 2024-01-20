@@ -472,6 +472,21 @@ let
         };
       };
 
+      bazelbuild.vscode-bazel = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-bazel";
+          publisher = "bazelbuild";
+          version = "0.7.0";
+          sha256 = "05wvih09184bsp4rv2m55z0sasra2qrvch5m3bkbrjq7rcqgibgx";
+        };
+        meta = {
+          description = "Bazel support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=BazelBuild.vscode-bazel";
+          homepage = "https://github.com/bazelbuild/vscode-bazel";
+          license = lib.licenses.asl20;
+        };
+      };
+
       bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
