@@ -90,7 +90,7 @@ let
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [ sikmir linsui ];
   };
 in
 if stdenv.isDarwin
