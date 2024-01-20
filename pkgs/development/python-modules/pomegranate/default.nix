@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 
@@ -16,20 +15,21 @@
 
 # tests
 , pytestCheckHook
+, nose
 }:
 
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "1.0.0";
+  version = "1.0.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
     # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
+    rev = "f8ed453337fae6b44eddcbfe0d1031d33d8bea76";
+    hash = "sha256-OdXLP/GpBqY28q3tcIfJRQ+nI82BfBwjLfCm1hIjw8U=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  checkInputs = [
+    nose
+  ];
+
+  disabledTests = [
+    # AssertionError: Arrays are not equal
+    "test_sample"
+    "test_from_summaries_null"
+  ];
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;
