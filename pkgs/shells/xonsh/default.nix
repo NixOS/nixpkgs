@@ -4,6 +4,7 @@
 , glibcLocales
 , coreutils
 , git
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -84,5 +85,6 @@ python3.pkgs.buildPythonApplication rec {
   passthru = {
     shellPath = "/bin/xonsh";
     python = python3;
+    updateScript = gitUpdater { };
   };
 }
