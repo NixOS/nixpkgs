@@ -15416,7 +15416,6 @@ with pkgs;
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh/wrapper.nix { };
-  xonsh-unwrapped = callPackage ../shells/xonsh/unwrapped.nix { };
 
   zsh = callPackage ../shells/zsh { };
 
