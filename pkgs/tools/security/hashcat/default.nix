@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
-  '' + lib.optionalString (stdenv.cc.libcxx != null) ''
+  '' + lib.optionalString (stdenv.cc.libcxx != null && stdenv.cc.libcxx?cxxabi.libName) ''
       --replace "-lstdc++" "-lc++ -l${stdenv.cc.libcxx.cxxabi.libName}" \
   '' + ''
       --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
