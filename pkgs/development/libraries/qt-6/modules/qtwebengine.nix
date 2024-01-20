@@ -186,13 +186,13 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
-    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ] ++ lib.optionals stdenv.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
 
     # Appears not to work on some platforms
@@ -225,11 +225,9 @@ qtModule {
 
     # Text rendering
     harfbuzz
-    icu
 
     openssl
     glib
-    libxml2
     libxslt
     lcms2
 
@@ -243,6 +241,9 @@ qtModule {
     nss
     protobuf
     jsoncpp
+
+    icu
+    libxml2
 
     # Audio formats
     alsa-lib
