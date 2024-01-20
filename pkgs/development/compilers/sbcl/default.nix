@@ -10,6 +10,12 @@
 , markRegionGC ? lib.versionAtLeast version "2.4.0"
 , texinfo
 , version
+  # Set this to a lisp binary to use a custom bootstrap lisp compiler for
+  # SBCL. Leave as null to use the default. This is useful for local development
+  # of SBCL, because you can use your existing stock SBCL as a boostrap. On Hydra
+  # of course we can’t do that because SBCL hasn’t been built yet, so we use
+  # CLISP, but that’s much slower.
+, bootstrapLisp ? null
 }:
 
 let
@@ -62,8 +68,10 @@ let
   sbclBootstrap = callPackage ./bootstrap.nix {
     cfg = bootstrapBinaries.${stdenv.hostPlatform.system};
   };
-  bootstrapLisp =
-    if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
+  bootstrapLisp' =
+    if bootstrapLisp != null
+    then bootstrapLisp
+    else if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
     then "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
     else "${clisp}/bin/clisp -E UTF-8 --silent -norc";
 
@@ -135,7 +143,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    sh make.sh --prefix=$out --xc-host="${bootstrapLisp}" ${
+    sh make.sh --prefix=$out --xc-host="${bootstrapLisp'}" ${
                   lib.concatStringsSep " "
                     (builtins.map (x: "--with-${x}") enableFeatures ++
                      builtins.map (x: "--without-${x}") disableFeatures)
