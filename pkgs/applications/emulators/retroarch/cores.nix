@@ -653,6 +653,11 @@ in
       "LLE=1"
       "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
     ];
+    # This CXXFLAGS hack works around the GCC 13 error:
+    # 'uint32_t' was not declared in this scope
+    # It can be removed if the issue filed upstream is resolved:
+    # https://github.com/libretro/mupen64plus-libretro-nx/issues/515
+    env.CXXFLAGS = "-include cstdint";
     meta = {
       description = "Libretro port of Mupen64 Plus, GL only";
       license = lib.licenses.gpl3Only;
