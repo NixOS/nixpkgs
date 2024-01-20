@@ -55,6 +55,8 @@
 , includeFortifyHeaders ? null
 }:
 
+let libcxx_args = libcxx; in
+
 with lib;
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
@@ -101,7 +103,7 @@ let
     lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
   useGccForLibs = useCcForLibs
-    && libcxx == null
+    && libcxx_args == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
@@ -111,7 +113,7 @@ let
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # Analogously to cc_solib and gccForLibs_solib
-  libcxx_solib = "${lib.getLib libcxx}/lib";
+  libcxx_solib = "${lib.getLib libcxx_args}/lib";
 
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
@@ -262,7 +264,8 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    libcxx = libcxx_args;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -394,7 +397,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
-  depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
+  depsTargetTargetPropagated = optional (libcxx_args != null) libcxx_args ++ extraPackages;
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -516,7 +519,7 @@ stdenv.mkDerivation {
 
     # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
     # bundled with the C compiler because it is GCC
-    + optionalString (libcxx != null || (useGccForLibs && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
+    + optionalString (libcxx_args != null || (useGccForLibs && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
@@ -524,7 +527,7 @@ stdenv.mkDerivation {
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
-    + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
+    + optionalString (libcxx_args == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
@@ -532,11 +535,11 @@ stdenv.mkDerivation {
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
-    + optionalString (libcxx.isLLVM or false) ''
-      echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
-      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+    + optionalString (libcxx_args.isLLVM or false) ''
+      echo "-isystem ${lib.getDev libcxx_args}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx_args.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
-      echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
+      echo "-l${libcxx_args.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
 
     ##
@@ -566,7 +569,7 @@ stdenv.mkDerivation {
     '' + ''
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
-    '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
+    '' + optionalString (targetPlatform.isDarwin && (libcxx_args != null) && (cc.isClang or false)) ''
       echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
