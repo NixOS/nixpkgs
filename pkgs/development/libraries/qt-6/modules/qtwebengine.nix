@@ -60,6 +60,7 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
+, autoSignDarwinBinariesHook
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -105,6 +106,7 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
+    autoSignDarwinBinariesHook
     bootstrap_cmds
     cctools
     xcbuild
