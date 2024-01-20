@@ -153,6 +153,7 @@ with lib;
     type = types.attrs;
     description = lib.mdDoc ''
       Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
+      See {manpage}`systemd.exec(5)` for more options.
     '';
     example = {
       ProtectHome = false;

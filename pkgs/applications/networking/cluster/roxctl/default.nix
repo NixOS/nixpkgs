@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "roxctl";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
-    sha256 = "sha256-uVpWOUSBbq8r8UBPHHIkn2WVJ0KDX3J0o8cEhn1G9KM=";
+    sha256 = "sha256-G+BmcGrVxZmVHNl2VsN7nankEIB7uV/PFpQekipdT3c=";
   };
 
   vendorHash = "sha256-Jzv4ozR8RJiwkgVGGq6dlV/7rbBLq8hFe/Pm4SJZCkU=";
