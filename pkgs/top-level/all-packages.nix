@@ -5316,8 +5316,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  fac = callPackage ../development/tools/fac { };
-
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   facter = callPackage ../tools/system/facter { };
