@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "datadog";
   version = "0.48.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
