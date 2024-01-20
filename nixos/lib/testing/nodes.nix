@@ -14,6 +14,25 @@ let
     types
     ;
 
+  inherit (hostPkgs) hostPlatform pkgsLocal;
+
+  guestPkgs =
+    if hostPlatform.isLinux
+    then hostPkgs
+    else
+      let
+        hostToGuest = {
+          "x86_64-darwin" = pkgsLocal.gnu64;
+          "aarch64-darwin" = pkgsLocal.aarch64-multiplatform;
+        };
+
+        supportedHosts = lib.concatStringsSep ", " (lib.attrNames hostToGuest);
+
+        message =
+          "Unsupported non-Linux host system: ${hostPlatform.system}, supported: ${supportedHosts}";
+      in
+        hostToGuest.${hostPlatform.system} or (throw message);
+
   baseOS =
     import ../eval-config.nix {
       inherit lib;
@@ -24,16 +43,18 @@ let
         [
           ./nixos-test-base.nix
           { key = "nodes"; _module.args.nodes = config.nodesCompat; }
-          ({ config, ... }:
+          ({ config, pkgs, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+              virtualisation.host.pkgs = hostPkgs;
+              nixpkgs.pkgs = guestPkgs;
             })
           ({ options, ... }: {
             key = "nodes.nix-pkgs";
             config = optionalAttrs (!config.node.pkgsReadOnly) (
               mkIf (!options.nixpkgs.pkgs.isDefined) {
                 # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-                nixpkgs.system = hostPkgs.stdenv.hostPlatform.system;
+                nixpkgs.system = hostPlatform.system;
               }
             );
           })

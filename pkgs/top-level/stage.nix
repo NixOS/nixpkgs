@@ -185,9 +185,24 @@ let
     # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
+    #
+    # This is essentially the same thing as pkgsLocal except for crossSystem
+    # instead of localSystem.
     pkgsCross = lib.mapAttrs (n: crossSystem:
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
+
+    # This maps each entry in lib.systems.examples to its own package set where
+    # packages are built and run on that system.  For example,
+    # pkgsLocal.x86_64-linux.hello will refer to the "hello" package bult for
+    # x86_64-linux.
+    #
+    # This is essentially the same thing as pkgsCross except for localSystem
+    # instead of crossSystem.
+    pkgsLocal =
+      lib.mapAttrs
+        (n: localSystem: nixpkgsFun { inherit localSystem; })
+        lib.systems.examples;
 
     pkgsLLVM = nixpkgsFun {
       overlays = [

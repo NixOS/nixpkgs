@@ -41,7 +41,9 @@ in
     rawTestDerivation = hostPkgs.stdenv.mkDerivation {
       name = "vm-test-run-${config.name}";
 
-      requiredSystemFeatures = [ "kvm" "nixos-test" ];
+      requiredSystemFeatures = [ "nixos-test" ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
       buildCommand = ''
         mkdir -p $out
