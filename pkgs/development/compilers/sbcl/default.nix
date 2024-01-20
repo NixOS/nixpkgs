@@ -77,7 +77,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: rec {
   pname = "sbcl";
   inherit version;
 
@@ -130,7 +130,16 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder version "2.1.10") [
+  buildArgs = [
+    "--prefix=$out"
+    "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
+  ] ++ builtins.map (x: "--with-${x}") self.enableFeatures
+  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    "--arch=arm64"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder self.version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
@@ -143,11 +152,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    sh make.sh --prefix=$out --xc-host="${bootstrapLisp'}" ${
-                  lib.concatStringsSep " "
-                    (builtins.map (x: "--with-${x}") enableFeatures ++
-                     builtins.map (x: "--without-${x}") disableFeatures)
-                } ${lib.optionalString (stdenv.hostPlatform.system == "aarch64-darwin") "--arch=arm64"}
+    sh make.sh ${lib.concatStringsSep " " self.buildArgs}
     (cd doc/manual ; make info)
 
     runHook postBuild
@@ -197,4 +202,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})
