@@ -36,7 +36,8 @@
   sdlSupport ? false,
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
-  waylandSupport ? wineRelease == "wayland",
+  # Basic wayland support was upstreamed in wine-8.4.
+  waylandSupport ? lib.elem wineRelease [ "staging" "unstable" "wayland" ],
   x11Support ? stdenv.isLinux,
   embedInstallers ? false, # The Mono and Gecko MSI installers
   moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
