@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_community";
     inherit version;
-    hash = "sha256-fP42xSsfuGwQldTewM9Gahx1KnRGEE6LOc8PcFEqSFE=";
+    hash = "sha256-z2bG/3/L61gvXojuAN7Op/3spczd2nJQRvKO/Gl8Qac=";
   };
 
   nativeBuildInputs = [
