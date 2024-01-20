@@ -112,7 +112,7 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         useCcForLibs = true;
         gccForLibs = ccForLibs-wrapper.cc;
       };
-      cxxStdlibDir = ccForLibs-wrapper.cxxStdlib.solib;
+      cxxStdlibDir = ccForLibs-wrapper.cxxStdlib.solib or (throw "necessary to fix CI");
     in
     {
 
