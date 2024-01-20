@@ -1,24 +1,24 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , SDL2
 , cmake
+, fetchFromGitHub
 , lua
 , minizip
 , pkg-config
+, stdenv
 , wrapQtAppsHook
 , x264
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.4";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "fceux-${finalAttrs.version}";
-    hash = "sha256-Q6r/iBlmi0z40+U6OLZCahS0io4IBBGZMP1mJH7szRM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sY7UyslRPeLw8IDDhx0VObNCUTy3k16Xx3aGBJjxNAk=";
   };
 
   nativeBuildInputs = [
