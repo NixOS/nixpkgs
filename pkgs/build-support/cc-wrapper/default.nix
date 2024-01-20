@@ -112,6 +112,13 @@ let
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
+  libcxx =
+    if libcxx_args != null
+    then libcxx_args
+    else if useGccForLibs
+    then getLib gccForLibs
+    else null;
+
   # Analogously to cc_solib and gccForLibs_solib
   libcxx_solib = "${lib.getLib libcxx_args}/lib";
 
