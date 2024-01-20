@@ -42,6 +42,7 @@ let
     lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
     lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     mediascanner2 = callPackage ./services/mediascanner2 { };
+    telephony-service = callPackage ./services/telephony-service { };
   };
 in
   lib.makeScope libsForQt5.newScope packages
