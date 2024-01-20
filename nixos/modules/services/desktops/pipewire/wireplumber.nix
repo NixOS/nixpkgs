@@ -32,13 +32,26 @@ in
           `share/wireplumber/*/*.lua` files.
         '';
       };
+
+      extraLv2Packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        example = lib.literalExpression "[ pkgs.lsp-plugins ]";
+        description = lib.mdDoc ''
+          List of packages that provide LV2 plugins in `lib/lv2` that should
+          be made available to WirePlumber for [filter chains][wiki-filter-chain].
+
+          Config packages have their required LV2 plugins added automatically,
+          so they don't need to be specified here.
+
+          [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
+        '';
+      };
     };
   };
 
   config =
     let
-      configPackages = cfg.configPackages;
-
       pwNotForAudioConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-pw-not-for-audio.lua" ''
         -- PipeWire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
@@ -54,12 +67,29 @@ in
         bluez_monitor.properties["with-logind"] = false
       '';
 
-      configs = pkgs.buildEnv {
-        name = "wireplumber-configs";
-        paths = configPackages
+      configPackages = cfg.configPackages
           ++ lib.optional (!pwUsedForAudio) pwNotForAudioConfigPkg
           ++ lib.optionals config.services.pipewire.systemWide [ systemwideConfigPkg systemwideBluetoothConfigPkg ];
+
+      configs = pkgs.buildEnv {
+        name = "wireplumber-configs";
+        paths = configPackages;
         pathsToLink = [ "/share/wireplumber" ];
+      };
+
+      requiredLv2Packages = lib.flatten
+        (
+          lib.concatMap
+            (p:
+              lib.attrByPath ["passthru" "requiredLv2Packages"] [] p
+            )
+            configPackages
+        );
+
+      lv2Plugins = pkgs.buildEnv {
+        name = "wireplumber-lv2-plugins";
+        paths = cfg.extraLv2Packages ++ requiredLv2Packages;
+        pathsToLink = [ "/lib/lv2" ];
       };
     in
     lib.mkIf cfg.enable {
@@ -85,6 +115,10 @@ in
       systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
         # Force WirePlumber to use system dbus.
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+        LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
+
+      systemd.user.services.wireplumber.environment.LV2_PATH =
+        lib.mkIf (!config.services.pipewire.systemWide) "${lv2Plugins}/lib/lv2";
     };
 }
