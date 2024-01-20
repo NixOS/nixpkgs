@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/mozc";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes ];
+    maintainers = with maintainers; [ gebner ericsagnes pineapplehunter ];
   };
 }
