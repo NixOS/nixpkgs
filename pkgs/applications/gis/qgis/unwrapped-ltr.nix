@@ -46,11 +46,13 @@
 }:
 
 let
-
   py = python3.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        # FIX sip and pyqt5_sip compatibility. See: https://github.com/NixOS/nixpkgs/issues/273561
+        # Remove this fix in NixOS 24.05.
+        pyqt5_sip = python3.pkgs.callPackage ./pyqt5-sip.nix { };
       };
     };
   };
