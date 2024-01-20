@@ -12598,6 +12598,12 @@
     githubId = 99988;
     name = "Maarten Hoogendoorn";
   };
+  morgenkaff = {
+    email = "software@morgenkaff.dk";
+    github = "morgenkaff";
+    githubId = 6614737;
+    name = "Emil Bøgh Harder";
+  };
   MoritzBoehme = {
     email = "mail@moritzboeh.me";
     github = "MoritzBoehme";
