@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, clisp, fetchurl, fetchpatch, writeText, zstd
+{ lib, stdenv, callPackage, clisp, fetchurl, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
