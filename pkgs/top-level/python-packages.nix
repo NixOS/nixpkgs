@@ -6587,6 +6587,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lmcloud = callPackage ../development/python-modules/lmcloud { };
+
   lmdb = callPackage ../development/python-modules/lmdb {
     inherit (pkgs) lmdb;
   };
@@ -9093,6 +9095,8 @@ self: super: with self; {
 
   pdfrw = callPackage ../development/python-modules/pdfrw { };
 
+  pdfrw2 = callPackage ../development/python-modules/pdfrw2 { };
+
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
@@ -9177,6 +9181,8 @@ self: super: with self; {
   pfzy = callPackage ../development/python-modules/pfzy { };
 
   ping3 = callPackage ../development/python-modules/ping3 { };
+
+  pins = callPackage ../development/python-modules/pins { };
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
@@ -10063,6 +10069,8 @@ self: super: with self; {
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake;
   };
+
+  pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
   pyasn = callPackage ../development/python-modules/pyasn { };
 
