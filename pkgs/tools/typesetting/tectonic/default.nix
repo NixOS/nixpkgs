@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
   # workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null && stdenv.cc.libcxx?cxxabi.libName) " -l${stdenv.cc.libcxx.cxxabi.libName}";
 
   postInstall = ''
     # Makes it possible to automatically use the V2 CLI API
