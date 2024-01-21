@@ -1,35 +1,42 @@
 { lib
+, aiohttp
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, aiohttp
 , jsonrpc-base
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
   version = "3.1.5";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-websocket";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-CdYa4gcbG3EM1glxLU1hyqbNse87KJKjwSRQSFfDMM0=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
     jsonrpc-base
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
