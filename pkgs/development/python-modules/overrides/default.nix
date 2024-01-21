@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "overrides";
-  version = "7.4.0";
+  version = "7.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mkorpela";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7fbuBcb47BTVxAoKokZmGdIwHSyfyfSiCAZ4XZjWz60=";
+    hash = "sha256-UdahbhmRfuxKTxb6Afjny/hMgXX1UuDUrIcLjZ0Jtak=";
   };
 
   nativeCheckInputs = [
