@@ -103,7 +103,7 @@ in {
 
   config = mkIf cfg.enable {
     warnings = []
-      ++ optional (cfg.settings ? update_manager)
+      ++ optional (cfg.settings.update_manager.enable_system_updates or false)
         ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.''
       ++ optional (cfg.configDir != null)
         ''
