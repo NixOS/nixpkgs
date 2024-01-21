@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "urdfdom-headers";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom_headers";
     rev = version;
-    hash = "sha256-ry5wDMRxR7TtupUghe9t1XP0XMvWKiOesO5RFHPrSdI=";
+    hash = "sha256-FQSnYuTc40MOxyFsMPfoCIonP+4AUQxdq74eoQ9tOoo=";
   };
 
   patches = [
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom_headers/pull/66)
     (fetchpatch {
-      url = "https://github.com/ros/urdfdom_headers/commit/c9c993147bbf18d5ec83bae684c5780281e529b4.patch";
-      hash = "sha256-BnYPdcetYSim2O1R38N0d1tY0Id++AgKNic8+dlM6Vg=";
+      url = "https://github.com/ros/urdfdom_headers/commit/6e0cea148c3a7123f8367cd48d5709a4490c32f1.patch";
+      hash = "sha256-LC2TACGma/k6+WE9fTkzY98SgJYKsVuj5O9v84Q5mQ4=";
     })
   ];
 
