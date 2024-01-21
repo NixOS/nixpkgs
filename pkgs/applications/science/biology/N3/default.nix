@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "06hci7gzhy8p34ggvx7gah2k9yxpwhgmq1cgw8pcd1r82g4rg6kd";
   };
 
+  postPatch = ''
+    substituteInPlace src/VolumeHist/DHistogram.cc \
+      --replace "register " ""
+  '';
+
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ebtks ];
   propagatedBuildInputs = with perlPackages; [ perl MNI-Perllib GetoptTabular ];
