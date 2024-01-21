@@ -70,8 +70,11 @@ stdenv.mkDerivation {
     license = with licenses; [ mit /* and */ lpl-102 ];
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
+    # Broken for x86_64-darwin at 2024-01-21
+    # error: call to undeclared function 'p9mbtowc'
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/282641
     # needs additional work to support aarch64-darwin
     # due to usage of _DARWIN_NO_64_BIT_INODE
-    broken = stdenv.isAarch64 && stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }
