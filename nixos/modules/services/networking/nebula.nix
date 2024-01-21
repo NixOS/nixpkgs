@@ -10,6 +10,15 @@ let
   format = pkgs.formats.yaml {};
 
   nameToId = netName: "nebula-${netName}";
+
+  resolveFinalPort = netCfg:
+    if netCfg.listen.port == null then
+      if (netCfg.isLighthouse || netCfg.isRelay) then
+        4242
+      else
+        0
+    else
+      netCfg.listen.port;
 in
 {
   # Interface
@@ -181,15 +190,7 @@ in
           };
           listen = {
             host = netCfg.listen.host;
-            port = (
-              if netCfg.listen.port == null then
-                if (netCfg.isLighthouse || netCfg.isRelay) then
-                  4242
-                else
-                  0
-              else
-                netCfg.listen.port
-            );
+            port = resolveFinalPort netCfg;
           };
           tun = {
             disabled = netCfg.tun.disable;
@@ -202,10 +203,10 @@ in
         } netCfg.settings;
         configFile = format.generate "nebula-config-${netName}.yml" (
           warnIf
-            ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port < 1)
+            ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
             ''
               Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
-              You will experience connectivity issues.
+              You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
             ''
             settings
           );
@@ -252,7 +253,7 @@ in
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (filter (port: port != null && port > 0) (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks));
+      unique (filter (port: port > 0) (mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
