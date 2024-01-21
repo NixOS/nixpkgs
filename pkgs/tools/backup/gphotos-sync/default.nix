@@ -5,14 +5,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "gphotos-sync";
-  version = "3.1.2";
+  version = "3.04";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gilesknap";
     repo = "gphotos-sync";
-    rev = version;
-    hash = "sha256-lLw450Rk7tIENFTZWHoinkhv3VtctDv18NKxhox+NgI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OucYS4ptv/InSqWkJeF7O5AfqF+iXy6dWcEOSCu21FY=";
   };
 
   patches = [
