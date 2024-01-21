@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
 
   buildInputs = [
     SDL2
+    extra-cmake-modules
     libarchive
     libslirp
     libGL
@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     zstd
   ];
+
+  strictDeps = true;
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
