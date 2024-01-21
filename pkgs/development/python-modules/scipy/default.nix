@@ -82,7 +82,7 @@ in buildPythonPackage {
   # configurePhase, so we pass on it.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>=' \
+      --replace-fail 'numpy==' 'numpy>=' \
   '';
 
   nativeBuildInputs = [
