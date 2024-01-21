@@ -1781,7 +1781,7 @@ dependencies = [
 
 [[package]]
 name = "rye"
-version = "0.18.0"
+version = "0.19.0"
 dependencies = [
  "age",
  "anyhow",
@@ -1827,6 +1827,7 @@ dependencies = [
  "whattheshell",
  "which",
  "winapi",
+ "winreg",
  "zip",
  "zstd",
 ]
@@ -2652,6 +2653,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61de7bac303dc551fe038e2b3cef0f571087a47571ea6e79a87692ac99b99699"
 dependencies = [
  "memchr",
+]
+
+[[package]]
+name = "winreg"
+version = "0.51.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "937f3df7948156640f46aacef17a70db0de5917bda9c92b0f751f3a955b588fc"
+dependencies = [
+ "cfg-if",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
