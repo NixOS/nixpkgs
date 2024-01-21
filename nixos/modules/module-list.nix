@@ -103,6 +103,7 @@
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
+  ./hardware/video/capture/mwecocapture.nix
   ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/switcheroo-control.nix
