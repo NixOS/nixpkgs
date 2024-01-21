@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, bzip2, libtomcrypt, zlib, darwin }:
 
 stdenv.mkDerivation rec {
-  pname = "StormLib";
+  pname = "stormlib";
   version = "9.22";
 
   src = fetchFromGitHub {
