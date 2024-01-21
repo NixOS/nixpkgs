@@ -28,5 +28,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license   = licenses.free;
+    # Broken for Darwin at 2024-01-21:
+    # error: ISO C++17 does not allow 'register' storage class specifier
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/282626
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
