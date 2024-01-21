@@ -4860,12 +4860,12 @@ final: prev:
 
   lazy-nvim = buildVimPlugin {
     pname = "lazy.nvim";
-    version = "2024-01-19";
+    version = "2024-01-21";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lazy.nvim";
-      rev = "747bb955c5bfb2dc5d51280132f00a56a53f9f6d";
-      sha256 = "0x9zasdj9nikida0csci1mnd4ajbcysqmz19h0rlkm9chd41fgv8";
+      rev = "28126922c9b54e35a192ac415788f202c3944c9f";
+      sha256 = "sha256-Qicyec1ZvSb5JVVTW8CrTjndHCLso8Rb2V5IA6D4Rps=";
     };
     meta.homepage = "https://github.com/folke/lazy.nvim/";
   };
