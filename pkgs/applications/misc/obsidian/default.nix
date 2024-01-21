@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , lib
+, libGL
 , makeWrapper
 , electron
 , makeDesktopItem
@@ -51,6 +52,7 @@ let
       runHook preInstall
       mkdir -p $out/bin
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
+        --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ libGL ]}" \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
