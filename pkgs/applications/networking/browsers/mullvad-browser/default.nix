@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   allowSubstitutes = false;
 
   desktopItems = [(makeDesktopItem {
-    name = "mullvadbrowser";
+    name = "mullvad-browser";
     exec = "mullvad-browser %U";
     icon = "mullvad-browser";
     desktopName = "Mullvad Browser";
