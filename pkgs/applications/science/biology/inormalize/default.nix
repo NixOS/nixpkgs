@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lgmask-interp.patch ./nu_correct_norm-interp.patch ];
 
+  postPatch = ''
+    substituteInPlace inormalize.cc \
+      --replace "clamp" "::clamp"
+  '';
+
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ebtks ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
