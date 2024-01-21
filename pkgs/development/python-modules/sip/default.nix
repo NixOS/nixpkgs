@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-COZvdCWS64GKyP2kFz4u1kyfLUC3C+4R2xxJkSfZhFA=";
   };
 
+  postPatch = ''
+    substituteInPlace sipbuild/generator/outputs/code.py \
+      --replace SocstringSignature DocstringSignature
+  '';
+
   nativeBuildInputs = [
     setuptools
     wheel
