@@ -18,5 +18,12 @@ stdenv.mkDerivation rec {
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
     platforms = platforms.unix;
     license = licenses.epl10;
+    # Broken for Darwin at 2024-01-21
+    # Log failure:
+    #   aarch64-darwin: https://hydra.nixos.org/build/246540922/nixlog/1
+    #   x86_64-darwin: https://hydra.nixos.org/build/246525811/nixlog/1
+    # Tracking issue:
+    #   https://github.com/NixOS/nixpkgs/issues/282606
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
