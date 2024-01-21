@@ -20481,6 +20481,13 @@
     githubId = 11229748;
     name = "Lin Yinfeng";
   };
+  yisraeldov = {
+    email = "lebow@lebowtech.com";
+    name = "Yisrael Dov Lebow";
+    github = "yisraeldov";
+    githubId = 138219;
+    matrix = "@yisraeldov:matrix.org";
+  };
   yisuidenghua = {
     email = "bileiner@gmail.com";
     name = "Milena Yisui";
