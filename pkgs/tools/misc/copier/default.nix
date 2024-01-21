@@ -2,7 +2,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "8.1.0";
+  version = "9.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
+    hash = "sha256-x5r7Xv4lAOMkR+UIEeSY7LvbYMLpTWYuICYe9ygz1tA=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ jonringer greg ];
     mainProgram = "copier";
   };
 }
