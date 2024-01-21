@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   version = "1.7.1";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
+  outputs = ["lib" "dev" "out"];
+
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
