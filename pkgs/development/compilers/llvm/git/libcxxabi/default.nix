@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       sha256 = "1xyjd56m4pfwq8p3xh6i8lhkk9kq15jaml7qbhxdf87z4jjkk63a";
       stripLen = 1;
     })
+    ../../libcxxabi-re-export.diff
   ];
 
   postPatch = ''
@@ -94,6 +95,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$dev/include"
     install -m 644 ../../${pname}/include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$dev/share/${pname}"
+    touch "$dev/share/${pname}/exceptions.exp" "$dev/share/${pname}/new-delete.exp"
+    if [[ -f libcxxabi/re-exports/new-delete.exp ]]; then
+      install -Dm 644 libcxxabi/re-exports/new-delete.exp -t "$dev/share/${pname}"
+    fi
+    if [[ -f libcxxabi/re-exports/exceptions.exp ]]; then
+      install -Dm 644 libcxxabi/re-exports/exceptions.exp -t "$dev/share/${pname}"
+      cat libcxxabi/re-exports/personality-*.exp >>  "$dev/share/${pname}/exceptions.exp"
+    fi
   '';
 
   passthru = {

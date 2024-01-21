@@ -1,0 +1,13 @@
+diff --git a/libcxxabi/src/CMakeLists.txt b/libcxxabi/src/CMakeLists.txt
+index 4198827203fc..1a028720bb7d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -222,6 +222,7 @@ if (LIBCXXABI_ENABLE_SHARED)
+     function(reexport_symbols file)
+       export_symbols("${file}")
+       target_link_libraries(cxxabi-reexports INTERFACE "-Wl,-reexported_symbols_list,${file}")
++      file(INSTALL "${file}" DESTINATION "${LIBCXXABI_BINARY_DIR}/re-exports")
+     endfunction()
+ 
+     export_symbols("${CMAKE_CURRENT_SOURCE_DIR}/../lib/itanium-base.exp")
+

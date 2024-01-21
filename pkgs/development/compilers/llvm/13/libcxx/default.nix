@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ../../libcxx-re-export.diff
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
@@ -44,6 +45,9 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+    ] ++ lib.optionals (!headersOnly && stdenv.hostPlatform.isDarwin) [
+      "-DLIBCXXABI_REEXPORT_NEW_DELETE=${lib.getDev cxxabi}/share/${cxxabi.pname}/new-delete.exp"
+      "-DLIBCXXABI_REEXPORT_EXCEPTIONS=${lib.getDev cxxabi}/share/${cxxabi.pname}/exceptions.exp"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   buildFlags = lib.optional headersOnly "generate-cxx-headers";

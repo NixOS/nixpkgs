@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
       relative = "libcxx";
     })
+    ../../libcxx-re-export.diff
   ];
 
   postPatch = ''
@@ -101,6 +102,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (headersOnly) [
       "-DCMAKE_C_COMPILER_WORKS=ON"
       "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    ] ++ lib.optionals (!headersOnly && stdenv.hostPlatform.isDarwin) [
+      "-DLIBCXXABI_REEXPORT_NEW_DELETE=${lib.getDev cxxabi}/share/${cxxabi.pname}/new-delete.exp"
+      "-DLIBCXXABI_REEXPORT_EXCEPTIONS=${lib.getDev cxxabi}/share/${cxxabi.pname}/exceptions.exp"
     ];
 
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";

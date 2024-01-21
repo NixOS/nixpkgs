@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ../../libcxxabi-re-export.diff
   ];
 
   nativeBuildInputs = [ cmake python3 ];
@@ -74,6 +75,16 @@ stdenv.mkDerivation rec {
       make install
       install -d 755 $out/include
       install -m 644 ../include/*.h $out/include
+
+      mkdir -p "$dev/share/${pname}"
+      touch "$dev/share/${pname}/exceptions.exp" "$dev/share/${pname}/new-delete.exp"
+      if [[ -f re-exports/new-delete.exp ]]; then
+        install -Dm 644 re-exports/new-delete.exp -t "$dev/share/${pname}"
+      fi
+      if [[ -f re-exports/exceptions.exp ]]; then
+        install -Dm 644 re-exports/exceptions.exp -t "$dev/share/${pname}"
+        cat re-exports/personality-*.exp >>  "$dev/share/${pname}/exceptions.exp"
+      fi
     ''
     else ''
       install -d -m 755 $out/include $out/lib

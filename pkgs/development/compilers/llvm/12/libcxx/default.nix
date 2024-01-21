@@ -6,7 +6,7 @@
 
 assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcxx";
   inherit version;
 
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./gnu-install-dirs.patch
+    ../../libcxx-re-export.diff
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
@@ -44,6 +45,9 @@ stdenv.mkDerivation {
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DLIBCXXABI_REEXPORT_NEW_DELETE=${lib.getDev cxxabi}/share/${cxxabi.pname}/new-delete.exp"
+      "-DLIBCXXABI_REEXPORT_EXCEPTIONS=${lib.getDev cxxabi}/share/${cxxabi.pname}/exceptions.exp"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   preInstall = lib.optionalString (stdenv.isDarwin) ''

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ../../libcxxabi-re-export.diff
   ];
 
   nativeBuildInputs = [ cmake python3 ];
@@ -64,6 +65,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$dev/include"
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$dev/share/${pname}"
+    touch "$dev/share/${pname}/exceptions.exp" "$dev/share/${pname}/new-delete.exp"
+    if [[ -f re-exports/new-delete.exp ]]; then
+      install -Dm 644 re-exports/new-delete.exp -t "$dev/share/${pname}"
+    fi
+    if [[ -f re-exports/exceptions.exp ]]; then
+      install -Dm 644 re-exports/exceptions.exp -t "$dev/share/${pname}"
+      cat re-exports/personality-*.exp >>  "$dev/share/${pname}/exceptions.exp"
+    fi
   '';
 
   passthru = {

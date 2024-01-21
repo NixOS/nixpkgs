@@ -1,0 +1,21 @@
+diff --git a/libcxx/src/CMakeLists.txt b/libcxx/src/CMakeLists.txt
+index 329964a00136..ac6f510196bb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -242,6 +242,16 @@ if (LIBCXX_ENABLE_SHARED)
+       "-Wl,-force_symbols_not_weak_list,${CMAKE_CURRENT_SOURCE_DIR}/../lib/notweak.exp"
+       "-Wl,-force_symbols_weak_list,${CMAKE_CURRENT_SOURCE_DIR}/../lib/weak.exp")
+ 
++    if (NOT LIBCXX_ENABLE_NEW_DELETE_DEFINITIONS
++        AND DEFINED LIBCXXABI_REEXPORT_NEW_DELETE)
++      target_link_libraries(cxx_shared PRIVATE
++              "-Wl,-reexported_symbols_list,${LIBCXXABI_REEXPORT_NEW_DELETE}")
++    endif()
++    if (DEFINED LIBCXXABI_REEXPORT_EXCEPTIONS)
++      target_link_libraries(cxx_shared PRIVATE
++              "-Wl,-reexported_symbols_list,${LIBCXXABI_REEXPORT_EXCEPTIONS}")
++    endif()
++
+     target_link_libraries(cxx_shared PRIVATE $<TARGET_NAME_IF_EXISTS:cxxabi-reexports>)
+   endif()
+ 
