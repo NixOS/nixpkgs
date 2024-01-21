@@ -905,6 +905,7 @@ in {
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   tsja = handleTest ./tsja.nix {};
   tsm-client-gui = handleTest ./tsm-client-gui.nix {};
+  ttyd = handleTest ./web-servers/ttyd.nix {};
   txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
