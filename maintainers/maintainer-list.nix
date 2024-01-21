@@ -11334,6 +11334,11 @@
     githubId = 1780588;
     name = "Malte Poll";
   };
+  malteneuss = {
+    github = "malteneuss";
+    githubId = 5301202;
+    name = "Malte Neuss";
+  };
   malte-v = {
     email = "nixpkgs@mal.tc";
     github = "malte-v";
