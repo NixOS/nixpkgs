@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , alsa-lib
 , dbus
 , docutils
 , ell
-, enableExperimental ? false
 , fetchpatch
 , fetchurl
 , glib
@@ -13,17 +11,19 @@
 , pkg-config
 , python3
 , readline
+, stdenv
 , systemdMinimal
 , udev
+, enableExperimental ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.71";
+  version = "5.72";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uCjUGMk87R9Vthb7VILPAVN0QL+zT72hpWTz7OlHNdg=";
+    hash = "sha256-SZ1/o0WplsG7ZQ9cZ0nh2SkRH6bs4L4OmGh/7mEkU24=";
   };
 
   buildInputs = [
