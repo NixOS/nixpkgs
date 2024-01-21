@@ -3424,6 +3424,12 @@
     githubId = 46303707;
     name = "Christian Lütke-Stetzkamp";
   };
+  clr-cera = {
+    email = "clrcera05@gmail.com";
+    github = "clr-cera";
+    githubId = 93736542;
+    name = "Clr";
+  };
   cmacrae = {
     email = "hi@cmacr.ae";
     github = "cmacrae";
@@ -20242,6 +20248,12 @@
     github = "zopieux";
     githubId = 81353;
     name = "Alexandre Macabies";
+  };
+  zoriya = {
+    email = "zoe.roux@zoriya.dev";
+    github = "zoriya";
+    githubId = 32224410;
+    name = "Zoe Roux";
   };
   zowoq = {
     github = "zowoq";
