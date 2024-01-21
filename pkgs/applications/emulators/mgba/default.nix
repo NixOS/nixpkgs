@@ -3,6 +3,7 @@
 , cmake
 , fetchFromGitHub
 , ffmpeg
+, discord-rpc
 , libedit
 , libelf
 , libepoxy
@@ -13,6 +14,7 @@
 , pkg-config
 , stdenv
 , wrapGAppsHook
+, enableDiscordRpc ? false
 }:
 
 let
@@ -25,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
+    hash = "sha256-wSt3kyjRxKBnDOVY10jq4cpv7uIaBUIcsZr6aU7XnMA=";
   };
 
   outputs = [ "out" "dev" "doc" "lib" "man" ];
@@ -56,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
+  ]
+  ++ lib.optionals enableDiscordRpc [ discord-rpc ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
   ];
 
   strictDeps = true;
@@ -88,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mgba";
     maintainers = with lib.maintainers; [ MP2E AndersonTorres ];
     platforms = lib.platforms.linux;
+    broken = enableDiscordRpc; # Some obscure `ld` error
   };
 })
