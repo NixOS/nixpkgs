@@ -9,7 +9,7 @@
 , libepoxy
 , libsForQt5
 , libzip
-, lua5_4
+, lua
 , minizip
 , pkg-config
 , stdenv
@@ -18,7 +18,6 @@
 }:
 
 let
-    lua = lua5_4;
     inherit (libsForQt5)
       qtbase
       qtmultimedia
