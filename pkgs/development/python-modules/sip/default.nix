@@ -9,6 +9,7 @@
 , ply
 , toml
 , tomli
+, poppler-qt5
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sipbuild" ];
+
+  passthru.tests = {
+    inherit poppler-qt5;
+  };
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
