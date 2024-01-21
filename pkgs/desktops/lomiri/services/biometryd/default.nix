@@ -56,6 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/OPNA2608/biometryd/-/commit/9e52fad0139c5a45f69e6a6256b2b5ff54f77740.patch";
       hash = "sha256-DZSdzKq6EYgAllKSDgkGk2g57zHN+gI5fOoj7U5AcKY=";
     })
+
+    # Fix GCC13 & musl compat
+    # Remove when version > 0.3.0
+    (fetchpatch {
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/bc6f1a743dbb0eda6310bd13229f650be62aa3b3.patch";
+      hash = "sha256-Pr3zHrMNxTKYHsqHEcVv4fYVknjUwBFRTSuBxZhqUi8=";
+    })
   ];
 
   postPatch = ''
