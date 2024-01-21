@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , poetry-core
+, pythonRelaxDepsHook
 , flet-core
 , httpx
 , oauthlib
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "flet-runtime";
   version = "0.18.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "flet_runtime";
@@ -20,6 +21,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "httpx"
   ];
 
   propagatedBuildInputs = [
