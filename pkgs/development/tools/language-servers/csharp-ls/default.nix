@@ -3,17 +3,17 @@
 , dotnetCorePackages
 }:
 let
-  inherit (dotnetCorePackages) sdk_7_0;
+  inherit (dotnetCorePackages) sdk_8_0;
 in
 
 buildDotnetGlobalTool rec {
   pname = "csharp-ls";
-  version = "0.10.0";
+  version = "0.11.0";
 
-  nugetSha256 = "sha256-1t8U2Q4lIlj2QwbnevAMMGcqtpPh5zk0Bd7EHa7qvCI=";
+  nugetSha256 = "sha256-zB8uJqlf8kL8jh3WNsPQF7EJpONqi23co3O/iBzfEoU=";
 
-  dotnet-sdk = sdk_7_0;
-  dotnet-runtime = sdk_7_0;
+  dotnet-sdk = sdk_8_0;
+  dotnet-runtime = sdk_8_0;
 
   meta = with lib; {
     description = "Roslyn-based LSP language server for C#";
