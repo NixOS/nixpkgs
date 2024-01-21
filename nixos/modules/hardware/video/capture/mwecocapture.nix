@@ -31,10 +31,10 @@ in
 
       # Set the png picture to be displayed when an loking input signal is detected.
       options MWEcoCapture locking_file=${kernelPackages.mwecocapture}/res/Locking.png
-	  
-	  # Set the png picture to be displayed when the bandwidth is limited.
-	  options MWEcoCapture limited_bandwidth_file=${kernelPackages.mwecocapture}/res/LimitedBandwidth.png
- 
+
+      # Set the png picture to be displayed when the bandwidth is limited.
+      options MWEcoCapture limited_bandwidth_file=${kernelPackages.mwecocapture}/res/LimitedBandwidth.png
+
       # Message signaled interrupts switch
       #options MWEcoCapture disable_msi=0
 
