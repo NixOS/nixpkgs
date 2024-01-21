@@ -341,7 +341,10 @@ in
                 ln -s ${bootstrapTools}/lib/clang $out/lib
                 ln -s ${bootstrapTools}/include   $out
               '';
-              passthru.isFromBootstrapFiles = true;
+              passthru = {
+                isFromBootstrapFiles = true;
+                hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
+              };
             };
             clang-unwrapped = selfTools.libclang;
             libllvm = self.stdenv.mkDerivation {
