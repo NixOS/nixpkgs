@@ -13,7 +13,7 @@ let
     propagatedBuildInputs = old.propagatedBuildInputs ++ selectedXontribs;
 
     passthru = rec {
-      inherit withXontribs;
+      inherit withXontribs python;
       inherit (python.pkgs) xontribs;
     };
   }));

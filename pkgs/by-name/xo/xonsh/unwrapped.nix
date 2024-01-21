@@ -1,10 +1,10 @@
 { lib
-, coreutils
 , fetchFromGitHub
+, python3
+, glibcLocales
+, coreutils
 , git
 , gitUpdater
-, glibcLocales
-, python3
 }:
 
 let
