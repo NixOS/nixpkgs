@@ -13025,6 +13025,12 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
+  nanotwerp = {
+    email = "nanotwerp@gmail.com";
+    github = "nanotwerp";
+    githubId = 17240342;
+    name = "Nano Twerpus";
+  };
   naphta = {
     github = "naphta";
     githubId = 6709831;
