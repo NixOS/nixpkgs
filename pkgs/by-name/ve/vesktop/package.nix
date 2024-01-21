@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (substituteAll { inherit vencord; src = ./use_system_vencord.patch; })
+    ./disable_update_checking.patch
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
