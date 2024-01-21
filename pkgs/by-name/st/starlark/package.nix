@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "starlark";
-  version = "unstable-2023-11-01";
+  version = "0-unstable-2023-11-21";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "starlark-go";
-    rev = "556fd59b42f68a2fb1f84957741b72811c714e51";
-    hash = "sha256-0IiEtZOQEvE2Qm//lI1eyFFL1q/ZQzO9JzmiGsk0HkQ=";
+    rev = "90ade8b19d09805d1b91a9687198869add6dfaa1";
+    hash = "sha256-ZNOPx7L21A4BR5WshMMAHGm6j1ukWC9waJ1lYLvxBw0=";
   };
 
   vendorHash = "sha256-jQE5fSqJeiDV7PW7BY/dzCxG6b/KEVIobcjJsaL2zMw=";
@@ -19,5 +19,6 @@ buildGoModule rec {
     description = "An interpreter for Starlark, implemented in Go";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "starlark";
   };
 }

@@ -18042,8 +18042,6 @@ with pkgs;
 
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
-  starlark = callPackage ../development/interpreters/starlark { };
-
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
   supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
