@@ -25178,8 +25178,6 @@ with pkgs;
 
   stegsolve = callPackage ../tools/graphics/stegsolve { };
 
-  StormLib = callPackage ../development/libraries/StormLib { };
-
   stxxl = callPackage ../development/libraries/stxxl { };
 
   sv-lang = callPackage ../applications/science/electronics/sv-lang { };
