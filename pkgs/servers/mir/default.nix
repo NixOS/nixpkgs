@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.16.1";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VN/HNgz2aKFCDpVaTxdPZzjO5i2zYhOLtzlRua+dzuw=";
+    hash = "sha256-Ccv6aiFbb6Rj/dHQ8wDBWifHtswxWew7ydW8Z094B0s=";
   };
 
   postPatch = ''
