@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
+    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication {
     "test_command_pipeline_capture"
     "test_dirty_working_directory"
     "test_man_completion"
+    "test_procproxy_not_captured[hiddenobject]"
     "test_vc_get_branch"
     "test_bash_and_is_alias_is_only_functional_alias"
   ];
