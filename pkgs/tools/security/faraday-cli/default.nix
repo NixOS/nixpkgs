@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
   version = "2.1.10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
@@ -14,6 +14,10 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/${version}";
     hash = "sha256-7Yg2m0xHpBPZ58gJodSYO8vXaxSlr4GK1Lin63WozOE=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow
