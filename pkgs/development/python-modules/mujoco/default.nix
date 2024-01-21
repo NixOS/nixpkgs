@@ -12,6 +12,7 @@
 , pyopengl
 , python
 , setuptools
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -56,11 +57,15 @@ buildPythonPackage rec {
       # E.g. 3.11.2 -> "311"
       pythonVersionMajorMinor = with lib.versions;
         "${major python.pythonVersion}${minor python.pythonVersion}";
+
+      # E.g. "linux-aarch64"
+      platform = with stdenv.hostPlatform.parsed;
+        "${kernel.name}-${cpu.name}";
     in ''
       ${perl}/bin/perl -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
       ${perl}/bin/perl -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
 
-      build="/build/${pname}-${version}/build/temp.linux-x86_64-cpython-${pythonVersionMajorMinor}/"
+      build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
       mkdir -p $build/_deps
       ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
       ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
