@@ -15633,6 +15633,12 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  raspher = {
+    email = "raspher@protonmail.com";
+    github = "raspher";
+    githubId = 23345803;
+    name = "Szymon Scholz";
+  };
   ratcornu = {
     email = "ratcornu@skaven.org";
     github = "RatCornu";
