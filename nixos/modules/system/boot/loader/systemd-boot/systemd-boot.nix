@@ -34,6 +34,8 @@ let
       then cfg.xbootldrMountPoint
       else efi.efiSysMountPoint;
 
+    nixosDir = "/EFI/nixos";
+
     inherit (config.system.nixos) distroName;
 
     memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
@@ -56,12 +58,12 @@ let
 
       ${concatStrings (mapAttrsToList (n: v: ''
         ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/EFI/nixos/.extra-files/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
       '') cfg.extraFiles)}
 
       ${concatStrings (mapAttrsToList (n: v: ''
         ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/EFI/nixos/.extra-files/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
       '') cfg.extraEntries)}
     '';
   };

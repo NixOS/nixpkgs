@@ -19,6 +19,7 @@ from dataclasses import dataclass
 EFI_SYS_MOUNT_POINT = "@efiSysMountPoint@"
 BOOT_MOUNT_POINT = "@bootMountPoint@"
 LOADER_CONF = f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"  # Always stored on the ESP
+NIXOS_DIR = "@nixosDir@"
 TIMEOUT = "@timeout@"
 EDITOR = bool("@editor@")
 CONSOLE_MODE = "@consoleMode@"
@@ -129,9 +130,9 @@ def copy_from_file(file: str, dry_run: bool = False) -> str:
     store_file_path = os.path.realpath(file)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    efi_file_path = f"{NIXOS_DIR}/{store_dir}-{suffix}.efi"
     if not dry_run:
-        copy_if_not_exists(store_file_path, f"{BOOT_MOUNT_POINT}%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, f"{BOOT_MOUNT_POINT}{efi_file_path}")
     return efi_file_path
 
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
@@ -223,7 +224,7 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
             continue
         if not (prof, gen_number, None) in gens:
             os.unlink(path)
-    for path in glob.iglob(f"{BOOT_MOUNT_POINT}/efi/nixos/*"):
+    for path in glob.iglob(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
@@ -231,8 +232,8 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
 def cleanup_esp() -> None:
     for path in glob.iglob(f"{EFI_SYS_MOUNT_POINT}/loader/entries/nixos*"):
         os.unlink(path)
-    if os.path.isdir(f"{EFI_SYS_MOUNT_POINT}/efi/nixos"):
-        shutil.rmtree(f"{EFI_SYS_MOUNT_POINT}/efi/nixos")
+    if os.path.isdir(f"{EFI_SYS_MOUNT_POINT}/{NIXOS_DIR}"):
+        shutil.rmtree(f"{EFI_SYS_MOUNT_POINT}/{NIXOS_DIR}")
 
 
 def get_profiles() -> list[str]:
@@ -304,7 +305,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             subprocess.check_call([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"] + bootctl_flags + ["update"])
 
-    os.makedirs(f"{BOOT_MOUNT_POINT}/efi/nixos", exist_ok=True)
+    os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}", exist_ok=True)
     os.makedirs(f"{BOOT_MOUNT_POINT}/loader/entries", exist_ok=True)
 
     gens = get_generations()
@@ -336,8 +337,8 @@ def install_bootloader(args: argparse.Namespace) -> None:
         # automatically, as we don't have information about the mount point anymore.
         cleanup_esp()
 
-    for root, _, files in os.walk(f"{BOOT_MOUNT_POINT}/efi/nixos/.extra-files", topdown=False):
-        relative_root = root.removeprefix(f"{BOOT_MOUNT_POINT}/efi/nixos/.extra-files").removeprefix("/")
+    for root, _, files in os.walk(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files", topdown=False):
+        relative_root = root.removeprefix(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files").removeprefix("/")
         actual_root = os.path.join(f"{BOOT_MOUNT_POINT}", relative_root)
 
         for file in files:
@@ -351,7 +352,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
             os.rmdir(actual_root)
         os.rmdir(root)
 
-    os.makedirs(f"{BOOT_MOUNT_POINT}/efi/nixos/.extra-files", exist_ok=True)
+    os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files", exist_ok=True)
 
     subprocess.check_call(COPY_EXTRA_FILES)
 
