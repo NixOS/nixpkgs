@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 
@@ -7,29 +6,25 @@
 , setuptools
 
 # dependencies
-, apricot-select
-, networkx
 , numpy
-, scikit-learn
+, joblib
+, networkx
 , scipy
-, torch
-
-# tests
-, pytestCheckHook
+, pyyaml
+, cython
 }:
-
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "0.14.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
     # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
+    hash = "sha256-PoDAtNm/snq4isotkoCTVYUuwr9AKKwiXIojUFMH/YE=";
   };
 
   nativeBuildInputs = [
@@ -37,20 +32,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    apricot-select
-    networkx
     numpy
-    scikit-learn
+    joblib
+    networkx
     scipy
-    torch
+    pyyaml
+    cython
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # https://github.com/etal/cnvkit/issues/815
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;
