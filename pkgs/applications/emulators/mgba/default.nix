@@ -1,17 +1,17 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , SDL2
 , cmake
+, fetchFromGitHub
 , ffmpeg
 , libedit
 , libelf
 , libepoxy
+, libsForQt5
 , libzip
 , lua5_4
 , minizip
 , pkg-config
-, libsForQt5
+, stdenv
 , wrapGAppsHook
 }:
 
@@ -34,17 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
   };
 
+  outputs = [ "out" "dev" "doc" "lib" "man" ];
+
   nativeBuildInputs = [
+    SDL2
     cmake
     pkg-config
     wrapGAppsHook
     wrapQtAppsHook
   ];
-
-  dontWrapGApps = true;
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
 
   buildInputs = [
     SDL2
@@ -60,7 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  meta = {
     homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
     longDescription = ''
@@ -77,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
-    changelog = "https://github.com/mgba-emu/mgba/blob/${finalAttrs.version}/CHANGES";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ MP2E AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
+    license = with lib.licenses; [ mpl20 ];
     mainProgram = "mgba";
+    maintainers = with lib.maintainers; [ MP2E AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 })
