@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "django-two-factor-auth";
   version = "1.15.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
