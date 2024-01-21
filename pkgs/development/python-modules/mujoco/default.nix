@@ -1,13 +1,15 @@
-{ buildPythonPackage
+{ absl-py
+, buildPythonPackage
 , cmake
+, etils
 , fetchPypi
 , glfw
 , lib
 , mujoco
 , numpy
 , perl
-, pkgs
 , pybind11
+, pyopengl
 , python
 , setuptools
 }:
@@ -30,7 +32,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake setuptools ];
   dontUseCmakeConfigure = true;
   buildInputs = [ mujoco pybind11 ];
-  propagatedBuildInputs = [ glfw numpy ];
+  propagatedBuildInputs = [
+    absl-py
+    etils
+    glfw
+    numpy
+    pyopengl
+  ];
 
   pythonImportsCheck = [ "${pname}" ];
 
