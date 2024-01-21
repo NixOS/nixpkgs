@@ -32,5 +32,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.pasqui23 ];
     platforms = platforms.all;
+    # Broken for x86_64-darwin at 2024-01-21
+    # Log file: https://hydra.nixos.org/build/246388745/nixlog/1
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/282632
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }
