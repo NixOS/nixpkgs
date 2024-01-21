@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "tomalok";
-    repo = pname;
+    repo = "yx";
     rev = version;
     sha256 = "sha256-oY61V9xP0DwRooabzi0XtaFsQa2GwYbuvxfERXQtYcA=";
   };
