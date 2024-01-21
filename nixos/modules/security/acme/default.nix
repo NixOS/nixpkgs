@@ -897,10 +897,10 @@ in {
         certs = attrValues cfg.certs;
       in [
         {
-          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
-            `security.acme.email` to register with the CA. Note that using
+            `security.acme.defaults.email` to register with the CA. Note that using
             many different addresses for certs may trigger account rate limits.
           '';
         }

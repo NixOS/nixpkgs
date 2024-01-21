@@ -21,13 +21,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.10";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uln0uoaEZgV9FN3HEBTeFOD7d6RkAQLgQZw7bcgu26A=";
+    hash = "sha256-JdfFzlfj1J5gx11MfOqIdzvBiheWBaGLxg5jCvvsrp8=";
   };
 
   nativeBuildInputs = [

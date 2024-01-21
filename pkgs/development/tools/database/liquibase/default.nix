@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "liquibase";
-  version = "4.24.0";
+  version = "4.25.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-bs9jinW1AbeYGJ2oJOFn8p25NHcYYQnyVJUIxiZtCyo=";
+    hash = "sha256-iyt6qOx1XU7lL6AhDNKiRP0W7WlfxKciRVYpUHdtKlY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
