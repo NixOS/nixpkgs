@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.1.0";
+  version = "3.1.1";
 
   pyproject = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rZNVihIuvNJnQWqA5tV9DG5r3/LttWNW6fN2js+fDb8=";
+    hash = "sha256-ESEnPeL79O0wnllEo9s50B84WyINIOeMRg7E78BpRbM=";
   };
 
   nativeBuildInputs = [ cmake setuptools ];
@@ -76,6 +76,7 @@ buildPythonPackage rec {
     description =
       "Python bindings for MuJoCo: a general purpose physics simulator.";
     homepage = "https://mujoco.org/";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tmplt ];
   };
