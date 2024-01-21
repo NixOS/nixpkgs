@@ -3310,6 +3310,8 @@ self: super: with self; {
 
   docker = callPackage ../development/python-modules/docker { };
 
+  docker-systemctl-replacement = callPackage ../development/python-modules/docker-systemctl-replacement { };
+
   dockerfile-parse = callPackage ../development/python-modules/dockerfile-parse { };
 
   dockerpty = callPackage ../development/python-modules/dockerpty { };
