@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, libyaml }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, libyaml
+, testers
+, yx
+}:
 stdenv.mkDerivation rec {
   pname = "yx";
   version = "1.0.0";
@@ -19,6 +25,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libyaml ];
 
   doCheck = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = yx;
+    command = "${meta.mainProgram} -v";
+    version = "v${yx.version}";
+  };
 
   meta = with lib; {
     description = "YAML Data Extraction Tool";
