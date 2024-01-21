@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control Vodafon Station";
     homepage = "https://github.com/chemelli74/aiovodafone";
-    changelog = "https://github.com/chemelli74/aiovodafone/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/chemelli74/aiovodafone/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
