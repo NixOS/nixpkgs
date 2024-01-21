@@ -4,10 +4,10 @@
 , ...
 }:
 with lib; let
-  cfg = config.services.handheldDaemon;
+  cfg = config.services.handheld-daemon;
 in
 {
-  options.services.handheldDaemon = {
+  options.services.handheld-daemon = {
     enable = mkEnableOption "Enable Handheld Daemon";
 
     user = mkOption {
@@ -23,7 +23,7 @@ in
     services.udev.packages = [ pkgs.handheld-daemon ];
     systemd.packages = [ pkgs.handheld-daemon ];
 
-    systemd.services.handheldDaemon = {
+    systemd.services.handheld-daemon = {
       description = "Handheld Daemon";
 
       wantedBy = [ "multi-user.target" ];
