@@ -707,6 +707,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-D__UAPI_DEF_ETHHDR=0"
+  ] ++ lib.optionals stdenv.hostPlatform.isPower [
+    "-Wno-error=format-overflow"
   ]);
 
   doCheck = false; # fails a bunch of tests
