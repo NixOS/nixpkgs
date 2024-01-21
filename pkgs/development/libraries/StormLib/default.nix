@@ -31,5 +31,12 @@ stdenv.mkDerivation rec {
     description = "An open-source project that can work with Blizzard MPQ archives";
     platforms = platforms.all;
     maintainers = with maintainers; [ aanderse karolchmist ];
+    # Broken for Darwin at 2024-01-21
+    # error: call to undeclared function 'LibTomMalloc'
+    # Log files:
+    #   aarch64-darwin: https://hydra.nixos.org/build/246503818/nixlog/1
+    #   x86_64-darwin: https://hydra.nixos.org/build/246485173/nixlog/1
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/282634
+    broken = true;
   };
 }
