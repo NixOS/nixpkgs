@@ -35,7 +35,9 @@ buildPythonPackage rec {
     jupyter-client
   ];
 
-  preCheck = "export HOME=/tmp";
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   checkInputs = [
     pytestCheckHook

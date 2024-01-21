@@ -23,7 +23,9 @@ buildPythonPackage rec {
       --replace '"xonsh>=0.12.5", ' ""
   '';
 
-  preCheck = "export HOME=/tmp";
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   checkInputs = [
     pytestCheckHook

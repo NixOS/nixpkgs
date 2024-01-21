@@ -34,7 +34,9 @@ buildPythonPackage rec {
     jedi
   ];
 
-  preCheck = "export HOME=/tmp";
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   checkInputs = [
     pytestCheckHook
