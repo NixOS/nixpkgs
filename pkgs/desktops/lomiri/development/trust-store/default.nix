@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trust-store";
-  version = "unstable-2023-10-17";
+  version = "0-unstable-2023-12-27";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/trust-store";
-    rev = "7aa7ab5b7f3843e24c13ae6d9b8607455296d60e";
-    hash = "sha256-j+4FZzbG3qh1pGRapFuuMiwT4Lv9P6Ji9/3Z0uGvXmw=";
+    rev = "c91e5ac54c4032525f930f0651d673ad3a1095a2";
+    hash = "sha256-zqs40tKo2AOd9yL2Xfbk52Uh8hy4uT1XDT6YtKufAaY=";
   };
 
   outputs = [
@@ -86,8 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Requires mirclient API, unavailable in Mir 2.x
     # https://gitlab.com/ubports/development/core/trust-store/-/issues/2
-    "-DTRUST_STORE_MIR_AGENT_ENABLED=OFF"
-    "-DTRUST_STORE_ENABLE_DOC_GENERATION=ON"
+    (lib.cmakeBool "TRUST_STORE_MIR_AGENT_ENABLED" false)
+    (lib.cmakeBool "TRUST_STORE_ENABLE_DOC_GENERATION" true)
+    # error: moving a temporary object prevents copy elision
+    (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
   # Not working

@@ -1583,6 +1583,8 @@ self: super: with self; {
 
   blurhash = callPackage ../development/python-modules/blurhash { };
 
+  blurhash-python = callPackage ../development/python-modules/blurhash-python { };
+
   bme280spi = callPackage ../development/python-modules/bme280spi { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };

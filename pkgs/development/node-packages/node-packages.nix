@@ -79283,69 +79283,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  http-server = nodeEnv.buildNodePackage {
-    name = "http-server";
-    packageName = "http-server";
-    version = "14.1.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/http-server/-/http-server-14.1.1.tgz";
-      sha512 = "+cbxadF40UXd9T01zUHgA+rlo2Bg1Srer4+B4NwIHdaGxAGGv59nYRnGGDJ9LBk7alpS0US+J+bLLdQOOkJq4A==";
-    };
-    dependencies = [
-      sources."ansi-styles-4.3.0"
-      sources."async-2.6.4"
-      sources."basic-auth-2.0.1"
-      sources."call-bind-1.0.5"
-      sources."chalk-4.1.2"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."corser-2.0.1"
-      sources."debug-3.2.7"
-      sources."define-data-property-1.1.1"
-      sources."eventemitter3-4.0.7"
-      sources."follow-redirects-1.15.3"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.2.2"
-      sources."gopd-1.0.1"
-      sources."has-flag-4.0.0"
-      sources."has-property-descriptors-1.0.1"
-      sources."has-proto-1.0.1"
-      sources."has-symbols-1.0.3"
-      sources."hasown-2.0.0"
-      sources."he-1.2.0"
-      sources."html-encoding-sniffer-3.0.0"
-      sources."http-proxy-1.18.1"
-      sources."iconv-lite-0.6.3"
-      sources."lodash-4.17.21"
-      sources."mime-1.6.0"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."ms-2.1.3"
-      sources."object-inspect-1.13.1"
-      sources."opener-1.5.2"
-      sources."portfinder-1.0.32"
-      sources."qs-6.11.2"
-      sources."requires-port-1.0.0"
-      sources."safe-buffer-5.1.2"
-      sources."safer-buffer-2.1.2"
-      sources."secure-compare-3.0.1"
-      sources."set-function-length-1.1.1"
-      sources."side-channel-1.0.4"
-      sources."supports-color-7.2.0"
-      sources."union-0.5.0"
-      sources."url-join-4.0.1"
-      sources."whatwg-encoding-2.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A simple zero-configuration command-line http server";
-      homepage = "https://github.com/http-party/http-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   hs-airdrop = nodeEnv.buildNodePackage {
     name = "hs-airdrop";
     packageName = "hs-airdrop";
