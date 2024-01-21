@@ -5319,8 +5319,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  fac = callPackage ../development/tools/fac { };
-
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   facter = callPackage ../tools/system/facter { };
@@ -10960,7 +10958,7 @@ with pkgs;
   monocraft = callPackage ../data/fonts/monocraft { };
 
   monolith = callPackage ../tools/backup/monolith {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   moreutils = callPackage ../tools/misc/moreutils {
