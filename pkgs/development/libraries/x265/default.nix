@@ -10,7 +10,7 @@
 , numactl
 
 # Multi bit-depth support (8bit+10bit+12bit):
-, multibitdepthSupport ? (stdenv.is64bit && !(stdenv.isAarch64 && stdenv.isLinux))
+, multibitdepthSupport ? (stdenv.is64bit && !(stdenv.isAarch64 && stdenv.isLinux) && !(stdenv.hostPlatform.isRiscV && stdenv.isLinux))
 
 # Other options:
 , cliSupport ? true # Build standalone CLI application
