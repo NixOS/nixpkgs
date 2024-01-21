@@ -1,13 +1,13 @@
 { lib, stdenvNoCC, fetchFromGitHub, makeWrapper, imagemagick }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lsix";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "hackerb9";
-    repo = pname;
-    rev = version;
+    repo = "lsix";
+    rev = finalAttrs.version;
     sha256 = "sha256-xlOlAfZonSo/RERt5WxPqMvppVrY5/Yhh7SgCCsYDQE=";
   };
 
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ kidonng ];
     mainProgram = "lsix";
   };
-}
+})
