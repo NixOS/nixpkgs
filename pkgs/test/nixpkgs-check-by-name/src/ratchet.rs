@@ -69,6 +69,9 @@ pub enum RatchetState<Ratchet: ToNixpkgsProblem> {
     /// This is either because we already use the latest state, or because the ratchet isn't
     /// relevant.
     Tight,
+    /// This ratchet can't be applied.
+    /// State transitions from/to NonApplicable are always allowed
+    NonApplicable,
 }
 
 /// A trait that can convert an attribute-specific error context into a NixpkgsProblem
@@ -102,6 +105,7 @@ impl<Context: ToNixpkgsProblem> RatchetState<Context> {
             // Everything else is allowed, including:
             // - Loose -> Loose (grandfathering policy for a loose ratchet)
             // - -> Tight (always okay to keep or make the ratchet tight)
+            // - Anything involving NotApplicable, where we can't really make any good calls
             _ => Success(()),
         }
     }

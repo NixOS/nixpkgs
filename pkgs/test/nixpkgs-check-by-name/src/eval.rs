@@ -159,8 +159,8 @@ pub fn check_values(
                     let uses_by_name = match attribute_info {
                         // In these cases the package doesn't qualify for being in pkgs/by-name,
                         // so the UsesByName ratchet is already as tight as it can be
-                        NonAttributeSet => Success(Tight),
-                        NonCallPackage => Success(Tight),
+                        NonAttributeSet => Success(NonApplicable),
+                        NonCallPackage => Success(NonApplicable),
                         // This is the case when the `pkgs/by-name`-internal _internalCallByNamePackageFile
                         // is used for a package outside `pkgs/by-name`
                         CallPackage(CallPackageInfo {
@@ -176,14 +176,14 @@ pub fn check_values(
                             // In the future we could kind of abuse this behavior to have better
                             // enforcement of conditional aliases, but for now we just need to not
                             // give an error.
-                            Success(Tight)
+                            Success(NonApplicable)
                         }
                         // Only derivations can be in pkgs/by-name,
                         // so this attribute doesn't qualify
                         CallPackage(CallPackageInfo {
                             is_derivation: false,
                             ..
-                        }) => Success(Tight),
+                        }) => Success(NonApplicable),
 
                         // The case of an attribute that qualifies:
                         // - Uses callPackage
