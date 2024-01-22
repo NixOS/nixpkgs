@@ -1,6 +1,6 @@
-{ lib, buildGo121Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "kubectl-klock";
   version = "0.5.0";
 
