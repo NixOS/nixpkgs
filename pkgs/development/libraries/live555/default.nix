@@ -10,16 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "live555";
-  version = "2023.05.10";
+  version = "2023.06.20";
 
   src = fetchurl {
     urls = [
       "http://www.live555.com/liveMedia/public/live.${version}.tar.gz"
+      "https://src.rrz.uni-hamburg.de/files/src/live555/live.${version}.tar.gz"
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
     ];
-    sha256 = "sha256-6ph9x4UYELkkJVIE9r25ycc5NOYbPcgAy9LRZebvGFY=";
+    sha256 = "sha256-TXl+al+M/VcFHNWAcrm8n2ZX3qPxzibpAe+4dNM5G7o=";
   };
+
+  env.CXXFLAGS = toString [ "-std=c++20" ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
 
