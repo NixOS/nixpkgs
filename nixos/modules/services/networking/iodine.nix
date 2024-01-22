@@ -130,7 +130,12 @@ in
         createIodineClientService = name: cfg:
           {
             description = "iodine client - ${name}";
-            after = [ "network.target" ];
+
+            # Seems to save bad network state, breaking it if it is started too
+            # early relative to the network.
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+
             wantedBy = [ "multi-user.target" ];
             script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "< \"${builtins.toString cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
             serviceConfig = {
@@ -164,7 +169,12 @@ in
         ) // {
           iodined = mkIf (cfg.server.enable) {
             description = "iodine, ip over dns server daemon";
-            after = [ "network.target" ];
+
+            # Seems to save bad network state, breaking it if it is started too
+            # early relative to the network.
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+
             wantedBy = [ "multi-user.target" ];
             script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "< \"${builtins.toString cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
             serviceConfig = {
