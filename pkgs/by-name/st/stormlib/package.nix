@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, bzip2, libtomcrypt, zlib, darwin }:
 
 stdenv.mkDerivation rec {
-  pname = "StormLib";
+  pname = "stormlib";
   version = "9.22";
 
   src = fetchFromGitHub {
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ bzip2 libtomcrypt zlib ] ++
     lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Carbon ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-implicit-function-declaration"
+    "-Wno-int-conversion"
+  ]);
 
   meta = with lib; {
     homepage = "https://github.com/ladislav-zezula/StormLib";
