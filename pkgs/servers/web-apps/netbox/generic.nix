@@ -58,6 +58,7 @@
         pillow
         psycopg2
         pyyaml
+        requests
         sentry-sdk
         social-auth-core
         social-auth-app-django
