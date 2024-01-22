@@ -70,7 +70,7 @@ def archive_paths_to(obj, paths, mtime, uid, gid, uname, gname):
         return ti
 
     def nix_root(ti):
-        ti.mode = 0o0555  # r-xr-xr-x
+        ti.mode = 0o0755  # rwxr-xr-x
         return ti
 
     def dir(path):
