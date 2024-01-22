@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "3.0.3";
+  version = "3.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-objects";
     rev = "refs/tags/${version}";
-    hash = "sha256-JQ3UDUOpuxPavXkoJqbS0T7y3kpwuJ8NvqAl3DahoLU=";
+    hash = "sha256-os4MzxB4IuqJ9EsKZXGzOU23Qf6LLLiV6SLaNpMlEp8=";
   };
 
   postPatch = ''
