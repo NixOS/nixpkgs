@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.5.2";
+  version = "1.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8bbVpC53wH9GvwwHHlPEYQd/zqMXIqrwixwn4HY6FMg=";
+    hash = "sha256-ARSe4r99ShPB4LJBrE7G53Ws0/fVKjZxUpGAdhWTsRs=";
   };
 
   pythonRelaxDeps = true;
