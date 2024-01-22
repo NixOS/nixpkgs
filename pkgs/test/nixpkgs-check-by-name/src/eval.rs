@@ -202,19 +202,24 @@ pub fn check_values(
                     })
                 }
                 NonByName(EvalFailure) => {
-                    // This is a bit of an odd case: We don't even _know_ whether this attribute
-                    // would qualify for using pkgs/by-name. We can either:
-                    // - Assume it's not using pkgs/by-name, which has the problem that if a
-                    //   package evaluation gets broken temporarily, the fix can remove it from
-                    //   pkgs/by-name again
-                    // - Assume it's using pkgs/by-name already, which has the problem that if a
-                    //   package evaluation gets broken temporarily, fixing it requires a move to
-                    //   pkgs/by-name
-                    // We choose the latter, since we want to move towards pkgs/by-name, not away
-                    // from it
+                    // We don't know anything about this attribute really
                     Success(ratchet::Package {
+                        // We'll assume that we can't remove any manual definitions, which has the
+                        // minimal drawback that if there was a manual definition that could've
+                        // been removed, fixing the package requires removing the definition, no
+                        // big deal, that's a minor edit.
                         manual_definition: Tight,
-                        uses_by_name: Tight,
+
+                        // Regarding whether this attribute could `pkgs/by-name`, we don't really
+                        // know, so return NonApplicable, which has the effect that if a
+                        // package evaluation gets broken temporarily, the fix can remove it from
+                        // pkgs/by-name again. For now this isn't our problem, but in the future we
+                        // might have another check to enforce that evaluation must not be broken.
+                        // The alternative of assuming that it's using `pkgs/by-name` already
+                        // has the problem that if a package evaluation gets broken temporarily,
+                        // fixing it requires a move to pkgs/by-name, which could happen more
+                        // often and isn't really justified.
+                        uses_by_name: NonApplicable,
                     })
                 }
                 ByName(Missing) => NixpkgsProblem::UndefinedAttr {
