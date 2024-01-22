@@ -44,7 +44,6 @@
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps # frei0r video filtering
 , withFribidi ? withFullDeps # Needed for drawtext filter
-, withGlslang ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
@@ -73,6 +72,7 @@
 , withRtmp ? false # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin # Samba protocol
 , withSdl2 ? withSmallDeps
+, withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
 , withSoxr ? withHeadlessDeps # Resampling via soxr
 , withSpeex ? withHeadlessDeps # Speex de/encoder
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
@@ -189,7 +189,6 @@
 , frei0r
 , fribidi
 , game-music-emu
-, glslang
 , gnutls
 , gsm
 , intel-media-sdk
@@ -245,6 +244,7 @@
 , rtmpdump
 , samba
 , SDL2
+, shaderc
 , soxr
 , speex
 , srt
@@ -525,7 +525,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withVulkan "vulkan")
-    (enableFeature withGlslang "libglslang")
+    (enableFeature withShaderc "libshaderc")
     (enableFeature withSamba "libsmbclient")
     /*
      * Developer flags
@@ -578,7 +578,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withFreetype [ freetype ]
   ++ optionals withFrei0r [ frei0r ]
   ++ optionals withFribidi [ fribidi ]
-  ++ optionals withGlslang [ glslang ]
   ++ optionals withGme [ game-music-emu ]
   ++ optionals withGnutls [ gnutls ]
   ++ optionals withGsm [ gsm ]
@@ -605,6 +604,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
+  ++ optionals withShaderc [ shaderc ]
   ++ optionals withSoxr [ soxr ]
   ++ optionals withSpeex [ speex ]
   ++ optionals withSrt [ srt ]

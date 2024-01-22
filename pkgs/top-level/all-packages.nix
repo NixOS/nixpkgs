@@ -23358,7 +23358,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  libplacebo_5 = callPackage ../development/libraries/libplacebo/5.nix { };
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
   libpng = callPackage ../development/libraries/libpng { };
@@ -25525,7 +25524,6 @@ with pkgs;
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-utility-libraries = callPackage ../development/libraries/vulkan-utility-libraries { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
-  vulkan-volk = callPackage ../development/libraries/vulkan-volk { };
 
   vxl = callPackage ../development/libraries/vxl { };
 
