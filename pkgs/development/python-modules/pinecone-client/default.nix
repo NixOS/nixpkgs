@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, poetry-core
+, pythonRelaxDepsHook
 , numpy
 , pyyaml
 , python-dateutil
@@ -18,12 +20,15 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pinecone_client";
+    inherit version;
     hash = "sha256-F2mWUpFMn2ipopa3UjvzrmNZsHtdRrUwfkuHbDYBElo=";
   };
 
   nativeBuildInputs = [
     setuptools
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -38,12 +43,20 @@ buildPythonPackage rec {
     loguru
   ];
 
+  pythonRelaxDeps = [
+    "urllib3"
+  ];
+
   doCheck = false;
+
+  pythonImportsCheck = [
+    "pinecone"
+  ];
 
   meta = with lib; {
     homepage = "https://www.pinecone.io/";
     description = "The Pinecone python client";
     license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    maintainers = with maintainers; [ happysalada ];
   };
 }
