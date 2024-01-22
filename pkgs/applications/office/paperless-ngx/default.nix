@@ -21,13 +21,13 @@
 }:
 
 let
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2XnOap37ZQjT0qx2ygxXo7n1HJcIEoc5TrMI1JIk4G8=";
+    hash = "sha256-bIiUG5yLpKOoxByef2Wm7MmSoL5zAYE9x6/zZywG9aE=";
   };
 
   python = python3;
@@ -52,7 +52,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-BFfbRrpF8p0AfEdl/KDWWG7qN+F9edvTW3j9jgvLIrc=";
+    npmDepsHash = "sha256-4PIslsmbcET/kKLZ/gijwEyBB9zgZR6vMU9h9enzScE=";
 
     nativeBuildInputs = [
       pkg-config
