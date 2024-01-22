@@ -16,7 +16,7 @@
 
 let
   pname = "insync";
-  version = "3.8.6.50504";
+  version = "3.8.7.50507";
   meta = with lib; {
     platforms = ["x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -47,7 +47,8 @@ let
     src = fetchurl {
       # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
       url = "https://cdn.insynchq.com/builds/linux/insync_${version}-lunar_amd64.deb";
-      sha256 = "sha256-BxTFtQ1rAsOuhKnH5vsl3zkM7WOd+vjA4LKZGxl4jk0=";
+      sha256 = "sha256-Fu3tmnYhcm6xIEnkTtpmMJmEgIUnZdLsAtmIktWdrRs=";
+      #sha256 = lib.fakeSha256;
     };
 
     buildInputs = [
@@ -124,3 +125,4 @@ in buildFHSEnvBubblewrap {
   # Since "insync start" command starts a daemon, this daemon should die with it.
   dieWithParent = false;
 }
+
