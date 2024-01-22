@@ -16419,5 +16419,16 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  fm-nvim = buildVimPlugin {
+    pname = "fm-nvim";
+    version = "2022-01-11";
+    src = fetchFromGitHub {
+      owner = "is0n";
+      repo = "fm-nvim";
+      rev = "8e6a77049330e7c797eb9e63affd75eb796fe75e";
+      sha256 = "sha256-I29p08P4Wh/LLTDZIQ2TkYy5Kdj0G8loU6k3eFM+iVE=";
+    };
+    meta.homepage = "https://github.com/is0n/fm-nvim/";
+  };
 
 }
