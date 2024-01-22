@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-7sIa50jCN+M36Y0C05QaAL+TVwLzKxJ0gzpZI1YQFxg=";
+    rev = "735781e3fcf95d92cd4537a9712893d00415cd63";
+    hash = "sha256-dQsYL2I3bWmdgoxIHhW6e+Sz8kfjD1bR5XZmpmUYCV8=";
   };
 
   nativeBuildInputs = [
