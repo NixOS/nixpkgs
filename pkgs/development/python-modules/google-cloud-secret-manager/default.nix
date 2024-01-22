@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Secret Manager API API client library";
-    homepage = "https://github.com/googleapis/python-secret-manager";
-    changelog = "https://github.com/googleapis/python-secret-manager/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-secret-manager";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-secret-manager-v${version}/packages/google-cloud-secret-manager/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ siriobalmelli ];
   };
