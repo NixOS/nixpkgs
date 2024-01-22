@@ -20,6 +20,8 @@
 , which
 , xdg-user-dirs
 , zlib
+# Affects final license
+, withAngrylionRdpPlus ? false
 }:
 
 let
@@ -77,6 +79,7 @@ stdenv.mkDerivation rec {
     # mupen64plus-input-gca is written in Rust, so we can't build it with
     # everything else.
     "-DNO_RUST=ON"
+    "-DUSE_ANGRYLION=${lib.boolToString withAngrylionRdpPlus}"
   ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
@@ -90,7 +93,7 @@ stdenv.mkDerivation rec {
       Rosalie's Mupen GUI is a free and open-source mupen64plus front-end
       written in C++. It offers a simple-to-use user interface.
     '';
-    license = licenses.gpl3;
+    license = if withAngrylionRdpPlus then licenses.unfree else licenses.gpl3Only;
     platforms = platforms.linux;
     mainProgram = "RMG";
     maintainers = with maintainers; [ slam-bert ];
