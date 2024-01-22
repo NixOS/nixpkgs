@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , certifi
+, cryptography
 , fetchPypi
 , openssl
 , pylsqpack
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     certifi
+    cryptography
     pylsqpack
     pyopenssl
     service-identity
