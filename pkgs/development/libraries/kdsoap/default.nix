@@ -28,10 +28,8 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/kdwsdl2cpp* "$dev"
-    sed -i "$out/lib/cmake/${cmakeName}/KDSoapTargets.cmake" \
-        -e "/^  INTERFACE_INCLUDE_DIRECTORIES/ c   INTERFACE_INCLUDE_DIRECTORIES \"$dev/include\""
-    sed -i "$out/lib/cmake/${cmakeName}/KDSoapTargets-release.cmake" \
-        -e "s@$out/bin@$dev/bin@"
+    substituteInPlace "$out/lib/cmake/${cmakeName}/KDSoapTargets-release.cmake" \
+      --replace $out/bin $dev/bin
   '';
 
   meta = with lib; {
