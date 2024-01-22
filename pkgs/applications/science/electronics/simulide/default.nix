@@ -122,10 +122,8 @@ in
   simulide_1_1_0 = generic {
     version = "1.1.0";
     release = "RC1";
-    # The 1.1.0 branch didn't get merged correctly from trunk
-    # See: https://simulide.com/p/forum/topic/new-files-missing-from-1-1-0-rc1-after-merge
-    branch = "trunk";
-    rev = "2162";
+    branch = "1.1.0";
+    rev = "1912";
     sha256 = "sha256-bgRAqt7h2LtU2Ze6Jiz8APhyPcV15v4ofxIilIeZV9E=";
   };
 }
