@@ -24049,7 +24049,10 @@ with pkgs;
     ch4backend = libfabric;
   };
 
-  mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
+  mpich-pmix = mpich.override {
+    enablePmix = true;
+    withPm = [ ];
+  };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
