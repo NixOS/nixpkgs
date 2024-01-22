@@ -18,6 +18,7 @@ lib.fix (self: {
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
+    eol = true;
   };
 
   netbox_3_7 = callPackage generic {
