@@ -1,34 +1,39 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, argostranslate
-, flask
-, flask-swagger
-, flask-swagger-ui
-, flask-limiter
-, flask-babel
-, flask-session
-, waitress
-, expiringdict
-, ltpycld2
-, morfessor
 , appdirs
 , apscheduler
-, translatehtml
 , argos-translate-files
-, requests
-, redis
-, prometheus-client
+, argostranslate
+, buildPythonPackage
+, expiringdict
+, fetchFromGitHub
+, flask
+, flask-babel
+, flask-limiter
+, flask-session
+, flask-swagger
+, flask-swagger-ui
+, hatchling
+, langdetect
+, lexilang
+, ltpycld2
+, morfessor
 , polib
+, prometheus-client
 , python
+, pythonOlder
+, pythonRelaxDepsHook
+, redis
+, requests
+, translatehtml
+, waitress
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
   version = "1.5.2";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
@@ -37,35 +42,36 @@ buildPythonPackage rec {
     hash = "sha256-8bbVpC53wH9GvwwHHlPEYQd/zqMXIqrwixwn4HY6FMg=";
   };
 
-  propagatedBuildInputs = [
-    argostranslate
-    flask
-    flask-swagger
-    flask-swagger-ui
-    flask-limiter
-    flask-babel
-    flask-session
-    waitress
-    expiringdict
-    ltpycld2
-    morfessor
-    appdirs
-    apscheduler
-    translatehtml
-    argos-translate-files
-    requests
-    redis
-    prometheus-client
-    polib
+  pythonRelaxDeps = true;
+
+  nativeBuildInputs = [
+    hatchling
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace "==" ">="
-
-    substituteInPlace setup.py  \
-      --replace "'pytest-runner'" ""
-  '';
+  propagatedBuildInputs = [
+    appdirs
+    apscheduler
+    argos-translate-files
+    argostranslate
+    expiringdict
+    flask
+    flask-babel
+    flask-limiter
+    flask-session
+    flask-swagger
+    flask-swagger-ui
+    langdetect
+    lexilang
+    ltpycld2
+    morfessor
+    polib
+    prometheus-client
+    redis
+    requests
+    translatehtml
+    waitress
+  ];
 
   postInstall = ''
     # expose static files to be able to serve them via web-server
@@ -73,16 +79,15 @@ buildPythonPackage rec {
     ln -s $out/${python.sitePackages}/libretranslate/static $out/share/libretranslate/static
   '';
 
-  doCheck = false; # needs network access
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # Tests need network access
+  doCheck = false;
 
   # required for import check to work (argostranslate)
   env.HOME = "/tmp";
 
-  pythonImportsCheck = [ "libretranslate" ];
+  pythonImportsCheck = [
+    "libretranslate"
+  ];
 
   meta = with lib; {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
