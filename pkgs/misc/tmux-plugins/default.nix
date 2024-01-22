@@ -548,6 +548,39 @@ in rec {
     '';
   };
 
+  session-wizard = mkTmuxPlugin rec {
+    pluginName = "session-wizard";
+    rtpFilePath = "session-wizard.tmux";
+    version = "1.2.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "27medkamal";
+      repo = "tmux-session-wizard";
+      rev = "V${version}";
+      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/27medkamal/tmux-session-wizard";
+      description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
+      longDescription = ''
+        Session Wizard is using fzf and zoxide to do all the magic. Features:
+        * Creating a new session from a list of recently accessed directories
+        * Naming a session after a folder/project
+        * Switching sessions
+        * Viewing current or creating new sessions in one popup
+      '';
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ mandos ];
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      substituteInPlace $target/session-wizard.tmux \
+        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
+      wrapProgram $target/session-wizard.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
+    '';
+  };
+
   sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
     version = "unstable-2017-12-03";
