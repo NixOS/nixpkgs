@@ -3,17 +3,19 @@
 , buildPythonPackage
 , dnspython
 , fetchFromGitHub
+, fetchpatch
 , iana-etc
 , libredirect
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "ipwhois";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,12 +26,22 @@ buildPythonPackage rec {
     hash = "sha256-2CfRRHlIIaycUtzKeMBKi6pVPeBCb1nW3/1hoxQU1YM=";
   };
 
+  patches = [
+    # Use assertEqual instead of assertEquals, https://github.com/secynic/ipwhois/pull/316
+    (fetchpatch {
+      name = "assert-equal.patch";
+      url = "https://github.com/secynic/ipwhois/commit/fce2761354af99bc169e6cd08057e838fcc40f75.patch";
+      hash = "sha256-7Ic4xWTAmklk6MvnZ/WsH9SW/4D9EG/jFKt5Wi89Xtc=";
+    })
+  ];
+
   pythonRelaxDeps = [
     "dnspython"
   ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [
