@@ -189,6 +189,8 @@ with lib;
       You should only enable this option if `tokenFile` points to a file which contains a
       personal access token (PAT). If you're using the option with a registration token, restarting the
       service will fail as soon as the registration token expired.
+
+      Changing this option triggers a new runner registration.
     '';
     default = false;
   };
@@ -210,6 +212,8 @@ with lib;
       The service cleans this directory on every service start.
 
       A value of `null` will default to the systemd `RuntimeDirectory`.
+
+      Changing this option triggers a new runner registration.
     '';
     default = null;
   };
