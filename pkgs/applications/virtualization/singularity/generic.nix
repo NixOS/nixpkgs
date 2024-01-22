@@ -289,8 +289,8 @@ in
           singularity-tools.buildImage {
             name = "saxpy";
             contents = [ cudaPackages.saxpy ];
-            memSize = 2048;
-            diskSize = 2048;
+            memSize = 8192;
+            diskSize = 8192;
             singularity = finalAttrs.finalPackage;
           })
         { };
