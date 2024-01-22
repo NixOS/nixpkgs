@@ -230,6 +230,7 @@
   ./programs/npm.nix
   ./programs/ns-usbloader.nix
   ./programs/oblogout.nix
+  ./programs/obs-studio.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
   ./programs/pantheon-tweaks.nix
