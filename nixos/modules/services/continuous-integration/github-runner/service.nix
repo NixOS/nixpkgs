@@ -76,7 +76,16 @@ in
 
             ${lines}
           '';
-          runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" "ephemeral" "workDir" ] cfg;
+          runnerRegistrationConfig = getAttrs [
+            "ephemeral"
+            "extraLabels"
+            "name"
+            "noDefaultLabels"
+            "runnerGroup"
+            "tokenFile"
+            "url"
+            "workDir"
+          ] cfg;
           newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
           currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
           newConfigTokenPath = "$STATE_DIRECTORY/.new-token";
@@ -142,6 +151,7 @@ in
                 ${optionalString cfg.replace "--replace"}
                 ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
                 ${optionalString cfg.ephemeral "--ephemeral"}
+                ${optionalString cfg.noDefaultLabels "--no-default-labels"}
               )
               # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"), we have to use the --pat option,
               # if it is not a PAT, we assume it contains a registration token and use the --token option

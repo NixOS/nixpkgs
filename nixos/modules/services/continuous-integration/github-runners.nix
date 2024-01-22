@@ -39,6 +39,13 @@ in
   };
 
   config = {
+    assertions = flatten (
+      flip mapAttrsToList config.services.github-runners (name: cfg: map (mkIf cfg.enable) [{
+        assertion = !cfg.noDefaultLabels || (cfg.extraLabels != [ ]);
+        message = "`services.github-runners.${name}`: The `extraLabels` option is mandatory if `noDefaultLabels` is set";
+      }])
+    );
+
     systemd.services = flip mapAttrs' cfg (n: v:
       let
         svcName = "github-runner-${n}";

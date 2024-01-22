@@ -112,12 +112,23 @@ with lib;
   extraLabels = mkOption {
     type = types.listOf types.str;
     description = mdDoc ''
-      Extra labels in addition to the default (`["self-hosted", "Linux", "X64"]`).
+      Extra labels in addition to the default.
+      Requires a non-empty list if the `noDefaultLabels` option is used.
 
       Changing this option triggers a new runner registration.
     '';
     example = literalExpression ''[ "nixos" ]'';
     default = [ ];
+  };
+
+  noDefaultLabels = mkOption {
+    type = types.bool;
+    description = mdDoc ''
+      Disables adding the default labels. Also see the `extraLabels` option.
+
+      Changing this option triggers a new runner registration.
+    '';
+    default = false;
   };
 
   replace = mkOption {
