@@ -172,7 +172,7 @@ in {
     ):
         docker.succeed(
             "docker load --input='${examples.bashLayeredWithUser}'",
-            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
+            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 755 == $(stat --format=%a /nix) && test 755 == $(stat --format=%a /nix/store)'",
             "docker rmi ${examples.bashLayeredWithUser.imageName}",
         )
 
