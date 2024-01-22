@@ -110,7 +110,7 @@ Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
-for `haskell.packages.ghc963`:
+for `haskell.packages.ghc964`:
 
 ```console
 $ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
