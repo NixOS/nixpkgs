@@ -4206,6 +4206,15 @@
     githubId = 3179832;
     name = "D. Bohdan";
   };
+  dbrgn = {
+    email = "nix@dbrgn.ch";
+    github = "dbrgn";
+    githubId = 105168;
+    name = "Danilo B.";
+    keys = [{
+      fingerprint = "20EE 002D 778A E197 EF7D  0D2C B993 FF98 A90C 9AB1";
+    }];
+  };
   dbrock = {
     email = "daniel@brockman.se";
     github = "dbrock";
