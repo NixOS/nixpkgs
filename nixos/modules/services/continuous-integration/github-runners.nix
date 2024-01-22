@@ -12,6 +12,10 @@ let
 in
 
 {
+  imports = [
+    mkRemovedOptionModule [ "services" "github-runner" ] "Use `services.github-runners.*` instead"
+  ];
+
   options.services.github-runners = mkOption {
     default = {};
     type = with types; attrsOf (submodule { options = import ./github-runner/options.nix (args // {
