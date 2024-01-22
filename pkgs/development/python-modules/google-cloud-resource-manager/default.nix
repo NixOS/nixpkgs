@@ -48,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Resource Manager API client library";
-    homepage = "https://github.com/googleapis/python-resource-manager";
-    changelog = "https://github.com/googleapis/python-resource-manager/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-resource-manager";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-resource-manager-v${version}/packages/google-cloud-resource-manager/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
