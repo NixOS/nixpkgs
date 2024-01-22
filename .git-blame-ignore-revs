@@ -96,3 +96,9 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # nixos/*: add trivial defaultText for options with simple defaults
 25124556397ba17bfd70297000270de1e6523b0a
+
+# systemd: rewrite comments
+92dfeb7b3dab820ae307c56c216d175c69ee93cd
+
+# systemd: break too long lines of Nix code
+67643f8ec84bef1482204709073e417c9f07eb87
