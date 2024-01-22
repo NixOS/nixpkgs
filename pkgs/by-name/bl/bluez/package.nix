@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
+    python3.pkgs.pygments
     python3.pkgs.wrapPython
   ];
 
