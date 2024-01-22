@@ -31,6 +31,7 @@ in {
         ayatana-indicator-messages
       ] ++ (with pkgs.lomiri; [
         lomiri-indicator-network
+        telephony-service
       ]);
     };
 
@@ -43,6 +44,25 @@ in {
 
     networking.networkmanager.enable = true; # lomiri-network-indicator
     # TODO potentially urfkill for lomiri-network-indicator?
+
+    services.dbus.packages = with pkgs.lomiri; [
+      libusermetrics
+    ];
+
+    environment.systemPackages = with pkgs.lomiri; [
+      lomiri-schemas
+    ];
+
+    services.telepathy.enable = true;
+
+    users.users.usermetrics = {
+      group = "usermetrics";
+      home = "/var/lib/usermetrics";
+      createHome = true;
+      isSystemUser = true;
+    };
+
+    users.groups.usermetrics = { };
   };
 
   # TODO session indicator starts up in a semi-broken state, but works fine after a restart. maybe being started before graphical session is truly up & ready?
