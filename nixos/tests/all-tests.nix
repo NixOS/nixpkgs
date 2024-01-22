@@ -627,6 +627,7 @@ in {
   ntpd-rs = handleTest ./ntpd-rs.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
+  obs-studio = handleTest ./obs-studio.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
