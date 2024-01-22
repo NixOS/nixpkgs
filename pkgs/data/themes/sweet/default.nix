@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Light and dark colorful Gtk3.20+ theme";
     homepage = "https://github.com/EliverLara/Sweet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fuzen ];
+    maintainers = with maintainers; [ fuzen d3vil0p3r ];
     platforms = platforms.unix;
   };
 })
