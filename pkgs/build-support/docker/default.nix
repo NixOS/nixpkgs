@@ -907,6 +907,11 @@ rec {
     , # Time of creation of the image. Passing "now" will make the
       # created date be the time of building.
       created ? "1970-01-01T00:00:01Z"
+    , # Credentials for file ownership.
+      uid ? 0
+    , gid ? 0
+    , uname ? "root"
+    , gname ? "root"
     , # Optional bash script to run on the files prior to fixturizing the layer.
       extraCommands ? ""
     , # Optional bash script to run inside fakeroot environment.
@@ -1007,7 +1012,7 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created;
+            inherit fromImage maxLayers created uid gid uname gname;
             imageName = lib.toLower name;
             preferLocalBuild = true;
             passthru.imageTag =
@@ -1086,14 +1091,22 @@ rec {
               "store_layers": $store_layers[0],
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
-              "created": $created
+              "created": $created,
+              "uid": $uid,
+              "gid": $gid,
+              "uname": $uname,
+              "gname": $gname
             }
             ' --arg store_dir "${storeDir}" \
               --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
               --slurpfile store_layers store_layers.json \
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
-              --arg created "$created" |
+              --arg created "$created" \
+              --arg uid "$uid" \
+              --arg gid "$gid" \
+              --arg uname "$uname" \
+              --arg gname "$gname" |
             tee $out
         '';
 
