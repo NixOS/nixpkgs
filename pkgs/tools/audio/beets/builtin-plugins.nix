@@ -9,6 +9,7 @@
 , mp3gain
 , mp3val
 , python3Packages
+, version
 , ...
 }: {
   absubmit = {
@@ -123,4 +124,16 @@
   unimported.testPaths = [ ];
   web.propagatedBuildInputs = [ python3Packages.flask ];
   zero = { };
+  # NOTE: Condition can be removed once stable beets updates
+} // lib.optionalAttrs ((lib.versions.majorMinor version) != "1.6") {
+  limit = { };
+  substitute = {
+    testPaths = [ ];
+  };
+  advancedrewrite = {
+    testPaths = [ ];
+  };
+  autobpm = {
+    testPaths = [ ];
+  };
 }

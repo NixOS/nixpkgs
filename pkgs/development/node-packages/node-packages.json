@@ -131,7 +131,6 @@
 , "gulp"
 , "gulp-cli"
 , "he"
-, "http-server"
 , "hs-airdrop"
 , "ijavascript"
 , "inliner"
