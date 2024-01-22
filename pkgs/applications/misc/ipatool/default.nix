@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "ipatool";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${version}";
-    hash = "sha256-kIFKVIhH+Vjt05XzR5jNwYQokNLSckdiWJ97A03Lgqc=";
+    hash = "sha256-e+gkr8i6dVfxyBM5Vi2YpW4eQ4LE2vhgQadLAFeHK4Q=";
   };
 
-  vendorHash = "sha256-ZTz3eW/rs3bV16Ugd4kUOW7NaXzBa5c9qTIqRCanPRU=";
+  vendorHash = "sha256-aVMWXlHMGdbApKLhuZZpaAYY5QpMMgXc/6f9r79/dTw=";
 
   ldflags = [
     "-s"
