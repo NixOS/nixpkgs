@@ -9,6 +9,7 @@ in
 {
   options.services.handheld-daemon = {
     enable = mkEnableOption "Enable Handheld Daemon";
+    package = mkPackageOption pkgs "handheld-daemon" { };
 
     user = mkOption {
       type = types.str;
@@ -19,9 +20,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.handheld-daemon ];
-    services.udev.packages = [ pkgs.handheld-daemon ];
-    systemd.packages = [ pkgs.handheld-daemon ];
+    environment.systemPackages = [ cfg.package ];
+    services.udev.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     systemd.services.handheld-daemon = {
       description = "Handheld Daemon";
@@ -31,7 +32,7 @@ in
       restartIfChanged = true;
 
       serviceConfig = {
-        ExecStart = "${ pkgs.handheld-daemon }/bin/hhd --user ${ cfg.user }";
+        ExecStart = "${ lib.getExe cfg.package } --user ${ cfg.user }";
         Nice = "-12";
         Restart = "on-failure";
         RestartSec = "10";

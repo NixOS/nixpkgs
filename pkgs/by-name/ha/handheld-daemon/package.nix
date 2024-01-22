@@ -9,27 +9,27 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
-    rev = "abe34c6841476f5b41afe30ee18ff3e510402d68";
+    rev = "v${version}";
     hash = "sha256-ovLC1BQ98jUaDEMPBzWma4TYSzTF+yE/cMemFdJmqlE=";
   };
 
-  pythonPath = with python3.pkgs; [
-    evdev
-    pyyaml
-    rich
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
+    evdev
     hidapi
     kmod
+    pyyaml
+    rich
     setuptools
     toybox
   ];
+
+  # This package doesn't have upstream tests.
+  doCheck = false;
 
   # handheld-daemon contains a fork of the python module `hid`, so this hook
   # is borrowed from the `hid` derivation.
