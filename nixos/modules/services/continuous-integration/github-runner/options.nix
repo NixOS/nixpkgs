@@ -11,18 +11,18 @@ with lib;
   enable = mkOption {
     default = false;
     example = true;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Whether to enable GitHub Actions runner.
 
       Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
       [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
     '';
-    type = lib.types.bool;
+    type = types.bool;
   };
 
   url = mkOption {
     type = types.str;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Repository to add the runner to.
 
       Changing this option triggers a new runner registration.
@@ -40,7 +40,7 @@ with lib;
 
   tokenFile = mkOption {
     type = types.path;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       The full path to a file which contains either
 
       * a fine-grained personal access token (PAT),
@@ -86,7 +86,7 @@ with lib;
     baseType = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
   in mkOption {
     type = if includeNameDefault then baseType else types.nullOr baseType;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Name of the runner to configure. Defaults to the hostname.
 
       Changing this option triggers a new runner registration.
@@ -101,7 +101,7 @@ with lib;
 
   runnerGroup = mkOption {
     type = types.nullOr types.str;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Name of the runner group to add this runner to (defaults to the default runner group).
 
       Changing this option triggers a new runner registration.
@@ -111,7 +111,7 @@ with lib;
 
   extraLabels = mkOption {
     type = types.listOf types.str;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Extra labels in addition to the default (`["self-hosted", "Linux", "X64"]`).
 
       Changing this option triggers a new runner registration.
@@ -122,7 +122,7 @@ with lib;
 
   replace = mkOption {
     type = types.bool;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Replace any existing runner with the same name.
 
       Without this flag, registering a new runner with the same name fails.
@@ -132,7 +132,7 @@ with lib;
 
   extraPackages = mkOption {
     type = types.listOf types.package;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Extra packages to add to `PATH` of the service to make them available to workflows.
     '';
     default = [ ];
@@ -140,7 +140,7 @@ with lib;
 
   extraEnvironment = mkOption {
     type = types.attrs;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Extra environment variables to set for the runner, as an attrset.
     '';
     example = {
@@ -151,7 +151,7 @@ with lib;
 
   serviceOverrides = mkOption {
     type = types.attrs;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
       See {manpage}`systemd.exec(5)` for more options.
     '';
@@ -166,7 +166,7 @@ with lib;
 
   ephemeral = mkOption {
     type = types.bool;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       If enabled, causes the following behavior:
 
       - Passes the `--ephemeral` flag to the runner configuration script
@@ -184,7 +184,7 @@ with lib;
 
   user = mkOption {
     type = types.nullOr types.str;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       User under which to run the service. If null, will use a systemd dynamic user.
     '';
     default = null;
@@ -193,7 +193,7 @@ with lib;
 
   workDir = mkOption {
     type = with types; nullOr str;
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
       and used as a default for [repository checkouts](https://github.com/actions/checkout).
       The service cleans this directory on every service start.
