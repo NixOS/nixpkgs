@@ -36,20 +36,20 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "619e75bb8db50325b44863f2ccf3c39470c3d5a3";
-    sha256 = "sha256-2KE0W3WwBJCLe8DosyDVsFtEofKgBsChpQEQe+3O+Hg=";
+    rev = "189f79d73f8cd9fd85c7394a14ee4419ddfa267b";
+    sha256 = "sha256-gxwAxR7N7QU4sTGHTdd656dmsW8MrcfroYPvv2UoeRc=";
   };
 in
 llvmPackages_17.stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.5474";
+  version = "1.7.5497";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-5ZCXw6PEQ6Ed6kEP27m9O0U79uVGEFR/vwee6/dZBD8=";
+    sha256 = "sha256-gbJkeelSyEHwD4DH/hbzPNNv47hmdgc4kyvX38txYhc=";
   };
 
   patches = [
