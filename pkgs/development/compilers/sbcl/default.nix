@@ -190,7 +190,7 @@ stdenv.mkDerivation (self: rec {
   '');
 
   meta = with lib; {
-    description = "Lisp compiler";
+    description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
     maintainers = lib.teams.lisp.members;
