@@ -31,16 +31,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XdN2oP5c2lK+bR3i+Hwd4oOlccMQisbzgevHsZ8YbSQ=";
+    hash = "sha256-XF5zCFXiViFsRPqI6p1Z7093NSWrGmcoyWcGEagIoEA=";
   };
 
-  cargoHash = "sha256-0JNKlzmMS5wcTW0faTnhFgNK2VHXixNnMx6ZS3eKbPA=";
+  cargoHash = "sha256-9fXHpq5lXG9Gup1dZPlXiNilbP79fJ3Jp3+ZD7mAzP4=";
 
   env.YAZI_GEN_COMPLETIONS = true;
 
