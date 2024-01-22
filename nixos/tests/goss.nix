@@ -28,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         };
         group.root.exists = true;
         kernel-param."kernel.ostype".value = "Linux";
-        service.goss = {
+        service."systemd-journald" = {
           enabled = true;
           running = true;
         };
@@ -43,8 +43,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_unit("goss.service")
     machine.wait_for_open_port(8080)
 
+    # due to incomprehensible race conditions, somehow goss fails to get
+    # answers out of systemctl about systemd-journald being up, despite this
+    # being more or less impossible.
+    machine.sleep(5)
+
     with subtest("returns health status"):
       result = json.loads(machine.succeed("curl -sS http://localhost:8080/healthz"))
+      print(result)
 
       assert len(result["results"]) == 10, f".results should be an array of 10 items, was {result['results']!r}"
       assert result["summary"]["failed-count"] == 0, f".summary.failed-count should be zero, was {result['summary']['failed-count']}"
