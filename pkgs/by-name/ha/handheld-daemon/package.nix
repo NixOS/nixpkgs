@@ -1,19 +1,21 @@
 { config
 , fetchFromGitHub
 , hidapi
+, kmod
 , lib
 , python3
+, toybox
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "1.0.8";
+  version = "1.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
-    rev = "6cb83a9833eebc81bd27bed57eb68ece15cdd7a6";
-    hash = "sha256-YfBi5UKaB+v+eDI8rcvqkogAYRU2kTc0NqvakhKxBOE=";
+    rev = "abe34c6841476f5b41afe30ee18ff3e510402d68";
+    hash = "sha256-ovLC1BQ98jUaDEMPBzWma4TYSzTF+yE/cMemFdJmqlE=";
   };
 
   pythonPath = with python3.pkgs; [
@@ -22,12 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     hidapi
+    kmod
+    setuptools
+    toybox
   ];
 
   # handheld-daemon contains a fork of the python module `hid`, so this hook
