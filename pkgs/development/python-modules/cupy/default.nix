@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R9syEU5v3UjQUQy/Cwiwk1Ui19+j45QWsMDaORQyNSQ=";
+    hash = "sha256-7gNhW7vonyBkhYkPjUV/fdeRg57SQnFbgVlKc04HVt8=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
