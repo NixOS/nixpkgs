@@ -32,7 +32,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "7.8.1";
+  version = "7.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "ArangoDB-Community";
     repo = "python-arango";
     rev = "refs/tags/${version}";
-    hash = "sha256-R/59SMEVPZow9aG32gqQApuvB2zQLmPCxf/Mz70ubUU=";
+    hash = "sha256-N10ysJKk0jxFyjgR/MXKHVS2MxCQtfFFGEh1IZ2eJk0=";
   };
 
   nativeBuildInputs = [
