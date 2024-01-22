@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zed";
-  version = "0.15.2";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-e9jgRvQ8eYy6eqweqQIyjEKZ4cfEq5DwGXBvBXB2Wk8=";
+    hash = "sha256-MxIeQ8WbTEH342EA03irjpDjfZZyc0sau2hOZOGT27w=";
   };
 
-  vendorHash = "sha256-VRWhhXgBnIkwkakhERm2iSKidPnk0e4iTXXJpJz4cRM=";
+  vendorHash = "sha256-KhtT0v0FJiOvYUhN/rBYxbkUKs0DdIc5HwlhVUAi9cA=";
 
   meta = with lib; {
     description = "Command line for managing SpiceDB";

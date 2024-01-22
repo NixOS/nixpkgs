@@ -230,7 +230,10 @@ in
         description = "Self-contained authentication service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig.ExecStart = "${cfg.package.out}/bin/portunus-orchestrator";
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/portunus-orchestrator";
+          Restart = "on-failure";
+        };
         environment = {
           PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
           PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";

@@ -1583,6 +1583,8 @@ self: super: with self; {
 
   blurhash = callPackage ../development/python-modules/blurhash { };
 
+  blurhash-python = callPackage ../development/python-modules/blurhash-python { };
+
   bme280spi = callPackage ../development/python-modules/bme280spi { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
@@ -13703,6 +13705,8 @@ self: super: with self; {
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
 
   spyse-python = callPackage ../development/python-modules/spyse-python { };
+
+  spython = callPackage ../development/python-modules/spython { };
 
   sqids = callPackage ../development/python-modules/sqids { };
 

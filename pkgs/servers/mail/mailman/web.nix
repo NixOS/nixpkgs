@@ -1,5 +1,6 @@
 { lib, python3, fetchPypi, fetchpatch
 , sassc, hyperkitty, postorius
+, nixosTests
 }:
 
 with python3.pkgs;
@@ -44,6 +45,8 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
   ];
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     homepage = "https://gitlab.com/mailman/mailman-web";

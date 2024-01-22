@@ -1,4 +1,4 @@
-{ lib, python3, fetchPypi }:
+{ lib, python3, fetchPypi, nixosTests }:
 
 with python3.pkgs;
 
@@ -16,6 +16,8 @@ buildPythonPackage rec {
 
   # Tries to connect to database.
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     homepage = "https://docs.mailman3.org/projects/postorius";

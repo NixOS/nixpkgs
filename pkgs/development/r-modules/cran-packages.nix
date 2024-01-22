@@ -7209,7 +7209,7 @@ in with self; {
   bssn = derive2 { name="bssn"; version="1.0"; sha256="1brxbvcvqy8n9xpvp5kz47x5ps8hdqgnh6s49051qaylp95qm432"; depends=[ClusterR mvtnorm sn ssmn]; };
   bst = derive2 { name="bst"; version="0.3-24"; sha256="1x297sv9px7ipd7a6xprlff8rgkdr2z379xsm8rfqd8xal9nxnb4"; depends=[doParallel foreach gbm rpart]; };
   bstrl = derive2 { name="bstrl"; version="1.0.2"; sha256="10ncaicda2rwwrl2ykbrdhh51fziy3ahwp8z859cr2k4v19lviv0"; depends=[BRL doParallel extraDistr foreach]; };
-  bsts = derive2 { name="bsts"; version="0.9.9"; sha256="0zaic91yw214bq3285kw7wj8h1jf4g1z9lahgpmikvlqhgy5744g"; depends=[Boom BoomSpikeSlab xts zoo]; };
+  bsts = derive2 { name="bsts"; version="0.9.10"; sha256="1cbiha8pgb2xmpwqbgb16d1dpjj9x41wx3dzly1xxy2fs04bq0m3"; depends=[Boom BoomSpikeSlab xts zoo]; };
   bsub = derive2 { name="bsub"; version="1.1.0"; sha256="112hlvg15jlzg3drfzkslaly42vnvsycn9vif0w3iaw5fzsaa954"; depends=[clisymbols crayon digest GetoptLong GlobalOptions]; };
   bsvars = derive2 { name="bsvars"; version="2.1.0"; sha256="1gnjl27ik6p8zsis8fdqhwdzp2jp0kyqnidil4jgy02fiwdww6c5"; depends=[GIGrvg R6 Rcpp RcppArmadillo RcppProgress RcppTN stochvol]; };
   btb = derive2 { name="btb"; version="0.2.0"; sha256="1gm03md6ky134nzmnnp054mi2w8kl4bgcgg4k65zf2cyniz4arxq"; depends=[BH dplyr magrittr mapsf Rcpp RcppArmadillo RcppParallel sf]; };

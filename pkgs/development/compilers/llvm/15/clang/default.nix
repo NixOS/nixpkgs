@@ -7,7 +7,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (rec {
+  self = stdenv.mkDerivation (finalAttrs: rec {
     pname = "clang";
     inherit version;
 
@@ -97,7 +97,12 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" ];
+      hardeningUnsupportedFlags = [
+        "fortify3"
+      ];
+      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
     meta = llvm_meta // {

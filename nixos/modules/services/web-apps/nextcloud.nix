@@ -99,11 +99,101 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2"
-    || (versionOlder cfg.package.version "27.0.0"
-      && versionAtLeast cfg.package.version "26.0.8");
+  nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
+  nextcloudOlderThan = versionOlder cfg.package.version;
 
+  # https://github.com/nextcloud/documentation/pull/11179
+  ocmProviderIsNotAStaticDirAnymore = nextcloudGreaterOrEqualThan "27.1.2"
+    || (nextcloudOlderThan "27.0.0" && nextcloudGreaterOrEqualThan "26.0.8");
+
+  overrideConfig = let
+    c = cfg.config;
+    requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
+    objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
+      'objectstore' => [
+        'class' => '\\OC\\Files\\ObjectStore\\S3',
+        'arguments' => [
+          'bucket' => '${s3.bucket}',
+          'autocreate' => ${boolToString s3.autocreate},
+          'key' => '${s3.key}',
+          'secret' => nix_read_secret('${s3.secretFile}'),
+          ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
+          ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
+          'use_ssl' => ${boolToString s3.useSsl},
+          ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
+          'use_path_style' => ${boolToString s3.usePathStyle},
+          ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
+        ],
+      ]
+    '';
+    showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != {};
+    renderedAppStoreSetting =
+      let
+        x = cfg.appstoreEnable;
+      in
+        if x == null then "false"
+        else boolToString x;
+    mkAppStoreConfig = name: { enabled, writable, ... }: optionalString enabled ''
+      [ 'path' => '${webroot}/${name}', 'url' => '/${name}', 'writable' => ${boolToString writable} ],
+    '';
+  in pkgs.writeText "nextcloud-config.php" ''
+    <?php
+    ${optionalString requiresReadSecretFunction ''
+      function nix_read_secret($file) {
+        if (!file_exists($file)) {
+          throw new \RuntimeException(sprintf(
+            "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
+            . "exist! Please make sure that the file exists and has appropriate "
+            . "permissions for user & group 'nextcloud'!",
+            $file
+          ));
+        }
+        return trim(file_get_contents($file));
+      }''}
+    function nix_decode_json_file($file, $error) {
+      if (!file_exists($file)) {
+        throw new \RuntimeException(sprintf($error, $file));
+      }
+      $decoded = json_decode(file_get_contents($file), true);
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+      }
+
+      return $decoded;
+    }
+    $CONFIG = [
+      'apps_paths' => [
+        ${concatStrings (mapAttrsToList mkAppStoreConfig appStores)}
+      ],
+      ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+      ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
+      ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
+      ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
+      ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
+      ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
+      ${optionalString (c.dbpassFile != null) ''
+          'dbpassword' => nix_read_secret(
+            "${c.dbpassFile}"
+          ),
+        ''
+      }
+      'dbtype' => '${c.dbtype}',
+      ${objectstoreConfig}
+    ];
+
+    $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
+      "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
+      "impossible: this should never happen (decoding generated extraOptions file %s failed)"
+    ));
+
+    ${optionalString (cfg.secretFile != null) ''
+      $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
+        "${cfg.secretFile}",
+        "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
+      ));
+    ''}
+  '';
 in {
 
   imports = [
@@ -787,107 +877,23 @@ in {
         timerConfig.Unit = "nextcloud-cron.service";
       };
 
-      systemd.tmpfiles.rules = ["d ${cfg.home} 0750 nextcloud nextcloud"];
+      systemd.tmpfiles.rules = map (dir: "d ${dir} 0750 nextcloud nextcloud - -") [
+        "${cfg.home}"
+        "${datadir}/config"
+        "${datadir}/data"
+        "${cfg.home}/store-apps"
+      ] ++ [
+        "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
+      ];
 
       systemd.services = {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as
         # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
         # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
-        phpfpm-nextcloud.restartTriggers = [ webroot ];
+        phpfpm-nextcloud.restartTriggers = [ webroot overrideConfig ];
 
         nextcloud-setup = let
           c = cfg.config;
-          requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
-          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
-            'objectstore' => [
-              'class' => '\\OC\\Files\\ObjectStore\\S3',
-              'arguments' => [
-                'bucket' => '${s3.bucket}',
-                'autocreate' => ${boolToString s3.autocreate},
-                'key' => '${s3.key}',
-                'secret' => nix_read_secret('${s3.secretFile}'),
-                ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
-                ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
-                'use_ssl' => ${boolToString s3.useSsl},
-                ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
-                'use_path_style' => ${boolToString s3.usePathStyle},
-                ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
-              ],
-            ]
-          '';
-
-          showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != {};
-          renderedAppStoreSetting =
-            let
-              x = cfg.appstoreEnable;
-            in
-              if x == null then "false"
-              else boolToString x;
-
-          nextcloudGreaterOrEqualThan = req: versionAtLeast cfg.package.version req;
-
-          mkAppStoreConfig = name: { enabled, writable, ... }: optionalString enabled ''
-            [ 'path' => '${webroot}/${name}', 'url' => '/${name}', 'writable' => ${boolToString writable} ],
-          '';
-
-          overrideConfig = pkgs.writeText "nextcloud-config.php" ''
-            <?php
-            ${optionalString requiresReadSecretFunction ''
-              function nix_read_secret($file) {
-                if (!file_exists($file)) {
-                  throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, secret file %s set by NixOS doesn't seem to "
-                    . "exist! Please make sure that the file exists and has appropriate "
-                    . "permissions for user & group 'nextcloud'!",
-                    $file
-                  ));
-                }
-                return trim(file_get_contents($file));
-              }''}
-            function nix_decode_json_file($file, $error) {
-              if (!file_exists($file)) {
-                throw new \RuntimeException(sprintf($error, $file));
-              }
-              $decoded = json_decode(file_get_contents($file), true);
-
-              if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
-              }
-
-              return $decoded;
-            }
-            $CONFIG = [
-              'apps_paths' => [
-                ${concatStrings (mapAttrsToList mkAppStoreConfig appStores)}
-              ],
-              ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
-              ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
-              ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
-              ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
-              ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpassFile != null) ''
-                  'dbpassword' => nix_read_secret(
-                    "${c.dbpassFile}"
-                  ),
-                ''
-              }
-              'dbtype' => '${c.dbtype}',
-              ${objectstoreConfig}
-            ];
-
-            $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
-              "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
-              "impossible: this should never happen (decoding generated extraOptions file %s failed)"
-            ));
-
-            ${optionalString (cfg.secretFile != null) ''
-              $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
-                "${cfg.secretFile}",
-                "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
-              ));
-            ''}
-          '';
           occInstallCmd = let
             mkExport = { arg, value }: "export ${arg}=${value}";
             dbpass = {
@@ -932,6 +938,7 @@ in {
           after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
           requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
           path = [ occ ];
+          restartTriggers = [ overrideConfig ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
               if [ ! -r "${c.dbpassFile}" ]; then
@@ -958,18 +965,6 @@ in {
                 rm -r "${cfg.home}"/${name}
               fi
             '') [ "nix-apps" "apps" ]}
-
-            # create nextcloud directories.
-            # if the directories exist already with wrong permissions, we fix that
-            for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps; do
-              if [ ! -e $dir ]; then
-                install -o nextcloud -g nextcloud -d $dir
-              elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
-                chgrp -R nextcloud $dir
-              fi
-            done
-
-            ln -sf ${overrideConfig} ${datadir}/config/override.config.php
 
             # Do not install if already installed
             if [[ ! -e ${datadir}/config/config.php ]]; then
