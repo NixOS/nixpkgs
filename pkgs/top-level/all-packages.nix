@@ -5753,6 +5753,8 @@ with pkgs;
   jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin = callPackage ../servers/jellyfin {
+    dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+    dotnet-sdk = dotnetCorePackages.sdk_6_0;
     ffmpeg = jellyfin-ffmpeg;
   };
 

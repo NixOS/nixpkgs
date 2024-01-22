@@ -1,15 +1,16 @@
-{ lib
+{ buildDotnetModule
+, dotnet-runtime
+, dotnet-sdk
 , fetchFromGitHub
 , fetchurl
-, nixosTests
-, stdenv
-, dotnetCorePackages
-, buildDotnetModule
 , ffmpeg
 , fontconfig
 , freetype
 , jellyfin-web
+, lib
+, nixosTests
 , sqlite
+, stdenv
 }:
 
 buildDotnetModule rec {
@@ -40,8 +41,7 @@ buildDotnetModule rec {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   preInstall = ''
