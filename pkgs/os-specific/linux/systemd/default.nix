@@ -845,7 +845,18 @@ stdenv.mkDerivation (finalAttrs: {
       network configuration, network time synchronization, log forwarding, and
       name resolution.
     '';
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; [
+      # Taken from https://raw.githubusercontent.com/systemd/systemd-stable/${finalAttrs.src.rev}/LICENSES/README.md
+      bsd2
+      bsd3
+      cc0
+      lgpl21Plus
+      lgpl2Plus
+      mit
+      mit0
+      ofl
+      publicDomain
+    ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
     platforms = lib.platforms.linux;
     priority = 10;
