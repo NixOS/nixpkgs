@@ -7,6 +7,7 @@
 , pycryptodome
 , pydantic
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 }:
 
@@ -24,7 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-2sGkHCIGo1lzLurvQBmq+16sodAaK8v+mAbIH/Gd3+E=";
   };
 
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
