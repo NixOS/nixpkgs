@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "11.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "glean_parser";
