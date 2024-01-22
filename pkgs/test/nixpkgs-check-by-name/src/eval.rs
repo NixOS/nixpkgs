@@ -191,13 +191,13 @@ pub fn check_values(
                         CallPackage(CallPackageInfo {
                             is_derivation: true,
                             call_package_variant: Manual { path, empty_arg },
-                        }) => Success(Loose(ratchet::UsesByName {
+                        }) => Success(Loose(ratchet::CouldUseByName {
                             call_package_path: path,
                             empty_arg,
                         })),
                     };
                     uses_by_name.map(|x| ratchet::Package {
-                        empty_non_auto_called: Tight,
+                        manual_definition: Tight,
                         uses_by_name: x,
                     })
                 }
@@ -213,7 +213,7 @@ pub fn check_values(
                     // We choose the latter, since we want to move towards pkgs/by-name, not away
                     // from it
                     Success(ratchet::Package {
-                        empty_non_auto_called: Tight,
+                        manual_definition: Tight,
                         uses_by_name: Tight,
                     })
                 }
@@ -248,7 +248,7 @@ pub fn check_values(
 
                     check_result.and(match &call_package_variant {
                         Auto => Success(ratchet::Package {
-                            empty_non_auto_called: Tight,
+                            manual_definition: Tight,
                             uses_by_name: Tight,
                         }),
                         Manual { path, empty_arg } => {
@@ -261,11 +261,7 @@ pub fn check_values(
                             if correct_file {
                                 Success(ratchet::Package {
                                     // Empty arguments for non-auto-called packages are not allowed anymore.
-                                    empty_non_auto_called: if *empty_arg {
-                                        Loose(ratchet::EmptyNonAutoCalled)
-                                    } else {
-                                        Tight
-                                    },
+                                    manual_definition: if *empty_arg { Loose(()) } else { Tight },
                                     uses_by_name: Tight,
                                 })
                             } else {
