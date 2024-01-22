@@ -71,7 +71,14 @@ stdenv.mkDerivation (finalAttrs: rec {
       url = "https://src.fedoraproject.org/rpms/mozjs91/raw/rawhide/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
       hash = "sha256-WgDIBidB9XNQ/+HacK7jxWnjOF8PEUt5eB0+Aubtl48=";
     })
+  ] ++ lib.optionals (lib.versionAtLeast version "91" && stdenv.hostPlatform.isMusl) [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/mozjs115/fix-rust-target.patch";
+      hash = "sha256-YneyPhsj6QyzLoyTrmaM+G1ybHO5ypz/L3rAJOCh7bI=";
+    })
   ];
+
+  env.RUST_TARGET = lib.optionalString stdenv.hostPlatform.isMusl stdenv.hostPlatform.config;
 
   nativeBuildInputs = [
     cargo
@@ -193,7 +200,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
-    broken = stdenv.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+    broken = # Requires SDK 13.3 (see #242666).
+      (stdenv.isDarwin && versionAtLeast version "115")
+      # Broken for Musl for versions before 91, patch needs adaptation
+      || (stdenv.hostPlatform.isMusl && (lib.versionAtLeast "91" version) );
     platforms = platforms.unix;
   };
 })
