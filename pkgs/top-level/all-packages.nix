@@ -33888,6 +33888,8 @@ with pkgs;
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
+  MoniqueMonosynth = callPackage ../applications/audio/MoniqueMonosynth { };
+
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
   mplayer = callPackage ../applications/video/mplayer ({

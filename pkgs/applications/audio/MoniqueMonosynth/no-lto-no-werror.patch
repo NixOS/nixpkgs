@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0781791e481..de0da6a5880 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -187,7 +187,6 @@ target_link_libraries(${PROJECT_NAME}
+     juce::juce_gui_extra
+   PUBLIC
+     juce::juce_recommended_config_flags
+-    juce::juce_recommended_lto_flags
+ 
+     monique::oddsound-mts
+     )
+@@ -210,7 +209,6 @@ if(APPLE)
+ elseif(UNIX)
+   message(STATUS "Turning off a legitimate compiler warning" )
+   target_compile_options(${PROJECT_NAME} PUBLIC
+-    -Werror
+     -Wno-deprecated-declarations
+     # -ftime-trace
+     )
