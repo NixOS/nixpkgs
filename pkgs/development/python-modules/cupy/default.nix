@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "12.3.0";
+  version = "13.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
