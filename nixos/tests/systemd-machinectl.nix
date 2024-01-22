@@ -69,7 +69,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       # Test machinectl start
       machine.succeed("machinectl start ${containerName}");
-      machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+      machine.wait_until_succeeds("systemctl -M ${containerName} start network-online.target");
+      machine.wait_until_succeeds("systemctl -M ${containerName} is-active network-online.target");
 
       # Test nss_mymachines without nscd
       machine.succeed('LD_LIBRARY_PATH="/run/current-system/sw/lib" getent -s hosts:mymachines hosts ${containerName}');
