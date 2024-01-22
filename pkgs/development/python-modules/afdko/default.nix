@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "4.0.0+unstable-2023-11-07";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = pname;
-    rev = "6c832edbd81ecf689dbe66e840bf18ae61cf4bca";
-    hash = "sha256-XXkksHggUIs2O0/OSGsft8ofogcbtAa3w5JdldIAJAI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
   };
 
   nativeBuildInputs = [
