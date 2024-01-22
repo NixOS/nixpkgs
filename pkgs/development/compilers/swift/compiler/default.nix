@@ -425,8 +425,7 @@ in stdenv.mkDerivation {
     # Add appleSwiftCore to the search paths. We can't simply add it to
     # buildInputs, because it is potentially an older stdlib than the one we're
     # building. We have to remove it again after the main Swift build, or later
-    # build steps may fail. (Specific case: Concurrency backdeploy uses the
-    # Sendable protocol, which appears to not be present in the macOS 11 SDK.)
+    # build steps may fail.
     OLD_NIX_SWIFTFLAGS_COMPILE="$NIX_SWIFTFLAGS_COMPILE"
     OLD_NIX_LDFLAGS="$NIX_LDFLAGS"
     export NIX_SWIFTFLAGS_COMPILE+=" -I ${appleSwiftCore}/lib/swift"
@@ -506,75 +505,6 @@ in stdenv.mkDerivation {
       -DPANEL_LIBRARIES=${ncurses}/lib/libpanel${stdenv.hostPlatform.extensions.sharedLibrary}
     ";
     buildProject lldb llvm-project/lldb
-
-    ${lib.optionalString stdenv.isDarwin ''
-    # Need to do a standalone build of concurrency for Darwin back deployment.
-    # Based on: utils/swift_build_support/swift_build_support/products/backdeployconcurrency.py
-    cmakeFlags="
-      -GNinja
-      -DCMAKE_Swift_COMPILER=$SWIFT_BUILD_ROOT/swift/bin/swiftc
-      -DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE=$SWIFT_SOURCE_ROOT/swift-syntax
-
-      -DTOOLCHAIN_DIR=/var/empty
-      -DSWIFT_NATIVE_LLVM_TOOLS_PATH=${stdenv.cc}/bin
-      -DSWIFT_NATIVE_CLANG_TOOLS_PATH=${stdenv.cc}/bin
-      -DSWIFT_NATIVE_SWIFT_TOOLS_PATH=$SWIFT_BUILD_ROOT/swift/bin
-
-      -DCMAKE_CROSSCOMPILING=ON
-
-      -DBUILD_SWIFT_CONCURRENCY_BACK_DEPLOYMENT_LIBRARIES=ON
-      -DSWIFT_INCLUDE_TOOLS=OFF
-      -DSWIFT_BUILD_STDLIB_EXTRA_TOOLCHAIN_CONTENT=OFF
-      -DSWIFT_BUILD_TEST_SUPPORT_MODULES=OFF
-      -DSWIFT_BUILD_STDLIB=OFF
-      -DSWIFT_BUILD_DYNAMIC_STDLIB=OFF
-      -DSWIFT_BUILD_STATIC_STDLIB=OFF
-      -DSWIFT_BUILD_REMOTE_MIRROR=OFF
-      -DSWIFT_BUILD_SDK_OVERLAY=OFF
-      -DSWIFT_BUILD_DYNAMIC_SDK_OVERLAY=OFF
-      -DSWIFT_BUILD_STATIC_SDK_OVERLAY=OFF
-      -DSWIFT_INCLUDE_TESTS=OFF
-      -DSWIFT_BUILD_PERF_TESTSUITE=OFF
-
-      -DSWIFT_HOST_VARIANT_ARCH=${swiftArch}
-      -DBUILD_STANDALONE=ON
-
-      -DSWIFT_INSTALL_COMPONENTS=back-deployment
-
-      -DSWIFT_SDKS=${{
-        "macos" = "OSX";
-        "ios" = "IOS";
-        #IOS_SIMULATOR
-        #TVOS
-        #TVOS_SIMULATOR
-        #WATCHOS
-        #WATCHOS_SIMULATOR
-      }.${targetPlatform.darwinPlatform}}
-
-      -DLLVM_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/llvm
-
-      -DSWIFT_DEST_ROOT=$out
-      -DSWIFT_HOST_VARIANT_SDK=OSX
-
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_OSX=10.15
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_IOS=13.0
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_MACCATALYST=13.0
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_TVOS=13.0
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_WATCHOS=6.0
-    "
-
-    # This depends on the special Clang build specific to the Swift branch.
-    # We also need to call a specific Ninja target.
-    export CC=$SWIFT_BUILD_ROOT/llvm/bin/clang
-    export CXX=$SWIFT_BUILD_ROOT/llvm/bin/clang++
-    ninjaFlags="back-deployment"
-
-    buildProject swift-concurrency-backdeploy swift
-
-    export CC=$NIX_CC/bin/clang
-    export CXX=$NIX_CC/bin/clang++
-    unset ninjaFlags
-  ''}
   '';
 
   # TODO: ~50 failing tests on x86_64-linux. Other platforms not checked.
@@ -610,13 +540,6 @@ in stdenv.mkDerivation {
 
     cd $SWIFT_BUILD_ROOT/swift
     ninjaInstallPhase
-
-    ${lib.optionalString stdenv.isDarwin ''
-    cd $SWIFT_BUILD_ROOT/swift-concurrency-backdeploy
-    installTargets=install-back-deployment
-    ninjaInstallPhase
-    unset installTargets
-    ''}
 
     # Separate $lib output here, because specific logic follows.
     # Only move the dynamic run-time parts, to keep $lib small. Every Swift
